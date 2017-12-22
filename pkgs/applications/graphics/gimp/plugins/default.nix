@@ -12,12 +12,12 @@ let
     prePhases = "extraLib";
     extraLib = ''
       installScripts(){
-        mkdir -p ${targetScriptDir};
-        for p in "$@"; do cp "$p" ${targetScriptDir}; done
+        mkdir -p $out/${targetScriptDir};
+        for p in "$@"; do cp "$p" $out/${targetScriptDir}; done
       }
       installPlugins(){
-        mkdir -p ${targetPluginDir};
-        for p in "$@"; do cp "$p" ${targetPluginDir}; done
+        mkdir -p $out/${targetPluginDir};
+        for p in "$@"; do cp "$p" $out/${targetPluginDir}; done
       }
     '';
   }

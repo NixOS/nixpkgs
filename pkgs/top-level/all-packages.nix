@@ -15868,16 +15868,14 @@ with pkgs;
 
   ghq = gitAndTools.ghq;
 
-  gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
-    webkit = null;
+  gimp = callPackage ../applications/graphics/gimp {
+    gegl = gegl_0_4;
     lcms = lcms2;
+    inherit (gnome3) gexiv2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
-  gimp = gimp_2_8;
-
   gimp-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
-    gimp = gimp_2_8;
     plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
   };
 
