@@ -136,6 +136,7 @@ let
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
+      libkgapi = callPackage ./libkgapi.nix {};
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
