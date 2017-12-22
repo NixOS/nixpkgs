@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./general-intel.nix ];
+  imports = [ ../intel.nix ];
 
   boot = {
     extraModprobeConfig = ''

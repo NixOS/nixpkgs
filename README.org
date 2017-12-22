@@ -1,0 +1,47 @@
+NixOS profiles covering hardware quirks.
+
+Add a new channel:
+
+  : $ sudo nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
+  : $ sudo nix-channel --update nixos-hardware
+
+Then add an appropriate profile path to ~imports~ in
+~/etc/nixos/configuration.nix~. Currently available profiles:
+
+| Model                     | Path                                       |
+|---------------------------+--------------------------------------------|
+| Acer Aspire 4810T         | ~<nixos-hardware/acer/aspire/4810t>~       |
+| Acer C720                 | ~<nixos-hardware/acer/c720>~               |
+| Airis N990                | ~<nixos-hardware/airis/n990>~              |
+| Apple MacBook Pro 10,1    | ~<nixos-hardware/apple/macbook-pro/10-1>~  |
+| Apple MacBook Pro 12,1    | ~<nixos-hardware/apple/macbook-pro/12-1>~  |
+| Dell XPS 15 9550          | ~<nixos-hardware/dell/xps/15-9550>~        |
+| Inverse Path USB armory   | ~<nixos-hardware/inversepath/usbarmory>~   |
+| Lenovo IdeaPad Z510       | ~<nixos-hardware/lenovo/ideapad/z510>~     |
+| Lenovo ThinkPad T410      | ~<nixos-hardware/lenovo/thinkpad/t410>~    |
+| Lenovo ThinkPad T440p     | ~<nixos-hardware/lenovo/thinkpad/t440p>~   |
+| Lenovo ThinkPad T460s     | ~<nixos-hardware/lenovo/thinkpad/t460s>~   |
+| Lenovo ThinkPad X140e     | ~<nixos-hardware/lenovo/thinkpad/x140e>~   |
+| Lenovo ThinkPad X220      | ~<nixos-hardware/lenovo/thinkpad/x220>~    |
+| Microsoft Surface Pro 3   | ~<nixos-hardware/microsoft/surface-pro/3>~ |
+| Raspberry Pi 2            | ~<nixos-hardware/raspberry-pi/2>~          |
+| Samsung Series 9 NP900X3C | ~<nixos-hardware/samsung/np900x3c>~        |
+| Supermicro A1SRi-2758F    | ~<nixos-hardware/supermicro/a1sri-2758f>~  |
+| Supermicro X10SLL-F       | ~<nixos-hardware/supermicro/x10sll-f>~     |
+
+For example, to enable ThinkPad X220 profile, your ~imports~ should look like:
+
+  : imports = [ <nixos-hardware/lenovo/thinkpad/x220> ./hardware-configuration.nix ];
+
+Profiles should favor usability and stability, so performance hacks should be
+activated by an additional NixOS option or conservative and performance configs
+can be declared in seperate profiles.
+
+Because profiles can only be tested with the appropriate hardware, quality
+assurance is up to *you*.
+
+** Simple tips and tricks
+
+*** Disable PC speaker
+
+  : boot.blacklistedKernelModules = [ "pcspkr" ];

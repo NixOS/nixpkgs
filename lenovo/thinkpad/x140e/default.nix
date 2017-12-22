@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./general.nix ];
+  imports = [ ../common.nix ];
 
   boot = {
     # wireless
