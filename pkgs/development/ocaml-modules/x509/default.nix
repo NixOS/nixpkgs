@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-x509-${version}";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/${version}/x509-${version}.tbz";
-    sha256 = "0pmi3s4179bpy4076fmrhwv500wp9x1nrglsj9kk0xc8s8vadc7x";
+    sha256 = "1c62mw9rnzq0rs3ihbhfs18nv4mdzwag7893hlqgji3wmaai70pk";
   };
 
   unpackCmd = "tar -xjf $curSrc";
