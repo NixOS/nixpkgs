@@ -207,7 +207,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = with maintainers; [ flokli sander ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
