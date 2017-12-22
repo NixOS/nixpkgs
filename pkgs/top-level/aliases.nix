@@ -160,6 +160,7 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  winusb = woeusb; # added 2017-12-22
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
