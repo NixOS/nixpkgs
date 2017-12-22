@@ -20,10 +20,11 @@ let
   python = python2;
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
-  extpack = "9328548ca8cbc526232c0631cb5a17618c771b07665b362c1e3d89a2425bf799";
-  extpackRev = "119230";
-  main = "05y03fcp013gc500q34bj6hvx1banib41v8l3hcxknzfgwq0rarm";
-  version = "5.2.2";
+  # Do not forget to update the hash in ./guest-additions/default.nix!
+  extpack = "98e9df4f23212c3de827af9d770b391cf2dba8d21f4de597145512c1479302cd";
+  extpackRev = "119785";
+  main = "053xpf0kxrig4jq5djfz9drhkxy1x5a4p9qvgxc0b3hnk6yn1869";
+  version = "5.2.4";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
