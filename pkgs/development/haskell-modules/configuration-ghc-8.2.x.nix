@@ -75,4 +75,13 @@ self: super: {
   # https://github.com/alanz/ghc-exactprint/pull/60
   ghc-exactprint = dontCheck super.ghc-exactprint;
 
+  # Reduction stack overflow; size = 38
+  # https://github.com/jystic/hadoop-tools/issues/31
+  hadoop-rpc =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/shlevy/hadoop-tools/commit/f03a46cd15ce3796932c3382e48bcbb04a6ee102.patch;
+            sha256 = "09ls54zy6gx84fmzwgvx18ssgm740cwq6ds70p0p125phi54agcp";
+            stripLen = 1;
+          };
+    in appendPatch super.hadoop-rpc patch;
 }
