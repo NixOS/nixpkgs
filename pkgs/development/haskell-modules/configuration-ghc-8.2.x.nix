@@ -71,4 +71,8 @@ self: super: {
   # https://github.com/aristidb/aws/issues/238
   aws = doJailbreak super.aws;
 
+  # Upstream failed to distribute the testsuite for 8.2
+  # https://github.com/alanz/ghc-exactprint/pull/60
+  ghc-exactprint = dontCheck super.ghc-exactprint;
+
 }
