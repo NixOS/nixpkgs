@@ -8047,7 +8047,6 @@ dont-distribute-packages:
   singnal:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   sink:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   siphon:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  siren-json:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   sirkel:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   sitepipe:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   sixfiguregroup:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
