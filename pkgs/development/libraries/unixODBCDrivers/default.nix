@@ -37,10 +37,10 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.lib ];
+    buildInputs = [ unixODBC mariadb.connector-c ];
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.lib}/include/mysql"
+      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
     ];
 
     preConfigure = ''
