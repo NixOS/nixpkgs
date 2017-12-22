@@ -6,17 +6,6 @@
       ./general-intel.nix
     ];
 
-  ## BEGIN from generated hardware-configuration
-  ## Probably better to just use a freshly generated hardware.configuration.nix
-  ## than this, but including for reference.
-  # boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-  # boot.kernelModules = [ "kvm-intel" ];
-  # boot.extraModulePackages = [  ];
-  #
-  #
-  # nix.maxJobs = lib.mkDefault 4;
-  ## END from generated hardware-configuration
-
   # Use the gummiboot efi boot loader. (From default generated configuration.nix)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

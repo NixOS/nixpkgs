@@ -5,21 +5,6 @@
     [ ../lib/kernel-version.nix
     ];
 
-  ## BEGIN from generated hardware-configuration
-  ## Probably better to just use a freshly generated hardware.configuration.nix
-  ## than this, but including for reference.
-  #imports =
-  #  [ <nixos/modules/hardware/network/broadcom-43xx.nix>
-  #    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-  #  ];
-  #
-  #boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "rtsx_pci_sdmmc" ];
-  #boot.kernelModules = [ "kvm-intel" ];
-  #boot.extraModulePackages = [ ];
-  #
-  #nix.maxJobs = 8;
-  ## END from generated hardware-configuration
-
   # Use the systemd-boot efi boot loader. (From default generated configuration.nix)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
