@@ -18545,24 +18545,6 @@ with pkgs;
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 =
-    let
-      deps = lib.makeScope newScope (self: {
-        inherit (python2Packages) python;
-        kdelibs = kdelibs4;
-        boost = boost155;
-        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
-      });
-
-      self = lib.makeScope deps.newScope (self: with self;
-        import ../desktops/kde-4.14 {
-          callPackageOrig = pkgs.callPackage;
-          inherit (self) callPackage;
-          inherit stdenv qt48 kdelibs;
-        }
-      );
-    in recurseIntoAttrs self;
-
   lumina = libsForQt5.callPackage ../desktops/lumina { };
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
