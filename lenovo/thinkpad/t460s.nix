@@ -1,10 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ ../lib/kernel-version.nix
-      ./general-intel.nix
-    ];
+  imports = [
+    ../lib/kernel-version.nix
+    ./general-intel.nix
+  ];
 
   # Use the gummiboot efi boot loader. (From default generated configuration.nix)
   boot.loader.systemd-boot.enable = true;

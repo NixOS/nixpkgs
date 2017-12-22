@@ -15,5 +15,5 @@
   };
 
   # video card
-  services.xserver.videoDrivers = ["ati"];
+  services.xserver.videoDrivers = [ "ati" ];
 }
