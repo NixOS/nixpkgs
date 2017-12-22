@@ -8271,8 +8271,6 @@ with pkgs;
   faac = callPackage ../development/libraries/faac { };
 
   faad2 = callPackage ../development/libraries/faad2 { };
-  
-  faad2-hdc = callPackage ../development/libraries/faad2 { hdcSupport=true; };
 
   factor-lang = callPackage ../development/compilers/factor-lang {
     inherit (pkgs.gnome2) gtkglext;
