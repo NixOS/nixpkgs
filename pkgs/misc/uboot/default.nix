@@ -119,6 +119,13 @@ in rec {
     filesToInstall = ["MLO" "u-boot.img"];
   };
 
+  # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
+  ubootClearfog = buildUBoot rec {
+    defconfig = "clearfog_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-spl.kwb"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
