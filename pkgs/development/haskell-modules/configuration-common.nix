@@ -1005,4 +1005,7 @@ self: super: {
             sha256 = "14mf9940arilg6v54w9bc4z567rfbmm7gknsklv965fr7jpinxxj";
           };
     in appendPatch super.monad-memo patch;
+
+  # https://github.com/alphaHeavy/protobuf/issues/34
+  protobuf = dontCheck super.protobuf;
 }
