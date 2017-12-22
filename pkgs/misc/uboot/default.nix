@@ -1,4 +1,5 @@
 { stdenv, fetchurl, fetchpatch, bc, dtc, python2
+, armTrustedFirmwareAllwinner
 , hostPlatform
 }:
 
@@ -36,6 +37,7 @@ let
         url = https://github.com/dezgeg/u-boot/commit/pythonpath-2017-11.patch;
         sha256 = "162b2lglp307pzxsf9m7nnmzwxqd7xkwp5j85bm6bg1a38ngpl9v";
       })
+      ./sopine-baseboard-dtb-fix.patch
     ];
 
     postPatch = ''
@@ -162,6 +164,13 @@ in rec {
     defconfig = "rpi_3_defconfig";
     targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootSopine = buildUBoot rec {
+    defconfig = "sopine_baseboard_defconfig";
+    targetPlatforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["spl/sunxi-spl.bin" "u-boot.itb"];
   };
 
   ubootUtilite = buildUBoot rec {
