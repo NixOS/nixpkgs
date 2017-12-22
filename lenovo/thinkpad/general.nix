@@ -1,6 +1,8 @@
-{ pkgs, lib, ... }:
+{ lib, pkgs, ... }:
 
-with lib;
+let
+  inherit (lib) mkDefault;
+in
 
 {
   hardware.trackpoint = mkDefault {

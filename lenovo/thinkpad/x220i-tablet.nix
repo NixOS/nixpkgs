@@ -8,7 +8,7 @@
 
   boot = {
     kernelModules = [ "tp_smapi" ];
-    extraModulePackages = [ config.boot.kernelPackages.tp_smapi ];
+    extraModulePackages = with config.boot.kernelPackages; [ tp_smapi ];
   };
 
   # hard disk protection if the laptop falls

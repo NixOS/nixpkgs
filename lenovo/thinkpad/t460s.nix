@@ -1,10 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ ../lib/kernel-version.nix
-      ./general-intel.nix
-    ];
+  imports = [
+    ../lib/kernel-version.nix
+    ./general-intel.nix
+  ];
 
   ## BEGIN from generated hardware-configuration
   ## Probably better to just use a freshly generated hardware.configuration.nix
