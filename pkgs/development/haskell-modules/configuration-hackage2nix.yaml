@@ -6881,7 +6881,6 @@ dont-distribute-packages:
   network-stream:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-topic-models:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-transport-amqp:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  network-uri-json:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-uri-static:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-voicetext:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-wai-router:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
