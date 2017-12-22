@@ -154,8 +154,6 @@ let
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
       syndication = callPackage ./syndication.nix {};
-
-      l10n = recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib recurseIntoAttrs; });
     };
 
 in lib.makeScope libsForQt5.newScope packages
