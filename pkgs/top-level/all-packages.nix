@@ -13259,6 +13259,7 @@ with pkgs;
     ubootA20OlinuxinoLime
     ubootBananaPi
     ubootBeagleboneBlack
+    ubootClearfog
     ubootJetsonTK1
     ubootOdroidXU3
     ubootOrangePiPc
