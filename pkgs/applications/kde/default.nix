@@ -124,6 +124,7 @@ let
       kontactinterface = callPackage ./kontactinterface.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
+      ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
