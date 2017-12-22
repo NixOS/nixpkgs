@@ -31,13 +31,8 @@ let
     then defaultBuildHostScope
     else assert pkgs.hostPlatform == pkgs.buildPlatform; defaultHostTargetScope;
   defaultHostHostScope = {}; # unimplemented
-  # TODO(@Ericson2314): we shouldn't preclude run-time fetching by removing
-  # these attributes. We should have a more general solution for selecting
-  # whether `nativeDrv` or `crossDrv` is the default in `defaultScope`.
-  pkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs;
-  targetPkgsWithoutFetchers = lib.filterAttrs (n: _: !lib.hasPrefix "fetch" n) pkgs.targetPackages;
-  defaultHostTargetScope = pkgsWithoutFetchers // pkgs.xorg;
-  defaultTargetTargetScope = targetPkgsWithoutFetchers // targetPkgsWithoutFetchers.xorg or {};
+  defaultHostTargetScope = pkgs // pkgs.xorg;
+  defaultTargetTargetScope = pkgs.targetPackages // pkgs.targetPackages.xorg or {};
 
   splicer = pkgsBuildBuild: pkgsBuildHost: pkgsBuildTarget:
             pkgsHostHost: pkgsHostTarget:
