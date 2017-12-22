@@ -84,4 +84,13 @@ self: super: {
             stripLen = 1;
           };
     in appendPatch super.hadoop-rpc patch;
+
+  # Custom Setup.hs breaks with Cabal 2
+  # https://github.com/NICTA/coordinate/pull/4
+  coordinate =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/NICTA/coordinate/pull/4.patch;
+            sha256 = "06sfxk5cyd8nqgjyb95jkihxxk8m6dw9m3mlv94sm2qwylj86gqy";
+          };
+    in appendPatch super.coordinate patch;
 }
