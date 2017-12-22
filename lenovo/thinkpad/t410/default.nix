@@ -5,7 +5,6 @@
 
   boot = {
     kernelParams = [
-      # Kernel GPU Savings Options (NOTE i915 chipset only)
       "drm.debug=0"
       "drm.vblankoffdelay=1"
       "i915.semaphores=1"
@@ -25,7 +24,6 @@
       "i915.i915_enable_rc6=1"
     ];
     blacklistedKernelModules = [
-      # Kernel GPU Savings Options (NOTE i915 chipset only)
       "sierra_net" "cdc_mbim" "cdc_ncm" "btusb"
     ];
   };
