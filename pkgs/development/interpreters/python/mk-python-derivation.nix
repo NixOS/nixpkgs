@@ -84,7 +84,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = doCheck && (python.stdenv.buildPlatform == python.stdenv.hostPlatform);
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
