@@ -717,13 +717,13 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.3.0";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "1mrd8c46ljilag8dljvnagaxnjnab8bmg9mcbnwvrivgjzgf6a1k";
+      sha256 = "1yzhjn8rsvjjsfycdc993ms6jy2j5jh7x3r2ax6g02z5n0anvnbx";
     };
 
     buildInputs = [ lua ];
@@ -735,7 +735,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      description = "Vicious widgets for window managers";
+      description = "A modular widget library for the awesome window manager";
       homepage    = https://github.com/Mic92/vicious;
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu mic92 ];

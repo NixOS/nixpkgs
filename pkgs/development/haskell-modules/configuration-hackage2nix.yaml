@@ -2681,6 +2681,7 @@ extra-packages:
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
   - haddock-library == 1.2.*            # required for haddock-api-2.16.x
+  - haddock-library == 1.4.4            # required for haddock-api-2.18.x
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
@@ -6881,7 +6882,6 @@ dont-distribute-packages:
   network-stream:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-topic-models:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-transport-amqp:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  network-uri-json:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-uri-static:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-voicetext:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-wai-router:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -8047,7 +8047,6 @@ dont-distribute-packages:
   singnal:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   sink:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   siphon:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  siren-json:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   sirkel:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   sitepipe:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   sixfiguregroup:                               [ i686-linux, x86_64-linux, x86_64-darwin ]

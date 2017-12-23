@@ -997,4 +997,26 @@ self: super: {
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
 
+  # Missing FlexibleContexts in testsuite
+  # https://github.com/EduardSergeev/monad-memo/pull/4
+  monad-memo =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/EduardSergeev/monad-memo/pull/4.patch;
+            sha256 = "14mf9940arilg6v54w9bc4z567rfbmm7gknsklv965fr7jpinxxj";
+          };
+    in appendPatch super.monad-memo patch;
+
+  # https://github.com/alphaHeavy/protobuf/issues/34
+  protobuf = dontCheck super.protobuf;
+
+  # https://github.com/strake/lenz.hs/issues/2
+  lenz =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/strake/lenz.hs/commit/4b9b79104759b9c6b24484455e1eb0d962eb3cff.patch;
+            sha256 = "02i0w9i55a4r251wgjzl5vbk6m2qhilwl7bfp5jwmf22z66sglyn";
+          };
+    in overrideCabal super.lenz (drv:
+      { patches = (drv.patches or []) ++ [ patch ];
+        editedCabalFile = null;
+      });
 }

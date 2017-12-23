@@ -1,4 +1,4 @@
-{ lib, callPackage, newScope
+{ lib, callPackage, newScope, recurseIntoAttrs
 , gnumake3
 , ocamlPackages_3_12_1
 , ocamlPackages_4_02
@@ -9,6 +9,9 @@ let
     let callPackage = newScope self ; in rec {
       inherit callPackage coq;
       coqPackages = self;
+
+      contribs = recurseIntoAttrs
+        (callPackage ../development/coq-modules/contribs {});
 
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
@@ -33,11 +36,10 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
-      contribs = callPackage ../development/coq-modules/contribs { };
     };
 
   filterCoqPackages = coq:
-    lib.filterAttrs
+    lib.filterAttrsRecursive
     (_: p:
       let pred = p.compatibleCoqVersions or (_: true);
       in pred coq.coq-version
