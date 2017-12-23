@@ -4,7 +4,7 @@ let
   version = "2.4";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "csfml-${version}";
   src = fetchurl {
     url = "https://github.com/SFML/CSFML/archive/b5facb85d13bff451a5fd2d088a97472a685576c.tar.gz";
