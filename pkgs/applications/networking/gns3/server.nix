@@ -36,7 +36,16 @@ let
       }));
   aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
     (oldAttrs:
-      { propagatedBuildInputs = [ aiohttp ]; }));
+      rec {
+        pname = "aiohttp-cors";
+        version = "0.5.3";
+        name = "${pname}-${version}";
+        src = pythonPackages.fetchPypi {
+          inherit pname version;
+          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+        };
+        propagatedBuildInputs = [ aiohttp ];
+      }));
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-server";
