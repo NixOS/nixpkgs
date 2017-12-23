@@ -16,7 +16,7 @@ with lib;
       '';
     };
 
-    boot.tmpOnTmpfs = mkOption {
+    boot.tmpfsOnTmp = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -30,7 +30,7 @@ with lib;
 
   config = {
 
-    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpOnTmpfs "tmp.mount";
+    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpfsOnTmp "tmp.mount";
 
     systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
 

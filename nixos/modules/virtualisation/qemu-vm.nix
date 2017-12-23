@@ -462,7 +462,7 @@ in
             options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
-        "/tmp" = mkIf config.boot.tmpOnTmpfs
+        "/tmp" = mkIf config.boot.tmpfsOnTmp
           { device = "tmpfs";
             fsType = "tmpfs";
             neededForBoot = true;
