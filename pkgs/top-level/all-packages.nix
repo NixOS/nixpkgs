@@ -10641,6 +10641,8 @@ with pkgs;
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
+    telegram = callPackage ../applications/networking/instant-messengers/telegram/telegram-qt { };
+
     vlc = lowPrio (callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
@@ -17043,6 +17045,8 @@ with pkgs;
   telepathy_logger = callPackage ../applications/networking/instant-messengers/telepathy/logger {};
 
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
+
+  telepathy_morse = libsForQt5.callPackage ../applications/networking/instant-messengers/telepathy/morse { };
 
   telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
 
