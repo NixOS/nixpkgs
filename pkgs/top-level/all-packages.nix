@@ -9782,8 +9782,6 @@ with pkgs;
 
   libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
 
-  libtoxcore-old = callPackage ../development/libraries/libtoxcore/old-api.nix { };
-
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
@@ -16625,9 +16623,7 @@ with pkgs;
 
   ratmen = callPackage ../tools/X11/ratmen {};
 
-  ratox = callPackage ../applications/networking/instant-messengers/ratox {
-    libtoxcore = libtoxcore-old;
-  };
+  ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
