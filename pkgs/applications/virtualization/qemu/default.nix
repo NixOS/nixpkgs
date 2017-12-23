@@ -101,6 +101,10 @@ stdenv.mkDerivation rec {
     else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else "";
 
+  passthru = {
+    qemu-system-i386 = "bin/qemu-system-i386";
+  };
+
   meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
