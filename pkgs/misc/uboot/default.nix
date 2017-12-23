@@ -90,7 +90,15 @@ in rec {
     buildFlags = "tools NO_SDL=1";
     dontStrip = false;
     targetPlatforms = stdenv.lib.platforms.linux;
-    filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
+    # build tools/kwboot
+    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" ];
+    filesToInstall = [
+      "tools/dumpimage"
+      "tools/fdtgrep"
+      "tools/kwboot"
+      "tools/mkenvimage"
+      "tools/mkimage"
+    ];
   };
 
   ubootA20OlinuxinoLime = buildUBoot rec {
