@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/Shopify/sarama";
-      rev = "c01858abb625b73a3af51d0798e4ad42c8147093";
-      sha256 = "139fyfi2h6qas83kan0kpm9d92985nl1fyhijswy37d6ia86797w";
+      rev = "3b1b38866a79f06deddf0487d5c27ba0697ccd65";
+      sha256 = "02qwlqd1kdgwlv39fimpbzjhgw8shzkkad82kfwdy8lppscb20br";
     };
   }
   {
@@ -77,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bsm/sarama-cluster";
-      rev = "ccdc0803695fbce22f1706d04ded46cd518fd832";
-      sha256 = "1jbb03bygjzzs6wyxp6cp057kyiyv80schwlhgi366nizp52hd56";
+      rev = "abf039439f66c1ce78017f560b490612552f6472";
+      sha256 = "16013ac7jv72mdiv84vhk4av1vb5q8xq3fhv253fz2a17h9ld78q";
     };
   }
   {
@@ -124,6 +124,15 @@
       url = "https://github.com/davecgh/go-spew";
       rev = "346938d642f2ec3594ed81d874461961cd0faa76";
       sha256 = "0d4jfmak5p6lb7n2r6yvf5p1zcw0l8j74kn55ghvr7zr7b7axm6c";
+    };
+  }
+  {
+    goPackagePath = "github.com/dgrijalva/jwt-go";
+    fetch = {
+      type = "git";
+      url = "https://github.com/dgrijalva/jwt-go";
+      rev = "dbeaa9332f19a944acb5736b4456cfcc02140e29";
+      sha256 = "0zk6l6kzsjdijfn7c4h0aywdjx5j2hjwi67vy1k6wr46hc8ks2hs";
     };
   }
   {
@@ -275,8 +284,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/jackc/pgx";
-      rev = "b84338d7d62598f75859b2b146d830b22f1b9ec8";
-      sha256 = "13q763a31yya8ij6m5zbnri7wc88hjwwn1rw4v7dmwbwsrqn885c";
+      rev = "63f58fd32edb5684b9e9f4cfaac847c6b42b3917";
+      sha256 = "1n9cbdwzpagnrisxwq0frqdnkmyfg2qlxsr890527d32633hp0h2";
     };
   }
   {
@@ -325,6 +334,24 @@
     };
   }
   {
+    goPackagePath = "github.com/mitchellh/mapstructure";
+    fetch = {
+      type = "git";
+      url = "https://github.com/mitchellh/mapstructure";
+      rev = "d0303fe809921458f417bcf828397a65db30a7e4";
+      sha256 = "1fjwi5ghc1ibyx93apz31n4hj6gcq1hzismpdfbg2qxwshyg0ya8";
+    };
+  }
+  {
+    goPackagePath = "github.com/multiplay/go-ts3";
+    fetch = {
+      type = "git";
+      url = "https://github.com/multiplay/go-ts3";
+      rev = "07477f49b8dfa3ada231afc7b7b17617d42afe8e";
+      sha256 = "1z2cfqhm6g48vzscargw6vl9idfppdcm3wq1xfwy73l1s77q4n9n";
+    };
+  }
+  {
     goPackagePath = "github.com/naoina/go-stringutil";
     fetch = {
       type = "git";
@@ -365,8 +392,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/nsqio/go-nsq";
-      rev = "a53d495e81424aaf7a7665a9d32a97715c40e953";
-      sha256 = "04npqz6ajr4r2w5jfvfzppr307qrwr57w4c1ppq9p9ddf7hx3wpz";
+      rev = "eee57a3ac4174c55924125bb15eeeda8cffb6e6f";
+      sha256 = "194wdmgsc0qhdjx95ka7blly58r9bj2vc0bgls7jawzszfpsbx8x";
     };
   }
   {
@@ -482,8 +509,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shirou/gopsutil";
-      rev = "48fc5612898a1213aa5d6a0fb2d4f7b968e898fb";
-      sha256 = "14mwpxd2v3y4mr0g37g99vhy9jkaaaw29d3j7427rpv568vyb8sd";
+      rev = "384a55110aa5ae052eb93ea94940548c1e305a99";
+      sha256 = "00idmnsmalxhm1y60lhm9vyck1ay7gbp0r35fgs8bbiwq351bs23";
     };
   }
   {
