@@ -3188,6 +3188,8 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
+  liblouis = callPackage ../development/libraries/liblouis { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
