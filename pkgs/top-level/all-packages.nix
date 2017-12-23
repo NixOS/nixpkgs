@@ -13730,6 +13730,8 @@ with pkgs;
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  scowl = callPackage ../data/misc/scowl { };
+
   shaderc = callPackage ../development/compilers/shaderc { };
 
   mime-types = callPackage ../data/misc/mime-types { };
