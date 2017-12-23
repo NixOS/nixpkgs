@@ -28,12 +28,12 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.21.0";
+  version = "0.21.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nf50ls2cnlsd2635nyji7l70xc91dw81qg5y01g5sifwwqcpmaw";
+    sha256 = "c5f5cba88bf0659554c41c909e1f78139f6fce8fa9315a29a23692b38ff9788a";
   };
 
   LC_ALL = "en_US.UTF-8";
