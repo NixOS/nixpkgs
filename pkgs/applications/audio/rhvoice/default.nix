@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rhvoice";
+  name = "rhvoice-${version}";
   #version = "2017-09-24";
   version = "0.5";
 
