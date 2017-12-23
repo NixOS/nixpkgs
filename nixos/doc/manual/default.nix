@@ -15,27 +15,13 @@ let
     else if builtins.isFunction x then "<function>"
     else x;
 
-  # Generate DocBook documentation for a list of packages
-  genRelatedPackages = packages:
-    let
-      unpack = p: if lib.isString p then { name = p; } else p;
-      describe = { name, package ? pkgs.${name}, comment ? "" }:
-          "<listitem>"
-        + "<para><option>pkgs.${name}</option> (${package.name}): ${package.meta.description or "???"}.</para>"
-        + lib.optionalString (comment != "") "\n<para>${comment}</para>"
-        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
-        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
-        + "</listitem>";
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
-
+  # Clean up declaration sites to not refer to the NixOS source tree.
   optionsList' = lib.flip map optionsList (opt: opt // {
-    # Clean up declaration sites to not refer to the NixOS source tree.
     declarations = map stripAnyPrefixes opt.declarations;
   }
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
+  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -46,22 +32,8 @@ let
   prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
   stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
 
-  # Custom "less" that pushes up all the things ending in ".enable*"
-  # and ".package"
-  optionListLess = a: b:
-    let
-      splt = lib.splitString ".";
-      ise = lib.hasPrefix "enable";
-      isp = lib.hasPrefix "package";
-      cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp (splt a) (splt b) < 0;
-
-  # Customly sort option list for the man page.
-  optionsList'' = lib.sort (a: b: optionListLess a.name b.name) optionsList';
-
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList'');
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
 
   optionsDocBook = runCommand "options-db.xml" {} ''
     optionsXML=${optionsXML}
