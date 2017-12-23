@@ -211,7 +211,7 @@ in
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
           AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys
+          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
           if [ -s $AUTH_KEYS ]; then
 
             # Read in key one by one, split in case Google decided
@@ -232,7 +232,7 @@ in
             chmod 600 /root/.ssh/authorized_keys
             rm -f $KEY_PUB
           else
-            echo "Downloading http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys failed."
+            echo "Downloading http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys failed."
             false
           fi
           rm -f $AUTH_KEYS
