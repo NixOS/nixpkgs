@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, python2
+{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2
 , hostPlatform
 }:
 
@@ -43,7 +43,7 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc dtc python2 ];
+    nativeBuildInputs = [ bc dtc openssl python2 ];
 
     hardeningDisable = [ "all" ];
 
