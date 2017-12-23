@@ -7,6 +7,7 @@ let
             , filesToInstall
             , installDir ? "$out"
             , defconfig
+            , extraMakeFlags ? []
             , extraMeta ? {}
             , ... } @ args:
            stdenv.mkDerivation (rec {
@@ -46,7 +47,7 @@ let
 
     hardeningDisable = [ "all" ];
 
-    makeFlags = [ "DTC=dtc" ];
+    makeFlags = [ "DTC=dtc" ] ++ extraMakeFlags;
 
     configurePhase = ''
       make ${defconfig}
