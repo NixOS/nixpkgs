@@ -16763,6 +16763,8 @@ with pkgs;
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
+
   slmenu = callPackage ../applications/misc/slmenu {};
 
   slop = callPackage ../tools/misc/slop {};
