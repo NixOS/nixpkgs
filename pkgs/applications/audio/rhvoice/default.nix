@@ -1,7 +1,6 @@
 { stdenv, lib, pkgconfig, fetchFromGitHub, scons, python, glibmm, libao
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   name = "rhvoice";
   #version = "2017-09-24";
@@ -55,8 +54,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A free and open source speech synthesizer for Russian language and others";
     homepage = https://github.com/Olga-Yakovleva/RHVoice/wiki;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ berce ];
-    platforms = with platforms; all;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ berce ];
+    platforms = with lib.platforms; all;
   };
 }
