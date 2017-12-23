@@ -20,25 +20,19 @@ stdenv.mkDerivation rec {
     python glibmm libao
   ];
 
-  # SConstruct patches
-  # 1. Scons creates an independent environment that assumes standard POSIX paths.
-  #    The patch is needed to push the nix environment.
-  #    - PATH
-  #    - PKG_CONFIG_PATH, to find available (sound) libraries
-  #    - RPATH, to link to the newly built libraries
-  # 2. Some data is being zipped. Zip can't handle files from 1970.
-  #
+  # SConstruct patch
+  #     Scons creates an independent environment that assumes standard POSIX paths.
+  #     The patch is needed to push the nix environment.
+  #     - PATH
+  #     - PKG_CONFIG_PATH, to find available (sound) libraries
+  #     - RPATH, to link to the newly built libraries
+
+  patches = [ ./honor_nix_environment.patch ];
+
+  # Zip friendly timestamps
+  #     Some data is being zipped. Zip can't handle files from 1970.
+
   postPatch = ''
-    substituteInPlace SConstruct --replace 'env=Environment(**env_args)' 'env=Environment(**env_args)
-        env.PrependENVPath("PATH", os.environ["PATH"])
-        env["ENV"]["PKG_CONFIG_PATH"]=os.environ["PKG_CONFIG_PATH"]
-            '
-    substituteInPlace SConstruct --replace 'else:
-            env["BUILDDIR"]=BUILDDIR
-    ' 'else:
-            env["BUILDDIR"]=BUILDDIR
-            env["RPATH"]="'$out'/lib"
-    '
     find "./" '!' -newermt '1980-01-01' -exec touch -d '1980-01-02' '{}' '+'
   '';
 
