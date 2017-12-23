@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = [
-    babl libpng cairo libjpeg librsvg pango gtk bzip2 json_glib
+    libpng cairo libjpeg librsvg pango gtk bzip2
     libraw libwebp gnome3.gexiv2
   ];
+
+  propagatedBuildInputs = [ glib json_glib babl ]; # for gegl-3.0.pc
 
   nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
 

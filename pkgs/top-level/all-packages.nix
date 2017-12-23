@@ -9434,6 +9434,8 @@ with pkgs;
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
+  libmypaint = callPackage ../development/libraries/libmypaint { };
+
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
   };
@@ -15073,7 +15075,6 @@ with pkgs;
   ghq = gitAndTools.ghq;
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
-    inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
