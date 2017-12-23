@@ -35,24 +35,19 @@ in
       description = ''
         The package used for Xen binary.
       '';
+      relatedPackages = [ "xen" "xen-light" ];
     };
 
-    virtualisation.xen.qemu = mkOption {
-      type = types.path;
-      defaultText = "\${pkgs.xen}/lib/xen/bin/qemu-system-i386";
-      example = literalExample "''${pkgs.qemu_xen-light}/bin/qemu-system-i386";
-      description = ''
-        The qemu binary to use for Dom-0 backend.
-      '';
-    };
-
-    virtualisation.xen.qemu-package = mkOption {
+    virtualisation.xen.package-qemu = mkOption {
       type = types.package;
       defaultText = "pkgs.xen";
       example = literalExample "pkgs.qemu_xen-light";
       description = ''
-        The package with qemu binaries for xendomains.
+        The package with qemu binaries for dom0 qemu and xendomains.
       '';
+      relatedPackages = [ "xen"
+                          { name = "qemu_xen-light"; comment = "For use with pkgs.xen-light."; }
+                        ];
     };
 
     virtualisation.xen.bootParams =
@@ -158,8 +153,7 @@ in
     } ];
 
     virtualisation.xen.package = mkDefault pkgs.xen;
-    virtualisation.xen.qemu = mkDefault "${pkgs.xen}/lib/xen/bin/qemu-system-i386";
-    virtualisation.xen.qemu-package = mkDefault pkgs.xen;
+    virtualisation.xen.package-qemu = mkDefault pkgs.xen;
     virtualisation.xen.stored = mkDefault "${cfg.package}/bin/oxenstored";
 
     environment.systemPackages = [ cfg.package ];
@@ -339,7 +333,8 @@ in
       after = [ "xen-console.service" ];
       requires = [ "xen-store.service" ];
       serviceConfig.ExecStart = ''
-        ${cfg.qemu} -xen-attach -xen-domid 0 -name dom0 -M xenpv \
+        ${cfg.package-qemu}/${cfg.package-qemu.qemu-system-i386} \
+           -xen-attach -xen-domid 0 -name dom0 -M xenpv \
            -nographic -monitor /dev/null -serial /dev/null -parallel /dev/null
         '';
     };
@@ -448,7 +443,7 @@ in
       before = [ "dhcpd.service" ];
       restartIfChanged = false;
       serviceConfig.RemainAfterExit = "yes";
-      path = [ cfg.package cfg.qemu-package ];
+      path = [ cfg.package cfg.package-qemu ];
       environment.XENDOM_CONFIG = "${cfg.package}/etc/sysconfig/xendomains";
       preStart = "mkdir -p /var/lock/subsys -m 755";
       serviceConfig.ExecStart = "${cfg.package}/etc/init.d/xendomains start";
