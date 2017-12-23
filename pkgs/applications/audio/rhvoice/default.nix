@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   name = "rhvoice-${version}";
-  #version = "2017-09-24";
   version = "0.5";
 
   src = fetchFromGitHub {
