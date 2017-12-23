@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, zlib, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec{
-  version = "1.7.0";
+  version = "1.8.0";
   name = "netdata-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "firehol";
     repo = "netdata";
-    sha256 = "1fv01jnbgwbafsxavlji90zdqizn8m4nfg9ivc4sbi05j036bg6n";
+    sha256 = "1kc6fzzfkfzz3yxy663s7ydq5kn6i6nvaycav8s0sa9k1wkpj3fv";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
