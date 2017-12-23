@@ -45,7 +45,7 @@ let
       let hlib = haskell.lib;
           elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
           elmPkgs' = elmRelease.packages;
-          elmPkgs = lib.mapAttrs (name: value: hlib.disableSharedExecutables value) (elmPkgs' // {
+          elmPkgs = elmPkgs' // {
 
             elm-reactor = hlib.overrideCabal elmPkgs'.elm-reactor (drv: {
               buildTools = drv.buildTools or [] ++ [ self.elm-make ];
@@ -85,7 +85,7 @@ let
                 ];
               });
             };
-          });
+          };
       in elmPkgs // {
         inherit elmPkgs;
         elmVersion = elmRelease.version;
@@ -96,6 +96,10 @@ let
           doCheck = false;
           sha256 = "16lz21bp9j14xilnq8yym22p3saxvc9fsgfcf5awn2a6i6n527xn";
           libraryHaskellDepends = drv.libraryHaskellDepends ++ [super.concatenative];
+        });
+        mkDerivation = args: super.mkDerivation (args // {
+          # reduce closure size for bin outputs
+          enableSharedExecutables = false;
         });
       };
   };
