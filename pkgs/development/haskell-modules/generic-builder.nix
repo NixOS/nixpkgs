@@ -1,31 +1,27 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo
+, jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo, haskellLib
 }:
-let isCross = (ghc.cross or null) != null; in
+let inherit (haskellLib.ghcInfo ghc) isCross isGhcjs nativeGhc; in
 
 { pname
-, dontStrip ? (ghc.isGhcjs or false)
+, dontStrip ? isGhcjs
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
-, buildDepends ? [], setupHaskellDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
 , buildTarget ? ""
-, buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
+, buildTools ? [], libraryToolDepends ? [], executableToolDepends ? []
 , configureFlags ? []
 , description ? ""
-, doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
-, doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
 , enableExecutableProfiling ? false
 # TODO enable shared libs for cross-compiling
-, enableSharedExecutables ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
-, enableSharedLibraries ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
+, enableSharedExecutables ? !isCross && ((isGhcjs || stdenv.lib.versionOlder "7.7" ghc.version))
+, enableSharedLibraries ? !isCross && ((isGhcjs || stdenv.lib.versionOlder "7.7" ghc.version))
 , enableSplitObjs ? null # OBSOLETE, use enableDeadCodeElimination
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip  for darwin
 , enableStaticLibraries ? true
-, extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
 , platforms ? ghc.meta.platforms
 , hydraPlatforms ? platforms
@@ -37,9 +33,6 @@ let isCross = (ghc.cross or null) != null; in
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
-, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
-, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
-, benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? []
 , testTarget ? ""
 , broken ? false
 , preCompileBuildDriver ? "", postCompileBuildDriver ? ""
@@ -56,6 +49,7 @@ let isCross = (ghc.cross or null) != null; in
 , hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, ... # For other arguments, see the 'mkDerivation helpers' section of lib.nix
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -63,18 +57,17 @@ assert editedCabalFile != null -> revision != null;
 assert enableSplitObjs == null;
 
 let
+  inherit (haskellLib.controlPhases ghc args) doCheck doBenchmark;
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
                        concatStringsSep enableFeature optionalAttrs toUpper
                        filter makeLibraryPath;
 
-  isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
   packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
                   then "package-db"
                   else "package-conf";
 
-  nativeGhc = if isCross || isGhcjs then ghc.bootPkgs.ghc else ghc;
   nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
                         then "package-db"
                         else "package-conf";
@@ -146,25 +139,11 @@ let
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
   ];
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
-  isSystemPkg = x: !isHaskellPkg x;
-
-  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
-                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+  inherit (haskellLib.extractBuildInputs ghc (args // { inherit doCheck doBenchmark; }))
+    allPkgconfigDepends propagatedBuildInputs otherBuildInputs haskellBuildInputs systemBuildInputs;
 
   nativeBuildInputs = optional (allPkgconfigDepends != []) pkgconfig ++
                       buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
-  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
-                     optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
-                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
-                     # ghcjs's hsc2hs calls out to the native hsc2hs
-                     optional isGhcjs nativeGhc ++
-                     optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
-
-  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
-  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
@@ -348,7 +327,9 @@ stdenv.mkDerivation ({
 
   passthru = passthru // {
 
-    inherit pname version;
+    inherit pname version ghc;
+
+    isHaskellPkg = true;
 
     isHaskellLibrary = hasActiveLibrary;
 
