@@ -39,6 +39,9 @@ let
        [org.gnome.desktop.screensaver]
        picture-uri='${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png'
 
+       [org.gnome.desktop.input-sources]
+       sources='[]'
+
        ${cfg.extraGSettingsOverrides}
      EOF
 
