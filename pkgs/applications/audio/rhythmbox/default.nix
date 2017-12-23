@@ -2,6 +2,7 @@
 , python3
 , perl
 , perlPackages
+, gstreamer
 , gtk3
 , intltool
 , libsoup
