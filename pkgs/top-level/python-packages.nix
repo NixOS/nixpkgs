@@ -6524,7 +6524,6 @@ in {
   pycuda = callPackage ../development/python-modules/pycuda rec {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (pkgs.stdenv) mkDerivation;
-    inherit pythonOlder;
   };
 
   pyphen = callPackage ../development/python-modules/pyphen {};
