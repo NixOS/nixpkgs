@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ../. ];
+
   boot = {
     kernelParams = [
       "drm.debug=0"

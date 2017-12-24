@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ../intel.nix ];
+  imports = [ ../. ];
 
   # hard disk protection if the laptop falls
   services.hdapsd.enable = true;
@@ -11,4 +11,6 @@
   #security.pam.services.login.fprintAuth = true;
   #security.pam.services.xscreensaver.fprintAuth = true;
   # similarly for other PAM providers
+
+  services.xserver.videoDrivers = [ "intel" ];
 }

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../.
     ../lib/kernel-version.nix
   ];
 
