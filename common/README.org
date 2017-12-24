@@ -1,2 +1,0 @@
-*NB!* This subtree is subject to change. Please don't import from here directly
-for now, unless you're OK that things might break at any point in time.
