@@ -170,6 +170,9 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc";
   };
 
   meta = {

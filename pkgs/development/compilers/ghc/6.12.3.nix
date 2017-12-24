@@ -36,7 +36,12 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags=["-S" "--keep-file-symbols"];
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc";
+  };
 
   meta = {
     homepage = http://haskell.org/ghc;
