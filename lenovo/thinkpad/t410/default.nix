@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ../. ];
+  imports = [ ../. ../tp-smapi.nix ];
 
   boot = {
     kernelParams = [

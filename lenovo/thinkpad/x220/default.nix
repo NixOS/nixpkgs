@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ../. ];
+  imports = [ ../. ../tp-smapi.nix ];
 
   # hard disk protection if the laptop falls
   services.hdapsd.enable = lib.mkDefault true;
