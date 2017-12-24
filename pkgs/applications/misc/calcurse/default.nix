@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, gettext, python3, makeWrapper }:
+{ stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "calcurse-${version}";
@@ -9,11 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "16jzg0nasnxdlz23i121x41pq5kbxmjzk52c5d863rg117fc7v1i";
   };
 
-  buildInputs = [ncurses gettext python3 ];
+  buildInputs = [ ncurses gettext python3 ];
   nativeBuildInputs = [ makeWrapper ];
 
+  # Build Python environment with httplib2 for calcurse-caldav
+  pythonEnv = python3Packages.python.buildEnv.override {
+    extraLibs = [ python3Packages.httplib2 ];
+  };
+  propogatedBuildInputs = [ pythonEnv ];
+
   postInstall = ''
-    makeWrapper ${python3}/bin/python3 $out/bin/calcurse-caldav
+    substituteInPlace $out/bin/calcurse-caldav --replace /usr/bin/python3 ${pythonEnv}/bin/python3
   '';
 
   meta = with stdenv.lib; {
