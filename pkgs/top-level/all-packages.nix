@@ -6133,6 +6133,12 @@ with pkgs;
   rustStable = callPackage ../development/compilers/rust {
     inherit (llvmPackages_4) llvm;
   };
+
+  rust119bin = lowPrio (callPackage ../development/compilers/rust/1.19.0-bin.nix {
+     buildRustPackage = callPackage ../build-support/rust {
+       rust = rust119bin;
+     };
+  });
   rustBeta = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/beta.nix {}));
 
   rustNightly = rustBeta;
@@ -14495,6 +14501,8 @@ with pkgs;
       python = python2;
       gnused = gnused_422;
       icu = icu59;
+      cargo = rust119bin.cargo;
+      rustc = rust119bin.rustc;
     };
   });
 
