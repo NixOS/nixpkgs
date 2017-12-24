@@ -62,7 +62,6 @@ ___ioctl
 ___iopolicysys
 ___kdebug_trace
 ___kdebug_trace64
-___kdebug_trace_string
 ___kernelVersionNumber
 ___kernelVersionString
 ___kill
@@ -87,7 +86,6 @@ ___mac_set_file
 ___mac_set_link
 ___mac_set_proc
 ___mac_syscall
-___microstackshot
 ___mkdir_extended
 ___mkfifo_extended
 ___mmap
@@ -117,8 +115,6 @@ ___pread
 ___pread_nocancel
 ___proc_info
 ___process_policy
-___pselect
-___pselect_nocancel
 ___psynch_cvbroad
 ___psynch_cvclrprepost
 ___psynch_cvsignal
@@ -197,7 +193,6 @@ ___sigsuspend_nocancel
 ___sigwait
 ___socketpair
 ___stack_snapshot
-___stack_snapshot_with_config
 ___stat64_extended
 ___stat_extended
 ___syscall
@@ -215,7 +210,6 @@ ___wait4
 ___wait4_nocancel
 ___waitid
 ___waitid_nocancel
-___work_interval_ctl
 ___workq_kernreturn
 ___workq_open
 ___write
@@ -452,7 +446,6 @@ _getsockopt
 _getuid
 _getwgroups_np
 _getxattr
-_grab_pgo_data
 _guarded_close_np
 _guarded_kqueue_np
 _guarded_open_dprotected_np
@@ -464,7 +457,6 @@ _host_check_multiuser_mode
 _host_create_mach_voucher
 _host_default_memory_manager
 _host_get_UNDServer
-_host_get_atm_diagnostic_flag
 _host_get_boot_info
 _host_get_clock_control
 _host_get_clock_service
@@ -490,7 +482,6 @@ _host_security_set_task_token
 _host_self
 _host_self_trap
 _host_set_UNDServer
-_host_set_atm_diagnostic_flag
 _host_set_exception_ports
 _host_set_multiuser_config_flags
 _host_set_special_port
@@ -507,10 +498,8 @@ _ioctl
 _issetugid
 _kas_info
 _kdebug_trace
-_kdebug_trace_string
 _kevent
 _kevent64
-_kevent_qos
 _kext_request
 _kill
 _kill$UNIX2003
@@ -557,7 +546,6 @@ _mach_host_self_
 _mach_init
 _mach_make_memory_entry
 _mach_make_memory_entry_64
-_mach_memory_info
 _mach_memory_object_memory_entry
 _mach_memory_object_memory_entry_64
 _mach_msg
@@ -702,7 +690,6 @@ _munlockall
 _munmap
 _munmap$UNIX2003
 _necp_match_policy
-_netagent_trigger
 _netname_check_in
 _netname_check_out
 _netname_look_up
@@ -743,7 +730,6 @@ _posix_spawn_file_actions_addopen
 _posix_spawn_file_actions_destroy
 _posix_spawn_file_actions_init
 _posix_spawnattr_destroy
-_posix_spawnattr_get_darwin_role_np
 _posix_spawnattr_get_qos_clamp_np
 _posix_spawnattr_getbinpref_np
 _posix_spawnattr_getcpumonitor
@@ -755,7 +741,6 @@ _posix_spawnattr_getprocesstype_np
 _posix_spawnattr_getsigdefault
 _posix_spawnattr_getsigmask
 _posix_spawnattr_init
-_posix_spawnattr_set_darwin_role_np
 _posix_spawnattr_set_importancewatch_port_np
 _posix_spawnattr_set_persona_gid_np
 _posix_spawnattr_set_persona_groups_np
@@ -796,10 +781,8 @@ _proc_importance_assertion_begin_with_msg
 _proc_importance_assertion_complete
 _proc_kmsgbuf
 _proc_libversion
-_proc_list_uptrs
 _proc_listallpids
 _proc_listchildpids
-_proc_listcoalitions
 _proc_listpgrppids
 _proc_listpids
 _proc_listpidspath
@@ -974,15 +957,6 @@ _socket
 _socket_delegate
 _socketpair
 _socketpair$UNIX2003
-_stackshot_capture_with_config
-_stackshot_config_create
-_stackshot_config_dealloc
-_stackshot_config_dealloc_buffer
-_stackshot_config_get_stackshot_buffer
-_stackshot_config_get_stackshot_size
-_stackshot_config_set_flags
-_stackshot_config_set_pid
-_stackshot_config_set_size_hint
 _stat
 _stat$INODE64
 _stat64
@@ -1050,7 +1024,6 @@ _thread_depress_abort
 _thread_get_assignment
 _thread_get_exception_ports
 _thread_get_mach_voucher
-_thread_get_register_pointer_values
 _thread_get_special_port
 _thread_get_state
 _thread_info
@@ -1123,10 +1096,6 @@ _waitid
 _waitid$NOCANCEL$UNIX2003
 _waitid$UNIX2003
 _watchevent
-_work_interval_create
-_work_interval_destroy
-_work_interval_notify
-_work_interval_notify_simple
 _write
 _write$NOCANCEL$UNIX2003
 _write$UNIX2003
