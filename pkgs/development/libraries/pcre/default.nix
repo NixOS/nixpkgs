@@ -33,6 +33,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 
+  # https://bugs.exim.org/show_bug.cgi?id=2173
+  patches = [ ./stacksize-detection.patch ];
+
   doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
