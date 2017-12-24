@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
 {
   boot = {
@@ -13,10 +13,10 @@
      ];
   };
 
-  services.xserver = {
-    videoDriver = "unichrome";
-    synaptics.enable = true;
-  };
+  hardware.firmware = with pkgs; [ intel2200BGFirmware ];
 
-  networking.enableIntel2200BGFirmware = true;
+  services.xserver = {
+    synaptics.enable = lib.mkDefault true;
+    videoDrivers = [ "unichrome" ];
+  };
 }
