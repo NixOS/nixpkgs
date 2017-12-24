@@ -14,9 +14,12 @@ mkDerivation rec {
     sha256 = "1dbvdrkdpgv39v8h7k3mri0nzlslfyd5kk410czj0jdn4qq400md";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules shared_mime_info ];
+  nativeBuildInputs = [
+    cmake extra-cmake-modules kdoctools shared_mime_info
+  ];
 
-  buildInputs = [ qtwebkit qtscript grantlee kxmlgui kwallet kparts kdoctools
+  buildInputs = [
+    qtwebkit qtscript grantlee kxmlgui kwallet kparts
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];
