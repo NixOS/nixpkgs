@@ -11,7 +11,6 @@ Then add an appropriate profile path to ~imports~ in
 | Model                     | Path                                       |
 |---------------------------+--------------------------------------------|
 | Acer Aspire 4810T         | ~<nixos-hardware/acer/aspire/4810t>~       |
-| Acer C720                 | ~<nixos-hardware/acer/c720>~               |
 | Airis N990                | ~<nixos-hardware/airis/n990>~              |
 | Apple MacBook Pro 10,1    | ~<nixos-hardware/apple/macbook-pro/10-1>~  |
 | Apple MacBook Pro 12,1    | ~<nixos-hardware/apple/macbook-pro/12-1>~  |
