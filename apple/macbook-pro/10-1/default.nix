@@ -10,7 +10,9 @@
 
   services.xserver = {
     libinput.enable = lib.mkDefault true;
+
     # TODO: we should not enable unfree drivers
+    # when there is an alternative (i.e. nouveau)
     videoDrivers = [ "nvidia" ];
   };
 }
