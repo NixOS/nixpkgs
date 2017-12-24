@@ -8,7 +8,7 @@ for profile in `${find[@]}`; do
     echo evaluating $profile >&2
 
     nixos-rebuild \
-	-I nixos-config=tests/eval-test.nix \
+	-I nixos-config=_tests/eval-test.nix \
 	-I nixos-hardware-profile=$profile \
 	dry-build
 
