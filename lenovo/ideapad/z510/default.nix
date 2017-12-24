@@ -1,9 +1,8 @@
-{ config, pkgs, ... }:
+{ lib, ... }:
 
 {
-  hardware.cpu.intel.updateMicrocode = true;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 
-  # see https://github.com/NixOS/nixpkgs/issues/18356
-  # found buggy driver with method https://wiki.ubuntu.com/DebuggingKernelSuspend
+  # https://github.com/NixOS/nixpkgs/issues/18356
   boot.blacklistedKernelModules = [ "nouveau" ];
 }

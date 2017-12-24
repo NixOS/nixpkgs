@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   boot = {
     initrd.kernelModules = [ "ata_piix" ];
@@ -15,12 +17,12 @@
   hardware.opengl.driSupport = false;
 
   services.xserver = {
-    enable = true;
-    defaultDepth = 24;
-    videoDriver = "intel";
-    autorun = true;
+    enable = lib.mkDefault true;
+    defaultDepth = lib.mkDefault 24;
+    videoDrivers = [ "intel" ];
+    autorun = lib.mkDefault true;
     synaptics = {
-      enable = true;
+      enable = lib.mkDefault true;
       dev = "/dev/input/event8";
     };
   };

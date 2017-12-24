@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    ipmitool
-  ];
+  environment.systemPackages = with pkgs; [ ipmitool ];
 
   boot.kernelModules = [ "jc42" "ipmi_devintf" "ipmi_si" "tpm_rng" ];
 
