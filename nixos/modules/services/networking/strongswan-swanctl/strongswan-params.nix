@@ -28,7 +28,8 @@ in {
     '';
   };
 
-  charon = charonParams;
+  # Since we only use charon-systemd we don't need to generate options for charon.
+  # charon = charonParams;
 
   charon-nm = {
     ca_dir = mkStrParam "<default>" ''
