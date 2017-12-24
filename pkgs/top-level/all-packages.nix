@@ -13577,6 +13577,8 @@ with pkgs;
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  ibm-plex = callPackage ../data/fonts/ibm-plex { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
