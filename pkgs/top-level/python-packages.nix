@@ -22969,11 +22969,11 @@ EOF
 
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
-    version = "2.4.1";
+    version = "4.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
-      sha256 = "95a222d01df60c888d56d86f91219bfbd47106a534e89ca7f80fb555cfbe08c1";
+      sha256 = "0cadwsr97c80k18if7qy5d8j8l1zj3yhnkm6kbngk0lpl7pxq8ax";
     };
 
     buildInputs = with self; [ nose ];
