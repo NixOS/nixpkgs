@@ -2,16 +2,7 @@
 
 cd $(dirname $0)/..
 
-skip_paths=(
-    ./inversepath/usbarmory/*
-    ./tests/*
-)
-
-find=(find . -name *.nix)
-
-for path in ${skip_paths[@]}; do
-    find+=(-not -path $path)
-done
+find=(find . -name default.nix)
 
 for profile in `${find[@]}`; do
     echo evaluating $profile >&2
