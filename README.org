@@ -16,7 +16,6 @@ Then add an appropriate profile path to ~imports~ in
 | Apple MacBook Pro 10,1    | ~<nixos-hardware/apple/macbook-pro/10-1>~  |
 | Apple MacBook Pro 12,1    | ~<nixos-hardware/apple/macbook-pro/12-1>~  |
 | Dell XPS 15 9550          | ~<nixos-hardware/dell/xps/15-9550>~        |
-| Inverse Path USB armory   | ~<nixos-hardware/inversepath/usbarmory>~   |
 | Lenovo IdeaPad Z510       | ~<nixos-hardware/lenovo/ideapad/z510>~     |
 | Lenovo ThinkPad T410      | ~<nixos-hardware/lenovo/thinkpad/t410>~    |
 | Lenovo ThinkPad T440p     | ~<nixos-hardware/lenovo/thinkpad/t440p>~   |
