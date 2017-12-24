@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [ ../. ];
@@ -28,7 +28,7 @@
     ];
   };
 
-  hardware.cpu.intel.updateMicrocode = true;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
 
   systemd.services.tune-powermanagement = {
     description = "Tune Powermanagement";

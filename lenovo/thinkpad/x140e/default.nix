@@ -9,7 +9,7 @@
     extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
     # audio device
-    extraModprobeConfig = ''
+    extraModprobeConfig = lib.mkDefault ''
       options snd_hda_intel enable=0,1
     '';
   };
