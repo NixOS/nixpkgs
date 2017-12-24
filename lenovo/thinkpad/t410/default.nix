@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ../. ../tp-smapi.nix ];
+  imports = [
+    ../.
+    ../tp-smapi.nix
+    ../../../common/cpu/intel
+  ];
 
   boot = {
     kernelParams = [
@@ -27,8 +31,4 @@
       "sierra_net" "cdc_mbim" "cdc_ncm" "btusb"
     ];
   };
-
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
-
-  services.xserver.videoDrivers = [ "intel" ];
 }

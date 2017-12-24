@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ../../.
+    ../.
+    ../../../common/pc/laptop/ssd
     <nixpkgs/nixos/modules/hardware/network/broadcom-43xx.nix>
   ];
 

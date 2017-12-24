@@ -1,7 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ../. ];
+  imports = [
+    ../.
+    ../../../common/cpu/intel
+  ];
 
   boot = {
     extraModprobeConfig = lib.mkDefault ''
@@ -9,6 +12,4 @@
     '';
     kernelModules = [ "tpm-rng" ];
   };
-
-  services.xserver.videoDrivers = [ "intel" ];
 }

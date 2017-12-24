@@ -1,6 +1,8 @@
 { lib, pkgs, ... }:
 
 {
+  imports = [ ../../common/pc/laptop ];
+
   boot = {
     initrd.kernelModules = [ "pata_via" ];
 
@@ -15,8 +17,5 @@
 
   hardware.firmware = with pkgs; [ intel2200BGFirmware ];
 
-  services.xserver = {
-    synaptics.enable = lib.mkDefault true;
-    videoDrivers = [ "unichrome" ];
-  };
+  services.xserver.videoDrivers = [ "openchrome" ];
 }

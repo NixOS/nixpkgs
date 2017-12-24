@@ -1,11 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ../. ];
+  imports = [
+    ../../../common/cpu/intel
+    ../.
+  ];
 
-  # Use the gummiboot efi boot loader. (From default generated configuration.nix)
+  # TODO: boot loader
   boot.loader.systemd-boot.enable = lib.mkDefault true;
   boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
-
-  services.xserver.videoDrivers = [ "intel" ];
 }

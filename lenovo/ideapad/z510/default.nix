@@ -1,7 +1,10 @@
 { lib, ... }:
 
 {
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault true;
+  imports = [
+    ../.
+    ../../../common/cpu/intel
+  ];
 
   # https://github.com/NixOS/nixpkgs/issues/18356
   boot.blacklistedKernelModules = [ "nouveau" ];
