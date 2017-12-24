@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "mate-panel-${version}";
   version = "${major-ver}.${minor-ver}";
   major-ver = "1.18";
-  minor-ver = "4";
+  minor-ver = "6";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1n565ff1n7jrfx223i3cl3m69wjda506nvbn8gra7m1jwdfzpbw1";
+    sha256 = "0cyfqq7i3qilw6qfxay4j9rl9y03s611nrqy5bh7lkdx1y0l16kx";
   };
 
   nativeBuildInputs = [

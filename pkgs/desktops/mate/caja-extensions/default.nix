@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "caja-extensions-${version}";
   version = "${major-ver}.${minor-ver}";
   major-ver = "1.18";
-  minor-ver = "1";
+  minor-ver = "2";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0hgala7zkfsa60jflq3s4n9yd11dhfdcla40l83cmgc3r1az7cmw";
+    sha256 = "065j3dyk7zp35rfvxxsdglx30i3xrma4d4saf7mn1rn1akdfgaba";
   };
 
   nativeBuildInputs = [
