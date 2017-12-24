@@ -4740,6 +4740,8 @@ in {
 
     propagatedBuildInputs = with self; [ greenlet ];
 
+    doCheck = false;
+
     meta = {
       description = "Eventlib bindings for python";
       homepage    = "http://ag-projects.com/";
