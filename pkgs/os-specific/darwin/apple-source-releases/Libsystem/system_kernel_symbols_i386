@@ -406,7 +406,6 @@ _fsync$NOCANCEL$UNIX2003
 _fsync$UNIX2003
 _ftruncate
 _futimes
-_get_dp_control_port
 _getattrlist
 _getattrlist$UNIX2003
 _getattrlistat
@@ -908,7 +907,6 @@ _sendmsg_x
 _sendto
 _sendto$NOCANCEL$UNIX2003
 _sendto$UNIX2003
-_set_dp_control_port
 _setattrlist
 _setattrlist$UNIX2003
 _setaudit
