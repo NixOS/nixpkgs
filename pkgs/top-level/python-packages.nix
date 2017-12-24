@@ -22840,15 +22840,7 @@ EOF
     doCheck = false;
   };
 
-  ansi = buildPythonPackage rec {
-    name = "ansi-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/ansi/${name}.tar.gz";
-      sha256 = "06y6470bzvlqys3zi2vc68rmk9n05v1ibral14gbfpgfa8fzy7pg";
-    };
-  };
+  ansi = callPackage ../development/python-modules/ansi { };
 
   pygments-markdown-lexer = buildPythonPackage rec {
     name = "pygments-markdown-lexer-${version}";
