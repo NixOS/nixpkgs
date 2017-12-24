@@ -3,6 +3,6 @@
 { pkgs, ... }:
 
 {
-  boot.extraModulePackages = [ pkgs.linuxPackages.rtl8812au ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ rtl8812au ];
   boot.kernelModules = [ "8812au" ];
 }
