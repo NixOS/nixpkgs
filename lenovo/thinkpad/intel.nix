@@ -1,4 +1,4 @@
 {
-  boot.kernelModules = mkDefault [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" ];
   services.xserver.videoDrivers = [ "intel" ];
 }
