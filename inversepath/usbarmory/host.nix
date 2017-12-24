@@ -24,12 +24,11 @@ in
 
   services.udev.extraRules =
     ''SUBSYSTEM=="net", ACTION=="add", ATTRS{idVendor}=="0525", ATTRS{idProduct}=="a4a2", NAME="${staticDevName}"'';
-  # systemshit will probably still leave an a interface with a garbage name around
 
   networking =
     { interfaces."${staticDevName}".ip4 = [{ address = "10.0.0.2"; prefixLength = 24; }];
       nat = { enable = true; internalInterfaces = [ staticDevName ]; };
       extraHosts = "10.0.0.1 armory";
     };
-  
+
 }
