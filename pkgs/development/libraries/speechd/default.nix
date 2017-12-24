@@ -66,14 +66,15 @@ in stdenv.mkDerivation rec {
     # ++ optional withIvona "--with-ivona"
   ;
 
-  patches = [ ./add_rhvoice_module.patch ./set_nix_defaultModule.patch ];
+  patches = [ ./set_nix_defaultModule.patch ]
+    ++ optional withRhvoice [ ./add_rhvoice_module.patch ];
 
   postPatch = ''
-    substituteInPlace config/speechd.conf --replace "nixDefault" "${selectedDefaultModule}"
-    substituteInPlace config/speechd.conf --replace "sd_rhvoice" "${rhvoice}/bin/sd_rhvoice"
-    substituteInPlace config/speechd.conf --replace "RHVoice.conf" "${rhvoice}/etc/RHVoice/RHVoice.conf"
-    ${stdenv.lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace config/speechd.conf --replace "nixDefault" "${selectedDefaultModule}"
+    ${stdenv.lib.optionalString withRhvoice ''
+      substituteInPlace config/speechd.conf --replace "sd_rhvoice" "${rhvoice}/bin/sd_rhvoice"
+      substituteInPlace config/speechd.conf --replace "RHVoice.conf" "${rhvoice}/etc/RHVoice/RHVoice.conf"
     ''}
   '';
 
