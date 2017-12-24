@@ -1,8 +1,27 @@
 #!/bin/sh
 
-cd $(dirname $0)
+cd $(dirname $0)/..
 
-for profile in $(find .. -name \*.nix); do
-    echo $profile >&2
-    nixos-rebuild -I nixos-config=eval-test.nix -I nixos-hardware-profile=$profile dry-build
+skip_paths=(
+    ./inversepath/usbarmory/*
+    ./tests/*
+)
+
+find=(find . -name *.nix)
+
+for path in ${skip_paths[@]}; do
+    find+=(-not -path $path)
+done
+
+for profile in `${find[@]}`; do
+    echo evaluating $profile >&2
+
+    nixos-rebuild \
+	-I nixos-config=tests/eval-test.nix \
+	-I nixos-hardware-profile=$profile \
+	dry-build
+
+    if [ $? -ne 0 ]; then
+	exit 1
+    fi
 done
