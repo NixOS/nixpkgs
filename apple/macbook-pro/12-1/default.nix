@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../.
     <nixpkgs/nixos/modules/hardware/network/broadcom-43xx.nix>
   ];
 
