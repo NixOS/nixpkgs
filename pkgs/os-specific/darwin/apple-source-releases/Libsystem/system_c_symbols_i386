@@ -240,11 +240,6 @@ __os_assumes_log_ctx
 __os_avoid_tail_call
 __os_debug_log
 __os_debug_log_error_str
-__osx_assert_log
-__osx_assert_log_ctx
-__osx_assumes_log
-__osx_assumes_log_ctx
-__osx_avoid_tail_call
 __putenvp
 __pututxline
 __rand48_add

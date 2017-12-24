@@ -16,7 +16,6 @@ ___bsdthread_terminate
 ___carbon_delete
 ___chmod
 ___chmod_extended
-___chud
 ___close
 ___close_nocancel
 ___coalition
@@ -35,7 +34,6 @@ ___fchmod_extended
 ___fcntl
 ___fcntl_nocancel
 ___fork
-___fsgetpath
 ___fstat64_extended
 ___fstat_extended
 ___fsync
@@ -147,7 +145,6 @@ ___recvfrom_nocancel
 ___recvmsg
 ___recvmsg_nocancel
 ___rename
-___rename_ext
 ___renameat
 ___rmdir
 ___sandbox_me
@@ -192,7 +189,6 @@ ___sigsuspend
 ___sigsuspend_nocancel
 ___sigwait
 ___socketpair
-___stack_snapshot
 ___stat64_extended
 ___stat_extended
 ___syscall
