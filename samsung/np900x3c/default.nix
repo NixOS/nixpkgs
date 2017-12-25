@@ -1,3 +1,5 @@
+# TODO: use ../../common/pc/laptop
+
 { lib, ... }:
 
 {

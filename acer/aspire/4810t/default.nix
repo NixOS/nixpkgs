@@ -14,14 +14,15 @@
       "vga=0x317"
       "video=vesafb:ywrap"
 
-      # Important, to disable Kernel Mode Setting for the graphics card
-      # This will allow backlight regulation
+      # Important, disable KMS to fix backlight regulation:
       "nomodeset"
     ];
   };
 
+  # TODO: reverse compat
   hardware.opengl.driSupport = false;
 
+  # TODO: reverse compat
   services.xserver = {
     defaultDepth = lib.mkDefault 24;
   };

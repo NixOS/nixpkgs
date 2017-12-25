@@ -10,7 +10,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # TODO: drop
+  # TODO: reverse compat
   hardware.opengl.driSupport32Bit = true;
 
   services.xserver = {

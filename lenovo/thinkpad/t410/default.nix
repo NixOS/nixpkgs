@@ -8,6 +8,8 @@
   ];
 
   boot = {
+    # TODO: this configuration seems to be very aggressive.
+    # Ask @peti if it's stable or not.
     kernelParams = [
       "drm.debug=0"
       "drm.vblankoffdelay=1"
