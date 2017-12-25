@@ -1,18 +1,15 @@
 #!/bin/sh
 
-cd $(dirname $0)/..
+set -e
 
-find=(find . -name default.nix)
+cd "$(dirname "$0")/.."
 
-for profile in `${find[@]}`; do
-    echo evaluating $profile >&2
+for profile in $(find . -name default.nix); do
+  echo evaluating $profile >&2
 
-    nixos-rebuild \
-	-I nixos-config=tests/eval-test.nix \
-	-I nixos-hardware-profile=$profile \
-	dry-build
-
-    if [ $? -ne 0 ]; then
-	exit 1
-    fi
+  nix-build '<nixpkgs/nixos>' \
+    -I nixos-config=tests/eval-test.nix \
+    -I nixos-hardware-profile=$profile \
+    -A system \
+    --dry-run
 done
