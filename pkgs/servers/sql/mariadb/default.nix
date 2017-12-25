@@ -182,6 +182,8 @@ connector-c = stdenv.mkDerivation rec {
 
   postFixup = ''
     ln -sv mariadb_config $out/bin/mysql_config
+    ln -sv mariadb $out/lib/mysql
+    ln -sv mariadb $out/include/mysql
   '';
 
   meta = with stdenv.lib; {
