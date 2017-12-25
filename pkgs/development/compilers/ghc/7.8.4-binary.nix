@@ -83,9 +83,6 @@ stdenv.mkDerivation rec {
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-      for prog in ld ar gcc strip ranlib; do
-        find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
-      done
     '';
 
   configurePlatforms = [ ];
@@ -105,8 +102,12 @@ stdenv.mkDerivation rec {
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    find "$out" -type f -executable \
-        -exec patchelf --set-rpath "${libPath}" {} \;
+    for p in $(find "$out" -type f -executable); do
+      if isELF "$p"; then
+        echo "Patchelfing $p"
+        patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+      fi
+    done
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
@@ -122,6 +123,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
