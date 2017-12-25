@@ -4,17 +4,17 @@ with python27Packages;
 
 stdenv.mkDerivation rec {
   name = "google-app-engine-go-sdk-${version}";
-  version = "1.9.55";
+  version = "1.9.61";
   src =
     if stdenv.system == "x86_64-linux" then
       fetchzip {
         url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
-        sha256 = "1gwrmqs69h3wbx6z0a7shdr8gn1qiwrkvh3pg6mi7dybwmd1x61h";
+        sha256 = "1i2j9ympl1218akwsmm7yb31v0gibgpzlb657bcravi1irfv1hhs";
       }
     else
       fetchzip {
         url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_darwin_amd64-${version}.zip";
-        sha256 = "0b8r2fqg9m285ifz0jahd4wasv7cq61nr6p1k664w021r5y5lbvr";
+        sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
       };
 
   buildInputs = [python27 makeWrapper];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -r "$src" "$out/share/go_appengine"
 
     # create wrappers with correct env
-    for i in goapp appcfg.py; do
+    for i in goapp go-app-stager *.py; do
       makeWrapper "$out/share/go_appengine/$i" "$out/bin/$i" \
         --prefix PATH : "${python27}/bin" \
         --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl})"
