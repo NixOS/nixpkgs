@@ -31,10 +31,10 @@ common = rec { # attributes common to both builds
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   prePatch = ''
-    substituteInPlace cmake/libutils.cmake \
-      --replace /usr/bin/libtool libtool
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
+
+  patches = [ ./cmake-includedir.patch ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -48,7 +48,7 @@ common = rec { # attributes common to both builds
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
-    "-DWITH_PCRE=bundled"
+    "-DWITH_PCRE=system"
 
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
     # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
@@ -105,10 +105,8 @@ client = stdenv.mkDerivation (common // {
 
   # prevent cycle; it needs to reference $dev
   postInstall = common.postInstall + ''
+    moveToOutput bin/mysql_config "$dev"
     moveToOutput bin/mariadb_config "$dev"
-    mv $bin/bin/mysql_config $dev/bin
-    mv $out/nix/store/*/include/mysql/*.h $dev/include/mysql
-    rm -r $out/nix
   '';
 
   enableParallelBuilding = true; # the client should be OK
@@ -156,7 +154,6 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
-    rm "$out"/bin/rcmysql
   '';
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
