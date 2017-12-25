@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, xtrans, dbus_glib, systemd,
-  libSM, libXtst, gtk3, gsettings_desktop_schemas, mate-desktop,
-  hicolor_icon_theme, wrapGAppsHook
+  libSM, libXtst, gtk3, mate-desktop, hicolor_icon_theme,
+  wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     libSM
     libXtst
     gtk3
-    gsettings_desktop_schemas
     mate-desktop
     hicolor_icon_theme
   ];
