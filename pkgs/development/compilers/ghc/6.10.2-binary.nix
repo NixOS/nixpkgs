@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl, perl
 , libedit, ncurses5, gmp
+, enableIntegerSimple ? false
 }:
 
 stdenv.mkDerivation rec {
