@@ -248,7 +248,6 @@ in {
 
       databasePassword = mkOption {
         type = types.str;
-        default = "";
         description = "Gitlab database user password.";
       };
 
@@ -439,12 +438,6 @@ in {
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
-
-    assertions = [
-      { assertion = cfg.databasePassword != "";
-        message = "databasePassword must be set";
-      }
-    ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
