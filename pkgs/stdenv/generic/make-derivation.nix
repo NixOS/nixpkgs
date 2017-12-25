@@ -182,6 +182,14 @@ rec {
           outputs = outputs';
         } else { }));
 
+      validity = import ./check-meta.nix {
+        inherit lib config meta derivationArg;
+        mkDerivationArg = attrs;
+        # Nix itself uses the `system` field of a derivation to decide where
+        # to build it. This is a bit confusing for cross compilation.
+        inherit (stdenv) system;
+      };
+
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not
       # passed to the builder and is not a dependency.  But since we
@@ -207,21 +215,16 @@ rec {
 
     in
 
-      lib.addPassthru
-        (derivation (import ./check-meta.nix
-          {
-            inherit lib config meta derivationArg;
-            mkDerivationArg = attrs;
-            # Nix itself uses the `system` field of a derivation to decide where
-            # to build it. This is a bit confusing for cross compilation.
-            inherit (stdenv) system;
-          }))
-        ( {
-            overrideAttrs = f: mkDerivation (attrs // (f attrs));
-            inherit meta passthru;
-          } //
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          passthru);
+      lib.extendDerivation
+        validity.handled
+        ({
+           overrideAttrs = f: mkDerivation (attrs // (f attrs));
+           inherit meta passthru;
+         } //
+         # Pass through extra attributes that are not inputs, but
+         # should be made available to Nix expressions using the
+         # derivation (e.g., in assertions).
+         passthru)
+        (derivation derivationArg);
+
 }
