@@ -18429,6 +18429,10 @@ with pkgs;
     nativeOnly = true;
   }).run;
 
+  linux-steam-integration = callPackage ../games/linux-steam-integration {
+    gtk = pkgs.gtk3;
+  };
+
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
   };
