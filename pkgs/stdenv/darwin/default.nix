@@ -58,6 +58,7 @@ in rec {
                           extraPreHook      ? "",
                           extraNativeBuildInputs,
                           extraBuildInputs,
+                          libcxx,
                           allowedRequisites ? null}:
     let
       buildPackages = lib.optionalAttrs (last ? stdenv) {
@@ -81,6 +82,8 @@ in rec {
       cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
         inherit shell;
         inherit (last) stdenvNoCC;
+
+        extraPackages = lib.optional (libcxx != null) libcxx;
 
         nativeTools  = false;
         nativeLibc   = false;
@@ -176,6 +179,7 @@ in rec {
 
     extraNativeBuildInputs = [];
     extraBuildInputs = [];
+    libcxx = null;
   };
 
   stage1 = prevStage: let
@@ -183,7 +187,8 @@ in rec {
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraNativeBuildInputs = [];
-    extraBuildInputs = [ pkgs.libcxx ];
+    extraBuildInputs = [ ];
+    libcxx = pkgs.libcxx;
 
     allowedRequisites =
       [ bootstrapTools ] ++ (with pkgs; [ libcxx libcxxabi ]) ++ [ pkgs.darwin.Libsystem ];
@@ -210,7 +215,8 @@ in rec {
     '';
 
     extraNativeBuildInputs = [ pkgs.xz ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
 
     allowedRequisites =
       [ bootstrapTools ] ++
@@ -242,7 +248,8 @@ in rec {
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
     extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
 
     extraPreHook = ''
       export PATH=${pkgs.bash}/bin:$PATH
@@ -277,7 +284,9 @@ in rec {
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
     extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
+
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
@@ -347,10 +356,11 @@ in rec {
       cc       = pkgs.llvmPackages.clang-unwrapped;
       bintools = pkgs.darwin.binutils;
       libc     = pkgs.darwin.Libsystem;
+      extraPackages = [ pkgs.libcxx ];
     };
 
     extraNativeBuildInputs = [];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
 
     extraAttrs = {
       inherit platform bootstrapTools;
