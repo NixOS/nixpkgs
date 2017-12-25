@@ -20,10 +20,14 @@ in
 {
   options = {
 
-    services.xserver.desktopManager.mate.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the MATE desktop environment";
+    services.xserver.desktopManager.mate = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the MATE desktop environment";
+      };
+
+      debug = mkEnableOption "mate-session debug messages";
     };
 
     environment.mate.excludePackages = mkOption {
@@ -55,7 +59,7 @@ in
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
-        ${pkgs.mate.mate-session-manager}/bin/mate-session &
+        ${pkgs.mate.mate-session-manager}/bin/mate-session ${optionalString cfg.debug "--debug"} &
         waitPID=$!
       '';
     };
