@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl, perl
+, fetchurl, perl, gcc
 , ncurses5, gmp, libiconv
 , enableIntegerSimple ? false
 }:
@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
     # during linking
     stdenv.lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
+      # not enough room in the object files for the full path to libiconv :(
+      for exe in $(find . -type f -executable); do
+        isScript $exe && continue
+        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+      done
     '' +
 
     # Some scripts used during the build need to have their shebangs patched
@@ -122,7 +128,7 @@ stdenv.mkDerivation rec {
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
       ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
+      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
     done
 
     for file in $(find "$out" -name setup-config); do

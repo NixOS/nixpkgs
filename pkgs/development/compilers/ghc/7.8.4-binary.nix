@@ -46,6 +46,15 @@ stdenv.mkDerivation rec {
     # during linking
     stdenv.lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
+      # not enough room in the object files for the full path to libiconv :(
+      for exe in $(find . -type f -executable); do
+        isScript $exe && continue
+        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
+        for file in $(find . -name setup-config); do
+          substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+        done
+      done
     '' +
 
     # Some scripts used during the build need to have their shebangs patched
