@@ -8,7 +8,7 @@ for profile in $(find . -name default.nix); do
   echo evaluating $profile >&2
 
   nix-build '<nixpkgs/nixos>' \
-    -I nixos-config=tests/eval-test.nix \
+    -I nixos-config=tests/eval.nix \
     -I nixos-hardware-profile=$profile \
     -A system \
     --dry-run \
