@@ -16,6 +16,7 @@ ___bsdthread_terminate
 ___carbon_delete
 ___chmod
 ___chmod_extended
+___chud
 ___close
 ___close_nocancel
 ___coalition
@@ -34,6 +35,7 @@ ___fchmod_extended
 ___fcntl
 ___fcntl_nocancel
 ___fork
+___fsgetpath
 ___fstat64_extended
 ___fstat_extended
 ___fsync
@@ -42,6 +44,7 @@ ___get_remove_counter
 ___getattrlist
 ___getdirentries64
 ___gethostuuid
+___getlcid
 ___getlogin
 ___getpeername
 ___getpid
@@ -73,6 +76,8 @@ ___lstat_extended
 ___mac_execve
 ___mac_get_fd
 ___mac_get_file
+___mac_get_lcid
+___mac_get_lctx
 ___mac_get_link
 ___mac_get_mount
 ___mac_get_pid
@@ -81,6 +86,7 @@ ___mac_getfsstat
 ___mac_mount
 ___mac_set_fd
 ___mac_set_file
+___mac_set_lctx
 ___mac_set_link
 ___mac_set_proc
 ___mac_syscall
@@ -144,6 +150,7 @@ ___recvfrom_nocancel
 ___recvmsg
 ___recvmsg_nocancel
 ___rename
+___rename_ext
 ___renameat
 ___rmdir
 ___sandbox_me
@@ -164,6 +171,7 @@ ___sendmsg_nocancel
 ___sendto
 ___sendto_nocancel
 ___setattrlist
+___setlcid
 ___setlogin
 ___setpriority
 ___setregid
@@ -188,6 +196,7 @@ ___sigsuspend
 ___sigsuspend_nocancel
 ___sigwait
 ___socketpair
+___stack_snapshot
 ___stat64_extended
 ___stat_extended
 ___syscall
@@ -349,6 +358,7 @@ _csops
 _csops_audittoken
 _csr_check
 _csr_get_active_config
+_csr_get_pending_config
 _denap_boost_assertion_token
 _disconnectx
 _dup
@@ -401,6 +411,7 @@ _fsync$NOCANCEL$UNIX2003
 _fsync$UNIX2003
 _ftruncate
 _futimes
+_get_dp_control_port
 _getattrlist
 _getattrlist$UNIX2003
 _getattrlistat
@@ -480,6 +491,7 @@ _host_statistics
 _host_statistics64
 _host_swap_exception_ports
 _host_virtual_physical_table_info
+_host_zone_info
 _i386_get_ldt
 _i386_set_ldt
 _important_boost_assertion_token
@@ -883,6 +895,7 @@ _sendmsg_x
 _sendto
 _sendto$NOCANCEL$UNIX2003
 _sendto$UNIX2003
+_set_dp_control_port
 _setattrlist
 _setattrlist$UNIX2003
 _setaudit

@@ -764,11 +764,6 @@ _processor_set_statistics
 _processor_set_tasks
 _processor_set_threads
 _processor_start
-_pselect
-_pselect$1050
-_pselect$DARWIN_EXTSN
-_pselect$DARWIN_EXTSN$NOCANCEL
-_pselect$NOCANCEL
 _pthread_getugid_np
 _pthread_setugid_np
 _ptrace
