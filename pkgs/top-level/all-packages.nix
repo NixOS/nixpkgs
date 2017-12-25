@@ -9415,6 +9415,8 @@ with pkgs;
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
+  liblcf = callPackage ../development/libraries/liblcf { };
+
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
