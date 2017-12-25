@@ -30,6 +30,7 @@ should look like:
 | Lenovo ThinkPad T460s     | ~<nixos-hardware/lenovo/thinkpad/t460s>~   |
 | Lenovo ThinkPad X140e     | ~<nixos-hardware/lenovo/thinkpad/x140e>~   |
 | Lenovo ThinkPad X220      | ~<nixos-hardware/lenovo/thinkpad/x220>~    |
+| Lenovo ThinkPad X250      | ~<nixos-hardware/lenovo/thinkpad/x250>~    |
 | Microsoft Surface Pro 3   | ~<nixos-hardware/microsoft/surface-pro/3>~ |
 | Raspberry Pi 2            | ~<nixos-hardware/raspberry-pi/2>~          |
 | Samsung Series 9 NP900X3C | ~<nixos-hardware/samsung/np900x3c>~        |
