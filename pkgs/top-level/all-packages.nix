@@ -18008,6 +18008,8 @@ with pkgs;
 
   d2x_rebirth = callPackage ../games/d2x-rebirth { };
 
+  easyrpg-player = callPackage ../games/easyrpg-player { };
+
   eboard = callPackage ../games/eboard { };
 
   eduke32 = callPackage ../games/eduke32 { };
