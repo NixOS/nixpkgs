@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sm2ca3lcdr4vjg7v94d8zhqz8cdp44rg8yinzzwkgsr0hj74fv2";
   };
 
-  buildInputs = [ unzip gmp zlib bzip2 boost mysql.client ];
+  buildInputs = [ unzip gmp zlib bzip2 boost mysql.connector-c ];
 
   patchPhase = ''
     substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" \
-      "${stdenv.lib.getLib mysql.client}/lib/mysql"
+      "${mysql.connector-c}/lib/mariadb"
   '';
 
   buildPhase = ''
