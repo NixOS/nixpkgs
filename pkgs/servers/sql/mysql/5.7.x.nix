@@ -3,7 +3,8 @@
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
-stdenv.mkDerivation rec {
+let
+self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
   version = "5.7.20";
 
@@ -54,11 +55,14 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 
-  passthru.mysqlVersion = "5.7";
+  passthru = {
+    connector-c = self;
+    mysqlVersion = "5.7";
+  };
 
   meta = {
     homepage = http://www.mysql.com/;
     description = "The world's most popular open source database";
     platforms = stdenv.lib.platforms.unix;
   };
-}
+}; in self
