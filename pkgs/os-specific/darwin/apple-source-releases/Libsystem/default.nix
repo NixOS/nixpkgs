@@ -62,29 +62,29 @@ appleDerivation rec {
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
        -o $out/lib/system/libsystem_c.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_c_symbols_x86_64}
+       -reexported_symbols_list ${symbols/system_c_symbols_x86_64}
 
     ld -macosx_version_min 10.7 -arch i386 -dylib \
        -o $out/lib/system/libsystem_c.i386.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_c_symbols_i386}
+       -reexported_symbols_list ${symbols/system_c_symbols_i386}
 
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
        -o $out/lib/system/libsystem_kernel.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_kernel_symbols_x86_64}
+       -reexported_symbols_list ${symbols/system_kernel_symbols_x86_64}
 
     ld -macosx_version_min 10.7 -arch i386 -dylib \
        -o $out/lib/system/libsystem_kernel.i386.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_kernel_symbols_i386}
+       -reexported_symbols_list ${symbols/system_kernel_symbols_i386}
 
     # The umbrella libSystem also exports some symbols,
     # but we don't want to pull in everything from the other libraries.
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
        -o $out/lib/libSystem_internal.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_symbols}
+       -reexported_symbols_list ${symbols/system_symbols}
 
     # We used to determine these impurely based on the host system, but then when we got some 10.12 Hydra boxes,
     # one of them accidentally built this derivation, referenced libsystem_symptoms.dylib, which doesn't exist on
