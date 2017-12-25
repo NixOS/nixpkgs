@@ -288,11 +288,11 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0jawvi83b1nm101nam0w71kdyh7cy3fr0l9qj1hfcjvzvihfk2l1";
       inherit dependencies buildDependencies features;
     };
-    wc_grab_0_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    wc_grab_0_3_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "wc-grab";
-      version = "0.2.0";
+      version = "0.3.0";
       authors = [ "Timidger <APragmaticPlace@gmail.com>" ];
-      src = ./.;
+      sha256 = "02dkjxffzh38h3hiwfypkjv0g8dsfkp9wk20j04x4qydg4dr8a8h";
       inherit dependencies buildDependencies features;
     };
     winapi_0_2_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -551,12 +551,12 @@ rec {
   vec_map_0_7_0_features."serde_derive".self_eders = hasFeature (vec_map_0_7_0_features."eders" or {});
   serde_0_0_0_features."default".from_vec_map_0_7_0__default = true;
   serde_derive_0_0_0_features."default".from_vec_map_0_7_0__default = true;
-  wc_grab_0_2_0 = wc_grab_0_2_0_ rec {
+  wc_grab_0_3_0 = wc_grab_0_3_0_ rec {
     dependencies = [ clap_2_22_0 dbus_0_5_2 image_0_12_3 ];
   };
-  clap_2_22_0_features."default".from_wc_grab_0_2_0__default = true;
-  dbus_0_5_2_features."default".from_wc_grab_0_2_0__default = true;
-  image_0_12_3_features."default".from_wc_grab_0_2_0__default = true;
+  clap_2_22_0_features."default".from_wc_grab_0_3_0__default = true;
+  dbus_0_5_2_features."default".from_wc_grab_0_3_0__default = true;
+  image_0_12_3_features."default".from_wc_grab_0_3_0__default = true;
   winapi_0_2_8 = winapi_0_2_8_ rec {};
   winapi_build_0_1_1 = winapi_build_0_1_1_ rec {};
 }

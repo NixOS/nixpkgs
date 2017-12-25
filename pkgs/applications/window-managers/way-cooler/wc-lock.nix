@@ -53,11 +53,46 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0zsr6b0m0yl5c0yy92nq7srfpczd1dx1xqcx3rlm5fbl8si9clqx";
       inherit dependencies buildDependencies features;
     };
+    byteorder_1_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "byteorder";
+      version = "1.1.0";
+      authors = [ "Andrew Gallant <jamslam@gmail.com>" ];
+      sha256 = "1i2n0161jm00zvzh4bncgv9zrwa6ydbxdn5j4bx0wwn7rvi9zycp";
+      inherit dependencies buildDependencies features;
+    };
+    cc_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "cc";
+      version = "1.0.0";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "1s5ha0k6cdy1049a5kpzvhnjc9hjvi18zrcr5dmbqpd03ag751g1";
+      inherit dependencies buildDependencies features;
+    };
     clap_2_24_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "clap";
       version = "2.24.2";
       authors = [ "Kevin K. <kbknapp@gmail.com>" ];
       sha256 = "0028bkzafprs6n7ing8lnf7iss2a2zq17qmgadipgdfgvww43rmv";
+      inherit dependencies buildDependencies features;
+    };
+    coco_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "coco";
+      version = "0.1.1";
+      authors = [ "Stjepan Glavina <stjepang@gmail.com>" ];
+      sha256 = "0hvj4jaj9y6i38c4dkii8nqq98cgx3kyx78cjqkdvk0aqq5sfr94";
+      inherit dependencies buildDependencies features;
+    };
+    color_quant_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "color_quant";
+      version = "1.0.0";
+      authors = [ "nwin <nwin@users.noreply.github.com>" ];
+      sha256 = "0jwr40lr115zm2bydk1wja12gcxrmgsx0n1z1pipq00sab71maaj";
+      inherit dependencies buildDependencies features;
+    };
+    dbus_0_5_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "dbus";
+      version = "0.5.4";
+      authors = [ "David Henningsson <diwic@ubuntu.com>" ];
+      sha256 = "0qr62splq38b8vfjvpcpk9ph21d63ya7vd2vifs5wc8jzwc309yn";
       inherit dependencies buildDependencies features;
     };
     dlib_0_3_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -74,11 +109,46 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0mgg4r90yby68qg7y8csbclhsm53ac26vsyq615viq535plllhzw";
       inherit dependencies buildDependencies features;
     };
+    either_1_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "either";
+      version = "1.2.0";
+      authors = [ "bluss" ];
+      sha256 = "0l72xaf1kwzgbl3andf3d2ggz7km9059rbmp90iywww8inlnqppp";
+      inherit dependencies buildDependencies features;
+    };
+    enum_primitive_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "enum_primitive";
+      version = "0.1.1";
+      authors = [ "Anders Kaseorg <andersk@mit.edu>" ];
+      sha256 = "1a225rlsz7sz3nn14dar71kp2f9v08s3rwl6j55xp51mv01f695y";
+      inherit dependencies buildDependencies features;
+    };
+    error_chain_0_10_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "error-chain";
+      version = "0.10.0";
+      authors = [ "Brian Anderson <banderson@mozilla.com>" "Paul Colomiets <paul@colomiets.name>" "Colin Kiegel <kiegel@gmx.de>" "Yamakaky <yamakaky@yamaworld.fr>" ];
+      sha256 = "1xxbzd8cjlpzsb9fsih7mdnndhzrvykj0w77yg90qc85az1xwy5z";
+      inherit dependencies buildDependencies features;
+    };
+    flate2_0_2_20_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "flate2";
+      version = "0.2.20";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "1am0d2vmqym1vcg7rvv516vpcrbhdn1jisy0q03r3nbzdzh54ppl";
+      inherit dependencies buildDependencies features;
+    };
     fs2_0_2_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "fs2";
       version = "0.2.5";
       authors = [ "Dan Burkert <dan@danburkert.com>" ];
       sha256 = "0j6l5r95jigbl0lgkm69c82dzq10jipjbm9qnni147hb45gyw790";
+      inherit dependencies buildDependencies features;
+    };
+    futures_0_1_16_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "futures";
+      version = "0.1.16";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "0ndk8cl6l600a95q8il2c3y38jz50nhfsczps0nziadqdd45gy2b";
       inherit dependencies buildDependencies features;
     };
     gcc_0_3_50_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -88,11 +158,47 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "032izcbbyiakv9ck5j3s27p3ddx4468n7qpaxgwi5iswmimjaaj0";
       inherit dependencies buildDependencies features;
     };
+    gif_0_9_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "gif";
+      version = "0.9.2";
+      authors = [ "nwin <nwin@users.noreply.github.com>" ];
+      sha256 = "0dl76jrn6127w3bdg2b58p5psf8fpnbzdxdkw1i35ac8dn4vxcqa";
+      inherit dependencies buildDependencies features;
+    };
+    glob_0_2_11_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "glob";
+      version = "0.2.11";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "104389jjxs8r2f5cc9p0axhjmndgln60ih5x4f00ccgg9d3zarlf";
+      inherit dependencies buildDependencies features;
+    };
+    image_0_10_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "image";
+      version = "0.10.4";
+      authors = [ "ccgn" "bvssvni <bvssvni@gmail.com>" "nwin" "TyOverby <ty@pre-alpha.com>" ];
+      sha256 = "1pwrs7k5760b38i1lg872x9q2zc6xvhs7mjhlzvjnr5p85zx2fbw";
+      libPath = "./src/lib.rs";
+      inherit dependencies buildDependencies features;
+    };
+    inflate_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "inflate";
+      version = "0.1.1";
+      authors = [ "nwin <nwin@users.noreply.github.com>" ];
+      sha256 = "112kh9hjcjjxdybl032mdhpwnr3qxw8j0ch6hwanwpcf3gz42g1h";
+      inherit dependencies buildDependencies features;
+    };
     itoa_0_3_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "itoa";
       version = "0.3.1";
       authors = [ "David Tolnay <dtolnay@gmail.com>" ];
       sha256 = "0jp1wvfw0qqbyz0whbycp7xr5nx1ds5plh4wsfyj503xmjf9ab4k";
+      inherit dependencies buildDependencies features;
+    };
+    jpeg_decoder_0_1_13_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "jpeg-decoder";
+      version = "0.1.13";
+      authors = [ "Ulf Nilsson <kaksmet@gmail.com>" ];
+      sha256 = "0w16gbywlm9p0p3wx34b85q4d1izrx89afcsxlc6g11cx2js4fa2";
       inherit dependencies buildDependencies features;
     };
     kernel32_sys_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -102,13 +208,6 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "1lrw1hbinyvr6cp28g60z97w32w8vsk6pahk64pmrv2fmby8srfj";
       libName = "kernel32";
       build = "build.rs";
-      inherit dependencies buildDependencies features;
-    };
-    lazy_static_0_1_16_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-      crateName = "lazy_static";
-      version = "0.1.16";
-      authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
-      sha256 = "0lc5ixs5bmnc43lfri2ynh9393l7vs0z3sw2v5rkaady2ivnznpc";
       inherit dependencies buildDependencies features;
     };
     lazy_static_0_2_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -125,12 +224,27 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "1i29f6k26fmv81c5bjc6hw2j95sd01h9ad66qxdc755b24xfa9jm";
       inherit dependencies buildDependencies features;
     };
+    libdbus_sys_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "libdbus-sys";
+      version = "0.1.1";
+      authors = [ "David Henningsson <diwic@ubuntu.com>" ];
+      sha256 = "14kpislv2zazmgv5f8by4zkgkjxd0cwab8z6621kskjdwyir1wpy";
+      build = "build.rs";
+      inherit dependencies buildDependencies features;
+    };
     libloading_0_3_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "libloading";
       version = "0.3.4";
       authors = [ "Simonas Kazlauskas <libloading@kazlauskas.me>" ];
       sha256 = "1f2vy32cr434n638nv8sdf05iwa53q9q5ahlcpw1l9ywh1bcbhf1";
       build = "build.rs";
+      inherit dependencies buildDependencies features;
+    };
+    lzw_0_10_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "lzw";
+      version = "0.10.0";
+      authors = [ "nwin <nwin@users.noreply.github.com>" ];
+      sha256 = "1cfsy2w26kbz9bjaqp9dh1wyyh47rpmhwvj4jpc1rmffbf438fvb";
       inherit dependencies buildDependencies features;
     };
     memmap_0_4_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -140,11 +254,63 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0q2gm5p8n9najc8kccbxxkannmnjh85rin4k8d4y1kg5ymdp6kll";
       inherit dependencies buildDependencies features;
     };
+    metadeps_1_1_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "metadeps";
+      version = "1.1.2";
+      authors = [ "Josh Triplett <josh@joshtriplett.org>" ];
+      sha256 = "00dpxjls9fq6fs5gr9v3hkqxmb1zwnhh8b56q3dnzghppjf3ivk3";
+      inherit dependencies buildDependencies features;
+    };
+    miniz_sys_0_1_10_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "miniz-sys";
+      version = "0.1.10";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "11vg6phafxil87nbxgrlhcx5hjr3145wsbwwkfmibvnmzxfdmvln";
+      libPath = "lib.rs";
+      libName = "miniz_sys";
+      build = "build.rs";
+      inherit dependencies buildDependencies features;
+    };
+    num_bigint_0_1_40_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "num-bigint";
+      version = "0.1.40";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "0pkxd9mb4chdbipprxjc8ll7kjh79n278s2z663zmd80yg5xi788";
+      inherit dependencies buildDependencies features;
+    };
+    num_integer_0_1_35_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "num-integer";
+      version = "0.1.35";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "0xybj8isi9b6wc646d5rc043i8l8j6wy0vrl4pn995qms9fxbbcc";
+      inherit dependencies buildDependencies features;
+    };
+    num_iter_0_1_34_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "num-iter";
+      version = "0.1.34";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "02cld7x9dzbqbs6sxxzq1i22z3awlcd6ljkgvhkfr9rsnaxphzl9";
+      inherit dependencies buildDependencies features;
+    };
+    num_rational_0_1_39_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "num-rational";
+      version = "0.1.39";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "1qsacdfp97zgpajc2pgbrbga3yag1f0k7yz0gi78vd165gxdwk3m";
+      inherit dependencies buildDependencies features;
+    };
     num_traits_0_1_37_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "num-traits";
       version = "0.1.37";
       authors = [ "The Rust Project Developers" ];
       sha256 = "0rwzfmdjq6iz6plva2gi7agvy1w9sjs7aqjh0p115w57xiix2224";
+      inherit dependencies buildDependencies features;
+    };
+    num_cpus_1_6_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "num_cpus";
+      version = "1.6.2";
+      authors = [ "Sean McArthur <sean.monstar@gmail.com>" ];
+      sha256 = "0wxfzxsk05xbkph5qcvdqyi334zn0pnpahzi7n7iagxbb68145rm";
       inherit dependencies buildDependencies features;
     };
     phf_0_7_21_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -177,6 +343,20 @@ let kernel = buildPlatform.parsed.kernel.name;
       libPath = "src/lib.rs";
       inherit dependencies buildDependencies features;
     };
+    pkg_config_0_3_9_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "pkg-config";
+      version = "0.3.9";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "06k8fxgrsrxj8mjpjcq1n7mn2p1shpxif4zg9y5h09c7vy20s146";
+      inherit dependencies buildDependencies features;
+    };
+    png_0_5_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "png";
+      version = "0.5.2";
+      authors = [ "nwin <nwin@users.noreply.github.com>" ];
+      sha256 = "1pgann3f1ysgf8y1acw86v4s3ji1xk85ri353biyvh4i1cpn1g3q";
+      inherit dependencies buildDependencies features;
+    };
     rand_0_3_15_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "rand";
       version = "0.3.15";
@@ -184,11 +364,47 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "1fs30rc1xic40s1n7l3y7pxzfifpy03mgrvhy5ggp5p7zjfv3rr8";
       inherit dependencies buildDependencies features;
     };
+    rayon_0_8_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "rayon";
+      version = "0.8.2";
+      authors = [ "Niko Matsakis <niko@alum.mit.edu>" "Josh Stone <cuviper@gmail.com>" ];
+      sha256 = "0d0mddg1k75hb9138pn8lysy2095jijrinskqbpgfr73s0jx6dq8";
+      inherit dependencies buildDependencies features;
+    };
+    rayon_core_1_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "rayon-core";
+      version = "1.2.1";
+      authors = [ "Niko Matsakis <niko@alum.mit.edu>" "Josh Stone <cuviper@gmail.com>" ];
+      sha256 = "12xv2r0dqrgvla24bl5mfvcw0599dlhrj0mx620nq95nyds753kk";
+      build = "build.rs";
+      inherit dependencies buildDependencies features;
+    };
+    rustc_serialize_0_3_24_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "rustc-serialize";
+      version = "0.3.24";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "0rfk6p66mqkd3g36l0ddlv2rvnp1mp3lrq5frq9zz5cbnz5pmmxn";
+      inherit dependencies buildDependencies features;
+    };
     rustc_version_0_1_7_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "rustc_version";
       version = "0.1.7";
       authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
       sha256 = "0plm9pbyvcwfibd0kbhzil9xmr1bvqi8fgwlfw0x4vali8s6s99p";
+      inherit dependencies buildDependencies features;
+    };
+    scoped_threadpool_0_1_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "scoped_threadpool";
+      version = "0.1.8";
+      authors = [ "Marvin Löbel <loebel.marvin@gmail.com>" ];
+      sha256 = "1al42hqbbijpah9bc6hw9c49nhnyrc0sj274ja1q3k9305c3s5a6";
+      inherit dependencies buildDependencies features;
+    };
+    scopeguard_0_3_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "scopeguard";
+      version = "0.3.2";
+      authors = [ "bluss" ];
+      sha256 = "0xlvfawva4fnp6kwr5xjwf0q2d1w6di81nhfby1sa55xj1ia5zs2";
       inherit dependencies buildDependencies features;
     };
     semver_0_1_20_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -249,6 +465,13 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "054d5avad49sy5nfaaaphai4kv4rmdh6q0npchnvdhpxp02lcfhs";
       inherit dependencies buildDependencies features;
     };
+    toml_0_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "toml";
+      version = "0.2.1";
+      authors = [ "Alex Crichton <alex@alexcrichton.com>" ];
+      sha256 = "0p4rkaqhmk4fp6iqpxfgp3p98hxhbs2wmla3fq531n875h922yqs";
+      inherit dependencies buildDependencies features;
+    };
     unicode_segmentation_1_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "unicode-segmentation";
       version = "1.2.0";
@@ -268,6 +491,13 @@ let kernel = buildPlatform.parsed.kernel.name;
       version = "0.8.0";
       authors = [ "Alex Crichton <alex@alexcrichton.com>" "Jorge Aparicio <japaricious@gmail.com>" "Alexis Beingessner <a.beingessner@gmail.com>" "Brian Anderson <>" "tbu- <>" "Manish Goregaokar <>" "Aaron Turon <aturon@mozilla.com>" "Adolfo Ochagavía <>" "Niko Matsakis <>" "Steven Fackler <>" "Chase Southwood <csouth3@illinois.edu>" "Eduard Burtescu <>" "Florian Wilkens <>" "Félix Raimundo <>" "Tibor Benke <>" "Markus Siemens <markus@m-siemens.de>" "Josh Branchaud <jbranchaud@gmail.com>" "Huon Wilson <dbau.pp@gmail.com>" "Corey Farwell <coref@rwell.org>" "Aaron Liblong <>" "Nick Cameron <nrc@ncameron.org>" "Patrick Walton <pcwalton@mimiga.net>" "Felix S Klock II <>" "Andrew Paseltiner <apaseltiner@gmail.com>" "Sean McArthur <sean.monstar@gmail.com>" "Vadim Petrochenkov <>" ];
       sha256 = "07sgxp3cf1a4cxm9n3r27fcvqmld32bl2576mrcahnvm34j11xay";
+      inherit dependencies buildDependencies features;
+    };
+    way_cooler_client_helpers_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "way-cooler-client-helpers";
+      version = "0.1.0";
+      authors = [ "Timidger <APragmaticPlace@gmail.com>" ];
+      sha256 = "0749lh5crd0rhq4dxij9mb3y5902laazjd01l6ci5782bjfk4s39";
       inherit dependencies buildDependencies features;
     };
     wayland_client_0_9_6_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -292,13 +522,6 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "1w5cyc48g4x5w3rakb4sji5328rl5yph1abmjbh5h4slkm4n76g1";
       inherit dependencies buildDependencies features;
     };
-    wayland_sys_0_6_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-      crateName = "wayland-sys";
-      version = "0.6.0";
-      authors = [ "Victor Berger <victor.berger@m4x.org>" ];
-      sha256 = "0m6db0kld2d4xv4ai9kxlqrh362hwi0030b4zbss0sfha1hx5mfl";
-      inherit dependencies buildDependencies features;
-    };
     wayland_sys_0_9_6_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "wayland-sys";
       version = "0.9.6";
@@ -306,11 +529,11 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0izw50pmj1r10hmr29gi8ps01avs6zjwisywijlq7wr268h6yxcg";
       inherit dependencies buildDependencies features;
     };
-    wc_lock_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    wc_lock_0_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "wc-lock";
-      version = "0.1.0";
+      version = "0.2.1";
       authors = [ "Timidger <APragmaticPlace@gmail.com>" ];
-      sha256 = "1fwfqzhqa8zqxx18amc129xfp1lrb7y9qxi92jqr856xiq4r8ypk";
+      sha256 = "0ikmir7azihxiyzgb0wnvk81yinmn2l6k93bnb1qg4k704zcyq84";
       build = "build.rs";
       inherit dependencies buildDependencies features;
     };
@@ -359,6 +582,16 @@ rec {
     features = mkFeatures byteorder_0_5_3_features;
   };
   byteorder_0_5_3_features."std".self_default = hasDefault byteorder_0_5_3_features;
+  byteorder_1_1_0 = byteorder_1_1_0_ rec {
+    features = mkFeatures byteorder_1_1_0_features;
+  };
+  byteorder_1_1_0_features."std".self_default = hasDefault byteorder_1_1_0_features;
+  cc_1_0_0 = cc_1_0_0_ rec {
+    dependencies = [];
+    features = mkFeatures cc_1_0_0_features;
+  };
+  cc_1_0_0_features."rayon".self_parallel = hasFeature (cc_1_0_0_features."parallel" or {});
+  rayon_0_0_0_features."default".from_cc_1_0_0__default = true;
   clap_2_24_2 = clap_2_24_2_ rec {
     dependencies = [ ansi_term_0_9_0 atty_0_2_2 bitflags_0_8_2 strsim_0_6_0 term_size_0_3_0 unicode_segmentation_1_2_0 unicode_width_0_1_4 vec_map_0_8_0 ]
       ++ (if lib.lists.any (x: x == "ansi_term") features then [ansi_term_0_9_0] else [])      ++ (if lib.lists.any (x: x == "atty") features then [atty_0_2_2] else [])      ++ (if lib.lists.any (x: x == "strsim") features then [strsim_0_6_0] else [])      ++ (if lib.lists.any (x: x == "term_size") features then [term_size_0_3_0] else []);
@@ -384,6 +617,21 @@ rec {
   unicode_width_0_1_4_features."default".from_clap_2_24_2__default = true;
   vec_map_0_8_0_features."default".from_clap_2_24_2__default = true;
   yaml_rust_0_0_0_features."default".from_clap_2_24_2__default = true;
+  coco_0_1_1 = coco_0_1_1_ rec {
+    dependencies = [ either_1_2_0 scopeguard_0_3_2 ];
+    features = mkFeatures coco_0_1_1_features;
+  };
+  coco_0_1_1_features."".self = true;
+  either_1_2_0_features."default".from_coco_0_1_1__default = true;
+  scopeguard_0_3_2_features."default".from_coco_0_1_1__default = true;
+  color_quant_1_0_0 = color_quant_1_0_0_ rec {};
+  dbus_0_5_4 = dbus_0_5_4_ rec {
+    dependencies = [ libc_0_2_23 libdbus_sys_0_1_1 ];
+    features = mkFeatures dbus_0_5_4_features;
+  };
+  dbus_0_5_4_features."".self = true;
+  libc_0_2_23_features."default".from_dbus_0_5_4__default = true;
+  libdbus_sys_0_1_1_features."default".from_dbus_0_5_4__default = true;
   dlib_0_3_1 = dlib_0_3_1_ rec {
     dependencies = [ libloading_0_3_4 ];
     features = mkFeatures dlib_0_3_1_features;
@@ -391,28 +639,114 @@ rec {
   dlib_0_3_1_features."".self = true;
   libloading_0_3_4_features."default".from_dlib_0_3_1__default = true;
   dtoa_0_4_1 = dtoa_0_4_1_ rec {};
+  either_1_2_0 = either_1_2_0_ rec {
+    features = mkFeatures either_1_2_0_features;
+  };
+  either_1_2_0_features."use_std".self_default = hasDefault either_1_2_0_features;
+  enum_primitive_0_1_1 = enum_primitive_0_1_1_ rec {
+    dependencies = [ num_traits_0_1_37 ];
+  };
+  num_traits_0_1_37_features."default".from_enum_primitive_0_1_1__default = false;
+  error_chain_0_10_0 = error_chain_0_10_0_ rec {
+    dependencies = [];
+    features = mkFeatures error_chain_0_10_0_features;
+  };
+  error_chain_0_10_0_features."backtrace".self_default = hasDefault error_chain_0_10_0_features;
+  error_chain_0_10_0_features."example_generated".self_default = hasDefault error_chain_0_10_0_features;
+  backtrace_0_0_0_features."default".from_error_chain_0_10_0__default = true;
+  flate2_0_2_20 = flate2_0_2_20_ rec {
+    dependencies = [ libc_0_2_23 miniz_sys_0_1_10 ]
+      ++ (if lib.lists.any (x: x == "miniz-sys") features then [miniz_sys_0_1_10] else []);
+    features = mkFeatures flate2_0_2_20_features;
+  };
+  flate2_0_2_20_features."".self = true;
+  flate2_0_2_20_features."miniz-sys".self_default = hasDefault flate2_0_2_20_features;
+  flate2_0_2_20_features."tokio-io".self_tokio = hasFeature (flate2_0_2_20_features."tokio" or {});
+  flate2_0_2_20_features."futures".self_tokio = hasFeature (flate2_0_2_20_features."tokio" or {});
+  flate2_0_2_20_features."libz-sys".self_zlib = hasFeature (flate2_0_2_20_features."zlib" or {});
+  futures_0_0_0_features."default".from_flate2_0_2_20__default = true;
+  libc_0_2_23_features."default".from_flate2_0_2_20__default = true;
+  libz_sys_0_0_0_features."default".from_flate2_0_2_20__default = true;
+  miniz_sys_0_1_10_features."default".from_flate2_0_2_20__default = true;
+  tokio_io_0_0_0_features."default".from_flate2_0_2_20__default = true;
   fs2_0_2_5 = fs2_0_2_5_ rec {
     dependencies = [ kernel32_sys_0_2_2 libc_0_2_23 winapi_0_2_8 ];
   };
   kernel32_sys_0_2_2_features."default".from_fs2_0_2_5__default = true;
   libc_0_2_23_features."default".from_fs2_0_2_5__default = true;
   winapi_0_2_8_features."default".from_fs2_0_2_5__default = true;
+  futures_0_1_16 = futures_0_1_16_ rec {
+    features = mkFeatures futures_0_1_16_features;
+  };
+  futures_0_1_16_features."use_std".self_default = hasDefault futures_0_1_16_features;
+  futures_0_1_16_features."with-deprecated".self_default = hasDefault futures_0_1_16_features;
   gcc_0_3_50 = gcc_0_3_50_ rec {
     dependencies = [];
     features = mkFeatures gcc_0_3_50_features;
   };
   gcc_0_3_50_features."rayon".self_parallel = hasFeature (gcc_0_3_50_features."parallel" or {});
   rayon_0_0_0_features."default".from_gcc_0_3_50__default = true;
+  gif_0_9_2 = gif_0_9_2_ rec {
+    dependencies = [ color_quant_1_0_0 lzw_0_10_0 ];
+    features = mkFeatures gif_0_9_2_features;
+  };
+  gif_0_9_2_features."libc".self_c_api = hasFeature (gif_0_9_2_features."c_api" or {});
+  gif_0_9_2_features."raii_no_panic".self_default = hasDefault gif_0_9_2_features;
+  color_quant_1_0_0_features."default".from_gif_0_9_2__default = true;
+  libc_0_0_0_features."default".from_gif_0_9_2__default = true;
+  lzw_0_10_0_features."default".from_gif_0_9_2__default = true;
+  glob_0_2_11 = glob_0_2_11_ rec {};
+  image_0_10_4 = image_0_10_4_ rec {
+    dependencies = [ byteorder_0_5_3 enum_primitive_0_1_1 gif_0_9_2 glob_0_2_11 jpeg_decoder_0_1_13 num_iter_0_1_34 num_rational_0_1_39 num_traits_0_1_37 png_0_5_2 scoped_threadpool_0_1_8 ]
+      ++ (if lib.lists.any (x: x == "gif") features then [gif_0_9_2] else [])      ++ (if lib.lists.any (x: x == "jpeg-decoder") features then [jpeg_decoder_0_1_13] else [])      ++ (if lib.lists.any (x: x == "png") features then [png_0_5_2] else [])      ++ (if lib.lists.any (x: x == "scoped_threadpool") features then [scoped_threadpool_0_1_8] else []);
+    features = mkFeatures image_0_10_4_features;
+  };
+  image_0_10_4_features."".self = true;
+  image_0_10_4_features."gif_codec".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."jpeg".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."ico".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."png_codec".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."ppm".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."tga".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."tiff".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."webp".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."bmp".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."hdr".self_default = hasDefault image_0_10_4_features;
+  image_0_10_4_features."gif".self_gif_codec = hasFeature (image_0_10_4_features."gif_codec" or {});
+  image_0_10_4_features."scoped_threadpool".self_hdr = hasFeature (image_0_10_4_features."hdr" or {});
+  image_0_10_4_features."bmp".self_ico = hasFeature (image_0_10_4_features."ico" or {});
+  image_0_10_4_features."png_codec".self_ico = hasFeature (image_0_10_4_features."ico" or {});
+  image_0_10_4_features."jpeg-decoder".self_jpeg = hasFeature (image_0_10_4_features."jpeg" or {});
+  image_0_10_4_features."png".self_png_codec = hasFeature (image_0_10_4_features."png_codec" or {});
+  byteorder_0_5_3_features."default".from_image_0_10_4__default = true;
+  enum_primitive_0_1_1_features."default".from_image_0_10_4__default = true;
+  gif_0_9_2_features."default".from_image_0_10_4__default = true;
+  glob_0_2_11_features."default".from_image_0_10_4__default = true;
+  jpeg_decoder_0_1_13_features."default".from_image_0_10_4__default = true;
+  num_iter_0_1_34_features."default".from_image_0_10_4__default = true;
+  num_rational_0_1_39_features."default".from_image_0_10_4__default = true;
+  num_traits_0_1_37_features."default".from_image_0_10_4__default = true;
+  png_0_5_2_features."default".from_image_0_10_4__default = true;
+  scoped_threadpool_0_1_8_features."default".from_image_0_10_4__default = true;
+  inflate_0_1_1 = inflate_0_1_1_ rec {
+    features = mkFeatures inflate_0_1_1_features;
+  };
+  inflate_0_1_1_features."".self = true;
   itoa_0_3_1 = itoa_0_3_1_ rec {};
+  jpeg_decoder_0_1_13 = jpeg_decoder_0_1_13_ rec {
+    dependencies = [ byteorder_1_1_0 rayon_0_8_2 ]
+      ++ (if lib.lists.any (x: x == "rayon") features then [rayon_0_8_2] else []);
+    features = mkFeatures jpeg_decoder_0_1_13_features;
+  };
+  jpeg_decoder_0_1_13_features."".self = true;
+  jpeg_decoder_0_1_13_features."rayon".self_default = hasDefault jpeg_decoder_0_1_13_features;
+  byteorder_1_1_0_features."default".from_jpeg_decoder_0_1_13__default = true;
+  rayon_0_8_2_features."default".from_jpeg_decoder_0_1_13__default = true;
   kernel32_sys_0_2_2 = kernel32_sys_0_2_2_ rec {
     dependencies = [ winapi_0_2_8 ];
     buildDependencies = [ winapi_build_0_1_1 ];
   };
   winapi_0_2_8_features."default".from_kernel32_sys_0_2_2__default = true;
-  lazy_static_0_1_16 = lazy_static_0_1_16_ rec {
-    features = mkFeatures lazy_static_0_1_16_features;
-  };
-  lazy_static_0_1_16_features."".self = true;
   lazy_static_0_2_8 = lazy_static_0_2_8_ rec {
     dependencies = [];
     features = mkFeatures lazy_static_0_2_8_features;
@@ -424,6 +758,8 @@ rec {
     features = mkFeatures libc_0_2_23_features;
   };
   libc_0_2_23_features."use_std".self_default = hasDefault libc_0_2_23_features;
+  libdbus_sys_0_1_1 = libdbus_sys_0_1_1_ rec {
+    buildDependencies = [ metadeps_1_1_2 ];};
   libloading_0_3_4 = libloading_0_3_4_ rec {
     dependencies = [ lazy_static_0_2_8 ]
       ++ (if kernel == "windows" then [ kernel32_sys_0_2_2 winapi_0_2_8 ] else []);
@@ -432,6 +768,10 @@ rec {
   lazy_static_0_2_8_features."default".from_libloading_0_3_4__default = true;
   kernel32_sys_0_2_2_features."default".from_libloading_0_3_4__default = true;
   winapi_0_2_8_features."default".from_libloading_0_3_4__default = true;
+  lzw_0_10_0 = lzw_0_10_0_ rec {
+    features = mkFeatures lzw_0_10_0_features;
+  };
+  lzw_0_10_0_features."raii_no_panic".self_default = hasDefault lzw_0_10_0_features;
   memmap_0_4_0 = memmap_0_4_0_ rec {
     dependencies = [ fs2_0_2_5 kernel32_sys_0_2_2 libc_0_2_23 winapi_0_2_8 ];
   };
@@ -439,7 +779,58 @@ rec {
   kernel32_sys_0_2_2_features."default".from_memmap_0_4_0__default = true;
   libc_0_2_23_features."default".from_memmap_0_4_0__default = true;
   winapi_0_2_8_features."default".from_memmap_0_4_0__default = true;
+  metadeps_1_1_2 = metadeps_1_1_2_ rec {
+    dependencies = [ error_chain_0_10_0 pkg_config_0_3_9 toml_0_2_1 ];
+  };
+  error_chain_0_10_0_features."default".from_metadeps_1_1_2__default = false;
+  pkg_config_0_3_9_features."default".from_metadeps_1_1_2__default = true;
+  toml_0_2_1_features."default".from_metadeps_1_1_2__default = false;
+  miniz_sys_0_1_10 = miniz_sys_0_1_10_ rec {
+    dependencies = [ libc_0_2_23 ];
+    buildDependencies = [ cc_1_0_0 ];
+  };
+  libc_0_2_23_features."default".from_miniz_sys_0_1_10__default = true;
+  num_bigint_0_1_40 = num_bigint_0_1_40_ rec {
+    dependencies = [ num_integer_0_1_35 num_traits_0_1_37 rand_0_3_15 rustc_serialize_0_3_24 ]
+      ++ (if lib.lists.any (x: x == "rand") features then [rand_0_3_15] else [])      ++ (if lib.lists.any (x: x == "rustc-serialize") features then [rustc_serialize_0_3_24] else []);
+    features = mkFeatures num_bigint_0_1_40_features;
+  };
+  num_bigint_0_1_40_features."".self = true;
+  num_bigint_0_1_40_features."rand".self_default = hasDefault num_bigint_0_1_40_features;
+  num_bigint_0_1_40_features."rustc-serialize".self_default = hasDefault num_bigint_0_1_40_features;
+  num_integer_0_1_35_features."default".from_num_bigint_0_1_40__default = true;
+  num_traits_0_1_37_features."default".from_num_bigint_0_1_40__default = true;
+  rand_0_3_15_features."default".from_num_bigint_0_1_40__default = true;
+  rustc_serialize_0_3_24_features."default".from_num_bigint_0_1_40__default = true;
+  serde_0_0_0_features."default".from_num_bigint_0_1_40__default = true;
+  num_integer_0_1_35 = num_integer_0_1_35_ rec {
+    dependencies = [ num_traits_0_1_37 ];
+  };
+  num_traits_0_1_37_features."default".from_num_integer_0_1_35__default = true;
+  num_iter_0_1_34 = num_iter_0_1_34_ rec {
+    dependencies = [ num_integer_0_1_35 num_traits_0_1_37 ];
+  };
+  num_integer_0_1_35_features."default".from_num_iter_0_1_34__default = true;
+  num_traits_0_1_37_features."default".from_num_iter_0_1_34__default = true;
+  num_rational_0_1_39 = num_rational_0_1_39_ rec {
+    dependencies = [ num_bigint_0_1_40 num_integer_0_1_35 num_traits_0_1_37 rustc_serialize_0_3_24 ]
+      ++ (if lib.lists.any (x: x == "num-bigint") features then [num_bigint_0_1_40] else [])      ++ (if lib.lists.any (x: x == "rustc-serialize") features then [rustc_serialize_0_3_24] else []);
+    features = mkFeatures num_rational_0_1_39_features;
+  };
+  num_rational_0_1_39_features."".self = true;
+  num_rational_0_1_39_features."num-bigint".self_bigint = hasFeature (num_rational_0_1_39_features."bigint" or {});
+  num_rational_0_1_39_features."bigint".self_default = hasDefault num_rational_0_1_39_features;
+  num_rational_0_1_39_features."rustc-serialize".self_default = hasDefault num_rational_0_1_39_features;
+  num_bigint_0_1_40_features."default".from_num_rational_0_1_39__default = true;
+  num_integer_0_1_35_features."default".from_num_rational_0_1_39__default = true;
+  num_traits_0_1_37_features."default".from_num_rational_0_1_39__default = true;
+  rustc_serialize_0_3_24_features."default".from_num_rational_0_1_39__default = true;
+  serde_0_0_0_features."default".from_num_rational_0_1_39__default = true;
   num_traits_0_1_37 = num_traits_0_1_37_ rec {};
+  num_cpus_1_6_2 = num_cpus_1_6_2_ rec {
+    dependencies = [ libc_0_2_23 ];
+  };
+  libc_0_2_23_features."default".from_num_cpus_1_6_2__default = true;
   phf_0_7_21 = phf_0_7_21_ rec {
     dependencies = [ phf_shared_0_7_21 ];
     features = mkFeatures phf_0_7_21_features;
@@ -465,14 +856,49 @@ rec {
   phf_shared_0_7_21_features."".self = true;
   siphasher_0_2_2_features."default".from_phf_shared_0_7_21__default = true;
   unicase_0_0_0_features."default".from_phf_shared_0_7_21__default = true;
+  pkg_config_0_3_9 = pkg_config_0_3_9_ rec {};
+  png_0_5_2 = png_0_5_2_ rec {
+    dependencies = [ bitflags_0_7_0 flate2_0_2_20 inflate_0_1_1 num_iter_0_1_34 ]
+      ++ (if lib.lists.any (x: x == "flate2") features then [flate2_0_2_20] else []);
+    features = mkFeatures png_0_5_2_features;
+  };
+  png_0_5_2_features."".self = true;
+  png_0_5_2_features."png-encoding".self_default = hasDefault png_0_5_2_features;
+  png_0_5_2_features."flate2".self_png-encoding = hasFeature (png_0_5_2_features."png-encoding" or {});
+  bitflags_0_7_0_features."default".from_png_0_5_2__default = true;
+  flate2_0_2_20_features."default".from_png_0_5_2__default = true;
+  inflate_0_1_1_features."default".from_png_0_5_2__default = true;
+  num_iter_0_1_34_features."default".from_png_0_5_2__default = true;
   rand_0_3_15 = rand_0_3_15_ rec {
     dependencies = [ libc_0_2_23 ];
   };
   libc_0_2_23_features."default".from_rand_0_3_15__default = true;
+  rayon_0_8_2 = rayon_0_8_2_ rec {
+    dependencies = [ rayon_core_1_2_1 ];
+  };
+  rayon_core_1_2_1_features."default".from_rayon_0_8_2__default = true;
+  rayon_core_1_2_1 = rayon_core_1_2_1_ rec {
+    dependencies = [ coco_0_1_1 futures_0_1_16 lazy_static_0_2_8 libc_0_2_23 num_cpus_1_6_2 rand_0_3_15 ];
+  };
+  coco_0_1_1_features."default".from_rayon_core_1_2_1__default = true;
+  futures_0_1_16_features."default".from_rayon_core_1_2_1__default = true;
+  lazy_static_0_2_8_features."default".from_rayon_core_1_2_1__default = true;
+  libc_0_2_23_features."default".from_rayon_core_1_2_1__default = true;
+  num_cpus_1_6_2_features."default".from_rayon_core_1_2_1__default = true;
+  rand_0_3_15_features."default".from_rayon_core_1_2_1__default = true;
+  rustc_serialize_0_3_24 = rustc_serialize_0_3_24_ rec {};
   rustc_version_0_1_7 = rustc_version_0_1_7_ rec {
     dependencies = [ semver_0_1_20 ];
   };
   semver_0_1_20_features."default".from_rustc_version_0_1_7__default = true;
+  scoped_threadpool_0_1_8 = scoped_threadpool_0_1_8_ rec {
+    features = mkFeatures scoped_threadpool_0_1_8_features;
+  };
+  scoped_threadpool_0_1_8_features."".self = true;
+  scopeguard_0_3_2 = scopeguard_0_3_2_ rec {
+    features = mkFeatures scopeguard_0_3_2_features;
+  };
+  scopeguard_0_3_2_features."use_std".self_default = hasDefault scopeguard_0_3_2_features;
   semver_0_1_20 = semver_0_1_20_ rec {};
   serde_0_9_15 = serde_0_9_15_ rec {
     dependencies = [];
@@ -535,6 +961,12 @@ rec {
   libc_0_2_23_features."default".from_term_size_0_3_0__default = true;
   kernel32_sys_0_2_2_features."default".from_term_size_0_3_0__default = true;
   winapi_0_2_8_features."default".from_term_size_0_3_0__default = true;
+  toml_0_2_1 = toml_0_2_1_ rec {
+    dependencies = [];
+  };
+  toml_0_2_1_features."rustc-serialize".self_default = hasDefault toml_0_2_1_features;
+  rustc_serialize_0_0_0_features."default".from_toml_0_2_1__default = true;
+  serde_0_0_0_features."default".from_toml_0_2_1__default = true;
   unicode_segmentation_1_2_0 = unicode_segmentation_1_2_0_ rec {
     features = mkFeatures unicode_segmentation_1_2_0_features;
   };
@@ -551,6 +983,15 @@ rec {
   vec_map_0_8_0_features."serde_derive".self_eders = hasFeature (vec_map_0_8_0_features."eders" or {});
   serde_0_0_0_features."default".from_vec_map_0_8_0__default = true;
   serde_derive_0_0_0_features."default".from_vec_map_0_8_0__default = true;
+  way_cooler_client_helpers_0_1_0 = way_cooler_client_helpers_0_1_0_ rec {
+    dependencies = [ wayland_client_0_9_6 wayland_sys_0_9_6 ];
+  };
+  wayland_client_0_9_6_features."cursor".from_way_cooler_client_helpers_0_1_0 = true;
+  wayland_client_0_9_6_features."dlopen".from_way_cooler_client_helpers_0_1_0 = true;
+  wayland_client_0_9_6_features."default".from_way_cooler_client_helpers_0_1_0__default = true;
+  wayland_sys_0_9_6_features."client".from_way_cooler_client_helpers_0_1_0 = true;
+  wayland_sys_0_9_6_features."dlopen".from_way_cooler_client_helpers_0_1_0 = true;
+  wayland_sys_0_9_6_features."default".from_way_cooler_client_helpers_0_1_0__default = true;
   wayland_client_0_9_6 = wayland_client_0_9_6_ rec {
     dependencies = [ bitflags_0_7_0 libc_0_2_23 wayland_sys_0_9_6 ];
     buildDependencies = [ wayland_scanner_0_9_6 ];
@@ -577,18 +1018,6 @@ rec {
     dependencies = [ xml_rs_0_3_6 ];
   };
   xml_rs_0_3_6_features."default".from_wayland_scanner_0_9_6__default = true;
-  wayland_sys_0_6_0 = wayland_sys_0_6_0_ rec {
-    dependencies = [ dlib_0_3_1 lazy_static_0_1_16 ]
-      ++ (if lib.lists.any (x: x == "lazy_static") features then [lazy_static_0_1_16] else []);
-    features = mkFeatures wayland_sys_0_6_0_features;
-  };
-  wayland_sys_0_6_0_features."".self = true;
-  wayland_sys_0_6_0_features."lazy_static".self_dlopen = hasFeature (wayland_sys_0_6_0_features."dlopen" or {});
-  wayland_sys_0_6_0_features."libc".self_server = hasFeature (wayland_sys_0_6_0_features."server" or {});
-  dlib_0_3_1_features."dlopen".from_wayland_sys_0_6_0__dlopen = hasFeature (wayland_sys_0_6_0_features."dlopen" or {});
-  dlib_0_3_1_features."default".from_wayland_sys_0_6_0__default = true;
-  lazy_static_0_1_16_features."default".from_wayland_sys_0_6_0__default = true;
-  libc_0_0_0_features."default".from_wayland_sys_0_6_0__default = true;
   wayland_sys_0_9_6 = wayland_sys_0_9_6_ rec {
     dependencies = [ dlib_0_3_1 lazy_static_0_2_8 ]
       ++ (if lib.lists.any (x: x == "lazy_static") features then [lazy_static_0_2_8] else []);
@@ -601,21 +1030,25 @@ rec {
   dlib_0_3_1_features."default".from_wayland_sys_0_9_6__default = true;
   lazy_static_0_2_8_features."default".from_wayland_sys_0_9_6__default = true;
   libc_0_0_0_features."default".from_wayland_sys_0_9_6__default = true;
-  wc_lock_0_1_0 = wc_lock_0_1_0_ rec {
-    dependencies = [ byteorder_0_5_3 clap_2_24_2 libc_0_2_23 tempfile_2_1_5 wayland_client_0_9_6 wayland_kbd_0_9_0 wayland_sys_0_6_0 ];
-    buildDependencies = [ gcc_0_3_50 ];
+  wc_lock_0_2_1 = wc_lock_0_2_1_ rec {
+    dependencies = [ byteorder_0_5_3 clap_2_24_2 dbus_0_5_4 image_0_10_4 libc_0_2_23 rand_0_3_15 tempfile_2_1_5 way_cooler_client_helpers_0_1_0 wayland_client_0_9_6 wayland_kbd_0_9_0 wayland_sys_0_9_6 ];
+    buildDependencies = [ gcc_0_3_50 wayland_scanner_0_9_6 ];
   };
-  byteorder_0_5_3_features."default".from_wc_lock_0_1_0__default = true;
-  clap_2_24_2_features."default".from_wc_lock_0_1_0__default = true;
-  libc_0_2_23_features."default".from_wc_lock_0_1_0__default = true;
-  tempfile_2_1_5_features."default".from_wc_lock_0_1_0__default = true;
-  wayland_client_0_9_6_features."cursor".from_wc_lock_0_1_0 = true;
-  wayland_client_0_9_6_features."dlopen".from_wc_lock_0_1_0 = true;
-  wayland_client_0_9_6_features."default".from_wc_lock_0_1_0__default = true;
-  wayland_kbd_0_9_0_features."default".from_wc_lock_0_1_0__default = true;
-  wayland_sys_0_6_0_features."client".from_wc_lock_0_1_0 = true;
-  wayland_sys_0_6_0_features."dlopen".from_wc_lock_0_1_0 = true;
-  wayland_sys_0_6_0_features."default".from_wc_lock_0_1_0__default = true;
+  byteorder_0_5_3_features."default".from_wc_lock_0_2_1__default = true;
+  clap_2_24_2_features."default".from_wc_lock_0_2_1__default = true;
+  dbus_0_5_4_features."default".from_wc_lock_0_2_1__default = true;
+  image_0_10_4_features."default".from_wc_lock_0_2_1__default = true;
+  libc_0_2_23_features."default".from_wc_lock_0_2_1__default = true;
+  rand_0_3_15_features."default".from_wc_lock_0_2_1__default = true;
+  tempfile_2_1_5_features."default".from_wc_lock_0_2_1__default = true;
+  way_cooler_client_helpers_0_1_0_features."default".from_wc_lock_0_2_1__default = true;
+  wayland_client_0_9_6_features."cursor".from_wc_lock_0_2_1 = true;
+  wayland_client_0_9_6_features."dlopen".from_wc_lock_0_2_1 = true;
+  wayland_client_0_9_6_features."default".from_wc_lock_0_2_1__default = true;
+  wayland_kbd_0_9_0_features."default".from_wc_lock_0_2_1__default = true;
+  wayland_sys_0_9_6_features."client".from_wc_lock_0_2_1 = true;
+  wayland_sys_0_9_6_features."dlopen".from_wc_lock_0_2_1 = true;
+  wayland_sys_0_9_6_features."default".from_wc_lock_0_2_1__default = true;
   winapi_0_2_8 = winapi_0_2_8_ rec {};
   winapi_build_0_1_1 = winapi_build_0_1_1_ rec {};
   xml_rs_0_3_6 = xml_rs_0_3_6_ rec {
