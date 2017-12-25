@@ -3960,6 +3960,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  opensm = callPackage ../tools/networking/opensm { };
+
   openssh =
     callPackage ../tools/networking/openssh {
       hpnSupport = false;
