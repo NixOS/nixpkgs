@@ -118,6 +118,7 @@ mapAliases (rec {
   nmap_graphical = nmap-graphical;
   nfsUtils = nfs-utils;
   opencl-icd = ocl-icd;
+  openssh_with_kerberos = openssh;
   owncloudclient = owncloud-client;
   pgp-tools = signing-party;
   pidgin-with-plugins = pidgin;
