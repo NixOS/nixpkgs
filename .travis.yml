@@ -1,3 +1,2 @@
 language: nix
-sudo: true # needed by the nix install
 script: tests/eval.sh
