@@ -7,10 +7,11 @@ find=(find . -name default.nix)
 for profile in `${find[@]}`; do
     echo evaluating $profile >&2
 
-    nixos-rebuild \
-	-I nixos-config=tests/eval-test.nix \
-	-I nixos-hardware-profile=$profile \
-	dry-build
+    nix-build '<nixpkgs/nixos>' \
+        -I nixos-config=tests/eval-test.nix \
+        -I nixos-hardware-profile=$profile \
+        -A system \
+        --dry-run
 
     if [ $? -ne 0 ]; then
 	exit 1
