@@ -11,5 +11,6 @@ for profile in $(find . -name default.nix); do
     -I nixos-config=tests/eval-test.nix \
     -I nixos-hardware-profile=$profile \
     -A system \
-    --dry-run
+    --dry-run \
+    --show-trace
 done
