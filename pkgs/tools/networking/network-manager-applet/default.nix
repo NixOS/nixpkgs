@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
   name    = "${pname}-${major}.${minor}";
   pname   = "network-manager-applet";
   major   = "1.8";
-  minor   = "2";
+  minor   = "6";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "09f9hjpn9nkhw57mk6pi7q1bq3lhf5hvmwas0fknscssak7yjmry";
+    sha256 = "0c4wxwxpa7wlskvnqaqfa7mmc0c6a2pj7jcvymcchjnq4wn9wx01";
   };
 
   configureFlags = [
