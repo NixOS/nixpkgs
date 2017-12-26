@@ -134,10 +134,12 @@ let
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
-  nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
+  addPassthru' = lib.addPassthru passthru;
 
-  crossDrv = lib.addPassthru kernel.crossDrv passthru;
+  nativeDrv = addPassthru' kernel.nativeDrv;
+
+  crossDrv = addPassthru' kernel.crossDrv;
 
 in if kernel ? crossDrv
    then nativeDrv // { inherit nativeDrv crossDrv; }
-   else lib.addPassthru kernel passthru
+   else addPassthru' kernel

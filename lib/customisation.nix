@@ -36,7 +36,7 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in addPassthru newDrv (
+    in lib.flip addPassthru newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
@@ -157,7 +157,7 @@ rec {
 
   /* Add attributes to each output of a derivation without changing
      the derivation itself. */
-  addPassthru = drv: passthru: extendDerivation true passthru drv;
+  addPassthru = extendDerivation true;
 
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
