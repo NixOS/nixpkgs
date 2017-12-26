@@ -218,6 +218,7 @@
   ertes = "Ertugrul Söylemez <esz@posteo.de>";
   ethercrow = "Dmitry Ivanov <ethercrow@gmail.com>";
   etu = "Elis Hirwing <elis@hirwing.se>";
+  exfalso = "Andras Slemmer <0slemi0@gmail.com>";
   exi = "Reno Reckling <nixos@reckling.org>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
   expipiplus1 = "Joe Hermaszewski <nix@monoid.al>";
