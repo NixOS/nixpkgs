@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Car racing game";
     homepage = http://vdrift.net/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric lheckemann];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
   };
