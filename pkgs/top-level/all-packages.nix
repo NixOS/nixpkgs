@@ -12321,6 +12321,8 @@ with pkgs;
     python = python2;
   };
 
+  sambaMaster = callPackage ../servers/samba/master.nix { };
+
   samba = samba4;
 
   smbclient = samba;
