@@ -1,0 +1,18 @@
+    buildInputs = [
+      lua51Packages.lua
+      ncurses
+      zlib
+      llvm_39
+    ];
+    nativeBuildInputs = [ cmake ];
+    buildPhase = ''
+      patchShebangs .
+      sed -i "s/add_dependencies(\S\+ \S\+_track_api)//" CMakeLists.txt
+
+      cmake -DDOWNLOAD_CLANG=0 \
+            -DLLVM_CONFIG=${llvm_39}/bin/llvm-config -DLLVM_ROOT_DIR=${llvm_39}\
+            -DCLANG_LIBRARY_DIRS=${llvmPackages.clang.cc}/lib \
+            -DCLANG_INCLUDE_DIRS=${llvmPackages.clang.cc}/include \
+            .
+      make
+    '';

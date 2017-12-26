@@ -4,6 +4,7 @@
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu, ncurses
 , ycmd, makeWrapper, rake
+, lua51Packages, zlib, llvm_39
 , pythonPackages, python3Packages
 , substituteAll
 , languagetool
@@ -1425,6 +1426,34 @@ rec {
     };
     dependencies = [];
 
+  };
+
+  color_coded = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "color_coded-2017-10-30";
+    src = fetchgit {
+      url = "https://github.com/jeaye/color_coded";
+      rev = "b450a19bdaaced760ad4c78558043d77bf3ed902";
+      sha256 = "1sq68c2hx4q95ibdxkywbdksc6lcmmb206acy0704957m8sc8n1f";
+    };
+    dependencies = [];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [
+      lua51Packages.lua
+      ncurses
+      zlib
+      llvm_39
+    ];
+    buildPhase = ''
+      patchShebangs .
+      sed -i "s/add_dependencies(\S\+ \S\+_track_api)//" CMakeLists.txt
+
+      cmake -DDOWNLOAD_CLANG=0 \
+            -DLLVM_CONFIG=${llvm_39}/bin/llvm-config -DLLVM_ROOT_DIR=${llvm_39}\
+            -DCLANG_LIBRARY_DIRS=${llvmPackages.clang.cc}/lib \
+            -DCLANG_INCLUDE_DIRS=${llvmPackages.clang.cc}/include \
+            .
+      make
+    '';
   };
 
   vim-buffergator = buildVimPluginFrom2Nix { # created by nix#NixDerivation
