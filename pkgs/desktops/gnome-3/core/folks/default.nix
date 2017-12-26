@@ -5,13 +5,12 @@
 # TODO: enable more folks backends
 
 let
-  majorVersion = "0.11";
-in
-stdenv.mkDerivation rec {
-  name = "folks-${majorVersion}.4";
+  version = "0.11.4";
+in stdenv.mkDerivation rec {
+  name = "folks-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/folks/${majorVersion}/${name}.tar.xz";
+    url = "mirror://gnome/sources/folks/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "16hqh2gxlbx0b0hgq216hndr1m72vj54jvryzii9zqkk0g9kxc57";
   };
 
@@ -29,6 +28,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postBuild = "rm -rf $out/share/gtk-doc";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "folks";
+      attrPath = "gnome3.folks";
+      versionPolicy = "none";
+    };
+  };
 
   meta = {
     description = "Folks";
