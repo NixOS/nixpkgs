@@ -91,7 +91,8 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.lablgtk ];
+  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ]
+  ++ stdenv.lib.optional buildIde ocamlPackages.lablgtk;
 
   postPatch = ''
     UNAME=$(type -tp uname)
