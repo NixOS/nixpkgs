@@ -3,7 +3,7 @@
 set -e
 set -x
 
-productVersions=( 10.10.5 10.11.6 10.12.6 10.13.2 )
+productVersions=( 10.11.6 10.12.6 10.13.2 )
 lists=( system_c_symbols_i386 system_c_symbols_x86_64 system_kernel_symbols_i386 system_kernel_symbols_x86_64 )
 first="${productVersions[0]}"
 unset -v 'productVersions[0]'
