@@ -35,6 +35,12 @@ buildInputs = [ jdk libfoo ];
 then <envar>CLASSPATH</envar> will be set to
 <filename>/nix/store/...-libfoo/share/java/foo.jar</filename>.</para>
 
+<warning>
+  <para>If you omit <literal>jdk</literal> in the
+  <literal>buildInputs</literal> definition, the classpath will not be
+  set.</para>
+</warning>
+
 <para>Private JARs
 should be installed in a location like
 <filename>$out/share/<replaceable>package-name</replaceable></filename>.</para>
