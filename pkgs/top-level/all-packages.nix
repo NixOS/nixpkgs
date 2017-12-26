@@ -184,7 +184,10 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
-    inherit curl stdenv;
+    inherit stdenv;
+    # On darwin, libkrb5 needs bootstrap_cmds which would require
+    # converting many packages to fetchurl_boot to avoid evaluation cycles.
+    curl = curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
@@ -1217,6 +1220,8 @@ with pkgs;
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
+  
+  nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   onboard = callPackage ../applications/misc/onboard { };
 
@@ -1685,6 +1690,7 @@ with pkgs;
     zlibSupport = true;
     sslSupport = zlibSupport;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+    gssSupport = true;
   };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
@@ -3188,6 +3194,8 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
+  liblouis = callPackage ../development/libraries/liblouis { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
@@ -4667,6 +4675,8 @@ with pkgs;
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
+  swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
+
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
@@ -5586,7 +5596,7 @@ with pkgs;
   });
 
   crystal = callPackage ../development/compilers/crystal {
-    llvm = llvm_4;
+    llvm = llvm_5;
   };
 
   devpi-client = callPackage ../development/tools/devpi-client {};
@@ -8987,7 +8997,10 @@ with pkgs;
   krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (darwin) bootstrap_cmds;
   };
-  libkrb5 = krb5Full.override { type = "lib"; };
+  libkrb5 = krb5Full.override {
+    fetchurl = fetchurlBoot;
+    type = "lib";
+  };
 
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 

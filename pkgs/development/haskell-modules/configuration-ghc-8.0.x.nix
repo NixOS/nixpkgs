@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # Suitable LLVM version.
-  llvmPackages = pkgs.llvmPackages_35;
+  llvmPackages = pkgs.llvmPackages_37;
 
   # Disable GHC 8.0.x core libraries.
   array = null;
