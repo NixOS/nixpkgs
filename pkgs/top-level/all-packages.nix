@@ -20323,6 +20323,12 @@ with pkgs;
 
   scummvm = callPackage ../games/scummvm { };
 
+  inherit (callPackage ../games/scummvm/games.nix { })
+    beneath-a-steel-sky
+    drascula-the-vampire-strikes-back
+    flight-of-the-amazon-queen
+    lure-of-the-temptress;
+
   scorched3d = callPackage ../games/scorched3d { };
 
   scrolls = callPackage ../games/scrolls { };
