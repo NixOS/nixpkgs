@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm" ];
 
+  CFLAGS = [ "-Wno-error=deprecated-declarations" ];
+
   meta = {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
