@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/${stage1Dir}/
 
     wrapProgram $out/bin/rkt \
-      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib \
+      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib:${acl.out}/lib" \
       --prefix PATH : ${iptables}/bin
   '';
 
