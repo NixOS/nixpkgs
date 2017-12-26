@@ -2,14 +2,14 @@
   bullet, curl, gettext }:
 
 stdenv.mkDerivation rec {
-  version = "2014-10-20";
+  version = "git";
   name = "vdrift-${version}";
 
   src = fetchFromGitHub {
-    owner = "VDrift";
+    owner = "vdrift";
     repo = "vdrift";
-    rev = version;
-    sha256 = "09yny5qzdrpffq3xhqwfymsracwsxwmdd5xa8bxx9a56hhxbak2l";
+    rev = "12d444ed18395be8827a21b96cc7974252fce6d1";
+    sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
   };
 
   data = fetchsvn {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     chmod -R +w data
     sed -i -e s,/usr/local,$out, SConstruct
     export CXXFLAGS="$(pkg-config --cflags SDL2_image)"
-    scons
+    scons -j$NIX_BUILD_CORES
   '';
   installPhase = "scons install";
 
