@@ -86,7 +86,7 @@ self:
       };
 
       # upstream issue: doesn't build
-      eterm-256color = markBroken super.emacs-256color;
+      eterm-256color = markBroken super.eterm-256color;
 
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
