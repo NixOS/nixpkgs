@@ -905,13 +905,6 @@ self: super: {
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
-  # https://github.com/alpmestan/taggy/issues/{19,20}
-  taggy = appendPatch super.taggy (pkgs.fetchpatch {
-    name = "blaze-markup.patch";
-    url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
-    sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
-  });
-
   # cryptol-2.5.0 doesn't want happy 1.19.6+.
   cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
 
@@ -958,9 +951,9 @@ self: super: {
   # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
-  # These packages depend on each other, forming an infinte loop.
-  scalendar = markBroken super.scalendar;
-  SCalendar = markBroken super.SCalendar;
+  # These packages depend on each other, forming an infinite loop.
+  scalendar = null;
+  SCalendar = null;
 
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;

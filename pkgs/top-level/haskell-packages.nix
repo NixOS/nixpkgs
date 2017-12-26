@@ -13,7 +13,6 @@ let
     "ghcjs"
     "ghcjsHEAD"
     "ghcCross"
-    "jhc"
     "uhc"
     "integer-simple"
   ];
@@ -58,10 +57,6 @@ in rec {
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
       ghc = compiler.ghc742Binary;
     };
-    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix rec {
-      bootPkgs = packages.ghc784;
-      inherit (bootPkgs) hscolour;
-    };
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
       bootPkgs = packages.ghc784;
       inherit (bootPkgs) hscolour;
@@ -95,10 +90,6 @@ in rec {
       inherit (bootPkgs) hscolour alex happy;
     };
 
-    jhc = callPackage ../development/compilers/jhc {
-      inherit (packages.ghc763) ghcWithPackages;
-    };
-
     uhc = callPackage ../development/compilers/uhc/default.nix ({
       stdenv = pkgs.clangStdenv;
       inherit (pkgs.haskellPackages) ghcWithPackages;
@@ -120,39 +111,9 @@ in rec {
 
   packages = {
 
-    # Support for this compiler is broken, because it can't deal with directory-based package databases.
-    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
-    ghc6123 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc6123;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
-    };
-    ghc704 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc704;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.0.x.nix { };
-    };
-    ghc722 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc722;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.2.x.nix { };
-    };
-    ghc742 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc742;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.4.x.nix { };
-    };
-    ghc763 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc763;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };
-    };
-    ghc783 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc783;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
     ghc784 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc784;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
-    ghc7102 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7102;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;

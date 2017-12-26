@@ -581,8 +581,8 @@ nix-shell "<nixpkgs>" -A haskellPackages.bar.env
 Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
-library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.config/nixpkgs/config.nix` file:
+library profiling for all packages. To accomplish that add the following
+snippet to your `~/.config/nixpkgs/config.nix` file:
 ```nix
 {
   packageOverrides = super: let self = super.pkgs; in
