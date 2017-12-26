@@ -5652,10 +5652,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileNext = buildPerlPackage rec {
-    name = "File-Next-1.12";
+    name = "File-Next-1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
-      sha256 = "cc3afd8eaf6294aba93b8152a269cc36a9df707c6dc2c149aaa04dabd869e60a";
+      sha256 = "0nfp84p63a5xm6iwlckh3f6cy9bdpjw5fazplskhnb8k5ifg4rb9";
     };
   };
 
