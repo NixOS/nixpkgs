@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "mate-menus-${version}";
   version = "${major-ver}.${minor-ver}";
   major-ver = "1.18";
-  minor-ver = "0";
+  minor-ver = "1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "05kyr37xqv6hm1rlvnqd5ng0x1n883brqynkirkk5drl56axnz7h";
+    sha256 = "03fwv0fvg073dmdbrcbpwjhxpj98aqna804m9nqybhvj3cfyhaz6";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

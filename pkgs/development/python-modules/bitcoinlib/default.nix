@@ -1,6 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, openssl }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, openssl }:
 
-buildPythonPackage rec {
+let ext = if stdenv.isDarwin then "dylib" else "so";
+in buildPythonPackage rec {
   pname = "bitcoinlib";
   version = "0.9.0";
   name = "${pname}-${version}";
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace bitcoin/core/key.py --replace \
       "ctypes.util.find_library('ssl') or 'libeay32'" \
-      "\"${openssl.out}/lib/libssl.so\""
+      "'${openssl.out}/lib/libssl.${ext}'"
   '';
 
   meta = {

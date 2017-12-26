@@ -4740,6 +4740,8 @@ in {
 
     propagatedBuildInputs = with self; [ greenlet ];
 
+    doCheck = false;
+
     meta = {
       description = "Eventlib bindings for python";
       homepage    = "http://ag-projects.com/";
@@ -6524,7 +6526,6 @@ in {
   pycuda = callPackage ../development/python-modules/pycuda rec {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (pkgs.stdenv) mkDerivation;
-    inherit pythonOlder;
   };
 
   pyphen = callPackage ../development/python-modules/pyphen {};
@@ -7904,15 +7905,25 @@ in {
 
   docutils = buildPythonPackage rec {
     name = "docutils-${version}";
-    version = "0.13.1";
+    version = "0.14";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "1gkma47i609jfs7dssxn4y9vsz06qi0l5q41nws0zgkpnrghz33i";
+      sha256 = "0x22fs3pdmr42kvz6c654756wja305qv6cx1zbhwlagvxgr4xrji";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    checkPhase = if isPy3k then ''
+      ${python.interpreter} test3/alltests.py
+    '' else ''
+      ${python.interpreter} test/alltests.py
+    '';
+
+    # Create symlinks lacking a ".py" suffix, many programs depend on these names
+    postFixup = ''
+      (cd $out/bin && for f in *.py; do
+        ln -s $f $(echo $f | sed -e 's/\.py$//')
+      done)
+    '';
 
     meta = {
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
@@ -16290,14 +16301,15 @@ in {
   routes = buildPythonPackage rec {
     pname = "Routes";
     version = "2.4.1";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
       sha256 = "1zamff3m0kc4vyfniyhxpkkcqv1rrgnmh37ykxv34nna1ws47vi6";
     };
 
-    propagatedBuildInputs = with self; [ paste webtest repoze_lru ];
+    propagatedBuildInputs = with self; [ repoze_lru six webob ];
+
+    checkInputs = with self; [ coverage webtest ];
 
     meta = {
       description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
@@ -22841,15 +22853,7 @@ EOF
     doCheck = false;
   };
 
-  ansi = buildPythonPackage rec {
-    name = "ansi-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/ansi/${name}.tar.gz";
-      sha256 = "06y6470bzvlqys3zi2vc68rmk9n05v1ibral14gbfpgfa8fzy7pg";
-    };
-  };
+  ansi = callPackage ../development/python-modules/ansi { };
 
   pygments-markdown-lexer = buildPythonPackage rec {
     name = "pygments-markdown-lexer-${version}";
@@ -22977,11 +22981,11 @@ EOF
 
   more-itertools = buildPythonPackage rec {
     name = "more-itertools-${version}";
-    version = "2.4.1";
+    version = "4.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
-      sha256 = "95a222d01df60c888d56d86f91219bfbd47106a534e89ca7f80fb555cfbe08c1";
+      sha256 = "0cadwsr97c80k18if7qy5d8j8l1zj3yhnkm6kbngk0lpl7pxq8ax";
     };
 
     buildInputs = with self; [ nose ];

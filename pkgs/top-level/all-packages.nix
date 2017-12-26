@@ -1220,6 +1220,8 @@ with pkgs;
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
+  
+  nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   onboard = callPackage ../applications/misc/onboard { };
 
@@ -1843,8 +1845,11 @@ with pkgs;
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
   dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
-  dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix { };
-
+  dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
+    inherit (darwin) cf-private;
+    wxGTK = wxGTK31;
+  };
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
   slade = callPackage ../applications/misc/slade {
@@ -3188,6 +3193,8 @@ with pkgs;
   libircclient = callPackage ../development/libraries/libircclient { };
 
   libite = callPackage ../development/libraries/libite { };
+
+  liblouis = callPackage ../development/libraries/liblouis { };
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
@@ -4668,6 +4675,8 @@ with pkgs;
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
+  swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
+
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
@@ -5587,7 +5596,7 @@ with pkgs;
   });
 
   crystal = callPackage ../development/compilers/crystal {
-    llvm = llvm_4;
+    llvm = llvm_5;
   };
 
   devpi-client = callPackage ../development/tools/devpi-client {};
@@ -6720,7 +6729,7 @@ with pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524;
+  inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524 perl526;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
@@ -9442,6 +9451,8 @@ with pkgs;
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
+  libmypaint = callPackage ../development/libraries/libmypaint { };
+
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
   };
@@ -9787,8 +9798,6 @@ with pkgs;
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
   libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
-
-  libtoxcore-old = callPackage ../development/libraries/libtoxcore/old-api.nix { };
 
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
@@ -11229,6 +11238,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
+
+  wxGTK31 = callPackage ../development/libraries/wxwidgets/3.1 {};
 
   wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix {
     inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel;
@@ -13580,6 +13591,8 @@ with pkgs;
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  ibm-plex = callPackage ../data/fonts/ibm-plex { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
@@ -13735,6 +13748,8 @@ with pkgs;
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
+
+  scowl = callPackage ../data/misc/scowl { };
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
@@ -15081,7 +15096,6 @@ with pkgs;
   ghq = gitAndTools.ghq;
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
-    inherit (gnome2) libart_lgpl;
     webkit = null;
     lcms = lcms2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
@@ -16630,9 +16644,7 @@ with pkgs;
 
   ratmen = callPackage ../tools/X11/ratmen {};
 
-  ratox = callPackage ../applications/networking/instant-messengers/ratox {
-    libtoxcore = libtoxcore-old;
-  };
+  ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
@@ -18628,6 +18640,8 @@ with pkgs;
   orion = callPackage ../misc/themes/orion {};
 
   deepin-gtk-theme = callPackage ../misc/themes/deepin { };
+
+  elementary-gtk-theme = callPackage ../misc/themes/elementary { };
 
   albatross = callPackage ../misc/themes/albatross { };
 

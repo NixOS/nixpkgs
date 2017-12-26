@@ -71,6 +71,7 @@
   ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
+  ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
@@ -91,6 +92,7 @@
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/qt5ct.nix
+  ./programs/rootston.nix
   ./programs/screen.nix
   ./programs/slock.nix
   ./programs/shadow.nix

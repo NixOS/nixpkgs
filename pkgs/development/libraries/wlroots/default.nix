@@ -35,6 +35,8 @@ in stdenv.mkDerivation rec {
     mkdir $bin/lib
     cp libwlroots.so $bin/lib/
     patchelf --set-rpath "$bin/lib:${stdenv.lib.makeLibraryPath buildInputs}" $bin/bin/rootston
+    mkdir $bin/etc
+    cp ../rootston/rootston.ini.example $bin/etc/rootston.ini
   '';
 
   meta = with stdenv.lib; {

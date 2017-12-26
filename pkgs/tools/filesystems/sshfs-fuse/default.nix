@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
-, buildManPages ? true, docutils
+, docutils
 }:
 
 let
@@ -15,10 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "15z1mlad09llckkadvjfzmbv14fbq218xmb4axkmi7kzixbi41hv";
   };
 
-  patches = optional buildManPages ./build-man-pages.patch;
-
-  nativeBuildInputs = [ meson pkgconfig ninja ];
-  buildInputs = [ fuse3 glib ] ++ optional buildManPages docutils;
+  nativeBuildInputs = [ meson pkgconfig ninja docutils ];
+  buildInputs = [ fuse3 glib ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optional
     (stdenv.system == "i686-linux")
