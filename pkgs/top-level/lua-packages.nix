@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, libmysql, postgresql, cyrus_sasl
+, mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which
 }:
 
@@ -210,7 +210,7 @@ let
     };
     sourceRoot = ".";
 
-    buildInputs = [ libmysql postgresql sqlite ];
+    buildInputs = [ mysql.connector-c postgresql sqlite ];
 
     preConfigure = ''
       substituteInPlace Makefile --replace CC=gcc CC=cc
@@ -220,7 +220,8 @@ let
     '';
 
     NIX_CFLAGS_COMPILE = [
-      "-I${libmysql.dev}/include/mysql"
+      "-I${mysql.connector-c}/include/mysql"
+      "-L${mysql.connector-c}/lib/mysql"
       "-I${postgresql}/include/server"
     ];
 
