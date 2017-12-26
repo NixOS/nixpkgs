@@ -1,13 +1,17 @@
-{ fetchurl, stdenv, ant }:
+{ fetchurl, stdenv, jre }:
 
 stdenv.mkDerivation rec {
-  name = "jmeter-2.11";
+  name = "jmeter-3.3";
   src = fetchurl {
     url = "http://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
-    sha256 = "1fr3sw06qncb6yygcf2lbnkxma4v1dbigpf39ajrm0isxbpyv944";
+    sha256 = "190k6yrh5casadphkv4azp4nvf4wf2q85mrfysw67r9d96nb9kk5";
   };
 
+  buildInputs = [ jre ];
+
   installPhase = ''
+    substituteInPlace ./bin/jmeter.sh --replace "java $ARGS" "${jre}/bin/java $ARGS"
+    substituteInPlace ./bin/jmeter --replace "java $ARGS" "${jre}/bin/java $ARGS"
     mkdir $out
     cp ./* $out/ -R
   '';
