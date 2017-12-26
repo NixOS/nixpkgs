@@ -13,7 +13,6 @@ let
     "ghcjs"
     "ghcjsHEAD"
     "ghcCross"
-    "jhc"
     "uhc"
     "integer-simple"
   ];
@@ -89,10 +88,6 @@ in rec {
     ghcHaLVM240 = callPackage ../development/compilers/halvm/2.4.0.nix rec {
       bootPkgs = packages.ghc802;
       inherit (bootPkgs) hscolour alex happy;
-    };
-
-    jhc = callPackage ../development/compilers/jhc {
-      inherit (packages.ghc763) ghcWithPackages;
     };
 
     uhc = callPackage ../development/compilers/uhc/default.nix ({
