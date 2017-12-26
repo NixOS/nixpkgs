@@ -951,9 +951,9 @@ self: super: {
   # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
-  # These packages depend on each other, forming an infinite loop.
-  scalendar = null;
-  SCalendar = null;
+  # These packages depend on each other, forming an infinte loop.
+  scalendar = markBroken super.scalendar;
+  SCalendar = markBroken super.SCalendar;
 
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
