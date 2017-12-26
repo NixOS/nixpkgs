@@ -223,7 +223,7 @@ let
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.15" -> libelf != null;
+assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
 stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
   name = "linux-${version}";
@@ -232,7 +232,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
       ++ optional (stdenv.platform.uboot != null) (ubootChooser stdenv.platform.uboot)
-      ++ optional (stdenv.lib.versionAtLeast version "4.15") libelf
+      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ;
 
