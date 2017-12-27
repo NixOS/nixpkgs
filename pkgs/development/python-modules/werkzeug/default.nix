@@ -11,6 +11,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "09mv4cya3lywkn4mi3qrqmjgwiw99kdk03dk912j8da6ny3pnflh";
   };
+  patches = [ ./0001-Check-wrapped-path-when-reloading-scripts.patch ];
 
   LC_ALL = "en_US.UTF-8";
 

@@ -1,0 +1,35 @@
+From ed50577064391a247e03082dcebf5ba118020bd6 Mon Sep 17 00:00:00 2001
+From: Sam Parkinson <sam@sam.today>
+Date: Wed, 27 Dec 2017 11:15:59 +1100
+Subject: [PATCH] Check wrapped path when reloading scripts
+
+Nix wraps the python script in a shell script for system installed
+utils (like Flask).  This previously caused a crash; as python can not
+run a shell script.
+
+This commit makes the reloader check for the wrapped version; so
+that the reloader finds the python script as it expects
+---
+ werkzeug/_reloader.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/werkzeug/_reloader.py b/werkzeug/_reloader.py
+index c4ca2714..883879b7 100644
+--- a/werkzeug/_reloader.py
++++ b/werkzeug/_reloader.py
+@@ -60,6 +60,12 @@ def _get_args_for_reloading():
+     if os.name == 'nt' and not os.path.exists(py_script) and \
+        os.path.exists(py_script + '.exe'):
+         py_script += '.exe'
++
++    dirname, basename = os.path.split(py_script)
++    nix_inner = os.path.join(dirname, '.{}-wrapped'.format(basename))
++    if os.path.isfile(nix_inner):
++        py_script = nix_inner
++
+     rv.append(py_script)
+     rv.extend(sys.argv[1:])
+     return rv
+-- 
+2.15.0
+
