@@ -99,5 +99,5 @@ in {
     programs.dconf.enable = mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ primeos ];
+  meta.maintainers = with lib.maintainers; [ primeos gnidorah ];
 }
