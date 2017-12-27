@@ -118,6 +118,9 @@ self:
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
 
+      # upstream issue: recipe fails
+      insert-shebang = markBroken super.insert-shebang;
+
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
 
