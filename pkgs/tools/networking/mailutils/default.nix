@@ -54,14 +54,14 @@ in stdenv.mkDerivation rec {
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
-    sed -i 's:/usr/lib/mysql:${mysql.connector-c}/lib/mariadb:' configure.ac
+    sed -i 's:/usr/lib/mysql:${mysql.connector-c}/lib/mysql:' configure.ac
     sed -i 's/0\.18/0.19/' configure.ac
     sed -i -e 's:mysql/mysql.h:mysql.h:' \
            -e 's:mysql/errmsg.h:errmsg.h:' \
       sql/mysql.c
   '';
 
-  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mariadb -I${mysql.connector-c}/include/mariadb";
+  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql";
 
   preCheck = ''
     # Add missing test files
