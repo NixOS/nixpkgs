@@ -1,7 +1,10 @@
 { lib, ... }:
 
 {
-  imports = [ ../. ];
+  imports = [
+    ../.
+    ../../../common/cpu/intel/sandy-bridge
+  ];
 
   boot.kernelParams = [
     "acpi_backlight=vendor"
