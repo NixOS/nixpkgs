@@ -59,12 +59,18 @@ stdenv.mkDerivation rec {
     echo > $MOZ_CONFIG "
     . $src/build/mozconfig.common
     ac_add_options --prefix=$out
+    ac_add_options --with-pthreads
     ac_add_options --enable-application=browser
     ac_add_options --enable-official-branding
     ac_add_options --enable-optimize="-O2"
+    ac_add_options --enable-release
+    ac_add_options --enable-devtools
     ac_add_options --enable-jemalloc
     ac_add_options --enable-shared-js
+    ac_add_options --enable-strip
     ac_add_options --disable-tests
+    ac_add_options --disable-installer
+    ac_add_options --disable-updaters
     "
   '';
 
