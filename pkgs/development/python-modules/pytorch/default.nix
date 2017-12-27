@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ${stdenv.shell} test/run_test.sh
   '';
 
-  doCheck = false; # for some unknown reason doesn't detect cuda if run from builder user
+  doCheck = !cudaSupport; # for some unknown reason doesn't detect cuda if run from builder user
 
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
