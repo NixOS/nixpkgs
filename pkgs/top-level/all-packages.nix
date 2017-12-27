@@ -7500,6 +7500,8 @@ with pkgs;
 
   jamomacore = callPackage ../development/libraries/audio/jamomacore { };
 
+  jbake = callPackage ../development/tools/jbake { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
