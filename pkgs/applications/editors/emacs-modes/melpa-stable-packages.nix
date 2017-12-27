@@ -165,6 +165,9 @@ self:
       qiita = markBroken super.qiita;
 
       # upstream issue: missing file header
+      rcirc-menu = markBroken super.rcirc-menu;
+
+      # upstream issue: missing file header
       speech-tagger = markBroken super.speech-tagger;
 
       # upstream issue: missing file header
