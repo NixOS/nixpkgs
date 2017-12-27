@@ -1,5 +1,5 @@
-{ stdenv, nasm
-, fetchurl, SDL2, SDL2_net, freetype, zlib, libmpeg2, libjpeg, libmad, libogg, libvorbis, flac, alsaLib, mesa
+{ stdenv, fetchurl, nasm
+, alsaLib, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, mesa, SDL2, zlib
 , hostPlatform
 }:
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ nasm ];
 
   buildInputs = [
-    SDL2 SDL2_net
-    freetype libjpeg libmpeg2 libmad libogg libvorbis flac alsaLib mesa zlib
+    alsaLib freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis mesa SDL2 zlib
   ];
 
   enableParallelBuilding = true;
