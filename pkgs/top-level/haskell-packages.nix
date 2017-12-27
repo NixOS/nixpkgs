@@ -29,13 +29,18 @@ in rec {
 
   compiler = {
 
-    ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix { gmp = pkgs.gmp4; };
+    ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix {
+      gmp = pkgs.gmp4;
+    };
     ghc704Binary = callPackage ../development/compilers/ghc/7.0.4-binary.nix {
       gmp = pkgs.gmp4;
     };
     ghc742Binary = callPackage ../development/compilers/ghc/7.4.2-binary.nix {
       gmp = pkgs.gmp4;
     };
+    ghc784Binary = callPackage ../development/compilers/ghc/7.8.4-binary.nix { };
+    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
+    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
     ghc6104 = callPackage ../development/compilers/ghc/6.10.4.nix { ghc = compiler.ghc6102Binary; };
     ghc6123 = callPackage ../development/compilers/ghc/6.12.3.nix { ghc = compiler.ghc6102Binary; };

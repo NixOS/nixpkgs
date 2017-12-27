@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl, perl
 , ncurses5, gmp, libiconv
+, enableIntegerSimple ? false
 }:
 
 let
@@ -14,26 +15,22 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.4.2";
+  version = "7.8.4";
 
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
     "i686-linux" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-      sha256 = "0gny7knhss0w0d9r6jm1gghrcb8kqjvj94bb7hxf9syrk4fxlcxi";
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux-deb7.tar.bz2";
+      sha256 = "5da2cf45986f33319a92a666f1f0149915334a7b64b41892ab94f4557242b406";
     };
     "x86_64-linux" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-      sha256 = "043jabd0lh6n1zlqhysngbpvlsdznsa2mmsj08jyqgahw9sjb5ns";
-    };
-    "i686-darwin" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
-      sha256 = "1vrbs3pzki37hzym1f1nh07lrqh066z3ypvm81fwlikfsvk4djc0";
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux-deb7.tar.bz2";
+      sha256 = "20b5731d268613bbf6e977dbb192a3a3b7b78d954c35edbfca4fb36b652e24f7";
     };
     "x86_64-darwin" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
-      sha256 = "1imzqc0slpg0r6p40n5a9m18cbcm0m86z8dgyhfxcckksw54mzwf";
+      sha256 = "dfa161c2a136ee16214a49d5902e2377407c8292dbbdbb14fa0fa6b17220cae6";
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
@@ -49,6 +46,20 @@ stdenv.mkDerivation rec {
     # during linking
     stdenv.lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
+      # not enough room in the object files for the full path to libiconv :(
+      for exe in $(find . -type f -executable); do
+        isScript $exe && continue
+        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
+        for file in $(find . -name setup-config); do
+          substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+        done
+      done
+    '' +
+
+    # Some scripts used during the build need to have their shebangs patched
+    ''
+      patchShebangs ghc-${version}/utils/
     '' +
 
     # Strip is harmful, see also below. It's important that this happens
@@ -75,15 +86,13 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          --replace-needed libtinfo.so libtinfo.so.5 \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
 
       paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-      for prog in ld ar gcc strip ranlib; do
-        find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
-      done
     '';
 
   configurePlatforms = [ ];
@@ -103,8 +112,12 @@ stdenv.mkDerivation rec {
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    find "$out" -type f -executable \
-        -exec patchelf --set-rpath "${libPath}" {} \;
+    for p in $(find "$out" -type f -executable); do
+      if isELF "$p"; then
+        echo "Patchelfing $p"
+        patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+      fi
+    done
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
@@ -120,6 +133,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc

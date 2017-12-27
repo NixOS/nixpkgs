@@ -1,6 +1,7 @@
 { stdenv
-, fetchurl, perl
+, fetchurl, perl, gcc
 , ncurses5, gmp, libiconv
+, enableIntegerSimple ? false
 }:
 
 let
@@ -14,26 +15,30 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.4.2";
+  version = "8.2.1";
 
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
     "i686-linux" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-      sha256 = "0gny7knhss0w0d9r6jm1gghrcb8kqjvj94bb7hxf9syrk4fxlcxi";
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
+      sha256 = "d86f9c157dd4161a8acb14062c131c8985a4f65fc856603c373502be1d50c95e";
     };
     "x86_64-linux" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-      sha256 = "043jabd0lh6n1zlqhysngbpvlsdznsa2mmsj08jyqgahw9sjb5ns";
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
+      sha256 = "543b81bf610240bd0398111d6c6607a9094dc2d159b564057d46c8a3d1aaa130";
     };
-    "i686-darwin" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
-      sha256 = "1vrbs3pzki37hzym1f1nh07lrqh066z3ypvm81fwlikfsvk4djc0";
+    "armv7-linux" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
+      sha256 = "0f0e5e1d4fad3fa1a87ca1fe0d19242f4a94d158b7b8a08f99efefd98b51b019";
+    };
+    "aarch64-linux" = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb8-linux.tar.xz";
+      sha256 = "61dab9c95ef9f9af8bce7338863fda3e42945eb46194b12d922b6d0dc245d0c2";
     };
     "x86_64-darwin" = {
-      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
-      sha256 = "1imzqc0slpg0r6p40n5a9m18cbcm0m86z8dgyhfxcckksw54mzwf";
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+      sha256 = "900c802025fb630060dbd30f9738e5d107a4ca5a50d5c1262cd3e69fe4467188";
     };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
@@ -49,6 +54,17 @@ stdenv.mkDerivation rec {
     # during linking
     stdenv.lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
+      # not enough room in the object files for the full path to libiconv :(
+      for exe in $(find . -type f -executable); do
+        isScript $exe && continue
+        ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+      done
+    '' +
+
+    # Some scripts used during the build need to have their shebangs patched
+    ''
+      patchShebangs ghc-${version}/utils/
     '' +
 
     # Strip is harmful, see also below. It's important that this happens
@@ -75,15 +91,13 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          --replace-needed libtinfo.so libtinfo.so.5 \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
 
       paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-      for prog in ld ar gcc strip ranlib; do
-        find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
-      done
     '';
 
   configurePlatforms = [ ];
@@ -103,14 +117,18 @@ stdenv.mkDerivation rec {
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    find "$out" -type f -executable \
-        -exec patchelf --set-rpath "${libPath}" {} \;
+    for p in $(find "$out" -type f -executable); do
+      if isELF "$p"; then
+        echo "Patchelfing $p"
+        patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+      fi
+    done
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
       ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
+      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
     done
 
     for file in $(find "$out" -name setup-config); do
@@ -120,6 +138,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
