@@ -1,6 +1,6 @@
 { stdenv, fetchurl, automoc4, cmake, perl, pkgconfig, kdelibs4, lcms2, libpng, eigen
 , exiv2, boost, sqlite, icu, vc, shared_mime_info, librevenge, libodfgen, libwpg
-, libwpd, poppler_qt4, ilmbase, gsl, qca2, marble, libvisio, libmysql, postgresql
+, libwpd, poppler_qt4, ilmbase, gsl, qca2, marble, libvisio, mysql, postgresql
 , freetds, fftw, glew, libkdcraw, pstoedit, opencolorio, kdepimlibs
 , kactivities, okular, git, oxygen-icons5, makeWrapper
 # TODO: not found
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     kdelibs4 lcms2 libpng eigen
     exiv2 boost sqlite icu vc shared_mime_info librevenge libodfgen libwpg
-    libwpd poppler_qt4 ilmbase gsl qca2 marble libvisio libmysql postgresql
+    libwpd poppler_qt4 ilmbase gsl qca2 marble libvisio mysql.connector-c postgresql
     freetds fftw glew libkdcraw opencolorio kdepimlibs
     kactivities okular git
   ];
