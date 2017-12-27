@@ -56,8 +56,8 @@ in
     propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.connector-c}/include/mariadb"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.connector-c}/lib/mariadb"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.connector-c}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.connector-c}/lib/mysql"
       '';
     };
   };

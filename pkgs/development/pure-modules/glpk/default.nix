@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     preConfigure = ''
       substituteInPlace configure \
-        --replace /usr/include/mysql ${mysql.connector-c}/include/mariadb
+        --replace /usr/include/mysql ${mysql.connector-c}/include/mysql
     '';
     configureFlags = [ "--enable-dl"
                        "--enable-odbc"

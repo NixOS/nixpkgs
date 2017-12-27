@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${mysql.connector-c}/include/mariadb"
-    export LDFLAGS="-L${mysql.connector-c}/lib/mariadb -L${postgresql}/lib"
+    export CPPFLAGS="-I${mysql.connector-c}/include/mysql"
+    export LDFLAGS="-L${mysql.connector-c}/lib/mysql -L${postgresql}/lib"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 

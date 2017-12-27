@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     nettools gettext readline openssl python2 flex ncurses sqlite postgresql
-    libmysql zlib lzo jansson acl glusterfs libceph libcap rocksdb
+    mysql.connector-c zlib lzo jansson acl glusterfs libceph libcap rocksdb
   ];
 
   postPatch = ''

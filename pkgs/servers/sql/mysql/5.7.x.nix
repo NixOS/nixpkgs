@@ -56,7 +56,9 @@ self = stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    client = self;
     connector-c = self;
+    server = self;
     mysqlVersion = "5.7";
   };
 
