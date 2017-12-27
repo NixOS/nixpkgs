@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 582214b..db6a410 100755
+--- a/setup.py
++++ b/setup.py
+@@ -38,7 +38,7 @@ with open(REQUIREMENTS_FILE) as f:
+ if sys.version_info < (3, 4):
+     install_reqs.append('enum34')
+
+-test_reqs = ['pytest', 'pytest-cov']
++test_reqs = ['pytest'] # no need for test coverage info in Nix builds
+ if sys.version_info[0] == 2:  # py3 has mock in stdlib
+     test_reqs.append('mock')
+
