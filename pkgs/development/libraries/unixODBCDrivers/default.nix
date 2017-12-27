@@ -43,13 +43,6 @@
       "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
     ];
 
-    preConfigure = ''
-      sed -i \
-        -e 's,mariadb_config,mysql_config,g' \
-        -e 's,libmariadbclient,libmysqlclient,g' \
-        cmake/FindMariaDB.cmake
-    '';
-
     passthru = {
       fancyName = "MariaDB";
       driver = "lib/libmyodbc3-3.51.12.so";
@@ -60,7 +53,6 @@
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
       platforms = platforms.linux;
-      broken = true;
     };
   };
 

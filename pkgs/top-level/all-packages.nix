@@ -1254,7 +1254,7 @@ with pkgs;
     libkrb5 = null;
     systemd = null;
     jemalloc = null;
-    libmysql = null;
+    mysql = null;
     postgresql = null;
     libdbi = null;
     net_snmp = null;
@@ -1508,7 +1508,6 @@ with pkgs;
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    libmysql = mysql.connector-c;
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
