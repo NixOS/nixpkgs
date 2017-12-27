@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, calendarsupport, kcalcore, kcompletion,
   kconfigwidgets, kcontacts, kdbusaddons, kitemmodels, kpimtextedit, libkdepim,
-  ktextwidgets, kxmlgui, messagelib, qtbase,
+  ktextwidgets, kxmlgui, messagelib, qtbase, akonadi-search, xapian
 }:
 
 mkDerivation {
@@ -16,6 +16,6 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-contacts calendarsupport kcalcore kcompletion kconfigwidgets
     kcontacts kdbusaddons kitemmodels kpimtextedit ktextwidgets kxmlgui
-    messagelib qtbase libkdepim
+    messagelib qtbase libkdepim akonadi-search xapian
   ];
 }
