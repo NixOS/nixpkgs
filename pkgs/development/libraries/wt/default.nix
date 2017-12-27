@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, libmysql, postgresql, graphicsmagick, glew, openssl
+, pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
 , pcre
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     cmake boost doxygen qt48Full libharu
-    pango fcgi firebird libmysql postgresql graphicsmagick glew
+    pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
     openssl pcre
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
     "-DWT_CPP_11_MODE=-std=c++11"
     "-DGM_PREFIX=${graphicsmagick}"
-    "-DMYSQL_PREFIX=${libmysql}"
+    "-DMYSQL_PREFIX=${mysql.connector-c}"
     "--no-warn-unused-cli"
   ];
 
