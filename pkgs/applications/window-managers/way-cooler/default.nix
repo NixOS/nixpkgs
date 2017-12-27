@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
-, wayland, wlc, dbus_libs, dbus_glib, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk_pixbuf, lua5_3
+{ stdenv, fetchurl, makeWrapper, symlinkJoin, writeShellScriptBin, callPackage, defaultCrateOverrides
+, wayland, wlc, cairo, libxkbcommon, pam, python3Packages, lemonbar, gdk_pixbuf, lua5_3
 }:
 
 let
@@ -13,13 +13,6 @@ let
     crateOverrides = defaultCrateOverrides // {
 
     way-cooler = attrs: { buildInputs = [ wlc cairo libxkbcommon fakegit gdk_pixbuf lua5_3 ]; };
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-    gobject-sys = attrs: { buildInputs = [ dbus_glib ]; };
-    gio-sys = attrs: { buildInputs = [ dbus_glib ]; };
-    gdk-pixbuf-sys = attrs: { buildInputs = [ dbus_glib ]; };
-    gdk-pixbuf = attrs: { buildInputs = [ dbus_glib gdk_pixbuf ]; };
-    cairo-rs = attrs: { buildInputs = [ cairo ]; };
-    xcb = attrs: { buildInputs = [ python3Packages.python ]; };
   };}).overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
@@ -32,11 +25,7 @@ let
       mv way_cooler way-cooler
     '';
   });
-  wc-bg = ((callPackage ./wc-bg.nix {}).wc_bg_0_3_0.override {
-    crateOverrides = defaultCrateOverrides // {
-
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-  };}).overrideAttrs (oldAttrs: rec {
+  wc-bg = (callPackage ./wc-bg.nix {}).wc_bg_0_3_0.overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
     postFixup = ''
@@ -44,11 +33,7 @@ let
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ wayland ]}"
     '';
   });
-  wc-grab = ((callPackage ./wc-grab.nix {}).wc_grab_0_3_0.override {
-    crateOverrides = defaultCrateOverrides // {
-
-    dbus = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
-  };}).overrideAttrs (oldAttrs: rec {
+  wc-grab = (callPackage ./wc-grab.nix {}).wc_grab_0_3_0.overrideAttrs (oldAttrs: rec {
     postFixup = ''
       cd $out/bin
       mv wc_grab wc-grab
@@ -58,7 +43,6 @@ let
     crateOverrides = defaultCrateOverrides // {
 
     wc-lock = attrs: { buildInputs = [ pam ]; };
-    libdbus-sys = attrs: { buildInputs = [ pkgconfig dbus_libs ]; };
   };}).overrideAttrs (oldAttrs: rec {
     nativeBuildInputs = [ makeWrapper ];
 
