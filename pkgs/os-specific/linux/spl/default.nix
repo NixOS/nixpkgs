@@ -20,9 +20,7 @@ let
       inherit sha256;
     };
 
-    patches = [ ./const.patch ./install_prefix.patch ];
-
-    nativeBuildInputs = [ autoreconfHook ];
+    nativeBuildInputs = [ autoreconfHook ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
     hardeningDisable = [ "pic" ];
 
