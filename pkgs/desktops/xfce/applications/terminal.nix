@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, ncurses, gtk, vte, dbus_glib
-, exo, libxfce4util, libxfce4ui
+{ stdenv, fetchurl, pkgconfig, intltool, ncurses, dbus_glib
+, exo, libxfce4util, libxfce4ui_gtk3, gtk3, gnome3
 }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-terminal";
-  ver_maj = "0.6";
-  ver_min = "3";
+  ver_maj = "0.8";
+  ver_min = "6";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "023y0lkfijifh05yz8grimxadqpi98mrivr00sl18nirq8b4fbwi";
+    sha256 = "bc2a560409a0f0b666d1c557e991748b986ec27572a45ae88b0ee5a480d881d7";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool exo gtk vte libxfce4util ncurses dbus_glib libxfce4ui ];
+  buildInputs = [ intltool exo gnome3.vte libxfce4util ncurses dbus_glib libxfce4ui_gtk3 gtk3 ];
 
   meta = {
     homepage = http://www.xfce.org/projects/terminal;
