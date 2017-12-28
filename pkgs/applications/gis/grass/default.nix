@@ -22,9 +22,12 @@ stdenv.mkDerivation {
     "--with-wxwidgets"
     "--with-netcdf"
     "--with-geos"
-    "--with-postgres" "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres"
+    "--with-postgres-libs=${postgresql.lib}/lib/"
     # it complains about missing libmysqld but doesn't really seem to need it
-    "--with-mysql" "--with-mysql-includes=${stdenv.lib.getDev mysql.client}/include/mysql"
+    "--with-mysql"
+    "--with-mysql-includes=${mysql.connector-c}/include/mysql"
+    "--with-mysql-libs=${mysql.connector-c}/lib/mysql"
     "--with-blas"
   ];
 
