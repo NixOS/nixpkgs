@@ -8148,6 +8148,8 @@ in {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
+  fastrlock = callPackage ../development/python-modules/fastrlock {};
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
