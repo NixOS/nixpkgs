@@ -17,13 +17,13 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
+  inherit (darwin.apple_sdk.frameworks) Security;
 
   procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
-
 in
 
 stdenv.mkDerivation {
@@ -141,6 +141,7 @@ stdenv.mkDerivation {
     ++ optional (!stdenv.isDarwin) gdb;
 
   buildInputs = [ ncurses ] ++ targetToolchains
+    ++ optional stdenv.isDarwin Security
     ++ optional (!forceBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
