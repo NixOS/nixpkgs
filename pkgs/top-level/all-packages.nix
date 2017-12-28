@@ -3545,6 +3545,10 @@ with pkgs;
 
   nbd = callPackage ../tools/networking/nbd { };
 
+  nccl = callPackage ../development/libraries/science/math/nccl {
+    cudatoolkit = cudatoolkit8;
+  };
+
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
   ndppd = callPackage ../applications/networking/ndppd { };
