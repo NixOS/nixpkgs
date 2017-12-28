@@ -98,6 +98,7 @@ client = stdenv.mkDerivation (common // {
     cmakeFlags="$cmakeFlags \
       -DINSTALL_BINDIR=$bin/bin \
       -DINSTALL_SCRIPTDIR=$bin/bin \
+      -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
       -DINSTALL_DOCDIR=$bin/share/doc/mysql \
       -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
       "

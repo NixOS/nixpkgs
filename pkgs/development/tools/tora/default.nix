@@ -17,7 +17,7 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
   buildInputs = [
-    boost doxygen graphviz loki mysql openssl postgresql qscintillaLib qtbase
+    boost doxygen graphviz loki mysql.connector-c openssl postgresql qscintillaLib qtbase
   ];
 
   preConfigure = ''
@@ -50,6 +50,8 @@ in mkDerivation rec {
     "-lecpg"
     "-lssl"
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql" ];
 
   postFixup = ''
     wrapProgram $out/bin/tora \
