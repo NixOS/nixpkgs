@@ -1467,6 +1467,9 @@ in {
       substituteInPlace setup.py --replace "argparse" ""
     '';
 
+  chainer = callPackage ../development/python-modules/chainer {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
 
   channels = callPackage ../development/python-modules/channels {};
 
