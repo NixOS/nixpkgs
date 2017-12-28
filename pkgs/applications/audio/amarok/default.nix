@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, automoc4, cmake, perl, pkgconfig
-, qtscriptgenerator, gettext, curl , libxml2, mysql, taglib
+, qtscriptgenerator, gettext, curl, libxml2, mysql57, taglib
 , taglib_extras, loudmouth , kdelibs4, qca2, libmtp, liblastfm, libgpod
 , phonon , strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null
 , lz4, lzo, snappy, libaio, pcre
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   buildInputs = [
-    qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.connector-c/*libmysqld*/
+    qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql57.server mysql57.server.static /*libmysqld*/
     taglib taglib_extras loudmouth kdelibs4 phonon strigi soprano qca2
     libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
     lz4 lzo snappy libaio pcre
