@@ -2959,10 +2959,6 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
-  # kget is part of kde-applications but the released version is still for KDE 4
-  # This needs to move to the proper place when the "frameworks" branch is released
-  kget = libsForQt5.callPackage ../applications/networking/kget { };
-
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
@@ -5109,7 +5105,7 @@ with pkgs;
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
-  uim = kde4.callPackage ../tools/inputmethods/uim { };
+  uim = callPackage ../tools/inputmethods/uim { };
 
   uhub = callPackage ../servers/uhub { };
 
@@ -8976,8 +8972,6 @@ with pkgs;
       };
     in
       recurseIntoAttrs (makeOverridable mkFrameworks attrs);
-
-  kdelibs4 = kdeApplications.kdelibs;
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -13066,8 +13060,6 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
-  kgocode = callPackage ../applications/misc/kgocode { };
-
   gotags = callPackage ../development/tools/gotags { };
 
   golint = callPackage ../development/tools/golint { };
@@ -13972,11 +13964,6 @@ with pkgs;
 
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
 
-  amarok = kde4.callPackage ../applications/audio/amarok {
-    ffmpeg = ffmpeg_2;
-    stdenv = overrideCC stdenv gcc5;
-  };
-
   amarok-kf5 = libsForQt5.callPackage ../applications/audio/amarok/kf5.nix { };
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
@@ -14213,10 +14200,6 @@ with pkgs;
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
-
-  calligra2 = kde4.callPackage ../applications/office/calligra/2.nix {
-    vc = vc_0_7;
-  };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     inherit (kdeApplications) akonadi-calendar akonadi-contacts;
@@ -15573,8 +15556,6 @@ with pkgs;
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
-  kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
-
   kanboard = callPackage ../applications/misc/kanboard { };
 
   kdeApplications =
@@ -15591,7 +15572,7 @@ with pkgs;
   inherit (kdeApplications)
     akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf keditbookmarks
-    kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
     kontact korganizer krdc krfb kwalletmanager marble minuet okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
@@ -16470,7 +16451,7 @@ with pkgs;
     python = python3;
   };
 
-  psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
+  psi = callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
 
@@ -18590,24 +18571,6 @@ with pkgs;
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 =
-    let
-      deps = lib.makeScope newScope (self: {
-        inherit (python2Packages) python;
-        kdelibs = kdelibs4;
-        boost = boost155;
-        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
-      });
-
-      self = lib.makeScope deps.newScope (self: with self;
-        import ../desktops/kde-4.14 {
-          callPackageOrig = pkgs.callPackage;
-          inherit (self) callPackage;
-          inherit stdenv qt48 kdelibs;
-        }
-      );
-    in recurseIntoAttrs self;
-
   lumina = libsForQt5.callPackage ../desktops/lumina { };
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
@@ -18680,7 +18643,7 @@ with pkgs;
   inherit (kdeFrameworks) kded kinit frameworkintegration;
 
   inherit (plasma5)
-    bluedevil breeze-gtk breeze-qt4 breeze-qt5 breeze-grub breeze-plymouth
+    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop

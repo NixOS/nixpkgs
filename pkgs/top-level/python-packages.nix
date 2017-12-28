@@ -303,6 +303,11 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
+  pykde4 = callPackage ../development/python-modules/pykde4/default.nix {
+    inherit (self) pyqt4;
+    callPackage = pkgs.callPackage;
+  };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };

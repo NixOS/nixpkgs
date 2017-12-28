@@ -6,7 +6,7 @@
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw, libzmf
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, glibc, qt4, kdelibs4, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus_glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
@@ -15,7 +15,6 @@
 , defaultIconTheme, glib, ncurses
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" "hu" "it" ]
 , withHelp ? true
-, kdeIntegration ? false
 }:
 
 let
@@ -187,7 +186,6 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
-    (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"
     "--with-jdk-home=${jdk.home}"
@@ -250,8 +248,7 @@ in stdenv.mkDerivation rec {
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew ncurses
       libodfgen CoinMP librdf_rasqal defaultIconTheme
-    ]
-    ++ lib.optional kdeIntegration kdelibs4;
+    ];
   nativeBuildInputs = [ wrapGAppsHook ];
 
   passthru = {
