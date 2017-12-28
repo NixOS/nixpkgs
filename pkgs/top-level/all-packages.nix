@@ -10838,6 +10838,7 @@ with pkgs;
   simp_le = callPackage ../tools/admin/simp_le { };
 
   sfml = callPackage ../development/libraries/sfml { };
+  csfml = callPackage ../development/libraries/csfml { };
 
   shapelib = callPackage ../development/libraries/shapelib { };
 
