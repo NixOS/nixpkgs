@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl, perl
 , ncurses5, gmp, libiconv
-, enableIntegerSimple ? false
 }:
 
 let
