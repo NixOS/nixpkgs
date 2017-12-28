@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel }:
+{ stdenv, fetchurl, fetchpatch, kernel, libelf }:
 
 let
   baseName = "bbswitch";
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
     sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
   }) ];
+
+  buildInputs = [ libelf ];
 
   hardeningDisable = [ "pic" ];
 
