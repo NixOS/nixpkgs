@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
-  ];
+  ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

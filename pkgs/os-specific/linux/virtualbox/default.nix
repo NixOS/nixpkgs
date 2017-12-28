@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     "fortify" "pic" "stackprotector"
   ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   makeFlags = [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"

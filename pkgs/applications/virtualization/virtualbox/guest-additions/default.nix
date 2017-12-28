@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  buildInputs = [ patchelf cdrkit makeWrapper dbus ];
+  buildInputs = [ patchelf cdrkit makeWrapper dbus ] ++ kernel.moduleBuildDependencies;
 
   installPhase = ''
     mkdir -p $out

@@ -49,6 +49,9 @@ let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
+  # Dependencies that are required to build kernel modules
+  moduleBuildDependencies = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
     mkdir -p $4
@@ -85,7 +88,7 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile;
+        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
       };
 
       inherit src;
