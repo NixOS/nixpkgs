@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  buildInputs = [ patchelf cdrkit makeWrapper dbus ];
+  buildInputs = [ patchelf cdrkit makeWrapper dbus ] ++ kernel.moduleBuildDependencies;
 
   installPhase = ''
     mkdir -p $out
