@@ -23,15 +23,20 @@ self = stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "static" ];
+
   cmakeFlags = [
     "-DWITH_SSL=yes"
-    "-DWITH_READLINE=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
+    "-DWITH_UNITTEST=no"
     "-DWITH_ZLIB=yes"
+    "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
+    "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
+    "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
+    "-DCMAKE_VERBOSE_MAKEFILE=yes"
     "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
-    "-DINSTALL_SYSCONFDIR=etc/mysql"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
@@ -51,7 +56,8 @@ self = stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test "$out"/lib/*.a
+    install -vD $out/lib/*.a -t $static/lib
+    rm -r $out/mysql-test
     rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 
