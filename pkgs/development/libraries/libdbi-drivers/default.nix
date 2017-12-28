@@ -1,5 +1,7 @@
 { stdenv, fetchurl, libdbi
-, mysql ? null, sqlite ? null, postgresql ? null
+, mysql ? null
+, sqlite ? null
+, postgresql ? null
 }:
 
 with stdenv.lib;
@@ -26,14 +28,16 @@ stdenv.mkDerivation rec {
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ optionals (mysql != null) [
     "--with-mysql"
-  ] ++ optionals (postgresql != null) [
-    "--with-pgsql"
-    "--with-pgsql_incdir=${postgresql}/include"
-    "--with-pgsql_libdir=${postgresql.lib}/lib"
+    "--with-mysql-incdir=${mysql.connector-c}/include/mysql"
+    "--with-mysql-libdir=${mysql.connector-c}/lib/mysql"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
     "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"
     "--with-sqlite3-libdir=${sqlite.out}/lib/sqlite"
+  ] ++ optionals (postgresql != null) [
+    "--with-pgsql"
+    "--with-pgsql_incdir=${postgresql}/include"
+    "--with-pgsql_libdir=${postgresql.lib}/lib"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];
