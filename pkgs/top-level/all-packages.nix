@@ -11992,7 +11992,6 @@ with pkgs;
   };
 
   mysql = mariadb;
-  libmysql = mysql.connector-c; # `libmysql` is a slight misnomer ATM
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
