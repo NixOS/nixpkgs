@@ -8268,6 +8268,8 @@ in {
     };
   };
 
+  filelock = callPackage ../development/python-modules/filelock {};
+
   fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
