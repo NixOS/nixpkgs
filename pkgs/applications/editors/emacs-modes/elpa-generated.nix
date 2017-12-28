@@ -768,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.8";
+        version = "1.4.0.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.8.tar";
-          sha256 = "1gk42n04f1h2vc8sp86gvi795qgnvnh4cyyqfvy6sz1pfix76kfl";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.11.tar";
+          sha256 = "12m468fxwfrwjkm0wcraafb7n9shh9fmw43nggc216ch3syxmfaw";
         };
         packageRequires = [ emacs stream ];
         meta = {
