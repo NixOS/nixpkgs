@@ -124,16 +124,6 @@ int nftw_remove(const char *path, const struct stat *sb, int type,
   return remove(path);
 }
 
-char *root;
-
-void root_cleanup() {
-  if (nftw(root, nftw_remove, getdtablesize(),
-           FTW_DEPTH | FTW_MOUNT | FTW_PHYS) < 0)
-    errorf(EX_IOERR, "nftw(%s)", root);
-
-  free(root);
-}
-
 #define REQUIREMENTS                                                           \
   "Requires Linux version >= 3.19 built with CONFIG_USER_NS option.\n"
 
@@ -158,6 +148,8 @@ int main(int argc, char *argv[]) {
   if (temp == NULL)
     temp = "/tmp";
 
+  char *root;
+
   if (asprintf(&root, "%s/chrootenvXXXXXX", temp) < 0)
     errorf(EX_IOERR, "asprintf");
 
@@ -165,8 +157,6 @@ int main(int argc, char *argv[]) {
 
   if (root == NULL)
     errorf(EX_IOERR, "mkdtemp(%s)", root);
-
-  atexit(root_cleanup);
 
   // Don't make root private so that privilege drops inside chroot are possible:
   if (chmod(root, 0755) < 0)
@@ -231,6 +221,12 @@ int main(int argc, char *argv[]) {
 
   if (waitpid(cpid, &status, 0) < 0)
     errorf(EX_OSERR, "waitpid(%d)", cpid);
+
+  if (nftw(root, nftw_remove, getdtablesize(),
+           FTW_DEPTH | FTW_MOUNT | FTW_PHYS) < 0)
+    errorf(EX_IOERR, "nftw(%s)", root);
+
+  free(root);
 
   if (WIFEXITED(status)) {
     return WEXITSTATUS(status);
