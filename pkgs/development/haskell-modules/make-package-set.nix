@@ -33,7 +33,7 @@ let
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv haskellLib;
+    inherit stdenv;
     inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
     nodejs = pkgs.nodejs-slim;
     jailbreak-cabal = if (self.ghc.cross or null) != null
