@@ -98,7 +98,7 @@ let makeDeps = dependencies:
       export CARGO_PKG_AUTHORS="${authors}"
 
       export CARGO_CFG_TARGET_ARCH=${buildPlatform.parsed.cpu.name}
-      export CARGO_CFG_TARGET_OS=${buildPlatform.parsed.kernel.name}
+      export CARGO_CFG_TARGET_OS=${if buildPlatform.isDarwin then "macos" else buildPlatform.parsed.kernel.name}
       export CARGO_CFG_TARGET_FAMILY="unix"
       export CARGO_CFG_UNIX=1
       export CARGO_CFG_TARGET_ENV="gnu"
