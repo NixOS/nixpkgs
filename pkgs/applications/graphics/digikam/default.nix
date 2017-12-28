@@ -75,7 +75,6 @@ mkDerivation rec {
     libqtav
     libusb1
     mesa
-    mysql
     opencv3
     pcre
 
