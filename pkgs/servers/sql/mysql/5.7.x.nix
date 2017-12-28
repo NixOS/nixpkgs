@@ -58,7 +58,8 @@ self = stdenv.mkDerivation rec {
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
     install -vD $out/lib/*.a -t $static/lib
     rm -r $out/mysql-test
-    rm $out/share/man/man1/mysql-test-run.pl.1
+    rm $out/share/man/man1/mysql-test-run.pl.1 $out/lib/*.a
+    ln -s libmysqlclient.so $out/lib/libmysqlclient_r.so
   '';
 
   passthru = {
