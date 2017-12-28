@@ -32,7 +32,7 @@ in
       };
 
       hooksPath = mkOption {
-        type = types.str;
+        type = types.path;
         default = "${pkgs.buildkite-agent}/share/hooks";
         defaultText = "${pkgs.buildkite-agent}/share/hooks";
         description = ''
@@ -107,7 +107,7 @@ in
             token="${catOrLiteral cfg.token}"
             name="${cfg.name}"
             meta-data="${cfg.meta-data}"
-            hooks-path="${cfg.hooksPath}"
+            hooks-path="${toString cfg.hooksPath}"
             build-path="/var/lib/buildkite-agent/builds"
             bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
             EOF
