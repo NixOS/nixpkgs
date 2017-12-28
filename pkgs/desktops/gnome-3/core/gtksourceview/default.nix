@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig intltool gettext perl ]
-    ++ stdenv.lib.optionals doCheck checkInputs;
+    ++ checkInputs;
   buildInputs = [ atk cairo glib pango libxml2 ];
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = stdenv.lib.optionals doCheck [ xvfb_run dbus ];
 
   preBuild = ''
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nix_share_path.patch ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
   checkPhase = ''
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
