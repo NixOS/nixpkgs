@@ -49,7 +49,7 @@ in
       };
 
       hooksPath = mkOption {
-        type = types.str;
+        type = types.path;
         default = "${pkgs.buildkite-agent}/share/hooks";
         defaultText = "${pkgs.buildkite-agent}/share/hooks";
         description = ''
