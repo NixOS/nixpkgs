@@ -83,7 +83,6 @@ common = rec { # attributes common to both builds
   };
 };
 
-
 client = stdenv.mkDerivation (common // {
   name = "mariadb-client-${common.version}";
 
@@ -97,9 +96,11 @@ client = stdenv.mkDerivation (common // {
 
   preConfigure = common.preConfigure + ''
     cmakeFlags="$cmakeFlags \
-      -DINSTALL_BINDIR=$bin/bin -DINSTALL_SCRIPTDIR=$bin/bin \
+      -DINSTALL_BINDIR=$bin/bin \
+      -DINSTALL_SCRIPTDIR=$bin/bin \
       -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
-      -DINSTALL_DOCDIR=$bin/share/doc/mysql -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
+      -DINSTALL_DOCDIR=$bin/share/doc/mysql \
+      -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
       "
   '';
 
@@ -111,7 +112,6 @@ client = stdenv.mkDerivation (common // {
 
   enableParallelBuilding = true; # the client should be OK
 });
-
 
 everything = stdenv.mkDerivation (common // {
   name = "mariadb-${common.version}";
@@ -154,6 +154,7 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
+    rm "$out"/bin/rcmysql
   '';
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
