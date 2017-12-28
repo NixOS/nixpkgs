@@ -20,6 +20,18 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
+      have been made to the infrastructure involved:
+      <itemizedlist>
+        <listitem>
+            <literal>libmysql</literal> has been deprecated, please use <literal>mysql.connector-c</literal>
+            instead, a compatibility passthru has been added to the MySQL packages.
+        </listitem>
+        <listitem>
+            The <literal>mysql57</literal> package has a new <literal>static</literal> output containing
+            the static libraries including <literal>libmysqld.a</literal>
+        </listitem>
+      </itemizedlist>
     </para>
   </listitem>
 </itemizedlist>
