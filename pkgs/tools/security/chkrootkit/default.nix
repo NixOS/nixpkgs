@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   # TODO: a lazy work-around for linux build failure ...
   makeFlags = [ "STATIC=" ];
 
+   postPatch = ''
+    substituteInPlace chkrootkit \
+      --replace " ./" " $out/bin/"
+   '';
+
   installPhase = ''
     mkdir -p $out/sbin
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
