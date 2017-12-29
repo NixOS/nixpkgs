@@ -24,12 +24,16 @@ has the following highlights: </para>
       have been made to the infrastructure involved:
       <itemizedlist>
         <listitem>
+          <para>
             <literal>libmysql</literal> has been deprecated, please use <literal>mysql.connector-c</literal>
             instead, a compatibility passthru has been added to the MySQL packages.
+          </para>
         </listitem>
         <listitem>
+          <para>
             The <literal>mysql57</literal> package has a new <literal>static</literal> output containing
             the static libraries including <literal>libmysqld.a</literal>
+          </para>
         </listitem>
       </itemizedlist>
     </para>
