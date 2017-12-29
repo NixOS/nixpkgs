@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchpatch, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "expat-2.2.1";
+  name = "expat-2.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/expat/${name}.tar.bz2";
-    sha256 = "11c8jy1wvllvlk7xdc5cm8hdhg0hvs8j0aqy6s702an8wkdcls0q";
+    sha256 = "17h1fb9zvqvf0sr78j211bngc6jpql5wzar8fg9b52jzjvdqbb83";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = "patchShebangs ./run.sh";
+  preCheck = ''
+    patchShebangs ./run.sh
+    patchShebangs ./test-driver-wrapper.sh
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.libexpat.org/;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://savannah.nongnu.org/projects/bbdb/";
+    homepage = http://savannah.nongnu.org/projects/bbdb/;
     description = "The Insidious Big Brother Database (BBDB), a contact management utility for Emacs, version 3";
     license = "GPL";
   };

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       It is based on the popular, but discontinued, X Win Commander, which was developed by Maxim Baranov.
       Xfe aims to be the filemanager of choice for all the Unix addicts!
     '';
-    homepage = "http://sourceforge.net/projects/xfe/";
+    homepage = http://sourceforge.net/projects/xfe/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [];
     platforms = stdenv.lib.platforms.linux;

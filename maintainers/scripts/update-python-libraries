@@ -91,7 +91,9 @@ def _get_latest_version_pypi(package, extension):
         if release['filename'].endswith(extension):
             # TODO: In case of wheel we need to do further checks!
             sha256 = release['digests']['sha256']
-
+            break
+    else:
+        sha256 = None
     return version, sha256
 
 

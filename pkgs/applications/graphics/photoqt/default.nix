@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://photoqt.org/";
+    homepage = http://photoqt.org/;
     description = "Simple, yet powerful and good looking image viewer";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

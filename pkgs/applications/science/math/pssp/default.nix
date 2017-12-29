@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.gnu.org/software/pspp/";
+    homepage = http://www.gnu.org/software/pspp/;
     description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
     license = stdenv.lib.licenses.gpl3Plus;
 

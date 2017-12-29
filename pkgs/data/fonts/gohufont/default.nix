@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
     mkfontscale
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0msl5y9q6hjbhc85v121x1b1rhsh2rbqqy4k234i5mpp8l3087r7";
+
   meta = with stdenv.lib; {
     description = ''
       A monospace bitmap font well suited for programming and terminal use

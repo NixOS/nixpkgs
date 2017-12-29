@@ -17,10 +17,15 @@
 <refsynopsisdiv>
   <cmdsynopsis>
     <command>nixos-option</command>
-    <arg choice='plain'><replaceable>option.name</replaceable></arg>
+    <arg>
+      <option>-I</option>
+      <replaceable>path</replaceable>
+    </arg>
+    <arg><option>--verbose</option></arg>
+    <arg><option>--xml</option></arg>
+    <arg choice="plain"><replaceable>option.name</replaceable></arg>
   </cmdsynopsis>
 </refsynopsisdiv>
-
 
 <refsection><title>Description</title>
 
@@ -30,6 +35,45 @@ of the option name given as argument.</para>
 
 <para>When the option name is not an option, the command prints the list of
 attributes contained in the attribute set.</para>
+
+</refsection>
+
+<refsection><title>Options</title>
+
+<para>This command accepts the following options:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>-I</option> <replaceable>path</replaceable></term>
+    <listitem>
+      <para>
+        This option is passed to the underlying
+        <command>nix-instantiate</command> invocation.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--verbose</option></term>
+    <listitem>
+      <para>
+        This option enables verbose mode, which currently is just
+        the Bash <command>set</command> <option>-x</option> debug mode.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--xml</option></term>
+    <listitem>
+      <para>
+        This option causes the output to be rendered as XML.
+      </para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
 
 </refsection>
 

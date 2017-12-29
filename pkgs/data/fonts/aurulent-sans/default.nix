@@ -1,21 +1,14 @@
-{stdenv, fetchgit}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "aurulent-sans-0.1";
 
-  src = fetchgit {
-    url = "https://github.com/deepfire/hartke-aurulent-sans.git";
-    rev = "refs/tags/${name}";
-    sha256 = "01hvpvbrks40g9k1xr2f1gxnd5wd0sxidgfbwrm94pdi1a36xxrk";
-  };
-
-  dontBuild = true;
-
-  installPhase = ''
-    fontDir=$out/share/fonts/opentype
-    mkdir -p $fontDir
-    cp *.otf $fontDir
+  url = "https://github.com/deepfire/hartke-aurulent-sans/archive/${name}.zip";
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+  sha256 = "1l60psfv9x0x9qx9vp1qnhmck7a7kks385m5ycrd3d91irz1j5li";
 
   meta = {
     description = "Aurulent Sans";

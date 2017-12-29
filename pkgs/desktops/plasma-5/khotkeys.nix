@@ -13,4 +13,5 @@ mkDerivation {
     plasma-framework plasma-workspace qtx11extras
   ];
   outputs = [ "out" "dev" "bin" ];
+  enableParallelBuilding = false;
 }

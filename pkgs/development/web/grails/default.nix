@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       over configuration to provide a productive and stream-lined development
       experience.
     '';
-    homepage = http://grails.org/;
+    homepage = https://grails.org/;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

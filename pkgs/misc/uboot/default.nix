@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, bc, dtc, python2 }:
+{ stdenv, fetchurl, bc, dtc, python2
+, hostPlatform
+}:
 
 let
   buildUBoot = { targetPlatforms
@@ -43,13 +45,13 @@ let
 
     crossAttrs = {
       makeFlags = [
-        "ARCH=${stdenv.cross.platform.kernelArch}"
-        "CROSS_COMPILE=${stdenv.cross.config}-"
+        "ARCH=${hostPlatform.platform.kernelArch}"
+        "CROSS_COMPILE=${stdenv.cc.prefix}"
       ];
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://www.denx.de/wiki/U-Boot/";
+      homepage = http://www.denx.de/wiki/U-Boot/;
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
       maintainers = [ maintainers.dezgeg ];

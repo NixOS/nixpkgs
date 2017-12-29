@@ -3,18 +3,16 @@
 %%! -smp enable
 %%% ---------------------------------------------------------------------------
 %%% @doc
-%%% The purpose of this command is to prepare a rebar3 project so that
-%%% rebar3 understands that the dependencies are all already
-%%% installed. If you want a hygienic build on nix then you must run
-%%% this command before running rebar3. I suggest that you add a
-%%% `Makefile` to your project and have the bootstrap command be a
-%%% dependency of the build commands. See the nix documentation for
+%%% The purpose of this command is to prepare a mix project so that mix
+%%% understands that the dependencies are all already installed. If you want a
+%%% hygienic build on nix then you must run this command before running mix. I
+%%% suggest that you add a `Makefile` to your project and have the bootstrap
+%%% command be a dependency of the build commands. See the nix documentation for
 %%% more information.
 %%%
-%%% This command designed to have as few dependencies as possible so
-%%% that it can be a dependency of root level packages like rebar3. To
-%%% that end it does many things in a fairly simplistic way. That is
-%%% by design.
+%%% This command designed to have as few dependencies as possible so that it can
+%%% be a dependency of root level packages like mix. To that end it does many
+%%% things in a fairly simplistic way. That is by design.
 %%%
 %%% ### Assumptions
 %%%
@@ -37,7 +35,7 @@ main(Args) ->
 
 %% @doc
 %% This takes an app name in the standard OTP <name>-<version> format
-%% and returns just the app name. Why? because rebar is doesn't
+%% and returns just the app name. Why? Because rebar doesn't
 %% respect OTP conventions in some cases.
 -spec fixup_app_name(file:name()) -> string().
 fixup_app_name(Path) ->

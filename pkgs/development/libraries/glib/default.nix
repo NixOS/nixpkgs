@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, python
+{ stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
 , libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 
-assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU;
+assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU || hostPlatform.isCygwin;
 assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library of programming buildings blocks";
-    homepage    = http://www.gtk.org/;
+    homepage    = https://www.gtk.org/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;

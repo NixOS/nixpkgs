@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mpl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libzmf";
+    homepage = https://wiki.documentfoundation.org/DLP/Libraries/libzmf;
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
     updateWalker = true;
   };

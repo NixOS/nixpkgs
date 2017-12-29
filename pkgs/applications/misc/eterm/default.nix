@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Terminal emulator";
-    homepage = "http://www.eterm.org";
+    homepage = http://www.eterm.org;
     license = licenses.bsd2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

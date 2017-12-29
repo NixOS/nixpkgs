@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec
 {
-  version = "5.0.7";
-  seafileVersion = "5.0.7";
+  version = "6.1.0";
+  seafileVersion = "6.1.0";
   name = "ccnet-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/ccnet/archive/v${version}.tar.gz";
-    sha256 = "1e1c670a85619b174328a15925a050c7a8b323fecd13434992332f5c15e05de1";
+    sha256 = "0q4a102xlcsxlr53h4jr4w8qzkbzvm2f3nk9fsha48h6l2hw34bb";
   };
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala_0_23 python ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   preConfigure = ''
-  sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh
+  sed -ie 's|/bin/bash|${stdenv.shell}|g' ./autogen.sh
   ./autogen.sh
   '';
 

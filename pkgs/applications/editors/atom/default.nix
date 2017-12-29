@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.18.0";
+  version = "1.19.2";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "07hssch8sfyp5sji91lx4v62m8zmy9j971i968p747dwfp6g0my6";
+    sha256 = "0bfhcxhjsa7p35s5dz3zjxm4wc802m3k137p04l9anr3v5hrgqmb";
     name = "${name}.deb";
   };
 
@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
       $out/share/atom/resources/app/apm/bin/node
 
     find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
+
+    paxmark m $out/share/atom/atom
+    paxmark m $out/share/atom/resources/app/apm/bin/node
   '';
 
   meta = with stdenv.lib; {

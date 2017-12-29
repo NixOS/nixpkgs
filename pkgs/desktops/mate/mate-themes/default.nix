@@ -6,15 +6,15 @@ stdenv.mkDerivation rec {
   version = "${major-ver}.${minor-ver}";
   major-ver = gnome3.version;
   minor-ver = {
-    "3.20" = "19";
-    "3.22" = "10";
+    "3.20" = "22";
+    "3.22" = "13";
   }."${major-ver}";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/themes/${major-ver}/${name}.tar.xz";
     sha256 = {
-      "3.20" = "11b8g374dkjhbs7x7khpriabvkip4dmfkma5myzfv6m54qlj3b8g";
-      "3.22" = "03ficjfxa4qpx4vcshhk2zxryivckxpw7wcjgbn8xqnjk3lgzjcb";
+      "3.20" = "1yjj5w7zvyjyg0k21nwk438jjsnj0qklsf0z5pmmp1jff1vxyck4";
+      "3.22" = "1p7w63an8qs15hkj79nppy7471glv0rm1b0himn3c4w69q8qdc9i";
     }."${major-ver}";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A set of themes from MATE";
-    homepage = "http://mate-desktop.org";
+    homepage = http://mate-desktop.org;
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

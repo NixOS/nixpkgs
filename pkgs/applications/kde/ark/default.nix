@@ -7,7 +7,7 @@
   khtml, kio, kparts, kpty, kservice, kwidgetsaddons, libarchive,
 
   # Archive tools
-  p7zip, unzipNLS, zip,
+  p7zip, unzip, zip,
 
   # Unfree tools
   unfreeEnableUnrar ? false, unrar,
@@ -25,7 +25,7 @@ mkDerivation {
     let
       PATH =
         lib.makeBinPath
-        ([ p7zip unzipNLS zip ] ++ lib.optional unfreeEnableUnrar unrar);
+        ([ p7zip unzip zip ] ++ lib.optional unfreeEnableUnrar unrar);
     in ''
       wrapProgram "$out/bin/ark" --prefix PATH: "${PATH}"
     '';

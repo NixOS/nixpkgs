@@ -8,6 +8,7 @@
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
 , esteidfirefoxplugin
 , vlc_npapi
+, libudev
 }:
 
 ## configurability of the wrapper itself
@@ -46,7 +47,7 @@ let
      );
   libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
          ++ lib.optionals (cfg.enableQuakeLive or false)
-         (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+         (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib libudev ])
          ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
          ++ lib.optional (config.pulseaudio or false) libpulseaudio;
   gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];

@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Powerful and easy-to-use multimedia player";
-    homepage = "https://bomi-player.github.io/";
+    homepage = https://bomi-player.github.io/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

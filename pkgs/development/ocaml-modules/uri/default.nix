@@ -4,7 +4,9 @@
 , sexplib_p4
 }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4";
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+|| legacyVersion && stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "uri${stdenv.lib.optionalString legacyVersion "_p4"} is not available for OCaml ${ocaml.version}" else
 
 with
   if legacyVersion

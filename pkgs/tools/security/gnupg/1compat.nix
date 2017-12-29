@@ -12,10 +12,6 @@ stdenv.mkDerivation {
     ${coreutils}/bin/rm $out/bin
     ${coreutils}/bin/mkdir -p $out/bin
     ${coreutils}/bin/ln -s "${gnupg}/bin/"* $out/bin
-
-    # Add gpg->gpg2 and gpgv->gpgv2 symlinks
-    ${coreutils}/bin/ln -s gpg2 $out/bin/gpg
-    ${coreutils}/bin/ln -s gpgv2 $out/bin/gpgv
   '';
 
   meta = gnupg.meta // {

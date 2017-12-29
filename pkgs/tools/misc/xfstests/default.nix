@@ -1,17 +1,18 @@
-{ stdenv, acl, attr, autoreconfHook, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk
-, lib, libaio, libcap, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
+{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk, keyutils
+, lib, libaio, libcap, libtool, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, quota, su
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2017-03-26";
+  name = "xfstests-2017-07-16";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "7400c10e503fed20fe2d9f8b03b2157eba4ff3b8";
-    sha256 = "0m30mx8nv49ryijlkqffjmkw2g1xdxsrq868jh9crwh19055v7qp";
+    rev = "c3893c2dc623a07b1ace8e72ee4beb29f8bfae15";
+    sha256 = "1p42dakry4r2366hdgj4i1wcnjs4qk0bfmyr70r1n7s7ykvnvnrl";
   };
 
-  buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
+  nativeBuildInputs = [ autoconf automake libtool ];
+  buildInputs = [ acl attr gawk libaio libuuid libxfs openssl perl ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
@@ -55,6 +56,8 @@ stdenv.mkDerivation {
     export MAKE=$(type -P make)
     export SED=$(type -P sed)
     export SORT=$(type -P sort)
+
+    make configure
   '';
 
   postInstall = ''
@@ -83,13 +86,13 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils libcap lvm2 perl procps psmisc quota utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 
   meta = with stdenv.lib; {
     description = "Torture test suite for filesystems";
-    homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
+    homepage = https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/;
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

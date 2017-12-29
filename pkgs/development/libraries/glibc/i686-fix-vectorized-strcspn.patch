@@ -1,0 +1,42 @@
+From adc7e06fb412a2a1ee52f8cb788caf436335b9f3 Mon Sep 17 00:00:00 2001
+From: Florian Weimer <fweimer@redhat.com>
+Date: Wed, 14 Jun 2017 08:11:22 +0200
+Subject: [PATCH] i686: Add missing IS_IN (libc) guards to vectorized strcspn
+
+Since commit d957c4d3fa48d685ff2726c605c988127ef99395 (i386: Compile
+rtld-*.os with -mno-sse -mno-mmx -mfpmath=387), vector intrinsics can
+no longer be used in ld.so, even if the compiled code never makes it
+into the final ld.so link.  This commit adds the missing IS_IN (libc)
+guard to the SSE 4.2 strcspn implementation, so that it can be used from
+ld.so in the future.
+
+(cherry picked from commit 69052a3a95da37169a08f9e59b2cc1808312753c)
+---
+ ChangeLog                               | 5 +++++
+ sysdeps/i386/i686/multiarch/strcspn-c.c | 6 ++++--
+ sysdeps/i386/i686/multiarch/varshift.c  | 4 +++-
+ 3 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/sysdeps/i386/i686/multiarch/strcspn-c.c b/sysdeps/i386/i686/multiarch/strcspn-c.c
+index 6d61e19..ec230fb 100644
+--- a/sysdeps/i386/i686/multiarch/strcspn-c.c
++++ b/sysdeps/i386/i686/multiarch/strcspn-c.c
+@@ -1,2 +1,4 @@
+-#define __strcspn_sse2 __strcspn_ia32
+-#include <sysdeps/x86_64/multiarch/strcspn-c.c>
++#if IS_IN (libc)
++# define __strcspn_sse2 __strcspn_ia32
++# include <sysdeps/x86_64/multiarch/strcspn-c.c>
++#endif
+diff --git a/sysdeps/i386/i686/multiarch/varshift.c b/sysdeps/i386/i686/multiarch/varshift.c
+index 7760b96..6742a35 100644
+--- a/sysdeps/i386/i686/multiarch/varshift.c
++++ b/sysdeps/i386/i686/multiarch/varshift.c
+@@ -1 +1,3 @@
+-#include <sysdeps/x86_64/multiarch/varshift.c>
++#if IS_IN (libc)
++# include <sysdeps/x86_64/multiarch/varshift.c>
++#endif
+-- 
+2.9.3
+

@@ -1,7 +1,7 @@
 { fetchurl, stdenv, mingw_headers }:
 
 # This file is tweaked for cross-compilation only.
-assert stdenv ? cross;
+assert hostPlatform != buildPlatform;
 
 stdenv.mkDerivation {
   name = "pthread-w32-1.10.0";

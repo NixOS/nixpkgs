@@ -315,7 +315,7 @@ following incompatible changes:</para>
   let
     pkgs = import &lt;nixpkgs&gt; {};
   in
-    import pkgs.path { overlays = [(self: super: ...)] }
+    import pkgs.path { overlays = [(self: super: ...)]; }
 </programlisting>
 
     </para>

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/nibbles/2017-04-03/nibbles-20170403-git.tgz'';
     sha256 = ''0bg7jwhqhm3qmpzk21gjv50sl0grdn68d770cqfs7in62ny35lk4'';
   };
+    
+  packageName = "nibbles";
 
   overrides = x: {
     postInstall = ''

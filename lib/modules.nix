@@ -98,7 +98,7 @@ rec {
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
     let
-      toClosureList = file: parentKey: imap (n: x:
+      toClosureList = file: parentKey: imap1 (n: x:
         if isAttrs x || isFunction x then
           let key = "${parentKey}:anon-${toString n}"; in
           unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)

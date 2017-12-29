@@ -6,14 +6,6 @@ let quicklisp-to-nix-packages = rec {
   buildLispPackage = callPackage ./define-package.nix;
   qlOverrides = callPackage ./quicklisp-to-nix-overrides.nix {};
 
-  "trivial-indent" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."trivial-indent" or (x: {}))
-       (import ./quicklisp-to-nix-output/trivial-indent.nix {
-         inherit fetchurl;
-       }));
-
-
   "closure-common" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."closure-common" or (x: {}))
@@ -24,12 +16,73 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "documentation-utils" = buildLispPackage
+  "list-of" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."documentation-utils" or (x: {}))
-       (import ./quicklisp-to-nix-output/documentation-utils.nix {
+       (qlOverrides."list-of" or (x: {}))
+       (import ./quicklisp-to-nix-output/list-of.nix {
          inherit fetchurl;
-           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
+       }));
+
+
+  "parse-number" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."parse-number" or (x: {}))
+       (import ./quicklisp-to-nix-output/parse-number.nix {
+         inherit fetchurl;
+       }));
+
+
+  "garbage-pools" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."garbage-pools" or (x: {}))
+       (import ./quicklisp-to-nix-output/garbage-pools.nix {
+         inherit fetchurl;
+       }));
+
+
+  "cl-containers" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-containers" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-containers.nix {
+         inherit fetchurl;
+           "metatilities-base" = quicklisp-to-nix-packages."metatilities-base";
+           "asdf-system-connections" = quicklisp-to-nix-packages."asdf-system-connections";
+       }));
+
+
+  "dynamic-classes" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."dynamic-classes" or (x: {}))
+       (import ./quicklisp-to-nix-output/dynamic-classes.nix {
+         inherit fetchurl;
+           "metatilities-base" = quicklisp-to-nix-packages."metatilities-base";
+       }));
+
+
+  "metatilities-base" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."metatilities-base" or (x: {}))
+       (import ./quicklisp-to-nix-output/metatilities-base.nix {
+         inherit fetchurl;
+       }));
+
+
+  "cl-interpol" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-interpol" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-interpol.nix {
+         inherit fetchurl;
+           "cl-unicode" = quicklisp-to-nix-packages."cl-unicode";
+       }));
+
+
+  "iolib_slash_syscalls" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib_slash_syscalls" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_syscalls.nix {
+         inherit fetchurl;
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "cffi" = quicklisp-to-nix-packages."cffi";
        }));
 
 
@@ -62,13 +115,150 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "cl-ansi-text" = buildLispPackage
+  "clack-socket" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."cl-ansi-text" or (x: {}))
-       (import ./quicklisp-to-nix-output/cl-ansi-text.nix {
+       (qlOverrides."clack-socket" or (x: {}))
+       (import ./quicklisp-to-nix-output/clack-socket.nix {
          inherit fetchurl;
-           "cl-colors" = quicklisp-to-nix-packages."cl-colors";
+       }));
+
+
+  "uuid" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."uuid" or (x: {}))
+       (import ./quicklisp-to-nix-output/uuid.nix {
+         inherit fetchurl;
+           "ironclad" = quicklisp-to-nix-packages."ironclad";
+           "trivial-utf-8" = quicklisp-to-nix-packages."trivial-utf-8";
+       }));
+
+
+  "simple-date" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."simple-date" or (x: {}))
+       (import ./quicklisp-to-nix-output/simple-date.nix {
+         inherit fetchurl;
+       }));
+
+
+  "qmynd" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."qmynd" or (x: {}))
+       (import ./quicklisp-to-nix-output/qmynd.nix {
+         inherit fetchurl;
+           "usocket" = quicklisp-to-nix-packages."usocket";
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+           "list-of" = quicklisp-to-nix-packages."list-of";
+           "ironclad" = quicklisp-to-nix-packages."ironclad";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "babel" = quicklisp-to-nix-packages."babel";
+       }));
+
+
+  "py-configparser" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."py-configparser" or (x: {}))
+       (import ./quicklisp-to-nix-output/py-configparser.nix {
+         inherit fetchurl;
+           "parse-number" = quicklisp-to-nix-packages."parse-number";
+       }));
+
+
+  "postmodern" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."postmodern" or (x: {}))
+       (import ./quicklisp-to-nix-output/postmodern.nix {
+         inherit fetchurl;
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+       }));
+
+
+  "mssql" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."mssql" or (x: {}))
+       (import ./quicklisp-to-nix-output/mssql.nix {
+         inherit fetchurl;
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "garbage-pools" = quicklisp-to-nix-packages."garbage-pools";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "parse-number" = quicklisp-to-nix-packages."parse-number";
+       }));
+
+
+  "lparallel" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lparallel" or (x: {}))
+       (import ./quicklisp-to-nix-output/lparallel.nix {
+         inherit fetchurl;
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
            "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
+  "ixf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."ixf" or (x: {}))
+       (import ./quicklisp-to-nix-output/ixf.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "ieee-floats" = quicklisp-to-nix-packages."ieee-floats";
+           "local-time" = quicklisp-to-nix-packages."local-time";
+           "md5" = quicklisp-to-nix-packages."md5";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+       }));
+
+
+  "db3" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."db3" or (x: {}))
+       (import ./quicklisp-to-nix-output/db3.nix {
+         inherit fetchurl;
+       }));
+
+
+  "cl-markdown" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-markdown" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-markdown.nix {
+         inherit fetchurl;
+           "metatilities-base" = quicklisp-to-nix-packages."metatilities-base";
+           "metabang-bind" = quicklisp-to-nix-packages."metabang-bind";
+           "dynamic-classes" = quicklisp-to-nix-packages."dynamic-classes";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "cl-containers" = quicklisp-to-nix-packages."cl-containers";
+           "anaphora" = quicklisp-to-nix-packages."anaphora";
+       }));
+
+
+  "cl-log" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-log" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-log.nix {
+         inherit fetchurl;
+       }));
+
+
+  "cl-csv" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-csv" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-csv.nix {
+         inherit fetchurl;
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "cl-interpol" = quicklisp-to-nix-packages."cl-interpol";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
+  "abnf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."abnf" or (x: {}))
+       (import ./quicklisp-to-nix-output/abnf.nix {
+         inherit fetchurl;
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "esrap" = quicklisp-to-nix-packages."esrap";
        }));
 
 
@@ -80,56 +270,38 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "array-utils" = buildLispPackage
+  "iolib_slash_multiplex" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."array-utils" or (x: {}))
-       (import ./quicklisp-to-nix-output/array-utils.nix {
+       (qlOverrides."iolib_slash_multiplex" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_multiplex.nix {
          inherit fetchurl;
+           "iolib_slash_syscalls" = quicklisp-to-nix-packages."iolib_slash_syscalls";
+           "cffi" = quicklisp-to-nix-packages."cffi";
        }));
 
 
-  "clss" = buildLispPackage
+  "iolib_slash_sockets" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."clss" or (x: {}))
-       (import ./quicklisp-to-nix-output/clss.nix {
+       (qlOverrides."iolib_slash_sockets" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_sockets.nix {
          inherit fetchurl;
-           "array-utils" = quicklisp-to-nix-packages."array-utils";
-           "plump" = quicklisp-to-nix-packages."plump";
+           "swap-bytes" = quicklisp-to-nix-packages."swap-bytes";
+           "iolib_slash_syscalls" = quicklisp-to-nix-packages."iolib_slash_syscalls";
+           "iolib_slash_streams" = quicklisp-to-nix-packages."iolib_slash_streams";
+           "idna" = quicklisp-to-nix-packages."idna";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "babel" = quicklisp-to-nix-packages."babel";
        }));
 
 
-  "form-fiddle" = buildLispPackage
+  "iolib_slash_streams" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."form-fiddle" or (x: {}))
-       (import ./quicklisp-to-nix-output/form-fiddle.nix {
+       (qlOverrides."iolib_slash_streams" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_streams.nix {
          inherit fetchurl;
-           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
-       }));
-
-
-  "nibbles" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."nibbles" or (x: {}))
-       (import ./quicklisp-to-nix-output/nibbles.nix {
-         inherit fetchurl;
-       }));
-
-
-  "swap-bytes" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."swap-bytes" or (x: {}))
-       (import ./quicklisp-to-nix-output/swap-bytes.nix {
-         inherit fetchurl;
-           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
-       }));
-
-
-  "idna" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."idna" or (x: {}))
-       (import ./quicklisp-to-nix-output/idna.nix {
-         inherit fetchurl;
-           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+           "iolib_slash_multiplex" = quicklisp-to-nix-packages."iolib_slash_multiplex";
+           "cffi" = quicklisp-to-nix-packages."cffi";
        }));
 
 
@@ -149,15 +321,6 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "hu.dwim.asdf" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."hu.dwim.asdf" or (x: {}))
-       (import ./quicklisp-to-nix-output/hu.dwim.asdf.nix {
-         inherit fetchurl;
-           "uiop" = quicklisp-to-nix-packages."uiop";
-       }));
-
-
   "jonathan" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."jonathan" or (x: {}))
@@ -171,6 +334,14 @@ let quicklisp-to-nix-packages = rec {
            "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
            "cl-annot" = quicklisp-to-nix-packages."cl-annot";
            "babel" = quicklisp-to-nix-packages."babel";
+       }));
+
+
+  "net_dot_didierverna_dot_asdf-flv" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."net_dot_didierverna_dot_asdf-flv" or (x: {}))
+       (import ./quicklisp-to-nix-output/net_dot_didierverna_dot_asdf-flv.nix {
+         inherit fetchurl;
        }));
 
 
@@ -272,6 +443,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-unicode_slash_base" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-unicode_slash_base" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-unicode_slash_base.nix {
+         inherit fetchurl;
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+       }));
+
+
   "cl-markup" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-markup" or (x: {}))
@@ -305,14 +485,6 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "uffi" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."uffi" or (x: {}))
-       (import ./quicklisp-to-nix-output/uffi.nix {
-         inherit fetchurl;
-       }));
-
-
   "metabang-bind" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."metabang-bind" or (x: {}))
@@ -336,25 +508,6 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "alexandria" = quicklisp-to-nix-packages."alexandria";
            "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-       }));
-
-
-  "cffi-grovel" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."cffi-grovel" or (x: {}))
-       (import ./quicklisp-to-nix-output/cffi-grovel.nix {
-         inherit fetchurl;
-           "alexandria" = quicklisp-to-nix-packages."alexandria";
-       }));
-
-
-  "let-plus" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."let-plus" or (x: {}))
-       (import ./quicklisp-to-nix-output/let-plus.nix {
-         inherit fetchurl;
-           "alexandria" = quicklisp-to-nix-packages."alexandria";
-           "anaphora" = quicklisp-to-nix-packages."anaphora";
        }));
 
 
@@ -507,6 +660,19 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."wookie" or (x: {}))
        (import ./quicklisp-to-nix-output/wookie.nix {
          inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "blackbird" = quicklisp-to-nix-packages."blackbird";
+           "chunga" = quicklisp-to-nix-packages."chunga";
+           "cl-async" = quicklisp-to-nix-packages."cl-async";
+           "cl-async-ssl" = quicklisp-to-nix-packages."cl-async-ssl";
+           "cl-fad" = quicklisp-to-nix-packages."cl-fad";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "do-urlencode" = quicklisp-to-nix-packages."do-urlencode";
+           "fast-http" = quicklisp-to-nix-packages."fast-http";
+           "fast-io" = quicklisp-to-nix-packages."fast-io";
+           "quri" = quicklisp-to-nix-packages."quri";
+           "vom" = quicklisp-to-nix-packages."vom";
        }));
 
 
@@ -515,6 +681,21 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."woo" or (x: {}))
        (import ./quicklisp-to-nix-output/woo.nix {
          inherit fetchurl;
+           "vom" = quicklisp-to-nix-packages."vom";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+           "trivial-utf-8" = quicklisp-to-nix-packages."trivial-utf-8";
+           "swap-bytes" = quicklisp-to-nix-packages."swap-bytes";
+           "static-vectors" = quicklisp-to-nix-packages."static-vectors";
+           "smart-buffer" = quicklisp-to-nix-packages."smart-buffer";
+           "quri" = quicklisp-to-nix-packages."quri";
+           "lev" = quicklisp-to-nix-packages."lev";
+           "fast-io" = quicklisp-to-nix-packages."fast-io";
+           "fast-http" = quicklisp-to-nix-packages."fast-http";
+           "clack-socket" = quicklisp-to-nix-packages."clack-socket";
+           "cffi-grovel" = quicklisp-to-nix-packages."cffi-grovel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -524,6 +705,14 @@ let quicklisp-to-nix-packages = rec {
        (import ./quicklisp-to-nix-output/usocket.nix {
          inherit fetchurl;
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+       }));
+
+
+  "uffi" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."uffi" or (x: {}))
+       (import ./quicklisp-to-nix-output/uffi.nix {
+         inherit fetchurl;
        }));
 
 
@@ -551,11 +740,28 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "trivial-indent" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."trivial-indent" or (x: {}))
+       (import ./quicklisp-to-nix-output/trivial-indent.nix {
+         inherit fetchurl;
+       }));
+
+
   "trivial-backtrace" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."trivial-backtrace" or (x: {}))
        (import ./quicklisp-to-nix-output/trivial-backtrace.nix {
          inherit fetchurl;
+       }));
+
+
+  "swap-bytes" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."swap-bytes" or (x: {}))
+       (import ./quicklisp-to-nix-output/swap-bytes.nix {
+         inherit fetchurl;
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
        }));
 
 
@@ -666,6 +872,44 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "pgloader" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."pgloader" or (x: {}))
+       (import ./quicklisp-to-nix-output/pgloader.nix {
+         inherit fetchurl;
+           "abnf" = quicklisp-to-nix-packages."abnf";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "cl-base64" = quicklisp-to-nix-packages."cl-base64";
+           "cl-csv" = quicklisp-to-nix-packages."cl-csv";
+           "cl-fad" = quicklisp-to-nix-packages."cl-fad";
+           "cl-log" = quicklisp-to-nix-packages."cl-log";
+           "cl-markdown" = quicklisp-to-nix-packages."cl-markdown";
+           "cl-postgres" = quicklisp-to-nix-packages."cl-postgres";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "command-line-arguments" = quicklisp-to-nix-packages."command-line-arguments";
+           "db3" = quicklisp-to-nix-packages."db3";
+           "drakma" = quicklisp-to-nix-packages."drakma";
+           "esrap" = quicklisp-to-nix-packages."esrap";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "ixf" = quicklisp-to-nix-packages."ixf";
+           "local-time" = quicklisp-to-nix-packages."local-time";
+           "lparallel" = quicklisp-to-nix-packages."lparallel";
+           "metabang-bind" = quicklisp-to-nix-packages."metabang-bind";
+           "mssql" = quicklisp-to-nix-packages."mssql";
+           "postmodern" = quicklisp-to-nix-packages."postmodern";
+           "py-configparser" = quicklisp-to-nix-packages."py-configparser";
+           "qmynd" = quicklisp-to-nix-packages."qmynd";
+           "quri" = quicklisp-to-nix-packages."quri";
+           "simple-date" = quicklisp-to-nix-packages."simple-date";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+           "sqlite" = quicklisp-to-nix-packages."sqlite";
+           "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+           "usocket" = quicklisp-to-nix-packages."usocket";
+           "uuid" = quicklisp-to-nix-packages."uuid";
+       }));
+
+
   "pcall" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."pcall" or (x: {}))
@@ -693,6 +937,30 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "closer-mop" = quicklisp-to-nix-packages."closer-mop";
            "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
+  "nibbles" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."nibbles" or (x: {}))
+       (import ./quicklisp-to-nix-output/nibbles.nix {
+         inherit fetchurl;
+       }));
+
+
+  "mt19937" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."mt19937" or (x: {}))
+       (import ./quicklisp-to-nix-output/mt19937.nix {
+         inherit fetchurl;
+       }));
+
+
+  "misc-extensions" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."misc-extensions" or (x: {}))
+       (import ./quicklisp-to-nix-output/misc-extensions.nix {
+         inherit fetchurl;
        }));
 
 
@@ -725,12 +993,31 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "lisp-namespace" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."lisp-namespace" or (x: {}))
+       (import ./quicklisp-to-nix-output/lisp-namespace.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
   "lev" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."lev" or (x: {}))
        (import ./quicklisp-to-nix-output/lev.nix {
          inherit fetchurl;
            "cffi" = quicklisp-to-nix-packages."cffi";
+       }));
+
+
+  "let-plus" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."let-plus" or (x: {}))
+       (import ./quicklisp-to-nix-output/let-plus.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "anaphora" = quicklisp-to-nix-packages."anaphora";
        }));
 
 
@@ -764,15 +1051,26 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."iolib" or (x: {}))
        (import ./quicklisp-to-nix-output/iolib.nix {
          inherit fetchurl;
-           "alexandria" = quicklisp-to-nix-packages."alexandria";
-           "babel" = quicklisp-to-nix-packages."babel";
-           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-           "cffi" = quicklisp-to-nix-packages."cffi";
-           "idna" = quicklisp-to-nix-packages."idna";
+           "iolib_slash_streams" = quicklisp-to-nix-packages."iolib_slash_streams";
+           "iolib_slash_sockets" = quicklisp-to-nix-packages."iolib_slash_sockets";
+           "iolib_slash_multiplex" = quicklisp-to-nix-packages."iolib_slash_multiplex";
+       }));
+
+
+  "ieee-floats" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."ieee-floats" or (x: {}))
+       (import ./quicklisp-to-nix-output/ieee-floats.nix {
+         inherit fetchurl;
+       }));
+
+
+  "idna" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."idna" or (x: {}))
+       (import ./quicklisp-to-nix-output/idna.nix {
+         inherit fetchurl;
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
-           "swap-bytes" = quicklisp-to-nix-packages."swap-bytes";
-           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
-           "uiop" = quicklisp-to-nix-packages."uiop";
        }));
 
 
@@ -795,16 +1093,24 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "hu.dwim.def" = buildLispPackage
+  "hu_dot_dwim_dot_def" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."hu.dwim.def" or (x: {}))
-       (import ./quicklisp-to-nix-output/hu.dwim.def.nix {
+       (qlOverrides."hu_dot_dwim_dot_def" or (x: {}))
+       (import ./quicklisp-to-nix-output/hu_dot_dwim_dot_def.nix {
          inherit fetchurl;
            "metabang-bind" = quicklisp-to-nix-packages."metabang-bind";
            "iterate" = quicklisp-to-nix-packages."iterate";
-           "hu.dwim.asdf" = quicklisp-to-nix-packages."hu.dwim.asdf";
            "anaphora" = quicklisp-to-nix-packages."anaphora";
            "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
+  "hu_dot_dwim_dot_asdf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."hu_dot_dwim_dot_asdf" or (x: {}))
+       (import ./quicklisp-to-nix-output/hu_dot_dwim_dot_asdf.nix {
+         inherit fetchurl;
+           "uiop" = quicklisp-to-nix-packages."uiop";
        }));
 
 
@@ -824,12 +1130,42 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "fset" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."fset" or (x: {}))
+       (import ./quicklisp-to-nix-output/fset.nix {
+         inherit fetchurl;
+           "misc-extensions" = quicklisp-to-nix-packages."misc-extensions";
+           "mt19937" = quicklisp-to-nix-packages."mt19937";
+       }));
+
+
+  "form-fiddle" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."form-fiddle" or (x: {}))
+       (import ./quicklisp-to-nix-output/form-fiddle.nix {
+         inherit fetchurl;
+           "documentation-utils" = quicklisp-to-nix-packages."documentation-utils";
+       }));
+
+
   "flexi-streams" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."flexi-streams" or (x: {}))
        (import ./quicklisp-to-nix-output/flexi-streams.nix {
          inherit fetchurl;
            "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+       }));
+
+
+  "fiveam" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."fiveam" or (x: {}))
+       (import ./quicklisp-to-nix-output/fiveam.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "net_dot_didierverna_dot_asdf-flv" = quicklisp-to-nix-packages."net_dot_didierverna_dot_asdf-flv";
+           "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
        }));
 
 
@@ -849,6 +1185,12 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."fast-http" or (x: {}))
        (import ./quicklisp-to-nix-output/fast-http.nix {
          inherit fetchurl;
+           "xsubseq" = quicklisp-to-nix-packages."xsubseq";
+           "smart-buffer" = quicklisp-to-nix-packages."smart-buffer";
+           "proc-parse" = quicklisp-to-nix-packages."proc-parse";
+           "cl-utilities" = quicklisp-to-nix-packages."cl-utilities";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -883,6 +1225,15 @@ let quicklisp-to-nix-packages = rec {
            "cl+ssl" = quicklisp-to-nix-packages."cl+ssl";
            "chunga" = quicklisp-to-nix-packages."chunga";
            "chipz" = quicklisp-to-nix-packages."chipz";
+       }));
+
+
+  "documentation-utils" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."documentation-utils" or (x: {}))
+       (import ./quicklisp-to-nix-output/documentation-utils.nix {
+         inherit fetchurl;
+           "trivial-indent" = quicklisp-to-nix-packages."trivial-indent";
        }));
 
 
@@ -1033,6 +1384,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-unicode" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-unicode.nix {
          inherit fetchurl;
+           "cl-unicode_slash_base" = quicklisp-to-nix-packages."cl-unicode_slash_base";
        }));
 
 
@@ -1079,9 +1431,21 @@ let quicklisp-to-nix-packages = rec {
            "uiop" = quicklisp-to-nix-packages."uiop";
            "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
            "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
            "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
            "cffi" = quicklisp-to-nix-packages."cffi";
            "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
+  "clss" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clss" or (x: {}))
+       (import ./quicklisp-to-nix-output/clss.nix {
+         inherit fetchurl;
+           "array-utils" = quicklisp-to-nix-packages."array-utils";
+           "plump" = quicklisp-to-nix-packages."plump";
        }));
 
 
@@ -1228,6 +1592,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-emb" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-emb.nix {
          inherit fetchurl;
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
        }));
 
 
@@ -1259,6 +1624,15 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "alexandria" = quicklisp-to-nix-packages."alexandria";
            "let-plus" = quicklisp-to-nix-packages."let-plus";
+       }));
+
+
+  "cl-cli" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-cli" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-cli.nix {
+         inherit fetchurl;
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
        }));
 
 
@@ -1315,6 +1689,16 @@ let quicklisp-to-nix-packages = rec {
            "cl-async-base" = quicklisp-to-nix-packages."cl-async-base";
            "cffi" = quicklisp-to-nix-packages."cffi";
            "babel" = quicklisp-to-nix-packages."babel";
+       }));
+
+
+  "cl-ansi-text" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-ansi-text" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-ansi-text.nix {
+         inherit fetchurl;
+           "cl-colors" = quicklisp-to-nix-packages."cl-colors";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -1376,6 +1760,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cffi-grovel" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cffi-grovel" or (x: {}))
+       (import ./quicklisp-to-nix-output/cffi-grovel.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+
+
   "cffi" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cffi" or (x: {}))
@@ -1434,6 +1827,22 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "asdf-system-connections" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."asdf-system-connections" or (x: {}))
+       (import ./quicklisp-to-nix-output/asdf-system-connections.nix {
+         inherit fetchurl;
+       }));
+
+
+  "array-utils" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."array-utils" or (x: {}))
+       (import ./quicklisp-to-nix-output/array-utils.nix {
+         inherit fetchurl;
+       }));
+
+
   "alexandria" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."alexandria" or (x: {}))
@@ -1442,10 +1851,10 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "3bmd" = buildLispPackage
+  "_3bmd" = buildLispPackage
     ((f: x: (x // (f x)))
-       (qlOverrides."3bmd" or (x: {}))
-       (import ./quicklisp-to-nix-output/3bmd.nix {
+       (qlOverrides."_3bmd" or (x: {}))
+       (import ./quicklisp-to-nix-output/_3bmd.nix {
          inherit fetchurl;
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "esrap" = quicklisp-to-nix-packages."esrap";

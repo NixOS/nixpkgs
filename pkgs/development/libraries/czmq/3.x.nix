@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zeromq ];
 
   meta = with stdenv.lib; {
-    homepage = "http://czmq.zeromq.org/";
+    homepage = http://czmq.zeromq.org/;
     description = "High-level C Binding for ZeroMQ";
     license = licenses.mpl20;
     platforms = platforms.all;

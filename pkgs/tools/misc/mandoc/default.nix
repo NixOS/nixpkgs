@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://mdocml.bsd.lv/";
+    homepage = http://mdocml.bsd.lv/;
     description = "suite of tools compiling mdoc and man";
     license = licenses.bsd3;
     platforms = platforms.all;

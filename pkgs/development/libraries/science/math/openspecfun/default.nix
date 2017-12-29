@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A collection of special mathematical functions";
-    homepage = "https://github.com/JuliaLang/openspecfun";
+    homepage = https://github.com/JuliaLang/openspecfun;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
     platforms = stdenv.lib.platforms.all;

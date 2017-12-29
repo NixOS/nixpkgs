@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WYSIWYG PostScript annotator";
-    homepage = "http://http://flpsed.org/flpsed.html";
+    homepage = http://http://flpsed.org/flpsed.html;
     license = licenses.gpl3;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ fuuzetsu ];

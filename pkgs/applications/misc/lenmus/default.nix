@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       It allows you to focus on specific skills and exercises, on both theory and aural training.
       The different activities can be customized to meet your needs
     '';
-    homepage = "http://www.lenmus.org/";
+    homepage = http://www.lenmus.org/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers;  [ ramkromberg ];
     platforms = with platforms; linux;

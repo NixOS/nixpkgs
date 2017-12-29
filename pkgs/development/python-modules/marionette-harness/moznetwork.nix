@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Network utilities for Mozilla testing";
-    homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
+    homepage = https://wiki.mozilla.org/Auto-tools/Projects/Mozbase;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
   };

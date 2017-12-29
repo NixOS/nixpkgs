@@ -527,7 +527,7 @@ in {
       input.gid = ids.gids.input;
     };
 
-    system.activationScripts.users = stringAfter [ "etc" ]
+    system.activationScripts.users = stringAfter [ "stdio" ]
       ''
         ${pkgs.perl}/bin/perl -w \
           -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \

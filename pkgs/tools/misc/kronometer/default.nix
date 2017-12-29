@@ -1,7 +1,7 @@
 {
   mkDerivation, fetchurl, lib,
   extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kinit
+  kconfig, kcrash, kinit
 }:
 
 let
@@ -21,5 +21,5 @@ mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
-  propagatedBuildInputs = [ kconfig kinit ];
+  propagatedBuildInputs = [ kconfig kcrash kinit ];
 }

@@ -1,17 +1,21 @@
-{ stdenv, fetchurl, boost, lhapdf, root, yoda }:
+{ stdenv, fetchurl, boost, fastjet, gfortran, lhapdf, python2, root, yoda, zlib }:
 
 stdenv.mkDerivation rec {
   name = "fastnlo_toolkit-${version}";
-  version = "2.3.1pre-2212";
+  version = "2.3.1pre-2402";
 
   src = fetchurl {
     url = "http://fastnlo.hepforge.org/code/v23/${name}.tar.gz";
-    sha256 = "0xgnnwc002awvz6dhn7792jc8kdff843yjgvwmgcs60yvcj6blgp";
+    sha256 = "1h41xnqcz401x3zbs8i2dsb4xlhbv8i5ps0561p6y7gcyridgcbl";
   };
 
-  buildInputs = [ boost lhapdf root yoda ];
+  buildInputs = [ boost fastjet gfortran gfortran.cc.lib lhapdf python2 root yoda ];
+  propagatedBuildInputs = [ zlib ];
 
-  CXXFLAGS="-std=c++11"; # for yoda
+  preConfigure = ''
+    substituteInPlace ./fastnlotoolkit/Makefile.in \
+      --replace "-fext-numeric-literals" ""
+  '';
 
   configureFlags = [
     "--with-yoda=${yoda}"

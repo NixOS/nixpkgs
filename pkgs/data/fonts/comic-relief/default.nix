@@ -1,31 +1,22 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "comic-relief-${version}";
+let
   version = "1.1";
+in fetchzip rec {
+  name = "comic-relief-${version}";
 
-  src = fetchurl {
-    url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
-    sha256 = "0wpf10m9zmcfvcxgc7dxzdm3syam7d7qxlfabgr1nxzq299kh8ch";
-  };
+  url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
 
-  buildInputs = [unzip];
-
-  phases = ["unpackPhase" "installPhase"];
-
-  unpackCmd = ''
-    mkdir -p ${name}
-    unzip -qq -d ${name} $src
-  '';
-
-  installPhase = ''
+  postFetch = ''
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/doc/${name}
     mkdir -p $out/share/fonts/truetype
-    cp -v *.ttf $out/share/fonts/truetype
-    cp -v ${./comic-sans-ms-alias.conf} $out/etc/fonts/conf.d/30-comic-sans-ms.conf
-    cp -v FONTLOG.txt $out/share/doc/${name}
+    cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
+    unzip -j $downloadedFile \*.ttf      -d $out/share/fonts/truetype
+    unzip -j $downloadedFile FONTLOG.txt -d $out/share/doc/${name}
   '';
+
+  sha256 = "0dz0y7w6mq4hcmmxv6fn4mp6jkln9mzr4s96vsg68wrl5b7k9yff";
 
   meta = with stdenv.lib; {
     homepage = http://loudifier.com/comic-relief/;

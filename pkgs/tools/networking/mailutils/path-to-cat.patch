@@ -1,8 +1,47 @@
-Fix absolute path to `cat'.
-
---- mailutils-2.2/testsuite/lib/mailutils.exp	2010-09-10 13:39:58.000000000 +0200
-+++ mailutils-2.2/testsuite/lib/mailutils.exp	2010-09-10 13:40:00.000000000 +0200
-@@ -719,7 +719,7 @@ proc mu_test_file {args} {
+diff --git a/mh/show.c b/mh/show.c
+index a43afe10c..6985386ec 100644
+--- a/mh/show.c
++++ b/mh/show.c
+@@ -254,7 +254,7 @@ main (int argc, char **argv)
+   */
+ 
+   if (!use_showproc)
+-    showproc = "/bin/cat";
++    showproc = "cat";
+   else
+     showproc = mh_global_profile_get ("showproc", NULL);
+ 
+diff --git a/mh/tests/mhparam.at b/mh/tests/mhparam.at
+index 54b7fc06a..3abd5bf9b 100644
+--- a/mh/tests/mhparam.at
++++ b/mh/tests/mhparam.at
+@@ -28,7 +28,7 @@ mhparam -all | tr '\t' ' ' | sed 's/^Path:.*/Path: Mail/;s/^mhetcdir:.*/mhetcdir
+ [0],
+ [Path: Mail
+ mhetcdir: dir
+-moreproc: /bin/cat
++moreproc: cat
+ Sequence-Negation: not
+ Draft-Folder: Mail/drafts
+ Aliasfile: .mh_aliases
+diff --git a/mh/tests/testsuite.at b/mh/tests/testsuite.at
+index c6820843c..6675a4a9c 100644
+--- a/mh/tests/testsuite.at
++++ b/mh/tests/testsuite.at
+@@ -25,7 +25,7 @@ export MH
+ cat > $MH <<EOT
+ Path: $HOME/Mail
+ mhetcdir: $abs_top_srcdir/mh/etc
+-moreproc: /bin/cat
++moreproc: cat
+ EOT
+ MTSTAILOR=$HOME/mtstailor
+ export MTSTAILOR
+diff --git a/testsuite/lib/mailutils.exp b/testsuite/lib/mailutils.exp
+index d4691d922..c1b056933 100644
+--- a/testsuite/lib/mailutils.exp
++++ b/testsuite/lib/mailutils.exp
+@@ -728,7 +728,7 @@ proc mu_test_file {args} {
          set pattern [lrange $args 1 end]
      }
      

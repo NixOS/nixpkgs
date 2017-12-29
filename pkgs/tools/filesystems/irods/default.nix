@@ -13,13 +13,13 @@ in rec {
 
   # irods: libs and server package
   irods = stdenv.mkDerivation (common // rec {
-    version = "4.2.0";
+    version = "4.2.1";
     prefix = "irods";
     name = "${prefix}-${version}";
 
     src = fetchurl {
       url = "https://github.com/irods/irods/releases/download/${version}/irods-${version}.tar.gz";
-      sha256 = "b5c0d7209219629da139058ce462a237ecc22ad4dae613413a428961e4ff9d3e";
+      sha256 = "07yj5g1mwra4sankhqx967mk4z28kc40rir5cb85x23ljql74abq";
     };
 
     # Patches:
@@ -40,6 +40,8 @@ in rec {
         -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib
         -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib
         "
+
+      substituteInPlace cmake/server.cmake --replace SETUID ""
     '';
 
     meta = common.meta // {

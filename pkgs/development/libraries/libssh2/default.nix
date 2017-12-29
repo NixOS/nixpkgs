@@ -1,4 +1,6 @@
-{stdenv, fetchurlBoot, openssl, zlib, windows}:
+{ stdenv, fetchurlBoot, openssl, zlib, windows
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libssh2-1.8.0";
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
       "--with-libz"
       "--with-libz-prefix=${zlib.crossDrv}"
     ];
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     # mingw needs import library of ws2_32 to build the shared library
     preConfigure = ''
       export LDFLAGS="-L${windows.mingw_w64}/lib $LDFLAGS"

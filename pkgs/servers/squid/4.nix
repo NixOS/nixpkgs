@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
-    homepage = "http://www.squid-cache.org";
+    homepage = http://www.squid-cache.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz raskin ];

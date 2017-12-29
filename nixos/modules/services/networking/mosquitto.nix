@@ -125,8 +125,8 @@ in
               description = ''
                 Specifies the hashed password for the MQTT User.
                 <option>hashedPassword</option> overrides <option>password</option>.
-                To generate hashed password install <literal>mkpasswd</literal>
-                package and run <literal>mkpasswd -m sha-512</literal>.
+                To generate hashed password install <literal>mosquitto</literal>
+                package and use <literal>mosquitto_passwd</literal>.
               '';
             };
 

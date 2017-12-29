@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       programs that need to ask a user's password to run another program
       as another user.
     '';
-    homepage = "http://www.nongnu.org/gksu/";
+    homepage = http://www.nongnu.org/gksu/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, pkgconfig, libatomic_ops, enableLargeConfig ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, libatomic_ops, enableLargeConfig ? false
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-7.6.0";
@@ -12,6 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   outputs = [ "out" "dev" "doc" ];
+  separateDebugInfo = stdenv.isLinux;
 
   configureFlags =
     [ "--enable-cplusplus" ]
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv ? cross;
+  dontStrip = hostPlatform != buildPlatform;
 
   postInstall =
     ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/fprint/fprint_demo/";
+    homepage = http://www.freedesktop.org/wiki/Software/fprint/fprint_demo/;
     description = "A simple GTK+ application to demonstrate and test libfprint's capabilities";
     license = licenses.gpl2;
     platforms = platforms.linux;

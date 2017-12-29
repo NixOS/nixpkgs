@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
-    homepage = "http://www.cs.nyu.edu/acsys/cvc3/index.html";
+    homepage = http://www.cs.nyu.edu/acsys/cvc3/index.html;
   };
   passthru = {
     updateInfo = {

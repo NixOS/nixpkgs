@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://swtch.com/plan9port/";
+    homepage = http://swtch.com/plan9port/;
     description = "Plan 9 from User Space";
     license = licenses.lpl-102;
     maintainers = with maintainers; [ ftrvxmtrx kovirobi ];

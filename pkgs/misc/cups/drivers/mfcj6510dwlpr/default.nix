@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, patchelf, utillinux, vimNox
+{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, patchelf, utillinux, xxd
 , ghostscript, a2ps }:
 
 # Why:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ${utillinux}/bin/hexdump -ve '1/1 "%.2X"' $out/usr/bin/brprintconf_mfcj6510dw | \
     sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F6272257366756E63.62726d66636a36353130647766756e63000000000000000000000000000000000000000000.' | \
     sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F627225737263.62726D66636A3635313064777263000000000000000000000000000000000000000000.' | \
-    ${vimNox}/bin/xxd -r -p > $out/usr/bin/brprintconf_mfcj6510dw_patched
+    ${xxd}/bin/xxd -r -p > $out/usr/bin/brprintconf_mfcj6510dw_patched
     chmod +x $out/usr/bin/brprintconf_mfcj6510dw_patched
     #executing from current dir. segfaults if it's not r\w.
     mkdir -p $out/bin
@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
-    description = "Brother MFC-J6510DW LPR driver";
-    license = with licenses; unfree;
-    platforms = with platforms; linux;
+    description  = "Brother MFC-J6510DW LPR driver";
     downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128;
-    maintainers = with maintainers; [ ramkromberg ];
+    homepage     = http://www.brother.com/;
+    license      = with licenses; unfree;
+    maintainers  = with maintainers; [ ramkromberg ];
+    platforms    = with platforms; linux;
   };
 }

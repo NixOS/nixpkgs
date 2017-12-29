@@ -9,7 +9,7 @@
 mkDerivation {
   name = "kolourpaint";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kdelibs4support libkexiv2 ];
+  buildInputs = [ kdelibs4support libkexiv2 ];
   meta = {
     maintainers = [ lib.maintainers.fridh ];
     license = with lib.licenses; [ gpl2 ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform shared library for serial port access";
     homepage = http://sigrok.org/;
     license = licenses.gpl3Plus;
-    # Mac OS X, Windows and Android is also supported (according to upstream).
+    # macOS, Windows and Android is also supported (according to upstream).
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

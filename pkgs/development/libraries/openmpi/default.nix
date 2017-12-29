@@ -13,18 +13,12 @@ let
   majorVersion = "1.10";
 
 in stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.1";
+  name = "openmpi-${majorVersion}.7";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "14p4px9a3qzjc22lnl6braxrcrmd9rgmy7fh4qpanawn2pgfq6br";
+    sha256 = "142s1vny9gllkq336yafxayjgcirj2jv0ddabj879jgya7hyr2d0";
   };
-
-  # Bug in openmpi implementation for zero sized messages
-  # Patch required to make mpi4py pass. Will NOT
-  # be required when openmpi >= 2.0.0
-  # https://www.open-mpi.org/community/lists/users/2015/11/28030.php
-  patches = [ ./nbc_copy.patch ];
 
   buildInputs = [ gfortran ]
     ++ optional (stdenv.isLinux || stdenv.isFreeBSD) libibverbs;

@@ -1,30 +1,23 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "paratype-pt-serif";
 
-  src = fetchurl rec {
-    url = "http://www.paratype.ru/uni/public/PTSerif.zip";
-    sha256 = "0x3l58c1rvwmh83bmmgqwwbw9av1mvvq68sw2hdkyyihjvamyvvs";
-  };
+  url = "http://www.paratype.ru/uni/public/PTSerif.zip";
 
-  buildInputs = [unzip];
-
-  phases = "unpackPhase installPhase";
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/paratype
-    cp *.ttf $out/share/fonts/truetype
-    cp *.txt $out/share/doc/paratype
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
   '';
 
+  sha256 = "1iw5qi4ag3yp1lwmi91lb18gr768bqwl46xskaqnkhr9i9qp0v6d";
+
   meta = with stdenv.lib; {
-    homepage = "http://www.paratype.ru/public/"; 
+    homepage = http://www.paratype.ru/public/; 
     description = "An open Paratype font";
 
-    license = "Open Paratype license"; 
+    license = "Open Paratype license";
     # no commercial distribution of the font on its own
     # must rename on modification
     # http://www.paratype.ru/public/pt_openlicense.asp

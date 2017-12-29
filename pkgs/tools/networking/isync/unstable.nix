@@ -1,17 +1,20 @@
-{ fetchgit, stdenv, openssl, pkgconfig, db, cyrus_sasl, zlib
-, autoconf, automake }:
+{
+  stdenv, fetchgit,
+  autoconf, automake, cyrus_sasl, db, openssl, perl, pkgconfig, zlib,
+}:
 
 stdenv.mkDerivation rec {
-  name = "isync-git-20170329";
-  rev = "1fdf793a3fb9f4704977ef49e0a490a83291ea4d";
+  name = "isync-git-20170514";
+  rev = "4b3768806278a70db696ba52645dc1b6eb8de58a";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/isync/isync";
     inherit rev;
-    sha256 = "1m54jjww1b7a6rfw4wckzx6z1nd90psbb6cs38b9c015cs0vwaf5";
+    sha256 = "1cv1isw01cfp7724z6f4pf6k4rx3k1lg0pc1xcq17zpikx9d10fb";
   };
 
-  buildInputs = [ openssl pkgconfig db cyrus_sasl zlib autoconf automake ];
+  nativeBuildInputs = [ autoconf automake perl pkgconfig ];
+  buildInputs = [ cyrus_sasl db openssl zlib ];
 
   preConfigure = ''
     touch ChangeLog

@@ -11,9 +11,7 @@ let
     password_secret = ${cfg.passwordSecret}
     root_username = ${cfg.rootUsername}
     root_password_sha2 = ${cfg.rootPasswordSha2}
-    elasticsearch_cluster_name = ${cfg.elasticsearchClusterName}
-    elasticsearch_discovery_zen_ping_multicast_enabled = ${boolToString cfg.elasticsearchDiscoveryZenPingMulticastEnabled}
-    elasticsearch_discovery_zen_ping_unicast_hosts = ${cfg.elasticsearchDiscoveryZenPingUnicastHosts}
+    elasticsearch_hosts = ${concatStringsSep "," cfg.elasticsearchHosts}
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
     plugin_dir = /var/lib/graylog/plugins
@@ -91,22 +89,10 @@ in
         '';
       };
 
-      elasticsearchClusterName = mkOption {
-        type = types.str;
-        example = "graylog";
-        description = "This must be the same as for your Elasticsearch cluster";
-      };
-
-      elasticsearchDiscoveryZenPingMulticastEnabled = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to use elasticsearch multicast discovery";
-      };
-
-      elasticsearchDiscoveryZenPingUnicastHosts = mkOption {
-        type = types.str;
-        default = "127.0.0.1:9300";
-        description = "Tells Graylogs Elasticsearch client how to find other cluster members. See Elasticsearch documentation for details";
+      elasticsearchHosts = mkOption {
+        type = types.listOf types.str;
+        example = literalExample ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
+        description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
       };
 
       messageJournalDir = mkOption {

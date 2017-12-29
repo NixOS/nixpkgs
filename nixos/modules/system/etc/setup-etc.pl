@@ -108,6 +108,8 @@ sub link {
             my $uid = read_file("$_.uid"); chomp $uid;
             my $gid = read_file("$_.gid"); chomp $gid;
             copy "$static/$fn", "$target.tmp" or warn;
+            $uid = getpwnam $uid unless $uid =~ /^\+/;
+            $gid = getgrnam $gid unless $gid =~ /^\+/;
             chown int($uid), int($gid), "$target.tmp" or warn;
             chmod oct($mode), "$target.tmp" or warn;
             rename "$target.tmp", $target or warn;

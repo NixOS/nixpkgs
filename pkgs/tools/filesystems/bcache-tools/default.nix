@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       User documentation is in Documentation/bcache.txt in the Linux kernel
       tree.
     '';
-    homepage = http://bcache.evilpiepirate.org/;
+    homepage = https://bcache.evilpiepirate.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

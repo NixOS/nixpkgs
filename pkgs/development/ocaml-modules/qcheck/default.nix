@@ -1,18 +1,18 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, oasis, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
 
 stdenv.mkDerivation {
 
-  name = "ocaml-qcheck-0.4.0.1";
+  name = "ocaml${ocaml.version}-qcheck-0.6";
   src = fetchzip {
-    url = https://github.com/c-cube/qcheck/archive/0.4.0.1.tar.gz;
-    sha256 = "0j2jdrfz8rrslgjihnfgg8yy12860z2vvf7hqzjbmfmf03hz4pgv";
+    url = https://github.com/c-cube/qcheck/archive/0.6.tar.gz;
+    sha256 = "14rlg0jh4p12sd9xagppacsbfw0239anbq5r1aqhsqxlfmzbmi1p";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild oasis ounit ];
+  buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
-  configureFlags = "--enable-tests --enable-ounit";
+  configureFlags = "--enable-tests";
 
   doCheck = true;
   checkPhase = "ocaml setup.ml -test";

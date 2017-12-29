@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x
+{ stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x-gtk3
 , libsass, notmuch, boost, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime webkitgtk24x libsass gnome3.libpeas
+  buildInputs = [ gnome3.gtkmm gmime webkitgtk24x-gtk3 libsass gnome3.libpeas
                   notmuch boost gnome3.gsettings_desktop_schemas
                   gnome3.adwaita-icon-theme ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = "scons --propagate-environment --prefix=$out install";
 
   meta = {
-    homepage = "https://astroidmail.github.io/";
+    homepage = https://astroidmail.github.io/;
     description = "GTK+ frontend to the notmuch mail system";
     maintainers = [ stdenv.lib.maintainers.bdimcheff ];
     license = stdenv.lib.licenses.gpl3Plus;

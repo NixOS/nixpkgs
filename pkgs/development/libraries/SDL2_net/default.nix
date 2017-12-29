@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SDL multiplatform networking library";
-    homepage = "https://www.libsdl.org/projects/SDL_net";
+    homepage = https://www.libsdl.org/projects/SDL_net;
     license = licenses.zlib;
     maintainers = with maintainers; [ MP2E ];
     platforms = platforms.linux;

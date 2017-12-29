@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation {
-  name = "FlameGraph-2017-05-11";
+  name = "FlameGraph-2017-07-01";
 
   src = fetchFromGitHub {
     owner = "brendangregg";
     repo = "FlameGraph";
-    rev = "6b2a446dfb5d8027a0adf14adf71748aa502c247";
-    sha256 = "11j1776zsvhn9digqay1cbfhhxz01nv2hm44i4gnpqcxkada44l2";
+    rev = "a93d905911c07c96a73b35ddbcb5ddb2f39da4b6";
+    sha256 = "07z2ffnab41dz833wwgr875vjccqyh0238357g7ml1yg5445x2jy";
   };
 
   buildInputs = [ perl ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
 
   meta = {
-    homepage = "http://fping.org/";
+    homepage = http://fping.org/;
     description = "Send ICMP echo probes to network hosts";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = with stdenv.lib.platforms; all;

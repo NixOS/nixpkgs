@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Powerful network analysis framework that is much different from the typical IDS you may know";
-    homepage = http://www.bro.org/;
+    homepage = https://www.bro.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;

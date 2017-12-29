@@ -24,7 +24,7 @@ python34Packages.buildPythonApplication rec {
       unreadable white text. An interface with almost infinite customization
       and extensibility using the excellent Python programming language.
     '';
-    homepage = http://codezen.org/canto-ng/;
+    homepage = https://codezen.org/canto-ng/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

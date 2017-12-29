@@ -1,7 +1,8 @@
 {
   mkDerivation, fetchFromGitHub, lib,
   extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kinit, kjsembed, taglib, exiv2, podofo
+  kconfig, kinit, kjsembed, taglib, exiv2, podofo,
+  kcrash
 }:
 
 let
@@ -26,5 +27,5 @@ in mkDerivation rec {
 
   buildInputs = [ taglib exiv2 podofo ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
-  propagatedBuildInputs = [ kconfig kinit kjsembed ];
+  propagatedBuildInputs = [ kconfig kcrash kinit kjsembed ];
 }

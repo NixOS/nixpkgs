@@ -2,6 +2,7 @@
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , libseccomp, busybox
+, hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -78,6 +79,9 @@ let
 
     doInstallCheck = true;
 
+    # socket path becomes too long otherwise
+    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+
     separateDebugInfo = stdenv.isLinux;
 
     crossAttrs = {
@@ -95,8 +99,8 @@ let
           --disable-init-state
           --enable-gc
         '' + stdenv.lib.optionalString (
-            stdenv.cross ? nix && stdenv.cross.nix ? system
-        ) ''--with-system=${stdenv.cross.nix.system}'';
+            hostPlatform ? nix && hostPlatform.nix ? system
+        ) ''--with-system=${hostPlatform.nix.system}'';
 
       doInstallCheck = false;
     };
@@ -148,21 +152,21 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.11";
+    name = "nix-1.11.13";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "f5b9da21fb412e4c35b6e2bc771cfbf4ca44746be5d99868ff29d6e7604760e5";
+      sha256 = "0913975e262f8069fde6e71a5fae757bb3aef558c51d1711034c525146ea5913";
     };
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5413_b4b1f452";
+    suffix = "pre5511_c94f3d55";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "b4b1f4525f8dc8f320d666c208bff5cb36777580";
-      sha256 = "0qb18k2rp6bbg8g50754srl95dq0lr96i297856yhrx1hh1ja37z";
+      rev = "c94f3d5575d7af5403274d1e9e2f3c9d72989751";
+      sha256 = "1akfzzm4f07wj6l7za916xv5rnh71pk3vl8dphgradjfqb37bv18";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

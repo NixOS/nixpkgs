@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
-    homepage = "http://jackaudio.org";
+    homepage = http://jackaudio.org;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ goibhniu wkennington ];

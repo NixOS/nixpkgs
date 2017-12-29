@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "plymouth-${version}";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/plymouth/releases/${name}.tar.bz2";
-    sha256 = "0zympsgy5bbfl2ag5nc1jxlshpx8r1s1yyjisanpx76g88hfh31g";
+    url = "http://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
+    sha256 = "0x2a9s5jdvfcrdnwbdhm5x4ck3zimmcpghnqvhl65byfj25d13cz";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       --libdir=$out/lib
       --libexecdir=$out/lib
       --sysconfdir=/etc
+      --with-systemdunitdir=$out/etc/systemd/system
       --localstatedir=/var
       --with-logo=/etc/plymouth/logo.png
       --with-background-color=0x000000

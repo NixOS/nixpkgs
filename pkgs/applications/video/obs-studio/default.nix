@@ -26,13 +26,13 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "19.0.2";
+  version = "20.0.1";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "0sawpk2yr52frdm4pkvahc11i1s1jlm7i07crhkxa8342sdc70ab";
+    sha256 = "1f701rh4w88ba48b50y16fvmzzsyv4y5nv30mrx3pb2ni7wyanld";
   };
 
   patches = [ ./find-xcb.patch ];
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
       Software", software originally designed for recording and streaming live
       video content, efficiently
     '';
-    homepage = "https://obsproject.com";
+    homepage = https://obsproject.com;
     maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
     platforms = with platforms; linux;

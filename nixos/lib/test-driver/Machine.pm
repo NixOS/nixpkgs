@@ -219,8 +219,8 @@ sub waitForMonitorPrompt {
 sub retry {
     my ($coderef) = @_;
     my $n;
-    for ($n = 0; $n < 900; $n++) {
-        return if &$coderef;
+    for ($n = 899; $n >=0; $n--) {
+        return if &$coderef($n);
         sleep 1;
     }
     die "action timed out after $n seconds";
@@ -518,6 +518,12 @@ sub waitUntilTTYMatches {
 
     $self->nest("waiting for $regexp to appear on tty $tty", sub {
         retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on TTY$tty, which currently contains:");
+                $self->log($self->getTTYText($tty));
+            }
+
             return 1 if $self->getTTYText($tty) =~ /$regexp/;
         }
     });
@@ -566,6 +572,12 @@ sub waitForText {
     my ($self, $regexp) = @_;
     $self->nest("waiting for $regexp to appear on the screen", sub {
         retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the screen, which currently contains:");
+                $self->log($self->getScreenText);
+            }
+
             return 1 if $self->getScreenText =~ /$regexp/;
         }
     });
@@ -600,6 +612,13 @@ sub waitForWindow {
     $self->nest("waiting for a window to appear", sub {
         retry sub {
             my @names = $self->getWindowNames;
+
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the the window list, which currently contains:");
+                $self->log(join(", ", @names));
+            }
+
             foreach my $n (@names) {
                 return 1 if $n =~ /$regexp/;
             }

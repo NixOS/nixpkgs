@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, utillinux, hexdump, which
+{ stdenv, fetchurl, pkgconfig, hexdump, which
 , knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "667002dc3ee0b0f755628997ef4f71be769a06fb8b9ccd935db329c8709c2af4";
+    sha256 = "c679238bea5744de8a99f4402a61e9e58502bc42b40ecfa370e53679ed5d5b80";
   };
 
   outputs = [ "out" "dev" ];
@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = https://knot-resolver.cz;
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    # Platforms using negative pointers for stack won't work ATM due to LuaJIT impl.
+    platforms = filter (p: p != "aarch64-linux") platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
   };
 }

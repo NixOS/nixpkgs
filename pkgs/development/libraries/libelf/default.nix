@@ -11,9 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vf7s9dwk2xkmhb79aigqm0x0yfbw1j0b9ksm51207qwr179n6jr";
   };
 
-  # TODO(@Ericson2314) Make unconditional next hash break
-  patches = if hostPlatform == buildPlatform then null else [
-    ./cross-ar.patch
+  patches = [
+    ./dont-hardcode-ar.patch
   ];
 
   doCheck = true;

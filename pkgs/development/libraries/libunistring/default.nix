@@ -8,11 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1ra1baz2187kbw9im47g6kqb5mx9plq703mkjxaval8rxv5q3q4w";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch stdenv.secure-format-patch ];
 
   outputs = [ "out" "dev" "info" "doc" ];
 
   propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+
+  enableParallelBuilding = false;
 
   configureFlags = [
     "--with-libiconv-prefix=${libiconv}"

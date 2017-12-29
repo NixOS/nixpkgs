@@ -71,6 +71,10 @@ callPackage (import ./generic.nix (rec {
           name = "211-qemuu-4.6";
           sha256 = "1g090xs8ca8676vyi78b99z5yjdliw6mxkr521b8kimhf8crx4yg";
         })
+        (xsaPatch {
+          name = "216-qemuu-4.5";
+          sha256 = "0nh5akbal93czia1gh1pzvwq7gc4zwiyr1hbyk1m6wwdmqv6ph61";
+        })
       ];
       meta.description = "Xen's fork of upstream Qemu";
     };
@@ -341,6 +345,62 @@ callPackage (import ./generic.nix (rec {
       (xsaPatch {
         name = "215";
         sha256 = "0sv8ccc5xp09f1w1gj5a9n3mlsdsh96sdb1n560vh31f4kkd61xs";
+      })
+      (xsaPatch {
+        name = "217-4.5";
+        sha256 = "067pgsfrb9py2dhm1pk9g8f6fs40vyfrcxhj8c12vzamb6svzmn4";
+      })
+      (xsaPatch {
+        name = "218-4.5/0001-IOMMU-handle-IOMMU-mapping-and-unmapping-failures";
+        sha256 = "00y6j3yjxw0igpldsavikmhlxw711k2jsj1qx0s05w2k608gadkq";
+      })
+      (xsaPatch {
+        name = "218-4.5/0002-gnttab-fix-unmap-pin-accounting-race";
+        sha256 = "0qbbfnnjlpdcd29mzmacfmi859k92c213l91q7w1rg2k6pzx928k";
+      })
+      (xsaPatch {
+        name = "218-4.5/0003-gnttab-Avoid-potential-double-put-of-maptrack-entry";
+        sha256 = "1cndzvyhf41mk4my6vh3bk9jvh2y4gpmqdhvl9zhxhmppszslqkc";
+      })
+      (xsaPatch {
+        name = "218-4.5/0004-gnttab-correct-maptrack-table-accesses";
+        sha256 = "02zpb0ffigijacqvyyjylwx3qpgibwslrka7mbxwnclf4s9c03a2";
+      })
+      (xsaPatch {
+        name = "219-4.5";
+        sha256 = "003msr5vhsc66scmdpgn0lp3p01g4zfw5vj86y5lw9ajkbaywdsm";
+      })
+      (xsaPatch {
+        name = "220-4.5";
+        sha256 = "1dj9nn6lzxlipjb3nb7b9m4337fl6yn2bd7ap1lqrjn8h9zkk1pp";
+      })
+      (xsaPatch {
+        name = "221";
+        sha256 = "1mcr1nqgxyjrkywdg7qhlfwgz7vj2if1dhic425vgd41p9cdgl26";
+      })
+      (xsaPatch {
+        name = "222-1-4.6";
+        sha256 = "1g4dqm5qx4wqlv1520jpfiscph95vllcp4gqp1rdfailk8xi0mcf";
+      })
+      (xsaPatch {
+        name = "222-2-4.5";
+        sha256 = "1hw8rhc7q4v309f4w11gxfsn5x1pirvxkg7s4kr711fnmvp9hkzd";
+      })
+      (xsaPatch {
+        name = "224-4.5/0001-gnttab-Fix-handling-of-dev_bus_addr-during-unmap";
+        sha256 = "1aislj66ss4cb3v2bh12mrqsyrf288d4h54rj94jjq7h1hnycw7h";
+      })
+      (xsaPatch {
+        name = "224-4.5/0002-gnttab-never-create-host-mapping-unless-asked-to";
+        sha256 = "1j6fgm1ccb07gg0mi5qmdr0vqwwc3n12z433g1jrija2gbk1x8aq";
+      })
+      (xsaPatch {
+        name = "224-4.5/0003-gnttab-correct-logic-to-get-page-references-during-m";
+        sha256 = "166kmicwx280fjqjvgigbmhabjksa0hhvqx5h4v6kjlcjpmxqy08";
+      })
+      (xsaPatch {
+        name = "224-4.5/0004-gnttab-__gnttab_unmap_common_complete-is-all-or-noth";
+        sha256 = "1skc0yj1zsn8xgyq1y57bdc0scvvlmd0ynrjwwf1zkias1wlilav";
       })
     ];
 

@@ -1,11 +1,11 @@
 { fetchurl, buildPerlPackage, zlib, stdenv }:
 
 buildPerlPackage rec {
-  name = "Compress-Raw-Zlib-2.071";
+  name = "Compress-Raw-Zlib-2.074";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "0dk7pcmhnl7n811q3p4rrz5ijdhz6jx367h6rypgvg1y39z4arfs";
+    sha256 = "08bpx9v6i40n54rdcj6invlj294z20amrl8wvwf9b83aldwdwsd3";
   };
 
   preConfigure = ''
@@ -18,9 +18,7 @@ buildPerlPackage rec {
     EOF
   '';
 
-  # Try untested for now.  Upstream bug:
-  # https://rt.cpan.org/Public/Bug/Display.html?id=119762
-  doCheck = false && !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

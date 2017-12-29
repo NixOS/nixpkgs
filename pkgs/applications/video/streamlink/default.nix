@@ -1,14 +1,14 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.6.0";
+  version = "0.7.0";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = "${version}";
-    sha256 = "0602mybh9qrxbalnpg930prjfmfkfiwdyr6iz4byfzv0qrwa08yq";
+    sha256 = "0knh7lw6bv1vix3p40hjp5lc0z9pavvx6rncviw5h095rzcw5287";
   };
 
   buildInputs = with pythonPackages; [ pytest mock ];

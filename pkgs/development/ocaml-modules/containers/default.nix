@@ -6,18 +6,18 @@ let
   mkpath = p:
       "${p}/lib/ocaml/${ocaml.version}/site-lib";
 
-  version = "1.2";
+  version = "1.3";
 
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-containers-${version}";
+  name = "ocaml${ocaml.version}-containers-${version}";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "${version}";
-    sha256 = "0k1676bn12hhayjlpy8bxfc3sgq6wd7zkh0ca700zh8jxjrshjqk";
+    sha256 = "1gjs9d6759zpgp68djv296zwmvhdc6dqfb27aip7dhj6ic2bwgil";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit ocaml_oasis qcheck ];

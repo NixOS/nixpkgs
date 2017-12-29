@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ffmpeg ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/FFMS/ffms2/;
+    homepage = https://github.com/FFMS/ffms2/;
     description = "Libav/ffmpeg based source library for easy frame accurate access";
     license = licenses.mit;
     maintainers = with maintainers; [ fuuzetsu ];

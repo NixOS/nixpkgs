@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-Source, self-hosted Slack-alternative";
-    homepage = "https://www.mattermost.org";
+    homepage = https://www.mattermost.org;
     license = with licenses; [ agpl3 asl20 ];
     maintainers = with maintainers; [ fpletz ];
     platforms = [ "x86_64-linux" ];

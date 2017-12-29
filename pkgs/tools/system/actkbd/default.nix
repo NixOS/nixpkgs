@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       release events.
     '';
     license = licenses.gpl2;
-    homepage = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/";
+    homepage = http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/;
     platforms = platforms.linux;
   };
 }

@@ -21,6 +21,7 @@
   ./config/sysctl.nix
   ./config/system-environment.nix
   ./config/system-path.nix
+  ./config/terminfo.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
@@ -104,7 +105,6 @@
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wireshark.nix
-  ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/zsh/oh-my-zsh.nix
@@ -115,6 +115,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/audit.nix
+  ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
@@ -184,6 +185,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/postage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
@@ -235,16 +237,18 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thermald.nix
+  ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
+  ./services/logging/heartbeat.nix
   ./services/logging/journalbeat.nix
+  ./services/logging/journalwatch.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
   ./services/logging/logstash.nix
   ./services/logging/rsyslogd.nix
-  ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
@@ -252,6 +256,7 @@
   ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mailhog.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
@@ -282,6 +287,7 @@
   ./services/misc/emby.nix
   ./services/misc/errbot.nix
   ./services/misc/etcd.nix
+  ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/fstrim.nix
@@ -318,10 +324,10 @@
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
-  ./services/misc/ripple-rest.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/ssm-agent.nix
@@ -349,6 +355,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
@@ -509,7 +516,6 @@
   ./services/networking/teamspeak3.nix
   ./services/networking/tinc.nix
   ./services/networking/tftpd.nix
-  ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
@@ -554,12 +560,14 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/vault.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
+  ./services/system/saslauthd.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
@@ -575,6 +583,7 @@
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
+  ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
@@ -584,9 +593,11 @@
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
+  ./services/web-servers/lighttpd/collectd.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
+  ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
   meta = {
-    homepage = "http://www.creytiv.com/baresip.html";
+    homepage = http://www.creytiv.com/baresip.html;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.bsd3;

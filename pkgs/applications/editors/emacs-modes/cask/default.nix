@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         building, packaging and more. Cask can also be used to manage
         dependencies for your local Emacs configuration.
       '';
-    homepage = "https://github.com/cask/cask";
+    homepage = https://github.com/cask/cask;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.jgeerds ];

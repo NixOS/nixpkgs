@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     ./waf install
   '';
   meta = with stdenv.lib; {
-    homepage = "http://named-data.net/";
+    homepage = http://named-data.net/;
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)

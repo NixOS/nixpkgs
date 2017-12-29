@@ -35,7 +35,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Check websites for broken links";
-    homepage = "https://wummel.github.io/linkchecker/";
+    homepage = https://wummel.github.io/linkchecker/;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };

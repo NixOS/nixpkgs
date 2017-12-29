@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       provide drop in security for users who wish to prevent recovery
       of deleted information, even if the machine is compromised.
     '';
-    homepage = "http://srm.sourceforge.net";
+    homepage = http://srm.sourceforge.net;
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;

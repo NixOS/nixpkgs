@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.balabit.com/network-security/syslog-ng/";
+    homepage = http://www.balabit.com/network-security/syslog-ng/;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
     maintainers = with maintainers; [ rickynils  fpletz ];

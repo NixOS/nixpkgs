@@ -5,23 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.4";
+  name = "qgis-2.18.10";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags ] ++
     (stdenv.lib.optional withGrass grass) ++
-    (with python2Packages; [ numpy psycopg2 requests python2Packages.qscintilla sip ]);
+    (with python2Packages; [ jinja2 numpy psycopg2 pygments requests python2Packages.qscintilla sip ]);
 
   nativeBuildInputs = [ cmake makeWrapper ];
-
-  patches = [
-    # See https://hub.qgis.org/issues/16071
-    (fetchpatch {
-      name = "fix-build-against-recent-sip";
-      url = "https://github.com/qgis/QGIS/commit/85a0db24f32351f6096cd8282f03ad5c2f4e6ef5.patch";
-      sha256 = "0snspzdrpawd7j5b69i8kk7pmmy6ij8bn02bzg94qznfpf9ihf30";
-    })
-  ];
 
   # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
   #enableParallelBuilding = true;
@@ -34,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "1s264pahxpn0215xmzm8q2khr5xspipd7bbvxah5kj339kyjfy3k";
+    sha256 = "1vrzxhnpzd75iia4xmhbxy90x0wlvj2w4210f0r8203hd2m4sxdj";
   };
 
   cmakeFlags = stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";

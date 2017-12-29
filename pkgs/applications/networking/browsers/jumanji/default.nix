@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Minimal web browser";
-    homepage = http://pwmt.org/projects/jumanji/;
+    homepage = https://pwmt.org/projects/jumanji/;
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];
   };

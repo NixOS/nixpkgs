@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
   '';
 
+  dontStrip = true;
+
   meta = with stdenv.lib; {
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

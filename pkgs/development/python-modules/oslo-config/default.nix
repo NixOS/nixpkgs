@@ -17,6 +17,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "argparse"
+    substituteInPlace requirements.txt --replace "argparse" ""
   '';
 }

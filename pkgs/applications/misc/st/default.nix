@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let patches' = if isNull patches then [] else patches;
+let patches' = if patches == null then [] else patches;
 in stdenv.mkDerivation rec {
   name = "st-0.7";
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://st.suckless.org/;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [viric andsild];
     platforms = platforms.linux;
   };

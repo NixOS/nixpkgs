@@ -24,7 +24,7 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "http://fedoraproject.org/wiki/Pykickstart";
+    homepage = http://fedoraproject.org/wiki/Pykickstart;
     description = "Read and write Fedora kickstart files";
     license = stdenv.lib.licenses.gpl2Plus;
   };

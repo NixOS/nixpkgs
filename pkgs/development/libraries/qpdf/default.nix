@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://qpdf.sourceforge.net/";
+    homepage = http://qpdf.sourceforge.net/;
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.artistic2;
     maintainers = with maintainers; [ abbradar ];

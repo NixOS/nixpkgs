@@ -376,7 +376,6 @@ _fsync
 _fsync$NOCANCEL
 _ftruncate
 _futimes
-_get_dp_control_port
 _getattrlist
 _getattrlistat
 _getattrlistbulk
@@ -838,7 +837,6 @@ _sendmsg$NOCANCEL
 _sendmsg_x
 _sendto
 _sendto$NOCANCEL
-_set_dp_control_port
 _setattrlist
 _setaudit
 _setaudit_addr

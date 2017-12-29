@@ -23,7 +23,7 @@ in
       '';
       serviceConfig = {
         Type = "forking";
-        ExecStart = "/bin/sh -c '${pkgs.spice-vdagent}/bin/spice-vdagentd'";
+        ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagentd";
       };
     };
   };

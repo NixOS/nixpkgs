@@ -243,5 +243,218 @@ set of packages.
 
 </section>
 
+<section xml:id="sec-declarative-package-management">
+  <title>Declarative Package Management</title>
+
+  <section xml:id="sec-building-environment">
+    <title>Build an environment</title>
+
+    <para>
+      Using <literal>packageOverrides</literal>, it is possible to manage
+      packages declaratively. This means that we can list all of our desired
+      packages within a declarative Nix expression. For example, to have
+      <literal>aspell</literal>, <literal>bc</literal>,
+      <literal>ffmpeg</literal>, <literal>coreutils</literal>,
+      <literal>gdb</literal>, <literal>nixUnstable</literal>,
+      <literal>emscripten</literal>, <literal>jq</literal>,
+      <literal>nox</literal>, and <literal>silver-searcher</literal>, we could
+      use the following in <filename>~/.config/nixpkgs/config.nix</filename>:
+    </para>
+
+    <screen>
+{
+  packageOverrides = pkgs: with pkgs; {
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+    };
+  };
+}
+    </screen>
+
+    <para>
+      To install it into our environment, you can just run <literal>nix-env -iA
+      nixpkgs.myPackages</literal>. If you want to load the packages to be built
+      from a working copy of <literal>nixpkgs</literal> you just run
+      <literal>nix-env -f. -iA myPackages</literal>. To explore what's been
+      installed, just look through <filename>~/.nix-profile/</filename>. You can
+      see that a lot of stuff has been installed. Some of this stuff is useful
+      some of it isn't. Let's tell Nixpkgs to only link the stuff that we want:
+    </para>
+
+    <screen>
+{
+  packageOverrides = pkgs: with pkgs; {
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = [ aspell bc coreutils gdb ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      pathsToLink = [ "/share" "/bin" ];
+    };
+  };
+}
+    </screen>
+
+    <para>
+      <literal>pathsToLink</literal> tells Nixpkgs to only link the paths listed
+      which gets rid of the extra stuff in the profile.
+      <filename>/bin</filename> and <filename>/share</filename> are good
+      defaults for a user environment, getting rid of the clutter. If you are
+      running on Nix on MacOS, you may want to add another path as well,
+      <filename>/Applications</filename>, that makes GUI apps available.
+    </para>
+
+  </section>
+
+  <section xml:id="sec-getting-documentation">
+    <title>Getting documentation</title>
+
+    <para>
+      After building that new environment, look through
+      <filename>~/.nix-profile</filename> to make sure everything is there that
+      we wanted. Discerning readers will note that some files are missing. Look
+      inside <filename>~/.nix-profile/share/man/man1/</filename> to verify this.
+      There are no man pages for any of the Nix tools! This is because some
+      packages like Nix have multiple outputs for things like documentation (see
+      section 4). Let's make Nix install those as well.
+    </para>
+
+    <screen>
+{
+  packageOverrides = pkgs: with pkgs; {
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = [ aspell bc coreutils ffmpeg nixUnstable emscripten jq nox silver-searcher ];
+      pathsToLink = [ "/share/man" "/share/doc" /bin" ];
+      extraOutputsToInstall = [ "man" "doc" ];
+    };
+  };
+}
+    </screen>
+
+    <para>
+      This provides us with some useful documentation for using our packages.
+      However, if we actually want those manpages to be detected by man, we need
+      to set up our environment. This can also be managed within Nix
+      expressions.
+    </para>
+
+    <screen>
+{
+  packageOverrides = pkgs: with pkgs; rec {
+    myProfile = writeText "my-profile" ''
+export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+    '';
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = [
+        (runCommand "profile" {} ''
+mkdir -p $out/etc/profile.d
+cp ${myProfile} $out/etc/profile.d/my-profile.sh
+        '')
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        man
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+      ];
+      pathsToLink = [ "/share/man" "/share/doc" /bin" "/etc" ];
+      extraOutputsToInstall = [ "man" "doc" ];
+    };
+  };
+}
+    </screen>
+
+    <para>
+      For this to work fully, you must also have this script sourced when you
+      are logged in. Try adding something like this to your
+      <filename>~/.profile</filename> file:
+    </para>
+
+    <screen>
+#!/bin/sh
+if [ -d $HOME/.nix-profile/etc/profile.d ]; then
+  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+fi
+    </screen>
+
+    <para>
+      Now just run <literal>source $HOME/.profile</literal> and you can starting
+      loading man pages from your environent.
+    </para>
+
+  </section>
+    
+  <section xml:id="sec-gnu-info-setup">
+    <title>GNU info setup</title>
+
+    <para>
+      Configuring GNU info is a little bit trickier than man pages. To work
+      correctly, info needs a database to be generated. This can be done with
+      some small modifications to our environment scripts.
+    </para>
+
+    <screen>
+{
+  packageOverrides = pkgs: with pkgs; rec {
+    myProfile = writeText "my-profile" ''
+export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
+    '';
+    myPackages = pkgs.buildEnv {
+      name = "my-packages";
+      paths = [
+        (runCommand "profile" {} ''
+mkdir -p $out/etc/profile.d
+cp ${myProfile} $out/etc/profile.d/my-profile.sh
+        '')
+        aspell
+        bc
+        coreutils
+        ffmpeg
+        man
+        nixUnstable
+        emscripten
+        jq
+        nox
+        silver-searcher
+        texinfoInteractive
+      ];
+      pathsToLink = [ "/share/man" "/share/doc" "/share/info" "/bin" "/etc" ];
+      extraOutputsToInstall = [ "man" "doc" "info" ];
+      postBuild = ''
+          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
+            shopt -s nullglob
+            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
+                $out/bin/install-info $i $out/share/info/dir
+            done
+          fi
+      '';
+    };
+  };
+}
+    </screen>
+
+    <para>
+      <literal>postBuild</literal> tells Nixpkgs to run a command after building
+      the environment. In this case, <literal>install-info</literal> adds the
+      installed info pages to <literal>dir</literal> which is GNU info's default
+      root node. Note that <literal>texinfoInteractive</literal> is added to the
+      environment to give the <literal>install-info</literal> command.
+    </para>
+
+  </section>
+
+</section>
 
 </chapter>

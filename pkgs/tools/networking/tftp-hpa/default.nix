@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    homepage = http://www.kernel.org/pub/software/network/tftp/;
+    homepage = https://www.kernel.org/pub/software/network/tftp/;
   };
 
   passthru = {
     updateInfo = {
-      downloadPage = "http://www.kernel.org/pub/software/network/tftp/";
+      downloadPage = "https://www.kernel.org/pub/software/network/tftp/";
     };
   };
 }

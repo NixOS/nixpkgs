@@ -6,7 +6,7 @@
 
 let
   major = "3.12";
-  minor = "1";
+  minor = "2";
   binpath = lib.makeBinPath [ dvdauthor vcdimager ];
 
 in stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gnome.org/sources/brasero/${major}/${name}.tar.xz";
-    sha256 = "09vi2hyhl0bz7imv3ky6h7x5m3d546n968wcghydwrkvwm9ylpls";
+    sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
   };
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];

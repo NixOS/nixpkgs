@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
 
-  buildInputs = optionals (hostPlatform == buildPlatform) [ coreutils ]; # bin/updatedb script needs to call sort
+  buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck
@@ -25,7 +25,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  configureFlags = [ "--localstatedir=/var/cache" ];
+  configureFlags = [
+    # "sort" need not be on the PATH as a run-time dep, so we need to tell
+    # configure where it is. Covers the cross and native case alike.
+    "SORT=${coreutils}/bin/sort"
+    "--localstatedir=/var/cache"
+  ];
 
   enableParallelBuilding = true;
 

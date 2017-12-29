@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , libsysfs, gnutls, openssl
-, libcap, sp, docbook_sgml_dtd_31
+, libcap, opensp, docbook_sgml_dtd_31
 , libidn, nettle
 , SGMLSpm, libgcrypt }:
 
@@ -18,13 +18,15 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    sed -i s/sgmlspl/sgmlspl.pl/ doc/Makefile
+    sed -e s/sgmlspl/sgmlspl.pl/ \
+        -e s/nsgmls/onsgmls/ \
+      -i doc/Makefile
   '';
 
   makeFlags = "USE_GNUTLS=no";
 
   buildInputs = [
-    libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm libgcrypt libidn nettle
+    libsysfs opensp openssl libcap docbook_sgml_dtd_31 SGMLSpm libgcrypt libidn nettle
   ];
 
   buildFlags = "man all ninfod";

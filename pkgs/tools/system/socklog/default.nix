@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       mv man"/"*.$i $man/share/man/man$i
     done
 
-    mkdir -p $doc/share/socklog/html
-    mv doc"/"*.html $doc/share/socklog/html/
+    mkdir -p $doc/share/doc/socklog/html
+    mv doc/*.html $doc/share/doc/socklog/html/
 
     runHook postInstall
   '';

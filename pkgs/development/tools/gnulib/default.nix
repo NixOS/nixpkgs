@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installPhase = "mkdir -p $out; mv * $out/";
 
   meta = {
-    homepage = "http://www.gnu.org/software/gnulib/";
+    homepage = http://www.gnu.org/software/gnulib/;
     description = "Central location for code to be shared among GNU packages";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;

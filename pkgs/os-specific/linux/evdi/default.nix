@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Extensible Virtual Display Interface";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    homepage = "http://www.displaylink.com/";
+    homepage = http://www.displaylink.com/;
     broken = !versionAtLeast kernel.version "3.16";
   };
 }

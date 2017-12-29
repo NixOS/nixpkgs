@@ -22,6 +22,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's@python@${python.interpreter}@' .testr.conf
-    substituteInPlace requirements.txt --replace "argparse"
+    substituteInPlace requirements.txt --replace "argparse" ""
   '';
 }

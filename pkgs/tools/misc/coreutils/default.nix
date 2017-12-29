@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, autoconf, automake114x, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
 , hostPlatform, buildPlatform
 , aclSupport ? false, acl ? null
 , attrSupport ? false, attr ? null
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   # FIXME needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "stackprotector" ];
 
-  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+    ++ optional hostPlatform.isDarwin stdenv.secure-format-patch;
 
   # The test tends to fail on btrfs and maybe other unusual filesystems.
   postPatch = optionalString (!hostPlatform.isDarwin) ''
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
-    ++ optionals hostPlatform.isCygwin [ autoconf automake114x texinfo ]   # due to patch
+    ++ optionals hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (hostPlatform != buildPlatform && hostPlatform.libc != "glibc") libiconv;
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     && builtins.storeDir == "/nix/store";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
-  ${if hostPlatform == buildPlatform then null else "PERL"} = "missing";
+  PERL = if hostPlatform == buildPlatform then null else "missing";
 
   # Saw random failures like ‘help2man: can't get '--help' info from
   # man/sha512sum.td/sha512sum’.
@@ -83,11 +84,11 @@ stdenv.mkDerivation rec {
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
-  ${if hostPlatform == buildPlatform then null else "preInstall"} = ''
+  preInstall = optionalString (hostPlatform != buildPlatform) ''
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  ${if hostPlatform == buildPlatform then null else "postInstall"} = ''
+  postInstall = optionalString (hostPlatform != buildPlatform) ''
     rm $out/share/man/man1/*
     cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
   '';

@@ -33,8 +33,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pythonPackages.searx;
-        defaultText = "pkgs.pythonPackages.searx";
+        default = pkgs.searx;
+        defaultText = "pkgs.searx";
         description = "searx package to use.";
       };
 

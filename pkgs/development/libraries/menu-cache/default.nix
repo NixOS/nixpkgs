@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ glib libfm-extra ];
 
   meta = with stdenv.lib; {
-    homepage = "http://blog.lxde.org/?tag=menu-cache";
+    homepage = http://blog.lxde.org/?tag=menu-cache;
     license = licenses.gpl2Plus;
     description = "Library to read freedesktop.org menu files";
     maintainers = [ maintainers.ttuegel ];

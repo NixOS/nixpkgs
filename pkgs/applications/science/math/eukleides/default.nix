@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Geometry Drawing Language";
-    homepage = "http://www.eukleides.org/";
+    homepage = http://www.eukleides.org/;
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

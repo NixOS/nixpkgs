@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://pallini.di.uniroma1.it/";
+    homepage = http://pallini.di.uniroma1.it/;
   };
 }

@@ -10,8 +10,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
+  nativeBuildInputs = [ xz.bin ];
   /* If no explicit coreutils is given, use the one from stdenv. */
-  nativeBuildInputs = [ xz.bin coreutils ];
+  buildInputs = [ coreutils ];
+
+  configureFlags =
+    # "pr" need not be on the PATH as a run-time dep, so we need to tell
+    # configure where it is. Covers the cross and native case alike.
+    stdenv.lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr";
 
   meta = {
     homepage = http://www.gnu.org/software/diffutils/diffutils.html;

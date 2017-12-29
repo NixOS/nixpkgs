@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gti-${version}";
-  version = "2016-12-07";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
-    rev = "d78001bd5b4b6f6ad853b4ec810e9a1ecde1ee32";
-    sha256 = "0449h9m16x542fy6gmhqqkvkg7z7brxw5vmb85nkk1gdlr9pl1mr";
+    rev = "v${version}";
+    sha256 = "19q3r4v22z2q1j4njap356f3mcq6kwh6v8nbbq2rw4x3cdxwdv51";
   };
 
   installPhase = ''

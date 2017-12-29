@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/fprint/fprintd/";
+    homepage = http://www.freedesktop.org/wiki/Software/fprint/fprintd/;
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
     license = licenses.gpl2;
     platforms = platforms.linux;

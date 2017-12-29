@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
       '';
-    homepage = "http://www.cs.washington.edu/~rose/sqsh/sqsh.html";
+    homepage = http://www.cs.washington.edu/~rose/sqsh/sqsh.html;
     platforms = stdenv.lib.platforms.all;
   };
 }

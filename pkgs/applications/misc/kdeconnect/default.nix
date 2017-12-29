@@ -11,6 +11,7 @@
 , qca-qt5
 , libfakekey
 , libXtst
+, qtx11extras
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     knotifications
     libfakekey
     libXtst
+    qtx11extras
   ];
 
   nativeBuildInputs = [ extra-cmake-modules ];

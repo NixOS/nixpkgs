@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -35,9 +35,6 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
-
-  # Enable latest version of cabal-install.
-  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
@@ -166,6 +163,12 @@ self: super: {
   # https://github.com/fpco/stackage/issues/1112
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
+
+  # vector with ghc < 8.0 needs semigroups
+  vector = addBuildDepend super.vector self.semigroups;
+
+  # too strict dependency on directory
+  tasty-ant-xml = doJailbreak super.tasty-ant-xml;
 
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig
+{ stdenv, fetchurl, alsaLib, pkgconfig, libjack2
 , AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
 
 stdenv.mkDerivation rec {
-  name = "portaudio-19-20140130";
-  
+  name = "portaudio-190600-20161030";
+
   src = fetchurl {
-    url = http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz;
-    sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
+    url = http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz;
+    sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
-  buildInputs = [ pkgconfig ]
+  buildInputs = [ pkgconfig libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   configureFlags = [ "--disable-mac-universal" ];

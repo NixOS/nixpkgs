@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Manage dynamic plugins for Python applications";
-    homepage = "https://pypi.python.org/pypi/stevedore";
+    homepage = https://pypi.python.org/pypi/stevedore;
     license = licenses.asl20;
   };
 }

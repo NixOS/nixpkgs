@@ -90,7 +90,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Rogue-like game";
-    homepage = "http://nethack.org/";
+    homepage = http://nethack.org/;
     license = "nethack";
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

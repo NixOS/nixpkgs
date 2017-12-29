@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = "http://www.eff-lang.org";
+    homepage = http://www.eff-lang.org;
     description = "A functional programming language based on algebraic effects and their handlers";
     longDescription = ''
       Eff is a functional language with handlers of not only exceptions,

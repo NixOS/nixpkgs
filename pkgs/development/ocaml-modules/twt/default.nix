@@ -1,7 +1,7 @@
 { stdenv, fetchzip, ocaml, findlib }:
 
 stdenv.mkDerivation {
-  name = "ocaml-twt-0.94.0";
+  name = "ocaml${ocaml.version}-twt-0.94.0";
 
   src = fetchzip {
     url = https://github.com/mlin/twt/archive/v0.94.0.tar.gz;
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installFlags = "PREFIX=$(out)";
+
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     homepage = http://people.csail.mit.edu/mikelin/ocaml+twt/;

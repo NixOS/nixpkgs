@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Provides a C API to different audio devices";
-    homepage = "https://github.com/rhdunn/pcaudiolib";
+    homepage = https://github.com/rhdunn/pcaudiolib;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.linux;

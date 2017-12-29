@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
-    homepage = "http://gurpscharactersheet.com/";
+    homepage = http://gurpscharactersheet.com/;
     license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [];

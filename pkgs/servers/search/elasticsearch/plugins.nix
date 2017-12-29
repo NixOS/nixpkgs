@@ -30,7 +30,7 @@ in {
       sha256 = "1p75l3vcnb90ar4j3dci2xf8dqnqyy31kc1r075fa2xqlsxgigcp";
     };
     meta = {
-      homepage = "https://github.com/jprante/elasticsearch-river-jdbc";
+      homepage = https://github.com/jprante/elasticsearch-river-jdbc;
       description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
       license = licenses.asl20;
     };
@@ -45,7 +45,7 @@ in {
       sha256 = "bf7bf5ce3ccdd3afecd0e18cd6fce1ef56f824e41f4ef50553ae598caa5c366d";
     };
     meta = {
-      homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
+      homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
       license = licenses.asl20;
     };
@@ -83,7 +83,7 @@ in {
     };
 
     meta = {
-      homepage = "https://github.com/elasticsearch/elasticsearch-river-twitter";
+      homepage = https://github.com/elasticsearch/elasticsearch-river-twitter;
       description = "Twitter River Plugin for ElasticSearch";
       license = licenses.asl20;
       maintainers = [ maintainers.edwtjo ];

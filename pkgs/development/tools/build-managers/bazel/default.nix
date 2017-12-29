@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.4.5";
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/bazelbuild/bazel/;
+    homepage = https://github.com/bazelbuild/bazel/;
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];

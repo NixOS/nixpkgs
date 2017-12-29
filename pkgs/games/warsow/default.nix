@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       Set in a futuristic cartoon-like world where rocketlauncher-wielding
       pigs and lasergun-carrying cyberpunks roam the streets, Warsow is a
       completely free fast-paced first-person shooter (FPS) for Windows, Linux
-      and Mac OS X.
+      and macOS.
     '';
     homepage = http://www.warsow.net;
     # Engine is under GPLv2, everything else is under
