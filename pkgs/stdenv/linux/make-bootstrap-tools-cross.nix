@@ -81,7 +81,6 @@ rec {
       nativeBuildInputs = [
         pkgs.buildPackages.nukeReferences
         pkgs.buildPackages.cpio
-        pkgs.buildPackages.binutils
       ];
 
       buildCommand = ''

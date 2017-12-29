@@ -44,7 +44,7 @@ let
     enableParallelBuilding = true;
       
     crossAttrs = {
-      dontSetConfigureCross = true;
+      configurePlatforms = [];
       configureFlags = configureFlags ++ [
         "--cross-prefix=${stdenv.cross.config}-"
         "--enable-cross-compile"

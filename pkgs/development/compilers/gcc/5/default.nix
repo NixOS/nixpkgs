@@ -35,6 +35,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
+, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -356,7 +357,7 @@ stdenv.mkDerivation ({
       )
     }
     ${optionalString (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${getDev (stdenv.ccCross or stdenv.cc).libc}/include"}
+      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include"}
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
@@ -364,7 +365,11 @@ stdenv.mkDerivation ({
     ${if targetPlatform == hostPlatform then platformFlags else ""}
   " + optionalString
         (hostPlatform != buildPlatform)
-        (platformFlags + " --target=${targetPlatform.config}");
+        (platformFlags + ''
+          --build=${buildPlatform.config}
+          --host=${hostPlatform.config}
+          --target=${targetPlatform.config}
+        '');
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -421,8 +426,7 @@ stdenv.mkDerivation ({
     buildFlags = "";
   };
 
-  NIX_BUILD_CC = stdenv.cc;
-  NIX_CC_CROSS = stdenv.ccCross or null;
+  NIX_BUILD_CC = buildPackages.stdenv.cc;
 
   # Needed for the cross compilation to work
   AR = "ar";

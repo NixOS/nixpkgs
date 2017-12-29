@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, coreutils }:
+{ stdenv, fetchurl
+, coreutils
+, buildPlatform, hostPlatform
+}:
+
+let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
   name = "findutils-4.6.0";
@@ -10,19 +15,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
 
-  buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
+  buildInputs = optionals (hostPlatform == buildPlatform) [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
-  doCheck = !stdenv.isDarwin && (stdenv.system != "i686-linux");
+  doCheck
+    =  !hostPlatform.isDarwin
+    && !(hostPlatform.libc == "glibc" && hostPlatform.isi686)
+    && hostPlatform == buildPlatform;
 
   outputs = [ "out" "info" ];
 
   configureFlags = [ "--localstatedir=/var/cache" ];
-
-  crossAttrs = {
-    # Fix the 'buildInputs = [ coreutils ]' above - that adds the cross coreutils to PATH :(
-    propagatedBuildInputs = [ ];
-  };
 
   enableParallelBuilding = true;
 

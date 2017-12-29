@@ -25,6 +25,7 @@
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , buildPlatform, hostPlatform, targetPlatform
+, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -275,7 +276,7 @@ stdenv.mkDerivation ({
       )
     }
     ${optionalString (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${getDev (stdenv.ccCross or stdenv.cc).libc}/include"}
+      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include"}
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if targetPlatform == hostPlatform && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
@@ -331,8 +332,7 @@ stdenv.mkDerivation ({
     dontStrip = true;
   };
 
-  NIX_BUILD_CC = stdenv.cc;
-  NIX_CC_CROSS = stdenv.ccCross or null;
+  NIX_BUILD_CC = buildPackages.stdenv.cc;
 
   # Needed for the cross compilation to work
   AR = "ar";

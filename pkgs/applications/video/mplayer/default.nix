@@ -25,6 +25,7 @@
 , libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 , darwin ? null
+, hostPlatform
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
@@ -185,13 +186,14 @@ stdenv.mkDerivation rec {
     '';
 
   crossAttrs = {
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     # Some things (vidix) are nanonote specific. Once someone cares, we can make options from them.
+    # Note, the `target` vs `host` confusion is intensional.
     preConfigure = ''
       configureFlags="`echo $configureFlags |
         sed -e 's/--codecsdir[^ ]\+//' \
         -e 's/--enable-runtime-cpudetection//' `"
-      configureFlags="$configureFlags --target=${stdenv.cross.arch}-linux
+      configureFlags="$configureFlags --target=${hostPlatform.arch}-linux
         --enable-cross-compile --cc=$crossConfig-gcc --as=$crossConfig-as
         --disable-vidix-pcidb --with-vidix-drivers=no --host-cc=gcc"
     '';
