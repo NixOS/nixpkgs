@@ -317,8 +317,14 @@ stdenv.mkDerivation ({
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
-      local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
-      mv $packageConfFile $packageConfDir/$pkgId.conf
+      if [ -d "$packageConfFile" ]; then
+        mv "$packageConfFile"/* "$packageConfDir"
+        rmdir "$packageConfFile"
+      fi
+      for packageConfFile in "$packageConfDir"/*; do
+        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        mv $packageConfFile $packageConfDir/$pkgId.conf
+      done
     ''}
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
