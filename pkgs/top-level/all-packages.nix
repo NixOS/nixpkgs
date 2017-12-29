@@ -5031,6 +5031,8 @@ with pkgs;
 
   whois = callPackage ../tools/networking/whois { };
 
+  woff2 = callPackage ../development/web/woff2 { };
+
   wsmancli = callPackage ../tools/system/wsmancli {};
 
   wolfebin = callPackage ../tools/networking/wolfebin {
