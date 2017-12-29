@@ -120,7 +120,7 @@ let version = "4.5.4";
           " --enable-sjlj-exceptions" +
           " --enable-hash-synchronization" +
           " --enable-version-specific-runtime-libs" +
-          " --disable-libssp" +
+          " --enable-libssp" +
           " --disable-nls" +
           " --with-dwarf2"
           else
