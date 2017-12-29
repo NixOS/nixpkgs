@@ -386,6 +386,8 @@ with pkgs;
 
   acbuild = callPackage ../applications/misc/acbuild { };
 
+  ac = callPackage ../tools/system/ac { };
+
   acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
