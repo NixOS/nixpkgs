@@ -3646,6 +3646,8 @@ with pkgs;
 
   nomad = callPackage ../applications/networking/cluster/nomad { };
 
+  miller = callPackage ../tools/text/miller { };
+
   milu = callPackage ../applications/misc/milu { };
 
   mpack = callPackage ../tools/networking/mpack { };
