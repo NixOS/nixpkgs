@@ -7472,6 +7472,11 @@ with pkgs;
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  hylafaxp = callPackage ../servers/hylafaxp {
+    pam = null;
+    openldap = null;
+  };
+
   icestorm = callPackage ../development/tools/icestorm { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
