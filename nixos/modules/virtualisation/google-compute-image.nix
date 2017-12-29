@@ -193,56 +193,6 @@ in
     };
   };
 
-  # TODO: remove this
-  systemd.services.fetch-ssh-keys =
-    { description = "Fetch host keys and authorized_keys for root user";
-
-      wantedBy = [ "sshd.service" ];
-      before = [ "sshd.service" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-
-      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'";
-                   mktemp = "mktemp --tmpdir=/run"; in
-        ''
-          # When dealing with cryptographic keys, we want to keep things private.
-          umask 077
-          # Don't download the SSH key if it has already been downloaded
-          echo "Obtaining SSH keys..."
-          mkdir -m 0700 -p /root/.ssh
-          AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
-          if [ -s $AUTH_KEYS ]; then
-
-            # Read in key one by one, split in case Google decided
-            # to append metadata (it does sometimes) and add to
-            # authorized_keys if not already present.
-            touch /root/.ssh/authorized_keys
-            NEW_KEYS=$(${mktemp})
-            # Yes this is a nix escape of two single quotes.
-            while IFS=''' read -r line || [[ -n "$line" ]]; do
-              keyLine=$(echo -n "$line" | cut -d ':' -f2)
-              IFS=' ' read -r -a array <<< "$keyLine"
-              if [ ''${#array[@]} -ge 3 ]; then
-                echo ''${array[@]:0:3} >> $NEW_KEYS
-                echo "Added ''${array[@]:2} to authorized_keys"
-              fi
-            done < $AUTH_KEYS
-            mv $NEW_KEYS /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-            rm -f $KEY_PUB
-          else
-            echo "Downloading http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys failed."
-            false
-          fi
-          rm -f $AUTH_KEYS
-        '';
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      serviceConfig.StandardError = "journal+console";
-      serviceConfig.StandardOutput = "journal+console";
-    };
-
   # Settings taken from https://github.com/GoogleCloudPlatform/compute-image-packages/blob/master/google_config/sysctl/11-gce-network-security.conf
   boot.kernel.sysctl = {
     # Turn on SYN-flood protections.  Starting with 2.6.26, there is no loss
