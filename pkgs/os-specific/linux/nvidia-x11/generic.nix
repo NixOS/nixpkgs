@@ -12,7 +12,7 @@
 }:
 
 { stdenv, callPackage, callPackage_i686, fetchurl, fetchpatch
-, kernel ? null, xorg, zlib, perl, nukeReferences
+, kernel ? null, libelf, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -63,6 +63,8 @@ let
     libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib stdenv.cc.cc ];
 
     nativeBuildInputs = [ perl nukeReferences ];
+
+    buildInputs = [ libelf ];
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 

@@ -83,7 +83,8 @@ mkDerivation rec {
     qtsvg
     qtwebkit
 
-    kcalcore
+    # https://bugs.kde.org/show_bug.cgi?id=387960
+    #kcalcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata

@@ -6,6 +6,9 @@ let
     "ghc6102Binary"
     "ghc704Binary"
     "ghc742Binary"
+    "ghc784Binary"
+    "ghc7103Binary"
+    "ghc821Binary"
     "ghc6104"
     "ghc6123"
     "ghc704"
@@ -29,13 +32,18 @@ in rec {
 
   compiler = {
 
-    ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix { gmp = pkgs.gmp4; };
+    ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix {
+      gmp = pkgs.gmp4;
+    };
     ghc704Binary = callPackage ../development/compilers/ghc/7.0.4-binary.nix {
       gmp = pkgs.gmp4;
     };
     ghc742Binary = callPackage ../development/compilers/ghc/7.4.2-binary.nix {
       gmp = pkgs.gmp4;
     };
+    ghc784Binary = callPackage ../development/compilers/ghc/7.8.4-binary.nix { };
+    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
+    ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
     ghc6104 = callPackage ../development/compilers/ghc/6.10.4.nix { ghc = compiler.ghc6102Binary; };
     ghc6123 = callPackage ../development/compilers/ghc/6.12.3.nix { ghc = compiler.ghc6102Binary; };
@@ -58,41 +66,41 @@ in rec {
       ghc = compiler.ghc742Binary;
     };
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
-      bootPkgs = packages.ghc784;
+      bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
       sphinx = pkgs.python27Packages.sphinx;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
-      bootPkgs = packages.ghc802;
+      bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour alex happy;
       inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
       selfPkgs = packages.ghc822;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
-      bootPkgs = packages.ghc822;
+      bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy;
       inherit buildPlatform targetPlatform;
       selfPkgs = packages.ghcHEAD;
     };
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = packages.ghc821Binary;
     };
     ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
-      bootPkgs = packages.ghc802;
+      bootPkgs = packages.ghc821Binary;
     };
     ghcHaLVM240 = callPackage ../development/compilers/halvm/2.4.0.nix rec {
-      bootPkgs = packages.ghc802;
+      bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour alex happy;
     };
 
     uhc = callPackage ../development/compilers/uhc/default.nix ({
       stdenv = pkgs.clangStdenv;
-      inherit (pkgs.haskellPackages) ghcWithPackages;
+      inherit (packages.ghc7103Binary) ghcWithPackages;
     });
 
     # The integer-simple attribute set contains all the GHC compilers
@@ -119,12 +127,20 @@ in rec {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
+    ghc7103Binary = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc7103Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+    };
     ghc802 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
     ghc822 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc822;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+    };
+    ghc821Binary = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc821Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {

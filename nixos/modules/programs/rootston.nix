@@ -10,6 +10,7 @@ let
     if [[ "$#" -ge 1 ]]; then
       exec ${pkgs.rootston}/bin/rootston "$@"
     else
+      ${cfg.extraSessionCommands}
       exec ${pkgs.rootston}/bin/rootston -C ${cfg.configFile}
     fi
   '';
@@ -21,14 +22,28 @@ in {
       Wayland compositor you should e.g. use Sway instead). You can manually
       start the compositor by running "rootston" from a terminal'';
 
+    extraSessionCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        # Define a keymap (US QWERTY is the default)
+        export XKB_DEFAULT_LAYOUT=de,us
+        export XKB_DEFAULT_VARIANT=nodeadkeys
+        export XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle,caps:escape
+      '';
+      description = ''
+        Shell commands executed just before rootston is started.
+      '';
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        xwayland rxvt_unicode dmenu
+        westonLite xwayland rofi
       ];
       defaultText = literalExample ''
         with pkgs; [
-          xwayland dmenu rxvt_unicode
+          westonLite xwayland rofi
         ]
       '';
       example = literalExample "[ ]";
@@ -55,9 +70,8 @@ in {
         Logo+q = close
         Logo+m = maximize
         Alt+Tab = next_window
-        Logo+Return = exec urxvt
-        # Note: Dmenu will only work properly while e.g. urxvt is running.
-        Logo+d = exec dmenu_run
+        Logo+Return = exec weston-terminal
+        Logo+d = exec rofi -show run
       '';
       description = ''
         Default configuration for rootston (used when called without any
@@ -82,7 +96,8 @@ in {
 
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
+    programs.dconf.enable = mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ primeos ];
+  meta.maintainers = with lib.maintainers; [ primeos gnidorah ];
 }

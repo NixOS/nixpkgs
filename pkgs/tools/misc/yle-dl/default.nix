@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages }:
+{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
   name = "yle-dl-${version}";
-  version = "2.28";
+  version = "2.30";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "1nb3gmkizgkd09slihc2iaf3rh1s7bdhy9zydkfghmqi7nv4mmq0";
+    sha256 = "08qqsg0rmp4xfzmla81f0a4vblqfw3rh90wvxm91vbm6937b4i7i";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests ];
+  propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests future ffmpeg ];
   pythonPath = [ rtmpdump php ];
 
   doCheck = false; # tests require network access
