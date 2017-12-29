@@ -1,34 +1,28 @@
-{ stdenv, fetchurl, unzip, cmake }:
+{ stdenv, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.8.4";
+  version = "0.9.8.5";
   name = "glm-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/g-truc/glm/releases/download/${version}/${name}.zip";
-    sha256 = "1c9cflvx0b16qxh3izk6siqldp9q8qlrznk14br3jdyhnr2gbdx9";
+    sha256 = "0dkfj4hin3am9fxgcvwr5gj0h9y52x7wa03lfwb3q0bvaj1rsly2";
   };
 
-  buildInputs = [ unzip cmake ];
+  nativeBuildInputs = [ cmake ];
 
   outputs = [ "out" "doc" ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  cmakeConfigureFlags = [ "-DGLM_INSTALL_ENABLE=off" ];
 
-  buildPhase = ''
-    set -x
-    cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX:PATH=$out
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '"''${CMAKE_CURRENT_BINARY_DIR}/''${GLM_INSTALL_CONFIGDIR}' '"''${GLM_INSTALL_CONFIGDIR}'
   '';
 
-  installPhase = ''
-    mkdir -p $out/lib/pkgconfig
-    cp glm.pc $out/lib/pkgconfig
-
-    mkdir -p "$out/include"
-    cp -r glm "$out/include"
-
-    mkdir -p "$doc/share/doc/glm"
-    cp -r doc/* "$doc/share/doc/glm"
+  postInstall = ''
+    mkdir -p $doc/share/doc/glm
+    cp -rv $NIX_BUILD_TOP/$sourceRoot/doc/* $doc/share/doc/glm
   '';
 
   meta = with stdenv.lib; {
