@@ -1,21 +1,18 @@
 { fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
-, configFile ? "all"
 
 # Kernel dependencies
-, kernel ? null
+, kernel
 }:
 
 with stdenv.lib;
 
 let
-  buildKernel = any (n: n == configFile) [ "kernel" "all" ];
-  buildUser = any (n: n == configFile) [ "user" "all" ];
   common = { version
     , sha256
     , rev ? "spl-${version}"
     , broken ? false
     } @ args : stdenv.mkDerivation rec {
-      name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
+      name = "spl-${version}-${kernel.version}";
 
       src = fetchFromGitHub {
         owner = "zfsonlinux";
@@ -25,7 +22,7 @@ let
 
       patches = [ ./const.patch ./install_prefix.patch ];
 
-      nativeBuildInputs = [ autoreconfHook ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
+      nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
       hardeningDisable = [ "pic" ];
 
@@ -37,8 +34,7 @@ let
       '';
 
       configureFlags = [
-        "--with-config=${configFile}"
-      ] ++ optionals buildKernel [
+        "--with-config=kernel"
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       ];
@@ -62,8 +58,7 @@ let
       };
   };
 in
-  assert any (n: n == configFile) [ "kernel" "user" "all" ];
-  assert buildKernel -> kernel != null;
+  assert kernel != null;
 {
     splStable = common {
       version = "0.7.4";
