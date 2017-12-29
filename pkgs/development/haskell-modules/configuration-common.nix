@@ -915,7 +915,8 @@ self: super: {
   grakn = dontCheck (doJailbreak super.grakn);
 
   # test suite requires git and does a bunch of git operations
-  restless-git = dontCheck super.restless-git;
+  # doJailbreak because of hardcoded time, seems to be fixed upstream
+  restless-git = dontCheck (doJailbreak super.restless-git);
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
