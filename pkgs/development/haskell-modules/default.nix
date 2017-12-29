@@ -2,7 +2,7 @@
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
-, initialPackages ? import ./hackage-packages.nix
+, initialPackages ? import ./initial-packages.nix
 , configurationCommon ? import ./configuration-common.nix
 , configurationNix ? import ./configuration-nix.nix
 }:
