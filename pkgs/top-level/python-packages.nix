@@ -6646,6 +6646,8 @@ in {
     };
   };
 
+  pythonix = callPackage ../development/python-modules/pythonix { };
+
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
     majorVersion = "2.0";
