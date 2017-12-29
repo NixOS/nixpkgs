@@ -283,6 +283,7 @@
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   htr = "Hugo Tavares Reis <hugo@linux.com>";
   hyphon81 = "Masato Yonekawa <zero812n@gmail.com>";
+  iamale = "Alexander Pushkov <alexander@notpushk.in>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   iblech = "Ingo Blechschmidt <iblech@speicherleck.de>";
