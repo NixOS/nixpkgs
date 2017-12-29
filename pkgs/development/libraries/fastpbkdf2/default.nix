@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
   name = "fastpbkdf2-1.0.0";
   
-  src = fetchurl {
-    url = https://github.com/ctz/fastpbkdf2/archive/v1.0.0.tar.gz;
-    sha256 = "492874e2088dd38cfa74b1b3a99c0b907ecb8da96c656e618353a2e825b8c152";
+  src = fetchFromGitHub {
+    owner = "ctz";
+    repo = "fastpbkdf2";
+    rev = "v1.0.0";
+    sha256 = "09ax0h4ik3vhvp3s98lic93l3g9f4v1jkr5k6z4g1lvm7s3lrha2";
   };
   
   buildInputs = [ openssl ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";
     homepage = https://github.com/ctz/fastpbkdf2;
-    licenses = licenses.cc0;
+    license = licenses.cc0;
     maintainers = with maintainers; [ ledif ];
   };
 }
