@@ -42,7 +42,9 @@ in {
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
-  allowImportFromDerivation ? false
+  allowImportFromDerivation ? false,
+  # Dependencies that are required to build kernel modules
+  moduleBuildDependencies ? stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf
 }:
 
 let
@@ -85,7 +87,7 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile;
+        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
       };
 
       inherit src;
