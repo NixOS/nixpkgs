@@ -6,7 +6,6 @@ let
     sha256 = "0qqk30nflj07zjhs231c95ln4yj4ipzwxxiwrxazrg4hb8bhypqq";
   };
 in
-
 stdenv.mkDerivation rec {
   name = "libpinyin-${version}";
   version = "2.1.91";
