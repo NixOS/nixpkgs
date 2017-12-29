@@ -17915,6 +17915,8 @@ with pkgs;
 
   banner = callPackage ../games/banner {};
 
+  barony = callPackage ../games/barony {};
+
   bastet = callPackage ../games/bastet {};
 
   beancount = callPackage ../applications/office/beancount {
