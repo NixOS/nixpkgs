@@ -164,6 +164,20 @@ stdenv.mkDerivation {
       set +u
     '';
 
+  emulation = let
+    fmt =
+      /**/ if targetPlatform.isDarwin  then "mach-o"
+      else if targetPlatform.isWindows then "pe"
+      else "elf" + toString targetPlatform.parsed.cpu.bits;
+    endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
+    arch =
+      /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
+      else if targetPlatform.isArm     then endianPrefix + "arm"
+      else if targetPlatform.isx86_64  then "x86-64"
+      else if targetPlatform.isi686    then "i386"
+      else throw "unknown emulation for platform: " + targetPlatform.config;
+    in targetPlatform.platform.bfdEmulation or (fmt + "-" + arch);
+
   propagatedBuildInputs = extraPackages;
 
   setupHook = ./setup-hook.sh;
