@@ -116,10 +116,6 @@ in rec {
 
   packages = {
 
-    ghc784 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc784;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
