@@ -350,6 +350,8 @@ stdenv.mkDerivation ({
 
     inherit pname version;
 
+    compiler = ghc;
+
     isHaskellLibrary = hasActiveLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
