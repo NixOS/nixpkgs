@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, kernel, libelf }:
+{ stdenv, fetchurl, fetchpatch, kernel }:
 
 let
   baseName = "bbswitch";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
   }) ];
 
-  buildInputs = [ libelf ];
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

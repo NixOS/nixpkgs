@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmnl, libelf, kernel ? null }:
+{ stdenv, fetchurl, libmnl, kernel ? null }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
@@ -37,7 +37,7 @@ let
 
     NIX_CFLAGS = ["-Wno-error=cpp"];
 
-    buildInputs = [ libelf ];
+    nativeBuildInputs = kernel.moduleBuildDependencies;
 
     buildPhase = "make module";
   };
