@@ -694,6 +694,7 @@
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
+  vidbina = "David Asabina <vid@bina.me>";
   vifino = "Adrian Pistol <vifino@tty.sh>";
   vinymeuh = "VinyMeuh <vinymeuh@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
