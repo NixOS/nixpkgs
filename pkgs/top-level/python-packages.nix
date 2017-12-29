@@ -8771,14 +8771,14 @@ in {
   });
 
   gdrivefs = buildPythonPackage rec {
-    version = "0.14.8";
+    version = "0.14.9";
     name = "gdrivefs-${version}";
     namePrefix = "";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
-      sha256 = "1dch10ajkp567pwvssvz1v5c0hxfyd8wf9qd7j1gfybh7f7hyzvw";
+      sha256 = "1mc2r35nf5k8vzwdcdhi0l9rb97amqd5xb53lhydj8v8f4rndk7a";
     };
 
     buildInputs = with self; [ gipc greenlet httplib2 six ];
