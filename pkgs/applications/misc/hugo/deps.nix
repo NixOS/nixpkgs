@@ -31,8 +31,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/alecthomas/chroma";
-      rev = "b0295f66bdb7c61d54906003d7649185794e21b4";
-      sha256 = "1hnvv13nphbzr9xm21fys7lgm0kd6qlbk58vc8fi802lxzsfmdis";
+      rev = "c9f612c1940a4951cd2b55811744632a7b3b3bb2";
+      sha256 = "0s1mzb175s96adxfx5vhyazpzfq9j4dzx4sr4n8gj7r8afkqys8h";
     };
   }
   {
