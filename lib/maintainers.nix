@@ -451,6 +451,7 @@
   mrVanDalo = "Ingolf Wanger <contact@ingolf-wagner.de>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
+  mstarzyk = "Maciek Starzyk <mstarzyk@gmail.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
   mt-caret = "Masayuki Takeda <mtakeda.enigsol@gmail.com>";
   mtreskin = "Max Treskin <zerthurd@gmail.com>";
