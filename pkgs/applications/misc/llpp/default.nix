@@ -6,18 +6,17 @@ assert lib.versionAtLeast (lib.getVersion ocaml) "4.02";
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "25-git-2017-01-18";
+  version = "26b";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
-    rev = "22740b9bca1c60ef18cf90538994ce4981539901";
-    sha256 = "0yg8z2zwhg2f5il2i1clx3b7hl088ncpk686rfxlvwyjg3qs3mv4";
+    rev = "v${version}";
+    sha256 = "1w8g1fp1c20sl34cx20plhnbghbsx2fwgp4vyhd1x0za29lw62nj";
     fetchSubmodules = false;
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ninja ];
-  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec # lablgl
-    openjpeg mujs openssl freetype ncurses ];
+  buildInputs = [ ocaml findlib mupdf gtk3 jbig2dec openjpeg mujs openssl freetype ncurses ];
 
   dontStrip = true;
 
@@ -32,7 +31,6 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     sh ./build.sh build
   '';
-#        --prefix CAML_LD_LIBRARY_PATH ":" "${lablgl}/lib/ocaml/${ocamlVersion}/site-lib/lablgl" \
 
   installPhase = ''
     install -d $out/bin $out/lib

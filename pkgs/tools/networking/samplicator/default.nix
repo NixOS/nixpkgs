@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "samplicator-${version}";
   version = "1.3.8rc1";
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   src = fetchFromGitHub {
     owner = "sleinen";

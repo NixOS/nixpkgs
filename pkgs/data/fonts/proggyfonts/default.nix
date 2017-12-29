@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
       cp Licence.txt $out/share/doc/$name/LICENSE
 
+      rm Speedy.pcf # duplicated as Speedy11.pcf
       for f in *.pcf; do
         gzip -c "$f" > $out/share/fonts/misc/"$f".gz
       done
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "06jsf3rw6q4l1jrw1161h4vxa1xbvpry5x12d8sh5g7hjk88p77g";
+  outputHash = "1l1sxmzp3gcd2d32nxar6xwd1v1w18a9gfh57zmsrfpspnfbz7y1";
 
   meta = with stdenv.lib; {
     homepage = http://upperbounds.net;

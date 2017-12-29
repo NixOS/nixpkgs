@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lcah7p66c05p7xpw6ns1is0i02lh0nq8gq51mv4wyvbr6zaasa8";
   };
 
-  buildInputs = [ pkgconfig check cppunit perl pythonPackages.wrapPython ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ check cppunit perl pythonPackages.wrapPython ];
 
   propagatedBuildInputs = with pythonPackages; [ testtools testscenarios ];
 

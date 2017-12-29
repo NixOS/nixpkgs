@@ -32,7 +32,8 @@ in stdenv.mkDerivation {
     sha256 = "1vfg8sfpj83ircp7ny6xsbn2ba5xbp3xrdl5wwyfcg1zrpdmi7f1";
   };
 
-  buildInputs = [ cmake pkgconfig wrapGAppsHook gsettings_desktop_schemas
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake wrapGAppsHook gsettings_desktop_schemas
                   glib gtk3 gettext libxkbfile libgnome_keyring libX11
                   freerdp libssh libgcrypt gnutls
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3

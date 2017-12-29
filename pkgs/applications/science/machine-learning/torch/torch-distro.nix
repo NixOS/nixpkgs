@@ -105,6 +105,7 @@ let
       installPhase = ''
         make install-extra $makeFlags
       '';
+      meta.broken = true;
     };
 
     luafilesystem = buildLuaRocks {
@@ -123,6 +124,7 @@ let
     luaffifb = buildLuaRocks {
       name = "luaffifb";
       src = "${distro_src}/extra/luaffifb";
+      meta.broken = true;
     };
 
     sundown = buildLuaRocks rec {
@@ -267,6 +269,7 @@ let
       preBuild = ''
         export Torch_DIR=${torch}/share/cmake/torch
       '';
+      meta.broken = true;
     };
 
     trepl = buildLuaRocks rec {

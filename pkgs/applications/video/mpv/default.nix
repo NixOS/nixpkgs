@@ -81,13 +81,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "0d9pvsknjqmxj907y85fxh9xcbb5dafw2bh7rpwhgs9x4wdrbvv0";
+    sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
   };
 
   patchPhase = ''
@@ -108,6 +108,7 @@ in stdenv.mkDerivation rec {
     (enableFeature dvdnavSupport "dvdnav")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
+    (enableFeature stdenv.isLinux "dvbin")
   ];
 
   configurePhase = ''

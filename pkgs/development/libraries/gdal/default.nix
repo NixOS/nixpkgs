@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
+{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4
 , libiconv

@@ -1,8 +1,9 @@
+{ lib }:
 let
-  lists = import ../lists.nix;
-  parse = import ./parse.nix;
-  inherit (import ./inspect.nix) predicates;
-  inherit (import ../attrsets.nix) matchAttrs;
+  inherit (lib) lists;
+  parse = import ./parse.nix { inherit lib; };
+  inherit (import ./inspect.nix { inherit lib; }) predicates;
+  inherit (lib.attrsets) matchAttrs;
 
   all = [
     "aarch64-linux"
@@ -26,7 +27,7 @@ in rec {
   allBut = platforms: lists.filter (x: !(builtins.elem x platforms)) all;
   none = [];
 
-  arm     = filterDoubles predicates.isArm32;
+  arm     = filterDoubles predicates.isArm;
   i686    = filterDoubles predicates.isi686;
   mips    = filterDoubles predicates.isMips;
   x86_64  = filterDoubles predicates.isx86_64;

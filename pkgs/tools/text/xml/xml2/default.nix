@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "01cps980m99y99cnmvydihga9zh3pvdsqag2fi1n6k2x7rfkl873";
   };
 
-  buildInputs = [ pkgconfig libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 ];
 
   meta = with stdenv.lib; {
     homepage = http://ofb.net/~egnor/xml2/;

@@ -144,6 +144,10 @@ let
   appleDerivation_ = name: version: sha256: attrs: stdenv.mkDerivation ({
     inherit version;
     name = "${name}-${version}";
+    enableParallelBuilding = true;
+    meta = {
+      platforms = stdenv.lib.platforms.darwin;
+    };
   } // (if attrs ? srcs then {} else {
     src  = fetchApple version sha256 name;
   }) // attrs);
@@ -153,7 +157,7 @@ let
       name = builtins.elemAt (stdenv.lib.splitString "/" namePath) 0;
       appleDerivation = appleDerivation_ name version sha256;
       callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation name version; });
-    in callPackage (./. + builtins.toPath "/${namePath}");
+    in callPackage (./. + "/${namePath}");
 
   libsecPackage = pkgs.callPackage ./libsecurity_generic {
     inherit applePackage appleDerivation_;
@@ -221,6 +225,7 @@ let
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
+    libutil-new     = applePackage "libutil/new.nix"   "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
     objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};

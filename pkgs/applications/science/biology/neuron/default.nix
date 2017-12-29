@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   name = "neuron-${version}";
-  version = "7.4";
+  version = "7.5";
 
   nativeBuildInputs = [ which pkgconfig automake autoconf libtool ];
   buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {
     url = "http://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
-    sha256 = "1rid8cmv5mca0vqkgwahm0prkwkbdvchgw2bdwvx4adkn8bbl0ql";
+    sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
   patches = (stdenv.lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);

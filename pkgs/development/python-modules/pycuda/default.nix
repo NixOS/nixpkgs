@@ -1,6 +1,7 @@
-{ buildPythonPackage 
-, fetchurl
+{ buildPythonPackage
+, fetchPypi
 , fetchFromGitHub
+, Mako
 , boost
 , numpy
 , pytools
@@ -22,28 +23,23 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2017.1";
+  version = "2017.1.1";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "a92725ccd8515b4d7284b9127184b6fdb61f224daa086e7fc6b926e2094b055f";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0qxmcjax32p1ywicw9sha2rvfbak4kjbx9pq57j3wq4cwf296nkb";
   };
 
   preConfigure = ''
-    findInputs ${boost.dev} boost_dirs propagated-native-build-inputs
-
-    export BOOST_INCLUDEDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep '\-dev')/include
-    export BOOST_LIBRARYDIR=$(echo $boost_dirs | sed -e s/\ /\\n/g - | grep -v '\-dev')/lib
-
-    ${python.interpreter} configure.py --boost-inc-dir=$BOOST_INCLUDEDIR \
-                            --boost-lib-dir=$BOOST_LIBRARYDIR \
-                            --no-use-shipped-boost \
-                            --boost-python-libname=boost_python
+    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+                          --boost-lib-dir=${boost}/lib \
+                          --no-use-shipped-boost \
+                          --boost-python-libname=boost_python
   '';
 
   postInstall = ''
-    ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte 
+    ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte
   '';
 
   # Requires access to libcuda.so.1 which is provided by the driver
@@ -63,7 +59,8 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-  ]; 
+    Mako
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/inducer/pycuda/;

@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
   name = "openbox-${version}";
   version = "3.6.1";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libxml2
+    libxml2
     libXinerama libXcursor libXau libXrandr libICE libSM
     libstartup_notification makeWrapper
     python2.pkgs.wrapPython

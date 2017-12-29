@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rrz5sp04zjal6v34ldkl6fjj9xqidb8xm1iscjyljf6z4l516cx";
   };
 
-  buildInputs = [ glib lilv lv2 pkgconfig serd sord sratom ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib lilv lv2 serd sord sratom ];
 
   installPhase = ''
     make install PREFIX=$out

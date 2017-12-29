@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17w3vgpgfmvl11wsd5ndk9zdggl3gbzv3wbd45dyf2al4i0miqnx";
   };
 
-  buildInputs = [ autoconf automake liblscp libtool pkgconfig qt4 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake liblscp libtool qt4 ];
 
   preConfigure = "make -f Makefile.svn";
 

@@ -1,6 +1,6 @@
+{ lib }:
 let
 
-  lib = import ./default.nix;
   inherit (builtins) attrNames isFunction;
 
 in

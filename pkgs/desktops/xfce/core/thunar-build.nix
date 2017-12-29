@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig intltool
+    intltool
     gtk dbus_glib libstartup_notification libnotify libexif pcre udev
     exo libxfce4util xfconf xfce4panel
   ];

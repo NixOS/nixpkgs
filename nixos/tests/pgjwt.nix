@@ -1,42 +1,37 @@
-import ./make-test.nix ({ pkgs, ...} : 
+import ./make-test.nix ({ pkgs, lib, ...}:
 let
-  test = pkgs.writeText "test.sql" ''
-    CREATE EXTENSION pgcrypto;
-    CREATE EXTENSION pgjwt;
-    select sign('{"sub":"1234567890","name":"John Doe","admin":true}', 'secret');
-    select * from verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ', 'secret');
+  test = with pkgs; runCommand "patch-test" {
+    nativeBuildInputs = [ pgjwt ];
+  }
+  ''
+    sed -e '12 i CREATE EXTENSION pgcrypto;\nCREATE EXTENSION pgtap;\nSET search_path TO tap,public;' ${pgjwt.src}/test.sql > $out;
   '';
 in
-{
+with pkgs; {
   name = "pgjwt";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ spinus ];
+  meta = with lib.maintainers; {
+    maintainers = [ spinus willibutz ];
   };
 
   nodes = {
-    master =
-      { pkgs, config, ... }:
-
-      {
-        services.postgresql = let mypg = pkgs.postgresql95; in {
-            enable = true;
-            package = mypg;
-            extraPlugins =[pkgs.pgjwt];
-            initialScript =  pkgs.writeText "postgresql-init.sql"
-          ''
-          CREATE ROLE postgres WITH superuser login createdb;
-          '';
-          };
+    master = { pkgs, config, ... }:
+    {
+      services.postgresql = {
+        enable = true;
+        extraPlugins = [ pgjwt pgtap ];
       };
+    };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }:
+  let
+    sqlSU = "${nodes.master.config.services.postgresql.superUser}";
+    pgProve = "${pkgs.perlPackages.TAPParserSourceHandlerpgTAP}";
+  in
+  ''
     startAll;
     $master->waitForUnit("postgresql");
-    $master->succeed("timeout 10 bash -c 'while ! psql postgres -c \"SELECT 1;\";do sleep 1;done;'");
-    $master->succeed("cat ${test} | psql postgres");
-    # I can't make original test working :[
-    # $master->succeed("${pkgs.perlPackages.TAPParserSourceHandlerpgTAP}/bin/pg_prove -d postgres ${pkgs.pgjwt.src}/test.sql");
-
+    $master->copyFileFromHost("${test}","/tmp/test.sql");
+    $master->succeed("${pkgs.sudo}/bin/sudo -u ${sqlSU} PGOPTIONS=--search_path=tap,public ${pgProve}/bin/pg_prove -d postgres -v -f /tmp/test.sql");
   '';
 })

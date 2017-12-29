@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sk7b92my1v1g7rhkpl1c608rb0rdb28m9zqfll95kflxajd16zv";
   };
 
-  buildInputs = [ libjack2 libsndfile pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 libsndfile ];
 
   buildPhase = "PREFIX=$out make jack_capture";
 

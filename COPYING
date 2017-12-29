@@ -23,9 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Note: the license above does not apply to the packages built by the
 Nix Packages collection, merely to the package descriptions (i.e., Nix
-expressions, build scripts, etc.).  Also, the license does not apply
-to some of the binaries used for bootstrapping Nixpkgs (e.g.,
-pkgs/stdenv/linux/tools/bash).  It also might not apply to patches
+expressions, build scripts, etc.).  It also might not apply to patches
 included in Nixpkgs, which may be derivative works of the packages to
 which they apply.  The aforementioned artifacts are all covered by the
 licenses of the respective packages.

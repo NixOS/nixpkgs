@@ -1,0 +1,36 @@
+From fa7438a0ff4033e4741c807394a9af6207940d71 Mon Sep 17 00:00:00 2001
+From: Joerg Sonnenberger <joerg@bec.de>
+Date: Tue, 5 Sep 2017 18:12:19 +0200
+Subject: [PATCH] Do something sensible for empty strings to make fuzzers
+ happy.
+
+---
+ libarchive/archive_read_support_format_xar.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/libarchive/archive_read_support_format_xar.c b/libarchive/archive_read_support_format_xar.c
+index 7a22beb9d..93eeacc5e 100644
+--- a/libarchive/archive_read_support_format_xar.c
++++ b/libarchive/archive_read_support_format_xar.c
+@@ -1040,6 +1040,9 @@ atol10(const char *p, size_t char_cnt)
+ 	uint64_t l;
+ 	int digit;
+ 
++	if (char_cnt == 0)
++		return (0);
++
+ 	l = 0;
+ 	digit = *p - '0';
+ 	while (digit >= 0 && digit < 10  && char_cnt-- > 0) {
+@@ -1054,7 +1057,10 @@ atol8(const char *p, size_t char_cnt)
+ {
+ 	int64_t l;
+ 	int digit;
+-        
++
++	if (char_cnt == 0)
++		return (0);
++
+ 	l = 0;
+ 	while (char_cnt-- > 0) {
+ 		if (*p >= '0' && *p <= '7')

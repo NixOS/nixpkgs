@@ -79,6 +79,23 @@ environment, see `rstudioWrapper`, which functions similarly to
 Then like above, `nix-env -f "<nixpkgs>" -iA rstudioEnv` will install
 this into your user profile.
 
+Alternatively, you can create a self-contained `shell.nix` without the need to
+modify any configuration files:
+
+```nix
+{ pkgs ? import <nixpkgs> {}
+}:
+
+pkgs.rstudioWrapper.override {
+  packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 ];
+}
+
+```
+
+Executing `nix-shell` will then drop you into an environment equivalent to the
+one above. If you need additional packages just add them to the list and
+re-enter the shell.
+
 ## Updating the package set
 
 ```bash

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, xorg, lxqt, openbox, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5, xorg, lxqt, openbox, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "obconf-qt";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1w94g8jk2j9qrkwg3i6qwgai2sj1m657bbk2zlk9bc3qvzmwxwrc";
+    sha256 = "1vwza1516z7f18s5vfnhzsiyxs6afb1hgr3yqkr7qhplmq5wjma5";
   };
 
   nativeBuildInputs = [
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    pcre
     qt5.qtbase
     qt5.qttools
     qt5.qtx11extras

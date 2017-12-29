@@ -128,7 +128,6 @@ rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.out}/bin/$i $out/bin
         done
-        cp -d ${binutils.lib}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 
@@ -216,7 +215,7 @@ rec {
       $CXX -v -o $out/bin/bar bar.cc
       $out/bin/bar
 
-      tar xvf ${hello.src}
+      tar xvf ${hello.srcTarball}
       cd hello-*
       ./configure --prefix=$out
       make

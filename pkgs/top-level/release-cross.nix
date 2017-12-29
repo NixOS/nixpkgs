@@ -19,7 +19,7 @@ let
   };
 
   gnuCommon = lib.recursiveUpdate common {
-    buildPackages.gccCrossStageFinal = nativePlatforms;
+    buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
   };
 

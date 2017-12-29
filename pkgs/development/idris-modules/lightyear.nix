@@ -8,7 +8,7 @@
 }:
 
 let
-  date = "2016-08-01";
+  date = "2017-09-10";
 in
 build-idris-package {
   name = "lightyear-${date}";
@@ -16,8 +16,8 @@ build-idris-package {
   src = fetchFromGitHub {
     owner = "ziman";
     repo = "lightyear";
-    rev = "9420f9e892e23a7016dea1a61d8ce43a6d4ecf15";
-    sha256 = "0xbjwq7sk4x78mi2zcqxbx7wziijlr1ayxihb1vml33lqmsgl1dn";
+    rev = "f737e25a09c1fe7c5fff063c53bd7458be232cc8";
+    sha256 = "05x66abhpbdm6yr0afbwfk6w04ysdk78gylj5alhgwhy4jqakv29";
   };
 
   propagatedBuildInputs = [ prelude base effects ];

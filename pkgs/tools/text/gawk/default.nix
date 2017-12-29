@@ -1,48 +1,56 @@
-{ stdenv, fetchurl, xz, libsigsegv, readline, interactive ? false
-, locale ? null }:
+{ stdenv, fetchurl
+# TODO: links -lsigsegv but loses the reference for some reason
+, withSigsegv ? (false && stdenv.system != "x86_64-cygwin"), libsigsegv
+, interactive ? false, readline
+
+/* Test suite broke on:
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+    || stdenv.isFreeBSD
+*/
+, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
+, locale ? null
+}:
+
+assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
 let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.4";
+  name = "gawk-4.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "0rn2mmjxm767zliqzd67j7h2ncjn4j0321c60y9fy3grs3i89qak";
+    sha256 = "1wm9lqj77y7xz07zi0n187aqm8zavzxzpm1j53ahxz81q0qwvwyl";
   };
 
   # When we do build separate interactive version, it makes sense to always include man.
-  outputs = [ "out" "info" ] ++ stdenv.lib.optional (!interactive) "man";
+  outputs = [ "out" "info" ] ++ optional (!interactive) "man";
 
-  # FIXME: 4.1.4 testsuite breaks when only C locales are available
-  doCheck = false /*!(
-       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
-    || stdenv.isDarwin # XXX: `locale' segfaults
-    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
-    || stdenv.isFreeBSD
-  )*/;
+  nativeBuildInputs = optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  nativeBuildInputs = [ xz.bin ];
   buildInputs =
-       stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
-    ++ stdenv.lib.optional interactive readline
-    ++ stdenv.lib.optional stdenv.isDarwin locale;
+       optional withSigsegv libsigsegv
+    ++ optional interactive readline
+    ++ optional stdenv.isDarwin locale;
 
-  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
-    ++ [(if interactive then "--with-readline=${readline.dev}" else "--without-readline")];
+  configureFlags = [
+    (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
+    (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
+  ];
 
-  postInstall =
-    if interactive then
-      ''
-        rm "$out"/bin/gawk-*
-        ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
-      ''
-    else # TODO: remove this other branch on a stdenv rebuild
-      ''
-        rm $out/bin/gawk-*
-        ln -s $man/share/man/man1/gawk.1 $man/share/man/man1/awk.1
-      '';
+  inherit doCheck;
+
+  postInstall = ''
+    rm "$out"/bin/gawk-*
+    ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
+  '';
+
+  passthru = {
+    libsigsegv = if withSigsegv then libsigsegv else null; # for stdenv bootstrap
+  };
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gawk/;

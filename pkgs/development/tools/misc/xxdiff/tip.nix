@@ -1,25 +1,25 @@
-{ stdenv, fetchFromBitbucket, qt5, flex, bison, docutils }:
+{ stdenv, fetchFromBitbucket, qtbase, flex, bison, docutils }:
 
 stdenv.mkDerivation rec {
-  name = "xxdiff-4.0.1.20170101";
+  name = "xxdiff-4.0.1.20170623";
 
   src = fetchFromBitbucket {
     owner = "blais";
     repo = "xxdiff";
-    rev = "1cf6b23ad30a845daba28a3409c65f93aec7f5e8";
-    sha256 = "0rq7grpndj85i7qzlj93jpzpfzk7bwsi55033fc63hb55rbdzz6z";
+    rev = "5e5f885dfc43559549a81c59e9e8c9525306356a";
+    sha256 = "0gbvxrkwkbvag3298j89smszghpr8ilxxfb0cvsknfqdf15b296w";
   };
 
-  nativeBuildInputs = [ flex bison qt5.qtbase docutils ];
+  nativeBuildInputs = [ flex bison docutils ];
 
-  buildInputs = [ qt5.qtbase ];
+  buildInputs = [ qtbase ];
 
   preConfigure = ''
-    ln -s ${qt5.qtbase.dev}/mkspecs/* ../__nix_qt*__/mkspecs
-    ln -s ${qt5.qtbase.dev}/bin/* ../__nix_qt*__/bin || true
+    ln -s ${qtbase.dev}/mkspecs/* ../__nix_qt*__/mkspecs
+    ln -s ${qtbase.dev}/bin/* ../__nix_qt*__/bin || true
   '';
 
-  NIX_CFLAGS_COMPILE="-I${qt5.qtbase.dev}/include/QtCore -I${qt5.qtbase.dev}/include/QtGui -I${qt5.qtbase.dev}/include/QtWidgets";
+  NIX_CFLAGS_COMPILE="-I${qtbase.dev}/include/QtCore -I${qtbase.dev}/include/QtGui -I${qtbase.dev}/include/QtWidgets";
   
   configurePhase = "${preConfigure} cd src; make -f Makefile.bootstrap";
 

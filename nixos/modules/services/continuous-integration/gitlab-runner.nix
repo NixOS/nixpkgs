@@ -96,10 +96,21 @@ in
       example = literalExample "pkgs.gitlab-runner_1_11";
     };
 
+    packages = mkOption {
+      default = [ pkgs.bash pkgs.docker-machine ];
+      defaultText = "[ pkgs.bash pkgs.docker-machine ]";
+      type = types.listOf types.package;
+      description = ''
+        Packages to add to PATH for the gitlab-runner process.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
     systemd.services.gitlab-runner = {
+      path = cfg.packages;
+      environment = config.networking.proxy.envVars;
       description = "Gitlab Runner";
       after = [ "network.target" ]
         ++ optional hasDocker "docker.service";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
+{ stdenv, fetchurl, fetchpatch, perl, python, ruby, bison, gperf, flex
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
   '';
   patches = [
     ./webcore-svg-libxml-cflags.patch
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/gentoo/gentoo/7c5457e265bd40c156a8fe6b2ff94a4e34bcea8e/net-libs/webkit-gtk/files/webkit-gtk-2.4.9-gcc-6.patch;
+      sha256 = "0ll93dr5vxd40wvly1jaw41lvw86krac0jc6k6cacrps4i5ql5j0";
+    })
   ] ++ optionals stdenv.isDarwin [
     ./configure.patch
     ./quartz-webcore.patch

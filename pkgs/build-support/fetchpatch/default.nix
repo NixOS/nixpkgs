@@ -27,4 +27,4 @@ fetchurl ({
       "$tmpfile" > "$out"
     ${args.postFetch or ""}
   '';
-} // builtins.removeAttrs args ["stripLen" "addPrefixes" "excludes"])
+} // builtins.removeAttrs args ["stripLen" "addPrefixes" "excludes" "postFetch"])

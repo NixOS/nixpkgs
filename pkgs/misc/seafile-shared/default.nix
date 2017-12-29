@@ -11,7 +11,8 @@ stdenv.mkDerivation rec
     sha256 = "03zvxk25311xgn383k54qvvpr8xbnl1vxd99fg4ca9yg5rmir1q6";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool vala_0_23 python intltool fuse ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which automake autoconf libtool vala_0_23 python intltool fuse ];
   propagatedBuildInputs = [ ccnet curl ];
 
   preConfigure = ''

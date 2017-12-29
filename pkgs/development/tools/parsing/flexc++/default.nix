@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
   };
 
-  sourceRoot = "flexcpp-${version}-src/flexc++";
+  setSourceRoot = ''
+    sourceRoot=$(echo */flexc++)
+  '';
 
   buildInputs = [ bobcat ];
   nativeBuildInputs = [ icmake yodl ];

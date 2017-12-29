@@ -45,6 +45,16 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+
+  # We only want to patch shebangs in /bin, and not those
+  # of the project scripts that are created by Pelican.
+  # See https://github.com/NixOS/nixpkgs/issues/30116
+  dontPatchShebangs = true;
+
+  postFixup = ''
+    patchShebangs $out/bin
+  '';
+
   meta = with stdenv.lib; {
     description = "A tool to generate a static blog from reStructuredText or Markdown input files";
     homepage = http://getpelican.com/;

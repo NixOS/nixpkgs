@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libtoxcore-${version}";
-  version = "0.1.8";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner  = "TokTok";
     repo   = "c-toxcore";
     rev    = "v${version}";
-    sha256 = "08vdq3j60wn62lj2z9f3f47hibns93rvaqx5xc5bm3nglk70q7kk";
+    sha256 = "1d3f7lnlxra2lhih838bvlahxqv50j35g9kfyzspq971sb5z30mv";
   };
 
   cmakeFlags = [
@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
     libopus
     libvpx
   ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
+
+  enableParallelBuilding = true;
+
   checkInputs = [ check ];
 
   checkPhase = "ctest";

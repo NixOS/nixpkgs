@@ -159,7 +159,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   udev = linux;
   unar = linux;
   unzip = all;
-  upstart = linux;
   usbutils = linux;
   utillinux = linux;
   utillinuxMinimal = linux;

@@ -3,7 +3,6 @@ hashes=builtins.listToAttrs[
   {name="baloo";value="0p3awsrc20q79kq04x0vjz84acxz6gjm9jc7j2al4kybkyzx5p4y";}
   {name="kde-baseapps";value="1nz6mm257rd916dklnbrix4r25scylvjil99b1djb35blx1aynqj";}
   {name="kdepimlibs";value="1mv8k0wr0wr0hnlb1al50nmz8d77vbm73p2hhipipgliq6zb3vb5";}
-  {name="kde-workspace";value="00bf708i0vzl47dgcr8mp61n7k0xjzqnlb8j1smliy5bydiaa86g";}
   {name="kfilemetadata";value="0wak1nphnphcam8r6pba7m2gld4w04dkk8qn23myjammv3myc59i";}
   {name="libkcddb";value="0xrmg53p5lh4ral2l5zh96angaf9czhih3zzvwr9qr9h9ks5vrn1";}
   {name="libkdcraw";value="0ksarwq8aaxc77cp0ryfnw1n311wkykzdlhj03rln8jjlbdm3j3q";}
@@ -18,7 +17,6 @@ versions=builtins.listToAttrs[
   {name="kde-baseapps";value="4.14.3";}
   {name="kdepimlibs";value="4.14.3";}
   {name="kde-runtime";value="4.14.3";}
-  {name="kde-workspace";value="4.11.14";}
   {name="kfilemetadata";value="4.14.3";}
   {name="libkcddb";value="4.14.3";}
   {name="libkdcraw";value="4.14.3";}
@@ -69,6 +67,5 @@ sane="kde_baseapps";  split=true;
 }
 { module="kactivities";  split=false;}
 { module="kdepimlibs";  split=false;}
-{ module="kde-workspace"; sane="kde_workspace"; split=false;}
 ];
 }

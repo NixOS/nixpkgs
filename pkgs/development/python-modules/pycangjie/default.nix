@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "12yi09nyffmn4va7lzk4irw349qzlbxgsnb89dh15cnw0xmrin05";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig libcangjie sqlite python cython
+    autoconf automake libtool libcangjie sqlite python cython
   ];
 
   preConfigure = ''

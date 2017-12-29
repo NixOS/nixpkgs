@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0vyzr4fhkblf2v3d7m0ch5hws4c493jw3ydl4y6b2dfbfzchhsz8";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig boost gnuradio rtl-sdr uhd makeWrapper hackrf
+    cmake boost gnuradio rtl-sdr uhd makeWrapper hackrf
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

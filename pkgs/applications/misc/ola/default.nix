@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
-, libuuid, cppunit, protobuf, zlib, avahi, libmicrohttpd
+, libuuid, cppunit, protobuf3_1, zlib, avahi, libmicrohttpd
 , perl, python3, python3Packages
 }:
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig perl ];
-  buildInputs = [ libuuid cppunit protobuf zlib avahi libmicrohttpd python3 ];
-  propagatedBuildInputs = with python3Packages; [ protobuf3_2 numpy ];
+  buildInputs = [ libuuid cppunit protobuf3_1 zlib avahi libmicrohttpd python3 ];
+  propagatedBuildInputs = [ python3Packages.protobuf3_1 python3Packages.numpy ];
 
   configureFlags = [ "--enable-python-libs" ];
 

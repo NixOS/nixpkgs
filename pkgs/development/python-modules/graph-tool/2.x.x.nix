@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     "--enable-openmp"
   ];
 
-  buildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
 
   propagatedBuildInputs = [
     boost

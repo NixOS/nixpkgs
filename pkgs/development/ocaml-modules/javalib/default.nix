@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/36307/javalib-2.3.3.tar.bz2;
-    sha256 = "0427n3vfb2h51gy2p4878gdwlp0mb03asn3g9kp9v4wfxmksjj11";
+    url = "https://gforge.inria.fr/frs/download.php/file/37154/javalib-2.3.4.tar.bz2";
+    sha256 = "1ajzbyli5a3y9s8f46913drpxdzlby3i4g3c2fqacmnbyvhpaqb6";
   };
 
   buildInputs = [ which ocaml findlib camlp4 ];

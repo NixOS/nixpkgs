@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ayrzfx95670k86y19bzl6i6w98haaln3x8dxpb39a5dwgz59pf8";
   };
 
-  buildInputs = [ cmake fcitx anthy gettext pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx anthy gettext ];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for automating interactive applications";
-    homepage = http://expect.nist.gov/;
+    homepage = http://expect.sourceforge.net/;
     license = "Expect";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

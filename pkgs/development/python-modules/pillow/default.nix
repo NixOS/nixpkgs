@@ -3,12 +3,12 @@
   freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11}:
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "4.2.1";
+  version = "4.3.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wq0fiw964bj5rdmw66mhbfsjnmb13bcdr42krpk2ig5f1cgc967";
+    sha256 = "a97c715d44efd5b4aa8d739b8fad88b93ed79f1b33fc2822d5802043f3b1b527";
   };
 
   doCheck = !stdenv.isDarwin && !isPyPy;

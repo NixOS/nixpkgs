@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python2 zip ];
-  nativeBuildInputs = if stdenv.isArm then [ autoconf213 ] else [];
+  nativeBuildInputs = [ pkgconfig ] ++ lib.optional stdenv.isArm autoconf213;
+  buildInputs = [ perl python2 zip ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 

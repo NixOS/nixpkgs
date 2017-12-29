@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langJava ? false
 , langAda ? false
@@ -20,7 +20,7 @@
 , enableMultilib ? false
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -72,62 +72,60 @@ let version = "4.5.4";
         gccFpu = targetPlatform.platform.gcc.fpu or null;
         gccFloat = targetPlatform.platform.gcc.float or null;
         gccMode = targetPlatform.platform.gcc.mode or null;
-        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        withArch +
-        withCpu +
-        withAbi +
-        withFpu +
-        withFloat +
-        withMode;
+        optional (gccArch != null) "--with-arch=${gccArch}" ++
+        optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
+        optional (gccAbi != null) "--with-abi=${gccAbi}" ++
+        optional (gccFpu != null) "--with-fpu=${gccFpu}" ++
+        optional (gccFloat != null) "--with-float=${gccFloat}" ++
+        optional (gccMode != null) "--with-mode=${gccMode}";
+
+    /* Cross-gcc settings */
+    crossMingw = (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt");
 
     crossConfigureFlags =
-      platformFlags +
       # Ensure that -print-prog-name is able to find the correct programs.
-      " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-      " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
-      (if crossMingw && crossStageStatic then
-        " --with-headers=${libcCross}/include" +
-        " --with-gcc" +
-        " --with-gnu-as" +
-        " --with-gnu-ld" +
-        " --with-gnu-ld" +
-        " --disable-shared" +
-        " --disable-nls" +
-        " --disable-debug" +
-        " --enable-sjlj-exceptions" +
-        " --enable-threads=win32" +
-        " --disable-win32-registry"
-        else if crossStageStatic then
-        " --disable-libssp --disable-nls" +
-        " --without-headers" +
-        " --disable-threads " +
-        " --disable-libmudflap " +
-        " --disable-libgomp " +
-        " --disable-shared" +
-        " --disable-decimal-float" # libdecnumber requires libc
-        else
-        " --with-headers=${libcCross}/include" +
-        " --enable-__cxa_atexit" +
-        " --enable-long-long" +
-        (if crossMingw then
-          " --enable-threads=win32" +
-          " --enable-sjlj-exceptions" +
-          " --enable-hash-synchronization" +
-          " --enable-version-specific-runtime-libs" +
-          " --enable-libssp" +
-          " --disable-nls" +
-          " --with-dwarf2"
-          else
-          " --enable-threads=posix" +
-          " --enable-nls" +
-          " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
-        );
+      [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+        "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
+      (if crossMingw && crossStageStatic then [
+        "--with-headers=${libcCross}/include"
+        "--with-gcc"
+        "--with-gnu-as"
+        "--with-gnu-ld"
+        "--with-gnu-ld"
+        "--disable-shared"
+        "--disable-nls"
+        "--disable-debug"
+        "--enable-sjlj-exceptions"
+        "--enable-threads=win32"
+        "--disable-win32-registry"
+      ] else if crossStageStatic then [
+        "--disable-libssp"
+        "--disable-nls"
+        "--without-headers"
+        "--disable-threads"
+        "--disable-libmudflap"
+        "--disable-libgomp"
+        "--disable-shared"
+        "--disable-decimal-float" # libdecnumber requires libc
+      ] else [
+        "--with-headers=${libcCross}/include"
+        "--enable-__cxa_atexit"
+        "--enable-long-long"
+      ] ++
+        (if crossMingw then [
+          "--enable-threads=win32"
+          "--enable-sjlj-exceptions"
+          "--enable-hash-synchronization"
+          "--enable-version-specific-runtime-libs"
+          "--enable-libssp"
+          "--disable-nls"
+          "--with-dwarf2"
+        ] else [
+          "--enable-threads=posix"
+          "--enable-nls"
+          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+        ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
@@ -149,8 +147,9 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
-  outputs = if (hostPlatform.is64bit && langAda) then [ "out" "doc" ]
-    else [ "out" "lib" "doc" ];
+  outputs = [ "out" "man" "info" ]
+    ++ optional (!(hostPlatform.is64bit && langAda)) "lib";
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -164,6 +163,7 @@ stdenv.mkDerivation ({
     # target libraries and tools.
     ++ optional langAda ../gnat-cflags.patch
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
+    ++ [ ../struct-ucontext-4.5.patch ] # glibc-2.26
     ;
 
   postPatch =
@@ -224,7 +224,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs profiledCompiler staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]
@@ -237,57 +239,80 @@ stdenv.mkDerivation ({
     ++ (optional langJava boehmgc)
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk ([gtk2 pkgconfig libart_lgpl] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
     ;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-  configureFlags = "
-    ${if enableMultilib then "" else "--disable-multilib"}
-    ${if enableShared then "" else "--disable-shared"}
-    ${if ppl != null then "--with-ppl=${ppl}" else ""}
-    ${if cloogppl != null then "--with-cloog=${cloogppl}" else ""}
-    ${if langJava then
-      "--with-ecj-jar=${javaEcj} " +
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
+  configureFlags =
+    # Basic dependencies
+    [
+      "--with-gmp=${gmp.dev}"
+      "--with-mpfr=${mpfr.dev}"
+      "--with-mpc=${libmpc}"
+    ] ++
+    optional (libelf != null) "--with-libelf=${libelf}" ++
+    optional (!(crossMingw && crossStageStatic))
+      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include" ++
+
+    # Basic configuration
+    [
+      "--disable-libstdcxx-pch"
+      "--without-included-gettext"
+      "--with-system-zlib"
+      "--enable-languages=${
+        concatStrings (intersperse ","
+          (  optional langC        "c"
+          ++ optional langCC       "c++"
+          ++ optional langFortran  "fortran"
+          ++ optional langJava     "java"
+          ++ optional langAda      "ada"
+          ++ optional langVhdl     "vhdl"
+          )
+        )
+      }"
+    ] ++
+    optional (!enableMultilib) "--disable-multilib" ++
+    optional (!enableShared) "--disable-shared" ++
+
+    # Optional features
+    optional (cloogppl != null) "--with-cloog=${cloogppl}" ++
+    optional (ppl != null) "--with-ppl=${ppl}" ++
+
+    # Java options
+    optionals langJava [
+      "--with-ecj-jar=${javaEcj}"
 
       # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
       # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
-      else ""}
-    ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-    ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
-    --with-gmp=${gmp.dev}
-    --with-mpfr=${mpfr.dev}
-    --with-mpc=${libmpc}
-    ${if libelf != null then "--with-libelf=${libelf}" else ""}
-    --disable-libstdcxx-pch
-    --without-included-gettext
-    --with-system-zlib
-    --enable-languages=${
-      concatStrings (intersperse ","
-        (  optional langC        "c"
-        ++ optional langCC       "c++"
-        ++ optional langFortran  "fortran"
-        ++ optional langJava     "java"
-        ++ optional langAda      "ada"
-        ++ optional langVhdl     "vhdl"
-        )
-      )
-    }
-    ${optionalString (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include"}
-    ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
-      if targetPlatform == hostPlatform && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
-    ${if langAda then " --enable-libada" else ""}
-    ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
-    ${platformFlags}
-    ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-  ";
+      "--enable-java-home"
+      "--with-java-home=\${prefix}/lib/jvm/jre"
+    ] ++
+    optional javaAwtGtk "--enable-java-awt=gtk" ++
+    optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
+
+    # Ada
+    optional langAda "--enable-libada" ++
+
+    platformFlags ++
+    optional (targetPlatform != hostPlatform) crossConfigureFlags ++
+
+    # Platform-specific flags
+    optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
+    # Trick that should be taken out once we have a mips64el-linux not loongson2f
+    optional (targetPlatform == hostPlatform && stdenv.system == "mips64el-linux") "--with-arch=loongson2f"
+  ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
+  /* For cross-built gcc (build != host == target) */
   crossAttrs = {
     AR_FOR_BUILD = "ar";
     AS_FOR_BUILD = "as";

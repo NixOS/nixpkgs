@@ -38,9 +38,6 @@ let
 
   pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
 
-  # NixOS traditionally used `root` as superuser, most other distros use `postgres`. From 17.09
-  # we also try to follow this standard
-  superuser = (if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root");
 
 in
 
@@ -62,7 +59,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql92";
+        example = literalExample "pkgs.postgresql96";
         description = ''
           PostgreSQL package to use.
         '';
@@ -151,6 +148,16 @@ in
           Contents of the <filename>recovery.conf</filename> file.
         '';
       };
+      superUser = mkOption {
+        type = types.str;
+        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        internal = true;
+        description = ''
+          NixOS traditionally used `root` as superuser, most other distros use `postgres`.
+          From 17.09 we also try to follow this standard. Internal since changing this value
+          would lead to breakage while setting up databases.
+        '';
+        };
     };
 
   };
@@ -215,7 +222,7 @@ in
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U ${superuser}
+              initdb -U ${cfg.superUser}
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
@@ -247,14 +254,14 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! ${pkgs.sudo}/bin/sudo -u ${superuser} psql --port=${toString cfg.port} -d postgres -c "" 2> /dev/null; do
+            while ! ${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port} -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                ${pkgs.sudo}/bin/sudo -u ${superuser} psql -f "${cfg.initialScript}" --port=${toString cfg.port} -d postgres
+                ${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql -f "${cfg.initialScript}" --port=${toString cfg.port} -d postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi

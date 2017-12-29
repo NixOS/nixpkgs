@@ -27,6 +27,7 @@ in
         type = types.int;
         default = 70;
         description = ''
+          Opacity percentage of Cairo rendered backgrounds.
         '';
       };
 
@@ -34,6 +35,7 @@ in
         type = types.str;
         default = "black";
         description = ''
+          Colour name or hex code (#ffffff) of the background color.
         '';
       };
 
@@ -41,6 +43,9 @@ in
         type = types.str;
         default = "simplistic";
         description = ''
+          Icon theme for the buttons, must be in the themes folder of
+          the package, or in
+          <filename>~/.themes/&lt;name&gt;/oblogout/</filename>.
         '';
       };
 
@@ -48,6 +53,7 @@ in
         type = types.str;
         default =  "cancel, logout, restart, shutdown, suspend, hibernate";
         description = ''
+          List and order of buttons to show.
         '';
       };
 
@@ -55,6 +61,7 @@ in
         type = types.str;
         default =  "Escape";
         description = ''
+          Cancel logout/shutdown shortcut.
         '';
       };
 
@@ -62,6 +69,7 @@ in
         type = types.str;
         default = "S";
         description = ''
+          Shutdown shortcut.
         '';
       };
 
@@ -69,6 +77,7 @@ in
         type = types.str;
         default = "R";
         description = ''
+          Restart shortcut.
         '';
       };
 
@@ -76,6 +85,7 @@ in
         type = types.str;
         default = "U";
         description = ''
+          Suspend shortcut.
         '';
       };
 
@@ -83,6 +93,7 @@ in
         type = types.str;
         default = "L";
         description = ''
+          Logout shortcut.
         '';
       };
 
@@ -90,6 +101,7 @@ in
         type = types.str;
         default = "K";
         description = ''
+          Lock session shortcut.
         '';
       };
 
@@ -97,6 +109,7 @@ in
         type = types.str;
         default =  "H";
         description = ''
+          Hibernate shortcut.
         '';
       };
 
@@ -104,6 +117,7 @@ in
         type = types.str;
         default = "openbox --exit";
         description = ''
+          Command to logout.
         '';
       };
 
@@ -111,6 +125,7 @@ in
         type = types.str;
         default = "";
         description = ''
+          Command to lock screen.
         '';
       };
 
@@ -118,6 +133,7 @@ in
         type = types.str;
         default = "";
         description = ''
+          Command to switch user.
         '';
       };
     };

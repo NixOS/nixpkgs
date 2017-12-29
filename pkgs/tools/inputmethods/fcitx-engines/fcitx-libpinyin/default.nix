@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "19h0p1s8bkw24v7x6v19fg7dqpz2kkjlvvrqhypi5bkkvfswf7xn";
   };
 
-  buildInputs = [ cmake pkgconfig fcitx gettext libpinyin glib pcre dbus qt4 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx gettext libpinyin glib pcre dbus qt4 ];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "glog-${version}";
   version = "0.3.4";
-  
+
   src = fetchFromGitHub {
     owner = "Google";
     repo = "glog";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/google-glog/;
+    homepage = https://github.com/google/glog;
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;

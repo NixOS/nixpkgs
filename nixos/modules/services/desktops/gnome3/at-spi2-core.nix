@@ -34,6 +34,8 @@ with lib;
 
     services.dbus.packages = [ pkgs.at_spi2_core ];
 
+    systemd.packages = [ pkgs.at_spi2_core ];
+
   };
 
 }

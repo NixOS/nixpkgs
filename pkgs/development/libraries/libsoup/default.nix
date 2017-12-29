@@ -4,15 +4,15 @@
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.59";
-  version = "${majorVersion}.90.1";
+  majorVersion = "2.60";
+  version = "${majorVersion}.0";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "0bh8wa0szkm9bx2anfq655zshwf6jhxvrqwx8jyh8rqgi6z9dhz0";
+    sha256 = "b324edbecda0884143c0853b4a2bd5bd37fb3761f12f293c621ff34b9acdc84c";
   };
 
   prePatch = ''
@@ -37,8 +37,6 @@ stdenv.mkDerivation {
     + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     inherit (glib.meta) maintainers platforms;

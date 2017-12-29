@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gmg4ppr4y6ck04mandlp2fmdcyssmck999m012jx5v1rm57g2hn";
   };
 
+  hardeningDisable = [ "format" ];
+
   unpackPhase = ''
     mkdir src
     pushd src
@@ -22,10 +24,9 @@ stdenv.mkDerivation rec {
     sourceRoot=`pwd`/src
   '';
 
-  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysql
-    makeWrapper ];
+  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysql makeWrapper ];
 
-  NIX_LDFLAGS="-L${stdenv.lib.getLib libmysql}/lib/mysql";
+  NIX_LDFLAGS = "-L${stdenv.lib.getLib libmysql}/lib/mysql";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/zod

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "13d5jkmh9nh4c2kjch8k8amslnxapa9vkqzrk1z6rqmw8qgvzbkj";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ]
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ]
     ++ stdenv.lib.optionals stdenv.isLinux [ udev libusb ];
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit Cocoa ]);

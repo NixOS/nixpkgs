@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       
   meta = with stdenv.lib; {
     description = "Open Street Map viewer";
-    homepage = http://sourceforge.net/projects/gosmore/;
+    homepage = https://sourceforge.net/projects/gosmore/;
     maintainers = with maintainers; [
       raskin
     ];

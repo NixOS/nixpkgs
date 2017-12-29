@@ -50,19 +50,12 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
-  outputs = [ "out" ]
-    ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
-    ++ [ "info" ]
-    ++ optional (targetPlatform == hostPlatform) "dev";
+  outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ bison ]
-    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+  nativeBuildInputs = [ bison buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     # Clear the default library search path.
@@ -86,20 +79,25 @@ stdenv.mkDerivation rec {
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if hostPlatform == targetPlatform && targetPlatform.isArm32
+    if hostPlatform == targetPlatform && targetPlatform.isArm
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
-  configureFlags =
-    [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
-    ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
-    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
+  configureFlags = [
+    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared" "--enable-static"
+    "--with-system-zlib"
+
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
+  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   enableParallelBuilding = true;
 
   passthru = {
-    inherit prefix;
+    inherit prefix version;
   };
 
   meta = with stdenv.lib; {
@@ -112,6 +110,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "091aq5zyc60wh21m1ryanjwknwxlaj9nvlswn5vjrmcdir5gnkm5";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool pam libHX utillinux libxml2 pcre perl openssl cryptsetup ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool pam libHX utillinux libxml2 pcre perl openssl cryptsetup ];
 
   patches = [ ./insert_utillinux_path_hooks.patch ];
 

@@ -11,11 +11,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.78c";
+  name = "blender-2.79";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0f6k3m9yd5yhn7fq9srgzwh2gachlxm03bdrvn2r7xq00grqzab4";
+    sha256 = "16f84mdzkmwjmqahjj64kbyk4kagdj4mcr8qjazs1952d7kh7pm9";
   };
 
   buildInputs =
@@ -57,13 +57,16 @@ stdenv.mkDerivation rec {
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
     ++ optionals cudaSupport
       [ "-DWITH_CYCLES_CUDA_BINARIES=ON"
-        # Disable the sm_20 architecture to work around a segfault in
-        # ptxas, as suggested on #blendercoders.
-        "-DCYCLES_CUDA_BINARIES_ARCH=sm_21;sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
+        # Disable architectures before sm_30 to support new CUDA toolkits.
+        "-DCYCLES_CUDA_BINARIES_ARCH=sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
       ]
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
+
+  # Since some dependencies are built with gcc 6, we need gcc 6's
+  # libstdc++ in our RPATH. Sigh.
+  NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   enableParallelBuilding = true;
 

@@ -7,7 +7,8 @@ stdenv.mkDerivation rec
     url = "http://noedler.de/projekte/wdfs/wdfs-1.4.2.tar.gz";
     sha256 = "fcf2e1584568b07c7f3683a983a9be26fae6534b8109e09167e5dff9114ba2e5";
   };
-  buildInputs = [fuse glib neon pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [fuse glib neon];
   meta = {
     homepage = http://noedler.de/projekte/wdfs/;
     description = "User-space filesystem that allows to mount a webdav share";

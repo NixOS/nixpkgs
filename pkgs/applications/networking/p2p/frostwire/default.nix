@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 with stdenv.lib;
 
@@ -11,20 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "01nq1vwkqdidmprlnz5d3c5412r6igv689barv64dmb9m6iqg53z";
   };
 
-  inherit jre;
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    jar=$(ls */*.jar)
-    
     mkdir -p $out/share/java
-    mv $jar $out/share/java
-    
-    mkdir -p $out/bin
-    cat > $out/bin/frostwire <<EOF
-    #! $SHELL -e
-    exec $out/share/java/frostwire
-    EOF
-    chmod +x $out/bin/frostwire
+    mv $(ls */*.jar) $out/share/java
+
+    makeWrapper $out/share/java/frostwire $out/bin/frostwire \
+      --prefix PATH : ${jre}/bin/
   '';
 
   meta = with stdenv.lib; {

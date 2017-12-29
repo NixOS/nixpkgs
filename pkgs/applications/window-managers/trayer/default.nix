@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   name = "trayer-1.1.7";
 
-  buildInputs = [ pkgconfig gdk_pixbuf gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gdk_pixbuf gtk2 ];
 
   src = fetchFromGitHub {
     owner = "sargon";

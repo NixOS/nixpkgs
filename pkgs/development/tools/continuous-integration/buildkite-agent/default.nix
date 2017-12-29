@@ -1,32 +1,38 @@
-{ stdenv, fetchurl, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
-
-stdenv.mkDerivation rec {
-  version = "2.1.13";
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
+let
+  version = "2.6.6";
+  goPackagePath = "github.com/buildkite/agent";
+in
+buildGoPackage {
   name = "buildkite-agent-${version}";
-  dontBuild = true;
 
-  src = fetchurl {
-    url = "https://github.com/buildkite/agent/releases/download/v${version}/buildkite-agent-linux-386-${version}.tar.gz";
-    sha256 = "bd40c2ba37b3b54b875241a32b62190a4cf4c15e2513c573f1626a3ca35c8657";
+  inherit goPackagePath;
+
+  src = fetchFromGitHub {
+    owner = "buildkite";
+    repo = "agent";
+    rev = "v${version}";
+    sha256 = "0rpi63mfzlm39517l4xjcka3m4dnfjzwvpi0i1rpf1z2288cnkyx";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  sourceRoot = ".";
-  installPhase = ''
-    install -Dt "$out/bin/" buildkite-agent
 
-    mkdir -p $out/share
-    mv hooks bootstrap.sh $out/share/
+  postInstall = ''
+    # Install bootstrap.sh
+    mkdir -p $bin/libexec/buildkite-agent
+    cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $bin/libexec/buildkite-agent
+    sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $bin/libexec/buildkite-agent/bootstrap.sh
+
+    # Fix binary name
+    mv $bin/bin/{agent,buildkite-agent}
+
+    # These are runtime dependencies
+    wrapProgram $bin/bin/buildkite-agent \
+      --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}' \
+      --set BUILDKITE_BOOTSTRAP_SCRIPT_PATH $bin/libexec/buildkite-agent/bootstrap.sh
   '';
 
-  postFixup = ''
-    substituteInPlace $out/share/bootstrap.sh \
-      --replace "#!/bin/bash" "#!$(type -P bash)"
-    wrapProgram $out/bin/buildkite-agent \
-      --set PATH '"${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}:$PATH"'
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Build runner for buildkite.com";
     longDescription = ''
       The buildkite-agent is a small, reliable, and cross-platform build runner
@@ -36,8 +42,8 @@ stdenv.mkDerivation rec {
       and uploading the job's artifacts.
     '';
     homepage = https://buildkite.com/docs/agent;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.pawelpacana ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ pawelpacana zimbatm ];
+    platforms = platforms.linux;
   };
 }

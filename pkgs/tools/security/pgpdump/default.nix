@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub
+, supportCompressedPackets ? true, zlib, bzip2
+}:
 
 stdenv.mkDerivation rec {
   name = "pgpdump-${version}";
@@ -10,6 +12,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1ip7q5sgh3nwdqbrzpp6sllkls5kma98kns53yspw1830xi1n8xc";
   };
+
+  buildInputs = stdenv.lib.optionals supportCompressedPackets [ zlib bzip2 ];
 
   meta = with stdenv.lib; {
     description = "A PGP packet visualizer";

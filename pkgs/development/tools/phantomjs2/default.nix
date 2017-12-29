@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
 , libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
-, darwin, writeScriptBin, cups
+, darwin, writeScriptBin, cups, makeWrapper
 }:
 
 let
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     bison2 flex fontconfig freetype gperf icu openssl
     libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL
     darwin.libobjc fakeClang cups
@@ -98,10 +99,9 @@ in stdenv.mkDerivation rec {
         ${darwin.configd}/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration \
         /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration \
     $out/bin/phantomjs
-  '';
-
-  preFixup = ''
-    rm -r ../__nix_qt5__
+  '' + ''
+    wrapProgram $out/bin/phantomjs \
+    --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
   '';
 
   meta = with stdenv.lib; {

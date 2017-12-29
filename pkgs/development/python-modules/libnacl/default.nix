@@ -1,13 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, libsodium }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, libsodium }:
 
 buildPythonPackage rec {
   pname = "libnacl";
-  version = "1.5.2";
+  version = "1.6.1";
   name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c58390b0d191db948fc9ab681f07fdfce2a573cd012356bada47d56795d00ee2";
+  src = fetchFromGitHub {
+    owner = "saltstack";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "05iamhbsqm8binqhc2zchfqdkajlx2icf8xl5vkd5fbrhw6yylad";
   };
 
   buildInputs = [ pytest ];

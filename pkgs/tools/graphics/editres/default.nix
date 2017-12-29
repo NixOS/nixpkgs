@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "06kv7dmw6pzlqc46dbh8k9xpb6sn4ihh0bcpxq0zpvw2lm66dx45";
   };
 
-  buildInputs = [ pkgconfig libXt libXaw libXres utilmacros ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libXt libXaw libXres utilmacros ];
 
   configureFlags = "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres";
 

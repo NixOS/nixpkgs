@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.0";
 
   src = fetchurl {
-    url = "http://dl.suckless.org/surf/surf-${version}.tar.gz";
+    url = "https://dl.suckless.org/surf/surf-${version}.tar.gz";
     sha256 = "07cmajyafljigy10d21kkyvv5jf3hxkx06pz3rwwk3y3c9x4rvps";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       possible to embed it in another application. Furthermore, one can point
       surf to another URI by setting its XProperties.
     '';
-    homepage = http://surf.suckless.org;
+    homepage = https://surf.suckless.org;
     license = licenses.mit;
     platforms = webkitgtk.meta.platforms;
     maintainers = with maintainers; [ joachifm ];

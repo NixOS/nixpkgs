@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ls3y97qqfcfd3z0balz94xq1gskfk04pg85x6b7wjw8dm4030qd";
   };
 
-  buildInputs = [ autoreconfHook perl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ perl ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dex4er/fakechroot;

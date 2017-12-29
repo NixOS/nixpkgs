@@ -16,6 +16,7 @@
 , gstreamer
 , gtk2
 , gtk3
+, kerberos
 , libX11
 , libXScrnSaver
 , libxcb
@@ -53,9 +54,12 @@ let
 
   inherit (generated) version sources;
 
-  arch = if stdenv.system == "i686-linux"
-    then "linux-i686"
-    else "linux-x86_64";
+  mozillaPlatforms = {
+    "i686-linux" = "linux-i686";
+    "x86_64-linux" = "linux-x86_64";
+  };
+
+  arch = mozillaPlatforms.${stdenv.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
@@ -100,6 +104,7 @@ stdenv.mkDerivation {
       gstreamer
       gtk2
       gtk3
+      kerberos
       libX11
       libXScrnSaver
       libXcomposite
@@ -168,6 +173,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.ffmpegSupport = true;
+  passthru.gssSupport = true;
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =
@@ -182,7 +188,7 @@ stdenv.mkDerivation {
       free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
-    platforms = platforms.linux;
+    platforms = builtins.attrNames mozillaPlatforms;
     maintainers = with maintainers; [ garbas ];
   };
 }

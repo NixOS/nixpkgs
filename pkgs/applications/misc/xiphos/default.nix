@@ -1,27 +1,30 @@
-{stdenv, fetchurl, pkgconfig
+{stdenv, fetchFromGitHub, pkgconfig
 , python
 , intltool
 , docbook2x, docbook_xml_dtd_412, libxslt
 , sword, clucene_core, biblesync
 , gnome_doc_utils
 , libgsf, gconf
-, gtkhtml, libgtkhtml, libglade, scrollkeeper
+, gtkhtml, libglade, scrollkeeper
 , webkitgtk
-, dbus_glib, enchant, isocodes, libuuid
+, dbus_glib, enchant, isocodes, libuuid, icu
 }:
 
 stdenv.mkDerivation rec {
   name = "xiphos-${version}";  
-  version = "4.0.3-20150806";
+  version = "4.0.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/gnomesword/Xiphos/4.0.3/${name}.tar.gz";
-    sha256 = "1xkvhpasdlda2rp0874znz158z4rjh1hpynwy13d96kjxq4npiqv";
+  src = fetchFromGitHub {
+    owner = "crosswire";
+    repo = "xiphos";
+    rev = "${version}";
+    sha256 = "02xyy6rxxxaqbjbhdp813f0vp1jpfzqscjdbdc0qcd4yvi3baj5f";
   };
 
-  buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt
-                  sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml libgtkhtml
-                  libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python intltool docbook2x docbook_xml_dtd_412 libxslt
+                  sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml
+                  libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid icu ];
 
   prePatch = ''
     patchShebangs .;
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
   
   configurePhase = ''
-    python waf configure --prefix=$out    
+    python waf configure --prefix=$out --enable-webkit2
   '';
   
   buildPhase = ''

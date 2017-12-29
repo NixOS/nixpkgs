@@ -51,6 +51,13 @@ python2Packages.buildPythonApplication rec {
     feedparser dbus-python mygpoclient pygtk eyeD3 podcastparser html5lib
   ] ++ stdenv.lib.optional ipodSupport libgpod;
 
+  preBuild = ''
+    make PREFIX="$out" \
+      share/applications/gpodder-url-handler.desktop \
+      share/applications/gpodder.desktop \
+      share/dbus-1/services/org.gpodder.service
+  '';
+
   checkPhase = ''
     LC_ALL=C python -m gpodder.unittests
   '';

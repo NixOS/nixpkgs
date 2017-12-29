@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
   };
 
-  buildInputs = [ zlib imagemagick libpng glib pkgconfig libgsf libxml2 bzip2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib imagemagick libpng glib libgsf libxml2 bzip2 ];
 
   hardeningDisable = [ "format" ];
 

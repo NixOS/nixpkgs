@@ -2,7 +2,7 @@
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
-, procps
+, procps, libseccomp
 }:
 
 with lib;
@@ -44,6 +44,12 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+
+      # This should go into the containerd derivation once 1.0.0 is out
+      preBuild = ''
+        mkdir $(pwd)/vendor/src
+        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
+      '' + oldAttrs.preBuild;
     });
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";
@@ -63,9 +69,13 @@ rec {
       ];
     });
 
+    # Optimizations break compilation of libseccomp c bindings
+    hardeningDisable = [ "fortify" ];
+
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
-      makeWrapper removeReferencesTo pkgconfig go-md2man go
-      sqlite devicemapper btrfs-progs systemd libtool
+      makeWrapper removeReferencesTo go-md2man go
+      sqlite devicemapper btrfs-progs systemd libtool libseccomp
     ];
 
     dontStrip = true;
@@ -73,7 +83,8 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
+      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (libseccomp != null) "seccomp";
 
     buildPhase = ''
       # build engine
@@ -111,7 +122,13 @@ rec {
 
     installPhase = ''
       install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-      install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+
+      if [ -d "./components/engine/bundles/${version}" ]; then
+        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      else
+        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      fi
+
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -164,19 +181,34 @@ rec {
       homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester ];
+      maintainers = with maintainers; [ nequissimus offline tailhook vdemeester ];
       platforms = platforms.linux;
     };
   };
 
-  docker_17_06 = dockerGen rec {
-    version = "17.06.0-ce";
-    rev = "02c1d876176546b5f069dae758d6a7d2ead6bd48"; # git commit
-    sha256 = "0wrg4ygcq4c7f2bwa7pgc7y33idg0hijavx40588jaglz4k8sqpm";
-    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
-    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
-    containerdRev = "cfb82a876ecc11b5ca0977d1733adbe58599088a";
-    containerdSha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
+  # Get revisions from
+  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+
+  docker_17_09 = dockerGen rec {
+    version = "17.09.0-ce";
+    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
+    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
+    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
+    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
+    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  };
+
+  docker_17_10 = dockerGen rec {
+    version = "17.10.0-ce";
+    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
+    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
+    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
+    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "d55e9ce6be38a44fc1053d82db2d117cf3991a51898bd86d7913bae769f04da7";
   };
 
-  buildInputs = [ pkgconfig gnupg gtk2 libxml2 intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gnupg gtk2 libxml2 intltool ];
 
   meta = {
     description = "FPM2 is GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements.";

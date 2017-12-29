@@ -3,16 +3,16 @@
 let
   ell = fetchgit {
      url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "58e873d7463f3a7f91e02260585bfa50cbc77668";
-     sha256 = "12k1f1iarm29j8k16mhw83xx7r3bama4lp0fchhnj7iwxrpgs4gh";
+     rev = "e0dbdfbd5992bd3e78029b83930b9020e74cdaa5";
+     sha256 = "031m1vvcrhggnyvvqyrqpzldi2amsbvhdfcxrypzqz58vysk69vm";
   };
 in stdenv.mkDerivation rec {
-  name = "iwd-unstable-2017-06-02";
+  name = "iwd-unstable-2017-09-22";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
-    rev = "6c64ae34619bf7f18cba007d8b0374badbe7c17e";
-    sha256 = "19rkf6lk213hdfs40ija7salars08zw6k5i5djdlpcn1j6y69i36";
+    rev = "31631e1935337910c7bc0c3eb215f579143c1fe0";
+    sha256 = "0xl8ali5hy7ragdc4palm857y0prcg32294hv3vv28r9r4x4llcm";
   };
 
   configureFlags = [

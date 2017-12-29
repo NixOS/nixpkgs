@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, obuild }:
 
-let version = "2.0.1"; in
+let version = "2.0.2"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-ptmap-${version}";
 
   src = fetchzip {
-    url = "https://github.com/UnixJunkie/ptmap/archive/v${version}.tar.gz";
-    sha256 = "09ib4q5amkac2yy0hr7yn1n1j6y10v08chh82qc70wl7s473if15";
+    url = "https://github.com/backtracking/ptmap/archive/v${version}.tar.gz";
+    sha256 = "093qax4lhpv1vcgwqh5b3pmy769hv5d8pqj1kjynh1z1xibv2qxc";
   };
 
   buildInputs = [ ocaml findlib obuild ];

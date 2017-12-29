@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, syslogng
-, eventlog, perl, python, yacc, protobufc, libivykis
+, eventlog, perl, python, yacc, protobufc, libivykis, libcap, czmq
 }:
 
 stdenv.mkDerivation rec {
   name = "syslog-ng-incubator-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "balabit";
     repo = "syslog-ng-incubator";
     rev = name;
-    sha256 = "00j123ya0xfj1jicaqnk1liffx07mhhf0r406pabxjjj97gy8nlk";
+    sha256 = "1wiv289lc5kxsd3ydyn1zvvgjrj1mv2jghv0cm425wsdsfr7fjb0";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook yacc ];
 
   buildInputs = [
-    glib syslogng eventlog perl python protobufc libivykis
+    glib syslogng eventlog perl python protobufc libivykis libcap czmq
   ];
 
   configureFlags = [
@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.rickynils ];
     platforms = platforms.linux;
-    broken = true; # does not work with our new syslog-ng version yet
   };
 }

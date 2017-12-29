@@ -12,6 +12,6 @@ mkDerivation {
     kcmutils kdbusaddons kdelibs4support kglobalaccel ki18n kio kxmlgui
     plasma-framework plasma-workspace qtx11extras
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   enableParallelBuilding = false;
 }

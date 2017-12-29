@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ms2v57f13r9km6mvf9rha5ndmlmjvrz3mcikai6nzhpj0nrjz0w";
   };
 
-  buildInputs = [ autoreconfHook gawk trousers cryptsetup openssl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gawk trousers cryptsetup openssl ];
 
   installPhase = ''
     mkdir -p $out

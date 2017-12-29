@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5 }:
+{ stdenv, fetchFromGitHub, mcpp, bzip2, expat, openssl, db5
+, darwin, libiconv, Security
+}:
 
 stdenv.mkDerivation rec {
   name = "zeroc-ice-${version}";
@@ -11,16 +13,19 @@ stdenv.mkDerivation rec {
     sha256 = "05xympbns32aalgcfcpxwfd7bvg343f16xpg6jv5s335ski3cjy2";
   };
 
-  buildInputs = [ mcpp bzip2 expat openssl db5 ];
+  buildInputs = [ mcpp bzip2 expat openssl db5 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
-  buildPhase = ''
-    cd cpp
-    make -j $NIX_BUILD_CORES OPTIMIZE=yes
+  postUnpack = ''
+    sourceRoot=$sourceRoot/cpp
   '';
 
-  installPhase = ''
-    make -j $NIX_BUILD_CORES prefix=$out install
+  prePatch = ''
+    substituteInPlace config/Make.rules.Darwin \
+        --replace xcrun ""
   '';
+
+  makeFlags = [ "prefix=$(out)" "OPTIMIZE=yes" ];
 
   enableParallelBuilding = true;
 

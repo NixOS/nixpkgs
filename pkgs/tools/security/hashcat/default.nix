@@ -1,40 +1,39 @@
-{ stdenv, fetchurl, gmp }:
+{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd }:
 
-assert stdenv.isLinux;
-
-let
-  bits = if stdenv.system == "x86_64-linux" then "64" else "32";
-in
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "2.00";
+  version = "4.0.0";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://codeload.github.com/hashcat/hashcat/tar.gz/${version}";
-    sha256 = "0i2l4i1jkdhj9bkvycgd2nf809kki3jp83y0vrd4iwsdbbbyc9b3";
+    url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
+    sha256 = "0l1vq4h1gfxc2yclxkvy6gfz6sii2vyzip8pw6ifq930y8dvi34y";
   };
 
-  buildInputs = [ gmp ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ opencl-headers ];
 
-  buildFlags = [ "posix${bits}" ]
-    ++ stdenv.lib.optionals (bits == "64") [ "posixXOP" "posixAVX" ];
+  makeFlags = [
+    "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
+    "COMPTIME=1337"
+    "VERSION_TAG=${version}"
+  ];
 
-  # Upstream Makefile doesn't have 'install' target
-  installPhase = ''
-    mkdir -p $out/bin $out/libexec
-    cp -R * $out/libexec
-
-    ln -s $out/libexec/hashcat-cli${bits}.bin $out/bin/hashcat
-    ln -s $out/libexec/hashcat-cliXOP.bin $out/bin/hashcat-xop
-    ln -s $out/libexec/hashcat-cliAVX.bin $out/bin/hashcat-avx
+  # $out is not known until the build has started.
+  configurePhase = ''
+    runHook preConfigure
+    makeFlags="$makeFlags PREFIX=$out"
+    runHook postConfigure
   '';
 
-  meta = {
+  postFixup = ''
+    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
+  '';
+
+  meta = with stdenv.lib; {
     description = "Fast password cracker";
-    homepage    = "https://hashcat.net/hashcat/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = https://hashcat.net/hashcat/;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ kierdavis zimbatm ];
   };
 }

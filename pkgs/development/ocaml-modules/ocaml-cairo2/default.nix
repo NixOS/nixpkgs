@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     sha256 = "1lc1iv5yz49avbc0wbrw9nrx8dn0c35r7cykivjln1zc2fwscf7w";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild pkgconfig cairo ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib ocamlbuild cairo ]
                 ++ optionals enableGtkSupport [ gtk2 ];
 
   # lablgtk2 is marked as a propagated build input since loading the

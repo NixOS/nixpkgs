@@ -78,6 +78,13 @@ in {
         '';
       };
 
+      package = mkOption {
+        default = pkgs.jenkins;
+        defaultText = "pkgs.jenkins";
+        type = types.package;
+        description = "Jenkins package to use.";
+      };
+
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
         defaultText = "[ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ]";
@@ -194,7 +201,7 @@ in {
         '';
 
       script = ''
-        ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${pkgs.jenkins}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   ${concatStringsSep " " cfg.extraOptions}

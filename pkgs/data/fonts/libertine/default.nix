@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x7cz6hvhpil1rh03rax9zsfzm54bh7r4bbrq8rz673gl9h47v0v";
   };
 
-  setSourceRoot = "sourceRoot=`pwd`";
+  sourceRoot = ".";
 
   nativeBuildInputs = [ fontforge ];
 
@@ -40,9 +40,14 @@ stdenv.mkDerivation rec {
     cp *.map $out/share/texmf/fonts/map
   '';
 
-  meta = {
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1mj0j0hkp8pn7jcs4pvcan6whba60bfd671g3vhx3s9kxwf7xjvr";
+
+  meta = with stdenv.lib; {
     description = "Linux Libertine Fonts";
     homepage = http://linuxlibertine.sf.net;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.volth ];
   };
 }

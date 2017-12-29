@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "10g65j5ia389ahhn3b9hr52ghpp0817fk0m60rfrv4wrzqrjxzk1";
   };
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel garcon
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4panel garcon
     gtk libxklavier librsvg libwnck  ];
 
   meta = {

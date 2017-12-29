@@ -3,6 +3,7 @@
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {
     buildInputs = [ makeWrapper ] ++ plugins;
+    propagatedBuildInputs = package.propagatedBuildInputs;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
     makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
@@ -10,14 +11,14 @@ let
     ln -sfv ${package}/lib $out/lib
   '';
 
-  package = pythonPackages.buildPythonApplication (rec {
+  package = pythonPackages.buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.9.post2";
+    version = "0.9.11";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0g932pvkxqq3ijwkwwa29jd9sp5895gv40c3k7m2acc5dp8ygb9w";
+      sha256 = "1s3y218wry7502xp4zxccf3z996xm8cnp3dcxl7m5ldmmb055qwv";
     };
 
     buildInputs = with pythonPackages; [
@@ -39,7 +40,6 @@ let
     ];
 
     propagatedBuildInputs = with pythonPackages; [
-
       # core
       twisted
       jinja2
@@ -87,5 +87,5 @@ let
       maintainers = with maintainers; [ nand0p ryansydnor ];
       license = licenses.gpl2;
     };
-  });
+  };
 in package

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luajit, luaPackages, ncurses, perl, pkgconfig
+, libtool, libuv, luajit, luajitPackages, luaPackages, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel, gperf
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
@@ -115,7 +115,7 @@ let
     LUA_PATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaPath lualibs);
     LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
-    lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+    lualibs = [ luaPackages.mpack luaPackages.lpeg luajitPackages.lpeg luaPackages.luabitop ];
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"

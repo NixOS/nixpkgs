@@ -1,35 +1,28 @@
 { stdenv, fetchurl, gtk_doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, gcab, appstream-glib, gusb, sqlite, libarchive
+, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive
 , libsoup, docbook2x, gpgme, libxslt, libelf, libsmbios, efivar
-, fwupdate, libgpgerror, libyaml, valgrind
+, fwupdate, libyaml, valgrind, meson, libuuid, pygobject3
+, pillow, ninja, gcab
 }:
-let version = "0.8.1"; in
+let version = "0.9.6";
+in
   stdenv.mkDerivation
     { name = "fwupd-${version}";
       src = fetchurl
         { url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-          sha256 = "0sq0aay5d6b0vgr7j7y4i58flbxmcbpwyw6vfwrd29fim21j6ac8";
+          sha256 = "0h3y4ygckvkjdx7yxwbm273iv84yk37ivlcf4xvq95g64vs8gfhf";
         };
       buildInputs =
         [ gtk_doc pkgconfig gobjectIntrospection intltool libgudev
-          polkit gcab appstream-glib gusb sqlite libarchive libsoup
+          polkit appstream-glib gusb sqlite libarchive libsoup
           docbook2x libxslt libelf libsmbios fwupdate libyaml valgrind
+          meson gpgme libuuid pygobject3 pillow ninja gcab
         ];
-      patches = [ ./localstatedir-check-perms.patch ];
-      postPatch = ''
-        sed -i -e \
-          's|/usr/bin/gpgme-config|${gpgme.dev}/bin/gpgme-config|' -e \
-          's|/usr/bin/gpg-error-config|${libgpgerror.dev}/bin/gpg-error-config|' \
-          ./configure
-      '';
+      patches = [ ./fix-missing-deps.patch ];
       preConfigure = ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${efivar}/include/efivar"
       '';
-      configureFlags =
-        [ "--with-systemdunitdir=$(out)/lib/systemd/system"
-          "--with-udevrulesdir=$(out)/lib/udev/rules.d"
-          "--localstatedir=/var"
-        ];
+      mesonFlags = [ "-Denable-colorhug=false" "-Denable-man=false" "-Denable-tests=false" "--localstatedir=/var" "-Denable-doc=false" "-Dwith-bootdir=/boot" ];
       enableParallelBuilding = true;
       meta =
         { license = [ stdenv.lib.licenses.gpl2 ];

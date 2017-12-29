@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "03ay6sa4ii8h6rr3l2qiqqml8xl6gplrlg4v2avdh9y6sihfyvvn";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig openwsman openssl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool openwsman openssl ];
 
   preConfigure = ''
     ./bootstrap

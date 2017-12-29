@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   name = "mate-themes-${version}";
   version = "${major-ver}.${minor-ver}";
-  major-ver = gnome3.version;
+  # There is no 3.24 release.
+  major-ver = if stdenv.lib.versionOlder gnome3.version "3.23" then gnome3.version else "3.22";
   minor-ver = {
     "3.20" = "22";
     "3.22" = "13";

@@ -21,6 +21,7 @@ pythonPackages.buildPythonApplication rec {
     cat ${startScript} > etc/scripts/gmvault
     chmod +x etc/scripts/gmvault
     substituteInPlace setup.py --replace "==" ">="
+    substituteInPlace setup.py --replace "argparse" ""
   '';
 
   meta = {

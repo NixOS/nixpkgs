@@ -5,7 +5,8 @@
 
     system.fsPackages = [ pkgs.e2fsprogs ];
 
-    boot.initrd.availableKernelModules = [ "ext2" "ext3" "ext4" ];
+    # As of kernel 4.3, there is no separate ext3 driver (they're also handled by ext4.ko)
+    boot.initrd.availableKernelModules = [ "ext2" "ext4" ];
 
     boot.initrd.extraUtilsCommands =
       ''

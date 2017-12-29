@@ -6,13 +6,13 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtlwifi_new-${version}";
-  version = "2016-09-12";
+  version = "2017-07-18";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtlwifi_new";
-    rev = "7a1b37d2121e8ab1457f002b2729fc23e6ff3e10";
-    sha256 = "0z8grf0fak2ryxwzapp9di77c4bghzkv8lffv76idkcnxgq6sclv";
+    rev = "a24cb561b4d23187ea103255336daa7ca88791a7";
+    sha256 = "1w9rx5wafcp1vc4yh7lj332bv78szl6gmx3ckr8yl6c39alqcv0d";
   };
 
   hardeningDisable = [ "pic" "format" ];

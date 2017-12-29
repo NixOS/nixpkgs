@@ -13,10 +13,8 @@ from pyquery import PyQuery as pq
 
 
 maintainers_json = subprocess.check_output([
-    'nix-instantiate',
-    'lib/maintainers.nix',
-    '--eval',
-    '--json'])
+    'nix-instantiate', '-E', 'import ./lib/maintainers.nix {}', '--eval', '--json'
+])
 maintainers = json.loads(maintainers_json)
 MAINTAINERS = {v: k for k, v in maintainers.iteritems()}
 
@@ -31,25 +29,28 @@ EVAL_FILE = {
 
 
 def get_maintainers(attr_name):
-    nixname = attr_name.split('.')
-    meta_json = subprocess.check_output([
-        'nix-instantiate',
-        '--eval',
-        '--strict',
-        '-A',
-        '.'.join(nixname[1:]) + '.meta',
-        EVAL_FILE[nixname[0]],
-        '--json'])
-    meta = json.loads(meta_json)
-    if meta.get('maintainers'):
-        return [MAINTAINERS[name] for name in meta['maintainers'] if MAINTAINERS.get(name)]
+    try:
+        nixname = attr_name.split('.')
+        meta_json = subprocess.check_output([
+            'nix-instantiate',
+            '--eval',
+            '--strict',
+            '-A',
+            '.'.join(nixname[1:]) + '.meta',
+            EVAL_FILE[nixname[0]],
+            '--json'])
+        meta = json.loads(meta_json)
+        if meta.get('maintainers'):
+            return [MAINTAINERS[name] for name in meta['maintainers'] if MAINTAINERS.get(name)]
+    except:
+       return []
 
 
 @click.command()
 @click.option(
     '--jobset',
-    default="nixos/release-17.03",
-    help='Hydra project like nixos/release-17.03')
+    default="nixos/release-17.09",
+    help='Hydra project like nixos/release-17.09')
 def cli(jobset):
     """
     Given a Hydra project, inspect latest evaluation

@@ -13,8 +13,8 @@ with pkgs; rec {
     pythonSupport = false;
   }).overrideDerivation
     (old: { 
-      buildInputs = old.buildInputs ++ [ autoreconfHook pkgconfig zlib nodejs ];
-      nativeBuildInputs = old.nativeBuildInputs ++ [ zlib pkgconfig ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ autoreconfHook pkgconfig ];
+      buildInputs = old.buildInputs ++ [ zlib nodejs ];
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used..."; 
       checkPhase = ''
@@ -39,7 +39,8 @@ with pkgs; rec {
   xmlmirror = buildEmscriptenPackage rec {
     name = "xmlmirror";
 
-    buildInputs = [ autoconf automake libtool pkgconfig gnumake libxml2 nodejs 
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ autoconf automake libtool gnumake libxml2 nodejs 
        python openjdk json_c zlib ];
 
     src = fetchgit {

@@ -1,6 +1,10 @@
 #! @shell@
-set -eu -o pipefail
+set -eu -o pipefail +o posix
 shopt -s nullglob
+
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
 
 path_backup="$PATH"
 
@@ -13,10 +17,6 @@ fi
 
 if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
-fi
-
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
 fi
 
 source @out@/nix-support/utils.sh
@@ -61,10 +61,6 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$p" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
     n+=1
 done
@@ -138,7 +134,7 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK "${hardeningLDFlags[@]}")
+    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_@infixSalt@_LDFLAGS again).
@@ -165,7 +161,7 @@ if [ "$*" = -v ]; then
 fi
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
@@ -173,10 +169,6 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" ${params+"${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
-fi
-
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

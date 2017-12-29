@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "164j43am4hka2vbzw4n52zy7rafgp6kmkgbcbvap368az644mr73";
   };
 
-  buildInputs = [ pcre pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre python ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl zlib libpcap boost automake autoconf ] ++ lib.optional useCairo cairo;
 
   postUnpack = ''
-    pushd tcpflow-*-src/src
+    pushd "$sourceRoot/src"
     cp -rv ${be13_api}/* be13_api/
     cp -rv ${dfxml}/* dfxml/
     cp -rv ${httpparser}/* http-parser/

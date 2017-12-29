@@ -18,9 +18,9 @@ appleDerivation {
 
     substituteInPlace lib/SecCertificate.cpp --replace '#include <Security/SecCertificatePriv.h>' ""
 
-    cp ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/include/xpc/private.h xpc
+    cp ${osx_private_sdk}/include/xpc/private.h xpc
     cp ${apple_sdk.sdk}/include/xpc/*.h xpc
-    cp ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/local/include/sandbox_private.h lib/sandbox.h
+    cp ${osx_private_sdk}/include/sandbox_private.h lib/sandbox.h
 
     substituteInPlace lib/SecItemPriv.h \
       --replace "extern CFTypeRef kSecAttrAccessGroup" "extern const CFTypeRef kSecAttrAccessGroup" \

@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "1rg7ydvnhlg8w6blilm3cv6v4q51x1hgrbkln2ikhpdq0vakp5fd";
   };
 
-  depsSha256 = "1n4rxipna307r4xppb2iaads7kpa3yjv99fimvpn8l0f999ir2rz";
+  cargoSha256 = "0i9617qwc6d4jvlbydwk03rcsnyvxzpbn2ms10ds4r6x7jy2a4sy";
 
   cargoBuildFlags = ["--features cli"];
 

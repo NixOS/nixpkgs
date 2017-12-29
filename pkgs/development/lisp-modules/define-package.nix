@@ -1,7 +1,10 @@
-args @ {stdenv, clwrapper, baseName, packageName ? baseName, testSystems ? [packageName]
+args @ {stdenv, clwrapper, baseName, packageName ? baseName
+  , parasites ? []
+  , buildSystems ? ([packageName] ++ parasites)
   , version ? "latest"
   , src, description, deps, buildInputs ? [], meta ? {}, overrides?(x: {})
-  , propagatedBuildInputs ? []}:
+  , propagatedBuildInputs ? []
+  , asdFilesToKeep ? [(builtins.concatStringsSep "" [packageName ".asd"])]}:
 let
   deployConfigScript = ''
     outhash="$out"
@@ -43,11 +46,34 @@ let
     echo "export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
     echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
+  moveAsdFiles = ''
+    find $out/lib/common-lisp/ -name '*.asd' | while read ASD_FILE; do
+      KEEP_THIS_ASD=0
+      for ALLOWED_ASD in $asdFilesToKeep; do
+        ALLOWED_ASD="/$ALLOWED_ASD"
+        ALLOWED_ASD_LENGTH=${"$"}{#ALLOWED_ASD}
+        ASD_FILE_LENGTH=${"$"}{#ASD_FILE}
+        ASD_FILE_SUFFIX_INDEX=$(expr "$ASD_FILE_LENGTH" - "$ALLOWED_ASD_LENGTH")
+        ASD_FILE_SUFFIX_INDEX=$(expr "$ASD_FILE_SUFFIX_INDEX" + 1)
+        echo $ALLOWED_ASD $ASD_FILE $ASD_FILE_SUFFIX_INDEX $(expr substr "$ASD_FILE" "$ASD_FILE_SUFFIX_INDEX" "$ASD_FILE_LENGTH")
+        if [ "$(expr substr "$ASD_FILE" "$ASD_FILE_SUFFIX_INDEX" "$ASD_FILE_LENGTH")" == "$ALLOWED_ASD" ]; then
+          KEEP_THIS_ASD=1
+          break
+        fi
+      done
+      if [ "$KEEP_THIS_ASD" == 0 ]; then
+        mv "$ASD_FILE"{,.sibling}
+      fi
+    done
+  '';
 basePackage = {
   name = "lisp-${baseName}-${version}";
   inherit src;
 
+  dontBuild = true;
+
   inherit deployConfigScript deployLaunchScript;
+  inherit asdFilesToKeep moveAsdFiles;
   installPhase = ''
     eval "$preInstall"
 
@@ -58,18 +84,19 @@ basePackage = {
 
     ${deployConfigScript}
     ${deployLaunchScript}
+    ${moveAsdFiles}
 
-    ${stdenv.lib.concatMapStrings (testSystem: ''
-       env -i \
-       NIX_LISP="$NIX_LISP" \
-       NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
-             (asdf:compile-system :${testSystem})
-             (asdf:load-system :${testSystem})
-             (asdf:operate (quote asdf::compile-bundle-op) :${testSystem})
-             (ignore-errors (asdf:operate (quote asdf::deploy-asd-op) :${testSystem}))
-             )"' \
-          "$out/bin/${args.baseName}-lisp-launcher.sh"
-    '') testSystems}
+    env -i \
+    NIX_LISP="$NIX_LISP" \
+    NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
+          ${stdenv.lib.concatMapStrings (system: ''
+            (asdf:compile-system :${system})
+            (asdf:load-system :${system})
+            (asdf:operate (quote asdf::compile-bundle-op) :${system})
+            (ignore-errors (asdf:operate (quote asdf::deploy-asd-op) :${system}))
+'') buildSystems}
+          )"' \
+       "$out/bin/${args.baseName}-lisp-launcher.sh"
 
     eval "$postInstall"
   '';

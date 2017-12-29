@@ -3,7 +3,7 @@
 let
   df = dwarf-fortress-original;
   dt = dwarf-therapist-original;
-  inifile = "linux/v0${df.baseVersion}.${df.patchVersion}.ini";
+  inifile = "linux/v0.${df.baseVersion}.${df.patchVersion}.ini";
   dfHashFile = "${df}/hash.md5";
 
 in symlinkJoin {

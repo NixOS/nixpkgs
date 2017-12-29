@@ -6,7 +6,8 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/freepops/0.2.9/freepops-0.2.9.tar.gz;
     sha256 = "3a065e30cafed03d9b6fdb28251ae5bf0d8aeb62181746154beecd25dc0c9cae";
   };
-  buildInputs = [pkgconfig openssl lua5 curl readline bison expat];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl lua5 curl readline bison expat];
   configurePhase =
   ''
     export WHERE=$prefix/

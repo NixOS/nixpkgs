@@ -9,6 +9,12 @@ in {
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
   options.amazonImage = {
+    name = mkOption {
+      type = types.str;
+      description = "The name of the generated derivation";
+      default = "nixos-disk-image";
+    };
+
     contents = mkOption {
       example = literalExample ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -38,7 +44,7 @@ in {
 
   config.system.build.amazonImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
-    inherit (cfg) contents format;
+    inherit (cfg) contents format name;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
     partitioned = config.ec2.hvm;
     diskSize = cfg.sizeMB;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, callPackage, libpng12, imagemagick,
-  autoreconfHook, glib, pstoedit, pkgconfig, gettext, darwin }:
+  autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin }:
 
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook glib autofig pkgconfig gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
     ++ stdenv.lib.optionals stdenv.isDarwin
-       (with darwin.apple_sdk.frameworks; [ApplicationServices]);
-    
+       (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
+
   postUnpack = ''
     pushd $sourceRoot
     autofig autotrace-config.af
@@ -66,5 +66,59 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl2;
+    knownVulnerabilities = [
+      "CVE-2013-1953"
+      "CVE-2016-7392"
+      "CVE-2017-9151"
+      "CVE-2017-9152"
+      "CVE-2017-9153"
+      "CVE-2017-9154"
+      "CVE-2017-9155"
+      "CVE-2017-9156"
+      "CVE-2017-9157"
+      "CVE-2017-9158"
+      "CVE-2017-9159"
+      "CVE-2017-9160"
+      "CVE-2017-9161"
+      "CVE-2017-9162"
+      "CVE-2017-9163"
+      "CVE-2017-9164"
+      "CVE-2017-9165"
+      "CVE-2017-9166"
+      "CVE-2017-9167"
+      "CVE-2017-9168"
+      "CVE-2017-9169"
+      "CVE-2017-9170"
+      "CVE-2017-9171"
+      "CVE-2017-9172"
+      "CVE-2017-9173"
+      "CVE-2017-9174"
+      "CVE-2017-9175"
+      "CVE-2017-9176"
+      "CVE-2017-9177"
+      "CVE-2017-9178"
+      "CVE-2017-9179"
+      "CVE-2017-9180"
+      "CVE-2017-9181"
+      "CVE-2017-9182"
+      "CVE-2017-9183"
+      "CVE-2017-9184"
+      "CVE-2017-9185"
+      "CVE-2017-9186"
+      "CVE-2017-9187"
+      "CVE-2017-9188"
+      "CVE-2017-9189"
+      "CVE-2017-9190"
+      "CVE-2017-9191"
+      "CVE-2017-9192"
+      "CVE-2017-9193"
+      "CVE-2017-9194"
+      "CVE-2017-9195"
+      "CVE-2017-9196"
+      "CVE-2017-9197"
+      "CVE-2017-9198"
+      "CVE-2017-9199"
+      "CVE-2017-9200"
+    ];
   };
 }

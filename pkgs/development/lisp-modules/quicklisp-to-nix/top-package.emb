@@ -8,7 +8,6 @@ let quicklisp-to-nix-packages = rec {
 <% @loop invocations %>
 <% @var code %>
 <% @endloop %>
-} // qlAliases {inherit quicklisp-to-nix-packages;};
-qlAliases = import ./quicklisp-to-nix-aliases.nix;
+};
 in
    quicklisp-to-nix-packages

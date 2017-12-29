@@ -4,7 +4,7 @@ let
 
   rootHints = fetchurl {
     url = "https://www.internic.net/domain/named.root";
-    sha256 = "0qsyxpj5b3i7n162qfyv76ljqbvnwjii7jk8mpfinklx0sk01473";
+    sha256 = "0vdrff4l8s8grif52dnh091s8qydhh88k25zqd9rj66sf1qwcwxl";
   };
 
   rootKey = ./root.key;
@@ -13,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dns-root-data-2017-07-26";
+  name = "dns-root-data-2017-10-24";
 
   buildCommand = ''
     mkdir $out

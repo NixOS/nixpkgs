@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1klpvv98bnx1zm6aqalnri2vd7w80scmdaxr2qnblb6mz82whk1j";
   };
 
-  buildInputs = [ libnl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libnl ];
 
   makeFlags = [ "PREFIX=\${out}" ];
 

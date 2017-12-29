@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "0gjylvvmq7ha0nhcjg56qfp0xxpsrcsj7y5r914svd5x1ppmzm5n";
   };
 
-  buildInputs = [ pkgconfig alsaLib libxmp ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib libxmp ];
 }

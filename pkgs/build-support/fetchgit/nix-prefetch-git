@@ -39,7 +39,7 @@ usage(){
 
 Options:
       --out path      Path where the output would be stored.
-      --url url       Any url understand by 'git clone'.
+      --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
       --deepClone     Clone the entire repository.

@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "01654d5abdcde6dac131cae9befe5cf6f01f9f7524d097c3b0f316e39f84ef73";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig cairo fontconfig freetype
+    cairo fontconfig freetype
     libXft libXcursor libXinerama libXpm libXt
     librsvg libpng fribidi perl
   ] ++ stdenv.lib.optional gestures libstroke;

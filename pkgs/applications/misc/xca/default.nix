@@ -20,12 +20,6 @@ mkDerivation rec {
 
   configureFlags = [ "CXXFLAGS=-std=c++11" ];
 
-  preBuild = ''
-    substituteInPlace Local.mak \
-      --replace ${qtbase}/bin/moc ${qtbase.dev}/bin/moc \
-      --replace ${qtbase}/bin/uic ${qtbase.dev}/bin/uic
-  '';
-
   meta = with lib; {
     description = "Interface for managing asymetric keys like RSA or DSA";
     homepage = http://xca.sourceforge.net/;

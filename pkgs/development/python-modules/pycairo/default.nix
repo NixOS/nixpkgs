@@ -31,7 +31,8 @@ in buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ python pkgconfig cairo xlibsWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python cairo xlibsWrapper ];
 
   configurePhase = ''
     (

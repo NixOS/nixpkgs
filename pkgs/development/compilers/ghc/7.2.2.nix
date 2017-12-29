@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;
+    broken = true;   # broken by 51cf42ad0d3ccb55af182f1f0ee5eb5094ea5995: https://hydra.nixos.org/build/60616815
   };
 
 }

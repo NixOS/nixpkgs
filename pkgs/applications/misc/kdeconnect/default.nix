@@ -5,6 +5,7 @@
 , kcmutils
 , kconfigwidgets
 , kdbusaddons
+, kdoctools
 , kiconthemes
 , ki18n
 , knotifications
@@ -15,34 +16,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kdeconnect-${version}";
-  version = "1.0.3";
+  pname = "kdeconnect";
+  version = "1.2";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/kdeconnect/${version}/src/kdeconnect-kde-${version}.tar.xz";
-    sha256 = "0b40402adw7cqz19fh8zw70f6l7b5p400mw668n3wic4favn27r2";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-${version}.tar.xz";
+    sha256 = "0w3rdldnr6md70r4ch255vk712d37vy63ml7ly2fhr4cfnk2i1ay";
   };
 
   buildInputs = [
-    kcmutils
-    kconfigwidgets
-    kdbusaddons
-    qca-qt5
-    ki18n
-    kiconthemes
-    knotifications
-    libfakekey
-    libXtst
-    qtx11extras
+    libfakekey libXtst
+    ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
+    qca-qt5 qtx11extras
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "KDE Connect provides several features to integrate your phone and your computer";
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ fridh ];
-    homepage = https://community.kde.org/KDEConnect;
+    homepage    = https://community.kde.org/KDEConnect;
+    license     = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [ fridh ];
   };
-
 }

@@ -1,27 +1,28 @@
-{ stdenv, writeScriptBin, makeWrapper, buildEnv, ghcWithPackages, ihaskell, ipython, packages }:
+{ stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages, ihaskell, jupyter, packages }:
 let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell
-    self.ihaskell-blaze
-    self.ihaskell-diagrams
-    self.ihaskell-display
+    (haskell.lib.doJailbreak self.ihaskell-blaze)
+    (haskell.lib.doJailbreak self.ihaskell-diagrams)
+    (haskell.lib.doJailbreak self.ihaskell-display)
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
     export GHC_PACKAGE_PATH="$(echo ${ihaskellEnv}/lib/*/package.conf.d| tr ' ' ':'):$GHC_PACKAGE_PATH"
-    export PATH="${stdenv.lib.makeBinPath [ ihaskell ihaskellEnv ipython ]}"
-    ${ihaskell}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${ipython}/bin/ipython notebook --kernel=haskell
+    export PATH="${stdenv.lib.makeBinPath ([ ihaskell ihaskellEnv jupyter ])}"
+    ${ihaskell}/bin/ihaskell install -l $(${ihaskellEnv}/bin/ghc --print-libdir) && ${jupyter}/bin/jupyter notebook
   '';
-  profile = "${ihaskell.pname}-${ihaskell.version}/profile/profile.tar";
 in
 buildEnv {
   name = "ihaskell-with-packages";
-  paths = [ ihaskellEnv ipython ];
+  buildInputs = [ makeWrapper ];
+  paths = [ ihaskellEnv jupyter ];
   postBuild = ''
-    . "${makeWrapper}/nix-support/setup-hook"
-    ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/.
+    ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/
     for prg in $out/bin"/"*;do
-      wrapProgram $prg --set PYTHONPATH "$(echo ${ipython}/lib/*/site-packages)"
+      if [[ -f $prg && -x $prg ]]; then
+        wrapProgram $prg --set PYTHONPATH "$(echo ${jupyter}/lib/*/site-packages)"
+      fi
     done
   '';
 }

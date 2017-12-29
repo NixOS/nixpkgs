@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     install util/unmkcromfs $out/bin
   '';
 
-  buildInputs = [ pkgconfig fuse perl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse perl ];
 
   meta = {
     description = "FUSE Compressed ROM filesystem with lzma";

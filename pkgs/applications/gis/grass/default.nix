@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "02qrdgn46gxr60amxwax4b8fkkmhmjxi6qh4yfvpbii6ai6diarf";
   };
 
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite pkgconfig cairo
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.client blas ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
@@ -71,5 +72,6 @@ stdenv.mkDerivation {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
+    broken = true;
   };
 }

@@ -13,11 +13,11 @@ assert withGssapiPatches -> withKerberos;
 let
 
   # **please** update this patch when you update to a new openssh release.
-  gssapiSrc = fetchpatch {
+  gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=a18d56bd84f04292ec9178b4b17ef6d56a0c7aef";
-    sha256 = "1sb929lfc3s45km2vpylmlbb6mpqcbr74xl6gx2s4cgnsrfd9kp3";
+        + "/patches/gssapi.patch?id=1e0d55f9163793742d20eaadd4784db16fd3459d";
+    sha256 = "130phj87q87p9crigd6852nnaqsqkfg09h45a32lk4524h9kkxgb";
   };
 
 in
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.5p1";
+  version = if hpnSupport then "7.5p1" else "7.6p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "1w7rb5gbrikxdkp8w7zxnci4549gk4bw1lml01s59w5rzb2y6ilq";
+        sha256 = "08qpsb8mrzcx8wgvz9insiyvq7sbg26yj5nvl2m5n57yvppcl8x3";
       };
 
   patches =
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
     ]
-    ++ optional withGssapiPatches gssapiSrc;
+    ++ optional withGssapiPatches gssapiPatch;
 
   postPatch =
     # On Hydra this makes installation fail (sometimes?),
@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib openssl libedit pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
 

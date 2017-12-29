@@ -2,7 +2,7 @@
 , gsettings_desktop_schemas }:
 
 let
-  ver_maj = "2.50";
+  ver_maj = "2.54";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib-networking/${ver_maj}/${name}.tar.xz";
-    sha256 = "3f1a442f3c2a734946983532ce59ed49120319fdb10c938447c373d5e5286bee";
+    sha256 = "5961b3779080b72314b373ff5d4790eb7e41b75ca91816ad7a81ef32922f7096";
   };
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs

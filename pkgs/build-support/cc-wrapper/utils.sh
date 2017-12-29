@@ -1,5 +1,5 @@
 skip () {
-    if [ -n "${NIX_DEBUG:-}" ]; then
+    if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2
     fi
 }
@@ -30,7 +30,7 @@ expandResponseParams() {
         if [[ "$arg" == @* ]]; then
             # phase separation makes this look useless
             # shellcheck disable=SC2157
-            if [ -n "@expandResponseParams@" ]; then
+            if [ -x "@expandResponseParams@" ]; then
                 # params is used by caller
                 #shellcheck disable=SC2034
                 readarray -d '' params < <("@expandResponseParams@" "$@")

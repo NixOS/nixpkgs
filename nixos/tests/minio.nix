@@ -12,6 +12,9 @@ import ./make-test.nix ({ pkgs, ...} : {
         secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
       };
       environment.systemPackages = [ pkgs.minio-client ];
+
+      # Minio requires at least 1GiB of free disk space to run.
+      virtualisation.diskSize = 4 * 1024;
     };
   };
 
@@ -20,7 +23,6 @@ import ./make-test.nix ({ pkgs, ...} : {
       startAll;
       $machine->waitForUnit("minio.service");
       $machine->waitForOpenPort(9000);
-      $machine->succeed("curl --fail http://localhost:9000/minio/index.html");
 
       # Create a test bucket on the server
       $machine->succeed("mc config host add minio http://localhost:9000 BKIKJAA5BMMU2RHO6IBB V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12 S3v4");

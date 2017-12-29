@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper
 , xorg, gtk2, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig
-, gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify }:
+, gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -39,6 +39,8 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
+  buildInputs = [ makeWrapper ];
+
   unpackPhase = ''
     tar xzf $src
   '';
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     paxmark m $out/opt/franz/Franz
+    wrapProgram $out/opt/franz/Franz --prefix PATH : ${xdg_utils}/bin
   '';
 
   meta = with stdenv.lib; {

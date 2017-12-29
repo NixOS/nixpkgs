@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev libXdmcp portaudio libusb libpulseaudio
                   libevdev libXdmcp portaudio libusb libpulseaudio

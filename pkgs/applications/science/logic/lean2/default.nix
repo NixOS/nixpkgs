@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
+  cmakeFlags = [ "-GNinja" ];
+
   postInstall = ''
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';

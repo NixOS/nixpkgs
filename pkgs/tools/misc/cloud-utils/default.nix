@@ -1,27 +1,34 @@
-{ stdenv, fetchurl, makeWrapper, gawk, gnused, utillinux }:
+{ stdenv, fetchurl, makeWrapper
+, gawk, gnused, utillinux, file
+, wget, python3, qemu, euca2ools
+, e2fsprogs, cdrkit }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   # NOTICE: if you bump this, make sure to run
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
-  name = "cloud-utils-0.29";
+  # growpart is needed in initrd in nixos/modules/virtualisation/grow-partition.nix
+  name = "cloud-utils-${version}";
+  version = "0.30";
   src = fetchurl {
-    url = "https://launchpad.net/cloud-utils/trunk/0.29/+download/cloud-utils-0.29.tar.gz";
-    sha256 = "0z15gs8gmpy5gqxl7yiyjj7a6s8iw44djj6axvbci627b9pvd8cy";
+    url = "https://launchpad.net/cloud-utils/trunk/0.3/+download/cloud-utils-${version}.tar.gz";
+    sha256 = "19ca9ckwwsvlqrjz19bc93rq4gv3y4ak7551li2qk95caqyxsq3k";
   };
-  buildInputs = [ makeWrapper ];
-  buildPhase = ''
-    mkdir -p $out/bin
-    cp bin/growpart $out/bin/growpart
-    sed -i 's|awk|gawk|' $out/bin/growpart
-    sed -i 's|sed|gnused|' $out/bin/growpart
-    ln -s sed $out/bin/gnused
-    wrapProgram $out/bin/growpart --prefix PATH : "${stdenv.lib.makeBinPath [ gnused gawk utillinux ]}:$out/bin"
-  '';
-  dontInstall = true;
-  dontPatchShebangs = true;
-  dontStrip = true;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 ];
+  installFlags = [ "LIBDIR=$(out)/lib" "BINDIR=$(out)/bin" "MANDIR=$(out)/man/man1" "DOCDIR=$(out)/doc" ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
-  };
+  # according to https://packages.ubuntu.com/source/zesty/cloud-utils
+  binDeps = [
+    wget e2fsprogs file gnused gawk utillinux qemu euca2ools cdrkit
+  ];
+
+  postFixup = ''
+    for i in $out/bin/*; do
+      wrapProgram $i --prefix PATH : "${stdenv.lib.makeBinPath binDeps}:$out/bin"
+    done
+  '';
+
+  dontBuild = true;
+
+  meta.platforms = stdenv.lib.platforms.unix;
 }

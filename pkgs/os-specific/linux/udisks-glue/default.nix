@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "317d25bf249278dc8f6a5dcf18f760512427c772b9afe3cfe34e6e1baa258176";
   };
 
-  buildInputs = [ automake autoconf pkgconfig udisks dbus_glib glib confuse ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ automake autoconf udisks dbus_glib glib confuse ];
 
   preConfigure = "sh autogen.sh";
 

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
   };
 
-  buildInputs = [ autoreconfHook protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ protobuf ncurses zlib IOTty makeWrapper perl openssl ];
 
   patches = [ ./ssh_path.patch ];
   postPatch = ''

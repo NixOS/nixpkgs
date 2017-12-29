@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xyhvhm85d9z0kw716cjllrrzksn4s4bw34layg8hf4m5m31sp2p";
   };
 
-  buildInputs = [ boost ladspaH lilv lv2 pkgconfig serd sord sratom ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost ladspaH lilv lv2 serd sord sratom ];
 
   installPhase = ''
     mkdir -p $out/bin

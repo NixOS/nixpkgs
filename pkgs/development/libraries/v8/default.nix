@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline python icu patchelf ]
   ++ stdenv.lib.optionals stdenv.isDarwin [ cctools ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow -Wno-error=unused-function -Wno-error=attributes";
 
   buildFlags = [
     "LINK=c++"

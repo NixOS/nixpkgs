@@ -1,0 +1,59 @@
+commit 31d3ac3d691b2a1b07991e67302fd52b0f409cac
+Author: Andy Li <andy@onthewings.net>
+Date:   Thu Jul 13 13:23:33 2017 +0800
+
+    include xlocale.h only if it is available since it is removed in recent glibc
+    
+    see: https://bugzilla.redhat.com/show_bug.cgi?id=1464244
+    
+    (Backported from e286c8f3301fa443255a3101d14b7392467051b8)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8de1702..d64cab9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ cmake_minimum_required(VERSION 2.8.7)
+ 
++include(CheckIncludeFile)
+ project(neko C)
+ 
+ set(CMAKE_OSX_ARCHITECTURES x86_64)
+@@ -48,6 +49,8 @@ set(NEKO_VERSION_MAJOR 2)
+ set(NEKO_VERSION_MINOR 1)
+ set(NEKO_VERSION_PATCH 0)
+ 
++check_include_file(xlocale.h HAVE_XLOCALE_H)
++
+ configure_file (
+ 	"${CMAKE_SOURCE_DIR}/vm/neko.h.in"
+ 	"${CMAKE_BINARY_DIR}/neko.h"
+diff --git a/libs/std/sys.c b/libs/std/sys.c
+index 8003d41..ae0cfee 100644
+--- a/libs/std/sys.c
++++ b/libs/std/sys.c
+@@ -41,7 +41,11 @@
+ #	include <sys/time.h>
+ #	include <sys/times.h>
+ #	include <sys/wait.h>
++#ifdef HAVE_XLOCALE_H
+ #	include <xlocale.h>
++#else
++#	include <locale.h>
++#endif
+ #endif
+ 
+ #ifdef NEKO_MAC
+diff --git a/vm/neko.h.in b/vm/neko.h.in
+index bb9ec1b..147ecce 100644
+--- a/vm/neko.h.in
++++ b/vm/neko.h.in
+@@ -88,6 +88,8 @@
+ #	include <stdint.h>
+ #endif
+ 
++#cmakedefine HAVE_XLOCALE_H
++
+ #define NEKO_VERSION_MAJOR	@NEKO_VERSION_MAJOR@
+ #define NEKO_VERSION_MINOR	@NEKO_VERSION_MINOR@
+ #define NEKO_VERSION_PATCH	@NEKO_VERSION_PATCH@

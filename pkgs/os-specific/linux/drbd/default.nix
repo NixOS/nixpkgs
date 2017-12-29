@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export PATH=${systemd.udev.bin}/sbin:$PATH
+      export PATH=${systemd}/sbin:$PATH
       substituteInPlace user/Makefile.in \
         --replace /sbin '$(sbindir)'
       substituteInPlace user/legacy/Makefile.in \

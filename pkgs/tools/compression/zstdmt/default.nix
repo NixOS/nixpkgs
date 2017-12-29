@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     owner = "mcmilk";
   };
 
-  sourceRoot = "zstdmt-v${version}-src/unix";
+  setSourceRoot = ''
+    sourceRoot=$(echo */unix)
+  '';
 
   buildInputs = [
     zstd lz4

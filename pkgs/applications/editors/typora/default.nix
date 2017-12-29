@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.31";
+  version = "0.9.38";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "786b5164d9c63ecc23eb427c5ff393285ce8fd540c5bfdd5c1464655fac87a42";
+        sha256 = "bf6a069c5da4a7dc289bdb3c8d27e7a81daeaee99488d4d3b512c6b673780557";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "a8fe53f8984d9f8c4e06c14affbb616be58a91cd2b475b9681fb18a6e21930d1";
+        sha256 = "edd092e96ebf69503cf6b39b77a61ec5e3185f8a1447da0bed063fa11861c1b9";
       }
     ;
 
@@ -57,8 +57,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     dpkg -x $src $out
-    cp -av $out/usr/* $out
+    mv $out/usr/bin $out
+    mv $out/usr/share $out
     rm $out/bin/typora
+    rmdir $out/usr
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
@@ -81,9 +83,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A minimal Markdown reading & writing app";
     homepage = https://typora.io;
-    license = licenses.free;
-    maintainers = with stdenv.lib.maintainers; [ jensbin ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jensbin ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
-

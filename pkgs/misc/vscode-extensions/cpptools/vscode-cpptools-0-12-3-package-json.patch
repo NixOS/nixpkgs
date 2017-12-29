@@ -1,0 +1,82 @@
+diff --git a/package.json b/package.json
+index 518e839..1c17c35 100644
+--- a/package.json
++++ b/package.json
+@@ -37,7 +37,26 @@
+     "Linters"
+   ],
+   "activationEvents": [
+-    "*"
++    "onLanguage:cpp",
++    "onLanguage:c",
++    "onCommand:extension.pickNativeProcess",
++    "onCommand:extension.pickRemoteNativeProcess",
++    "onCommand:extension.provideInitialConfigurations_cppvsdbg",
++    "onCommand:extension.provideInitialConfigurations_cppdbg",
++    "onCommand:C_Cpp.ConfigurationEdit",
++    "onCommand:C_Cpp.ConfigurationSelect",
++    "onCommand:C_Cpp.SwitchHeaderSource",
++    "onCommand:C_Cpp.UnloadLanguageServer",
++    "onCommand:C_Cpp.Navigate",
++    "onCommand:C_Cpp.GoToDeclaration",
++    "onCommand:C_Cpp.PeekDeclaration",
++    "onCommand:C_Cpp.ToggleErrorSquiggles",
++    "onCommand:C_Cpp.ToggleIncludeFallback",
++    "onCommand:C_Cpp.ShowReleaseNotes",
++    "onCommand:C_Cpp.ResetDatabase",
++    "workspaceContains:.vscode/c_cpp_properties.json",
++    "onDebug:cppdbg",
++    "onDebug:cppvsdbg"
+   ],
+   "main": "./out/src/main",
+   "contributes": {
+@@ -281,8 +300,7 @@
+             "cpp"
+           ]
+         },
+-        "runtime": "node",
+-        "program": "./out/src/Debugger/Proxy/debugProxy.js",
++        "program": "./debugAdapters/OpenDebugAD7",
+         "aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+         "variables": {
+           "pickProcess": "extension.pickNativeProcess",
+@@ -722,7 +740,29 @@
+               }
+             }
+           }
+-        }
++        },
++        "configurationSnippets": [
++          {
++            "label": "C/C++: (gdb) Launch",
++            "description": "Launch with gdb.",
++            "bodyText": "{\n\t\"name\": \"(gdb) Launch\",\n\t\"type\": \"cppdbg\",\n\t\"request\": \"launch\",\n\t\"program\": \"enter program name, for example \\${workspaceRoot}/a.out\",\n\t\"args\": [],\n\t\"stopAtEntry\": false,\n\t\"cwd\": \"\\${workspaceRoot}\",\n\t\"environment\": [],\n\t\"externalConsole\": true,\n\t\"MIMode\": \"gdb\",\n\t\"setupCommands\": [\n\t    {\n\t        \"description\": \"Enable pretty-printing for gdb\",\n\t        \"text\": \"-enable-pretty-printing\",\n\t        \"ignoreFailures\": true\n\t    }\n\t]\n}"
++          },
++          {
++            "label": "C/C++: (gdb) Attach",
++            "description": "Attach with gdb.",
++            "bodyText": "{ \n\t\"name\": \"(gdb) Attach\",\n\t\"type\": \"cppdbg\",\n\t\"request\": \"attach\",\n\t\"program\": \"enter program name, for example \\${workspaceRoot}/a.out\",\n\t\"processId\": \"\\${command:pickProcess}\",\n\t\"MIMode\": \"gdb\"\n}"
++          },
++          {
++            "label": "C/C++: (gdb) Pipe Launch",
++            "description": "Pipe Launch with gdb.",
++            "bodyText": "{\n\t\"name\": \"(gdb) Pipe Launch\",\n\t\"type\": \"cppdbg\",\n\t\"request\": \"launch\",\n\t\"program\": \"enter program name, for example \\${workspaceRoot}/a.out\",\n\t\"args\": [],\n\t\"stopAtEntry\": false,\n\t\"cwd\": \"\\${workspaceRoot}\",\n\t\"environment\": [],\n\t\"externalConsole\": true,\n\t\"pipeTransport\": {\n\t\t\"debuggerPath\": \"/usr/bin/gdb\",\n\t\t\"pipeProgram\": \"/usr/bin/ssh\",\n\t\t\"pipeArgs\": [],\n\t\t\"pipeCwd\": \"\"\n\t},\n\t\"MIMode\": \"gdb\",\n\t\"setupCommands\": [\n\t    {\n\t        \"description\": \"Enable pretty-printing for gdb\",\n\t        \"text\": \"-enable-pretty-printing\",\n\t        \"ignoreFailures\": true\n\t    }\n\t]\n}"
++          },
++          {
++            "label": "C/C++: (gdb) Pipe Attach",
++            "description": "Pipe Attach with gdb.",
++            "bodyText": "{\n\t\"name\": \"(gdb) Pipe Attach\",\n\t\"type\": \"cppdbg\",\n\t\"request\": \"attach\",\n\t\"program\": \"enter program name, for example \\${workspaceRoot}/a.out\",\n\t\"processId\": \"\\${command:pickRemoteProcess}\",\n\t\"pipeTransport\": {\n\t\t\"debuggerPath\": \"/usr/bin/gdb\",\n\t\t\"pipeProgram\": \"/usr/bin/ssh\",\n\t\t\"pipeArgs\": [],\n\t\t\"pipeCwd\": \"\"\n\t},\n\t\"MIMode\": \"gdb\"\n}"
++          }
++        ]
+       },
+       {
+         "type": "cppvsdbg",
+@@ -741,7 +781,7 @@
+         "variables": {
+           "pickProcess": "extension.pickNativeProcess"
+         },
+-        "initialConfigurations": "extension.provideInitialConfigurations_cppvsdbg",
++        "initialConfigurations": "",
+         "configurationAttributes": {
+           "launch": {
+             "required": [

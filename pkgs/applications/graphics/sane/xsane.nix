@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     chmod a+rX -R .
   '';
 
-  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 ]
     ++ (if libusb != null then [libusb] else [])
     ++ stdenv.lib.optional gimpSupport gimp_2_8;
 

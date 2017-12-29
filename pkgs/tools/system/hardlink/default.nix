@@ -1,29 +1,33 @@
-{ fetchurl, stdenv, unzip }:
+{ stdenv, fetchurl, pcre2 }:
 
-let
-  rev = "3ec908d539";
-in
-stdenv.mkDerivation {
-  name = "hardlink-2012.9.${rev}";
+
+stdenv.mkDerivation rec {
+  name = "hardlink-${version}";
+  version = "1.3-4";
 
   src = fetchurl {
-    url = "http://pkgs.fedoraproject.org/cgit/hardlink.git/snapshot/hardlink-${rev}.zip";
-    sha256 = "fea1803170b538d5fecf6a8d312ded1d25d516e9386a3797441a247487551647";
-    name = "hardlink-${rev}.zip";
+    url = "http://pkgs.fedoraproject.org/cgit/rpms/hardlink.git/snapshot/hardlink-aa6325ac4e8100b8ac7d38c7f0bc2708e69bd855.tar.xz";
+    sha256 = "0g4hyrnd9hpykbf06qvvp3s4yyk7flbd95gilkf7r3w9vqiagvs2";
   };
+
+  buildInputs = [ pcre2 ];
+  NIX_CFLAGS_LINK = "-lpcre2-8";
+
+  buildPhase = ''
+    $CC -O2 hardlink.c -o hardlink $NIX_CFLAGS_LINK
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
-    cc -O2 hardlink.c -o $out/bin/hardlink
-    mv hardlink.1 $out/share/man/man1/hardlink.1
+    cp -f hardlink $out/bin/hardlink
+    cp -f hardlink.1 $out/share/man/man1/hardlink.1
   '';
 
-  buildInputs = [ unzip ];
-
-  meta = {
-    homepage = http://pkgs.fedoraproject.org/cgit/hardlink.git/;
+  meta = with stdenv.lib; {
     description = "Consolidate duplicate files via hardlinks";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = https://pagure.io/hardlink;
+    repositories.git = http://pkgs.fedoraproject.org/cgit/rpms/hardlink.git;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

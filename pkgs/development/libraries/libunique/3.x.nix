@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f70lkw66v9cj72q0iw1s2546r6bwwcd8idcm3621fg2fgh2rw58";
   };
 
-  buildInputs = [ pkgconfig dbus dbus_glib gtk3 gobjectIntrospection gtkdoc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus dbus_glib gtk3 gobjectIntrospection gtkdoc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
 
   meta = {
     homepage = https://wiki.gnome.org/Attic/LibUnique;

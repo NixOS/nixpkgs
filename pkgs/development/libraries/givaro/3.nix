@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     url = "https://forge.imag.fr/frs/download.php/592/givaro-${version}.tar.gz";
     sha256 = "1822ksv8653a84hvcz0vxl3nk8dqz7d41ys8rplq0zjjmvb2i5yq";
   };
-  buildInputs = [autoconf automake libtool autoreconfHook gmpxx];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [autoconf automake libtool gmpxx];
   meta = {
     inherit version;
     description = ''A C++ library for arithmetic and algebraic computations'';

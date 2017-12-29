@@ -31,7 +31,7 @@ ISO, copy its contents verbatim to your drive, then either:
     <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
     and change the <literal>root=</literal> field in the <literal>options</literal>
     line to point to your drive (see the documentation on <literal>root=</literal>
-    in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
+    in <link xlink:href="https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt">
     the kernel documentation</link> for more details).</para>
   </listitem>
   <listitem>

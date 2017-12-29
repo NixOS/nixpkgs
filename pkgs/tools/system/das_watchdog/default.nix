@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "02y1vfb3wh4908xjj1kpyf8kgxk29x8dw7yl3pnl220qz2gi99vr";
   };
 
-  buildInputs = [ libgtop xmessage which pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgtop xmessage which ];
 
   installPhase = ''
     mkdir -p $out/bin/

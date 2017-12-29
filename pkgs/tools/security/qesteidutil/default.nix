@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  buildInputs = [ cmake ccid qttools pkgconfig pcsclite qttranslations
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ccid qttools pcsclite qttranslations
                   hicolor_icon_theme
                 ];
   

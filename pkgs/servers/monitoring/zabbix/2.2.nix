@@ -57,7 +57,8 @@ in
         -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
     '';
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ postgresql curl openssl zlib ]
       ++ stdenv.lib.optional enableSnmp net_snmp
       ++ stdenv.lib.optional enableSsh libssh2
       ++ stdenv.lib.optional enableLdap openldap;

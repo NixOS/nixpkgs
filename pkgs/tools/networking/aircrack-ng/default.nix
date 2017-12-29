@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dpzx9kddxpgzmgvdpl3rxn0jdaqhm5wxxndp1xd7d75mmmc2fnr";
   };
 
-  buildInputs = [ libpcap openssl zlib libnl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap openssl zlib libnl ];
 
   patchPhase = ''
     sed -e 's@^prefix.*@prefix = '$out@ -i common.mak

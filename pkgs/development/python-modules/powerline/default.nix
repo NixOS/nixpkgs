@@ -8,6 +8,9 @@
 , pygit2
 }:
 
+# The source of this package needs to be patched to include the full path to
+# the executables of git, mercurial and bazaar.
+
 buildPythonPackage rec {
   rev  = "2.6";
   name = "powerline-${rev}";
@@ -17,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "c108f11fe10dc910febb94b87d3abded85d4363fb950366a9e30282b9ba7c272";
   };
 
-  propagatedBuildInputs = [ git mercurial bazaar psutil pygit2];
+  propagatedBuildInputs = [ psutil pygit2];
 
 # error: This is still beta and some tests still fail
   doCheck = false;

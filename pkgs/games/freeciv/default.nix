@@ -12,7 +12,7 @@ let
   gtkName = if gtkClient then "-gtk" else "";
 
   name = "freeciv";
-  version = "2.5.7";
+  version = "2.5.9";
 in
 stdenv.mkDerivation {
   name = "${name}${sdlName}${gtkName}-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
-    sha256 = "1lmydnnqraa947l7gdz6xgm0bgks1ywsivp9h4v8jr3avcv6gqzz";
+    sha256 = "0a2rjw6065psh14bkk6ar4i19dcicn9lz63rffr9h278b9c76g5q";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -95,7 +95,7 @@ in
       nixosVersionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: code names must only increase in alphabetical order.
-      nixosCodeName = "Hummingbird";
+      nixosCodeName = "Impala";
     };
 
     # Generate /etc/os-release.  See

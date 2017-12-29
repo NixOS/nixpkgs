@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   # INFO: It is important to list 'systemd' first as for now miraclecast
   # links against a customized systemd. Otherwise, a systemd package from
   # a propagatedBuildInput could take precedence.
-  buildInputs = [ systemd autoreconfHook pkgconfig udev glib readline ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ systemd udev glib readline ];
 
   meta = {
     homepage = https://github.com/albfan/miraclecast;

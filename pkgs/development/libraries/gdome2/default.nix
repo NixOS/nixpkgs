@@ -15,7 +15,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [pkgconfig glib libxml2 gtkdoc];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 gtkdoc];
   propagatedBuildInputs = [glib libxml2];
   patches = [ ./xml-document.patch ];
 

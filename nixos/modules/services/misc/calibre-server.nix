@@ -42,7 +42,7 @@ in
         serviceConfig = {
           User = "calibre-server";
           Restart = "always";
-          ExecStart = "${pkgs.calibre}/bin/calibre-server --with-library=${cfg.libraryDir}";
+          ExecStart = "${pkgs.calibre}/bin/calibre-server ${cfg.libraryDir}";
         };
 
       };

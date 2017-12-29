@@ -4,12 +4,12 @@
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20170730";
+  name = "dolphin-emu-20170902";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "141fb0f03ca4e0d05f7ccbf3e020997097f60dbe";
-    sha256 = "1b4ygrfj1dpmyv7qqfnqrrvm96a3b68cwcnvv2pknrcpc17g52im";
+    rev = "b073db51e5f3df8c9890e09a3f4f8a2276c31e3f";
+    sha256 = "0pr5inkd7swc6s7im7axhvmkdbqidhrha2wpflnr25aiwq0dzm10";
   };
 
   cmakeFlags = ''
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ gcc pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib pcre
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gcc cmake bluez ffmpeg libao mesa gtk2 glib pcre
                   gettext libpthreadstubs libXrandr libXext libSM readline openal
                   libevdev libXdmcp portaudio libusb libpulseaudio ];
 

@@ -4,7 +4,8 @@
 
 { buildPackages, runCommand, lib }:
 
-{ name
+lib.makeOverridable
+({ name
 
 , # The manifest file (if any).  A symlink $out/manifest will be
   # created to it.
@@ -68,4 +69,4 @@ runCommand name
   ''
     ${buildPackages.perl}/bin/perl -w ${./builder.pl}
     eval "$postBuild"
-  ''
+  '')

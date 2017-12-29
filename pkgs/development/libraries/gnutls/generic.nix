@@ -12,7 +12,8 @@ assert guileBindings -> guile != null;
 let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
+  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
+      && stdenv.buildPlatform == stdenv.hostPlatform;
 in
 stdenv.mkDerivation {
   name = "gnutls-${version}";

@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmilter libX11 openssl readline utillinux ];
   nativeBuildInputs = [ icmake yodl ];
 
-  sourceRoot = "bobcat-${version}-src/bobcat";
+  setSourceRoot = ''
+    sourceRoot=$(echo */bobcat)
+  '';
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

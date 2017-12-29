@@ -155,7 +155,10 @@ in
   ###### implementation
   config = {
 
-    security.wrappers.fusermount.source = "${pkgs.fuse}/bin/fusermount";
+    security.wrappers = {
+      fusermount.source = "${pkgs.fuse}/bin/fusermount";
+      fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
+    };
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";

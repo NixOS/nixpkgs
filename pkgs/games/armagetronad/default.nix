@@ -2,15 +2,15 @@
 
 let
   versionMajor = "0.2.8";
-  versionMinor = "3.3";
+  versionMinor = "3.4";
   version = "${versionMajor}.${versionMinor}";
 in
 
 stdenv.mkDerivation {
   name = "armagetron-${version}";
   src = fetchurl {
-    url = "https://launchpad.net/armagetronad/${versionMajor}/0.2.8.3.x/+download/armagetronad-${version}.src.tar.bz2";
-    sha256 = "1s55irhg60fpmhy8wwxpdq7c45r1mqch6zpicyb2wf9ln60xgwnx";
+    url = "https://launchpad.net/armagetronad/${versionMajor}/${versionMajor}.${versionMinor}/+download/armagetronad-${version}.src.tar.bz2";
+    sha256 = "157pp84wf0q3bdb72rnbm3ck0czwx2ply6lyhj8z7kfdc7csdbr3";
   };
 
   NIX_LDFLAGS = [ "-lSDL_image" ];

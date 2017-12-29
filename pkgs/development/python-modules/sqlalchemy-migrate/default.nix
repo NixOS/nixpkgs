@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0ld2bihp9kmf57ykgzrfgxs4j9kxlw79sgdj9sfn47snw3izb2p6";
   };
 
-  buildInputs = [ unittest2 scripttest pytz pylint tempest-lib mock testtools ];
+  checkInputs = [ unittest2 scripttest pytz pylint mock testtools tempest-lib ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   checkPhase = ''
@@ -27,9 +27,12 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/sqlalchemy-migrate/;
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
+    maintainers = with maintainers; [ makefu ];
   };
 }

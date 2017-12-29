@@ -11,6 +11,7 @@ python2Packages.buildPythonApplication {
   };
 
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ libxslt pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxslt intltool ];
   propagatedBuildInputs = [ libxml2Python ];
 }

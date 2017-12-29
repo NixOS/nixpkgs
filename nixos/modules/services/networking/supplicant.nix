@@ -181,18 +181,19 @@ in
 
       default = { };
 
-      example = {
-        "wlan0 wlan1" = {
-          configFile = "/etc/wpa_supplicant";
-          userControlled.group = "network";
-          extraConf = ''
-            ap_scan=1
-            p2p_disabled=1
-          '';
-          extraCmdArgs = "-u -W";
-          bridge = "br0";
-        };
-      };
+      example = literalExample ''
+        { "wlan0 wlan1" = {
+            configFile = "/etc/wpa_supplicant";
+            userControlled.group = "network";
+            extraConf = '''
+              ap_scan=1
+              p2p_disabled=1
+            ''';
+            extraCmdArgs = "-u -W";
+            bridge = "br0";
+          };
+        }
+      '';
 
       description = ''
         Interfaces for which to start <command>wpa_supplicant</command>.

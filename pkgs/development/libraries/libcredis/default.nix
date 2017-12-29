@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libcredis-0.2.3";
 
   src = fetchurl {
-    url = "https://credis.googlecode.com/files/credis-0.2.3.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-0.2.3.tar.gz";
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C client library for Redis (key-value database)";
-    homepage = https://code.google.com/p/credis/;
+    homepage = https://code.google.com/archive/p/credis/;
     license = licenses.bsd3; # from homepage
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

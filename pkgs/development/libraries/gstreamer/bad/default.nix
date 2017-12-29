@@ -17,11 +17,11 @@ let
   inherit (stdenv.lib) optional optionalString;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.10.4";
+  name = "gst-plugins-bad-1.12.2";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the
       rest.  They might be close to being good quality, but they're missing
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "0rk9rlzf2b0hjw5hwbadz53yh4ls7vm3w3cshsa3n8isdd8axp93";
+    sha256 = "0dwyq03g2m0p16dwx8q5qvjn5x9ia72h21sf87mp97gmwkfpwb4w";
   };
 
   outputs = [ "out" "dev" ];

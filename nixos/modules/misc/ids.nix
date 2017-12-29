@@ -207,11 +207,12 @@
       ripple-data-api = 186;
       mediatomb = 187;
       rdnssd = 188;
-      # ihaskell = 189; # unused
+      ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
+      plexpy = 195;
       grafana = 196;
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
@@ -254,7 +255,6 @@
       hydra-queue-runner = 235;
       hydra-www = 236;
       syncthing = 237;
-      mfi = 238;
       caddy = 239;
       taskd = 240;
       factorio = 241;
@@ -297,6 +297,9 @@
       clickhouse = 278;
       rslsync = 279;
       minio = 280;
+      kanboard = 281;
+      pykms = 282;
+      kodi = 283;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -427,7 +430,7 @@
       teamspeak = 124;
       influxdb = 125;
       nsd = 126;
-      #gitolite = 127; # unused
+      gitolite = 127;
       znc = 128;
       polipo = 129;
       mopidy = 130;
@@ -481,7 +484,7 @@
       #ripple-data-api = 186; #unused
       mediatomb = 187;
       #rdnssd = 188; # unused
-      # ihaskell = 189; # unused
+      ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
       asterisk = 192;
@@ -522,7 +525,6 @@
       octoprint = 230;
       radicale = 234;
       syncthing = 237;
-      #mfi = 238; # unused
       caddy = 239;
       taskd = 240;
       factorio = 241;
@@ -563,6 +565,9 @@
       clickhouse = 278;
       rslsync = 279;
       minio = 280;
+      kanboard = 281;
+      pykms = 282;
+      kodi = 283;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

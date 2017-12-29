@@ -17,8 +17,9 @@ stdenv.mkDerivation  rec {
       -i b_synth/Makefile
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib freetype ftgl libjack2 libX11 lv2 mesa pkgconfig
+    alsaLib freetype ftgl libjack2 libX11 lv2 mesa
     ttf_bitstream_vera
   ];
 

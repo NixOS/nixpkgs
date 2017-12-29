@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = with stdenv.lib; {
-    homepage = http://phonon.kde.org/;
+    homepage = https://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
   };

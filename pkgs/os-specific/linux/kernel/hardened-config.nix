@@ -18,7 +18,11 @@ assert (versionAtLeast version "4.9");
 # Report BUG() conditions and kill the offending process.
 BUG y
 
-${optionalString (stdenv.system == "x86_64-linux") ''
+${optionalString (versionAtLeast version "4.10") ''
+  BUG_ON_DATA_CORRUPTION y
+''}
+
+${optionalString (stdenv.platform.kernelArch == "x86_64") ''
   DEFAULT_MMAP_MIN_ADDR 65536 # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling various emulations
@@ -64,9 +68,13 @@ IO_STRICT_DEVMEM y
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
 DEBUG_LIST y
+DEBUG_PI_LIST y # doesn't BUG()
 DEBUG_SG y
 SCHED_STACK_END_CHECK y
-BUG_ON_DATA_CORRUPTION y
+
+${optionalString (versionAtLeast version "4.13") ''
+  REFCOUNT_FULL y
+''}
 
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
@@ -97,4 +105,9 @@ INET_DIAG n # Has been used for heap based attacks in the past
 # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
 CC_STACKPROTECTOR_REGULAR n
 CC_STACKPROTECTOR_STRONG y
+
+# Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
+${optionalString (versionAtLeast version "4.13") ''
+  FORTIFY_SOURCE y
+''}
 ''

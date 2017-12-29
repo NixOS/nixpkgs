@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     # libQt5XcbQpa is a platform plugin dependency and doesn't get linked
     patchelf --add-needed libQt5XcbQpa.so.5 $out/bin/qgo
     wrapProgram $out/bin/qgo \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH "${qt56.qtbase}/lib/qt-5.6/plugins/platforms/"
+      --set QT_QPA_PLATFORM_PLUGIN_PATH "${stdenv.lib.getBin qt56.qtbase}/lib/qt-5.6/plugins/platforms/"
   '';
 }

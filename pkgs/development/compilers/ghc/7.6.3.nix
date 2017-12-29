@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghc, perl, ncurses, binutils, libiconv
+{ stdenv, fetchurl, ghc, perl, ncurses, libiconv
 
   # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.

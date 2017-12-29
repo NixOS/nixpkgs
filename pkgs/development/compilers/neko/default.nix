@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
           + "c6d9c6d796200990b3b6a53a4dc716c9192398e6.patch";
       sha256 = "1pq0qhhb9gbhc3zbgylwp0amhwsz0q0ggpj6v2xgv0hfy7d63rcd";
     })
+    # Glibc 2.26 no longer has xlocale.h, patch backported from upstream commit
+    # e286c8f3301fa443255a3101d14b7392467051b8.
+    ./xlocale-fix.patch
   ];
 
   buildInputs =

@@ -31,7 +31,8 @@ stdenv.mkDerivation {
     sha256 = "0sflrpp6x0ada0bjh67q1x65g88d179n3cawpwkp1pm4kw76g8x7";
   };
 
-  buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
 
   postPatch = ''
     UNAME=$(type -tp uname)

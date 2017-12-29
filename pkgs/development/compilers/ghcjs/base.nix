@@ -40,11 +40,6 @@
 , coreutils
 , libiconv
 
-, ghcjsNodePkgs ? callPackage ../../../top-level/node-packages.nix {
-    generated = ./node-packages-generated.nix;
-    self = ghcjsNodePkgs;
-  }
-
 , version ? "0.2.0"
 , ghcjsSrc ? fetchFromGitHub {
     owner = "ghcjs";
@@ -178,7 +173,7 @@ in mkDerivation (rec {
     isCross = true;
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
-    inherit (ghcjsNodePkgs) "socket.io";
+    socket-io = pkgs.nodePackages."socket.io";
 
     inherit stage1Packages;
     mkStage2 = stage2 {

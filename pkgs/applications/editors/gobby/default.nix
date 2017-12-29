@@ -15,7 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "165x0r668ma5blziisvbr8qig3jw9hf7i6w8r7wwvz3wsac3bswc";
   };
 
-  buildInputs = [ pkgconfig gtkmm2 gsasl gtksourceview libxmlxx libinf intltool ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtkmm2 gsasl gtksourceview libxmlxx libinf intltool ]
     ++ stdenv.lib.optional gnomeSupport gnome_vfs;
   
   configureFlags = ''

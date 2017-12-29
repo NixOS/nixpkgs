@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-1.10.4";
+  name = "gstreamer-1.12.2";
 
   meta = {
     description = "Open source multimedia framework";
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "062jidnw17hkpva6ddygp80gyasyigfkpm1y7w56rk56a2pzbhjh";
+    sha256 = "1fllz7n58lavyy4nh64xc7izd4ffhl12a2ff0yg4z67al8wkzplz";
   };
 
   outputs = [ "out" "dev" ];

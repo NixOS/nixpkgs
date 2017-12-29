@@ -1,9 +1,10 @@
 { stdenv
 , cairo
 , cmake
-, fetchsvn
+, fetchFromGitHub
 , ffmpeg
 , gettext
+, gtk2-x11
 , libpng
 , libpthreadstubs
 , libXdmcp
@@ -11,18 +12,21 @@
 , mesa
 , openal
 , pkgconfig
-, SDL
+, SDL2
+, sfml
 , wxGTK
 , zip
 , zlib
 }:
 
-stdenv.mkDerivation {
-  name = "VBAM-1507";
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/vbam/code/trunk";
-    rev = 1507;
-    sha256 = "0fqvgi5s0sacqr9yi7kv1klqlvfzr13sjq5ikipirz0jv50kjxa7";
+stdenv.mkDerivation rec {
+  name = "visualboyadvance-m-${version}";
+  version = "unstable-2017-09-04";
+  src = fetchFromGitHub {
+    owner = "visualboyadvance-m";
+    repo = "visualboyadvance-m";
+    rev = "ceef480";
+    sha256 = "1lpmlj8mv6fwlfg9m58hzggx8ld6cnjvaqx5ka5sffxd9v95qq2l";
   };
 
   buildInputs = [
@@ -30,14 +34,12 @@ stdenv.mkDerivation {
     cmake
     ffmpeg
     gettext
-    libpng
-    libpthreadstubs
-    libXdmcp
-    libxshmfence
+    gtk2-x11
     mesa
     openal
     pkgconfig
-    SDL
+    SDL2
+    sfml
     wxGTK
     zip
     zlib

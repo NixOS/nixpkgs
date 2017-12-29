@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "16hd61icvzaciv7s9jpgm9c8q6m4mwvj97gxrb20sc65p5gjb7hv";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig libusb fftwSinglePrec
+    cmake libusb fftwSinglePrec
   ];
 
   cmakeFlags = [ "-DUDEV_RULES_GROUP=plugdev" "-DUDEV_RULES_PATH=lib/udev/rules.d" ];

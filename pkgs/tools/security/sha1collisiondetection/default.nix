@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, libtool, which }:
 
 stdenv.mkDerivation  rec {
-  pname = "sha1collisiondetection";
-  version = "1.0.1";
-  name = "${pname}-${version}";
+  name = "sha1collisiondetection-${version}";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "cr-marcstevens";
-    repo = pname;
-    rev = "development-v${version}";
-    sha256 = "09vd5mgclcdx7yq3kwzxy1z7pbxcp0xljfly7hy4ixahmnn290h6";
+    repo = "sha1collisiondetection";
+    rev = "stable-v${version}";
+    sha256 = "0xn31hkkqs0kj9203rzx6w4nr0lq8fnrlm5i76g0px3q4v2dzw1s";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jzp1llq6635ldb7j9qb29j2k0x5mblimdqg3179dvva1hv0ia23";
   };
 
-  buildInputs = [ fuse pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse ];
 
   configurePhase = ''
     sed -i 's/`git describe`/v${version}/g' Tupfile

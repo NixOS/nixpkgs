@@ -1,5 +1,7 @@
 { stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
   version = "0.33";
@@ -13,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
 
   buildInputs = [ qtbase qtsvg ];
+
+  qmakeFlags = [ ''LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease'' ];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags PLUGINDIR=$out/$qtPluginPrefix"

@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/gimp-print/;
     license = licenses.gpl2;
     platforms = platforms.linux;
+    isGutenprint = true;
   };
 }

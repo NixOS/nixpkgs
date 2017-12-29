@@ -12,11 +12,10 @@ mkChromiumDerivation (base: rec {
   sandboxExecutableName = "__chromium-suid-sandbox";
 
   installPhase = ''
-    mkdir -p "$libExecPath/swiftshader"
+    mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v "$buildPath/swiftshader/"*.so "$libExecPath/swiftshader/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
@@ -48,7 +47,7 @@ mkChromiumDerivation (base: rec {
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ chaoflow ];
+    maintainers = with maintainers; [ chaoflow bendlas ];
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];

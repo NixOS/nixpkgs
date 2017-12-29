@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
-  version = "9.4-${dver}";
-  dver    = "20160507";
+  version = "9.5-${dver}";
+  dver    = "20171012";
 
   src = fetchgit {
     url    = "https://github.com/cisco/chezscheme.git";
-    rev    = "65df1d1f7c37f5b5a93cd7e5b475dda9dbafe03c";
-    sha256 = "1b273il3njnn04z55w1hnygvcqllc6p5qg9mcwh10w39fwsd8fbs";
+    rev    = "adb3b7bb22ddaa1ba91b98b6f4a647427c3a4d9b";
+    sha256 = "0hiynf7g0q77ipqxjsqdm2zb0m15bl1hhp615fn3i2hv0qz5a4xr";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   */
   patchPhase = ''
     substituteInPlace ./configure \
-      --replace "git submodule init && git submodule update || exit 1" ""
+      --replace "git submodule init && git submodule update || exit 1" "true"
 
     substituteInPlace ./workarea \
       --replace "/bin/ln" "${coreutils}/bin/ln" \

@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1g329aapdvbzhr39wyh295shpfq5f0nlzsqkjnr8l6zzak7f4yrg";
   };
 
-  buildInputs = [ autoreconfHook gettext libtool makeWrapper texinfo ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gettext libtool makeWrapper texinfo ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform file change monitor with multiple backends";

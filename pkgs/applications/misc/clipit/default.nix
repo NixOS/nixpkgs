@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jrwn8qfgb15rwspdp1p8hb1nc0ngmpvgr87d4k3lhlvqg2cfqva";
   };
 
-  buildInputs = [ intltool pkgconfig gtk2 xdotool hicolor_icon_theme ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk2 xdotool hicolor_icon_theme ];
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK+ Clipboard Manager";

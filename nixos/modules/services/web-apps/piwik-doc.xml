@@ -79,16 +79,6 @@
           You can safely ignore this, unless you need a plugin that needs JavaScript tracker access.
         </para>
       </listitem>
-
-      <listitem>
-        <para>
-          Sending mail from piwik, e.g. for the password reset function, might not work out of the box:
-          There's a problem with using <command>sendmail</command> from <literal>php-fpm</literal> that is
-          being investigated at <link xlink:href="https://github.com/NixOS/nixpkgs/issues/26611" />.
-          If you have (or don't have) this problem as well, please report it. You can enable SMTP as method
-          to send mail in piwik's <quote>General Settings</quote> > <quote>Mail Server Settings</quote> instead.
-        </para>
-      </listitem>
     </itemizedlist>
   </section>
 

@@ -4,7 +4,7 @@
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.3.1";
+  version = "4.3.2";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
 in python2Packages.buildPythonApplication {
@@ -13,7 +13,7 @@ in python2Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "18hq6vvjsrjsnbs15bvyyfrss35bgc0hgw4wxksdyaj578pg04ib";
+    sha256 = "0j6djq584rcj9ghz59ddqzrfq49lykg3wqwap5fnzp9apa4gcnqg";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
@@ -43,12 +43,6 @@ in python2Packages.buildPythonApplication {
         wrapProgram $out/bin/$i \
           $WRAP_TK
       done
-
-      mkdir -p $out/etc/mercurial
-      cat >> $out/etc/mercurial/hgrc << EOF
-      [web]
-      cacerts = /etc/ssl/certs/ca-certificates.crt
-      EOF
 
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin

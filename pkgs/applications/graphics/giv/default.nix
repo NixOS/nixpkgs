@@ -2,13 +2,14 @@
   pcre, cfitsio, perl, gob2, vala_0_23, libtiff, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "giv-20150811-git";
+  name = "giv-${version}";
+  version = "0.9.26";
 
   src = fetchFromGitHub {
     owner = "dov";
     repo = "giv";
-    rev = "64648bfbbf10ec4a9adfbc939c96c7d1dbdce57a";
-    sha256 = "1sz2n7jbmg3g97bs613xxjpzqbsl5rvpg6v7g3x3ycyd35r8vsfp";
+    rev = "v${version}";
+    sha256 = "1sfm8j3hvqij6z3h8xz724d7hjqqbzljl2a6pp4yjpnnrxksnic2";
   };
 
   hardeningDisable = [ "format" ];
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  buildInputs = [ gdk_pixbuf pkgconfig gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gdk_pixbuf gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
     json_glib ];
 
   meta = {
