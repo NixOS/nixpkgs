@@ -35,12 +35,12 @@
 , libmnl ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.8.0";
+  version = "5.7.2";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "1j8mxgfq8039js2bscphd6cnriy35hk4jrxfjz5k6mghpdvg8vxh";
+    sha256 = "14p5cc3ys3qfg71xzxfvmxdmz5l4brpbhlmw1fwdda392lia084x";
   };
 
   # on 5.7.2: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
