@@ -12888,8 +12888,9 @@ with pkgs;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    inherit (callPackage ../os-specific/linux/spl { })
-      splStable splUnstable;
+    inherit (callPackage ../os-specific/linux/spl {
+      inherit kernel;
+    }) splStable splUnstable;
 
     spl = splStable;
 
