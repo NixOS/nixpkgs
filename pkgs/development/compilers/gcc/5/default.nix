@@ -157,13 +157,9 @@ let version = "5.5.0";
           "--enable-threads=win32"
           "--enable-sjlj-exceptions"
           "--enable-hash-synchronization"
-          "--disable-libssp"
+          "--enable-libssp"
           "--disable-nls"
           "--with-dwarf2"
-          # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, mingw32 g++ linking is broken by default with shared libs,
-          # unless adding "-lsupc++" to any linking command. I don't know why.
-          "--disable-shared"
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
