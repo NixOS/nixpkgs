@@ -12,6 +12,8 @@ let
       inherit sha256;
     };
 
+    outputs = [ "out" "devdoc" ];
+
     nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
 
     buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
@@ -65,5 +67,5 @@ in rec {
     extraBuildInputs = [ graphviz ];
   };
 
-  vala = vala_0_34;
+  vala = vala_0_38;
 }

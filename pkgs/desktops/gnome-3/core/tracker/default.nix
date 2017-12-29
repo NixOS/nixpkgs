@@ -1,43 +1,23 @@
-{ stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool, vala_0_32, sqlite, libxslt
-, gnome3, librsvg, gdk_pixbuf, file, libnotify
-, evolution_data_server, gst_all_1, poppler
-, icu, taglib, libjpeg, libtiff, giflib, libcue
-, libvorbis, flac, exempi, networkmanager
-, libpng, libexif, libgsf, libuuid, bzip2
-, libsoup, json_glib, libseccomp }:
+{ stdenv, fetchurl, fetchpatch, intltool, pkgconfig
+, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt
+, gnome3, icu, libuuid, networkmanager, libsoup, json_glib }:
 
 stdenv.mkDerivation rec {
-
   inherit (import ./src.nix fetchurl) name src;
-
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0 -I${poppler.dev}/include/poppler";
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ vala_0_32 gtk3 glib intltool itstool libxml2
-                  bzip2 gnome3.totem-pl-parser libxslt
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook
-                  file gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
-                  upower libnotify evolution_data_server gnome3.libgee
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base flac
-                  poppler icu taglib libjpeg libtiff giflib libvorbis
-                  exempi networkmanager libpng libexif libgsf libuuid
-                  libsoup json_glib libseccomp
-                ];
+  nativeBuildInputs = [ vala pkgconfig intltool libxslt wrapGAppsHook ];
+  # TODO: add libstemmer
+  buildInputs = [
+    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json_glib
+  ];
 
-  preConfigure = ''
-    substituteInPlace src/libtracker-sparql/Makefile.in --replace "--shared-library=libtracker-sparql" "--shared-library=$out/lib/libtracker-sparql"
-  '';
+  # TODO: figure out wrapping unit tests, some of them fail on missing gsettings_desktop_schemas
+  configureFlags = [ "--disable-unit-tests" ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
-    )
+  postPatch = ''
+    patchShebangs utils/g-ir-merge/g-ir-merge
   '';
 
   meta = with stdenv.lib; {

@@ -16,6 +16,11 @@ rustPlatform.buildRustPackage rec {
   preFixup = ''
     mkdir -p "$out/man/man1"
     cp "$src/doc/fd.1" "$out/man/man1"
+
+    mkdir -p "$out/share/"{bash-completion/completions,fish/completions,zsh/site-functions}
+    cp target/release/build/fd-find-*/out/fd.bash-completion "$out/share/bash-completion/completions/"
+    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/completions/"
+    cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
   '';
 
   meta = with stdenv.lib; {

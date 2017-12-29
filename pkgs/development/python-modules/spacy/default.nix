@@ -4,7 +4,7 @@
 , python
 , fetchPypi
 , fetchFromGitHub
-, pytest 
+, pytest
 , cython
 , cymem
 , preshed
@@ -28,20 +28,21 @@ let
     version = "2017.04.05";
 
     src = fetchPypi {
-      inherit pname version;      
+      inherit pname version;
       sha256 = "0c95gf3jzz8mv52lkgq0h7sbasjwvdhghm4s0phmy5k9sr78f4fq";
     };
   };
 in buildPythonPackage rec {
-  name = "spacy-${version}";
+  pname = "spacy";
   version = "1.8.2";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     rev = "v${version}";
-    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";    
-  };  
+    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";
+  };
 
   propagatedBuildInputs = [
    cython
@@ -65,8 +66,8 @@ in buildPythonPackage rec {
   doCheck = false;
   # checkPhase = ''
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
-  # '';  
-  
+  # '';
+
   meta = with stdenv.lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;

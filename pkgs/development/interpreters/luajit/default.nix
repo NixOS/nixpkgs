@@ -26,7 +26,7 @@ rec {
     homepage    = http://luajit.org;
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers ; [ thoughtpolice smironov vcunat ];
+    maintainers = with maintainers ; [ thoughtpolice smironov vcunat andir ];
   };
 
   generic =
@@ -61,7 +61,8 @@ rec {
       enableParallelBuilding = true;
 
       installPhase   = ''
-        make install INSTALL_INC="$out"/include PREFIX="$out"
+        make install PREFIX="$out"
+        ( cd "$out/include"; ln -s luajit-*/* . )
         ln -s "$out"/bin/luajit-* "$out"/bin/lua
       ''
         + stdenv.lib.optionalString (!isStable)

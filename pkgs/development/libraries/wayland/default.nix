@@ -8,11 +8,11 @@ assert expat != null;
 
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "d6b4135cba0188abcb7275513c72dede751d6194f6edc5b82183a3ba8b821ab1";
+    sha256 = "1f3sla6h0bw15fz8pjc67jhwj7pwmfdc7qlj42j5k9v116ycm07d";
   };
 
   configureFlags = [ "--with-scanner" "--disable-documentation" ];

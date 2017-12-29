@@ -8,7 +8,10 @@
 }:
 
 buildPythonPackage rec {
-  name = "selenium-3.6.0";
+  pname = "selenium";
+  version = "3.6.0";
+  name = pname + "-" + version;
+
   src = fetchurl {
     url = "mirror://pypi/s/selenium/${name}.tar.gz";
     sha256 = "15qpvz0bdwjvpcj11fm0rw6r5inr66sqw89ww50l025sbhf04qwm";

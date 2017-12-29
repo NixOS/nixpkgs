@@ -89,8 +89,8 @@ in
         description = ''
           Enable zsh-autosuggestions
         '';
+        type = types.bool;
       };
-
     };
 
   };

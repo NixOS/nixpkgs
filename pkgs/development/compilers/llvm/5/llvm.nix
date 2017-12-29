@@ -75,6 +75,8 @@ in stdenv.mkDerivation rec {
 
     # Revert compiler-rt commit that makes codesign mandatory
     patch -p1 -i ${./compiler-rt-codesign.patch} -d projects/compiler-rt
+  '' + stdenv.lib.optionalString stdenv.isAarch64 ''
+    patch -p0 < ${../aarch64.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation

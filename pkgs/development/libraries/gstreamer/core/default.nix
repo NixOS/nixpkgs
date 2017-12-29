@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, perl, bison, flex, python, gobjectIntrospection
 , glib, makeWrapper
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig perl bison flex python gobjectIntrospection makeWrapper
   ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
 
   propagatedBuildInputs = [ glib ];
 

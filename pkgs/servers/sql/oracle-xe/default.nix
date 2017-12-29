@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       makeWrapper "$i" "$out/bin/''${i##*/}" \
         --set ORACLE_HOME "$out/libexec/oracle" \
         --set ORACLE_SID XE \
-        --set NLS_LANG '$("'"$out"'/libexec/oracle/bin/nls_lang.sh")' \
+        --run "export NLS_LANG=\$($out/libexec/oracle/bin/nls_lang.sh)" \
         --prefix PATH : "$out/libexec/oracle/bin"
     done
   '';

@@ -18,10 +18,17 @@ stdenv.mkDerivation rec {
   # that cause shar to just segfault. It isn't a problem on Linux because their sandbox
   # remaps /etc/passwd to a trivial file, but we can't do that on Darwin so I do this
   # instead. In this case, I pass in the very imaginative "submitter" as the submitter name
-  patchPhase = ''
-    substituteInPlace tests/shar-1 --replace '$''\{SHAR}' '$''\{SHAR} -s submitter'
-    substituteInPlace tests/shar-2 --replace '$''\{SHAR}' '$''\{SHAR} -s submitter'
-  '';
+
+  patchPhase = let
+      # This evaluates to a string containing:
+      #
+      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
+      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
+      shar_sub = "\${SHAR}";
+    in ''
+      substituteInPlace tests/shar-1 --replace '${shar_sub}' '${shar_sub} -s submitter'
+      substituteInPlace tests/shar-2 --replace '${shar_sub}' '${shar_sub} -s submitter'
+    '';
 
   doCheck = true;
 

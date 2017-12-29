@@ -5,10 +5,10 @@
     src = fetchFromGitHub {
       owner = "google";
       repo = "ngx_brotli";
-      rev = "788615eab7c5e0a984278113c55248305620df14";
-      sha256 = "02514bbjdhm9m38vljdh626d3c1783jxsxawv5c6bzblwmb8xgvf";
+      rev = "bfd2885b2da4d763fed18f49216bb935223cd34b";
+      sha256 = "04yx1n0wi3l2x37jd1ynl9951qxkn8xp42yv0mfp1qz9svips81n";
+      fetchSubmodules = true;
     };
-    inputs = [ pkgs.libbrotli ];
   };
 
   rtmp = {
@@ -45,6 +45,16 @@
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.aprutil.dev}/include/apr-1 -I${pkgs.apacheHttpd.dev}/include -I${pkgs.apr.dev}/include/apr-1 -I${pkgs.yajl}/include"
     '';
+  };
+
+  modsecurity-beta = {
+    src = fetchFromGitHub {
+      owner = "SpiderLabs";
+      repo = "ModSecurity-nginx";
+      rev = "abbf2c47f6f3205484a1a9db618e067dce213b89";
+      sha256 = "04ar51bnqjca6g4p2irymgdmc8rh5nsi8ml43srm4krllnkvw8qn";
+    };
+    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
 
   echo = {

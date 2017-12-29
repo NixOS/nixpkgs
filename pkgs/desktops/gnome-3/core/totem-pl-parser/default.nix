@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gmime, libxml2, libsoup, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gmime, libxml2, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig file intltool ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
   buildInputs = [ gmime libxml2 libsoup ];
 
   meta = with stdenv.lib; {

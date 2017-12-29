@@ -124,7 +124,7 @@ let result = stdenv.mkDerivation rec {
     ln -s $out $out/jre
 
     mkdir -p $out/nix-support
-    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook

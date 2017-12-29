@@ -127,6 +127,7 @@ let
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
+      kruler = callPackage ./kruler.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};

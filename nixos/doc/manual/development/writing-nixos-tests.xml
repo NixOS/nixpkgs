@@ -262,6 +262,16 @@ startAll;
     <literal>waitForWindow(qr/Terminal/)</literal>.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><methodname>copyFileFromHost</methodname></term>
+    <listitem><para>Copies a file from host to machine, e.g.,
+    <literal>copyFileFromHost("myfile", "/etc/my/important/file")</literal>.</para>
+    <para>The first argument is the file on the host. The file needs to be
+    accessible while building the nix derivation. The second argument is
+    the location of the file on the machine.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>

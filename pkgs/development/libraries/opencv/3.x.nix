@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl, fetchFromGitHub
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5, protobuf
+, cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -28,20 +28,20 @@
 }:
 
 let
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0266kg337wij9rz602z5088jn2fq56aqpxxflf0fbh28kygchvk4";
+    sha256 = "1jq8nny78gp54yjgsnb2rdp5rwhp78b3r2i36b2vyx6xk6h6wwji";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0qxdvzdszzlpsya1pn4d2r9z4j98isxrgk15a2wwa3dqjmgv880d";
+    sha256 = "0q5vsa8dpa3mdhzas0ckagwh2sbckpm1kxsp0i3yfknsr5ampyi2";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -52,16 +52,16 @@ let
     src = fetchFromGitHub {
       owner  = "opencv";
       repo   = "opencv_3rdparty";
-      rev    = "a62e20676a60ee0ad6581e217fe7e4bada3b95db";
-      sha256 = "04idycc479l7fidj6r107sv65iszndswm287ms3nh896jbpbaxbv";
+      rev    = "dfe3162c237af211e98b8960018b564bc209261d";
+      sha256 = "1k5xiwdi5r2y3fs5g70lpknxqi4pj32w6l311gfwng3q1cb2crif";
     } + "/ippicv";
-    files = let name = platform : "ippicv_2017u2_${platform}_20170418.tgz"; in
+    files = let name = platform : "ippicv_2017u3_${platform}_general_20170822.tgz"; in
       if stdenv.system == "x86_64-linux" then
-      { ${name "lnx_intel64"} = "87cbdeb627415d8e4bc811156289fa3a"; }
+      { ${name "lnx_intel64"} = "4e0352ce96473837b1d671ce87f17359"; }
       else if stdenv.system == "i686-linux" then
-      { ${name "lnx_ia32"}    = "f2cece00d802d4dea86df52ed095257e"; }
+      { ${name "lnx_ia32"}    = "dcdb0ba4b123f240596db1840cd59a76"; }
       else if stdenv.system == "x86_64-darwin" then
-      { ${name "mac_intel64"} = "0c25953c99dbb499ff502485a9356d8d"; }
+      { ${name "mac_intel64"} = "c1ebb5dfa5b7f54b0c44e1917805a463"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -104,6 +104,7 @@ let
     dst = ".cache/xfeatures2d/boostdesc";
   };
 
+  # See opencv/cmake/OpenCVDownload.cmake
   installExtraFiles = extra : with lib; ''
     mkdir -p "${extra.dst}"
   '' + concatStrings (mapAttrsToList (name : md5 : ''
@@ -156,7 +157,7 @@ stdenv.mkDerivation rec {
     '');
 
   buildInputs =
-       [ zlib pcre hdf5 protobuf ]
+       [ zlib pcre hdf5 ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -190,8 +191,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DBUILD_PROTOBUF=OFF"
-    "-DPROTOBUF_UPDATE_FILES=ON"
     "-DWITH_OPENMP=ON"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)

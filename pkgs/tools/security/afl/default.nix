@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "2.51b";
+  version = "2.52b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "15xvjma2lpawg1wasnja9wmgrpss5mnm3f5xmh5yli5q6m5vjdfl";
+    sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
   };
 
   # Note: libcgroup isn't needed for building, just for the afl-cgroup
@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
         --prefix AFL_CXX  : "${clang}/bin/clang++"
     done
   '';
+
+  passthru = {
+    qemu = afl-qemu;
+  };
 
   meta = {
     description = "Powerful fuzzer via genetic algorithms and instrumentation";

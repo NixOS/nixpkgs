@@ -16,6 +16,10 @@ my $reloadListFile = "/run/systemd/reload-list";
 
 my $action = shift @ARGV;
 
+if ("@localeArchive@" ne "") {
+    $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
+}
+
 if (!defined $action || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<EOF;
 Usage: $0 [switch|boot|test]
@@ -65,7 +69,8 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `LANG= systemctl list-units --full --no-legend`;
+    # Use current version of systemctl binary before daemon is reexeced.
+    my $lines = `LANG= /run/current-system/sw/bin/systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
@@ -262,7 +267,8 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
 sub pathToUnitName {
     my ($path) = @_;
-    open my $cmd, "-|", "@systemd@/bin/systemd-escape", "--suffix=mount", "-p", $path
+    # Use current version of systemctl binary before daemon is reexeced.
+    open my $cmd, "-|", "/run/current-system/sw/bin/systemd-escape", "--suffix=mount", "-p", $path
         or die "Unable to escape $path!\n";
     my $escaped = join "", <$cmd>;
     chomp $escaped;
@@ -364,7 +370,8 @@ syslog(LOG_NOTICE, "switching to system configuration $out");
 if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
-    system("systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    # Use current version of systemctl binary before daemon is reexeced.
+    system("/run/current-system/sw/bin/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"

@@ -219,7 +219,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   SmartIrc4net = fetchNuGet {
     baseName = "SmartIrc4net";
     version = "0.4.5.1";
-    sha256 = "1k6zc6xsqfzj7nc9479d32akj6d37jq6i1qirmz1i66p52zb5hm1";
+    sha256 = "1d531sj39fvwmj2wgplqfify301y3cwp7kwr9ai5hgrq81jmjn2b";
     outputFiles = [ "lib/*" ];
   };
 

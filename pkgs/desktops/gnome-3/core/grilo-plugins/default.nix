@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, glib, sqlite
 , gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp_av
-, gmime, json_glib, avahi, tracker, itstool }:
+, gmime, json_glib, avahi, tracker, dleyna-server, itstool }:
 
 stdenv.mkDerivation rec {
   major = "0.3";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
                   lua5 liboauth gupnp_av sqlite gnome3.gnome_online_accounts
                   gnome3.totem-pl-parser gnome3.rest gmime json_glib
-                  avahi gnome3.libmediaart tracker intltool itstool ];
+                  avahi gnome3.libmediaart tracker dleyna-server intltool itstool ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Grilo;

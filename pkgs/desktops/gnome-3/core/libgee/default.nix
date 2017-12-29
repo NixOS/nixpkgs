@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix_introspection_paths.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoconf vala pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoconf vala gobjectIntrospection ];
   buildInputs = [ glib ];
 
   meta = with stdenv.lib; {

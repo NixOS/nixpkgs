@@ -1,5 +1,5 @@
 { stdenv, fetchurl, wxGTK30, pkgconfig, file, gettext, gtk2, glib, zlib, perl, intltool,
-  libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame, fetchpatch,
+  libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
   autoconf, automake, libtool
   }:
@@ -14,14 +14,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
     sha256 = "09xpr4bjnainz1xmc35v3qg3dadjr9wv8bmn1p4y91aqyihnhjry";
   };
-  patches = [
-    (fetchpatch {
-      name = "new-ffmpeg.patch";
-      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-        + "/audacity-ffmpeg.patch?h=packages/audacity&id=0c1e35798d4d70692";
-      sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
-    })
-  ];
 
   preConfigure = /* we prefer system-wide libs */ ''
     autoreconf -vi # use system libraries

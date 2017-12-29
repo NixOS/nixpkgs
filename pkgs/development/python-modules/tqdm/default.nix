@@ -21,6 +21,12 @@ buildPythonPackage rec {
 
   buildInputs = [ nose coverage glibcLocales flake8 ];
 
+  postPatch = ''
+    # Remove performance testing.
+    # Too sensitive for on Hydra.
+    rm tqdm/tests/tests_perf.py
+  '';
+
   LC_ALL="en_US.UTF-8";
 
   meta = {

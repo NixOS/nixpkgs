@@ -27,9 +27,11 @@ stdenv.mkDerivation {
   patches = [ ./install-emacs-to-site-lisp.patch
               ./use-nix-ocaml-byteflags.patch ];
 
-  postPatch = stdenv.lib.optionalString (camlp4 != null) ''
+  postPatch = optionalString (camlp4 != null) ''
     substituteInPlace src/Makefile.master.in \
       --replace "+camlp4" "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4/"
+  '' + optionalString (versionAtLeast (stdenv.lib.getVersion ocamlPackages.yojson) "1.4") ''
+    substituteInPlace src/scripting/Makefile.in --replace yojson.cmo yojson.cma
   '';
 
   # The bytecode executable is dependent on the dynamic library provided by

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   name = "aseprite-${version}";
-  version = if unfree then "1.2.2" else "1.1.7";
+  version = if unfree then "1.2.4" else "1.1.7";
 
   src = fetchFromGitHub {
     owner = "aseprite";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = if unfree
-      then "1ldi7zikl1g6rq3g9lkypx5wqzza5j0054j1r8bh7lyvb0szicig"
+      then "1rnf4a8vgddz8x55rpqaihlxmqip1kgpdhqb4d3l71h1zmidg5k3"
       else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 

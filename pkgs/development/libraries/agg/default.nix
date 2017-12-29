@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--x-includes=${libX11.dev}/include --x-libraries=${libX11.out}/lib";
 
+  # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
+  # libtool: error: cannot find the library 'libexamples.la'
+  enableParallelBuilding = false;
+
   meta = {
     description = "High quality rendering engine for C++";
 

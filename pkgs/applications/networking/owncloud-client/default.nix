@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1r5ddln1wc9iyjizgqb104i0r6qhzsmm2wdnxfaif119cv0vphda";
   };
 
+  patches = [ ../nextcloud-client/find-sql.patch ];
+
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
 

@@ -181,7 +181,7 @@ let version = "4.8.5";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-    bootstrap = targetPlatform == hostPlatform && !hostPlatform.isArm && !hostPlatform.isMips;
+    bootstrap = targetPlatform == hostPlatform;
 
 in
 
@@ -340,14 +340,6 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    # Optional features
-    optional (isl != null) "--with-isl=${isl}" ++
-    optionals (cloog != null) [
-      "--with-cloog=${cloog}"
-      "--disable-cloog-version-check"
-      "--enable-cloog-backend=isl"
-    ] ++
-
     (if enableMultilib
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
@@ -355,6 +347,14 @@ stdenv.mkDerivation ({
     (if enablePlugin
       then ["--enable-plugin"]
       else ["--disable-plugin"]) ++
+
+    # Optional features
+    optional (isl != null) "--with-isl=${isl}" ++
+    optionals (cloog != null) [
+      "--with-cloog=${cloog}"
+      "--disable-cloog-version-check"
+      "--enable-cloog-backend=isl"
+    ] ++
 
     # Java options
     optionals langJava [

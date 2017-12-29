@@ -62,4 +62,14 @@ rec {
     name = "tag-hardened";
     patch = ./tag-hardened.patch;
   };
+
+  # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6
+  iwlwifi_mvm_support_version_7_scan_req_umac_fw_command = rec {
+    name = "iwlwifi_mvm_support_version_7_scan_req_umac_fw_command";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://bugzilla.kernel.org/attachment.cgi?id=260597;
+      sha256 = "09096npxpgvlwdz3pb3m9brvxh7vy0xc9z9p8hh85xyczyzcsjhr";
+    };
+  };
 }

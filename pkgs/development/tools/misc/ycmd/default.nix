@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "ycmd-${version}";
-  version = "2017-03-27";
+  version = "2017-11-05";
 
   src = fetchgit {
     url = "git://github.com/Valloric/ycmd.git";
-    rev = "2ef1ae0d00a06a47fed3aacfd465a310e8bdb0d2";
-    sha256 = "0p5knlxgy66zi229ns1lfdhz5lram93vahmmk54w98fr3h8b1yfj";
+    rev = "0ca16e7ba3a9078b697befdce64104e61829aa3b";
+    sha256 = "0bs94iv521ac2n53n3k8mw3s6v0hi3hhxhjsr0ips3n99al8wndi";
   };
 
   buildInputs = [ cmake boost ]

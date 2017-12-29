@@ -12,7 +12,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.18.2";
+  version = "2.18.3";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1ry8zvv6k01g9p7agg326n0ziqpqjxd49h5w1b2is6rjnpqv6k5i";
+    sha256 = "17lgn7qwrwqxl1lgmq5icvzmna6aymx4c7al47rp0vvac7hj0m71";
   };
 
   # see if we can clean this up....

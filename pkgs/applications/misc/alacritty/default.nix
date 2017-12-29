@@ -26,28 +26,28 @@ let
     libXxf86vm
     libXi
   ];
-in
-
-buildRustPackage rec {
+in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2017-10-31";
+  version = "2017-11-12";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "1yybx23smwdkzb6byvxd6zxi7asmrzvp9h1ihmy6xlzwjfbsalj0";
+    sha256 = "0096fzrfzj0a2n2n531r4b6c8rlfj5qc90d6i4iin5axalk3i1h4";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "14bmm1f7hqh8i4mpb6ljh7szrm4g6mplzpq9zbgjrgxnc01w3s0i";
+  cargoSha256 = "10blch8pzk1zk3w27sbcszhcnq908xh1q55vqgy8iv5x47rpl02q";
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
     makeWrapper
     pkgconfig
-  ] ++ rpathLibs;
+  ];
+
+  buildInputs = rpathLibs;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \

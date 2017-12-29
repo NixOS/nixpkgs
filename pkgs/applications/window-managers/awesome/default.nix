@@ -10,7 +10,7 @@
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
   version = "4.2";
-  
+
   src = fetchFromGitHub {
     owner = "awesomewm";
     repo = "awesome";
@@ -25,10 +25,10 @@ with luaPackages; stdenv.mkDerivation rec {
     imagemagick
     makeWrapper
     pkgconfig
-    xmlto docbook_xml_dtd_45 
+    xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
   ];
-   
+
   propagatedUserEnvPkgs = [ hicolor_icon_theme ];
   buildInputs = [ cairo librsvg dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
@@ -49,8 +49,8 @@ with luaPackages; stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/awesome \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
-      --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
+      --prefix LUA_CPATH ";" '${lgi}/lib/lua/${lua.luaversion}/?.so' \
+      --prefix LUA_PATH ";" '${lgi}/share/lua/${lua.luaversion}/?.lua' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"

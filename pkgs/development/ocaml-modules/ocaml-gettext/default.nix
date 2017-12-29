@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-gettext-${version}";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1678/ocaml-gettext-${version}.tar.gz";
-    sha256 = "1zhvzc9x3j57xf2mzg5rshgp14cb4dsqbnj52jjv1qnja97plyjp";
+    url = "https://forge.ocamlcore.org/frs/download.php/1731/ocaml-gettext-${version}.tar.gz";
+    sha256 = "05wnpxwzzpn2qinah2wb5wzfh5iz8gyf8jyihdbjxc8mk4hf70qv";
   };
 
   propagatedBuildInputs = [ gettext fileutils camomile ];

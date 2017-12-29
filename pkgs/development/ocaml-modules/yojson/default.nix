@@ -1,16 +1,26 @@
-{ stdenv, fetchzip, ocaml, findlib, cppo, easy-format, biniou }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, cppo, easy-format, biniou }:
 let
   pname = "yojson";
   param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.01" then {
-    version = "1.3.3";
-    sha256 = "02l11facbr6bxrxq95vrcp1dxapp02kv7g4gq8rm62pb3dj5c6g7";
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+    version = "1.4.0";
+    sha256 = "0rzn4yihfi0psd2qmgrx5fvwpby87sqx4zws3ijf49f7wbpycccv";
+    buildInputs = [ jbuilder ];
+    extra = { inherit (jbuilder) installPhase; };
   } else {
     version = "1.2.3";
     sha256 = "10dvkndgwanvw4agbjln7kgb1n9s6lii7jw82kwxczl5rd1sgmvl";
+    buildInputs = [];
+    extra = {
+      createFindlibDestdir = true;
+
+      makeFlags = "PREFIX=$(out)";
+
+      preBuild = "mkdir $out/bin";
+    };
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
 
   name = "ocaml${ocaml.version}-${pname}-${param.version}";
 
@@ -19,17 +29,9 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ] ++ param.buildInputs;
 
   propagatedBuildInputs = [ cppo easy-format biniou ];
-
-  createFindlibDestdir = true;
-
-  makeFlags = "PREFIX=$(out)";
-
-  preBuild = ''
-    mkdir $out/bin
-  '';
 
   meta = with stdenv.lib; {
     description = "An optimized parsing and printing library for the JSON format";
@@ -38,4 +40,4 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];
   };
-}
+} // param.extra)

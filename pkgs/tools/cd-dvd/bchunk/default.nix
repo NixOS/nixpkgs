@@ -1,14 +1,13 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bchunk-1.2.0";
+  name = "bchunk-${version}";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "http://he.fi/bchunk/${name}.tar.gz";
-    sha256 = "0pcbyx3689cbl23dcij497hb3q5f1wmki7cxic5nzldx71g9vp5g";
+    sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
   };
-
-  patches = [ ./CVE-2017-15953.patch ./CVE-2017-15955.patch ];
 
   installPhase = ''
     install -Dt $out/bin bchunk

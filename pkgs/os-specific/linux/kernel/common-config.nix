@@ -571,6 +571,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.14") ''
     MEDIA_RC_SUPPORT y
   ''}
+  MEDIA_CONTROLLER y
   MEDIA_USB_SUPPORT y
   MEDIA_PCI_SUPPORT y
   MEDIA_ANALOG_TV_SUPPORT y

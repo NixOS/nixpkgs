@@ -485,7 +485,7 @@ stdenv.mkDerivation ({
   EXTRA_TARGET_FLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
     ([
-      "-idirafter ${libcCross.dev}/include"
+      "-idirafter ${getDev libcCross}/include"
     ] ++ optionals (! crossStageStatic) [
       "-B${libcCross.out}/lib"
     ]);

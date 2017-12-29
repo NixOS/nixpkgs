@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
-, qtbase, qtx11extras, vulkan-loader, xorg
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, qtbase, qtx11extras, qtsvg, makeWrapper, python3, bison
+, autoconf, automake, pcre, vulkan-loader, xorg
 }:
 
 stdenv.mkDerivation rec {
   name = "renderdoc-${version}";
-  version = "0.34pre";
+  version = "0.91";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
-    rev = "5e2717daec53e5b51517d3231fb6120bebbe6b7a";
-    sha256 = "1zpvjvsj5c441kyjpmd2d2r0ykb190rbq474nkmp1jk72cggnpq0";
+    rev = "2d8b2cf818746b6a2add54e2fef449398816a40c";
+    sha256 = "07yc3fk7j2nqmrhc4dm3v2pgbc37scd7d28nlzk6v0hw99zck8k0";
   };
 
   buildInputs = [
-    qtbase xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
   ];
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig python3 bison autoconf automake pcre ];
 
   cmakeFlags = [
-    "-DBUILD_VERSION_HASH=${src.rev}-distro-nix"
+    "-DBUILD_VERSION_HASH=${src.rev}"
+    "-DBUILD_VERSION_DIST_NAME=NixOS"
+    "-DBUILD_VERSION_DIST_VER=0.91"
+    "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
+    "-DBUILD_VERSION_DIST_STABLE=ON"
     # TODO: use this instead of preConfigure once placeholders land
     #"-DVULKAN_LAYER_FOLDER=${placeholder out}/share/vulkan/implicit_layer.d/"
   ];
   preConfigure = ''
     cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
   '';
+
   preFixup = ''
     mkdir $out/bin/.bin
     mv $out/bin/qrenderdoc $out/bin/.bin/qrenderdoc
@@ -48,6 +54,6 @@ stdenv.mkDerivation rec {
       Windows 7 - 10, Linux or Android.
     '';
     maintainers = [maintainers.jansol];
-    platforms = platforms.linux;
+    platforms = ["i686-linux" "x86_64-linux"];
   };
 }

@@ -35,11 +35,11 @@ let
     #     source both, but source the more global configuration files earlier
     #     than the more local ones, so that more local configurations inherit
     #     from but override the more global locations.
-    
+
     if test -f /etc/fish/config.fish
       source /etc/fish/config.fish
     end
-    
+
     #                                                                             #
     ############### ↑ Nix hook for sourcing /etc/fish/config.fish ↑ ###############
   '';
@@ -88,13 +88,15 @@ let
 
   fish = stdenv.mkDerivation rec {
     name = "fish-${version}";
-    version = "2.6.0";
+    version = "2.7.0";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
     src = fetchurl {
-      url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-      sha256 = "1yzx73kg5ng5ivhi68756sl5hpb8869110l9fwim6gn7f7bbprby";
+      # There are differences between the release tarball and the tarball github packages from the tag
+      # Hence we cannot use fetchFromGithub
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${name}.tar.gz";
+      sha256 = "1jvvm27hp46w0cia14lfz6161dkz8b935j1m7j38i7rgx75bfxis";
     };
 
     buildInputs = [ ncurses libiconv pcre2 ];
@@ -156,6 +158,8 @@ let
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
     '';
+
+    enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
       description = "Smart and user-friendly command line shell";

@@ -47,6 +47,7 @@ mapAliases (rec {
   cv = progress; # added 2015-09-06
   debian_devscripts = debian-devscripts; # added 2016-03-23
   digikam5 = digikam; # added 2017-02-18
+  double_conversion = double-conversion; # 2017-11-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30

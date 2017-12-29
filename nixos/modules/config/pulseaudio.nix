@@ -45,7 +45,7 @@ let
   uid = ids.uids.pulseaudio;
   gid = ids.gids.pulseaudio;
 
-  stateDir = "/var/run/pulse";
+  stateDir = "/run/pulse";
 
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
@@ -219,6 +219,12 @@ in {
 
         { target = "pulse/daemon.conf";
           source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
+
+        { target = "openal/alsoft.conf";
+          source = writeText "alsoft.conf" "drivers=pulse"; }
+
+        { target = "libao.conf";
+          source = writeText "libao.conf" "default_driver=pulse"; }
       ];
 
       # Allow PulseAudio to get realtime priority using rtkit.

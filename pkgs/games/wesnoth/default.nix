@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.wesnoth.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ kkallio abbradar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

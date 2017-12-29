@@ -1,0 +1,12 @@
+--- a/gio/gsettingsschema.c
++++ b/gio/gsettingsschema.c
+@@ -352,6 +352,9 @@
+ 
+       try_prepend_data_dir (g_get_user_data_dir ());
+ 
++      if ((path = g_getenv ("NIX_GSETTINGS_OVERRIDES_DIR")) != NULL)
++        try_prepend_dir (path);
++
+       if ((path = g_getenv ("GSETTINGS_SCHEMA_DIR")) != NULL)
+         try_prepend_dir (path);
+ 

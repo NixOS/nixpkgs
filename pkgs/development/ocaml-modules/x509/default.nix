@@ -1,4 +1,6 @@
-{stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, asn1-combinators, nocrypto, ounit, ocaml_oasis, ppx_sexp_conv}:
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, asn1-combinators, nocrypto
+, ounit, ocaml_oasis, ppx_sexp_conv, cstruct-unix
+}:
 
 buildOcaml rec {
   name = "x509";
@@ -13,7 +15,7 @@ buildOcaml rec {
     sha256 = "07cc3z6h87460z3f4vz8nlczw5jkc4vjhix413z9x6nral876rn7";
   };
 
-  buildInputs = [ ocaml ocaml_oasis findlib ounit ppx_sexp_conv ];
+  buildInputs = [ ocaml ocaml_oasis findlib ounit ppx_sexp_conv cstruct-unix ];
   propagatedBuildInputs = [ asn1-combinators nocrypto ];
 
   configureFlags = "--enable-tests";

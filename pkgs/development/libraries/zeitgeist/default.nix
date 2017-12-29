@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "0vw6m0azycqabbz8f0fd8xsh5kf6j3ig4wpqlhw6sklvf44ii5b8";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   configureScript = "./autogen.sh";
 
   configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];

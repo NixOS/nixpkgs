@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mv man "$out/share"
     mv bin "$out"
     for p in $out/bin/*; do
-      wrapProgram "$p" --set PATH '$PATH:'"$out/bin"
+      wrapProgram "$p" --suffix PATH : "$out/bin"
     done
   '';
 

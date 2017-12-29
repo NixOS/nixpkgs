@@ -40,6 +40,7 @@ in rec {
         nat
         nfs3
         openssh
+        php-pcre
         proxy
         simple;
       installer = {

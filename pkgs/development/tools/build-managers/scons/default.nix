@@ -11,4 +11,8 @@ in {
     version = "3.0.0";
     sha256 = "05jjykllk4icnq6gfrkgkbc4ggxm7983q6r33mrhpilqbd02ylqg";
   };
+  scons_3_0_1 = mkScons {
+    version = "3.0.1";
+    sha256 = "0wzid419mlwqw9llrg8gsx4nkzhqy16m4m40r0xnh6cwscw5wir4";
+  };
 }

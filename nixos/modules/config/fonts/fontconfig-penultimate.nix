@@ -52,6 +52,8 @@ let
       </fontconfig>
     '';
 
+  localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
+
   # The configuration to be included in /etc/font/
   penultimateConf = pkgs.runCommand "font-penultimate-conf" {} ''
     support_folder=$out/etc/fonts/conf.d
@@ -106,6 +108,12 @@ let
       ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/51-local.conf \
       $latest_folder/51-local.conf \
       --replace local.conf /etc/fonts/${latestVersion}/local.conf
+
+    # local.conf (indirect priority 51)
+    ${optionalString (cfg.localConf != "") ''
+    ln -s ${localConf}        $out/etc/fonts/local.conf
+    ln -s ${localConf}        $out/etc/fonts/${latestVersion}/local.conf
+    ''}
 
     ln -s ${defaultFontsConf} $support_folder/52-default-fonts.conf
     ln -s ${defaultFontsConf} $latest_folder/52-default-fonts.conf

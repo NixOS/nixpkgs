@@ -119,6 +119,9 @@ self:
       # missing OCaml
       ocp-indent = markBroken super.ocp-indent;
 
+      # upstream issue: missing file header
+      po-mode = markBroken super.po-mode;
+
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 

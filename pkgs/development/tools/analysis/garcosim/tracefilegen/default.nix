@@ -1,22 +1,29 @@
-{ stdenv, fetchgit, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
 
-  name = "tracefilegen-2015-11-14";
+  name = "tracefilegen-2017-05-13";
 
-  src = fetchgit {
-    url = "https://github.com/GarCoSim/TraceFileGen.git";
-    rev = "4acf75b142683cc475c6b1c841a221db0753b404";
-    sha256 = "0mh661l9d1lczv0mr2y9swzqqlwikyqiv1hdd71r9v8cvm54y5ij";
+  src = fetchFromGitHub {
+    owner = "GarCoSim";
+    repo = "TraceFileGen";
+    rev = "0ebfd1fdb54079d4bdeaa81fc9267ecb9f016d60";
+    sha256 = "1gsx18ksgz5gwl3v62vgrmhxc0wc99i74qwhpn0h57zllk41drjc";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  builder = ./builder.sh;
+  patches = [ ./gcc7.patch ];
+
+  installPhase = ''
+    install -Dm755 TraceFileGen $out/bin/TraceFileGen
+    mkdir -p $out/share/doc/${name}/
+    cp -ar $src/Documentation/html $out/share/doc/${name}/.
+  '';
 
   meta = with stdenv.lib; {
     description = "Automatically generate all types of basic memory management operations and write into trace files";
-    homepage = https://github.com/GarCoSim; 
+    homepage = https://github.com/GarCoSim;
     maintainers = [ maintainers.cmcdragonkai ];
     license = licenses.gpl2;
     platforms = platforms.linux;

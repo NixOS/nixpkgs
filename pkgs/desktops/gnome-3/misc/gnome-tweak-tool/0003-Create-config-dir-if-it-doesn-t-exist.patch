@@ -1,6 +1,6 @@
-From ba2eb4be6c69ee8206e0139268c896e6a2b278d8 Mon Sep 17 00:00:00 2001
+From 6a6a7d1c708a2f568277699c5b605fa03ccb5faa Mon Sep 17 00:00:00 2001
 From: Jascha Geerds <jascha@jgeerds.name>
-Date: Sun, 25 Jun 2017 11:50:33 +0100
+Date: Tue, 19 Sep 2017 03:17:20 +0200
 Subject: [PATCH 3/3] Create config dir if it doesn't exist
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH 3/3] Create config dir if it doesn't exist
  1 file changed, 4 insertions(+)
 
 diff --git a/gtweak/gtksettings.py b/gtweak/gtksettings.py
-index a0c163b..f5883ec 100644
+index a11363b..2871c49 100644
 --- a/gtweak/gtksettings.py
 +++ b/gtweak/gtksettings.py
 @@ -36,6 +36,10 @@ class GtkSettingsManager:
@@ -23,5 +23,5 @@ index a0c163b..f5883ec 100644
              keyfile.load_from_file(self._path, 0)
          except MemoryError:
 -- 
-2.12.2
+2.14.1
 

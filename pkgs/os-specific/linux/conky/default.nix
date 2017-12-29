@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -72,6 +72,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "15j8h251v9jpdg6h6wn1vb45pkk806pf9s5n3rdrps9r185w8hn8";
   };
+
+  patches = [
+    # Patch to fix compilation on gcc-7 from conky PR
+    # https://github.com/brndnmtthws/conky/pull/402
+    (fetchpatch {
+      name = "gcc7.patch";
+      url = "https://github.com/brndnmtthws/conky/commit/6140122b82d50acc333e5d2a813cc1933ecc6d21.patch";
+      sha256 = "1fblfj1w2kc0gshc2pq9lc1pxxsgmgh8byb1xs2v6amx15kj11k7";
+    })
+  ];
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \

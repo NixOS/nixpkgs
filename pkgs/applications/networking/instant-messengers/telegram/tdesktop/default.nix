@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
 , qtbase, qtimageformats
-, breakpad, gtk3, libappindicator-gtk3, dee
+, gtk3, libappindicator-gtk3, dee
 , ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
 , gcc
 }:

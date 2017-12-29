@@ -1,8 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub, pytest, pytestrunner, pytestcov, pytestflakes, pytestpep8, sphinx, six }:
 
 buildPythonPackage rec {
-  name = "python-utils-${version}";
+  pname = "python-utils";
   version = "2.2.0";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "WoLpH";

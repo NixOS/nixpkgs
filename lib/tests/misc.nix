@@ -201,7 +201,7 @@ runTests {
 # in alphabetical order
 
   testMkKeyValueDefault = {
-    expr = generators.mkKeyValueDefault ":" "f:oo" "bar";
+    expr = generators.mkKeyValueDefault {} ":" "f:oo" "bar";
     expected = ''f\:oo:bar'';
   };
 

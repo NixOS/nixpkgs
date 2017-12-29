@@ -2,16 +2,20 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "yle-dl-${version}";
-  version = "2.20";
+  version = "2.27";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "06wzv230hfh3w9gs245kff8666bsfbax3ibr5zxj3h5z4qhhf9if";
+    sha256 = "1wxl074vxy7dlnk3ykcgnk3ms7bwh0zs7b9pxwhx5hsd894c8fpg";
   };
 
-  pythonPath = [ rtmpdump php ] ++ (with pythonPackages; [ pycrypto ]);
+  propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests ];
+  pythonPath = [ rtmpdump php ];
+
+  doCheck = false; # tests require network access
+  checkInputs = with pythonPackages; [ pytest pytestrunner ];
 
   meta = with stdenv.lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";

@@ -79,9 +79,10 @@ in
 
     meta = {
       description = "Signal Private Messenger for the Desktop.";
-      homepage = https://signal.org/;
-      license = lib.licenses.gpl3;
-      platforms = [
+      homepage    = https://signal.org/;
+      license     = lib.licenses.gpl3;
+      maintainers = [ lib.maintainers.ixmatus ];
+      platforms   = [
         "x86_64-linux"
       ];
     };

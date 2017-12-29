@@ -1,14 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
+{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, rake, ruby, buildRubyGem, libiconv
 , libxml2, libxslt, libffi, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "2.0.0";
-  rake = buildRubyGem {
-    inherit ruby;
-    gemName = "rake";
-    version = "10.4.2";
-    sha256 = "1rn03rqlf1iv6n87a78hkda2yqparhhaivfjpizblmxvlw2hk5r8";
-  };
+  version = "2.0.1";
 
   url = if stdenv.isLinux
     then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.deb"
@@ -17,9 +11,9 @@ let
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "184amybyxqlxqr8fk6lyx2znmci1fazsiby90q7d1xx2ihz3hm5x";
-    "i686-linux"    = "19r1m5jila40x69m1qz2hslz7v1hdg8wwdhcq8d5qjnzwfmlw2qz";
-    "x86_64-darwin" = "154400iqs01235bclr8ic7g9jv01lfs766bmv7p8784r3xsblvsr";
+    "x86_64-linux"  = "0kyqchjsy747vbvhqiynz81kik8g0xqpkv70rz7hyr9x7fl9i51g";
+    "i686-linux"    = "0p3xhxy6shkd0393wjyj8qycdn3zqv60vnyz1b6zclz0kfah07zs";
+    "x86_64-darwin" = "01hr5j9k31hsdlcwv3srzk0lphd8w0n9z95jvfkschdyjm9clpwm";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux" "-darwin"] ["" ""] stdenv.system;

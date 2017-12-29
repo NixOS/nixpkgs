@@ -1,0 +1,5 @@
+--- a/main/Makefile
++++ b/main/Makefile
+@@ -81 +80,1 @@ ifdef SHFLAGS
+-flite_LIBS_flags += -Wl,-rpath $(LIBDIR) 
++flite_LIBS_flags += -Wl,-rpath,$(INSTALLLIBDIR) 

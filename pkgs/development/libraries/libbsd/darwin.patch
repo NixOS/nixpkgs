@@ -1,8 +1,8 @@
 diff --git a/configure.ac b/configure.ac
-index 5a432d4..a69ae0b 100644
+index c909878..60c540e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -55,7 +55,7 @@ AS_CASE([$host_os],
+@@ -59,7 +59,7 @@ AS_CASE([$host_os],
  )
  
  # Checks for header files.
@@ -10,10 +10,10 @@ index 5a432d4..a69ae0b 100644
 +AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h stdio_ext.h])
  
  # Checks for typedefs, structures, and compiler characteristics.
- AC_TYPE_UID_T
-@@ -143,6 +143,31 @@ AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
+ AC_C_INLINE
+@@ -146,6 +146,31 @@ AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
                  pstat_getproc sysconf])
- AM_CONDITIONAL(HAVE_GETENTROPY, [test "x$ac_cv_func_getentropy" = "xtrue"])
+ AM_CONDITIONAL([HAVE_GETENTROPY], [test "x$ac_cv_func_getentropy" = "xtrue"])
  
 +HostOS=`echo "$host" | sed 's/.*-//'`
 +os_is_macosx=false
@@ -31,7 +31,7 @@ index 5a432d4..a69ae0b 100644
 +		os_is_macosx=false
 +		nonLinuxOS=false
 +		;;
-+esac		
++esac
 +AM_CONDITIONAL([IS_DARWIN], [test x$os_is_macosx = xtrue])
 +AM_COND_IF([IS_DARWIN],
 +	[AC_DEFINE([IS_DARWIN], [1], [Get HostOS Type is Darwin])])
@@ -44,12 +44,12 @@ index 5a432d4..a69ae0b 100644
  	Makefile
  	include/Makefile
 diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
-index ebb6160..ce882bf 100644
+index 45b3b15..d0d4043 100644
 --- a/include/bsd/libutil.h
 +++ b/include/bsd/libutil.h
 @@ -39,7 +39,9 @@
- #ifndef _LIBUTIL_H_
- #define _LIBUTIL_H_
+ #ifndef LIBBSD_LIBUTIL_H
+ #define LIBBSD_LIBUTIL_H
  
 +#ifdef HAVE_FEATURES_H
  #include <features.h>
@@ -58,10 +58,10 @@ index ebb6160..ce882bf 100644
  #include <sys/types.h>
  #include <stdint.h>
 diff --git a/include/bsd/stdio.h b/include/bsd/stdio.h
-index 7697425..ef34c4f 100644
+index 4b69983..8e2ac75 100644
 --- a/include/bsd/stdio.h
 +++ b/include/bsd/stdio.h
-@@ -44,12 +44,16 @@
+@@ -48,12 +48,16 @@
  __BEGIN_DECLS
  const char *fmtcheck(const char *, const char *);
  
@@ -69,9 +69,9 @@ index 7697425..ef34c4f 100644
  /* XXX: The function requires cooperation from the system libc to store the
   * line buffer in the FILE struct itself. */
  char *fgetln(FILE *fp, size_t *lenp)
- 	__attribute__((deprecated("This functions cannot be safely ported, "
- 	                          "use getline(3) instead, as it is supported "
- 	                          "by GNU and POSIX.1-2008.")));
+ 	LIBBSD_DEPRECATED("This functions cannot be safely ported, "
+ 	                  "use getline(3) instead, as it is supported "
+ 	                  "by GNU and POSIX.1-2008.");
 +#else
 +char *fgetln(FILE *fp, size_t *lenp);
 +#endif
@@ -519,17 +519,18 @@ index 462535a..e7eb46f 100644
 +}
  #endif
 diff --git a/src/funopen.c b/src/funopen.c
-index 7d6ae31..9963162 100644
+index 1e05c7e..ed8ce85 100644
 --- a/src/funopen.c
 +++ b/src/funopen.c
-@@ -137,6 +137,7 @@ funopen(const void *cookie,
+@@ -137,7 +137,7 @@ funopen(const void *cookie,
  
  	return fopencookie(cookiewrap, mode, funcswrap);
  }
-+#elif defined(darwin) || defined(__APPLE__) || defined(MACOSX)
- #else
- #error "Function funopen() needs to be ported."
- #endif
+-#elif defined(__MUSL__)
++#elif defined(__MUSL__) || defined(darwin) || defined(__APPLE__) || defined(MACOSX)
+ /*
+  * This is unimplementable on musl based systems, and upstream has stated
+  * they will not add the needed support to implement it. Just ignore this
 diff --git a/src/getentropy.c b/src/getentropy.c
 index 3f11a1e..8a23a07 100644
 --- a/src/getentropy.c
@@ -562,13 +563,13 @@ index 4f368a1..ab22fc1 100644
  #define SHA512_DIGEST_LENGTH		64
  
 diff --git a/src/hash/sha512c.c b/src/hash/sha512c.c
-index c2a93be..f69013d 100644
+index b3c8d5e..4fade0f 100644
 --- a/src/hash/sha512c.c
 +++ b/src/hash/sha512c.c
-@@ -27,7 +27,11 @@
- #include <sys/cdefs.h>
- __FBSDID("$FreeBSD$");
+@@ -25,7 +25,11 @@
+  */
  
+ #include <sys/cdefs.h>
 +#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
 +#include <machine/endian.h>
 +#else
@@ -578,24 +579,26 @@ index c2a93be..f69013d 100644
  
  #include <string.h>
 diff --git a/src/nlist.c b/src/nlist.c
-index 0cffe55..f785b61 100644
+index 0932f59..a3ba2be 100644
 --- a/src/nlist.c
 +++ b/src/nlist.c
-@@ -27,6 +27,7 @@
+@@ -27,6 +27,8 @@
   * SUCH DAMAGE.
   */
  
 +#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
- #if defined(LIBC_SCCS) && !defined(lint)
- static char sccsid[] = "@(#)nlist.c	8.1 (Berkeley) 6/4/93";
- #endif /* LIBC_SCCS and not lint */
-@@ -409,3 +410,4 @@ elf_sym_to_nlist(struct nlist *nl, Elf_Sym *s, Elf_Shdr *shdr, int shnum)
- 		nl->n_type |= N_EXT;
++
+ #include <sys/cdefs.h>
+ 
+ #include <sys/param.h>
+@@ -265,3 +267,5 @@ nlist(const char *name, struct nlist *list)
+ 	(void)close(fd);
+ 	return (n);
  }
- #endif /* _NLIST_DO_ELF */
++
 +#endif
 diff --git a/src/setproctitle.c b/src/setproctitle.c
-index c18c61c..b1b1591 100644
+index 038ac7d..d0ef01b 100644
 --- a/src/setproctitle.c
 +++ b/src/setproctitle.c
 @@ -32,6 +32,11 @@
@@ -626,42 +629,42 @@ index c18c61c..b1b1591 100644
  void setproctitle_stub(const char *fmt, ...)
  	__attribute__((alias("setproctitle_impl")));
 diff --git a/src/strlcat.c b/src/strlcat.c
-index 21c8afb..e036132 100644
+index 14c53a1..e01cb60 100644
 --- a/src/strlcat.c
 +++ b/src/strlcat.c
 @@ -27,7 +27,11 @@
-  * If retval >= siz, truncation occurred.
+  * If retval >= dsize, truncation occurred.
   */
  size_t
 +#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
-+bsd_strlcat(char *dst, const char *src, size_t siz)
++bsd_strlcat(char *dst, const char *src, size_t dsize)
 +#else
- strlcat(char *dst, const char *src, size_t siz)
+ strlcat(char *dst, const char *src, size_t dsize)
 +#endif
  {
- 	char *d = dst;
- 	const char *s = src;
+ 	const char *odst = dst;
+ 	const char *osrc = src;
 diff --git a/src/strlcpy.c b/src/strlcpy.c
-index 1719d35..c63591d 100644
+index e9a7fe4..10a855f 100644
 --- a/src/strlcpy.c
 +++ b/src/strlcpy.c
 @@ -25,7 +25,11 @@
-  * Returns strlen(src); if retval >= siz, truncation occurred.
+  * Returns strlen(src); if retval >= dsize, truncation occurred.
   */
  size_t
 +#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
-+bsd_strlcpy(char *dst, const char *src, size_t siz)
++bsd_strlcpy(char *dst, const char *src, size_t dsize)
 +#else
- strlcpy(char *dst, const char *src, size_t siz)
+ strlcpy(char *dst, const char *src, size_t dsize)
 +#endif
  {
- 	char *d = dst;
- 	const char *s = src;
+ 	const char *osrc = src;
+ 	size_t nleft = dsize;
 diff --git a/src/strmode.c b/src/strmode.c
-index 8d825ae..c1b5f8d 100644
+index e6afde5..c463243 100644
 --- a/src/strmode.c
 +++ b/src/strmode.c
-@@ -37,7 +37,11 @@ static char sccsid[] = "@(#)strmode.c	8.3 (Berkeley) 8/15/94";
+@@ -33,7 +33,11 @@
  #include <string.h>
  
  void

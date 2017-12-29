@@ -1,4 +1,4 @@
-{ stdenv 
+{ stdenv
 , lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,18 +11,19 @@
 , python
 , cudaSupport ? false, cudatoolkit
 , openclSupport ? true, ocl-icd, clblas
-}: 
+}:
 
 buildPythonPackage rec {
-  name = "libgpuarray-${version}";
+  pname = "libgpuarray";
   version = "0.6.9";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
-    owner = "Theano"; 
+    owner = "Theano";
     repo = "libgpuarray";
     rev = "v${version}";
     sha256 = "06z47ls42a37gbv0x7f3l1qvils7q0hvy02s95l530klgibp19s0";
-  }; 
+  };
 
   # requires a GPU
   doCheck = false;
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     export NIX_CFLAGS_COMPILE="-L $out/lib -I $out/include $NIX_CFLAGS_COMPILE"
 
     cd ..
-  ''; 
+  '';
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
@@ -64,11 +65,11 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ 
-    cmake 
-    cython 
+  buildInputs = [
+    cmake
+    cython
     nose
-  ]; 
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Theano/libgpuarray";

@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;
@@ -64,6 +64,7 @@ rec {
     ''
       mknod -m 666 ${dev}/null    c 1 3
       mknod -m 666 ${dev}/zero    c 1 5
+      mknod -m 666 ${dev}/full    c 1 7
       mknod -m 666 ${dev}/random  c 1 8
       mknod -m 666 ${dev}/urandom c 1 9
       mknod -m 666 ${dev}/tty     c 5 0
@@ -1310,6 +1311,17 @@ rec {
       packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
 
+    centos73x86_64 = {
+      name = "centos-7.3-x86_64";
+      fullName = "CentOS 7.3 (x86_64)";
+      packagesList = fetchurl {
+        url = http://vault.centos.org/7.3.1611/os/x86_64/repodata/dd86df27191d231cc6b7c5828fadb63b08db4725aef8e2613351667e649c9ca3-primary.xml.gz;
+        sha256 = "18wwkij7wrji6dhy5y5f4m3xn21vnsnqz0n5nz31q8qx34kxz1nx";
+      };
+      urlPrefix = http://vault.centos.org/7.3.1611/os/x86_64;
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
+    };
   };
 
 

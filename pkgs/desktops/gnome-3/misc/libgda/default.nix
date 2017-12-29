@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;

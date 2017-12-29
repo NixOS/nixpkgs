@@ -28,7 +28,7 @@ index 8ee7ff02c..bd5551ab3 100755
  skip 'live SNMP test disabled', 6 unless $ENV{TEST_LIVE_SNMP};
  
 diff --git a/t/apps/agent.t b/t/apps/agent.t
-index f417b4106..12207f192 100755
+index c0f6fc52f..c83837d70 100755
 --- a/t/apps/agent.t
 +++ b/t/apps/agent.t
 @@ -12,7 +12,7 @@ use XML::TreePP;
@@ -40,15 +40,28 @@ index f417b4106..12207f192 100755
  
  my ($content, $out, $err, $rc);
  
-@@ -73,11 +73,6 @@ subtest "first inventory execution and content" => sub {
+@@ -71,11 +71,6 @@ subtest "first inventory execution and content" => sub {
+     check_content_ok($out);
  };
  
- ok(
+-ok(
 -    exists $content->{REQUEST}->{CONTENT}->{SOFTWARES},
 -    'inventory has software'
 -);
 -
--ok(
+ ok(
      exists $content->{REQUEST}->{CONTENT}->{ENVS},
      'inventory has environment variables'
- );
+diff --git a/t/tasks/inventory/linux/softwares.t b/t/tasks/inventory/linux/softwares.t
+index 72a0e578c..13944f34f 100755
+--- a/t/tasks/inventory/linux/softwares.t
++++ b/t/tasks/inventory/linux/softwares.t
+@@ -89,7 +89,7 @@ my $rpm_packages = [
+         PUBLISHER   => 'Mageia.Org',
+         NAME        => 'xfsprogs',
+         COMMENTS    => 'Utilities for managing the XFS filesystem',
+-        INSTALLDATE => '25/03/2012',
++        INSTALLDATE => '24/03/2012',
+         FILESIZE    => '3628382',
+         FROM        => 'rpm',
+         ARCH        => 'x86_64',

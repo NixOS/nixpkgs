@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw cssselect cssutils dateutil html5-parser lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil dns html5-parser lxml mechanize netifaces pillow
     python pyqt5 sip
     regex msgpack
     # the following are distributed with calibre, but we use upstream instead

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ttwatch-${version}";
-  version = "2017-09-26";
+  version = "2017-10-31";
 
   src = fetchFromGitHub {
     owner = "ryanbinns";
     repo = "ttwatch";
-    rev = "31fb7ca6ac992d131a3f5ea6acf49f0c52a128c5";
-    sha256 = "1sxjx593jqbq45jn2dkjz07zq9kkgsbcj971phimlm6dj6g75wxq";
+    rev = "f4103bdeb612a216ac21747941b3df943d67c48c";
+    sha256 = "0fylycdi0g119d21l11yz23cjjhr3qdxjv02vz86zkc15kyvgsas";
   };
 
   nativeBuildInputs = [ cmake perl ];
