@@ -502,4 +502,7 @@ self: super: builtins.intersectAttrs super {
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
 
+  LDAP = dontCheck (overrideCabal super.LDAP (drv: {
+    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
+  }));
 }
