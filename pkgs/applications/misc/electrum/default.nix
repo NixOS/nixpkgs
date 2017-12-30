@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, python3Packages }:
+{ stdenv, fetchurl, python3, python3Packages, zbar }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
   '';
 
   postInstall = ''
