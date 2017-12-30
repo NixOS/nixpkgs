@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, python3Packages }:
+{ stdenv, fetchurl, python3, python3Packages, qt5 }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
@@ -48,6 +48,10 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+
+    mv $out/bin/electrum $out/bin/.electrum-no-qt
+    makeWrapper $out/bin/.electrum-no-qt $out/bin/electrum \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms
   '';
 
   doCheck = false;
