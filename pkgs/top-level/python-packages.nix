@@ -15698,23 +15698,7 @@ in {
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
-  pyaml = buildPythonPackage (rec {
-    name = "pyaml-15.02.1";
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyaml/${name}.tar.gz";
-      sha256 = "8dfe1b295116115695752acc84d15ecf5c1c469975fbed7672bf41a6bc6d6d51";
-    };
-
-    buildInputs = with self; [ pyyaml ];
-
-    meta = {
-      description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
-      homepage = https://github.com/mk-fg/pretty-yaml;
-    };
-  });
-
+  pyaml = callPackage ../development/python-modules/pyaml { };
 
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.12";
