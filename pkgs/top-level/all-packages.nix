@@ -14159,6 +14159,8 @@ with pkgs;
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 
+  bitlbee-discord = callPackage ../applications/networking/instant-messengers/bitlbee-discord { };
+
   bitlbee-facebook = callPackage ../applications/networking/instant-messengers/bitlbee-facebook { };
 
   bitlbee-steam = callPackage ../applications/networking/instant-messengers/bitlbee-steam { };
