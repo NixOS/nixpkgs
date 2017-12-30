@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "15.02.1";
+  version = "17.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8dfe1b295116115695752acc84d15ecf5c1c469975fbed7672bf41a6bc6d6d51";
+    sha256 = "66623c52f34d83a2c0fc963e08e8b9d0c13d88404e3b43b1852ef71eda19afa3";
   };
 
   propagatedBuildInputs = [ pyyaml ];
