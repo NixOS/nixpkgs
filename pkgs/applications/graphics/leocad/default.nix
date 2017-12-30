@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "CAD program for creating virtual LEGO models";
     homepage = http://www.leocad.org/;
     license = licenses.gpl2;
-    inherit (qt4.meta) platforms;
+    platforms = platforms.linux;
   };
 }
