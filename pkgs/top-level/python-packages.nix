@@ -1040,24 +1040,7 @@ in {
     };
   };
 
-  backports_functools_lru_cache = buildPythonPackage rec {
-    name = "backports.functools_lru_cache-${version}";
-    version = "1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports_functools_lru_cache/${name}.tar.gz";
-      sha256 = "444a21bcec4ae177da554321f81a78dc879eaa8f6ea9920cb904830585d31e95";
-    };
-
-    buildInputs = with self; [ setuptools_scm ];
-    doCheck = false; # No proper test
-
-    meta = {
-      description = "Backport of functools.lru_cache";
-      homepage = https://github.com/jaraco/backports.functools_lru_cache;
-      license = licenses.mit;
-    };
-  };
+  backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
 
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
