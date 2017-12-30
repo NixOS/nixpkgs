@@ -70,7 +70,7 @@ let
       secret_key_base: ${cfg.secrets.secret}
       otp_key_base: ${cfg.secrets.otp}
       db_key_base: ${cfg.secrets.db}
-      jws_private_key: ${builtins.toJSON cfg.secrets.jws}
+      openid_connect_signing_key: ${builtins.toJSON cfg.secrets.jws}
   '';
 
   gitlabConfig = {
