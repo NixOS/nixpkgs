@@ -337,7 +337,12 @@ Finally, you can run
 hoogle server -p 8080 --local
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/).
+[Hoogle](https://www.haskell.org/hoogle/). Note, however, that Firefox and
+possibly other browsers disallow navigation from `http:` to `file:` URIs for
+security reasons, which might be quite an inconvenience. Since version 5 hoogle
+server has a `--local` flag that solves the problem. For older versions see
+[this page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
+workarounds.
 
 ### How to build a Haskell project using Stack
 
