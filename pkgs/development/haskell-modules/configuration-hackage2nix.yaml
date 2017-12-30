@@ -6382,7 +6382,6 @@ dont-distribute-packages:
   liquid:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   liquidhaskell-cabal-demo:                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   liquidhaskell-cabal:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
-  liquidhaskell:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   list-mux:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   list-prompt:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   list-remote-forwards:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
