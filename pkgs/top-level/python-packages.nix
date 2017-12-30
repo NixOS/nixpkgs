@@ -9842,6 +9842,8 @@ in {
 
   jsondate = callPackage ../development/python-modules/jsondate { };
 
+  jsondiff = callPackage ../development/python-modules/jsondiff { };
+
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
     # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
