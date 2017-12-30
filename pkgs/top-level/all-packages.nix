@@ -667,6 +667,8 @@ with pkgs;
 
   arc-theme = callPackage ../misc/themes/arc { };
 
+  arc-kde-theme = callPackage ../misc/themes/arc-kde { };
+
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
 
   aria2 = callPackage ../tools/networking/aria2 {
