@@ -58,8 +58,8 @@ in
   assert kernel != null;
 {
     splStable = common {
-      version = "0.7.4";
-      sha256 = "0vmakqi3zm8ka5cglif45ll2m6ynq7r55mhk8d1rzjkgi191cddh";
+      version = "0.7.5";
+      sha256 = "0njb3274bc5pfr80pzj94sljq457pr71n50s0gsccbz8ghk28rlr";
     };
 
     splUnstable = common {
