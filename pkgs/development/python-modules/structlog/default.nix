@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "16.1.0";
+  version = "17.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00dywyg3bqlkrmbrfrql21hpjjjkc4zjd6xxjyxyd15brfnzlkdl";
+    sha256 = "6980001045abd235fa12582222627c19b89109e58b85eb77d5a5abc778df6e20";
   };
 
   checkInputs = [ pytest pretend freezegun ];
