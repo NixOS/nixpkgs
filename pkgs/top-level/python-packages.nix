@@ -5697,6 +5697,8 @@ in {
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
+  jsonpickle = callPackage ../development/python-modules/jsonpickle { };
+
   jsonpointer = buildPythonPackage rec {
     name = "jsonpointer-1.9";
 
