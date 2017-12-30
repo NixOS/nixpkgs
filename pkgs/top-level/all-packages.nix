@@ -3926,6 +3926,10 @@ with pkgs;
 
   pepper = callPackage ../tools/admin/salt/pepper { };
 
+  percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
+    boost = boost159;
+  };
+
   pick = callPackage ../tools/misc/pick { };
 
   pitivi = callPackage ../applications/video/pitivi {
