@@ -1,4 +1,6 @@
-{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
+{ coreutils, db, fetchurl, openldap, openssl, pcre, perl, pkgconfig, stdenv
+, enableLDAP ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "exim-4.90";
@@ -9,7 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ coreutils db openssl pcre perl ];
+  buildInputs = [ coreutils db openssl pcre perl ]
+    ++ stdenv.lib.optional enableLDAP openldap;
 
   preBuild = ''
     sed '
@@ -33,6 +36,11 @@ stdenv.mkDerivation rec {
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      ${stdenv.lib.optionalString enableLDAP ''
+        s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
+        s:^# \(LOOKUP_LDAP=yes\)$:\1:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap:
+      ''}
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
