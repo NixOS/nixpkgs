@@ -4016,6 +4016,8 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
+  libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
+
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
   locket = buildPythonPackage rec {
@@ -7467,6 +7469,10 @@ in {
   django = self.django_1_11;
 
   django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
+    gdal = self.gdal;
+  };
+
+  django_2_0 = callPackage ../development/python-modules/django/2_0.nix {
     gdal = self.gdal;
   };
 
@@ -12119,42 +12125,7 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
-  numexpr = buildPythonPackage rec {
-    version = "2.6.2";
-    name = "numexpr-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numexpr/${name}.tar.gz";
-      sha256 = "6ab8ff5c19e7f452966bf5a3220b845cf3244fe0b96544f7f9acedcc2db5c705";
-    };
-
-    propagatedBuildInputs = with self; [ numpy ];
-
-    # Run the test suite.
-    # It requires the build path to be in the python search path.
-    checkPhase = ''
-      ${python}/bin/${python.executable} <<EOF
-      import sysconfig
-      import sys
-      import os
-      f = "lib.{platform}-{version[0]}.{version[1]}"
-      lib = f.format(platform=sysconfig.get_platform(),
-                     version=sys.version_info)
-      build = os.path.join(os.getcwd(), 'build', lib)
-      sys.path.insert(0, build)
-      import numexpr
-      r = numexpr.test()
-      if not r.wasSuccessful():
-          sys.exit(1)
-      EOF
-    '';
-
-    meta = {
-      description = "Fast numerical array expression evaluator for NumPy";
-      homepage = "https://github.com/pydata/numexpr";
-      license = licenses.mit;
-    };
-  };
+  numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = let
     # scons is needed but using it requires Python 2.7
@@ -22400,6 +22371,8 @@ EOF
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
   trezor = callPackage ../development/python-modules/trezor { };
+
+  protocol = callPackage ../development/python-modules/protocol { };
 
   trezor_agent = buildPythonPackage rec{
     name = "${pname}-${version}";

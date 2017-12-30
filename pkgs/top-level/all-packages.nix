@@ -1173,6 +1173,8 @@ with pkgs;
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  home-manager = callPackage ../tools/package-management/home-manager {};
+
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
   hr = callPackage ../applications/misc/hr { };
@@ -2025,6 +2027,8 @@ with pkgs;
     inherit (python27Packages) numpy scipy h5py scikitlearn python
       pillow;
   };
+
+  fastpbkdf2 = callPackage ../development/libraries/fastpbkdf2 { };
 
   fanficfare = callPackage ../tools/text/fanficfare { };
 
@@ -3644,6 +3648,8 @@ with pkgs;
   noip = callPackage ../tools/networking/noip { };
 
   nomad = callPackage ../applications/networking/cluster/nomad { };
+
+  miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
 
@@ -6274,6 +6280,13 @@ with pkgs;
   mitscheme = callPackage ../development/compilers/mit-scheme {
    texLive = texlive.combine { inherit (texlive) scheme-small; };
    texinfo = texinfo5;
+   xlibsWrapper = null;
+  };
+
+  mitschemeX11 = callPackage ../development/compilers/mit-scheme {
+   texLive = texlive.combine { inherit (texlive) scheme-small; };
+   texinfo = texinfo5;
+   enableX11 = true;
   };
 
   mkcl = callPackage ../development/compilers/mkcl {};
@@ -12886,10 +12899,8 @@ with pkgs;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    inherit (callPackage ../os-specific/linux/spl {
-      configFile = "kernel";
-      inherit kernel;
-    }) splStable splUnstable;
+    inherit (callPackage ../os-specific/linux/spl {})
+      splStable splUnstable;
 
     spl = splStable;
 
@@ -13219,10 +13230,6 @@ with pkgs;
   smem = callPackage ../os-specific/linux/smem { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
-
-  inherit (callPackage ../os-specific/linux/spl {
-    configFile = "user";
-  }) splStable splUnstable;
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -18583,6 +18590,7 @@ with pkgs;
   gnomeExtensions = {
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
+    dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
@@ -19723,6 +19731,8 @@ with pkgs;
   };
 
   splix = callPackage ../misc/cups/drivers/splix { };
+
+  steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
   streamripper = callPackage ../applications/audio/streamripper { };
 

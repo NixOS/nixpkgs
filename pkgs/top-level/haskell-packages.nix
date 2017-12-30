@@ -59,9 +59,6 @@ in rec {
     ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix {
       ghc = compiler.ghc704Binary;
     };
-    ghc783 = callPackage ../development/compilers/ghc/7.8.3.nix {
-      ghc = compiler.ghc742Binary;
-    };
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
       ghc = compiler.ghc742Binary;
     };
@@ -119,10 +116,6 @@ in rec {
 
   packages = {
 
-    ghc784 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc784;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };

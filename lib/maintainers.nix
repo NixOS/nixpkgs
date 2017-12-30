@@ -361,6 +361,7 @@
   ldesgoui = "Lucas Desgouilles <ldesgoui@gmail.com>";
   league = "Christopher League <league@contrapunctus.net>";
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
+  ledif = "Adam Fidel <refuse@gmail.com>";
   leemachin = "Lee Machin <me@mrl.ee>";
   leenaars = "Michiel Leenaars <ml.software@leenaa.rs>";
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";
@@ -451,6 +452,7 @@
   mrVanDalo = "Ingolf Wanger <contact@ingolf-wagner.de>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
+  mstarzyk = "Maciek Starzyk <mstarzyk@gmail.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
   mt-caret = "Masayuki Takeda <mtakeda.enigsol@gmail.com>";
   mtreskin = "Max Treskin <zerthurd@gmail.com>";

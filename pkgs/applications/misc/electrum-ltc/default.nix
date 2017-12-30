@@ -5,16 +5,15 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-ltc-${version}";
-  version = "2.6.4.2";
+  version = "2.9.3.1";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "0sqcyk6n6kgaiinnwh6mzbbn4whk3ga59r5bw5rqmnnfqk1xdnb4";
+    sha256 = "d931a5376b7f38fba7221b01b1010f172c4d662668adae5c38885a646d5ee530";
   };
 
   propagatedBuildInputs = with python2Packages; [
     pyqt4
-    slowaes
     ecdsa
     pbkdf2
     requests
@@ -23,6 +22,8 @@ python2Packages.buildPythonApplication rec {
     protobuf
     dnspython
     jsonrpclib
+    pyaes
+    pysocks
   ];
 
   preBuild = ''

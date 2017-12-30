@@ -38,7 +38,8 @@ let
 
       patches = extraPatches;
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel kernel.moduleBuildDependencies;
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
@@ -140,9 +141,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.4";
+    version = "0.7.5";
 
-    sha256 = "1djm97nlipn0fch1vcvpw94bnfvg9ylv9i2hp46dzaxhdh7bm265";
+    sha256 = "086g4xjx05sy4fwn5709sm46m2yv35wb915xfmqjvpry46245nig";
 
     extraPatches = [
       (fetchpatch {
@@ -159,10 +160,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-11-16";
+    version = "2017-12-28";
 
-    rev = "d4a72f23863382bdf6d0ae33196f5b5decbc48fd";
-    sha256 = "0q2gkkj11hy8m8cjd70g99bs69ldxvc17ym0x1pgwvs4722hzpha";
+    rev = "390d679acdfa6a2498280a4dcd33b7600ace27ce";
+    sha256 = "09lh1cpsf87yl1sr6inam5av60cy5wv89x6a952vfxrs64ph2m6n";
     isUnstable = true;
 
     extraPatches = [

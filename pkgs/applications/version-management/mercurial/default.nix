@@ -18,12 +18,12 @@ in python2Packages.buildPythonApplication {
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [ hg-git dulwich ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = (stdenv.lib.optionalString guiSupport
     ''

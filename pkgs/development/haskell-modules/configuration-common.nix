@@ -1012,4 +1012,10 @@ self: super: {
       { patches = (drv.patches or []) ++ [ patch ];
         editedCabalFile = null;
       });
+
+  # https://github.com/haskell/cabal/issues/4969
+  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
+
+  haddock-api = super.haddock-api.override
+    { haddock-library = self.haddock-library_1_4_4; };
 }
