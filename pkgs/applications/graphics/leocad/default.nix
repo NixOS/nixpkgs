@@ -7,13 +7,13 @@ set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 
 stdenv.mkDerivation rec {
   name = "leocad-${version}";
-  version = "17.02";
+  version = "17.07";
 
   src = fetchFromGitHub {
     owner = "leozide";
     repo = "leocad";
     rev = "v${version}";
-    sha256 = "0d7l2il6r4swnmrmaf1bsrgpjgai5xwhwk2mkpcsddnk59790mmc";
+    sha256 = "1j361pvxywi4nb2alhnnd4qpqrpg6503gbi17cadcdi434gbqbsd";
   };
 
   nativeBuildInputs = [ qmake4Hook ];
