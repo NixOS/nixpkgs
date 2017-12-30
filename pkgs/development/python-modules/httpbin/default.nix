@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.5.0";
+  version = "0.6.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
+    sha256 = "0afa0486a76305cac441b5cc80d5d4ccd82b20875da7c5119ecfe616cefef45f";
   };
 
   propagatedBuildInputs = [ flask markupsafe decorator itsdangerous six ];
