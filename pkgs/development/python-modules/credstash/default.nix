@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname    = "credstash";
-  version = "1.13.4";
+  version = "1.14.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "676cc03a6143dec260c78aeef09d08a64faf27c411f8a94f6d9338e985879f81";
+    sha256 = "718b337f7a6fa001e014386071f05c59900525d0507009126d2fe8d75fe0761d";
   };
 
   propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
