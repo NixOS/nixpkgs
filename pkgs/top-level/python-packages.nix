@@ -18373,20 +18373,7 @@ in {
     };
   };
 
-  texttable = self.buildPythonPackage rec {
-    name = "texttable-0.8.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/texttable/${name}.tar.gz";
-      sha256 = "0bkhs4dx9s6g7fpb969hygq56hyz4ncfamlynw72s0n6nqfbd1w5";
-    };
-
-    meta = {
-      description = "A module to generate a formatted text table, using ASCII characters";
-      homepage = http://foutaise.org/code/;
-      license = licenses.lgpl2;
-    };
-  };
+  texttable = callPackage ../development/python-modules/texttable { };
 
   tiros = callPackage ../development/python-modules/tiros { };
 
