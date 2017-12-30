@@ -6648,7 +6648,7 @@ in {
     };
   };
 
-  pythonix = callPackage ../development/python-modules/pythonix { };
+  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
 
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
