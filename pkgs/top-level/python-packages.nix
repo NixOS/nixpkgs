@@ -18049,28 +18049,7 @@ in {
     };
   };
 
-  structlog = buildPythonPackage rec {
-    name = "structlog-16.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/structlog/${name}.tar.gz";
-      sha256 = "00dywyg3bqlkrmbrfrql21hpjjjkc4zjd6xxjyxyd15brfnzlkdl";
-    };
-
-    buildInputs = with self; [ pytest pretend freezegun ];
-    propagatedBuildInputs = with self; [ simplejson ];
-
-    checkPhase = ''
-      rm tests/test_twisted.py*
-      py.test
-    '';
-
-    meta = {
-      description = "Painless structural logging";
-      homepage = http://www.structlog.org/;
-      license = licenses.asl20;
-    };
-  };
+  structlog = callPackage ../development/python-modules/structlog { };
 
   svgwrite = buildPythonPackage rec {
     name = "svgwrite-${version}";
