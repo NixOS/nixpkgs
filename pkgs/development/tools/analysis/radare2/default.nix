@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
 
   '';
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libusb libewf perl zlib openssl]
     ++ optional useX11 [gtkdialog vte gtk2]
