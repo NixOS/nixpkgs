@@ -5967,6 +5967,9 @@ with pkgs;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
+  tamarin-prover = # haskell.lib.justStaticExecutables
+    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover { inherit maude; });
+
   inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
