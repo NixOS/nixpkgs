@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake }:
+{ fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
+  enableX11 ? false, xlibsWrapper ? null }:
 
 let
   version = "9.2";
@@ -9,7 +10,7 @@ let
          else                         "";
 in
 stdenv.mkDerivation {
-  name = "mit-scheme-${version}";
+  name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
 
   # MIT/GNU Scheme is not bootstrappable, so it's recommended to compile from
   # the platform-specific tarballs, which contain pre-built binaries.  It
@@ -28,6 +29,8 @@ stdenv.mkDerivation {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
       sha256 = "0w5ib5vsidihb4hb6fma3sp596ykr8izagm57axvgd6lqzwicsjg";
     };
+
+  buildInputs = if enableX11 then [xlibsWrapper] else [];
 
   configurePhase =
     '' (cd src && ./configure)
