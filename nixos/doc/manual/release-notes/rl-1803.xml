@@ -103,6 +103,18 @@ following incompatible changes:</para>
       Other more obscure ones are just moved.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The propagation logic has been changed.
+      The new logic, along with new types of dependencies that go with, is thoroughly documented in the "Specifying dependencies" section of the "Standard Environment" chapter of the nixpkgs manual.
+      <!-- That's <xref linkend="ssec-stdenv-attributes"> were we to merge the manuals. -->
+      The old logic isn't but is easy to describe: dependencies were propagated as the same type of dependency no matter what.
+      In practice, that means that many <function>propagatedNativeBuildInputs</function> should instead be  <function>propagatedBuildInputs</function>.
+      Thankfully, that was and is the least used type of dependency.
+      Also, it means that some <function>propagatedBuildInputs</function> should instead be <function>depsTargetTargetPropagated</function>.
+      Other types dependencies should be unaffected.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
