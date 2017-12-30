@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "444a21bcec4ae177da554321f81a78dc879eaa8f6ea9920cb904830585d31e95";
+    sha256 = "31f235852f88edc1558d428d890663c49eb4514ffec9f3650e7f3c9e4a12e36f";
   };
 
   buildInputs = [ setuptools_scm ];
