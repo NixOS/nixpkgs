@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "extras";
-  version = "0.0.3";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h7zx4dfyclalg0fqnfjijpn0f793a9mx8sy3b27gd31nr6dhq3s";
+    sha256 = "132e36de10b9c91d5d4cc620160a476e0468a88f16c9431817a6729611a81b4e";
   };
 
   # error: invalid command 'test'
