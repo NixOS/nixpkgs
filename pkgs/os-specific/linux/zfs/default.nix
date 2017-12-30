@@ -39,7 +39,7 @@ let
       patches = extraPatches;
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
-         ++ optional buildUser kernel.moduleBuildDependencies;
+         ++ optional buildKernel kernel.moduleBuildDependencies;
       buildInputs = [ autoreconfHook nukeReferences ]
         ++ optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ];
