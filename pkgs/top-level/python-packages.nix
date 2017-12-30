@@ -173,6 +173,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
+
   # packages defined elsewhere
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
