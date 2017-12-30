@@ -373,28 +373,21 @@ rec {
   }
   '';
 
-  addRtp = path: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}"; } // {
+  addRtp = path: attrs: drv:
+    drv // { rtp = "${drv}/${path}"; } // {
       overrideAttrs = f: buildVimPlugin (attrs // f attrs);
     };
 
-  buildVimPlugin = a@{
-    name,
+  buildVimPlugin = attrs@{
+    name, addonInfo ? null,
     namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
     path ? (builtins.parseDrvName name).name,
-    addonInfo ? null,
+    dontBuild ? !(attrs ? "buildPhase" || attrs ? "preBuild" || attrs ? "postBuild"),
     ...
   }:
-    addRtp "${rtpPath}/${path}" a (stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
-
-      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+      inherit addonInfo dontBuild;
 
       installPhase = ''
         runHook preInstall
@@ -412,12 +405,9 @@ rec {
       '';
     }));
 
-  vim_with_vim2nix = vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; };
+  buildVimPluginFrom2Nix = buildVimPlugin;
 
-  buildVimPluginFrom2Nix = a: buildVimPlugin ({
-    buildPhase = ":";
-    configurePhase =":";
-  } // a);
+  vim_with_vim2nix = vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; };
 
   requiredPlugins = {
     givenKnownPlugins ? null,
