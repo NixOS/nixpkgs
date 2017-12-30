@@ -4002,6 +4002,8 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
+  libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
+
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
   locket = buildPythonPackage rec {
