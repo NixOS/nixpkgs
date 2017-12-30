@@ -2,13 +2,13 @@
 , mesa, xorg, freetype, fontconfig}:
 
 buildPythonPackage rec {
-  version = "1.2.4";
+  version = "1.3.0";
   pname = "pyglet";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f62ffbbcf2b202d084bf158685e77d28b8f4f5f2738f4c5e63a947a07503445";
+    sha256 = "640a8f8e3d7bf8dbb551fa707f14021f619932990ab1401c48ba9dbcc6c2242c";
   };
 
   patchPhase = let
