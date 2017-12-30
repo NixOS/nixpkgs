@@ -69,6 +69,9 @@ in buildFHSUserEnv rec {
     xlibs.libX11
     xlibs.libXfixes
 
+    # Needed to properly check for libGL.so.1 in steam-wrapper.sh
+    pkgsi686Linux.glxinfo
+
     # Not formally in runtime but needed by some games
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
@@ -103,7 +106,15 @@ in buildFHSUserEnv rec {
     export TZDIR=/etc/zoneinfo
   '';
 
-  runScript = "steam";
+  runScript = writeScript "steam-wrapper.sh" ''
+    #!${stdenv.shell}
+    glxinfo >/dev/null 2>&1
+    if [ ! "$?" = "0" ]; then
+      echo "*** WARNING: Test for 32-bit libGL unsuccessful."
+      echo "             This could mean you forgot to activate hardware.opengl.driSupport32Bit"
+    fi
+    steam
+  '';
 
   passthru.run = buildFHSUserEnv {
     name = "steam-run";
