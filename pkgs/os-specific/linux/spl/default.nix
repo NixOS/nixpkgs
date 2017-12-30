@@ -66,8 +66,8 @@ in
     };
 
     splUnstable = common {
-      version = "2017-11-16";
-      rev = "ed19bccfb651843fa208232b3a2d3d22a4152bc8";
-      sha256 = "08ihjbf5fhcnhq9zavcwswg9djlbalbx1bil4rcv6i3d617wammb";
+      version = "2017-12-21";
+      rev = "c9821f1ccc647dfbd506f381b736c664d862d126";
+      sha256 = "08r6sa36jaj6n54ap18npm6w85v5yn3x8ljg792h37f49b8kir6c";
     };
 }
