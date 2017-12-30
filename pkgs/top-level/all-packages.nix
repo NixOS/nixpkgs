@@ -14165,6 +14165,8 @@ with pkgs;
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bitscope = callPackage ../applications/science/electronics/bitscope/packages.nix { };
+
   bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
     inherit (gnome2) zenity;
   };
