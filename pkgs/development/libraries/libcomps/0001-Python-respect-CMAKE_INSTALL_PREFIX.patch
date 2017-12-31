@@ -1,0 +1,51 @@
+From de8384017bf83798b2578ec588aee7c38c826bae Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Tue, 5 Dec 2017 16:50:40 +0100
+Subject: [PATCH] Python: respect CMAKE_INSTALL_PREFIX
+
+While packaging I noticed it tried to put the modules in the wrong
+folder.
+---
+ libcomps/src/python/src/python2/CMakeLists.txt | 7 ++++++-
+ libcomps/src/python/src/python3/CMakeLists.txt | 7 ++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/libcomps/src/python/src/python2/CMakeLists.txt b/libcomps/src/python/src/python2/CMakeLists.txt
+index 3ad9e18..a9326fa 100644
+--- a/libcomps/src/python/src/python2/CMakeLists.txt
++++ b/libcomps/src/python/src/python2/CMakeLists.txt
+@@ -1,7 +1,12 @@
+ find_package (PythonLibs 2.6)
+ find_package (PythonInterp 2.6 REQUIRED)
+ 
+-execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
++from sys import stdout
++from distutils import sysconfig
++path=sysconfig.get_python_lib(True, prefix='${CMAKE_INSTALL_PREFIX}')
++stdout.write(path)"
++OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
+ 
+ include_directories(${PYTHON_INCLUDE_PATH})
+ include_directories(${LIBCOMPS_INCLUDE_PATH})
+diff --git a/libcomps/src/python/src/python3/CMakeLists.txt b/libcomps/src/python/src/python3/CMakeLists.txt
+index 7fafa9f..e359092 100644
+--- a/libcomps/src/python/src/python3/CMakeLists.txt
++++ b/libcomps/src/python/src/python3/CMakeLists.txt
+@@ -2,7 +2,12 @@ find_package (PythonLibs 3.0)
+ find_package (PythonInterp 3.0)
+ #add_custom_target(py3-copy)
+ 
+-execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
++from sys import stdout
++from distutils import sysconfig
++path=sysconfig.get_python_lib(True, prefix='${CMAKE_INSTALL_PREFIX}')
++stdout.write(path)"
++OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
+ 
+ include_directories(${PYTHON_INCLUDE_PATH})
+ include_directories(${LIBCOMPS_INCLUDE_PATH})
+-- 
+2.15.0
+

@@ -10222,6 +10222,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  libcomps = toPythonModule (pkgs.libcomps.override {
+    inherit python;
+  });
+
   librepo = toPythonModule (pkgs.librepo.override {
     inherit python;
   });
