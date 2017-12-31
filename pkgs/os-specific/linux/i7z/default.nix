@@ -1,36 +1,31 @@
-{ stdenv, fetchurl, qt4, ncurses }:
+{ stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "i7z-0.27.2";
+  name = "i7z-93";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/i7z/${name}.tar.gz";
-    sha256 = "1wa7ix6m75wl3k2n88sz0x8cckvlzqklja2gvzqfw5rcfdjjvxx7";
+  src = fetchFromGitHub {
+    owner  = "ajaiantilal";
+    repo   = "i7z";
+    rev    = "5023138d7c35c4667c938b853e5ea89737334e92";
+    sha256 = "0z0aqj79cbwwx3q600nwf3nixgihvcngrgkcn1xw6wpl9rpxpzjk";
   };
 
-  buildInputs = [ qt4 ncurses ];
+  # The GUI is qt4 only so we do not build it as qt4 is deprecated
 
-  buildPhase = ''
-    make
-    cd GUI
-    qmake
-    make clean
-    make
-    cd ..
+  buildInputs = [ ncurses ];
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    sed -i Makefile -e "s,^prefix.*,prefix = $out,"
   '';
 
-  installPhase = ''
-    mkdir -p $out/sbin
-    make install prefix=$out
-    install -Dm755 GUI/i7z_GUI $out/sbin/i7z-gui
-  '';
-
-  meta = {
-    description = "A better i7 (and now i3, i5) reporting tool for Linux";
+  meta = with stdenv.lib; {
+    description = "A better i3, i5 and i7 reporting tool for Linux";
     homepage = https://github.com/ajaiantilal/i7z;
     repositories.git = https://github.com/ajaiantilal/i7z.git;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ bluescreen303 ];
+    platforms = platforms.linux;
   };
 }
