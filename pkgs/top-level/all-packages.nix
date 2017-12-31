@@ -359,6 +359,10 @@ with pkgs;
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
+  buildSingleXMLCatalog = makeSetupHook {
+    deps = [ findXMLCatalogs ];
+  } ../build-support/setup-hooks/build-single-xml-catalog.sh;
+
   wrapGAppsHook = makeSetupHook {
     deps = [ gnome3.dconf.lib gnome3.gtk librsvg makeWrapper ];
   } ../build-support/setup-hooks/wrap-gapps-hook.sh;
@@ -17089,6 +17093,10 @@ with pkgs;
 
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome2.vte.override { pythonSupport = true; };
+  };
+
+  lxterminal = callPackage ../applications/misc/lxterminal {
+    vte = gnome2.vte;
   };
 
   deepin-terminal = callPackage ../applications/misc/deepin-terminal {
