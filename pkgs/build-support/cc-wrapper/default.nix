@@ -292,7 +292,7 @@ stdenv.mkDerivation {
       ## Hardening support
       ##
 
-      export hardening_unsupported_flags=""
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
     + optionalString hostPlatform.isCygwin ''

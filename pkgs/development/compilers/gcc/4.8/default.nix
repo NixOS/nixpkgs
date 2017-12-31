@@ -507,8 +507,11 @@ stdenv.mkDerivation ({
       "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
     ]);
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version;
+    isGNU = true;
+    hardeningUnsupportedFlags = [ "stackprotector" ];
+  };
 
   inherit enableParallelBuilding enableMultilib;
 
