@@ -1038,23 +1038,7 @@ in {
     };
   };
 
-  backports_lzma = self.buildPythonPackage rec {
-    name = "backports.lzma-0.0.3";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports.lzma/${name}.tar.gz";
-      sha256 = "bac58aec8d39ac3d22250840fb24830d0e4a0ef05ad8f3f09172dc0cc80cdbca";
-    };
-
-    buildInputs = [ pkgs.lzma ];
-
-    meta = {
-      description = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
-      homepage = https://github.com/peterjc/backports.lzma;
-      license = licenses.bsd3;
-    };
-  };
+  backports_lzma = callPackage ../development/python-modules/backports_lzma { };
 
   backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
 
