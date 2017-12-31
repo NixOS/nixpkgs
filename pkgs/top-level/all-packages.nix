@@ -3008,6 +3008,8 @@ with pkgs;
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lvmsync = callPackage ../tools/backup/lvmsync { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
