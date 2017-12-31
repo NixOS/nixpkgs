@@ -65,13 +65,15 @@ mkDerivation (common "tamarin-prover" src // {
   enableSharedExecutables = false;
   postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
 
-  # wrap the prover to be sure it can find maude
+  # wrap the prover to be sure it can find maude, sapic, etc
+  executableToolDepends = [ makeWrapper which maude graphviz sapic ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz sapic ]}
   '';
 
-  executableToolDepends = [ makeWrapper ];
+  checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
+
   executableHaskellDepends = (with haskellPackages; [
     base binary binary-orphans blaze-builder blaze-html bytestring
     cmdargs conduit containers deepseq directory fclabels file-embed
