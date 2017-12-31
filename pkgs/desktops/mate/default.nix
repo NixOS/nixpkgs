@@ -33,6 +33,7 @@ let
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
     mate-screensaver = callPackage ./mate-screensaver { };
+    mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
     mate-user-guide = callPackage ./mate-user-guide { };
@@ -68,6 +69,7 @@ let
       mate-media
       mate-power-manager
       mate-screensaver
+      mate-system-monitor
       mate-terminal
       mate-user-guide
       pluma
