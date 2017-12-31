@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl, fetchFromGitHub
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, caffe, glog, boost, google-gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -15,33 +16,37 @@
 , enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
 , enableIpp       ? false
-, enableContrib   ? false  #, caffe, glog, boost, google-gflags
+, enableContrib   ? false
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
+, enableVtk       ? false, vtk
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
+, enableOvis      ? false, ogre
+, enableGPhoto2   ? false, libgphoto2
+, enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
 , AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
 }:
 
 let
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1jq8nny78gp54yjgsnb2rdp5rwhp78b3r2i36b2vyx6xk6h6wwji";
+    sha256 = "1nc14kvsjwaisv7d1r6f0hn7na9zr2cm2zh3hd3r9qwm3g78xnac";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0q5vsa8dpa3mdhzas0ckagwh2sbckpm1kxsp0i3yfknsr5ampyi2";
+    sha256 = "1cxw7nra3f1hng057c6hi1ynsyqdazd69irjdgn8xjg6q9h76br0";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -104,6 +109,20 @@ let
     dst = ".cache/xfeatures2d/boostdesc";
   };
 
+  # See opencv_contrib/modules/face/CMakeLists.txt
+  face = {
+    src = fetchFromGitHub {
+      owner  = "opencv";
+      repo   = "opencv_3rdparty";
+      rev    = "8afa57abc8229d611c4937165d20e2a2d9fc5a12";
+      sha256 = "061lsvqdidq9xa2hwrcvwi9ixflr2c2lfpc8drr159g68zi8bp4v";
+    };
+    files = {
+      "face_landmark_model.dat" = "7505c44ca4eb54b4ab1e4777cb96ac05";
+    };
+    dst = ".cache/data";
+  };
+
   # See opencv/cmake/OpenCVDownload.cmake
   installExtraFiles = extra : with lib; ''
     mkdir -p "${extra.dst}"
@@ -151,16 +170,19 @@ stdenv.mkDerivation rec {
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
+      ${installExtraFiles face}
 
       mkdir -p "${tinyDnn.dst}"
       ln -s "${tinyDnn.src}" "${tinyDnn.dst}/${tinyDnn.md5}-${tinyDnn.name}"
     '');
 
   buildInputs =
-       [ zlib pcre hdf5 ]
+       [ zlib pcre hdf5 glog boost google-gflags protobuf ]
+    ++ lib.optional (!stdenv.isDarwin) caffe
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
+    ++ lib.optional enableVtk vtk
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
@@ -171,6 +193,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optional enableOvis ogre
+    ++ lib.optional enableGPhoto2 libgphoto2
+    ++ lib.optional enableDC1394 libdc1394
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
     # There is seemingly no compile-time flag for Tesseract.  It's
@@ -178,11 +203,6 @@ stdenv.mkDerivation rec {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableCuda cudatoolkit
-
-    # These are only needed for the currently disabled
-    # cnn_3dobj and dnn_modern modules
-    # ++ lib.optionals buildContrib [ caffe glog boost google-gflags ]
-
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
@@ -206,16 +226,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
-  ] ++ lib.optionals buildContrib [
-         # the cnn_3dobj module fails to build
-         "-DBUILD_opencv_cnn_3dobj=OFF"
-
-         # the dnn_modern module causes:
-         # https://github.com/opencv/opencv_contrib/issues/823
-         #
-         # On OS X its dependency tiny-dnn-1.0.0a3 also fails to build.
-         "-DBUILD_opencv_dnn_modern=OFF"
-       ]
+  ]
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
