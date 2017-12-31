@@ -11728,7 +11728,9 @@ with pkgs;
 
   cayley = callPackage ../servers/cayley { };
 
-  charybdis = callPackage ../servers/irc/charybdis {};
+  charybdis = callPackage ../servers/irc/charybdis { };
+
+  clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse { };
 
