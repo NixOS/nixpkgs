@@ -1,12 +1,6 @@
-    buildInputs = [
-      python3
-      stdenv
-      cmake
-      boost
-      icu
-    ];
-    buildPhase = ''
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ boost icu python3 ];
+    cmakeFlags = [ "-DPY3:BOOL=ON" ];
+    preConfigure = ''
       patchShebangs .
-      export PY3=ON
-      ./install.sh
     '';

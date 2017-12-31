@@ -1341,17 +1341,11 @@ rec {
       sha256 = "0x5jac7x85bqdh38vggi1fvxjw2z29b2227n471f3cxy8arvylrw";
     };
     dependencies = [];
-    buildInputs = [
-      python3
-      stdenv
-      cmake
-      boost
-      icu
-    ];
-    buildPhase = ''
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ boost icu python3 ];
+    cmakeFlags = [ "-DPY3:BOOL=ON" ];
+    preConfigure = ''
       patchShebangs .
-      export PY3=ON
-      ./install.sh
     '';
   };
 
