@@ -214,6 +214,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_OPENMP=ON"
+    "-DBUILD_PROTOBUF=OFF"
+    "-DPROTOBUF_UPDATE_FILES=ON"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
@@ -230,6 +232,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
+
+  # Workaround for: https://github.com/opencv/opencv/issues/10474
+  preBuild = ''
+    make opencv_dnn
+  '';
 
   postBuild = lib.optionalString enableDocs ''
     make doxygen
