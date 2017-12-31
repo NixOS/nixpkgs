@@ -26,6 +26,6 @@ in stdenv.mkDerivation {
     homepage = http://octopus-code.org/wiki/Libxc;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainer = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [ markuskowa ];
   };
 }
