@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXtst, qt4 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, libX11, libXtst, qtbase, qttools, qtx11extras }:
+
 stdenv.mkDerivation rec {
-  name = "qjoypad-4.1.0";
-  src = fetchurl {
-    url = "mirror://sourceforge/qjoypad/${name}.tar.gz";
-    sha256 = "1jlm7i26nfp185xrl41kz5z6fgvyj51bjpz48cg27xx64y40iamm";
+  name = "qjoypad-${version}";
+  version = "4.3.0";
+
+  src = fetchFromGitHub {
+    owner  = "panzi";
+    repo   = "qjoypad";
+    rev    = "v${version}";
+    sha256 = "0ps85ncqmy8jz3zzyv5f5z4564kkgcl799ri4kcz407mjyc4fvs6";
   };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 libXtst qt4 ];
-  patchPhase = ''
-    cd src
-    substituteInPlace config --replace /bin/bash /bin/sh
-    mkdir -p $out
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${libX11}/lib"
-  '';
-  meta = {
+
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
+
+  buildInputs = [ qtbase qtx11extras libXtst ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "A program that lets you use gaming devices anywhere";
     longDescription = ''
       A simple Linux/QT program that lets you use your gaming devices
@@ -31,9 +36,9 @@ stdenv.mkDerivation rec {
       of gaming devices in Linux, and makes the Linux gaming
       experience just a little bit nicer.
     '';
-    homepage = http://qjoypad.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = https://github.com/panzi/qjoypad;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
   };
 }
