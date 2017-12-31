@@ -19026,6 +19026,8 @@ with pkgs;
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
+  sapic = callPackage ../applications/science/logic/sapic { };
+
   satallax = callPackage ../applications/science/logic/satallax {
     ocaml = ocamlPackages_4_01_0.ocaml;
   };
