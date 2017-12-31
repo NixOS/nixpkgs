@@ -31,6 +31,7 @@ let
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
+    mate-user-guide = callPackage ./mate-user-guide { };
     pluma = callPackage ./pluma { };
 
     basePackages = [
@@ -60,6 +61,7 @@ let
       mate-media
       mate-power-manager
       mate-terminal
+      mate-user-guide
       pluma
     ];
   
