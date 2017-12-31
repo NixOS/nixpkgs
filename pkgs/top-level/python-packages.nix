@@ -13998,27 +13998,6 @@ in {
     };
   };
 
-  pycosat = buildPythonPackage rec {
-    name = "pycosat-0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycosat/${name}.tar.gz";
-      sha256 = "02sdn2998jlrm35smn1530hix3kzwyc1jv49cjdcnvfvrqqi3rww";
-    };
-
-    meta = {
-      description = "Python bindings for PicoSAT";
-      longDescription = ''PicoSAT is a popular SAT solver written by Armin
-          Biere in pure C. This package provides efficient Python bindings
-          to picosat on the C level, i.e. when importing pycosat, the
-          picosat solver becomes part of the Python process itself. For
-          ease of deployment, the picosat source (namely picosat.c and
-          picosat.h) is included in this project.'';
-      homepage = https://github.com/ContinuumIO/pycosat;
-      license = licenses.mit;
-    };
-  };
-
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = buildPythonPackage (rec {
@@ -14171,6 +14150,7 @@ in {
 
   };
 
+  pycosat = callPackage ../development/python-modules/pycosat { };
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
