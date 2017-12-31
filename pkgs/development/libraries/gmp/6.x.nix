@@ -19,8 +19,8 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
-  nativeBuildInputs = [ m4 ]
-    ++ stdenv.lib.optional (buildPlatform != hostPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ m4 ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures

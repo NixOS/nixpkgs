@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
-  nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc
-    ++ [ nukeReferences ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ nukeReferences ]
+    ++ stdenv.lib.optional sslSupport pkgconfig;
 
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
 

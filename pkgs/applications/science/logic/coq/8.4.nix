@@ -60,7 +60,7 @@ stdenv.mkDerivation {
       fi
     }
 
-    envHooks=(''${envHooks[@]} addCoqPath)
+    addEnvHooks "$targetOffset" addCoqPath
   '';
 
   passthru = {

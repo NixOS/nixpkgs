@@ -10,4 +10,4 @@ addGuileLibPath () {
     fi
 }
 
-envHooks+=(addGuileLibPath)
+addEnvHooks "$hostOffset" addGuileLibPath

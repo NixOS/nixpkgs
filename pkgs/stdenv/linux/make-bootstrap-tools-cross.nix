@@ -193,6 +193,7 @@ rec {
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/*
 
         mkdir $out/.pack
         mv $out/* $out/.pack

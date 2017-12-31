@@ -11,7 +11,7 @@ make_gobject_introspection_find_gir_files() {
     fi
 }
 
-envHooks+=(make_gobject_introspection_find_gir_files)
+addEnvHooks "$hostOffset" make_gobject_introspection_find_gir_files
 
 _multioutMoveGlibGir() {
   moveToOutput share/gir-1.0 "${!outputDev}"
