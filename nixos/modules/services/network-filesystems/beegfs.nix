@@ -180,7 +180,7 @@ in
               description = ''
                 Mount point under which the beegfs filesytem should be mounted.
                 If mounted manually the mount option specifing the config file is needed:
-                cfgFile=/etc/beegfs/beegfs-client-<name>.conf
+                cfgFile=/etc/beegfs/beegfs-client-&lt;name&gt;.conf
               '';
             };
 
@@ -216,7 +216,7 @@ in
                 Data directory for mgmtd.
                 Must not be shared with other beegfs daemons.
                 This directory must exist and it must be initialized
-                with beegfs-setup-mgmtd, e.g. "beegfs-setup-mgmtd -C -p <storeDir>"
+                with beegfs-setup-mgmtd, e.g. "beegfs-setup-mgmtd -C -p &lt;storeDir&gt;"
               '';
             };
 
@@ -256,7 +256,7 @@ in
                 The underlying filesystem must be mounted with xattr turned on.
                 This directory must exist and it must be initialized
                 with beegfs-setup-meta, e.g.
-                "beegfs-setup-meta -C -s <serviceID> -p <storeDir>"
+                "beegfs-setup-meta -C -s &lt;serviceID&gt; -p &lt;storeDir&gt;"
               '';
             };
 
@@ -283,7 +283,7 @@ in
                 The underlying filesystem must be mounted with xattr turned on.
                 This directory must exist and it must be initialized
                 with beegfs-setup-storage, e.g.
-                "beegfs-setup-storage -C -s <serviceID> -i <storageTargetID> -p <storeDir>"
+                "beegfs-setup-storage -C -s &lt;serviceID&gt; -i &lt;storageTargetID&gt; -p &lt;storeDir&gt;"
               '';
             };
 
