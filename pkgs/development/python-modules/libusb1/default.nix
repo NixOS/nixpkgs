@@ -12,7 +12,7 @@ buildPythonPackage rec {
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace usb1/libusb1.py --replace \
       "ctypes.util.find_library(base_name)" \
-      "'${libusb1}/lib/libusb${stdenv.hostPlatform.extensions.sharedLibrary}'"
+      "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
   buildInputs = [ libusb1 ];
