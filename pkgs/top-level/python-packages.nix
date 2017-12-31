@@ -3073,22 +3073,7 @@ in {
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
 
-  idna = buildPythonPackage rec {
-    pname = "idna";
-    version = "2.5";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab";
-    };
-
-    meta = {
-      homepage = "http://github.com/kjd/idna/";
-      description = "Internationalized Domain Names in Applications (IDNA)";
-      license = "licenses.bsd3";
-    };
-  };
+  idna = callPackage ../development/python-modules/idna { };
 
   mahotas = buildPythonPackage rec {
     name = "python-mahotas-${version}";
