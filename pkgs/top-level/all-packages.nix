@@ -14084,9 +14084,7 @@ with pkgs;
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
-  sysprof = callPackage ../development/tools/profiling/sysprof {
-    inherit (gnome2) libglade;
-  };
+  sysprof = callPackage ../development/tools/profiling/sysprof { };
 
   # Provided with sysfsutils.
   libsysfs = sysfsutils;
