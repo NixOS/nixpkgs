@@ -2842,6 +2842,7 @@ in {
     };
   };
 
+  conda = callPackage ../development/python-modules/conda { };
 
   configobj = buildPythonPackage (rec {
     name = "configobj-5.0.6";
