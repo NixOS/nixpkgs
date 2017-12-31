@@ -1,16 +1,21 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
 , gobjectIntrospection, gtk3, hicolor_icon_theme, libnotify, librsvg
-, pythonPackages, udisks2, wrapGAppsHook }:
+, udisks2, wrapGAppsHook
+, docopt
+, pygobject3
+, pyyaml
+, pythonPackages
+}:
 
 pythonPackages.buildPythonApplication rec {
   name = "udiskie-${version}";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = version;
-    sha256 = "1p732gi6lhwcqxvsa0pknb6jmhy3kgv3yzz7xzmdzhy47m312965";
+    sha256 = "1yv1faq81n3vspf3jprcs5v21l2fchy3m3pc7lk8jb0xqlnh60x4";
   };
 
   buildInputs = [
@@ -21,8 +26,8 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    gettext gobjectIntrospection gtk3 libnotify pythonPackages.docopt
-    pythonPackages.pygobject3 pythonPackages.pyyaml udisks2
+    gettext gobjectIntrospection gtk3 libnotify docopt
+    pygobject3 pyyaml udisks2
   ];
 
   postBuild = "make -C doc";

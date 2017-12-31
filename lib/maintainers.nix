@@ -663,6 +663,7 @@
   thpham = "Thomas Pham <thomas.pham@ithings.ch>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
+  tiramiseb = "Sébastien Maccagnoni <sebastien@maccagnoni.eu>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tnias = "Philipp Bartsch <phil@grmr.de>";
   tohl = "Tomas Hlavaty <tom@logand.com>";
@@ -693,6 +694,7 @@
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
+  vidbina = "David Asabina <vid@bina.me>";
   vifino = "Adrian Pistol <vifino@tty.sh>";
   vinymeuh = "VinyMeuh <vinymeuh@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";

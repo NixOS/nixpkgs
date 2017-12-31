@@ -1338,6 +1338,8 @@ with pkgs;
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
+  beegfs = callPackage ../os-specific/linux/beegfs { };
+
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python2Packages;
   };
@@ -3228,6 +3230,8 @@ with pkgs;
   libiberty_static = callPackage ../development/libraries/libiberty { staticBuild = true; };
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
+
+  libxc = callPackage ../development/libraries/libxc { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
 
@@ -5542,13 +5546,7 @@ with pkgs;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
-  clang_34 = (wrapCC llvmPackages_34.clang).override {
-    # Default cc-wrapper's hardening flags don't work with clang-3.4,
-    # so just remove it entirely for this wrapper.
-    extraBuildCommands = ''
-    :> $out/nix-support/add-hardening.sh
-    '';
-  };
+  clang_34 = wrapCC llvmPackages_34.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools { };
 
@@ -5965,6 +5963,13 @@ with pkgs;
   purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
+
+  tamarin-prover =
+    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
+      # NOTE: do not use the haskell packages 'graphviz' and 'maude'
+      inherit maude which sapic;
+      graphviz = graphviz-nox;
+    });
 
   inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
@@ -12818,6 +12823,8 @@ with pkgs;
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
+    beegfs-module = callPackage ../os-specific/linux/beegfs/kernel-module.nix { };
+
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     blcr = callPackage ../os-specific/linux/blcr { };
@@ -14165,6 +14172,8 @@ with pkgs;
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bitscope = callPackage ../applications/science/electronics/bitscope/packages.nix { };
+
   bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
     inherit (gnome2) zenity;
   };
@@ -14385,7 +14394,7 @@ with pkgs;
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
-  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
+  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskell.packages.ghc802.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
   });
 
@@ -16739,7 +16748,7 @@ with pkgs;
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = callPackage ../applications/misc/udiskie { };
+  udiskie = python3Packages.callPackage ../applications/misc/udiskie { };
 
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte;
@@ -18591,6 +18600,7 @@ with pkgs;
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
@@ -19013,6 +19023,8 @@ with pkgs;
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
   proverif = callPackage ../applications/science/logic/proverif { };
+
+  sapic = callPackage ../applications/science/logic/sapic { };
 
   satallax = callPackage ../applications/science/logic/satallax {
     ocaml = ocamlPackages_4_01_0.ocaml;

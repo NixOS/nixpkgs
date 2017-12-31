@@ -62,7 +62,8 @@ let
 
     libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib stdenv.cc.cc ];
 
-    nativeBuildInputs = [ perl nukeReferences ] ++ kernel.moduleBuildDependencies;
+    nativeBuildInputs = [ perl nukeReferences ]
+      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 

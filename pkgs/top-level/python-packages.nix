@@ -6648,7 +6648,7 @@ in {
     };
   };
 
-  pythonix = callPackage ../development/python-modules/pythonix { };
+  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
 
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
@@ -11338,35 +11338,7 @@ in {
     };
   });
 
-  mygpoclient = buildPythonPackage rec {
-    name = "mygpoclient-${version}";
-    version = "1.7";
-
-    src = pkgs.fetchurl {
-      url = "https://thp.io/2010/mygpoclient/${name}.tar.gz";
-      sha256 = "6a0b7b1fe2b046875456e14eda3e42430e493bf2251a64481cf4fd1a1e21a80e";
-    };
-
-    buildInputs = with self; [ nose minimock ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "A gpodder.net client library";
-      longDescription = ''
-        The mygpoclient library allows developers to utilize a Pythonic interface
-        to the gpodder.net web services.
-      '';
-      homepage = https://thp.io/2010/mygpoclient/;
-      license = with licenses; [ gpl3 ];
-      platforms = with platforms; linux ++ darwin;
-      maintainers = with maintainers; [ skeidel ];
-    };
-  };
+  mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
