@@ -9665,26 +9665,7 @@ in {
 
   iso3166 = callPackage ../development/python-modules/iso3166 {};
 
-  iso8601 = buildPythonPackage rec {
-    name = "iso8601-${version}";
-    version = "0.1.11";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/iso8601/${name}.tar.gz";
-      sha256 = "e8fb52f78880ae063336c94eb5b87b181e6a0cc33a6c008511bac9a6e980ef30";
-    };
-
-    buildInputs = [ self.pytest ];
-
-    checkPhase = ''
-      py.test iso8601
-    '';
-
-    meta = {
-      homepage = https://bitbucket.org/micktwomey/pyiso8601/;
-      description = "Simple module to parse ISO 8601 dates";
-      maintainers = with maintainers; [ phreedom ];
-    };
-  };
+  iso8601 = callPackage ../development/python-modules/iso8601 { };
 
   isort = buildPythonPackage rec {
     name = "${pname}-${version}";
