@@ -1769,6 +1769,8 @@ with pkgs;
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
+  diskrsync = callPackage ../tools/backup/diskrsync { };
+
   djbdns = callPackage ../tools/networking/djbdns { };
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
