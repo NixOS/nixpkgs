@@ -2609,6 +2609,8 @@ with pkgs;
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hash_extender = callPackage ../tools/security/hash_extender { };
+
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
