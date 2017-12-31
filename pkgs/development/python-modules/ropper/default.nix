@@ -3,10 +3,10 @@
 , fetchPypi
 , capstone
 , filebytes
-, pytest }:
+, pytest
+}:
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "ropper";
   version = "1.11.2";
 
@@ -19,7 +19,9 @@ buildPythonApplication rec {
   checkPhase = ''
     py.test testcases
   '';
-  buildInputs = [pytest];
+  doCheck = false; # Tests not included in archive
+
+  checkInputs = [pytest];
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with stdenv.lib; {
     homepage = https://scoding.de/ropper/;
