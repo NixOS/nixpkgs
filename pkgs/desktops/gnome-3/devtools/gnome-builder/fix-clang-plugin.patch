@@ -1,0 +1,13 @@
+--- a/src/plugins/clang/meson.build
++++ b/src/plugins/clang/meson.build
+@@ -38,8 +38,8 @@
+ 
+ add_languages('cpp') # Needed for llvm dep
+ llvm_dep = dependency('llvm', version: '>= 3.5')
+-clang_include = llvm_dep.get_configtool_variable('includedir')
+-clang_libdir = llvm_dep.get_configtool_variable('libdir').split(' ')
++clang_include = '@clangCc@/include/'
++clang_libdir = '@clangCc@/lib/'
+ 
+ if not cc.has_header('clang-c/Index.h', args: '-I' + clang_include)
+   error('clang: Failed to find headers')
