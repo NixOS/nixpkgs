@@ -3230,6 +3230,8 @@ with pkgs;
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
+  libxc = callPackage ../development/libraries/libxc { };
+
   libxcomp = callPackage ../development/libraries/libxcomp { };
 
   libxl = callPackage ../development/libraries/libxl {};
