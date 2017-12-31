@@ -1,17 +1,17 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, makeWrapper, pkgconfig, qmake
 , curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit
+, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
 
 let
-  version = "4.7.2";
+  version = "4.7.5";
 
   libdc = stdenv.mkDerivation rec {
     name = "libdivecomputer-ssrf-${version}";
 
     src = fetchurl {
       url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
-      sha256 = "04wadhhva1bfnwk0kl359kcv0f83mgym2fzs441spw5llcl7k52r";
+      sha256 = "1xsgnmgc7yb46lflx8ynkbdxg2f6sny6xg6caqgx7rf0x1jmjj4x";
     };
 
     nativeBuildInputs = [ autoreconfHook ];
@@ -32,24 +32,25 @@ let
   googlemaps = stdenv.mkDerivation rec {
     name = "googlemaps-${version}";
 
-    version = "2017-09-17";
+    version = "2017-12-18";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "1b857c02504dd52b1aa442418b8dcea78ced3f35";
-      sha256 = "14icmc925g4abwwdrldjc387aiyvcp3ia5z7mfh9qa09bv829a84";
+      rev = "79f3511d60dc9640de02a5f24656094c8982b26d";
+      sha256 = "11334w0bnfb97sv23vvj2b5hcwvr0171hxldn91jms9y12l5j15d";
     };
 
     nativeBuildInputs = [ qmake ];
 
-    buildInputs = [ qtbase qtlocation ];
+    buildInputs = [ qtbase qtlocation libXcomposite ];
 
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
     installPhase = ''
-      mkdir $out $(dirname ${pluginsSubdir})
-      mv plugins ${pluginsSubdir}
+      mkdir -p $out $(dirname ${pluginsSubdir})
+      mkdir -p ${pluginsSubdir}
+      mv *.so ${pluginsSubdir}
       mv lib $out/
     '';
 
@@ -69,7 +70,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
-    sha256 = "06f215xx1nc2q2qff2ihcl86fkrlnkvacl1swi3fw9iik6nq3bjp";
+    sha256 = "0qqmnrmj2alr4rc2nqkv8sbdp92xb6j4j468wn6yqvgb23n77b82";
   };
 
   buildInputs = [
