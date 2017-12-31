@@ -16,6 +16,8 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ which kmod ];
 
+  buildInputs = kernel.moduleBuildDependencies;
+
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/" ];
 
   postPatch = ''
@@ -39,5 +41,6 @@ in stdenv.mkDerivation {
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ markuskowa ];
+    broken = versionAtLeast kernel.version "4.14";
   };
 }
