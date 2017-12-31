@@ -10339,28 +10339,7 @@ in {
     };
   };
 
-
-  Mako = buildPythonPackage rec {
-    name = "Mako-1.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/Mako/${name}.tar.gz";
-      sha256 = "0nchpw6akfcsg8w6irjlx0gyzadc123hv4g47sijgnqd9nz9vngy";
-    };
-
-    buildInputs = with self; [ markupsafe nose mock pytest ];
-    propagatedBuildInputs = with self; [ markupsafe ];
-
-    doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
-
-    meta = {
-      description = "Super-fast templating language";
-      homepage = http://www.makotemplates.org;
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  Mako = callPackage ../development/python-modules/Mako { };
 
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix {};
   marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix {};
