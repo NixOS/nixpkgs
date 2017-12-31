@@ -15,6 +15,7 @@
 
 , enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
+, enableUnfree    ? false
 , enableIpp       ? false
 , enableContrib   ? false
 , enablePython    ? false, pythonPackages
@@ -141,8 +142,9 @@ let
     dst  = ".cache/tiny_dnn";
   };
 
-  opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
+  opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
+  printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
 stdenv.mkDerivation rec {
@@ -216,6 +218,7 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
     "-DPROTOBUF_UPDATE_FILES=ON"
+    "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
@@ -249,7 +252,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = with stdenv.lib.licenses; if enableUnfree then unfree else bsd3;
     maintainers = with stdenv.lib.maintainers; [viric mdaiter basvandijk];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
