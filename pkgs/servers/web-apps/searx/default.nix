@@ -29,6 +29,8 @@ pythonPackages.buildPythonApplication rec {
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
   ];
 
+  doCheck = false;
+
   meta = with lib; {
     homepage = https://github.com/asciimoo/searx;
     description = "A privacy-respecting, hackable metasearch engine";
