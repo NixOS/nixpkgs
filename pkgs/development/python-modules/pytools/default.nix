@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , decorator
 , appdirs
 , six
@@ -10,13 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2017.4";
+  version = "2017.6";
 
-  src = fetchFromGitHub {
-    owner = "inducer";
-    repo = "pytools";
-    rev = "8078e74265bb5a3c9676c698595ab5450cd2bfe7";
-    sha256 = "17q61l79fcxkj5jxg3fnymi652sdjp5s6kpsabgxp22kma9crr28";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "80f1bba4469d473c1b3969bc8e188c03bcc94d35807a889ceebbfc78e3208115";
   };
 
   checkInputs = [ pytest ];
