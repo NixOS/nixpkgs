@@ -10290,6 +10290,8 @@ with pkgs;
 
   openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
+  openscenegraph-qt5 = libsForQt5.callPackage ../development/libraries/openscenegraph { withQt = true; };
+
   openslp = callPackage ../development/libraries/openslp {};
 
   openvdb = callPackage ../development/libraries/openvdb {};

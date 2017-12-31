@@ -1,29 +1,35 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig, doxygen, unzip
-, freetype, libjpeg, jasper, libxml2, zlib, gdal, curl, libX11
-, cairo, poppler, librsvg, libpng, libtiff, libXrandr
-, xineLib, boost
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen
+, freetype, libjpeg, jasper, libxml2, zlib, gdal, curl, libX11, libpthreadstubs
+, cairo, poppler, librsvg, libpng, libtiff, libXrandr, libXdmcp
+, pcre, xineLib, boost
 , withApps ? false
-, withSDL ? false, SDL
-, withQt4 ? false, qt4
+, withSDL ? false,  SDL
+, withQt ? false,   qtbase
 }:
 
 stdenv.mkDerivation rec {
   name = "openscenegraph-${version}";
-  version = "3.4.0";
+  version = "3.4.1";
 
-  src = fetchurl {
-    url = "http://trac.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-${version}.zip";
-    sha256 = "03h4wfqqk7rf3mpz0sa99gy715cwpala7964z2npd8jxfn27swjw";
+  src = fetchFromGitHub rec {
+    owner  = "openscenegraph";
+    repo   = "OpenSceneGraph";
+    rev    = "${repo}-${version}";
+    sha256 = "1fbzg1ihjpxk6smlq80p3h3ggllbr16ihd2fxpfwzam8yr8yxip9";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen unzip ];
+  # The Qt OpenGL module is deprecated and now part of Qt GUI
+  postPatch = "substituteInPlace src/osgQt/CMakeLists.txt --replace OpenGL ''";
+
+  nativeBuildInputs = [ cmake doxygen pkgconfig ];
 
   buildInputs = [
-    freetype libjpeg jasper libxml2 zlib gdal curl libX11
-    cairo poppler librsvg libpng libtiff libXrandr boost
-    xineLib
+    freetype libjpeg jasper libxml2 zlib gdal curl
+    cairo poppler librsvg libpng libtiff boost
+    pcre xineLib
+    libpthreadstubs libX11 libXdmcp libXrandr
   ] ++ lib.optional withSDL SDL
-    ++ lib.optional withQt4 qt4;
+    ++ lib.optional withQt  qtbase;
 
   enableParallelBuilding = true;
 
@@ -31,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
-    homepage = http://www.openscenegraph.org/;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    homepage    = http://www.openscenegraph.org/;
+    license     = "OpenSceneGraph Public License - free LGPL-based license";
+    maintainers = with maintainers; [ raskin ];
+    platforms   = platforms.linux;
   };
 }
