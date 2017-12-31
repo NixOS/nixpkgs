@@ -1,7 +1,7 @@
---- a/config.mk	2012-05-14 01:13:09.009740082 +0400
-+++ b/config.mk	2012-05-14 01:13:50.400525700 +0400
-@@ -11,6 +11,9 @@
- LIBDIR ?= ${PREFIX}/lib
+--- zathura-djvu-0.2.7.orig/config.mk	2017-12-21 14:20:24.000000000 +0100
++++ zathura-djvu-0.2.7/config.mk	2017-12-31 00:41:02.580154770 +0100
+@@ -16,6 +16,9 @@
+ DESKTOPPREFIX ?= ${PREFIX}/share/applications
  
  # libs
 +GTK_INC ?= $(shell pkg-config --cflags gtk+-2.0)
@@ -10,14 +10,14 @@
  CAIRO_INC ?= $(shell pkg-config --cflags cairo)
  CAIRO_LIB ?= $(shell pkg-config --libs cairo)
  
-@@ -29,8 +32,8 @@
+@@ -34,8 +37,8 @@
  PLUGINDIR = ${LIBDIR}/zathura
  endif
  
--INCS = ${GIRARA_INC} ${GLIB_INC} ${DJVU_INC} ${ZATHURA_INC}
--LIBS = ${GIRARA_LIB} ${GLIB_LIB} ${DJVU_LIB}
-+INCS = ${GIRARA_INC} ${GLIB_INC} ${DJVU_INC} ${ZATHURA_INC} ${GTK_INC}
-+LIBS = ${GIRARA_LIB} ${GLIB_LIB} ${DJVU_LIB} ${GTK_LIB}
+-INCS = ${GIRARA_INC} ${GLIB_INC} ${DJVU_INC} ${CAIRO_INC} ${ZATHURA_INC}
+-LIBS = ${GIRARA_LIB} ${GLIB_LIB} ${DJVU_LIB} ${CAIRO_LIB}
++INCS = ${GIRARA_INC} ${GLIB_INC} ${DJVU_INC} ${CAIRO_INC} ${ZATHURA_INC} ${GTK_INC}
++LIBS = ${GIRARA_LIB} ${GLIB_LIB} ${DJVU_LIB} ${CAIRO_LIB} ${GTK_LIB}
  
- # flags
- CFLAGS += -std=c99 -fPIC -pedantic -Wall -Wno-format-zero-length $(INCS)
+ # pre-processor flags
+ CPPFLAGS += -D_FILE_OFFSET_BITS=64
