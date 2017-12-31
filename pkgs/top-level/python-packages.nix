@@ -484,25 +484,6 @@ in {
     };
   };
 
-  amqp_1 = buildPythonPackage rec {
-    name = "amqp-${version}";
-    version = "1.4.9";
-    disabled = pythonOlder "2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/amqp/${name}.tar.gz";
-      sha256 = "06n6q0kxhjnbfz3vn8x9yz09lwmn1xi9d6wxp31h5jbks0b4vsid";
-    };
-
-    buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
-
-    meta = {
-      homepage = https://github.com/celery/py-amqp;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
-      license = licenses.lgpl21;
-    };
-  };
-
   amqp = buildPythonPackage rec {
     name = "amqp-${version}";
     version = "2.1.4";
