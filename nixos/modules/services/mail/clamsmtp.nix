@@ -91,12 +91,11 @@ in
 
           tempDirectory = mkOption {
             type = types.str;
-            default = "/var/tmp";
+            default = "/tmp";
             description =
               ''
                 Temporary directory that needs to be accessible to both clamd
-                and clamsmtpd. Note that clamd runs by default with
-                PrivateTmp=yes.
+                and clamsmtpd.
               '';
           };
 
@@ -170,6 +169,8 @@ in
           wantedBy = [ "multi-user.target" ];
           script = "exec ${pkgs.clamsmtp}/bin/clamsmtpd -f ${configfile conf}";
           serviceConfig.Type = "forking";
+          serviceConfig.PrivateTmp = "yes";
+          unitConfig.JoinsNamespaceOf = "clamav-daemon.service";
         }
       ) cfg.instances);
     };
