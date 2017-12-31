@@ -10417,22 +10417,7 @@ in {
     };
   };
 
-  markdown = buildPythonPackage rec {
-    version = "2.6.8";
-    name = "markdown-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/Markdown/Markdown-${version}.tar.gz";
-      sha256 = "0cqfhr1km2s5d8jm6hbwgkrrj9hvkjf2gab3s2axlrw1clgaij0a";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://www.freewisdom.org/projects/python-markdown;
-    };
-  };
+  markdown = callPackage ../development/python-modules/markdown { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
