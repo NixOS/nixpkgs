@@ -6814,21 +6814,7 @@ in {
 
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
-  zope_copy = buildPythonPackage rec {
-    name = "zope.copy-4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.copy/${name}.zip";
-      sha256 = "eb2a95866df1377741876a3ee62d8600e80089e6246e1a235e86791b29534457";
-    };
-
-    buildInputs = with self; [ zope_interface zope_location zope_schema ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  zope_copy = callPackage ../development/python-modules/zope_copy {};
 
   ssdeep = buildPythonPackage rec {
     name = "ssdeep-3.1.1";
