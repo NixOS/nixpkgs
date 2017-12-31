@@ -5967,8 +5967,12 @@ with pkgs;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
-  tamarin-prover = # haskell.lib.justStaticExecutables
-    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover { inherit maude; });
+  tamarin-prover =
+    (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
+      # do not use the haskell packages 'graphviz' and 'maude'
+      inherit maude which;
+      graphviz = graphviz-nox;
+    });
 
   inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
