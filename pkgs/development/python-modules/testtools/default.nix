@@ -12,19 +12,18 @@
 , pyrsistent
 }:
 
-# testtools 2.0.0 and up has a circular run-time dependency on futures
+
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "1.9.0";
-  name = "${pname}-${version}";
+  version = "2.3.0";
 
   # Python 2 only judging from SyntaxError
 #   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b46eec2ad3da6e83d53f2b0eca9a8debb687b4f71343a074f83a16bbdb3c0644";
+    sha256 = "5827ec6cf8233e0f29f51025addd713ca010061204fdea77484a2934690a0559";
   };
 
   propagatedBuildInputs = [ pbr python_mimeparse extras lxml unittest2 pyrsistent ];
@@ -32,6 +31,11 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
+
+  # testtools 2.0.0 and up has a circular run-time dependency on futures
+  postPatch = ''
+    substituteInPlace requirements.txt --replace "fixtures>=1.3.0" ""
+  '';
 
   meta = {
     description = "A set of extensions to the Python standard library's unit testing framework";
