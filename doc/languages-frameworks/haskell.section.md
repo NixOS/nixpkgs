@@ -339,7 +339,7 @@ hoogle server --local -p 8080
 and navigate to http://localhost:8080/ for your own local
 [Hoogle](https://www.haskell.org/hoogle/). The `--local` flag makes the hoogle
 server serve files from your nix store over http, without the flag it will use
-`file:\\` URIs. Note, however, that Firefox and possibly other browsers
+`file://` URIs. Note, however, that Firefox and possibly other browsers
 disallow navigation from `http://` to `file://` URIs for security reasons,
 which might be quite an inconvenience. Versions before v5 did not have this
 flag. See
