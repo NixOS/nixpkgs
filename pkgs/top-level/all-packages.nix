@@ -1314,6 +1314,8 @@ with pkgs;
 
   bats = callPackage ../development/interpreters/bats { };
 
+  bdsync = callPackage ../tools/backup/bdsync { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   beets = callPackage ../tools/audio/beets {
