@@ -9860,6 +9860,8 @@ with pkgs;
     emscripten = emscripten.override {python=python2;};
   };
 
+  jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   libb64 = callPackage ../development/libraries/libb64 { };
