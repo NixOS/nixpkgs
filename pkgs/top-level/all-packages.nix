@@ -5969,8 +5969,8 @@ with pkgs;
 
   tamarin-prover =
     (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
-      # do not use the haskell packages 'graphviz' and 'maude'
-      inherit maude which;
+      # NOTE: do not use the haskell packages 'graphviz' and 'maude'
+      inherit maude which sapic;
       graphviz = graphviz-nox;
     });
 

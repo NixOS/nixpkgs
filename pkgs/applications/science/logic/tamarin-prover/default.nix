@@ -1,6 +1,6 @@
 { haskell, haskellPackages, mkDerivation, fetchFromGitHub, lib
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+, makeWrapper, which, maude, graphviz, sapic
 }:
 
 let
@@ -68,7 +68,7 @@ mkDerivation (common "tamarin-prover" src // {
   # wrap the prover to be sure it can find maude
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
-      --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
+      --prefix PATH : ${lib.makeBinPath [ which maude graphviz sapic ]}
   '';
 
   executableToolDepends = [ makeWrapper ];
