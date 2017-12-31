@@ -17603,6 +17603,8 @@ with pkgs;
       );
   };
 
+  wsjtx = qt5.callPackage ../applications/misc/wsjtx { };
+
   wtftw = callPackage ../applications/window-managers/wtftw {};
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
