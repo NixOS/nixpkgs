@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
 , gobjectIntrospection, gtk3, hicolor_icon_theme, libnotify, librsvg
 , udisks2, wrapGAppsHook
-, buildPythonApplication
 , docopt
 , pygobject3
 , pyyaml
+, pythonPackages
 }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "udiskie-${version}";
   version = "1.7.3";
 
