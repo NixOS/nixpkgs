@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "backports_abc";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b3e4092ba3d541c7a2f9b7d0d9c0275b21c6a01c53a61c731eba6686939d0a5";
+    sha256 = "033be54514a03e255df75c5aee8f9e672f663f93abb723444caec8fe43437bde";
   };
 
   checkPhase = ''
