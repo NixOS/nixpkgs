@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig
-, freetype, harfbuzz, openjpeg, jbig2dec, libjpeg
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+, jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
 , enableGL ? true, freeglut, mesa_glu
@@ -29,10 +29,13 @@ in stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
       sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
     })
+  ]
 
-    ./mupdf-1.12-shared_libs-1.patch
+  # Use shared libraries to decrease size
+  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.12-shared_libs-1.patch
 
-  ];
+  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+  ;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
@@ -43,7 +46,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut mesa_glu ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
-                ++ lib.optionals enableGL [ freeglut mesa_glu ];
+                ++ lib.optionals enableGL (
+                  if stdenv.isDarwin then
+                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+                  else
+                    [ freeglut mesa_glu ])
+                ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -86,6 +94,6 @@ in stdenv.mkDerivation rec {
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric vrthra fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
