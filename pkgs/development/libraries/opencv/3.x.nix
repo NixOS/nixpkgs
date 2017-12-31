@@ -232,7 +232,13 @@ stdenv.mkDerivation rec {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
   ]
-    ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
+    ++ lib.optionals stdenv.isDarwin [
+      "-DWITH_OPENCL=OFF"
+      "-DWITH_LAPACK=OFF"
+
+      # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
+      "-DBUILD_opencv_dnn_modern=OFF"
+    ];
 
   enableParallelBuilding = true;
 
