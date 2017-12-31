@@ -5541,25 +5541,7 @@ in {
     };
   };
 
-  jdcal = buildPythonPackage rec {
-    version = "1.0";
-    name = "jdcal-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "phn";
-      repo = "jdcal";
-      rev = "v${version}";
-      sha256 = "0jjgrrylraqzk3n97hay4gj00ky6vlvkfaapfgqlbcxyq30j24vq";
-    };
-
-    meta = {
-      description = "A module containing functions for converting between Julian dates and calendar dates";
-      homepage = "https://github.com/phn/jdcal";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ lihop ];
-      platforms = platforms.all;
-    };
-  };
+  jdcal = callPackage ../development/python-modules/jdcal { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive {};
 
