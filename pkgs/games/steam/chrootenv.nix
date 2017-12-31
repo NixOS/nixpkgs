@@ -108,10 +108,21 @@ in buildFHSUserEnv rec {
 
   runScript = writeScript "steam-wrapper.sh" ''
     #!${stdenv.shell}
-    glxinfo >/dev/null 2>&1
-    if [ ! "$?" = "0" ]; then
-      echo "*** WARNING: Test for 32-bit libGL unsuccessful."
-      echo "             This could mean you forgot to activate hardware.opengl.driSupport32Bit"
+    if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
+      glxinfo >/dev/null 2>&1
+      # If there was an error running glxinfo, we know something is wrong with the configuration
+      if [ $? -ne 0 ]; then
+        cat <<EOF > /dev/stderr
+    **
+    WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
+    and then run \`sudo nixos-rebuild switch\`:
+    { 
+      hardware.opengl.driSupport32Bit = true;
+      hardware.pulseaudio.support32Bit = true;
+    }
+    **
+    EOF
+      fi
     fi
     steam
   '';
