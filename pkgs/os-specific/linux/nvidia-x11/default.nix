@@ -22,6 +22,11 @@ in
     sha256_64bit = "1fxnqrin8clwl7g13zfnn4422ws0laraxwlvr9gqlp43k9nvc47v";
     settingsSha256 = "081fmqk0d5fxn70kky59g9n024rb79ir6f5gf31mkw8zmyzqypvd";
     persistencedSha256 = "1whhcsz6cij1c7pg4h8795rndp4rywx9k75cjlfh0s184lyi9wm2";
+    prePatch = ''
+      if [ "$system" = "x86_64-linux" ]; then
+        sed '1i#include <linux/sched/task_stack.h>' -i kernel/nvidia-uvm/uvm8_va_block.c
+      fi
+    '';
   };
 
   beta = generic {
