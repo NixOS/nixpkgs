@@ -1,6 +1,8 @@
 { stdenv, fetchurl, cmake, pkgconfig
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebkit, readline
+, withAlsa ? !stdenv.isDarwin, alsaLib             # ALSA is required for MIDI to work in SC
+, withAvahi ? false, avahi                         # Avahai is optional dependency
 , useSCEL ? false, emacs
 }:
 
@@ -24,10 +26,12 @@ stdenv.mkDerivation rec {
     -DSC_EL=${if useSCEL then "ON" else "OFF"}
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [cmake pkgconfig qttools ]
+    ++ optional withAlsa alsaLib;
 
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+      ++ optional withAvahi avahi
       ++ optional useSCEL emacs;
 
   meta = {
