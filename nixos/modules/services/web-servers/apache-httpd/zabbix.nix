@@ -13,7 +13,7 @@ let
   # we could generate zabbix.conf.php declaratively.
   zabbixPHP = pkgs.runCommand "${pkgs.zabbix.server.name}-php" {}
     ''
-      cp -rs ${pkgs.zabbix.server}/share/zabbix/php "$out"
+      cp -r ${pkgs.zabbix.server}/share/zabbix/php "$out"
       chmod -R u+w $out
       ln -s "${if config.configFile == null
                then "${config.stateDir}/zabbix.conf.php"
