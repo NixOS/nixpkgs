@@ -10,11 +10,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "zathura-core-${version}";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchurl {
     url    = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "1w0g74dq4z2vl3f99s2gkaqrb5pskgzig10qhbxj4gq9yj4zzbr2";
+    sha256 = "0dz5pky3vmf3s2cp2rv1c099gb1s49p9xlgm3ghyy4pzyxc8bgs6";
   };
 
   icon = ./icon.xpm;
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
+    "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
     "TPUT=${ncurses.out}/bin/tput"
     (optionalString synctexSupport "WITH_SYNCTEX=1")
