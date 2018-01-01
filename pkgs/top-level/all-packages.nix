@@ -10195,7 +10195,9 @@ with pkgs;
 
   mygpoclient = pythonPackages.mygpoclient;
 
-  mygui = callPackage ../development/libraries/mygui {};
+  mygui = callPackage ../development/libraries/mygui {
+    ogre = ogre1_9;
+  };
 
   mysocketw = callPackage ../development/libraries/mysocketw { };
 
@@ -10270,6 +10272,7 @@ with pkgs;
   ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
+  ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
@@ -18370,6 +18373,7 @@ with pkgs;
 
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;
+    ogre = ogre1_9;
     mygui = mygui.override {
       withOgre = true;
     };
@@ -18464,6 +18468,7 @@ with pkgs;
   };
 
   stuntrally = callPackage ../games/stuntrally {
+    ogre = ogre1_9;
     mygui = mygui.override {
       withOgre = true;
     };
