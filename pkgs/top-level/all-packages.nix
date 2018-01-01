@@ -6916,12 +6916,13 @@ with pkgs;
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
 
-  inherit (callPackage ../development/interpreters/ruby {})
+  inherit (callPackage ../development/interpreters/ruby { inherit (darwin.apple_sdk.frameworks) Foundation; })
     ruby_2_0_0
     ruby_2_1_10
     ruby_2_2_8
     ruby_2_3_5
-    ruby_2_4_2;
+    ruby_2_4_2
+    ruby_2_5_0;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -6930,6 +6931,7 @@ with pkgs;
   ruby_2_2 = ruby_2_2_8;
   ruby_2_3 = ruby_2_3_5;
   ruby_2_4 = ruby_2_4_2;
+  ruby_2_5 = ruby_2_5_0;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
