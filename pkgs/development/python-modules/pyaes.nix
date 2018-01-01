@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pyaes";
-  version = "1.6.0";
+  version = "1.6.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bp9bjqy1n6ij1zb86wz9lqa1dhla8qr1d7w2kxyn7jbj56sbmcw";
+    sha256 = "02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f";
   };
 
   meta = {
