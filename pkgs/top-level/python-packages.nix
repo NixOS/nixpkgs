@@ -12073,6 +12073,8 @@ in {
     };
   };
 
+  plone-testing = callPackage ../development/python-modules/plone-testing { };
+
   ply = buildPythonPackage (rec {
     name = "ply-3.8";
 
