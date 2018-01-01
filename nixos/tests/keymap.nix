@@ -49,6 +49,7 @@ let
     machine.i18n.consoleKeyMap = mkOverride 900 layout;
     machine.services.xserver.layout = mkOverride 900 layout;
     machine.imports = [ ./common/x11.nix extraConfig ];
+    machine.virtualisation.vncDisplay = 0;
     machine.services.xserver.displayManager.slim = {
       enable = true;
 
@@ -107,7 +108,8 @@ let
           die "tests for $desc failed" if $exitcode ne 0;
         };
       }
-
+      $machine->start;
+      record "machine", 0;
       $machine->waitForX;
 
       mkTest "VT keymap", "openvt -sw --";

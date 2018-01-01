@@ -29,7 +29,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu vde2 netpbm coreutils vnc2flv netcat ]}" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -50,6 +50,8 @@ rec {
           mkdir -p $out/nix-support
 
           LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
+
+          cp ./*.flv $out/ # */
 
           # Generate a pretty-printed log.
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
@@ -131,8 +133,8 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
+    in (if makeCoverageReport then report else test) // {
+      inherit nodes driver test;
     };
 
   runInMachine =

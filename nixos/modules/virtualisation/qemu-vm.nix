@@ -35,6 +35,7 @@ let
 
   qemuGraphics = if cfg.graphics then "" else "-nographic";
   kernelConsole = if cfg.graphics then "" else "console=${serialDevice}";
+  vncDisplay = if cfg.vncDisplay == null then "" else "-vnc :${toString cfg.vncDisplay}";
   ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # Shell script to start the VM.
@@ -106,6 +107,7 @@ let
           ''} \
           $extraDisks \
           ${qemuGraphics} \
+          ${vncDisplay} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
           $@
@@ -244,6 +246,18 @@ in
           ''
             Whether to run QEMU with a graphics window, or access
             the guest computer serial port through the host tty.
+          '';
+      };
+
+    virtualisation.vncDisplay =
+      mkOption {
+        default = null;
+        type = types.int;
+        description =
+          ''
+            If specified, expose a VNC server for the specified display.
+            It will listen on 5900 +  the option, ie: 5, will be
+            listening on 5905.
           '';
       };
 
