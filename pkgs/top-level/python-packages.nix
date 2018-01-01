@@ -7001,23 +7001,7 @@ in {
     };
   };
 
-  regex = buildPythonPackage rec {
-    name = "regex-${version}";
-    version = "2016.11.18";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/regex/${name}.tar.gz";
-      sha256 = "126ds2b355n3pgl7brshhscpxn14ycs0yznzl8k4akj4sps1i6c6";
-    };
-
-    meta = {
-      description = "Alternative regular expression module, to replace re";
-      homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
-      license = licenses.psfl;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  regex = callPackage ../development/python-modules/regex { };
 
   repoze_lru = buildPythonPackage rec {
     name = "repoze.lru-0.6";
@@ -7032,8 +7016,6 @@ in {
       platforms = platforms.all;
     };
   };
-
-
 
   repoze_sphinx_autointerface = buildPythonPackage rec {
     name = "repoze.sphinx.autointerface-0.7.1";
@@ -9518,23 +9500,7 @@ in {
 
   jedi = callPackage ../development/python-modules/jedi { };
 
-  jellyfish = buildPythonPackage rec {
-    version = "0.5.2";
-    name = "jellyfish-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
-    };
-
-    buildInputs = with self; [ pytest unicodecsv ];
-
-    meta = {
-      homepage = https://github.com/sunlightlabs/jellyfish;
-      description = "Approximate and phonetic matching of strings";
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  jellyfish = callPackage ../development/python-modules/jellyfish { };
 
   j2cli = buildPythonPackage rec {
     name = "j2cli-${version}";
@@ -10536,23 +10502,7 @@ in {
 
   mistune = callPackage ../development/python-modules/mistune { };
 
-  brotlipy = buildPythonPackage rec {
-    name = "brotlipy-${version}";
-    version = "0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/brotlipy/${name}.tar.gz";
-      sha256 = "10s2y19zywfkf3sksrw81czhva759aki0clld2pnnlgf64sz7016";
-    };
-
-    propagatedBuildInputs = with self; [ cffi enum34 construct ];
-
-    meta = {
-      description = "Python bindings for the reference Brotli encoder/decoder";
-      homepage = "https://github.com/python-hyper/brotlipy/";
-      license = licenses.mit;
-    };
-  };
+  brotlipy = callPackage ../development/python-modules/brotlipy { };
 
   sortedcontainers = buildPythonPackage rec {
     name = "sortedcontainers-${version}";
@@ -12092,6 +12042,8 @@ in {
     };
   };
 
+  plone-testing = callPackage ../development/python-modules/plone-testing { };
+
   ply = buildPythonPackage (rec {
     name = "ply-3.8";
 
@@ -12689,30 +12641,7 @@ in {
 
   parso = callPackage ../development/python-modules/parso { };
 
-  partd = buildPythonPackage rec {
-    name = "partd-${version}";
-    version = "0.3.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/partd/${name}.tar.gz";
-      sha256 = "066d254d2dh9xcanffgkjgwxpz5v0059b063bij10fvzl2y49hzx";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
-
-    checkPhase = ''
-      rm partd/tests/test_zmq.py # requires network & fails
-      py.test
-    '';
-
-    meta = {
-      description = "Appendable key-value storage";
-      license = with licenses; [ bsd3 ];
-      homepage = https://github.com/dask/partd/;
-    };
-  };
+  partd = callPackage ../development/python-modules/partd { };
 
   patch = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -17389,6 +17318,8 @@ in {
     };
   });
 
+  splinter = callPackage ../development/python-modules/splinter { };
+
   spotipy = callPackage ../development/python-modules/spotipy { };
 
   Pweave = buildPythonPackage (rec {
@@ -20952,31 +20883,7 @@ EOF
     };
   };
 
-  networkx = buildPythonPackage rec {
-    version = "1.11";
-    name = "networkx-${version}";
-
-    # Currently broken on PyPy.
-    # https://github.com/networkx/networkx/pull/1361
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/networkx/${name}.tar.gz";
-      sha256 = "1f74s56xb4ggixiq0vxyfxsfk8p20c7a099lpcf60izv1php03hd";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ decorator ];
-
-    # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
-    doCheck = !(isPy36);
-
-    meta = {
-      homepage = "https://networkx.github.io/";
-      description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
-      license = licenses.bsd3;
-    };
-  };
+  networkx = callPackage ../development/python-modules/networkx { };
 
   ofxclient = callPackage ../development/python-modules/ofxclient {};
 
