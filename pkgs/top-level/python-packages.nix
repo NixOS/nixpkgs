@@ -12656,30 +12656,7 @@ in {
 
   parso = callPackage ../development/python-modules/parso { };
 
-  partd = buildPythonPackage rec {
-    name = "partd-${version}";
-    version = "0.3.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/partd/${name}.tar.gz";
-      sha256 = "066d254d2dh9xcanffgkjgwxpz5v0059b063bij10fvzl2y49hzx";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
-
-    checkPhase = ''
-      rm partd/tests/test_zmq.py # requires network & fails
-      py.test
-    '';
-
-    meta = {
-      description = "Appendable key-value storage";
-      license = with licenses; [ bsd3 ];
-      homepage = https://github.com/dask/partd/;
-    };
-  };
+  partd = callPackage ../development/python-modules/partd { };
 
   patch = buildPythonPackage rec {
     name = "${pname}-${version}";
