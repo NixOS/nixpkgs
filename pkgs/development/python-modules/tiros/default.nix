@@ -10,11 +10,11 @@
 buildPythonPackage rec {
   pname = "tiros";
   name = "${pname}-${version}";
-  version = "1.0.38";
+  version = "1.0.40";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k668z9gb5vh304gysynj4rxgi24wy2vl4a33dnwkri2g6db3s4n";
+    sha256 = "841ca13564e3cddfd1404cbc60b3433bcc1e31c2753ecea20d0ad68173b80169";
   };
 
   patchPhase = ''

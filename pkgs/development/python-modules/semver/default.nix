@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "semver";
-  version = "2.7.8";
+  version = "2.7.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6212f5c552452e306502ac8476bbca48af62db29c4528fdd91d319d0a44b07b";
+    sha256 = "1ffb55fb86a076cf7c161e6b5931f7da59f15abe217e0f24cea96cc8eec50f42";
   };
 
   # No tests in archive

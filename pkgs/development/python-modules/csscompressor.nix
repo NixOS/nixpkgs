@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "csscompressor";
-  version = "0.9.4";
+  version = "0.9.5";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e12f125b88379d7b680636d94a3c8fa14bed1de2358f7f9a9e6749e222cff3b";
+    sha256 = "afa22badbcf3120a4f392e4d22f9fff485c044a1feda4a950ecc5eba9dd31a05";
   };
 
   doCheck = false; # No tests

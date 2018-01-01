@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   pname = "uritools";
   name = "uritools-${version}";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20d7881a947cd3c3bb452e2b541f44acc52febe9c4e3f6d05c55d559fb208c50";
+    sha256 = "97c74001adecce230299e2b916e95467ef7eed172fe67fd1f88b397cbc43a8e7";
   };
 
   propagatedBuildInputs = [ ipaddress ];

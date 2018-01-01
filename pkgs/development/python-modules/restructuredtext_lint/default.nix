@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";
-  version = "1.1.1";
+  version = "1.1.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "167e8adaa5bdc30531ee91760d6c216b306a8a3372aad34b1f72d8adcc5e011e";
+    sha256 = "9201d354e22c27be61cf6d8212da6e10c875eec7ec8d1bdb1067b2a5ba931637";
   };
 
   checkInputs = [ nose flake8 pyyaml testtools ];

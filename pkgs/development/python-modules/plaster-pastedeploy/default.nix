@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "plaster_pastedeploy";
-  version = "0.4.1";
+  version = "0.4.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lrbkya5birfmg9gnfcnsa9id28klmjcqbm33rcg69pv9sfld4jv";
+    sha256 = "2a401228c7cfbe38f728249e75af7a666f91c61d642cbb8fcb78a71df69d2754";
   };
 
   checkPhase = ''
