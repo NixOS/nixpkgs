@@ -1336,6 +1336,8 @@ with pkgs;
 
   bats = callPackage ../development/interpreters/bats { };
 
+  bdsync = callPackage ../tools/backup/bdsync { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   beegfs = callPackage ../os-specific/linux/beegfs { };
