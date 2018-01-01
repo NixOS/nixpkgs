@@ -1336,6 +1336,8 @@ with pkgs;
 
   bats = callPackage ../development/interpreters/bats { };
 
+  bdsync = callPackage ../tools/backup/bdsync { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   beegfs = callPackage ../os-specific/linux/beegfs { };
@@ -2934,6 +2936,8 @@ with pkgs;
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
+
+  kde2-decoration = libsForQt5.callPackage ../misc/themes/kde2 { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
@@ -8683,6 +8687,8 @@ with pkgs;
 
   qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
+  qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
+
   gnet = callPackage ../development/libraries/gnet { };
 
   gnu-config = callPackage ../development/libraries/gnu-config { };
@@ -10671,6 +10677,8 @@ with pkgs;
     };
 
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
+
+    qtstyleplugin-kvantum = libsForQt5.callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
     quazip = callPackage ../development/libraries/quazip { };
 
