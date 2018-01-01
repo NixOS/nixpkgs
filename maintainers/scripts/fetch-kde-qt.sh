@@ -21,7 +21,7 @@ find . -type f | while read src; do
     # Sanitize file name
     filename=$(basename "$src" | tr '@' '_')
     nameVersion="${filename%.tar.*}"
-    name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,')
+    name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
     version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
     echo "$name,$version,$src,$filename" >>$csv
 done
