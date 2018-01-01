@@ -25,7 +25,7 @@ in
     cmakeFlags = [ "-DINSTALL_UDEV_RULES=ON" ];
 
     meta = with stdenv.lib; {
-      homepage = http://github.com/airspy/airspyone_host;
+      homepage = https://github.com/airspy/airspyone_host;
       description = "Host tools and driver library for the AirSpy SDR";
       license = licenses.free;
       platforms = platforms.linux;
