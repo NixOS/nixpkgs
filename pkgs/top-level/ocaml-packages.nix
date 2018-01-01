@@ -208,6 +208,8 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+    dtoa = callPackage ../development/ocaml-modules/dtoa { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     eff = callPackage ../development/interpreters/eff { };
