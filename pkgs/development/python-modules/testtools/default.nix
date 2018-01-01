@@ -25,7 +25,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pbr python_mimeparse extras lxml unittest2 ];
   buildInputs = [ traceback2 ];
-  patches = [ ./testtools_support_unittest2.patch ];
 
   # No tests in archive
   doCheck = false;
