@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 }:
 
 buildPythonPackage rec {
@@ -14,11 +15,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    pushd tests
-    rm runtests
-    for file in test*.py; do
-        python  $file
-    done
+    ${python.interpreter} -m unittest discover -s tests
   '';
 
   meta = {
