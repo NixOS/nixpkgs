@@ -1,17 +1,17 @@
-{ fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
+{ fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv, libev }:
 
 stdenv.mkDerivation rec {
   name = "libwebsockets-${version}";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    sha256 = "1hv2b5r6sg42xnqhm4ysjvyiz3cqpfmwaqm33vpbx0k7arj4ixvy";
+    sha256 = "0d3xqdq3hpk5l9cg4dqkba6jm6620y6knqqywya703662spmj2xw";
   };
 
-  buildInputs = [ cmake openssl zlib libuv ];
+  buildInputs = [ cmake openssl zlib libuv libev ];
   cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
 
   meta = {
