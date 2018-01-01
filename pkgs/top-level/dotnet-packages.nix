@@ -872,7 +872,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
