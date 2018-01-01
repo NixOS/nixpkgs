@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  doCheck = true;
+  # Tests are not deterministic https://bugzilla.gnome.org/show_bug.cgi?id=791932
+  doCheck = false;
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \
