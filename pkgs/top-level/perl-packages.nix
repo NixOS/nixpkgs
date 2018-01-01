@@ -15645,6 +15645,25 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  vidir = buildPerlPackage rec {
+    name = "vidir-0.040";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-${name}-woldrich.tar.gz";
+      sha256 = "0c97yx33pyhskbmwpqbwlkxr85awd6kg1baibvqkarhhvc8v7l0h";
+    };
+    # NB: This preInstall a workaround for a problem that is fixed in HEAD.
+    preInstall = ''
+      sed -i -e '/^use encoding/d' bin/vidir
+    '';
+    outputs = [ "out" ];
+    meta = {
+      maintainers = [ maintainers.chreekat ];
+      homepage = "http://search.cpan.org/~woldrich/App-vidir/bin/vidir";
+      description = "Edit a directory in $EDITOR";
+      license = with stdenv.lib.licenses; [ gpl1 ];
+    };
+  };
+
   VMEC2 = buildPerlModule rec {
     name = "VM-EC2-1.28";
     src = fetchurl {
