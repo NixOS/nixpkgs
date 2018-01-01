@@ -20941,31 +20941,7 @@ EOF
     };
   };
 
-  networkx = buildPythonPackage rec {
-    version = "1.11";
-    name = "networkx-${version}";
-
-    # Currently broken on PyPy.
-    # https://github.com/networkx/networkx/pull/1361
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/networkx/${name}.tar.gz";
-      sha256 = "1f74s56xb4ggixiq0vxyfxsfk8p20c7a099lpcf60izv1php03hd";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ decorator ];
-
-    # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
-    doCheck = !(isPy36);
-
-    meta = {
-      homepage = "https://networkx.github.io/";
-      description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
-      license = licenses.bsd3;
-    };
-  };
+  networkx = callPackage ../development/python-modules/networkx { };
 
   ofxclient = callPackage ../development/python-modules/ofxclient {};
 
