@@ -168,6 +168,8 @@ in
           description = "ClamSMTP instance ${toString i}";
           wantedBy = [ "multi-user.target" ];
           script = "exec ${pkgs.clamsmtp}/bin/clamsmtpd -f ${configfile conf}";
+          after = [ "clamav-daemon.service" ];
+          requires = [ "clamav-daemon.service" ];
           serviceConfig.Type = "forking";
           serviceConfig.PrivateTmp = "yes";
           unitConfig.JoinsNamespaceOf = "clamav-daemon.service";
