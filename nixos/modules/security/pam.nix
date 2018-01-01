@@ -351,6 +351,8 @@ let
           ${optionalString (cfg.enableKwallet)
               ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+          ${optionalString (config.virtualisation.lxc.lxcfs.enable)
+               "session optional ${pkgs.lxcfs}/lib/security/pam_cgfs.so -c freezer,memory,name=systemd,unified,cpuset"}
         '');
     };
 
