@@ -681,6 +681,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
+
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
