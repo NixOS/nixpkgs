@@ -1,6 +1,6 @@
 # Extend a derivation with checks for brokenness, license, etc.  Throw a
 # descriptive error when the check fails; return `derivationArg` otherwise.
-# Note: no dependencies are checked in this step.
+# See the bottom of this file for details.
 
 { lib, config, system, meta, derivationArg, mkDerivationArg }:
 
@@ -204,5 +204,13 @@ let
            else true;
 
 in
-  assert validityCondition;
-  derivationArg
+  # As a compromise, do the check when evaluating the name attribute;
+  #   the intention is to also catch any attempt to show in nix-env -qa,
+  #   while allowing to query meta (surprisingly even --no-name doesn't break that).
+  # Note that any attempts to access the derivation (or output paths, etc.)
+  #   will lead to evaluating names in the whole build-time closure,
+  #   triggering these checks.
+  derivationArg // {
+    name = assert validityCondition; derivationArg.name;
+  }
+
