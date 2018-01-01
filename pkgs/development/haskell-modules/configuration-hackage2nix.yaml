@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 10.1
+  # LTS Haskell 10.2
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -181,7 +181,7 @@ default-package-overrides:
   - amazonka-xray ==1.5.0
   - amqp ==0.18.1
   - annotated-wl-pprint ==0.7.0
-  - ansigraph ==0.3.0.4
+  - ansigraph ==0.3.0.5
   - ansi-terminal ==0.7.1.1
   - ansi-wl-pprint ==0.6.8.1
   - apecs ==0.2.4.7
@@ -352,7 +352,7 @@ default-package-overrides:
   - cabal-file-th ==0.2.4
   - cabal-rpm ==0.12
   - cabal-toolkit ==0.0.4
-  - cache ==0.1.0.0
+  - cache ==0.1.0.1
   - cairo ==0.13.4.2
   - calendar-recycling ==0.0
   - call-stack ==0.1.0
@@ -378,7 +378,7 @@ default-package-overrides:
   - Chart ==1.8.2
   - Chart-cairo ==1.8.2
   - Chart-diagrams ==1.8.2
-  - chart-unit ==0.5.4
+  - chart-unit ==0.5.5.0
   - chaselev-deque ==0.5.0.5
   - chatwork ==0.1.2.0
   - cheapskate ==0.1.1
@@ -449,7 +449,7 @@ default-package-overrides:
   - conduit-algorithms ==0.0.6.1
   - conduit-combinators ==1.1.2
   - conduit-connection ==0.1.0.3
-  - conduit-extra ==1.2.3
+  - conduit-extra ==1.2.3.1
   - conduit-iconv ==0.1.1.2
   - conduit-parse ==0.1.2.2
   - conduit-throttle ==0.3.1.0
@@ -489,7 +489,7 @@ default-package-overrides:
   - cryptocipher ==0.6.2
   - crypto-cipher-tests ==0.0.11
   - crypto-cipher-types ==0.0.9
-  - crypto-enigma ==0.0.2.9
+  - crypto-enigma ==0.0.2.10
   - cryptohash ==0.11.9
   - cryptohash-cryptoapi ==0.1.4
   - cryptohash-md5 ==0.11.100.1
@@ -560,7 +560,7 @@ default-package-overrides:
   - DAV ==1.3.1
   - dawg-ord ==0.5.1.0
   - dbcleaner ==0.1.3
-  - dbus ==0.10.13
+  - dbus ==0.10.14
   - debian-build ==0.10.1.0
   - debug ==0.0.2
   - Decimal ==0.4.2
@@ -628,7 +628,7 @@ default-package-overrides:
   - doctest-driver-gen ==0.1.0.1
   - do-list ==1.0.1
   - dom-parser ==3.0.0
-  - dotenv ==0.5.2.0
+  - dotenv ==0.5.2.1
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
   - download ==0.3.2.6
@@ -764,7 +764,7 @@ default-package-overrides:
   - FloatingHex ==0.4
   - floatshow ==0.2.4
   - flow ==1.0.10
-  - fmlist ==0.9
+  - fmlist ==0.9.1
   - fmt ==0.5.0.0
   - fn ==0.3.0.2
   - focus ==0.1.5.2
@@ -799,7 +799,7 @@ default-package-overrides:
   - funcmp ==1.8
   - functor-classes-compat ==1
   - fuzzcheck ==0.1.1
-  - fuzzyset ==0.1.0.2
+  - fuzzyset ==0.1.0.3
   - gauge ==0.1.3
   - gd ==3000.7.3
   - gdax ==0.6.0.0
@@ -808,7 +808,7 @@ default-package-overrides:
   - generic-aeson ==0.2.0.9
   - generic-arbitrary ==0.1.0
   - generic-deriving ==1.12
-  - generic-lens ==0.5.0.0
+  - generic-lens ==0.5.1.0
   - GenericPretty ==1.2.1
   - generic-random ==1.0.0.0
   - generics-eot ==0.2.1.1
@@ -1024,7 +1024,7 @@ default-package-overrides:
   - hamlet ==1.2.0
   - HandsomeSoup ==0.4.2
   - handwriting ==0.1.0.3
-  - hapistrano ==0.3.5.0
+  - hapistrano ==0.3.5.1
   - happstack-hsp ==7.3.7.3
   - happstack-jmacro ==7.0.12
   - happstack-server ==7.5.0.1
@@ -1043,8 +1043,8 @@ default-package-overrides:
   - haskell-gi-overloading ==1.0
   - haskell-import-graph ==1.0.3
   - haskell-lexer ==1.0.1
-  - haskell-lsp ==0.2.0.0
-  - haskell-lsp-client ==1.0.0.0
+  - haskell-lsp ==0.2.0.1
+  - haskell-lsp-client ==1.0.0.1
   - haskell-names ==0.9.0
   - haskell-neo4j-client ==0.3.2.4
   - HaskellNet ==0.5.1
@@ -1106,7 +1106,7 @@ default-package-overrides:
   - hfsevents ==0.1.6
   - hid ==0.2.2
   - hidapi ==0.1.4
-  - hidden-char ==0.1.0.1
+  - hidden-char ==0.1.0.2
   - hierarchical-clustering ==0.4.6
   - higher-leveldb ==0.4.0.1
   - highjson ==0.4.0.0
@@ -1155,7 +1155,7 @@ default-package-overrides:
   - hquantlib ==0.0.4.0
   - hreader ==1.1.0
   - hreader-lens ==0.1.3.0
-  - hruby ==0.3.5
+  - hruby ==0.3.5.1
   - hsass ==0.5.0
   - hsb2hs ==0.3.1
   - hs-bibutils ==6.2.0.1
@@ -1281,13 +1281,13 @@ default-package-overrides:
   - incremental-parser ==0.2.5.2
   - indentation-core ==0.0.0.1
   - indentation-parsec ==0.0.0.1
-  - indents ==0.4.0.0
+  - indents ==0.4.0.1
   - inflections ==0.4.0.0
   - influxdb ==1.2.2.2
   - ini ==0.3.5
   - inline-c ==0.6.0.5
   - inline-c-cpp ==0.2.1.0
-  - inline-java ==0.7.1
+  - inline-java ==0.7.2
   - inline-r ==0.9.0.2
   - insert-ordered-containers ==0.2.1.0
   - inspection-testing ==0.1.2
@@ -1297,8 +1297,8 @@ default-package-overrides:
   - intern ==0.9.1.4
   - interpolate ==0.1.1
   - interpolatedstring-perl6 ==1.0.0
-  - Interpolation ==0.3.0
   - interpolation ==0.1.0.2
+  - Interpolation ==0.3.0
   - IntervalMap ==0.5.3.1
   - intervals ==0.8.1
   - intro ==0.3.0.1
@@ -1338,7 +1338,7 @@ default-package-overrides:
   - jmacro-rpc ==0.3.2
   - jmacro-rpc-happstack ==0.3.2
   - jmacro-rpc-snap ==0.3
-  - jni ==0.5.0
+  - jni ==0.5.1
   - jose ==0.6.0.3
   - jose-jwt ==0.7.8
   - jsaddle ==0.9.4.0
@@ -1348,14 +1348,14 @@ default-package-overrides:
   - json ==0.9.1
   - json-autotype ==1.0.18
   - json-builder ==0.3
-  - json-rpc-generic ==0.2.1.2
+  - json-rpc-generic ==0.2.1.3
   - json-schema ==0.7.4.1
   - json-stream ==0.4.1.5
-  - JuicyPixels ==3.2.9.1
+  - JuicyPixels ==3.2.9.2
   - JuicyPixels-extra ==0.2.2
   - JuicyPixels-scale-dct ==0.1.1.2
   - justified-containers ==0.2.0.1
-  - jvm ==0.4.0.1
+  - jvm ==0.4.1
   - jwt ==0.7.2
   - kan-extensions ==5.0.2
   - kanji ==3.0.2
@@ -1493,7 +1493,7 @@ default-package-overrides:
   - median-stream ==0.7.0.0
   - med-module ==0.1.1
   - megaparsec ==6.3.0
-  - mega-sdist ==0.3.0.5
+  - mega-sdist ==0.3.0.6
   - memory ==0.14.11
   - MemoTrie ==0.6.8
   - mercury-api ==0.1.0.1
@@ -1532,7 +1532,7 @@ default-package-overrides:
   - mixed-types-num ==0.3.1.4
   - mltool ==0.1.0.2
   - mmap ==0.5.9
-  - mmark ==0.0.3.2
+  - mmark ==0.0.4.0
   - mmark-ext ==0.0.1.1
   - mmorph ==1.1.0
   - mnist-idx ==0.1.2.8
@@ -1575,12 +1575,12 @@ default-package-overrides:
   - monad-time ==0.2
   - monad-unlift ==0.2.0
   - monad-unlift-ref ==0.2.1
-  - mongoDB ==2.3.0
+  - mongoDB ==2.3.0.1
   - monoidal-containers ==0.3.0.2
   - monoid-extras ==0.4.2
   - monoid-subclasses ==0.4.4
   - monoid-transformer ==0.0.3
-  - mono-traversable ==1.0.6.0
+  - mono-traversable ==1.0.7.0
   - mono-traversable-instances ==0.1.0.0
   - morte ==1.6.13
   - mountpoints ==1.0.2
@@ -1663,8 +1663,8 @@ default-package-overrides:
   - numbers ==3000.2.0.1
   - numeric-extras ==0.1
   - numeric-prelude ==0.4.2
-  - numhask ==0.1.3
-  - numhask-range ==0.1.2
+  - numhask ==0.1.4.0
+  - numhask-range ==0.1.3.0
   - NumInstances ==1.4
   - numtype-dk ==0.5.0.1
   - nvim-hs ==0.2.4
@@ -1679,7 +1679,7 @@ default-package-overrides:
   - old-locale ==1.0.0.7
   - old-time ==1.1.0.3
   - once ==0.2
-  - one-liner ==0.9.1
+  - one-liner ==0.9.2
   - OneTuple ==0.2.1
   - online ==0.2.0
   - Only ==0.1
@@ -1710,8 +1710,8 @@ default-package-overrides:
   - pagerduty ==0.0.8
   - pagination ==0.2.1
   - palette ==0.1.0.5
-  - pandoc ==2.0.5
-  - pandoc-citeproc ==0.12.2
+  - pandoc ==2.0.6
+  - pandoc-citeproc ==0.12.2.2
   - pandoc-types ==1.17.3
   - pango ==0.13.4.0
   - papillon ==0.1.0.5
@@ -1722,7 +1722,7 @@ default-package-overrides:
   - parsec-numeric ==0.1.0.0
   - ParsecTools ==0.0.2.0
   - parser-combinators ==0.2.1
-  - parsers ==0.12.7
+  - parsers ==0.12.8
   - partial-handler ==1.0.2
   - partial-isomorphisms ==0.2.2.1
   - partial-order ==0.1.2.1
@@ -1842,7 +1842,7 @@ default-package-overrides:
   - product-isomorphic ==0.0.3.1
   - product-profunctors ==0.8.0.3
   - profiterole ==0.1
-  - profiteur ==0.4.3.0
+  - profiteur ==0.4.4.0
   - profunctor-extras ==4.0
   - profunctors ==5.2.1
   - projectroot ==0.2.0.1
@@ -1872,7 +1872,7 @@ default-package-overrides:
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
   - purescript-bridge ==0.11.1.2
-  - pusher-http-haskell ==1.5.0.1
+  - pusher-http-haskell ==1.5.1.0
   - pwstore-fast ==2.4.4
   - qchas ==1.0.1.0
   - qm-interpolated-string ==0.2.1.0
@@ -2244,7 +2244,7 @@ default-package-overrides:
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.9.1
   - tasty-rerun ==1.1.8
-  - tasty-silver ==3.1.10
+  - tasty-silver ==3.1.11
   - tasty-smallcheck ==0.8.1
   - tasty-stats ==0.2.0.3
   - tasty-tap ==0.0.4
@@ -2286,7 +2286,7 @@ default-package-overrides:
   - text-printer ==0.5
   - text-region ==0.3.0.0
   - text-short ==0.1.1
-  - text-show ==3.7
+  - text-show ==3.7.1
   - text-show-instances ==3.6.2
   - text-zipper ==0.10.1
   - tfp ==1.0.0.2
@@ -2295,7 +2295,7 @@ default-package-overrides:
   - th-data-compat ==0.0.2.5
   - th-desugar ==1.7
   - these ==0.7.4
-  - th-expand-syns ==0.4.3.0
+  - th-expand-syns ==0.4.4.0
   - th-extras ==0.0.0.4
   - th-lift ==0.7.7
   - th-lift-instances ==0.1.11
@@ -2381,7 +2381,7 @@ default-package-overrides:
   - type-level-kv-list ==1.1.0
   - type-level-numbers ==0.1.1.1
   - typelits-witnesses ==0.2.3.0
-  - type-of-html ==1.3.0.1
+  - type-of-html ==1.3.2.0
   - type-operators ==0.1.0.4
   - type-spec ==0.3.0.1
   - typography-geometry ==1.0.0.1
@@ -2408,7 +2408,7 @@ default-package-overrides:
   - Unique ==0.4.7.1
   - unique ==0
   - unit-constraint ==0.0.0
-  - units-parser ==0.1.1
+  - units-parser ==0.1.1.2
   - universe ==1.0
   - universe-base ==1.0.2.1
   - universe-instances-base ==1.0
@@ -2419,7 +2419,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.0.1
   - unix-time ==0.3.7
-  - unliftio ==0.2.1.0
+  - unliftio ==0.2.2.0
   - unliftio-core ==0.1.0.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.8.0
@@ -2491,7 +2491,7 @@ default-package-overrides:
   - wai-eventsource ==3.0.0
   - wai-extra ==3.0.21.0
   - wai-handler-launch ==3.0.2.3
-  - wai-logger ==2.3.0
+  - wai-logger ==2.3.1
   - wai-middleware-auth ==0.1.2.1
   - wai-middleware-caching ==0.1.0.2
   - wai-middleware-caching-lru ==0.1.0.0
@@ -2530,7 +2530,7 @@ default-package-overrides:
   - websockets-rpc ==0.6.0
   - websockets-simple ==0.0.6.3
   - websockets-snap ==0.10.2.4
-  - weeder ==0.1.9
+  - weeder ==0.1.11
   - weigh ==0.0.7
   - wide-word ==0.1.0.5
   - wikicfp-scraper ==0.1.0.9
@@ -2603,7 +2603,7 @@ default-package-overrides:
   - xturtle ==0.2.0.0
   - xxhash ==0.0.2
   - xxhash-ffi ==0.2.0.0
-  - yaml ==0.8.25
+  - yaml ==0.8.25.1
   - Yampa ==0.10.7
   - YampaSynth ==0.2
   - yeshql ==3.0.1.3
@@ -2630,7 +2630,7 @@ default-package-overrides:
   - yesod-static ==1.5.3.1
   - yesod-static-angular ==0.1.8
   - yesod-table ==2.0.3
-  - yesod-test ==1.5.8
+  - yesod-test ==1.5.9.1
   - yesod-websockets ==0.2.6
   - yes-precure5-command ==5.5.3
   - yi-core ==0.17.1

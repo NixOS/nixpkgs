@@ -3288,7 +3288,9 @@ with pkgs;
   ltris = callPackage ../games/ltris { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
-  lxcfs = callPackage ../os-specific/linux/lxcfs { };
+  lxcfs = callPackage ../os-specific/linux/lxcfs {
+    enableDebugBuild = config.lxcfs.enableDebugBuild or false;
+  };
   lxd = callPackage ../tools/admin/lxd { };
 
   lzfse = callPackage ../tools/compression/lzfse { };
@@ -7406,7 +7408,8 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild ocaml_lwt;
+    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild ocaml_lwt
+      wtf8 dtoa;
   };
 
   framac = callPackage ../development/tools/analysis/frama-c { };

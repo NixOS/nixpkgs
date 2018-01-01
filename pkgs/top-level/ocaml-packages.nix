@@ -208,6 +208,8 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+    dtoa = callPackage ../development/ocaml-modules/dtoa { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     eff = callPackage ../development/interpreters/eff { };
@@ -678,6 +680,8 @@ let
     vg = callPackage ../development/ocaml-modules/vg { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
