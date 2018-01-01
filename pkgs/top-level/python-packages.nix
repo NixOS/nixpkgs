@@ -17392,6 +17392,8 @@ in {
     };
   });
 
+  splinter = callPackage ../development/python-modules/splinter { };
+
   spotipy = callPackage ../development/python-modules/spotipy { };
 
   Pweave = buildPythonPackage (rec {
