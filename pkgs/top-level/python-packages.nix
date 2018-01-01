@@ -10501,23 +10501,7 @@ in {
 
   mistune = callPackage ../development/python-modules/mistune { };
 
-  brotlipy = buildPythonPackage rec {
-    name = "brotlipy-${version}";
-    version = "0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/brotlipy/${name}.tar.gz";
-      sha256 = "10s2y19zywfkf3sksrw81czhva759aki0clld2pnnlgf64sz7016";
-    };
-
-    propagatedBuildInputs = with self; [ cffi enum34 construct ];
-
-    meta = {
-      description = "Python bindings for the reference Brotli encoder/decoder";
-      homepage = "https://github.com/python-hyper/brotlipy/";
-      license = licenses.mit;
-    };
-  };
+  brotlipy = callPackage ../development/python-modules/brotlipy { };
 
   sortedcontainers = buildPythonPackage rec {
     name = "sortedcontainers-${version}";
