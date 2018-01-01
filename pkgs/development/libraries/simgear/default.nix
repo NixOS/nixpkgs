@@ -1,22 +1,27 @@
-{ stdenv, fetchurl, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
+{ stdenv, fetchFromGitHub, cmake
+, plib, freeglut, xproto, libX11, libXext, xextproto, libXi
 , inputproto, libICE, libSM, libXt, libXmu, mesa, boost, zlib, libjpeg, freealut
-, openscenegraph, openal, expat, cmake, apr
-, curl
+, openscenegraph, openal, expat, curl, apr
 }:
 
 stdenv.mkDerivation rec {
   name = "simgear-${version}";
-  version = "2017.3.1";
-  shortVersion = "2017.3";
+  version = "2017.4.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "1x71wvycs2bjgmmacswgk6091p65p46fr40mr7f4kcipnx88bq0f";
+  src = fetchFromGitHub {
+    owner  = "FlightGear";
+    repo   = "simgear";
+    rev    = "version/${version}";
+    sha256 = "0p2ww4iadafz95wqjh8l8lvhzx6jbz85nw6kfaqi8j1sif0m9vwm";
   };
 
-  buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
-                  libICE libSM libXt libXmu mesa boost zlib libjpeg freealut
-                  openscenegraph openal expat cmake apr curl ];
+  buildInputs = [
+    plib freeglut xproto libX11 libXext xextproto libXi inputproto
+    libICE libSM libXt libXmu mesa boost zlib libjpeg freealut
+    openscenegraph openal expat apr curl
+  ];
+
+  nativeBuildInputs = [ cmake ];
 
   enableParallelBuilding = true;
 
@@ -28,4 +33,3 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
   };
 }
-
