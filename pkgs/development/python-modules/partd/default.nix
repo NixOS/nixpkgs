@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "partd";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "066d254d2dh9xcanffgkjgwxpz5v0059b063bij10fvzl2y49hzx";
+    sha256 = "67291f1c4827cde3e0148b3be5d69af64b6d6169feb9ba88f0a6cfe77089400f";
   };
 
   checkInputs = [ pytest ];
