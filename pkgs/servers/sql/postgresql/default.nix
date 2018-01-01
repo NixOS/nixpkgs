@@ -109,9 +109,9 @@ in {
   };
 
   postgresql96 = common {
-    version = "9.6.5";
+    version = "9.6.6";
     psqlSchema = "9.6";
-    sha256 = "0k3ls2x182jz6djjiqj9kycddabdl2gk1y1ajq1vipnxwfki5nh6";
+    sha256 = "0m417h30s18rwa7yzkqqcdb22ifpcda2fpg2cyx8bxvjp3ydz71r";
   };
 
   postgresql100 = common {
