@@ -6770,10 +6770,16 @@ with pkgs;
     php = php71;
   });
 
+  php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php72;
+  });
+
+
   inherit (callPackages ../development/interpreters/php { })
     php56
     php70
-    php71;
+    php71
+    php72;
 
   php-embed = php71-embed;
 
