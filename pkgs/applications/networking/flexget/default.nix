@@ -35,7 +35,9 @@ buildPythonApplication rec {
       --replace "sqlalchemy==1.1.10" "sqlalchemy" \
       --replace "zxcvbn-python==4.4.15" "zxcvbn-python" \
       --replace "flask-cors==3.0.2" "flask-cors" \
-      --replace "certifi==2017.4.17" "certifi"
+      --replace "certifi==2017.4.17" "certifi" \
+      --replace "cheroot==5.5.0" "cheroot" \
+      --replace "plumbum==1.6.3" "plumbum" \
   '';
 
   checkPhase = ''
