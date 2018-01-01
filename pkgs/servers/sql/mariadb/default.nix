@@ -134,6 +134,8 @@ everything = stdenv.mkDerivation (common // {
     "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
     "-DINSTALL_DOCDIR=share/doc/mysql"
     "-DINSTALL_SHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR=OFF"
+    "-DINSTALL_SQLBENCHDIR=OFF"
 
     "-DENABLED_LOCAL_INFILE=ON"
     "-DWITH_READLINE=ON"
@@ -152,7 +154,7 @@ everything = stdenv.mkDerivation (common // {
   ];
 
   postInstall = common.postInstall + ''
-    rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
+    rm -r "$out"/data # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
     rm "$out"/bin/rcmysql
   '';
