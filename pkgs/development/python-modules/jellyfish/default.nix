@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.5.2";
+  version = "0.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
+    sha256 = "887a9a49d0caee913a883c3e7eb185f6260ebe2137562365be422d1316bd39c9";
   };
 
   checkInputs = [ pytest unicodecsv ];
