@@ -11,7 +11,7 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "Simple, blog aware, static site generator";
-    homepage    =  http://jekyllrb.com/;
+    homepage    =  https://jekyllrb.com/;
     license     = licenses.mit;
     maintainers = with maintainers; [ pesterhazy ];
     platforms   = platforms.unix;
