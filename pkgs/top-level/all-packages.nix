@@ -11278,8 +11278,8 @@ with pkgs;
   x265 = callPackage ../development/libraries/x265 { };
 
   inherit (callPackages ../development/libraries/xapian { })
-    xapian_1_2_22 xapian_1_4_4;
-  xapian = xapian_1_4_4;
+    xapian_1_2_22 xapian_1_4;
+  xapian = xapian_1_4;
 
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
