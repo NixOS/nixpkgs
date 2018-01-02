@@ -1,8 +1,8 @@
 diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
-index ee5b38717..bbccef8c4 100644
+index a7cafa1a9..e17ffd35b 100644
 --- a/src/qml/qml/qqmlimport.cpp
 +++ b/src/qml/qml/qqmlimport.cpp
-@@ -1678,6 +1678,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+@@ -1737,6 +1737,15 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
      QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
      addImportPath(installImportsPath);
  
@@ -17,7 +17,7 @@ index ee5b38717..bbccef8c4 100644
 +
      // env import paths
      if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
-         const QByteArray envImportPath = qgetenv("QML2_IMPORT_PATH");
+         const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
 diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
 index 330da358b..cdf570205 100644
 --- a/tools/qmlcachegen/qmlcache.prf

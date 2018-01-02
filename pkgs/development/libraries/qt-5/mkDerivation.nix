@@ -14,6 +14,8 @@ let
       ++ optional (debug != null)
           (if debug then "CONFIG+=debug" else "CONFIG+=release");
 
+    NIX_CFLAGS_COMPILE = optional (debug != null) "-DQT_NO_DEBUG";
+
     cmakeFlags =
       (args.cmakeFlags or [])
       ++ [ "-DBUILD_TESTING=OFF" ]
