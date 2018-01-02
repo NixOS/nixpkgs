@@ -159,6 +159,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
+    evaluates = bool;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = str;

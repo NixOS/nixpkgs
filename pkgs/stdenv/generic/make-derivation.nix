@@ -211,6 +211,9 @@ rec {
         # Fill `meta.position` to identify the source location of the package.
         // lib.optionalAttrs (pos != null) {
           position = pos.file + ":" + toString pos.line;
+        # Expose the result of the checks for everyone to see.
+        } // {
+          evaluates = validity.valid;
         };
 
     in
