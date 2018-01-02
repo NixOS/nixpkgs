@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "543b81bf610240bd0398111d6c6607a9094dc2d159b564057d46c8a3d1aaa130";
     };
-    "armv7-linux" = {
+    "armv7l-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
       sha256 = "0f0e5e1d4fad3fa1a87ca1fe0d19242f4a94d158b7b8a08f99efefd98b51b019";
     };
