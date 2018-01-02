@@ -118,6 +118,7 @@
   ChengCat = "Yucheng Zhang <yu@cheng.cat>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
+  chreekat = "Bryan Richter <b@chreekat.net>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
