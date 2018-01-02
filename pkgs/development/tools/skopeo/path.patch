@@ -22,17 +22,4 @@ index 50e29b2..7108df5 100644
  	if c.GlobalBool("insecure-policy") {
  		policy = &signature.Policy{Default: []signature.PolicyRequirement{signature.NewPRInsecureAcceptAnything()}}
  	} else if policyPath == "" {
-diff --git a/vendor/github.com/containers/image/docker/docker_client.go b/vendor/github.com/containers/image/docker/docker_client.go
-index b989770..697d2ee 100644
---- a/vendor/github.com/containers/image/docker/docker_client.go
-+++ b/vendor/github.com/containers/image/docker/docker_client.go
-@@ -154,6 +154,9 @@ func setupCertificates(dir string, tlsc *tls.Config) error {
- 		if os.IsNotExist(err) {
- 			return nil
- 		}
-+		if os.IsPermission(err) {
-+			return nil
-+		}
- 		return err
- 	}
  
