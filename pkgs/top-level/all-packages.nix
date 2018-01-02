@@ -2238,6 +2238,8 @@ with pkgs;
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
+  gauge = callPackage ../development/tools/gauge { };
+
   gawk = callPackage ../tools/text/gawk {
     inherit (darwin) locale;
   };
