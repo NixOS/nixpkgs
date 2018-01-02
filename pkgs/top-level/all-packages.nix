@@ -14191,9 +14191,14 @@ with pkgs;
 
   bitscope = callPackage ../applications/science/electronics/bitscope/packages.nix { };
 
-  bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
+  bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
     inherit (gnome2) zenity;
   };
+  bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
+    inherit (gnome2) zenity;
+    inherit (self) bitwig-studio1;
+  };
+  bitwig-studio = bitwig-studio2;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
