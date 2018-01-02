@@ -17730,6 +17730,8 @@ with pkgs;
 
   xkbset = callPackage ../tools/X11/xkbset { };
 
+  xkbmon = callPackage ../applications/misc/xkbmon { };
+
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
   win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
