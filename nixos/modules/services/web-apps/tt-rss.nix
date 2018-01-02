@@ -557,6 +557,20 @@ let
         after = ["network.target" "${dbService}"];
     };
 
+    services.mysql = optionalAttrs (cfg.database.type == "mysql") {
+      enable = true;
+      package = mkDefault pkgs.mariadb;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+    };
+
     users = optionalAttrs (cfg.user == "tt_rss") {
       extraUsers = singleton {
         name = "tt_rss";
