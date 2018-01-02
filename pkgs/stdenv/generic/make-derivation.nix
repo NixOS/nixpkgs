@@ -72,6 +72,9 @@ rec {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let
+      references = nativeBuildInputs ++ buildInputs
+                ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
+
       dependencies = map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
@@ -213,7 +216,10 @@ rec {
           position = pos.file + ":" + toString pos.line;
         # Expose the result of the checks for everyone to see.
         } // {
-          evaluates = validity.valid;
+          evaluates = validity.valid
+                   && (if config.checkMetaRecursively or false
+                       then lib.all (d: d.meta.evaluates or true) references
+                       else true);
         };
 
     in
