@@ -9887,8 +9887,6 @@ in {
 
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
-    # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
-    disabled = isPy3k;
   };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
