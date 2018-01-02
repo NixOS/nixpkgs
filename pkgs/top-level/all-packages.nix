@@ -13110,6 +13110,8 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
+  goconvey = callPackage ../development/tools/goconvey { };
+
   gotags = callPackage ../development/tools/gotags { };
 
   golint = callPackage ../development/tools/golint { };
