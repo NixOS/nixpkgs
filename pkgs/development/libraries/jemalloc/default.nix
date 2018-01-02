@@ -1,8 +1,4 @@
-{ stdenv, fetchurl,
-  # jemalloc is unable to correctly detect transparent hugepage support on
-  # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
-  # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-  thpSupport ? !stdenv.isArm }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "jemalloc-${version}";
@@ -17,10 +13,11 @@ stdenv.mkDerivation rec {
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix="
-                   ++ stdenv.lib.optional (!thpSupport) "--disable-thp";
-
+                   # jemalloc is unable to correctly detect transparent hugepage support on
+                   # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
+                   # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
+                   ++ stdenv.lib.optional stdenv.isArm "--disable-thp";
   doCheck = true;
-
 
   meta = with stdenv.lib; {
     homepage = http://jemalloc.net;
