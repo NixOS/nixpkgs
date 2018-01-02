@@ -14484,11 +14484,10 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_09
-    docker_17_11;
+    docker_17_12;
 
-  docker = docker_17_09;
-  docker-edge = docker_17_11;
+  docker = docker_17_12;
+  docker-edge = docker_17_12;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
