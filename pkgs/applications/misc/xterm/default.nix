@@ -6,7 +6,10 @@ stdenv.mkDerivation rec {
   name = "xterm-330";
 
   src = fetchurl {
-    url = "http://invisible-mirror.net/archives/xterm/${name}.tgz";
+    urls = [
+     "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
+     "https://invisible-mirror.net/archives/xterm/${name}.tgz"
+   ];
     sha256 = "1psnfmqd23v9gxj8a98nzrgvymrk0p1whwqi92gy15bbkzrgkvks";
   };
 

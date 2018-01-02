@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   } else {
     urls = [
+      "https://invisible-mirror.net/archives/ncurses/current/${name}.tgz"
       "http://mirror.jax.hugeserver.com/archlinux/other/ncurses/${name}.tgz"
       "http://kuiper.mirrorservice.org/sites/lynx.invisible-island.net/ncurses/current/${name}.tgz"
       "ftp://ftp.invisible-island.net/ncurses/current/${name}.tgz"
