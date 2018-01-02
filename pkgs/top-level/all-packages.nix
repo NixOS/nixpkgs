@@ -15241,9 +15241,7 @@ with pkgs;
 
   gmu = callPackage ../applications/audio/gmu { };
 
-  gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
-    inherit (gnome2) GConf;
-  };
+  gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
   gnumeric = callPackage ../applications/office/gnumeric { };
 
