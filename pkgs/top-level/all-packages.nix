@@ -15237,6 +15237,8 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  gmtk = callPackage ../development/libraries/gmtk { };
+
   gmu = callPackage ../applications/audio/gmu { };
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
