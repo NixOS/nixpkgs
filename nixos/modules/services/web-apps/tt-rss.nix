@@ -99,8 +99,8 @@ let
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
-        example = "nginx";
+        default = "tt_rss";
+        example = "tt_rss";
         description = ''
           User account under which both the update daemon and the web-application run.
         '';
@@ -553,5 +553,18 @@ let
         requires = ["${dbService}"];
         after = ["network.target" "${dbService}"];
     };
+
+    users = optionalAttrs (cfg.user == "tt_rss") {
+      extraUsers = singleton {
+        name = "tt_rss";
+        group = "tt_rss";
+        uid = config.ids.uids.tt_rss;
+      };
+      extraGroups = singleton {
+        name = "tt_rss";
+        gid = config.ids.gids.tt_rss;
+      };
+    };
+
   };
 }
