@@ -72,7 +72,7 @@ in rec {
       sphinx = pkgs.python27Packages.sphinx;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
-      bootPkgs = packages.ghc7103Binary;
+      bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) hscolour alex happy;
       inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
