@@ -9794,20 +9794,19 @@ in {
   jabberbot = callPackage ../development/python-modules/jabberbot {};
 
   jedi = callPackage ../development/python-modules/jedi { };
-
   jellyfish = buildPythonPackage rec {
-    version = "0.5.2";
+    version = "0.5.6";
     name = "jellyfish-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
+      sha256 = "1j9rplb16ba2prjj6mip46z0w9pnhnqpwgiwi0x93vnas14rlyl8";
     };
 
     buildInputs = with self; [ pytest unicodecsv ];
 
     meta = {
-      homepage = https://github.com/sunlightlabs/jellyfish;
+      homepage = https://github.com/jamesturk/jellyfish;
       description = "Approximate and phonetic matching of strings";
       maintainers = with maintainers; [ koral ];
     };
@@ -23236,6 +23235,8 @@ EOF
   parse-type = callPackage ../development/python-modules/parse-type { };
 
   ephem = callPackage ../development/python-modules/ephem { };
+
+  us = callPackage ../development/python-modules/us { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 });
