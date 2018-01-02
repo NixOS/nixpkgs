@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
+, fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
 , caffe, glog, boost, google-gflags, protobuf
 , config
@@ -151,6 +151,14 @@ stdenv.mkDerivation rec {
   name = "opencv-${version}";
   inherit version src;
 
+  patches = [
+    # Fix for: https://github.com/opencv/opencv/issues/10474
+    (fetchpatch {
+      url = "https://github.com/opencv/opencv/commit/ea5a3e557f93844fdb5e54e3e8acfc5f61c6fd9f.patch";
+      sha256 = "1w7jmqlrx73ydh9jjsnnic5xz8r04kxbjpzkcfyb91v3az9132r1";
+    })
+  ];
+
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
@@ -241,11 +249,6 @@ stdenv.mkDerivation rec {
     ];
 
   enableParallelBuilding = true;
-
-  # Workaround for: https://github.com/opencv/opencv/issues/10474
-  preBuild = ''
-    make opencv_dnn
-  '';
 
   postBuild = lib.optionalString enableDocs ''
     make doxygen
