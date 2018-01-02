@@ -695,6 +695,7 @@
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
+  velovix = "Tyler Compton <xaviosx@gmail.com>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   vidbina = "David Asabina <vid@bina.me>";
   vifino = "Adrian Pistol <vifino@tty.sh>";
