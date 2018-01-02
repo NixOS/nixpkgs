@@ -303,6 +303,11 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
+  pykde4 = callPackage ../development/python-modules/pykde4/default.nix {
+    inherit (self) pyqt4;
+    callPackage = pkgs.callPackage;
+  };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
@@ -1462,6 +1467,9 @@ in {
       substituteInPlace setup.py --replace "argparse" ""
     '';
 
+  chainer = callPackage ../development/python-modules/chainer {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
 
   channels = callPackage ../development/python-modules/channels {};
 
@@ -1561,6 +1569,12 @@ in {
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
+
+  cupy = callPackage ../development/python-modules/cupy {
+    cudatoolkit = pkgs.cudatoolkit8;
+    cudnn = pkgs.cudnn6_cudatoolkit8;
+    nccl = pkgs.nccl;
+  };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
 
@@ -2828,6 +2842,7 @@ in {
     };
   };
 
+  conda = callPackage ../development/python-modules/conda { };
 
   configobj = buildPythonPackage (rec {
     name = "configobj-5.0.6";
@@ -4001,6 +4016,8 @@ in {
   libais = callPackage ../development/python-modules/libais { };
 
   libtmux = callPackage ../development/python-modules/libtmux { };
+
+  libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
@@ -6632,6 +6649,8 @@ in {
     };
   };
 
+  pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
+
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
     majorVersion = "2.0";
@@ -7454,6 +7473,10 @@ in {
     gdal = self.gdal;
   };
 
+  django_2_0 = callPackage ../development/python-modules/django/2_0.nix {
+    gdal = self.gdal;
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.18";
@@ -7905,15 +7928,25 @@ in {
 
   docutils = buildPythonPackage rec {
     name = "docutils-${version}";
-    version = "0.13.1";
+    version = "0.14";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "1gkma47i609jfs7dssxn4y9vsz06qi0l5q41nws0zgkpnrghz33i";
+      sha256 = "0x22fs3pdmr42kvz6c654756wja305qv6cx1zbhwlagvxgr4xrji";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    checkPhase = if isPy3k then ''
+      ${python.interpreter} test3/alltests.py
+    '' else ''
+      ${python.interpreter} test/alltests.py
+    '';
+
+    # Create symlinks lacking a ".py" suffix, many programs depend on these names
+    postFixup = ''
+      (cd $out/bin && for f in *.py; do
+        ln -s $f $(echo $f | sed -e 's/\.py$//')
+      done)
+    '';
 
     meta = {
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
@@ -8133,6 +8166,8 @@ in {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
+  fastrlock = callPackage ../development/python-modules/fastrlock {};
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
@@ -8250,6 +8285,8 @@ in {
       maintainers = with maintainers; [ bennofs ];
     };
   };
+
+  filelock = callPackage ../development/python-modules/filelock {};
 
   fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
 
@@ -8743,14 +8780,14 @@ in {
   });
 
   gdrivefs = buildPythonPackage rec {
-    version = "0.14.8";
+    version = "0.14.9";
     name = "gdrivefs-${version}";
     namePrefix = "";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
-      sha256 = "1dch10ajkp567pwvssvz1v5c0hxfyd8wf9qd7j1gfybh7f7hyzvw";
+      sha256 = "1mc2r35nf5k8vzwdcdhi0l9rb97amqd5xb53lhydj8v8f4rndk7a";
     };
 
     buildInputs = with self; [ gipc greenlet httplib2 six ];
@@ -9037,6 +9074,10 @@ in {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
+  googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
+
+  google_api_core = callPackage ../development/python-modules/google_api_core { };
+
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-${version}";
     version = "1.5.1";
@@ -9085,6 +9126,14 @@ in {
     };
   };
 
+  google_auth = callPackage ../development/python-modules/google_auth { };
+
+  google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
+
+  google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
+
+  google_gax = callPackage ../development/python-modules/google_gax { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
@@ -9117,6 +9166,8 @@ in {
       enablePython = true;
       pythonPackages = self;
     }));
+
+  grpcio = callPackage ../development/python-modules/grpcio { };
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -9836,8 +9887,6 @@ in {
 
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
-    # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
-    disabled = isPy3k;
   };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
@@ -11288,35 +11337,7 @@ in {
     };
   });
 
-  mygpoclient = buildPythonPackage rec {
-    name = "mygpoclient-${version}";
-    version = "1.7";
-
-    src = pkgs.fetchurl {
-      url = "https://thp.io/2010/mygpoclient/${name}.tar.gz";
-      sha256 = "6a0b7b1fe2b046875456e14eda3e42430e493bf2251a64481cf4fd1a1e21a80e";
-    };
-
-    buildInputs = with self; [ nose minimock ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "A gpodder.net client library";
-      longDescription = ''
-        The mygpoclient library allows developers to utilize a Pythonic interface
-        to the gpodder.net web services.
-      '';
-      homepage = https://thp.io/2010/mygpoclient/;
-      license = with licenses; [ gpl3 ];
-      platforms = with platforms; linux ++ darwin;
-      maintainers = with maintainers; [ skeidel ];
-    };
-  };
+  mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
@@ -12075,42 +12096,7 @@ in {
 
   numba = callPackage ../development/python-modules/numba { };
 
-  numexpr = buildPythonPackage rec {
-    version = "2.6.2";
-    name = "numexpr-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numexpr/${name}.tar.gz";
-      sha256 = "6ab8ff5c19e7f452966bf5a3220b845cf3244fe0b96544f7f9acedcc2db5c705";
-    };
-
-    propagatedBuildInputs = with self; [ numpy ];
-
-    # Run the test suite.
-    # It requires the build path to be in the python search path.
-    checkPhase = ''
-      ${python}/bin/${python.executable} <<EOF
-      import sysconfig
-      import sys
-      import os
-      f = "lib.{platform}-{version[0]}.{version[1]}"
-      lib = f.format(platform=sysconfig.get_platform(),
-                     version=sys.version_info)
-      build = os.path.join(os.getcwd(), 'build', lib)
-      sys.path.insert(0, build)
-      import numexpr
-      r = numexpr.test()
-      if not r.wasSuccessful():
-          sys.exit(1)
-      EOF
-    '';
-
-    meta = {
-      description = "Fast numerical array expression evaluator for NumPy";
-      homepage = "https://github.com/pydata/numexpr";
-      license = licenses.mit;
-    };
-  };
+  numexpr = callPackage ../development/python-modules/numexpr { };
 
   Nuitka = let
     # scons is needed but using it requires Python 2.7
@@ -14011,27 +13997,6 @@ in {
     };
   };
 
-  pycosat = buildPythonPackage rec {
-    name = "pycosat-0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycosat/${name}.tar.gz";
-      sha256 = "02sdn2998jlrm35smn1530hix3kzwyc1jv49cjdcnvfvrqqi3rww";
-    };
-
-    meta = {
-      description = "Python bindings for PicoSAT";
-      longDescription = ''PicoSAT is a popular SAT solver written by Armin
-          Biere in pure C. This package provides efficient Python bindings
-          to picosat on the C level, i.e. when importing pycosat, the
-          picosat solver becomes part of the Python process itself. For
-          ease of deployment, the picosat source (namely picosat.c and
-          picosat.h) is included in this project.'';
-      homepage = https://github.com/ContinuumIO/pycosat;
-      license = licenses.mit;
-    };
-  };
-
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = buildPythonPackage (rec {
@@ -14184,6 +14149,7 @@ in {
 
   };
 
+  pycosat = callPackage ../development/python-modules/pycosat { };
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
@@ -22356,6 +22322,8 @@ EOF
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
   trezor = callPackage ../development/python-modules/trezor { };
+
+  protocol = callPackage ../development/python-modules/protocol { };
 
   trezor_agent = buildPythonPackage rec{
     name = "${pname}-${version}";

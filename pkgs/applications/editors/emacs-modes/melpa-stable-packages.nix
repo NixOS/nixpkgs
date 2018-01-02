@@ -86,7 +86,7 @@ self:
       };
 
       # upstream issue: doesn't build
-      eterm-256color = markBroken super.emacs-256color;
+      eterm-256color = markBroken super.eterm-256color;
 
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
@@ -117,6 +117,9 @@ self:
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # upstream issue: recipe fails
+      insert-shebang = markBroken super.insert-shebang;
 
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
@@ -160,6 +163,9 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
+
+      # upstream issue: missing file header
+      rcirc-menu = markBroken super.rcirc-menu;
 
       # upstream issue: missing file header
       speech-tagger = markBroken super.speech-tagger;

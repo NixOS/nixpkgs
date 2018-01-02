@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = with gnome3; [
-    dbus libgcrypt pam gtk3 gconf libgnome_keyring
+    dbus libgcrypt pam gtk3 libgnome_keyring
     pango gcr gdk_pixbuf atk p11_kit
   ];
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  doCheck = true;
+  # Tests are not deterministic https://bugzilla.gnome.org/show_bug.cgi?id=791932
+  doCheck = false;
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \

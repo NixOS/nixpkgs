@@ -97,6 +97,7 @@
   bradediger = "Brad Ediger <brad@bradediger.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
+  bugworm = "Roman Gerasimenko <bugworm@zoho.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
   c0bw3b = "Renaud <c0bw3b@gmail.com>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
@@ -117,6 +118,7 @@
   ChengCat = "Yucheng Zhang <yu@cheng.cat>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
+  chreekat = "Bryan Richter <b@chreekat.net>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
@@ -282,6 +284,7 @@
   hodapp = "Chris Hodapp <hodapp87@gmail.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   htr = "Hugo Tavares Reis <hugo@linux.com>";
+  hyphon81 = "Masato Yonekawa <zero812n@gmail.com>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   iblech = "Ingo Blechschmidt <iblech@speicherleck.de>";
@@ -324,6 +327,7 @@
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
   jonafato = "Jon Banafato <jon@jonafato.com>";
   joncojonathan = "Jonathan Haddock <joncojonathan@gmail.com>";
+  jpdoyle = "Joe Doyle <joethedoyle@gmail.com>";
   jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
   jpotier = "Martin Potier <jpo.contributes.to.nixos@marvid.fr>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
@@ -359,6 +363,7 @@
   ldesgoui = "Lucas Desgouilles <ldesgoui@gmail.com>";
   league = "Christopher League <league@contrapunctus.net>";
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
+  ledif = "Adam Fidel <refuse@gmail.com>";
   leemachin = "Lee Machin <me@mrl.ee>";
   leenaars = "Michiel Leenaars <ml.software@leenaa.rs>";
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";
@@ -432,6 +437,7 @@
   mjanczyk = "Marcin Janczyk <m@dragonvr.pl>";
   mjp = "Mike Playle <mike@mythik.co.uk>"; # github = "MikePlayle";
   mlieberman85 = "Michael Lieberman <mlieberman85@gmail.com>";
+  moaxcp = "John Mercier <moaxcp@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   montag451 = "montag451 <montag451@laposte.net>";
@@ -448,6 +454,7 @@
   mrVanDalo = "Ingolf Wanger <contact@ingolf-wagner.de>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
+  mstarzyk = "Maciek Starzyk <mstarzyk@gmail.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
   mt-caret = "Masayuki Takeda <mtakeda.enigsol@gmail.com>";
   mtreskin = "Max Treskin <zerthurd@gmail.com>";
@@ -658,6 +665,7 @@
   thpham = "Thomas Pham <thomas.pham@ithings.ch>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
+  tiramiseb = "Sébastien Maccagnoni <sebastien@maccagnoni.eu>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tnias = "Philipp Bartsch <phil@grmr.de>";
   tohl = "Tomas Hlavaty <tom@logand.com>";
@@ -687,7 +695,9 @@
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
+  velovix = "Tyler Compton <xaviosx@gmail.com>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
+  vidbina = "David Asabina <vid@bina.me>";
   vifino = "Adrian Pistol <vifino@tty.sh>";
   vinymeuh = "VinyMeuh <vinymeuh@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";

@@ -6,11 +6,11 @@ assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20171111";
+  version = "0.0.20171221";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "0mqix3v4qqwwa7hcd0h5rcwhc7yvm9jcl8b3v1vc4sj0m637fd6r";
+    sha256 = "1vf5dbwc2lgcf28k1m919w94hil2gcl0l4h4da1sh6r7kdz6k5rb";
   };
 
   meta = with stdenv.lib; {
@@ -36,6 +36,8 @@ let
     INSTALL_MOD_PATH = "\${out}";
 
     NIX_CFLAGS = ["-Wno-error=cpp"];
+
+    nativeBuildInputs = kernel.moduleBuildDependencies;
 
     buildPhase = "make module";
   };

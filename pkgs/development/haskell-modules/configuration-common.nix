@@ -951,9 +951,9 @@ self: super: {
   # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
-  # These packages depend on each other, forming an infinte loop.
-  scalendar = markBroken super.scalendar;
-  SCalendar = markBroken super.SCalendar;
+  # These packages depend on each other, forming an infinite loop.
+  scalendar = markBroken (super.scalendar.override { SCalendar = null; });
+  SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
 
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
@@ -1012,4 +1012,15 @@ self: super: {
       { patches = (drv.patches or []) ++ [ patch ];
         editedCabalFile = null;
       });
+
+  # https://github.com/haskell/cabal/issues/4969
+  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
+  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+
+  # Jailbreak "unix-compat >=0.1.2 && <0.5".
+  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' darcs.cabal"; });
+
+  # https://github.com/Twinside/Juicy.Pixels/issues/149
+  JuicyPixels = dontHaddock super.JuicyPixels;
+
 }

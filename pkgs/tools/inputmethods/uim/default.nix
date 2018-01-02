@@ -6,10 +6,7 @@
 , withGtk3 ? withGtk, gtk3 ? null
 , withQt ? true
 , withQt4 ? withQt, qt4 ? null
-, withKde ? withQt
-, withKde4 ? withKde && withQt4, kdelibs4 ? null, automoc4 ? null
-, withKNotify4 ? false
-, withLibnotify ? !withKNotify4, libnotify ? null
+, withLibnotify ? true, libnotify ? null
 , withSqlite ? true, sqlite ? null
 , withNetworking ? true, curl ? null, openssl ? null
 , withFFI ? true, libffi ? null
@@ -24,9 +21,7 @@ assert withAnthy -> anthy != null;
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
 assert withQt4 -> qt4 != null;
-assert withKde4 -> withQt4 && kdelibs4 != null && automoc4 != null;
-assert withKNotify4 -> withKde4 && !withLibnotify;
-assert withLibnotify -> !withKNotify4 && libnotify != null;
+assert withLibnotify -> libnotify != null;
 assert withSqlite -> sqlite != null;
 assert withNetworking -> curl != null && openssl != null;
 assert withFFI -> libffi != null;
@@ -49,9 +44,6 @@ stdenv.mkDerivation rec {
   ++ optional withGtk2 gtk2
   ++ optional withGtk3 gtk3
   ++ optional withQt4 qt4
-  ++ optionals withKde4 [
-    kdelibs4 automoc4
-  ]
   ++ optional withLibnotify libnotify
   ++ optional withSqlite sqlite
   ++ optionals withNetworking [
@@ -76,8 +68,6 @@ stdenv.mkDerivation rec {
     "--with-qt4"
     "--with-qt4-immodule"
   ]
-  ++ optional withKde4 "--enable-kde4-applet"
-  ++ optional withKNotify4 "--enable-notify=knotify4"
   ++ optional withLibnotify "--enable-notify=libnotify"
   ++ optional withSqlite "--with-sqlite3"
   ++ optionals withNetworking [

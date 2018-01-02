@@ -163,13 +163,9 @@ let version = "4.8.5";
           "--enable-threads=win32"
           "--enable-sjlj-exceptions"
           "--enable-hash-synchronization"
-          "--disable-libssp"
+          "--enable-libssp"
           "--disable-nls"
           "--with-dwarf2"
-          # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, mingw32 g++ linking is broken by default with shared libs,
-          # unless adding "-lsupc++" to any linking command. I don't know why.
-          "--disable-shared"
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
@@ -511,8 +507,11 @@ stdenv.mkDerivation ({
       "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
     ]);
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version;
+    isGNU = true;
+    hardeningUnsupportedFlags = [ "stackprotector" ];
+  };
 
   inherit enableParallelBuilding enableMultilib;
 

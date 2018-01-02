@@ -135,10 +135,10 @@
     arbitools = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "arbitools";
-        version = "0.71";
+        version = "0.91";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.71.el";
-          sha256 = "1ghf5yla126n7xpn2sc2vg7q8arp7iv2z5f9r9l38vxm6dvnxp50";
+          url = "https://elpa.gnu.org/packages/arbitools-0.91.el";
+          sha256 = "0r0nbpwjxal40ydvx7hmjq56x12jcfqgld7yc4fjfz93wn8m40qf";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -236,6 +236,19 @@
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/avy.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    bbdb = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "bbdb";
+        version = "3.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/bbdb-3.2.tar";
+          sha256 = "1p56dg0mja2b2figy7yhdx714zd5j6njzn0k07zjka3jc06izvjx";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/bbdb.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -755,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.8";
+        version = "1.4.0.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.8.tar";
-          sha256 = "1gk42n04f1h2vc8sp86gvi795qgnvnh4cyyqfvy6sz1pfix76kfl";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.11.tar";
+          sha256 = "12m468fxwfrwjkm0wcraafb7n9shh9fmw43nggc216ch3syxmfaw";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -1584,10 +1597,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171218";
+        version = "20171225";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171218.tar";
-          sha256 = "0x3i9wdcl1nqdfhfinrs8bnhpjivm7s0akz90rwkh96d08kx0kpa";
+          url = "https://elpa.gnu.org/packages/org-20171225.tar";
+          sha256 = "0jq410l1d4gz8qz01kmpgf9n77hghnknbcmhhznnq4dxiypgigc2";
         };
         packageRequires = [];
         meta = {

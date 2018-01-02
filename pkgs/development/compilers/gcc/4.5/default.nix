@@ -118,7 +118,7 @@ let version = "4.5.4";
           "--enable-sjlj-exceptions"
           "--enable-hash-synchronization"
           "--enable-version-specific-runtime-libs"
-          "--disable-libssp"
+          "--enable-libssp"
           "--disable-nls"
           "--with-dwarf2"
         ] else [
@@ -422,8 +422,11 @@ stdenv.mkDerivation ({
       "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
     ]);
 
-  passthru = { inherit langC langCC langAda langFortran langVhdl
-      enableMultilib version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langAda langFortran langVhdl enableMultilib version;
+    isGNU = true;
+    hardeningUnsupportedFlags = [ "stackprotector" ];
+  };
 
   enableParallelBuilding = !langAda;
 

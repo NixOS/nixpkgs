@@ -276,7 +276,7 @@ stdenv.mkDerivation ({
 
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-    if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+    if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
     fi
@@ -317,8 +317,14 @@ stdenv.mkDerivation ({
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
-      local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
-      mv $packageConfFile $packageConfDir/$pkgId.conf
+      if [ -d "$packageConfFile" ]; then
+        mv "$packageConfFile"/* "$packageConfDir"
+        rmdir "$packageConfFile"
+      fi
+      for packageConfFile in "$packageConfDir"/*; do
+        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        mv $packageConfFile $packageConfDir/$pkgId.conf
+      done
     ''}
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
@@ -349,6 +355,8 @@ stdenv.mkDerivation ({
   passthru = passthru // {
 
     inherit pname version;
+
+    compiler = ghc;
 
     isHaskellLibrary = hasActiveLibrary;
 

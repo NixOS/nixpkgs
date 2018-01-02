@@ -33,7 +33,6 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
                   (lib.nameValuePair "php" {
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
-                    preBuild = "touch unix.h";
                     inputs = [ php-embed ] ++ php-embed.buildInputs;
                   })
                 ];

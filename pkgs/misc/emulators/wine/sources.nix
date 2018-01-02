@@ -1,4 +1,11 @@
 { pkgs ? import <nixpkgs> {} }:
+## we default to importing <nixpkgs> here, so that you can use
+## a simple shell command to insert new sha256's into this file
+## e.g. with emacs C-u M-x shell-command
+##
+##     nix-prefetch-url sources.nix -A {stable{,.mono,.gecko64,.gecko32}, unstable, staging, winetricks}
+
+# here we wrap fetchurl and fetchFromGitHub, in order to be able to pass additional args around it
 let fetchurl = args@{url, sha256, ...}:
   pkgs.fetchurl { inherit url sha256; } // args;
     fetchFromGitHub = args@{owner, repo, rev, sha256, ...}:
@@ -6,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "2.0.2";
+    version = "2.0.3";
     url = "https://dl.winehq.org/wine/source/2.0/wine-${version}.tar.xz";
-    sha256 = "16iwf48cfi39aqyy8131jz4x7lr551c9yc0mnks7g24j77sq867p";
+    sha256 = "0mmyc94r5drffir8zr8jx6iawhgfzjk96fj494aa18vhz1jcc4d8";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {

@@ -1,9 +1,7 @@
-diff --git a/config.mk b/config.mk.new
-index c3a7b37..0cbce67 100644
---- a/config.mk
-+++ b/config.mk
-@@ -10,6 +10,9 @@ ZATHURA_VERSION_CHECK ?= $(shell pkg-config --atleast-version=$(ZATHURA_MIN_VERS
- PREFIX ?= /usr
+--- zathura-ps-0.2.5.orig/config.mk	2017-12-21 14:21:17.000000000 +0100
++++ zathura-ps-0.2.5/config.mk	2017-12-31 01:05:17.507268817 +0100
+@@ -16,6 +16,9 @@
+ DESKTOPPREFIX ?= ${PREFIX}/share/applications
  
  # libs
 +GTK_INC ?= $(shell pkg-config --cflags gtk+-2.0)
@@ -12,14 +10,14 @@ index c3a7b37..0cbce67 100644
  CAIRO_INC ?= $(shell pkg-config --cflags cairo)
  CAIRO_LIB ?= $(shell pkg-config --libs cairo)
  
-@@ -26,8 +29,8 @@ ZATHURA_INC ?= $(shell pkg-config --cflags zathura)
- PLUGINDIR ?= $(shell pkg-config --variable=plugindir zathura)
- PLUGINDIR ?= ${PREFIX}/lib/zathura
+@@ -34,8 +37,8 @@
+ PLUGINDIR = ${LIBDIR}/zathura
+ endif
  
--INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${ZATHURA_INC}
--LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB}
-+INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${ZATHURA_INC} ${GTK_INC}
-+LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB} ${GTK_LIB}
+-INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${CAIRO_INC} ${ZATHURA_INC}
+-LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB} ${CAIRO_LIB}
++INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${CAIRO_INC} ${ZATHURA_INC} ${GTK_INC}
++LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB} ${CAIRO_LIB } ${GTK_LIB}
  
- # flags
- CFLAGS += -std=c99 -fPIC -pedantic -Wall -Wno-format-zero-length $(INCS)
+ # compiler flags
+ CFLAGS += -std=c11 -fPIC -pedantic -Wall -Wno-format-zero-length $(INCS)

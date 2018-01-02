@@ -95,6 +95,14 @@ following incompatible changes:</para>
       <link xlink:href="https://search.nix.gsc.io/?q=stateVersion">here</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal>has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
+      Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
+      Other more obscure ones are just moved.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

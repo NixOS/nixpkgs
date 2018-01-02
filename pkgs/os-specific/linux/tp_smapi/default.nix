@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     name = "tp-smapi-${version}";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   hardeningDisable = [ "pic" ];
 
   makeFlags = [

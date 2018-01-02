@@ -3,16 +3,13 @@
 with lib;
 
 let
-
   xcfg = config.services.xserver;
   pcfg = config.hardware.pulseaudio;
   cfg = xcfg.desktopManager.xfce;
-
 in
 
 {
   options = {
-
     services.xserver.desktopManager.xfce = {
       enable = mkOption {
         type = types.bool;
@@ -125,9 +122,7 @@ in
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
-    environment.variables.GDK_PIXBUF_MODULE_FILE = [
-      "$(echo ${pkgs.librsvg.out}/lib/gdk-pixbuf-*/*/loaders.cache)"
-    ];
+    environment.variables.GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
