@@ -7,8 +7,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
   buildInputs = [ gtk3 glib gnome3.gnome_desktop gnome3.defaultIconTheme ];
 
