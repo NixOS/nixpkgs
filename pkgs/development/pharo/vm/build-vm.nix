@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     else if stdenv.isLinux && stdenv.isx86_64  then "linux64x64"
     else if stdenv.isDarwin && stdenv.isi686   then "macos32x86"
     else if stdenv.isDarwin && stdenv.isx86_64 then "macos64x64"
-    else abort "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
+    else throw "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
 
   # Shared data (for the sources file)
   pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
@@ -122,8 +122,8 @@ stdenv.mkDerivation rec {
       packaging (ppa:pharo/stable)' project.
     '';
     homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lukego ];
-    platforms = [ "i686-linux" "x86_64-linux" "i686-darwin" "x86_64-darwin" ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lukego ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
