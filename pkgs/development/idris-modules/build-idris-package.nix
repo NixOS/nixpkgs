@@ -18,7 +18,8 @@
       fi
     }
 
-    envHooks+=(addIdrisLibs)
+    # All run-time deps
+    addEnvHooks 0 addIdrisLibs
   '';
 
   buildPhase = ''

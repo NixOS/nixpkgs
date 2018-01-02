@@ -10,8 +10,4 @@ _grantleeEnvHook() {
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-if [ "$crossEnv" ]; then
-    crossEnvHooks+=(_grantleeEnvHook)
-else
-    envHooks+=(_grantleeEnvHook)
-fi
+addEnvHooks "$hostOffset" _grantleeEnvHook

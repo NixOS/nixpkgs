@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl mysql.lib ncurses gtk2 lua hwloc numactl
+    curl python munge perl pam openssl mysql.connector-c ncurses gtk2 lua hwloc numactl
   ];
 
   configureFlags =

@@ -20,7 +20,7 @@
 , libtool ? null
 , lm_sensors ? null
 , lvm2 ? null
-, libmysql ? null
+, mysql ? null
 , postgresql ? null
 , protobufc ? null
 , python ? null
@@ -53,9 +53,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl libdbi libgcrypt libmemcached
     cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
-    libxml2 libmysql postgresql protobufc rrdtool
+    libxml2 postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis libmicrohttpd
     riemann_c_client mosquitto rdkafka mongoc
+  ] ++ stdenv.lib.optionals (mysql != null) [ mysql.connector-c
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl

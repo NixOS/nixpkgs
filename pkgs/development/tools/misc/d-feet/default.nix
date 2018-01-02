@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, fetchurl, itstool, intltool, libxml2, glib, gtk3
-, python3Packages, wrapGAppsHook, gnome3, libwnck3 }:
+, python3Packages, wrapGAppsHook, gnome3, libwnck3, gobjectIntrospection }:
 
 let
   version = "${major}.13";
@@ -14,7 +14,7 @@ in python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook libxml2 ];
-  buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 ];
+  buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 gobjectIntrospection ];
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pep8 ];
 

@@ -20,6 +20,22 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
+      have been made to the infrastructure involved:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>libmysql</literal> has been deprecated, please use <literal>mysql.connector-c</literal>
+            instead, a compatibility passthru has been added to the MySQL packages.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <literal>mysql57</literal> package has a new <literal>static</literal> output containing
+            the static libraries including <literal>libmysqld.a</literal>
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
   </listitem>
 </itemizedlist>
@@ -101,6 +117,18 @@ following incompatible changes:</para>
       The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
       Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
       Other more obscure ones are just moved.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The propagation logic has been changed.
+      The new logic, along with new types of dependencies that go with, is thoroughly documented in the "Specifying dependencies" section of the "Standard Environment" chapter of the nixpkgs manual.
+      <!-- That's <xref linkend="ssec-stdenv-attributes"> were we to merge the manuals. -->
+      The old logic isn't but is easy to describe: dependencies were propagated as the same type of dependency no matter what.
+      In practice, that means that many <function>propagatedNativeBuildInputs</function> should instead be  <function>propagatedBuildInputs</function>.
+      Thankfully, that was and is the least used type of dependency.
+      Also, it means that some <function>propagatedBuildInputs</function> should instead be <function>depsTargetTargetPropagated</function>.
+      Other types dependencies should be unaffected.
     </para>
   </listitem>
 </itemizedlist>

@@ -20,15 +20,16 @@ stdenv.mkDerivation rec {
     "--with-gettext=${gettext}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-gl=${mesa}"
-    "--with-mysql=yes"
+    "--with-mysql=${mysql.connector-c}"
     "--with-manpages=yes"
   ];
 
   outputs = [ "out" "devdoc" ];
 
   nativeBuildInputs = [ pkgconfig libtool gettext ];
+
   buildInputs = [
-    bsdbuild perl xlibsWrapper libXinerama SDL mesa  mysql.client mandoc
+    bsdbuild perl xlibsWrapper libXinerama SDL mesa mysql.connector-c mandoc
     freetype.dev libpng libjpeg.dev fontconfig portaudio libsndfile
   ];
 

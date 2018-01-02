@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
 
 buildPythonPackage rec {
-  name = "mygpoclient-${version}";
+  pname = "mypgoclient";
   version = "1.8";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0aa28wc55x3rxa7clwfv5v5500ffyaq0vkxaa3v01y1r93dxkdvp";
   };
 
-  buildInputs = [ nose minimock ];
+  checkInputs = [ nose minimock ];
 
   checkPhase = ''
     nosetests
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     '';
     homepage = https://github.com/gpodder/mygpoclient;
     license = with licenses; [ gpl3 ];
-    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ skeidel ];
   };
 }
