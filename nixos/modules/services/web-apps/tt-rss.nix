@@ -479,7 +479,6 @@ let
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
             fastcgi_pass unix:${phpfpmSocketName};
             fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME ${cfg.root}/$fastcgi_script_name;
           '';
         };
       };
