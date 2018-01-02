@@ -1,0 +1,47 @@
+{
+  "name": "shiny-server",
+  "preferGlobal": "true",
+  "version": "1.5.5",
+  "author": "RStudio <node@rstudio.com>",
+  "description": "Application server for the Shiny web framework for R",
+  "bin": "./lib/main.js",
+  "scripts": {
+    "start": "node ./lib/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rstudio/shiny-server.git"
+  },
+  "dependencies": {
+    "bash": "0.0.1",
+    "client-sessions": "^0.8.0",
+    "express": "^4.14.0",
+    "faye-websocket": "^0.11.0",
+    "graceful-fs": "4.1.x",
+    "handlebars": "^4.0.8",
+    "http-proxy": "^1.15.2",
+    "log4js": "^1.1.1",
+    "mocha": "^3.4.1",
+    "moment": "^2.15.2",
+    "morgan": "^1.7.0",
+    "optimist": "0.6.1",
+    "pause": "0.1.0",
+    "q": "^1.5.0",
+    "qs": "^6.3.0",
+    "regexp-quote": "0.0.0",
+    "rewire": "2.5.x",
+    "send": "^0.15.2",
+    "shiny-server-client": "https://github.com/rstudio/shiny-server-client/archive/f214eae20.tar.gz",
+    "should": "^11.2.1",
+    "sinon": "^2.2.0",
+    "sockjs": "0.3.18",
+    "split": "1.0.x",
+    "stable": "^0.1.6",
+    "underscore": "1.8.3",
+    "unixgroups": "https://github.com/rstudio/node-unixgroups/tarball/e6dfefe"
+  },
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": ">=6.6.0"
+  }
+}

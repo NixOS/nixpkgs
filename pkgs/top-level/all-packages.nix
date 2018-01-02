@@ -6444,6 +6444,8 @@ with pkgs;
 
   shmig = callPackage ../development/tools/database/shmig { };
 
+  shiny-server = callPackage ../servers/web-apps/shiny-server { };
+
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }

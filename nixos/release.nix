@@ -342,6 +342,7 @@ in rec {
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.samba = callTest tests/samba.nix {};
   tests.sddm = callSubTests tests/sddm.nix {};
+  tests.shiny-server = callTest tests/shiny-server.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
