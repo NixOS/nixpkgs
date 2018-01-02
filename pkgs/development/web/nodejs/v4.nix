@@ -10,11 +10,11 @@ let
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 in
   stdenv.mkDerivation (nodejs // rec {
-    version = "4.8.5";
+    version = "4.8.7";
     name = "${baseName}-${version}";
     src = fetchurl {
       url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
-      sha256 = "0lqdnnihmc2wpl1v1shj60i49wka2354b00a86k0xbjg5gyfx2m4";
+      sha256 = "1y21wq092d3gmccm2zldbflbbbx7a71wi9l0bpkxvzmgws69liq3";
     };
 
   })
