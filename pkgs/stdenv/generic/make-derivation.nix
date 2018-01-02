@@ -194,24 +194,24 @@ rec {
       # but it's not part of the actual derivation, i.e., it's not
       # passed to the builder and is not a dependency.  But since we
       # include it in the result, it *is* available to nix-env for queries.
-      meta = { }
+      meta = {
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
           # if he has specified it, it will be overridden below in `// meta`.
           #   Note: This default probably shouldn't be globally configurable.
           #   Services and users should specify outputs explicitly,
           #   unless they are comfortable with this default.
-        // { outputsToInstall =
-          let
-            outs = outputs'; # the value passed to derivation primitive
-            hasOutput = out: builtins.elem out outs;
-          in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+          outputsToInstall =
+            let
+              outs = outputs'; # the value passed to derivation primitive
+              hasOutput = out: builtins.elem out outs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
         }
         // attrs.meta or {}
-          # Fill `meta.position` to identify the source location of the package.
-        // lib.optionalAttrs (pos != null)
-          { position = pos.file + ":" + toString pos.line; }
-        ;
+        # Fill `meta.position` to identify the source location of the package.
+        // lib.optionalAttrs (pos != null) {
+          position = pos.file + ":" + toString pos.line;
+        };
 
     in
 
