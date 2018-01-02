@@ -359,10 +359,6 @@ with pkgs;
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  buildSingleXMLCatalog = makeSetupHook {
-    deps = [ findXMLCatalogs ];
-  } ../build-support/setup-hooks/build-single-xml-catalog.sh;
-
   wrapGAppsHook = makeSetupHook {
     deps = [ gnome3.dconf.lib gnome3.gtk librsvg makeWrapper ];
   } ../build-support/setup-hooks/wrap-gapps-hook.sh;
