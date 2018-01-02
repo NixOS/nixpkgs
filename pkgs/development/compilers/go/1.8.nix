@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isArm ''
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
-    echo '#!/usr/bin/env bash' > misc/cgo/testplugin/test.bash
+    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
