@@ -14,11 +14,11 @@ buildGoPackage rec {
     sha256 = "1241zqyimgqil4qd72f0yiw935lkdmfr88kvqbkn9n05k7xhdg30";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "debugger for the Go programming language";
     homepage = https://github.com/derekparker/delve;
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ vdemeester ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
 }
