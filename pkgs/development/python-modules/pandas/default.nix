@@ -78,12 +78,12 @@ in buildPythonPackage rec {
   '' + ''
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
-    # Disable test_argsort, test_numpy_argsort and test_basic_indexing due to numpy bumpy from 1.13.1 -> 1.13.3
+    # Disable test_argsort, test_numpy_argsort, test_basic_indexing and test_unsortable due to numpy bump from 1.13.1 -> 1.13.3
     py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
       -k "not test_fallback_plural and \
           not test_ambiguous_flags and \
           not test_ambiguous_compat and \
-          not test_argsort and not test_numpy_argsort and not test_basic_indexing \
+          not test_argsort and not test_numpy_argsort and not test_basic_indexing and not test_unsortable \
           ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
     runHook postCheck
   '';
