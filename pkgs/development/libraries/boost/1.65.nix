@@ -9,6 +9,4 @@ callPackage ./generic.nix (args // rec {
     sha256 = "9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81";
   };
 
-  enableNumpy = args.enableNumpy or true;
-
 })
