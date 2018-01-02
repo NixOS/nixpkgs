@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://invisible-island.net/xterm;
-    license = "BSD";
+    license = with stdenv.lib.licenses; [ mit ];
     maintainers = with stdenv.lib.maintainers; [viric vrthra];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
