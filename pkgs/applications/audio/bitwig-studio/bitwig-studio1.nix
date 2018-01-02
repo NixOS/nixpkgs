@@ -1,35 +1,35 @@
-{ stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, ffmpeg, freetype, gdk_pixbuf
-, glib, gtk2, harfbuzz, jdk, lib, libX11, libXau, libXcursor, libXdmcp
-, libXext, libXfixes, libXrender, libbsd, libjack2, libpng, libxcb
-, libxkbcommon, libxkbfile, makeWrapper, pixman, xcbutil, xcbutilwm
+{ stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
+, glib, gtk2, harfbuzz, jdk, lib, xorg
+, libbsd, libjack2, libpng
+, libxkbcommon
+, makeWrapper, pixman
 , xdg_utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
   name = "bitwig-studio-${version}";
-  version = "2.2.2";
+  version = "1.3.16";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "1x4wka32xlygmhdh9rb15s37zh5qjrgap2qk35y34c52lf5aak22";
+    url    = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
+    sha256 = "0n0fxh9gnmilwskjcayvjsjfcs3fz9hn00wh7b3gg0cv3qqhich8";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
   unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
 
-  dontBuild = true;
+  dontBuild    = true;
   dontPatchELF = true;
-  dontStrip = true;
+  dontStrip    = true;
 
-  libPath = lib.makeLibraryPath [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 harfbuzz
-    libX11 libXau libXcursor libXdmcp libXext libXfixes libXrender
-    libbsd libjack2 libpng libxcb libxkbfile pixman xcbutil xcbutilwm
-    zlib
+  libPath = with xorg; lib.makeLibraryPath [
+    alsaLib bzip2.out cairo freetype gdk_pixbuf glib gtk2 harfbuzz libX11 libXau
+    libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
+    libxkbfile pixman xcbutil xcbutilwm zlib
   ];
 
   binPath = lib.makeBinPath [
-    ffmpeg xdg_utils zenity
+    xdg_utils zenity
   ];
 
   installPhase = ''
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.bitwig.com/;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michalrus ];
+    maintainers = with maintainers; [ michalrus mrVanDalo ];
   };
 }
