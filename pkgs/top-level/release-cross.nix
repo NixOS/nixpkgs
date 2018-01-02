@@ -123,6 +123,8 @@ in
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = drv: hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+    mkBootstrapToolsJob = drv:
+      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }
