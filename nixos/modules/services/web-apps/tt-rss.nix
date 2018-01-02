@@ -466,24 +466,27 @@ let
       '';
     };
 
-    services.nginx.virtualHosts = mkIf (cfg.virtualHost != null) {
-      "${cfg.virtualHost}" = {
-        root = "${cfg.root}";
+    services.nginx = {
+      enable = true;
+      # NOTE: No configuration is done if not using virtual host
+      virtualHosts = mkIf (cfg.virtualHost != null) {
+        "${cfg.virtualHost}" = {
+          root = "${cfg.root}";
 
-        locations."/" = {
-          index = "index.php";
-        };
+          locations."/" = {
+            index = "index.php";
+          };
 
-        locations."~ \.php$" = {
-          extraConfig = ''
-            fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:${phpfpmSocketName};
-            fastcgi_index index.php;
-          '';
+          locations."~ \.php$" = {
+            extraConfig = ''
+              fastcgi_split_path_info ^(.+\.php)(/.+)$;
+              fastcgi_pass unix:${phpfpmSocketName};
+              fastcgi_index index.php;
+            '';
+          };
         };
       };
     };
-
 
     systemd.services.tt-rss = let
       dbService = if cfg.database.type == "pgsql" then "postgresql.service" else "mysql.service";
