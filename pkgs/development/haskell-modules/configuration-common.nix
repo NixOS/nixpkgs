@@ -1003,6 +1003,9 @@ self: super: {
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
 
+  # https://github.com/bos/text-icu/issues/32
+  text-icu = dontCheck super.text-icu;
+
   # https://github.com/strake/lenz.hs/issues/2
   lenz =
     let patch = pkgs.fetchpatch
