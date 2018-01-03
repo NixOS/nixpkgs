@@ -8741,12 +8741,17 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
+  muslCross = callPackage ../os-specific/linux/musl {
+    stdenv = crossLibcStdenv;
+  };
+
   # We can choose:
   libcCrossChooser = name:
     # libc is hackily often used from the previous stage. This `or`
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
     else if name == "uclibc" then uclibcCross
+    else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
