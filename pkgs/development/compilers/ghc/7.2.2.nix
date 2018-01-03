@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://haskell.org/ghc/dist/${version}/${name}-src.tar.bz2";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.bz2";
     sha256 = "0g87d3z9275dniaqzkf56qfgzp1msd89nqqhhm2gkc6iga072spz";
   };
 
