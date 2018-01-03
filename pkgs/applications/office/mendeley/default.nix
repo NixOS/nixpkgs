@@ -96,6 +96,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg which ] ++ deps;
 
+  propagatedUserEnvPkgs = [ gconf ];
+
   unpackPhase = "true";
 
   installPhase = ''
@@ -110,6 +112,7 @@ stdenv.mkDerivation {
 
     wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
+      --set QTWEBENGINE_DISABLE_SANDBOX 1 \
       ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
       ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}
 
