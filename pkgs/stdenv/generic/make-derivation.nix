@@ -134,9 +134,12 @@ rec {
               (lib.concatLists propagatedDependencies));
         in
         {
-          name = name + lib.optionalString
+          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
+          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
+          name = assert validity.handled; name + lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform)
             ("-" + stdenv.hostPlatform.config);
+
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
