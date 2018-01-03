@@ -15,7 +15,13 @@
 , orc
 , nss
 , nspr
-, qt5
+, qtbase
+, qtsvg
+, qtdeclarative
+, qtwebchannel
+, qtquickcontrols
+, qtwebkit
+, qtwebengine
 , sqlite
 , xorg
 , xlibs
@@ -47,13 +53,13 @@ let
     else "11z65mj1a2rw6cwfarl8r1vzpcz4ww5mgvd5fyv31l60mbmnqkap";
 
   deps = [
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtdeclarative
-    qt5.qtwebchannel
-    qt5.qtquickcontrols
-    qt5.qtwebkit
-    qt5.qtwebengine
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtwebchannel
+    qtquickcontrols
+    qtwebkit
+    qtwebengine
     alsaLib
     dbus
     freetype
