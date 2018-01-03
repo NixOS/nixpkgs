@@ -1,7 +1,6 @@
 { lib, targetPlatform, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
 , withLLVM ? false
 , postBuild ? ""
-, haskellPackages
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
 
@@ -131,6 +130,5 @@ symlinkJoin {
   passthru = {
     preferLocalBuild = true;
     inherit (ghc) version meta;
-    inherit haskellPackages;
   };
 }

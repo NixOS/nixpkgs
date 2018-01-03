@@ -102,7 +102,6 @@ let
 
   withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
-    haskellPackages = self;
     inherit packages;
   };
 
