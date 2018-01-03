@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ajgybjx7g6qzddavab8bj7il7wn5wy24nivjj5rk84mfbi71s5v";
   };
 
-  buildInputs = [ cmake pkgconfig bzip2 libxml2 libzip boost lua luabind tbb expat];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 
