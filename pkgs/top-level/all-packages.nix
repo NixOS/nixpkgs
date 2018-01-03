@@ -15348,6 +15348,8 @@ with pkgs;
 
   gv = callPackage ../applications/misc/gv { };
 
+  gutenberg = callPackage ../applications/misc/gutenberg { };
+
   guvcview = callPackage ../os-specific/linux/guvcview {
     pulseaudioSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
