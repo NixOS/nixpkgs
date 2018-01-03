@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, flex, cracklib }:
+{ stdenv, buildPackages, targetPlatform, fetchurl, fetchpatch, flex, cracklib }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
@@ -8,6 +8,21 @@ stdenv.mkDerivation rec {
     url = "http://www.linux-pam.org/library/Linux-PAM-${version}.tar.bz2";
     sha256 = "1fyi04d5nsh8ivd0rn2y0z83ylgc0licz7kifbb6xxi2ylgfs6i4";
   };
+
+  patches = stdenv.lib.optionals (targetPlatform.libc == "musl") [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
+    })
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
+    })
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/musl-fix-pam_exec.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+      sha256 = "04dx6s9d8cxl40r7m7dc4si47ds4niaqm7902y1d6wcjvs11vrf0";
+    })
+  ];
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
@@ -46,6 +61,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
+  '' + stdenv.lib.optionalString (targetPlatform.libc == "musl") ''
+      # export ac_cv_search_crypt=no
+      # (taken from Alpine linux, apparently insecure but also doesn't build O:))
+      # disable insecure modules
+      # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
+      sed -e 's/pam_rhosts//g' -i modules/Makefile.in
   '';
 
   meta = {
