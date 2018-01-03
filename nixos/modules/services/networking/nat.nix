@@ -19,6 +19,8 @@ let
     iptables -w -t nat -D POSTROUTING -j nixos-nat-post 2>/dev/null || true
     iptables -w -t nat -F nixos-nat-post 2>/dev/null || true
     iptables -w -t nat -X nixos-nat-post 2>/dev/null || true
+
+    ${cfg.extraStopCommands}
   '';
 
   setupNat = ''
@@ -58,6 +60,8 @@ let
         -i ${cfg.externalInterface} -j DNAT \
 	--to-destination ${cfg.dmzHost}
     ''}
+
+    ${cfg.extraCommands}
 
     # Append our chains to the nat tables
     iptables -w -t nat -A PREROUTING -j nixos-nat-pre
@@ -167,6 +171,28 @@ in
         ''
           The local IP address to which all traffic that does not match any
           forwarding rule is forwarded.
+        '';
+    };
+
+    networking.nat.extraCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = "iptables -A INPUT -p icmp -j ACCEPT";
+      description =
+        ''
+          Additional shell commands executed as part of the nat
+          initialisation script.
+        '';
+    };
+
+    networking.nat.extraStopCommands = mkOption {
+      type = types.lines;
+      default = "";
+      example = "iptables -D INPUT -p icmp -j ACCEPT || true";
+      description =
+        ''
+          Additional shell commands executed as part of the nat
+          teardown script.
         '';
     };
 
