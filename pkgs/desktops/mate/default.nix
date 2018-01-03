@@ -38,6 +38,7 @@ let
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
     mate-user-guide = callPackage ./mate-user-guide { };
+    mate-utils = callPackage ./mate-utils { };
     pluma = callPackage ./pluma { };
 
     basePackages = [
@@ -74,6 +75,7 @@ let
       mate-system-monitor
       mate-terminal
       mate-user-guide
+      mate-utils
       pluma
     ];
   
