@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
     sha256 = "1cks4gsz4148jw6wpqia4w5jx7cfxr29g2kmpvp0ssmvwczh8dr4";
   });
 
-  patches = lib.optionals (abiVersion == "5") [ ./clang.patch ./gcc-5.patch ];
+  # Unnecessarily complicated in order to avoid mass-rebuilds
+  patches = lib.optional (!stdenv.cc.isClang || abiVersion == "5") ./clang.patch
+    ++ lib.optional (stdenv.cc.isGNU && abiVersion == "5") ./gcc-5.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
