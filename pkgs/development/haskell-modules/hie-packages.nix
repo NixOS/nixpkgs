@@ -28,6 +28,7 @@ let src = pkgs.fetchFromGitHub
       };
     cabal-helper = self.cabal-helper_hie;
     haddock-library = self.haddock-library_1_4_4;
+    hoogle = self.hoogle_5_0_14;
     ghc-dump-tree = self.ghc-dump-tree_hie;
     ghc-mod = self.ghc-mod_hie;
     HaRe = self.HaRe_hie;
@@ -259,7 +260,7 @@ in
          homepage = "http://github.com/githubuser/haskell-ide-engine#readme";
          description = "Provide a common engine to power any Haskell IDE";
          license = stdenv.lib.licenses.bsd3;
-      }) {};
+      }) { inherit hoogle; };
     hie-apply-refact = callPackage
       ({ mkDerivation, aeson, apply-refact, base, either, extra, ghc-mod
        , ghc-mod-core, haskell-src-exts, hie-base, hie-plugin-api, hlint
@@ -435,7 +436,7 @@ in
          ];
          description = "Haskell IDE Hoogle plugin";
          license = stdenv.lib.licenses.bsd3;
-       }) { inherit ghc-mod; };
+       }) { inherit ghc-mod hoogle; };
     hie-plugin-api = callPackage
       ({ mkDerivation, aeson, base, containers, Diff, directory, either
        , filepath, fingertree, ghc, ghc-mod-core, haskell-lsp, hie-base
