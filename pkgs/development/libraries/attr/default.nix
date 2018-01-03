@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, gettext, targetPlatform }:
 
 stdenv.mkDerivation rec {
   name = "attr-2.4.47";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 
   installTargets = "install install-lib install-dev";
+
+  patches = if (targetPlatform.libc == "musl") then [ ./fix-headers-musl.patch ] else null;
 
   meta = {
     homepage = http://savannah.nongnu.org/projects/attr/;
