@@ -5,7 +5,7 @@
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
-  self = stdenv.mkDerivation {
+  self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
     unpackPhase = ''
@@ -37,10 +37,6 @@ let
 
     patches = [ ./purity.patch ];
 
-    postBuild = stdenv.lib.optionalString enableManpages ''
-      cmake --build . --target docs-clang-man
-    '';
-
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
@@ -49,8 +45,7 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" "python" ]
-      ++ stdenv.lib.optional enableManpages "man";
+    outputs = [ "out" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -67,13 +62,6 @@ let
       mv $out/share/clang/*.py $python/share/clang
 
       rm $out/bin/c-index-test
-    ''
-    + stdenv.lib.optionalString enableManpages ''
-      # Manually install clang manpage
-      cp docs/man/*.1 $out/share/man/man1/
-
-      # Move it and other man pages to 'man' output
-      moveToOutput "share/man" "$man"
     '';
 
     enableParallelBuilding = true;
@@ -92,5 +80,23 @@ let
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
-  };
+  } // stdenv.lib.optionalAttrs enableManpages {
+    name = "clang-manpages-${version}";
+
+    buildPhase = ''
+      make docs-clang-man
+    '';
+
+    installPhase = ''
+      mkdir -p $out/share/man/man1
+      # Manually install clang manpage
+      cp docs/man/*.1 $out/share/man/man1/
+    '';
+
+    outputs = [ "out" ];
+
+    doCheck = false;
+
+    meta.description = "man page for Clang ${version}";
+  });
 in self
