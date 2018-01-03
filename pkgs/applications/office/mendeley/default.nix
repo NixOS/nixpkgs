@@ -96,6 +96,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg which ] ++ deps;
 
+  propagatedUserEnvPkgs = [ gconf ];
+
   unpackPhase = "true";
 
   installPhase = ''
