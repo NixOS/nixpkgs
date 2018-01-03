@@ -254,22 +254,7 @@ stdenvNoCC.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
-  '' + (optionalString stdenv.isDarwin ''
-    # Work around a limit in the macOS Sierra linker on the number of paths
-    # referenced by any one dynamic library:
-    #
-    # Create a local directory with symlinks of the *.dylib (macOS shared
-    # libraries) from all the dependencies.
-    local dynamicLinksDir="$out/lib/links"
-    mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
-      ln -s "$d/"*.dylib $dynamicLinksDir
-    done
-    # Edit the local package DB to reference the links directory.
-    for f in "$packageConfDir/"*.conf; do
-      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
-    done
-  '') + ''
+
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
