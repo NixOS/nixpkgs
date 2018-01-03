@@ -1,5 +1,5 @@
 { lib, targetPlatform, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, ignoreCollisions ? false, withLLVM ? false
+, withLLVM ? false
 , postBuild ? ""
 , haskellPackages
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
@@ -58,7 +58,6 @@ symlinkJoin {
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
   extraOutputsToInstall = [ "out" "doc" ];
-  inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
