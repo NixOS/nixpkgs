@@ -9834,7 +9834,9 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
-  libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
+  libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix {
+    boost = boost165; # Doesn't support 1.66, https://github.com/arvidn/libtorrent/issues/2620
+  };
 
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
