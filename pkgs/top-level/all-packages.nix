@@ -16539,9 +16539,7 @@ with pkgs;
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    libtorrentRasterbar = libtorrentRasterbar_1_0;
-  };
+  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
     lua5 = lua5_1;
