@@ -100,7 +100,7 @@ let
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
-  withPackages = packages: callPackage ./with-packages-wrapper.nix {
+  withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
     haskellPackages = self;
     inherit packages;

@@ -1,4 +1,4 @@
-{ stdenv, lib, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+{ lib, targetPlatform, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
 , haskellPackages
@@ -48,7 +48,7 @@ let
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/code-generators.html
   llvm          = lib.makeBinPath
                   ([ llvmPackages.llvm ]
-                   ++ lib.optional stdenv.isDarwin llvmPackages.clang);
+                   ++ lib.optional targetPlatform.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
 symlinkJoin {
@@ -98,7 +98,7 @@ symlinkJoin {
         makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
       fi
     done
-  '' + (lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString targetPlatform.isDarwin ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
     local dynamicLinksDir="$out/lib/links"
