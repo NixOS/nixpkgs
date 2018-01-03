@@ -286,6 +286,11 @@ with pkgs;
     inherit url;
   };
 
+  haskell-deps-hook = { ghcName, packageDbFlag }: {
+    name = "haskell-deps-hook";
+    substitutions = { inherit ghcName packageDbFlag; };
+  } ../build-support/setup-hooks/haskell-deps.bash;
+
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
 
