@@ -131,6 +131,14 @@ following incompatible changes:</para>
       Other types dependencies should be unaffected.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>memcached</literal> service no longer accept dynamic socket
+      paths via <option>services.memcached.socket</option>. Unix sockets can be
+      still enabled by <option>services.memcached.enableUnixSocket</option> and
+      will be accessible at <literal>/run/memcached/memcached.sock</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
