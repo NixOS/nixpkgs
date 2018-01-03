@@ -201,6 +201,10 @@ rec {
       # passed to the builder and is not a dependency.  But since we
       # include it in the result, it *is* available to nix-env for queries.
       meta = {
+          # `name` above includes cross-compilation cruft (and is under assert),
+          # lets have a clean always accessible version here.
+          inherit name;
+
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
           # if he has specified it, it will be overridden below in `// meta`.
