@@ -11,7 +11,7 @@
 , enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePython ? hostPlatform == buildPlatform
-, enableNumpy ? false
+, enableNumpy ? enablePython && stdenv.lib.versionAtLeast version "1.65"
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
