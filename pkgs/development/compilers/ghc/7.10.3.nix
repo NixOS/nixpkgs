@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
     # Install the bash completion file.
