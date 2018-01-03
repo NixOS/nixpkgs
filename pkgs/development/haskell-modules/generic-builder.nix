@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, ghc
+{ stdenv, stdenvNoCC, buildPackages, ghc
 , jailbreak-cabal, hscolour, cpphs, nodejs
 , buildPlatform, hostPlatform
 }:
@@ -157,27 +157,42 @@ let
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
-  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
-                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+  allPkgconfigDepends =
+    pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends
+    ++ optionals doCheck testPkgconfigDepends
+    ++ optionals doBenchmark benchmarkPkgconfigDepends;
+  maybePropagatedBuildInputs =
+    buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
+  otherBuildInputs =
+    extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ allPkgconfigDepends
+    ++ optionals doCheck
+         (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends)
+    ++ optionals doBenchmark
+         (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
 
-  nativeBuildInputs = optional (allPkgconfigDepends != []) pkgconfig ++
-                      buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
-  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
-                     optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
-                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
-                     # ghcjs's hsc2hs calls out to the native hsc2hs
-                     optional isGhcjs nativeGhc ++
-                     optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+  depsBuildBuild = [ nativeGhc ];
+  nativeBuildInputs =
+    [ ghc removeReferencesTo ]
+    ++ optional (allPkgconfigDepends != []) pkgconfig
+    ++ setupHaskellDepends
+    ++ buildTools ++ libraryToolDepends ++ executableToolDepends
+    ++ [
+      # HACK with `stdenvNoCC` cause these hooks needs to come after
+      stdenv.cc
+      ../../build-support/setup-hooks/no-cc-deps.sh
+      ../../build-support/setup-hooks/no-ld-deps.sh
+    ];
+  buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) maybePropagatedBuildInputs;
+  propagatedBuildInputs = optionals hasActiveLibrary maybePropagatedBuildInputs;
 
-  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
-  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
+  allBuildInputs = buildInputs ++ propagatedBuildInputs;
 
-  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
+  ghcEnv = ghc.withPackages (_: stdenv.lib.filter isHaskellPkg allBuildInputs);
 
-  setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
+
+  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= toUpper ghcCommand';
@@ -186,7 +201,7 @@ in
 
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
-stdenv.mkDerivation ({
+stdenvNoCC.mkDerivation ({
   name = "${pname}-${version}";
 
   outputs = if (args ? outputs) then args.outputs else ([ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc"));
@@ -200,9 +215,7 @@ stdenv.mkDerivation ({
 
   inherit src;
 
-  inherit nativeBuildInputs;
-  buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
-  propagatedBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
+  inherit depsBuildBuild nativeBuildInputs buildInputs propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
@@ -220,7 +233,6 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
@@ -271,7 +283,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${setupBuilder} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -377,20 +389,26 @@ stdenv.mkDerivation ({
     # TODO: fetch the self from the fixpoint instead
     haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
 
-    env = stdenv.mkDerivation {
+    env = stdenvNoCC.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
-      buildInputs = systemBuildInputs;
-      nativeBuildInputs = [ ghcEnv ];
+      inherit depsBuildBuild;
+      nativeBuildInputs = [ ghcEnv ] ++ stdenv.lib.tail nativeBuildInputs;
+      buildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
+        for x in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
+          if [ -d "$p/include" ]; then
+            CABAL_CONFIG+=" --extra-include-dirs=$p/include"
+          fi
+          if [ -d "$p/lib" ]; then
+            CABAL_CONFIG+=" --extra-lib-dirs=$p/lib"
+          fi
+        done
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         # TODO: is this still valid?
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}${
-          makeLibraryPath (filter (x: !isNull x) systemBuildInputs)
-        }"
         ${if isHaLVM
             then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
             else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}

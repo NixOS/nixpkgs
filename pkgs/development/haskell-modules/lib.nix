@@ -181,6 +181,7 @@ rec {
   # Divide the build inputs of the package into useful sets.
   extractBuildInputs = ghc:
     { setupHaskellDepends ? [], extraLibraries ? []
+    , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? []
     , librarySystemDepends ? [], executableSystemDepends ? []
     , pkgconfigDepends ? [], libraryPkgconfigDepends ? []
     , executablePkgconfigDepends ? [], testPkgconfigDepends ? []
@@ -200,31 +201,35 @@ rec {
           executablePkgconfigDepends ++
           lib.optionals doCheck testPkgconfigDepends ++
           lib.optionals doBenchmark benchmarkPkgconfigDepends;
+        maybePropagatedBuildInputs =
+          buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
         otherBuildInputs =
-          setupHaskellDepends ++ extraLibraries ++
-          librarySystemDepends ++ executableSystemDepends ++
+          extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
           allPkgconfigDepends ++
           lib.optionals doCheck ( testDepends ++ testHaskellDepends ++
                                   testSystemDepends ++ testToolDepends
                                 ) ++
           # ghcjs's hsc2hs calls out to the native hsc2hs
-          lib.optional isGhcjs nativeGhc ++
           lib.optionals doBenchmark ( benchmarkDepends ++
                                       benchmarkHaskellDepends ++
                                       benchmarkSystemDepends ++
                                       benchmarkToolDepends
                                     );
-        propagatedBuildInputs =
-          buildDepends ++ libraryHaskellDepends ++
-          executableHaskellDepends;
-        allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+        depsBuildBuild = [ nativeGhc ];
+        nativeBuildInputs =
+          setupHaskellDepends
+          ++ buildTools ++ libraryToolDepends ++ executableToolDepends;
+
+        allBuildInputs = maybePropagatedBuildInputs ++ otherBuildInputs;
         isHaskellPartition =
           lib.partition isHaskellPkg allBuildInputs;
-    in
-      { haskellBuildInputs = isHaskellPartition.right;
-        systemBuildInputs = isHaskellPartition.wrong;
-        inherit propagatedBuildInputs otherBuildInputs
-          allPkgconfigDepends;
-      };
+    in {
+      inherit
+        allPkgconfigDepends
+        maybePropagatedBuildInputs otherBuildInputs
+        depsBuildBuild nativeBuildInputs;
+      haskellBuildInputs = isHaskellPartition.right;
+      systemBuildInputs = isHaskellPartition.wrong;
+    };
 
 }
