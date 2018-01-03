@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation (rec {
   inherit version rev;
-  name = "ghc-${version}";
+  name = "${targetPrefix}ghc-${version}";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
@@ -107,8 +107,6 @@ stdenv.mkDerivation (rec {
   };
 
 } // stdenv.lib.optionalAttrs (cross != null) {
-  name = "${cross.config}-ghc-${version}";
-
   configureFlags = [
     "CC=${stdenv.cc}/bin/${cross.config}-cc"
     "LD=${stdenv.cc.bintools}/bin/${cross.config}-ld"

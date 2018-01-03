@@ -17,7 +17,6 @@ assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
-  version = "8.2.2";
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = stdenv.lib.optionalString
@@ -25,11 +24,11 @@ let
     "${targetPlatform.config}-";
 in
 stdenv.mkDerivation (rec {
-  inherit version;
-  name = "ghc-${version}";
+  version = "8.2.2";
+  name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.2.2/${name}-src.tar.xz";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
     sha256 = "1z05vkpaj54xdypmaml50hgsdpw29dhbs2r7magx0cm199iw73mv";
   };
 
@@ -100,8 +99,6 @@ stdenv.mkDerivation (rec {
   };
 
 } // stdenv.lib.optionalAttrs (cross != null) {
-  name = "${cross.config}-ghc-${version}";
-
   configureFlags = [
     "CC=${stdenv.cc}/bin/${cross.config}-cc"
     "LD=${stdenv.cc.bintools}/bin/${cross.config}-ld"
