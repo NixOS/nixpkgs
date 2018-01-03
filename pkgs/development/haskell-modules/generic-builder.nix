@@ -6,7 +6,7 @@
 let
   isCross = buildPlatform != hostPlatform;
   inherit (buildPackages)
-    fetchurl removeReferencesTo
+    fetchurl removeReferencesTo haskell-deps-hook
     pkgconfig coreutils gnugrep gnused glibcLocales;
 in
 
@@ -58,7 +58,7 @@ in
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
 , shellHook ? ""
-, coreSetup ? false # Use only core packages to build Setup.hs.
+, coreSetup ? true # Don't use build-inputs to build Setup.hs.
 , useCpphs ? false
 , hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
@@ -125,7 +125,6 @@ let
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
-    "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
@@ -147,7 +146,6 @@ let
   ] ++ crossCabalFlags);
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
     (optionalString isGhcjs "-build-runner")
     (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
     # https://github.com/haskell/cabal/issues/2398
@@ -170,13 +168,20 @@ let
     ++ optionals doBenchmark
          (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
 
-  depsBuildBuild = [ nativeGhc ];
+  depsBuildBuild = [
+    nativeGhc
+    (haskell-deps-hook {
+      ghcName = nativeGhc.name;
+      packageDbFlag = nativePackageDbFlag
+    })
+  ];
   nativeBuildInputs =
     [ ghc removeReferencesTo ]
     ++ optional (allPkgconfigDepends != []) pkgconfig
     ++ setupHaskellDepends
     ++ buildTools ++ libraryToolDepends ++ executableToolDepends
     ++ [
+      (haskell-deps-hook { ghcName = ghc.name; inherit packageDbFlag; })
       # HACK with `stdenvNoCC` cause these hooks needs to come after
       stdenv.cc
       ../../build-support/setup-hooks/no-cc-deps.sh
@@ -209,9 +214,8 @@ stdenvNoCC.mkDerivation ({
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
-  prePhases = ["setupCompilerEnvironmentPhase"];
-  preConfigurePhases = ["compileBuildDriverPhase"];
-  preInstallPhases = ["haddockPhase"];
+  preConfigurePhases = [ "compileBuildDriverPhase" "setupCompilerEnvironmentPhase" ];
+  preInstallPhases = [ "haddockPhase" ];
 
   inherit src;
 
@@ -229,6 +233,28 @@ stdenvNoCC.mkDerivation ({
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
+  compileBuildDriverPhase = ''
+    runHook preCompileBuildDriver
+
+    for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
+      test -f $i && break
+    done
+
+    setupCompileFlags=""
+
+    local db
+    for db in "${HS_PKG_DBS_FOR_BUILD[@]}"; do
+      setupCompileFlags+=" -${packageDbFlag}=$db"
+    done
+
+    setupCompileFlags+=" $${concatStringsSep " " setupCompileFlags}"
+
+    echo setupCompileFlags: $setupCompileFlags
+    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+
+    runHook postCompileBuildDriver
+  '';
+
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
@@ -238,39 +264,13 @@ stdenvNoCC.mkDerivation ({
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
-    setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-    configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
-
-    # host.*Pkgs defined in stdenv/setup.hs
-    for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
-        continue
-      fi
-      if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
-      fi
-      if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
-      fi
-    done
+    configureFlags="$CABAL_CONFIG ${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+    unset -v CABAL_CONFIG
+    configureFlags+=" --${packageDbFlag}=$packageConfDir"
 
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
-  '';
-
-  compileBuildDriverPhase = ''
-    runHook preCompileBuildDriver
-
-    for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
-      test -f $i && break
-    done
-
-    echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
-
-    runHook postCompileBuildDriver
   '';
 
   inherit configureFlags;
@@ -278,16 +278,12 @@ stdenvNoCC.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
-
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
     fi
-
-    export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
   '';
@@ -382,14 +378,6 @@ stdenvNoCC.mkDerivation ({
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
-        for x in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-          if [ -d "$p/include" ]; then
-            CABAL_CONFIG+=" --extra-include-dirs=$p/include"
-          fi
-          if [ -d "$p/lib" ]; then
-            CABAL_CONFIG+=" --extra-lib-dirs=$p/lib"
-          fi
-        done
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         # TODO: is this still valid?
