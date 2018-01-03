@@ -16,10 +16,12 @@ stdenv.mkDerivation rec {
     "--enable-man"
   ];
 
-  buildInputs = [
-    automake autoconf intltool pkgconfig gtk2 vte libxslt docbook_xml_dtd_412
-    docbook_xml_xslt libxml2 findXMLCatalogs
+  nativeBuildInputs = [
+    automake autoconf intltool pkgconfig
+    libxslt docbook_xml_dtd_412 docbook_xml_xslt libxml2 findXMLCatalogs
   ];
+
+  buildInputs = [ gtk2 vte ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch
