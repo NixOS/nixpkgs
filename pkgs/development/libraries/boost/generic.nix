@@ -125,9 +125,9 @@ stdenv.mkDerivation {
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
-    (if enablePython then "--with-python=${python.interpreter}" else "--without-python")
-    (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else  "--without-icu")
-  ] ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ] ++ optional enablePython "--with-python=${python.interpreter}"
+    ++ [ (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+    ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
     ./b2 ${b2Args}
