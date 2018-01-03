@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, hscolour
+, bootPkgs, hscolour, llvm_37
 , coreutils, fetchurl, fetchpatch, patchutils, perl, sphinx
 
 , libiconv ? null, ncurses
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
-  buildInputs = [ ghc perl hscolour sphinx ];
+  buildInputs = [ ghc perl hscolour sphinx ] ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ llvm_37 ];
 
   enableParallelBuilding = true;
 

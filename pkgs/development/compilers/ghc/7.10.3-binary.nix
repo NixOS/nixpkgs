@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl, perl
 , ncurses5, gmp, libiconv
-, gcc
+, gcc, llvm_35
 }:
 
 # Prebuilt only does native
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
+  buildInputs = stdenv.lib.optionals stdenv.isArm [ llvm_35 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
