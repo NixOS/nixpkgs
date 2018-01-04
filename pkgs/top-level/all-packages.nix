@@ -13239,6 +13239,8 @@ with pkgs;
 
   gotools = callPackage ../development/tools/gotools { };
 
+  gomodifytags = callPackage ../development/tools/gomodifytags { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
