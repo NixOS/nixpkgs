@@ -1,18 +1,28 @@
-;;; NixOS specific load-path
+(defun nix--profile-paths ()
+  "Returns a list of all paths in the NIX_PROFILES environment
+variable, ordered from more-specific (the user profile) to the
+least specific (the system profile)"
+  (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
+
+;;; Extend `load-path' to search for elisp files in subdirectories of
+;;; all folders in `NIX_PROFILES'
 (setq load-path
-      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                               (split-string (or (getenv "NIX_PROFILES") ""))))
+      (append (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                      (nix--profile-paths))
               load-path))
 
 ;;; Make `woman' find the man pages
 (eval-after-load 'woman
   '(setq woman-manpath
-         (append (reverse (mapcar (lambda (x) (concat x "/share/man/"))
-                                  (split-string (or (getenv "NIX_PROFILES") ""))))
+         (append (mapcar (lambda (x) (concat x "/share/man/"))
+                         (nix--profile-paths))
                  woman-manpath)))
 
 ;;; Make tramp work for remote NixOS machines
 (eval-after-load 'tramp
+  ;; TODO: We should also add the other `NIX_PROFILES' to this path.
+  ;; However, these are user-specific, so we would need to discover
+  ;; them dynamically after connecting via `tramp'
   '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
 
 ;;; C source directory
@@ -22,9 +32,9 @@
 ;;; from: /nix/store/<hash>-emacs-<version>/share/emacs/site-lisp/site-start.el
 ;;; to:   /nix/store/<hash>-emacs-<version>/share/emacs/<version>/src/
 (let ((emacs
-       (file-name-directory                      ;; .../emacs/
-        (directory-file-name                     ;; .../emacs/site-lisp
-         (file-name-directory load-file-name)))) ;; .../emacs/site-lisp/
+       (file-name-directory                      ; .../emacs/
+        (directory-file-name                     ; .../emacs/site-lisp
+         (file-name-directory load-file-name)))) ; .../emacs/site-lisp/
       (version
        (file-name-as-directory
         (concat
