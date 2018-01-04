@@ -17,6 +17,7 @@ let
     libmatemixer = callPackage ./libmatemixer { };
     libmateweather = callPackage ./libmateweather { };
     marco = callPackage ./marco { };
+    mate-applets = callPackage ./mate-applets { };
     mate-backgrounds = callPackage ./mate-backgrounds { };
     mate-calc = callPackage ./mate-calc { };
     mate-common = callPackage ./mate-common { };
@@ -65,6 +66,7 @@ let
       cajaWithExtensions
       engrampa
       eom
+      mate-applets
       mate-backgrounds
       mate-calc
       mate-icon-theme-faenza
