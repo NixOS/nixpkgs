@@ -13111,6 +13111,8 @@ with pkgs;
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
+  go-protobuf = callPackage ../development/tools/go-protobuf { };
+
   gocode = callPackage ../development/tools/gocode { };
 
   goconvey = callPackage ../development/tools/goconvey { };
