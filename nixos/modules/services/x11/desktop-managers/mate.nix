@@ -67,6 +67,10 @@ in
         # Find the mouse
         export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
+        # Let mate-panel find applets
+        export MATE_PANEL_APPLETS_DIR=$MATE_PANEL_APPLETS_DIR''${MATE_PANEL_APPLETS_DIR:+:}${config.system.path}/share/mate-panel/applets
+        export MATE_PANEL_EXTRA_MODULES=$MATE_PANEL_EXTRA_MODULES''${MATE_PANEL_EXTRA_MODULES:+:}${config.system.path}/lib/mate-panel/applets
+
         # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
         ${addToXDGDirs pkgs.mate.mate-control-center}
 
