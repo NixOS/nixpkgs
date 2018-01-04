@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-static"
     "CFLAGS=-fstack-protector-strong"
+    # Fix cycle between outputs
+    "--disable-wrapper"
   ];
+
+  outputs = [ "out" "dev" ];
 
   dontDisableStatic = true;
 
