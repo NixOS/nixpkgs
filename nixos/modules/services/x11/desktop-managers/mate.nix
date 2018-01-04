@@ -12,6 +12,17 @@ let
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
 
+  addToXDGDirs = p: ''
+    if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+      export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+    fi
+
+    if [ -d "${p}/lib/girepository-1.0" ]; then
+      export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+    fi
+  '';
+
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.mate;
 
@@ -55,6 +66,9 @@ in
 
         # Find the mouse
         export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
+
+        # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
+        ${addToXDGDirs pkgs.mate.mate-control-center}
 
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
