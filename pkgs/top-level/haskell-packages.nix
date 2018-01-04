@@ -128,48 +128,58 @@ in rec {
   };
 
   # Always get compilers from `buildPackages`
-  packages = let inherit (buildPackages.haskell) compiler; in {
+  packages = let bh = buildPackages.haskell; in {
 
     ghc7103 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7103;
+      buildHaskellPackages = bh.packages.ghc7103;
+      ghc = bh.compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc7103Binary = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7103Binary;
+      buildHaskellPackages = bh.packages.ghc7103Binary;
+      ghc = bh.compiler.ghc7103Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc802 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc802;
+      buildHaskellPackages = bh.packages.ghc802;
+      ghc = bh.compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
-    ghc822 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc822;
+    ghc821Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc821Binary;
+      ghc = bh.compiler.ghc821Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghc821Binary = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc821Binary;
+    ghc822 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc822;
+      ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghc841 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc841;
+      buildHaskellPackages = bh.packages.ghc841;
+      ghc = bh.compiler.ghc841;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHEAD;
+      buildHaskellPackages = bh.packages.ghcHEAD;
+      ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcjs = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcjs;
+    ghcjs = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcjsHEAD = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcjsHEAD;
+    ghcjsHEAD = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcHaLVM240 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHaLVM240;
+      buildHaskellPackages = bh.packages.ghcHaLVM240;
+      ghc = bh.compiler.ghcHaLVM240;
       compilerConfig = callPackage ../development/haskell-modules/configuration-halvm-2.4.0.nix { };
     };
 
