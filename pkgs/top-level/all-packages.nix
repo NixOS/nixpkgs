@@ -18091,6 +18091,8 @@ with pkgs;
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
+  neovim-gtk = callPackage ../applications/editors/neovim/neovim-gtk.nix { };
+
   neovim-pygui = pythonPackages.neovim_gui;
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { pythonPackages = python3Packages; };
