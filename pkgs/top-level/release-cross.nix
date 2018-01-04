@@ -125,6 +125,8 @@ in
   android = mapTestOnCross lib.systems.examples.aarch64-multiplatform (linuxCommon // {
   });
 
+  musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
