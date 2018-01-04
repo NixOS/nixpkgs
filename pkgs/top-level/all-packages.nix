@@ -1088,6 +1088,8 @@ with pkgs;
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  fac = callPackage ../development/tools/fac { };
+
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   facter = callPackage ../tools/system/facter { };
