@@ -24,7 +24,9 @@ in
     persistencedSha256 = "1whhcsz6cij1c7pg4h8795rndp4rywx9k75cjlfh0s184lyi9wm2";
     prePatch = ''
       if [ "$system" = "x86_64-linux" ]; then
-        sed '1i#include <linux/sched/task_stack.h>' -i kernel/nvidia-uvm/uvm8_va_block.c
+        local f="kernel/nvidia-uvm/uvm8_va_block.c"
+        cat ${./task_stack.c} $f > $f.tmp
+	mv $f.tmp $f
       fi
     '';
   };
