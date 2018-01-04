@@ -1,15 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, stdenv
 , jellyfish
 }:
 
 buildPythonPackage rec {
   pname = "us";
   version = "1.0.0";
-  name = "${pname}-${version}";
-  doCheck = !stdenv.isDarwin;
+
+  propagatedBuildInputs = [ jellyfish ];
 
   src = fetchPypi {
     inherit pname version;
