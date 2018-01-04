@@ -41,6 +41,7 @@ let
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
     mate-user-guide = callPackage ./mate-user-guide { };
+    mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
     pluma = callPackage ./pluma { };
 
@@ -81,6 +82,7 @@ let
       mate-system-monitor
       mate-terminal
       mate-user-guide
+      #mate-user-share
       mate-utils
       pluma
     ];
