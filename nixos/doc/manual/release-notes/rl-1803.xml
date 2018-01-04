@@ -234,6 +234,13 @@ following incompatible changes:</para>
       to your <literal>configuration.nix</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The NixOS test driver supports user services declared by <literal>systemd.user.services</literal>.
+      The methods <literal>waitForUnit</literal>, <literal>getUnitInfo</literal>, <literal>startJob</literal>
+      and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
