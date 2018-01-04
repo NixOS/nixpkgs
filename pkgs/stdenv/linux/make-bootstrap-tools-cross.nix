@@ -13,4 +13,5 @@ in with (import ../../../lib).systems.examples; {
   armv6l    = make raspberryPi;
   armv7l    = make armv7l-hf-multiplatform;
   aarch64   = make aarch64-multiplatform;
+  musl      = make musl64;
 }
