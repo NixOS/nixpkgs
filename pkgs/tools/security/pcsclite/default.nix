@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
-  version = "1.8.22";
+  version = "1.8.23";
 
   src = fetchurl {
     # This URL changes in unpredictable ways, so it is not sensible
     # to put a version variable in there.
-    url = "https://alioth.debian.org/frs/download.php/file/4225/pcsc-lite-1.8.22.tar.bz2";
-    sha256 = "01flkdyqs7kr6c63dv2qg8dwir3v9jlr9rzlw7vafrivxmhqydba";
+    url = "https://alioth.debian.org/frs/download.php/file/4235/pcsc-lite-1.8.23.tar.bz2";
+    sha256 = "1jc9ws5ra6v3plwraqixin0w0wfxj64drahrbkyrrwzghqjjc9ss";
   };
 
   patches = [ ./no-dropdir-literals.patch ];
