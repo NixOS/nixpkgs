@@ -13373,7 +13373,10 @@ with pkgs;
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
+
   go-symbols = callPackage ../development/tools/go-symbols { };
+
+  go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
 
