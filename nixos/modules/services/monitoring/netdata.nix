@@ -12,10 +12,19 @@ let
 in {
   options = {
     services.netdata = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable netdata monitoring.";
+      enable = mkEnableOption "netdata";
+
+      extraPackages = mkOption {
+          type = with types; listOf package;
+          default = [];
+          example = literalExample ''
+            with pkgs; [ python3 lm_sensors ]
+          '';
+          description = ''
+            Extra packages available in the service context.
+
+            Useful for enabling netdata's built-in plugins.
+          '';
       };
 
       user = mkOption {
@@ -47,6 +56,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.netdata = {
+      path = cfg.extraPackages;
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
