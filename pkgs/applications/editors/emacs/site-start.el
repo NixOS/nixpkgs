@@ -5,11 +5,22 @@ least specific (the system profile)"
   (reverse (split-string (or (getenv "NIX_PROFILES") ""))))
 
 ;;; Extend `load-path' to search for elisp files in subdirectories of
-;;; all folders in `NIX_PROFILES'
-(setq load-path
-      (append (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                      (nix--profile-paths))
-              load-path))
+;;; all folders in `NIX_PROFILES'. Also search for one level of
+;;; subdirectories in these directories to handle multi-file libraries
+;;; like `mu4e'.'
+(require 'seq)
+(let* ((subdirectory-sites (lambda (site-lisp)
+                             (when (file-exists-p site-lisp)
+                               (seq-filter (lambda (f) (file-directory-p (file-truename f)))
+                                           ;; Returns all files in `site-lisp', excluding `.' and `..'
+                                           (directory-files site-lisp 'full "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))))
+       (paths (apply #'append
+                     (mapcar (lambda (profile-dir)
+                               (let ((site-lisp (concat profile-dir "/share/emacs/site-lisp/")))
+                                 (cons site-lisp (funcall subdirectory-sites site-lisp))))
+                             (nix--profile-paths)))))
+  (setq load-path (append paths load-path)))
+
 
 ;;; Make `woman' find the man pages
 (eval-after-load 'woman
