@@ -25,6 +25,7 @@ let
     mate-desktop = callPackage ./mate-desktop { };
     mate-icon-theme = callPackage ./mate-icon-theme { };
     mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
+    mate-indicator-applet = callPackage ./mate-indicator-applet { };
     mate-media = callPackage ./mate-media { };
     mate-menus = callPackage ./mate-menus { };
     mate-netbook = callPackage ./mate-netbook { };
@@ -70,6 +71,7 @@ let
       mate-backgrounds
       mate-calc
       mate-icon-theme-faenza
+      mate-indicator-applet
       mate-media
       mate-netbook
       mate-power-manager
