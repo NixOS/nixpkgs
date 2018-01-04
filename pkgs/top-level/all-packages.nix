@@ -9835,8 +9835,6 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
-  libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
-
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
@@ -16541,9 +16539,7 @@ with pkgs;
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    libtorrentRasterbar = libtorrentRasterbar_1_0;
-  };
+  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
     lua5 = lua5_1;
