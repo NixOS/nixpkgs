@@ -168,7 +168,7 @@ let
         listenString = { addr, port, ssl, ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString vhost.http2 "http2 "
+          + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
           + ";";
 

@@ -2,6 +2,8 @@
 
 rec {
 
+  aeon = callPackage ./aeon { };
+
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
 

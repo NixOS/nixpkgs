@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -258,7 +258,7 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_5; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -502,4 +502,7 @@ self: super: builtins.intersectAttrs super {
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
 
+  LDAP = dontCheck (overrideCabal super.LDAP (drv: {
+    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
+  }));
 }

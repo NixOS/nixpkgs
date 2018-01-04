@@ -47,7 +47,7 @@ in
         # Find theme engines
         export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
 
-        export XDG_MENU_PREFIX=mate
+        export XDG_MENU_PREFIX=mate-
 
         # Find the mouse
         export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons

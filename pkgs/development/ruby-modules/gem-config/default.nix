@@ -109,7 +109,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre gobjectIntrospection ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,11 +167,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   ncursesw = attrs: {

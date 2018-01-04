@@ -1,7 +1,10 @@
 # This expression takes a file like `hackage-packages.nix` and constructs
 # a full package set out of that.
 
-{ # package-set used for non-haskell dependencies (all of nixpkgs)
+{ # package-set used for build tools (all of nixpkgs)
+  buildPackages
+
+, # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
 , # stdenv to use for building haskell packages
@@ -28,19 +31,21 @@
 self:
 
 let
+  inherit (stdenv) buildPlatform hostPlatform;
 
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
+  buildHaskellPackages = if hostPlatform != buildPlatform
+                         then self.ghc.bootPkgs
+                         else self;
+
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
-    inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
-    nodejs = pkgs.nodejs-slim;
-    jailbreak-cabal = if (self.ghc.cross or null) != null
-      then self.ghc.bootPkgs.jailbreak-cabal
-      else self.jailbreak-cabal;
+    nodejs = buildPackages.nodejs-slim;
+    inherit (buildHaskellPackages) jailbreak-cabal;
     inherit (self) ghc;
-    hscolour = overrideCabal self.hscolour (drv: {
+    hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
@@ -95,7 +100,7 @@ let
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
-  withPackages = packages: callPackage ./with-packages-wrapper.nix {
+  withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
     haskellPackages = self;
     inherit packages;
@@ -104,13 +109,13 @@ let
   haskellSrc2nix = { name, src, sha256 ? null }:
     let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
-    in pkgs.stdenv.mkDerivation {
+    in pkgs.buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      buildInputs = [ pkgs.haskellPackages.cabal2nix ];
+      nativeBuildInputs = [ pkgs.buildPackages.haskellPackages.cabal2nix ];
       preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = pkgs.lib.optionalString buildPlatform.isLinux "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"

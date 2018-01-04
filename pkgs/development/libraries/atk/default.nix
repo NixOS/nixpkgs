@@ -18,13 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = libintlOrEmpty;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl gobjectIntrospection ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
-    # TODO: Why propagate?
-    gobjectIntrospection
   ];
 
   doCheck = true;

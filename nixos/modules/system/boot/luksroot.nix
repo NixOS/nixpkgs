@@ -227,6 +227,11 @@ in
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
+
+          # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+          # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+          "ecb"
+
           (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''

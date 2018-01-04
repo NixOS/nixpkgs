@@ -6,11 +6,11 @@ with stdenv.lib;
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Flask-Testing";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w0dpwvrcpffm8ychyxpm8s5blm7slik9kplh9jb3sgwcv9gyppj";
+    sha256 = "dc076623d7d850653a018cb64f500948334c8aeb6b10a5a842bf1bcfb98122bc";
   };
 
   postPatch = ''

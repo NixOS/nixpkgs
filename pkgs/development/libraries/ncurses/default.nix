@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "11adzj0k82nlgpfrflabvqn2m7fmhp2y6pd7ivmapynxqb9vvb92";
   });
 
-  patches = [ ./clang.patch ] ++ lib.optional (abiVersion == "5" && stdenv.cc.isGNU) ./gcc-5.patch;
+  # Unnecessarily complicated in order to avoid mass-rebuilds
+  patches = lib.optional (!stdenv.cc.isClang || abiVersion == "5") ./clang.patch
+    ++ lib.optional (stdenv.cc.isGNU && abiVersion == "5") ./gcc-5.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
@@ -37,10 +39,11 @@ stdenv.mkDerivation rec {
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     pkgconfig
   ] ++ lib.optionals (buildPlatform != hostPlatform) [
-    buildPackages.ncurses buildPackages.stdenv.cc
+    buildPackages.ncurses
   ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 

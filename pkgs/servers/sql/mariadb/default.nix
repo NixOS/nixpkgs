@@ -11,23 +11,17 @@ let # in mariadb # spans the whole file
 mariadb = everything // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
   server = everything; # a full single-output build, including everything in `client` again
-  lib = client; # compat. with the old mariadb split
+  inherit connector-c; # libmysqlclient.so
 };
 
 common = rec { # attributes common to both builds
-  version = "10.1.28";
+  version = "10.2.11";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1g9b0c04qhgcgw6xw29bvdjjjacr7kn82crc7apvvi10ykzwhb99";
+    sha256 = "1s53ravbrxcc8ixvkm56rwgs3cfifzngc56pidd1f1dr1n0mlmb3";
     name   = "mariadb-${version}.tar.gz";
   };
-
-  prePatch = ''
-    substituteInPlace cmake/libutils.cmake \
-      --replace /usr/bin/libtool libtool
-    sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -35,6 +29,12 @@ common = rec { # attributes common to both builds
     ncurses openssl zlib pcre jemalloc
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+
+  prePatch = ''
+    sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
+  '';
+
+  patches = [ ./cmake-includedir.patch ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -72,7 +72,7 @@ common = rec { # attributes common to both builds
     find "''${!outputBin}/bin" -name '*test*' -delete
   '';
 
-  passthru.mysqlVersion = "5.6";
+  passthru.mysqlVersion = "5.7";
 
   meta = with stdenv.lib; {
     description = "An enhanced, drop-in replacement for MySQL";
@@ -82,7 +82,6 @@ common = rec { # attributes common to both builds
     platforms   = platforms.all;
   };
 };
-
 
 client = stdenv.mkDerivation (common // {
   name = "mariadb-client-${common.version}";
@@ -97,20 +96,22 @@ client = stdenv.mkDerivation (common // {
 
   preConfigure = common.preConfigure + ''
     cmakeFlags="$cmakeFlags \
-      -DINSTALL_BINDIR=$bin/bin -DINSTALL_SCRIPTDIR=$bin/bin \
+      -DINSTALL_BINDIR=$bin/bin \
+      -DINSTALL_SCRIPTDIR=$bin/bin \
       -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
-      -DINSTALL_DOCDIR=$bin/share/doc/mysql -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
+      -DINSTALL_DOCDIR=$bin/share/doc/mysql \
+      -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
       "
   '';
 
   # prevent cycle; it needs to reference $dev
   postInstall = common.postInstall + ''
     moveToOutput bin/mysql_config "$dev"
+    moveToOutput bin/mariadb_config "$dev"
   '';
 
   enableParallelBuilding = true; # the client should be OK
 });
-
 
 everything = stdenv.mkDerivation (common // {
   name = "mariadb-${common.version}";
@@ -120,9 +121,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ]
-    ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
-    ;
+  ] ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ];
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -155,10 +154,45 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
-
-    # Don't install mysqlbug to prevent a dependency on gcc.
-    rm $out/bin/mysqlbug
+    rm "$out"/bin/rcmysql
   '';
+
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
+
+connector-c = stdenv.mkDerivation rec {
+  name = "mariadb-connector-c-${version}";
+  version = "2.3.4";
+
+  src = fetchurl {
+    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
+    sha256 = "1g1sq5knarxkfhpkcczr6qxmq12pid65cdkqnhnfs94av89hbswb";
+    name   = "mariadb-connector-c-${version}-src.tar.gz";
+  };
+
+  # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
+  cmakeFlags = [
+    "-DWITH_EXTERNAL_ZLIB=ON"
+    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ openssl zlib ];
+
+  enableParallelBuilding = true;
+
+  postFixup = ''
+    ln -sv mariadb_config $out/bin/mysql_config
+    ln -sv mariadb $out/lib/mysql
+    ln -sv mariadb $out/include/mysql
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Client library that can be used to connect to MySQL or MariaDB";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ globin ];
+    platforms = platforms.all;
+  };
+};
 
 in mariadb

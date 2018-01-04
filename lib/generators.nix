@@ -130,6 +130,6 @@ rec {
               (name: value:
                 "${toPretty args name} = ${toPretty args value};") v)
         + " }"
-    else "toPretty: should never happen (v = ${v})";
+    else abort "toPretty: should never happen (v = ${v})";
 
 }

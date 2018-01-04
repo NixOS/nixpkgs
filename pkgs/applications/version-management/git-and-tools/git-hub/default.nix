@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace rst2man rst2man.py
     patchShebangs .
   '';
 

@@ -1,0 +1,35 @@
+diff --git a/Makerules b/Makerules
+--- a/Makerules
++++ b/Makerules
+@@ -81,22 +81,10 @@ HAVE_GLUT ?= yes
+ SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
+ SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
+ 
+-CC = xcrun cc
+-AR = xcrun ar
+-LD = xcrun ld
+-RANLIB_CMD = xcrun ranlib $@
+-
+-# Linux uses pkg-config for system libraries.
+-else ifeq "$(OS)" "Linux"
+-
+ HAVE_PTHREAD := yes
+ SYS_PTHREAD_CFLAGS :=
+ SYS_PTHREAD_LIBS := -lpthread
+ 
+-HAVE_GLUT := yes
+-SYS_GLUT_CFLAGS :=
+-SYS_GLUT_LIBS := -lglut -lGL
+-
+ ifeq "$(shell pkg-config --exists 'libcrypto <= 1.0.1t' && echo yes)" "yes"
+ HAVE_LIBCRYPTO := yes
+ SYS_LIBCRYPTO_CFLAGS := -DHAVE_LIBCRYPTO $(shell pkg-config --cflags libcrypto)
+@@ -113,7 +101,7 @@ SYS_CURL_CFLAGS += $(shell pkg-config --cflags openssl)
+ SYS_CURL_DEPS += $(shell pkg-config --libs openssl)
+ endif
+ endif
+-SYS_CURL_DEPS += -lpthread -lrt
++SYS_CURL_DEPS += -lpthread
+ 
+ ifeq "$(shell pkg-config --exists x11 xext && echo yes)" "yes"
+ HAVE_X11 := yes

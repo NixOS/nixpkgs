@@ -23,10 +23,23 @@ networking.firewall.allowedTCPPorts = [ 80 443 ];
 </programlisting>
 
 Note that TCP port 22 (ssh) is opened automatically if the SSH daemon
-is enabled (<option>services.openssh.enable = true</option>).  UDP
+is enabled (<option>services.openssh.enable = true</option>). UDP
 ports can be opened through
-<option>networking.firewall.allowedUDPPorts</option>.  Also of
-interest is
+<option>networking.firewall.allowedUDPPorts</option>.</para>
+
+<para>To open ranges of TCP ports:
+
+<programlisting>
+networking.firewall.allowedTCPPortRanges = [
+  { from = 4000; to = 4007; }
+  { from = 8000; to = 8010; }
+];
+</programlisting>
+
+Similarly, UDP port ranges can be opened through
+<option>networking.firewall.allowedUDPPortRanges</option>.</para>
+
+<para>Also of interest is
 
 <programlisting>
 networking.firewall.allowPing = true;

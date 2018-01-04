@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, vlc
-, withQt4 ? false, qt4
-, withQt5 ? true, qtbase, qtmultimedia, qtsvg, qttools
+, qtbase, qtmultimedia, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -18,11 +17,6 @@
 , withHttpServer ? true
 , withStreams ? true
 }:
-
-# One and only one front-end.
-assert withQt5 -> withQt4 == false;
-assert withQt4 -> withQt5 == false;
-assert withQt4 || withQt5;
 
 # Inter-dependencies.
 assert withCddb -> withCdda && withTaglib;
@@ -51,9 +45,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1b633chgfs8rya78bzzck5zijna15d1y4nmrz4dcjp862ks5y5q6";
   };
 
-  buildInputs = [ vlc ]
-    ++ stdenv.lib.optional  withQt4 qt4
-    ++ stdenv.lib.optionals withQt5 [ qtbase qtmultimedia qtsvg qttools ]
+  buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
     ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
     ++ stdenv.lib.optional  withCdda cdparanoia
@@ -63,12 +55,11 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional  withMusicbrainz libmusicbrainz5
     ++ stdenv.lib.optional  withUdisks udisks2;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = stdenv.lib.flatten [
-    (fstat withQt5            "QT5")
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
     (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])
     (fstat withCdda           "CDPARANOIA")

@@ -32,9 +32,10 @@ let
     setOutputFlags = false;
 
     patches =
-      [ # Do not look in /usr etc. for dependencies.
-        ./no-sys-dirs.patch
-      ]
+      [ ]
+      # Do not look in /usr etc. for dependencies.
+      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
+      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
       ++ optional (versionAtLeast version "5.24") (
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
         fetchurlBoot {
@@ -132,5 +133,10 @@ in rec {
   perl524 = common {
     version = "5.24.3";
     sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
+  };
+
+  perl526 = common {
+    version = "5.26.1";
+    sha256 = "1p81wwvr5jb81m41d07kfywk5gvbk0axdrnvhc2aghcdbr4alqz7";
   };
 }

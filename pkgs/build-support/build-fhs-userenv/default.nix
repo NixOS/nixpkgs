@@ -1,4 +1,4 @@
-{ callPackage, runCommand, lib, writeScript, stdenv, coreutils, ruby }:
+{ callPackage, runCommand, lib, writeScript, stdenv, coreutils }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
@@ -7,14 +7,7 @@ args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru 
 let
   env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  chrootenv = stdenv.mkDerivation {
-    name = "chrootenv";
-
-    unpackPhase = "cp ${./chrootenv.c} chrootenv.c";
-    installPhase = "cp chrootenv $out";
-
-    makeFlags = [ "chrootenv" ];
-  };
+  chrootenv = callPackage ./chrootenv {};
 
   init = run: writeScript "${name}-init" ''
     #! ${stdenv.shell}

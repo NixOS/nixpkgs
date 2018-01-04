@@ -3,12 +3,12 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pyasn1-modules";
-  version = "0.1.5";
+  version = "0.2.1";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1239h6h67vg0wazg2qgv6m3hdim2gs66pl89lbnayk55bbnkwc0x";
+    sha256 = "af00ea8f2022b6287dc375b2c70f31ab5af83989fc6fe9eacd4976ce26cd7ccc";
   };
 
   propagatedBuildInputs = [ pyasn1 ];

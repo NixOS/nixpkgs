@@ -44,6 +44,11 @@ let
         # BEAM-based languages.
         elixir = elixir_1_5;
 
+        elixir_1_6_rc = lib.callElixir ../interpreters/elixir/1.6.nix {
+                       inherit rebar erlang;
+                       debugInfo = true;
+                     };
+
         elixir_1_5 = lib.callElixir ../interpreters/elixir/1.5.nix {
                        inherit rebar erlang;
                        debugInfo = true;

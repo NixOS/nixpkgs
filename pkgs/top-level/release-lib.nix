@@ -27,6 +27,8 @@ rec {
     if system == "x86_64-linux" then pkgs_x86_64_linux
     else if system == "i686-linux" then pkgs_i686_linux
     else if system == "aarch64-linux" then pkgs_aarch64_linux
+    else if system == "armv6l-linux" then pkgs_armv6l_linux
+    else if system == "armv7l-linux" then pkgs_armv7l_linux
     else if system == "x86_64-darwin" then pkgs_x86_64_darwin
     else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
@@ -37,6 +39,8 @@ rec {
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_i686_linux = allPackages { system = "i686-linux"; };
   pkgs_aarch64_linux = allPackages { system = "aarch64-linux"; };
+  pkgs_armv6l_linux = allPackages { system = "armv6l-linux"; };
+  pkgs_armv7l_linux = allPackages { system = "armv7l-linux"; };
   pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
   pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };

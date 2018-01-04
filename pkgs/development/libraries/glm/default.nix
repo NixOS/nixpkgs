@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "glm-0.9.6.1";
+  version = "0.9.8.5";
+  name = "glm-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/ogl-math/${name}/${name}.zip";
-    sha256 = "1s1kpf9hpyq6bdf87nhlkxyr2ay0ip9wqicdma9h8yz4vs20r2hs";
+  src = fetchzip {
+    url = "https://github.com/g-truc/glm/releases/download/${version}/${name}.zip";
+    sha256 = "0dkfj4hin3am9fxgcvwr5gj0h9y52x7wa03lfwb3q0bvaj1rsly2";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ cmake ];
 
   outputs = [ "out" "doc" ];
 
-  installPhase = ''
-    mkdir -p "$out/include"
-    cp -r glm "$out/include"
+  cmakeConfigureFlags = [ "-DGLM_INSTALL_ENABLE=off" ];
 
-    mkdir -p "$doc/share/doc/glm"
-    cp -r doc/* "$doc/share/doc/glm"
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '"''${CMAKE_CURRENT_BINARY_DIR}/''${GLM_INSTALL_CONFIGDIR}' '"''${GLM_INSTALL_CONFIGDIR}'
+  '';
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/glm
+    cp -rv $NIX_BUILD_TOP/$sourceRoot/doc/* $doc/share/doc/glm
   '';
 
   meta = with stdenv.lib; {
@@ -33,3 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }
+

@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "0.4.2";
-  name = "haxor-news-${version}";
+with python.pkgs;
 
-  src = fetchurl {
-    url = "https://github.com/donnemartin/haxor-news/archive/${version}.tar.gz";
-    sha256 = "0543k5ys044f2a1q8k36djnnq2h2dffnwbkva9snjjy30nlwwdgs";
+buildPythonApplication rec {
+  pname = "haxor-news";
+  version = "0.4.3";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5b9af8338a0f8b95a8133b66ef106553823813ac171c0aefa3f3f2dbeb4d7f88";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     click
     colorama
     requests
@@ -17,6 +19,12 @@ pythonPackages.buildPythonApplication rec {
     prompt_toolkit
     six
   ];
+
+  checkInputs = [ mock ];
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s tests -v
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/donnemartin/haxor-news;

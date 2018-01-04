@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lhapdf-${version}";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
-    sha256 = "0gfjps7v93n0rrdndkhp22d93y892bf76pnzdhqbish0cigkkxph";
+    sha256 = "0bi02xcmq5as0wf0jn6i3hx0qy0hj61m02sbrbzd1gwjhpccwmvd";
   };
 
   buildInputs = [ python2 ];

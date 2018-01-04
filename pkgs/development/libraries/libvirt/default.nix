@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs, parted, qemu
+, curl, libiconv, gmp, xen, zfs, parted
 }:
 
 with stdenv.lib;
@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
-    substituteInPlace src/qemu/qemu_capabilities.c \
-      --replace '"/usr/libexec/qemu-kvm"' '"/run/libvirt/nix-emulators/${if stdenv.isAarch64 then "qemu-system-aarch64" else "qemu-kvm"}"'
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
   '' + ''
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl qemu ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;

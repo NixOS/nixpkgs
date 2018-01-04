@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, gambit,
   coreutils, rsync, bash,
-  openssl, zlib, sqlite, libxml2, libyaml, libmysql, lmdb, leveldb }:
+  openssl, zlib, sqlite, libxml2, libyaml, mysql, lmdb, leveldb }:
 
 # TODO: distinct packages for gerbil-release and gerbil-devel
 
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gambit
     coreutils rsync bash
-    openssl zlib sqlite libxml2 libyaml libmysql lmdb leveldb
+    openssl zlib sqlite libxml2 libyaml mysql.connector-c lmdb leveldb
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
 
   postPatch = ''
     echo '(define (gerbil-version-string) "v${version}")' > src/gerbil/runtime/gx-version.scm

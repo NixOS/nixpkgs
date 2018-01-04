@@ -72,11 +72,7 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
-if [ -n "$crossConfig" ]; then
-    crossEnvHooks+=(addCMakeParams)
-else
-    envHooks+=(addCMakeParams)
-fi
+addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
   isystem_seen=

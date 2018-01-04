@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
   ];
 
   # Note: Bison is needed because the patches above modify parse.y.
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [bison]
     ++ optional (texinfo != null) texinfo
-    ++ optional hostPlatform.isDarwin binutils
-    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+    ++ optional hostPlatform.isDarwin binutils;
 
   buildInputs = optional interactive readline70;
 

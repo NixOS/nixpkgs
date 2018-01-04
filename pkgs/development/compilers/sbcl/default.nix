@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
   setupHook = writeText "setupHook.sh" ''
-    envHooks+=(_setSbclHome)
+    addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }

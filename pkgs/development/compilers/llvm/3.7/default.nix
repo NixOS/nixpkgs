@@ -44,15 +44,11 @@ let
     stdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.clang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.libcxxClang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     lldb = callPackage ./lldb.nix {};

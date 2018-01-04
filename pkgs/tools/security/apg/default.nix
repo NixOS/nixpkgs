@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, openssl }:
 stdenv.mkDerivation rec {
   name = "apg-2.3.0b";
   src = fetchurl {
@@ -8,8 +8,13 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
+  makeFlags = stdenv.lib.optionals stdenv.isDarwin ["CC=cc"];
 
   patches = [ ./apg.patch ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's|APG_CLIBS += -lcrypt|APG_CLIBS += -L${openssl.out}/lib -lcrypto|' Makefile
+  '';
 
   meta = {
     description = "Tools for random password generation";

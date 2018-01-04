@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, python
+{ stdenv, intltool, fetchurl, python3
 , pkgconfig, gtk3, glib, gobjectIntrospection
 , wrapGAppsHook, itstool, libxml2, docbook_xsl
 , gnome3, gdk_pixbuf, libxslt }:
@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt gobjectIntrospection
   ];
-  buildInputs = [ gtk3 glib libxml2 python
-                  gnome3.gsettings_desktop_schemas
-                  gdk_pixbuf gnome3.defaultIconTheme ];
+  buildInputs = [
+    gtk3 glib libxml2 python3 python3.pkgs.pygobject3
+    gnome3.gsettings_desktop_schemas
+    gdk_pixbuf gnome3.defaultIconTheme
+  ];
 
   enableParallelBuilding = true;
 

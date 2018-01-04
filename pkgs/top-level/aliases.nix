@@ -79,7 +79,7 @@ mapAliases (rec {
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
-  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
+  inherit (haskell.compiler) uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
@@ -95,6 +95,7 @@ mapAliases (rec {
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
@@ -160,6 +161,7 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  winusb = woeusb; # added 2017-12-22
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09

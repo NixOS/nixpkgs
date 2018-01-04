@@ -4,7 +4,7 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
 let
 
@@ -12,9 +12,8 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
         mysqlndSupport = config.php.mysqlnd or false;
-        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysql.connector-c;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -121,7 +120,7 @@ let
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysqlHeaders}/bin/mysql_config"}"];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -132,7 +131,7 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysqlHeaders}"];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -226,6 +225,11 @@ let
         calendar = {
           configureFlags = ["--enable-calendar"];
         };
+
+        sodium = {
+          configureFlags = ["--with-sodium=${libsodium.dev}"];
+          buildInputs = [libsodium];
+        };
       };
 
       cfg = {
@@ -265,6 +269,7 @@ let
         mssqlSupport = (!php7) && (config.php.mssql or (!stdenv.isDarwin));
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
+        sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
       };
 
       hardeningDisable = [ "bindnow" ];
@@ -345,5 +350,10 @@ in {
   php71 = generic {
     version = "7.1.11";
     sha256 = "0ww5493w8w3jlks0xqlfm3v6mm53vpnv5vjy63inkj8zf3gdfikn";
+  };
+
+  php72 = generic {
+    version = "7.2.0";
+    sha256 = "0jn642bm4ah6a5cjavpz8mzw3ddxa270fcwxkj3rg6vb4bjgmzib";
   };
 }

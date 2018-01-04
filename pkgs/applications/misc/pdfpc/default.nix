@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg, pcre }:
+, poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg, pcre, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "00qfmmk8h762p53z46g976z7j4fbxyi16w5axzsv1ymvdq95ds8c";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig vala ];
+  nativeBuildInputs = [
+    cmake pkgconfig vala
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [ gstreamer gst-plugins-base gtk3 libgee poppler
     libpthreadstubs makeWrapper librsvg pcre ];
 

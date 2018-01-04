@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, perl522, python, ruby
+, makeWrapper, python, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -28,8 +28,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
-      stdenv python ruby;
-    perl = perl522; # avoid issues like #26890, probably remove after texlive upgrade
+      stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 

@@ -71,6 +71,7 @@
   ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
+  ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
@@ -91,6 +92,7 @@
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/qt5ct.nix
+  ./programs/rootston.nix
   ./programs/screen.nix
   ./programs/slock.nix
   ./programs/shadow.nix
@@ -104,6 +106,7 @@
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/way-cooler.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
@@ -217,7 +220,6 @@
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
-  ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
   ./services/games/terraria.nix
@@ -258,6 +260,7 @@
   ./services/logging/rsyslogd.nix
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
+  ./services/mail/dkimproxy-out.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
@@ -401,6 +404,7 @@
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
+  ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix
