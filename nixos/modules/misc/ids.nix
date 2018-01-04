@@ -200,7 +200,7 @@
       memcached = 177;
       ntp = 179;
       zabbix = 180;
-      redis = 181;
+      #redis = 181; removed 2018-01-03
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
@@ -478,7 +478,7 @@
       #memcached = 177; # unused
       #ntp = 179; # unused
       #zabbix = 180; # unused
-      #redis = 181; # unused
+      #redis = 181; # unused, removed 2018-01-03
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
