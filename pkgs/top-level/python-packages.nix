@@ -9794,6 +9794,7 @@ in {
   jabberbot = callPackage ../development/python-modules/jabberbot {};
 
   jedi = callPackage ../development/python-modules/jedi { };
+
   jellyfish = buildPythonPackage rec {
     version = "0.5.6";
     name = "jellyfish-${version}";
