@@ -260,6 +260,7 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
+        (
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER', \`UCLIBC_DYNAMIC_LINKER', and \`MUSL_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
            do
@@ -270,6 +271,11 @@ stdenv.mkDerivation ({
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
+        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        ''
+            sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
+        ''
+        )
     else null;
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
