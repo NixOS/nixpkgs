@@ -421,6 +421,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mgdelacroix = "Miguel de la Cruz <mgdelacroix@gmail.com>";
+  mgttlinger = "Merlin Göttlinger <megoettlinger@gmail.com";
   mguentner = "Maximilian Güntner <code@klandest.in>";
   mic92 = "Jörg Thalheim <joerg@thalheim.io>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
