@@ -5,6 +5,7 @@
 , systemd, withSystemd ? false
 , python2, python3, ncurses
 , ruby, php-embed
+, mysql
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
@@ -33,7 +34,7 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
                   (lib.nameValuePair "php" {
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
-                    inputs = [ php-embed ] ++ php-embed.buildInputs;
+                    inputs = [ php-embed mysql.client ] ++ php-embed.buildInputs;
                   })
                 ];
 
