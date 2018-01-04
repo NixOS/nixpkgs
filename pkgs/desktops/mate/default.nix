@@ -33,6 +33,7 @@ let
     mate-panel = callPackage ./mate-panel { };
     mate-polkit = callPackage ./mate-polkit { };
     mate-power-manager = callPackage ./mate-power-manager { };
+    mate-sensors-applet = callPackage ./mate-sensors-applet { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
     mate-screensaver = callPackage ./mate-screensaver { };
@@ -76,6 +77,7 @@ let
       mate-netbook
       mate-power-manager
       mate-screensaver
+      mate-sensors-applet
       mate-system-monitor
       mate-terminal
       mate-user-guide
