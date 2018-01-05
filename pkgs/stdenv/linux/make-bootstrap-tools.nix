@@ -4,7 +4,7 @@
 
 let
   pkgs = import ../../.. { inherit localSystem crossSystem; };
-  glibc = if pkgs.hostPlatform != pkgs.buildPlatform
+  libc = if pkgs.hostPlatform != pkgs.buildPlatform
           then pkgs.libcCross
           else pkgs.glibc;
 in with pkgs; rec {
@@ -46,29 +46,30 @@ in with pkgs; rec {
         set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
+      '' + (if (targetPlatform.libc == "glibc") then ''
         # Copy what we need of Glibc.
-        cp -d ${glibc.out}/lib/ld*.so* $out/lib
-        cp -d ${glibc.out}/lib/libc*.so* $out/lib
-        cp -d ${glibc.out}/lib/libc_nonshared.a $out/lib
-        cp -d ${glibc.out}/lib/libm*.so* $out/lib
-        cp -d ${glibc.out}/lib/libdl*.so* $out/lib
-        cp -d ${glibc.out}/lib/librt*.so*  $out/lib
-        cp -d ${glibc.out}/lib/libpthread*.so* $out/lib
-        cp -d ${glibc.out}/lib/libnsl*.so* $out/lib
-        cp -d ${glibc.out}/lib/libutil*.so* $out/lib
-        cp -d ${glibc.out}/lib/libnss*.so* $out/lib
-        cp -d ${glibc.out}/lib/libresolv*.so* $out/lib
-        cp -d ${glibc.out}/lib/crt?.o $out/lib
+        cp -d ${libc.out}/lib/ld*.so* $out/lib
+        cp -d ${libc.out}/lib/libc*.so* $out/lib
+        cp -d ${libc.out}/lib/libc_nonshared.a $out/lib
+        cp -d ${libc.out}/lib/libm*.so* $out/lib
+        cp -d ${libc.out}/lib/libdl*.so* $out/lib
+        cp -d ${libc.out}/lib/librt*.so*  $out/lib
+        cp -d ${libc.out}/lib/libpthread*.so* $out/lib
+        cp -d ${libc.out}/lib/libnsl*.so* $out/lib
+        cp -d ${libc.out}/lib/libutil*.so* $out/lib
+        cp -d ${libc.out}/lib/libnss*.so* $out/lib
+        cp -d ${libc.out}/lib/libresolv*.so* $out/lib
+        cp -d ${libc.out}/lib/crt?.o $out/lib
 
-        cp -rL ${glibc.dev}/include $out
+        cp -rL ${libc.dev}/include $out
         chmod -R u+w "$out"
 
-        # glibc can contain linker scripts: find them, copy their deps,
+        # libc can contain linker scripts: find them, copy their deps,
         # and get rid of absolute paths (nuke-refs would make them useless)
         local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
-        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc.out}' | sort -u)
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${libc.out}' | sort -u)
         for f in $lScripts; do
-          substituteInPlace "$f" --replace '${glibc.out}/lib/' ""
+          substituteInPlace "$f" --replace '${libc.out}/lib/' ""
         done
 
         # Hopefully we won't need these.
@@ -76,7 +77,17 @@ in with pkgs; rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
+    '' else if (targetPlatform.libc == "musl") then ''
+        # Copy what we need from musl
+        cp ${libc.out}/lib/* $out/lib
+        cp -rL ${libc.dev}/include $out
+        chmod -R u+w "$out"
 
+        rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
+        find $out/include -name .install -exec rm {} \;
+        find $out/include -name ..install.cmd -exec rm {} \;
+    '' else throw "unsupported libc for bootstrap tools")
+    + ''
         # Copy coreutils, bash, etc.
         cp ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
@@ -115,7 +126,7 @@ in with pkgs; rec {
         cp -rd ${gcc.cc.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
-        mkdir $out/include
+        mkdir -p $out/include
         cp -rd ${gcc.cc.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
