@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
      then with darwin.apple_sdk.frameworks; [ Cocoa OpenGL ]
      else [mesa freeglut]);
 
+  patches = [ ./gwen-narrowing.patch ];
+
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
