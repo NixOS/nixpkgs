@@ -124,7 +124,7 @@ in
             name="${cfg.name}"
             meta-data="${cfg.meta-data}"
             build-path="${cfg.dataDir}/builds"
-            hooks-path="${cfg.hooks-path}"
+            hooks-path="${cfg.hooksPath}"
             bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
             EOF
           '';
