@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, requireFile, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
-  version = "17.3.1.279.0537";
+  version = "17.4.0.355.2349";
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
     # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
-    sha256 = "d9c3c61b12a57d6b0fd6e172bf5716d6e829306d44815bf68ae42eab8a51bea3";
+    sha256 = "70add9b5c998583416e3d127aeb63dde8e3d0489036982026b930c85496c7850";
   };
 
   buildInputs = [ makeWrapper unzip ];
