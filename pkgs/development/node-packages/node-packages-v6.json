@@ -71,6 +71,7 @@
 , "stylus"
 , "svgo"
 , "tern"
+, "titanium"
 , "typescript"
 , "uglify-js"
 , "ungit"
