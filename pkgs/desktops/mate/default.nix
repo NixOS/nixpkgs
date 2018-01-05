@@ -7,6 +7,7 @@ let
 
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
+    caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
     cajaWithExtensions = callPackage ./caja/cajaWithExtensions.nix {
       extensions = [ caja-extensions ];
