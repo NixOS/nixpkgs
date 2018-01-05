@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   patches = [
     ./i686-build-failure.patch
     ./license.patch
