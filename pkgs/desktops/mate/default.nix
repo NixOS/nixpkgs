@@ -46,6 +46,7 @@ let
     mate-utils = callPackage ./mate-utils { };
     mozo = callPackage ./mozo { };
     pluma = callPackage ./pluma { };
+    python-caja = callPackage ./python-caja { };
 
     basePackages = [
       caja
