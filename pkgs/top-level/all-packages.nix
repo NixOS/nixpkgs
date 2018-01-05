@@ -4758,6 +4758,8 @@ with pkgs;
 
   telepresence = callPackage ../tools/networking/telepresence { };
 
+  tewisay = callPackage ../tools/misc/tewisay { };
+
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texlive.combined.scheme-small;
     extraFonts = true;

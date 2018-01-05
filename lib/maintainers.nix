@@ -116,6 +116,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   ChengCat = "Yucheng Zhang <yu@cheng.cat>";
+  chiiruno = "Okina Matara <okinan@protonmail.com>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
   chreekat = "Bryan Richter <b@chreekat.net>";
