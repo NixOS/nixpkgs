@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pp38b3fifkfwqcb6vi194ccgb8j3zc8j8jq8ww5ib0wvhldzsg8";
   };
 
+  patches = [ ./hidpi.patch ];
+
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
   nativeBuildInputs = [ makeWrapper qmake ];
