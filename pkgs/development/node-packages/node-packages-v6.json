@@ -91,6 +91,7 @@
 , "stylus"
 , "svgo"
 , "tern"
+, "titanium"
 , "typescript"
 , "typings"
 , "uglify-js"

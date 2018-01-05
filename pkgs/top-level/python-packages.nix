@@ -19818,7 +19818,7 @@ EOF
 
   unidecode = callPackage ../development/python-modules/unidecode {};
 
-  pyusb = callPackage ../development/python-modules/pyusb {};
+  pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
   BlinkStick = buildPythonPackage rec {
     name = "BlinkStick-${version}";

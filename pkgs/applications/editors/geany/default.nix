@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       - Simple project management
       - Plugin interface
     '';
-    homepage = http://www.geany.org/;
+    homepage = https://www.geany.org/;
     license = "GPL";
     maintainers = [];
     platforms = platforms.all;
