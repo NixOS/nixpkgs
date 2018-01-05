@@ -517,13 +517,13 @@ let
         sha512 = "02w1ih1lh86i5ap7c3dy2ml7g5a11r0w300iyxdf6v02qr0j1x3vf78hx5q9dgg3drifab018mgm851m457zzzi05i2z2r1s3zlflc3";
       };
     };
-    "rusha-0.8.9" = {
+    "rusha-0.8.11" = {
       name = "rusha";
       packageName = "rusha";
-      version = "0.8.9";
+      version = "0.8.11";
       src = fetchurl {
-        url = "https://registry.npmjs.org/rusha/-/rusha-0.8.9.tgz";
-        sha1 = "77bd0951608bf81cedb948cec9c44d8ce5662219";
+        url = "https://registry.npmjs.org/rusha/-/rusha-0.8.11.tgz";
+        sha1 = "caa8963b1dbfd229d90626dd3f2a784430d6058d";
       };
     };
     "varint-3.0.1" = {
@@ -2056,13 +2056,13 @@ let
         sha1 = "4a5282ac164729e93619bcfd3ad151f817ce91f5";
       };
     };
-    "acorn-5.2.1" = {
+    "acorn-5.3.0" = {
       name = "acorn";
       packageName = "acorn";
-      version = "5.2.1";
+      version = "5.3.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/acorn/-/acorn-5.2.1.tgz";
-        sha512 = "3ryzhy30vzfnn2a0crafh3qsrx145ali8i88q1bc0lzl1dz0ycmjmmwh2yn9xfjs3vmjxl7nphpwcs4imgz3da5jb8fvjqbrvnjwvcc";
+        url = "https://registry.npmjs.org/acorn/-/acorn-5.3.0.tgz";
+        sha512 = "197zp88clmmxjyvhahqv32kv07q825hf87facxaq8qmvb1swfqnpyy4398dl56sr2fa44f7gjpzzlwy1szqzwww6746y3kmwb6gxs31";
       };
     };
     "foreach-2.0.5" = {
@@ -2209,13 +2209,13 @@ let
         sha1 = "9a8eac8ff79866f3f9b4bb1443ca778f1598aeda";
       };
     };
-    "sorted-array-functions-1.0.0" = {
+    "sorted-array-functions-1.1.0" = {
       name = "sorted-array-functions";
       packageName = "sorted-array-functions";
-      version = "1.0.0";
+      version = "1.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/sorted-array-functions/-/sorted-array-functions-1.0.0.tgz";
-        sha1 = "c0b554d9e709affcbe56d34c1b2514197fd38279";
+        url = "https://registry.npmjs.org/sorted-array-functions/-/sorted-array-functions-1.1.0.tgz";
+        sha512 = "209rl01n6lwbsxl40lmh1v38sad3d94s0mjb4mz6r3wwwhzcahibr8m2fhlqgsjgzf3dja9wyhz7qjkw39gxlwpapyid2whs4nrzbnf";
       };
     };
     "duplexify-3.5.1" = {
@@ -2416,13 +2416,13 @@ let
         sha512 = "1dqdzm0qjk1rwq62b010b649wdpvlzdxpmwc972p0dcwsc86wqfcm8lbdcxlrwypkn2jq5df1xpbxhxfphnpr993ac543p9s212si30";
       };
     };
-    "sodium-native-2.1.2" = {
+    "sodium-native-2.1.4" = {
       name = "sodium-native";
       packageName = "sodium-native";
-      version = "2.1.2";
+      version = "2.1.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/sodium-native/-/sodium-native-2.1.2.tgz";
-        sha512 = "3rkm9fyndric0yxx4qsrxmj1wbz7q4ixm6735jlsvkyi8gvibszsc017660p4gdypcikwbzfyvcxl1bpjwnbcd60gbri5xnxqd1m0yl";
+        url = "https://registry.npmjs.org/sodium-native/-/sodium-native-2.1.4.tgz";
+        sha512 = "3d3bbjycbpplxgjpfz78vqr8g8hp62j37hr4c3vym7ax36qzxqan73fmqw2i3wd8ix65ysdlzbnzhrs3634ngp840gfpmm9alarc80j";
       };
     };
     "blake2b-2.1.2" = {
@@ -2477,6 +2477,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/base64-to-uint8array/-/base64-to-uint8array-1.0.0.tgz";
         sha512 = "01a4ip2ivflpjsx4flnww5fqvdcsy2sqnjgp2cii6b2gnkkccr02vbf2y8r2wlcab4pb8x47qb3jpahca61v584bmz9xcwyqx0xdf3n";
+      };
+    };
+    "ini-1.3.5" = {
+      name = "ini";
+      packageName = "ini";
+      version = "1.3.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz";
+        sha512 = "1rjbvf1rg5ywhnba08sgagn2qf23lab330qrqmh7d891zap3xpxcyfyj1cblpf0f0rypglcfacybzyrpd4996aa1mbc820awa33k5j5";
       };
     };
     "corsify-2.1.0" = {
@@ -3361,15 +3370,6 @@ let
         sha1 = "48b699c27e334bf89f10892be432f6e4c7d34a7f";
       };
     };
-    "ini-1.3.5" = {
-      name = "ini";
-      packageName = "ini";
-      version = "1.3.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz";
-        sha512 = "1rjbvf1rg5ywhnba08sgagn2qf23lab330qrqmh7d891zap3xpxcyfyj1cblpf0f0rypglcfacybzyrpd4996aa1mbc820awa33k5j5";
-      };
-    };
     "strip-json-comments-2.0.1" = {
       name = "strip-json-comments";
       packageName = "strip-json-comments";
@@ -3755,7 +3755,7 @@ in
       sources."safe-buffer-5.1.1"
       sources."simple-sha1-2.1.0"
       sources."k-rpc-socket-1.7.2"
-      sources."rusha-0.8.9"
+      sources."rusha-0.8.11"
       sources."varint-3.0.1"
       sources."nan-2.8.0"
       sources."node-gyp-build-3.2.2"
@@ -3974,7 +3974,7 @@ in
       sources."esprima-1.1.1"
       sources."source-map-0.1.43"
       sources."amdefine-1.0.1"
-      sources."acorn-5.2.1"
+      sources."acorn-5.3.0"
       sources."foreach-2.0.5"
       sources."object-keys-1.0.11"
       sources."function-bind-1.1.1"
@@ -3985,7 +3985,7 @@ in
       sources."is-property-1.0.2"
       sources."os-homedir-1.0.2"
       sources."abstract-random-access-1.1.2"
-      sources."sorted-array-functions-1.0.0"
+      sources."sorted-array-functions-1.1.0"
       sources."duplexify-3.5.1"
       (sources."hypercore-6.11.0" // {
         dependencies = [
@@ -4010,13 +4010,14 @@ in
       sources."unordered-array-remove-1.0.2"
       sources."sorted-indexof-1.0.0"
       sources."sodium-javascript-0.5.4"
-      sources."sodium-native-2.1.2"
+      sources."sodium-native-2.1.4"
       sources."blake2b-2.1.2"
       sources."nanoassert-1.1.0"
       sources."siphash24-1.1.0"
       sources."xsalsa20-1.0.2"
       sources."blake2b-wasm-1.1.4"
       sources."base64-to-uint8array-1.0.0"
+      sources."ini-1.3.5"
       sources."corsify-2.1.0"
       sources."directory-index-html-2.1.0"
       sources."mime-1.6.0"
@@ -4116,10 +4117,10 @@ in
   mocha = nodeEnv.buildNodePackage {
     name = "mocha";
     packageName = "mocha";
-    version = "4.0.1";
+    version = "4.1.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/mocha/-/mocha-4.0.1.tgz";
-      sha512 = "07hbr2w894az0s1hi6lglls00nwb941ymwm580q4917kwcmsg3ngagqf9cfxyjdwwivm956dpwzsrkbk4i7a404i56w1y809a3fdw3s";
+      url = "https://registry.npmjs.org/mocha/-/mocha-4.1.0.tgz";
+      sha512 = "0s6517vczlh2vm9syq4kpwkwrr7panih1cip6aq8qjn9cw2gvbl14lql0y81dh10ims8p1f2qm4vkbifcrs2hw1v7cca9j71n76f5fi";
     };
     dependencies = [
       sources."browser-stdout-1.3.0"
