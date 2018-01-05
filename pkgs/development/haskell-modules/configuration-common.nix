@@ -653,7 +653,9 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  }));
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
+  };
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
