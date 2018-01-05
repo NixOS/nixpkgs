@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yflnydzdfkr8bi29yf42hb6h6525a4rdid3w8qjfk8rpqh53pqj";
   };
 
-  postPatch = ''
+  postAutoreconf = ''
     substituteInPlace configure --replace "macx-g++" "macx-clang"
   '';
 
