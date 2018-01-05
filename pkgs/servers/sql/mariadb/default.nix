@@ -178,6 +178,8 @@ connector-c = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
+  # FIXME: move libiconv outside isDarwin on staging.
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   enableParallelBuilding = true;
 
