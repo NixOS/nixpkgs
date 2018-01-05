@@ -169,7 +169,7 @@ stdenv.mkDerivation {
   # enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.rust-lang.org/;
+    homepage = https://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
     license = [ licenses.mit licenses.asl20 ];

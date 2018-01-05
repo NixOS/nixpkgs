@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A recursive DNS server";
-    homepage = http://www.powerdns.com/;
+    homepage = https://www.powerdns.com/;
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];

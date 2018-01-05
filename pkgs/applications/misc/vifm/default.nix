@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin garbas ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    downloadPage = "http://vifm.info/downloads.shtml";
-    homepage = http://vifm.info/;
+    downloadPage = "https://vifm.info/downloads.shtml";
+    homepage = https://vifm.info/;
     inherit version;
     updateWalker = true;
   };
