@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   createFindLibDestdir = true;
 
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-dtoa;
     description = "Converts OCaml floats into strings (doubles to ascii, \"d to a\"), using the efficient Grisu3 algorithm.";
