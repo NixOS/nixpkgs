@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
         --disable-xorg --disable-xnest --disable-xvfb --disable-dmx \
         --disable-xwin --disable-xephyr --disable-kdrive --with-pic \
         --disable-xorgcfg --disable-xprint --disable-static \
-        --disable-composite --disable-xtrap --enable-xcsecurity \
+        --enable-composite --disable-xtrap --enable-xcsecurity \
         --disable-{a,c,m}fb \
         --disable-xwayland \
         --disable-config-dbus --disable-config-udev --disable-config-hal \
