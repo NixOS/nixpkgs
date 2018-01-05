@@ -1,20 +1,25 @@
-{ stdenv, buildGoPackage, fetchgit, asciidoc, go-runewidth, pflag }:
+{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "tewisay-${version}";
-  version = "0.65+e3fc387";
-  goPackagePath = "github.com/neeee/tewisay";
+  name = "tewisay-unstable-${version}";
+  version = "2017-04-14";
+  rev = "e3fc38737cedb79d93b8cee07207c6c86db4e488";
+
+  goPackagePath = "github.com/lucy/tewisay";
 
   src = fetchgit {
-    url = https://github.com/lucy/tewisay.git;
-    rev = "e3fc38737cedb79d93b8cee07207c6c86db4e488";
+    inherit rev;
+    url = "https://github.com/lucy/tewisay.git";
     sha256 = "1na3xi4z90v8qydcvd3454ia9jg7qhinciy6kvgyz61q837cw5dk";
   };
 
+  goDeps = ./deps.nix;
+
   meta = {
-    description = "Cowsay replacement with unicode and partial ansi escape support";
     homepage = https://github.com/lucy/tewisay;
+    description = "Cowsay replacement with unicode and partial ansi escape support";
+    license = stdenv.lib.licenses.cc0;
+    maintainers = [ stdenv.lib.maintainers.chiiruno ];
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.rob ];
   };
 }

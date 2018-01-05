@@ -2412,8 +2412,6 @@ with pkgs;
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  go-runewidth = callPackage ../development/tools/go-runewidth { };
-
   go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
@@ -4025,8 +4023,6 @@ with pkgs;
   };
 
   pfstools = callPackage ../tools/graphics/pfstools { };
-
-  pflag = callPackage ../development/tools/pflag { };
 
   philter = callPackage ../tools/networking/philter { };
 
