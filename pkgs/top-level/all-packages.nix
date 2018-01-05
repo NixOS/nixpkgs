@@ -18926,6 +18926,8 @@ with pkgs;
 
   minc-tools = callPackage ../applications/science/biology/minc-tools { };
 
+  ncbi-blast = callPackage ../applications/science/biology/ncbi-blast { };
+
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
   paml = callPackage ../applications/science/biology/paml { };
