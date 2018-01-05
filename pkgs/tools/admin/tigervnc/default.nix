@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
         --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
         --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
         --with-xkb-output=$out/share/X11/xkb/compiled
-    make TIGERVNC_SRCDIR=`pwd`/../..
+    make TIGERVNC_SRCDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
     popd
   '';
 
