@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   } else {
-    url = "ftp://ftp.invisible-island.net/ncurses/current/${name}.tgz";
+    urls = [
+      "http://mirror.jax.hugeserver.com/archlinux/other/ncurses/${name}.tgz"
+      "http://kuiper.mirrorservice.org/sites/lynx.invisible-island.net/ncurses/current/${name}.tgz"
+      "ftp://ftp.invisible-island.net/ncurses/current/${name}.tgz"
+      ];
     sha256 = "1cks4gsz4148jw6wpqia4w5jx7cfxr29g2kmpvp0ssmvwczh8dr4";
   });
 
