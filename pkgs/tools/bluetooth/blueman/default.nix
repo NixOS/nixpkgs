@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
-, hicolor_icon_theme, librsvg, wrapGAppsHook
+, hicolor_icon_theme, librsvg, wrapGAppsHook, gobjectIntrospection
 , withPulseAudio ? true, libpulseaudio }:
 
 let
@@ -15,7 +15,10 @@ in stdenv.mkDerivation rec {
     sha256 = "03s305mbc57nl3sq5ywh9casz926k4aqnylgaidli8bmgz1djbg9";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython wrapGAppsHook ];
+  nativeBuildInputs = [
+    gobjectIntrospection intltool pkgconfig pythonPackages.cython
+    pythonPackages.wrapPython wrapGAppsHook
+  ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor_icon_theme ]
                 ++ pythonPath
