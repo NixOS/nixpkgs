@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
      dbus dbus_glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
-  propagatedBuildInputs = [ dbus dbus_glib glib glib_networking ];
+  propagatedBuildInputs = [ dbus dbus_glib glib ] ++
+    optionals (!stdenv.isDarwin) [ glib_networking ];
 
   preConfigure = ''
      substituteInPlace configure --replace "-Werror" ""
