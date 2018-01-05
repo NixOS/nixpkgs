@@ -498,7 +498,7 @@ let
           callSql = e:
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
-                  ${pkgs.postgresql95}/bin/psql \
+                  ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
                     -c '${e}' \
@@ -523,6 +523,14 @@ let
         ''
 
         + (optionalString (cfg.database.type == "pgsql") ''
+          ${optionalString (cfg.database.host == null && cfg.database.password == null) ''
+            if ! [ -e ${cfg.root}/.db-created ]; then
+              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser ${cfg.database.user}
+              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O ${cfg.database.user} ${cfg.database.name}
+              touch ${cfg.root}/.db-created
+            fi
+          ''}
+
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -559,7 +567,7 @@ let
 
     services.mysql = optionalAttrs (cfg.database.type == "mysql") {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = mkDefault pkgs.mysql;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
@@ -571,17 +579,13 @@ let
       ];
     };
 
-    users = optionalAttrs (cfg.user == "tt_rss") {
-      extraUsers = singleton {
-        name = "tt_rss";
-        group = "tt_rss";
-        uid = config.ids.uids.tt_rss;
-      };
-      extraGroups = singleton {
-        name = "tt_rss";
-        gid = config.ids.gids.tt_rss;
-      };
+    services.postgresql = optionalAttrs (cfg.database.type == "pgsql") {
+      enable = mkDefault true;
     };
 
+    users = optionalAttrs (cfg.user == "tt_rss") {
+      extraUsers.tt_rss.group = "tt_rss";
+      extraGroups.tt_rss = {};
+    };
   };
 }
