@@ -328,6 +328,8 @@ with pkgs;
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
 
+  substitute-paths = callPackage ../build-support/substitute-paths { };
+
   replaceDependency = callPackage ../build-support/replace-dependency.nix { };
 
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
