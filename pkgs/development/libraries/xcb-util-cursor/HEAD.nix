@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XCB cursor library (libxcursor port)";
-    homepage    = http://cgit.freedesktop.org/xcb/util-cursor;
+    homepage    = https://cgit.freedesktop.org/xcb/util-cursor;
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux ++ platforms.darwin;
