@@ -17367,7 +17367,9 @@ with pkgs;
     system-libvirt = libvirt;
   };
 
-  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix { };
+  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
+    qtermwidget = lxqt.qtermwidget;
+  };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
