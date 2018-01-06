@@ -190,6 +190,7 @@
   dtzWill = "Will Dietz <nix@wdtz.org>";
   dupgit = "Olivier Delhomme <olivier.delhomme@free.fr>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
+  dzabraev = "Maksim Dzabraev <dzabraew@gmail.com>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   earldouglas = "James Earl Douglas <james@earldouglas.com>";
   ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
