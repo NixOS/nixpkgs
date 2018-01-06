@@ -4,15 +4,13 @@
 , http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
-, brotliSupport ? true, brotli ? null
+, brotliSupport ? true, brotli
 , luaSupport ? false, lua5
 }:
 
-let optional       = stdenv.lib.optional;
-    optionalString = stdenv.lib.optionalString;
+let inherit (stdenv.lib) optional optionalString;
 in
 
-assert brotliSupport -> brotli != null;
 assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
