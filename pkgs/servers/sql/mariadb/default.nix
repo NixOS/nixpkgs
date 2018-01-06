@@ -28,7 +28,9 @@ common = rec { # attributes common to both builds
   buildInputs = [
     ncurses openssl zlib pcre jemalloc
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ]
+    # FIXME: move libiconv outside isDarwin on staging.
+    ++ optional stdenv.isDarwin libiconv;
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -122,8 +124,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl
-    ++ optional stdenv.isDarwin libiconv;
+  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
