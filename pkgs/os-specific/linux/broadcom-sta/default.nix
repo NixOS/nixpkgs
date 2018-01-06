@@ -39,8 +39,6 @@ stdenv.mkDerivation {
 
   makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
   unpackPhase = ''
     sourceRoot=broadcom-sta
     mkdir "$sourceRoot"
