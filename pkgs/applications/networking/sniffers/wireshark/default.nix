@@ -23,7 +23,10 @@ in stdenv.mkDerivation {
     sha256 = "0n3g28hrhifnchlz4av0blq4ykm4zaxwwxbzdm9wsba27677b6h4";
   };
 
-  cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE -DBUILD_wireshark=OFF";
+  cmakeFlags = [
+    "-DBUILD_wireshark_gtk=${if withGtk then "ON" else "OFF"}"
+    "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
+  ];
 
   nativeBuildInputs = [
     bison cmake extra-cmake-modules flex
