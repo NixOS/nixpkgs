@@ -197,7 +197,7 @@ in
         "mmc_block"
 
         # Support USB keyboards, in case the boot fails and we only have
-        # a USB keyboard.
+        # a USB keyboard, or for LUKS passphrase prompt.
         "uhci_hcd"
         "ehci_hcd"
         "ehci_pci"
@@ -206,7 +206,7 @@ in
         "xhci_hcd"
         "xhci_pci"
         "usbhid"
-        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat" "hid_logitech_hidpp"
 
         # Misc. keyboard stuff.
         "pcips2" "atkbd" "i8042"
