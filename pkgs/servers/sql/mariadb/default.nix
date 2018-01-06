@@ -34,7 +34,8 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ];
+  patches = [ ./cmake-includedir.patch ]
+    ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -121,7 +122,8 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ];
+  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl
+    ++ optional stdenv.isDarwin libiconv;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -159,7 +161,8 @@ everything = stdenv.mkDerivation (common // {
     rm "$out"/bin/rcmysql
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive"
+    + optionalString stdenv.isDarwin " -std=c++11";
 });
 
 connector-c = stdenv.mkDerivation rec {
