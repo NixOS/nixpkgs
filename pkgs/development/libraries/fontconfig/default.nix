@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
   ];
   # additionally required for the glibc-2.25 patch; avoid requiring gperf
   postPatch = ''
-    sed s/CHAR_WIDTH/CHARWIDTH/g -i src/fcobjshash.{h,gperf}
-    touch src/*
+    sed s/CHAR_WIDTH/CHARWIDTH/g -i src/fcobjshash.{gperf,h}
   '';
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
