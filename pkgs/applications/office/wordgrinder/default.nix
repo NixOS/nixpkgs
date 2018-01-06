@@ -1,24 +1,32 @@
 { stdenv, fetchFromGitHub, pkgconfig, makeWrapper
-, lua52Packages, libXft, ncurses, readline, zlib }:
+, lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
   name = "wordgrinder-${version}";
-  version = "0.6-db14181";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = "db141815e8bd1da6e684a1142a59492e516f3041";
-    sha256 = "1l1jqzcqiwnc8r1igfi7ay4pzzhdhss81znnmfr4rc1ia8bpdjc2";
+    rev = "${version}";
+    sha256 = "19n4vn8zyvcvgwygm63d3jcmiwh6a2ikrrqqmkm8fvhdvwkqgr9k";
   };
 
   makeFlags = [
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
+    "XFT_PACKAGE=--libs=\{-lX11 -lXft\}"
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  dontUseNinjaBuild = true;
+  dontUseNinjaInstall = true;
+
+  nativeBuildInputs = [
+    pkgconfig
+    makeWrapper
+    ninja
+  ];
 
   buildInputs = [
     libXft
