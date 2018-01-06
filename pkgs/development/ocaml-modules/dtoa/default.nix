@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
 
   inherit (jbuilder) installPhase;
 
-  createFindLibDestdir = true;
-
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with stdenv.lib; {
