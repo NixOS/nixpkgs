@@ -10303,7 +10303,7 @@ with pkgs;
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     enableCuda = config.cudaSupport or false;
     cudatoolkit = cudatoolkit8;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
   };
 
   # this ctl version is needed by openexr_viewers
