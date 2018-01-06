@@ -12402,6 +12402,7 @@ with pkgs;
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
+  microcodeIntelDebian = callPackage ../os-specific/linux/microcode/intel_debian.nix { };
 
   inherit (callPackages ../os-specific/linux/apparmor { pythonPackages = python27Packages; swig = swig2; })
     libapparmor apparmor-pam apparmor-parser apparmor-profiles apparmor-utils;
