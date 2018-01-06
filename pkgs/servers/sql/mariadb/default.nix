@@ -26,11 +26,9 @@ common = rec { # attributes common to both builds
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc
+    ncurses openssl zlib pcre jemalloc libiconv
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ]
-    # FIXME: move libiconv outside isDarwin on staging.
-    ++ optional stdenv.isDarwin libiconv;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -184,8 +182,7 @@ connector-c = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
-  # FIXME: move libiconv outside isDarwin on staging.
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
 
   enableParallelBuilding = true;
 
