@@ -2759,6 +2759,7 @@ package-maintainers:
     - lambdabot
   alunduil:
     - collection-json
+    - network-arbitrary
     - network-uri-json
     - siren-json
 
