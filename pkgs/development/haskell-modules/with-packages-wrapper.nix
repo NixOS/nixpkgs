@@ -1,7 +1,6 @@
-{ stdenv, lib, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, ignoreCollisions ? false, withLLVM ? false
+{ lib, targetPlatform, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+, withLLVM ? false
 , postBuild ? ""
-, haskellPackages
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
 
@@ -36,9 +35,8 @@ let
   isHaLVM       = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
-  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
-  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
@@ -46,10 +44,10 @@ let
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
   hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
-  # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/code-generators.html
+  # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm          = lib.makeBinPath
                   ([ llvmPackages.llvm ]
-                   ++ lib.optional stdenv.isDarwin llvmPackages.clang);
+                   ++ lib.optional targetPlatform.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
 symlinkJoin {
@@ -59,7 +57,6 @@ symlinkJoin {
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
   extraOutputsToInstall = [ "out" "doc" ];
-  inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
@@ -99,7 +96,7 @@ symlinkJoin {
         makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
       fi
     done
-  '' + (lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString targetPlatform.isDarwin ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
     local dynamicLinksDir="$out/lib/links"
@@ -133,6 +130,5 @@ symlinkJoin {
   passthru = {
     preferLocalBuild = true;
     inherit (ghc) version meta;
-    inherit haskellPackages;
   };
 }

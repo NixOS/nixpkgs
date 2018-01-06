@@ -11,7 +11,7 @@
 , enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePython ? hostPlatform == buildPlatform
-, enableNumpy ? false
+, enableNumpy ? enablePython && stdenv.lib.versionAtLeast version "1.65"
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
@@ -125,9 +125,9 @@ stdenv.mkDerivation {
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
-    (if enablePython then "--with-python=${python.interpreter}" else "--without-python")
-    (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else  "--without-icu")
-  ] ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ] ++ optional enablePython "--with-python=${python.interpreter}"
+    ++ [ (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+    ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
     ./b2 ${b2Args}

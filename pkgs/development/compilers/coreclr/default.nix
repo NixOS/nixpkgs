@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://dotnet.github.io/core/;
+    homepage = https://dotnet.github.io/core/;
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kuznero ];

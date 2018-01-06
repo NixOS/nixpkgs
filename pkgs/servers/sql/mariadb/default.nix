@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
-, openssl, pcre, boost, judy, bison, libxml2
+, libiconv, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 }:
@@ -34,7 +34,8 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ];
+  patches = [ ./cmake-includedir.patch ]
+    ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -121,7 +122,8 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ];
+  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl
+    ++ optional stdenv.isDarwin libiconv;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -134,6 +136,8 @@ everything = stdenv.mkDerivation (common // {
     "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
     "-DINSTALL_DOCDIR=share/doc/mysql"
     "-DINSTALL_SHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR=OFF"
+    "-DINSTALL_SQLBENCHDIR=OFF"
 
     "-DENABLED_LOCAL_INFILE=ON"
     "-DWITH_READLINE=ON"
@@ -152,12 +156,13 @@ everything = stdenv.mkDerivation (common // {
   ];
 
   postInstall = common.postInstall + ''
-    rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
+    rm -r "$out"/data # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
     rm "$out"/bin/rcmysql
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive"
+    + optionalString stdenv.isDarwin " -std=c++11";
 });
 
 connector-c = stdenv.mkDerivation rec {
@@ -178,6 +183,8 @@ connector-c = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
+  # FIXME: move libiconv outside isDarwin on staging.
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   enableParallelBuilding = true;
 

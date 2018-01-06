@@ -29,6 +29,7 @@
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ahmedtd = "Taahir Ahmed <ahmed.taahir@gmail.com>";
   aij = "Ivan Jager <aij+git@mrph.org>";
+  ajgrf = "Alex Griffin <a@ajgrf.com>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
   akc = "Anders Claesson <akc@akc.is>";
@@ -118,6 +119,7 @@
   ChengCat = "Yucheng Zhang <yu@cheng.cat>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
+  chreekat = "Bryan Richter <b@chreekat.net>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
@@ -189,6 +191,7 @@
   dtzWill = "Will Dietz <nix@wdtz.org>";
   dupgit = "Olivier Delhomme <olivier.delhomme@free.fr>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
+  dzabraev = "Maksim Dzabraev <dzabraew@gmail.com>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   earldouglas = "James Earl Douglas <james@earldouglas.com>";
   ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
@@ -420,6 +423,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mgdelacroix = "Miguel de la Cruz <mgdelacroix@gmail.com>";
+  mgttlinger = "Merlin Göttlinger <megoettlinger@gmail.com";
   mguentner = "Maximilian Güntner <code@klandest.in>";
   mic92 = "Jörg Thalheim <joerg@thalheim.io>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
@@ -582,6 +586,7 @@
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryansydnor = "Ryan Sydnor <ryan.t.sydnor@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
+  ryantrinkle = "Ryan Trinkle <ryan.trinkle@gmail.com>";
   rybern = "Ryan Bernstein <ryan.bernstein@columbia.edu>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   ryneeverett = "Ryne Everett <ryneeverett@gmail.com>";
@@ -694,6 +699,7 @@
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
+  velovix = "Tyler Compton <xaviosx@gmail.com>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   vidbina = "David Asabina <vid@bina.me>";
   vifino = "Adrian Pistol <vifino@tty.sh>";

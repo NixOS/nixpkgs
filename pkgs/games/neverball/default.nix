@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "neverball-1.6.0";
   src = fetchurl {
-    url = "http://neverball.org/${name}.tar.gz";
+    url = "https://neverball.org/${name}.tar.gz";
     sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://neverball.org/;
+    homepage = https://neverball.org/;
     description = "Tilt the floor to roll a ball";
     license = "GPL";
     maintainers = with stdenv.lib.maintainers; [viric];

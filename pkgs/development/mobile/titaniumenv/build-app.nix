@@ -1,7 +1,7 @@
-{stdenv, androidsdk, titaniumsdk, titanium, alloy, xcodewrapper, jdk, python, nodejs, which, xcodeBaseDir}:
-{ name, src, target, androidPlatformVersions ? [ "23" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
+{stdenv, androidsdk, titaniumsdk, titanium, alloy, xcodewrapper, jdk, python, nodejs, which, file, xcodeBaseDir}:
+{ name, src, preBuild ? "", target, androidPlatformVersions ? [ "25" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "10.2"
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "11.2"
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
@@ -47,9 +47,11 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [ nodejs titanium alloy jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy jdk python which file ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
   
   buildPhase = ''
+    ${preBuild}
+
     export HOME=$TMPDIR
     
     ${stdenv.lib.optionalString (tiVersion != null) ''
@@ -77,9 +79,9 @@ stdenv.mkDerivation {
             export JAVA_HOME=${javaVersionFixWrapper}
             javac -version
           ''}
-          
-          titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec
-          
+
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec
+
           export PATH=$(echo ${androidsdkComposition}/libexec/tools):$(echo ${androidsdkComposition}/libexec/build-tools/android-*):$PATH
           
           ${if release then

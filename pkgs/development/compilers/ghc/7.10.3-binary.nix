@@ -4,6 +4,9 @@
 , gcc
 }:
 
+# Prebuilt only does native
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 let
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses5 gmp
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}b-x86_64-deb8-linux.tar.bz2";
       sha256 = "5e163c557e9236cce68be41c984eab0fcdbdc1602e39040ca9ae325e6bdec1c3";
     };
-    "armv7-linux" = {
+    "armv7l-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.bz2";
       sha256 = "2913763eef88e4d1843a1e4c34225afb1866310d1a1956c08a4131f4593518f6";
     };
@@ -148,6 +151,8 @@ stdenv.mkDerivation rec {
     [ $(./main) == "yes" ]
   '';
 
+  passthru = { targetPrefix = ""; };
+
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux"];
 }

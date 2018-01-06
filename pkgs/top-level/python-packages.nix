@@ -4546,30 +4546,7 @@ in {
     };
   };
 
-  evdev = buildPythonPackage rec {
-    version = "0.6.4";
-    name = "evdev-${version}";
-    disabled = isPy34;  # see http://bugs.python.org/issue21121
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/evdev/${name}.tar.gz";
-      sha256 = "1wkag91s8j0f45jx5n619z354n8pz8in9krn81hp7hlkhi6p8s2j";
-    };
-
-    buildInputs = with self; [ pkgs.linuxHeaders ];
-
-    patchPhase = "sed -e 's#/usr/include/linux/#${pkgs.linuxHeaders}/include/linux/#g' -i setup.py";
-
-    doCheck = false;
-
-    meta = {
-      description = "Provides bindings to the generic input event interface in Linux";
-      homepage = http://pythonhosted.org/evdev;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ goibhniu ];
-      platforms = platforms.linux;
-    };
-  };
+  evdev = callPackage ../development/python-modules/evdev {};
 
   eve = callPackage ../development/python-modules/eve {};
 
@@ -9578,8 +9555,6 @@ in {
 
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
-    # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
-    disabled = isPy3k;
   };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
@@ -18898,6 +18873,7 @@ EOF
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
     ffmpegSupport = false;
+    phantomjsSupport = false;
   };
 
   zbase32 = buildPythonPackage (rec {
@@ -19842,7 +19818,7 @@ EOF
 
   unidecode = callPackage ../development/python-modules/unidecode {};
 
-  pyusb = callPackage ../development/python-modules/pyusb {};
+  pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
   BlinkStick = buildPythonPackage rec {
     name = "BlinkStick-${version}";
@@ -22697,6 +22673,8 @@ EOF
   ephem = callPackage ../development/python-modules/ephem { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
+
+  pysigset = callPackage ../development/python-modules/pysigset { };
 });
 
 in fix' (extends overrides packages)

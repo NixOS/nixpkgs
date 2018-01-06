@@ -4,6 +4,9 @@
 , enableIntegerSimple ? false
 }:
 
+# Prebuilt only does native
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 stdenv.mkDerivation rec {
   version = "6.10.2";
 
@@ -92,6 +95,8 @@ stdenv.mkDerivation rec {
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
+
+  passthru = { targetPrefix = ""; };
 
   meta = {
     homepage = http://haskell.org/ghc;

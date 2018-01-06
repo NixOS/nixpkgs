@@ -8,8 +8,6 @@ let
 
 in {
 
-  imports = [ ./grow-partition.nix ];
-
   options = {
     virtualbox = {
       baseImageSize = mkOption {
@@ -23,7 +21,6 @@ in {
   };
 
   config = {
-
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
       name = "nixos-ova-${config.system.nixosLabel}-${pkgs.stdenv.system}";
 
@@ -71,6 +68,7 @@ in {
       autoResize = true;
     };
 
+    boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";
 
     virtualisation.virtualbox.guest.enable = true;
