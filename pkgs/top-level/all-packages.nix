@@ -7011,6 +7011,8 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
+  betaflight = callPackage ../development/stm32/betaflight { };
+
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
   ecj = callPackage ../development/eclipse/ecj { };
