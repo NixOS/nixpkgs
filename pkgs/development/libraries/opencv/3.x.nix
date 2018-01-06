@@ -24,7 +24,7 @@
 , enableTesseract ? false, tesseract, leptonica
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, QTKit
+, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
 }:
 
 let
@@ -168,6 +168,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg
+    ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
+                     [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
