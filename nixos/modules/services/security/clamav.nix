@@ -43,6 +43,14 @@ in
             configuration file.
           '';
         };
+
+        privateTmp = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to run clamd with a private /tmp.
+          '';
+        };
       };
       updater = {
         enable = mkEnableOption "ClamAV freshclam updater";
@@ -97,8 +105,8 @@ in
 
     systemd.services.clamav-daemon = optionalAttrs cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
-      after = mkIf cfg.updater.enable [ "clamav-freshclam.service" ];
-      requires = mkIf cfg.updater.enable [ "clamav-freshclam.service" ];
+      after = optional cfg.updater.enable "clamav-freshclam.service";
+      requires = optional cfg.updater.enable "clamav-freshclam.service";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -110,7 +118,7 @@ in
       serviceConfig = {
         ExecStart = "${pkg}/bin/clamd";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
-        PrivateTmp = "yes";
+        PrivateTmp = if cfg.daemon.privateTmp then "yes" else "no";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
       };
