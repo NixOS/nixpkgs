@@ -155,6 +155,7 @@ mapAliases (rec {
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
   transmission_gtk = transmission-gtk; # added 2018-01-06
+  transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
