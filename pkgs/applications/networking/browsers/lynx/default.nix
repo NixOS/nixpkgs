@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
   version = "2.8.9dev.16";
 
   src = fetchurl {
-    url = "http://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2";
+    urls = [
+      "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
+      "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
+    ];
     sha256 = "1j0vx871ghkm7fgrafnvd2ml3ywcl8d3gyhq02fhfb851c88lc84";
   };
 
