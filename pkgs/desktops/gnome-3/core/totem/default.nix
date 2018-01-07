@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gobjectIntrospection python3Packages.pylint python3Packages.pygobject2 ];
 
-  checkPhase = "meson test";
-
   patches = [
     (fetchurl {
       name = "remove-pycompile.patch";
