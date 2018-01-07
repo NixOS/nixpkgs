@@ -2666,6 +2666,7 @@ default-package-overrides:
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
   - aeson-pretty < 0.8                  # required by elm compiler
+  - ansi-terminal < 0.7                 # required by purescript compiler
   - apply-refact < 0.4                  # newer versions don't work with GHC 8.0.x
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
