@@ -91,7 +91,8 @@ stdenv.mkDerivation rec {
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld"
+    # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isArm ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -120,11 +121,13 @@ stdenv.mkDerivation rec {
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
+  ] ++ stdenv.lib.optionals (targetPlatform.isArm) [
+    "CFLAGS=-fuse-ld=gold"
+    "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
+    "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     "--disable-large-address-space"
-  ] ++ stdenv.lib.optional targetPlatform.isArm [
-    "LD=${stdenv.cc}/bin/ld.gold"
   ];
 
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
