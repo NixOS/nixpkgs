@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
   prePatch = "rm BUILD";
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$lib/lib")
-  '';
-
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
 
