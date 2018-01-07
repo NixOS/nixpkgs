@@ -9765,6 +9765,8 @@ in {
 
   };
 
+  ldaptor = callPackage ../development/python-modules/ldaptor { };
+
   le = buildPythonPackage rec {
     name = "le-${version}";
     version = "1.4.29";
