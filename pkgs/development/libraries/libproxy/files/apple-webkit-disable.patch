@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 451e7a6..55fa956 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,6 +28,9 @@ include(cmake/ctest.cmk)
+ include(cmake/paths.cmk)
+ 
+ option(WITH_WEBKIT3 "Build against gtk-3 version of webkitgtk" OFF)
++if(APPLE)
++    option(WITH_WEBKIT "Build against Mac WebKit" ON)
++endif()
+ 
+ ### Subdirectories
+ # Conditionally build bundled libmodman
+diff --git a/libproxy/cmake/modules/pacrunner_webkit.cmk b/libproxy/cmake/modules/pacrunner_webkit.cmk
+index c5afcc2..2041942 100644
+--- a/libproxy/cmake/modules/pacrunner_webkit.cmk
++++ b/libproxy/cmake/modules/pacrunner_webkit.cmk
+@@ -7,9 +7,11 @@ if(WIN32)
+     include_directories("${WEBKIT_INCLUDE_DIR}")
+   endif()
+ elseif(APPLE)
+-  find_library(WEBKIT_LIBRARIES JavaScriptCore)
+-  if(WEBKIT_LIBRARIES)
+-    set(WEBKIT_FOUND 1)
++  if(WITH_WEBKIT)
++    find_library(WEBKIT_LIBRARIES JavaScriptCore)
++    if(WEBKIT_LIBRARIES)
++      set(WEBKIT_FOUND 1)
++    endif()
+   endif()
+ else()
+   if(WITH_WEBKIT3)
