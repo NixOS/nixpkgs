@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "10.1.1";
+  version = "10.3.3";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "0xvzxcygy6ffqm24rk6v9gs6g9r744vpwwvk9d00wjla7hwmq3w2";
+    sha256 = "0bnafl7mpm3vjhfkqwgf5ff1y1iixfdfvv25zmpl0yjd70fwx2aq";
   };
 
 in
@@ -30,16 +30,16 @@ in
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
-  buildInputs = [
-    rubyEnv ruby bundler tzdata git procps dpkg nettools
-  ];
-
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0p118msad6l12pd4q3vkvjggiiasbkh6pnl94riqyb5zkb7yrb1a";
+    sha256 = "1fhjijs8rvxrgx43fc7vp6f3vwshwq74gjwk41fi2yam8bri8p6k";
   };
+
+  buildInputs = [
+    rubyEnv ruby bundler tzdata git procps dpkg nettools
+  ];
 
   patches = [
     ./remove-hardcoded-locations.patch
@@ -74,7 +74,11 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
+    # work around unpacking deb containing binary with suid bit
+    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
+    tar -xf gitlab-deb-data.tar
+
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 

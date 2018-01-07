@@ -15,18 +15,18 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.11";
+  version = "10.2.12";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1s53ravbrxcc8ixvkm56rwgs3cfifzngc56pidd1f1dr1n0mlmb3";
+    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    sha256 = "1v21sc1y5qndwdbr921da1s009bkn6pshwcgw47w7aygp9zjvcia";
     name   = "mariadb-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc
+    ncurses openssl zlib pcre jemalloc libiconv
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
@@ -122,8 +122,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl
-    ++ optional stdenv.isDarwin libiconv;
+  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -183,8 +182,7 @@ connector-c = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
-  # FIXME: move libiconv outside isDarwin on staging.
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
 
   enableParallelBuilding = true;
 
