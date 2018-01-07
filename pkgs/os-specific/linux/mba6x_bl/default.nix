@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   hardeningDisable = [ "pic" ];
+  
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
