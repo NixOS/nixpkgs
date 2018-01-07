@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   preCheck =
     stdenv.lib.optionalString doCheck

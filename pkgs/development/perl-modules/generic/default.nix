@@ -2,11 +2,12 @@ perl:
 
 { buildInputs ? [], name, ... } @ attrs:
 
-perl.stdenv.mkDerivation (
+with perl.stdenv;
+mkDerivation (
   {
     outputs = [ "out" "devdoc" ];
 
-    doCheck = true;
+    doCheck = hostPlatform == buildPlatform;
 
     checkTarget = "test";
 
