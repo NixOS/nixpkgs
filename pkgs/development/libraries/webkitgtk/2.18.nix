@@ -26,19 +26,22 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
   };
 
+  postPatch = optionalString stdenv.isDarwin ''
+    sed -i 's/^target_link_libraries(webkit2gtkinjectedbundle WebKit2*/\0 WebCore/' \
+        Source/WebKit/PlatformGTK.cmake
+  '';
+
   postConfigure = optionalString stdenv.isDarwin ''
-    substituteInPlace Source/WebKit2/CMakeFiles/WebKit2.dir/link.txt \
+    substituteInPlace Source/WebKit/CMakeFiles/WebKit2.dir/link.txt \
         --replace "../../lib/libWTFGTK.a" ""
-    substituteInPlace Source/JavaScriptCore/CMakeFiles/JavaScriptCore.dir/link.txt \
-        --replace "../../lib/libbmalloc.a" ""
     sed -i "s|[\./]*\.\./lib/lib[^\.]*\.a||g" \
         Source/JavaScriptCore/CMakeFiles/LLIntOffsetsExtractor.dir/link.txt \
         Source/JavaScriptCore/shell/CMakeFiles/jsc.dir/link.txt \
         Source/JavaScriptCore/shell/CMakeFiles/testb3.dir/link.txt \
-        Source/WebKit2/CMakeFiles/DatabaseProcess.dir/link.txt \
-        Source/WebKit2/CMakeFiles/NetworkProcess.dir/link.txt \
-        Source/WebKit2/CMakeFiles/webkit2gtkinjectedbundle.dir/link.txt \
-        Source/WebKit2/CMakeFiles/WebProcess.dir/link.txt
+        Source/WebKit/CMakeFiles/StorageProcess.dir/link.txt \
+        Source/WebKit/CMakeFiles/NetworkProcess.dir/link.txt \
+        Source/WebKit/CMakeFiles/webkit2gtkinjectedbundle.dir/link.txt \
+        Source/WebKit/CMakeFiles/WebProcess.dir/link.txt
     substituteInPlace Source/JavaScriptCore/CMakeFiles/JavaScriptCore.dir/link.txt \
         --replace "../../lib/libWTFGTK.a" "-Wl,-all_load ../../lib/libWTFGTK.a"
   '';
@@ -54,8 +57,7 @@ stdenv.mkDerivation rec {
      ++ optionals stdenv.isDarwin [
     ./PR-152650-2.patch
     ./PR-153138.patch
-    ./PR-157554.patch
-    ./PR-157574.patch
+    ./bmalloc-mac.patch
   ];
 
   cmakeFlags = [
@@ -65,7 +67,6 @@ stdenv.mkDerivation rec {
   ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
   ++ optional stdenv.isLinux "-DENABLE_GLES2=ON"
   ++ optionals stdenv.isDarwin [
-  "-DUSE_SYSTEM_MALLOC=ON"
   "-DUSE_ACCELERATE=0"
   "-DENABLE_INTROSPECTION=ON"
   "-DENABLE_MINIBROWSER=OFF"
@@ -89,12 +90,12 @@ stdenv.mkDerivation rec {
   buildInputs = libintlOrEmpty ++ [
     libwebp enchant libnotify gnutls pcre nettle libidn
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
-    sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at_spi2_core
+    sqlite gst-plugins-base libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
     ++ (with xlibs; [ libXdmcp libXt libXtst ])
     ++ optionals stdenv.isDarwin [ libedit readline mesa ]
-    ++ optional stdenv.isLinux wayland;
+    ++ optionals stdenv.isLinux [ wayland gst-plugins-bad ];
 
   propagatedBuildInputs = [
     libsoup gtk3

@@ -1,0 +1,25 @@
+diff -ru webkitgtk-2.18.2.orig/Source/WTF/wtf/Platform.h webkitgtk-2.18.2/Source/WTF/wtf/Platform.h
+--- webkitgtk-2.18.2.orig/Source/WTF/wtf/Platform.h	2017-11-06 02:16:22.000000000 +1300
++++ webkitgtk-2.18.2/Source/WTF/wtf/Platform.h	2017-11-06 03:01:33.000000000 +1300
+@@ -659,7 +659,7 @@
+ #define HAVE_READLINE 1
+ #define HAVE_SYS_TIMEB_H 1
+ 
+-#if __has_include(<mach/mach_exc.defs>) && !(PLATFORM(WATCHOS) || PLATFORM(APPLETV))
++#if __has_include(<mach/mach_exc.defs>) && !(PLATFORM(WATCHOS) || PLATFORM(APPLETV) || PLATFORM(GTK))
+ #define HAVE_MACH_EXCEPTIONS 1
+ #endif
+ 
+diff -ru webkitgtk-2.18.2.orig/Source/bmalloc/bmalloc/Scavenger.cpp webkitgtk-2.18.2/Source/bmalloc/bmalloc/Scavenger.cpp
+--- webkitgtk-2.18.2.orig/Source/bmalloc/bmalloc/Scavenger.cpp	2017-11-06 02:16:18.000000000 +1300
++++ webkitgtk-2.18.2/Source/bmalloc/bmalloc/Scavenger.cpp	2017-11-06 03:03:08.000000000 +1300
+@@ -28,6 +28,9 @@
+ #include "AvailableMemory.h"
+ #include "Heap.h"
+ #include <thread>
++#if BOS(DARWIN)
++#include <pthread/qos.h>
++#endif
+ 
+ namespace bmalloc {
+ 
