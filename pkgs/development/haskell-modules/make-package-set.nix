@@ -102,6 +102,7 @@ let
 
   withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
+    inherit ghc;
     inherit packages;
   };
 
