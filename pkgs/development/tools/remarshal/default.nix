@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "remarshal-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner  = "dbohdan";
     repo   = "remarshal";
     rev    = "v${version}";
-    sha256 = "0jslawpzghv3chamrfddnyn5p5068kjxy8d38fxvi5h06qgfb4wp";
+    sha256 = "1wsgvzfp40lvly7nyyhv9prip4vi32rfc8kdji587jpw28zc1dfb";
   };
 
   propagatedBuildInputs = with pythonPackages; [
