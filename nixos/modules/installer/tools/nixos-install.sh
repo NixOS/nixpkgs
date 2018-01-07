@@ -22,7 +22,7 @@ if [ "$(id -u)" = 0 ]; then
 fi
 
 # Parse the command line for the -I flag
-extraBuildFlags=()
+extraBuildFlagsAfter=()
 chrootCommand=(/run/current-system/sw/bin/bash)
 buildUsersGroup="nixbld"
 
@@ -31,12 +31,12 @@ while [ "$#" -gt 0 ]; do
     case "$i" in
         --max-jobs|-j|--cores|-I)
             j="$1"; shift 1
-            extraBuildFlags+=("$i" "$j")
+            extraBuildFlagsAfter+=("$i" "$j")
             ;;
         --option)
             j="$1"; shift 1
             k="$1"; shift 1
-            extraBuildFlags+=("$i" "$j" "$k")
+            extraBuildFlagsAfter+=("$i" "$j" "$k")
             ;;
         --root)
             mountPoint="$1"; shift 1
@@ -55,7 +55,7 @@ while [ "$#" -gt 0 ]; do
             noBootLoader=1
             ;;
         --show-trace)
-            extraBuildFlags+=("$i")
+            extraBuildFlagsAfter+=("$i")
             ;;
         --chroot)
             runChroot=1
@@ -98,6 +98,9 @@ if [ ! -e "$mountPoint/$NIXOS_CONFIG" ] && [ -z "$closure" ]; then
 fi
 
 
+# Build flags for Nix.
+extraBuildFlags=()
+
 # Builds will use users that are members of this group
 extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 
@@ -105,6 +108,9 @@ extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 # TODO: will this still work with Nix 1.12 now that it has no perl? Probably not...
 binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
 extraBuildFlags+=(--option "binary-caches" "$binary_caches")
+
+# Add user flags.
+extraBuildFlags+=("${extraBuildFlagsAfter[@]}")
 
 # We only need nixpkgs in the path if we don't already have a system closure to install
 if [[ -z "$closure" ]]; then
