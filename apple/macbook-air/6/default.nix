@@ -13,5 +13,6 @@
 
   services.xserver.deviceSection = lib.mkDefault ''
     Option "Backlight" "mba6x_backlight"
+    Option "TearFree" "true"
   '';
 }
