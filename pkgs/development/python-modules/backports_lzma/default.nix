@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "backports.lzma";
-  version = "0.0.8";
+  version = "0.0.9";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "200584ad5079d8ca6b1bfe14890c7be58666ab0128d8ca26cfb2669b476085f3";
+    sha256 = "9ba5d94214a79900ee297a594b8e154cd8e4a54d26eb06243c0e2f3ad5286539";
   };
 
   buildInputs = [ lzma ];
