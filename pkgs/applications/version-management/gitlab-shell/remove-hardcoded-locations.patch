@@ -25,3 +25,16 @@ index e7d0254..181ec8a 100644
    end
  
    def api
+diff --git a/go/internal/config/config.go b/go/internal/config/config.go
+index c57b4de..88cfc95 100644
+--- a/go/internal/config/config.go
++++ b/go/internal/config/config.go
+@@ -27,7 +27,7 @@ func New() (*Config, error) {
+ 	}
+ 	cfg.RootDir = dir
+ 
+-	configBytes, err := ioutil.ReadFile(path.Join(cfg.RootDir, configFile))
++	configBytes, err := ioutil.ReadFile(os.Getenv("GITLAB_SHELL_CONFIG_PATH"))
+ 	if err != nil {
+ 		return nil, err
+ 	}
