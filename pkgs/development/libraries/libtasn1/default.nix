@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   buildInputs = [ perl ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/libtasn1/;
