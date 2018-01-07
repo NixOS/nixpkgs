@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git doxygen help2man tecla libusb1 udev ];
+  buildInputs = with stdenv; [ cmake git doxygen help2man tecla libusb1 ]
+    ++ lib.optional isLinux udev;
 
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Debug"
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
-    "-DINSTALL_UDEV_RULES=ON"
+    "-DINSTALL_UDEV_RULES=${if stdenv.isLinux then "ON" else "OFF"}"
     "-DBUILD_DOCUMENTATION=ON"
   ];
 
@@ -35,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ funfunctor ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }
