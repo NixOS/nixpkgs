@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Don't search in non-Nix locations such as /usr, but do search in our libc.
-  patches = [ ./search-path-3.10.patch ]
+  patches = [ ./search-path-3.9.patch ]
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
