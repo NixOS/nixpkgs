@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, llvmPackages
-, xkb_switch, rustracerd, fzf
+, xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu
 , ycmd, makeWrapper, rake
 , pythonPackages, python3Packages
@@ -11,6 +11,8 @@
 }:
 
 let
+
+  _skim = skim;
 
 inherit (vimUtils.override {inherit vim;}) rtpPath addRtp buildVimPlugin
   buildVimPluginFrom2Nix vimHelpTags;
@@ -137,6 +139,12 @@ rec {
   fzfWrapper = buildVimPluginFrom2Nix {
     name = fzf.name;
     src = fzf.src;
+    dependencies = [];
+  };
+
+  skim = buildVimPluginFrom2Nix {
+    name = _skim.name;
+    src = _skim.vim;
     dependencies = [];
   };
 
