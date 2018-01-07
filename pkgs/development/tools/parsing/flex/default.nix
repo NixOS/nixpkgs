@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
-
     # disable tests which can't run on build machine
     postPatch = ''
-      substituteInPlace Makefile.in --replace "tests" " ";
+      substituteInPlace Makefile.in --replace "tests" " "
+
+      substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
     '';
 
     preConfigure = ''
