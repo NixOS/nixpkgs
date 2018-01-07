@@ -7,9 +7,8 @@ if md5 != "" then
 else
 stdenv.mkDerivation {
   name = "fetchdarcs";
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   builder = ./builder.sh;
-  buildInputs = [darcs];
+  buildInputs = [cacert darcs];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

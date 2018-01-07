@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -912,9 +912,7 @@ let
     });
 
     geojsonio = old.geojsonio.overrideDerivation (attrs: {
-      preConfigure = ''
-        export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-        '';
+      buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
     rstan = old.rstan.overrideDerivation (attrs: {

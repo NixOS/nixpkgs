@@ -11,7 +11,6 @@ let
 
   fetchbower = name: version: target: outputHash: stdenv.mkDerivation {
     name = "${cleanName name}-${bowerVersion version}";
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     buildCommand = ''
       fetch-bower --quiet --out=$PWD/out "${name}" "${target}" "${version}"
       # In some cases, the result of fetchBower is different depending
@@ -23,7 +22,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     inherit outputHash;
-    buildInputs = [ bower2nix ];
+    buildInputs = [ cacert bower2nix ];
   };
 
 in fetchbower

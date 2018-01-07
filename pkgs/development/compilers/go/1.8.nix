@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
     ++ optionals stdenv.isLinux [ procps ];
-  buildInputs = [ pcre ]
+  buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
@@ -121,8 +121,6 @@ stdenv.mkDerivation rec {
     echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
-
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
