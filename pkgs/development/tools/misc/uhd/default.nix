@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, pkgconfig
 , python, pythonPackages, orc, libusb1, boost }:
 
 # You need these udev rules to not have to run as root (copied from
@@ -27,6 +27,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];
+
+  patches = [
+    # Boost 1.66 compat
+    (fetchpatch {
+      url = "https://github.com/EttusResearch/uhd/commit/d9d9d0a8a2e61b1b82e9799585cb7376f581f276.patch";
+      sha256 = "0bb7xyq85q591wsjipf1f3rm06zz4pl87xrcmm08xl21hw9avnb5";
+    })
+  ];
 
   # Build only the host software
   preConfigure = "cd host";
