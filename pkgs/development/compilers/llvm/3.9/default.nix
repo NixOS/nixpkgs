@@ -22,6 +22,8 @@ let
       inherit clang-tools-extra_src stdenv;
     };
 
+    libclang = self.clang-unwrapped.lib;
+
     clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
 
     libstdcxxClang = ccWrapperFun {
