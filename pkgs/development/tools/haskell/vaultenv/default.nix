@@ -26,5 +26,4 @@ mkDerivation rec {
   description = "Runs processes with secrets from HashiCorp Vault";
   license = stdenv.lib.licenses.bsd3;
   maintainers = with stdenv.lib.maintainers; [ lnl7 ];
-  broken = true;  # https://hydra.nixos.org/build/66706385
 }
