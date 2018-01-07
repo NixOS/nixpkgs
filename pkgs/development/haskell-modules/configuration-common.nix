@@ -566,7 +566,7 @@ self: super: {
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
-  # Unpin some versions
+  # https://github.com/haskell-hvr/lzma/issues/8
   lzma = appendPatch super.lzma ./patches/lzma-tests.patch;
 
   # https://github.com/BNFC/bnfc/issues/140
