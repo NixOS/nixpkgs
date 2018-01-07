@@ -7,7 +7,7 @@ index 4861171ef5..f6e701c548 100644
  
 +gem 'activerecord-nulldb-adapter'
 +
- gem 'rails', '4.2.8'
+ gem 'rails', '4.2.10'
  gem 'rails-deprecated_sanitizer', '~> 1.0.3'
  
 diff --git a/Gemfile.lock b/Gemfile.lock

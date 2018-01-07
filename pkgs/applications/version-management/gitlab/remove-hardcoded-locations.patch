@@ -62,24 +62,15 @@ diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
 index 59b21149a9..4f4a39a06c 100644
 --- a/lib/gitlab/logger.rb
 +++ b/lib/gitlab/logger.rb
-@@ -13,7 +13,7 @@
+@@ -26,7 +26,7 @@
      end
  
-     def self.read_latest
--      path = Rails.root.join("log", file_name)
-+      path = File.join(ENV["GITLAB_LOG_PATH"], file_name)
- 
-       return [] unless File.readable?(path)
- 
-@@ -22,7 +22,7 @@
+     def self.full_log_path
+-      Rails.root.join("log", file_name)
++      File.join(ENV["GITLAB_LOG_PATH"], file_name)
      end
  
-     def self.build
--      new(Rails.root.join("log", file_name))
-+      new(File.join(ENV["GITLAB_LOG_PATH"], file_name))
-     end
-   end
- end
+     def self.cache_key
 diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
 index b5f4124052..f72c556983 100644
 --- a/lib/gitlab/uploads_transfer.rb
