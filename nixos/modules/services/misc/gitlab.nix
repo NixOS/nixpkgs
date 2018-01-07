@@ -29,7 +29,11 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
+
+    [git]
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -489,7 +493,7 @@ in {
       after = [ "network.target" "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ];
+      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ruby ];
       serviceConfig = {
         #PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
