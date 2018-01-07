@@ -13,6 +13,8 @@ let
     pname = "matrix-synapse-ldap3";
     version = "0.1.3";
 
+    doCheck = false;
+
     src = fetchFromGitHub {
       owner = "matrix-org";
       repo = "matrix-synapse-ldap3";
