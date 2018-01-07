@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "2.0.14";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee355eb66e4c2e5d95689e1253515aad5b3177c274abdd00a57d5ab1aa6d071a";
+    sha256 = "b3ad481724adfb2280773edd95ce501e497e88fa4489c6e41e637ab3fd9a456c";
   };
 
   meta = with stdenv.lib; {

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , mock
 , numpy
@@ -8,14 +8,24 @@
 , dateutil
 }:
 
-buildPythonPackage rec {
-  pname = "datashape";
-  version = "0.5.2";
-  name = "${pname}-${version}";
+let
+  # Fetcher function looks similar to fetchPypi.
+  # Allows for easier overriding, without having to know
+  # how the source is actually fetched.
+  fetcher = {pname, version, sha256}: fetchFromGitHub {
+    owner = "blaze";
+    repo = pname;
+    rev = version;
+    inherit sha256;
+  };
 
-  src = fetchPypi {
+in buildPythonPackage rec {
+  pname = "datashape";
+  version = "0.5.4";
+
+  src = fetcher {
     inherit pname version;
-    sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
+    sha256 = "0rhlj2kjj1vx5m73wnc5518rd6cs1zsbgpsvzk893n516k69shcf";
   };
 
   checkInputs = [ pytest mock ];

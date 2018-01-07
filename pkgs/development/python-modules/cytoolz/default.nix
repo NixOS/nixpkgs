@@ -23,6 +23,12 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ toolz ];
 
+  # File as accidentally included in release
+  # See https://github.com/pytoolz/cytoolz/issues/116#issuecomment-355770073
+  postPatch = ''
+    rm cytoolz/tests/test_curried_doctests.py
+  '';
+
   # Disable failing test https://github.com/pytoolz/cytoolz/issues/97
   checkPhase = ''
     NOSE_EXCLUDE=test_curried_exceptions nosetests -v $out/${python.sitePackages}
