@@ -1746,38 +1746,7 @@ in {
 
   httpserver = callPackage ../development/python-modules/httpserver {};
 
-  bleach = buildPythonPackage rec {
-    pname = "bleach";
-    version = "2.0.0";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "0c5w7hh70lqzca7ir71j891csvch1899r8q09zgswk1y00q22lmr";
-    };
-
-    buildInputs = with self; [ pytest pytestrunner ];
-    propagatedBuildInputs = with self; [ six html5lib ];
-
-    meta = {
-      description = "An easy, HTML5, whitelisting HTML sanitizer";
-      longDescription = ''
-        Bleach is an HTML sanitizing library that escapes or strips markup and
-        attributes based on a white list. Bleach can also linkify text safely,
-        applying filters that Django's urlize filter cannot, and optionally
-        setting rel attributes, even on links already in the text.
-
-        Bleach is intended for sanitizing text from untrusted sources. If you
-        find yourself jumping through hoops to allow your site administrators
-        to do lots of things, you're probably outside the use cases. Either
-        trust those users, or don't.
-      '';
-      homepage = https://github.com/mozilla/bleach;
-      downloadPage = https://github.com/mozilla/bleach/releases;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ prikhi ];
-    };
-  };
+  bleach = callPackage ../development/python-modules/bleach { };
 
   # needed for tensorflow-tensorboard
   bleach_1_5_0 = self.bleach.overridePythonAttrs rec {
