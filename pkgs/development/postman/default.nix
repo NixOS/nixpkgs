@@ -58,4 +58,16 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/postman
   '';
+
+  meta = with stdenv.lib; {
+    description = "GUI for API development";
+    homepage = https://www.getpostman.com;
+    license = licenses.postman;
+    maintainers = [ manveru ];
+    platforms = ["x86_64-linux"];
+    longDescription = ''
+      A powerful GUI platform to make your API development faster & easier, from
+      building API requests through testing, documentation and sharing.
+    '';
+  };
 }
