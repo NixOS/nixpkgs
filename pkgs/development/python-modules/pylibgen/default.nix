@@ -1,6 +1,6 @@
-{ python3Packages, fetchPypi , python , stdenv }:
+{ pythonPackages, fetchPypi , python , stdenv }:
 
-python3Packages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
   pname = "pylibgen";
   version = "1.3.0";
   name = "${pname}-${version}";
@@ -10,7 +10,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "16hj4x1j490w0wnrqv1la0jlbywiv3fx7ps62i008djbampc9li9";
   };
 
-  buildInputs = with python3Packages; [
+  buildInputs = with pythonPackages; [
     requests
   ];
 
@@ -19,7 +19,6 @@ python3Packages.buildPythonPackage rec {
     description = "Programmatic Python interface for Library Genesis";
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms   = stdenv.lib.platforms.unix;
   };
 }
 
