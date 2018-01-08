@@ -121,7 +121,13 @@ mapAliases (rec {
   owncloudclient = owncloud-client;  # added 2016-08
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
-  pidginlatexSF = pidginlatex; # added 2014-11-02
+  pidginlatexSF = pidgin-latex; # added 2014-11-02
+  pidginlatex = pidgin-latex; # added 2018-01-08
+  pidginmsnpecan = pidgin-msn-pecan; # added 2018-01-08
+  pidginotr = pidgin-otr; # added 2018-01-08
+  pidginosd = pidgin-osd; # added 2018-01-08
+  pidginsipe = pidgin-sipe; # added 2018-01-08
+  pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   PPSSPP = ppsspp; # added 2017-10-01
