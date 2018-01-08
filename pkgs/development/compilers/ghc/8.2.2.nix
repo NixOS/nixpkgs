@@ -3,7 +3,7 @@
 , selfPkgs, cross ? null
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, bootPkgs, alex, happy, hscolour, llvm_39
 , autoconf, automake, coreutils, fetchurl, perl, python3, sphinx
 
 , libiconv ? null, ncurses
@@ -46,7 +46,7 @@ stdenv.mkDerivation (rec {
     sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
   '';
 
-  buildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
+  buildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ] ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ llvm_39 ];
 
   enableParallelBuilding = true;
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation (rec {
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+  ] ++ stdenv.lib.optional stdenv.isArm [
+    "LD=${stdenv.cc}/bin/ld.gold"
   ];
 
   # required, because otherwise all symbols from HSffi.o are stripped, and

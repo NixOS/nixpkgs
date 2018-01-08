@@ -67,9 +67,20 @@ let
       patch     = "0";
       x64hash   = "18fb374b9fb8e249b79178500dddca7a1f275411c6537e7695da5dcf19c5ba91";
       x86hash   = "4c68723b0327cf6f12da824056fce2b7853c38e6163a48c9d222b93dd8da75b6";
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html; # Fix when updating version
       x64suffix = "10276927";
       x86suffix = "10276925";
+      homepage = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-137.html;
+    };
+
+    "13.8.0" = {
+      major = "13";
+      minor = "8";
+      patch = "0";
+      x64hash = "FDF5991CCD52B2B98289D7B2FB46D492D3E4032846D4AFA52CAA0F8AC0578931";
+      x86hash = "E0CFB43312BF79F753514B11F7B8DE4529823AE4C92D1B01E8A2C34F26AC57E7";
+      x64suffix = "10299729";
+      x86suffix = "10299729";
+      homepage = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
     };
   };
 

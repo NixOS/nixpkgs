@@ -1,16 +1,19 @@
-{ mkDerivation, fetchurl, async, base, bytestring, http-conduit, lens
-, lens-aeson, optparse-applicative, retry, stdenv, text, unix
+{ mkDerivation, fetchzip, async, base, bytestring, hpack, http-conduit
+, lens, lens-aeson, optparse-applicative, retry, stdenv, text, unix
 , unordered-containers, utf8-string
 }:
 
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.5.0";
+  version = "0.5.3";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/channable/vaultenv/archive/v${version}.tar.gz";
-    sha256 = "0hdcxq88cf3ygnikkppyg3fcf7xmwm9zif7274j3n34p9vd8xci3";
+    sha256 = "1kxq2pp8l8xf7xwjyd9cwyi7z192013s6psq5fk8jrkkhrk8z3li";
   };
+
+  buildTools = [ hpack ];
+  preConfigure = "hpack .";
 
   isLibrary = false;
   isExecutable = true;
@@ -23,5 +26,4 @@ mkDerivation rec {
   description = "Runs processes with secrets from HashiCorp Vault";
   license = stdenv.lib.licenses.bsd3;
   maintainers = with stdenv.lib.maintainers; [ lnl7 ];
-  broken = true;  # https://hydra.nixos.org/build/66706385
 }

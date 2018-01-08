@@ -93,4 +93,8 @@ self: super: {
             sha256 = "06sfxk5cyd8nqgjyb95jkihxxk8m6dw9m3mlv94sm2qwylj86gqy";
           };
     in appendPatch super.coordinate patch;
+
+  # https://github.com/purescript/purescript/issues/3189
+  purescript = doJailbreak (super.purescript);
+
 }
