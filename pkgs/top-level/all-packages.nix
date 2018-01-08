@@ -1721,6 +1721,8 @@ with pkgs;
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
+  dbeaver = callPackage ../applications/misc/dbeaver { };
+
   dbench = callPackage ../development/tools/misc/dbench { };
 
   dclxvi = callPackage ../development/libraries/dclxvi { };
