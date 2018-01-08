@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true; # not cross;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = hostPlatform != buildPlatform;
