@@ -67,6 +67,18 @@ in
         # Find the mouse
         export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
+        # Let caja find extensions
+        export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
+
+        # Let caja extensions find gsettings schemas
+        ${concatMapStrings (p: ''
+          if [ -d "${p}/lib/caja/extensions-2.0" ]; then
+            ${addToXDGDirs p}
+          fi
+          '')
+          config.environment.systemPackages
+        }
+
         # Let mate-panel find applets
         export MATE_PANEL_APPLETS_DIR=$MATE_PANEL_APPLETS_DIR''${MATE_PANEL_APPLETS_DIR:+:}${config.system.path}/share/mate-panel/applets
         export MATE_PANEL_EXTRA_MODULES=$MATE_PANEL_EXTRA_MODULES''${MATE_PANEL_EXTRA_MODULES:+:}${config.system.path}/lib/mate-panel/applets
