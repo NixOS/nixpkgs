@@ -2,10 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , flask
+, flask_common
+, flask_limiter
 , markupsafe
 , decorator
 , itsdangerous
+, raven
 , six
+, brotlipy
 }:
 
 buildPythonPackage rec {
@@ -18,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0afa0486a76305cac441b5cc80d5d4ccd82b20875da7c5119ecfe616cefef45f";
   };
 
-  propagatedBuildInputs = [ flask markupsafe decorator itsdangerous six ];
+  propagatedBuildInputs = [ brotlipy flask flask_common flask_limiter markupsafe decorator itsdangerous raven six ];
 
   # No tests
   doCheck = false;

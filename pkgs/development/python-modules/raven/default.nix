@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, isPy3k, contextlib2 }:
+{ lib, buildPythonPackage, fetchurl, isPy3k, contextlib2, blinker }:
 
 buildPythonPackage rec {
   pname = "raven";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # see https://github.com/getsentry/raven-python/blob/master/setup.py
   doCheck = false;
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ contextlib2 ];
+  propagatedBuildInputs = [ blinker ] ++ lib.optionals (!isPy3k) [ contextlib2 ];
 
   meta = {
     description = "A Python client for Sentry (getsentry.com)";
