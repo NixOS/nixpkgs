@@ -19973,7 +19973,7 @@ with pkgs;
     staging = base.override { wineRelease = "staging"; };
   };
 
-  wine = winePackages.base;
+  wine = winePackages.full;
 
   wine-staging = lowPrio (winePackages.full.override {
     wineRelease = "staging";
