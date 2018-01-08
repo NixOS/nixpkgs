@@ -111,6 +111,10 @@ stdenv.mkDerivation {
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
+    rm -v src/test/run-pass/backtrace-debuginfo.rs
+
+    # error: No such file or directory
+    rm -v src/test/run-pass/issue-45731.rs
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
