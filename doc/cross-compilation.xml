@@ -11,7 +11,7 @@
     For example, a typical use of cross compilation is to compile programs for embedded devices.
     These devices often don't have the computing power and memory to compile their own programs.
     One might think that cross-compilation is a fairly niche concern, but there are advantages to being rigorous about distinguishing build-time vs run-time environments even when one is developing and deploying on the same machine.
-    Nixpkgs is increasingly adopting this opinion in that packages should be written with cross-compilation in mind, and nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
+    Nixpkgs is increasingly adopting this opinion in that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
   </para>
 
   <para>
@@ -39,7 +39,7 @@
       In Nixpkgs, these three platforms are defined as attribute sets under the names <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal>.
       All three are always defined as attributes in the standard environment, and at the top level. That means one can get at them just like a dependency in a function that is imported with <literal>callPackage</literal>:
       <programlisting>{ stdenv, buildPlatform, hostPlatform, fooDep, barDep, .. }: ...buildPlatform...</programlisting>, or just off <varname>stdenv</varname>:
-      <programlisting>{ stdenv, fooDep, barDep, .. }: ...stdenv.buildPlatform...</programlisting>.
+      <programlisting>{ stdenv, fooDep, barDep, .. }: ...stdenv.buildPlatform...</programlisting>
     </para>
     <variablelist>
       <varlistentry>
@@ -72,7 +72,7 @@
             If the tool supports modular or pluggable backends, one might imagine specifying a <emphasis>set</emphasis> of target platforms / backends one wishes to support, rather than a single one.
           </para>
           <para>
-            The biggest reason for mess, if there is one, is that many compilers have the bad habit a build process that builds the compiler and standard library/runtime together.
+            The biggest reason for this mess, if there is one, is that many compilers have the bad habit of a build process that builds the compiler and standard library/runtime together.
             Then the specifying target platform is essential, because it determines the host platform of the standard library/runtime.
             Nixpkgs tries to avoid this where possible too, but still, because the concept of a target platform is so ingrained now in Autoconf and other tools, it is best to support it as is.
             Tools like LLVM that don't need up-front target platforms can safely ignore it like normal packages, and it will do no harm.
