@@ -1226,6 +1226,8 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
+  optar = callPackage ../tools/graphics/optar {};
+
   patdiff = callPackage ../tools/misc/patdiff { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
