@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "arxiv2bib";
   version = "1.0.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +14,6 @@ buildPythonPackage rec {
     description = "Get arXiv.org metadata in BibTeX format";
     license     = stdenv.lib.licenses.bsd;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms   = stdenv.lib.platforms.unix;
   };
 }
 
