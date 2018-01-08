@@ -9,9 +9,6 @@ let
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
-    cajaWithExtensions = callPackage ./caja/cajaWithExtensions.nix {
-      extensions = [ caja-extensions ];
-    };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -69,7 +66,7 @@ let
 
     extraPackages = [
       atril
-      cajaWithExtensions
+      caja-extensions
       engrampa
       eom
       mate-applets
