@@ -175,6 +175,9 @@ in mkDerivation (rec {
     inherit nodejs ghcjsBoot;
     socket-io = pkgs.nodePackages."socket.io";
 
+    # let us assume ghcjs is never actually cross compiled
+    targetPlatform = "";
+
     inherit stage1Packages;
     mkStage2 = stage2 {
       inherit ghcjsBoot;
