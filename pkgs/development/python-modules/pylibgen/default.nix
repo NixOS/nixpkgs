@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "16hj4x1j490w0wnrqv1la0jlbywiv3fx7ps62i008djbampc9li9";
   };
 
-  buildInputs = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
     requests
   ];
 
