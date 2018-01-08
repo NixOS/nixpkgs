@@ -113,7 +113,6 @@ in
 
       after = [ "kresd-cachedir.service" ];
       requires = [ "kresd.socket" "kresd-cachedir.service" ];
-      wantedBy = [ "sockets.target" ];
     };
   };
 }
