@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, ninja }:
 python3Packages.buildPythonApplication rec {
   version = "0.44.0";
   pname = "meson";
@@ -32,6 +32,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  propagatedNativeBuildInputs = [ ninja ];
 
   meta = with lib; {
     homepage = http://mesonbuild.com;
