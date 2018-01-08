@@ -16253,6 +16253,8 @@ with pkgs;
 
   mythtv = callPackage ../applications/video/mythtv { };
 
+  micro = callPackage ../applications/editors/micro { };
+
   nano = callPackage ../applications/editors/nano { };
 
   nanoblogger = callPackage ../applications/misc/nanoblogger { };
