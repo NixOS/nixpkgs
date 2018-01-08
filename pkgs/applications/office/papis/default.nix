@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, pkgs }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   name = "papis-${version}";
