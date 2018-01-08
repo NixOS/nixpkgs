@@ -4175,6 +4175,8 @@ with pkgs;
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
+  pubs = callPackage ../tools/misc/pubs {};
+
   pv = callPackage ../tools/misc/pv { };
 
   pwgen = callPackage ../tools/security/pwgen { };
