@@ -98,7 +98,7 @@ stdenv.mkDerivation {
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
-    "--sysconfdir=/etc"
+    "--sysconfdir=${driverLink}/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -197,7 +197,6 @@ stdenv.mkDerivation {
   '';
 
   # TODO:
-  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = ''
