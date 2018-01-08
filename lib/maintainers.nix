@@ -588,6 +588,7 @@
   rzetterberg = "Richard Zetterberg <richard.zetterberg@gmail.com>";
   s1lvester = "Markus Silvester <s1lvester@bockhacker.me>";
   samdroid-apps = "Sam Parkinson <sam@sam.today>";
+  samueldr = "Samuel Dionne-Riel <samuel@dionne-riel.com>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   sargon = "Daniel Ehlers <danielehlers@mindeye.net>";
