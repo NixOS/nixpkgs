@@ -36,6 +36,28 @@ let
     UI vesamenu.c32
     MENU TITLE NixOS
     MENU BACKGROUND /isolinux/background.png
+    MENU RESOLUTION 800 600
+    MENU CLEAR
+    MENU ROWS 6
+    MENU CMDLINEROW -4
+    MENU TIMEOUTROW -3
+    MENU TABMSGROW  -2
+    MENU HELPMSGROW -1
+    MENU HELPMSGENDROW -1
+    MENU MARGIN 0
+
+    #                                FG:AARRGGBB  BG:AARRGGBB   shadow
+    MENU COLOR BORDER       30;44      #00000000    #00000000   none
+    MENU COLOR SCREEN       37;40      #FF000000    #00E2E8FF   none
+    MENU COLOR TABMSG       31;40      #80000000    #00000000   none
+    MENU COLOR TIMEOUT      1;37;40    #FF000000    #00000000   none
+    MENU COLOR TIMEOUT_MSG  37;40      #FF000000    #00000000   none
+    MENU COLOR CMDMARK      1;36;40    #FF000000    #00000000   none
+    MENU COLOR CMDLINE      37;40      #FF000000    #00000000   none
+    MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
+    MENU COLOR UNSEL        37;44      #FF000000    #00000000   none
+    MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+
     DEFAULT boot
 
     LABEL boot
@@ -236,8 +258,8 @@ in
 
     isoImage.splashImage = mkOption {
       default = pkgs.fetchurl {
-          url = https://raw.githubusercontent.com/NixOS/nixos-artwork/5729ab16c6a5793c10a2913b5a1b3f59b91c36ee/ideas/grub-splash/grub-nixos-1.png;
-          sha256 = "43fd8ad5decf6c23c87e9026170a13588c2eba249d9013cb9f888da5e2002217";
+          url = https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png;
+          sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
         };
       description = ''
         The splash image to use in the bootloader.
