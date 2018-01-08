@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "papis-python-rofi";
   version = "1.0.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +14,6 @@ buildPythonPackage rec {
     description = "Create simple GUIs using the Rofi application";
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms   = stdenv.lib.platforms.unix;
   };
 }
 
