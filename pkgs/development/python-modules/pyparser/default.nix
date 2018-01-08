@@ -1,11 +1,10 @@
-{ buildPythonPackage, fetchPypi, fetchpatch, python, stdenv, python3Packages }:
+{ buildPythonPackage, fetchPypi, fetchpatch, python, stdenv, pythonPackages }:
 
 let
   # pyparser only builds with parse == 1.6.5
   parse = buildPythonPackage rec {
     pname = "parse";
     version = "1.6.5";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
@@ -35,14 +34,13 @@ in
 buildPythonPackage rec {
   pname = "pyparser";
   version = "1.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1x8jp48kzxav3l1il5xz61hyxbs4q6f24ifmvz554afxmcnnxdyi";
   };
 
-  buildInputs = with python3Packages; [
+  buildInputs = with pythonPackages; [
     parse
   ];
 
@@ -53,7 +51,6 @@ buildPythonPackage rec {
     description = "A collection of classes to make it easier to parse text data in a pythonic way";
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms   = stdenv.lib.platforms.unix;
   };
 }
 
