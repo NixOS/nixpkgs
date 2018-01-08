@@ -13083,6 +13083,8 @@ with pkgs;
 
   smem = callPackage ../os-specific/linux/smem { };
 
+  speedometer = callPackage ../os-specific/linux/speedometer { };
+
   statifier = callPackage ../os-specific/linux/statifier { };
 
   inherit (callPackage ../os-specific/linux/spl {
