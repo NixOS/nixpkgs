@@ -4,19 +4,15 @@
 
 stdenv.mkDerivation rec {
   name = "dhcp-${version}";
-  version = "4.3.4";
+  version = "4.3.6";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "0zk0imll6bfyp9p4ndn8h6s4ifijnw5bhixswifr5rnk7pp5l4gm";
+    sha256 = "06vgxhm6agzkp6r1jy10467vrfw2rzcp2mnkcph7ydziciisy7m4";
   };
 
   patches =
-    [ # Don't bring down interfaces, because wpa_supplicant doesn't
-      # recover when the wlan interface goes down.  Instead just flush
-      # all addresses, routes and neighbours of the interface.
-      ./flush-if.patch
-
+    [
       # Make sure that the hostname gets set on reboot.  Without this
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
