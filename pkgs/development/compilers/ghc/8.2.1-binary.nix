@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl, perl, gcc
+, fetchurl, perl, gcc, llvm_39
 , ncurses5, gmp, libiconv
 }:
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
+  buildInputs = stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ llvm_39 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
