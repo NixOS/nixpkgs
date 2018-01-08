@@ -2,9 +2,8 @@
 , crayons, flask, flask_cache, gunicorn, maya, meinheld, whitenoise }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.2.0";
   pname = "Flask-Common";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;

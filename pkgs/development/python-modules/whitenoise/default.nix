@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "4.0b4";
   pname = "whitenoise";
+  version = "4.0b4";
 
   src = fetchPypi {
     inherit pname version;

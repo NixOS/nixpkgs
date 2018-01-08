@@ -11,7 +11,6 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  name = "${pname}-${version}";
   version = "0.3.0";
 
   src = fetchFromGitHub {
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  checkPhase = "py.test";
 
   propagatedBuildInputs = [ flask decorator httpbin six requests ];
 

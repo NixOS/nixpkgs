@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage, colorama }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.1.2";
   pname = "crayons";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;

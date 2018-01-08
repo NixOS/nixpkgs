@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage, greenlet }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.6.1";
   pname = "meinheld";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;

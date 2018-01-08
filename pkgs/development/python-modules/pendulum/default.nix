@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage, dateutil, pytzdata, tzlocal }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "1.3.2";
   pname = "pendulum";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;

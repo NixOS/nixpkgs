@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "2017.3.1";
   pname = "pytzdata";
+  version = "2017.3.1";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,9 +2,8 @@
 , dateparser, humanize, pendulum, ruamel_yaml, tzlocal }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.3.3";
   pname = "maya";
+  version = "0.3.3";
 
   src = fetchPypi {
     inherit pname version;

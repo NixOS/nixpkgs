@@ -1,9 +1,8 @@
 { stdenv, fetchPypi, buildPythonPackage, flask, limits }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "1.0.1";
   pname = "Flask-Limiter";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
