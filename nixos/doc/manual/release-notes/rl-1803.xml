@@ -139,12 +139,6 @@ following incompatible changes:</para>
       will be accessible at <literal>/run/memcached/memcached.sock</literal>.
     </para>
   </listitem>
-  <listitem>
-    <para>
-      The DNSCrypt proxy module has been removed, the upstream project
-      is no longer maintained.
-    </para>
-  </listitem>
 </itemizedlist>
 
 </section>
