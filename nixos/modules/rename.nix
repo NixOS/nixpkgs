@@ -89,9 +89,6 @@ with lib;
     # Tarsnap
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
 
-    # dnscrypt-proxy
-    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" "enable" ] "")
-
     # ibus
     (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
 
