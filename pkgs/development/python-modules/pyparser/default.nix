@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, fetchpatch, python, stdenv, pythonPackages }:
+{ buildPythonPackage, fetchPypi, fetchpatch, python, stdenv, parse }:
 
 let
   # pyparser only builds with parse == 1.6.5
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     sha256 = "1x8jp48kzxav3l1il5xz61hyxbs4q6f24ifmvz554afxmcnnxdyi";
   };
 
-  buildInputs = with pythonPackages; [
+  buildInputs = [
     parse
   ];
 
