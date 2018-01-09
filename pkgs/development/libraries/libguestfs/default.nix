@@ -2,7 +2,10 @@
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
 , gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen, libapparmor
-, getopt, perlPackages, ocamlPackages, jdk }:
+, getopt, perlPackages, ocamlPackages
+, javaSupport ? false, jdk ? null }:
+
+assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
@@ -24,8 +27,8 @@ stdenv.mkDerivation rec {
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
-    jdk
-  ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ]);
+  ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
+    ++ stdenv.lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
@@ -41,7 +44,8 @@ stdenv.mkDerivation rec {
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
   '';
-  configureFlags = "--disable-appliance --disable-daemon";
+  configureFlags = [ "--disable-appliance" "--disable-daemon" ]
+    ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = "REALLY_INSTALL=yes";
