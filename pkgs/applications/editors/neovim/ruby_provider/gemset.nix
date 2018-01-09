@@ -2,10 +2,10 @@
   msgpack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ck7w17d6b4jbb8inh1q57bghi9cjkiaxql1d3glmj1yavbpmlh7";
+      sha256 = "0sxa34f8zq0sw5gzxdigkrsfx8mqixv7nyrdxblgngvxqg9lcifk";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.2.0";
   };
   multi_json = {
     source = {
@@ -19,9 +19,9 @@
     dependencies = ["msgpack" "multi_json"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1dnv2pdl8lwwy4av8bqc6kdlgxw88dmajm4fkdk6hc7qdx1sw234";
+      sha256 = "15r3j9bwlpm1ry7cp6059xb0irvsvvlmw53i28z6sf2khwfj5j53";
       type = "gem";
     };
-    version = "0.6.1";
+    version = "0.6.2";
   };
 }

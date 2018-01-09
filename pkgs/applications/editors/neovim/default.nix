@@ -87,13 +87,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.2.1";
+    version = "0.2.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "19ppj0i59kk70j09gap6azm0jm4y95fr5fx7n9gx377y3xjs8h03";
+      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
     };
 
     enableParallelBuilding = true;
@@ -144,7 +144,7 @@ let
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
-    '' + optionalString withPython3 ''
+    '' + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
     '' + optionalString withPyGUI ''
       makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
