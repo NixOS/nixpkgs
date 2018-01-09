@@ -60,9 +60,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
-  configureFlags = " --enable-man ";
+  configureFlags = " --enable-man "
+    + stdenv.lib.optionalString (hostPlatform.libc != "glibc") " --disable-nscd ";
 
-  preBuild = assert glibc != null;
+  preBuild = stdenv.lib.optionalString (hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';
