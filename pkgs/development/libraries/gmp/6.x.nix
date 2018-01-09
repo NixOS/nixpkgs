@@ -1,6 +1,5 @@
 { stdenv, fetchurl, m4, cxx ? true
 , buildPackages
-, buildPlatform, hostPlatform
 , withStatic ? false }:
 
 let inherit (stdenv.lib) optional optionalString; in
@@ -43,7 +42,7 @@ let self = stdenv.mkDerivation rec {
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = buildPlatform == hostPlatform;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 

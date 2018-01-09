@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${gmp.dev}/include";
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional hostPlatform.isSunOS "--disable-thread-safe" ++
     stdenv.lib.optional hostPlatform.is64bit "--with-pic";
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   enableParallelBuilding = true;
 

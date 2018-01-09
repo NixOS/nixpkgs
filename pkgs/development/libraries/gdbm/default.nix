@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lx201q20dvc70f8a3c9s7s18z15inlxvbffph97ngvrgnyjq9cx";
   };
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true; # not cross;
 
   # Linking static stubs on cygwin requires correct ordering.
   # Consider upstreaming this.
