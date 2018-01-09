@@ -107,7 +107,7 @@ symlinkJoin {
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
     for f in $packageConfDir/*.conf; do
