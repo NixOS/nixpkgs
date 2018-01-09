@@ -191,10 +191,10 @@ rec {
           outputs = outputs';
         } // lib.optionalAttrs (attrs ? doCheck) {
           # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doCheck = doCheck && (stdenv.hostPlatform == stdenv.targetPlatform);
+          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
         } // lib.optionalAttrs (attrs ? doInstallCheck) {
           # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.targetPlatform);
+          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
         });
 
       # The meta attribute is passed in the resulting attribute set,
