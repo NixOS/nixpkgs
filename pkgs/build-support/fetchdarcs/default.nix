@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "fetchdarcs";
   NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   builder = ./builder.sh;
-  buildInputs = [darcs];
+  nativeBuildInputs = [darcs];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

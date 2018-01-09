@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
-  buildInputs = [git];
+  nativeBuildInputs = [git];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

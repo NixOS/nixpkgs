@@ -10,7 +10,7 @@ else
 stdenv.mkDerivation {
   name = "chicken-${name}-export";
   builder = ./builder.sh;
-  buildInputs = [ chicken ];
+  nativeBuildInputs = [ chicken ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

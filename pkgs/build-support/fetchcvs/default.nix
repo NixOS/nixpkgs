@@ -10,7 +10,7 @@
 stdenv.mkDerivation {
   name = "cvs-export";
   builder = ./builder.sh;
-  buildInputs = [cvs];
+  nativeBuildInputs = [cvs];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

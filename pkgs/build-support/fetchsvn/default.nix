@@ -31,7 +31,7 @@ else
 stdenv.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  buildInputs = [ subversion glibcLocales ];
+  nativeBuildInputs = [ subversion glibcLocales ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

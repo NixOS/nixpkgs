@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "bzr-export";
 
   builder = ./builder.sh;
-  buildInputs = [ bazaar ];
+  nativeBuildInputs = [ bazaar ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

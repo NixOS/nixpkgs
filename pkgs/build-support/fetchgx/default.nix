@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "${name}-gxdeps";
   inherit src;
 
-  buildInputs = [ go gx gx-go ];
+  nativeBuildInputs = [ go gx gx-go ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

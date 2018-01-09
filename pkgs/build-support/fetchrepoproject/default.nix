@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
   ];
 
-  buildInputs = [ gitRepo cacert ];
+  nativeBuildInputs = [ gitRepo cacert ];
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

@@ -112,7 +112,7 @@ else stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   urls = urls_;
 

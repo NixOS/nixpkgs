@@ -7,7 +7,7 @@ else
 stdenv.mkDerivation {
   name = "hg-archive" + (if name != null then "-${name}" else "");
   builder = ./builder.sh;
-  buildInputs = [mercurial];
+  nativeBuildInputs = [mercurial];
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 

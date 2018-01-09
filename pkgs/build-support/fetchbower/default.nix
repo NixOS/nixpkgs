@@ -23,7 +23,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     inherit outputHash;
-    buildInputs = [ bower2nix ];
+    nativeBuildInputs = [ bower2nix ];
   };
 
 in fetchbower

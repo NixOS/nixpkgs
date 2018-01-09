@@ -8,7 +8,7 @@ else
 stdenv.mkDerivation {
   name = "svn-export-ssh";
   builder = ./builder.sh;
-  buildInputs = [subversion expect];
+  nativeBuildInputs = [subversion expect];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
