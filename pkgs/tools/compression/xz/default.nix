@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "xz-5.2.3";
 
   src = fetchurl {
-    url = "http://tukaani.org/xz/${name}.tar.bz2";
+    url = "https://tukaani.org/xz/${name}.tar.bz2";
     sha256 = "1ha08wxcldgcl81021x5nhknr47s1p95ljfkka4sqah5w5ns377x";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/share/doc";
 
   meta = with stdenv.lib; {
-    homepage = http://tukaani.org/xz/;
+    homepage = https://tukaani.org/xz/;
     description = "XZ, general-purpose data compression software, successor of LZMA";
 
     longDescription =

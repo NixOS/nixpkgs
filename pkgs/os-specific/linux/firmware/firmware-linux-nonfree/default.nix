@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2017-12-06-${src.iwlRev}";
+  version = "2018-01-04-${src.iwlRev}";
 
   # The src runCommand automates the process of building a merged repository of both
   #
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   src = runCommand "firmware-linux-nonfree-src-merged-${version}" {
     shallowSince = "2017-10-01";
-    baseRev = "7f93c9deb484c0a8f4cf59780e77dc7b0c14abe3";
+    baseRev = "65b1c68c63f974d72610db38dfae49861117cae2";
     iwlRev = "iwlwifi-fw-2017-11-15";
 
     # When updating this, you need to let it run with a wrong hash, in order to find out the desired hash
     # randomly mutate the hash to break out of fixed hash, when updating
-    outputHash = "007ncka33vkyaxnih3a36w5pnhn19wdzjl95ig7lhznzvf1bnc1w";
+    outputHash = "1anr7fblxfcrfrrgq98kzy64yrwygc2wdgi47skdmjxhi3wbrvxz";
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -55,12 +55,15 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+  # Firmware blobs do not need fixing and should not be modified
+  dontFixup = true;
+
   meta = with stdenv.lib; {
     description = "Binary firmware collection packaged by kernel.org";
     homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     priority = 6; # give precedence to kernel firmware
   };
 

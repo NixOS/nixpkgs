@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
-, bootPkgs, hscolour
+, bootPkgs, hscolour, llvm_35
 , coreutils, fetchurl, fetchpatch, perl
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ./relocation.patch
   ];
 
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
+  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ] ++ stdenv.lib.optionals stdenv.isArm [ llvm_35 ];
 
   enableParallelBuilding = true;
 

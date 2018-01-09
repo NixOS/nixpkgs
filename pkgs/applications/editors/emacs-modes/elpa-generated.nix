@@ -135,10 +135,10 @@
     arbitools = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "arbitools";
-        version = "0.91";
+        version = "0.93";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.91.el";
-          sha256 = "0r0nbpwjxal40ydvx7hmjq56x12jcfqgld7yc4fjfz93wn8m40qf";
+          url = "https://elpa.gnu.org/packages/arbitools-0.93.el";
+          sha256 = "0z3lqp8dqfkams5h4sw569p48d2rvpd3d8lb4xaw0z8l49y2mvg8";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.11";
+        version = "1.4.0.12";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.11.tar";
-          sha256 = "12m468fxwfrwjkm0wcraafb7n9shh9fmw43nggc216ch3syxmfaw";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.12.tar";
+          sha256 = "140p1ian8dwip6305spg4rvm3rqxhznlq0w5msixw6ykwm735a8z";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -2254,10 +2254,10 @@
       }) {};
     vlf = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "vlf";
-        version = "1.7";
+        version = "1.7.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vlf-1.7.tar";
-          sha256 = "007zdr5szimr6nwwrqz9s338s0qq82r006pdwgcm8nc41jsmsx7r";
+          url = "https://elpa.gnu.org/packages/vlf-1.7.1.tar";
+          sha256 = "0cnwxk20573iqkwk0c0h7pyjk0rkr8l2qd0xmyqj8mvdxjb8nnkz";
         };
         packageRequires = [];
         meta = {

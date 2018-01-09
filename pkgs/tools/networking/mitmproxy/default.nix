@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
-    homepage = http://mitmproxy.org/;
+    homepage = https://mitmproxy.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };

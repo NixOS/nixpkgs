@@ -626,6 +626,7 @@ with pkgs;
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
+  pass-otp = callPackage ../tools/security/pass-otp { };
 
   gopass = callPackage ../tools/security/gopass { };
 
@@ -1087,6 +1088,8 @@ with pkgs;
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  fac = callPackage ../development/tools/fac { };
+
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   facter = callPackage ../tools/system/facter { };
@@ -1222,6 +1225,8 @@ with pkgs;
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   onboard = callPackage ../applications/misc/onboard { };
+
+  optar = callPackage ../tools/graphics/optar {};
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
@@ -1479,7 +1484,8 @@ with pkgs;
 
   # Use Citrix Receiver 13.4.0 below if you get "A network error occured (SSL error 4)"
   # See https://discussions.citrix.com/topic/385459-ssl-error-with-135-works-with-134/?p=1977735
-  citrix_receiver        = hiPrio citrix_receiver_13_7_0;
+  citrix_receiver        = hiPrio citrix_receiver_13_8_0;
+  citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.8.0"; };
   citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.7.0"; };
   citrix_receiver_13_6_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.6.0"; };
   citrix_receiver_13_5_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.5.0"; };
@@ -3641,6 +3647,8 @@ with pkgs;
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
+  newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
+
   nextcloud = callPackage ../servers/nextcloud { };
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
@@ -3896,7 +3904,7 @@ with pkgs;
 
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
-    buildTools = drv.buildTools or [] ++ [haskellPackages.file-embed];
+    buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -3920,6 +3928,10 @@ with pkgs;
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
+
+  percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
+    boost = boost159;
+  };
 
   pick = callPackage ../tools/misc/pick { };
 
@@ -4164,6 +4176,8 @@ with pkgs;
   psensor = callPackage ../tools/system/psensor {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
+
+  pubs = callPackage ../tools/misc/pubs {};
 
   pv = callPackage ../tools/misc/pv { };
 
@@ -6394,7 +6408,7 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
-  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_0;
+  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_2;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
@@ -7001,6 +7015,8 @@ with pkgs;
   avrlibc     = callPackage ../development/misc/avr/libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
+
+  betaflight = callPackage ../development/stm32/betaflight { };
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
@@ -8503,6 +8519,8 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gflags = callPackage ../development/libraries/gflags { };
+
   gf2x = callPackage ../development/libraries/gf2x {};
 
   gd = callPackage ../development/libraries/gd {
@@ -8645,6 +8663,8 @@ with pkgs;
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grib-api = callPackage ../development/libraries/grib-api { };
+
+  grpc = callPackage ../development/libraries/grpc { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
@@ -9834,8 +9854,6 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
-  libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
-
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
@@ -10296,7 +10314,7 @@ with pkgs;
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
     enableCuda = config.cudaSupport or false;
     cudatoolkit = cudatoolkit8;
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
   };
 
   # this ctl version is needed by openexr_viewers
@@ -11719,7 +11737,9 @@ with pkgs;
 
   cayley = callPackage ../servers/cayley { };
 
-  charybdis = callPackage ../servers/irc/charybdis {};
+  charybdis = callPackage ../servers/irc/charybdis { };
+
+  clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse { };
 
@@ -12130,6 +12150,7 @@ with pkgs;
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
+  prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
@@ -12278,7 +12299,7 @@ with pkgs;
     tomcat7
     tomcat8
     tomcat85
-    tomcatUnstable;
+    tomcat9;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
@@ -12861,6 +12882,8 @@ with pkgs;
     evdi = callPackage ../os-specific/linux/evdi { };
 
     pktgen = callPackage ../os-specific/linux/pktgen { };
+
+    hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
     odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
@@ -14486,11 +14509,10 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_09
-    docker_17_11;
+    docker_17_12;
 
-  docker = docker_17_09;
-  docker-edge = docker_17_11;
+  docker = docker_17_12;
+  docker-edge = docker_17_12;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -14823,6 +14845,8 @@ with pkgs;
   exercism = callPackage ../applications/misc/exercism { };
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
+
+  icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
@@ -15248,11 +15272,11 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  gmtk = callPackage ../development/libraries/gmtk { };
+
   gmu = callPackage ../applications/audio/gmu { };
 
-  gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
-    inherit (gnome2) GConf;
-  };
+  gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
   gnumeric = callPackage ../applications/office/gnumeric { };
 
@@ -15404,9 +15428,7 @@ with pkgs;
   hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
   hyperterm = self.hyper;
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
-  };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -15884,6 +15906,8 @@ with pkgs;
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
+  mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
+
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
@@ -15898,8 +15922,7 @@ with pkgs;
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
-  mendeley = callPackage ../applications/office/mendeley {
-    qt5 = qt56;
+  mendeley = libsForQt56.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
 
@@ -16238,6 +16261,8 @@ with pkgs;
 
   mythtv = callPackage ../applications/video/mythtv { };
 
+  micro = callPackage ../applications/editors/micro { };
+
   nano = callPackage ../applications/editors/nano { };
 
   nanoblogger = callPackage ../applications/misc/nanoblogger { };
@@ -16541,9 +16566,7 @@ with pkgs;
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    libtorrentRasterbar = libtorrentRasterbar_1_0;
-  };
+  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
     lua5 = lua5_1;
@@ -16676,7 +16699,9 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
-  radiotray-ng = callPackage ../applications/audio/radiotray-ng { };
+  radiotray-ng = callPackage ../applications/audio/radiotray-ng {
+    wxGTK = wxGTK30;
+  };
 
   rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
@@ -17148,6 +17173,8 @@ with pkgs;
     enableGTK3 = true;
   };
 
+  thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
+
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
@@ -17219,10 +17246,10 @@ with pkgs;
   transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
-  transmission_gtk = transmission.override { enableGTK3 = true; };
+  transmission-gtk = transmission.override { enableGTK3 = true; };
 
   transmission-remote-cli = callPackage ../applications/networking/p2p/transmission-remote-cli {};
-  transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
+  transmission-remote-gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
 
   transgui = callPackage ../applications/networking/p2p/transgui { };
 
@@ -17359,7 +17386,9 @@ with pkgs;
     system-libvirt = libvirt;
   };
 
-  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix { };
+  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
+    qtermwidget = lxqt.qtermwidget;
+  };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
@@ -18429,6 +18458,10 @@ with pkgs;
   steam-run-native = (steam.override {
     nativeOnly = true;
   }).run;
+
+  linux-steam-integration = callPackage ../games/linux-steam-integration {
+    gtk = pkgs.gtk3;
+  };
 
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
@@ -19753,6 +19786,11 @@ with pkgs;
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
+
+  sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
+    inherit libusb1; # Shadow python.pkgs.libusb1.
+    librsvg = librsvg.override { enableIntrospection = true; };
+  };
 
   sct = callPackage ../tools/X11/sct {};
 

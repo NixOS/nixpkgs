@@ -131,6 +131,20 @@ following incompatible changes:</para>
       Other types dependencies should be unaffected.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>memcached</literal> service no longer accept dynamic socket
+      paths via <option>services.memcached.socket</option>. Unix sockets can be
+      still enabled by <option>services.memcached.enableUnixSocket</option> and
+      will be accessible at <literal>/run/memcached/memcached.sock</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The DNSCrypt proxy module has been removed, the upstream project
+      is no longer maintained.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -179,6 +193,58 @@ following incompatible changes:</para>
       periodically check btrfs filesystems for data corruption.
       If there's a correct copy available, it will automatically repair
       corrupted blocks.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.clock-format.</literal>
+      has been added, the clock format string (as expected by
+      strftime, e.g. <literal>%H:%M</literal>) to use with the lightdm
+      gtk greeter panel.
+    </para>
+    <para>
+      If set to null the default clock format is used.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.indicators</literal>
+      has been added, a list of allowed indicator modules to use with
+      the lightdm gtk greeter panel.
+    </para>
+    <para>
+      Built-in indicators include <literal>~a11y</literal>,
+      <literal>~language</literal>, <literal>~session</literal>,
+      <literal>~power</literal>, <literal>~clock</literal>,
+      <literal>~host</literal>, <literal>~spacer</literal>. Unity
+      indicators can be represented by short name
+      (e.g. <literal>sound</literal>, <literal>power</literal>),
+      service file name, or absolute path.
+    </para>
+    <para>
+      If set to <literal>null</literal> the default indicators are
+      used.
+    </para>
+    <para>
+      In order to have the previous default configuration add
+<programlisting>
+  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [
+    "~host" "~spacer"
+    "~clock" "~spacer"
+    "~session"
+    "~language"
+    "~a11y"
+    "~power"
+  ];
+</programlisting>
+      to your <literal>configuration.nix</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The NixOS test driver supports user services declared by <literal>systemd.user.services</literal>.
+      The methods <literal>waitForUnit</literal>, <literal>getUnitInfo</literal>, <literal>startJob</literal>
+      and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
     </para>
   </listitem>
 </itemizedlist>

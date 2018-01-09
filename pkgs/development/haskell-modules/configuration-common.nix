@@ -48,7 +48,7 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec = super.hspec.override { stringbuilder = dontCheck self.stringbuilder; };
   hspec-core = super.hspec-core.override { silently = dontCheck super.silently; temporary = dontCheck super.temporary; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
@@ -653,7 +653,9 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  }));
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
+  };
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -915,7 +917,8 @@ self: super: {
   grakn = dontCheck (doJailbreak super.grakn);
 
   # test suite requires git and does a bunch of git operations
-  restless-git = dontCheck super.restless-git;
+  # doJailbreak because of hardcoded time, seems to be fixed upstream
+  restless-git = dontCheck (doJailbreak super.restless-git);
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -1002,6 +1005,9 @@ self: super: {
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
 
+  # https://github.com/bos/text-icu/issues/32
+  text-icu = dontCheck super.text-icu;
+
   # https://github.com/strake/lenz.hs/issues/2
   lenz =
     let patch = pkgs.fetchpatch
@@ -1023,4 +1029,6 @@ self: super: {
   # https://github.com/Twinside/Juicy.Pixels/issues/149
   JuicyPixels = dontHaddock super.JuicyPixels;
 
+  # armv7l fixes.
+  happy = if pkgs.stdenv.isArm then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
 }

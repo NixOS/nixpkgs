@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, ounit }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib jbuilder ounit ];
+  buildInputs = [ ocaml findlib jbuilder ];
 
   buildPhase = "jbuilder build -p dtoa";
 
   inherit (jbuilder) installPhase;
 
-  createFindLibDestdir = true;
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-dtoa;

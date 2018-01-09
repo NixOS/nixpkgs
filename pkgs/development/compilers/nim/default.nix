@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.17.2";
 
   src = fetchurl {
-    url = "http://nim-lang.org/download/${name}.tar.xz";
+    url = "https://nim-lang.org/download/${name}.tar.xz";
     sha256 = "1gc2xk3ygmz9y4pm75pligssgw995a7gvnfpy445fjpw4d81pzxa";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Statically typed, imperative programming language";
-    homepage = http://nim-lang.org/;
+    homepage = https://nim-lang.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ ehmry peterhoeg ];
     platforms = with platforms; linux ++ darwin; # arbitrary

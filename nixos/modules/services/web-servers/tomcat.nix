@@ -29,7 +29,7 @@ in
         type = types.package;
         default = pkgs.tomcat85;
         defaultText = "pkgs.tomcat85";
-        example = lib.literalExample "pkgs.tomcatUnstable";
+        example = lib.literalExample "pkgs.tomcat9";
         description = ''
           Which tomcat package to use.
         '';

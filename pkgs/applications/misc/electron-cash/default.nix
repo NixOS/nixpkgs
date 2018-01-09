@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.0";
+  version = "3.1.1";
   name = "electron-cash-${version}";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "f0e2bf5c6d29da714eddd50b45761fea9fc905a0172c7b92df8fca7427439f1a";
+    sha256 = "cd42a0a0075787125f195508834d8c34d651896c0986d0b2066763add59bad2b";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -35,6 +35,11 @@ python3Packages.buildPythonApplication rec {
     keepkey
     trezor
   ];
+
+  postPatch = ''
+    # Remove pyqt5 check
+    sed -i '/pyqt5/d' setup.py
+  '';
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py

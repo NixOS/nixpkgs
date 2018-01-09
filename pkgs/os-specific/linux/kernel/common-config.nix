@@ -370,6 +370,15 @@ with stdenv.lib;
     MICROCODE_AMD_EARLY y
   ''}
 
+  ${optionalString (versionAtLeast version "4.10") ''
+    # Write Back Throttling
+    # https://lwn.net/Articles/682582/
+    # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
+    BLK_WBT y
+    BLK_WBT_SQ y
+    BLK_WBT_MQ y
+  ''}
+
   # Misc. options.
   8139TOO_8129 y
   8139TOO_PIO n # PIO is slower

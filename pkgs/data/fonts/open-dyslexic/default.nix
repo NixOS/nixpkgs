@@ -16,7 +16,7 @@ in fetchzip {
   sha256 = "045xc7kj56q4ygnjppm8f8fwqqvf21x1piabm4nh8hwgly42a3w2";
 
   meta = with stdenv.lib; {
-    homepage = http://opendyslexic.org/;
+    homepage = https://opendyslexic.org/;
     description = "Font created to increase readability for readers with dyslexia";
     license = "Bitstream Vera License (https://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
     platforms = platforms.all;

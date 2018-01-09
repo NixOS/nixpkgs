@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, meson, ninja, glib, pkgconfig, gnome3, appstream-glib, gettext }:
+{ stdenv, fetchurl, meson, ninja, glib, pkgconfig, gnome3, appstream-glib
+, gettext, gobjectIntrospection
+}:
 
 stdenv.mkDerivation rec {
   name = "nautilus-sendto-${version}";
@@ -10,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "164d7c6e8bae29c4579bcc67a7bf50d783662b1545b62f3008e7ea3c0410e04d";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig appstream-glib gettext ];
+  nativeBuildInputs = [ meson ninja pkgconfig appstream-glib gettext gobjectIntrospection ];
   buildInputs = [ glib ];
 
   meta = with stdenv.lib; {

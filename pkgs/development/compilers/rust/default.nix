@@ -6,7 +6,7 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.21.0";
+  version = "1.22.1";
 in
 rec {
   rustc = callPackage ./rustc.nix {
@@ -18,7 +18,7 @@ rec {
 
     src = fetchurl {
       url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-      sha256 = "1yj8lnxybjrybp00fqhxw8fpr641dh8wcn9mk44xjnsb4i1c21qp";
+      sha256 = "1lrzzp0nh7s61wgfs2h6ilaqi6iq89f1pd1yaf65l87bssyl4ylb";
     };
 
     patches = [
@@ -30,9 +30,9 @@ rec {
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.22.0";
-    srcSha = "0x9pm73hkkd1hq4qrmz8iv91djgpdsxzwll7jari0h77vpwajmw4";
-    cargoSha256 = "0xd0rb8gcqy6xngsx9l30jg3fqrcwccgv904ksqs9c4d44hga0gd";
+    version = "0.23.0";
+    srcSha = "14b2n1msxma19ydchj54hd7f2zdsr524fg133dkmdn7j65f1x6aj";
+    cargoSha256 = "1mcqv45l0d1gw8v3v48gm1902xckj6r0s8l1z46nbmrsjs34rzhx";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

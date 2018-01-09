@@ -29,6 +29,7 @@
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ahmedtd = "Taahir Ahmed <ahmed.taahir@gmail.com>";
   aij = "Ivan Jager <aij+git@mrph.org>";
+  ajgrf = "Alex Griffin <a@ajgrf.com>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
   akc = "Anders Claesson <akc@akc.is>";
@@ -190,6 +191,7 @@
   dtzWill = "Will Dietz <nix@wdtz.org>";
   dupgit = "Olivier Delhomme <olivier.delhomme@free.fr>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
+  dzabraev = "Maksim Dzabraev <dzabraew@gmail.com>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   earldouglas = "James Earl Douglas <james@earldouglas.com>";
   ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
@@ -421,6 +423,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mgdelacroix = "Miguel de la Cruz <mgdelacroix@gmail.com>";
+  mgttlinger = "Merlin Göttlinger <megoettlinger@gmail.com";
   mguentner = "Maximilian Güntner <code@klandest.in>";
   mic92 = "Jörg Thalheim <joerg@thalheim.io>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
@@ -579,10 +582,11 @@
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
-  rvolosatovs = "Roman Volosatovs <rvolosatovs@riseup.net";
+  rvolosatovs = "Roman Volosatovs <rvolosatovs@riseup.net>";
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryansydnor = "Ryan Sydnor <ryan.t.sydnor@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
+  ryantrinkle = "Ryan Trinkle <ryan.trinkle@gmail.com>";
   rybern = "Ryan Bernstein <ryan.bernstein@columbia.edu>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   ryneeverett = "Ryne Everett <ryneeverett@gmail.com>";

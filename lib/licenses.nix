@@ -309,6 +309,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free      = false;
   };
 
+  inria-icesl = {
+    fullName = "INRIA Non-Commercial License Agreement for IceSL";
+    url      = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf";
+    free     = false;
+  };
+
   ipa = spdx {
     spdxId = "IPA";
     fullName = "IPA Font License";

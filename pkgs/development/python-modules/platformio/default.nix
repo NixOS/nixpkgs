@@ -8,12 +8,12 @@ buildPythonPackage rec {
   disabled = isPy3k || isPyPy;
 
   pname = "platformio";
-  version="3.4.1";
+  version="3.5.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b4lba672l851sv1xwc320xbh46x7hx4ms6whc0k37hxkxj0nwm2";
+    sha256 = "0gy13cwp0i97lgjd8hh8kh9cswxh53x4cx2sq5b7d7vv8kd7bh6c";
   };
 
   propagatedBuildInputs =  [

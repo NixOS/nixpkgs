@@ -89,6 +89,9 @@ with lib;
     # Tarsnap
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
 
+    # dnscrypt-proxy
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" "enable" ] "")
+
     # ibus
     (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
 
@@ -185,6 +188,9 @@ with lib;
     (mkRenamedOptionModule [ "config" "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "config" "fonts" "fontconfig" "useEmbeddedBitmaps" ])
     (mkRenamedOptionModule [ "config" "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "config" "fonts" "fontconfig" "forceAutohint" ])
     (mkRenamedOptionModule [ "config" "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "config" "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
+
+    # Profile splitting
+    (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
 
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")

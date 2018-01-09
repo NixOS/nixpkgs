@@ -18,6 +18,10 @@ buildPythonPackage rec {
   checkInputs = [ nose chai simplejson ];
   propagatedBuildInputs = [ dateutil backports_functools_lru_cache ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "==1.2.1" ""
+  '';
+
   meta = with stdenv.lib; {
     description = "Python library for date manipulation";
     license     = "apache";

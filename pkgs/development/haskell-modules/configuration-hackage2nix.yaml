@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 10.2
+  # LTS Haskell 10.3
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -250,7 +250,7 @@ default-package-overrides:
   - base-unicode-symbols ==0.2.2.4
   - basic-prelude ==0.7.0
   - bbdb ==0.8
-  - bcrypt ==0.0.10
+  - bcrypt ==0.0.11
   - bench ==1.0.7
   - benchpress ==0.2.2.10
   - bencode ==0.6.0.0
@@ -415,7 +415,7 @@ default-package-overrides:
   - cmark-gfm ==0.1.3
   - cmark-highlight ==0.2.0.0
   - cmark-lucid ==0.1.0.0
-  - cmdargs ==0.10.18
+  - cmdargs ==0.10.19
   - code-builder ==0.1.3
   - codec ==0.2.1
   - code-page ==0.1.3
@@ -449,7 +449,7 @@ default-package-overrides:
   - conduit-algorithms ==0.0.6.1
   - conduit-combinators ==1.1.2
   - conduit-connection ==0.1.0.3
-  - conduit-extra ==1.2.3.1
+  - conduit-extra ==1.2.3.2
   - conduit-iconv ==0.1.1.2
   - conduit-parse ==0.1.2.2
   - conduit-throttle ==0.3.1.0
@@ -484,7 +484,7 @@ default-package-overrides:
   - crackNum ==1.9
   - criterion ==1.2.6.0
   - cron ==0.6.1
-  - crypto-api ==0.13.2
+  - crypto-api ==0.13.3
   - crypto-api-tests ==0.3
   - cryptocipher ==0.6.2
   - crypto-cipher-tests ==0.0.11
@@ -515,7 +515,7 @@ default-package-overrides:
   - cubicspline ==0.1.2
   - cublas ==0.4.0.0
   - cuda ==0.9.0.0
-  - cue-sheet ==1.0.0
+  - cue-sheet ==1.0.1
   - cufft ==0.8.0.0
   - curl ==1.3.8
   - currencies ==0.1.1.1
@@ -847,10 +847,10 @@ default-package-overrides:
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.4.0.4
   - ghc-syb-utils ==0.2.3.3
-  - ghc-tcplugins-extra ==0.2.1
-  - ghc-typelits-extra ==0.2.3
-  - ghc-typelits-knownnat ==0.3.1
-  - ghc-typelits-natnormalise ==0.5.7
+  - ghc-tcplugins-extra ==0.2.2
+  - ghc-typelits-extra ==0.2.4
+  - ghc-typelits-knownnat ==0.4
+  - ghc-typelits-natnormalise ==0.5.8
   - ghost-buster ==0.1.1.0
   - gi-atk ==2.0.14
   - gi-cairo ==1.0.14
@@ -1035,7 +1035,7 @@ default-package-overrides:
   - hashable ==1.2.6.1
   - hashable-time ==0.2.0.1
   - hashids ==1.0.2.3
-  - hashmap ==1.3.2
+  - hashmap ==1.3.3
   - hashtables ==1.2.2.1
   - haskeline ==0.7.4.2
   - haskell-gi ==0.20.3
@@ -1055,16 +1055,16 @@ default-package-overrides:
   - haskell-src-exts-simple ==1.19.0.0
   - haskell-src-exts-util ==0.2.1.2
   - haskell-src-meta ==0.8.0.1
-  - haskell-tools-ast ==1.0.0.2
-  - haskell-tools-backend-ghc ==1.0.0.2
-  - haskell-tools-builtin-refactorings ==1.0.0.2
-  - haskell-tools-cli ==1.0.0.2
-  - haskell-tools-daemon ==1.0.0.2
-  - haskell-tools-debug ==1.0.0.2
-  - haskell-tools-demo ==1.0.0.2
-  - haskell-tools-prettyprint ==1.0.0.2
-  - haskell-tools-refactor ==1.0.0.2
-  - haskell-tools-rewrite ==1.0.0.2
+  - haskell-tools-ast ==1.0.0.3
+  - haskell-tools-backend-ghc ==1.0.0.3
+  - haskell-tools-builtin-refactorings ==1.0.0.3
+  - haskell-tools-cli ==1.0.0.3
+  - haskell-tools-daemon ==1.0.0.3
+  - haskell-tools-debug ==1.0.0.3
+  - haskell-tools-demo ==1.0.0.3
+  - haskell-tools-prettyprint ==1.0.0.3
+  - haskell-tools-refactor ==1.0.0.3
+  - haskell-tools-rewrite ==1.0.0.3
   - haskintex ==0.8.0.0
   - hasmin ==1.0.1
   - hasql ==1.1.1
@@ -1082,7 +1082,7 @@ default-package-overrides:
   - hbeanstalk ==0.2.4
   - Hclip ==3.0.0.4
   - HCodecs ==0.5
-  - hdaemonize ==0.5.4
+  - hdaemonize ==0.5.5
   - HDBC ==2.4.0.2
   - HDBC-mysql ==0.7.1.0
   - HDBC-session ==0.1.1.1
@@ -1171,7 +1171,7 @@ default-package-overrides:
   - hsignal ==0.2.7.5
   - hsinstall ==1.6
   - hslogger ==1.2.10
-  - hslua ==0.9.3
+  - hslua ==0.9.5
   - hslua-aeson ==0.3.0.1
   - hslua-module-text ==0.1.2.1
   - hsndfile ==0.8.0
@@ -1297,8 +1297,8 @@ default-package-overrides:
   - intern ==0.9.1.4
   - interpolate ==0.1.1
   - interpolatedstring-perl6 ==1.0.0
-  - interpolation ==0.1.0.2
   - Interpolation ==0.3.0
+  - interpolation ==0.1.0.2
   - IntervalMap ==0.5.3.1
   - intervals ==0.8.1
   - intro ==0.3.0.1
@@ -1351,7 +1351,7 @@ default-package-overrides:
   - json-rpc-generic ==0.2.1.3
   - json-schema ==0.7.4.1
   - json-stream ==0.4.1.5
-  - JuicyPixels ==3.2.9.2
+  - JuicyPixels ==3.2.9.3
   - JuicyPixels-extra ==0.2.2
   - JuicyPixels-scale-dct ==0.1.1.2
   - justified-containers ==0.2.0.1
@@ -1433,8 +1433,8 @@ default-package-overrides:
   - ListLike ==4.5.1
   - listsafe ==0.1.0.1
   - list-t ==1.0.0.1
-  - llvm-hs ==5.1.2
-  - llvm-hs-pure ==5.1.1
+  - llvm-hs ==5.1.3
+  - llvm-hs-pure ==5.1.2
   - lmdb ==0.2.5
   - load-env ==0.1.2
   - loch-th ==0.2.1
@@ -1533,12 +1533,12 @@ default-package-overrides:
   - mltool ==0.1.0.2
   - mmap ==0.5.9
   - mmark ==0.0.4.0
-  - mmark-ext ==0.0.1.1
+  - mmark-ext ==0.0.1.2
   - mmorph ==1.1.0
   - mnist-idx ==0.1.2.8
   - mockery ==0.3.5
   - model ==0.4.4
-  - modern-uri ==0.1.2.0
+  - modern-uri ==0.1.2.1
   - modify-fasta ==0.8.2.3
   - moesocks ==1.0.0.43
   - mole ==0.0.6
@@ -1667,10 +1667,10 @@ default-package-overrides:
   - numhask-range ==0.1.3.0
   - NumInstances ==1.4
   - numtype-dk ==0.5.0.1
-  - nvim-hs ==0.2.4
+  - nvim-hs ==0.2.5
   - nvim-hs-contrib ==0.2.0
   - nvim-hs-ghcid ==0.2.0
-  - nvvm ==0.8.0.1
+  - nvvm ==0.8.0.2
   - objective ==1.1.2
   - ObjectName ==1.1.0.1
   - ochintin-daicho ==0.1.0.1
@@ -1711,7 +1711,7 @@ default-package-overrides:
   - pagination ==0.2.1
   - palette ==0.1.0.5
   - pandoc ==2.0.6
-  - pandoc-citeproc ==0.12.2.2
+  - pandoc-citeproc ==0.12.2.5
   - pandoc-types ==1.17.3
   - pango ==0.13.4.0
   - papillon ==0.1.0.5
@@ -1721,7 +1721,7 @@ default-package-overrides:
   - parsec ==3.1.11
   - parsec-numeric ==0.1.0.0
   - ParsecTools ==0.0.2.0
-  - parser-combinators ==0.2.1
+  - parser-combinators ==0.4.0
   - parsers ==0.12.8
   - partial-handler ==1.0.2
   - partial-isomorphisms ==0.2.2.1
@@ -1753,8 +1753,8 @@ default-package-overrides:
   - persistent ==2.7.1
   - persistent-mongoDB ==2.6.0
   - persistent-mysql ==2.6.2.1
-  - persistent-mysql-haskell ==0.3.5
-  - persistent-postgresql ==2.6.2.1
+  - persistent-mysql-haskell ==0.3.6
+  - persistent-postgresql ==2.6.2.2
   - persistent-refs ==0.4
   - persistent-sqlite ==2.6.4
   - persistent-template ==2.5.3
@@ -2003,8 +2003,8 @@ default-package-overrides:
   - say ==0.1.0.0
   - sbp ==2.3.2
   - sbv ==7.4
-  - scalendar ==1.2.0
   - SCalendar ==1.1.0
+  - scalendar ==1.2.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -2232,7 +2232,7 @@ default-package-overrides:
   - tasty-ant-xml ==1.1.1
   - tasty-auto ==0.2.0.0
   - tasty-dejafu ==0.7.1.1
-  - tasty-discover ==4.1.2
+  - tasty-discover ==4.1.3
   - tasty-expected-failure ==0.11.0.4
   - tasty-fail-fast ==0.0.3
   - tasty-golden ==2.3.1.2
@@ -2324,7 +2324,7 @@ default-package-overrides:
   - time-compat ==0.1.0.3
   - timeit ==1.0.0.0
   - timelens ==0.2.0.2
-  - time-lens ==0.4.0.1
+  - time-lens ==0.4.0.2
   - time-locale-compat ==0.1.1.3
   - time-locale-vietnamese ==1.0.0.0
   - timemap ==0.0.6
@@ -2336,7 +2336,7 @@ default-package-overrides:
   - tinylog ==0.14.0
   - tinytemplate ==0.1.2.0
   - titlecase ==1.0.1
-  - tldr ==0.2.3
+  - tldr ==0.2.4
   - tls ==1.4.0
   - tls-debug ==0.4.5
   - tls-session-manager ==0.0.0.2
@@ -2374,7 +2374,7 @@ default-package-overrides:
   - type-combinators ==0.2.4.3
   - type-combinators-singletons ==0.1.0.0
   - TypeCompose ==0.9.12
-  - typed-process ==0.2.0.0
+  - typed-process ==0.2.1.0
   - type-fun ==0.1.1
   - type-hint ==0.1
   - type-level-integers ==0.0.1
@@ -2389,7 +2389,7 @@ default-package-overrides:
   - tzdata ==0.1.20170320.0
   - ua-parser ==0.7.4.1
   - uglymemo ==0.1.0.1
-  - unagi-chan ==0.4.0.0
+  - unagi-chan ==0.4.1.0
   - unbounded-delays ==0.1.1.0
   - unbound-generics ==0.3.1
   - unboxed-ref ==0.4.0.0
@@ -2420,7 +2420,7 @@ default-package-overrides:
   - unix-compat ==0.5.0.1
   - unix-time ==0.3.7
   - unliftio ==0.2.2.0
-  - unliftio-core ==0.1.0.0
+  - unliftio-core ==0.1.1.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.8.0
   - unordered-intmap ==0.1.0.0
@@ -2482,7 +2482,7 @@ default-package-overrides:
   - vivid-osc ==0.3.0.0
   - vivid-supercollider ==0.3.0.0
   - void ==0.7.2
-  - vty ==5.19
+  - vty ==5.19.1
   - wai ==3.2.1.1
   - wai-app-static ==3.1.6.1
   - wai-cli ==0.1.1
@@ -2500,7 +2500,7 @@ default-package-overrides:
   - wai-middleware-crowd ==0.1.4.2
   - wai-middleware-metrics ==0.2.4
   - wai-middleware-prometheus ==0.3.0
-  - wai-middleware-rollbar ==0.8.0
+  - wai-middleware-rollbar ==0.8.1
   - wai-middleware-static ==0.8.1
   - wai-middleware-throttle ==0.2.2.0
   - wai-predicates ==0.10.0
@@ -2519,14 +2519,14 @@ default-package-overrides:
   - webdriver-angular ==0.1.11
   - webpage ==0.0.5
   - web-plugins ==0.2.9
-  - web-routes ==0.27.12
+  - web-routes ==0.27.13
   - web-routes-boomerang ==0.28.4.2
   - web-routes-happstack ==0.23.11
   - web-routes-hsp ==0.24.6.1
   - web-routes-th ==0.22.6.2
   - web-routes-wai ==0.24.3
   - webrtc-vad ==0.1.0.3
-  - websockets ==0.12.2.0
+  - websockets ==0.12.3.0
   - websockets-rpc ==0.6.0
   - websockets-simple ==0.0.6.3
   - websockets-snap ==0.10.2.4
@@ -2534,7 +2534,7 @@ default-package-overrides:
   - weigh ==0.0.7
   - wide-word ==0.1.0.5
   - wikicfp-scraper ==0.1.0.9
-  - wild-bind ==0.1.0.3
+  - wild-bind ==0.1.1.0
   - wild-bind-x11 ==0.1.0.7
   - Win32 ==2.5.4.1
   - Win32-notify ==0.3.0.3
@@ -2557,8 +2557,8 @@ default-package-overrides:
   - Workflow ==0.8.3
   - wrap ==0.0.0
   - wrecker ==1.2.3.0
-  - wreq ==0.5.1.0
-  - wreq-stringless ==0.5.1.0
+  - wreq ==0.5.2.0
+  - wreq-stringless ==0.5.2.0
   - writer-cps-full ==0.1.0.0
   - writer-cps-lens ==0.1.0.1
   - writer-cps-morph ==0.1.0.2
@@ -2582,7 +2582,7 @@ default-package-overrides:
   - xlsx-tabular ==0.2.2
   - xml ==1.3.14
   - xml-basic ==0.1.2
-  - xml-conduit ==1.7.0
+  - xml-conduit ==1.7.0.1
   - xml-conduit-parse ==0.3.1.2
   - xml-conduit-writer ==0.1.1.2
   - xmlgen ==0.6.2.1
@@ -2683,11 +2683,13 @@ extra-packages:
   - haddock < 2.17                      # required on GHC 7.10.x
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
+  - haddock-api == 2.17.*               # required on GHC 8.0.x
   - haddock-library == 1.2.*            # required for haddock-api-2.16.x
   - haddock-library == 1.4.4            # required for haddock-api-2.18.x
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
+  - hoogle == 5.0.14                    # required by hie-hoogle
   - hpack == 0.20.*                     # required by stack-1.6.1
   - inline-c < 0.6                      # required on GHC 8.0.x
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
@@ -2758,6 +2760,7 @@ package-maintainers:
     - lambdabot
   alunduil:
     - collection-json
+    - network-arbitrary
     - network-uri-json
     - siren-json
 

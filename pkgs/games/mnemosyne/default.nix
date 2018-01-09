@@ -26,7 +26,7 @@ in pythonPackages.buildPythonApplication rec {
     rm -r $out/lib/python2.7/site-packages/nix
   '';
   meta = {
-    homepage = http://mnemosyne-proj.org/;
+    homepage = https://mnemosyne-proj.org/;
     description = "Spaced-repetition software";
     longDescription = ''
       The Mnemosyne Project has two aspects:
