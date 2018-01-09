@@ -1082,6 +1082,41 @@ index da63360333..95e34e2e50 100644
              xcursorFound = xcursorLib.load();
          }
          if (xcursorFound) {
+diff --git a/src/plugins/platforms/cocoa/qcocoawindow.mm b/src/plugins/platforms/cocoa/qcocoawindow.mm
+index d1f19f2..1ac2cf1 100644
+--- a/src/plugins/platforms/cocoa/qcocoawindow.mm
++++ b/src/plugins/platforms/cocoa/qcocoawindow.mm
+@@ -1699,7 +1699,7 @@ void QCocoaWindow::applyContentBorderThickness(NSWindow *window)
+
+     if (!m_drawContentBorderGradient) {
+         window.styleMask = window.styleMask & ~NSTexturedBackgroundWindowMask;
+-        [window.contentView.superview setNeedsDisplay:YES];
++        [[window.contentView superview] setNeedsDisplay:YES];
+         window.titlebarAppearsTransparent = NO;
+         return;
+     }
+diff --git a/src/plugins/platforms/cocoa/qnswindow.mm b/src/plugins/platforms/cocoa/qnswindow.mm
+index e846fa0..4171cd4 100644
+--- a/src/plugins/platforms/cocoa/qnswindow.mm
++++ b/src/plugins/platforms/cocoa/qnswindow.mm
+@@ -224,7 +224,7 @@ static bool isMouseEvent(NSEvent *ev)
+     if (pw->frameStrutEventsEnabled() && isMouseEvent(theEvent)) {
+         NSPoint loc = [theEvent locationInWindow];
+         NSRect windowFrame = [self convertRectFromScreen:self.frame];
+-        NSRect contentFrame = self.contentView.frame;
++        NSRect contentFrame = [self.contentView frame];
+         if (NSMouseInRect(loc, windowFrame, NO) && !NSMouseInRect(loc, contentFrame, NO))
+             [qnsview_cast(pw->view()) handleFrameStrutMouseEvent:theEvent];
+     }
+@@ -253,7 +253,7 @@ static bool isMouseEvent(NSEvent *ev)
+ + (void)applicationActivationChanged:(NSNotification*)notification
+ {
+     const id sender = self;
+-    NSEnumerator<NSWindow*> *windowEnumerator = nullptr;
++    NSEnumerator *windowEnumerator = nullptr;
+     NSApplication *application = [NSApplication sharedApplication];
+
+ #if QT_MACOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__MAC_10_12)
 diff --git a/src/plugins/platformthemes/gtk3/main.cpp b/src/plugins/platformthemes/gtk3/main.cpp
 index c4cd66c33b..b6f2691587 100644
 --- a/src/plugins/platformthemes/gtk3/main.cpp
