@@ -11851,6 +11851,8 @@ with pkgs;
 
   hbase = callPackage ../servers/hbase {};
 
+  home-assistant = callPackage ../servers/home-assistant { };
+
   hiawatha = callPackage ../servers/http/hiawatha {};
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
