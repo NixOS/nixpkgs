@@ -34,7 +34,7 @@
 
 let
   androidStudio = stdenv.mkDerivation {
-    name = "${pname}";
+    name = "${pname}-${version}";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
@@ -48,6 +48,7 @@ let
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
+        --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set PATH "${stdenv.lib.makeBinPath [
 
           # Checked in studio.sh
@@ -68,7 +69,6 @@ let
 
           # Runtime stuff
           git
-
         ]}" \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
 
