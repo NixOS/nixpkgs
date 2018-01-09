@@ -74,6 +74,7 @@ python3Packages.buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = https://www.electroncash.org/;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
   };
