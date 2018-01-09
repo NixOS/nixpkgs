@@ -2,7 +2,7 @@
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
 , gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen, libapparmor
-, getopt, perlPackages, ocamlPackages }:
+, getopt, perlPackages, ocamlPackages, jdk }:
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
+    jdk
   ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ]);
 
   prePatch = ''
