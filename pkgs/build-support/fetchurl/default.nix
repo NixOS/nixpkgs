@@ -1,4 +1,4 @@
-{ stdenv, curl }: # Note that `curl' may be `null', in case of the native stdenv.
+{ stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
 
 let
 
@@ -10,7 +10,7 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    stdenv.mkDerivation ({
+    stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
@@ -20,7 +20,7 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
     # This variable allows the user to pass additional options to curl
     "NIX_CURL_FLAGS"
 
@@ -103,8 +103,8 @@ let
 in
 
 if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
-else if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}"
-else stdenv.mkDerivation {
+else if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenvNoCC.lib.concatStringsSep ", " urls_}"
+else stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name

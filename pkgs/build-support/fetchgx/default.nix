@@ -1,8 +1,8 @@
-{ stdenv, gx, gx-go, go, cacert }:
+{ stdenvNoCC, gx, gx-go, go, cacert }:
 
 { name, src, sha256 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "${name}-gxdeps";
   inherit src;
 

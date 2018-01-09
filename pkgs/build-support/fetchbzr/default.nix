@@ -1,7 +1,7 @@
-{ stdenv, bazaar }: 
+{ stdenvNoCC, bazaar }:
 { url, rev, sha256 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "bzr-export";
 
   builder = ./builder.sh;
