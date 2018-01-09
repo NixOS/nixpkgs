@@ -43,15 +43,21 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    if [[ ! -f $cargoDeps/.config ]]; then
-      echo "ERROR: file not found: $cargoDeps/.config"
-      echo "try updating the cargoSha256"
-      exit 1
-    fi
+    unpackFile "$cargoDeps"
+    cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+    chmod -R +w "$cargoDepsCopy"
 
-    mkdir -p .cargo
-    # inherit cargo config from the deps, rewrite the target directory
-    cat $cargoDeps/.config | sed "s|REPLACEME|$cargoDeps|g" > .cargo/config
+    mkdir .cargo
+    cat >.cargo/config <<-EOF
+      [source.crates-io]
+      registry = 'https://github.com/rust-lang/crates.io-index'
+      replace-with = 'vendored-sources'
+
+      [source.vendored-sources]
+      directory = '$(pwd)/$cargoDepsCopy'
+    EOF
+
+    unset cargoDepsCopy
 
     export RUST_LOG=${logLevel}
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
