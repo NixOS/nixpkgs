@@ -19,6 +19,7 @@ let
   deleteKeychain = ''
     security default-keychain -s login.keychain
     security delete-keychain $keychainName
+    rm -f $HOME/lock-keychain
   '';
   
   # On macOS, the java executable shows an -unoffical postfix in the version
@@ -131,7 +132,18 @@ stdenv.mkDerivation {
               then
                   ln -s ${titaniumsdk}/modules modules
               fi
-              
+
+              # Take precautions to prevent concurrent builds blocking the keychain
+              while [ -f $HOME/lock-keychain ]
+              do
+                  echo "Keychain locked, waiting for a couple of seconds, or remove $HOME/lock-keychain to unblock..."
+                  sleep 3
+              done
+
+              touch $HOME/lock-keychain
+
+              security default-keychain -s $keychainName
+
               # Do the actual build
               titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
             
