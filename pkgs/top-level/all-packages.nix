@@ -973,6 +973,8 @@ with pkgs;
 
   coursier = callPackage ../development/tools/coursier {};
 
+  cri-tools = callPackage ../tools/virtualization/cri-tools {};
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
