@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, glibcLocales, pkgs, rust, cargo }:
+{ stdenv, fetchurl, python3Packages, glibcLocales, rustc, cargo }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
