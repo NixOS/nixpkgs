@@ -18374,6 +18374,9 @@ with pkgs;
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;
     ogre = ogre1_9;
+    ogrepaged = ogrepaged.override {
+      ogre = ogre1_9;
+    };
     mygui = mygui.override {
       withOgre = true;
     };
