@@ -212,8 +212,49 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # Reload the changed mount unit to force a remount.
                 $unitsToReload{$unit} = 1;
                 recordUnit($reloadListFile, $unit);
-            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/ || $unit =~ /\.slice$/) {
+            } elsif ($unit =~ /\.path$/ || $unit =~ /\.slice$/) {
                 # FIXME: do something?
+            } elsif ($unit =~ /\.socket$/) {
+                my $unitInfo = parseUnit($newUnitFile);
+                my $service = $unitInfo->{Service} // "$baseName.service";
+                if (defined $activePrev->{$service}) {
+                    # Service is active so check if we should restart it
+                    my $serviceUnitFile = "$out/etc/systemd/system/$service";
+                    my $serviceInfo = parseUnit($serviceUnitFile);
+
+                    if (boolIsTrue($serviceInfo->{'X-ReloadIfChanged'} // "no") ||
+                        !boolIsTrue($serviceInfo->{'X-RestartIfChanged'} // "yes") ||
+                        boolIsTrue($serviceInfo->{'RefuseManualStop'} // "no") ||
+                        !boolIsTrue($serviceInfo->{'X-StopIfChanged'} // "yes"))
+                    {
+                        # Service is not stopped and then started on change so
+                        # respect that by not doing anything with the changed
+                        # socket
+                        $unitsToSkip{$unit} = 1;
+                    } else {
+                        # To restart a socket when the service is running we
+                        # need to stop the service and all its sockets and then
+                        # we can start all the sockets again.
+                        my @sockets = split / /, ($serviceInfo->{Sockets} // "");
+                        if (scalar @sockets == 0) {
+                            @sockets = ("$baseName.socket");
+                        }
+                        foreach my $socket (@sockets) {
+                            if (defined $activePrev->{$socket}) {
+                                $unitsToStop{$socket} = 1;
+                                $unitsToStart{$socket} = 1;
+                                recordUnit($startListFile, $socket);
+                            }
+                        }
+                        $unitsToStop{$service} = 1;
+                    }
+                } else {
+                    # When service is not active we can simply stop and start
+                    # the socket
+                    $unitsToStop{$unit} = 1;
+                    $unitsToStart{$unit} = 1;
+                    recordUnit($startListFile, $unit);
+                }
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
                 if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
