@@ -153,7 +153,7 @@
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
         rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        sha256 = "176skx7zmi7islc1hmdxcynix4lkvgmr78lknn13s9gskc7qi25w";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -172,6 +172,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {
