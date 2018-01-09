@@ -18289,7 +18289,9 @@ with pkgs;
 
   openarena = callPackage ../games/openarena { };
 
-  opendungeons = callPackage ../games/opendungeons { };
+  opendungeons = callPackage ../games/opendungeons {
+    ogre = ogre1_9;
+  };
 
   openlierox = callPackage ../games/openlierox { };
 
