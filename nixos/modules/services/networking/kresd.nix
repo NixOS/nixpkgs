@@ -86,16 +86,7 @@ in
       };
     };
 
-    # Create the cacheDir; tmpfiles don't work on nixos-rebuild switch.
-    systemd.services.kresd-cachedir = {
-      serviceConfig.Type = "oneshot";
-      script = ''
-        if [ ! -d '${cfg.cacheDir}' ]; then
-          mkdir -p '${cfg.cacheDir}'
-          chown kresd:kresd '${cfg.cacheDir}'
-        fi
-      '';
-    };
+    systemd.tmpfiles.rules = [ "d '${cfg.cacheDir}' 0770 kresd kresd - -" ];
 
     systemd.services.kresd = {
       description = "Knot-resolver daemon";
@@ -111,8 +102,7 @@ in
           -k '${cfg.cacheDir}/root.key'
       '';
 
-      after = [ "kresd-cachedir.service" ];
-      requires = [ "kresd.socket" "kresd-cachedir.service" ];
+      requires = [ "kresd.socket" ];
     };
   };
 }
