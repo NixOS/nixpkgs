@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   name = "papis-${version}";
-  version = "v0.5.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "alejandrogallo";
     repo = "papis";
-    rev = version;
+    rev = "v${version}";
     sha256 = "03j4v40n93jg3bjh9rqvh4fvkms3hdbbdx9ncviq9s92n2ykwkin";
   };
 
