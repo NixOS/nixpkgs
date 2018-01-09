@@ -99,7 +99,7 @@ in
 
       script = ''
         exec '${package}/bin/kresd' --config '${configFile}' \
-          -k '${cfg.cacheDir}/root.key'
+          -k '${pkgs.dns-root-data}/root.key'
       '';
 
       requires = [ "kresd.socket" ];
