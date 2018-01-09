@@ -1,6 +1,6 @@
-{ pythonPackages, fetchPypi , python , stdenv }:
+{ buildPythonPackage, fetchPypi , python , stdenv, requests }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pylibgen";
   version = "1.3.0";
   name = "${pname}-${version}";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "16hj4x1j490w0wnrqv1la0jlbywiv3fx7ps62i008djbampc9li9";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     requests
   ];
 
