@@ -83,10 +83,24 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--docdir=share/doc/${name}" ]
     ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ optional (useQt4 || withQt5) "--qt-gui"
-    ++ optionals (!useNcurses) [ "--" "-DBUILD_CursesDialog=OFF" ];
+    ++ ["--"]
+    ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ]
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}g++"
+      "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}gcc"
+      "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+      "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+      "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+      # TODO: Why are ar and friends not provided by the bintools wrapper?
+    ];
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
+
+  # This isn't an autoconf configure script; triples are passed via
+  # CMAKE_SYSTEM_NAME, etc.
+  configurePlatforms = [ ];
+
 
   meta = with stdenv.lib; {
     homepage = http://www.cmake.org/;

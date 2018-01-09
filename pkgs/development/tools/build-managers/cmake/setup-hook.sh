@@ -33,7 +33,15 @@ cmakeConfigurePhase() {
         # By now it supports linux builds only. We should set the proper
         # CMAKE_SYSTEM_NAME otherwise.
         # http://www.cmake.org/Wiki/CMake_Cross_Compiling
-        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
+        #
+        # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
+        # strip. Otherwise they are taken to be relative to the source root of
+        # the package being built.
+        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ $cmakeFlags"
+        cmakeFlags="-DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
+        cmakeFlags="-DCMAKE_AR=$(command -v $crossConfig-ar) $cmakeFlags"
+        cmakeFlags="-DCMAKE_RANLIB=$(command -v $crossConfig-ranlib) $cmakeFlags"
+        cmakeFlags="-DCMAKE_STRIP=$(command -v $crossConfig-strip) $cmakeFlags"
     fi
 
     # This installs shared libraries with a fully-specified install
