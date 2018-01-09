@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "papis-${version}";
   version = "v0.5.0";
 

@@ -3913,6 +3913,8 @@ with pkgs;
 
   papertrail = callPackage ../tools/text/papertrail { };
 
+  papis = callPackage ../applications/office/papis { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
