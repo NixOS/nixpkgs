@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, glibcLocales, pkgs }:
+{ stdenv, fetchurl, python3Packages, glibcLocales, pkgs, rust, cargo }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
@@ -22,8 +22,8 @@ pythonPackages.buildPythonApplication rec {
     atomicwrites
     milksnake
 
-    pkgs.cargo
-    pkgs.rustc
+    cargo
+    rustc
   ];
 
   buildInputs = with pythonPackages; [hypothesis pytest pytest-localserver pytest-subtesthack setuptools_scm ] ++ [ glibcLocales ];
