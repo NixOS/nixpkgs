@@ -2231,39 +2231,7 @@ in {
     '';
   };
 
-  celery = buildPythonPackage rec {
-    name = "celery-${version}";
-    version = "4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/celery/${name}.tar.gz";
-      sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
-    };
-
-    # Fixes testsuite for python-3.6
-    # From ubuntu packaging: https://launchpad.net/ubuntu/+archive/primary/+files/celery_4.0.2-0ubuntu1.debian.tar.xz
-    # (linked from https://launchpad.net/ubuntu/+source/celery)
-    # https://github.com/celery/celery/pull/3736#issuecomment-274155454 from upstream
-    patches = [ ../development/python-modules/celery/fix_endless_python3.6_loop_logger_isa.patch ];
-
-    # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-    preCheck = ''
-      export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
-        LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-    '';
-    postCheck = ''
-      unset NIX_REDIRECTS LD_PRELOAD
-    '';
-
-    buildInputs = with self; [ pytest case ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
-
-    meta = {
-      homepage = https://github.com/celery/celery/;
-      description = "Distributed task queue";
-      license = licenses.bsd3;
-    };
-  };
+  celery = callPackage ../development/python-modules/celery { pytest = self.pytest_32; };
 
   cerberus = buildPythonPackage rec {
     name = "Cerberus-${version}";
