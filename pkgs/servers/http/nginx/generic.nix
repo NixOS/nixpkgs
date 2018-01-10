@@ -70,6 +70,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  passthru.modules = modules;
+
   meta = {
     description = "A reverse proxy and lightweight webserver";
     homepage    = http://nginx.org;
