@@ -154,6 +154,10 @@ rec {
     (p.override { mkDerivation = extractBuildInputs p.compiler;
                 }).haskellBuildInputs;
 
+  # Under normal evaluation, simply return the original package. Under
+  # nix-shell evaluation, return a nix-shell optimized environment.
+  shellAware = p: if lib.inNixShell then p.env else p;
+
   ghcInfo = ghc:
     rec { isCross = (ghc.cross or null) != null;
           isGhcjs = ghc.isGhcjs or false;
