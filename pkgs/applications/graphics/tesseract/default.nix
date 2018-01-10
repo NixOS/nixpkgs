@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   name = "tesseract-${version}";
-  version = "3.05.00";
+  version = "3.05.01";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "11wrpcfl118wxsv2c3w2scznwb48c4547qml42s2bpdz079g8y30";
+    sha256 = "1rkr4y4q80kw8iaj5ihwv576f4lp9iixp5bshi8jfh1yi1qmnnn5";
   };
 
   tessdata = fetchFromGitHub {
