@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDotnetPackage, unzip }:
+{ stdenvNoCC, fetchurl, buildDotnetPackage, unzip }:
 
 attrs @
 { baseName
