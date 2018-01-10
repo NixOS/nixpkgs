@@ -928,6 +928,7 @@ self: super: {
 
   # armv7l fixes.
   happy = if pkgs.stdenv.isArm then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
+  hashable = if pkgs.stdenv.isArm then dontCheck super.hashable else super.hashable; # https://github.com/tibbe/hashable/issues/95
 
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
