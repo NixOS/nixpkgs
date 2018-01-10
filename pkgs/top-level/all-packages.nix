@@ -16287,6 +16287,8 @@ with pkgs;
 
   notepadqq = libsForQt56.callPackage ../applications/editors/notepadqq { };
 
+  notbit = callPackage ../applications/networking/mailreaders/notbit { };
+
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
   };
