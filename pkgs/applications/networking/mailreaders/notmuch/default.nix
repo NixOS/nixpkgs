@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.25.3";
+  version = "0.26";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1fyx20rjpwbf2j1v5fpa5s0rjnwhcgvijzh2qyinp8rlbh1qxmab";
+    sha256 = "1pvn1n7giv8n3xlazi3wpscdqhd2yak0fgv68aj23myr5bnr9s6k";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         "{}" ";"
 
     for src in \
-      crypto.c \
+      util/crypto.c \
       notmuch-config.c \
       emacs/notmuch-crypto.el
     do
