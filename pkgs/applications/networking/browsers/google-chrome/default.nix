@@ -5,6 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at_spi2_atk
+, kerberos
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -58,6 +59,7 @@ let
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at_spi2_atk
+    kerberos
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
