@@ -31,9 +31,11 @@ let
 
   callPackage = pkgs.newScope self;
 
+  callModule = name: callPackage (../development/python-modules + "/${name}");
+
   namePrefix = python.libPrefix + "-";
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  bootstrapped-pip = callModule "bootstrapped-pip" { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -175,9 +177,9 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
-  awscli = callPackage ../tools/admin/awscli { };
+  awscli = callModule "awscli" { };
 
-  aws_shell = callPackage ../tools/admin/aws_shell { };
+  aws_shell = callModule "aws_shell" { };
 
   # packages defined elsewhere
 
