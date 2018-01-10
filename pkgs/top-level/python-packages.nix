@@ -3395,30 +3395,7 @@ in {
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
-  pytest-rerunfailures = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-rerunfailures";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "pytest plugin to re-run tests to eliminate flaky failures.";
-      homepage = https://github.com/pytest-dev/pytest-rerunfailures;
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ jgeerds ];
-      platforms = platforms.all;
-    };
-  };
+  pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
