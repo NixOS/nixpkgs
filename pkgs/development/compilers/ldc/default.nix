@@ -58,9 +58,9 @@ let
         rm tests/d2/dmd-testsuite/runnable/variadic.d
     ''
 
-    + stdenv.lib.optionalString (stdenv.hostPlatform.isLinux && !bootstrapVersion) ''
-	# http://forum.dlang.org/thread/xtbbqthxutdoyhnxjhxl@forum.dlang.org
-	rm -r tests/dynamiccompile
+    + stdenv.lib.optionalString (!bootstrapVersion) ''
+	    # http://forum.dlang.org/thread/xtbbqthxutdoyhnxjhxl@forum.dlang.org
+	    rm -r tests/dynamiccompile
     '';
 
     ROOT_HOME_DIR = "$(echo ~root)";
