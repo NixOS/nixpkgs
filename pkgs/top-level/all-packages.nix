@@ -12411,6 +12411,7 @@ with pkgs;
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
+  microcodeIntelDebian = callPackage ../os-specific/linux/microcode/intel_debian.nix { };
 
   inherit (callPackages ../os-specific/linux/apparmor { pythonPackages = python27Packages; swig = swig2; })
     libapparmor apparmor-pam apparmor-parser apparmor-profiles apparmor-utils;
@@ -12619,6 +12620,8 @@ with pkgs;
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
+
+  iucode_tool = callPackage ../os-specific/linux/iucode_tool { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
