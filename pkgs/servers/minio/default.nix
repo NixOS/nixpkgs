@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "minio-${version}";
 
-  version = "2017-09-29T19-16-56Z";
+  version = "2018-01-02T23-07-00Z";
 
   src = fetchurl {
     url = "https://github.com/minio/minio/archive/RELEASE.${version}.tar.gz";
-    sha256 = "1h028gyfvyh5x6k4fsj4s64sgzqy7jgln6kvs27bnxzigj6dp2wx";
+    sha256 = "1a4x14pn5dp6cclpkfd72wbn3xzp3dmxxbjgkcgn3s5w83qmsvv9";
   };
 
   buildInputs = [ go ];
