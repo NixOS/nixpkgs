@@ -11,10 +11,7 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkOption {
-          default = false;
-          description = "Start the Deluge daemon";
-        };
+        enable = mkEnableOption "Deluge daemon";
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
@@ -25,14 +22,7 @@ in {
         };
       };
 
-      deluge.web = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Start Deluge Web daemon.
-          '';
-        };
-      };
+      deluge.web.enable = mkEnableOption "Deluge Web daemon";
     };
   };
 
