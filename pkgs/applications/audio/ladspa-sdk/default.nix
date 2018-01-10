@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   name = "ladspa-sdk-${version}";
   version = "1.13";
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/l/ladspa-sdk/ladspa-sdk_${version}.orig.tar.gz";
+    url = "http://www.ladspa.org/download/ladspa_sdk_${version}.tgz";
     sha256 = "0srh5n2l63354bc0srcrv58rzjkn4gv8qjqzg8dnq3rs4m7kzvdm";
   };
 

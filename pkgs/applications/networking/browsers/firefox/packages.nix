@@ -6,10 +6,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "57.0.1";
+    version = "57.0.4";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "8cbfe0ad2c0f935dbc3a0ac4e855c489c83bf8c4506815dbae6e27f5d6a262ecf19ac82b6e81d52782559834fa14403116ecbf3acc8e3bc56b6c319e68316edd";
+      sha512 = "58846037aebbf14b85e6b3a46dbe617c780c6916e437ea4ee32a2502a6b55e3689921a0be28b920dedf2f966195df04ac8e45411caeb2601a168ec08b4827cf0";
     };
 
     patches =
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.5.1esr";
+    version = "52.5.3esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "37318a9f82fa36fe390b85f536f26be9a6950a5143e74a218477adaffb89c77c1ffe17add4b79b26e320bb3138d418ccbb1371ca11e086d140143ba075947dc0";
+      sha512 = "7b9c87905c53bc681dc6475e05596449fed88850f9dc07c8223d0d3edd2dd9d8a0dd88ebae1cd59eced2165696df9370de5e85cc03cded58ec4d0f622634417f";
     };
 
     patches =
@@ -109,7 +109,7 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo = "tor-browser";
-      # branch "tor-browser-45.8.0esr-6.5-2"
+      # branch "tor-browser-45.8.0esr-6.5-2-slnos"
       rev = "e4140ea01b9906934f0347e95f860cec207ea824";
       sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
     };
@@ -128,8 +128,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
-      sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
+      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
+      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
+      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
     patches =

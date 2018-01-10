@@ -581,8 +581,8 @@ nix-shell "<nixpkgs>" -A haskellPackages.bar.env
 Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
-library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.config/nixpkgs/config.nix` file:
+library profiling for all packages. To accomplish that add the following
+snippet to your `~/.config/nixpkgs/config.nix` file:
 ```nix
 {
   packageOverrides = super: let self = super.pkgs; in
@@ -777,14 +777,14 @@ to find out the store path of the system's zlib library. Now, you can
     stack --extra-lib-dirs=/nix/store/alsvwzkiw4b7ip38l4nlfjijdvg3fvzn-zlib-1.2.8/lib build
     ```
 
-    Typically, you'll need `--extra-include-dirs` as well. It's possible
-    to add those flag to the project's `stack.yaml` or your user's
-    global `~/.stack/global/stack.yaml` file so that you don't have to
-    specify them manually every time. But again, you're likely better off
-    using Stack's Nix support instead.
+Typically, you'll need `--extra-include-dirs` as well. It's possible
+to add those flag to the project's `stack.yaml` or your user's
+global `~/.stack/global/stack.yaml` file so that you don't have to
+specify them manually every time. But again, you're likely better off
+using Stack's Nix support instead.
 
-    The same thing applies to `cabal configure`, of course, if you're
-    building with `cabal-install` instead of Stack.
+The same thing applies to `cabal configure`, of course, if you're
+building with `cabal-install` instead of Stack.
 
 ### Creating statically linked binaries
 

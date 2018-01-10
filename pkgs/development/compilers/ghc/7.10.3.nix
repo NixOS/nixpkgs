@@ -1,13 +1,27 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, targetPackages, coreutils
-, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, hscolour
+{ stdenv, targetPackages
+, buildPlatform, hostPlatform, targetPlatform
 
-  # If enabled GHC will be build with the GPL-free but slower integer-simple
+# build-tools
+, bootPkgs, hscolour, llvm_35
+, coreutils, fetchurl, fetchpatch, perl
+, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
+
+, libiconv ? null, ncurses
+
+, # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-, enableIntegerSimple ? false, gmp
+  enableIntegerSimple ? false, gmp ? null
 }:
+
+assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
+
+  # TODO(@Ericson2314) Make unconditional
+  targetPrefix = stdenv.lib.optionalString
+    (targetPlatform != hostPlatform)
+    "${targetPlatform.config}-";
 
   docFixes = fetchurl {
     url = "https://downloads.haskell.org/~ghc/7.10.3/ghc-7.10.3a.patch";
@@ -18,10 +32,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "7.10.3";
-  name = "ghc-${version}";
+  name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/${name}-src.tar.xz";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
     sha256 = "1vsgmic8csczl62ciz51iv8nhrkm72lyhbz7p7id13y2w7fcx46g";
   };
 
@@ -30,7 +44,7 @@ stdenv.mkDerivation rec {
     ./relocation.patch
   ];
 
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
+  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ] ++ stdenv.lib.optionals stdenv.isArm [ llvm_35 ];
 
   enableParallelBuilding = true;
 
@@ -58,11 +72,11 @@ stdenv.mkDerivation rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
     # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
@@ -73,7 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs;
+    inherit bootPkgs targetPrefix;
   };
 
   meta = {

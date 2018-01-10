@@ -1,24 +1,23 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , multidict
 , pytestrunner
 , pytest
+, idna
 }:
 
-let
+buildPythonPackage rec {
   pname = "yarl";
-  version = "0.13.0";
-in buildPythonPackage rec {
+  version = "0.17.0";
   name = "${pname}-${version}";
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "25fe681a982f2cec567df8abac7cbd2ac27016e4aec89193945cab0643bfdb42";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "2e4e1aec650ad80e73e7063941cd8aadb48e72487ec680a093ad364cc61efe64";
   };
 
-  buildInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict ];
-
+  checkInputs = [ pytest pytestrunner ];
+  propagatedBuildInputs = [ multidict idna ];
 
   meta = {
     description = "Yet another URL library";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pykmhi7pdmzq47glbj8i2im6iarp4wnj4l1pyvsrnba61f0939s";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optionals enableGTK3 [ wrapGAppsHook ];
   buildInputs = [ intltool file openssl curl libevent zlib ]
-    ++ optionals enableGTK3 [ gtk3 makeWrapper ]
+    ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
     ++ optionals stdenv.isLinux [ inotify-tools ];
 
@@ -41,10 +42,8 @@ stdenv.mkDerivation rec {
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
 
-  preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
+  preFixup = optionalString enableGTK3 ''
     rm "$out/share/icons/hicolor/icon-theme.cache"
-    wrapProgram "$out/bin/transmission-gtk" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";

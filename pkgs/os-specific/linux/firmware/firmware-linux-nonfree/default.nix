@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2017-10-09-${src.iwlRev}";
+  version = "2018-01-04-${src.iwlRev}";
 
   # The src runCommand automates the process of building a merged repository of both
   #
-  # http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/
-  # http://git.kernel.org/cgit/linux/kernel/git/iwlwifi/linux-firmware.git/
+  # https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/
+  # https://git.kernel.org/cgit/linux/kernel/git/iwlwifi/linux-firmware.git/
   #
   # This gives us up to date iwlwifi firmware as well as
   # the usual set of firmware. firmware/linux-firmware usually lags kernel releases
@@ -17,15 +17,21 @@ stdenv.mkDerivation rec {
   # update version to the more recent commit date
 
   src = runCommand "firmware-linux-nonfree-src-merged-${version}" {
-    # When updating this, you need to let it run with a wrong hash, in order to find out the desired hash
-    baseRev = "bf04291309d3169c0ad3b8db52564235bbd08e30";
-    iwlRev = "iwlwifi-fw-2017-11-03";
+    shallowSince = "2017-10-01";
+    baseRev = "65b1c68c63f974d72610db38dfae49861117cae2";
+    iwlRev = "iwlwifi-fw-2017-11-15";
 
+    # When updating this, you need to let it run with a wrong hash, in order to find out the desired hash
     # randomly mutate the hash to break out of fixed hash, when updating
-    outputHash = "11izv1vpq9ixlqdss19lzs5q289d7jxr5kgf6iymk4alxznffd8z";
+    outputHash = "1anr7fblxfcrfrrgq98kzy64yrwygc2wdgi47skdmjxhi3wbrvxz";
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
+
+    # Doing the download on a remote machine just duplicates network
+    # traffic, so don't do that.
+    preferLocalBuild = true;
+
     buildInputs = [ git gnupg ];
     NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   } ''
@@ -33,12 +39,12 @@ stdenv.mkDerivation rec {
       cd src
       git config user.email "build-daemon@nixos.org"
       git config user.name "Nixos Build Daemon $name"
-      git remote add base git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-      git remote add iwl git://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/linux-firmware.git
-      git fetch base $baseRev
-      git checkout -b work FETCH_HEAD
-      git fetch iwl $iwlRev
-      git merge FETCH_HEAD)
+      git remote add base https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+      git remote add iwl https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/linux-firmware.git
+      git fetch --shallow-since=$shallowSince base
+      git fetch --shallow-since=$shallowSince iwl
+      git checkout -b work $baseRev
+      git merge $iwlRev)
     rm -rf src/.git
     cp -a src $out
   '';
@@ -49,12 +55,15 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+  # Firmware blobs do not need fixing and should not be modified
+  dontFixup = true;
+
   meta = with stdenv.lib; {
     description = "Binary firmware collection packaged by kernel.org";
     homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     priority = 6; # give precedence to kernel firmware
   };
 

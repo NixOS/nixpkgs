@@ -27,29 +27,25 @@ let
     libstdcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
     libcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 
     stdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.clang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.libcxxClang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     lldb = callPackage ./lldb.nix {};

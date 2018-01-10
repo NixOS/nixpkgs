@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "coursier-${version}";
-  version = "1.0.0-RC3";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/raw/v${version}/coursier";
-    sha256 = "0iiv79ig8p9pm7fklxskxn6bx1m4xqgdfdk6bvqq81gl8b101z5w";
+    sha256 = "0167cgp3kqx336p8dmlxx57bi3lhzyp6ncly28v1s7r2sjxj9krj";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = "installPhase";
+  unpackPhase = ":";
 
   installPhase = ''
     mkdir -p $out/bin
     cp ${src} $out/bin/coursier
     chmod +x $out/bin/coursier
-    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin ;
+    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
   '';
 
   meta = with stdenv.lib; {

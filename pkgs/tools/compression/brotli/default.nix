@@ -4,20 +4,26 @@
 
 stdenv.mkDerivation rec {
   name = "brotli-${version}";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "1rqgp8xi1k4sjy9sngg1vw0v8q2mm46dhyya4d35n3k6yk7pk0qv";
+    sha256 = "1rpg16zpr7h6vs7qr6npmqhyw4w5nkp24iq70s4dryn77m0r4mcv";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
+
+  outputs = [ "out" "dev" "lib" ];
 
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
   prePatch = "rm BUILD";
+
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$lib/lib")
+  '';
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

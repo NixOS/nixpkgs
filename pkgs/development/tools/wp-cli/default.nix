@@ -25,6 +25,9 @@ let
   '';
 
   ini = writeText "wp-cli.ini" ''
+    [PHP]
+    memory_limit = 512M ; composer can be a bit of a memory pig
+
     [Phar]
     phar.readonly = Off
   '';

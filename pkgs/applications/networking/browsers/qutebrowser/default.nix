@@ -1,41 +1,40 @@
-{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeWrapper, wrapGAppsHook
-, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, pyopengl, cssutils, glib_networking
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
-, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
-, qtwebkit-plugins ? null
-, attrs
+{ stdenv, lib, fetchurl, fetchzip, python3Packages
+, makeWrapper, wrapGAppsHook, qtbase, glib_networking
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
+, libxslt, gst_all_1 ? null
+, withPdfReader        ? true
+, withMediaPlayback    ? true
 , withWebEngineDefault ? true
 }:
 
-assert (! withWebEngineDefault) -> qtwebkit-plugins != null;
+assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
     version = "1.7.225";
 
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "1n8ylmv60r0qbw2vilp640a87l4lgnrsi15z3iihcs6dj1n1yy67";
+      sha256 = "0bsmbz7bbh0zpd70dlhss4fjdw7zq356091wld9s7kxnb2rixqd8";
+      stripRoot = false;
     };
-
-    nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir $out
-      unzip -d $out $src
+      cp -r $src $out
     '';
   };
 
-in buildPythonApplication rec {
-  name = "qutebrowser-${version}${fix_postfix}";
-  fix_postfix = "-1";
-  version = "1.0.3";
+in python3Packages.buildPythonApplication rec {
+  name = "qutebrowser-${version}${versionPostfix}";
   namePrefix = "";
+  version = "1.0.4";
+  versionPostfix = "";
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "04d6hg2yf2wjwn0sd05bpx3zngnb93g7rizbdq17bbpmnwxchzap";
+    sha256 = "0z8zrgr914bfmimqk3l17dxyc7gzh42sw8lfp041zzvj6fxw3lkr";
   };
 
   # Needs tox
@@ -43,21 +42,25 @@ in buildPythonApplication rec {
 
   buildInputs = [
     qtbase
-    gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
     glib_networking
-  ]
-    ++ lib.optional (! withWebEngineDefault) qtwebkit-plugins;
+  ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
+    gst-plugins-base gst-plugins-good
+    gst-plugins-bad gst-plugins-ugly gst-libav
+  ]) ++ lib.optional (!withWebEngineDefault) python3Packages.qtwebkit-plugins;
 
   nativeBuildInputs = [
-    makeWrapper wrapGAppsHook asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
+    makeWrapper wrapGAppsHook asciidoc
+    docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
-  propagatedBuildInputs = [
-    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils pyopengl attrs
+  propagatedBuildInputs = with python3Packages; [
+    pyyaml pyqt5 jinja2 pygments
+    pypeg2 cssutils pyopengl attrs
   ];
 
   postPatch = ''
     sed -i "s,/usr/share/qutebrowser,$out/share/qutebrowser,g" qutebrowser/utils/standarddir.py
+  '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
 

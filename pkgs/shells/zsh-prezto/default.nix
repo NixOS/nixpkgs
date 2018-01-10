@@ -1,28 +1,13 @@
 { stdenv, fetchpatch, fetchgit, fetchFromGitHub }:
 
-let
-  # https://github.com/spwhitt/nix-zsh-completions/pull/2
-  nix-zsh-completions = fetchFromGitHub {
-    owner = "garbas";
-    repo = "nix-zsh-completions";
-    rev = "9b7d216ec095ccee541ebfa5f04249aa2964d054";
-    sha256 = "1pvmfcqdvdi3nc1jm72f54mwf06yrmlq31pqw6b5fczawcz02jrz";
-  };
-in stdenv.mkDerivation rec {
-  rev = "4f19700919c8ebbaf75755fc0d03716d13183f49";
-  name = "zsh-prezto-2015-03-03_rev${builtins.substring 0 7 rev}";
+stdenv.mkDerivation rec {
+  name = "zsh-prezto-2017-12-03";
   src = fetchgit {
     url = "https://github.com/sorin-ionescu/prezto";
-    inherit rev;
-    sha256 = "17mql9mb7zbf8q1nvnci60yrmz5bl9q964i8dv4shz8b42861cdg";
+    rev = "029414581e54f5b63156f81acd0d377e8eb78883";
+    sha256 = "0crrj2nq0wcv5in8qimnkca2an760aqald13vq09s5kbwwc9rs1f";
     fetchSubmodules = true;
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/sorin-ionescu/prezto/pull/1028.patch";
-      sha256 = "0yrj72s1hiaq13374xa82hxdig4s0kvqjn9apkmw0h7kzggxjfn3";
-    })
-  ];
   buildPhase = ''
     sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zpreztorc|/etc/zpreztorc|g" init.zsh
     sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" init.zsh
@@ -32,8 +17,7 @@ in stdenv.mkDerivation rec {
     sed -i -e "s|\''${0:h}/cache.zsh|\''${ZDOTDIR:\-\$HOME}/.zfasd_cache|g" modules/fasd/init.zsh
   '';
   installPhase = ''
-    mkdir -p $out/modules/nix
-    cp ${nix-zsh-completions}/* $out/modules/nix -R
+    mkdir -p $out
     cp ./* $out/ -R
   '';
   meta = with stdenv.lib; {

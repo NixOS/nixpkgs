@@ -147,4 +147,88 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  # Extract the haskell build inputs of a haskell package.
+  # This is useful to build environments for developing on that
+  # package.
+  getHaskellBuildInputs = p:
+    (p.override { mkDerivation = extractBuildInputs p.compiler;
+                }).haskellBuildInputs;
+
+  # Under normal evaluation, simply return the original package. Under
+  # nix-shell evaluation, return a nix-shell optimized environment.
+  shellAware = p: if lib.inNixShell then p.env else p;
+
+  ghcInfo = ghc:
+    rec { isCross = (ghc.cross or null) != null;
+          isGhcjs = ghc.isGhcjs or false;
+          nativeGhc = if isCross || isGhcjs
+                        then ghc.bootPkgs.ghc
+                        else ghc;
+        };
+
+  ### mkDerivation helpers
+  # These allow external users of a haskell package to extract
+  # information about how it is built in the same way that the
+  # generic haskell builder does, by reusing the same functions.
+  # Each function here has the same interface as mkDerivation and thus
+  # can be called for a given package simply by overriding the
+  # mkDerivation argument it used. See getHaskellBuildInputs above for
+  # an example of this.
+
+  # Some information about which phases should be run.
+  controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
+                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  , doBenchmark ? false
+                  , ...
+                  }: { inherit doCheck doBenchmark; };
+
+  # Divide the build inputs of the package into useful sets.
+  extractBuildInputs = ghc:
+    { setupHaskellDepends ? [], extraLibraries ? []
+    , librarySystemDepends ? [], executableSystemDepends ? []
+    , pkgconfigDepends ? [], libraryPkgconfigDepends ? []
+    , executablePkgconfigDepends ? [], testPkgconfigDepends ? []
+    , benchmarkPkgconfigDepends ? [], testDepends ? []
+    , testHaskellDepends ? [], testSystemDepends ? []
+    , testToolDepends ? [], benchmarkDepends ? []
+    , benchmarkHaskellDepends ? [], benchmarkSystemDepends ? []
+    , benchmarkToolDepends ? [], buildDepends ? []
+    , libraryHaskellDepends ? [], executableHaskellDepends ? []
+    , ...
+    }@args:
+    let inherit (ghcInfo ghc) isGhcjs nativeGhc;
+        inherit (controlPhases ghc args) doCheck doBenchmark;
+        isHaskellPkg = x: x ? isHaskellLibrary;
+        allPkgconfigDepends =
+          pkgconfigDepends ++ libraryPkgconfigDepends ++
+          executablePkgconfigDepends ++
+          lib.optionals doCheck testPkgconfigDepends ++
+          lib.optionals doBenchmark benchmarkPkgconfigDepends;
+        otherBuildInputs =
+          setupHaskellDepends ++ extraLibraries ++
+          librarySystemDepends ++ executableSystemDepends ++
+          allPkgconfigDepends ++
+          lib.optionals doCheck ( testDepends ++ testHaskellDepends ++
+                                  testSystemDepends ++ testToolDepends
+                                ) ++
+          # ghcjs's hsc2hs calls out to the native hsc2hs
+          lib.optional isGhcjs nativeGhc ++
+          lib.optionals doBenchmark ( benchmarkDepends ++
+                                      benchmarkHaskellDepends ++
+                                      benchmarkSystemDepends ++
+                                      benchmarkToolDepends
+                                    );
+        propagatedBuildInputs =
+          buildDepends ++ libraryHaskellDepends ++
+          executableHaskellDepends;
+        allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+        isHaskellPartition =
+          lib.partition isHaskellPkg allBuildInputs;
+    in
+      { haskellBuildInputs = isHaskellPartition.right;
+        systemBuildInputs = isHaskellPartition.wrong;
+        inherit propagatedBuildInputs otherBuildInputs
+          allPkgconfigDepends;
+      };
+
 }

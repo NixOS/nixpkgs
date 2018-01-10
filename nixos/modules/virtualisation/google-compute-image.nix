@@ -6,7 +6,7 @@ let
   gce = pkgs.google-compute-engine;
 in
 {
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
   system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
     name = "google-compute-image";
@@ -29,6 +29,7 @@ in
     autoResize = true;
   };
 
+  boot.growPartition = true;
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
   boot.kernelModules = [ "virtio_pci" "virtio_net" ];

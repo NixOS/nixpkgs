@@ -1,8 +1,13 @@
-{ system ? builtins.currentSystem }:
+{ localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+}:
 
-with import ../../.. {inherit system;};
-
-rec {
+let
+  pkgs = import ../../.. { inherit localSystem crossSystem; };
+  glibc = if pkgs.hostPlatform != pkgs.buildPlatform
+          then pkgs.glibcCross
+          else pkgs.glibc;
+in with pkgs; rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
@@ -35,7 +40,7 @@ rec {
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
 
-      buildInputs = [nukeReferences cpio];
+      nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
       buildCommand = ''
         set -x
@@ -118,15 +123,22 @@ rec {
 
         cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
+      '' + lib.optionalString (hostPlatform != buildPlatform) ''
+        # These needed for cross but not native tools because the stdenv
+        # GCC has certain things built in statically. See
+        # pkgs/stdenv/linux/default.nix for the details.
+        cp -d ${isl_0_14.out}/lib/libisl*.so* $out/lib
+
+      '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.out}/bin/$i $out/bin
+          cp ${binutils.bintools.out}/bin/$i $out/bin
         done
 
         chmod -R u+w $out
@@ -135,13 +147,14 @@ rec {
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             if test -x $i -a ! -L $i; then
                 chmod +w $i
-                strip -s $i || true
+                $STRIP -s $i || true
             fi
         done
 
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/*
 
         mkdir $out/.pack
         mv $out/* $out/.pack
@@ -176,11 +189,14 @@ rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
+  bootstrapTools = import ./bootstrap-tools {
+    inherit (hostPlatform) system;
+    inherit bootstrapFiles;
+  };
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit system;
+    inherit (hostPlatform) system;
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 

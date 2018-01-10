@@ -129,6 +129,9 @@ let format' = format; in let
     # TODO: Nix really likes to chown things it creates to its current user...
     fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
 
+    # fakeroot seems to always give the owner write permissions, which we do not want
+    find $root/nix/store -mindepth 1 -maxdepth 1 -type f -o -type d | xargs chmod -R a-w
+
     echo "copying staging root to image..."
     cptofs ${optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
   '';
@@ -150,8 +153,6 @@ in pkgs.vmTools.runInLinuxVM (
     }
     ''
       ${if partitioned then ''
-        . /sys/class/block/vda1/uevent
-        mknod /dev/vda1 b $MAJOR $MINOR
         rootDisk=/dev/vda1
       '' else ''
         rootDisk=/dev/vda

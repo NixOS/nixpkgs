@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
-  version = "0.5.3";
+  version = "0.6.0";
   name = "${pname}-${version}";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+    sha256 = "1r0mb4dw0dc1lpi54dk5vxqs06nyhvagp76lyrvk7rd94z5mjkd4";
   };
 
   # Requires network access

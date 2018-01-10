@@ -1,7 +1,14 @@
-{ stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo
+{ stdenv, buildPackages, ghc
+, jailbreak-cabal, hscolour, cpphs, nodejs
+, buildPlatform, hostPlatform
 }:
-let isCross = (ghc.cross or null) != null; in
+
+let
+  isCross = buildPlatform != hostPlatform;
+  inherit (buildPackages)
+    fetchurl removeReferencesTo
+    pkgconfig coreutils gnugrep gnused glibcLocales;
+in
 
 { pname
 , dontStrip ? (ghc.isGhcjs or false)
@@ -20,8 +27,8 @@ let isCross = (ghc.cross or null) != null; in
 , enableLibraryProfiling ? false
 , enableExecutableProfiling ? false
 # TODO enable shared libs for cross-compiling
-, enableSharedExecutables ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
-, enableSharedLibraries ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
+, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSplitObjs ? null # OBSOLETE, use enableDeadCodeElimination
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip  for darwin
 , enableStaticLibraries ? true
@@ -53,7 +60,7 @@ let isCross = (ghc.cross or null) != null; in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
 } @ args:
@@ -102,11 +109,12 @@ let
   enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
 
   crossCabalFlags = [
-    "--with-ghc=${ghc.cross.config}-ghc"
-    "--with-ghc-pkg=${ghc.cross.config}-ghc-pkg"
-    "--with-gcc=${ghc.cc}"
-    "--with-ld=${ghc.ld}"
-    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
+    "--with-ghc=${ghc.targetPrefix}ghc"
+    "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
+    "--with-gcc=${stdenv.cc.targetPrefix}cc"
+    "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs" # not cross one
+    "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
 
   crossCabalFlagsString =
@@ -122,7 +130,7 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
+    (enableFeature (enableDeadCodeElimination && !stdenv.isArm && !stdenv.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
@@ -135,7 +143,7 @@ let
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
-    "--configure-option=--host=${ghc.cross.config}"
+    "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
   setupCompileFlags = [
@@ -171,8 +179,7 @@ let
   setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
-  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
-  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= toUpper ghcCommand';
 
 in
@@ -222,8 +229,8 @@ stdenv.mkDerivation ({
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
-    # nativePkgs defined in stdenv/setup.hs
-    for p in "''${nativePkgs[@]}"; do
+    # host.*Pkgs defined in stdenv/setup.hs
+    for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
         cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
@@ -243,7 +250,7 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'); do
+    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
       ln -s "$d/"*.dylib $dynamicLinksDir
     done
     # Edit the local package DB to reference the links directory.
@@ -269,6 +276,8 @@ stdenv.mkDerivation ({
     runHook postCompileBuildDriver
   '';
 
+  inherit configureFlags;
+
   configurePhase = ''
     runHook preConfigure
 
@@ -276,7 +285,7 @@ stdenv.mkDerivation ({
 
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-    if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+    if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
     fi
@@ -317,8 +326,14 @@ stdenv.mkDerivation ({
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
-      local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
-      mv $packageConfFile $packageConfDir/$pkgId.conf
+      if [ -d "$packageConfFile" ]; then
+        mv "$packageConfFile"/* "$packageConfDir"
+        rmdir "$packageConfFile"
+      fi
+      for packageConfFile in "$packageConfDir"/*; do
+        local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
+        mv $packageConfFile $packageConfDir/$pkgId.conf
+      done
     ''}
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
@@ -350,6 +365,8 @@ stdenv.mkDerivation ({
 
     inherit pname version;
 
+    compiler = ghc;
+
     isHaskellLibrary = hasActiveLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
@@ -362,7 +379,8 @@ stdenv.mkDerivation ({
 
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
-      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
+      buildInputs = systemBuildInputs;
+      nativeBuildInputs = [ ghcEnv ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
@@ -393,7 +411,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
-// optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
@@ -412,5 +429,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
-// optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (buildPlatform.isLinux){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )

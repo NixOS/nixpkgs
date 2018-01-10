@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./respect-xml-catalog-files-var.patch
+    passthru.respect_xml_catalog_files_var_patch
   ];
 
   outputDevdoc = "out";
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
    ];
 
   configureFlags = "--disable-scrollkeeper";
+
+  passthru = {
+    # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
+    respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
+  };
 
   meta = with stdenv.lib; {
     homepage = https://www.gtk.org/gtk-doc;

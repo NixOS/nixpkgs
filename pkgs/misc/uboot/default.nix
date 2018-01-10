@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, python2
+{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2
 , hostPlatform
 }:
 
@@ -7,6 +7,7 @@ let
             , filesToInstall
             , installDir ? "$out"
             , defconfig
+            , extraMakeFlags ? []
             , extraMeta ? {}
             , ... } @ args:
            stdenv.mkDerivation (rec {
@@ -20,6 +21,10 @@ let
     };
 
     patches = [
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/cbsize-2017-11.patch;
+        sha256 = "08rqsrj78aif8vaxlpwiwwv1jwf0diihbj0h88hc0mlp0kmyqxwm";
+      })
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch1.patch;
         sha256 = "067yq55vv1slv4xy346px7h329pi14abdn04chg6s1s6hmf6c1x9";
@@ -38,11 +43,11 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc dtc python2 ];
+    nativeBuildInputs = [ bc dtc openssl python2 ];
 
     hardeningDisable = [ "all" ];
 
-    makeFlags = [ "DTC=dtc" ];
+    makeFlags = [ "DTC=dtc" ] ++ extraMakeFlags;
 
     configurePhase = ''
       make ${defconfig}
@@ -85,7 +90,15 @@ in rec {
     buildFlags = "tools NO_SDL=1";
     dontStrip = false;
     targetPlatforms = stdenv.lib.platforms.linux;
-    filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
+    # build tools/kwboot
+    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" ];
+    filesToInstall = [
+      "tools/dumpimage"
+      "tools/fdtgrep"
+      "tools/kwboot"
+      "tools/mkenvimage"
+      "tools/mkimage"
+    ];
   };
 
   ubootA20OlinuxinoLime = buildUBoot rec {
@@ -106,6 +119,13 @@ in rec {
     filesToInstall = ["MLO" "u-boot.img"];
   };
 
+  # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
+  ubootClearfog = buildUBoot rec {
+    defconfig = "clearfog_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-spl.kwb"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
@@ -118,10 +138,22 @@ in rec {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOrangePiPc = buildUBoot rec {
+    defconfig = "orangepi_pc_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot rec {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     targetPlatforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootQemuArm = buildUBoot rec {
+    defconfig = "qemu_arm_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi = buildUBoot rec {

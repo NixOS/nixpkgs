@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                   gtk3 gnome3.gnome_control_center dbus
                   clutter pango appstream-glib systemd gobjectIntrospection ];
 
-  configureFlags = [ "--with-controlcenterdir=$(out)/gnome-control-center/keybindings"
+  configureFlags = [ "--with-controlcenterdir=$(out)/share/gnome-control-center/keybindings"
                      "--with-dbusservicesdir=$(out)/share/dbus-1/services"
                      "--with-systemduserunitdir=$(out)/etc/systemd/user" ];
 

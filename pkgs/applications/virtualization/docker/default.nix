@@ -105,6 +105,7 @@ rec {
       cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
+      export VERSION="${version}"
       ./hack/make.sh dynbinary
       cd -
     '') + ''
@@ -136,11 +137,7 @@ rec {
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
-      if [ -d "./components/engine/bundles/${version}" ]; then
-        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      else
-        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      fi
+      install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
         --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -207,26 +204,14 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
 
-  docker_17_09 = dockerGen rec {
-    version = "17.09.0-ce";
-    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
-    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
-    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
-    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
-    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
-    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
-  };
-
-  docker_17_11 = dockerGen rec {
-    version = "17.11.0-ce";
-    rev = "1caf76ce6baa889133ece59fab3c36aaf143d4ef"; # git commit
-    sha256 = "09s7lxcs4wdjj69l7z3nybbms7iqspk1wy7qnr4r52s8vr3fd5s4";
-    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
-    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
-    containerdRev = "992280e8e265f491f7a624ab82f3e238be086e49";
-    containerdSha256 = "1ci6jlgrrgz4ph451035sl98lj2jd467pd4qnv85ma9gzblrxs7n";
+  docker_17_12 = dockerGen rec {
+    version = "17.12.0-ce";
+    rev = "486a48d2701493bb65385788a291e36febb44ec1"; # git commit
+    sha256 = "14kp7wrzf3s9crk8px1dc575lchyrcl2dqiwr3sgxb9mzjfiyqps";
+    runcRev = "b2567b37d7b75eb4cf325b77297b140ea686ce8f";
+    runcSha256 = "0zarsrbfcm1yp6mdl6rcrigdf7nb70xmv2cbggndz0qqyrw0mk0l";
+    containerdRev = "89623f28b87a6004d4b785663257362d1658a729";
+    containerdSha256 = "0irx7ps6rhq7z69cr3gspxdr7ywrv6dz62gkr1z2723cki9hsxma";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib camlp4 ansiterminal biniou bolt ocaml_cairo2 dypgen easy-format ocf yojson
+    ocaml findlib camlp4 ansiterminal biniou bolt cairo2 dypgen easy-format ocf yojson
   ];
 
   patches = [ ./install-emacs-to-site-lisp.patch

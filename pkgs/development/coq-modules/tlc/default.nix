@@ -1,38 +1,27 @@
-{stdenv, fetchsvn, coq}:
+{ stdenv, fetchurl, coq }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "20171206";
+  name = "coq${coq.coq-version}-tlc-${version}";
 
-  name = "coq-tlc-${coq.coq-version}";
-
-  src = fetchsvn {
-    url = svn://scm.gforge.inria.fr/svn/tlc/branches/v3.1;
-    rev = 240;
-    sha256 = "0mjnb6n9wzb13y2ix9cvd6irzd9d2gj8dcm2x71wgan0jcskxadm";
+  src = fetchurl {
+    url = "http://tlc.gforge.inria.fr/releases/tlc-${version}.tar.gz";
+    sha256 = "1wc44qb5zmarafp56gdrbka8gllipqna9cj0a6d99jzb361xg4mf";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 ];
-  propagatedBuildInputs = [ coq ];
+  buildInputs = [ coq ];
 
-  preConfigure = ''
-    patch Makefile <<EOF
-    105c105
-    < 	\$(COQC) \$<
-    ---
-    > 	\$(COQC) -R . Tlc \$<
-    EOF
-  '';
+  installFlags = "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib";
 
-  installPhase = ''
-    COQLIB=$out/lib/coq/${coq.coq-version}/
-    mkdir -p $COQLIB/user-contrib/Tlc
-    cp -p *.vo $COQLIB/user-contrib/Tlc
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://www.chargueraud.org/softs/tlc/;
-    description = "A general purpose Coq library that provides an alternative to Coq's standard library";
-    maintainers = with maintainers; [ jwiegley ];
-    platforms = coq.meta.platforms;
+  meta = {
+    homepage = "http://www.chargueraud.org/softs/tlc/";
+    description = "A non-constructive library for Coq";
+    license = stdenv.lib.licenses.free;
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    inherit (coq.meta) platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+  };
 }

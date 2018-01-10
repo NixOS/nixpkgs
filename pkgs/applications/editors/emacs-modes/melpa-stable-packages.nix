@@ -38,6 +38,9 @@ self:
       # upstream issue: mismatched filename
       ack-menu = markBroken super.ack-menu;
 
+      # Expects bash to be at /bin/bash
+      ac-rtags = markBroken super.ac-rtags;
+
       airline-themes = super.airline-themes.override {
         inherit (self.melpaPackages) powerline;
       };
@@ -46,8 +49,14 @@ self:
       bufshow = markBroken super.bufshow;
 
       # part of a larger package
+      caml = dontConfigure super.caml;
+
+      # part of a larger package
       # upstream issue: missing package version
       cmake-mode = markBroken (dontConfigure super.cmake-mode);
+
+      # Expects bash to be at /bin/bash
+      company-rtags = markBroken super.company-rtags;
 
       # upstream issue: missing file header
       connection = markBroken super.connection;
@@ -76,6 +85,9 @@ self:
         inherit (self.melpaPackages) ess popup;
       };
 
+      # upstream issue: doesn't build
+      eterm-256color = markBroken super.eterm-256color;
+
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
 
@@ -84,6 +96,9 @@ self:
 
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
+
+      # Expects bash to be at /bin/bash
+      flycheck-rtags = markBroken super.flycheck-rtags;
 
       # upstream issue: missing file header
       fold-dwim = markBroken super.fold-dwim;
@@ -94,11 +109,20 @@ self:
       # upstream issue: mismatched filename
       helm-lobsters = markBroken super.helm-lobsters;
 
+      # Expects bash to be at /bin/bash
+      helm-rtags = markBroken super.helm-rtags;
+
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # upstream issue: recipe fails
+      insert-shebang = markBroken super.insert-shebang;
+
+      # Expects bash to be at /bin/bash
+      ivy-rtags = markBroken super.ivy-rtags;
 
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
@@ -141,10 +165,16 @@ self:
       qiita = markBroken super.qiita;
 
       # upstream issue: missing file header
+      rcirc-menu = markBroken super.rcirc-menu;
+
+      # upstream issue: missing file header
       speech-tagger = markBroken super.speech-tagger;
 
       # upstream issue: missing file header
       stgit = markBroken super.stgit;
+
+      # upstream issue: missing file header
+      tawny-mode = markBroken super.tawny-mode;
 
       # upstream issue: missing file header
       textmate = markBroken super.textmate;

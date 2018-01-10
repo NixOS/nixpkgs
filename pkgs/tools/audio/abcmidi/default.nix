@@ -1,14 +1,13 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   name = "abcMIDI-${version}";
-  version = "2017.06.10";
+  version = "2018.01.02";
 
-  src = fetchFromGitHub {
-    owner = "leesavide";
-    repo = "abcmidi";
-    rev = name;
-    sha256 = "0y92m3mj63vvy79ksq4z5hgkz6w50drg9a4bmbk6jylny0l0bdpy";
+  # You can find new releases on http://ifdo.ca/~seymour/runabc/top.html
+  src = fetchzip {
+    url = "http://ifdo.ca/~seymour/runabc/${name}.zip";
+    sha256 = "0s8wm637dgzgpgdxba3a6fh06i0c4iwvv9cdghh8msnx428k68iw";
   };
 
   # There is also a file called "makefile" which seems to be preferred by the standard build phase
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://abc.sourceforge.net/abcMIDI/;
     license = licenses.gpl2Plus;
-    description = "abc <-> MIDI conversion utilities";
+    description = "Utilities for converting between abc and MIDI";
     maintainers = [ maintainers.dotlambda ];
   };
 }

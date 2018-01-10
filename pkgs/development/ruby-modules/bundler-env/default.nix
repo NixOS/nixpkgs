@@ -1,7 +1,4 @@
-{ stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
-, callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem, buildEnv
-, linkFarm, git, makeWrapper, bundler, tree
-}@defs:
+{ ruby, lib, callPackage, defaultGemConfig, buildEnv, bundler }@defs:
 
 { name ? null
 , pname ? null

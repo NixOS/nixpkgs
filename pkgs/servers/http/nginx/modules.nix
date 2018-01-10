@@ -1,4 +1,4 @@
-{ fetchFromGitHub, pkgs }:
+{ fetchFromGitHub, fetchurl, lib, pkgs }:
 
 {
   brotli = {
@@ -11,12 +11,12 @@
     };
   };
 
-  rtmp = {
+  rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.1.11";
-      sha256 = "09zrnf8lk179mpqnx92zm24xl7m3bq4ca84wc2zwi5hc8kxjbwxc";
+      rev = "v1.2.1";
+      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
     };
   };
 
@@ -47,12 +47,12 @@
     '';
   };
 
-  modsecurity-beta = {
+  modsecurity-nginx = {
     src = fetchFromGitHub {
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "abbf2c47f6f3205484a1a9db618e067dce213b89";
-      sha256 = "04ar51bnqjca6g4p2irymgdmc8rh5nsi8ml43srm4krllnkvw8qn";
+      rev = "v1.0.0";
+      sha256 = "0zzpdqhbdqqy8kjkszv0mrq6136ah9v3zwr1jbh312j8izmzdyi7";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
@@ -153,7 +153,7 @@
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
         rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        sha256 = "176skx7zmi7islc1hmdxcynix4lkvgmr78lknn13s9gskc7qi25w";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -172,6 +172,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {

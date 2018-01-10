@@ -66,7 +66,7 @@ let
 in
 
 let
-  version = "17.2.6";
+  version = "17.2.8";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1pihiymglf3bf6w2vphac65v64hv71wgrj38mckbwc03c8j55n3a";
+    sha256 = "0pq9kmmyllgd63d936f3x1zsg7sqaswx47khbn0gvbgari2h753f";
   };
 
   prePatch = "patchShebangs .";
@@ -214,7 +214,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
-    homepage = http://www.mesa3d.org/;
+    homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ eduarrrd vcunat ];

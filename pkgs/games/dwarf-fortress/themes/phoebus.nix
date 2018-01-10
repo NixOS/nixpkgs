@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "phoebus-theme-${version}";
-  version = "43.05c";
+  version = "44.03";
 
   src = fetchFromGitHub {
     owner = "DFgraphics";
     repo = "Phoebus";
     rev = version;
-    sha256 = "0wiz9rd5ypibgh8854h5n2xwksfxylaziyjpbp3p1rkm3r7kr4fd";
+    sha256 = "0jpklikg2bf315m45kdkhd1n1plzb4jwzsg631gqfm9dwnrcs4w3";
   };
 
   installPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp -r data raw $out
   '';
 
-  passthru.dfVersion = "0.43.05";
+  passthru.dfVersion = "0.44.03";
 
   preferLocalBuild = true;
 

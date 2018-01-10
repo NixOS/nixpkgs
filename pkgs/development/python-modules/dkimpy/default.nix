@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, makeWrapper, buildPythonApplication
-, pytest, dns }:
+, pytest, dnspython }:
 
 buildPythonApplication rec {
   name = "${pname}-${version}";
@@ -14,7 +14,7 @@ buildPythonApplication rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs =  [ openssl dns ];
+  propagatedBuildInputs =  [ openssl dnspython ];
 
   patchPhase = ''
     substituteInPlace dknewkey.py --replace \

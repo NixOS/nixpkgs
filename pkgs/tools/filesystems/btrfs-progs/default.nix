@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd
 }:
 
-let version = "4.13.3"; in
+let version = "4.14.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "10yp0b4pwrw5mcd81yn3d0d87fnqpp4si5d25dfhl6n2640dnnw0";
+    sha256 = "1palnddw3d50kyflwk1j4xapbc6jniid6j5i9dsr8l8a7nkv7ich";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     attr acl zlib libuuid e2fsprogs lzo
-    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt zstd
   ];
 
   # gcc bug with -O1 on ARM with gcc 4.8

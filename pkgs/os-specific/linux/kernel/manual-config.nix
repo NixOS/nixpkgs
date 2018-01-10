@@ -39,6 +39,8 @@ in {
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Cross-compiling config
   crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
+  # Use defaultMeta // extraMeta
+  extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
@@ -46,6 +48,9 @@ in {
 let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
+
+  # Dependencies that are required to build kernel modules
+  moduleBuildDependencies = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -83,7 +88,7 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile;
+        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
       };
 
       inherit src;
@@ -228,11 +233,11 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
-      };
+      } // extraMeta;
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.15" -> libelf != null;
+assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
 stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
   name = "linux-${version}";
@@ -241,7 +246,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
       ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools
-      ++ optional (stdenv.lib.versionAtLeast version "4.15") libelf
+      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ;
 

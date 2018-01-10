@@ -42,11 +42,7 @@ qtEnvHook() {
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-if [ "$crossConfig" ]; then
-   crossEnvHooks+=(qtEnvHook)
-else
-   envHooks+=(qtEnvHook)
-fi
+envHostTargetHooks+=(qtEnvHook)
 
 postPatchMkspecs() {
     local bin="${!outputBin}"

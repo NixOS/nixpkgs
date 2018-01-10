@@ -64,11 +64,11 @@ in stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/share/fonts/truetype
     cp ${full-ttf}/share/fonts/truetype/*.ttf $out/share/fonts/truetype/
-    ln -s --force ${minimal}/share/fonts/truetype/DejaVuSans.ttf $out/share/fonts/truetype/DejaVuSans.ttf
+    ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf
   '';
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1nf0h15p8yvjx36syq1034i3hix99lm8p54iyjw8dpa19i9jfkmd";
+  outputHash = "15l93xm9mg2ziaxv4nqy2a4jaz54d05xf0hfz1h84bclzb882llh";
   inherit meta;
 
   passthru.minimal = minimal;

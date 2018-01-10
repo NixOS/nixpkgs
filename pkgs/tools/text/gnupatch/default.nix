@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_strnlen_working=yes"
   ];
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

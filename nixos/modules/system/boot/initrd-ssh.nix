@@ -89,9 +89,6 @@ in
 
   config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [
-      { assertion = cfg.hostRSAKey != null || cfg.hostDSSKey != null || cfg.hostECDSAKey != null;
-        message = "You should specify at least one host key for initrd SSH";
-      }
       { assertion = cfg.authorizedKeys != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
@@ -121,7 +118,7 @@ in
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
 
-      dropbear -s -j -k -E -m -p ${toString cfg.port}
+      dropbear -s -j -k -E -m -p ${toString cfg.port} ${optionalString (cfg.hostRSAKey == null && cfg.hostDSSKey == null && cfg.hostECDSAKey == null) "-R"}
     '';
 
     boot.initrd.secrets =

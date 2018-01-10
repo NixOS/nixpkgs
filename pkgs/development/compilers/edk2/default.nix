@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libuuid, python2, iasl }:
+{ stdenv, fetchFromGitHub, fetchpatch, libuuid, python2, iasl }:
 
 let
   pythonEnv = python2.withPackages(ps: [ps.tkinter]);
@@ -11,16 +11,24 @@ else
   throw "Unsupported architecture";
 
 edk2 = stdenv.mkDerivation {
-  name = "edk2-2014-12-10";
+  name = "edk2-2017-12-05";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
-    rev = "vUDK2017";
-    sha256 = "0sswa028644yr8fbl8j6rhrdm717fj29h4dys3ygklmjhss90a2g";
+    rev = "f71a70e7a4c93a6143d7bad8ab0220a947679697";
+    sha256 = "0k48xfwxcgcim1bhkggc19hilvsxsf5axvvcpmld0ng1fcfg0cr6";
   };
 
-  buildInputs = [ libuuid pythonEnv];
+  patches = [
+    (fetchpatch {
+      name = "short-circuit-the-transfer-of-an-empty-S3_CONTEXT.patch";
+      url = "https://github.com/tianocore/edk2/commit/9e2a8e928995c3b1bb664b73fd59785055c6b5f6";
+      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    })
+  ];
+
+  buildInputs = [ libuuid pythonEnv ];
 
   makeFlags = "-C BaseTools";
 
@@ -33,10 +41,13 @@ edk2 = stdenv.mkDerivation {
     mv -v edksetup.sh $out
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Intel EFI development kit";
     homepage = https://sourceforge.net/projects/edk2/;
     license = stdenv.lib.licenses.bsd2;
+    branch = "UDK2017";
     platforms = ["x86_64-linux" "i686-linux"];
   };
 

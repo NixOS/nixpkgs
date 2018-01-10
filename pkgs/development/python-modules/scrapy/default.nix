@@ -2,7 +2,7 @@
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.5.0";
     pname = "Scrapy";
     name = "${pname}-${version}";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
     src = fetchurl {
       url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "04a08f027eef5d271342a016439533c81ba46f14bfcf230fecf602e99beaf233";
+      sha256 = "31a0bf05d43198afaf3acfb9b4fb0c09c1d7d7ff641e58c66e36117f26c4b755";
     };
 
     meta = with lib; {

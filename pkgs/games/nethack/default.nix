@@ -3,7 +3,7 @@
 let
   platform =
     if lib.elem stdenv.system lib.platforms.unix then "unix"
-    else abort "Unknown platform for NetHack";
+    else throw "Unknown platform for NetHack: ${stdenv.system}";
   unixHint =
     if stdenv.isLinux then "linux"
     else if stdenv.isDarwin then "macosx10.10"

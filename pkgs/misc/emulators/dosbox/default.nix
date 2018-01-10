@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "A DOS emulator";
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
   };
 }

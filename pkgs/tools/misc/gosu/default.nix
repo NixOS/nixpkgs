@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description= "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     homepage = "https://github.com/tianon/gosu";
-    licence = stdenv.lib.licenses.gpl3;
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };
 }

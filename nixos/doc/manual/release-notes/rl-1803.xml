@@ -20,6 +20,22 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
+      have been made to the infrastructure involved:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>libmysql</literal> has been deprecated, please use <literal>mysql.connector-c</literal>
+            instead, a compatibility passthru has been added to the MySQL packages.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <literal>mysql57</literal> package has a new <literal>static</literal> output containing
+            the static libraries including <literal>libmysqld.a</literal>
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
   </listitem>
 </itemizedlist>
@@ -95,6 +111,34 @@ following incompatible changes:</para>
       <link xlink:href="https://search.nix.gsc.io/?q=stateVersion">here</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal>has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
+      Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
+      Other more obscure ones are just moved.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The propagation logic has been changed.
+      The new logic, along with new types of dependencies that go with, is thoroughly documented in the "Specifying dependencies" section of the "Standard Environment" chapter of the nixpkgs manual.
+      <!-- That's <xref linkend="ssec-stdenv-attributes"> were we to merge the manuals. -->
+      The old logic isn't but is easy to describe: dependencies were propagated as the same type of dependency no matter what.
+      In practice, that means that many <function>propagatedNativeBuildInputs</function> should instead be  <function>propagatedBuildInputs</function>.
+      Thankfully, that was and is the least used type of dependency.
+      Also, it means that some <function>propagatedBuildInputs</function> should instead be <function>depsTargetTargetPropagated</function>.
+      Other types dependencies should be unaffected.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>memcached</literal> service no longer accept dynamic socket
+      paths via <option>services.memcached.socket</option>. Unix sockets can be
+      still enabled by <option>services.memcached.enableUnixSocket</option> and
+      will be accessible at <literal>/run/memcached/memcached.sock</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -129,6 +173,72 @@ following incompatible changes:</para>
       An assertion failure is thrown if WM's and DM's default are <literal>none</literal>.
       To explicitly run a plain X session without and DM or WM, the newly introduced option <option>services.xserver.plainX</option>
       must be set to true.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The option <option>services.logstash.listenAddress</option> is now <literal>127.0.0.1</literal> by default.
+      Previously the default behaviour was to listen on all interfaces.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>services.btrfs.autoScrub</literal> has been added, to
+      periodically check btrfs filesystems for data corruption.
+      If there's a correct copy available, it will automatically repair
+      corrupted blocks.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.clock-format.</literal>
+      has been added, the clock format string (as expected by
+      strftime, e.g. <literal>%H:%M</literal>) to use with the lightdm
+      gtk greeter panel.
+    </para>
+    <para>
+      If set to null the default clock format is used.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.indicators</literal>
+      has been added, a list of allowed indicator modules to use with
+      the lightdm gtk greeter panel.
+    </para>
+    <para>
+      Built-in indicators include <literal>~a11y</literal>,
+      <literal>~language</literal>, <literal>~session</literal>,
+      <literal>~power</literal>, <literal>~clock</literal>,
+      <literal>~host</literal>, <literal>~spacer</literal>. Unity
+      indicators can be represented by short name
+      (e.g. <literal>sound</literal>, <literal>power</literal>),
+      service file name, or absolute path.
+    </para>
+    <para>
+      If set to <literal>null</literal> the default indicators are
+      used.
+    </para>
+    <para>
+      In order to have the previous default configuration add
+<programlisting>
+  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [
+    "~host" "~spacer"
+    "~clock" "~spacer"
+    "~session"
+    "~language"
+    "~a11y"
+    "~power"
+  ];
+</programlisting>
+      to your <literal>configuration.nix</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The NixOS test driver supports user services declared by <literal>systemd.user.services</literal>.
+      The methods <literal>waitForUnit</literal>, <literal>getUnitInfo</literal>, <literal>startJob</literal>
+      and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
     </para>
   </listitem>
 </itemizedlist>

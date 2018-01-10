@@ -6,19 +6,13 @@ rec {
 
   # Jane Street packages, up to ppx_core
 
-  sexplib = janePackage ({
+  sexplib = janePackage {
     name = "sexplib";
     meta.description = "Automated S-expression conversion";
-  } // (if lib.versionAtLeast ocaml.version "4.05"
-    then {
-      version = "0.9.3";
-      hash = "0a2sqh235ja3qwy7b2k3qym2616dz7369a195qwi6ljy3cnh7s53";
-      buildInputs = [ num ];
-    } else {
-      version = "0.9.2";
-      hash = "0szj7gi5ksy7kif5g71rkr6xhxc41xl8hq6s5zz610cjyngzyzjl";
-    }
-  ));
+    version = "0.10.0";
+    hash = "1agw649n0rnf6h4y2dr1zs1970nncxgjmf90848vbxv8y9im4yy2";
+    buildInputs = [ num ];
+  };
 
   base = janePackage {
     name = "base";
@@ -279,14 +273,14 @@ rec {
     name = "ppx_sexp_message";
     hash = "0r0skyr1zf2jh48xrxbs45gzywynhlivkq24xwc0qq435fmc2jqv";
     propagatedBuildInputs = [ ppx_sexp_conv ppx_here ];
-    meta.declarations = "A ppx rewriter for easy construction of s-expressions";
+    meta.description = "A ppx rewriter for easy construction of s-expressions";
   };
 
   ppx_sexp_value = janePackage {
     name = "ppx_sexp_value";
     hash = "0hha5mmx700m8fy9g4znb8278l09chgwlpshny83vsmmzgq2jhah";
     propagatedBuildInputs = [ ppx_sexp_conv ppx_here ];
-    meta.declarations = "A ppx rewriter that simplifies building s-expressions from OCaml values";
+    meta.description = "A ppx rewriter that simplifies building s-expressions from OCaml values";
   };
 
   ppx_typerep_conv = janePackage {

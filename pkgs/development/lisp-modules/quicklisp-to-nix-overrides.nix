@@ -30,6 +30,12 @@ in
       configurePhase = ''
         export makeFlags="$makeFlags LISP=common-lisp.sh"
       '';
+      preInstall = ''
+        type gcc
+        mkdir -p "$out/lib/common-lisp/" 
+        cp -r . "$out/lib/common-lisp/cl-fuse/"
+        "gcc" "-x" "c" "$out/lib/common-lisp/cl-fuse/fuse-launcher.c-minus" "-fPIC" "--shared" "-lfuse" "-o" "$out/lib/common-lisp/cl-fuse/libfuse-launcher.so"        
+      '';
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
@@ -47,11 +53,11 @@ in
   cl-async-ssl = addNativeLibs [pkgs.openssl];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
-    propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
+    propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.lib.getDev pkgs.mysql.client}/include/mysql"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.lib.getLib pkgs.mysql.client}/lib/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.connector-c}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.connector-c}/lib/mysql"
       '';
     };
   };

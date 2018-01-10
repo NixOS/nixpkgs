@@ -9,6 +9,7 @@
 
 , withPyGUI ? false
 , vimAlias ? false
+, viAlias ? false
 , configure ? null
 }:
 
@@ -82,7 +83,7 @@ let
                        (optionalString withPython3 python3Wrapper) +
                        (optionalString withRuby rubyWrapper)}" --unset PYTHONPATH '' +
     optionalString (withRuby)
-      ''--suffix PATH : \"${rubyEnv}/bin\" --set GEM_HOME \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
+      ''--suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath} '';
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
@@ -174,7 +175,9 @@ let
     };
   };
 
-in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
+in if (vimAlias == false && viAlias == false && configure == null)
+      then neovim
+      else stdenv.mkDerivation {
   name = "neovim-${neovim.version}-configured";
   inherit (neovim) version meta;
 
@@ -187,6 +190,8 @@ in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivat
     done
   '' + optionalString vimAlias ''
     ln -s $out/bin/nvim $out/bin/vim
+  '' + optionalString viAlias ''
+    ln -s $out/bin/nvim $out/bin/vi
   '' + optionalString (configure != null) ''
     wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
   '';

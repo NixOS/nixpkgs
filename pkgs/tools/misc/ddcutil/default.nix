@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.ddcutil.com/;
     description = "Query and change Linux monitor settings using DDC/CI and USB";
     license     = licenses.gpl2;
-    maintainer  = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }
 

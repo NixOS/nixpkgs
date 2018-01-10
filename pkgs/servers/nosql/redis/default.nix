@@ -1,21 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, lua }:
+{ stdenv, fetchurl, lua }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.2";
+  version = "4.0.6";
   name = "redis-${version}";
 
   src = fetchurl {
     url = "http://download.redis.io/releases/${name}.tar.gz";
-    sha256 = "04s8cgvwjj1979s3hg8zkwc9pyn3jkjpz5zidp87kfcipifr385i";
+    sha256 = "1ypnwmxwm49l0b8i9swcbjdxnc6f0r9zyqm2h423wz13xilmv6vn";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-15047.patch";
-      url = https://github.com/antirez/redis/commit/ffcf7d5ab1e98d84c28af9bea7be76c6737820ad.patch;
-      sha256 = "0cgx3lm0n7jxhsly8v9hdvy6vlamj3ck2jsid4fwyapz6907h64l";
-    })
-  ];
 
   buildInputs = [ lua ];
   makeFlags = "PREFIX=$(out)";

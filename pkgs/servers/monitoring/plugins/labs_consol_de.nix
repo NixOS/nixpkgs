@@ -46,9 +46,9 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage   = https://labs.consol.de/;
-      license    = licenses.gpl2;
-      maintainer = with maintainers; [ peterhoeg ];
+      homepage    = https://labs.consol.de/;
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ peterhoeg ];
       inherit description;
     };
   };

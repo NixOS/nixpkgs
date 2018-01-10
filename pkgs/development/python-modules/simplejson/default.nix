@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.11.1";
+  version = "3.13.2";
   name = "${pname}-${version}";
   doCheck = !stdenv.isDarwin;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01a22d49ddd9a168b136f26cac87d9a335660ce07aa5c630b8e3607d6f4325e7";
+    sha256 = "4c4ecf20e054716cc1e5a81cadc44d3f4027108d8dd0861d8b1e3bd7a32d4f0a";
   };
 
   meta = {

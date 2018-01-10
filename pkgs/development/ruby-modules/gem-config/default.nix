@@ -31,8 +31,7 @@ let
   rainbow_rake = buildRubyGem {
     name = "rake";
     gemName = "rake";
-    remotes = ["https://rubygems.org"];
-    sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
+    source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
     version = "12.0.0";
   };
@@ -109,7 +108,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre gobjectIntrospection ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -167,11 +166,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   ncursesw = attrs: {

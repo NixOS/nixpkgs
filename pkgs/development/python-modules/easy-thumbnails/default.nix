@@ -5,7 +5,7 @@
 buildPythonPackage rec {
   pname = "easy-thumbnails";
   name = "${pname}-${version}";
-  version = "2.4.2";
+  version = "2.5";
 
   meta = {
     description = "Easy thumbnails for Django";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cad7ea4fb2b800284e842d8a44f685cbc1968535be04c24a4bbf6e6dbc550c4";
+    sha256 = "e244d1f26027fc32c6ca60ffb0169a39099446f614b0433e907a2588ae7d9b95";
   };
 
   propagatedBuildInputs = [ django pillow ];

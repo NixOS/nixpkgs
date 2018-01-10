@@ -11,11 +11,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "pdns-recursor-${version}";
-  version = "4.0.6";
+  version = "4.0.8";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "03fnjiacvhdlkr3a2206mham0p6p24gkawashs5v12r68k32l67j";
+    sha256 = "04v5y6mfdhn8ikigqmm3k5k0zz5l8d3k1a7ih464n1161q7z0vww";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A recursive DNS server";
-    homepage = http://www.powerdns.com/;
+    homepage = https://www.powerdns.com/;
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];

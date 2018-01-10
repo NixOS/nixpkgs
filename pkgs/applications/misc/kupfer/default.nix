@@ -3,6 +3,7 @@
 , fetchurl
 , intltool
 , python3Packages
+, gobjectIntrospection
 , gtk3
 , dbus
 , libwnck3
@@ -22,7 +23,11 @@ buildPythonApplication rec {
     sha256 = "0c9xjx13r8ckfr4az116bhxsd3pk78v04c3lz6lqhraak0rp4d92";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook intltool ];
+  nativeBuildInputs = [
+    wrapGAppsHook intltool
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [ hicolor_icon_theme docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 

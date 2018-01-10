@@ -65,7 +65,7 @@
       foldingathome = 37;
       sabnzbd = 38;
       #kdm = 39; # dropped in 17.03
-      ghostone = 40;
+      #ghostone = 40; # dropped in 18.03
       git = 41;
       fourstore = 42;
       fourstorehttp = 43;
@@ -197,10 +197,10 @@
       #input = 174; # unused
       sddm = 175;
       tss = 176;
-      memcached = 177;
+      #memcached = 177; removed 2018-01-03
       ntp = 179;
       zabbix = 180;
-      redis = 181;
+      #redis = 181; removed 2018-01-03
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
@@ -281,8 +281,8 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      keystone = 265;
-      glance = 266;
+      # keystone = 265; # unused, removed 2017-12-13
+      # glance = 266; # unused, removed 2017-12-13
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
@@ -348,7 +348,7 @@
       #foldingathome = 37; # unused
       #sabnzd = 38; # unused
       #kdm = 39; # unused, even before 17.03
-      ghostone = 40;
+      #ghostone = 40; # dropped in 18.03
       git = 41;
       fourstore = 42;
       fourstorehttp = 43;
@@ -475,10 +475,10 @@
       input = 174;
       sddm = 175;
       tss = 176;
-      #memcached = 177; # unused
+      #memcached = 177; # unused, removed 2018-01-03
       #ntp = 179; # unused
       #zabbix = 180; # unused
-      #redis = 181; # unused
+      #redis = 181; # unused, removed 2018-01-03
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
@@ -551,8 +551,8 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      keystone = 265;
-      glance = 266;
+      # keystone = 265; # unused, removed 2017-12-13
+      # glance = 266; # unused, removed 2017-12-13
       couchpotato = 267;
       gogs = 268;
       kresd = 270;

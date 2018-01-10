@@ -18,16 +18,17 @@
 
 with stdenv.lib;
 let
-  version = "2.10.1";
-  sha256 = "1a3bjr0ygx4r2qd4nx5jf77jhh4xis3zga27lfryn0b4ap3hn14f";
+  version = "2.11.0";
+  sha256 = "1jvzw6rdhimn583dz6an8xiw07n3ycvxmj3jpv1s312scv3k9w64";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
-  hostCpuTargets = if stdenv.isi686 || stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
-                      else if stdenv.isArm then "arm-softmmu"
-                      else if stdenv.isAarch64 then "aarch64-softmmu"
-                      else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
+  hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
+                   else if stdenv.isi686 then "i386-softmmu"
+                   else if stdenv.isArm then "arm-softmmu"
+                   else if stdenv.isAarch64 then "aarch64-softmmu"
+                   else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
@@ -62,12 +63,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-etc-install.patch ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optional pulseSupport ./fix-hda-recording.patch
-    ++ [ (fetchpatch {
-           name = "qemu-CVE-2017-15118.patch";
-           url = "http://git.qemu.org/?p=qemu.git;a=patch;h=51ae4f8455c9e32c54770c4ebc25bf86a8128183";
-           sha256 = "0f9i096dz3h1i8g92y99vak23rjs1shf7prlcxqizsz0fah7wx7h"; })
-       ];
+    ++ optional pulseSupport ./fix-hda-recording.patch;
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -97,14 +93,13 @@ stdenv.mkDerivation rec {
       done
     '';
 
+  # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall =
-    ''
-      # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-      p="$out/bin/qemu-system-${if stdenv.system == "x86_64-linux" then "x86_64" else "i386"}"
-      if [ -e "$p" ]; then
-        makeWrapper "$p" $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
-      fi
-    '';
+    if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isArm     then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else "";
 
   meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;

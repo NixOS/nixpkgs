@@ -20,7 +20,7 @@ buildGoPackage rec {
     homepage = https://github.com/jeffail/leaps/;
     license = "MIT";
     maintainers = with stdenv.lib.maintainers; [ qknight ];
-    meta.platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

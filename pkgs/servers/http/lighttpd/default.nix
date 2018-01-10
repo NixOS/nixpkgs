@@ -1,27 +1,31 @@
 { stdenv, fetchurl, pkgconfig, pcre, libxml2, zlib, attr, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, mysql ? null
+, enableLdap ? false, openldap ? null
 }:
 
 assert enableMagnet -> lua5_1 != null;
 assert enableMysql -> mysql != null;
+assert enableLdap -> openldap != null;
 
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.45";
+  name = "lighttpd-1.4.48";
 
   src = fetchurl {
     url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "0grsqh7pdqnjx6xicd96adsx84vryb7c4n21dnxfygm3xrfj55qw";
+    sha256 = "0djgsx06x3p22rjvzml5klq7gqd9nk88qzlxifa7p7ajqymdb2hg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre libxml2 zlib attr bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql mysql.lib;
+             ++ stdenv.lib.optional enableMysql mysql.connector-c
+             ++ stdenv.lib.optional enableLdap openldap;
 
   configureFlags = [ "--with-openssl" ]
                 ++ stdenv.lib.optional enableMagnet "--with-lua"
-                ++ stdenv.lib.optional enableMysql "--with-mysql";
+                ++ stdenv.lib.optional enableMysql "--with-mysql"
+                ++ stdenv.lib.optional enableLdap "--with-ldap";
 
   preConfigure = ''
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure

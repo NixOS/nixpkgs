@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnftnl-1.0.7";
+  name = "libnftnl-1.0.8";
 
   src = fetchurl {
     url = "http://netfilter.org/projects/libnftnl/files/${name}.tar.bz2";
-    sha256 = "10irjrylcfkbp11617yr19vpfhgl54w0kw02jhj0i1abqv5nxdlv";
+    sha256 = "0f10cfiyl4c0f8k3brxfrw28x7a6qvrakaslg4jgqncwxycxggg6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

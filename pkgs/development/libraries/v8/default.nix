@@ -7,13 +7,11 @@
 assert readline != null;
 
 let
-  arch = if stdenv.isArm
-         then if stdenv.is64bit
-              then"arm64"
-              else "arm"
-         else if stdenv.is64bit
-              then"x64"
-              else "ia32";
+  arch = if stdenv.isx86_64 then "x64"
+            else if stdenv.isi686 then "ia32"
+            else if stdenv.isAarch64 then "arm64"
+            else if stdenv.isArm then "arm"
+            else throw "Unknown architecture for v8";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
   sharedFlag = if static then "static_library" else "shared_library";
@@ -171,6 +169,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
 
   # the `libv8_libplatform` target is _only_ built as a static library,
   # and is expected to be statically linked in when needed.

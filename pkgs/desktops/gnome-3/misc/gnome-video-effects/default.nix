@@ -2,15 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-video-effects-${version}";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-video-effects/0.4/${name}.tar.xz";
-    sha256 = "0jl4iny2dqpcgi3sgxzpgnbw0752i8ay3rscp2cgdjlp79ql5gil";
+    sha256 = "06c2f1kihyhawap1s3zg5w7q7fypsybkp7xry4hxkdz4mpsy0zjs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeVideoEffects;

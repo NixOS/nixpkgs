@@ -137,10 +137,10 @@
     dependencies = ["CFPropertyList" "addressable" "babosa" "colored" "commander-fastlane" "dotenv" "excon" "faraday" "faraday-cookie_jar" "faraday_middleware" "fastimage" "gh_inspector" "google-api-client" "highline" "json" "mini_magick" "multi_json" "multi_xml" "multipart-post" "plist" "public_suffix" "rubyzip" "security" "slack-notifier" "terminal-notifier" "terminal-table" "tty-screen" "word_wrap" "xcodeproj" "xcpretty" "xcpretty-travis-formatter"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "12pwfz36l1ks84618g6y7l6s4pbb86ngr4fmg1dnxgj01h4m7dx6";
+      sha256 = "1dgpr6rdg0bc8fxv0ysf4pw6p1by03jw8bwzqxkyai5fsl6hggpf";
       type = "gem";
     };
-    version = "2.66.2";
+    version = "2.68.2";
   };
   gh_inspector = {
     source = {
@@ -171,10 +171,10 @@
   highline = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nf5lgdn6ni2lpfdn4gk3gi47fmnca2bdirabbjbz1fk9w4p8lkr";
+      sha256 = "01ib7jp85xjc4gh4jg0wyzllm46hwv8p0w1m4c75pbgi41fps50y";
       type = "gem";
     };
-    version = "1.7.8";
+    version = "1.7.10";
   };
   http-cookie = {
     dependencies = ["domain_name"];

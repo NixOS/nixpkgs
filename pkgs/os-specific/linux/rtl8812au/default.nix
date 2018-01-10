@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  buildInputs = kernel.moduleBuildDependencies;
+
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";

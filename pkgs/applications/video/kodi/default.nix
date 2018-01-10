@@ -8,8 +8,7 @@
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
 , libXtst, libXfixes, fixesproto, systemd
-, SDL, SDL2, SDL_image, SDL_mixer, alsaLib
-, mesa, glew, fontconfig, freetype, ftgl
+, alsaLib, mesa, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -44,6 +43,7 @@ assert vdpauSupport -> libvdpau != null;
 # - cmake is no longer in project/cmake
 # - maybe we can remove auto{conf,make} and libtool from inputs
 # - check if dbus support PR has been merged and add dbus as a buildInput
+# - try to use system ffmpeg (kodi 17 works best with bundled 3.1 with patches)
 
 let
   kodiReleaseDate = "20171115";
@@ -78,7 +78,8 @@ let
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
     '';
-    buildInputs = [ gnutls libidn libtasn1 p11_kit zlib ];
+    buildInputs = [ gnutls libidn libtasn1 p11_kit zlib libva ]
+      ++ lib.optional  vdpauSupport    libvdpau;
     nativeBuildInputs = [ cmake nasm pkgconfig ];
   };
 
@@ -124,13 +125,12 @@ in stdenv.mkDerivation rec {
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto libXtst libXfixes fixesproto
-      SDL SDL_image SDL_mixer alsaLib
-      mesa glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff libva wayland
+      alsaLib mesa glew fontconfig freetype ftgl
+      libjpeg jasper libpng libtiff wayland
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.lib avahi lame
+      sqlite mysql.connector-c avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring
@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional  dbusSupport     dbus_libs
-    ++ lib.optionals joystickSupport [ cwiid SDL2 ]
+    ++ lib.optionals joystickSupport [ cwiid ]
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
     ++ lib.optional  rtmpSupport     rtmpdump
@@ -189,7 +189,7 @@ in stdenv.mkDerivation rec {
         wrapProgram $out/bin/$p \
           --prefix PATH            ":" "${lib.makeBinPath [ python2 glxinfo xdpyinfo ]}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass SDL2 ]}"
+              [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ]}"
       done
 
       substituteInPlace $out/share/xsessions/kodi.desktop \

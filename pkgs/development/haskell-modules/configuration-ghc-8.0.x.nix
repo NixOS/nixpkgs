@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # Suitable LLVM version.
-  llvmPackages = pkgs.llvmPackages_35;
+  llvmPackages = pkgs.llvmPackages_37;
 
   # Disable GHC 8.0.x core libraries.
   array = null;
@@ -60,6 +60,12 @@ self: super: {
   apply-refact = super.apply-refact_0_3_0_1;
 
   # This builds needs the latest Cabal version.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_0; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
 
+  # Add appropriate Cabal library to build this code.
+  stack = addSetupDepend super.stack self.Cabal_2_0_1_1;
+
+  # inline-c > 0.5.6.0 requires template-haskell >= 2.12
+  inline-c = super.inline-c_0_5_6_1;
+  inline-c-cpp = super.inline-c-cpp_0_1_0_0;
 }

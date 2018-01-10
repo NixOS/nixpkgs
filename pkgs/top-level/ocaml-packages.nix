@@ -128,7 +128,7 @@ let
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
@@ -192,7 +192,9 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
-    curses = callPackage ../development/ocaml-modules/curses { };
+    curses = callPackage ../development/ocaml-modules/curses {
+      ncurses = pkgs.ncurses5;
+    };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
@@ -200,9 +202,13 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    digestif =  callPackage ../development/ocaml-modules/digestif { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
+
+    dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
@@ -227,7 +233,13 @@ let
       lwt = ocaml_lwt;
     };
 
+    facile = callPackage ../development/ocaml-modules/facile { };
+
     faillib = callPackage ../development/ocaml-modules/faillib { };
+
+    faraday = callPackage ../development/ocaml-modules/faraday { };
+
+    farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
@@ -347,6 +359,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    lru = callPackage ../development/ocaml-modules/lru { };
+
     lwt2 = callPackage ../development/ocaml-modules/lwt { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
@@ -367,7 +381,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -497,6 +511,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
@@ -664,6 +680,8 @@ let
     vg = callPackage ../development/ocaml-modules/vg { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
@@ -967,10 +985,6 @@ let
     };
 
     matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
-
-    ott = callPackage ../applications/science/logic/ott {
-      camlp5 = camlp5_transitional;
-    };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);

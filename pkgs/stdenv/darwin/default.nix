@@ -58,12 +58,45 @@ in rec {
                           extraPreHook      ? "",
                           extraNativeBuildInputs,
                           extraBuildInputs,
+                          libcxx,
                           allowedRequisites ? null}:
     let
+      buildPackages = lib.optionalAttrs (last ? stdenv) {
+        inherit (last) stdenv;
+      };
+
+      coreutils = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
+      gnugrep   = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
+
+      bintools = import ../../build-support/bintools-wrapper {
+        inherit shell;
+        inherit (last) stdenvNoCC;
+
+        nativeTools  = false;
+        nativeLibc   = false;
+        inherit buildPackages coreutils gnugrep;
+        libc         = last.pkgs.darwin.Libsystem;
+        bintools     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
+      };
+
+      cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
+        inherit shell;
+        inherit (last) stdenvNoCC;
+
+        extraPackages = lib.optional (libcxx != null) libcxx;
+
+        nativeTools  = false;
+        nativeLibc   = false;
+        inherit buildPackages coreutils gnugrep bintools;
+        libc         = last.pkgs.darwin.Libsystem;
+        isClang      = true;
+        cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
+      };
+
       thisStdenv = import ../generic {
         inherit config shell extraNativeBuildInputs extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
-          thisStdenv.cc.expand-response-params
+          cc.expand-response-params cc.bintools
         ];
 
         name = "stdenv-darwin-boot-${toString step}";
@@ -72,24 +105,9 @@ in rec {
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
-          inherit shell;
-          inherit (last) stdenvNoCC;
+        inherit cc;
 
-          nativeTools  = false;
-          nativeLibc   = false;
-          buildPackages = lib.optionalAttrs (last ? stdenv) {
-            inherit (last) stdenv;
-          };
-          libc         = last.pkgs.darwin.Libsystem;
-          isClang      = true;
-          cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
-          binutils     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
-          coreutils    = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
-          gnugrep      = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
-        };
-
-        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
+        preHook = lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
@@ -161,6 +179,7 @@ in rec {
 
     extraNativeBuildInputs = [];
     extraBuildInputs = [];
+    libcxx = null;
   };
 
   stage1 = prevStage: let
@@ -168,7 +187,8 @@ in rec {
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraNativeBuildInputs = [];
-    extraBuildInputs = [ pkgs.libcxx ];
+    extraBuildInputs = [ ];
+    libcxx = pkgs.libcxx;
 
     allowedRequisites =
       [ bootstrapTools ] ++ (with pkgs; [ libcxx libcxxabi ]) ++ [ pkgs.darwin.Libsystem ];
@@ -195,7 +215,8 @@ in rec {
     '';
 
     extraNativeBuildInputs = [ pkgs.xz ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
 
     allowedRequisites =
       [ bootstrapTools ] ++
@@ -227,7 +248,8 @@ in rec {
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
     extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
 
     extraPreHook = ''
       export PATH=${pkgs.bash}/bin:$PATH
@@ -262,7 +284,9 @@ in rec {
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
     extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
+    libcxx = pkgs.libcxx;
+
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
@@ -328,13 +352,15 @@ in rec {
       buildPackages = {
         inherit (prevStage) stdenv;
       };
-      inherit (pkgs) coreutils binutils gnugrep;
-      cc   = pkgs.llvmPackages.clang-unwrapped;
-      libc = pkgs.darwin.Libsystem;
+      inherit (pkgs) coreutils gnugrep;
+      cc       = pkgs.llvmPackages.clang-unwrapped;
+      bintools = pkgs.darwin.binutils;
+      libc     = pkgs.darwin.Libsystem;
+      extraPackages = [ pkgs.libcxx ];
     };
 
     extraNativeBuildInputs = [];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = [ pkgs.darwin.CF ];
 
     extraAttrs = {
       inherit platform bootstrapTools;
@@ -349,8 +375,8 @@ in rec {
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
-      binutils gettext
+      gnugrep llvmPackages.clang-unwrapped patch pcre.out gettext
+      binutils-raw.bintools binutils binutils.bintools
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
