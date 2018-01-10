@@ -533,7 +533,7 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
+  awscli = pythonPackages.awscli;
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
