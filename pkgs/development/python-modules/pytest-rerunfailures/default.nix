@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-rerunfailures";
   version = "4.0";
 
@@ -10,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "18lpy6d9b4ck8j3jwh4vmxj54is0fwanpmpg70qg4y0fycdqzwks";
   };
 
-  buildInputs = [ pytest mock ];
+  checkInputs = [ pytest mock ];
 
   checkPhase = ''
     py.test
@@ -21,6 +20,5 @@ buildPythonPackage rec {
     homepage = https://github.com/pytest-dev/pytest-rerunfailures;
     license = licenses.mpl20;
     maintainers = with maintainers; [ jgeerds ];
-    platforms = platforms.all;
   };
 }
