@@ -8272,6 +8272,8 @@ with pkgs;
 
   dclib = callPackage ../development/libraries/dclib { };
 
+  dillinger = callPackage ../servers/web-apps/dillinger { };
+
   dillo = callPackage ../applications/networking/browsers/dillo {
     fltk = fltk13;
   };
