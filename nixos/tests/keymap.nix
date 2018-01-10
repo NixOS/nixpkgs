@@ -101,6 +101,11 @@ let
           $machine->succeed("$cmd ${testReader} $shellTestdata &");
           while (my ($testname, $qwerty, $expect) = splice(@testdata, 0, 3)) {
             waitCatAndDelete "/tmp/reader.ready";
+
+            # Workaround for xterm not being in focus.
+            if ($desc eq "Xorg keymap") {
+              $machine->succeed("${pkgs.xdotool}/bin/xdotool search --class testterm windowactivate --sync");
+            }
             $machine->sendKeys($qwerty);
           };
           my $exitcode = waitCatAndDelete "/tmp/reader.exit";
@@ -111,7 +116,7 @@ let
       $machine->waitForX;
 
       mkTest "VT keymap", "openvt -sw --";
-      mkTest "Xorg keymap", "DISPLAY=:0 xterm -fullscreen -e";
+      mkTest "Xorg keymap", "DISPLAY=:0 xterm -class testterm -fullscreen -e";
     '';
   };
 
