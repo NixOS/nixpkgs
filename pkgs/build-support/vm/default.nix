@@ -1978,6 +1978,28 @@ rec {
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
+
+    debian9x86_64 = {
+      name = "debian-9pre-stretch-amd64";
+      fullName = "Debian Stretch (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/stretch/main/binary-amd64/Packages.xz;
+        sha256 = "1ihfcrrjz2nwh5wxa8b90m24b5z7q5p1h2ydfg9f1b6pdk81f6ji";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian9i386 = {
+      name = "debian-9pre-stretch-i386";
+      fullName = "Debian Stretch (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/stretch/main/binary-i386/Packages.xz;
+        sha256 = "08gikw2pfm76fdl14b6sjx07dwp70ycgdj3zir296b7xrwiymima";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
   };
 
 
