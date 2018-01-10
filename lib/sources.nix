@@ -26,14 +26,35 @@ rec {
     (type == "symlink" && lib.hasPrefix "result" baseName)
   );
 
-  cleanSource = builtins.filterSource cleanSourceFilter;
+  cleanSource = src: cleanSourceWith { filter = cleanSourceFilter; inherit src; };
+
+  # Like `builtins.filterSource`, except it will compose with itself,
+  # allowing you to chain multiple calls together without any
+  # intermediate copies being put in the nix store.
+  #
+  #     lib.cleanSourceWith f (lib.cleanSourceWith g ./.)     # Succeeds!
+  #     builtins.filterSource f (builtins.filterSource g ./.) # Fails!
+  cleanSourceWith = { filter, src }:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+      origSrc = if isFiltered then src.origSrc else src;
+      filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
+    in {
+      inherit origSrc;
+      filter = filter';
+      outPath = builtins.filterSource filter' origSrc;
+      _isLibCleanSourceWith = true;
+    };
 
   # Filter sources by a list of regular expressions.
   #
   # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
-  sourceByRegex = src: regexes: builtins.filterSource (path: type:
-    let relPath = lib.removePrefix (toString src + "/") (toString path);
-    in lib.any (re: builtins.match re relPath != null) regexes) src;
+  sourceByRegex = src: regexes: cleanSourceWith {
+    filter = (path: type:
+      let relPath = lib.removePrefix (toString src + "/") (toString path);
+      in lib.any (re: builtins.match re relPath != null) regexes);
+    inherit src;
+  };
 
   # Get all files ending with the specified suffices from the given
   # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
@@ -42,7 +63,7 @@ rec {
     let filter = name: type:
       let base = baseNameOf (toString name);
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
-    in builtins.filterSource filter path;
+    in cleanSourceWith { inherit filter; src = path; };
 
 
   # Get the commit id of a git repo
