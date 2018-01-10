@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   })
 ];
 
-  buildInputs = [unzip];
+  nativeBuildInputs = [unzip];
 
   sourceRoot = ".";
 
