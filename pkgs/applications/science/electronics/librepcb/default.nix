@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "librepcb-${version}";
-  version = "2017-12-29";
+  version = "20171229";
 
   src = fetchFromGitHub {
     owner = "LibrePCB";
