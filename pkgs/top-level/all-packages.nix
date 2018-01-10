@@ -1106,6 +1106,8 @@ with pkgs;
 
   filebench = callPackage ../tools/misc/filebench { };
 
+  fileshelter = callPackage ../servers/web-apps/fileshelter { };
+
   fsmon = callPackage ../tools/misc/fsmon { };
 
   fsql = callPackage ../tools/misc/fsql { };
@@ -11276,7 +11278,10 @@ with pkgs;
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
-  wt = callPackage ../development/libraries/wt { };
+  wt = wt4;
+  inherit (callPackages ../development/libraries/wt {})
+    wt3
+    wt4;
 
   wxGTK = wxGTK28;
 
