@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
 
     for src in \
       util/crypto.c \
-      notmuch-config.c \
-      emacs/notmuch-crypto.el
+      notmuch-config.c
     do
       substituteInPlace "$src" \
         --replace \"gpg\" \"${gnupg}/bin/gpg\"
