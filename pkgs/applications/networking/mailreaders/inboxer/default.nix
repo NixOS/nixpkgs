@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils, patchelf, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype, fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups }:
+{ stdenv, fetchurl, binutils, patchelf, makeWrapper, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype, fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, libudev }:
 
 stdenv.mkDerivation rec {
   name = "inboxer-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     ar p $src data.tar.xz | tar xJ
   '';
-  buildInputs = [ binutils patchelf ];
+  buildInputs = [ binutils patchelf makeWrapper ];
 
   preFixup = with stdenv.lib; let
     lpath = makeLibraryPath [
@@ -52,12 +52,23 @@ stdenv.mkDerivation rec {
       gnome2.GConf
       expat
       stdenv.cc.cc.lib
+      libpulseaudio
+      libudev
     ];
   in ''
+    patchelf \
+      --set-rpath "$out/opt/Inboxer:${lpath}" \
+      $out/opt/Inboxer/libnode.so
+    patchelf \
+      --set-rpath "$out/opt/Inboxer:${lpath}" \
+      $out/opt/Inboxer/libffmpeg.so
+   
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/opt/Inboxer:${lpath}" \
       $out/opt/Inboxer/inboxer
+
+    wrapProgram $out/opt/Inboxer/inboxer --set LD_LIBRARY_PATH "${xorg.libxkbfile}/lib:${lpath}"
   '';
   
   installPhase = ''
