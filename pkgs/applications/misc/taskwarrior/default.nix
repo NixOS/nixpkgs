@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
-    ln -s "../../doc/task/scripts/bash/task.sh" "$out/share/bash-completion/completions/"
+    ln -s "../../doc/task/scripts/bash/task.sh" "$out/share/bash-completion/completions/task.bash"
     mkdir -p "$out/share/fish/vendor_completions.d"
     ln -s "../../../share/doc/task/scripts/fish/task.fish" "$out/share/fish/vendor_completions.d/"
   '';
