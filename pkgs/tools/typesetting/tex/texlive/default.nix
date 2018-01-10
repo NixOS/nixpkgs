@@ -55,15 +55,9 @@ let
 
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
-        deps = removeAttrs orig.collection-basic.deps [ "luatex" "metafont" "xdvi" ];
-      };
-      latex = orig.latex // {
-        deps = removeAttrs orig.latex.deps [ "luatex" ];
+        deps = removeAttrs orig.collection-basic.deps [ "metafont" "xdvi" ];
       };
       # add them elsewhere so that collections cover all packages
-      collection-luatex = orig.collection-luatex // {
-        deps = orig.collection-luatex.deps // { inherit (tl) luatex; };
-      };
       collection-metapost = orig.collection-metapost // {
         deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
       };
