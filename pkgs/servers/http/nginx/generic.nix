@@ -68,6 +68,8 @@ stdenv.mkDerivation {
     mv $out/sbin $out/bin
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A reverse proxy and lightweight webserver";
     homepage    = http://nginx.org;
