@@ -19830,14 +19830,13 @@ with pkgs;
     terraform_0_8
     terraform_0_9
     terraform_0_10
+    terraform_0_10-full
     terraform_0_11
+    terraform_0_11-full
     ;
 
-  # Terraform with all the plugins, both to get Hydra to build all plugins for us and for
-  # convenience if someone doesn't want to have to think about which plugins to use.
-  terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
-
   terraform = terraform_0_11;
+  terraform-full = terraform_0_11-full;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
