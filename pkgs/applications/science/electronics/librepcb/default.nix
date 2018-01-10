@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+	# LibrePCB still supports QT below 5.9. But some code lines break the build, so they are removed by this patch so that the software builds.
   patches = [ ./fix-2017-12.patch ];
 
   qmakeFlags = ["-r"];
