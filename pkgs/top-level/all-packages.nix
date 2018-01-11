@@ -485,7 +485,7 @@ with pkgs;
     withGui = false;
   };
 
-  apitrace = libsForQt56.callPackage ../applications/graphics/apitrace {};
+  apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
   argus = callPackage ../tools/networking/argus {};
 
