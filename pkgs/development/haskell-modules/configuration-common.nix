@@ -931,7 +931,7 @@ self: super: {
   hashable = if pkgs.stdenv.isArm then dontCheck super.hashable else super.hashable; # https://github.com/tibbe/hashable/issues/95
   servant-docs = if pkgs.stdenv.isArm then dontCheck super.servant-docs else super.servant-docs;
   servant-swagger = if pkgs.stdenv.isArm then dontCheck super.servant-swagger else super.servant-swagger;
-  swagger2 = if pkgs.stdenv.isArm then dontCheck super.swagger2 else super.swagger2;
+  swagger2 = if pkgs.stdenv.isArm then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
