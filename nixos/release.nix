@@ -107,6 +107,7 @@ let
           echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
           echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
+        preferLocalBuild = true;
       };
 
 
