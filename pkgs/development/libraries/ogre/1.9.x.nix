@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib
+{ fetchFromGitHub, stdenv, lib
 , cmake, mesa
 , freetype, freeimage, zziplib, randrproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
@@ -8,12 +8,16 @@
 , withNvidiaCg ? false, nvidia_cg_toolkit
 , withSamples ? false }:
 
-stdenv.mkDerivation {
-  name = "ogre-1.10.11";
+stdenv.mkDerivation rec {
+  pname = "ogre";
+  version = "1.9.1";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v1-10-11.tar.gz";
-     sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
+  src = fetchFromGitHub {
+    owner = "OGRECave";
+    repo = "ogre";
+    rev = "v${version}";
+    sha256 = "11lfgzqaps3728dswrq3cbwk7aicigyz08q4hfyy6ikc6m35r4wg";
   };
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
@@ -34,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A 3D engine";
-    homepage = https://www.ogre3d.org/;
+    homepage = http://www.ogre3d.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;
