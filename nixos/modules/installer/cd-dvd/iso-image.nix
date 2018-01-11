@@ -98,6 +98,24 @@ let
   isolinuxCfg = concatStringsSep "\n"
     ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
+  # Setup instructions for rEFInd.
+  refind =
+    if targetArch == "x64" then
+      ''
+      # Adds rEFInd to the ISO.
+      cp -v ${pkgs.refind}/share/refind/refind_x64.efi $out/EFI/boot/
+
+      # Makes it bootable through systemd-boot.
+      # It purposefully does not have a refind configuration file nor theme.
+      cat << EOF > $out/loader/entries/zz-rEFInd.conf
+      title rEFInd rescue bootloader
+      efi /EFI/boot/refind_x64.efi
+      EOF
+      ''
+    else
+      "# No refind for ia32"
+  ;
+
   # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''
     mkdir -p $out/EFI/boot
@@ -141,6 +159,8 @@ let
     default nixos-iso
     timeout ${builtins.toString config.boot.loader.timeout}
     EOF
+
+    ${refind}
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
