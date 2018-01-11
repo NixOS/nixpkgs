@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "astral";
   version = "1.4";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

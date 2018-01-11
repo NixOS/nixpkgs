@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, fetchurl, python3Packages, git, nmap }:
 
 python3Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   version = "0.60.1";
   pname = "homeassistant";
 
