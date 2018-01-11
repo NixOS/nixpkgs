@@ -10,9 +10,9 @@ let
                 hadoopVersion = "cdh4";
                 sparkSha256 = "00il083cjb9xqzsma2ifphq9ggichwndrj6skh2z5z9jk3z0lgyn";
               };
-    "2.1.0" = {
+    "2.1.2" = {
                 hadoopVersion = "hadoop2.4";
-                sparkSha256 = "0pbsmbjwijsfgbnm56kgwnmnlqkz3w010ma0d7vzlkdklj40vqn2";
+                sparkSha256 = "0ri272bbpdbhj68ynp1d769zp5rhpjc7hh1zi8gfp0lj31h6vpza";
               };
   };
 in
