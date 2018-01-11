@@ -394,8 +394,6 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
-  afew = callPackage ../development/python-modules/afew { };
-
   aiodns = callPackage ../development/python-modules/aiodns { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
