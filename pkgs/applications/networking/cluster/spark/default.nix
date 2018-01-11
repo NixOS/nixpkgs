@@ -6,9 +6,9 @@
 
 let
   versionMap = {
-    "2.2.0" = {
+    "2.2.1" = {
                 hadoopVersion = "hadoop2.7";
-                sparkSha256 = "0wjjn2pgalrcji8avhj5d48kl1mf7rhrdxhzf29dbiszq4fkx0s6";
+                sparkSha256 = "10nxsf9a6hj1263sxv0cbdqxdb8mb4cl6iqq32ljq9ydvk32s99c";
               };
   };
 in
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     license          = stdenv.lib.licenses.asl20;
     platforms        = stdenv.lib.platforms.all;
     maintainers      = with maintainers; [ thoughtpolice offline ];
-    knownVulnerabilities = optional (!((versionAtLeast version "2.2.0") || (versionOlder version "2.2.0" && versionAtLeast version "2.1.2"))) "CVE-2017-12612";
     repositories.git = git://git.apache.org/spark.git;
   };
 }
