@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [ pillow prettytable pyyaml dateutil
     gdata requests mechanize feedparser lxml gnupg pyqt5 libyaml
     simplejson cssselect futures pdfminer termcolor google_api_python_client
-    html2text ];
+    html2text unidecode ];
 
   checkPhase = ''
     nosetests
