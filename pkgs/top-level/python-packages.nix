@@ -20759,35 +20759,7 @@ EOF
     };
   };
 
-  weboob = buildPythonPackage rec {
-    name = "weboob-1.3";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/356/weboob-1.3.tar.gz";
-      sha256 = "0m5yh49lplvb57dfilczh65ky35fshp3g7ni31pwfxwqi1f7i4f9";
-    };
-
-    setupPyBuildFlags = ["--qt" "--xdg"];
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil
-      gdata requests mechanize feedparser lxml pkgs.gnupg pyqt5 pkgs.libyaml
-      simplejson cssselect futures pdfminer termcolor google_api_python_client
-      html2text ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      homepage = http://weboob.org;
-      description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  weboob = callPackage ../development/python-modules/weboob { };
 
   datadiff = buildPythonPackage rec {
     name = "datadiff-1.1.6";
