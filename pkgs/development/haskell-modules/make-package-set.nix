@@ -146,7 +146,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       overrideCabal (self.callPackage (haskellSrc2nix {
         inherit name;
         src = pkgs.lib.cleanSourceWith
-          { inherit src;
+          { src = if pkgs.lib.canCleanSource src
+                    then src
+                    else pkgs.safeDiscardStringContext src;
             filter = path: type:
               pkgs.lib.hasSuffix "${name}.cabal" path ||
               pkgs.lib.hasSuffix "package.yaml" path;
