@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libatomic_ops, enableLargeConfig ? false
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops, enableLargeConfig ? false
 , buildPlatform, hostPlatform
 }:
 
@@ -20,9 +20,19 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux;
 
+  preConfigure = stdenv.lib.optionalString (stdenv.cc.libc == "musl") ''
+    export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
+  '';
+
+  patches = [ (fetchpatch {
+    url = "https://raw.githubusercontent.com/gentoo/musl/85b6a600996bdd71162b357e9ba93d8559342432/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
+    sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
+  }) ];
+
   configureFlags =
     [ "--enable-cplusplus" ]
-    ++ lib.optional enableLargeConfig "--enable-large-config";
+    ++ lib.optional enableLargeConfig "--enable-large-config"
+    ++ lib.optional (stdenv.cc.libc == "musl") "--disable-static";
 
   doCheck = true; # not cross;
 
