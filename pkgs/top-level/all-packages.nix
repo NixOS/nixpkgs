@@ -541,6 +541,8 @@ with pkgs;
 
   aws_shell = pythonPackages.aws_shell;
 
+  aws-vault = callPackage ../tools/admin/aws-vault { };
+
   azure-cli = nodePackages.azure-cli;
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
