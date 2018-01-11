@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     license          = stdenv.lib.licenses.asl20;
     platforms        = stdenv.lib.platforms.all;
     maintainers      = with maintainers; [ thoughtpolice offline ];
+    knownVulnerabilities = optional (!((versionAtLeast version "2.2.0") || (versionOlder version "2.2.0" && versionAtLeast version "2.1.2"))) "CVE-2017-12612";
     repositories.git = git://git.apache.org/spark.git;
   };
 }
