@@ -90,13 +90,13 @@ let
 
   makeNetboot = config:
     let
-      config_evaled = import lib/eval-config.nix config;
-      build = config_evaled.config.system.build;
-      kernelTarget = config_evaled.pkgs.stdenv.platform.kernelTarget;
+      configEvaled = import lib/eval-config.nix config;
+      build = configEvaled.config.system.build;
+      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
-        name="netboot";
-        paths=[
+        name = "netboot";
+        paths = [
           build.netbootRamdisk
           build.kernel
           build.netbootIpxeScript
