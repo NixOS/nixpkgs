@@ -6966,8 +6966,7 @@ with pkgs;
   self = callPackage_i686 ../development/interpreters/self { };
 
   spark = spark_22;
-  spark_16 = callPackage ../applications/networking/cluster/spark { version = "1.6.3"; };
-  spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.0"; };
+  spark_22 = callPackage ../applications/networking/cluster/spark { version = "2.2.1"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
