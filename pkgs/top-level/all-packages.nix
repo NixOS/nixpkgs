@@ -3109,6 +3109,8 @@ with pkgs;
 
   jupp = callPackage ../applications/editors/jupp { };
 
+  jupyter = callPackage ../applications/editors/jupyter { };
+
   jupyterKernels = callPackage ../development/misc/jupyterKernels { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
