@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "164a87dh4zxw1a5nmlgwjc1nls0d4jjhdy5pzz43pgnwhhflbph3";
   };
 
-  patchPhase = ''
+  postPatch = ''
 	sed -i 's/yarl==/yarl>=/' setup.py
 	sed -i 's/aiohttp==/aiohttp>=/' setup.py
   '';
