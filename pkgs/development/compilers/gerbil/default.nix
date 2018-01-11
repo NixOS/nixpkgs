@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.12-DEV-836-gcde6802";
+  version = "0.12-DEV-1030-gbbed3bc";
   src = fetchgit {
     url = "https://github.com/vyzo/gerbil.git";
-    rev = "2904b0014fac344409d0ae2ba5835d0e67ac83b5";
-    sha256 = "1nnirqdd11n6pkvidnf8pb39m45jjnpmwj2qy62di024r7ha3y18";
+    rev = "bbed3bc4cf7bcaa64eaabdf097192bfcc2bfc928";
+    sha256 = "1dc0j143j860yq72lfjp71fin7hpsy1426azz7rl1szxvjfb7h4r";
   };
 
   buildInputs = [
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
 
     # Enable all optional libraries
     substituteInPlace "src/std/build-features.ss" --replace '#f' '#t'
+
+    # gxprof testing uses $HOME/.cache/gerbil/gxc
+    export HOME=$$PWD
 
     # Build, replacing make by build.sh
     ( cd src && sh build.sh )
