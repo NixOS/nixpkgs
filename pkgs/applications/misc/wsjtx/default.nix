@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
 
   # Composite build has its own patch step after it extracts the inner archives
-  patchPhase = "cp ${./wsjtx.patch} wsjtx.patch";
+  postPatch = "cp ${./wsjtx.patch} wsjtx.patch";
 
   meta = with stdenv.lib; {
     description = "Weak-signal digital communication modes for amateur radio";
