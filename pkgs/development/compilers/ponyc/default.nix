@@ -69,8 +69,10 @@ stdenv.mkDerivation ( rec {
     + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
     + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
     + '' install
-    mv $out/bin/ponyc $out/bin/ponyc.wrapped
-    makeWrapper $out/bin/ponyc.wrapped $out/bin/ponyc \
+
+    wrapProgram $out/bin/ponyc \
+      --prefix PATH ":" "${stdenv.cc}/bin" \
+      --set-default CC "$CC" \
       --prefix PONYPATH : "$out/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib pcre2}/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib libressl}/lib"
