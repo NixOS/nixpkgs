@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
         paxmark m $out/opt/discord/Discord
 
-        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib:${libpulseaudio}/lib"
+        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib:${libpulseaudio}/lib:${libnotify}/lib"
 
         ln -s $out/opt/discord/Discord $out/bin/
         ln -s $out/opt/discord/discord.png $out/share/pixmaps
