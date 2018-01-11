@@ -23,7 +23,7 @@ let
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
-    pkgs.desktop-file-utils pkgs.ibus
+    pkgs.desktop-file-utils
     pkgs.shared-mime-info # for update-mime-database
     glib # for gsettings
     gtk3.out # for gtk-update-icon-cache
