@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
         mkdir -p $out/{bin,opt/discord,share/pixmaps}
         mv * $out/opt/discord
 
-        patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                  $out/opt/discord/Discord
 
         paxmark m $out/opt/discord/Discord
