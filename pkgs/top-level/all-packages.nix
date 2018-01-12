@@ -4519,6 +4519,10 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
+  sigal = callPackage ../applications/misc/sigal {
+    inherit (pythonPackages) buildPythonApplication;
+  };
+
   sigil = libsForQt56.callPackage ../applications/editors/sigil { };
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
