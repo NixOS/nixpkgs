@@ -171,6 +171,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  auquantoolbox = callPackage ../development/python-modules/auquantoolbox { };
+
   automat = callPackage ../development/python-modules/automat { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
@@ -11702,14 +11704,6 @@ in {
     blas = pkgs.openblasCompat;
   };
 
-  auquantoolbox = callPackage ../development/python-modules/auquantoolbox { };
-
-  pandas-datareader = callPackage ../development/python-modules/pandas-datareader {  };
-
-  requests-ftp = callPackage ../development/python-modules/requests-ftp {  };
-
-  requests-file = callPackage ../development/python-modules/requests-file {  };
-
   numpydoc = buildPythonPackage rec {
     pname = "numpydoc";
     name = "${pname}-${version}";
@@ -12469,6 +12463,8 @@ in {
   pandas = callPackage ../development/python-modules/pandas { };
 
   pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
+
+  pandas-datareader = callPackage ../development/python-modules/pandas-datareader {  };
 
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
@@ -15326,6 +15322,10 @@ in {
   requests_download = callPackage ../development/python-modules/requests_download { };
 
   requestsexceptions = callPackage ../development/python-modules/requestsexceptions {};
+
+  requests-file = callPackage ../development/python-modules/requests-file {  };
+
+  requests-ftp = callPackage ../development/python-modules/requests-ftp {  };
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 

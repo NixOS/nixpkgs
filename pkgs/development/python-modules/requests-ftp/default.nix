@@ -15,6 +15,6 @@ buildPythonPackage rec {
   meta = {
     description = "FTP Transport adapter for Requests";
     homepage = http://github.com/Lukasa/requests-ftp;
-    license = stdenv.lib.licenses.apache_2_0;
+    license = stdenv.lib.licenses.asl20;
   };
 }

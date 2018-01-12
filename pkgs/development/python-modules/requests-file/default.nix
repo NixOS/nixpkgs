@@ -15,6 +15,6 @@ buildPythonPackage rec {
   meta = {
     description = "File Transport Adapter for Requests";
     homepage = http://github.com/dashea/requests-file;
-    license = stdenv.lib.licenses.apache_2_0;
+    license = stdenv.lib.licenses.asl20;
   };
 }

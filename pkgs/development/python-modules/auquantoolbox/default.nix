@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = {
     description = "Auquan Toolbox for developing strategies and backtesting.";
     homepage = http://toolbox.auquan.com/;
-    license = stdenv.lib.licenses.apache_2_0;
+    license = stdenv.lib.licenses.asl20;
   };
 }
