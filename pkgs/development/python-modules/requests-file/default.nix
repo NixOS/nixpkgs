@@ -1,9 +1,8 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, requests }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, requests }:
 
 buildPythonPackage rec {
   pname = "requests-file";
   version = "1.4.3";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,10 +10,11 @@ buildPythonPackage rec {
     sha256 = "1yp2jaxg3v86pia0q512dg3hz6s9y5vzdivsgrba1kds05ial14g";
   };
 
-  disabled = isPyPy;
-  buildInputs = [ requests ];
+  propagatedBuildInputs = [ requests ];
+
   meta = {
     description = "File Transport Adapter for Requests";
     homepage = http://github.com/dashea/requests-file;
+    license = stdenv.lib.licenses.apache_2_0;
   };
 }

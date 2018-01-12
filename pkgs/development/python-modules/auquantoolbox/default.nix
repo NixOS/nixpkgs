@@ -1,10 +1,9 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, requests, pandas,
-numpy, pandas-datareader, requests-file, requests-ftp, plotly }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, requests, pandas, numpy,
+pandas-datareader, requests-file, requests-ftp, plotly }:
 
 buildPythonPackage rec {
   pname = "auquan_toolbox";
   version = "2.0.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,5 +18,6 @@ buildPythonPackage rec {
   meta = {
     description = "Auquan Toolbox for developing strategies and backtesting.";
     homepage = http://toolbox.auquan.com/;
+    license = stdenv.lib.licenses.apache_2_0;
   };
 }
