@@ -7004,13 +7004,15 @@ with pkgs;
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
-  foreman = callPackage ../tools/system/foreman { };
+  flootty = pythonPackages.flootty;
 
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
     inherit (ocamlPackages_4_03) ocaml findlib camlp4 sedlex ocamlbuild;
   };
+
+  foreman = callPackage ../tools/system/foreman { };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
 

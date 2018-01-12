@@ -167,6 +167,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  flootty = callPackage ../development/python-modules/flootty { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };

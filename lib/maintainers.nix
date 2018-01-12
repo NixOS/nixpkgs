@@ -530,6 +530,7 @@
   schristo = "Scott Christopher <schristopher@konputa.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sdll = "Sasha Illarionov <sasha.delly@gmail.com>";
+  sellout = "Greg Pfeil <greg@technomadic.org>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
   shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";
