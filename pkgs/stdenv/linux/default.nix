@@ -340,6 +340,7 @@ in
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
+          ++ lib.optional (localSystem.libc == "musl") libiconv
           ++ lib.optionals localSystem.isAarch64
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
