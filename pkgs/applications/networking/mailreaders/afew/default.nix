@@ -15,6 +15,10 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.notmuch chardet
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
+  makeWrapperArgs = [
+    ''--prefix PATH ':' "${notmuch}/bin"''
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/afew \
       --prefix LD_LIBRARY_PATH : ${notmuch}/lib
