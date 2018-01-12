@@ -16976,7 +16976,7 @@ with pkgs;
   curaengine = callPackage ../applications/misc/curaengine {
     inherit (python3.pkgs) libarcus;
   };
-  cura = qt56.callPackage ../applications/misc/cura { };
+  cura = qt5.callPackage ../applications/misc/cura { };
 
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
