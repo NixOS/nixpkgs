@@ -1,4 +1,5 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
+  gpgme, makeWrapper, hostPlatform, vmnet }:
 
 let
   binPath = [ kubernetes ]
@@ -14,15 +15,15 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.7.3";
+  localkube-version = "1.8.0";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "1ay11321kg3waxzi9d885pr08hz97a8ajwk31kbfxlm3x5bk3jii";
+    sha256 = "09mv1g9i0d14brvvp2wxgmfqvgp0na5dbm4z76a660q1fxszvgqc";
   };
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.21.0";
+  version = "0.24.1";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -30,12 +31,16 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1y72kdrpbxwfzxs9jslcrb2l3xw83z4i7raf5c7sky4wf2nx8vis";
+    sha256 = "18b5ic4lcn84hq2ji5alyx58x9vi0b03544i5xzfgn3h2k78kynk";
   };
+
+  patches = [
+    ./localkube.patch
+  ];
 
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
   # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes ];
+  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
   subPackages = [ "cmd/minikube" ];
 
   preBuild = ''
@@ -60,6 +65,8 @@ in buildGoPackage rec {
   postInstall = ''
     mkdir -p $bin/share/bash-completion/completions/
     MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
+    mkdir -p $bin/share/zsh/site-functions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
   '';
 
   postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";

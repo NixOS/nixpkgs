@@ -91,5 +91,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.samba.org/;
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     platforms = stdenv.lib.platforms.linux;
+    knownVulnerabilities = [
+      "Numerous CVEs and no patches from upstream for 3.x since 2014."
+    ];
   };
 }

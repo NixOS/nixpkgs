@@ -1,36 +1,39 @@
-{ stdenv, fetchFromGitHub, coreutils, qtbase, qtdeclarative, qmake, texlive }:
+{ stdenv, fetchFromGitHub, coreutils, qtbase, qtdeclarative, cmake, texlive, ninja }:
 
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
-  version = "37.0.0";
+  version = "39.1.2";
 
   src = fetchFromGitHub {
-    owner = "splintermind";
+    owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "0dw86b4x5hjhb7h4ynvwjgcinpqywfc5l48ljb5sahz08rfnx63d";
+    sha256 = "0j5pldc184xv1mhdrhsmp23g58cy9a2bba27djigkh2sd5rksgji";
   };
 
   outputs = [ "out" "layouts" ];
   buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ texlive qmake ];
+  nativeBuildInputs = [ texlive cmake ninja ];
 
-  enableParallelBuilding = false;
+  configurePhase = ''
+    cmake -GNinja
+  '';
 
-  # Move layout files so they cannot be found by Therapist
-  postInstall = ''
-    mkdir -p $layouts
-    mv $out/share/dwarftherapist/memory_layouts/* $layouts
-    rmdir $out/share/dwarftherapist/memory_layouts
-    # Useless symlink
-    rm $out/bin/dwarftherapist
+  buildPhase = ''
+    ninja -j$NIX_BUILD_CORES
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ./DwarfTherapist $out/bin/DwarfTherapist
+    cp -r ./share/memory_layouts $layouts
   '';
 
   meta = with stdenv.lib; {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
-    maintainers = with maintainers; [ the-kenny abbradar ];
+    maintainers = with maintainers; [ the-kenny abbradar bendlas ];
     license = licenses.mit;
     platforms = platforms.linux;
-    homepage = https://github.com/splintermind/Dwarf-Therapist;
+    homepage = https://github.com/Dwarf-Therapist/Dwarf-Therapist;
   };
 }

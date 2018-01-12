@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
   version = "1.0.6";
   name = "${baseName}-${version}";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig asciidoc libxslt libxml2
+    autoconf automake libtool asciidoc libxslt libxml2
     docbook_xml_dtd_45 docbook_xml_xslt
     libarchive lzma
   ];

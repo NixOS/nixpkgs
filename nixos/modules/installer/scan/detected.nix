@@ -6,8 +6,7 @@ with lib;
 
 {
   config = mkDefault {
-    # Wireless card firmware
-    networking.enableIntel2200BGFirmware = true;
-    networking.enableIntel3945ABGFirmware = true;
+    # Common firmware, i.e. for wifi cards
+    hardware.enableRedistributableFirmware = true;
   };
 }

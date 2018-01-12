@@ -15,25 +15,30 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2017.2";
-  name = "${pname}-${version}";
+  version = "2017.2.2";
 
-  buildInputs = [ pytest opencl-headers ocl-icd ];
+  checkInputs = [ pytest ];
+  buildInputs = [ opencl-headers ocl-icd ];
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "039b689a58eb98e27a577ac086210deae959f40d657487f3199d2d217c270ff9";
+    sha256 = "d2f7b04d2e819c6e90d6366b7712a7452a39fba218e51b11b02c85ab07fd2983";
   };
+
+  # py.test is not needed during runtime, so remove it from `install_requires`
+  postPatch = ''
+    substituteInPlace setup.py --replace "pytest>=2" ""
+  '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Python wrapper for OpenCL";
     homepage = https://github.com/pyopencl/pyopencl;
-    license = stdenv.lib.licenses.mit;
-    maintainer = stdenv.lib.maintainers.fridh;
+    license = licenses.mit;
+    maintainers = [ maintainers.fridh ];
   };
 }

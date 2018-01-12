@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bvf623g0n2ifijcxv1nw0z3wbs2vhhdky4n04ywsbjlykm44nd1";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     freetype giflib gtk2 lcms2 libjpeg libpng libtiff openjpeg gifsicle
   ];
 

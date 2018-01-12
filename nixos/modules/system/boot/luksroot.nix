@@ -227,11 +227,26 @@ in
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
+
+          # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+          # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+          "ecb"
+
           (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
         The default includes all common modules.
+      '';
+    };
+
+    boot.initrd.luks.forceLuksSupportInInitrd = mkOption {
+      type = types.bool;
+      default = false;
+      internal = true;
+      description = ''
+        Whether to configure luks support in the initrd, when no luks
+        devices are configured.
       '';
     };
 
@@ -417,14 +432,16 @@ in
     };
   };
 
-  config = mkIf (luks.devices != {}) {
+  config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
+    # Also load input_leds to get caps lock light working (#12456)
+    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" "input_leds" ]
+      ++ luks.cryptoModules;
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''

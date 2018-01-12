@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket, pkgconfig, tcl, readline, libffi, python3, bison, flex }:
+{ stdenv, fetchFromGitHub, fetchFromBitbucket
+, pkgconfig, tcl, readline, libffi, python3, bison, flex
+}:
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2017.09.01";
+  version = "2018.01.10";
 
   srcs = [
     (fetchFromGitHub {
-      owner = "cliffordwolf";
-      repo = "yosys";
-      rev = "18609f3df82a3403c41d552908183f7e49ff5678";
-      sha256 = "0qdjxqg3l098g8pda5a4cif4bd78rx7vilv3z62r56ppj55mgw96";
-      name = "yosys";
+      owner  = "cliffordwolf";
+      repo   = "yosys";
+      rev    = "9ac560f5d3e5847b7e475195f66b7034e91fd938";
+      sha256 = "01p1bcjq030y7g21lsghgkqj23x6yl8cwrcx2xpik45xls6pxrg7";
+      name   = "yosys";
     })
     (fetchFromBitbucket {
-      owner = "alanmi";
-      repo = "abc";
-      rev = "ff5be0604997";
-      sha256 = "08gdvxm44dvhgjw6lf2jx0xyk6h4ai37h6b88dysvaa69sx7rh8n";
-      name = "yosys-abc";
+      owner  = "alanmi";
+      repo   = "abc";
+      rev    = "6e3c24b3308a";
+      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      name   = "yosys-abc";
     })
   ];
   sourceRoot = "yosys";
 
-  buildInputs = [ pkgconfig tcl readline libffi python3 bison flex ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ tcl readline libffi python3 bison flex ];
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
@@ -42,9 +46,9 @@ stdenv.mkDerivation rec {
       adding additional passes as needed by extending the yosys C++
       code base.
     '';
-    homepage = http://www.clifford.at/yosys/;
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.shell ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://www.clifford.at/yosys/;
+    license     = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
+    platforms   = stdenv.lib.platforms.linux;
   };
 }

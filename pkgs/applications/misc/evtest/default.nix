@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   name = "evtest-1.33";
 
-  buildInputs = [ autoreconfHook pkgconfig libxml2 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libxml2 ];
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/evtest";

@@ -1,17 +1,10 @@
-{ mkDerivation, lib, copyPathsToStore, fetchFromGitHub, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
 
 let
-
-  version = "0.14.0";
-
-  /* Fix display of user avatars. */
-  patchFixUserAvatars = fetchpatch {
-    url = https://github.com/sddm/sddm/commit/ecb903e48822bd90650bdd64fe80754e3e9664cb.patch;
-    sha256 = "0zm88944pwdad8grmv0xwnxl23xml85ryc71x2xac233jxdyx6ms";
-  };
+  version = "0.17.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -20,12 +13,10 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "0wwid23kw0725zpw67zchalg9mmharr7sn4yzhijq7wqpsczjfxj";
+    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
-  patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ [ patchFixUserAvatars ];
+  patches = [ ./sddm-ignore-config-mtime.patch ];
 
   postPatch =
     # Module Qt5::Test must be included in `find_package` before it is used.
@@ -57,12 +48,16 @@ in mkDerivation rec {
   postInstall = ''
     # remove empty scripts
     rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
+    for f in $out/share/sddm/themes/**/theme.conf ; do
+      substituteInPlace $f \
+        --replace 'background=' "background=$(dirname $f)/"
+    done
   '';
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage = https://github.com/sddm/sddm;
-    platforms = platforms.linux;
+    homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
+    platforms   = platforms.linux;
   };
 }

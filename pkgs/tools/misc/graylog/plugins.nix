@@ -25,10 +25,10 @@ in {
   aggregates = glPlugin rec {
     name = "graylog-aggregates-${version}";
     pluginName = "graylog-plugin-aggregates";
-    version = "1.1.1";
+    version = "2.0.0";
     src = fetchurl {
       url = "https://github.com/cvtienhoven/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1wx5i8ls7dgffsy35i91gkrj6p9nh2jbar9pgas190lfb9yk45bx";
+      sha256 = "0crgb49msjkvfpksbfhq2hlkc904j184wm1wp6q0x6lzhn07hm8y";
     };
     meta = {
       homepage = https://github.com/cvtienhoven/graylog-plugin-aggregates;
@@ -48,13 +48,39 @@ in {
       description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
     };
   };
+  dnsresolver = glPlugin rec {
+    name = "graylog-dnsresolver-${version}";
+    pluginName = "graylog-plugin-dnsresolver";
+    version = "1.1.2";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "01s7wm6bwcpmdrl35gjp6rrqxixs2s9km2bdgzhv8pn25j5qnw28";
+    };
+    meta = {
+      homepage = https://github.com/graylog-labs/graylog-plugin-dnsresolver;
+      description = "Message filter plugin can be used to do DNS lookups for the source field in Graylog messages";
+    };
+  };
+  filter-messagesize = glPlugin rec {
+    name = "graylog-filter-messagesize-${version}";
+    pluginName = "graylog-plugin-filter-messagesize";
+    version = "0.0.2";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1vx62yikd6d3lbwsfiyf9j6kx8drvn4xhffwv27fw5jzhfqr61ji";
+    };
+    meta = {
+      homepage = https://github.com/graylog-labs/graylog-plugin-filter-messagesize;
+      description = "Prints out all messages that have an estimated size crossing a configured threshold during processing";
+    };
+  };
   internal-logs = glPlugin rec {
     name = "graylog-internal-logs-${version}";
     pluginName = "graylog-plugin-internal-logs";
-    version = "1.0.0";
+    version = "2.3.0";
     src = fetchurl {
       url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1abl7wwr59k9vvr2fmrlrx4ipsjjl8xryqy19fy5irxhpwp93ixl";
+      sha256 = "05r4m2gf1hj1b889rmpb6b5a6q2xd0qkl1rpj107yd219j2grzf4";
     };
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-internal-logs;
@@ -66,11 +92,11 @@ in {
     pluginName = "graylog-plugin-ipanonymizer";
     version = "1.1.2";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
       sha256 = "0hd66751hp97ddkn29s1cmjmc2h1nrp431bq7d2wq16iyxxlygri";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-ipanonymizer;
+      homepage = https://github.com/graylog-labs/graylog-plugin-ipanonymizer;
       description = "A graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
     };
   };
@@ -87,6 +113,19 @@ in {
       description = "Jabber Alarmcallback Plugin for Graylog";
     };
   };
+  metrics = glPlugin rec {
+    name = "graylog-metrics-${version}";
+    pluginName = "graylog-plugin-metrics";
+    version = "1.3.0";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1v1yzmqp43kxigh3fymdwki7pn21sk2ym3kk4nn4qv4zzkhz59vp";
+    };
+    meta = {
+      homepage = https://github.com/graylog-labs/graylog-plugin-metrics;
+      description = "An output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
+    };
+  };
   mongodb-profiler = glPlugin rec {
     name = "graylog-mongodb-profiler-${version}";
     pluginName = "graylog-plugin-mongodb-profiler";
@@ -100,17 +139,17 @@ in {
       description = "Graylog input plugin that reads MongoDB profiler data";
     };
   };
-  netflow = glPlugin rec {
-    name = "graylog-netflow-${version}";
-    pluginName = "graylog-plugin-netflow";
-    version = "0.1.1";
+  pagerduty = glPlugin rec {
+    name = "graylog-pagerduty-${version}";
+    pluginName = "graylog-plugin-pagerduty";
+    version = "1.3.0";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1pdv12f9dca1rxf62ds51n79cjhkkyj0gjny8kj1cq64vlayc9x9";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1g63c6rm5pkz7f0d73wb2lmk4zm430jqnhihbyq112cm4i7ymglh";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-netflow;
-      description = "Graylog NetFlow plugin";
+      homepage = https://github.com/graylog-labs/graylog-plugin-pagerduty;
+      description = "An alarm callback plugin for integrating PagerDuty into Graylog";
     };
   };
   redis = glPlugin rec {
@@ -126,30 +165,43 @@ in {
       description = "Redis plugin for Graylog";
     };
   };
+  slack = glPlugin rec {
+    name = "graylog-slack-${version}";
+    pluginName = "graylog-plugin-slack";
+    version = "2.4.0";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "0v8ilfhs8bnx87pjxg1i3p2vxw61rwpg4k3zhga7slavx70y986p";
+    };
+    meta = {
+      homepage = https://github.com/graylog-labs/graylog-plugin-slack;
+      description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
+    };
+  };
   spaceweather = glPlugin rec {
     name = "graylog-spaceweather-${version}";
     pluginName = "graylog-plugin-spaceweather";
     version = "1.0";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/spaceweather-input.jar";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/spaceweather-input.jar";
       sha256 = "1mwqy3fhyy4zdwyrzvbr565xwf96xs9d3l70l0khmrm848xf8wz4";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-spaceweather;
+      homepage = https://github.com/graylog-labs/graylog-plugin-spaceweather;
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
     };
   };
-  threatintel = glPlugin rec {
-    name = "graylog-threatintel-${version}";
-    pluginName = "graylog-plugin-threatintel";
-    version = "0.10.0";
+  twiliosms = glPlugin rec {
+    name = "graylog-twiliosms-${version}";
+    pluginName = "graylog-plugin-twiliosms";
+    version = "1.0.0";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0clg0vy8aipw122rfqww1lnjriazlnnh77pqiy5vnmv6ycjw0y4i";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "0kwfv1zfj0fmxh9i6413bcsaxrn1vdwrzb6dphvg3dx27wxn1j1a";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-threatintel;
-      description = "Graylog Processing Pipeline functions to enrich log messages with IoC information from threat intelligence databases";
+      homepage = https://github.com/graylog-labs/graylog-plugin-twiliosms;
+      description = "An alarm callback plugin for integrating the Twilio SMS API into Graylog";
     };
   };
   twitter = glPlugin rec {
@@ -157,11 +209,11 @@ in {
     pluginName = "graylog-plugin-twitter";
     version = "2.0.0";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
       sha256 = "1pi34swy9nzq35a823zzvqrjhb6wsg302z31vk2y656sw6ljjxyh";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-twitter;
+      homepage = https://github.com/graylog-labs/graylog-plugin-twitter;
       description = "Graylog input plugin that reads Twitter messages based on keywords in realtime";
     };
   };

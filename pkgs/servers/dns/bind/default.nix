@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "--without-gssapi"
     "--without-idn"
     "--without-idnlib"
+    "--without-lmdb"
     "--without-pkcs11"
     "--without-purify"
     "--without-python"

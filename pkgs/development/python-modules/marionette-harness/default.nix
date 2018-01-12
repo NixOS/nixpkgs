@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , mozprofile
 , mozversion
 , moztest
@@ -13,12 +14,13 @@
 
 buildPythonPackage rec {
   pname = "marionette-harness";
-  version = "4.1.0";
+  version = "4.3.0";
   name = "${pname}-${version}";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20c188791e28d586c58acf86ff28cb704c4195a4da6eb10db7b8c6771e3f2983";
+    sha256 = "a98bb65a0c63f60d9e3d7ef21dabc9c29676917dc2ec0d46851a3ed694c820cc";
   };
 
   propagatedBuildInputs = [ mozprofile mozversion browsermob-proxy moztest 

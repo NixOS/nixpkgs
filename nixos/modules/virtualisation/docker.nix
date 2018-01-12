@@ -126,14 +126,23 @@ in
         '';
       };
     };
+
+    package = mkOption {
+      default = pkgs.docker;
+      type = types.package;
+      example = pkgs.docker-edge;
+      description = ''
+        Docker package to be used in the module.
+      '';
+    };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
-      environment.systemPackages = [ pkgs.docker ];
+      environment.systemPackages = [ cfg.package ];
       users.extraGroups.docker.gid = config.ids.gids.docker;
-      systemd.packages = [ pkgs.docker ];
+      systemd.packages = [ cfg.package ];
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
@@ -142,7 +151,7 @@ in
           ExecStart = [
             ""
             ''
-              ${pkgs.docker}/bin/dockerd \
+              ${cfg.package}/bin/dockerd \
                 --group=docker \
                 --host=fd:// \
                 --log-driver=${cfg.logDriver} \
@@ -180,7 +189,7 @@ in
         serviceConfig.Type = "oneshot";
 
         script = ''
-          ${pkgs.docker}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
+          ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
         '';
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;

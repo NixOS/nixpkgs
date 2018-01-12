@@ -1,0 +1,13 @@
+--- a/criu/cr-restore.c
++++ b/criu/cr-restore.c
+@@ -650,3 +650,2 @@ static void zombie_prepare_signals(void)
+ 		(1 << SIGSYS)	|\
+-		(1 << SIGUNUSED)|\
+ 		(1 << SIGSTKFLT)|\
+--- a/test/zdtm/static/pthread01.c
++++ b/test/zdtm/static/pthread01.c
+@@ -45,3 +45,3 @@ static char *decode_signal(const sigset_t *s, char *buf)
+ 	COLLECT(SIGXFSZ); COLLECT(SIGVTALRM); COLLECT(SIGPROF); COLLECT(SIGWINCH); COLLECT(SIGIO);
+-	COLLECT(SIGPOLL); COLLECT(SIGPWR); COLLECT(SIGSYS); COLLECT(SIGUNUSED);
++	COLLECT(SIGPOLL); COLLECT(SIGPWR); COLLECT(SIGSYS);
+ #undef COLLECT

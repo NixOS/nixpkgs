@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     gtkspell3
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     gtk3 glib glibmm gtkmm3
   ];
 

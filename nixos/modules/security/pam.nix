@@ -41,7 +41,7 @@ let
         type = types.bool;
         description = ''
           If set, users listed in
-          <filename>~/.yubico/u2f_keys</filename> are able to log in
+          <filename>~/.config/Yubico/u2f_keys</filename> are able to log in
           with the associated U2F key.
         '';
       };
@@ -223,6 +223,17 @@ let
         '';
       };
 
+      enableGnomeKeyring = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If enabled, pam_gnome_keyring will attempt to automatically unlock the
+          user's default Gnome keyring upon login. If the user login password does
+          not match their keyring password, Gnome Keyring will prompt separately
+          after login.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -273,7 +284,7 @@ let
           # prompts the user for password so we run it once with 'required' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount || cfg.enableKwallet)) ''
+          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount || cfg.enableKwallet || cfg.enableGnomeKeyring)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -282,6 +293,8 @@ let
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+              ${optionalString cfg.enableGnomeKeyring
+                ("auth optional ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so")}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
@@ -351,6 +364,10 @@ let
           ${optionalString (cfg.enableKwallet)
               ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
+          ${optionalString (cfg.enableGnomeKeyring)
+              "session optional ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+          ${optionalString (config.virtualisation.lxc.lxcfs.enable)
+               "session optional ${pkgs.lxcfs}/lib/security/pam_cgfs.so -c freezer,memory,name=systemd,unified,cpuset"}
         '');
     };
 
@@ -486,8 +503,9 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
-      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
-      ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
+      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ];
+
+    boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
     security.wrappers = {
       unix_chkpwd = {
@@ -495,10 +513,7 @@ in
         owner = "root";
         setuid = true;
       };
-    } // (if config.security.pam.enableEcryptfs then {
-      "mount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
-       "umount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
-    } else {});
+    };
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;

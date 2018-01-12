@@ -1,17 +1,26 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, fuse, autoreconfHook }:
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
+, docutils
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.10"; # Temporary (need to add libfuse 3.x first)
+let
+  inherit (stdenv.lib) optional;
+in stdenv.mkDerivation rec {
+  version = "3.3.1";
   name = "sshfs-fuse-${version}";
-  
+
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "1dmw4kx6vyawcywiv8drrajnam0m29mxfswcp4209qafzx3mjlp1";
+    sha256 = "15z1mlad09llckkadvjfzmbv14fbq218xmb4axkmi7kzixbi41hv";
   };
-  
-  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+
+  nativeBuildInputs = [ meson pkgconfig ninja docutils ];
+  buildInputs = [ fuse3 glib ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+    (stdenv.system == "i686-linux")
+    "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin

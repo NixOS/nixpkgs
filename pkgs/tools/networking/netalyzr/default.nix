@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "netalyzr-${version}";
@@ -12,17 +12,13 @@ stdenv.mkDerivation rec {
 
   phases = [ "installPhase" ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     mkdir -p $out/{bin,share/netalyzr}
     install -m644 $src $out/share/netalyzr/NetalyzrCLI.jar
-    cat <<_EOF >> $out/bin/netalyzr
-    #!${stdenv.shell}
-
-    set -euo pipefail
-
-    exec ${stdenv.lib.getBin jre}/bin/java -jar $out/share/netalyzr/NetalyzrCLI.jar "\$@"
-    _EOF
-    chmod 755 $out/bin/netalyzr
+    makeWrapper ${stdenv.lib.getBin jre}/bin/java $out/bin/netalyzr \
+      --add-flags "-jar $out/share/netalyzr/NetalyzrCLI.jar"
   '';
 
   meta = with stdenv.lib; {

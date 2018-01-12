@@ -7,12 +7,12 @@
 assert stdenv.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.23.1";
+  ver = "1.23.5";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "http://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "0si407qm47ndy0l6zv57lqb5za4aiv0lyghnzb211g03szjkfpg8";
+    sha256 = "0ps7ckrv63ydviqkqxs57hn04z53s2jnjnp94n1prs63xx0njswv";
   };
 
   configureFlags = [ "--with-inotify" ];

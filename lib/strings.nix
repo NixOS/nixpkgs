@@ -1,6 +1,6 @@
 /* String manipulation functions. */
-
-let lib = import ./default.nix;
+{ lib }:
+let
 
 inherit (builtins) length;
 
@@ -218,6 +218,14 @@ rec {
        => "'one' 'two three' 'four'\\''five'"
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
+
+  /* Turn a string into a Nix expression representing that string
+
+     Example:
+       escapeNixString "hello\${}\n"
+       => "\"hello\\\${}\\n\""
+  */
+  escapeNixString = s: escape ["$"] (builtins.toJSON s);
 
   /* Obsolete - use replaceStrings instead. */
   replaceChars = builtins.replaceStrings or (

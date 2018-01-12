@@ -1,40 +1,28 @@
-{ stdenv, writeText, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
-, async ? null, lwt ? null
-}:
+{ stdenv, fetchurl, ocaml, jbuilder, findlib, sexplib, ocplib-endian }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
-
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then { version = "2.3.2"; sha256 = "1fykack86hvvqhwngddyxxqlwm3xjljfaszsjbdrvjlrd1nlg079"; }
-  else { version = "1.9.0"; sha256 = "1c1j21zgmxi9spq23imy7byn50qr7hlds1cfpzxlsx9dp309jngy"; };
-in
-
-let opt = b: "--${if b != null then "en" else "dis"}able"; in
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-cstruct-${param.version}";
-
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-cstruct";
-    rev = "v${param.version}";
-    inherit (param) sha256;
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-cstruct-${version}";
+  version = "3.0.2";
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
+    sha256 = "03caxcyzfjmbnnwa15zy9s1ckkl4sc834d1qkgi4jcs3zqchvd8z";
   };
 
-  configureFlags = [ "${opt lwt}-lwt" "${opt async}-async" "${opt ppx_tools}-ppx" ];
+  unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ ocaml findlib ocamlbuild ppx_tools lwt async ];
-  propagatedBuildInputs = [ ocplib-endian sexplib ];
+  buildInputs = [ ocaml jbuilder findlib ];
 
-  createFindlibDestdir = true;
-  dontStrip = true;
+  propagatedBuildInputs = [ sexplib ocplib-endian ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-cstruct;
-    description = "Map OCaml arrays onto C-like structs";
+  buildPhase = "jbuilder build -p cstruct";
+
+  inherit (jbuilder) installPhase;
+
+  meta = {
+    description = "Access C-like structures directly from OCaml";
     license = stdenv.lib.licenses.isc;
-    maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/mirage/ocaml-cstruct";
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    inherit (ocaml.meta) platforms;
   };
 }

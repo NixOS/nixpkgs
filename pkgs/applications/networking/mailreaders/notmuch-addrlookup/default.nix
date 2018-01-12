@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mz0llf1ggl1k46brgrqj3i8qlg1ycmkc5a3a0kg8fg4s1c1m6xk";
   };
 
-  buildInputs = [ pkgconfig glib notmuch ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib notmuch ];
 
   # Required until notmuch-addrlookup can be compiled against notmuch >= 0.25
   patches = [ ./0001-notmuch-0.25-compatibility-fix.patch ];

@@ -1,9 +1,16 @@
 { stdenv, fetchurl, lib, pkgconfig, utillinux, libcap, libtirpc, libevent, libnfsidmap
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+, buildEnv
 }:
 
 let
   statdPath = lib.makeBinPath [ systemd utillinux coreutils ];
+
+  # Not nice; feel free to find a nicer solution.
+  kerberosEnv = buildEnv {
+    name = "kerberos-env-${kerberos.version}";
+    paths = with lib; [ (getDev kerberos) (getLib kerberos) ];
+  };
 
 in stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
@@ -26,7 +33,7 @@ in stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-gss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${kerberos}"
+      "--with-krb5=${kerberosEnv}"
       "--with-systemd=$(out)/etc/systemd/system"
       "--enable-libmount-mount"
     ]
@@ -39,12 +46,14 @@ in stdenv.mkDerivation rec {
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
       configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
-      
+
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
 
       substituteInPlace utils/mount/Makefile.in \
         --replace "chmod 4511" "chmod 0511"
+
+      sed '1i#include <stdint.h>' -i support/nsm/rpc.c
     '';
 
   makeFlags = [

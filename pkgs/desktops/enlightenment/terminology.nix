@@ -2,16 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "13rl1k22yf8qrpzdm5nh6ij641fibadr2ww1r7rnz7mbhzj3d4gb";
+    sha256 = "05ncxvzb9rzkyjvd95hzn8lswqdwr8cix6rd54nqn9559jibh4ns";
   };
 
-  nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) makeWrapper ];
+  nativeBuildInputs = [
+    (pkgconfig.override { vanilla = true; })
+    makeWrapper
+  ];
 
-  buildInputs = [ efl pcre curl ];
+  buildInputs = [
+    efl
+    pcre
+    curl
+  ];
 
   postInstall = ''
     for f in $out/bin/*; do

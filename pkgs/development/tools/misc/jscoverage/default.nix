@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "c45f051cec18c10352f15f9844f47e37e8d121d5fd16680e2dd0f3b4420eb7f4";
   };
 
+  patches = [
+    ./jsfalse_to_null.patch
+  ];
+
   buildInputs = [ autoconf makedepend perl python unzip zip ];
 
   # It works without MOZ_FIX_LINK_PATHS, circumventing an impurity

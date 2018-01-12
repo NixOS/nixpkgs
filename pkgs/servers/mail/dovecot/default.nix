@@ -2,24 +2,24 @@
 , bzip2, zlib, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap
 # Auth modules
-, withMySQL ? false, libmysql
+, withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.27";
+  name = "dovecot-2.2.33.2";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs = [ openssl bzip2 zlib clucene_core_2 icu openldap ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL libmysql
+    ++ lib.optional withMySQL mysql.connector-c
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "1s8qvr6fa9d0n179kdwgpsi72zkvpbh9q57q8fr2fjysgjl94zw9";
+    sha256 = "117f9i62liz2pm96zi2lpldzlj2knzj7g410zhifwmlsc1w3n7py";
   };
 
   preConfigure = ''

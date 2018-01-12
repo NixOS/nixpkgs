@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pywinrm";
-  version = "0.2.2";
+  version = "0.3.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06xc0mbqf718vmsp0fq0rb64nql66l5w2x23bmqnzl6nzc0gfc1h";
+    sha256 = "799fc3e33fec8684443adf5778860388289102ea4fa1458f1bf307d167855573";
   };
 
   checkInputs = [ mock pytest ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";
-    homepage = http://github.com/diyan/pywinrm/;
+    homepage = https://github.com/diyan/pywinrm/;
     license = licenses.mit;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;

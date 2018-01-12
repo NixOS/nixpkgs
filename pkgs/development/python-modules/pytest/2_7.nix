@@ -1,6 +1,8 @@
 { stdenv, pkgs, buildPythonPackage, fetchurl, isPy26, argparse, py, selenium }:
 buildPythonPackage rec {
-  name = "pytest-2.7.3";
+  pname = "pytest";
+  version = "2.7.3";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/p/pytest/${name}.tar.gz";

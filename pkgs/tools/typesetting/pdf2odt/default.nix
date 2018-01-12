@@ -1,21 +1,7 @@
 { stdenv, lib, makeWrapper, fetchFromGitHub
 , bc, coreutils, file, gawk, ghostscript, gnused, imagemagick, zip }:
 
-stdenv.mkDerivation rec {
-  version = "2014-12-17";
-  name = "pdf2odt-${version}";
-
-  src = fetchFromGitHub {
-    owner = "gutschke";
-    repo = "pdf2odt";
-    rev = "master";
-    sha256 = "14f9r5f0g6jzanl54jv86ls0frvspka1p9c8dy3fnriqpm584j0r";
-  };
-
-  dontStrip = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
+let
   path = lib.makeBinPath [
     bc
     coreutils
@@ -27,24 +13,36 @@ stdenv.mkDerivation rec {
     zip
   ];
 
+in stdenv.mkDerivation rec {
+  name = "pdf2odt-${version}";
+  version = "20170207";
+
+  src = fetchFromGitHub {
+    owner  = "gutschke";
+    repo   = "pdf2odt";
+    rev    = "4533bd14306c30c085001db59dbb8114ea09c360";
+    sha256 = "14f9r5f0g6jzanl54jv86ls0frvspka1p9c8dy3fnriqpm584j0r";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
   patches = [ ./use_mktemp.patch ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc
+    install -Dm0755 pdf2odt           -t $out/bin
+    install -Dm0644 README.md LICENSE -t $out/share/doc/pdf2odt
 
-    install -m0755 pdf2odt $out/bin/pdf2odt
     ln -rs $out/bin/pdf2odt $out/bin/pdf2ods
 
-    install -m0644 README.md LICENSE -t $out/share/doc
-
-    wrapProgram $out/bin/pdf2odt --prefix PATH : ${path}
+    wrapProgram $out/bin/pdf2odt \
+      --prefix PATH : ${path}
   '';
 
   meta = with stdenv.lib; {
     description = "PDF to ODT format converter";
-    homepage = http://github.com/gutschke/pdf2odt;
-    license = licenses.mit;
-    platforms = platforms.all;
+    homepage    = https://github.com/gutschke/pdf2odt;
+    license     = licenses.mit;
+    platforms   = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];
     inherit version;
   };

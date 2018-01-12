@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk, libXcomposite, libXcursor, libXdamage
-, libcanberra, intltool, GConf, startup_notification, zenity, gnome_doc_utils
+, libcanberra_gtk2, intltool, GConf, startup_notification, zenity, gnome_doc_utils
 , gsettings_desktop_schemas }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ pkgconfig glib gtk libXcomposite libXcursor libXdamage libcanberra
+    [ pkgconfig glib gtk libXcomposite libXcursor libXdamage libcanberra_gtk2
       intltool GConf startup_notification zenity gnome_doc_utils
       gsettings_desktop_schemas
     ];

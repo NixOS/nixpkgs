@@ -18,7 +18,11 @@ assert (versionAtLeast version "4.9");
 # Report BUG() conditions and kill the offending process.
 BUG y
 
-${optionalString (stdenv.system == "x86_64-linux") ''
+${optionalString (versionAtLeast version "4.10") ''
+  BUG_ON_DATA_CORRUPTION y
+''}
+
+${optionalString (stdenv.platform.kernelArch == "x86_64") ''
   DEFAULT_MMAP_MIN_ADDR 65536 # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling various emulations
@@ -57,22 +61,30 @@ ${optionalString (versionAtLeast version "4.12") ''
 DEBUG_WX y # boot-time warning on RWX mappings
 
 # Stricter /dev/mem
-STRICT_DEVMEM y
-IO_STRICT_DEVMEM y
+STRICT_DEVMEM? y
+IO_STRICT_DEVMEM? y
 
 # Perform additional validation of commonly targeted structures.
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
 DEBUG_LIST y
+DEBUG_PI_LIST y # doesn't BUG()
 DEBUG_SG y
 SCHED_STACK_END_CHECK y
-BUG_ON_DATA_CORRUPTION y
+
+${optionalString (versionAtLeast version "4.13") ''
+  REFCOUNT_FULL y
+''}
 
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
 
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y
+
+${optionalString (versionAtLeast version "4.14") ''
+  SLAB_FREELIST_HARDENED y
+''}
 
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
@@ -85,8 +97,14 @@ PANIC_TIMEOUT -1
 
 GCC_PLUGINS y # Enable gcc plugin options
 
+# Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
+GCC_PLUGIN_LATENT_ENTROPY y
+
 ${optionalString (versionAtLeast version "4.11") ''
   GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+${optionalString (versionAtLeast version "4.14") ''
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
 ''}
 
 # Disable various dangerous settings
@@ -97,4 +115,9 @@ INET_DIAG n # Has been used for heap based attacks in the past
 # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
 CC_STACKPROTECTOR_REGULAR n
 CC_STACKPROTECTOR_STRONG y
+
+# Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
+${optionalString (versionAtLeast version "4.13") ''
+  FORTIFY_SOURCE y
+''}
 ''

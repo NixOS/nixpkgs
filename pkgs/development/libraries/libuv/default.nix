@@ -2,14 +2,14 @@
 , ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.13.1";
+  version = "1.18.0";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "0k348kgdphha1w4cw78zngq3gqcrhcn0az7k0k4w2bgmdf4ip8z8";
+    sha256 = "0s71c2y4ll3vp463hsdk74q4hr7wprkxc2a4agw3za2hhzcb95pd";
   };
 
   postPatch = let

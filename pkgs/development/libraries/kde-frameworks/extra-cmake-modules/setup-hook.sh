@@ -2,7 +2,7 @@ _ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
 }
-envHooks+=(_ecmEnvHook)
+addEnvHooks "$targetOffset" _ecmEnvHook
 
 _ecmPreConfigureHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.

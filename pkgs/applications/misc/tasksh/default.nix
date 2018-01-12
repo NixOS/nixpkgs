@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ stdenv, fetchurl, cmake, libuuid, gnutls, readline }:
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z8zw8lld62fjafjvy248dncjk0i4fwygw0ahzjdvyyppx4zjhkf";
   };
 
+  buildInputs = [ readline ];
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {

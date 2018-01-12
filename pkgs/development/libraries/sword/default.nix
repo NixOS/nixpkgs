@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g91kpfkwccvdikddffdbzd6glnp1gdvkx4vh04iyz10bb7shpcr";
   };
 
-  buildInputs = [ pkgconfig icu clucene_core curl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ icu clucene_core curl ];
 
   prePatch = ''
     patchShebangs .;

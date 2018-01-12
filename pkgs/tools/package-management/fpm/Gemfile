@@ -1,4 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'archive-tar-minitar', '>= 0.5.2.1', github: 'peterhoeg/archive-tar-minitar'
 gem 'fpm'

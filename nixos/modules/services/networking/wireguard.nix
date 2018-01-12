@@ -95,6 +95,14 @@ let
         type = with types; listOf (submodule peerOpts);
       };
 
+      allowedIPsAsRoutes = mkOption {
+        example = false;
+        default = true;
+        type = types.bool;
+        description = ''
+          Determines whether to add allowed IPs as routes or not.
+        '';
+      };
     };
 
   };
@@ -187,6 +195,7 @@ let
         description = "WireGuard Tunnel - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment.DEVICE = name;
 
         serviceConfig = {
           Type = "oneshot";
@@ -217,11 +226,11 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (map (peer:
+            (optionals (values.allowedIPsAsRoutes != false) (map (peer:
             (map (allowedIP:
             "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
             ) peer.allowedIPs)
-            ) values.peers)
+            ) values.peers))
 
             values.postSetup
           ]);

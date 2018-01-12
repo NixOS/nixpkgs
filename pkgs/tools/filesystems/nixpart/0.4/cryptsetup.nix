@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-cryptsetup-reencrypt" ]
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
-  buildInputs = [ devicemapper libgcrypt libuuid pkgconfig popt ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ devicemapper libgcrypt libuuid popt ]
              ++ stdenv.lib.optional enablePython python;
 
   meta = {

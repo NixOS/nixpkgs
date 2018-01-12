@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c7k847cp68w20frzsdknpss2cwv3lp970asyybv65jxyl2jz3iq";
   };
 
-  buildInputs = [ bdftopcf mkfontdir mkfontscale ];
+  nativeBuildInputs = [ bdftopcf mkfontdir mkfontscale ];
   buildPhase = ''
     for i in *.bdf; do
         bdftopcf -o ''${i/bdf/pcf} $i

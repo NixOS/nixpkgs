@@ -6,36 +6,46 @@
 , username ? "" , password ? ""
 }:
 
-assert releaseType == "alpha" || releaseType == "headless" || releaseType == "demo";
+assert releaseType == "alpha"
+    || releaseType == "headless"
+    || releaseType == "demo";
 
-with stdenv.lib;
 let
-  version = if releaseType != "demo" then "0.15.33" else "0.15.33";
 
-  arch = if stdenv.system == "x86_64-linux" then {
-    inUrl = "linux64";
-    inTar = "x64";
-  } else if stdenv.system == "i686-linux" then {
-    inUrl = "linux32";
-    inTar = "i386";
-  } else abort "Unsupported platform";
-
-  authenticatedFetch = callPackage ./fetch.nix { inherit username password; };
-
-  fetch = rec {
-    url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
-    name = "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
-    x64 = {
-      headless =           fetchurl { inherit name url; sha256 = "17x0dlmfd7jwmpmn5i8wag28rl01iysqz3ri6g6msxjnvj5l6byn"; };
-      alpha    = authenticatedFetch { inherit name url; sha256 = "1m2r0n99ngqq47s9fzr09d347i15an6x9v1qlij8yf8w7lyrdy4z"; };
-      demo     =           fetchurl { inherit name url; sha256 = "03nwn4838yhqq0r76pf2m4wxi32rsq0knsxmq3qq4ycji89q1dyc"; };
+  # NB If you nix-prefetch-url any of these, be sure to add a --name arg,
+  #    where the ultimate "_" (before the version) is changed to a "-".
+  binDists = {
+    x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
+      alpha    = bdist { sha256 = "1i25q8x80qdpmf00lvml67gyklrfvmr4gfyakrx954bq8giiy4ll"; fetcher = authenticatedFetch; };
+      headless = bdist { sha256 = "0v5sypz1q6x6hi6k5cyi06f9ld0cky80l0z64psd3v2ax9hyyh8h"; };
+      demo     = bdist { sha256 = "0aca8gks7wl7yi821bcca16c94zcc41agin5j0vfz500i0sngzzw"; version = "0.15.36"; };
     };
-    i386 = {
-      headless = abort "Factorio 32-bit headless binaries are not available for download.";
-      alpha    = abort "Factorio 32-bit client is not available for this version.";
-      demo     = abort "Factorio 32-bit demo binaries are not available for download.";
+    i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
+      alpha    = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; nameMut = asGz; };
+      headless = bdist { };
+      demo     = bdist { };
     };
   };
+  actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
+
+  bdistForArch = arch: { sha256 ? null
+                       , version ? "0.15.40"
+                       , fetcher ? fetchurl
+                       , nameMut ? x: x
+                       }:
+    if sha256 == null then
+      throw "Factorio ${releaseType}-${arch.inTar} binaries are not (and were never?) available to download"
+    else {
+      inherit version arch;
+      src = fetcher {
+        inherit sha256;
+        url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
+        name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
+      };
+    };
+  authenticatedFetch = callPackage ./fetch.nix { inherit username password; };
+  asGz = builtins.replaceStrings [".xz"] [".gz"];
+
 
   configBaseCfg = ''
     use-system-read-write-data-directories=false
@@ -59,10 +69,10 @@ let
 
   modDir = factorio-utils.mkModDirDrv mods;
 
-  base = {
+  base = with actual; {
     name = "factorio-${releaseType}-${version}";
 
-    src = fetch.${arch.inTar}.${releaseType};
+    inherit src;
 
     preferLocalBuild = true;
     dontBuild = true;
@@ -117,8 +127,9 @@ let
         wrapProgram $out/bin/factorio                                \
           --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
           --run "$out/share/factorio/update-config.sh"               \
-          --argv0 "" \
-          --add-flags "-c \$HOME/.factorio/config.cfg ${optionalString (mods != []) "--mod-directory=${modDir}"}"
+          --argv0 ""                                                 \
+          --add-flags "-c \$HOME/.factorio/config.cfg"               \
+          ${if mods!=[] then "--add-flags --mod-directory=${modDir}" else ""}
 
           # TODO Currently, every time a mod is changed/added/removed using the
           # modlist, a new derivation will take up the entire footprint of the
@@ -154,4 +165,5 @@ let
       '';
     };
   };
+
 in stdenv.mkDerivation (releases.${releaseType})

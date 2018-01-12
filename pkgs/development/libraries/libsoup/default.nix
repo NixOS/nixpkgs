@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, glib, libxml2, pkgconfig
+{ stdenv, fetchurl, fetchpatch, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring3, sqlite, glib_networking, gobjectIntrospection
-, valaSupport ? true, vala_0_32
+, valaSupport ? true, vala_0_38
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.59";
-  version = "${majorVersion}.90.1";
+  majorVersion = "2.60";
+  version = "${majorVersion}.2";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "0bh8wa0szkm9bx2anfq655zshwf6jhxvrqwx8jyh8rqgi6z9dhz0";
+    sha256 = "7263cfe18872e2e652c196f5667e514616d9c97c861dfca82a65a55f45f0da01";
   };
 
   prePatch = ''
@@ -22,10 +22,19 @@ stdenv.mkDerivation {
      substituteInPlace libsoup/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
   '';
 
+  patches = [
+    # remove for >= 2.60.3
+    (fetchpatch {
+      name = "buffer-overflow.patch"; # https://bugzilla.gnome.org/show_bug.cgi?id=788037
+      url = "https://git.gnome.org/browse/libsoup/patch/?id=b79689833ba";
+      sha256 = "1azbk540mbm4c6ip54ixbg9d6w7nkls9y81fzm3csq9a5786r3d3";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ]
-    ++ stdenv.lib.optionals valaSupport [ vala_0_32 ];
+    ++ stdenv.lib.optionals valaSupport [ vala_0_38 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring3 ];
@@ -37,8 +46,6 @@ stdenv.mkDerivation {
     + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     inherit (glib.meta) maintainers platforms;

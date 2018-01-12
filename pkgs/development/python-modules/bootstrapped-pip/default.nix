@@ -3,22 +3,22 @@
 let
   wheel_source = fetchPypi {
     pname = "wheel";
-    version = "0.29.0";
+    version = "0.30.0";
     format = "wheel";
-    sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
+    sha256 = "e721e53864f084f956f40f96124a74da0631ac13fbbd1ba99e8e2b5e9cafdf64";
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "36.0.1";
+    version = "38.2.5";
     format = "wheel";
-    sha256 = "f2900e560efc479938a219433c48f15a4ff4ecfe575a65de385eeb44f2425587";
+    sha256 = "bcf0d4f3e2f7890e658db11e218b8643afffb905a0e2f2a7d5a6a3e949bb87e6";
   };
 
   # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
   # https://github.com/NixOS/nixpkgs/issues/26392
   # https://github.com/pypa/setuptools/issues/885
   pkg_resources = fetchurl {
-    url = https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py;
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
     sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
   };
 

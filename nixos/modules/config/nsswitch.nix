@@ -18,7 +18,7 @@ let
 
   hostArray = [ "files" ]
     ++ optionals mymachines [ "mymachines" ]
-    ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
+    ++ optionals nssmdns [ "mdns_minimal [NOTFOUND=return]" ]
     ++ optionals nsswins [ "wins" ]
     ++ optionals resolved ["resolve [!UNAVAIL=return]"]
     ++ [ "dns" ]

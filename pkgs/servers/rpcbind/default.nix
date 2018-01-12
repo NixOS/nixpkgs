@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libtirpc
+{ fetchurl, stdenv, pkgconfig, libnsl, libtirpc, fetchpatch
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +12,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sunrpc.patch
+    (fetchpatch {
+      name = "CVE-2017-8779.patch";
+      url = "https://raw.githubusercontent.com/guidovranken/rpcbomb/e6da9e489aa8ad000b0ad5ac9abc5b4eefc3a769/rpcbind_patch.txt";
+      sha256 = "0w231w8fxihgrn526np078j3vbj3ylvjvxjmfpjvqhga5zg821ab";
+    })
   ];
 
-  buildInputs = [ libtirpc ]
+  buildInputs = [ libnsl libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;
 
   configureFlags = [
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "ONC RPC portmapper";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    homepage = http://sourceforge.net/projects/rpcbind/;
+    homepage = https://sourceforge.net/projects/rpcbind/;
     maintainers = with maintainers; [ abbradar ];
     longDescription = ''
       Universal addresses to RPC program number mapper.

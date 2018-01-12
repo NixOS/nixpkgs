@@ -1,4 +1,5 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync, removeReferencesTo }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync
+, removeReferencesTo, fetchFromGitHub }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -57,6 +58,10 @@ let
       else if goDep.fetch.type == "bzr" then
         fetchbzr {
           inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "FromGitHub" then
+        fetchFromGitHub {
+          inherit (goDep.fetch) owner repo rev sha256;
         }
       else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
@@ -123,7 +128,7 @@ go.stdenv.mkDerivation (
       [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
       local OUT
       if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v $d 2>&1)"; then
-        if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+        if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
           echo "$OUT" >&2
           return 1
         fi
@@ -140,7 +145,7 @@ go.stdenv.mkDerivation (
       if [ -n "$subPackages" ]; then
         echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
       else
-        pushd go/src >/dev/null
+        pushd "$NIX_BUILD_TOP/go/src" >/dev/null
         find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
         popd >/dev/null
       fi
@@ -215,6 +220,7 @@ go.stdenv.mkDerivation (
 
   meta = {
     # Add default meta information
+    homepage = "https://${goPackagePath}";
     platforms = go.meta.platforms or lib.platforms.all;
   } // meta // {
     # add an extra maintainer to every package

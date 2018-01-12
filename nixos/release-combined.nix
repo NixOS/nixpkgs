@@ -42,12 +42,11 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ pkgs.lib.maintainers.eelco ];
+      maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
     };
     constituents =
       let
-        all = x: map (system: x.${system})
-          (supportedSystems ++ limitedSupportedSystems);
+        all = x: map (system: x.${system}) supportedSystems;
       in [
         nixos.channel
         (all nixos.dummy)
@@ -61,7 +60,7 @@ in rec {
         nixos.tests.chromium
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
+        (all nixos.tests.gnome3)
         nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
@@ -80,8 +79,10 @@ in rec {
         (all nixos.tests.boot.uefiCdrom)
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
-        nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        (all nixos.tests.hibernate)
+        nixos.tests.docker
         (all nixos.tests.ecryptfs)
+        (all nixos.tests.env)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
         (all nixos.tests.keymap.azerty)
@@ -91,11 +92,10 @@ in rec {
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
-        (all nixos.tests.kernel-latest)
-        (all nixos.tests.kernel-lts)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
+        (all nixos.tests.mutableUsers)
         (all nixos.tests.nat.firewall)
         (all nixos.tests.nat.standalone)
         (all nixos.tests.networking.scripted.loopback)
@@ -110,11 +110,13 @@ in rec {
         (all nixos.tests.nfs3)
         (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
+        (all nixos.tests.php-pcre)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.slim)
+        (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 

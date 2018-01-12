@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     ./install.sh ${withFont}
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1f3qvzl7blqddx3cm2sdml7hi8s56yjc0vqhfajndxr5ybz6g1rw";
-
   meta = with stdenv.lib; {
     description = ''
       Nerd Fonts is a project that attempts to patch as many developer targeted

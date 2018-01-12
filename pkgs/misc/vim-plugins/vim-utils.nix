@@ -373,8 +373,10 @@ rec {
   }
   '';
 
-  addRtp = path: derivation:
-    derivation // { rtp = "${derivation}/${path}"; };
+  addRtp = path: attrs: derivation:
+    derivation // { rtp = "${derivation}/${path}"; } // {
+      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
+    };
 
   buildVimPlugin = a@{
     name,
@@ -383,16 +385,20 @@ rec {
     unpackPhase ? "",
     configurePhase ? "",
     buildPhase ? "",
+    preInstall ? "",
+    postInstall ? "",
     path ? (builtins.parseDrvName name).name,
     addonInfo ? null,
     ...
   }:
-    addRtp "${rtpPath}/${path}" (stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" a (stdenv.mkDerivation (a // {
       name = namePrefix + name;
 
-      inherit unpackPhase configurePhase buildPhase addonInfo;
+      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
+        runHook preInstall
+
         target=$out/${rtpPath}/${path}
         mkdir -p $out/${rtpPath}
         cp -r . $target
@@ -401,6 +407,8 @@ rec {
         if [ -n "$addonInfo" ]; then
           echo "$addonInfo" > $target/addon-info.json
         fi
+
+        runHook postInstall
       '';
     }));
 

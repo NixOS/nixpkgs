@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "teyjus-2.0b2";
 
   src = fetchurl {
-    url = "https://teyjus.googlecode.com/files/teyjus-source-2.0-b2.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/teyjus/teyjus-source-2.0-b2.tar.gz";
     sha256 = "f589fb460d7095a6e674b7a6413772c41b98654c38602c3e8c477a976da99052";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An efficient implementation of the Lambda Prolog language";
-    homepage = https://code.google.com/p/teyjus/;
+    homepage = https://github.com/teyjus/teyjus;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.bcdarwin ];
     platforms = platforms.linux;

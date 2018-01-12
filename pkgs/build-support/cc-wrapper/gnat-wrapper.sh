@@ -1,6 +1,10 @@
 #! @shell@
-set -eu -o pipefail
+set -eu -o pipefail +o posix
 shopt -s nullglob
+
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
 
 # N.B. Gnat is not used during bootstrapping, so we don't need to
 # worry about the old bash empty array `set -u` workarounds.
@@ -13,15 +17,11 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
+source @out@/nix-support/utils.sh
+
 if [ -z "${NIX_@infixSalt@_GNAT_WRAPPER_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
-
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK"
-fi
-
-source @out@/nix-support/utils.sh
 
 
 # Figure out if linker flags should be passed.  GCC prints annoying
@@ -36,10 +36,6 @@ for i in "$@"; do
         dontLink=1
     elif [ "${i:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$i" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
 done
 
@@ -113,17 +109,13 @@ fi
 #fi
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
     printf "  %q\n" "${params[@]}" >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" "${extraAfter[@]}" >&2
-fi
-
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

@@ -14,7 +14,7 @@ buildRustPackage rec {
     sha256 = "0pqrm85pd9hqn5fwqjbyyrrfh4k7q9mi9qy9hm8yigk5l8mw44y1";
   };
 
-  depsSha256 = "1ahfm5agvabqqqgjsyjb95xxbc7mng1mdyclcakwp1m1qdkxx9py";
+  cargoSha256 = "1ahfm5agvabqqqgjsyjb95xxbc7mng1mdyclcakwp1m1qdkxx9p0";
 
   buildInputs = [ libsodium libarchive openssl ];
 
@@ -35,5 +35,6 @@ buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [ maintainers.rushmorem ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    broken = true; # mark temporary as broken due git dependencies
   };
 }

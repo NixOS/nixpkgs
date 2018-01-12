@@ -6,8 +6,8 @@
 with stdenv.lib;
 
 let
-  baseVersion = "4.3";
-  revision = "1";
+  baseVersion = "4.5";
+  revision = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1bd4wxvp8b5imsmrbnn8rkiln38g74g2545x07pmihc8z51qh2h6";
+    sha256 = "1yfrfma23xxzz8hl43g7pk7ay5lg25l9lscjlih617lyv6jmc0hl";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   preBuild = optional withDocumentation ''
-    ln -s ${qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
+    ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

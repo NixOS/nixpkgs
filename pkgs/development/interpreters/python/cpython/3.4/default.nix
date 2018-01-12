@@ -66,6 +66,7 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+    ./ld_library_path.patch
   ];
 
   postPatch = ''
@@ -159,7 +160,7 @@ in stdenv.mkDerivation {
   in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
-    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
     pkgs = pythonPackages;
     isPy3 = true;

@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2017-01-08";
+  version = "2018-01-05";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "9668032d8715265ca5b4ff16eb2efa8f1c450883";
-    sha256 = "0nwcf5mh3ba0g23zw7ym73pgpfdass412k2fy67ryr9vnc709jkj";
+    rev = "c66bdfb4db99977c1bd0568e33e60853a48dca65";
+    sha256 = "0fdzhr0704cj84ym00plkl5l9w83haal6i6w70lx6f4968pcliyi";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
-  # remove when https://github.com/universal-ctags/ctags/pull/1267 is merged
-  patches = [ ./sed-test.patch ];
-
+  # to generate makefile.in
   autoreconfPhase = ''
-    ./autogen.sh --tmpdir
+    ./autogen.sh
   '';
+
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   postConfigure = ''
     sed -i 's|/usr/bin/env perl|${perl}/bin/perl|' misc/optlib2c

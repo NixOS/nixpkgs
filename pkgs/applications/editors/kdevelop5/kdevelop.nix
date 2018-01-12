@@ -39,7 +39,7 @@ mkDerivation rec {
 
   postInstall = ''
     # The kdevelop! script (shell environment) needs qdbus and kioclient5 in PATH.
-    wrapProgram "$out/bin/kdevelop!" --prefix PATH ":" "${qttools}/bin:${kde-cli-tools}/bin"
+    wrapProgram "$out/bin/kdevelop!" --prefix PATH ":" "${lib.makeBinPath [ qttools kde-cli-tools ]}"
 
     # Fix the (now wrapped) kdevelop! to find things in right places:
     # - Make KDEV_BASEDIR point to bin directory of kdevplatform.

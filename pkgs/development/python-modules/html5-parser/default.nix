@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "b9f3a1d4cdb8742e8e4ecafab04bff541bde4ff09af233293ed0b94028ec1ab5";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ chardet lxml pkgs.libxml2 ];
 
   doCheck = false; # No such file or directory: 'run_tests.py'

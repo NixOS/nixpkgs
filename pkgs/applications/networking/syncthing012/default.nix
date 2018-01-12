@@ -5,8 +5,6 @@ buildGoPackage rec {
   version = "0.12.15";
   rev = "v${version}";
 
-  buildFlags = "--tags noupgrade,release";
-  
   goPackagePath = "github.com/syncthing/syncthing";
 
   src = fetchFromGitHub {
@@ -22,4 +20,16 @@ buildGoPackage rec {
     # Mostly a cosmetic change
     sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
   '';
+
+  preBuild = ''
+    export buildFlagsArray+=("-tags" "noupgrade release")
+  '';
+
+  meta = {
+    knownVulnerabilities = [ "CVE-2017-1000420" ];
+    homepage = https://www.syncthing.net/;
+    description = "Open Source Continuous File Synchronization";
+    license = stdenv.lib.licenses.mpl20;
+    platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
+  };
 }

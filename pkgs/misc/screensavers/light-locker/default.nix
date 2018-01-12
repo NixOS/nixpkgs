@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   # Patch so that systemd is "found" when configuring.
   patches = [ ./systemd.patch ];
 
-  buildInputs = [ which xfce.xfce4_dev_tools glib systemd pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which xfce.xfce4_dev_tools glib systemd
                   libX11 libXScrnSaver libXxf86misc gtk3 dbus_glib wrapGAppsHook ];
 
   preConfigure = ''

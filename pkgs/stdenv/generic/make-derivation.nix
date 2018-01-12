@@ -14,12 +14,29 @@ rec {
   mkDerivation =
     { name ? ""
 
-    , nativeBuildInputs ? []
-    , buildInputs ? []
+    # These types of dependencies are all exhaustively documented in
+    # the "Specifying Dependencies" section of the "Standard
+    # Environment" chapter of the Nixpkgs manual.
 
-    , propagatedNativeBuildInputs ? []
-    , propagatedBuildInputs ? []
+    # TODO(@Ericson2314): Stop using legacy dep attribute names
 
+    #                           host offset -> target offset
+    , depsBuildBuild              ? [] # -1 -> -1
+    , depsBuildBuildPropagated    ? [] # -1 -> -1
+    , nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
+    , propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
+    , depsBuildTarget             ? [] # -1 ->  1
+    , depsBuildTargetPropagated   ? [] # -1 ->  1
+
+    , depsHostHost                ? [] #  0 ->  0
+    , depsHostHostPropagated      ? [] #  0 ->  0
+    , buildInputs                 ? [] #  0 ->  1  N.B. Legacy name
+    , propagatedBuildInputs       ? [] #  0 ->  1  N.B. Legacy name
+
+    , depsTargetTarget            ? [] #  1 ->  1
+    , depsTargetTargetPropagated  ? [] #  1 ->  1
+
+    # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
@@ -28,6 +45,13 @@ rec {
       configurePlatforms ? lib.optionals
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
+
+    # Check phase
+    , doCheck ? false
+
+    # InstallCheck phase
+    , doInstallCheck ? false
+
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -41,17 +65,51 @@ rec {
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
+
+    , hardeningEnable ? []
+    , hardeningDisable ? []
+
     , ... } @ attrs:
+
+    # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
-      dependencies = map lib.chooseDevOutputs [
-        (map (drv: drv.nativeDrv or drv) nativeBuildInputs
-           ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
-           ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
-        (map (drv: drv.crossDrv or drv) buildInputs)
+      supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      # hardeningDisable additionally supports "all".
+      erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
+    in if builtins.length erroneousHardeningFlags != 0
+    then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
+      inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
+    })
+    else let
+      dependencies = map (map lib.chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
+          (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
+          (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
+          (map (drv: drv.crossDrv or drv) buildInputs)
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
+        ]
       ];
-      propagatedDependencies = map lib.chooseDevOutputs [
-        (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
-        (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+      propagatedDependencies = map (map lib.chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
+          (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
+          (map (drv: drv.__spliced.buildTarget or drv) depsBuildTargetPropagated)
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) depsHostHostPropagated)
+          (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
+        ]
       ];
 
       outputs' =
@@ -84,7 +142,7 @@ rec {
         {
           name = name + lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform)
-            stdenv.hostPlatform.config;
+            ("-" + stdenv.hostPlatform.config);
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -92,11 +150,19 @@ rec {
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
-          nativeBuildInputs = lib.elemAt dependencies 0;
-          buildInputs = lib.elemAt dependencies 1;
+          depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
+          nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
+          depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
+          depsHostBuild               = lib.elemAt (lib.elemAt dependencies 1) 0;
+          buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
+          depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
-          propagatedNativeBuildInputs = lib.elemAt propagatedDependencies 0;
-          propagatedBuildInputs = lib.elemAt propagatedDependencies 1;
+          depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
+          propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
+          depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
+          depsHostBuildPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
+          propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
+          depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags = let inherit (lib) optional elem; in
@@ -121,9 +187,15 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // (if outputs' != [ "out" ] then {
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
           outputs = outputs';
-        } else { }));
+        } // lib.optionalAttrs (attrs ? doCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        } // lib.optionalAttrs (attrs ? doInstallCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        });
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

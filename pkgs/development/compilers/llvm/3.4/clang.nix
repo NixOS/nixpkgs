@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     # GCC_INSTALL_PREFIX points here, so just use it even though it may not
     # actually be a gcc
     gcc = stdenv.cc.cc;
+    hardeningUnsupportedFlags = [ "stackprotector" ];
   };
 
   enableParallelBuilding = true;

@@ -11,13 +11,13 @@ let
   version = "2.28.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
-  # The prefix prepended to binary names to allow multiple binuntils on the
+  # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  prefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
 stdenv.mkDerivation rec {
-  name = prefix + basename;
+  name = targetPrefix + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -48,21 +48,28 @@ stdenv.mkDerivation rec {
     # there) and causes a cycle between the lib and bin outputs, so
     # get rid of it.
     ./no-plugins.patch
+
+    # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
+    # elf32-littlearm-vxworks in favor of the first.
+    # https://github.com/NixOS/nixpkgs/pull/30484#issuecomment-345472766
+    ./disambiguate-arm-targets.patch
+
+    # For some reason bfd ld doesn't search DT_RPATH when cross-compiling. It's
+    # not clear why this behavior was decided upon but it has the unfortunate
+    # consequence that the linker will fail to find transitive dependencies of
+    # shared objects when cross-compiling. Consequently, we are forced to
+    # override this behavior, forcing ld to search DT_RPATH even when
+    # cross-compiling.
+    ./always-search-rpath.patch
   ];
 
-  outputs = [ "out" ]
-    ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
-    ++ [ "info" ]
-    ++ optional (targetPlatform == hostPlatform) "dev";
+  outputs = [ "out" "info" "man" ];
 
-  nativeBuildInputs = [ bison ]
-    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
     # Clear the default library search path.
@@ -83,23 +90,28 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
-  configureFlags =
-    [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
-    ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
-    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
+  configureFlags = [
+    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared" "--enable-static"
+    "--with-system-zlib"
+
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
+  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   enableParallelBuilding = true;
 
   passthru = {
-    inherit prefix;
+    inherit targetPrefix version;
   };
 
   meta = with stdenv.lib; {
@@ -112,6 +124,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a

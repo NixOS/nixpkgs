@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, uutf, result }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, result }:
 
 let
   pname = "otfm";
@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "054s82539k3kc9na6s47g3scsl04icjahpas7pv5351jmsgqcq3k";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ uutf result ];
-
-  createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 

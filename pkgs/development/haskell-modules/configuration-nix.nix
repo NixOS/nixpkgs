@@ -53,7 +53,7 @@ self: super: builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.lib; });
+  mysql = dontCheck (super.mysql.override { mysql = pkgs.mysql.connector-c; });
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal super.cuda (drv: {
@@ -104,6 +104,12 @@ self: super: builtins.intersectAttrs super {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
   });
+
+  # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
+  hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+  }));
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
@@ -211,10 +217,7 @@ self: super: builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (overrideCabal super.wxc (drv: {
-      buildDepends = (drv.buildDepends or []) ++ [self.split];
-      postInstall = "cp -v dist/build/libwxc.so.0.92.3.0 $lib/lib/libwxc.so";
-    })).override { wxGTK = pkgs.wxGTK30; };
+  wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
@@ -223,6 +226,12 @@ self: super: builtins.intersectAttrs super {
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
+
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
 
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
@@ -249,7 +258,7 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_5; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -454,9 +463,6 @@ self: super: builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
-  # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
-
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
     preConfigure = ''
@@ -492,47 +498,11 @@ self: super: builtins.intersectAttrs super {
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
 
-  # Alex has some weird files in /usr/share that create a cyclic ref with
-  # its bin dir.
-  alex = hasNoBinOutput super.alex;
+  # Break cyclic reference that results in an infinite recursion.
+  partial-semigroup = dontCheck super.partial-semigroup;
+  colour = dontCheck super.colour;
 
-  # Disable separate bin outputs for these specific packages that break with it.
-  H = hasNoBinOutput super.H;
-  cryptol = hasNoBinOutput super.cryptol;
-  hscolour = hasNoBinOutput super.hscolour;
-  sproxy = hasNoBinOutput super.sproxy;
-  sproxy2 = hasNoBinOutput super.sproxy2;
-  sproxy-web = hasNoBinOutput super.sproxy-web;
-  juandelacosa = hasNoBinOutput super.juandelacosa;
-  mywatch = hasNoBinOutput super.mywatch;
-  sugarhaskell = hasNoBinOutput super.sugarhaskell;
-  zerobin = hasNoBinOutput super.zerobin;
-
-  git-annex = overrideCabal super.git-annex (drv: {
-    enableSeparateBinOutput = false;
-    enableSeparateEtcOutput = false;
-  });
-
-  # Override a number of packages with specific references to $out in their
-  # derivations
-  stack = overrideCabal super.stack (drv: {
-    postInstall = ''
-      exe=$bin/bin/stack
-      mkdir -p $bin/share/bash-completion/completions
-      $exe --bash-completion-script $exe >$bin/share/bash-completion/completions/stack
-    '';
-  });
-  Agda = overrideCabal super.Agda (drv: {
-    postInstall = ''
-      files=("$out/share/"*"-ghc-"*"/Agda-"*"/lib/prim/Agda/"{Primitive.agda,Builtin"/"*.agda})
-      for f in "''${files[@]}" ; do
-        $bin/bin/agda $f
-      done
-      for f in "''${files[@]}" ; do
-        $bin/bin/agda -c --no-main $f
-      done
-      $bin/bin/agda-mode compile
-    '';
-  });
-
+  LDAP = dontCheck (overrideCabal super.LDAP (drv: {
+    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
+  }));
 }

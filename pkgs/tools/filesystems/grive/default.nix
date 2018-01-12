@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, libgcrypt, json_c, curl, expat, boost, binutils }:
+{ stdenv, fetchgit, cmake, libgcrypt, json_c, curl, expat, boost, libiberty }:
 
 stdenv.mkDerivation rec {
   version = "0.3.0";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "11cqfcjl128nfg1rjvpvr9x1x2ch3kyliw4vi14n51zqp82f9ysb";
   };
 
-  buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
+  buildInputs = [cmake libgcrypt json_c curl expat stdenv libiberty boost];
 
-  # work around new binutils headers, see
-  # http://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now
+  # work around new libiberty headers, see
+  # http://stackoverflow.com/questions/11748035/libiberty-bfd-h-wants-config-h-now
   prePatch = ''
     sed -i '1i#define PACKAGE "grive"\n#define PACKAGE_VERSION "${version}"' \
       libgrive/src/bfd/SymbolInfo.cc

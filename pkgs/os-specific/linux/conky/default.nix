@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -73,6 +73,16 @@ stdenv.mkDerivation rec {
     sha256 = "15j8h251v9jpdg6h6wn1vb45pkk806pf9s5n3rdrps9r185w8hn8";
   };
 
+  patches = [
+    # Patch to fix compilation on gcc-7 from conky PR
+    # https://github.com/brndnmtthws/conky/pull/402
+    (fetchpatch {
+      name = "gcc7.patch";
+      url = "https://github.com/brndnmtthws/conky/commit/6140122b82d50acc333e5d2a813cc1933ecc6d21.patch";
+      sha256 = "1fblfj1w2kc0gshc2pq9lc1pxxsgmgh8byb1xs2v6amx15kj11k7";
+    })
+  ];
+
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
       cmake/ConkyPlatformChecks.cmake
@@ -80,17 +90,14 @@ stdenv.mkDerivation rec {
     # Drop examples, since they contain non-ASCII characters that break docbook2x :(
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
-    substituteInPlace cmake/Docbook.cmake \
-      --replace "http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl"
-    substituteInPlace doc/docs.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
     substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ pkgconfig glib cmake libXinerama ]
-    ++ optionals docsSupport        [ docbook2x libxslt man less ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib cmake libXinerama ]
+    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper
     ++ optional  xdamageSupport     libXdamage
@@ -123,6 +130,10 @@ stdenv.mkDerivation rec {
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
     ;
+
+  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
+  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://conky.sourceforge.net/;

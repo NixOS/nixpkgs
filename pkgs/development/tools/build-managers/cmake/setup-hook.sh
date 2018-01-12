@@ -51,9 +51,18 @@ cmakeConfigurePhase() {
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
 
+    if [ "$buildPhase" = ninjaBuildPhase ]; then
+        cmakeFlags="-GNinja $cmakeFlags"
+    fi
+
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
     cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "cmake: enabled parallel building"
+    fi
 
     runHook postConfigure
 }
@@ -63,11 +72,7 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
-if [ -n "$crossConfig" ]; then
-    crossEnvHooks+=(addCMakeParams)
-else
-    envHooks+=(addCMakeParams)
-fi
+addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
   isystem_seen=
@@ -83,6 +88,9 @@ makeCmakeFindLibs(){
           ;;
         -L*)
           export CMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH${CMAKE_LIBRARY_PATH:+:}${flag:2}"
+          ;;
+        -F*)
+          export CMAKE_FRAMEWORK_PATH="$CMAKE_FRAMEWORK_PATH${CMAKE_FRAMEWORK_PATH:+:}${flag:2}"
           ;;
         -isystem)
           isystem_seen=1

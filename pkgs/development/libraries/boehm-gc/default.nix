@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = hostPlatform != buildPlatform;
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/doc
       mv $out/share/gc $out/share/doc/gc
     '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

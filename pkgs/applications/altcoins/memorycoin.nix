@@ -13,7 +13,8 @@ stdenv.mkDerivation rec{
     sha256 = "1iyh6dqrg0mirwci5br5n5qw3ghp2cs23wd8ygr56bh9ml4dr1m8";
   };
 
-  buildInputs = [ pkgconfig openssl db48 boost zlib utillinux protobuf ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl db48 boost zlib utillinux protobuf ]
                   ++ optionals withGui [ qt4 qmake4Hook qrencode ];
 
   qmakeFlags = ["USE_UPNP=-"];
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec{
     if withGui
     then "install -D bitcoin-qt $out/bin/memorycoin-qt"
     else "install -D bitcoind $out/bin/memorycoind";
+
+  # `make build/version.o`:
+  # make: *** No rule to make target 'build/build.h', needed by 'build/version.o'.  Stop.
+  enableParallelBuilding = false;
 
   meta = {
     description = "Peer-to-peer, CPU-based electronic cash system";

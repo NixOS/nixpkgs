@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.10.4";
+  version = "1.12.4";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "0xfyf1mgcxnwf380wxv20hakl2srp34dmiw6bm4zkncl2mi91rh3";
+    sha256 = "1jg9nvc8000yi2bcl3wn2yh2hwl7yvlwldj6778w8c0z5qj7fb8w";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-builtin-libvpx --with-gstreamer-api=1.0";
 
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

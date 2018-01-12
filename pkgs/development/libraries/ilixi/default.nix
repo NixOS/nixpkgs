@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kmdmqf68jiv7y6as41bhbgdy70yy2i811a3l6kccbazlzpif34v";
   };
 
-  buildInputs = [ pkgconfig directfb libsigcxx libxml2 fontconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ directfb libsigcxx libxml2 fontconfig ];
 
   configureFlags = ''
     --enable-log-debug --enable-debug --enable-trace --with-examples

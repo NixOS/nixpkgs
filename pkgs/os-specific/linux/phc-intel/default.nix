@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     homepage = http://www.linux-phc.org/;
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ nckx ];
   };
 }

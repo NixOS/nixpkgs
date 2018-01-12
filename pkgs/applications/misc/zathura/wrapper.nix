@@ -16,7 +16,7 @@ in symlinkJoin {
   '';
 
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura/;
     description = "A highly customizable and functional PDF viewer";
     longDescription = ''
       Zathura is a highly customizable and functional PDF viewer based on the

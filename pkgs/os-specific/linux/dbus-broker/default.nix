@@ -1,20 +1,23 @@
-{ stdenv, fetchgit, fetchFromGitHub, meson, ninja, pkgconfig
+{ stdenv, fetchgit, fetchFromGitHub, docutils, meson, ninja, pkgconfig
 , dbus, glib, systemd }:
 
 stdenv.mkDerivation rec {
   name = "dbus-broker-${version}";
-  version = "3";
+  version = "9";
 
   src = fetchFromGitHub {
     owner           = "bus1";
     repo            = "dbus-broker";
     rev             = "v${version}";
-    sha256          = "1f2vw5b2cbdgd3g7vnzwr9lsw9v4xc5nc0nf9xc3qb5xqzsq7v7i";
+    sha256          = "0q0kbinkkia96bsy7jczlyjz8xgdrfkyx8v6gdr2zflgv0mgbsab";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ docutils meson ninja pkgconfig ];
+
   buildInputs = [ dbus glib systemd ];
+
+  enableParallelBuilding = true;
 
   prePatch = ''
     substituteInPlace meson.build \

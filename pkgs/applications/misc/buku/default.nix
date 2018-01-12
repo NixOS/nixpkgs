@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.0"; # When updating to 3.1, make sure to remove the marked line in preCheck
+  version = "3.4";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1a33x3197vi5s8rq5fvhy021jdlsc8ww8zc4kysss6r9mvdlk7ax";
+    sha256 = "0v0wvsxw78g6yl606if25k1adghr5764chwy1kl7dsxvchqwvmg0";
   };
 
   nativeBuildInputs = [
@@ -16,6 +16,8 @@ with python3.pkgs; buildPythonApplication rec {
     pytest-catchlog
     hypothesis
     pytest
+    pylint
+    flake8
   ];
 
   propagatedBuildInputs = [
@@ -28,11 +30,6 @@ with python3.pkgs; buildPythonApplication rec {
   preCheck = ''
     # Fixes two tests for wrong encoding
     export PYTHONIOENCODING=utf-8
-
-    ### Remove this for 3.1 ###
-    # See https://github.com/jarun/Buku/pull/167 (merged)
-    substituteInPlace setup.py \
-      --replace "hypothesis==3.7.0" "hypothesis>=3.7.0"
 
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \

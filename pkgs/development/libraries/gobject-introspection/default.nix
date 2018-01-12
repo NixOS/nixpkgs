@@ -7,7 +7,7 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.52";
+  ver_maj = "1.54";
   ver_min = "1";
 in
 with stdenv.lib;
@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "1x5gkyrglv3dn9b4fsgw6asqgjw1wj7qc37g9pyac6pyaa6w7l1f";
+    sha256 = "0zl7pfkzkm07733391b4f3cwjbnvb1nwvpmajf5bajh6bxgfv3dq";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ flex bison python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "open-vm-tools-${version}";
-  version = "10.1.0";
+  version = "10.1.10";
 
   src = fetchFromGitHub {
-    owner = "vmware";
-    repo = "open-vm-tools";
-    rev = "stable-${version}";
-    sha256 = "1qzk4mvw618ca4j9agsfpqch9jgwghvdc4rpkvlyz8kirvh9iniz";
+    owner  = "vmware";
+    repo   = "open-vm-tools";
+    rev    = "stable-${version}";
+    sha256 = "13ifpi53rc2463ka8xw9zx407d1fz119x8sb9k48g5mwxm6c85fm";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
 
      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
      sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+
+     # Make reboot work, shutdown is not in /sbin on NixOS
+     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
   configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
@@ -52,11 +55,11 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/vmware/open-vm-tools;
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
-      A set of services and modules that enable several features in VMware products for 
-      better management of, and seamless user interactions with, guests. 
+      A set of services and modules that enable several features in VMware products for
+      better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms =  [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ joamaki ];
   };
 }

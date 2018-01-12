@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1wg7pslcx7z4fw595a3nbnygxy2bwfj0h377i48mxhddvl3wzzbq";
   };
 
-  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gsettings_desktop_schemas libsoup
     webkitgtk24x-gtk2 gtk2 gnutls json_c m4 ];
 
   # There are Xlib and gtk warnings therefore I have set Wno-error

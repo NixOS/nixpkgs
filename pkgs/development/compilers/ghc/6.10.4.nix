@@ -1,12 +1,15 @@
 {stdenv, fetchurl, libedit, ghc, perl, gmp, ncurses}:
 
+# TODO(@Ericson2314): Cross compilation support
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 stdenv.mkDerivation rec {
   version = "6.10.4";
 
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/dist/${version}/${name}-src.tar.bz2";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.bz2";
     sha256 = "d66a8e52572f4ff819fe5c4e34c6dd1e84a7763e25c3fadcc222453c0bd8534d";
   };
 
@@ -21,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
+
+  passthru = { targetPrefix = ""; };
 
   meta = {
     homepage = http://haskell.org/ghc;

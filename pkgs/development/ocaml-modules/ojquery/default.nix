@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, js_of_ocaml-camlp4, camlp4, lwt3, ocaml_react }:
+{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, js_of_ocaml-camlp4, camlp4, lwt3, react }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib ocamlbuild js_of_ocaml-camlp4 camlp4 ];
-  propagatedBuildInputs = [ js_of_ocaml lwt3 ocaml_react ];
+  propagatedBuildInputs = [ js_of_ocaml lwt3 react ];
 
   createFindlibDestdir = true;
 

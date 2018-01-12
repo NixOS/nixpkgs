@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  buildInputs = [ pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ expat ];
 
   configureFlags = [
     "--sysconfdir=/etc"

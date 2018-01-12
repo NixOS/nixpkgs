@@ -13,10 +13,10 @@
 buildPythonPackage rec {
   pname = "gensim";
   name = "${pname}-${version}";
-  version = "2.3.0";
+  version = "3.2.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d0dccc7d2c576e270037949874800b7cfbc86ef081ff981483f612cd18e223f";
+    sha256 = "db00b68c6567ba0598d400b917c889e8801adf249170ce0a80ec38187d1b0797";
   };
 
   propagatedBuildInputs = [ smart_open numpy six scipy
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Topic-modelling library";
     homepage = https://radimrehurek.com/gensim/;
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ jpbernardy ];
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

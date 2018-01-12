@@ -2,22 +2,21 @@
 , fetchPypi
 , buildPythonPackage
 , numpy
-, cython
-, h5py
-, scipy }:
+, pytest }:
 
 buildPythonPackage rec {
   
   pname = "astropy";
-  version = "2.0.1";
+  version = "2.0.3";
 
   name = "${pname}-${version}";
   doCheck = false; #Some tests are failing. More importantly setup.py hangs on completion. Needs fixing with a proper shellhook.
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25e0881a392a2e03b4a705cf9592f01894d23f64797323b21387efa8ea9ec03e";
+    sha256 = "fdfc0248f6250798ed6d1327be609cb901db89ae01fc768cfbc9e263bdf56f4f";
   };
-  propagatedBuildInputs = [ numpy cython h5py scipy ];
+
+  propagatedBuildInputs = [ pytest numpy ]; # yes it really has pytest in install_requires
 
 
   meta = {

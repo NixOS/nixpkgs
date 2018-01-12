@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Library with common API for various MATE modules";
     homepage = http://mate-desktop.org;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
 }

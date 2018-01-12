@@ -1,14 +1,15 @@
 { stdenv, fetchurl, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-djvu-0.2.5";
+  name = "zathura-djvu-0.2.7";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/plugins/download/${name}.tar.gz";
-    sha256 = "03cw54d2fipvbrnbqy0xccqkx6s77dyhyymx479aj5ryy4513dq8";
+    sha256 = "1sbfdsyp50qc85xc4458sn4w1rv1qbygdwmcr5kjlfpsmdq98vhd";
   };
 
-  buildInputs = [ pkgconfig djvulibre gettext zathura_core gtk girara ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ djvulibre gettext zathura_core gtk girara ];
 
   patches = [ ./gtkflags.patch ];
 

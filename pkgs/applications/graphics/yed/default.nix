@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "yEd-${version}";
-  version = "3.17";
+  version = "3.17.2";
 
   src = requireFile {
     name = "${name}.zip";
     url = "https://www.yworks.com/en/products/yfiles/yed/";
-    sha256 = "1wk58cql90y3i5l7jlxqfjjgf26i0zrv5cn0p9npgagaw6aiw2za";
+    sha256 = "0wpfvd3jqxgjk3xqkamvlg7rk0w0pmrv7srjfqns447ccc3i7qg2";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

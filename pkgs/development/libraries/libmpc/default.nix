@@ -18,10 +18,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${gmp.dev}/include";
 
-  doCheck = hostPlatform == buildPlatform;
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
+  doCheck = true; # not cross;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";

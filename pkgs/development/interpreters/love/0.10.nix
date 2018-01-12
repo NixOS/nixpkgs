@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig SDL2 mesa openal luajit libdevil freetype physfs libmodplug mpg123
+    SDL2 mesa openal luajit libdevil freetype physfs libmodplug mpg123
     libvorbis libogg libtheora autoconf which libtool automake
   ];
 

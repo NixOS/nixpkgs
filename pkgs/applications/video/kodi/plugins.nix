@@ -149,14 +149,14 @@ rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.3.6";
+    version = "1.3.2";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "5b480ccdd4a87f2ca3283a7b8d1bd69a114af0db";
-      sha256 = "1zf5zwghx96bqk7bx53qra27lfbgfdi1dsk4s3hwixr8ii72cqpp";
+      rev = "96171dd32899553ffe8fc775fca66e8df5ff5cf1";
+      sha256 = "18m61v8z9fbh4imvzhh4g9629r9df49g2yk9ycaczirg131dhfbh";
     };
 
     meta = with stdenv.lib; {
@@ -264,7 +264,7 @@ rec {
 
     meta = with stdenv.lib; {
       homepage = https://forum.kodi.tv/showthread.php?tid=187421;
-      descritpion = "A comic book reader";
+      description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
     };
   };

@@ -16,11 +16,6 @@ import ./generic.nix (args // rec {
     BCACHEFS_FS m
   '';
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
-
   # Should the testing kernels ever be built on Hydra?
   extraMeta.hydraPlatforms = [];
 

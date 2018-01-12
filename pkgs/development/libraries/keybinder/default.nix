@@ -14,8 +14,9 @@ in stdenv.mkDerivation rec {
     sha256 = "0kkplz5snycik5xknwq1s8rnmls3qsp32z09mdpmaacydcw7g3cf";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig gnome3.gnome_common gtk_doc gnome3.gtk3
+    autoconf automake libtool gnome3.gnome_common gtk_doc gnome3.gtk3
     python pygobject3 pygtk lua libX11 libXext libXrender gobjectIntrospection gtk2
   ];
 

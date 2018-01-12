@@ -1,0 +1,17 @@
+--- pypy-pypy-84a2f3e6a7f8.org/lib_pypy/_tkinter/tklib_build.py	2017-10-03 11:49:20.000000000 +0100
++++ pypy-pypy-84a2f3e6a7f8/lib_pypy/_tkinter/tklib_build.py	2017-11-21 13:20:51.398607530 +0000
+@@ -24,11 +24,11 @@
+ else:
+     # On some Linux distributions, the tcl and tk libraries are
+     # stored in /usr/include, so we must check this case also
+-    libdirs = []
++    libdirs = ["@tcl@/lib", "@tk@/lib"]
+     found = False
+     for _ver in ['', '8.6', '8.5']:
+-        incdirs = ['/usr/include/tcl' + _ver]
+-        linklibs = ['tcl' + _ver, 'tk' + _ver]
++        incdirs = ['@tcl_dev@/include', '@tk_dev@/include']
++        linklibs = ['@tcl_libprefix@', '@tk_libprefix@']
+         if os.path.isdir(incdirs[0]):
+             found = True
+             break

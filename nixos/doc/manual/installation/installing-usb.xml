@@ -11,10 +11,24 @@ a USB stick. You can use the <command>dd</command> utility to write the image:
 <command>dd if=<replaceable>path-to-image</replaceable>
 of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying the
 correct drive; you can use the <command>lsblk</command> command to get a list of
-block devices. If you're on macOS you can run <command>diskutil list</command>
-to see the list of devices; the device you'll use for the USB must be ejected
-before writing the image.</para>
+block devices.</para>
 
+<para>On macOS:
+<programlisting>
+$ diskutil list
+[..]
+/dev/diskN (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+[..]
+$ diskutil unmountDisk diskN
+Unmount of all volumes on diskN was successful
+$ sudo dd bs=1m if=nix.iso of=/dev/rdiskN
+</programlisting>
+Using the 'raw' <command>rdiskN</command> device instead of <command>diskN</command>
+completes in minutes instead of hours. After <command>dd</command> completes, a GUI
+dialog "The disk you inserted was not readable by this computer" will pop up, which
+can be ignored.</para>
+         
 <para>The <command>dd</command> utility will write the image verbatim to the drive,
 making it the recommended option for both UEFI and non-UEFI installations. For
 non-UEFI installations, you can alternatively use
@@ -31,7 +45,7 @@ ISO, copy its contents verbatim to your drive, then either:
     <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
     and change the <literal>root=</literal> field in the <literal>options</literal>
     line to point to your drive (see the documentation on <literal>root=</literal>
-    in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
+    in <link xlink:href="https://www.kernel.org/doc/Documentation/admin-guide/kernel-parameters.txt">
     the kernel documentation</link> for more details).</para>
   </listitem>
   <listitem>

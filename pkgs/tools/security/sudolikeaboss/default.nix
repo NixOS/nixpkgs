@@ -22,10 +22,6 @@ buildGoPackage rec {
     fixDarwinDylibNames
   ];
 
-  postInstall = ''
-    install_name_tool -delete_rpath $out/lib -add_rpath $bin $bin/bin/sudolikeaboss
-  '';
-
   meta = with stdenv.lib; {
     inherit version;
     inherit (src.meta) homepage;

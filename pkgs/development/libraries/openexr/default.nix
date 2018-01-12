@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
 
 stdenv.mkDerivation rec {
   name = "openexr-${lib.getVersion ilmbase}";
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
-    sha256 = "0ca2j526n4wlamrxb85y2jrgcv0gf21b3a19rr0gh4rjqkv1581n";
+    sha256 = "1kdf2gqznsdinbd5vcmqnif442nyhdf9l7ckc51410qm2gv5m6lg";
   };
+
+  patches = [
+    ./bootstrap.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
@@ -14,12 +18,11 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  buildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
   enableParallelBuilding = true;
-
-  patches = [ ./bootstrap.patch ];
 
   meta = with stdenv.lib; {
     homepage = http://www.openexr.com/;

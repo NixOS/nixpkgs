@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./missing-casts.patch ];
 
-  buildInputs = [ javac jvm antlr pkgconfig gtk2 gconf ecj ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ javac jvm antlr gtk2 gconf ecj ];
 
   configurePhase = ''
     # GCJ tries to compile all of Classpath during the `configure' run when

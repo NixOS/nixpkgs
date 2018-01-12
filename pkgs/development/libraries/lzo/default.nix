@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   meta = with stdenv.lib; {
     description = "Real-time data (de)compression library";

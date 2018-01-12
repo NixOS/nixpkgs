@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
   '' else null;
 
-  patches = [ ./environment.patch ./getline.patch ./clang.patch ];
+  patches = [ ./environment.patch ./getline.patch ./clang.patch ./extramembot.patch ];
 
   setupHook = ./setup-hook.sh;
 

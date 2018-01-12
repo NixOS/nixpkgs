@@ -264,7 +264,7 @@ parasitic systems will be tracked."
          (source-file (asdf:system-source-file asdf-system)))
     (cond
       (source-file
-       (loop :for system-name :being :the :hash-keys :of asdf/find-system:*defined-systems* :do
+       (loop :for system-name :being :the :hash-keys :of asdf/find-system::*registered-systems* :do
           (when (and (parasitic-relationship-p system system-name)
                      (not (blacklisted-parasite-p system-name)))
             (found-new-parasite system-name)

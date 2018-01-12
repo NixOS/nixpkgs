@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
-  version = "9.02.02";
+  version = "9.02.04";
 
   src = fetchFromGitHub {
-    sha256 = "0f7w3b8r2h6ckgzc6wbfbw5yyxia0f3j3acmzi1yzylj6ak05mmd";
+    sha256 = "0dkqdm7nc3l9kgwkkf545hfbxj7ibkxl7n49wz9m1rcq9pvpmrw3";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";
   };
 
-  sourceRoot = "icmake-${version}-src/icmake";
+
+  setSourceRoot = ''
+    sourceRoot=$(echo */icmake)
+  '';
 
   buildInputs = [ gcc ];
 

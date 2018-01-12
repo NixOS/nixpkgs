@@ -1,9 +1,14 @@
-{ stdenv, fetchurl, bison, flex, which, perl }:
+{ sensord ? false,
+  stdenv, fetchurl, bison, flex, which, perl,
+  rrdtool ? null
+}:
+
+assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
   name = "lm-sensors-${version}";
   version = "3.4.0"; # don't forget to tweak fedoraproject mirror URL hash
-  
+
   src = fetchurl {
     urls = [
       "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2"
@@ -12,10 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "07q6811l4pp0f7pxr8bk3s97ippb84mx5qdg7v92s9hs10b90mz0";
   };
 
-  buildInputs = [ bison flex which perl ];
+  buildInputs = [ bison flex which perl ]
+   ++ stdenv.lib.optional sensord rrdtool;
 
   preBuild = ''
-    makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc)
+    makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc
+    ${stdenv.lib.optionalString sensord "PROG_EXTRA=sensord"})
   '';
 
   meta = {

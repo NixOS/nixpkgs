@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nix.nixpkgs.sdk";
+  name = "MacOSX.sdk";
   buildInputs = [ xcbuild ];
   buildCommand = ''
     mkdir -p $out/

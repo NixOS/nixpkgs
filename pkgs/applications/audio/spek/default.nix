@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0y4hlhswpqkqpsglrhg5xbfy1a6f9fvasgdf336vhwcjqsc3k2xv";
   };
 
-  buildInputs = [ autoconf automake intltool pkgconfig ffmpeg wxGTK ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake intltool ffmpeg wxGTK ];
 
   preConfigure = ''
     ./autogen.sh

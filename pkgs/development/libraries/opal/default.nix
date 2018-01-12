@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "f208985003461b2743575eccac13ad890b3e5baac35b68ddef17162460aff864";
   };
 
-  buildInputs = [ pkgconfig ptlib srtp libtheora speex
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ptlib srtp libtheora speex
                   ffmpeg x264 cyrus_sasl openldap openssl expat unixODBC ];
   propagatedBuildInputs = [ speex ]; 
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, protobuf3_2, automake
+{ stdenv, lib, fetchFromGitHub, pkgconfig, protobuf, automake
 , autoreconfHook, zlib
 , enableGrpc ? false
 }:
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    protobuf3_2 zlib
+    protobuf zlib
   ];
 
   meta = with lib; {
     description = "Distributed tracing system built on top of the OpenTracing standard";
-    homepage = "http://lightstep.com/";
+    homepage = "https://lightstep.com/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -16,6 +16,8 @@
 , libffi
 , CF, configd, coreutils
 , python-setup-hook
+# Some proprietary libs assume UCS2 unicode, especially on darwin :(
+, ucsEncoding ? 4
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -29,7 +31,7 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "13";
+  minorVersion = "14";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -38,7 +40,7 @@ let
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0cgpk3zk0fgpji59pb4zy9nzljr70qzgv1vpz5hq5xw2d2c47m9m";
+    sha256 = "0rka541ys16jwzcnnvjp2v12m4cwgd2jp6wj4kj511p715pb5zvi";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -66,8 +68,6 @@ let
       # (since it will do a futile invocation of gcc (!) to find
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
-
-      ./glibc-2.25-enosys.patch
 
     ] ++ optionals hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
@@ -109,9 +109,10 @@ let
   configureFlags = [
     "--enable-shared"
     "--with-threads"
-    "--enable-unicode=ucs4"
-  ] ++ optionals hostPlatform.isCygwin [
+    "--enable-unicode=ucs${toString ucsEncoding}"
+  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
     "--with-system-ffi"
+  ] ++ optionals hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
@@ -125,10 +126,11 @@ let
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optionals hostPlatform.isCygwin [ expat libffi ]
+    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
+    ++ optional hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -163,7 +165,8 @@ in stdenv.mkDerivation {
         # functionality to 2.x from 3.x
         for item in $out/lib/python${majorVersion}/test/*; do
           if [[ "$item" != */test_support.py*
-             && "$item" != */regrtest.py* ]]; then
+             && "$item" != */test/support
+             && "$item" != */test/regrtest.py* ]]; then
             rm -rf "$item"
           else
             echo $item
@@ -198,9 +201,9 @@ in stdenv.mkDerivation {
     passthru = let
       pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
     in rec {
-      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
+      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
       executable = libPrefix;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
+      buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
       withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
       pkgs = pythonPackages;
       isPy2 = true;

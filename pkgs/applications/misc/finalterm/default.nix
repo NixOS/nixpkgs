@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, pkgconfig, cmake, libxml2, vala_0_23, intltool, libmx, gnome3, gtk3, gtk_doc
+, pkgconfig, cmake, libxml2, vala_0_26, intltool, libmx, gnome3, gtk3, gtk_doc
 , keybinder3, clutter_gtk, libnotify
 , libxkbcommon, xorg, udev
 , bashInteractive
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig cmake intltool makeWrapper ];
   buildInputs = [
-    vala_0_23 gtk3 gnome3.gnome_common gnome3.libgee
+    vala_0_26 gtk3 gnome3.gnome_common gnome3.libgee
     gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify
     xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence
     libxkbcommon

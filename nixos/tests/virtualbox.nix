@@ -107,11 +107,8 @@ let
 
     buildInputs = [ pkgs.utillinux pkgs.perl ];
   } ''
-    ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-    ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
-    . /sys/class/block/vda1/uevent
-    mknod /dev/vda1 b $MAJOR $MINOR
-
+    ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+    ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
     ${pkgs.e2fsprogs}/sbin/mkfs.ext4 /dev/vda1
     ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
     mkdir /mnt
@@ -461,11 +458,11 @@ in mapAttrs mkVBoxTest {
     my $test1IP = waitForIP_test1 1;
     my $test2IP = waitForIP_test2 1;
 
-    $machine->succeed("echo '$test2IP' | nc '$test1IP' 1234");
-    $machine->succeed("echo '$test1IP' | nc '$test2IP' 1234");
+    $machine->succeed("echo '$test2IP' | nc -N '$test1IP' 1234");
+    $machine->succeed("echo '$test1IP' | nc -N '$test2IP' 1234");
 
-    $machine->waitUntilSucceeds("nc '$test1IP' 5678 >&2");
-    $machine->waitUntilSucceeds("nc '$test2IP' 5678 >&2");
+    $machine->waitUntilSucceeds("nc -N '$test1IP' 5678 < /dev/null >&2");
+    $machine->waitUntilSucceeds("nc -N '$test2IP' 5678 < /dev/null >&2");
 
     shutdownVM_test1;
     shutdownVM_test2;

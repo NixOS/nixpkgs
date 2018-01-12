@@ -9,10 +9,15 @@ stdenv.mkDerivation rec {
     url = "http://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
     sha256 = "071g7229shr9srwzspx29fcx3ccj3rwakkydpc4vdf1q3lldd2ld";
   };
-  postPatch = "patchShebangs libs/libvpx/build/make/rtcd.pl";
+  postPatch = ''
+    patchShebangs     libs/libvpx/build/make/rtcd.pl
+    substituteInPlace libs/libvpx/build/make/configure.sh \
+      --replace AS=\''${AS} AS=yasm
+  '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    openssl ncurses curl pkgconfig gnutls readline perl libjpeg
+    openssl ncurses curl gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
   ];

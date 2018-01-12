@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     maxx=$out/opt/MaXX
-    mkdir -p "$maxx" $out/share
+    mkdir -p "$maxx" $out/share $maxx/sbin
 
     mv -- ./* "$maxx"
     ln -s $maxx/share/icons $out/share
@@ -60,17 +60,18 @@ in stdenv.mkDerivation {
     while IFS= read -r -d ''$'\0' i; do
       if isELF "$i"; then
         bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
-        patchelf --set-rpath "${stdenv.lib.makeLibraryPath deps}" "$i"
+        patchelf --set-rpath "$maxx/lib64:$maxx/OpenMotif-2.1.32/lib64:$maxx/OpenMotif-2.3.1/lib64:${stdenv.lib.makeLibraryPath deps}" "$i"
         if [ "$bin" -eq 0 ]; then
           wrapProgram "$i" \
             --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-            --set NIX_REDIRECTS /opt/MaXX=$maxx
+            --set NIX_REDIRECTS /opt/MaXX=$maxx \
+            --prefix PATH : $maxx/sbin
         fi
       fi
     done < <(find "$maxx" -type f -print0)
 
-    cp ${gcc-unwrapped}/bin/cpp ${gcc-unwrapped}/libexec/gcc/*/*/cc1 $maxx/bin
-    for i in $maxx/bin/cpp $maxx/bin/cc1
+    cp ${gcc-unwrapped}/bin/cpp ${gcc-unwrapped}/libexec/gcc/*/*/cc1 $maxx/sbin
+    for i in $maxx/sbin/cpp $maxx/sbin/cc1
     do
       wrapProgram "$i" \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
@@ -88,7 +89,6 @@ in stdenv.mkDerivation {
     };
     maintainers = [ maintainers.gnidorah ];
     platforms = ["x86_64-linux"];
-    hydraPlatforms = [];
     longDescription = ''
       A clone of IRIX Interactive Desktop made in agreement with SGI. 
       Provides simple and fast retro desktop environment.

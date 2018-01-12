@@ -1,23 +1,33 @@
-{ stdenv, fetchurl, glib, pkgconfig, gobjectIntrospection, dbus, libintlOrEmpty }:
+{ stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext, gobjectIntrospection, dbus, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = "json-glib-${minVer}.0";
-  minVer = "1.2";
+  name = "json-glib-${minVer}.2";
+  minVer = "1.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/json-glib/${minVer}/${name}.tar.xz";
-    sha256 = "1lx7p1c7cl21byvfgw92n8dhm09vi6qxrs0zkx9dg3y096zdzmlr";
+    sha256 = "2d7709a44749c7318599a6829322e081915bdc73f5be5045882ed120bb686dc8";
   };
 
-  configureflags= "--with-introspection";
-
-  propagatedBuildInputs = [ glib gobjectIntrospection ];
-  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ glib ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
   buildInputs = libintlOrEmpty;
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
+  patches = [
+    # https://gitlab.gnome.org/GNOME/json-glib/issues/27
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/json-glib/merge_requests/2.diff";
+      sha256 = "0pf006jxj1ki7a0w4ykxm6b24m0wafrhpdcmixsw9x83m227156c";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
+
+  doCheck = true;
+
+  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     homepage = http://live.gnome.org/JsonGlib;

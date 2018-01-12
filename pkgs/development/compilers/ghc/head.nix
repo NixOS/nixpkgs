@@ -1,21 +1,45 @@
-{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
+{ stdenv, targetPackages
+, buildPlatform, hostPlatform, targetPlatform
 , selfPkgs, cross ? null
 
-  # If enabled GHC will be build with the GPL-free but slower integer-simple
+# build-tools
+, bootPkgs, alex, happy
+, autoconf, automake, coreutils, fetchgit, perl, python3
+
+, libiconv ? null, ncurses
+
+, # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-, enableIntegerSimple ? false, gmp
-, version ? "8.3.20170808"
+  enableIntegerSimple ? false, gmp ? null
+
+, version ? "8.5.20171209"
 }:
+
+assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
 
-  commonBuildInputs = [ ghc perl autoconf automake (stdenv.lib.getBin happy) (stdenv.lib.getBin alex) python3 ];
+  rev = "4335c07ca7e64624819b22644d7591853826bd75";
 
-  rev = "14457cf6a50f708eecece8f286f08687791d51f7";
+  # TODO(@Ericson2314) Make unconditional
+  targetPrefix = stdenv.lib.optionalString
+    (targetPlatform != hostPlatform)
+    "${targetPlatform.config}-";
+in
+stdenv.mkDerivation (rec {
+  inherit version rev;
+  name = "${targetPrefix}ghc-${version}";
 
-  commonPreConfigure =  ''
+  src = fetchgit {
+    url = "git://git.haskell.org/ghc.git";
+    inherit rev;
+    sha256 = "19csad94sk0bw2nj97ppmnwh4c193jg0jmg5w2sx9rqm9ih4yg85";
+  };
+
+  postPatch = "patchShebangs .";
+
+  preConfigure = ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
     ./boot
@@ -26,22 +50,11 @@ let
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
+  '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
   '';
-in stdenv.mkDerivation (rec {
-  inherit version rev;
-  name = "ghc-${version}";
 
-  src = fetchgit {
-    url = "git://git.haskell.org/ghc.git";
-    inherit rev;
-    sha256 = "08vj9ca7rq7rv8pjfl14fg2lg9d6zisrwlq6bi5vzr006816dy8y";
-  };
-
-  postPatch = "patchShebangs .";
-
-  preConfigure = commonPreConfigure;
-
-  buildInputs = commonBuildInputs;
+  buildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
   enableParallelBuilding = true;
 
@@ -57,28 +70,28 @@ in stdenv.mkDerivation (rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
 
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/{ghc,haddock}
+    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
 
     # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
   '';
 
   outputs = [ "out" "doc" ];
 
   passthru = {
-    inherit bootPkgs;
+    inherit bootPkgs targetPrefix;
   } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
     crossCompiler = selfPkgs.ghc.override {
       cross = targetPlatform;
@@ -94,33 +107,23 @@ in stdenv.mkDerivation (rec {
   };
 
 } // stdenv.lib.optionalAttrs (cross != null) {
-  name = "${cross.config}-ghc-${version}";
-
-  preConfigure = commonPreConfigure + ''
-    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
-  '';
-
   configureFlags = [
     "CC=${stdenv.cc}/bin/${cross.config}-cc"
-    "LD=${stdenv.cc}/bin/${cross.config}-ld"
-    "AR=${stdenv.cc}/bin/${cross.config}-ar"
-    "NM=${stdenv.cc}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.cc}/bin/${cross.config}-ranlib"
+    "LD=${stdenv.cc.bintools}/bin/${cross.config}-ld"
+    "AR=${stdenv.cc.bintools}/bin/${cross.config}-ar"
+    "NM=${stdenv.cc.bintools}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.cc.bintools}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
-
-  buildInputs = commonBuildInputs;
+    stdenv.lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
   configurePlatforms = [];
 
   passthru = {
     inherit bootPkgs cross;
-
     cc = "${stdenv.cc}/bin/${cross.config}-cc";
-
     ld = "${stdenv.cc}/bin/${cross.config}-ld";
   };
 })

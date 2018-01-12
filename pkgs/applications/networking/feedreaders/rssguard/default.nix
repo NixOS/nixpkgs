@@ -1,19 +1,26 @@
-{ stdenv, fetchgit, qmake, qtwebengine, qttools, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "rssguard-${version}";
-  version = "3.4.0";
+  name = "${pname}-${version}";
+  pname = "rssguard";
+  version = "3.5.5";
 
-  src = fetchgit {
-    url = https://github.com/martinrotter/rssguard;
-    rev = "refs/tags/${version}";
-    sha256 = "1cdpfjj2lm1q2qh0w0mh505blcmi4n78458d3z3c1zn9ls9b9zsp";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "martinrotter";
+    repo = pname;
+    rev = version;
+    sha256 = "0swjh664y1yqr1rn3ym2kicyx7r97ypr4qf7qrjl4a5q1spzsv48";
   };
 
   buildInputs =  [ qtwebengine qttools ];
   nativeBuildInputs = [ qmake wrapGAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
+
+  # FIXME: This shouldn't be needed after 3.5.5.
+  # See: https://github.com/martinrotter/rssguard/issues/175
+  preConfigure = ''
+    lrelease rssguard.pro
+  '';
 
   meta = with stdenv.lib; {
     description = "Simple RSS/Atom feed reader with online synchronization";

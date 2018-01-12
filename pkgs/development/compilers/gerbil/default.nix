@@ -1,24 +1,30 @@
 { stdenv, fetchurl, fetchgit, gambit,
   coreutils, rsync, bash,
-  openssl, zlib, sqlite, libxml2, libyaml, libmysql, lmdb, leveldb }:
+  openssl, zlib, sqlite, libxml2, libyaml, mysql, lmdb, leveldb }:
+
+# TODO: distinct packages for gerbil-release and gerbil-devel
 
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.12-DEV";
+  version = "0.12-DEV-1030-gbbed3bc";
   src = fetchgit {
     url = "https://github.com/vyzo/gerbil.git";
-    rev = "3657b6e940ea248e0b312f276590e38ff68997e7";
-    sha256 = "11ys7082ghkm4yikz4qxmv3jpxcr42jfi0jhjw1mpzbqdg6004w2";
+    rev = "bbed3bc4cf7bcaa64eaabdf097192bfcc2bfc928";
+    sha256 = "1dc0j143j860yq72lfjp71fin7hpsy1426azz7rl1szxvjfb7h4r";
   };
 
   buildInputs = [
-    gambit openssl
+    gambit
     coreutils rsync bash
-    zlib openssl zlib sqlite libxml2 libyaml libmysql lmdb leveldb
+    openssl zlib sqlite libxml2 libyaml mysql.connector-c lmdb leveldb
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ];
+
   postPatch = ''
+    echo '(define (gerbil-version-string) "v${version}")' > src/gerbil/runtime/gx-version.scm
+
     patchShebangs .
 
     find . -type f -executable -print0 | while IFS= read -r -d ''$'\0' f; do
@@ -31,6 +37,9 @@ stdenv.mkDerivation rec {
 
     # Enable all optional libraries
     substituteInPlace "src/std/build-features.ss" --replace '#f' '#t'
+
+    # gxprof testing uses $HOME/.cache/gerbil/gxc
+    export HOME=$$PWD
 
     # Build, replacing make by build.sh
     ( cd src && sh build.sh )
@@ -48,9 +57,9 @@ stdenv.mkDerivation rec {
 export GERBIL_HOME=$out
 case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
 if [[ \$# = 0 ]] ; then
-  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
 else
-  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
 fi
 EOF
     runHook postInstall

@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0gpp0vwiwr7kgbhh26jspv3255662mnvnav6g8i2h0qxar8hf8w2";
   };
 
-  buildInputs = [ pkgconfig dbus libnotify udisks2 gdk_pixbuf ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus libnotify udisks2 gdk_pixbuf ];
 
   NIX_CFLAGS_COMPILE = [ "-DENABLE_NOTIFICATIONS" ];
 

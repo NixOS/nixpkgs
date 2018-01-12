@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     "--disable-static"
   ];
 
-  buildInputs = [ xalanc xercesc openssl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ xalanc xercesc openssl ];
 
   meta = {
     homepage = http://santuario.apache.org/;

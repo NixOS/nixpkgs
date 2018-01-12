@@ -2,12 +2,15 @@
 , lib
 , fetchPypi
 , mock
-, pytest_27
+, pytest
+, pytestrunner
 , sh
 , coverage
 , docopt
 , requests
+, urllib3
 , git
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -21,11 +24,15 @@ buildPythonPackage rec {
     sha256 = "510682001517bcca1def9f6252df6ce730fcb9831c62d9fff7c7d55b6fdabdf3";
   };
 
-  buildInputs = [
+  checkInputs = [
     mock
     sh
-    pytest_27
+    pytest
     git
+  ];
+
+  buildInputs = [
+    pytestrunner
   ];
 
   # FIXME: tests requires .git directory to be present
@@ -39,7 +46,7 @@ buildPythonPackage rec {
     coverage
     docopt
     requests
-  ];
+  ] ++ lib.optional (!isPy3k) urllib3;
 
   meta = {
     description = "Show coverage stats online via coveralls.io";

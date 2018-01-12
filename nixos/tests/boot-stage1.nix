@@ -21,11 +21,16 @@ import ./make-test.nix ({ pkgs, ... }: {
       # the boot process kills any kthread by accident, like what happened in
       # issue #15226.
       kcanary = compileKernelModule "kcanary" ''
+        #include <linux/version.h>
         #include <linux/init.h>
         #include <linux/module.h>
         #include <linux/kernel.h>
         #include <linux/kthread.h>
         #include <linux/sched.h>
+        #include <linux/signal.h>
+        #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
+        #include <linux/sched/signal.h>
+        #endif
 
         struct task_struct *canaryTask;
 

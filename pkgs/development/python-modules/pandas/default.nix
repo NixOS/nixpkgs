@@ -8,6 +8,7 @@
 , cython
 , dateutil
 , scipy
+, moto
 , numexpr
 , pytz
 , xlrd
@@ -27,12 +28,12 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.20.3";
+  version = "0.22.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a777e07633d83d546c55706420179551c8e01075b53c497dcf8ae4036766bc66";
+    sha256 = "44a94091dd71f05922eec661638ec1a35f26d573c119aa2fad964f10a2880e6c";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -64,6 +65,7 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+  checkInputs = [ moto ];
   checkPhase = ''
     runHook preCheck
   ''
@@ -76,8 +78,13 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      ${if isDarwin then "-k 'not test_locale and not test_clipboard'" else ""}
+      -k "not test_fallback_plural and \
+          not test_ambiguous_flags and \
+          not test_ambiguous_compat \
+          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
     runHook postCheck
   '';
 

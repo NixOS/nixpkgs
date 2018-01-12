@@ -4,19 +4,20 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "skopeo-${version}";
-  version = "0.1.22";
+  version = "0.1.27";
   rev = "v${version}";
 
   goPackagePath = "github.com/projectatomic/skopeo";
   excludedPackages = "integration";
 
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs pkgconfig ostree ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree ];
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "0aivs37bcvx3g22a9r3q1vj2ahw323g1vaq9jzbmifm9k0pb07jy";
+    sha256 = "1xwwzxjczz8qdk1rf0h78qd3vk9mxxb8yi6f8kfqvcdcsvkajd5g";
   };
 
   patches = [

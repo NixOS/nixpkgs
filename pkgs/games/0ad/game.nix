@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
-    homepage = https://wildfiregames.com/0ad/;
+    homepage = "https://play0ad.com/";
     license = with licenses; [
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib

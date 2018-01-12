@@ -1,7 +1,10 @@
 # This expression takes a file like `hackage-packages.nix` and constructs
 # a full package set out of that.
 
-{ # package-set used for non-haskell dependencies (all of nixpkgs)
+{ # package-set used for build tools (all of nixpkgs)
+  buildPackages
+
+, # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
 , # stdenv to use for building haskell packages
@@ -28,23 +31,24 @@
 self:
 
 let
+  inherit (stdenv) buildPlatform hostPlatform;
 
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
+  buildHaskellPackages = if hostPlatform != buildPlatform
+                         then self.ghc.bootPkgs
+                         else self;
+
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
-    inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
-    nodejs = pkgs.nodejs-slim;
-    jailbreak-cabal = if (self.ghc.cross or null) != null
-      then self.ghc.bootPkgs.jailbreak-cabal
-      else self.jailbreak-cabal;
+    nodejs = buildPackages.nodejs-slim;
+    inherit (buildHaskellPackages) jailbreak-cabal;
     inherit (self) ghc;
-    hscolour = overrideCabal self.hscolour (drv: {
+    hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
-      enableSeparateEtcOutput = false; # The flag to support this is missing in old versions of cabal.
       postFixup = "rm -rf $out/lib $out/share $out/nix-support";
     });
     cpphs = overrideCabal (self.cpphs.overrideScope (self: super: {
@@ -96,22 +100,22 @@ let
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
-  withPackages = packages: callPackage ./with-packages-wrapper.nix {
+  withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
-    haskellPackages = self;
+    inherit ghc;
     inherit packages;
   };
 
   haskellSrc2nix = { name, src, sha256 ? null }:
     let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
-    in pkgs.stdenv.mkDerivation {
+    in pkgs.buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      buildInputs = [ pkgs.haskellPackages.cabal2nix ];
+      nativeBuildInputs = [ pkgs.buildPackages.haskellPackages.cabal2nix ];
       preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = pkgs.lib.optionalString buildPlatform.isLinux "${buildPackages.glibcLocales}/lib/locale/locale-archive";
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
@@ -119,10 +123,16 @@ let
       '';
   };
 
-  hackage2nix = name: version: self.haskellSrc2nix {
+  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+    mkdir -p $out
+    mv */${name}/${version}/${name}.{json,cabal} $out
+  '';
+
+  hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
     name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
-    src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
+    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
+    src    = "${component}/${name}.cabal";
   };
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
@@ -132,7 +142,18 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+    callCabal2nix = name: src: args:
+      overrideCabal (self.callPackage (haskellSrc2nix {
+        inherit name;
+        src = pkgs.lib.cleanSourceWith
+          { src = if pkgs.lib.canCleanSource src
+                    then src
+                    else pkgs.safeDiscardStringContext src;
+            filter = path: type:
+              pkgs.lib.hasSuffix "${name}.cabal" path ||
+              pkgs.lib.hasSuffix "package.yaml" path;
+          };
+      }) args) (_: { inherit src; });
 
     # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
     # Given a set whose values are either paths or version strings, produces

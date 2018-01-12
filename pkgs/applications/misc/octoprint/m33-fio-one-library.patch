@@ -1,18 +1,18 @@
-From 0defcf6ec155899c414f66524b7df629f59327f0 Mon Sep 17 00:00:00 2001
+From 314bcebfcd1759981ce12255be29d8ae68cd400b Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Wed, 23 Nov 2016 00:40:48 +0300
 Subject: [PATCH] Build and use one version of preprocessor library
 
 ---
- octoprint_m33fio/__init__.py   | 67 ++----------------------------------------
- shared library source/Makefile | 62 +++-----------------------------------
- 2 files changed, 6 insertions(+), 123 deletions(-)
+ octoprint_m33fio/__init__.py   | 73 ++----------------------------------------
+ shared library source/Makefile | 62 +++--------------------------------
+ 2 files changed, 6 insertions(+), 129 deletions(-)
 
 diff --git a/octoprint_m33fio/__init__.py b/octoprint_m33fio/__init__.py
-index 4b43c59..d1259e4 100755
+index 054870a..4d5ecc1 100755
 --- a/octoprint_m33fio/__init__.py
 +++ b/octoprint_m33fio/__init__.py
-@@ -1062,71 +1062,8 @@ class M33FioPlugin(
+@@ -1189,78 +1189,9 @@ class M33FioPlugin(
  		# Check if using shared library or checking if it is usable
  		if self._settings.get_boolean(["UseSharedLibrary"]) or isUsable :
  	
@@ -54,7 +54,9 @@ index 4b43c59..d1259e4 100755
 -
 -			# Otherwise check if running on Windows and using an i386 or x86-64 device
 -			elif platform.uname()[0].startswith("Windows") and (platform.uname()[4].endswith("86") or platform.uname()[4].endswith("64")) :
--
++			# Set shared library
++			self.sharedLibrary = ctypes.cdll.LoadLibrary(self._basefolder.replace('\\', '/') + "/static/libraries/libpreprocessor.so")
+ 
 -				# Check if Python is running as 32-bit
 -				if platform.architecture()[0].startswith("32") :
 -	
@@ -81,11 +83,16 @@ index 4b43c59..d1259e4 100755
 -	
 -					# Set shared library
 -					self.sharedLibrary = ctypes.cdll.LoadLibrary(self._basefolder.replace("\\", "/") + "/static/libraries/preprocessor_x86-64.dylib")
-+			# Set shared library
-+			self.sharedLibrary = ctypes.cdll.LoadLibrary(self._basefolder.replace('\\', '/') + "/static/libraries/libpreprocessor.so")
- 
+-			
+-			# Otherwise check if running FreeBSD
+-			elif platform.uname()[0].startswith("FreeBSD") :
+-			
+-				# TODO: Compile FreeBSD shared library pre-processors
+-				pass
+-			
  			# Check if shared library was set
  			if self.sharedLibrary :
+ 
 diff --git a/shared library source/Makefile b/shared library source/Makefile
 index 792b4f4..4c74f5c 100755
 --- a/shared library source/Makefile	
@@ -164,5 +171,5 @@ index 792b4f4..4c74f5c 100755
  clean:
  	rm -f ../octoprint_m33fio/static/libraries/$(PROG)
 -- 
-2.11.0
+2.14.1
 

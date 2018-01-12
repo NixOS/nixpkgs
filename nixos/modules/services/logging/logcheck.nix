@@ -8,7 +8,7 @@ let
   defaultRules = pkgs.runCommand "logcheck-default-rules" {} ''
                    cp -prd ${pkgs.logcheck}/etc/logcheck $out
                    chmod u+w $out
-                   rm $out/logcheck.*
+                   rm -r $out/logcheck.*
                  '';
 
   rulesDir = pkgs.symlinkJoin

@@ -1,25 +1,29 @@
-{ stdenv, pythonPackages }:
+{ lib, buildPythonApplication, fetchPypi
+, requests, fasteners, pyyaml, pyjwt, colorama, patch
+, bottle, pluginbase, six, distro, pylint, node-semver
+, future, pygments, mccabe
+}:
 
-pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
-  version = "0.21.2";
+buildPythonApplication rec {
+  version = "0.28.1";
   pname = "conan";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0x9s5h81d885xdrjw5x99q18lhmj11kalrs6xnjy2phrr8qzil8c";
+    sha256 = "0zf564iqh0099yd779f9fgk21qyp87d7cmgfj34hmncf8y3qh32a";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     requests fasteners pyyaml pyjwt colorama patch
     bottle pluginbase six distro pylint node-semver
+    future pygments mccabe
   ];
 
   # enable tests once all of these pythonPackages available:
-  # [ nose nose_parameterized mock WebTest codecov ]
+  # [ nose nose_parameterized mock webtest codecov ]
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://conan.io;
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;

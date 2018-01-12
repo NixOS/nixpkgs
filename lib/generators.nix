@@ -7,10 +7,11 @@
  * Tests can be found in ./tests.nix
  * Documentation in the manual, #sec-generators
  */
-with import ./trivial.nix;
+{ lib }:
+with (lib).trivial;
 let
-  libStr = import ./strings.nix;
-  libAttr = import ./attrsets.nix;
+  libStr = lib.strings;
+  libAttr = lib.attrsets;
 
   flipMapAttrs = flip libAttr.mapAttrs;
 in
@@ -21,11 +22,15 @@ rec {
    * character sep. If sep appears in k, it is escaped.
    * Helper for synaxes with different separators.
    *
-   * mkKeyValueDefault ":" "f:oo" "bar"
+   * mkValueString specifies how values should be formatted.
+   *
+   * mkKeyValueDefault {} ":" "f:oo" "bar"
    * > "f\:oo:bar"
    */
-  mkKeyValueDefault = sep: k: v:
-    "${libStr.escape [sep] k}${sep}${toString v}";
+  mkKeyValueDefault = {
+    mkValueString ? toString
+  }: sep: k: v:
+    "${libStr.escape [sep] k}${sep}${mkValueString v}";
 
 
   /* Generate a key-value-style config file from an attrset.
@@ -33,7 +38,7 @@ rec {
    * mkKeyValue is the same as in toINI.
    */
   toKeyValue = {
-    mkKeyValue ? mkKeyValueDefault "="
+    mkKeyValue ? mkKeyValueDefault {} "="
   }: attrs:
     let mkLine = k: v: mkKeyValue k v + "\n";
     in libStr.concatStrings (libAttr.mapAttrsToList mkLine attrs);
@@ -63,7 +68,7 @@ rec {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
     # format a setting line from key and value
-    mkKeyValue    ? mkKeyValueDefault "="
+    mkKeyValue    ? mkKeyValueDefault {} "="
   }: attrsOfAttrs:
     let
         # map function to string for each key val
@@ -125,6 +130,6 @@ rec {
               (name: value:
                 "${toPretty args name} = ${toPretty args value};") v)
         + " }"
-    else "toPretty: should never happen (v = ${v})";
+    else abort "toPretty: should never happen (v = ${v})";
 
 }

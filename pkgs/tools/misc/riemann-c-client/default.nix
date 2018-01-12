@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1j3wgf9xigsv6ckmv82gjj4wavi7xjn2zvj1f63fzbaa1rv7pf3s";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig file protobufc ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ file protobufc ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/algernon/riemann-c-client;

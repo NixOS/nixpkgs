@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0j2y6ggpwdlvyqhirp010aix2g6aacj3kvggvpwzxhig30x9vgq8";
   };
 
-  buildInputs = [ gtk2.dev pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2.dev ];
 
   meta = {
     homepage = http://keldon.net/rftg/;

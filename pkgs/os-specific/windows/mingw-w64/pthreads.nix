@@ -1,9 +1,9 @@
-{ stdenvNoCC, callPackage }:
+{ stdenv, callPackage }:
 
 let
   inherit (callPackage ./common.nix {}) name src;
 
-in stdenvNoCC.mkDerivation {
+in stdenv.mkDerivation {
   name = name + "-pthreads";
   inherit src;
 

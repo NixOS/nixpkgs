@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
@@ -81,16 +81,23 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "0d9pvsknjqmxj907y85fxh9xcbb5dafw2bh7rpwhgs9x4wdrbvv0";
+    sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f.patch";
+      sha256 = "1sr0770rvhsgz8d7ysr9qqp4g9gwdhgj8g3rgnz90wl49lgrykhb";
+    })
+  ];
+
+  postPatch = ''
     patchShebangs ./TOOLS/
   '';
 
@@ -108,6 +115,7 @@ in stdenv.mkDerivation rec {
     (enableFeature dvdnavSupport "dvdnav")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
+    (enableFeature stdenv.isLinux "dvbin")
   ];
 
   configurePhase = ''

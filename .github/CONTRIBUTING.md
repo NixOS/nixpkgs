@@ -12,11 +12,11 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
 ## Submitting changes
 
-* Format the commits in the following way:
+* Format the commit messages in the following way:
 
   ```
   (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
-  
+
   (Motivation for change. Additional information.)
   ```
 
@@ -25,18 +25,21 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   * nginx: init at 2.0.1
   * firefox: 54.0.1 -> 55.0
   * nixos/hydra: add bazBaz option
-  
+
     Dual baz behavior is needed to do foo.
   * nixos/nginx: refactor config generation
-    
+
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
-  * Be capitalized
-  * Not start with the package name
-  * Not have a dot at the end
+  * Be capitalized.
+  * Not start with the package name.
+  * Not have a period at the end.
+* `meta.license` must be set and fit the upstream license.
+  * If there is no upstream license, `meta.license` should default to `stdenv.lib.licenses.unfree`.
+* `meta.maintainers` must be set.
 
-See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
+See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
 
 ## Writing good commit messages
 

@@ -1,0 +1,11 @@
+--- old/build/pkgs/giac/spkg-install	2017-07-21 14:10:00.000000000 -0500
++++ new/build/pkgs/giac/spkg-install	2017-10-15 15:55:55.321237645 -0500
+@@ -4,6 +4,8 @@
+ ## Giac
+ ###########################################
+ 
++find . -type f -exec sed -e 's@/bin/cp@cp@g' -i '{}' ';' && echo "Patching input parser" && find . -iname 'input_parser.cc'
++sed -e 's@yylex (&yylval)@yylex (\&yyval, scanner)@gp' -i 'src/src/input_parser.cc'
+ 
+ if [ "$SAGE_LOCAL" = "" ]; then
+    echo "SAGE_LOCAL undefined ... exiting";

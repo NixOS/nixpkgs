@@ -105,7 +105,8 @@ in {
         RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
         RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
         RABBITMQ_NODE_PORT = toString cfg.port;
-        RABBITMQ_SERVER_START_ARGS = "-rabbit error_logger tty -rabbit sasl_error_logger false";
+        RABBITMQ_LOGS = "-";
+        RABBITMQ_SASL_LOGS = "-";
         RABBITMQ_PID_FILE = "${cfg.dataDir}/pid";
         SYS_PREFIX = "";
         RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
@@ -128,7 +129,7 @@ in {
       preStart = ''
         ${optionalString (cfg.cookie != "") ''
             echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chmod 400 ${cfg.dataDir}/.erlang.cookie
+            chmod 600 ${cfg.dataDir}/.erlang.cookie
         ''}
       '';
     };

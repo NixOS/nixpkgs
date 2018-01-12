@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchurl {
     urls = [
       "mirror://kernel/linux/utils/kernel/kexec/${name}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz"
     ];
-    sha256 = "1ihd3kzw8xnc5skq4pb633rr80007knjm4n1dd67a24xkplygcpz";
+    sha256 = "043hasx5b9zk7r7dzx24z5wybg74dpmh0nyns6nrnb3mmm8k642v";
   };
 
   hardeningDisable = [ "format" "pic" "relro" ];

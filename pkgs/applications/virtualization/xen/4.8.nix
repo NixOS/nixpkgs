@@ -27,6 +27,8 @@ let
     inherit sha256;
   });
 
+  xsa = import ./xsa-patches.nix { inherit fetchpatch; };
+
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
     alsaLib
@@ -34,11 +36,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.8.1";
+  version = "4.8.2";
 
   src = fetchurl {
-    url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "158kb1w61jmwxi3fc560s4269hhpxrin9xhm60ljj52njhxias8x";
+    url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
+    sha256 = "1ydgwbn8ab0s16jrbi3wzaa6j0y3zk0j8pay458qcgayk3qc476b";
   };
 
   # Sources needed to build tools and firmwares.
@@ -141,68 +143,28 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
-  patches =
-    [ (xsaPatch {
-        name = "213-4.8";
-        sha256 = "0ia3zr6r3bqy2h48fdy7p0iz423lniy3i0qkdvzgv5a8m80darr2";
-      })
-      (xsaPatch {
-        name = "214";
-        sha256 = "0qapzx63z0yl84phnpnglpkxp6b9sy1y7cilhwjhxyigpfnm2rrk";
-      })
-      (xsaPatch {
-        name = "217";
-        sha256 = "1khs5ilif14dzcm7lmikjzkwsrfzlmir1rgrgzkc411gf18ylzmj";
-      })
-      (xsaPatch {
-        name = "218-4.8/0001-gnttab-fix-unmap-pin-accounting-race";
-        sha256 = "0r363frai239r2wmwxi48kcr50gbk5l64nja0h9lppi3z2y3dkdd";
-      })
-      (xsaPatch {
-        name = "218-4.8/0002-gnttab-Avoid-potential-double-put-of-maptrack-entry";
-        sha256 = "07wm06i7frv7bsaykakx3g9h0hfqv96zcadvwf6wv194dggq1plc";
-      })
-      (xsaPatch {
-        name = "218-4.8/0003-gnttab-correct-maptrack-table-accesses";
-        sha256 = "0ad0irc3p4dmla8sp3frxbh2qciji1dipkslh0xqvy2hyf9p80y9";
-      })
-      (xsaPatch {
-        name = "219-4.8";
-        sha256 = "16q7kiamy86x8qdvls74wmq5j72kgzgdilryig4q1b21mp0ij1jq";
-      })
-      (xsaPatch {
-        name = "220-4.8";
-        sha256 = "0214qyqx7qap5y1pdi9fm0vz4y2fbyg71gaq36fisknj35dv2mh5";
-      })
-      (xsaPatch {
-        name = "221";
-        sha256 = "1mcr1nqgxyjrkywdg7qhlfwgz7vj2if1dhic425vgd41p9cdgl26";
-      })
-      (xsaPatch {
-        name = "222-1";
-        sha256 = "0x02x4kqwfw255638fh2zcxwig1dy6kadlmqim1jgnjgmrvvqas2";
-      })
-      (xsaPatch {
-        name = "222-2-4.8";
-        sha256 = "1xhyp6q3c5l8djh965g1i8201m2wvhms8k886h4sn30hks38giin";
-      })
-      (xsaPatch {
-        name = "224-4.8/0001-gnttab-Fix-handling-of-dev_bus_addr-during-unmap";
-        sha256 = "1k326yan5811qzyvpdfkv801a19nyd09nsqayi8gyh58xx9c21m4";
-      })
-      (xsaPatch {
-        name = "224-4.8/0002-gnttab-never-create-host-mapping-unless-asked-to";
-        sha256 = "06nj1x59bbx9hrj26xmvbw8z805lfqhld9hm0ld0fs6dmcpqzcck";
-      })
-      (xsaPatch {
-        name = "224-4.8/0003-gnttab-correct-logic-to-get-page-references-during-m";
-        sha256 = "0kmag6fdsskgplcvzqp341yfi6pgc14wvjj58bp7ydb9hdk53qx2";
-      })
-      (xsaPatch {
-        name = "224-4.8/0004-gnttab-__gnttab_unmap_common_complete-is-all-or-noth";
-        sha256 = "1ww80pi7jr4gjpymkcw8qxmr5as18b2asdqv35527nqprylsff9f";
-      })
-    ];
+  patches = with xsa; flatten [
+    XSA_231
+    XSA_232
+    XSA_233
+    XSA_234_48
+    XSA_236
+    XSA_237_48
+    XSA_238
+    XSA_239
+    XSA_240_48
+    XSA_241
+    XSA_242
+    XSA_243_48
+    XSA_244
+    XSA_245
+    XSA_246
+    XSA_247_48
+    XSA_248_48
+    XSA_249
+    XSA_250
+    XSA_251_48
+  ];
 
   # Fix build on Glibc 2.24.
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";

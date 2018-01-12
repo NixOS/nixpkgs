@@ -114,6 +114,20 @@ with lib;
       description = "Path to server SSL certificate key.";
     };
 
+    http2 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable HTTP 2.
+        Note that (as of writing) due to nginx's implementation, to disable
+        HTTP 2 you have to disable it on all vhosts that use a given
+        IP address / port.
+        If there is one server block configured to enable http2,then it is
+        enabled for all server blocks on this IP.
+        See https://stackoverflow.com/a/39466948/263061.
+      '';
+    };
+
     root = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -142,10 +156,10 @@ with lib;
     globalRedirect = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = http://newserver.example.org/;
+      example = "newserver.example.org";
       description = ''
         If set, all requests for this host are redirected permanently to
-        the given URL.
+        the given hostname.
       '';
     };
 

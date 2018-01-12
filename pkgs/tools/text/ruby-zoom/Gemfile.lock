@@ -1,16 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    djinni (2.0.1)
-      fagin (~> 0.1, >= 0.1.2)
-      ruby-terminfo (~> 0.1, >= 0.1.1)
-    fagin (0.1.2)
-    hilighter (0.1.7)
+    djinni (2.1.1)
+      fagin (~> 1.0, >= 1.0.0)
+    fagin (1.0.0)
+    hilighter (1.1.0)
     json_config (0.1.2)
-    ruby-terminfo (0.1.1)
-    ruby-zoom (4.1.0)
-      djinni (~> 2.0, >= 2.0.1)
-      hilighter (~> 0.1, >= 0.1.3)
+    ruby-zoom (5.0.1)
+      djinni (~> 2.1, >= 2.1.1)
+      fagin (~> 1.0, >= 1.0.0)
+      hilighter (~> 1.1, >= 1.1.0)
       json_config (~> 0.1, >= 0.1.2)
       scoobydoo (~> 0.1, >= 0.1.4)
     scoobydoo (0.1.4)
@@ -22,4 +21,4 @@ DEPENDENCIES
   ruby-zoom
 
 BUNDLED WITH
-   1.13.1
+   1.14.6

@@ -4,14 +4,13 @@
 # http://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
 # Triple::normalize. Parsing should essentially act as a more conservative
 # version of that last function.
-
-with import ../lists.nix;
-with import ../types.nix;
-with import ../attrsets.nix;
-with (import ./inspect.nix).predicates;
+{ lib }:
+with lib.lists;
+with lib.types;
+with lib.attrsets;
+with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
-  lib = import ../default.nix;
   setTypesAssert = type: pred:
     mapAttrs (name: value:
       assert pred value;

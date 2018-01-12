@@ -1,6 +1,5 @@
+{ lib }:
 let
-
-  lib = import ./default.nix;
 
   spdx = lic: lic // {
     url = "http://spdx.org/licenses/${lic.spdxId}";
@@ -16,7 +15,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   afl21 = spdx {
     spdxId = "AFL-2.1";
-    fullName = "Academic Free License";
+    fullName = "Academic Free License v2.1";
+  };
+
+  afl3 = spdx {
+    spdxId = "AFL-3.0";
+    fullName = "Academic Free License v3.0";
   };
 
   agpl3 = spdx {
@@ -175,6 +179,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "DOC License";
   };
 
+  eapl = {
+    fullName = "EPSON AVASYS PUBLIC LICENSE";
+    url = http://avasys.jp/hp/menu000000700/hpg000000603.htm;
+    free = false;
+  };
+
   efl10 = spdx {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";
@@ -209,6 +219,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   fdl13 = spdx {
     spdxId = "GFDL-1.3";
     fullName = "GNU Free Documentation License v1.3";
+  };
+
+  ffsl = {
+    fullName = "Floodgap Free Software License";
+    url = http://www.floodgap.com/software/ffsl/license.html;
+    free = false;
   };
 
   free = {
@@ -271,6 +287,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
+  hpnd = spdx {
+    spdxId = "HPND";
+    fullName = "Historic Permission Notice and Disclaimer";
+  };
+
   # Intel's license, seems free
   iasl = {
     fullName = "iASL";
@@ -282,9 +303,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Independent JPEG Group License";
   };
 
-  inria = {
-    fullName  = "INRIA Non-Commercial License Agreement";
+  inria-compcert = {
+    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "http://compcert.inria.fr/doc/LICENSE";
+    free      = false;
+  };
+
+  inria-icesl = {
+    fullName = "INRIA Non-Commercial License Agreement for IceSL";
+    url      = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf";
+    free     = false;
   };
 
   ipa = spdx {
@@ -408,7 +436,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-  
+
+  nposl3 = spdx {
+    spdxId = "NPOSL-3.0";
+    fullName = "Non-Profit Open Software License 3.0";
+  };
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
@@ -422,6 +455,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   openssl = spdx {
     spdxId = "OpenSSL";
     fullName = "OpenSSL License";
+  };
+
+  osl21 = spdx {
+    spdxId = "OSL-2.1";
+    fullName = "Open Software License 2.1";
+  };
+
+  osl3 = spdx {
+    spdxId = "OSL-3.0";
+    fullName = "Open Software License 3.0";
   };
 
   php301 = spdx {

@@ -9,11 +9,11 @@ let
   isonum = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
   isogrk1 = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
 in stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.35";
+  name = "gnumeric-1.12.38";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "77b1e3ce523578a807767ad71680fb865ac021d7bfadf93eada99ae094c06c0a";
+    sha256 = "3435d7d93a47a32764b1ec2d03f7fbb348a97af52530815e49370803a1a69c65";
   };
 
   configureFlags = "--disable-component";
@@ -25,9 +25,11 @@ in stdenv.mkDerivation rec {
 	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
+
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    pkgconfig intltool perl perlXMLParser bison
+    intltool perl perlXMLParser bison
     goffice gtk3 makeWrapper gnome3.defaultIconTheme
     python pygobject3 itstool
   ];

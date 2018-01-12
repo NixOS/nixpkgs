@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lx201q20dvc70f8a3c9s7s18z15inlxvbffph97ngvrgnyjq9cx";
   };
 
-  doCheck = true;
+  doCheck = true; # not cross;
 
   # Linking static stubs on cygwin requires correct ordering.
   # Consider upstreaming this.
@@ -24,6 +24,17 @@ stdenv.mkDerivation rec {
         'm4_include([dbmfetch03.at])' ""
   '';
   configureFlags = [ "--enable-libgdbm-compat" ];
+
+  postInstall = ''
+    # create symlinks for compatibility
+    install -dm755 $out/include/gdbm
+    (
+      cd $out/include/gdbm
+      ln -s ../gdbm.h gdbm.h
+      ln -s ../ndbm.h ndbm.h
+      ln -s ../dbm.h  dbm.h
+    )
+  '';
 
   meta = with lib; {
     description = "GNU dbm key/value database library";

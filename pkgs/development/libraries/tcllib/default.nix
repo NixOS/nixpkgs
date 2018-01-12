@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "tcllib-${version}";
-  version = "1.15";
+  version = "1.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
-    sha256 = "1zdzaqdpxljsaabgknq3paakgs262qy255ib4p329knsv608jc3d";
+    sha256 = "05dmrk9qsryah2n17z6z85dj9l9lfyvnsd7faw0p9bs1pp5pwrkj";
   };
 
   passthru = {

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome.gnome_themes_standard ];
 
-  buildInputs = [ pkgconfig makeWrapper intltool curl gettext perl perlXMLParser
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper intltool curl gettext perl perlXMLParser
     flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf libglade gnome.anjuta
     gnome.gdl gnome.defaultIconTheme
     hicolor_icon_theme ];

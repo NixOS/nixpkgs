@@ -26,15 +26,29 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.2";
+  version = "25.3";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
+    sha256 = "02y00y9q42g1iqgz5qhmsja75hwxd88yrn9zp14lanay0zkwafi5";
   };
 
-  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch);
+  enableParallelBuilding = true;
+
+  patches = [
+    ./clean-env.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./at-fdcwd.patch
+
+    # Backport of the fix to
+    # https://lists.gnu.org/archive/html/bug-gnu-emacs/2017-04/msg00201.html
+    # Should be removed when switching to Emacs 26.1
+    (fetchurl {
+      url = "https://gist.githubusercontent.com/aaronjensen/f45894ddf431ecbff78b1bcf533d3e6b/raw/6a5cd7f57341aba673234348d8b0d2e776f86719/Emacs-25-OS-X-use-vfork.patch";
+      sha256 = "1nlsxiaynswqhy99jf4mw9x0sndhwcrwy8713kq1l3xqv9dbrzgj";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]

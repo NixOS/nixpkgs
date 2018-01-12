@@ -212,6 +212,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open ports in the firewall for ZNC.
+        '';
+      };
+
       zncConf = mkOption {
         default = "";
         example = "See: http://wiki.znc.in/Configuration";
@@ -261,7 +269,7 @@ in
             "freenode" = {
               server = "chat.freenode.net";
               port = 6697;
-              ssl = true;
+              useSSL = true;
               modules = [ "simple_away" ];
             };
           };
@@ -321,7 +329,7 @@ in
       };
 
       mutable = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed
@@ -349,6 +357,10 @@ in
   ###### Implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.confOptions.port ];
+    };
 
     systemd.services.znc = {
       description = "ZNC Server";

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qzvmzkzdrmwrzfbxb2rz1i39j5zskjxiiv1w9m0xyg08p2wr7h3";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig dbus_libs dbus_glib libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool dbus_libs dbus_glib libxml2 ];
 
   patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Thermal Daemon";
     homepage = https://01.org/linux-thermal-daemon;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };
 }

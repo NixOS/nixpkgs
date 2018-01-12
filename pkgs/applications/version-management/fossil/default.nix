@@ -2,15 +2,16 @@
 , tcllib, withJson ? true}:
 
 stdenv.mkDerivation rec {
-  name = "fossil-2.2";
+  name = "fossil-${version}";
+  version = "2.3";
 
   src = fetchurl {
-    urls = 
+    urls =
       [
-        https://www.fossil-scm.org/index.html/uv/fossil-src-2.2.tar.gz
+        "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
     name = "${name}.tar.gz";
-    sha256 = "0wfgacfg29dkl0c3l1rp5ji0kraa64gcbg5lh8p4m7mqdqcq53wv";
+    sha256 = "0paalvb4rdyr79v6rwspaha5n4dqb92df9irijha13m3apsanwzh";
   };
 
   buildInputs = [ zlib openssl readline sqlite which ed ]

@@ -14,18 +14,14 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.27";
+  name = "coreutils-8.29";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "0sv547572iq8ayy8klir4hnngnx92a9nsazmf1wgzfc7xr4x74c8";
+    sha256 = "0plm1zs9il6bb5mk881qvbghq4glc8ybbgakk2lfzb0w64fgml4j";
   };
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
-  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-    ++ optional hostPlatform.isDarwin stdenv.secure-format-patch;
+  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
   # The test tends to fail on btrfs and maybe other unusual filesystems.
   postPatch = optionalString (!hostPlatform.isDarwin) ''
@@ -79,8 +75,6 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString hostPlatform.isSunOS "1";
-
-  makeFlags = optionalString hostPlatform.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.

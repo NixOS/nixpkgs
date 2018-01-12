@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "mate-panel-${version}";
   version = "${major-ver}.${minor-ver}";
   major-ver = "1.18";
-  minor-ver = "4";
+  minor-ver = "7";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1n565ff1n7jrfx223i3cl3m69wjda506nvbn8gra7m1jwdfzpbw1";
+    sha256 = "1m0fxyzbvg239dddmz3ksd8871lhkd7n3fxvdgdf4hv9rlvm1klv";
   };
 
   nativeBuildInputs = [
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     libwnck3
     librsvg
     libxml2
-    hicolor_icon_theme
     gnome3.gtk
     gnome3.dconf
     mate.libmateweather
     mate.mate-desktop
     mate.mate-menus
+    hicolor_icon_theme
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bitcoinunlimited";
     repo = "bitcoinunlimited";
     rev = "v${version}";
-    sha256 = "0rhk6xvzvzyfppg0pgq72nqgm2rmkiw0nhg3rwnzcvvj90nrz3da";
+    sha256 = "17cmyns1908s2rqs0zwr05f3541nqm2pg08n2xn97g2k3yimdg5q";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

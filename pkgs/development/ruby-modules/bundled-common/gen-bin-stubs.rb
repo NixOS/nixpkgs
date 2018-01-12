@@ -18,7 +18,8 @@ paths.each do |path|
   next unless File.directory?("#{path}/nix-support/gem-meta")
 
   name = File.read("#{path}/nix-support/gem-meta/name")
-  executables = File.read("#{path}/nix-support/gem-meta/executables").split
+  executables = File.read("#{path}/nix-support/gem-meta/executables")
+    .force_encoding('UTF-8').split
   executables.each do |exe|
     File.open("#{out}/bin/#{exe}", "w") do |f|
       f.write(<<-EOF)

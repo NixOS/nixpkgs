@@ -11,7 +11,9 @@ stdenv.mkDerivation {
     sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
   };
 
-  buildInputs = [freetype mesa];
+  buildInputs = [ freetype mesa ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://sourceforge.net/apps/mediawiki/ftgl/;
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
       and extruded polygon rendering modes.
     '';
 
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [];
   };
 }

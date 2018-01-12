@@ -63,7 +63,6 @@ let
         kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
       };
     in {
-      kdelibs = callPackage ./kdelibs { inherit attica phonon; };
       akonadi = callPackage ./akonadi {};
       akonadi-calendar = callPackage ./akonadi-calendar.nix {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
@@ -101,6 +100,8 @@ let
       kdepim-runtime = callPackage ./kdepim-runtime.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
+      keditbookmarks = callPackage ./keditbookmarks.nix {};
+      kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kholidays = callPackage ./kholidays.nix {};
@@ -123,8 +124,11 @@ let
       kontactinterface = callPackage ./kontactinterface.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
+      ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
+      kruler = callPackage ./kruler.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
@@ -132,24 +136,26 @@ let
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
+      libkgapi = callPackage ./libkgapi.nix {};
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
+      libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
       mbox-importer = callPackage ./mbox-importer.nix {};
       messagelib = callPackage ./messagelib.nix {};
+      minuet = callPackage ./minuet.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
+      pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
       syndication = callPackage ./syndication.nix {};
-
-      l10n = recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib recurseIntoAttrs; });
     };
 
 in lib.makeScope libsForQt5.newScope packages

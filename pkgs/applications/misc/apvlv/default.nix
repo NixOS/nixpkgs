@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
+  nativeBuildInputs = [
+    pkgconfig
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    pkgconfig cmake
+    cmake
     poppler pcre libxkbcommon epoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
-  ];
-
-  nativeBuildInputs = [
-    wrapGAppsHook
   ];
 
   patches = [

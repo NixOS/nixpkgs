@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ../../profiles/base.nix
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
@@ -27,24 +28,18 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=tty0"];
-  boot.consoleLogLevel = 7;
+
+  # The serial ports listed here are:
+  # - ttyS0: for Tegra (Jetson TX1)
+  # - ttyAMA0: for QEMU's -machine virt
+  # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
+  boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let
-      # Contains a couple of fixes for booting a Linux kernel, will hopefully appear upstream soon.
-      patchedUboot = pkgs.ubootRaspberryPi3_64bit.overrideAttrs (oldAttrs: {
-        src = pkgs.fetchFromGitHub {
-          owner = "dezgeg";
-          repo = "u-boot";
-          rev = "baab53ec244fe44def01948a0f10e67342d401e6";
-          sha256 = "0r5j2pc42ws3w3im0a9c6bh01czz5kapqrqp0ik9ra823cw73lxr";
-        };
-      });
-
       configTxt = pkgs.writeText "config.txt" ''
         kernel=u-boot-rpi3.bin
         arm_control=0x200
@@ -52,7 +47,7 @@ in
       '';
       in ''
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
-        cp ${patchedUboot}/u-boot.bin boot/u-boot-rpi3.bin
+        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin boot/u-boot-rpi3.bin
         cp ${configTxt} boot/config.txt
         ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
       '';

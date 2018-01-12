@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zlib}:
+{ stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   version = "20160404";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "15nacq84n9gvlzp3slpmfrrbh57kfb6lbdlc46i7aqgci4qv6fg0";
   };
 
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   setSourceRoot = ''export sourceRoot="$(echo */contrib/fonttools)"'';
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/fontforge-fonttools}
     for i in *.c; do
-      gcc "$i" -lz -lm --std=c99 -o "$out"/bin/$(basename "$i" .c)
+      $CC "$i" -lz -lm --std=c99 -o "$out"/bin/$(basename "$i" .c)
     done
     cp README* "$out/share/doc/fontforge-fonttools"
   '';

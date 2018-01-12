@@ -1,22 +1,30 @@
-{ python3Packages, fetchurl, lib }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
-  version = "2.2.0";
-  name = "cheat-${version}";
+with python3Packages;
+buildPythonApplication rec {
+  name = "${pname}-${version}";
+  pname = "cheat";
+  version = "2.2.2";
 
-  propagatedBuildInputs = with python3Packages; [ docopt pygments ];
+  propagatedBuildInputs = [ docopt pygments ];
 
-  src = fetchurl {
-    url = "mirror://pypi/c/cheat/${name}.tar.gz";
-    sha256 = "16pg1bgyfjvzpm2rbi411ckf3gljg9v1vzd5qhp23g69ch6yr138";
+  src = fetchFromGitHub {
+    owner = "chrisallenlane";
+    repo = "cheat";
+    rev = version;
+    sha256 = "1da4m4n6nivjakpll6jj0aszrv24g2zax74034lzpv3pbh84fvas";
   };
   # no tests available
   doCheck = false;
 
-  meta = {
+  postInstall = ''
+    install -D man1/cheat.1.gz $out/share/man/man1/cheat.1.gz
+  '';
+
+  meta = with stdenv.lib; {
     description = "cheat allows you to create and view interactive cheatsheets on the command-line";
-    maintainers = with lib.maintainers; [ mic92 ];
-    license = with lib.licenses; [gpl3 mit];
+    maintainers = with maintainers; [ mic92 ];
+    license = with licenses; [gpl3 mit];
     homepage = https://github.com/chrisallenlane/cheat;
   };
 }

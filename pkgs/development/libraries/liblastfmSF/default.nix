@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "liblastfm-SF-0.5";
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ curl openssl ];
 

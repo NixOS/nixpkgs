@@ -2,11 +2,11 @@
 
 let
   name = "wp-cli-${version}";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "0q5d32jq7a6rba77sr1yyj6ib6x838hw14mm186ah1xxgnn7rnry";
+    sha256 = "0fyfwpsbm9s3khxq8876ah85vjwfd5r4a59aix3zjmhq2v7j8n9j";
   };
 
   completion = fetchurl {
@@ -25,6 +25,9 @@ let
   '';
 
   ini = writeText "wp-cli.ini" ''
+    [PHP]
+    memory_limit = 512M ; composer can be a bit of a memory pig
+
     [Phar]
     phar.readonly = Off
   '';

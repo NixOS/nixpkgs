@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "13nnq927kpf91iqccr8db9ripy5czjl5jiyivizn6bia0bam2pvx";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig boost gnuradio makeWrapper cppunit libosmocore gnuradio-osmosdr
+    cmake boost gnuradio makeWrapper cppunit libosmocore gnuradio-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
@@ -26,11 +27,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Gnuradio block for gsm";
     homepage = https://github.com/ptrkrysik/gr-gsm;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];
   };
 }

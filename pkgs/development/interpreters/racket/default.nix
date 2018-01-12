@@ -3,7 +3,7 @@
 , glib, gmp, gtk2, libedit, libffi, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
-, disableDocs ? true
+, disableDocs ? false
 }:
 
 let
@@ -33,11 +33,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.10";
+  version = "6.11";
 
   src = fetchurl {
-    url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "1mqnyj3bawad12dygsb11f2dbnkjp7q6d7ra714rqyw8mxix5ws0";
+    url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+    sha256 = "1nk7705x24jjlbqqhj8yvbgqkfscxx3m81bry1g56kjxysjmf3sw";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
   };
 }

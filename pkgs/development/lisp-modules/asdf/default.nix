@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asdf";
-    version="3.2.0";
+    version="3.3.1";
     name="${baseName}-${version}";
-    hash="0ns4hh5f0anfgvy4q68wsylgwfin82kb1k2p53h29cf8jiil0p9a";
-    url="http://common-lisp.net/project/asdf/archives/asdf-3.2.0.tar.gz";
-    sha256="0ns4hh5f0anfgvy4q68wsylgwfin82kb1k2p53h29cf8jiil0p9a";
+    hash="1yhlhyllabsha84wycqk0mhbcq2w332jdlp19ccx4rplczzn2w3g";
+    url="http://common-lisp.net/project/asdf/archives/asdf-3.3.1.tar.gz";
+    sha256="1yhlhyllabsha84wycqk0mhbcq2w332jdlp19ccx4rplczzn2w3g";
   };
   buildInputs = [
     texinfo texLive perl

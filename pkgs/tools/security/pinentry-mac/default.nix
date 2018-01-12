@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "pinentry-mac";
-    rev = "d60aa902644a1f0126ec50e79937423a3a7c3bc4";
-    sha256 = "0xp4rdyj0mw6gg1z1wraggb1qlkjb5845mibrz3nj0l692da52nq";
+    rev = "6dfef256c8ea32d642fea847f27d800f024cf51e";
+    sha256 = "0g75302697gqcxyf2hyqzvcbd5pyss1bl2xvfd40wqav7dlyvj83";
   };
 
   buildInputs = [ xcbuild libiconv Cocoa ncurses ];

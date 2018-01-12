@@ -1,23 +1,28 @@
-{ stdenv, lib, fetchurl, pkgconfig, autoreconfHook
-, boost, libsodium, czmqpp, secp256k1 }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+, boost, secp256k1 }:
 
 let
   pname = "libbitcoin";
-  version = "2.11.0";
+  version = "3.4.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/libbitcoin/libbitcoin/archive/v${version}.tar.gz";
-    sha256 = "1lpdjm13kgs4fbp579bwfvws8yf9mnr5dw3ph8zxg2gf110h85sy";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1h6h7cxbwkdk8bzbkfvnrrdzajw1d4lr8wqs66is735bksh6gk1y";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   propagatedBuildInputs = [ secp256k1 ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
+    "--with-tests=no"
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.out}/lib"
   ];
@@ -28,8 +33,7 @@ in stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];
 
-    # https://wiki.unsystem.net/en/index.php/Libbitcoin/License
-    # AGPL with an additional clause
+    # AGPL with a lesser clause
     license = licenses.agpl3;
   };
 }

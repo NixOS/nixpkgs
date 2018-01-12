@@ -13,9 +13,12 @@ in stdenv.mkDerivation rec {
     sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobjectIntrospection libcap_ng numactl xen libapparmor
+    libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
+    python pygobject2 gobjectIntrospection libcap_ng numactl libapparmor
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+    xen
   ];
 
   enableParallelBuilding = true;

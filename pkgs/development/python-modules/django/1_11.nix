@@ -1,24 +1,27 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
   pythonOlder,
-  geos, gdal, pytz
+  geos, gdal, pytz,
+  withGdal ? false
 }:
+
 buildPythonPackage rec {
   pname = "Django";
   name = "${pname}-${version}";
-  version = "1.11.4";
+  version = "1.11.8";
 
   disabled = pythonOlder "2.7";
 
   src = fetchurl {
     url = "http://www.djangoproject.com/m/releases/1.11/${name}.tar.gz";
-    sha256 = "1ckvq2sdlgpy2sqy6fwl84ms9dggvdbys9x76qapm2d9vmknxs5b";
+    sha256 = "04gphaarwj1yrhhpi9im6gsg77i2vv0iwyjc0pmxba53nndyglzy";
   };
 
-  patches = [
+  patches = stdenv.lib.optionals withGdal [
     (substituteAll {
       src = ./1.10-gis-libs.template.patch;
       geos = geos;
       gdal = gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
 

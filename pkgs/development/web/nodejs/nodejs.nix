@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, openssl, python2, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, libtool, fetchpatch
-, callPackage
+{ stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
+, pkgconfig, which
 , darwin ? null
-, enableNpm ? true
 }:
 
 with stdenv.lib;
 
+{ enableNpm ? true, version, sha256, patches }:
+
 let
 
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+
+
+
+  baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
   sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs (!stdenv.isDarwin) { inherit http-parser; });
 
@@ -25,12 +29,20 @@ let
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
 in
 
-  rec {
+  stdenv.mkDerivation {
+    inherit version;
+
+    name = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      inherit sha256;
+    };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
     ++ [ python2 which zlib libuv openssl ]
     ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig libtool ];
+    ++ optionals stdenv.isDarwin [ pkgconfig darwin.cctools ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
@@ -40,10 +52,9 @@ in
 
     passthru.interpreterName = "nodejs";
 
-
     setupHook = ./setup-hook.sh;
 
-    patches = optionals stdenv.isDarwin [ ./no-xcode.patch ];
+    inherit patches;
 
     preBuild = optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
@@ -59,7 +70,7 @@ in
       paxmark m $out/bin/node
       PATH=$out/bin:$PATH patchShebangs $out
 
-      ${optionalString enableNpm '' 
+      ${optionalString enableNpm ''
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
       ''}

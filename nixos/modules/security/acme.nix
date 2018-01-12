@@ -139,6 +139,28 @@ in
         '';
       };
 
+      tosHash = mkOption {
+        type = types.string;
+        default = "cc88d8d9517f490191401e7b54e9ffd12a2b9082ec7a1d4cec6101f9f1647e7b";
+        description = ''
+          SHA256 of the Terms of Services document. This changes once in a while.
+        '';
+      };
+
+      production = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If set to true, use Let's Encrypt's production environment
+          instead of the staging environment. The main benefit of the
+          staging environment is to get much higher rate limits.
+
+          See
+          <literal>https://letsencrypt.org/docs/staging-environment</literal>
+          for more detail.
+        '';
+      };
+
       certs = mkOption {
         default = { };
         type = with types; attrsOf (submodule certOpts);
@@ -174,10 +196,12 @@ in
                 domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
-                          ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
+                          ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
+                          ++ (if cfg.production then []
+                              else ["--server" "https://acme-staging.api.letsencrypt.org/directory"]);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];

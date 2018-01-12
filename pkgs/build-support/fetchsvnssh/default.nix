@@ -1,14 +1,14 @@
-{stdenv, subversion, sshSupport ? false, openssh ? null, expect}: 
+{stdenvNoCC, subversion, sshSupport ? false, openssh ? null, expect}: 
 {username, password, url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
 
 
 if md5 != "" then
   throw "fetchsvnssh does not support md5 anymore, please use sha256"
 else
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "svn-export-ssh";
   builder = ./builder.sh;
-  buildInputs = [subversion expect];
+  nativeBuildInputs = [subversion expect];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

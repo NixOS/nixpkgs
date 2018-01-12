@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       (page number, printing date, file name or supplied header), line numbering, symbol substitution as
       well as pretty printing for a wide range of programming languages.
     '';
-    homepage = http://www.inf.enst.fr/~demaille/a2ps/index.html;
+    homepage = https://www.gnu.org/software/a2ps/;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;

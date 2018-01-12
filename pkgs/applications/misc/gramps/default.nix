@@ -1,23 +1,31 @@
-{ stdenv, fetchurl, gtk3, pythonPackages, intltool,
-  pango, gsettings_desktop_schemas }:
+{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool,
+  pango, gsettings_desktop_schemas,
+# Optional packages:
+ enableOSM ? true, osm-gps-map
+ }:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "4.1.1";
+  version = "4.2.6";
   name = "gramps-${version}";
 
-  buildInputs = [ intltool gtk3 ];
+  buildInputs = [ intltool gtk3 ] 
+    # Map support
+    ++ stdenv.lib.optional enableOSM osm-gps-map
+  ;
 
   # Currently broken
   doCheck = false;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gramps/Stable/${version}/${name}.tar.gz";
-    sha256 = "0jdps7yx2mlma1hdj64wssvnqd824xdvw0bmn2dnal5fn3h7h060";
+  src = fetchFromGitHub {
+    owner = "gramps-project";
+    repo = "gramps";
+    rev = "v${version}";
+    sha256 = "0k0bx6msc2kvkg0nwa9v2mp3qy7lmnxjd97n6a1zdzlq8yzw29f1";
   };
 
-  pythonPath = with pythonPackages; [ pygobject3 pycairo ] ++ [ pango ];
+  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ] ++ [ pango ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.

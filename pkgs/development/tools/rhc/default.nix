@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/openshift/rhc;
     description = "OpenShift client tools";
     license = licenses.asl20;
-    maintaners = maintainers.szczyp;
+    maintainers = [ maintainers.szczyp ];
   };
 }

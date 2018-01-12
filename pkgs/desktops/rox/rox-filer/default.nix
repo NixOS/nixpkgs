@@ -11,7 +11,8 @@ in stdenv.mkDerivation {
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  buildInputs = [ pkgconfig libxml2 gtk shared_mime_info hicolor_icon_theme libSM ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gtk shared_mime_info hicolor_icon_theme libSM ];
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch

@@ -1,10 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, hypothesis, py
-, setuptools_scm
+{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
+, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k
 }:
 buildPythonPackage rec {
-  version = "3.2.1";
+  version = "3.3.1";
   pname = "pytest";
-  name = "${pname}-${version}";
 
   preCheck = ''
     # don't test bash builtins
@@ -13,15 +12,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c2159d2be2b4e13fa293e7a72bdf2f06848a017150d5c6d35112ce51cfd74ce";
+    sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
   };
 
-  buildInputs = [ hypothesis setuptools_scm ];
-  propagatedBuildInputs = [ py ]
+  checkInputs = [ hypothesis ];
+  buildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ attrs py setuptools six pluggy ]
+    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
     ++ (stdenv.lib.optional isPy26 argparse);
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     platforms = platforms.unix;
+    description = "Framework for writing tests";
   };
 }

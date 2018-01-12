@@ -9,14 +9,14 @@
 
 with stdenv.lib;
 
-# if you update, also bump pythonPackages.libvirt or it will break
+# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.6.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "0gcyql5dp6j370kvik9hjhxirrg89m7l1q52yq0g75h7jpv9fb1s";
+    sha256 = "03kb37iv3dvvdlslznlc0njvjpmq082lczmsslz5p4fcwb50kwfz";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen attr parted
+    libapparmor libcap_ng numactl attr parted
+  ] ++ optionals (stdenv.isLinux && stdenv.isx86_64) [
+    xen
   ] ++ optionals stdenv.isDarwin [
-     libiconv gmp
+    libiconv gmp
   ];
 
   preConfigure = optionalString stdenv.isLinux ''
@@ -39,8 +41,6 @@ stdenv.mkDerivation rec {
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
-    substituteInPlace src/qemu/qemu_capabilities.c \
-      --replace '"/usr/libexec/qemu-kvm"' '"/run/libvirt/nix-emulators/${if stdenv.isAarch64 then "qemu-system-aarch64" else "qemu-kvm"}"'
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
   '' + ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;

@@ -4,7 +4,7 @@ let
   ld32 =
     if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else abort "Unsupported architecture";
+    else throw "Unsupported system ${stdenv.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
 
   mkLdPath = ps: lib.makeLibraryPath (with ps; [ qt4 dbus alsaLib ]);
@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
-  version = "12.0.76279";
+  version = "12.0.85001";
 
   src = fetchurl {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
-    url = "http://download.teamviewer.com/download/teamviewer_${version}_i386.deb";
-    sha256 = "15yhx66zxbjk0x3dpfg39gb1f2ajcp9kbp4zi58bfnvby277jl00";
+    url = "https://dl.tvcdn.de/download/version_12x/teamviewer_${version}_i386.deb";
+    sha256 = "01vzky22gisjxa4ihaygkb7jwhl4z9ldd9lli8fc863nxxbrawks";
   };
 
   unpackPhase = ''

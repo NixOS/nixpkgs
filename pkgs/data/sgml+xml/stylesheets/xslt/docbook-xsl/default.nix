@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, findXMLCatalogs, writeScriptBin, ruby, bash }:
 
 let
 
-  common = { pname, sha256 }: stdenv.mkDerivation rec {
+  common = { pname, sha256 }: let self = stdenv.mkDerivation rec {
     name = "${pname}-1.79.1";
 
     src = fetchurl {
       url = "mirror://sourceforge/docbook/${name}.tar.bz2";
       inherit sha256;
     };
+
+    propagatedBuildInputs = [ findXMLCatalogs ];
 
     dontBuild = true;
 
@@ -23,13 +25,19 @@ let
       ln -s $dst $out/xml/xsl/docbook
     '';
 
+    passthru.dbtoepub = writeScriptBin "dbtoepub"
+      ''
+        #!${bash}/bin/bash
+        exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
+      '';
+
     meta = {
       homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
       description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
       maintainers = [ lib.maintainers.eelco ];
       platforms = lib.platforms.all;
     };
-  };
+  }; in self;
 
 in {
 

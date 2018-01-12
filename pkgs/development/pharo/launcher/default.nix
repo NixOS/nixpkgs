@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
      secs=5
      echo -n "Running headless Pharo for $secs seconds to check for a crash... "
      timeout $secs \
-       "${pharo}/bin/pharo" -nodisplay PharoLauncher.image --no-quit eval 'true'
+       "${pharo}/bin/pharo" --nodisplay PharoLauncher.image --no-quit eval 'true'
      test "$?" == 124 && echo "ok")
   '';
 

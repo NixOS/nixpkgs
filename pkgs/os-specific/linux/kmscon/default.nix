@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
+  patches = [ ./kmscon-8-glibc-2.26.patch ];
+
   # FIXME: Remove as soon as kmscon > 8 comes along.
   postPatch = ''
     sed -i -e 's/libsystemd-daemon libsystemd-login/libsystemd/g' configure
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     "--enable-optimizations"
     "--with-renderers=bbulk,gltex,pixman"
   ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "KMS/DRM based System Console";

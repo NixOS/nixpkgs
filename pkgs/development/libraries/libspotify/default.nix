@@ -63,7 +63,8 @@ else stdenv.mkDerivation {
       '' else stdenv.mkDerivation {
         name = "libspotify-samples-${version}";
         src = libspotify.src;
-        buildInputs = [ pkgconfig libspotify readline ]
+  nativeBuildInputs = [ pkgconfig ];
+        buildInputs = [ libspotify readline ]
           ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
         postUnpack = "sourceRoot=$sourceRoot/share/doc/libspotify/examples";
         patchPhase = "cp ${apiKey} appkey.c";

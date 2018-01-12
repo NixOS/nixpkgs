@@ -3,10 +3,10 @@
 buildPythonPackage rec {
   pname = "relatorio";
   name = "${pname}-${version}";
-  version = "0.7.0";
+  version = "0.8.0";
   src = fetchurl {
     url = "mirror://pypi/r/relatorio/${name}.tar.gz";
-    sha256 = "efd68d96573b15c59c24a8f420ed14210ce51de535a8470d14381f2bed69d845";
+    sha256 = "bddf85d029c5c85a0f976d73907e14e4c3093065fe8527170c91abf0218546d9";
   };
   propagatedBuildInputs = [
     genshi

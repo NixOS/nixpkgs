@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     sha256 = "0c83wmipnsdnbihc5niyczs7jrkss2s8n6iwwjdia7hkjzbd0hl7";
   };
 
-  buildInputs = [ glib pkgconfig xorg.libX11 xorg.libXScrnSaver dbus ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib xorg.libX11 xorg.libXScrnSaver dbus ];
 
   makeFlags = [
     "bindir=$(out)/bin"

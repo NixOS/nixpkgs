@@ -72,7 +72,7 @@ let
     in withPlugins (_: []);
 
   plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
-in {
+in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";
     sha256 = "1cxwv3652fpsbm2zk1akw356cd7w7vhny1623ighgbz9ha8gvg09";
@@ -91,9 +91,20 @@ in {
   };
 
   terraform_0_10 = pluggable (generic {
-    version = "0.10.2";
-    sha256 = "1q7za7jcfqv914a3ynfl7hrqbgwcahgm418kivjrac6p1q26w502";
+    version = "0.10.8";
+    sha256 = "11hhij0hq99xhwlg5dx5nv7y074x79wkr8hr3wc6ln0kwdk5scdf";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
+
+  terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
+
+  terraform_0_11 = pluggable (generic {
+    version = "0.11.1";
+    sha256 = "04qyhlif3b3kjs3m6c3mx45sgr5r13x55aic638zzlrhbpmqiih1";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  });
+
+  terraform_0_11-full = terraform_0_11.withPlugins lib.attrValues;
 }

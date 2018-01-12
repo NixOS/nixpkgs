@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   name = "ign-transport-${version}";
   inherit src;
 
-  buildInputs = [ cmake protobuf zeromq pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake protobuf zeromq
     utillinux # we need utillinux/e2fsprogs uuid/uuid.h
   ];
 

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
 
-  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gtk2 libsoup libX11 perl webkit gsettings_desktop_schemas ];
 
   hardeningDisable = [ "format" ];
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
       featureset might be considered "minimalistic", but not as minimalistic as
       being completely featureless.
     '';
-    homepage = http://sourceforge.net/apps/trac/vimprobable;
+    homepage = https://sourceforge.net/apps/trac/vimprobable;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.aforemny ];
     platforms = with stdenv.lib.platforms; linux;

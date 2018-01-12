@@ -16,7 +16,8 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ libX11 unzip cmake ois freetype libuuid boost pkgconfig (if withOgre then ogre else mesa) ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 unzip cmake ois freetype libuuid boost (if withOgre then ogre else mesa) ];
 
   # Tools are disabled due to compilation failures.
   cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];

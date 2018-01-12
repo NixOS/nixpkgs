@@ -1,20 +1,28 @@
 { stdenv, fetchurl, jre, makeWrapper, bash,
-  majorVersion ? "0.9" }:
+  majorVersion ? "1.0" }:
 
 let
   versionMap = {
-    "0.8" = { kafkaVersion = "0.8.2.2";
-              scalaVersion = "2.10";
-              sha256 = "1azccf1k0nr8y1sfpjgqf9swyp87ypvgva68ci4kczwcx1z9d89v";
-            };
-    "0.9" = { kafkaVersion = "0.9.0.1";
-              scalaVersion = "2.11";
-              sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
-            };
-    "0.10" = { kafkaVersion = "0.10.2.0";
-               scalaVersion = "2.12";
-               sha256 = "0py43s6zv8z7wr2lk8403k07xxckl11gla3vs4gr99lixc4whis1";
-             };
+    "0.9" = {
+      kafkaVersion = "0.9.0.1";
+      scalaVersion = "2.11";
+      sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
+    };
+    "0.10" = {
+      kafkaVersion = "0.10.2.1";
+      scalaVersion = "2.12";
+      sha256 = "0iszr6r0n9yjgq7kcp1hf00fg754m86gs4jzqc18542an94b88z5";
+    };
+    "0.11" = {
+      kafkaVersion = "0.11.0.1";
+      scalaVersion = "2.12";
+      sha256 = "1wj639h95aq5n132fq1rbyzqh5rsa4mlhbg3c5mszqglnzdz4xn7";
+    };
+    "1.0" = {
+      kafkaVersion = "1.0.0";
+      scalaVersion = "2.12";
+      sha256 = "1cs4nmp39m99gqjpy5klsffqksc0h9pz514jkq99qb95a83x1cfm";
+    };
   };
 in
 

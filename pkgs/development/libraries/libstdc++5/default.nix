@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
       sha256 = "11m5lc51b0addhc4yq4rz0dwpv6k73rrj73wya3lqdk8rly6cjpm";
       addPrefixes = true;
     })
+    # Required because of glibc 2.26
+    ./struct-ucontext.patch
   ];
 
   postPatch = ''
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
     # being generated to make sure that they use our glibc.
     EXTRA_FLAGS="-I$NIX_FIXINC_DUMMY $(cat $NIX_CC/nix-support/libc-cflags) -O2"
 
-    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $(cat $NIX_CC/nix-support/libc-ldflags) $(cat $NIX_CC/nix-support/libc-ldflags-before)"
+    extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $(cat $NIX_BINTOOLS/nix-support/libc-ldflags) $(cat $NIX_BINTOOLS/nix-support/libc-ldflags-before)"
     for i in $extraLDFlags; do
       EXTRA_FLAGS="$EXTRA_FLAGS -Wl,$i"
     done

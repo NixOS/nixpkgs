@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  buildInputs = [ pkgconfig glib gtk2 libgnomeui libXv libraw1394 libdc1394 SDL GConf ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 libgnomeui libXv libraw1394 libdc1394 SDL GConf ];
   
   meta = {
     homepage = https://damien.douxchamps.net/ieee1394/coriander/;

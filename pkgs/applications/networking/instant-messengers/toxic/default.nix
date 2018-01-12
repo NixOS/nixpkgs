@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Reference CLI for Tox";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ viric jgeerds ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

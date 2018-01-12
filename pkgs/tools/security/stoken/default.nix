@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     automake --add-missing --copy
     autoconf
   '';
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool pkgconfig
+    autoconf automake libtool
     libxml2 nettle
   ] ++ stdenv.lib.optional withGTK3 gtk3;
 

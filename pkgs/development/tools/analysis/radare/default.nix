@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [pkgconfig readline libusb perl]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ readline libusb perl]
     ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://radare.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.varnish-cache.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ garbas fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1zv1fvik76kpp1q5f2dz01f4fwg1m5a8rl168px47jy9nyl9k277";
   };
 
-  buildInputs = [ pkgconfig fuse libarchive ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse libarchive ];
 
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";

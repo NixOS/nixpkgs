@@ -24,9 +24,11 @@ in stdenv.mkDerivation rec {
             ++ stdenv.lib.optionals (stdenv.system == "x86_64-linux")
                   [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
-    homepage = http://hci.iwr.uni-heidelberg.de/vigra;
+    homepage = https://hci.iwr.uni-heidelberg.de/vigra;
     license = licenses.mit;
     maintainers = [ maintainers.viric ];
     platforms = platforms.linux;

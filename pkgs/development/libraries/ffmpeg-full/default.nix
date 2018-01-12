@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 , hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -231,14 +231,15 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.3.3";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "07is8msrhxr1dk6vgwa192k2pl2a0in1h9w8f9cknlvbvhn01afj";
+    sha256 = "1h4iz7q10wj04awr2wvmp60n7b09pfwrgwbbw9sgl7klcf52fxss";
   };
 
-  patchPhase = ''patchShebangs .
+  prePatch = ''
+    patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
   '' + stdenv.lib.optionalString (frei0r != null) ''
@@ -411,7 +412,8 @@ stdenv.mkDerivation rec {
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optionals nvenc [ nvidia-video-sdk ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
-                                   MediaToolbox VideoDecodeAcceleration ];
+                                   MediaToolbox VideoDecodeAcceleration
+                                   libiconv ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
@@ -437,7 +439,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.prefix}"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
       "--arch=${hostPlatform.arch}"

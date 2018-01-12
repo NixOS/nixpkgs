@@ -40,11 +40,6 @@
 , coreutils
 , libiconv
 
-, ghcjsNodePkgs ? callPackage ../../../top-level/node-packages.nix {
-    generated = ./node-packages-generated.nix;
-    self = ghcjsNodePkgs;
-  }
-
 , version ? "0.2.0"
 , ghcjsSrc ? fetchFromGitHub {
     owner = "ghcjs";
@@ -118,7 +113,7 @@ in mkDerivation (rec {
     lens optparse-applicative parallel safe shelly split
     stringsearch syb system-fileio system-filepath tar terminfo text-binary
     unordered-containers vector wl-pprint-text yaml
-    (stdenv.lib.getBin alex) (stdenv.lib.getBin happy) git gnumake autoconf automake libtool patch gmp
+    alex happy git gnumake autoconf automake libtool patch gmp
     base16-bytestring cryptohash executable-path haddock-api
     transformers-compat QuickCheck haddock hspec xhtml
     regex-posix libiconv
@@ -178,7 +173,10 @@ in mkDerivation (rec {
     isCross = true;
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
-    inherit (ghcjsNodePkgs) "socket.io";
+    socket-io = pkgs.nodePackages."socket.io";
+
+    # let us assume ghcjs is never actually cross compiled
+    targetPrefix = "";
 
     inherit stage1Packages;
     mkStage2 = stage2 {

@@ -33,11 +33,13 @@ closer-mop
 cl-ppcre
 cl-ppcre-template
 cl-ppcre-unicode
+cl-protobufs
 cl-reexport
 cl-smtp
 clsql
 clsql-postgresql
 clsql-postgresql-socket
+clsql-sqlite3
 clss
 cl+ssl
 cl-syntax-annot

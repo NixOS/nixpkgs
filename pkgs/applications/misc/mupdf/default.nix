@@ -1,34 +1,57 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, zlib, freetype, libjpeg, jbig2dec, openjpeg
-, libX11, libXcursor, libXrandr, libXinerama, libXext, harfbuzz, mesa }:
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+, jbig2dec, libjpeg , darwin
+, enableX11 ? true, libX11, libXext, libXi, libXrandr
+, enableCurl ? true, curl, openssl
+, enableGL ? true, freeglut, mesa_glu
+}:
 
-stdenv.mkDerivation rec {
-  version = "1.11";
+let
+
+  # OpenJPEG version is hardcoded in package source
+  openJpegVersion = with stdenv;
+    lib.concatStringsSep "." (lib.lists.take 2
+      (lib.splitString "." (lib.getVersion openjpeg)));
+
+
+in stdenv.mkDerivation rec {
+  version = "1.12.0";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "02phamcchgsmvjnb3ir7r5sssvx9fcrscn297z73b82n1jl79510";
+    sha256 = "0mc7a92zri27lk17wdr2iffarbfi4lvrmxhc53sz84hm5yl56qsw";
   };
 
   patches = [
     # Compatibility with new openjpeg
     (fetchpatch {
-      name = "mupdf-1.11-openjpeg-2.1.1.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=3d997e7ff2ac20c44856ede22760ba6fbca81a5c";
-      sha256 = "1vr12kpzmmfr8pp3scwfhrm5laqwd58xm6vx971c4y8bxy60b2ig";
+      name = "mupdf-1.12-openjpeg-version.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
+      sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
     })
+  ]
 
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-6060.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=blobdiff_plain;f=platform/x11/jstest_main.c;h=f158d9628ed0c0a84e37fe128277679e8334422a;hp=13c3a0a3ba3ff4aae29f6882d23740833c1d842f;hb=06a012a42c9884e3cd653e7826cff1ddec04eb6e;hpb=34e18d127a02146e3415b33c4b67389ce1ddb614";
-      sha256 = "163bllvjrbm0gvjb25lv7b6sih4zr4g4lap3h0cbq8dvpjxx0jfc";
-    })
-  ];
+  # Use shared libraries to decrease size
+  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.12-shared_libs-1.patch
+
+  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+  ;
+
+  postPatch = ''
+    sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+  '';
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut mesa_glu ]
+                ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
+                ++ lib.optionals enableCurl [ curl openssl ]
+                ++ lib.optionals enableGL (
+                  if stdenv.isDarwin then
+                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+                  else
+                    [ freeglut mesa_glu ])
+                ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -37,13 +60,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for i in $out/lib/*.a; do
-      so="''${i%.a}.so"
-      gcc -shared -o $so.${version} -Wl,--whole-archive $i -Wl,--no-whole-archive
-      ln -s $so.${version} $so
-      rm $i
-    done
-
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
     prefix=$out
@@ -76,8 +92,8 @@ stdenv.mkDerivation rec {
     homepage = http://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
-    license = licenses.gpl3Plus;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric vrthra fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -3,12 +3,12 @@
   libXext, wayland, mesa_noglu, makeWrapper }:
 
 let
-  version = "1.0.42.2";
+  version = "1.0.61.1";
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-LoaderAndValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "0na1ax2cgv6w29213mby56mndfsj3iizj3n5pbpy4s4p7ij9kdgn";
+    sha256 = "043kw6wnrpdplnb40x6n9rgf3gygsn9jiv91y458sydbhalfr945";
   };
 in
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
   inherit version src;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ cmake git python3 python3Packages.lxml
                   glslang spirv-tools x11 libxcb libXrandr libXext wayland
                 ];
   enableParallelBuilding = true;
@@ -48,11 +48,12 @@ stdenv.mkDerivation rec {
     sed -i "s:\\./lib:$out/lib/lib:g" "$out/share/vulkan/"*/*.json
     mkdir -p $dev/include
     cp -rv ../include $dev/
+    mkdir -p $demos/share/vulkan-demos
+    cp demos/*.spv demos/*.ppm $demos/share/vulkan-demos
     mkdir -p $demos/bin
-    cp demos/*.spv demos/*.ppm $demos/bin
-    find demos -type f -executable -not -name vulkaninfo -exec cp {} $demos/bin \;
+    find demos -type f -executable -not -name vulkaninfo -exec cp -v {} $demos/bin \;
     for p in cube cubepp; do
-      wrapProgram $demos/bin/$p --run "cd $demos/bin"
+      wrapProgram $demos/bin/$p --run "cd $demos/share/vulkan-demos"
     done
   '';
 

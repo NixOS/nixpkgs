@@ -1,19 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm, six }:
+, setuptools_scm
+, six, pytz}:
 
 buildPythonPackage rec {
-  version = "1.4";
-  pname = "tempora";
   name = "${pname}-${version}";
+  pname = "tempora";
+  version = "1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ysvns22i5hzhl5ln4n86bq10j8xwvd09z8qw1zjr3s0fj3lynza";
+    sha256 = "9ea980c63be54f83d2a466fccc6eeef96a409f74c5034764fb328b0d43247e96";
   };
 
   doCheck = false;
 
   buildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six pytz ];
 }

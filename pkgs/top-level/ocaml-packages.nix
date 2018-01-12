@@ -54,7 +54,9 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap { };
+    bap = callPackage ../development/ocaml-modules/bap { cmdliner = cmdliner_0_9; };
+
+    batteries = callPackage ../development/ocaml-modules/batteries { };
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
@@ -98,7 +100,10 @@ let
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
-    camomile = callPackage ../development/ocaml-modules/camomile { };
+    camomile =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/camomile { }
+      else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
     camlimages_4_0 =
       if lib.versionOlder "4.02" ocaml.version
@@ -114,19 +119,22 @@ let
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
-    biniou = callPackage ../development/ocaml-modules/biniou { };
+    biniou =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/biniou { }
+      else callPackage ../development/ocaml-modules/biniou/1.0.nix { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
-    cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
+    cmdliner_0_9 = callPackage ../development/ocaml-modules/cmdliner/0.9.nix { };
 
-    cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
+    cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
       lwt = lwt2;
@@ -168,13 +176,25 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
-    cstruct = callPackage ../development/ocaml-modules/cstruct {
+    cstruct =
+      if lib.versionAtLeast ocaml.version "4.2"
+      then callPackage ../development/ocaml-modules/cstruct {}
+      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { lwt = ocaml_lwt; };
+
+    cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix {
       lwt = ocaml_lwt;
     };
 
-    csv = callPackage ../development/ocaml-modules/csv { };
+    cstruct-unix = callPackage ../development/ocaml-modules/cstruct/unix.nix {};
 
-    curses = callPackage ../development/ocaml-modules/curses { };
+    csv =
+      if lib.versionAtLeast ocaml.version "4.2"
+      then callPackage ../development/ocaml-modules/csv { }
+      else callPackage ../development/ocaml-modules/csv/1.5.nix { };
+
+    curses = callPackage ../development/ocaml-modules/curses {
+      ncurses = pkgs.ncurses5;
+    };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
@@ -182,9 +202,13 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    digestif =  callPackage ../development/ocaml-modules/digestif { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
+
+    dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
@@ -209,7 +233,13 @@ let
       lwt = ocaml_lwt;
     };
 
+    facile = callPackage ../development/ocaml-modules/facile { };
+
     faillib = callPackage ../development/ocaml-modules/faillib { };
+
+    faraday = callPackage ../development/ocaml-modules/faraday { };
+
+    farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
@@ -277,7 +307,6 @@ let
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
-      batteries = ocaml_batteries;
       pcre = ocaml_pcre;
     };
 
@@ -330,6 +359,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    lru = callPackage ../development/ocaml-modules/lru { };
+
     lwt2 = callPackage ../development/ocaml-modules/lwt { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
@@ -350,7 +381,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -370,15 +401,15 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
-      lwt = ocaml_lwt;
-    };
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
     notty = callPackage ../development/ocaml-modules/notty {
       lwt = ocaml_lwt;
     };
 
-    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
+    num = if lib.versionOlder "4.06" ocaml.version
+      then callPackage ../development/ocaml-modules/num {}
+      else null;
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
@@ -398,7 +429,10 @@ let
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
 
-    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+    ocaml_expat =
+    if lib.versionAtLeast ocaml.version "4.02"
+    then callPackage ../development/ocaml-modules/expat { }
+    else callPackage ../development/ocaml-modules/expat/0.9.nix { };
 
     frontc = callPackage ../development/ocaml-modules/frontc { };
 
@@ -430,16 +464,11 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
-    ocaml_react = callPackage ../development/ocaml-modules/react { };
-    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
-
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
-
-    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
@@ -447,8 +476,8 @@ let
 
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { cmdliner = cmdliner_1_0; };
-    ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { };
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
+    ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { cmdliner = cmdliner_0_9; };
 
     ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
 
@@ -482,6 +511,8 @@ let
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
+    psq = callPackage ../development/ocaml-modules/psq { };
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
@@ -560,6 +591,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
 
+    ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix {};
+
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 
     ppx_deriving =
@@ -590,6 +623,10 @@ let
 
     re = callPackage ../development/ocaml-modules/re { };
 
+    react = callPackage ../development/ocaml-modules/react { };
+
+    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
+
     reason = callPackage ../development/compilers/reason { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
@@ -601,6 +638,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stog = callPackage ../applications/misc/stog { };
 
@@ -622,6 +661,8 @@ let
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
+    stdint = callPackage ../development/ocaml-modules/stdint { };
+
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
@@ -639,6 +680,8 @@ let
     vg = callPackage ../development/ocaml-modules/vg { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
@@ -663,7 +706,7 @@ let
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime;
+      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime num;
       inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
     };
@@ -943,10 +986,6 @@ let
 
     matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
 
-    ott = callPackage ../applications/science/logic/ott {
-      camlp5 = camlp5_transitional;
-    };
-
   };
     in (ocamlPackages.janeStreet // ocamlPackages);
     in lib.fix' (lib.extends overrides packageSet);
@@ -975,7 +1014,9 @@ in rec
 
   ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_05;
+  ocamlPackages_4_06 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.06.nix { }) (self: super: { });
 
-  ocamlPackages = ocamlPackages_4_02;
+  ocamlPackages_latest = ocamlPackages_4_06;
+
+  ocamlPackages = ocamlPackages_4_04;
 }

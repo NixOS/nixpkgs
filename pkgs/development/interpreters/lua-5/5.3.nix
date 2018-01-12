@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.3";
-  version = "${luaversion}.0";
+  version = "${luaversion}.4";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "00fv1p6dv4701pyjrlvkrr6ykzxqy9hy1qxzj6qmwlb0ssr5wjmf";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
+    sha256 = "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
   };
 
   nativeBuildInputs = [ readline ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    inherit (hostPlatform) isDarwin isMingw;
+    inherit (hostPlatform) isDarwin isMinGW;
   in {
     configurePhase = ''
       makeFlagsArray=(
@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
         INSTALL_MAN=$out/share/man/man1
         V=${luaversion}
         R=${version}
-        ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
+        ${if isMinGW then "mingw" else stdenv.lib.optionalString isDarwin ''
         ''}
       )
-    '' + stdenv.lib.optionalString isMingw ''
+    '' + stdenv.lib.optionalString isMinGW ''
       installFlagsArray=(
         TO_BIN="lua.exe luac.exe"
         TO_LIB="liblua.a lua52.dll"

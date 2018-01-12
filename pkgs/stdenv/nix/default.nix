@@ -1,5 +1,5 @@
 { lib
-, crossSystem, config
+, crossSystem, config, overlays
 , bootStages
 , ...
 }:
@@ -7,9 +7,7 @@
 assert crossSystem == null;
 
 bootStages ++ [
-  (prevStage: let
-    inherit (prevStage) stdenv;
-  in {
+  (prevStage: {
     inherit config overlays;
 
     stdenv = import ../generic rec {
@@ -27,10 +25,9 @@ bootStages ++ [
 
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;
-        nativePrefix = stdenv.lib.optionalString hostPlatform.isSunOS "/usr";
+        nativePrefix = lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
-        inherit stdenv;
-        inherit (prevStage) binutils coreutils gnugrep;
+        inherit (prevStage) stdenvNoCC binutils coreutils gnugrep;
         cc = prevStage.gcc.cc;
         isGNU = true;
         shell = prevStage.bash + "/bin/sh";
@@ -38,7 +35,7 @@ bootStages ++ [
 
       shell = prevStage.bash + "/bin/sh";
 
-      fetchurlBoot = stdenv.fetchurlBoot;
+      fetchurlBoot = prevStage.stdenv.fetchurlBoot;
 
       overrides = self: super: {
         inherit cc;

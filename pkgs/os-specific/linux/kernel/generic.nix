@@ -29,12 +29,27 @@
 , ...
 }:
 
-assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 assert stdenv.isLinux;
 
 let
 
   lib = stdenv.lib;
+
+  # Combine the `features' attribute sets of all the kernel patches.
+  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
+    iwlwifi = true;
+    efiBootStub = true;
+    needsCifsUtils = true;
+    netfilterRPFilter = true;
+  } // features) kernelPatches;
+
+  configWithPlatform = kernelPlatform: import ./common-config.nix {
+    inherit stdenv version kernelPlatform extraConfig;
+    features = kernelFeatures; # Ensure we know of all extra patches, etc.
+  };
+
+  config = configWithPlatform stdenv.platform;
+  configCross = configWithPlatform hostPlatform.platform;
 
   kernelConfigFun = baseConfig:
     let
@@ -103,7 +118,7 @@ let
   };
 
   kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches stdenv;
+    inherit version modDirVersion src kernelPatches stdenv extraMeta;
 
     configfile = configfile.nativeDrv or configfile;
 
@@ -115,23 +130,14 @@ let
   };
 
   passthru = {
-    # Combine the `features' attribute sets of all the kernel patches.
-    features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
-
-    meta = kernel.meta // extraMeta;
-
-    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" "meta" ]);
+    features = kernelFeatures;
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
-
-  configWithPlatform = kernelPlatform: import ./common-config.nix
-    { inherit stdenv version kernelPlatform extraConfig;
-      features = passthru.features; # Ensure we know of all extra patches, etc.
-    };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform hostPlatform.platform;
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
 
   crossDrv = lib.addPassthru kernel.crossDrv passthru;
-in if kernel ? crossDrv then nativeDrv // { inherit nativeDrv crossDrv; } else lib.addPassthru kernel passthru
+
+in if kernel ? crossDrv
+   then nativeDrv // { inherit nativeDrv crossDrv; }
+   else lib.addPassthru kernel passthru

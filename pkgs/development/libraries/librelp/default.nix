@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mvvxqfsfg96rb6xv3fw7mcsqmyfnsb74sc53gnhpcpp4h2p6m83";
   };
 
-  buildInputs = [ pkgconfig gnutls zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gnutls zlib ];
 
   meta = with stdenv.lib; {
     homepage = http://www.librelp.com/;

@@ -110,16 +110,16 @@ let
         text = ''
           var fs = require('fs');
           var path = require('path');
-          
+
           function resolveDependencyVersion(location, name) {
               if(location == process.env['NIX_STORE']) {
                   return null;
               } else {
                   var dependencyPackageJSON = path.join(location, "node_modules", name, "package.json");
-                  
+
                   if(fs.existsSync(dependencyPackageJSON)) {
                       var dependencyPackageObj = JSON.parse(fs.readFileSync(dependencyPackageJSON));
-                      
+
                       if(dependencyPackageObj.name == name) {
                           return dependencyPackageObj.version;
                       }
@@ -128,12 +128,12 @@ let
                   }
               }
           }
-          
+
           function replaceDependencies(dependencies) {
               if(typeof dependencies == "object" && dependencies !== null) {
                   for(var dependency in dependencies) {
                       var resolvedVersion = resolveDependencyVersion(process.cwd(), dependency);
-                      
+
                       if(resolvedVersion === null) {
                           process.stderr.write("WARNING: cannot pinpoint dependency: "+dependency+", context: "+process.cwd()+"\n");
                       } else {
@@ -142,17 +142,17 @@ let
                   }
               }
           }
-          
+
           /* Read the package.json configuration */
           var packageObj = JSON.parse(fs.readFileSync('./package.json'));
-          
+
           /* Pinpoint all dependencies */
           replaceDependencies(packageObj.dependencies);
           if(process.argv[2] == "development") {
               replaceDependencies(packageObj.devDependencies);
           }
           replaceDependencies(packageObj.optionalDependencies);
-          
+
           /* Write the fixed package.json file */
           fs.writeFileSync("package.json", JSON.stringify(packageObj, null, 2));
         '';
@@ -160,7 +160,7 @@ let
     in
     ''
       node ${pinpointDependenciesFromPackageJSON} ${if production then "production" else "development"}
-      
+
       ${stdenv.lib.optionalString (dependencies != [])
         ''
           if [ -d node_modules ]
@@ -171,11 +171,11 @@ let
           fi
         ''}
     '';
-  
+
   # Recursively traverses all dependencies of a package and pinpoints all
   # dependencies in the package.json file to the versions that are actually
   # being used.
-  
+
   pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }@args:
     ''
       if [ -d "${packageName}" ]
@@ -194,9 +194,126 @@ let
     mv node-* $out
   '';
 
-  # Builds and composes an NPM package including all its dependencies
-  buildNodePackage = { name, packageName, version, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, preRebuild ? "", ... }@args:
+  # Script that adds _integrity fields to all package.json files to prevent NPM from consulting the cache (that is empty)
+  addIntegrityFieldsScript = writeTextFile {
+    name = "addintegrityfields.js";
+    text = ''
+      var fs = require('fs');
+      var path = require('path');
 
+      function augmentDependencies(baseDir, dependencies) {
+          for(var dependencyName in dependencies) {
+              var dependency = dependencies[dependencyName];
+
+              // Open package.json and augment metadata fields
+              var packageJSONDir = path.join(baseDir, "node_modules", dependencyName);
+              var packageJSONPath = path.join(packageJSONDir, "package.json");
+
+              if(fs.existsSync(packageJSONPath)) { // Only augment packages that exist. Sometimes we may have production installs in which development dependencies can be ignored
+                  console.log("Adding metadata fields to: "+packageJSONPath);
+                  var packageObj = JSON.parse(fs.readFileSync(packageJSONPath));
+
+                  if(dependency.integrity) {
+                      packageObj["_integrity"] = dependency.integrity;
+                  } else {
+                      packageObj["_integrity"] = "sha1-000000000000000000000000000="; // When no _integrity string has been provided (e.g. by Git dependencies), add a dummy one. It does not seem to harm and it bypasses downloads.
+                  }
+
+                  packageObj["_resolved"] = dependency.version; // Set the resolved version to the version identifier. This prevents NPM from cloning Git repositories.
+                  fs.writeFileSync(packageJSONPath, JSON.stringify(packageObj, null, 2));
+              }
+
+              // Augment transitive dependencies
+              if(dependency.dependencies !== undefined) {
+                  augmentDependencies(packageJSONDir, dependency.dependencies);
+              }
+          }
+      }
+
+      if(fs.existsSync("./package-lock.json")) {
+          var packageLock = JSON.parse(fs.readFileSync("./package-lock.json"));
+
+          if(packageLock.lockfileVersion !== 1) {
+             process.stderr.write("Sorry, I only understand lock file version 1!\n");
+             process.exit(1);
+          }
+
+          if(packageLock.dependencies !== undefined) {
+              augmentDependencies(".", packageLock.dependencies);
+          }
+      }
+    '';
+  };
+
+  # Reconstructs a package-lock file from the node_modules/ folder structure and package.json files with dummy sha1 hashes
+  reconstructPackageLock = writeTextFile {
+    name = "addintegrityfields.js";
+    text = ''
+      var fs = require('fs');
+      var path = require('path');
+
+      var packageObj = JSON.parse(fs.readFileSync("package.json"));
+
+      var lockObj = {
+          name: packageObj.name,
+          version: packageObj.version,
+          lockfileVersion: 1,
+          requires: true,
+          dependencies: {}
+      };
+
+      function augmentPackageJSON(filePath, dependencies) {
+          var packageJSON = path.join(filePath, "package.json");
+          if(fs.existsSync(packageJSON)) {
+              var packageObj = JSON.parse(fs.readFileSync(packageJSON));
+              dependencies[packageObj.name] = {
+                  version: packageObj.version,
+                  integrity: "sha1-000000000000000000000000000=",
+                  dependencies: {}
+              };
+              processDependencies(path.join(filePath, "node_modules"), dependencies[packageObj.name].dependencies);
+          }
+      }
+
+      function processDependencies(dir, dependencies) {
+          if(fs.existsSync(dir)) {
+              var files = fs.readdirSync(dir);
+
+              files.forEach(function(entry) {
+                  var filePath = path.join(dir, entry);
+                  var stats = fs.statSync(filePath);
+
+                  if(stats.isDirectory()) {
+                      if(entry.substr(0, 1) == "@") {
+                          // When we encounter a namespace folder, augment all packages belonging to the scope
+                          var pkgFiles = fs.readdirSync(filePath);
+
+                          pkgFiles.forEach(function(entry) {
+                              if(stats.isDirectory()) {
+                                  var pkgFilePath = path.join(filePath, entry);
+                                  augmentPackageJSON(pkgFilePath, dependencies);
+                              }
+                          });
+                      } else {
+                          augmentPackageJSON(filePath, dependencies);
+                      }
+                  }
+              });
+          }
+      }
+
+      processDependencies("node_modules", lockObj.dependencies);
+
+      fs.writeFileSync("package-lock.json", JSON.stringify(lockObj, null, 2));
+    '';
+  };
+
+  # Builds and composes an NPM package including all its dependencies
+  buildNodePackage = { name, packageName, version, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, bypassCache ? false, preRebuild ? "", ... }@args:
+
+    let
+      forceOfflineFlag = if bypassCache then "--offline" else "--registry http://www.example.com";
+    in
     stdenv.lib.makeOverridable stdenv.mkDerivation (builtins.removeAttrs args [ "dependencies" ] // {
       name = "node-${name}-${version}";
       buildInputs = [ tarWrapper python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ args.buildInputs or [];
@@ -210,7 +327,7 @@ let
 
       compositionScript = composePackage args;
       pinpointDependenciesScript = pinpointDependenciesOfPackage args;
-      
+
       passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
       installPhase = args.installPhase or ''
@@ -220,7 +337,7 @@ let
 
         # Compose the package and all its dependencies
         source $compositionScriptPath
-        
+
         # Pinpoint the versions of all dependencies to the ones that are actually being used
         echo "pinpointing versions of dependencies..."
         source $pinpointDependenciesScriptPath
@@ -242,14 +359,25 @@ let
         export HOME=$TMPDIR
         cd "${packageName}"
         runHook preRebuild
-        npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
+
+        ${stdenv.lib.optionalString bypassCache ''
+          if [ ! -f package-lock.json ]
+          then
+              echo "No package-lock.json file found, reconstructing..."
+              node ${reconstructPackageLock}
+          fi
+
+          node ${addIntegrityFieldsScript}
+        ''}
+
+        npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
         if [ "$dontNpmInstall" != "1" ]
         then
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
 
-            npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
+            npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
         fi
 
         # Create symlink to the deployed executable folder, if applicable
@@ -278,8 +406,10 @@ let
     });
 
   # Builds a development shell
-  buildNodeShell = { name, packageName, version, src, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, ... }@args:
+  buildNodeShell = { name, packageName, version, src, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, bypassCache ? false, ... }@args:
     let
+      forceOfflineFlag = if bypassCache then "--offline" else "--registry http://www.example.com";
+
       nodeDependencies = stdenv.mkDerivation {
         name = "node-dependencies-${name}-${version}";
 
@@ -287,40 +417,58 @@ let
 
         includeScript = includeDependencies { inherit dependencies; };
         pinpointDependenciesScript = pinpointDependenciesOfPackage args;
-        
+
         passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
 
         buildCommand = ''
-          mkdir -p $out/lib
-          cd $out/lib
+          mkdir -p $out/${packageName}
+          cd $out/${packageName}
+
           source $includeScriptPath
-          
-          # Pinpoint the versions of all dependencies to the ones that are actually being used
-          echo "pinpointing versions of dependencies..."
-          source $pinpointDependenciesScriptPath
 
           # Create fake package.json to make the npm commands work properly
-          cat > package.json <<EOF
-          {
-              "name": "${packageName}",
-              "version": "${version}"
-          }
-          EOF
+          cp ${src}/package.json .
+          chmod 644 package.json
+          ${stdenv.lib.optionalString bypassCache ''
+            if [ -f ${src}/package-lock.json ]
+            then
+              cp ${src}/package-lock.json .
+            fi
+          ''}
+
+          # Pinpoint the versions of all dependencies to the ones that are actually being used
+          echo "pinpointing versions of dependencies..."
+          cd ..
+          source $pinpointDependenciesScriptPath
+          cd ${packageName}
 
           # Patch the shebangs of the bundled modules to prevent them from
           # calling executables outside the Nix store as much as possible
           patchShebangs .
 
           export HOME=$PWD
-          npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
+
+          ${stdenv.lib.optionalString bypassCache ''
+            if [ ! -f package-lock.json ]
+            then
+                echo "No package-lock.json file found, reconstructing..."
+                node ${reconstructPackageLock}
+            fi
+
+            node ${addIntegrityFieldsScript}
+          ''}
+
+          npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
           ${stdenv.lib.optionalString (!dontNpmInstall) ''
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
 
-            npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
+            npm ${forceOfflineFlag} --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
           ''}
 
+          cd ..
+          mv ${packageName} lib
           ln -s $out/lib/node_modules/.bin $out/bin
         '';
       };

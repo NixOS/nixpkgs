@@ -9,7 +9,7 @@
 , enableJPEG2K ? true, jasper
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all
-, enableEigen ? false, eigen
+, enableEigen ? true, eigen
 , darwin
 }:
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = http://opencv.org/;
+    homepage = https://opencv.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   installPhase = "mkdir $out; mkdir -p $out/bin; cp -p watch $out/bin";
 
   meta = {
-    homepage = http://sourceforge.net/projects/procps/;
+    homepage = https://sourceforge.net/projects/procps/;
     description = "Utility for watch the output of a given command at intervals";
     platforms = stdenv.lib.platforms.unix;
   };

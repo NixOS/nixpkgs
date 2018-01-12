@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-      flex bison libiberty libaudit makeWrapper ];
-  buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils zlib ] ++
+      flex bison libiberty libaudit makeWrapper pkgconfig ];
+  buildInputs = [ elfutils python perl newt slang libunwind binutils zlib ] ++
     stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     /* I don't want cross-python or cross-perl -
        I don't know if cross-python even works */
     propagatedBuildInputs = [ elfutils.crossDrv newt.crossDrv ];
-    makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
+    makeFlags = "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
     elfutils = elfutils.crossDrv;
     inherit (kernel.crossDrv) src patches;
   };

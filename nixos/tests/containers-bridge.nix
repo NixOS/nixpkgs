@@ -69,6 +69,12 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("ping -n -c 1 $ip6");
       $machine->succeed("curl --fail http://[$ip6]/ > /dev/null");
 
+      # Check that nixos-container show-ip works in case of an ipv4 address with
+      # subnetmask in CIDR notation.
+      my $result = $machine->succeed("nixos-container show-ip webserver");
+      chomp $result;
+      $result eq $ip or die;
+
       # Stop the container.
       $machine->succeed("nixos-container stop webserver");
       $machine->fail("curl --fail --connect-timeout 2 http://$ip/ > /dev/null");

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
       sha256 = "1m378vxh1sf9ry8k11x773xpy5f6cab5gkzqglz0jp9hc431r60r";
     };
 
-  buildInputs = [ autoreconfHook boost python2 libgsf pkgconfig bzip2
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ boost python2 libgsf bzip2
     xmlto gettext imagemagick doxygen
   ];
 

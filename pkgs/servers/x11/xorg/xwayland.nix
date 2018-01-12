@@ -6,7 +6,7 @@ with stdenv.lib;
 overrideDerivation xorgserver (oldAttrs: {
 
   name = "xwayland-${xorgserver.version}";
-  propagatedNativeBuildInputs = oldAttrs.propagatedNativeBuildInputs
+  propagatedBuildInputs = oldAttrs.propagatedBuildInputs
     ++ [wayland wayland-protocols epoxy libxslt makeWrapper libunwind];
   configureFlags = [
     "--disable-docs"
@@ -17,6 +17,7 @@ overrideDerivation xorgserver (oldAttrs: {
     "--disable-xnest"
     "--disable-xquartz"
     "--disable-xwin"
+    "--enable-glamor"
     "--with-default-font-path="
     "--with-xkb-bin-directory=${xkbcomp}/bin"
     "--with-xkb-path=${xkeyboard_config}/etc/X11/xkb"

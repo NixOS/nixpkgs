@@ -31,6 +31,8 @@ let
       ${mkBindSockets cfg.bindUISocket}
         .include "$CONFDIR/worker-controller.inc"
       }
+
+      ${cfg.extraConfig}
    '';
 
 in
@@ -76,6 +78,15 @@ in
         ];
         description = ''
           List of sockets for web interface, in format acceptable by rspamd
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration to add at the end of the rspamd configuration
+          file.
         '';
       };
 

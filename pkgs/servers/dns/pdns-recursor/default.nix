@@ -11,15 +11,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "pdns-recursor-${version}";
-  version = "4.0.4";
+  version = "4.0.8";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "0k8y9zxj2lz4rq782vgzr28yd43q0hwlnvszwq0k9l6c967pff13";
+    sha256 = "04v5y6mfdhn8ikigqmm3k5k0zz5l8d3k1a7ih464n1161q7z0vww";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost openssl pkgconfig systemd
+    boost openssl systemd
   ] ++ optional enableLua [ lua luajit ]
     ++ optional enableProtoBuf protobuf;
 
@@ -28,9 +29,11 @@ stdenv.mkDerivation rec {
     "--with-systemd"
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A recursive DNS server";
-    homepage = http://www.powerdns.com/;
+    homepage = https://www.powerdns.com/;
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];

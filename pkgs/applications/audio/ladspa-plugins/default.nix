@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rqwh8xrw6hnp69dg4gy336bfbfpmbx4fjrk0nb8ypjcxkz91c6i";
   };
 
-  buildInputs = [ autoreconfHook fftw ladspaH libxml2 pkgconfig perlPackages.perl  perlPackages.XMLParser ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl  perlPackages.XMLParser ];
 
   patchPhase = ''
     patchShebangs .

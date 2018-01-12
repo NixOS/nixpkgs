@@ -1,4 +1,4 @@
-# Temporaririly avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
+# Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
 { stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
 
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mvmvwwpl4zq0yvgzdizww8l9azvlrc82xm32nz1fi1nw8x5qfqk";
   };
 
-  buildInputs = [ mono pkgconfig dotnetbuildhelpers autoconf automake which ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mono dotnetbuildhelpers autoconf automake which ];
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets

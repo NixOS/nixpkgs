@@ -4,17 +4,20 @@
 , fdk_aac
 , ffmpeg
 , jansson
+, libjack2
 , libxkbcommon
 , libpthreadstubs
 , libXdmcp
 , qtbase
 , qtx11extras
+, speex
 , libv4l
 , x264
 , curl
 , xorg
 , makeWrapper
 , pkgconfig
+, vlc
 
 , alsaSupport ? false
 , alsaLib
@@ -26,13 +29,13 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "20.0.1";
+  version = "20.1.3";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "1f701rh4w88ba48b50y16fvmzzsyv4y5nv30mrx3pb2ni7wyanld";
+    sha256 = "0qdpa2xxiiw53ksvlrf80jm8gz6kxsn56sffv2v2ijxvy7kw5zcg";
   };
 
   patches = [ ./find-xcb.patch ];
@@ -45,13 +48,16 @@ in stdenv.mkDerivation rec {
                   fdk_aac
                   ffmpeg
                   jansson
+                  libjack2
                   libv4l
                   libxkbcommon
                   libpthreadstubs
                   libXdmcp
                   qtbase
                   qtx11extras
+                  speex
                   x264
+                  vlc
                   makeWrapper
                 ]
                 ++ optional alsaSupport alsaLib
@@ -64,7 +70,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib"
+        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
   '';
 
   meta = with stdenv.lib; {

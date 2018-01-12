@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys, qtx11extras,
-menu-cache, muparser }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-globalkeys, qtx11extras,
+menu-cache, muparser, pcre }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-runner";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1nsxm0fplwrzz3vccd5fm82lpl4fqss6kv558zj44vzpsl13l954";
+    sha256 = "1354vdaskhch1n8v3kdy15nszgqb1092csr84nbhymzgrhrq1093";
   };
 
   nativeBuildInputs = [
@@ -27,13 +27,18 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
-    lxqt-common
     lxqt-globalkeys
     menu-cache
     muparser
+    pcre
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+
+  postPatch = ''
+    substituteInPlace autostart/CMakeLists.txt \
+      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+  '';
 
   meta = with stdenv.lib; {
     description = "Tool used to launch programs quickly by typing their names";

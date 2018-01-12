@@ -17,19 +17,27 @@ with lib;
   };
 
   config = mkIf config.security.lockKernelModules {
+    boot.kernelModules = concatMap (x:
+      if x.device != null
+        then
+          if x.fsType == "vfat"
+            then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
+            else [ x.fsType ]
+        else []) config.system.build.fileSystems;
+
     systemd.services.disable-kernel-module-loading = rec {
       description = "Disable kernel module loading";
 
       wantedBy = [ config.systemd.defaultUnit ];
-      after = [ "systemd-udev-settle.service" "firewall.service" "systemd-modules-load.service" ] ++ wantedBy;
 
-      script = "echo -n 1 > /proc/sys/kernel/modules_disabled";
+      after = [ "systemd-udev-settle.service" "firewall.service" "systemd-modules-load.service" ] ++ wantedBy;
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        ExecStart = "/bin/sh -c 'echo -n 1 >/proc/sys/kernel/modules_disabled'";
       };
     };
   };

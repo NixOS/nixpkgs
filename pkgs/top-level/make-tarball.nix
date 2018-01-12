@@ -24,7 +24,9 @@ releaseTools.sourceTarball rec {
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
     echo -n $VERSION_SUFFIX > .version-suffix
+    echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
     echo "release name is $releaseName"
+    echo "git-revision is $(cat .git-revision)"
   '';
 
   dontBuild = false;
@@ -41,8 +43,10 @@ releaseTools.sourceTarball rec {
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>
-    if (find pkgs -type f -name '*.nix' -print | xargs grep '<nixpkgs\/'); then
+    badFiles=$(find pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
+    if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
+        echo "The offending files: $badFiles"
         exit 1
     fi
 

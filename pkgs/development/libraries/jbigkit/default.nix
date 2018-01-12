@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's/^\(CFLAGS.*\)$/\1 -fPIC/' Makefile
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile libjbig/Makefile pbmtools/Makefile \
-      --replace "CC = gcc" "CC = clang"
+    for f in Makefile libjbig/Makefile pbmtools/Makefile; do
+        substituteInPlace $f --replace "CC = gcc" "CC = clang"
+    done
   '';
 
   installPhase = ''

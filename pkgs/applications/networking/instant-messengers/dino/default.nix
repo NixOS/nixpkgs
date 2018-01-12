@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub
-, vala, cmake, wrapGAppsHook, pkgconfig, gettext
+, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
 , gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib_networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify
+, libnotify, libsoup
 , libgcrypt
 , epoxy
 , at_spi2_core
@@ -13,19 +13,20 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2017-06-21";
+  name = "dino-unstable-2017-12-03";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "3f0089db86e2057293a33453361678989919147f";
-    sha256 = "011wd6qi8nagig8418hibgnsmznd76dvp3p2dzzr4wyrb7d6cgcb";
+    rev = "cee39b0117c1620d852d50c14ca6f06db4e2956b";
+    sha256 = "15cm6y2rgj6fcw8sciygd1wvcw7k9fgf69ji1abfwybzydflj7ny";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     vala
     cmake
+    ninja
     pkgconfig
     wrapGAppsHook
   ];
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libnotify
     gpgme
     libgcrypt
+    libsoup
     pcre
     xorg.libxcb
     xorg.libpthreadstubs

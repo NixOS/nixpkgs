@@ -28,7 +28,7 @@ let
   configFile = pkgs.writeText "smb.conf"
     (if cfg.configText != null then cfg.configText else
     ''
-      [ global ]
+      [global]
       security = ${cfg.securityType}
       passwd program = /run/wrappers/bin/passwd %u
       pam password change = ${smbToString cfg.syncPasswordsByPam}
@@ -56,6 +56,7 @@ let
       serviceConfig = {
         ExecStart = "${samba}/sbin/${appName} ${args}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitNOFILE = 16384;
         Type = "notify";
       };
 

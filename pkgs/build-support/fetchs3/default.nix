@@ -1,4 +1,4 @@
-{ stdenv, runCommand, awscli }:
+{ stdenvNoCC, runCommand, awscli }:
 
 { s3url
 , sha256
@@ -10,13 +10,13 @@
 }:
 
 let
-  credentialAttrs = stdenv.lib.optionalAttrs (credentials != null) {
+  credentialAttrs = stdenvNoCC.lib.optionalAttrs (credentials != null) {
     AWS_ACCESS_KEY_ID = credentials.access_key_id;
     AWS_SECRET_ACCESS_KEY = credentials.secret_access_key;
     AWS_SESSION_TOKEN = credentials.session_token ? null;
   };
 in runCommand "foo" ({
-  buildInputs = [ awscli ];
+  nativeBuildInputs = [ awscli ];
   outputHashAlgo = "sha256";
   outputHash = sha256;
   outputHashMode = if recursiveHash then "recursive" else "flat";

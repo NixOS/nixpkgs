@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ]
     ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  buildInputs = [ libtool pkgconfig ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool ncurses ];
 
   meta = with lib; {
     description = "Terminal keypress reading library";

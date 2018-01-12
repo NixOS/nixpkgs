@@ -29,7 +29,11 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
+
+    [git]
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -70,7 +74,7 @@ let
       secret_key_base: ${cfg.secrets.secret}
       otp_key_base: ${cfg.secrets.otp}
       db_key_base: ${cfg.secrets.db}
-      jws_private_key: ${builtins.toJSON cfg.secrets.jws}
+      openid_connect_signing_key: ${builtins.toJSON cfg.secrets.jws}
   '';
 
   gitlabConfig = {
@@ -104,6 +108,7 @@ let
       ldap.enabled = false;
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
+      gitaly.client_path = "${cfg.packages.gitaly}/bin";
       backup.path = "${cfg.backupPath}";
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
@@ -117,8 +122,6 @@ let
       };
       git = {
         bin_path = "git";
-        max_size = 20971520; # 20MB
-        timeout = 10;
       };
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
@@ -142,9 +145,9 @@ let
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
     GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
-    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/home/config.yml";
+    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
     GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
-    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/home/hooks";
+    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "gitlab-redis.yml" redisYml;
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
@@ -248,7 +251,6 @@ in {
 
       databasePassword = mkOption {
         type = types.str;
-        default = "";
         description = "Gitlab database user password.";
       };
 
@@ -414,7 +416,7 @@ in {
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
-          openssl genrsa 2048openssl genpkey -algorithm RSA -out - -pkeyopt rsa_keygen_bits:2048
+          openssl genrsa 2048
         '';
       };
 
@@ -439,12 +441,6 @@ in {
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
-
-    assertions = [
-      { assertion = cfg.databasePassword != "";
-        message = "databasePassword must be set";
-      }
-    ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
@@ -496,7 +492,9 @@ in {
       after = [ "network.target" "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ];
+      environment.GEM_HOME = "${cfg.packages.gitaly.rubyEnv}/${ruby.gemPath}";
+      environment.GITLAB_SHELL_CONFIG_PATH = gitlabEnv.GITLAB_SHELL_CONFIG_PATH;
+      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ruby ];
       serviceConfig = {
         #PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
@@ -555,6 +553,7 @@ in {
         openssh
         nodejs
         procps
+        gnupg
       ];
       preStart = ''
         mkdir -p ${cfg.backupPath}
@@ -566,11 +565,12 @@ in {
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
+        mkdir -p ${cfg.statePath}/shell
 
-        rm -rf ${cfg.statePath}/config ${cfg.statePath}/home/hooks
+        rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
 
-        tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
@@ -579,6 +579,7 @@ in {
         mkdir -p ${cfg.statePath}/{log,uploads}
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
         # Prepare home directory
@@ -616,7 +617,7 @@ in {
         fi
 
         # enable required pg_trgm extension for gitlab
-        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
@@ -629,11 +630,23 @@ in {
           touch "${cfg.statePath}/db-seeded"
         fi
 
+        # The gitlab:shell:create_hooks task seems broken for fixing links
+        # so we instead delete all the hooks and create them anew
+        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
+        ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks RAILS_ENV=production
+
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
         chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
+        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
+        chmod -R ug-s ${cfg.statePath}/repositories
+        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
+        chmod 770 ${cfg.statePath}/uploads
+        chown -R ${cfg.user} ${cfg.statePath}/uploads
+        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0770 {} \;
       '';
 
       serviceConfig = {

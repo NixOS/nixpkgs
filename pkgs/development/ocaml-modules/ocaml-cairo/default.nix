@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./META.patch ];
 
-  buildInputs = [ ocaml automake gnum4 autoconf unzip pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml automake gnum4 autoconf unzip
                   findlib freetype lablgtk cairo gdk_pixbuf gtk2 pango ];
 
   createFindlibDestdir = true;

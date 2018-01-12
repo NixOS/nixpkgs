@@ -54,8 +54,6 @@ let
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
-  supportOldHostKeys = !versionAtLeast config.system.stateVersion "15.07";
-
 in
 
 {
@@ -100,6 +98,15 @@ in
           Whether to enable the SFTP subsystem in the SSH daemon.  This
           enables the use of commands such as <command>sftp</command> and
           <command>sshfs</command>.
+        '';
+      };
+
+      sftpFlags = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "-f AUTHPRIV" "-l INFO" ];
+        description = ''
+          Commandline flags to add to sftp-server.
         '';
       };
 
@@ -182,9 +189,6 @@ in
         default =
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-          ] ++ optionals supportOldHostKeys
-          [ { type = "dsa"; path = "/etc/ssh/ssh_host_dsa_key"; }
-            { type = "ecdsa"; bits = 521; path = "/etc/ssh/ssh_host_ecdsa_key"; }
           ];
         description = ''
           NixOS can automatically generate SSH host keys.  This option
@@ -208,7 +212,7 @@ in
       };
 
       moduliFile = mkOption {
-        example = "services.openssh.moduliFile = /etc/my-local-ssh-moduli;";
+        example = "/etc/my-local-ssh-moduli;";
         type = types.path;
         description = ''
           Path to <literal>moduli</literal> file to install in
@@ -244,13 +248,10 @@ in
       let
         service =
           { description = "SSH Daemon";
-
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
-
+            after = [ "network.target" ];
             stopIfChanged = false;
-
             path = [ cfgc.package pkgs.gawk ];
-
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
             preStart =
@@ -338,7 +339,7 @@ in
         ''}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfgc.package}/libexec/sftp-server
+          Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
@@ -354,14 +355,21 @@ in
           HostKey ${k.path}
         '')}
 
-        # Allow DSA client keys for now. (These were deprecated
-        # in OpenSSH 7.0.)
-        PubkeyAcceptedKeyTypes +ssh-dss
+        ### Recommended settings from both:
+        # https://stribika.github.io/2015/01/04/secure-secure-shell.html
+        # and
+        # https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29
 
-        # Re-enable DSA host keys for now.
-        ${optionalString supportOldHostKeys ''
-          HostKeyAlgorithms +ssh-dss
-        ''}
+        KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+        Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+        MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+        # LogLevel VERBOSE logs user's key fingerprint on login.
+        # Needed to have a clear audit track of which key was used to log in.
+        LogLevel VERBOSE
+
+        # Use kernel sandbox mechanisms where possible in unprivileged processes.
+        UsePrivilegeSeparation sandbox
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

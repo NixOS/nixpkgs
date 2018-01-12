@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
-  buildInputs = [libxml2 pkgconfig openssl]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libxml2 openssl]
     ++ stdenv.lib.optional compressionSupport zlib;
 
   configureFlags = ''

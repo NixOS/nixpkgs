@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "bonnie++-1.97.3";
   src = fetchurl {
-    url = "http://www.coker.com.au/bonnie++/experimental/${name}.tgz";
+    url = "https://fossies.org/linux/privat/${name}.tgz";
     sha256 = "0vkl42rsrsy95fc1ykc6g8rsdbnpxayvdaihnnkly1fww1m3hyz2";
   };
 

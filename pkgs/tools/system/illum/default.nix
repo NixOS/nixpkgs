@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "05v3hz7n6b1mlhc6zqijblh1vpl0ja1y8y0lafw7mjdz03wxhfdb";
   };
 
-  buildInputs = [ pkgconfig ninja libevdev libev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ninja libevdev libev ];
 
   configurePhase = ''
     bash ./configure

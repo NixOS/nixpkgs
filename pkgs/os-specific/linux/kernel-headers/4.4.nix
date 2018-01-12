@@ -20,16 +20,12 @@ stdenvNoCC.mkDerivation {
 
   targetConfig = if hostPlatform != buildPlatform then hostPlatform.config else null;
 
-  platform = hostPlatform.platform.kernelArch or (
-    if hostPlatform.system == "i686-linux" then "i386" else
-    if hostPlatform.system == "x86_64-linux" then "x86_64" else
-    if hostPlatform.system == "powerpc-linux" then "powerpc" else
-    if hostPlatform.isArm then "arm" else
-    abort "don't know what the kernel include directory is called for this platform");
+  platform = hostPlatform.platform.kernelArch;
 
   # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
   # We do this so we have a build->build, not build->host, C compiler.
-  nativeBuildInputs = [ buildPackages.stdenv.cc perl ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl ];
 
   extraIncludeDirs = lib.optional hostPlatform.isPowerPC ["ppc"];
 

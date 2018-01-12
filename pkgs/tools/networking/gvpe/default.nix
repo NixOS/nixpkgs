@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v61mj25iyd91z0ir7cmradkkcm1ffbk52c96v293ibsvjs2s2hf";
   };
 
+  patches = [ ./gvpe-3.0-glibc-2.26.patch ];
+
   buildInputs = [ openssl gmp zlib ];
 
   configureFlags = [

@@ -9,11 +9,11 @@
 buildPythonPackage rec {
   pname = "sounddevice";
   name = "${pname}-${version}";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc5ec8534c3831ab133c497721f3aaeed4f5084b0eda842f0c0ada09f2f066dc";
+    sha256 = "1c9e833f8c8ccc67c0291c3448b29e9acc548fe56d15ee6f7fdd7037e00319f8";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   prePatch = ''
-    substituteInPlace sounddevice.py --replace "'portaudio'" "'${portaudio}/lib/libportaudio.so.2'"
+    substituteInPlace src/sounddevice.py --replace "'portaudio'" "'${portaudio}/lib/libportaudio.so.2'"
   '';
 
   meta = {

@@ -15,12 +15,20 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm *.otf
+
+    substituteInPlace tools/postprocess.py --replace \
+      'font = ttLib.TTFont(sys.argv[1])' \
+      'font = ttLib.TTFont(sys.argv[1], recalcTimestamp=False)'
   '';
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
     cp *.otf $out/share/fonts/opentype
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "00xycmb9ka67j5s66nkng53y8q6362igisxz04zb58r2717jk50m";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/khaledhosny/xits-math;

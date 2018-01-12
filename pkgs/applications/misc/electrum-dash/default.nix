@@ -10,10 +10,10 @@ python2Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python2Packages; [
-    dns
+    dnspython
     ecdsa
     pbkdf2
-    protobuf3_2
+    protobuf
     pyasn1
     pyasn1-modules
     pycrypto

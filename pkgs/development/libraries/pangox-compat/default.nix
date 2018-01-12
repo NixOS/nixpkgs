@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ip0ziys6mrqqmz4n71ays0kf5cs1xflj1gfpvs4fgy2nsrr482m";
   };
 
-  buildInputs = [ pkgconfig glib pango libX11 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib pango libX11 ];
 
   meta = {
     description = "A compatibility library for pango>1.30.*";

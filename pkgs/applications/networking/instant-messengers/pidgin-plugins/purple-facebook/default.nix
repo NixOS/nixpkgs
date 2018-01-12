@@ -52,7 +52,8 @@ in stdenv.mkDerivation rec {
     cp pidgin/libpurple/protocols/facebook/.libs/*.so $out/lib/purple-2/
   '';
 
-  buildInputs = [pidgin glib json_glib mercurial autoreconfHook];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [pidgin glib json_glib mercurial];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

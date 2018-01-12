@@ -1,37 +1,49 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel,
-  flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages_5, kernel
+, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.0";
+  version = "0.5.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "19lkqmilfjmj7bnhxlacd0waa5db8gf4lng12fy2zgji0d77vm1d";
+    sha256 = "0bb3244xll5sqx0lvrchg71qy2zg0yj6r5h4v5fvrg1fjhaldys9";
   };
 
-  buildInputs = [ makeWrapper cmake llvmPackages.llvm llvmPackages.clang-unwrapped kernel
-    flex bison elfutils python pythonPackages.netaddr luajit netperf iperf
+  buildInputs = [
+    llvmPackages_5.llvm llvmPackages_5.clang-unwrapped kernel
+    elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 
-  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules -DBCC_KERNEL_HAS_SOURCE_DIR=1";
+  patches = [
+    # fix build with llvm > 5.0.0 && < 6.0.0
+    (fetchpatch {
+      url = "https://github.com/iovisor/bcc/commit/bd7fa55bb39b8978dafd0b299e35616061e0a368.patch";
+      sha256 = "1sgxhsq174iihyk1x08py73q8fh78d7y3c90k5nh8vcw2pf1xbnf";
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper cmake flex bison ]
+    # libelf is incompatible with elfutils-libelf
+    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+
+  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
 
   postInstall = ''
     mkdir -p $out/bin $out/share
-    rm -r $out/share/bcc/tools/{old,doc/CMakeLists.txt}
+    rm -r $out/share/bcc/tools/old
     mv $out/share/bcc/tools/doc $out/share
     mv $out/share/bcc/man $out/share/
 
-    for f in $out/share/bcc/tools\/*; do
-      if [ -x $f ]; then
-        ln -s $f $out/bin/$(basename $f)
-        wrapProgram $f \
-          --prefix LD_LIBRARY_PATH : $out/lib \
-          --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
-          --prefix PYTHONPATH : ${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
-      fi
+    find $out/share/bcc/tools -type f -executable -print0 | \
+    while IFS= read -r -d ''$'\0' f; do
+      pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
+      rm -f $out/bin/$(basename $f)
+      makeWrapper $f $out/bin/$(basename $f) \
+        --prefix LD_LIBRARY_PATH : $out/lib \
+        --prefix PYTHONPATH : "$pythonLibs"
     done
   '';
 
@@ -39,6 +51,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic Tracing Tools for Linux";
     homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragge ];
+    maintainers = with maintainers; [ ragge mic92 ];
   };
 }

@@ -6,8 +6,8 @@ let
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
-    #(optionalString  cfg.autoMount                   "--mount")
-    (optionalString  cfg.autoMigrate                 "--migrate")
+    (optionalString  cfg.autoMount                   "--mount")
+    #(optionalString  cfg.autoMigrate                 "--migrate")
     (optionalString  cfg.enableGC                    "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
     (optionalString (cfg.defaultMode == "offline")   "--offline")
@@ -36,10 +36,10 @@ let
 
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
+    # NB: migration must be performed prior to pre-start, else we get the failure message!
     preStart = ''
-      ipfs --local config Addresses.API ${cfg.apiAddress}
-      ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
-    '' + optionalString false/*cfg.autoMount*/ ''
+      ipfs repo fsck # workaround for BUG #4212 (https://github.com/ipfs/go-ipfs/issues/4214)
+    '' + optionalString cfg.autoMount ''
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
       ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
@@ -54,7 +54,11 @@ let
               EOF
               ipfs --local config --json "${concatStringsSep "." path}" "$value"
             '')
-            cfg.extraConfig)
+            ({ Addresses.API = cfg.apiAddress;
+               Addresses.Gateway = cfg.gatewayAddress;
+               Addresses.Swarm = cfg.swarmAddress;
+            } //
+            cfg.extraConfig))
         );
     serviceConfig = {
       ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
@@ -91,24 +95,28 @@ in {
       };
 
       defaultMode = mkOption {
-        description = "systemd service that is enabled by default";
         type = types.enum [ "online" "offline" "norouting" ];
         default = "online";
+        description = "systemd service that is enabled by default";
       };
 
+      /*
       autoMigrate = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Whether IPFS should try to migrate the file system automatically.
+
+          The daemon will need to be able to download a binary from https://ipfs.io to perform the migration.
         '';
       };
+      */
 
-      #autoMount = mkOption {
-      #  type = types.bool;
-      #  default = false;
-      #  description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
-      #};
+      autoMount = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+      };
 
       ipfsMountDir = mkOption {
         type = types.str;
@@ -134,29 +142,31 @@ in {
         description = "Where IPFS exposes its API to";
       };
 
+      swarmAddress = mkOption {
+        type = types.listOf types.str;
+        default = [ "/ip4/0.0.0.0/tcp/4001" "/ip6/::/tcp/4001" ];
+        description = "Where IPFS listens for incoming p2p connections";
+      };
+
       enableGC = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable automatic garbage collection.
-        '';
+        description = "Whether to enable automatic garbage collection";
       };
 
       emptyRepo = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If set to true, the repo won't be initialized with help files
-        '';
+        description = "If set to true, the repo won't be initialized with help files";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
-        description = toString [
-          "Attrset of daemon configuration to set using `ipfs config`, every time the daemon starts."
-          "These are applied last, so may override configuration set by other options in this module."
-          "Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!"
-        ];
+        description = ''
+          Attrset of daemon configuration to set using <command>ipfs config</command>, every time the daemon starts.
+          These are applied last, so may override configuration set by other options in this module.
+          Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
+        '';
         default = {};
         example = {
           Datastore.StorageMax = "100GB";
@@ -179,10 +189,8 @@ in {
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = ''
-          The fdlimit for the IPFS systemd unit or `null` to have the daemon attempt to manage it.
-        '';
-        example = 256*1024;
+        description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
+        example = 64*1024;
       };
 
     };
@@ -192,6 +200,9 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ wrapped ];
+    environment.etc."fuse.conf" = mkIf cfg.autoMount { text = ''
+      user_allow_other
+    ''; };
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
@@ -211,11 +222,11 @@ in {
       description = "IPFS Initializer";
 
       after = [ "local-fs.target" ];
-      before = [ "ipfs.service" "ipfs-offline.service" ];
+      before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-      '' + optionalString false/*cfg.autoMount*/ ''
+      '' + optionalString cfg.autoMount ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipfsMountDir}
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipnsMountDir}
       '';

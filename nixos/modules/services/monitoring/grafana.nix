@@ -111,7 +111,7 @@ in {
       type = mkOption {
         description = "Database type.";
         default = "sqlite3";
-        type = types.enum ["mysql" "sqlite3" "postgresql"];
+        type = types.enum ["mysql" "sqlite3" "postgres"];
       };
 
       host = mkOption {

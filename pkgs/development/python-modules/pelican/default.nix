@@ -25,7 +25,10 @@ buildPythonPackage rec {
 
   buildInputs = [
     glibcLocales
-    pandoc
+    # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
+    # again. Compare https://github.com/getpelican/pelican/pull/2252.
+    # Version 3.7.1 is incompatible with our current pandoc version.
+    # pandoc
     git
     mock
     nose
@@ -44,6 +47,16 @@ buildPythonPackage rec {
   '';
 
   LC_ALL="en_US.UTF-8";
+
+
+  # We only want to patch shebangs in /bin, and not those
+  # of the project scripts that are created by Pelican.
+  # See https://github.com/NixOS/nixpkgs/issues/30116
+  dontPatchShebangs = true;
+
+  postFixup = ''
+    patchShebangs $out/bin
+  '';
 
   meta = with stdenv.lib; {
     description = "A tool to generate a static blog from reStructuredText or Markdown input files";

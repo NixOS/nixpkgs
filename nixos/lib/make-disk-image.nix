@@ -33,19 +33,25 @@
 
 , name ? "nixos-disk-image"
 
-, format ? "raw"
+, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
+  format ? "raw"
 }:
 
 with lib;
 
-let
-  extensions = {
+let format' = format; in let
+
+  format = if (format' == "qcow2-compressed") then "qcow2" else format';
+
+  compress = optionalString (format' == "qcow2-compressed") "-c";
+
+  filename = "nixos." + {
     qcow2 = "qcow2";
     vpc   = "vhd";
     raw   = "img";
-  };
+  }.${format};
 
-  nixpkgs = lib.cleanSource pkgs.path;
+  nixpkgs = cleanSource pkgs.path;
 
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
     mkdir -p $out
@@ -73,21 +79,21 @@ let
   targets = map (x: x.target) contents;
 
   prepareImage = ''
-    export PATH=${pkgs.lib.makeSearchPathOutput "bin" "bin" prepareImageInputs}
+    export PATH=${makeSearchPathOutput "bin" "bin" prepareImageInputs}
 
     mkdir $out
     diskImage=nixos.raw
     truncate -s ${toString diskSize}M $diskImage
 
     ${if partitioned then ''
-      parted $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
+      parted --script $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
       offset=$((2048*512))
     '' else ''
       offset=0
     ''}
 
     mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
-  
+
     root="$PWD/root"
     mkdir -p $root
 
@@ -123,8 +129,11 @@ let
     # TODO: Nix really likes to chown things it creates to its current user...
     fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
 
+    # fakeroot seems to always give the owner write permissions, which we do not want
+    find $root/nix/store -mindepth 1 -maxdepth 1 -type f -o -type d | xargs chmod -R a-w
+
     echo "copying staging root to image..."
-    cptofs ${pkgs.lib.optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
+    cptofs ${optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
@@ -133,20 +142,17 @@ in pkgs.vmTools.runInLinuxVM (
       exportReferencesGraph = [ "closure" metaClosure ];
       postVM = ''
         ${if format == "raw" then ''
-          mv $diskImage $out/nixos.img
-          diskImage=$out/nixos.img
+          mv $diskImage $out/${filename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/nixos.${extensions.${format}}
-          diskImage=$out/nixos.${extensions.${format}}
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
+        diskImage=$out/${filename}
         ${postVM}
       '';
       memSize = 1024;
     }
     ''
       ${if partitioned then ''
-        . /sys/class/block/vda1/uevent
-        mknod /dev/vda1 b $MAJOR $MINOR
         rootDisk=/dev/vda1
       '' else ''
         rootDisk=/dev/vda

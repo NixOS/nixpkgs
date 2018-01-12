@@ -3,30 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "couchdb-${version}";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${name}.tar.gz";
-    sha256 = "09w6ijj9l5jzh81nvc3hrlqp345ajg3haj353g9kxkik6wbinq2s";
+    sha256 = "1b9cbdrmh1i71mrwvhm17v4cf7lckpil1vvq7lpmxyn6zfk0l84i";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
-    file pkgconfig ];
-
-  /* This patch removes the `-Werror` flag as there are warnings due to
-   * _BSD_SOURCE being deprecated in glibc >= 2.20
-   */
-  patchPhase = ''
-    patch src/couchdb/priv/Makefile.in <<EOF
-    392c392
-    < couchjs_CFLAGS = -g -Wall -Werror -D_BSD_SOURCE \$(CURL_CFLAGS) \$(JS_CFLAGS)
-    ---
-    > couchjs_CFLAGS = -g -Wall -D_BSD_SOURCE \$(CURL_CFLAGS) \$(JS_CFLAGS)
-    EOF
-  '';
+  nativeBuildInputs = [ help2man which file pkgconfig sphinx ];
+  buildInputs = [ erlang icu openssl spidermonkey curl ];
 
   postInstall = ''
-    sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb
+    substituteInPlace $out/bin/couchdb --replace getopt "${getopt}/bin/getopt"
   '';
 
   /*

@@ -1,16 +1,16 @@
-{ stdenv, lib, bower2nix, cacert }:
+{ stdenvNoCC, lib, bower2nix, cacert }:
 let
   bowerVersion = version:
     let
       components = lib.splitString "#" version;
       hash = lib.last components;
-      ver = if builtins.length components == 1 then version else hash;
+      ver = if builtins.length components == 1 then (cleanName version) else hash;
     in ver;
 
-  bowerName = name: lib.replaceStrings ["/"] ["-"] name;
+  cleanName = name: lib.replaceStrings ["/" ":"] ["-" "-"] name;
 
-  fetchbower = name: version: target: outputHash: stdenv.mkDerivation {
-    name = "${bowerName name}-${bowerVersion version}";
+  fetchbower = name: version: target: outputHash: stdenvNoCC.mkDerivation {
+    name = "${cleanName name}-${bowerVersion version}";
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     buildCommand = ''
       fetch-bower --quiet --out=$PWD/out "${name}" "${target}" "${version}"
@@ -23,7 +23,7 @@ let
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     inherit outputHash;
-    buildInputs = [ bower2nix ];
+    nativeBuildInputs = [ bower2nix ];
   };
 
 in fetchbower

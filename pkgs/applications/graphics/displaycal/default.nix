@@ -49,7 +49,7 @@ buildPythonPackage {
 
   meta = {
     description = "Display Calibration and Characterization powered by Argyll CMS";
-    homepage = http://displaycal.net/;
+    homepage = https://displaycal.net/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

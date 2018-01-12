@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qmnnl846agg55i7h4vmrn11lgb8kg6gvs8byqz34bdkjh5gwiy1";
   };
 
-  buildInputs = [ pkgconfig libpng zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng zlib ];
 
   patchPhase = ''
     sed -i '/png.h/a \#include <zlib.h>' src/rwpng.c

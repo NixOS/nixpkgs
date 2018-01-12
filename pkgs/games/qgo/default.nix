@@ -1,8 +1,15 @@
-{ stdenv, fetchFromGitHub, makeWrapper, qmake, qt56 }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, qmake
+, qtbase
+, qtmultimedia
+, qttranslations
+}:
 
 stdenv.mkDerivation rec {
   name = "qgo-${version}";
-  version = "unstable-2016-06-23";
+  version = "unstable-2017-12-18";
 
   meta = with stdenv.lib; {
     description = "A Go client based on Qt5";
@@ -26,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pzorin";
     repo = "qgo";
-    rev = "1e65b0c74914e534ea4d040f8f0ef8908383e374";
+    rev = "bef526dda4c79686edd95c88cc68de24f716703c";
     sha256 = "1xzkayclmhsi07p9mnbf8185jw8n5ikxp2mik3x8qz1i6rmrfl5b";
   };
 
@@ -35,14 +42,7 @@ stdenv.mkDerivation rec {
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
   nativeBuildInputs = [ makeWrapper qmake ];
-  # qt58 does not provide platform plugins
-  # We need lib/qt*/plugins/platforms/libqxcb.so
-  buildInputs = with qt56; [ qtbase.out qtmultimedia qttranslations ];
+  buildInputs = [ qtbase qtmultimedia qttranslations ];
   enableParallelBuilding = true;
-  postFixup = ''
-    # libQt5XcbQpa is a platform plugin dependency and doesn't get linked
-    patchelf --add-needed libQt5XcbQpa.so.5 $out/bin/qgo
-    wrapProgram $out/bin/qgo \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH "${qt56.qtbase}/lib/qt-5.6/plugins/platforms/"
-  '';
+
 }

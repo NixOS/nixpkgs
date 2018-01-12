@@ -62,8 +62,6 @@ in rec {
 
      buildInputs = common.buildInputs ++ [ irods ];
 
-     propagateBuildInputs = [ boost ];
-
      preConfigure = common.preConfigure + ''
        patchShebangs ./bin
      '';
