@@ -19,11 +19,6 @@ pythonPackages.buildPythonApplication rec {
     ''--prefix PATH ':' "${notmuch}/bin"''
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/afew \
-      --prefix LD_LIBRARY_PATH : ${notmuch}/lib
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://github.com/afewmail/afew;
     description = "An initial tagging script for notmuch mail";
