@@ -153,6 +153,7 @@ let
     broken = bool;
 
     # Weirder stuff that doesn't appear in the documentation?
+    knownVulnerabilities = listOf str;
     version = str;
     tag = str;
     updateWalker = bool;
