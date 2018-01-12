@@ -6949,18 +6949,18 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby { inherit (darwin.apple_sdk.frameworks) Foundation; })
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_8
-    ruby_2_3_5
-    ruby_2_4_2
+    ruby_2_2_9
+    ruby_2_3_6
+    ruby_2_4_3
     ruby_2_5_0;
 
   # Ruby aliases
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_8;
-  ruby_2_3 = ruby_2_3_5;
-  ruby_2_4 = ruby_2_4_2;
+  ruby_2_2 = ruby_2_2_9;
+  ruby_2_3 = ruby_2_3_6;
+  ruby_2_4 = ruby_2_4_3;
   ruby_2_5 = ruby_2_5_0;
 
   scsh = callPackage ../development/interpreters/scsh { };
