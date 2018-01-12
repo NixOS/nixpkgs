@@ -2715,7 +2715,7 @@ with pkgs;
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
-  hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
+  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
   hping = callPackage ../tools/networking/hping { };
 
