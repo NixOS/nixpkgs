@@ -1,12 +1,12 @@
 { lib, buildPythonApplication, fetchPypi, pythonPackages }:
 
 buildPythonApplication rec {
-  version = "1.0.1";
+  version = "1.3.0";
   pname   = "sigal";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
+    sha256 = "0ycyrap4rc0yrjagi5c5fs5gpw9whvkli656syfpj99dq1q9q1d0";
   };
 
   buildInputs = with pythonPackages; [ pytest ];
