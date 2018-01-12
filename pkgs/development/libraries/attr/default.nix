@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, targetPlatform }:
+{ stdenv, fetchurl, gettext, hostPlatform }:
 
 stdenv.mkDerivation rec {
   name = "attr-2.4.47";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installTargets = "install install-lib install-dev";
 
-  patches = if (targetPlatform.libc == "musl") then [ ./fix-headers-musl.patch ] else null;
+  patches = if (hostPlatform.libc == "musl") then [ ./fix-headers-musl.patch ] else null;
 
   meta = {
     homepage = http://savannah.nongnu.org/projects/attr/;

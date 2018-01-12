@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux;
 
-  preConfigure = stdenv.lib.optionalString (stdenv.cc.libc == "musl") ''
+  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
     export NIX_CFLAGS_COMPILE+="-D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
   '';
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.cc.libc == "musl") "--disable-static";
+    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static";
 
   doCheck = true; # not cross;
 
