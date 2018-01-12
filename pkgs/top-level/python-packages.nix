@@ -320,10 +320,6 @@ in {
     pythonPackages = self;
   };
 
-  pyqt56 = pkgs.libsForQt56.callPackage ../development/python-modules/pyqt/5.x.nix {
-    pythonPackages = self;
-  };
-
   pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
