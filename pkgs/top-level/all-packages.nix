@@ -19642,6 +19642,10 @@ with pkgs;
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
 
+  nix-delegate = haskell.lib.justStaticExecutables haskellPackages.nix-delegate;
+  nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
+  nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
+
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
 
