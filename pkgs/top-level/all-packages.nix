@@ -4525,7 +4525,7 @@ with pkgs;
     inherit (pythonPackages) buildPythonApplication fetchPypi;
   };
 
-  sigil = libsForQt56.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
