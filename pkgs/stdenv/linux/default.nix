@@ -43,6 +43,8 @@ let
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) { inherit system bootstrapFiles; };
 
+  getLibc = stage: stage.${localSystem.libc};
+
 
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
@@ -83,7 +85,7 @@ let
           cc = prevStage.gcc-unwrapped;
           bintools = prevStage.binutils;
           isGNU = true;
-          libc = prevStage.glibc;
+          libc = getLibc prevStage;
           inherit (prevStage) coreutils gnugrep;
           name = name;
           stdenvNoCC = prevStage.ccWrapperStdenv;
@@ -96,7 +98,7 @@ let
 
           # stdenv.glibc is used by GCC build to figure out the system-level
           # /usr/include directory.
-          inherit (prevStage) glibc;
+          # inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -114,7 +116,8 @@ in
     __raw = true;
 
     gcc-unwrapped = null;
-    glibc = null;
+    glibc = assert false; null;
+    musl = assert false; null;
     binutils = null;
     coreutils = null;
     gnugrep = null;
@@ -136,8 +139,8 @@ in
       # will search the Glibc headers before the GCC headers).  So
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
-      glibc = self.stdenv.mkDerivation {
-        name = "bootstrap-glibc";
+      ${localSystem.libc} = self.stdenv.mkDerivation {
+        name = "bootstrap-${localSystem.libc}";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -152,7 +155,7 @@ in
         nativeTools = false;
         nativeLibc = false;
         buildPackages = { };
-        libc = self.glibc;
+        libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
         name = "bootstrap-binutils-wrapper";
@@ -181,7 +184,9 @@ in
       binutils = super.binutils_nogold;
       inherit (prevStage)
         ccWrapperStdenv
-        glibc gcc-unwrapped coreutils gnugrep;
+        gcc-unwrapped coreutils gnugrep;
+
+      ${localSystem.libc} = getLibc prevStage;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
@@ -207,7 +212,7 @@ in
       binutils = prevStage.binutils.override {
         # Rewrap the binutils with the new glibc, so both the next
         # stage's wrappers use it.
-        libc = self.glibc;
+        libc = getLibc self;
       };
     };
   })
@@ -222,8 +227,9 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils glibc coreutils gnugrep
+        binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison;
+      ${localSystem.libc} = getLibc prevStage;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -251,8 +257,8 @@ in
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
-
+      inherit (prevStage) gettext gnum4 bison gmp perl zlib linuxHeaders;
+      ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
         shell = self.bash + "/bin/bash";
@@ -271,7 +277,7 @@ in
         };
         cc = prevStage.gcc-unwrapped;
         bintools = self.binutils;
-        libc = self.glibc;
+        libc = getLibc self;
         inherit (self) stdenvNoCC coreutils gnugrep;
         name = "";
         shell = self.bash + "/bin/bash";
@@ -318,7 +324,7 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        inherit (prevStage) glibc;
+        # inherit (prevStage) glibc;
         inherit platform bootstrapTools;
         shellPackage = prevStage.bash;
       };
@@ -336,8 +342,8 @@ in
             ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases
-        ++ [
-            glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
+        ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
+        ++  [ /*propagated from .dev*/ linuxHeaders
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
           ++ lib.optional (localSystem.libc == "musl") libiconv
@@ -347,8 +353,9 @@ in
       overrides = self: super: {
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
-          glibc gnumake gnused gnutar gnugrep gnupatch patchelf
+          gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;
+        ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-raw;
