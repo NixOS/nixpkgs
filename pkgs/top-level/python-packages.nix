@@ -16273,29 +16273,6 @@ in {
     };
   };
 
-  sigal = buildPythonPackage rec {
-    name = "sigal-1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sigal/${name}.tar.gz";
-      sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click blinker ];
-
-    # No tests included
-    doCheck = false;
-
-
-    meta = {
-      description = "Yet another simple static gallery generator";
-      homepage = http://sigal.saimon.org/en/latest/index.html;
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
   slob = buildPythonPackage rec {
     name = "slob-unstable-2016-11-03";
 
