@@ -3896,7 +3896,7 @@ with pkgs;
     owncloud90
     owncloud91;
 
-  owncloud-client = libsForQt56.callPackage ../applications/networking/owncloud-client { };
+  owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
 
   p2pvc = callPackage ../applications/video/p2pvc {};
 
