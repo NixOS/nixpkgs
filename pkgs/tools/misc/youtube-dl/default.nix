@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonApplication
+{ stdenv, targetPlatform, fetchurl, buildPythonApplication
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -8,7 +8,7 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? true
+, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
