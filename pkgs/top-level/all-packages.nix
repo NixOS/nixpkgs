@@ -4520,7 +4520,7 @@ with pkgs;
   siege = callPackage ../tools/networking/siege {};
 
   sigal = callPackage ../applications/misc/sigal {
-    inherit (pythonPackages) buildPythonApplication;
+    inherit (pythonPackages) buildPythonApplication fetchPypi;
   };
 
   sigil = libsForQt56.callPackage ../applications/editors/sigil { };

@@ -1,11 +1,11 @@
-{ lib, buildPythonApplication, fetchurl, pythonPackages }:
+{ lib, buildPythonApplication, fetchPypi, pythonPackages }:
 
 buildPythonApplication rec {
   version = "1.0.1";
-  name    = "sigal-${version}";
+  pname   = "sigal";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/sigal/${name}.tar.gz";
+  src = fetchPypi {
+    inherit version pname;
     sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
   };
 
