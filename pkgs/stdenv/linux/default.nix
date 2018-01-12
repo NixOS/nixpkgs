@@ -6,17 +6,26 @@
 { lib
 , localSystem, crossSystem, config, overlays
 
-, bootstrapFiles ? if localSystem.libc == "musl" then import ./bootstrap-files/musl64.nix
-else { # switch
-    "i686-linux" = import ./bootstrap-files/i686.nix;
-    "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
-    "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
-    "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
-    "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
-    "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
-    "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
-  }.${localSystem.system}
-    or (abort "unsupported platform for the pure Linux stdenv")
+, bootstrapFiles ?
+  let table = {
+    "glibc" = {
+      "i686-linux" = import ./bootstrap-files/i686.nix;
+      "x86_64-linux" = import ./bootstrap-files/x86_64.nix;
+      "armv5tel-linux" = import ./bootstrap-files/armv5tel.nix;
+      "armv6l-linux" = import ./bootstrap-files/armv6l.nix;
+      "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
+      "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
+      "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
+    };
+    "musl" = {
+      "x86_64-linux" = import ./bootstrap-files/musl64.nix;
+    };
+  };
+  archLookupTable = table.${localSystem.libc}
+    or (abort "unsupported libc for the pure Linux stdenv");
+  files = archLookupTable.${localSystem.system}
+    or (abort "unsupported platform for the pure Linux stdenv");
+  in files
 }:
 
 assert crossSystem == null;
