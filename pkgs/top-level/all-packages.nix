@@ -19736,6 +19736,8 @@ with pkgs;
 
   pjsip = callPackage ../applications/networking/pjsip { };
 
+  plano-theme = callPackage ../misc/themes/plano { };
+
   ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
   pt = callPackage ../applications/misc/pt { };
