@@ -9,8 +9,10 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "121w7bd53xyibllxxbfykjj76n81kn1vgjqd22izyh67y8qyyk5r";
   };
 
+  buildInputs = with pythonPackages; [ setuptools_scm ];
+
   propagatedBuildInputs = with pythonPackages; [
-    setuptools_scm pythonPackages.notmuch chardet
+    pythonPackages.notmuch chardet
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "${version}";
