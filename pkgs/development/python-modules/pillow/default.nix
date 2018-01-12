@@ -1,14 +1,15 @@
 { stdenv, buildPythonPackage, fetchPypi, isPyPy,
   nose, olefile,
-  freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11}:
+  freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, pytestrunner, pytest,
+  tk, libX11}:
 buildPythonPackage rec {
   pname = "Pillow";
-  version = "4.3.0";
+  version = "5.0.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a97c715d44efd5b4aa8d739b8fad88b93ed79f1b33fc2822d5802043f3b1b527";
+    sha256 = "1fz1n1cq65dqdbiwy1cn8l21amqbzq18rdmmcr670ks24dn9vwhj";
   };
 
   doCheck = !stdenv.isDarwin && !isPyPy;
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ olefile ];
 
   buildInputs = [
-    freetype libjpeg zlib libtiff libwebp tcl nose lcms2 ]
+    freetype libjpeg zlib libtiff libwebp tcl nose lcms2 pytestrunner pytest ]
     ++ stdenv.lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
