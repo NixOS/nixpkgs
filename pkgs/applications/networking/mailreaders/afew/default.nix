@@ -15,8 +15,6 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.notmuch chardet
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = "${version}";
-
   postInstall = ''
     wrapProgram $out/bin/afew \
       --prefix LD_LIBRARY_PATH : ${notmuch}/lib
