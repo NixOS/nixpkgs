@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "mblaze-${version}";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "0p97zfl35ilrnrx9ynj82igsb698m9klikfaicw5jhjpf6qp2n3y";
+    sha256 = "1jrn81rvw6qanlfppc12dkvpbmidzrq1lx3rfhvcsna55k3gjyw9";
   };
 
   makeFlags = "PREFIX=$(out)";
