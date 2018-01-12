@@ -1,6 +1,6 @@
 { stdenv, fetchurl, coreutils, utillinux,
   nettools, kbd, bc, which, gnused, gnugrep,
-  groff, man-db, glibc, libiconv, pcre2,
+  groff, man-db, glibc, musl-getent, libiconv, pcre2,
   gettext, ncurses, python3
 
   , writeText
@@ -12,6 +12,9 @@
 with stdenv.lib;
 
 let
+  getent = if stdenv.hostPlatform.isMusl
+             then "${musl-getent}/bin/getent"
+             else "${glibc.bin}/bin/getent";
   etcConfigAppendixText = ''
     ############### ↓ Nix hook for sourcing /etc/fish/config.fish ↓ ###############
     #                                                                             #
@@ -142,7 +145,7 @@ let
       sed -e "s| ul| ${utillinux}/bin/ul|" \
           -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
-        sed -e "s|/usr/bin/getent|${glibc.bin}/bin/getent|" \
+        sed -e "s|/usr/bin/getent|${getent}|" \
             -i "$cur"
       done
 
