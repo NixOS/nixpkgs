@@ -939,4 +939,6 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
+  # Sporadically OOMs even with 16G
+  ChasingBottoms = dontCheck super.ChasingBottoms;
 }
