@@ -11702,6 +11702,14 @@ in {
     blas = pkgs.openblasCompat;
   };
 
+  auquantoolbox = callPackage ../development/python-modules/auquantoolbox { };
+
+  pandas-datareader = callPackage ../development/python-modules/pandas-datareader {  };
+
+  requests-ftp = callPackage ../development/python-modules/requests-ftp {  };
+
+  requests-file = callPackage ../development/python-modules/requests-file {  };
+
   numpydoc = buildPythonPackage rec {
     pname = "numpydoc";
     name = "${pname}-${version}";
