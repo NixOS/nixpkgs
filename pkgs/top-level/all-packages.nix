@@ -14464,6 +14464,7 @@ with pkgs;
 
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome2) GConf libglade;
+    lua = lua5_3;
     pugixml = pugixml.override { shared = true; };
   };
 
