@@ -17779,6 +17779,8 @@ in {
 
   tiros = callPackage ../development/python-modules/tiros { };
 
+  tifffile = callPackage ../development/python-modules/tifffile { };
+    
   # Tkinter/tkinter is part of the Python standard library.
   # The Python interpreters in Nixpkgs come without tkinter by default.
   # To make the module available, we make it available as any other
