@@ -30,15 +30,13 @@ buildPythonApplication rec {
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
-  postInstall = let
-    packagesToBinPath =
-    [ atomicparsley ]
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional rtmpSupport rtmpdump
-    ++ optional phantomjsSupport phantomjs2;
-  in ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesToBinPath}"
-  '';
+  makeWrapperArgs = let
+      packagesToBinPath =
+        [ atomicparsley ]
+        ++ optional ffmpegSupport ffmpeg
+        ++ optional rtmpSupport rtmpdump
+        ++ optional phantomjsSupport phantomjs2;
+    in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
 
   # Requires network
   doCheck = false;
