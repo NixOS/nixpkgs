@@ -1,11 +1,11 @@
 { lib, python2Packages, fetchurl, libxslt, docbook5_xsl, openssh
 # version args
-, src, version, patches ? []
+, src, version
 }:
 
 python2Packages.buildPythonApplication {
   name = "nixops-${version}";
-  inherit version src patches;
+  inherit version src;
 
   buildInputs = [ libxslt ];
 
