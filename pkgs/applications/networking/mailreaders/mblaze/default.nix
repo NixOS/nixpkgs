@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "mblaze-${version}";
   version = "0.3";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
