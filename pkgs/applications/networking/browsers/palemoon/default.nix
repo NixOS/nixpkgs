@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     chmod u+w .
-    sed -i /status4evar/d browser/installer/package-manifest.in
   '';
 
   buildPhase = ''
