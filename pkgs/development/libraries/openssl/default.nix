@@ -55,6 +55,10 @@ let
     # TODO(@Ericson2314): Make unconditional on mass rebuild
     ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
 
+    preConfigure = ''
+      patchShebangs Configure
+    '';
+
     configureFlags = [
       "shared"
       "--libdir=lib"
