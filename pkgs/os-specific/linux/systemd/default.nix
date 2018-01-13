@@ -17,7 +17,7 @@ assert stdenv.isLinux;
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (rec {
   version = "238";
   name = "systemd-${version}";
 
@@ -88,6 +88,12 @@ in stdenv.mkDerivation rec {
     "-Dsulogin-path=${utillinux}/bin/sulogin"
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dnss-systemd=false"
+    "-Dlocaled=false"
+    "-Dresolve=false"
+    "-Dutmp=false"
+    "-Dmyhostname=false"
   ];
 
   preConfigure = ''
@@ -210,4 +216,13 @@ in stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  patches =
+    let systemd_rev = "c58ab03f64890e7db88745a843bd4520e307099b"; # v238-stable
+  in [
+    (fetchpatch {
+      url = "https://github.com/dtzWill/systemd/compare/${systemd_rev}...238-musl.patch";
+      sha256 = "09s5gbccbmm4j4p9fyn6x59achrlxk30rp5pmi20bh527mjgw442";
+    })
+  ];
+})
