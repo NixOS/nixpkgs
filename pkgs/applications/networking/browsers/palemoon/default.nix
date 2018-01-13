@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   desktopItem = makeDesktopItem {
     name = "palemoon";
     exec = "palemoon %U";
+    icon = "palemoon";
     desktopName = "Pale Moon";
     genericName = "Web Browser";
     categories = "Application;Network;WebBrowser;";
@@ -86,6 +87,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
+
+    for n in 16 22 24 32 48 256; do
+      size=$n"x"$n
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      cp $src/browser/branding/official/default$n.png \
+         $out/share/icons/hicolor/$size/apps/palemoon.png
+    done
+
     cd $builddir
     $src/mach install
   '';
