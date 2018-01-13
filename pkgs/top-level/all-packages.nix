@@ -10047,8 +10047,6 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
-  libzxcvbn = callPackage ../development/libraries/libzxcvbn { };
-
   libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
@@ -20127,6 +20125,8 @@ with pkgs;
   );
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+
+  zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
