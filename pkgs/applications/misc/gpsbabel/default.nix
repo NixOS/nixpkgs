@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
       url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
       sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
     })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/Homebrew/formula-patches/ca4c4730/gpsbabel/qt5.10.patch;
+      sha256 = "0ydl69bys66qvmb6dqk4ps2ag7gjl131zvb84cff4la334y777iv";
+    })
   ];
 
   buildInputs = [ zlib qtbase which ]
