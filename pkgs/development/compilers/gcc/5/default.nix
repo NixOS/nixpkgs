@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -74,7 +74,11 @@ let version = "5.5.0";
 
       # This could be applied unconditionally but I don't want to cause a full
       # Linux rebuild.
-      ++ optional stdenv.cc.isClang ./libcxx38-and-above.patch;
+      ++ optional stdenv.cc.isClang ./libcxx38-and-above.patch
+      ++ optional stdenv.hostPlatform.isMusl (fetchpatch {
+        url = https://raw.githubusercontent.com/richfelker/musl-cross-make/e84b1bd1fc12a3def33111ca6df522cd6e5ec361/patches/gcc-5.3.0/0001-musl.diff;
+        sha256 = "0pppbf8myi2kjhm3z3479ihn1cm60kycfv60gj8yy1bs0pl1qcfm";
+      });
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
