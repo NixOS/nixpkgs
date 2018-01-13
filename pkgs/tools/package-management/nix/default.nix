@@ -27,7 +27,7 @@ let
       ++ lib.optionals (!is20) [ curl perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
-    buildInputs = [ curl openssl sqlite xz ]
+    buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli ] # Since 1.12
       ++ lib.optional stdenv.isLinux libseccomp
@@ -38,15 +38,6 @@ let
           });
 
     propagatedBuildInputs = [ boehmgc ];
-
-    # Note: bzip2 is not passed as a build input, because the unpack phase
-    # would end up using the wrong bzip2 when cross-compiling.
-    # XXX: The right thing would be to reinstate `--with-bzip2' in Nix.
-    postUnpack =
-      '' export CPATH="${bzip2.dev}/include"
-         export LIBRARY_PATH="${bzip2.out}/lib"
-         export CXXFLAGS="-Wno-error=reserved-user-defined-literal"
-      '';
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -75,11 +66,6 @@ let
     separateDebugInfo = stdenv.isLinux;
 
     crossAttrs = {
-      postUnpack =
-        '' export CPATH="${bzip2.crossDrv}/include"
-           export NIX_CROSS_LDFLAGS="-L${bzip2.crossDrv}/lib -rpath-link ${bzip2.crossDrv}/lib $NIX_CROSS_LDFLAGS"
-        '';
-
       configureFlags =
         ''
           --with-store-dir=${storeDir} --localstatedir=${stateDir}
