@@ -17987,6 +17987,7 @@ with pkgs;
   asc = callPackage ../games/asc {
     lua = lua5_1;
     libsigcxx = libsigcxx12;
+    physfs = physfs_2;
   };
 
   astromenace = callPackage ../games/astromenace { };
