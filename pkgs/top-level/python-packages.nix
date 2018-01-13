@@ -5954,6 +5954,8 @@ in {
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
+  netdisco = callPackage ../development/python-modules/netdisco { };
+
   Nikola = callPackage ../development/python-modules/Nikola { };
 
   nxt-python = buildPythonPackage rec {
