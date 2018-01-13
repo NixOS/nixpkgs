@@ -20126,6 +20126,8 @@ with pkgs;
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
+  zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
+
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
   openmsx = callPackage ../misc/emulators/openmsx {
