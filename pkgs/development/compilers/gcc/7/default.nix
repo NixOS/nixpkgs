@@ -269,7 +269,7 @@ stdenv.mkDerivation ({
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
-        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        + stdenv.lib.optionalString (hostPlatform.libc == "musl")
         ''
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
