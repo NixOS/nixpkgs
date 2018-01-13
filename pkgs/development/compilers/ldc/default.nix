@@ -110,6 +110,13 @@ let
         substituteInPlace dmd2/root/port.c --replace __inline_isnanl __inline_isnan
     ''
 
+    + stdenv.lib.optionalString (!bootstrapVersion) ''
+        # TODO Can be removed with the next ldc version > 1.7.0
+        # https://github.com/ldc-developers/ldc/issues/2493
+        substituteInPlace tests/d2/dmd-testsuite/Makefile \
+            --replace "# disable tests based on arch" "DISABLED_TESTS += test_cdvecfill"
+    ''
+
     + stdenv.lib.optionalString (bootstrapVersion) ''
         substituteInPlace runtime/${datetimePath} \
             --replace "import std.traits;" "import std.traits;import std.path;"
