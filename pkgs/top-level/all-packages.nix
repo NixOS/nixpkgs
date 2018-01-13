@@ -10047,6 +10047,8 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
+  libzxcvbn = callPackage ../development/libraries/libzxcvbn { };
+
   libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
