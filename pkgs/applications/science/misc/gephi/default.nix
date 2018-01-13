@@ -2,13 +2,13 @@
 
 with stdenv.lib;
 
-let version = "0.9.1"; in
+let version = "0.9.2"; in
 stdenv.mkDerivation {
   name = "gephi-${version}";
 
   src = fetchurl {
     url = "https://github.com/gephi/gephi/releases/download/v${version}/gephi-${version}-linux.tar.gz";
-    sha256 = "f1d54157302df05a53b94e1518880c949c43ba4ab21e52d57f3edcbdaa06c7ee";
+    sha256 = "1wr3rka8j2y10nnwbg27iaxkbrp4d7d07ccs9n94yqv6wqawj5z8";
   };
 
   meta = {
