@@ -1,6 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, python }:
 
-buildPythonPackage rec {
+let
+  inherit (python.pkgs) buildPythonApplication fetchPypi;
+in
+
+buildPythonApplication rec {
   pname = "Flootty";
   version = "3.2.1";
   name = "${pname}-${version}";

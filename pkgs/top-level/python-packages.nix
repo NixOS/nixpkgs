@@ -225,8 +225,6 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
-  flootty = callPackage ../development/python-modules/flootty { };
-
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
