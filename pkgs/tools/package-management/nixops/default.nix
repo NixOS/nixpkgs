@@ -7,7 +7,6 @@ callPackage ./generic.nix (rec {
     sha256 = "00y2arc5rffvy6xmx4p6ibpjyc61k8dkiabq7ccwwjgckz1d2dpb";
   };
   patches = [
-    ./634.patch
     ./765.patch
   ];
 })
