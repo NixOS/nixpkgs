@@ -157,7 +157,8 @@ rec {
 
   /* Add attributes to each output of a derivation without changing
      the derivation itself. */
-  addPassthru = extendDerivation true;
+  addPassthru = lib.warn "`addPassthru` is deprecated, replace with `extendDerivation true`"
+                         (extendDerivation true);
 
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
