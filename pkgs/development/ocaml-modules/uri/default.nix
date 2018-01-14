@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.5";
+  version = "1.9.6";
   name = "ocaml${ocaml.version}-uri-${version}";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-uri/releases/download/v${version}/uri-${version}.tbz";
-    sha256 = "11cix26fisjbzd1kj12a78wjf3bfgaxpj8nz88bl3dssdakhswyc";
+    sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
   };
 
   unpackCmd = "tar -xjf $curSrc";
