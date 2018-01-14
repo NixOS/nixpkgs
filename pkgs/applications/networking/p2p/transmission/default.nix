@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, makeWrapper
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
@@ -24,6 +24,16 @@ stdenv.mkDerivation rec {
     ++ optionals enableGTK3 [ gtk3 makeWrapper ]
     ++ optionals enableSystemd [ systemd ]
     ++ optionals stdenv.isLinux [ inotify-tools ];
+
+  patches = [
+    (fetchpatch {
+      # See https://github.com/transmission/transmission/pull/468
+      # Patch from: https://github.com/transmission/transmission/pull/468#issuecomment-357098126
+      name = "transmission-fix-dns-rebinding-vuln.patch";
+      url = https://github.com/transmission/transmission/files/1624507/transmission-fix-dns-rebinding-vuln.patch.txt;
+      sha256 = "1p9m20kp4kdyp5jjr3yp5px627n8cfa29mg5n3wzsdfv0qzk9gy4";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./configure \
