@@ -1,8 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, qt4 ? null, qtbase ? null }:
-
-# Only one qt
-assert qt4 != null -> qtbase == null;
-assert qtbase != null -> qt4 == null;
+{ stdenv, fetchFromGitHub, cmake, boost, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "snowman-${version}";
@@ -17,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost qt4 qtbase ];
+  buildInputs = [ boost qtbase ];
 
   postUnpack = ''
     export sourceRoot=$sourceRoot/src
