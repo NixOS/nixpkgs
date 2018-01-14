@@ -36,7 +36,7 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip addPassthru newDrv (
+    in lib.flip (extendDerivation true) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }

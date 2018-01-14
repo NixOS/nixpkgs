@@ -134,7 +134,7 @@ let
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
-  addPassthru' = lib.addPassthru passthru;
+  addPassthru' = lib.extendDerivation true passthru;
 
   nativeDrv = addPassthru' kernel.nativeDrv;
 
