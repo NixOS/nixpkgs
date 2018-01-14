@@ -31,6 +31,8 @@
 # will leave entries on your system after uninstalling mendeley.
 # (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
 , autorunLinkHandler ? true
+# Update script
+, writeScript
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -133,11 +135,14 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  meta = {
+  updateScript = import ./update.nix { inherit writeScript; };
+
+  meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers  = with maintainers; [ dtzWill ];
   };
 
 }
