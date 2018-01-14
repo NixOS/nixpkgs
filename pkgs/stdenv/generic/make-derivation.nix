@@ -81,6 +81,9 @@ rec {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let
+      references = nativeBuildInputs ++ buildInputs
+                ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
+
       dependencies = map (map lib.chooseDevOutputs) [
         [
           (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
@@ -140,9 +143,12 @@ rec {
               (lib.concatLists propagatedDependencies));
         in
         {
-          name = name + lib.optionalString
+          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
+          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
+          name = assert validity.handled; name + lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform)
             ("-" + stdenv.hostPlatform.config);
+
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -197,46 +203,59 @@ rec {
           doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
         });
 
+      validity = import ./check-meta.nix {
+        inherit lib config meta derivationArg;
+        mkDerivationArg = attrs;
+        # Nix itself uses the `system` field of a derivation to decide where
+        # to build it. This is a bit confusing for cross compilation.
+        inherit (stdenv) system;
+      };
+
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not
       # passed to the builder and is not a dependency.  But since we
       # include it in the result, it *is* available to nix-env for queries.
-      meta = { }
+      meta = {
+          # `name` above includes cross-compilation cruft (and is under assert),
+          # lets have a clean always accessible version here.
+          inherit name;
+
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
           # if he has specified it, it will be overridden below in `// meta`.
           #   Note: This default probably shouldn't be globally configurable.
           #   Services and users should specify outputs explicitly,
           #   unless they are comfortable with this default.
-        // { outputsToInstall =
-          let
-            outs = outputs'; # the value passed to derivation primitive
-            hasOutput = out: builtins.elem out outs;
-          in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+          outputsToInstall =
+            let
+              outs = outputs'; # the value passed to derivation primitive
+              hasOutput = out: builtins.elem out outs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
         }
         // attrs.meta or {}
-          # Fill `meta.position` to identify the source location of the package.
-        // lib.optionalAttrs (pos != null)
-          { position = pos.file + ":" + toString pos.line; }
-        ;
+        # Fill `meta.position` to identify the source location of the package.
+        // lib.optionalAttrs (pos != null) {
+          position = pos.file + ":" + toString pos.line;
+        # Expose the result of the checks for everyone to see.
+        } // {
+          evaluates = validity.valid
+                   && (if config.checkMetaRecursively or false
+                       then lib.all (d: d.meta.evaluates or true) references
+                       else true);
+        };
 
     in
 
-      lib.addPassthru
-        (derivation (import ./check-meta.nix
-          {
-            inherit lib config meta derivationArg;
-            mkDerivationArg = attrs;
-            # Nix itself uses the `system` field of a derivation to decide where
-            # to build it. This is a bit confusing for cross compilation.
-            inherit (stdenv) system;
-          }))
-        ( {
-            overrideAttrs = f: mkDerivation (attrs // (f attrs));
-            inherit meta passthru;
-          } //
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          passthru);
+      lib.extendDerivation
+        validity.handled
+        ({
+           overrideAttrs = f: mkDerivation (attrs // (f attrs));
+           inherit meta passthru;
+         } //
+         # Pass through extra attributes that are not inputs, but
+         # should be made available to Nix expressions using the
+         # derivation (e.g., in assertions).
+         passthru)
+        (derivation derivationArg);
+
 }

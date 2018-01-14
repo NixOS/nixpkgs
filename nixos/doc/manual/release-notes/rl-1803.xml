@@ -113,7 +113,7 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      <literal>cc-wrapper</literal>has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      <literal>cc-wrapper</literal> has been split in two; there is now also a <literal>bintools-wrapper</literal>.
       The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
       Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
       Other more obscure ones are just moved.
@@ -129,6 +129,11 @@ following incompatible changes:</para>
       Thankfully, that was and is the least used type of dependency.
       Also, it means that some <function>propagatedBuildInputs</function> should instead be <function>depsTargetTargetPropagated</function>.
       Other types dependencies should be unaffected.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.addPassthru</literal> is removed.  Use <literal>lib.extendDerivation true</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
     </para>
   </listitem>
   <listitem>
