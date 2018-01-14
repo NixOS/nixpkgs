@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     homepage = http://scidvspc.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.paraseba ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 
