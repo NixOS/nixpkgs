@@ -22523,6 +22523,8 @@ EOF
 
   uranium = callPackage ../development/python-modules/uranium { };
 
+  versioneer = callPackage ../development/python-modules/versioneer { };
+
   vine = callPackage ../development/python-modules/vine { };
 
   wp_export_parser = buildPythonPackage rec {
