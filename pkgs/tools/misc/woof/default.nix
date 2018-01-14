@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python ];
-  runtimeDeps = [ python ];
 
   unpackPhase = "true";
 
