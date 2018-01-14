@@ -7,12 +7,12 @@ assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
   name = "gnuradio-osmosdr-${version}";
-  version = "0.1.4";
+  version = "0.1.5-git";
 
   src = fetchgit {
     url = "git://git.osmocom.org/gr-osmosdr";
-    rev = "refs/tags/v${version}";
-    sha256 = "0vyzr4fhkblf2v3d7m0ch5hws4c493jw3ydl4y6b2dfbfzchhsz8";
+    rev = "c653754dde5e2cf682965e939cc016fbddbd45e4";
+    sha256 = "05na9bbcv3sd533p5q57x40jq5ypknrzr89y8kxrjq7w3xlyk6qd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
