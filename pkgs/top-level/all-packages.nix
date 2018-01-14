@@ -15967,7 +15967,7 @@ with pkgs;
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
-  mendeley = libsForQt56.callPackage ../applications/office/mendeley {
+  mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
 
