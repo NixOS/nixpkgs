@@ -1,17 +1,21 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux, getopt }:
+{ stdenv, fetchurl, elk6Version, makeWrapper, jre_headless, utillinux, getopt }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = elk5Version;
+  version = elk6Version;
   name = "elasticsearch-${version}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
-    sha256 = "1cks75227mxyri2r0hykc7jlvk6c4f4vaxh14mgmfmw4krwvrzxs";
+    sha256 = "1dkl7crha5g8h9c1zs1ahcmv221cpipzkvk574g99gdi586ckb8c";
   };
 
-  patches = [ ./es-home-5.x.patch ./es-classpath-5.x.patch ];
+  patches = [ ./es-home-6.x.patch ];
+
+  postPatch = ''
+    sed -i "s|ES_CLASSPATH=\"\$ES_HOME/lib/\*\"|ES_CLASSPATH=\"$out/lib/*\"|" ./bin/elasticsearch-env
+  '';
 
   buildInputs = [ makeWrapper jre_headless ] ++
     (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
@@ -23,7 +27,6 @@ stdenv.mkDerivation rec {
     chmod -x $out/bin/*.*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix ES_CLASSPATH : "$out/lib/*" \
       ${if (!stdenv.isDarwin)
         then ''--prefix PATH : "${utillinux}/bin/"''
         else ''--prefix PATH : "${getopt}/bin"''} \
@@ -37,8 +40,6 @@ stdenv.mkDerivation rec {
     description = "Open Source, Distributed, RESTful Search Engine";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [
-      maintainers.apeschar
-    ];
+    maintainers = with maintainers; [ apeschar basvandijk ];
   };
 }

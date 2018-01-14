@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre  }:
+{ stdenv, fetchurl, elk6Version, makeWrapper, jre  }:
 
 stdenv.mkDerivation rec {
-  version = elk5Version;
+  version = elk6Version;
   name = "logstash-${version}";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 = "18k2bhyzpxc2pad64wz0rpy43xp0nv843igjflav53jsglifh1yk";
+    sha256 = "07apb0135rlbraqw3pmwf13jjhzgflr6qik0b0qxp8im0hwx082p";
   };
 
   dontBuild         = true;
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage    = https://www.elastic.co/products/logstash;
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.wjlroe maintainers.offline ];
+    maintainers = with maintainers; [ wjlroe offline basvandijk ];
   };
 }

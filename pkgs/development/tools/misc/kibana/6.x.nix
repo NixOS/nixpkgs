@@ -1,26 +1,21 @@
-{ stdenv, makeWrapper, fetchurl, elk5Version, nodejs, coreutils, which }:
+{ stdenv, makeWrapper, fetchurl, elk6Version, nodejs, coreutils, which }:
 
 with stdenv.lib;
 let
   inherit (builtins) elemAt;
-  archOverrides = {
-    "i686" = "x86";
-  };
   info = splitString "-" stdenv.system;
-  arch = (elemAt info 0);
-  elasticArch = archOverrides."${arch}" or arch;
+  arch = elemAt info 0;
   plat = elemAt info 1;
   shas = {
-    "x86_64-linux"  = "09bck05dfq4j1csyghlpw86nzn28kpx8ikli3v1s4si2hbxb1ifr";
-    "i686-linux"    = "0ql1611wg7i9vwqr4wmz04606hjj7w224ak34svfsn6qxyrh2dbb";
-    "x86_64-darwin" = "1x24rqkkc9slm7jbyy41q5c2rbn17h85m0k6h3ijiafky6cv0cz2";
+    "x86_64-linux"  = "0847flk4sfimcdx9wqkaglk7bvbnz1iyindz10z0d1fvbldivp46";
+    "x86_64-darwin" = "03f7l91r6nczzzlqxsxkpzzwafpy45fx4lss4g6kg022rwisdma7";
   };
 in stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = elk5Version;
+  version = elk6Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${elasticArch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
     sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
   };
 
@@ -39,7 +34,7 @@ in stdenv.mkDerivation rec {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline rickynils ];
+    maintainers = with maintainers; [ offline rickynils basvandijk ];
     platforms = with platforms; unix;
   };
 }
