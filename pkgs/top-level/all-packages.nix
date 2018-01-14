@@ -11974,6 +11974,8 @@ with pkgs;
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
+  home-assistant = callPackage ../servers/home-assistant { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
