@@ -23,7 +23,8 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? hostPlatform.platform.name != "pc"
+, ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
+                       hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 , hostPlatform
 , ...
@@ -58,7 +59,7 @@ let
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    #inherit ignoreConfigErrors;
+    inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 
     generateConfig = ./generate-config.pl;
@@ -73,9 +74,6 @@ let
     autoModules = hostPlatform.platform.kernelAutoModules;
     preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
     arch = hostPlatform.platform.kernelArch;
-
-    # TODO(@Ericson2314): No null next hash break
-    ignoreConfigErrors = if stdenv.hostPlatform == stdenv.buildPlatform then null else true;
 
     crossAttrs = let
         cp = hostPlatform.platform;
