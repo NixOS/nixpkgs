@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     # traffic, so don't do that.
     preferLocalBuild = true;
 
-    buildInputs = [ cacert git gnupg ];
+    nativeBuildInputs = [ cacert git gnupg ];
   } ''
     git init src && (
       cd src

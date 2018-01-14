@@ -255,11 +255,12 @@ in rec {
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.docker-edge = hydraJob (import tests/docker-edge.nix { system = "x86_64-linux"; });
   tests.dovecot = callTest tests/dovecot.nix {};
+  tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
-  tests.elk = hydraJob (import tests/elk.nix { system = "x86_64-linux"; });
+  tests.elk = callSubTests tests/elk.nix { system = "x86_64-linux"; };
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};

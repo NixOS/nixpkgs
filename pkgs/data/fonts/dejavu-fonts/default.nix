@@ -25,7 +25,7 @@ let
 
   full-ttf = stdenv.mkDerivation {
     name = "dejavu-fonts-full-${version}";
-    buildInputs = [fontforge perl FontTTF];
+    nativeBuildInputs = [fontforge perl FontTTF];
 
     src = fetchFromGitHub {
       owner = "dejavu-fonts";

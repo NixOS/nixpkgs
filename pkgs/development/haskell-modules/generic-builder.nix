@@ -130,7 +130,7 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && !stdenv.isArm && !stdenv.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
+    (enableFeature (enableDeadCodeElimination && !hostPlatform.isArm && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")

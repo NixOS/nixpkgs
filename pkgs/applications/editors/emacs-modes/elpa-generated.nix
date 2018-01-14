@@ -768,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.12";
+        version = "1.4.0.14";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.12.tar";
-          sha256 = "140p1ian8dwip6305spg4rvm3rqxhznlq0w5msixw6ykwm735a8z";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.14.tar";
+          sha256 = "1qc30dia59i2bklhivfhmsghirnpgz5mvcjdc78n0r8nizb68jfp";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -1592,19 +1592,6 @@
         packageRequires = [ cl-lib ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/on-screen.html";
-          license = lib.licenses.free;
-        };
-      }) {};
-    org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
-        pname = "org";
-        version = "20171225";
-        src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171225.tar";
-          sha256 = "0jq410l1d4gz8qz01kmpgf9n77hghnknbcmhhznnq4dxiypgigc2";
-        };
-        packageRequires = [];
-        meta = {
-          homepage = "https://elpa.gnu.org/packages/org.html";
           license = lib.licenses.free;
         };
       }) {};

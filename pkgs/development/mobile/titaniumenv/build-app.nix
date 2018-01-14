@@ -19,6 +19,7 @@ let
   deleteKeychain = ''
     security default-keychain -s login.keychain
     security delete-keychain $keychainName
+    rm -f $HOME/lock-keychain
   '';
   
   # On macOS, the java executable shows an -unoffical postfix in the version
@@ -131,7 +132,18 @@ stdenv.mkDerivation {
               then
                   ln -s ${titaniumsdk}/modules modules
               fi
-              
+
+              # Take precautions to prevent concurrent builds blocking the keychain
+              while [ -f $HOME/lock-keychain ]
+              do
+                  echo "Keychain locked, waiting for a couple of seconds, or remove $HOME/lock-keychain to unblock..."
+                  sleep 3
+              done
+
+              touch $HOME/lock-keychain
+
+              security default-keychain -s $keychainName
+
               # Do the actual build
               titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
             
@@ -186,10 +198,10 @@ stdenv.mkDerivation {
            ''
              cp -av build/iphone/build/* $out
              mkdir -p $out/nix-support
-             echo "file binary-dist \"$(echo $out/Products/Release-iphoneos/*.ipa)\"" > $out/nix-support/hydra-build-products
+             echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
              
              ${stdenv.lib.optionalString enableWirelessDistribution ''
-               appname=$(basename $out/Products/Release-iphoneos/*.ipa .ipa)
+               appname=$(basename $out/*.ipa .ipa)
                bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
                version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
                

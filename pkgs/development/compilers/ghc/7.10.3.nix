@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ./relocation.patch
   ];
 
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ] ++ stdenv.lib.optionals stdenv.isArm [ llvm_35 ];
+  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ] ++ stdenv.lib.optionals targetPlatform.isArm [ llvm_35 ];
 
   enableParallelBuilding = true;
 

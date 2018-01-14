@@ -118,8 +118,8 @@ in rec {
         initialPath  = [ bootstrapTools ];
 
         fetchurlBoot = import ../../build-support/fetchurl {
-          stdenv = stage0.stdenv;
-          curl   = bootstrapTools;
+          stdenvNoCC = stage0.stdenv;
+          curl = bootstrapTools;
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here

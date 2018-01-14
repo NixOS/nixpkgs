@@ -162,7 +162,7 @@ let
     position = str;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
-    schedulingPriority = str;
+    schedulingPriority = int;
     downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;

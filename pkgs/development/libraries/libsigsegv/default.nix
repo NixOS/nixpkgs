@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;

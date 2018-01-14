@@ -9,11 +9,11 @@
 , withSamples ? false }:
 
 stdenv.mkDerivation {
-  name = "ogre-1.9-hg-20160322";
+  name = "ogre-1.10.11";
 
   src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v1-9.tar.gz";
-     sha256 = "0w3argjy1biaxwa3c80zxxgll67wjp8czd83p87awlcvwzdk5mz9";
+     url = "https://bitbucket.org/sinbad/ogre/get/v1-10-11.tar.gz";
+     sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
   };
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]

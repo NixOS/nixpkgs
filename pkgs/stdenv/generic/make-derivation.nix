@@ -36,6 +36,7 @@ rec {
     , depsTargetTarget            ? [] #  1 ->  1
     , depsTargetTargetPropagated  ? [] #  1 ->  1
 
+    # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
@@ -44,6 +45,13 @@ rec {
       configurePlatforms ? lib.optionals
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
+
+    # Check phase
+    , doCheck ? false
+
+    # InstallCheck phase
+    , doInstallCheck ? false
+
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -60,6 +68,7 @@ rec {
 
     , hardeningEnable ? []
     , hardeningDisable ? []
+
     , ... } @ attrs:
 
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
@@ -178,9 +187,15 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // (if outputs' != [ "out" ] then {
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
           outputs = outputs';
-        } else { }));
+        } // lib.optionalAttrs (attrs ? doCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        } // lib.optionalAttrs (attrs ? doInstallCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        });
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not

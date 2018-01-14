@@ -995,13 +995,14 @@ but only if the <varname>doCheck</varname> variable is enabled.</para>
 
   <varlistentry>
     <term><varname>doCheck</varname></term>
-    <listitem><para>If set to a non-empty string, the check phase is
-    executed, otherwise it is skipped (default).  Thus you should set
-
-    <programlisting>
-doCheck = true;</programlisting>
-
-    in the derivation to enable checks.</para></listitem>
+    <listitem><para>
+      Controls whether the check phase is executed.
+      By default it is skipped, but if <varname>doCheck</varname> is set to true, the check phase is usually executed.
+      Thus you should set <programlisting>doCheck = true;</programlisting> in the derivation to enable checks.
+      The exception is cross compilation.
+      Cross compiled builds never run tests, no matter how <varname>doCheck</varname> is set,
+      as the newly-built program won't run on the platform used to build it.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -1280,12 +1281,14 @@ installcheck</command>.</para>
 
   <varlistentry>
     <term><varname>doInstallCheck</varname></term>
-    <listitem><para>If set to a non-empty string, the installCheck phase is
-    executed, otherwise it is skipped (default).  Thus you should set
-
-    <programlisting>doInstallCheck = true;</programlisting>
-
-    in the derivation to enable install checks.</para></listitem>
+    <listitem><para>
+      Controls whether the installCheck phase is executed.
+      By default it is skipped, but if <varname>doInstallCheck</varname> is set to true, the installCheck phase is usually executed.
+      Thus you should set <programlisting>doInstallCheck = true;</programlisting> in the derivation to enable install checks.
+      The exception is cross compilation.
+      Cross compiled builds never run tests, no matter how <varname>doInstallCheck</varname> is set,
+      as the newly-built program won't run on the platform used to build it.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>

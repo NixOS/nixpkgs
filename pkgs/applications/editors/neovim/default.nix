@@ -83,7 +83,7 @@ let
                        (optionalString withPython3 python3Wrapper) +
                        (optionalString withRuby rubyWrapper)}" --unset PYTHONPATH '' +
     optionalString (withRuby)
-      ''--suffix PATH : \"${rubyEnv}/bin\" --set GEM_HOME \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
+      ''--suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath} '';
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";

@@ -55,7 +55,6 @@ stdenv.mkDerivation {
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
-                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
@@ -112,6 +111,10 @@ stdenv.mkDerivation {
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
+    rm -v src/test/run-pass/backtrace-debuginfo.rs
+
+    # error: No such file or directory
+    rm -v src/test/run-pass/issue-45731.rs
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
@@ -120,12 +123,6 @@ stdenv.mkDerivation {
         --replace 'home_dir().is_some()' true
     rm -v src/test/run-pass/fds-are-cloexec.rs  # FIXME: pipes?
     rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
-  '';
-
-  preConfigure = ''
-    # Needed flags as the upstream configure script has a broken prefix substitution
-    configureFlagsArray+=("--datadir=$out/share")
-    configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't

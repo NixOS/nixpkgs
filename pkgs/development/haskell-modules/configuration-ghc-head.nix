@@ -47,10 +47,6 @@ self: super: {
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 
-  # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
-  # https://github.com/haskell-suite/haskell-src-exts/issues/224
-  haskell-src-exts = dontCheck super.haskell-src-exts;
-
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";

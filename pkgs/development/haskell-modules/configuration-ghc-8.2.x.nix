@@ -56,20 +56,9 @@ self: super: {
   # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
   vector-algorithms = dontCheck super.vector-algorithms;
 
-  # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
-  yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;
 
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
-
-  # Work around overly restrictive constraints on the version of 'base'.
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  hashable = doJailbreak super.hashable;
-  protolude = doJailbreak super.protolude;
-  quickcheck-instances = doJailbreak super.quickcheck-instances;
-
-  # https://github.com/aristidb/aws/issues/238
-  aws = doJailbreak super.aws;
 
   # Upstream failed to distribute the testsuite for 8.2
   # https://github.com/alanz/ghc-exactprint/pull/60

@@ -343,7 +343,7 @@ with stdenv.lib;
 
   # Security related features.
   RANDOMIZE_BASE? y
-  STRICT_DEVMEM y # Filter access to /dev/mem
+  STRICT_DEVMEM? y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem

@@ -393,11 +393,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.9.0";
+    version = "2.10.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "12z1fan4yyxll03an51zhx6npr1d49s84dvmrvnzzf9jhckl5mqd";
+      sha256 = "0mi72sg0gms2lg1r1b6qxhsxgi3v07kczmr1hnk7pwa47jb6572q";
     };
 
     phases = [ "installPhase" ];
