@@ -4627,6 +4627,8 @@ with pkgs;
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
+  spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
+
   spiped = callPackage ../tools/networking/spiped { };
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
