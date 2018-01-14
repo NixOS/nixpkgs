@@ -1,14 +1,15 @@
-diff --git a/salt/utils/rsax931.py b/salt/utils/rsax931.py
-index f827cc6db8..b728595186 100644
---- a/salt/utils/rsax931.py
-+++ b/salt/utils/rsax931.py
-@@ -47,6 +47,9 @@ def _load_libcrypto():
-             lib = lib[0] if len(lib) > 0 else None
-         if lib:
-             return cdll.LoadLibrary(lib)
-+        else:
+diff --git i/salt/utils/rsax931.py w/salt/utils/rsax931.py
+index b7ecfcd0b8..e2727e0b27 100644
+--- i/salt/utils/rsax931.py
++++ w/salt/utils/rsax931.py
+@@ -34,6 +34,10 @@ def _load_libcrypto():
+             os.path.dirname(sys.executable),
+             'libcrypto.so*'))[0])
+     else:
++        try:
 +            return cdll.LoadLibrary('@libcrypto@')
-+
-         raise OSError('Cannot locate OpenSSL libcrypto')
- 
- 
++        except OSError:
++            pass
+         lib = find_library('crypto')
+         if not lib and salt.utils.is_sunos():
+             # Solaris-like distribution that use pkgsrc have
