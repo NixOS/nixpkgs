@@ -6156,6 +6156,8 @@ in {
 
   pydotplus = callPackage ../development/python-modules/pydotplus { };
 
+  pyhomematic = callPackage ../development/python-modules/pyhomematic { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
