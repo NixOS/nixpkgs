@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [ ./few-more-uapi-fixes.patch ];
+
   dontDisableStatic = true;
   dontStrip = true;
 
