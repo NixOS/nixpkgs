@@ -44,13 +44,11 @@ let
     netfilterRPFilter = true;
   } // features) kernelPatches;
 
-  configWithPlatform = kernelPlatform: import ./common-config.nix {
-    inherit stdenv version kernelPlatform extraConfig;
+  config = import ./common-config.nix {
+    inherit stdenv version extraConfig;
+    kernelPlatform = hostPlatform;
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform hostPlatform.platform;
 
   kernelConfigFun = baseConfig:
     let
@@ -74,12 +72,6 @@ let
     autoModules = hostPlatform.platform.kernelAutoModules;
     preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
     arch = hostPlatform.platform.kernelArch;
-
-    crossAttrs = let
-        cp = hostPlatform.platform;
-      in {
-        ignoreConfigErrors = true;
-      };
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -108,9 +100,7 @@ let
   };
 
   kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches stdenv extraMeta;
-
-    configfile = configfile.nativeDrv or configfile;
+    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
