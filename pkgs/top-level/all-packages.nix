@@ -539,7 +539,7 @@ with pkgs;
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws_shell = pythonPackages.aws_shell;
+  aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 

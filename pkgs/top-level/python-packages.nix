@@ -177,8 +177,6 @@ in {
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  aws_shell = callPackage ../tools/admin/aws_shell { };
-
   # packages defined elsewhere
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
