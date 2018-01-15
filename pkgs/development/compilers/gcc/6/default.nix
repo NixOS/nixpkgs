@@ -142,6 +142,9 @@ let version = "6.4.0";
         "--disable-shared"
         "--disable-libatomic"  # libatomic requires libc
         "--disable-decimal-float" # libdecnumber requires libc
+        # maybe only needed on musl, PATH_MAX
+        # https://github.com/richfelker/musl-cross-make/blob/0867cdf300618d1e3e87a0a939fa4427207ad9d7/litecross/Makefile#L62
+        "--disable-libmpx"
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
          else                "--with-headers=${getDev libcCross}/include")
