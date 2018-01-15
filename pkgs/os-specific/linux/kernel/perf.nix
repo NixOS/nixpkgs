@@ -11,7 +11,7 @@ assert versionAtLeast kernel.version "3.12";
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
-  inherit (kernel) src;
+  inherit (kernel) src makeFlags;
 
   preConfigure = ''
     cd tools/perf
@@ -39,10 +39,6 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
-
-  makeFlags = if stdenv.hostPlatform == stdenv.buildPlatform
-    then null
-    else "CROSS_COMPILE=${stdenv.cc.prefix}";
 
   installFlags = "install install-man ASCIIDOC8=1";
 
