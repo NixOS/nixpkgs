@@ -90,6 +90,28 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      Package attributes starting with a digit have been prefixed with an
+      underscore sign. This is to avoid quoting in the configuration and
+      other issues with command-line tools like <literal>nix-env</literal>.
+      The change affects the following packages:
+      <itemizedlist>
+        <listitem>
+          <para><literal>2048-in-terminal</literal> → <literal>_2048-in-terminal</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>90secondportraits</literal> → <literal>_90secondportraits</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>2bwm</literal> → <literal>_2bwm</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>389-ds-base</literal> → <literal>_389-ds-base</literal></para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       <emphasis role="strong">
         The OpenSSH service no longer enables support for DSA keys by default,
         which could cause a system lock out. Update your keys or, unfavorably,
