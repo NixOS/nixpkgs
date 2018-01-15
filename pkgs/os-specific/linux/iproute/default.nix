@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
+    # Don't build netem tools--they're not installed and require HOSTCC
+    substituteInPlace Makefile --replace " netem " " "
   '';
 
   makeFlags = [
@@ -36,6 +38,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    PATH=${stdenv.shell}/bin:$PATH patchShebangs $out/sbin
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.linuxfoundation.org/networking/iproute2;
