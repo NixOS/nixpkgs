@@ -4687,6 +4687,14 @@ with pkgs;
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
+  suricata = callPackage ../applications/networking/ids/suricata { libnet = libnet_1_1; };
+
+  suricata-full = callPackage ../applications/networking/ids/suricata {
+    libnet = libnet_1_1;
+    redisSupport = true;
+    rustSupport = true;
+  };
+
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
