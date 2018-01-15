@@ -225,8 +225,8 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
-      };
-    } // extraMeta;
+      } // extraMeta;
+    };
 in
 
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
