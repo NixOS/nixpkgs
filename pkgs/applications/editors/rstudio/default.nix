@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, makeDesktopItem, cmake, boost, zlib, openssl
-, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts, unzip, ant, jdk
-, gnumake, makeWrapper, pandoc
+{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost
+, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts
+, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
-  version = "1.1.383";
+  version = "1.1.414";
   ginVer = "1.5";
   gwtVer = "2.7.0";
 in
@@ -15,19 +15,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel libuuid ];
 
-  src = fetchurl {
-    url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
-    sha256 = "06680l9amq03b4jarmzfr605bijhb79fip9rk464zab6hgwqbp3f";
+  src = fetchFromGitHub {
+    owner = "rstudio";
+    repo = "rstudio";
+    rev = "v${version}";
+    sha256 = "1rr2zkv53r8swhq5d745jpp0ivxpsizzh7srf34isqpkn5pgx3v8";
   };
 
   # Hack RStudio to only use the input R.
-  patches = [ 
-    ./r-location.patch 
-    (fetchpatch {
-      url = https://aur.archlinux.org/cgit/aur.git/plain/socketproxy-openssl.patch?h=rstudio-desktop-git;
-      sha256 = "0ywq9rk14s5961l6hvd3cw70jsm73r16h0bsh4yp52vams7cwy9d";
-    })
-  ];
+  patches = [ ./r-location.patch ];
   postPatch = "substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}";
 
   inherit ginVer;
@@ -49,14 +45,18 @@ stdenv.mkDerivation rec {
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
   };
 
-  rmarkdownSrc = fetchurl {
-    url = "https://github.com/rstudio/rmarkdown/archive/95b8b1fa64f78ca99f225a67fff9817103be56.zip";
-    sha256 = "12fa65qr04rwsprkmyl651mkaqcbn1znwsmcjg4qsk9n5nxg0fah";
+  rmarkdownSrc = fetchFromGitHub {
+    owner = "rstudio";
+    repo = "rmarkdown";
+    rev = "v1.8";
+    sha256 = "1blqxdr1vp2z5wd52nmf8hq36sdd4s2pyms441dqj50v35f8girb";
   };
 
-  rsconnectSrc = fetchurl {
-    url = "https://github.com/rstudio/rsconnect/archive/425f3767b3142bc6b81c9eb62c4722f1eedc9781.zip";
-    sha256 = "1sgf9dj9wfk4c6n5p1jc45386pf0nj2alg2j9qx09av3can1dy9p";
+  rsconnectSrc = fetchFromGitHub {
+    owner = "rstudio";
+    repo = "rsconnect";
+    rev = "953c945779dd180c1bfe68f41c173c13ec3e222d";
+    sha256 = "1yxwd9v4mvddh7m5rbljicmssw7glh1lhin7a9f01vxxa92vpj7z";
   };
 
   rstudiolibclang = fetchurl {
@@ -88,8 +88,10 @@ stdenv.mkDerivation rec {
       done
 
       unzip $mathJaxSrc -d dependencies/common/mathjax-26
-      unzip $rmarkdownSrc -d dependencies/common/rmarkdown
-      unzip $rsconnectSrc -d dependencies/common/rsconnect
+      mkdir -p dependencies/common/rmarkdown
+      ln -s $rmarkdownSrc dependencies/common/rmarkdown/
+      mkdir -p dependencies/common/rsconnect
+      ln -s $rsconnectSrc dependencies/common/rsconnect/
       mkdir -p dependencies/common/libclang/3.5
       unzip $rstudiolibclang -d dependencies/common/libclang/3.5
       mkdir -p dependencies/common/libclang/builtin-headers
