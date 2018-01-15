@@ -1,9 +1,20 @@
-{ stdenv, fetchurl, xorg, jre, makeWrapper }:
+{ stdenv, fetchurl, xorg, jre, makeWrapper, makeDesktopItem }:
 
 let
   rpath = stdenv.lib.makeLibraryPath (with xorg; [
     libXtst
   ]);
+
+  desktopItem = makeDesktopItem {
+    name = "apache-directory-studio";
+    exec = "ApacheDirectoryStudio";
+    icon = "apache-directory-studio";
+    comment = "Eclipse-based LDAP browser and directory client";
+    desktopName = "Apache Directory Studio";
+    genericName = "Apache Directory Studio";
+    categories = "Java;Network";
+  };
+
 in
 stdenv.mkDerivation rec {
   name = "apache-directory-studio-${version}";
@@ -36,6 +47,10 @@ stdenv.mkDerivation rec {
         "$out/bin/ApacheDirectoryStudio" \
         --prefix PATH : "${jre}/bin" \
         --prefix LD_LIBRARY_PATH : "${rpath}"
+    mkdir -p "$out/share/pixmaps"
+    cp icon.xpm $out/share/pixmaps/apache-directory-studio.xpm
+    mkdir -p "$out/share/applications"
+    cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = with stdenv.lib; {
