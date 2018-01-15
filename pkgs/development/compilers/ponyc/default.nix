@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   name = "ponyc-${version}";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     rev = version;
-    sha256 = "0kpnmgxhha22nhl2bmch47cpr0d9h5718h3w9h7qqwd994xcfk9z";
+    sha256 = "0gdkm1mihn266km3q5ma7nhvjpzwdzmy39cxb7kkz8aal2nmvwri";
   };
 
   buildInputs = [ llvm makeWrapper which ];
@@ -69,8 +69,10 @@ stdenv.mkDerivation ( rec {
     + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
     + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
     + '' install
-    mv $out/bin/ponyc $out/bin/ponyc.wrapped
-    makeWrapper $out/bin/ponyc.wrapped $out/bin/ponyc \
+
+    wrapProgram $out/bin/ponyc \
+      --prefix PATH ":" "${stdenv.cc}/bin" \
+      --set-default CC "$CC" \
       --prefix PONYPATH : "$out/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib pcre2}/lib" \
       --prefix PONYPATH : "${stdenv.lib.getLib libressl}/lib"

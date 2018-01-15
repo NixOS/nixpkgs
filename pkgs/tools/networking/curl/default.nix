@@ -6,7 +6,7 @@
 , sslSupport ? false, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , scpSupport ? false, libssh2 ? null
-, gssSupport ? false, gss ? null
+, gssSupport ? false, kerberos ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -21,6 +21,7 @@ assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
+assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.57.0";
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport gss ++
+    optional gssSupport kerberos ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
 
   CXX = "c++";
   CXXCPP = "c++ -E";

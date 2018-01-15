@@ -4,18 +4,17 @@ stdenv.mkDerivation rec {
   name = "eom-${version}";
   version = "${major-ver}.${minor-ver}";
   major-ver = "1.18";
-  minor-ver = "2";
+  minor-ver = "3";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "00ns7g7qykakc89lijrw2vwy9x9ijqiyvmnd4sw0j6py90zs8m87";
+    sha256 = "1zr85ilv0f4x8iky002qvh00qhsq1vsfm5z1954gf31hi57z2j25";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
     itstool
-    hicolor_icon_theme
     wrapGAppsHook
   ];
 
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
     gnome3.gtk
     gnome3.libpeas
     mate.mate-desktop
+    hicolor_icon_theme
   ];
 
   meta = {

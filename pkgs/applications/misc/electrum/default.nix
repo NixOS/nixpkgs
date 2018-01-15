@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, python3, python3Packages }:
+{ stdenv, fetchurl, python3, python3Packages, zbar }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "09h3s1mbkliwh8758prbdk3sm19bnma7wy3k10pl9q9fkarbhp75";
+    sha256 = "06z0a5p1jg93jialphslip8d72q9yg3651qqaf494gs3h9kw1sv1";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
   '';
 
   postInstall = ''

@@ -6,7 +6,6 @@ with lib;
   imports = [
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
-    ./grow-partition.nix
   ];
 
   config = {
@@ -15,8 +14,7 @@ with lib;
       autoResize = true;
     };
 
-    virtualisation.growPartition = true;
-
+    boot.growPartition = true;
     boot.kernelParams = [ "console=ttyS0" ];
     boot.loader.grub.device = "/dev/vda";
     boot.loader.timeout = 0;

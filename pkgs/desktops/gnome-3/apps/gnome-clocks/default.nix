@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs build-aux/";
 
-  checkPhase = "meson test";
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Clocks;
     description = "Clock application designed for GNOME 3";

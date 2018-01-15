@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, automake, autoconf, libtool,
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool,
   pkgconfig, file, intltool, libxml2, json_glib , sqlite, itstool,
-  librsvg, vala_0_34, gnome3, wrapGAppsHook
+  librsvg, vala_0_34, gnome3, wrapGAppsHook, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [
-    makeWrapper
     pkgconfig
     automake autoconf libtool
     file
@@ -23,6 +22,8 @@ stdenv.mkDerivation rec {
     vala_0_34
     gnome3.yelp_tools
     wrapGAppsHook
+    # For setup hook
+    gobjectIntrospection
   ];
 
   buildInputs = [

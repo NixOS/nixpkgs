@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Set of integrated tools for the R language";
-      homepage = http://www.rstudio.com/;
+      homepage = https://www.rstudio.com/;
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
                         desktop_file_utils appstream-glib libxslt docbook_xsl docbook_xml_dtd_43];
   buildInputs = [ gtk glib gnome3.gsettings_desktop_schemas ];
 
-  checkPhase = "meson test";
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Dictionary;
     description = "Dictionary is the GNOME application to look up definitions";

@@ -70,11 +70,11 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0p4b3nr0s5nda2qmm7xdhnvh4lkqk3xd8l9ffmwbvqw137vx7mj1";
       inherit dependencies buildDependencies features;
     };
-    carnix_0_5_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    carnix_0_5_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.5.0";
+      version = "0.5.2";
       authors = [ "pe@pijul.org <pe@pijul.org>" ];
-      sha256 = "0mrprfa9l6q351ci77zr305jk5wdii8gamaphd2iars4xwn26lj4";
+      sha256 = "1znj345jziksxxkq7ap3i8p3fp3x4794qggac35d0banj7ml3fv8";
       inherit dependencies buildDependencies features;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -521,22 +521,22 @@ rec {
     features = mkFeatures bitflags_1_0_1_features;
   };
   bitflags_1_0_1_features."example_generated".self_default = hasDefault bitflags_1_0_1_features;
-  carnix_0_5_0 = carnix_0_5_0_ rec {
+  carnix_0_5_2 = carnix_0_5_2_ rec {
     dependencies = [ clap_2_28_0 env_logger_0_4_3 error_chain_0_11_0 itertools_0_7_3 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_13_0 serde_1_0_21 serde_derive_1_0_21 serde_json_1_0_6 tempdir_0_3_5 toml_0_4_5 ];
   };
-  clap_2_28_0_features."default".from_carnix_0_5_0__default = true;
-  env_logger_0_4_3_features."default".from_carnix_0_5_0__default = true;
-  error_chain_0_11_0_features."default".from_carnix_0_5_0__default = true;
-  itertools_0_7_3_features."default".from_carnix_0_5_0__default = true;
-  log_0_3_8_features."default".from_carnix_0_5_0__default = true;
-  nom_3_2_1_features."default".from_carnix_0_5_0__default = true;
-  regex_0_2_2_features."default".from_carnix_0_5_0__default = true;
-  rusqlite_0_13_0_features."default".from_carnix_0_5_0__default = true;
-  serde_1_0_21_features."default".from_carnix_0_5_0__default = true;
-  serde_derive_1_0_21_features."default".from_carnix_0_5_0__default = true;
-  serde_json_1_0_6_features."default".from_carnix_0_5_0__default = true;
-  tempdir_0_3_5_features."default".from_carnix_0_5_0__default = true;
-  toml_0_4_5_features."default".from_carnix_0_5_0__default = true;
+  clap_2_28_0_features."default".from_carnix_0_5_2__default = true;
+  env_logger_0_4_3_features."default".from_carnix_0_5_2__default = true;
+  error_chain_0_11_0_features."default".from_carnix_0_5_2__default = true;
+  itertools_0_7_3_features."default".from_carnix_0_5_2__default = true;
+  log_0_3_8_features."default".from_carnix_0_5_2__default = true;
+  nom_3_2_1_features."default".from_carnix_0_5_2__default = true;
+  regex_0_2_2_features."default".from_carnix_0_5_2__default = true;
+  rusqlite_0_13_0_features."default".from_carnix_0_5_2__default = true;
+  serde_1_0_21_features."default".from_carnix_0_5_2__default = true;
+  serde_derive_1_0_21_features."default".from_carnix_0_5_2__default = true;
+  serde_json_1_0_6_features."default".from_carnix_0_5_2__default = true;
+  tempdir_0_3_5_features."default".from_carnix_0_5_2__default = true;
+  toml_0_4_5_features."default".from_carnix_0_5_2__default = true;
   cc_1_0_3 = cc_1_0_3_ rec {
     dependencies = [];
     features = mkFeatures cc_1_0_3_features;

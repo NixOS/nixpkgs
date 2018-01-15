@@ -6,7 +6,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.11.0.4";
+  version = "8.13.0.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -57,7 +57,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "1chwc4rqcwwim03n6nski5dar33bb1gnadbvcjg6gln3xqr0ipib";
+        sha256 = "15p1v6y8fwx9qj3ag645bvrcw7c1j20v63iy75s4xwsv1siz8cf9";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.system}";

@@ -49,8 +49,8 @@ with luaPackages; stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/awesome \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix LUA_CPATH ";" '${lgi}/lib/lua/${lua.luaversion}/?.so' \
-      --prefix LUA_PATH ";" '${lgi}/share/lua/${lua.luaversion}/?.lua' \
+      --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
+      --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"

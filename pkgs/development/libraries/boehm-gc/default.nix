@@ -3,11 +3,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-7.6.0";
+  name = "boehm-gc-${version}";
+  version = "7.6.2";
 
   src = fetchurl {
-    url = http://www.hboehm.info/gc/gc_source/gc-7.6.0.tar.gz;
-    sha256 = "143x7g0d0k6250ai6m2x3l4y352mzizi4wbgrmahxscv2aqjhjm1";
+    urls = [
+      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
+      "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
+    ];
+    sha256 = "07nli9hgdzc09qzw169sn7gchkrn5kqgyniv2rspcy1xaq2j04dx";
   };
 
   buildInputs = [ libatomic_ops ];
@@ -20,16 +24,10 @@ stdenv.mkDerivation rec {
     [ "--enable-cplusplus" ]
     ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true; # not cross;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = hostPlatform != buildPlatform;
-
-  postInstall =
-    ''
-      mkdir -p $out/share/doc
-      mv $out/share/gc $out/share/doc/gc
-    '';
 
   enableParallelBuilding = true;
 

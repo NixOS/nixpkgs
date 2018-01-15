@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub
 , cmake , pkgconfig, libusb
 }:
 
@@ -22,13 +22,14 @@ in
     nativeBuildInputs = [ cmake pkgconfig ];
     buildInputs = [ libusb ];
 
-    cmakeFlags = [ "-DINSTALL_UDEV_RULES=ON" ];
+    cmakeFlags =
+      lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
 
     meta = with stdenv.lib; {
-      homepage = http://github.com/airspy/airspyone_host;
+      homepage = https://github.com/airspy/airspyone_host;
       description = "Host tools and driver library for the AirSpy SDR";
       license = licenses.free;
-      platforms = platforms.linux;
+      platforms = with platforms; linux ++ darwin;
       maintainers = with maintainers; [ markuskowa ];
     };
   }

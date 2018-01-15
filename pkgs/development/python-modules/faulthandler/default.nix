@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "faulthandler";
-  version = "2.6";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zywq3jaznddvqc3hnfrlv24wmpyq4xgajk9xhv6578qw1rpfj2r";
+    sha256 = "acc10e10909f0f956ba1b42b6c450ea0bdaaa27b3942899f65931396cfcdd36a";
   };
 
   meta = {

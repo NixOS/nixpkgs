@@ -3,6 +3,7 @@
 , perl, perlXMLParser, libxml2, nss, nspr, farstream
 , libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
+, cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
 , libgcrypt ? null
@@ -33,7 +34,7 @@ let unwrapped = stdenv.mkDerivation rec {
     libxml2 nss nspr farstream
     libXScrnSaver ncurses python
     avahi dbus dbus_glib intltool libidn
-    libICE libXext libSM
+    libICE libXext libSM cyrus_sasl
   ]
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
@@ -55,6 +56,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-nm"
     "--disable-tcl"
   ]
+  ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
   ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
 
   enableParallelBuilding = true;
@@ -78,4 +80,3 @@ in if plugins == [] then unwrapped
       inherit stdenv makeWrapper symlinkJoin plugins;
       pidgin = unwrapped;
     }
-

@@ -13,6 +13,9 @@ let
       sha256 = "02cn70ygl93ghhkhs3xdxn5b1yadc255v3yp8cmhhyzsv5027hvj";
     };
 
+    # https://github.com/thestinger/termite/pull/516
+    patches = [ ./url_regexp_trailing.patch ];
+
     postPatch = "sed '1i#include <math.h>' -i termite.cc";
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];

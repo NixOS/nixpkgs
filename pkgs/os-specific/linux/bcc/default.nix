@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages_5, kernel
-, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages_5, kernel
+, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.0";
+  version = "0.5.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "106ri3yhjhp3dgsjb05y4j6va153d5nqln3zjdz6qfz87svak0rw";
+    sha256 = "0bb3244xll5sqx0lvrchg71qy2zg0yj6r5h4v5fvrg1fjhaldys9";
   };
 
   buildInputs = [
@@ -17,7 +17,17 @@ stdenv.mkDerivation rec {
     elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 
-  nativeBuildInputs = [ makeWrapper cmake flex bison ];
+  patches = [
+    # fix build with llvm > 5.0.0 && < 6.0.0
+    (fetchpatch {
+      url = "https://github.com/iovisor/bcc/commit/bd7fa55bb39b8978dafd0b299e35616061e0a368.patch";
+      sha256 = "1sgxhsq174iihyk1x08py73q8fh78d7y3c90k5nh8vcw2pf1xbnf";
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper cmake flex bison ]
+    # libelf is incompatible with elfutils-libelf
+    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
 

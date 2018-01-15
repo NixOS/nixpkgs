@@ -9,8 +9,10 @@
 }:
 
 let
-  apparmor-series = "2.10";
-  apparmor-version = apparmor-series;
+
+  apparmor-series = "2.12";
+  apparmor-patchver = "0";
+  apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
     homepage = http://apparmor.net/;
@@ -21,8 +23,8 @@ let
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "1x06qmmbha9krx7880pxj2k3l8fxy3nm945xjjv735m2ax1243jd";
+    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-series}.tar.gz";
+    sha256 = "0mm0mcp0w18si9wl15drndysm7v27az2942p1xjd197shg80qawa";
   };
 
   prePatchCommon = ''
@@ -96,7 +98,7 @@ let
         wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${pythonPackages.python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      for prog in aa-exec aa-notify ; do
+      for prog in aa-notify ; do
         wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
       done
     '';

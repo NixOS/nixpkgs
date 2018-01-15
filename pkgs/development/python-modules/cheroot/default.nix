@@ -1,20 +1,22 @@
 { stdenv, fetchPypi, buildPythonPackage
-, six
+, more-itertools, six
 , coverage, codecov, pytest, pytestcov, pytest-sugar, portend
 , backports_unittest-mock, setuptools_scm }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "cheroot";
-  version = "5.8.3";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c0531fd732700b1fb3e6e7079dc3aefbdf29e9136925633d93f009cb87d70a3";
+    sha256 = "10s67wxymk4xg45l7ca59n4l6m6rnj8b9l52pg1angxh958lwixs";
   };
 
-  propagatedBuildInputs = [ six ];
-  buildInputs = [ coverage codecov pytest pytestcov pytest-sugar portend backports_unittest-mock setuptools_scm ];
+  propagatedBuildInputs = [ more-itertools six ];
+
+  buildInputs = [ setuptools_scm ];
+
+  checkInputs = [ coverage codecov pytest pytestcov pytest-sugar portend backports_unittest-mock  ];
 
   checkPhase = ''
     py.test cheroot

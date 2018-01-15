@@ -47,12 +47,12 @@
     '';
   };
 
-  modsecurity-beta = {
+  modsecurity-nginx = {
     src = fetchFromGitHub {
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "a2a5858d249222938c2f5e48087a922c63d7f9d8";
-      sha256 = "1zj0fq35hddzf7b3x40xlbss866lg7w2vd1bbm8g1hcq1ny2s84n";
+      rev = "v1.0.0";
+      sha256 = "0zzpdqhbdqqy8kjkszv0mrq6136ah9v3zwr1jbh312j8izmzdyi7";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
@@ -153,7 +153,7 @@
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
         rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        sha256 = "176skx7zmi7islc1hmdxcynix4lkvgmr78lknn13s9gskc7qi25w";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -172,6 +172,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {

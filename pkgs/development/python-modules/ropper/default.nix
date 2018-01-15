@@ -3,23 +3,25 @@
 , fetchPypi
 , capstone
 , filebytes
-, pytest }:
+, pytest
+}:
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "ropper";
-  version = "1.10.10";
+  version = "1.11.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
+    sha256 = "77d9b03083d0a098261a1d2856cd330ea3db520511a78472e421a00526aa220c";
   };
   # XXX tests rely on user-writeable /dev/shm to obtain process locks and return PermissionError otherwise
   # workaround: sudo chmod 777 /dev/shm
   checkPhase = ''
     py.test testcases
   '';
-  buildInputs = [pytest];
+  doCheck = false; # Tests not included in archive
+
+  checkInputs = [pytest];
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with stdenv.lib; {
     homepage = https://scoding.de/ropper/;

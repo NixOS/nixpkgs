@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "4.6.1";
+  version = "4.7.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e1825aca4e2585b5adb7953ea16e53f53a62159ed49952a564b1e23507205db";
+    sha256 = "354986612a38f0555c43d5af2425e2a67506b63b313a0325e38904003b9d977b";
   };
 
   buildInputs = [ nose ] ++ lib.optional isPy27 mock;

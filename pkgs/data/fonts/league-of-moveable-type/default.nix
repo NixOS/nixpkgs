@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   srcs = fonts;
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   sourceRoot = ".";
 
   installPhase = ''

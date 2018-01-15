@@ -49,7 +49,7 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" "python" ]
+    outputs = [ "out" "lib" "python" ]
       ++ stdenv.lib.optional enableManpages "man";
 
     # Clang expects to find LLVMgold in its own prefix
@@ -59,13 +59,15 @@ let
       ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
       ln -sv $out/bin/clang $out/bin/cpp
 
+      # Move libclang to 'lib' output
+      moveToOutput "lib/libclang.*" "$lib"
+
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
-
       rm $out/bin/c-index-test
     ''
     + stdenv.lib.optionalString enableManpages ''
@@ -79,7 +81,6 @@ let
     enableParallelBuilding = true;
 
     passthru = {
-      lib = self; # compatibility with gcc, so that `stdenv.cc.cc.lib` works on both
       isClang = true;
       inherit llvm;
     } // stdenv.lib.optionalAttrs stdenv.isLinux {

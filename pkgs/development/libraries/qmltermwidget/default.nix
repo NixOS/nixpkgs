@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, qtbase, qtquick1, qmake, qtmultimedia }:
+{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
   name = "qmltermwidget-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Swordfish90/qmltermwidget.git";
-    rev = "refs/tags/v${version}";
+  src = fetchFromGitHub {
+    repo = "qmltermwidget";
+    owner = "Swordfish90";
+    rev = "v${version}";
     sha256 = "0ca500mzcqglkj0i6km0z512y3a025dbm24605xyv18l6y0l2ny3";
   };
 

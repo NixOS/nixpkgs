@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w3nx5cqf8z600bdlbwz7brmdb5yn233qrqvv24kbmmxhbwp7qld";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ kernel.moduleBuildDependencies;
   buildInputs = [ libvirt ];
 
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

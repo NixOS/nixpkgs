@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.8";
   name = "nftables-${version}";
 
-  src = fetchurl {
+src = fetchurl {
     url = "http://netfilter.org/projects/nftables/files/${name}.tar.bz2";
     sha256 = "16iq9x0qxikdhp1nan500rk33ycqddl1k57876m4dfv3n7kqhnrz";
   };

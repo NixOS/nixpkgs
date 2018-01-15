@@ -1,13 +1,17 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, wrapGAppsHook
 , cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
-, libxml2, sane-backends, vala, gnome3 }:
+, libxml2, sane-backends, vala, gnome3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   buildInputs = [ cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
                 gtk libwebp packagekit sane-backends vala ];
-  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2 ];
+  nativeBuildInputs = [
+    meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2
+    # For setup hook
+    gobjectIntrospection
+  ];
 
   postPatch = ''
     patchShebangs data/meson_compile_gschema.py
@@ -34,8 +38,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Simple scanning utility";

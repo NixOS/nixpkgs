@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, darwin ? null
-, buildEnv, bundler, bundix
+, buildEnv, bundler, bundix, Foundation
 } @ args:
 
 let
@@ -27,6 +27,7 @@ let
     tag = ver.gitTag;
     isRuby20 = ver.majMin == "2.0";
     isRuby21 = ver.majMin == "2.1";
+    isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
       { stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -40,7 +41,7 @@ let
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
       , darwin ? null
-      , buildEnv, bundler, bundix
+      , buildEnv, bundler, bundix, Foundation
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -75,11 +76,13 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
+          ++ (op isRuby25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+          ++ (op (isRuby25 && stdenv.isDarwin) Foundation)
           ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
 
         enableParallelBuilding = true;
@@ -103,6 +106,11 @@ let
 
         postPatch = if isRuby21 then ''
           rm tool/config_files.rb
+          cp ${config}/config.guess tool/
+          cp ${config}/config.sub tool/
+        ''
+        else if isRuby25 then ''
+          sed -i configure.ac -e '/config.guess/d'
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
         ''
@@ -142,7 +150,7 @@ let
             addToSearchPath GEM_PATH \$1/${passthru.gemPath}
           }
 
-          envHooks+=(addGemPath)
+          addEnvHooks "$hostOffset" addGemPath
           EOF
         '' + opString useRailsExpress ''
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
@@ -197,27 +205,35 @@ in {
     };
   };
 
-  ruby_2_2_8 = generic {
-    version = rubyVersion "2" "2" "8" "";
+  ruby_2_2_9 = generic {
+    version = rubyVersion "2" "2" "9" "";
     sha256 = {
-      src = "12i6v5i0djl4xx3x7fq12snqb5d4drqjmnwqs05fby4bagcbjdwg";
-      git = "16nw0795nhrj13crp5x4jis8hmi3gsyjl96pwk698wlrb89lf9bw";
+      src = "19m1ximl7vcrsvq595dgrjh4yb6kar944095wbywqh7waiqcfirg";
+      git = "03qrjh55098wcqh2khxryzkzfqkznjrcdgwf27r2bgcycbg5ca5q";
     };
   };
 
-  ruby_2_3_5 = generic {
-    version = rubyVersion "2" "3" "5" "";
+  ruby_2_3_6 = generic {
+    version = rubyVersion "2" "3" "6" "";
     sha256 = {
-      src = "1k6x4g68lq30i0myip5bn56rcbwjxmqq95j1fkdgbvwbnaxzfqjl";
-      git = "0spwqz4b5xxqzs13azsd4xz4jkc3is7d9q4s6s2qilb8ib4863jl";
+      src = "07jpa7fw1gyf069m7alf2b0zm53qm08w2ns45mhzmvgrg4r528l3";
+      git = "1bk59i0ygdc5z3zz3k6indfrxd2ix55np6rwvkcdpdw8svm749ds";
     };
   };
 
-  ruby_2_4_2 = generic {
-    version = rubyVersion "2" "4" "2" "";
+  ruby_2_4_3 = generic {
+    version = rubyVersion "2" "4" "3" "";
     sha256 = {
-      src = "174cdiz3am1f76vsnm3iqi9c5vqphypbf9kbxx6vqqmj01gfgfck";
-      git = "1w83kzak3m6vv3k09ynfw9vpgc7vpmij3x3zmgrhwm4ds1sp5irl";
+      src = "161smb52q19r9lrzy22b3bhnkd0z8wjffm0qsfkml14j5ic7a0zx";
+      git = "0x2lqbqm2rq9j5zh1p72dma56nqvdkfbgzb9wybm4y4hwhiw8c1m";
+    };
+  };
+
+  ruby_2_5_0 = generic {
+    version = rubyVersion "2" "5" "0" "";
+    sha256 = {
+      src = "1azj0d2lzziw6iml7bx3sxpxzcdmfwfq3yhm7djyp20q1xiz7rj6";
+      git = "0d436nqmp3ykdkp4sck5bb8sf3qvx30x1p58xh8axv66mvsyc2jd";
     };
   };
 }

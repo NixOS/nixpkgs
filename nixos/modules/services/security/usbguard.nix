@@ -56,7 +56,7 @@ in {
       };
 
       rules = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.lines;
         default = null;
         example = ''
           allow with-interface equals { 08:*:* }

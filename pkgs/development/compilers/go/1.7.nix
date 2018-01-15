@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch ];
-  buildInputs = [ pcre ];
+  buildInputs = [ cacert pcre ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
@@ -115,8 +115,6 @@ stdenv.mkDerivation rec {
         sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
       })
     ];
-
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

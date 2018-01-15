@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
-  checkPhase = "meson test";
 
   patches = [
     ./no-update-icon-cache.patch
