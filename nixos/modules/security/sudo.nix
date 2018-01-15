@@ -8,6 +8,22 @@ let
 
   inherit (pkgs) sudo;
 
+  toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
+  toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
+
+  toCommandOptionsString = options:
+    "${concatStringsSep ":" options}: ";
+    
+  toCommandsString = commands:
+    concatStringsSep ", " (
+      map (command:
+        if (isString command) then
+          command
+        else
+          "${toCommandOptionsString command.options}${command.command}"
+      ) commands
+    );
+
 in
 
 {
@@ -47,6 +63,80 @@ in
         '';
     };
 
+    security.sudo.extraRules = mkOption {
+      description = ''
+        Define specifc rules to be in the <filename>sudoers</filename> file.
+      '';
+      default = [];
+      type = with types; listOf (submodule {
+        options = {
+          users = mkOption {
+            type = with types; listOf (either string int);
+            description = ''
+              The usernames / UIDs this rule should apply for.
+            '';
+            default = [];
+          };
+
+          groups = mkOption {
+            type = with types; listOf (either string int);
+            description = ''
+              The groups / GIDs this rule should apply for.
+            '';
+            default = [];
+          };
+
+          host = mkOption {
+            type = types.string;
+            default = "ALL";
+            description = ''
+              For what host this rule should apply.
+            '';
+          };
+
+          runAs = mkOption {
+            type = with types; string;
+            default = "ALL:ALL";
+            description = ''
+              Under which user/group the specified command is allowed to run.
+              
+              A user can be specified using just the username: <code>"foo"</code>.
+              It is also possible to specify a user/group combination using <code>"foo:bar"</code>
+              or to only allow running as a specific group with <code>":bar"</code>.
+            '';
+          };
+
+          commands = mkOption {
+            description = ''
+              The commands for which the rule should apply.
+            '';
+            type = with types; listOf (either string (submodule {
+
+              options = {
+                command = mkOption {
+                  type = with types; string;
+                  description = ''
+                    A command being either just a path to a binary to allow any arguments,
+                    the full command with arguments pre-set or with <code>""</code> used as the argument,
+                    not allowing arguments to the command at all.
+                  '';
+                };
+
+                options = mkOption {
+                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
+                  description = ''
+                    Options for running the command. Refer to the <a href="https://www.sudo.ws/man/1.7.10/sudoers.man.html">sudo manual</a>.
+                  '';
+                  default = [];
+                };
+              };
+
+            })); 
+          };
+        };
+      });
+    };
+
     security.sudo.extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -61,6 +151,12 @@ in
 
   config = mkIf cfg.enable {
 
+    security.sudo.extraRules = [
+      { groups = [ "wheel" ];
+        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "NOPASSWD" ] else [ ]); } ];
+      }
+    ]; 
+
     security.sudo.configFile =
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
@@ -72,8 +168,18 @@ in
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
 
-        # Users in the "wheel" group can do anything.
-        %wheel      ALL=(ALL:ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
+        # extraRules
+        ${concatStringsSep "\n" (
+          lists.flatten (
+            map (
+              rule: [
+                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
+                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
+              ]
+            ) cfg.extraRules
+          )
+        )} 
+
         ${cfg.extraConfig}
       '';
 
