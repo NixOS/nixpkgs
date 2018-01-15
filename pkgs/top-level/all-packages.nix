@@ -18870,6 +18870,8 @@ with pkgs;
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
+  mrtrix3 = callPackage ../applications/science/biology/mrtrix { };
+
   minc-tools = callPackage ../applications/science/biology/minc-tools { };
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
