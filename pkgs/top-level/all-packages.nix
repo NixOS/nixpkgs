@@ -15474,6 +15474,8 @@ with pkgs;
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  hyperscan = callPackage ../development/libraries/hyperscan { };
+
   hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
   hyperterm = self.hyper;
 
