@@ -1253,6 +1253,8 @@ with pkgs;
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  skim = callPackage ../tools/misc/skim { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   staccato = callPackage ../tools/text/staccato { };
