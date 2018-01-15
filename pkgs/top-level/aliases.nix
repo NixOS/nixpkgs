@@ -24,7 +24,11 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases (rec {
-  accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
+  _2048-in-terminal = "2048-in-terminal"; # added 2017-01-16
+  _2bwm = "2bwm"; # added 2017-01-16
+  _389-ds-base = "389-ds-base"; # added 2017-01-16
+  _90secondportraits = "90secondsportraits"; # added 2017-01-16
+  accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
   ammonite-repl = ammonite; # added 2017-05-02
