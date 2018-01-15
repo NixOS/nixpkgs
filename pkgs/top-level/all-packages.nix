@@ -1372,6 +1372,8 @@ with pkgs;
 
   bepasty = callPackage ../tools/misc/bepasty { };
 
+  bettercap = callPackage ../tools/security/bettercap { };
+
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
   bgs = callPackage ../tools/X11/bgs { };
