@@ -48,6 +48,7 @@ stdenv.mkDerivation ({
       */
       ./2.26-75.patch.gz
       ./2.26-75to115.diff.gz
+      ./2.26-115to137.diff.gz
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
