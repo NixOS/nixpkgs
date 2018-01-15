@@ -2819,7 +2819,7 @@ with pkgs;
   inadyn = callPackage ../tools/networking/inadyn { };
 
   inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
-  
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
@@ -14184,6 +14184,7 @@ with pkgs;
 
 
   go-ethereum = self.altcoins.go-ethereum;
+  ethsign = self.altcoins.ethsign;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
