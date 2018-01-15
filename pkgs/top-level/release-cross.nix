@@ -125,7 +125,16 @@ in
   android = mapTestOnCross lib.systems.examples.aarch64-multiplatform (linuxCommon // {
   });
 
-  musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+  x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+  rpi-musl = mapTestOnCross lib.systems.examples.muslpi  (linuxCommon // {
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
+  });
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
