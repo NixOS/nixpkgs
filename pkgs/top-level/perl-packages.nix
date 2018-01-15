@@ -8320,6 +8320,20 @@ let self = _self // overrides; _self = with self; {
     inherit fetchurl buildPerlPackage stdenv DBDmysql;
   };
 
+  MacPasteboard = buildPerlPackage rec {
+    name = "Mac-Pasteboard-0.009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WY/WYANT/${name}.tar.gz";
+      sha256 = "85b1d5e9630973b997c3c1634e2df964d6a8d6cb57d9abe1f7093385cf26cf54";
+    };
+    meta = with stdenv.lib; {
+      description = "Manipulate Mac OS X pasteboards";
+      license = with licenses; [ artistic1 gpl1Plus ];
+      platforms = platforms.darwin;
+    };
+    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
+  };
+
   MailMaildir = buildPerlPackage rec {
     version = "1.0.0";
     name = "Mail-Maildir-${version}";
