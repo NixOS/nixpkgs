@@ -175,8 +175,6 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
-  awscli = callPackage ../tools/admin/awscli { };
-
   # packages defined elsewhere
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
