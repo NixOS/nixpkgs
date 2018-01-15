@@ -7868,9 +7868,7 @@ with pkgs;
 
   smc = callPackage ../tools/misc/smc { };
 
-  snowman_qt4 = callPackage ../development/tools/analysis/snowman { };
-  snowman_qt5 = qt5.callPackage ../development/tools/analysis/snowman { qt4 = null; };
-  snowman = snowman_qt5;
+  snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
