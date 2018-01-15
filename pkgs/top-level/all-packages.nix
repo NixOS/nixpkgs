@@ -9739,6 +9739,8 @@ with pkgs;
 
   libnet = callPackage ../development/libraries/libnet { };
 
+  libnet_1_1 = callPackage ../development/libraries/libnet/1.1.nix { };
+
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
   libnetfilter_cthelper = callPackage ../development/libraries/libnetfilter_cthelper { };
