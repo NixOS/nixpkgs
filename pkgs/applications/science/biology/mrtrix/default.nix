@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.mrtrix.org/;
     license = licenses.mpl20;
     maintainers = [ maintainers.ashgillman ];
-    platforms = platforms.linux;
-};
+    platforms = platforms.all;
+  };
 }
