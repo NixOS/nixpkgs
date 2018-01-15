@@ -12792,8 +12792,7 @@ with pkgs;
   linux_beagleboard = callPackage ../os-specific/linux/kernel/linux-beagleboard.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.p9_fixes
-        kernelPatches.cpu-cgroup-v2."4.9"
+        kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ];
   };

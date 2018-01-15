@@ -1,10 +1,10 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ubootTools, dtc, ... } @ args:
 
 let
-  modDirVersion = "4.9.61";
-  tag = "r76";
+  modDirVersion = "4.14.12";
+  tag = "r23";
 in
-import ./generic.nix (args // rec {
+stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
   version = "${modDirVersion}-ti-${tag}";
   inherit modDirVersion;
 
@@ -12,7 +12,7 @@ import ./generic.nix (args // rec {
     owner = "beagleboard";
     repo = "linux";
     rev = "${version}";
-    sha256 = "0hcz4fwjyic42mrn8qsvzm4jq1g5k51awjj3d2das7k8frjalaby";
+    sha256 = "07hdv2h12gsgafxsqqr7b0fir10rv9k66riklpjba2cg6x0p2nr4";
   };
 
   kernelPatches = args.kernelPatches;
@@ -21,5 +21,14 @@ import ./generic.nix (args // rec {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraMeta.hydraPlatforms = [];
-} // (args.argsOverride or {}))
+  extraMeta.hydraPlatforms = [ "armv7l-linux" ];
+} // (args.argsOverride or {}))) (oldAttrs: {
+
+  # This kernel will run mkuboot.sh.
+  postPatch = ''
+    patchShebangs scripts/
+  '';
+
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ dtc ubootTools ];
+
+})
