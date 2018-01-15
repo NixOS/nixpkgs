@@ -31,6 +31,8 @@
 # will leave entries on your system after uninstalling mendeley.
 # (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
 , autorunLinkHandler ? true
+# Update script
+, writeScript
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -43,14 +45,14 @@ let
     then "i386"
     else "amd64";
 
-  shortVersion = "1.17.12-stable";
+  shortVersion = "1.17.13-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "09n910ny8k103g1v8m19f9n827l2y0kmz79cwgy95k6acf2rkc2x"
-    else "11z65mj1a2rw6cwfarl8r1vzpcz4ww5mgvd5fyv31l60mbmnqkap";
+    then "0q4x62k00whmq8lskphpcxc610cvclxzcr5k0v7pxjxs9sx5yx43"
+    else "01ylyily1hip35z0d4qkdpbzp5yn4r015psc5773xsqlgrnlwjm3";
 
   deps = [
     qtbase
@@ -133,11 +135,14 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  meta = {
+  updateScript = import ./update.nix { inherit writeScript; };
+
+  meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers  = with maintainers; [ dtzWill ];
   };
 
 }
