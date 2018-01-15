@@ -65,6 +65,6 @@ let
     runScript = target;
   };
 in buildFHSUserEnv {
-  name = attrs.toolName;
+  name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
 } // { inherit (pkg) meta name; }
