@@ -39,7 +39,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (!config.boot.isContainer && !config.boot.usePvKernel) {
 
     environment.etc."modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
 

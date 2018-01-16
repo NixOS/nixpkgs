@@ -35,7 +35,7 @@ let
 
       # Containers don't have their own kernel or initrd.  They boot
       # directly into stage 2.
-      ${optionalString (!config.boot.isContainer) ''
+      ${optionalString (!config.boot.isContainer && !config.boot.usePvKernel) ''
         if [ ! -f ${kernelPath} ]; then
           echo "The bootloader cannot find the proper kernel image."
           echo "(Expecting ${kernelPath})"

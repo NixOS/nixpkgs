@@ -90,7 +90,7 @@ in
     boot.loader.grub = {
 
       enable = mkOption {
-        default = !config.boot.isContainer;
+        default = !config.boot.isContainer && !config.boot.usePvKernel;
         type = types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.

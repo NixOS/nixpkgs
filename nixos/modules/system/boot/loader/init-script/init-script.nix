@@ -22,7 +22,10 @@ in
     boot.loader.initScript = {
 
       enable = mkOption {
-        default = false;
+        # When being booted in as a xen domU
+        # with a provided kernel and initrd,
+        # we need the /sbin/init script.
+        default = config.boot.usePvKernel;
         type = types.bool;
         description = ''
           Some systems require a /sbin/init script which is started.
