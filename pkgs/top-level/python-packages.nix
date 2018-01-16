@@ -6271,6 +6271,8 @@ in {
     inherit (pkgs.stdenv) mkDerivation;
   };
 
+  pydotplus = callPackage ../development/python-modules/pydotplus { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
