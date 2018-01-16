@@ -46,11 +46,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    dbus dbus.lib dbus-cpp gmock gtest boost
-    libcap mesa glib SDL2 SDL2_image
-    protobuf protobufc lxc libdrm
-    libpthreadstubs libXdmcp libXdamage
-    python2 libproperties-cpp glm
+    boost dbus dbus.lib dbus-cpp glib glm gmock gtest
+    libcap libdrm libproperties-cpp libpthreadstubs libXdamage libXdmcp lxc
+    mesa protobuf protobufc
+    python2
+    SDL2 SDL2_image
   ];
 
   patchPhase = ''
