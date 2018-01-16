@@ -212,6 +212,7 @@
 "vim-addon-xdebug"
 "vim-airline"
 "vim-coffee-script"
+"vim-cursorword"
 "vim-easy-align"
 "vim-gista"
 "vim-gitgutter"

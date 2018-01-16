@@ -2594,6 +2594,17 @@ rec {
 
   };
 
+  vim-cursorword = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-cursorword-2017-10-19";
+    src = fetchgit {
+      url = "git://github.com/itchyny/vim-cursorword";
+      rev = "4878d6185b99131c5f610cc6ad0e223439ac4601";
+      sha256 = "170nf0w7i5k3cr72dkvraq2p0lzsvb3cmdvslyz7cmxnz611n6bf";
+    };
+    dependencies = [];
+
+  };
+
   vim-easy-align = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-easy-align-2017-06-03";
     src = fetchgit {
