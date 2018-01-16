@@ -11408,44 +11408,8 @@ in {
     };
   };
 
-  nipype = buildPythonPackage rec {
-    version = "0.14.0";
-    name = "nipype-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nipype/${name}.tar.gz";
-      sha256 = "0airdrh93vwmbfkqxp5cqfzm0zzqcvjnvphv3zhg197y39xxpl1k";
-    };
-
-    doCheck = false; # fails with TypeError: None is not callable
-    checkInputs = [ pkgs.which ];
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [
-      click
-      dateutil
-      funcsigs
-      future
-      networkx
-      nibabel
-      numpy
-      packaging
-      prov
-      psutil
-      pydot
-      scipy
-      simplejson
-      traits
-      xvfbwrapper
-    ] ++ stdenv.lib.optional (!isPy3k) [
-      configparser
-    ];
-
-    meta = {
-      homepage = http://nipy.org/nipype/;
-      description = "Neuroimaging in Python: Pipelines and Interfaces";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ ashgillman ];
-    };
+  nipype = callPackage ../development/python-modules/nipype {
+    inherit (pkgs) which;
   };
 
   nose = buildPythonPackage rec {
