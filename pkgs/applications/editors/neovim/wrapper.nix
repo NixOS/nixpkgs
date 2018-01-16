@@ -68,7 +68,9 @@ let
         --unset PYTHONPATH \
          ${optionalString withRuby '' --suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
 
-        # copy and patch the original neovim.destkop file
+      ''
+      + optionalString (!stdenv.isDarwin) ''
+        # copy and patch the original neovim.desktop file
         mkdir -p $out/share/applications
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
