@@ -2715,4 +2715,14 @@ rec {
 
   };
 
+  zeavim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "zeavim-2017-12-20";
+    src = fetchgit {
+      url = "git://github.com/KabbAmine/zeavim.vim";
+      rev = "88f81078059d98d7637a93b90730897a3af231a4";
+      sha256 = "1p43f6bbs9fcvvp1i90kzx1xj7k6c5w3ajf9wlrplpkz6hsiv2wv";
+    };
+    dependencies = [];
+
+  };
 }
