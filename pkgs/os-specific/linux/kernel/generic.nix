@@ -64,7 +64,8 @@ let
 
     kernelConfig = kernelConfigFun config;
 
-    nativeBuildInputs = [ buildPackages.stdenv.cc perl ];
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ perl ];
 
     platformName = hostPlatform.platform.name;
     kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;

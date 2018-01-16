@@ -236,7 +236,8 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr buildPackages.stdenv.cc ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
