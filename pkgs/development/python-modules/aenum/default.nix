@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   # For Python 3, locale has to be set to en_US.UTF-8 for
   # tests to pass
-  buildInputs = if isPy3k then [ glibcLocales ] else [];
+  checkInputs = if isPy3k then [ glibcLocales ] else [];
 
   checkPhase = ''
   runHook preCheck
