@@ -2703,4 +2703,16 @@ rec {
     dependencies = [];
 
   };
+
+  xterm-color-table = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "xterm-color-table-2013-12-31";
+    src = fetchgit {
+      url = "git://github.com/guns/xterm-color-table.vim";
+      rev = "9754e857e5f4fe1f8727106dcc682d21c29a51e4";
+      sha256 = "08a1d9428xwrjp40qgi34cb5fwgc239qf3agxl32k7bqbn08pq19";
+    };
+    dependencies = [];
+
+  };
+
 }
