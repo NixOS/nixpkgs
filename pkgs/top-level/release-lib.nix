@@ -58,7 +58,8 @@ rec {
      interested in the result of cross building a package. */
   crossMaintainers = [ maintainers.viric ];
 
-  forAllSupportedSystems = systems: f:
+  forAllSystems = genAttrs supportedSystems;
+  forTheseSystems = systems: f:
     genAttrs (filter (x: elem x supportedSystems) systems) f;
 
   /* Build a package on the given set of platforms.  The function `f'
@@ -66,14 +67,14 @@ rec {
      platform as an argument .  We return an attribute set containing
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
-  testOn = systems: f: forAllSupportedSystems systems
+  testOn = systems: f: forTheseSystems systems
     (system: hydraJob' (f (pkgsFor system)));
 
 
   /* Similar to the testOn function, but with an additional
      'crossSystem' parameter for allPackages, defining the target
      platform for cross builds. */
-  testOnCross = crossSystem: systems: f: forAllSupportedSystems systems
+  testOnCross = crossSystem: systems: f: forTheseSystems systems
     (system: hydraJob' (f (allPackages { inherit system crossSystem; })));
 
 
