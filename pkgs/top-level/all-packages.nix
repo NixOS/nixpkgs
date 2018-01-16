@@ -461,6 +461,8 @@ with pkgs;
   };
 
   anbox-binder = callPackage ../applications/virtualization/anbox/kmod-binder.nix { };
+  anbox-ashmem = callPackage ../applications/virtualization/anbox/kmod-ashmem.nix { };
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   apktool = callPackage ../development/tools/apktool {
