@@ -132,7 +132,7 @@ stdenv.mkDerivation (rec {
   ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.clang-unwrapped.lib}/lib"
+    "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "57") [
