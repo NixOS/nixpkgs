@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernel, libelf }:
 
 stdenv.mkDerivation rec {
   name = "vhba-${version}";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
+  buildInputs = [ libelf ];
 
   hardeningDisable = [ "pic" ];
 

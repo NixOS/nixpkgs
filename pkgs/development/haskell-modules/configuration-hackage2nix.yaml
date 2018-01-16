@@ -2681,6 +2681,7 @@ extra-packages:
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock < 2.17                      # required on GHC 7.10.x
+  - haddock == 2.17.*                   # required on GHC 8.0.x
   - haddock-api == 2.15.*               # required on GHC 7.8.x
   - haddock-api == 2.16.*               # required on GHC 7.10.x
   - haddock-api == 2.17.*               # required on GHC 8.0.x

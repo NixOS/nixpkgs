@@ -13,6 +13,8 @@
 , libfakekey
 , libXtst
 , qtx11extras
+, sshfs
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -28,10 +30,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libfakekey libXtst
     ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
-    qca-qt5 qtx11extras
+    qca-qt5 qtx11extras makeWrapper
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+
+  postInstall = ''
+    wrapProgram $out/lib/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+  '';
 
   enableParallelBuilding = true;
 

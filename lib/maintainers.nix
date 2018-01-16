@@ -60,6 +60,7 @@
   arobyn = "Alexei Robyn <shados@shados.net>";
   artuuge = "Artur E. Ruuge <artuuge@gmail.com>";
   ashalkhakov = "Artyom Shalkhakov <artyom.shalkhakov@gmail.com>";
+  ashgillman = "Ashley Gillman <gillmanash@gmail.com>";
   aske = "Kirill Boltaev <aske@fmap.me>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
@@ -506,6 +507,7 @@
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
   panaeon = "Vitalii Voloshyn <vitalii.voloshyn@gmail.com";
   paperdigits = "Mica Semrick <mica@silentumbrella.com>";
+  paraseba = "Sebastian Galkin <paraseba@gmail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   patternspandemic = "Brad Christensen <patternspandemic@live.com>";
   pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
@@ -605,6 +607,7 @@
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sdll = "Sasha Illarionov <sasha.delly@gmail.com>";
   SeanZicari = "Sean Zicari <sean.zicari@gmail.com>";
+  sellout = "Greg Pfeil <greg@technomadic.org>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
   shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";
@@ -640,6 +643,7 @@
   sternenseemann = "Lukas Epple <post@lukasepple.de>";
   stesie = "Stefan Siegl <stesie@brokenpipe.de>";
   steveej = "Stefan Junker <mail@stefanjunker.de>";
+  StillerHarpo = "Florian Engel <florianengel39@gmail.com>";
   stumoss = "Stuart Moss <samoss@gmail.com>";
   SuprDewd = "Bjarki Ágúst Guðmundsson <suprdewd@gmail.com>";
   swarren83 = "Shawn Warren <shawn.w.warren@gmail.com>";
@@ -731,6 +735,7 @@
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   xaverdh = "Dominik Xaver Hörl <hoe.dom@gmx.de>";
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
+  xurei = "Olivier Bourdoux <olivier.bourdoux@gmail.com>";
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";
   xwvvvvwx = "David Terry <davidterry@posteo.de>";
   xzfc = "Albert Safin <xzfcpw@gmail.com>";

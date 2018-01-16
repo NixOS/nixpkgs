@@ -135,10 +135,10 @@
     arbitools = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "arbitools";
-        version = "0.93";
+        version = "0.94";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.93.el";
-          sha256 = "0z3lqp8dqfkams5h4sw569p48d2rvpd3d8lb4xaw0z8l49y2mvg8";
+          url = "https://elpa.gnu.org/packages/arbitools-0.94.el";
+          sha256 = "00iq8rr1275p48ic5mibcx657li723q8r7ax4g21w6bzwsj3gksd";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.14";
+        version = "1.4.0.17";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.14.tar";
-          sha256 = "1qc30dia59i2bklhivfhmsghirnpgz5mvcjdc78n0r8nizb68jfp";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.17.tar";
+          sha256 = "14jacy0gjhpvia15ffa99np2wyblmadb95f17a9azl6dsn6dq1m6";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -1386,10 +1386,10 @@
     mines = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "mines";
-        version = "1.2";
+        version = "1.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/mines-1.2.tar";
-          sha256 = "1xwnw2hyk1qz98mdnckk0i05li0gzygq12kkmrlidxnk7ngbq9vw";
+          url = "https://elpa.gnu.org/packages/mines-1.5.tar";
+          sha256 = "1wpkn47iza78hzj396z5c05hsimnhhhmr1cq598azd6h8c1zca7g";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -2320,10 +2320,10 @@
       }) {};
     which-key = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "which-key";
-        version = "3.0.2";
+        version = "3.1.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/which-key-3.0.2.tar";
-          sha256 = "1s7bq7vq9xsf2pz1w03l743yzaxm9gk5qgympcwlkiq90ph13vcn";
+          url = "https://elpa.gnu.org/packages/which-key-3.1.0.tar";
+          sha256 = "17n09i92m7qdicybxl60j81c8fn7jcx25wds0sb7j8i364psjabq";
         };
         packageRequires = [ emacs ];
         meta = {

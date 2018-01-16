@@ -61,7 +61,7 @@
         <listitem>
           <para>
             The "target platform" attribute is, unlike the other two attributes, not actually fundamental to the process of building software.
-            Instead, it is only relevant for compatability with building certain specific compilers and build tools.
+            Instead, it is only relevant for compatibility with building certain specific compilers and build tools.
             It can be safely ignored for all other packages.
           </para>
           <para>
@@ -162,7 +162,7 @@
     <para>
       A runtime dependency between 2 packages implies that between them both the host and target platforms match.
       This is directly implied by the meaning of "host platform" and "runtime dependency":
-      The package dependency exists while both packages are runnign on a single host platform.
+      The package dependency exists while both packages are running on a single host platform.
     </para>
     <para>
       A build time dependency, however, implies a shift in platforms between the depending package and the depended-on package.

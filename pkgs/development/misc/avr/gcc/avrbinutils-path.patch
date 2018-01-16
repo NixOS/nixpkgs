@@ -1,0 +1,15 @@
+diff --git a/gcc/gcc-ar.c b/gcc/gcc-ar.c
+index 838ebc2..3ac4ee7 100644
+--- a/gcc/gcc-ar.c
++++ b/gcc/gcc-ar.c
+@@ -118,8 +118,8 @@ setup_prefixes (const char *exec_path)
+ 				dir_separator, NULL);
+   prefix_from_string (self_libexec_prefix, &target_path);
+ 
+-  /* Add path as a last resort.  */
+-  prefix_from_env ("PATH", &path);
++  /* Add path to avrbinutils.  */
++  prefix_from_string ("@avrbinutils@/bin", &path);
+ }
+ 
+ int 

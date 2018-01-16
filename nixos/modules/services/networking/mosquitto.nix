@@ -12,6 +12,10 @@ let
     keyfile ${cfg.ssl.keyfile}
   '';
 
+  passwordConf = optionalString cfg.checkPasswords ''
+    password_file ${cfg.dataDir}/passwd
+  '';
+
   mosquittoConf = pkgs.writeText "mosquitto.conf" ''
     pid_file /run/mosquitto/pid
     acl_file ${aclFile}
@@ -19,6 +23,7 @@ let
     allow_anonymous ${boolToString cfg.allowAnonymous}
     bind_address ${cfg.host}
     port ${toString cfg.port}
+    ${passwordConf}
     ${listenerConf}
     ${cfg.extraConf}
   '';
@@ -150,6 +155,15 @@ in
         type = types.bool;
         description = ''
           Allow clients to connect without authentication.
+        '';
+      };
+
+      checkPasswords = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = ''
+          Refuse connection when clients provide incorrect passwords.
         '';
       };
 

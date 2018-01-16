@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "voluptuous";
   version = "0.10.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

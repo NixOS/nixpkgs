@@ -88,7 +88,7 @@ in {
 
     meta = {
       description = "Mixed signal logic timing and serial protocol analysis software for BitScope";
-      home = "http://bitscope.com/software/logic/";
+      homepage = "http://bitscope.com/software/logic/";
     };
 
     src = fetchurl {

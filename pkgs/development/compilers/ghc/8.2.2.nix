@@ -46,7 +46,7 @@ stdenv.mkDerivation (rec {
     sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
   '';
 
-  buildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ] ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ llvm_39 ];
+  buildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ] ++ stdenv.lib.optionals (targetPlatform.isArm || targetPlatform.isAarch64) [ llvm_39 ];
 
   enableParallelBuilding = true;
 
