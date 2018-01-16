@@ -11343,6 +11343,28 @@ in {
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
+  nimfa = buildPythonPackage rec {
+    pname = "nimfa";
+    version = "1.3.1";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/${pname}/${name}.tar.gz";
+      sha256 = "05d0m5n96bg6wj94r7m1har48f93797gk5v9s62zdv7x83a6n6j5";
+    };
+
+    propagatedBuildInputs = with self; [ numpy scipy ];
+    buildInputs = with self; [ matplotlib pytest ];
+    doCheck = false; # errors
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Nonnegative matrix factorization library";
+      homepage = "http://nimfa.biolab.si";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ashgillman ];
+    };
+  };
+
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
