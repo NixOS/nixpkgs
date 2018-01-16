@@ -5,8 +5,9 @@
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
+  mantag = stdenv.lib.optionalString enableManpages "-manpages";
   self = stdenv.mkDerivation {
-    name = "clang-${version}";
+    name = "clang${mantag}-${version}";
 
     unpackPhase = ''
       unpackFile ${fetch "cfe" "16vnv3msnvx33dydd17k2cq0icndi1a06bg5vcxkrhjjb1rqlwv1"}
