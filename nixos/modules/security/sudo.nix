@@ -65,7 +65,7 @@ in
 
     security.sudo.extraRules = mkOption {
       description = ''
-        Define specifc rules to be in the <filename>sudoers</filename> file.
+        Define specific rules to be in the <filename>sudoers</filename> file.
       '';
       default = [];
       example = [
