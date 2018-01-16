@@ -2320,6 +2320,17 @@ rec {
 
   };
 
+  tabpagecd = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "tabpagecd-2013-11-29";
+    src = fetchgit {
+      url = "git://github.com/kana/vim-tabpagecd";
+      rev = "8b71a03a037608fa5918f5096812577cec6355e4";
+      sha256 = "1mr6s2hvsf2a2nkjjvq78c9isfxk2k1ih890w740srbq6ssj0npm";
+    };
+    dependencies = [];
+
+  };
+
   taglist = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "taglist";
     src = fetchurl {
