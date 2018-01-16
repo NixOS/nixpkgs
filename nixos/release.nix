@@ -123,22 +123,13 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = {
-    x86_64-linux = makeNetboot {
-      system = "x86_64-linux";
-      modules = [
-        ./modules/installer/netboot/netboot-minimal.nix
-        versionModule
-      ];
-    };
-  } // (optionalAttrs (elem "aarch64-linux" supportedSystems) {
-    aarch64-linux = makeNetboot {
-      system = "aarch64-linux";
-      modules = [
-        ./modules/installer/netboot/netboot-minimal.nix
-        versionModule
-      ];
-    };});
+  netboot = forTheseSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    inherit system;
+    modules = [
+      ./modules/installer/netboot/netboot-minimal.nix
+      versionModule
+    ];
+  });
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -146,7 +137,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = genAttrs [ "x86_64-linux" ] (system: makeIso {
+  iso_graphical = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -154,7 +145,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = genAttrs [ "x86_64-linux" ] (system: makeIso {
+  iso_minimal_new_kernel = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -162,7 +153,7 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = genAttrs [ "x86_64-linux" ] (system:
+  ova = forTheseSystems [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
