@@ -17380,6 +17380,8 @@ with pkgs;
 
   urh = callPackage ../applications/misc/urh { };
 
+  uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
