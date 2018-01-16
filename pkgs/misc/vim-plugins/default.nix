@@ -444,11 +444,11 @@ rec {
   };
 
   fugitive = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "fugitive-2017-11-30";
+    name = "fugitive-2017-12-16";
     src = fetchgit {
       url = "git://github.com/tpope/vim-fugitive";
-      rev = "5032d9ee72361dc3cfaae1a9b3353211203e443f";
-      sha256 = "1zx5l8lx7440l3pvs2bx81r3wmpvbmq7qs8ziz9lvlp91s7dqy88";
+      rev = "f3ccb0c12ee4985b8808f83059830a24cc92821c";
+      sha256 = "1ry67wi5dci4jy54jyf3lsf0yq13a42z9w5qh39rwv5w9wiab2fb";
     };
     dependencies = [];
 
