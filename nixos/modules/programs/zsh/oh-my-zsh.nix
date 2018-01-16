@@ -54,7 +54,7 @@ in
           type = types.str;
           description = ''
             Cache directory to be used by `oh-my-zsh`.
-            Default is /nix/store/<oh-my-zsh>/cache.
+            Without this option it would default to the read-only nix store.
           '';
         };
       };
