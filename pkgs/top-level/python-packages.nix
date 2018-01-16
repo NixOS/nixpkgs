@@ -21677,6 +21677,10 @@ EOF
     };
   };
 
+  xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
+    inherit (pkgs.xorg) xorgserver;
+  };
+
   hidapi = callPackage ../development/python-modules/hidapi {
     inherit (pkgs) udev libusb1;
   };
