@@ -11409,34 +11409,42 @@ in {
   };
 
   nipype = buildPythonPackage rec {
-    version = "0.10.0";
+    version = "0.14.0";
     name = "nipype-${version}";
-
-    # Uses python 2 print. Master seems to be Py3 compatible.
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nipype/${name}.tar.gz";
-      sha256 = "7fb143cd4d05f18db1cb7f0b83dba13d3dcf55b4eb3d16df08c97033ccae507b";
+      sha256 = "0airdrh93vwmbfkqxp5cqfzm0zzqcvjnvphv3zhg197y39xxpl1k";
     };
 
-    # Tests fail due to getcwd returning ENOENT???
-    doCheck = false;
-
+    doCheck = false; # fails with TypeError: None is not callable
+    checkInputs = [ pkgs.which ];
+    buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [
-     numpy
-     dateutil
-     nose
-     traits
-     scipy
-     nibabel
-     networkx
-   ];
+      click
+      dateutil
+      funcsigs
+      future
+      networkx
+      nibabel
+      numpy
+      packaging
+      prov
+      psutil
+      pydot
+      scipy
+      simplejson
+      traits
+      xvfbwrapper
+    ] ++ stdenv.lib.optional (!isPy3k) [
+      configparser
+    ];
 
     meta = {
       homepage = http://nipy.org/nipype/;
       description = "Neuroimaging in Python: Pipelines and Interfaces";
       license = licenses.bsd3;
+      maintainers = with maintainers; [ ashgillman ];
     };
   };
 
