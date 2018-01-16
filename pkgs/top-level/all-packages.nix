@@ -3818,6 +3818,10 @@ with pkgs;
 
   ola = callPackage ../applications/misc/ola { };
 
+  onioncircuits = callPackage ../tools/security/onioncircuits {
+    inherit (gnome3) defaultIconTheme;
+  };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
