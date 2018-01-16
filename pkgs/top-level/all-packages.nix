@@ -10604,8 +10604,23 @@ with pkgs;
 
   libsForQt59 = recurseIntoAttrs (lib.makeScope qt59.newScope mkLibsForQt5);
 
-  qt5 = qt59;
-  libsForQt5 = libsForQt59;
+  qt510 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.10) {
+      inherit newScope;
+      inherit stdenv fetchurl makeSetupHook makeWrapper;
+      bison = bison2; # error: too few arguments to function 'int yylex(...
+      inherit cups;
+      harfbuzz = harfbuzz-icu;
+      mesa = mesa_noglu;
+      inherit perl;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit (gnome3) gtk3 dconf;
+    });
+
+  libsForQt510 = recurseIntoAttrs (lib.makeScope qt510.newScope mkLibsForQt5);
+
+  qt5 = qt510;
+  libsForQt5 = libsForQt510;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
