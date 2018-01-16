@@ -18430,6 +18430,8 @@ with pkgs;
 
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
+  factorio-experimental = callPackage ../games/factorio { releaseType = "alpha"; experimental = true; };
+
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
   factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
