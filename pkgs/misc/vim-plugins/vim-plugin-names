@@ -220,6 +220,7 @@
 "vim-javascript"
 "vim-jsbeautify"
 "vim-latex-live-preview"
+"vim-logreview"
 "vim-multiple-cursors"
 "vim-ruby"
 "vim-scouter"
