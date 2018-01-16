@@ -8402,6 +8402,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ParseRecDescent];
   };
 
+  MailPOP3Client = buildPerlPackage rec {
+    name = "Mail-POP3Client-2.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SD/SDOWD/${name}.tar.gz";
+      sha256 = "1142d6247a93cb86b23ed8835553bb2d227ff8213ee2743e4155bb93f47acb59";
+    };
+    meta = {
+      description = "Perl 5 module to talk to a POP3 (RFC1939) server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MailRFC822Address = buildPerlPackage {
     name = "Mail-RFC822-Address-0.3";
     src = fetchurl {
