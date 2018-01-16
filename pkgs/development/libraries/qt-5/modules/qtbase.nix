@@ -93,7 +93,6 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  fix_qt_static_libs = ../hooks/fix-qt-static-libs.sh;
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
   preHook = ''
