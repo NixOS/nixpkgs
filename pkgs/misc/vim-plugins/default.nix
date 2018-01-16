@@ -2649,6 +2649,17 @@ rec {
 
   };
 
+  vim-ruby = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-ruby-2017-06-22";
+    src = fetchgit {
+      url = "git://github.com/vim-ruby/vim-ruby";
+      rev = "074200ffa39b19baf9d9750d399d53d97f21ee07";
+      sha256 = "1w2d12cl40nf73f3hcpqc4sqma8h1a557fy8kds2x143gq7s5vx6";
+    };
+    dependencies = [];
+
+  };
+
   vim-scouter = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-scouter-2014-08-10";
     src = fetchgit {
