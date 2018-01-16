@@ -373,6 +373,17 @@ rec {
 
   };
 
+  csv = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "csv-2018-01-03";
+    src = fetchgit {
+      url = "git://github.com/chrisbra/csv.vim";
+      rev = "a50b977fa25a854e7d099198bfa65e2dc680898b";
+      sha256 = "02a6289rbjw8r0l668ala5abfr2rls3slrnk4yrsfc6ka550zj9y";
+    };
+    dependencies = [];
+
+  };
+
   ctrlp-cmatcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ctrlp-cmatcher-2015-10-15";
     src = fetchgit {
