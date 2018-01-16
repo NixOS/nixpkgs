@@ -2232,6 +2232,17 @@ rec {
 
   };
 
+  riv = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "riv-2017-02-07";
+    src = fetchgit {
+      url = "git://github.com/Rykka/riv.vim";
+      rev = "d1efdd92fbb51dc452c61eec54a0ec084f011b4b";
+      sha256 = "18qcglbrixgqk05x34dy2cksaw0dg7n51p48i6zkh5sqspv98zz3";
+    };
+    dependencies = [];
+
+  };
+
   sensible = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "sensible-2017-05-09";
     src = fetchgit {
