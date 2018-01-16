@@ -12,7 +12,7 @@ let
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
 
   toCommandOptionsString = options:
-    "${concatStringsSep ":" options}: ";
+    "${concatStringsSep ":" options}${optionalString (length options != 0) ":"} ";
 
   toCommandsString = commands:
     concatStringsSep ", " (
@@ -170,7 +170,7 @@ in
 
     security.sudo.extraRules = [
       { groups = [ "wheel" ];
-        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "NOPASSWD" ] else [ ]); } ];
+        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
       }
     ];
 
