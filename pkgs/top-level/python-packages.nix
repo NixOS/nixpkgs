@@ -17584,23 +17584,7 @@ in {
     };
   };
 
-  terminado = buildPythonPackage rec {
-    name = "terminado-${version}";
-    version = "0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/terminado/${name}.tar.gz";
-      sha256 = "2c0ba1f624067dccaaead7d2247cfe029806355cef124dc2ccb53c83229f0126";
-    };
-
-    propagatedBuildInputs = with self; [ ptyprocess tornado ];
-
-    meta = {
-      description = "Terminals served to term.js using Tornado websockets";
-      homepage = https://github.com/takluyver/terminado;
-      license = licenses.bsd2;
-    };
-  };
+  terminado = callPackage ../development/python-modules/terminado { };
 
   terminaltables = buildPythonPackage rec {
     name = "terminaltables-${version}";
