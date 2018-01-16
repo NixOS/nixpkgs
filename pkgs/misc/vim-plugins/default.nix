@@ -226,6 +226,17 @@ rec {
 
   };
 
+  SyntaxRange = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "SyntaxRange-2017-07-03";
+    src = fetchgit {
+      url = "git://github.com/inkarkat/vim-SyntaxRange";
+      rev = "213cfda0a0f11505665dbfe1e58c803f498761a6";
+      sha256 = "1dg9n3zll3a79lv96kdlxxs141binb8w79zdisj7djxc5y2k48qs";
+    };
+    dependencies = [];
+
+  };
+
   Tabular = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "Tabular-2016-05-04";
     src = fetchgit {
