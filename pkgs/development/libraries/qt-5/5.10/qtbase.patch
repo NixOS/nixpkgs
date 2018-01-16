@@ -622,7 +622,7 @@ index 1848f00e90..2af93675c5 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index fb96d1b6a0..508ed17d30 100644
+index f4ae5bde80..6d4c6d223f 100644
 --- a/mkspecs/features/qt_common.prf
 +++ b/mkspecs/features/qt_common.prf
 @@ -32,8 +32,8 @@ contains(TEMPLATE, .*lib) {
@@ -702,7 +702,7 @@ index 1903e509c8..ae7b585989 100644
              $${1}_EXE = $${cmd}.pl
              cmd = perl -w $$system_path($${cmd}.pl)
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
-index 0d3dfb6b93..5f935b4424 100644
+index 90d84cc535..387481bfc6 100644
 --- a/mkspecs/features/qt_installs.prf
 +++ b/mkspecs/features/qt_installs.prf
 @@ -12,16 +12,10 @@
@@ -732,7 +732,7 @@ index 0d3dfb6b93..5f935b4424 100644
 +    class_headers.path = $$NIX_OUTPUT_DEV/include/$$MODULE_INCNAME
      INSTALLS += class_headers
  
-     targ_headers.files = $$SYNCQT.HEADER_FILES
+     targ_headers.files = $$SYNCQT.HEADER_FILES $$SYNCQT.INJECTED_HEADER_FILES
 -    targ_headers.path = $$[QT_INSTALL_HEADERS]/$$MODULE_INCNAME
 +    targ_headers.path = $$NIX_OUTPUT_DEV/include/$$MODULE_INCNAME
      INSTALLS += targ_headers
@@ -851,10 +851,10 @@ index 706304cf34..546420f6ad 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index cba279c184..5ae3fd62e5 100644
+index 609e52d9d2..f0f29ce61f 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
-@@ -2533,6 +2533,15 @@ QStringList QCoreApplication::libraryPaths()
+@@ -2580,6 +2580,15 @@ QStringList QCoreApplication::libraryPaths()
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -871,7 +871,7 @@ index cba279c184..5ae3fd62e5 100644
          if (!libPathEnv.isEmpty()) {
              QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);
 diff --git a/src/corelib/tools/qtimezoneprivate_tz.cpp b/src/corelib/tools/qtimezoneprivate_tz.cpp
-index 4fdc2e36ac..d3ec222543 100644
+index bcc1285472..a77eb472a3 100644
 --- a/src/corelib/tools/qtimezoneprivate_tz.cpp
 +++ b/src/corelib/tools/qtimezoneprivate_tz.cpp
 @@ -70,7 +70,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
@@ -887,7 +887,7 @@ index 4fdc2e36ac..d3ec222543 100644
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -645,12 +649,16 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
+@@ -644,12 +648,16 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
          if (!tzif.open(QIODevice::ReadOnly))
              return;
      } else {
@@ -982,10 +982,10 @@ index 1da00813ce..0bf877afcb 100644
              return false;
      }
 diff --git a/src/network/kernel/qhostinfo_unix.cpp b/src/network/kernel/qhostinfo_unix.cpp
-index 9a24938284..74962b4ae2 100644
+index 8d2cffc304..9730fb33f2 100644
 --- a/src/network/kernel/qhostinfo_unix.cpp
 +++ b/src/network/kernel/qhostinfo_unix.cpp
-@@ -102,7 +102,7 @@ static bool resolveLibraryInternal()
+@@ -98,7 +98,7 @@ static bool resolveLibraryInternal()
      if (!lib.load())
  #endif
      {
@@ -994,28 +994,6 @@ index 9a24938284..74962b4ae2 100644
          if (!lib.load())
              return false;
      }
-diff --git a/src/network/ssl/qsslcontext_openssl.cpp b/src/network/ssl/qsslcontext_openssl.cpp
-index c92d8fc3f8..6008063bcf 100644
---- a/src/network/ssl/qsslcontext_openssl.cpp
-+++ b/src/network/ssl/qsslcontext_openssl.cpp
-@@ -351,7 +351,7 @@ init_context:
- 
-     const QVector<QSslEllipticCurve> qcurves = sslContext->sslConfiguration.ellipticCurves();
-     if (!qcurves.isEmpty()) {
--#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
-+#if OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
-         // Set the curves to be used
-         if (q_SSLeay() >= 0x10002000L) {
-             // SSL_CTX_ctrl wants a non-const pointer as last argument,
-@@ -364,7 +364,7 @@ init_context:
-                 sslContext->errorCode = QSslError::UnspecifiedError;
-             }
-         } else
--#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
-+#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
-         {
-             // specific curves requested, but not possible to set -> error
-             sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));
 diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 index b5a0a5bbeb..6c20305f4d 100644
 --- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
@@ -1035,7 +1013,7 @@ index b5a0a5bbeb..6c20305f4d 100644
  
  QString TableGenerator::findComposeFile()
 diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-index e2e573f0e1..1c8289f81e 100644
+index 3bc8590d36..2a78fde518 100644
 --- a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 +++ b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 @@ -580,7 +580,14 @@ QFunctionPointer QGLXContext::getProcAddress(const char *procName)
@@ -1054,7 +1032,7 @@ index e2e573f0e1..1c8289f81e 100644
  #endif
              }
 diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index 7c62c2e2b3..fefa40e0f6 100644
+index da63360333..95e34e2e50 100644
 --- a/src/plugins/platforms/xcb/qxcbcursor.cpp
 +++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
 @@ -311,10 +311,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
