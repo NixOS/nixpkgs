@@ -171,6 +171,8 @@ in
             description = ''
               This option can be used to store the username / password credentials
               with the "auth-user-pass" authentication method.
+
+              WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
             '';
             type = types.nullOr (types.submodule {
 
