@@ -11331,17 +11331,18 @@ in {
   });
 
   nibabel = buildPythonPackage rec {
-    version = "2.0.2";
+    version = "2.2.0";
     name = "nibabel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nibabel/${name}.tar.gz";
-      sha256 = "0k8mv5zmwb6vc8kwrydl3pp0pnw937rf5mz10figkxczrw6dkk7h";
+      sha256 = "1h6nhi1s2ab7sdyyl3qjnvlw0kggcnam7vn4b3z56ay20596kvhw";
     };
 
     propagatedBuildInputs = with self; [
       numpy
       nose
+      six
     ];
 
     # Failing tests
