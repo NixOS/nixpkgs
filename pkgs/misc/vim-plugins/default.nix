@@ -2649,6 +2649,17 @@ rec {
 
   };
 
+  vim-javascript = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-javascript-2018-01-10";
+    src = fetchgit {
+      url = "git://github.com/pangloss/vim-javascript";
+      rev = "4c0a554423df72ecb8d13b143afa7a4cfcb994ec";
+      sha256 = "01lbkcfjqwrn2pbxz1jj8g2vxasc2i7s6nc7665s1warn066ykjr";
+    };
+    dependencies = [];
+
+  };
+
   vim-latex-live-preview = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-latex-live-preview-2017-11-09";
     src = fetchgit {
