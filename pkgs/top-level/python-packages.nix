@@ -6174,6 +6174,8 @@ in {
     };
   };
 
+  prov = callPackage ../development/python-modules/prov { };
+
   pudb = buildPythonPackage rec {
     name = "pudb-2016.2";
 
