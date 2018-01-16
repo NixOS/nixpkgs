@@ -216,6 +216,7 @@
 "vim-iced-coffee-script"
 "vim-latex-live-preview"
 "vim-multiple-cursors"
+"vim-scouter"
 "vim-signature"
 "vim-signify"
 "vim-snippets"

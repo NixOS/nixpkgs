@@ -2638,6 +2638,17 @@ rec {
 
   };
 
+  vim-scouter = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-scouter-2014-08-10";
+    src = fetchgit {
+      url = "git://github.com/thinca/vim-scouter";
+      rev = "5221901d4ad6b2ef8b370b336db2aa7f69f2b6dc";
+      sha256 = "0fx64hj1kzrsxz96195d5lm3x88zyycbcr78819mcbgfzyxis6b8";
+    };
+    dependencies = [];
+
+  };
+
   vim-signature = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-signature-2017-09-24";
     src = fetchgit {
