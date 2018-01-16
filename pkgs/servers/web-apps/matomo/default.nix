@@ -13,13 +13,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  # regarding the 127.0.0.1 substitute:
-  #   This replaces the default value of the database server field.
+  # make-localhost-default-database-server.patch:
+  #   This changes the default value of the database server field
+  #   from 127.0.0.1 to localhost.
   #   unix socket authentication only works with localhost,
   #   but password-based SQL authentication works with both.
+  # TODO: is upstream interested in this?
+  patches = [ ./make-localhost-default-database-host.patch ];
+
+  # this bootstrap.php adds support for getting PIWIK_USER_PATH
+  # from an environment variable. Point it to a mutable location
+  # to be able to use matomo read-only from the nix store
   postPatch = ''
-    substituteInPlace plugins/Installation/FormDatabaseSetup.php \
-      --replace "=> '127.0.0.1'," "=> 'localhost',"
     cp ${./bootstrap.php} bootstrap.php
   '';
 
