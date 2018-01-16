@@ -456,6 +456,10 @@ with pkgs;
 
   analog = callPackage ../tools/admin/analog {};
 
+  anbox = callPackage ../applications/virtualization/anbox {
+    boost = boost15x;
+  };
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   apktool = callPackage ../development/tools/apktool {
