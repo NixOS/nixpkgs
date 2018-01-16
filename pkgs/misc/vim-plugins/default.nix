@@ -2199,6 +2199,17 @@ rec {
 
   };
 
+  prettyprint = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "prettyprint-2016-07-16";
+    src = fetchgit {
+      url = "git://github.com/thinca/vim-prettyprint";
+      rev = "d6060d2b1ff1cff71714e126addd3b10883ade12";
+      sha256 = "0mb1ylsq4023ik9wd9iwzlynra2c320xp9h2i79bspapglgd5gk9";
+    };
+    dependencies = [];
+
+  };
+
   quickfixstatus = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "quickfixstatus-2011-09-02";
     src = fetchgit {
