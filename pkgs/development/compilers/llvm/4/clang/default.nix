@@ -37,6 +37,9 @@ let
 
     patches = [ ./purity.patch ];
 
+    # XXX: TODO: This should be removed on next rebuild
+    postBuild = "";
+
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
