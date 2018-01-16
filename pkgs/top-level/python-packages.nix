@@ -11334,32 +11334,7 @@ in {
     };
   });
 
-  nibabel = buildPythonPackage rec {
-    version = "2.2.0";
-    name = "nibabel-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nibabel/${name}.tar.gz";
-      sha256 = "1h6nhi1s2ab7sdyyl3qjnvlw0kggcnam7vn4b3z56ay20596kvhw";
-    };
-
-    propagatedBuildInputs = with self; [
-      numpy
-      nose
-      six
-    ];
-
-    # Failing tests
-    # nibabel.tests.test_minc1.test_old_namespace
-    # nisext.tests.test_testers.test_back_tick
-    doCheck = false;
-
-    meta = {
-      homepage = http://nipy.org/nibabel/;
-      description = "Access a multitude of neuroimaging data formats";
-      license = licenses.mit;
-    };
-  };
+  nibabel = callPackage ../development/python-modules/nibabel {};
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
