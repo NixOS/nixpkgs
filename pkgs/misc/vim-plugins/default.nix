@@ -330,6 +330,17 @@ rec {
     sourceRoot = ".";
   };
 
+  caw = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "caw-2018-01-01";
+    src = fetchgit {
+      url = "git://github.com/tyru/caw.vim";
+      rev = "50efcd94e00dc3e814bcc0d3d8ccfa3ff324ea42";
+      sha256 = "06hpby2amh2pb4dlfd7s6wybzc8rh8wa3jz0gyv6xx3l91agfari";
+    };
+    dependencies = [];
+
+  };
+
   clang_complete = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "clang_complete-2017-09-25";
     src = fetchgit {
