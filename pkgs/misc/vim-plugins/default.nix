@@ -216,11 +216,11 @@ rec {
   };
 
   Syntastic = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "Syntastic-2017-11-17";
+    name = "Syntastic-2018-01-12";
     src = fetchgit {
       url = "git://github.com/scrooloose/syntastic";
-      rev = "96cc251075f3f9d290c5afd4adf1b64c1542d469";
-      sha256 = "1c2nch9037565n3mrpxf17dnn4c6j7w8wwzfj3fw9anwzr1m5kwl";
+      rev = "937d77d1f3ba8de08ad275e052e38d0e680a175b";
+      sha256 = "10qrq1fs53srp4inxmcm8zq5kjdl56hh1lwh2jhda9mfwrbhg3fp";
     };
     dependencies = [];
 
