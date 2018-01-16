@@ -2287,6 +2287,17 @@ rec {
 
   };
 
+  sparkup = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "sparkup-2012-06-10";
+    src = fetchgit {
+      url = "git://github.com/chrisgeo/sparkup";
+      rev = "6fbfceef890e705c47b42b27be743ffed6f9296e";
+      sha256 = "17jgpvl879ik53rr3razfnbpfx63mzpp1rlvxxjsvvrk4g45dssm";
+    };
+    dependencies = [];
+
+  };
+
   surround = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "surround-2016-06-01";
     src = fetchgit {
