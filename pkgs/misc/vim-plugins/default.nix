@@ -1096,11 +1096,11 @@ rec {
   };
 
   fzf-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "fzf-vim-2017-12-06";
+    name = "fzf-vim-2018-01-09";
     src = fetchgit {
       url = "https://github.com/junegunn/fzf.vim";
-      rev = "11b7fb91e152258c59b0bb0526c3fb04469cf38c";
-      sha256 = "1p6p557bg56763vq49lfhyr8h30kf1gwiqz1jf6j0mqg46w4q77j";
+      rev = "c0a5fee7071ed89602b9b59fb67e83d6cd23addc";
+      sha256 = "0biqq9g116zziv9k0axgn8wasgwb57fwaxwjj8vsajrmq5phdl4z";
     };
     dependencies = [];
 
