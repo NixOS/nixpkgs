@@ -18801,7 +18801,7 @@ with pkgs;
   };
 
   redshift = callPackage ../applications/misc/redshift {
-    inherit (python3Packages) python pygobject3 pyxdg;
+    inherit (python3Packages) python pygobject3 pyxdg wrapPython;
   };
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
