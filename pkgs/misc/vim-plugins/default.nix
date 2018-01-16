@@ -2660,6 +2660,17 @@ rec {
 
   };
 
+  vim-jsbeautify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-jsbeautify-2017-05-20";
+    src = fetchgit {
+      url = "git://github.com/maksimr/vim-jsbeautify";
+      rev = "e83f749c3de7e958e7bc285e80e484707b6f1e12";
+      sha256 = "0dy9ljqp6shac406xgawzrqcapm80rjxmbzwy93ypzlhi8b67w0a";
+    };
+    dependencies = [];
+
+  };
+
   vim-latex-live-preview = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-latex-live-preview-2017-11-09";
     src = fetchgit {

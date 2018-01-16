@@ -218,6 +218,7 @@
 "vim-gitgutter"
 "vim-iced-coffee-script"
 "vim-javascript"
+"vim-jsbeautify"
 "vim-latex-live-preview"
 "vim-multiple-cursors"
 "vim-ruby"
