@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5 }:
+{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
 
 stdenv.mkDerivation rec
 {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec
   outputs = [ "bin" "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake ];
-  buildInputs = [ openexr hdf5 ];
+  buildInputs = [ openexr hdf5-threadsafe ];
 
   sourceRoot = "${name}-src";
 
