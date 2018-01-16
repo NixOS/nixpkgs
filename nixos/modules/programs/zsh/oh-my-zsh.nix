@@ -50,7 +50,7 @@ in
         };
 
         cacheDir = mkOption {
-          default = null;
+          default = "$HOME/.cache/oh-my-zsh";
           type = types.str;
           description = ''
             Cache directory to be used by `oh-my-zsh`.
