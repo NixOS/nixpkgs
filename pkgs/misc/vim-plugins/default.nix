@@ -2660,6 +2660,17 @@ rec {
 
   };
 
+  vim-dashboard = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-dashboard-2017-08-08";
+    src = fetchgit {
+      url = "git://github.com/junegunn/vim-github-dashboard";
+      rev = "054d7c69d9882a6ffccedd6e43623e184958d3b6";
+      sha256 = "1ns6dd8719hqrkqnxd52ssi7gxjxni7w4l1ih7ag72d62qzw0p8y";
+    };
+    dependencies = [];
+
+  };
+
   vim-iced-coffee-script = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-iced-coffee-script-2013-12-27";
     src = fetchgit {
