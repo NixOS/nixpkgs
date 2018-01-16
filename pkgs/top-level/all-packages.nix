@@ -3511,6 +3511,8 @@ with pkgs;
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
+  molden = callPackage ../applications/science/chemistry/molden { };
+
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
   moneyplex = callPackage ../applications/office/moneyplex { };
