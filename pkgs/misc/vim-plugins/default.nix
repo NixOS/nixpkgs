@@ -2299,11 +2299,11 @@ rec {
   };
 
   table-mode = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "table-mode-2017-10-26";
+    name = "table-mode-2018-01-04";
     src = fetchgit {
       url = "git://github.com/dhruvasagar/vim-table-mode";
-      rev = "40fe641708c58476c3a1b9aeafb68dd888d4920b";
-      sha256 = "1rb2jq81965gpziqxlljr2bqjyfbikqa9ncxaaak3x61prn4z084";
+      rev = "b25fe6f9f0f0b704d05ebd05edbbf0be3038cef9";
+      sha256 = "14ykj2yrwi8k6mkzg0vi4favwg88l8c7zf7m6qzvndpjqw8jggdy";
     };
     dependencies = [];
 
