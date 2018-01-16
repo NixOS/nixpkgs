@@ -11400,9 +11400,8 @@ in {
       sha256 = "0airdrh93vwmbfkqxp5cqfzm0zzqcvjnvphv3zhg197y39xxpl1k";
     };
 
-    # Fails in testing, "no such file or directory: which"
-    doCheck = false;
-
+    doCheck = false; # fails with TypeError: None is not callable
+    checkInputs = [ pkgs.which ];
     buildInputs = with self; [ pytest mock ];
     propagatedBuildInputs = with self; [
       click
