@@ -2177,6 +2177,17 @@ rec {
     '';
   };
 
+  neco-look = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neco-look-2018-01-07";
+    src = fetchgit {
+      url = "git://github.com/ujihisa/neco-look";
+      rev = "ff3de2731177694d0e85f1227b6cfd51c8e2bc8d";
+      sha256 = "0zpny9sj7alzsbrjbph71b44zf575hij1ky8pwgba0ygp2p2fxd4";
+    };
+    dependencies = [];
+
+  };
+
   pathogen = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "pathogen-2017-08-04";
     src = fetchgit {
