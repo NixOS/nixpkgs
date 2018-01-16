@@ -51,7 +51,7 @@ with stdenv.lib;
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
-  ${optionalString (stdenv.system == "x86_64-linux" || stdenv.system == "aarch64-linux") ''
+  ${optionalString (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") ''
     NR_CPUS 384
   ''}
 
@@ -347,11 +347,12 @@ with stdenv.lib;
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-  '' else ''
-    CC_STACKPROTECTOR_REGULAR? y
-  ''}
+  ${optionalString (! stdenv.hostPlatform.isArm)
+    (if versionOlder version "3.14" then ''
+        CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
+      '' else ''
+        CC_STACKPROTECTOR_REGULAR? y
+      '')}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}

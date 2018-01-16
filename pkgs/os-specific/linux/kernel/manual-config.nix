@@ -1,6 +1,6 @@
-{ runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
-, libelf ? null
-, utillinux ? null
+{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+, libelf
+, utillinux
 , writeTextFile, ubootTools
 , hostPlatform
 }:
@@ -26,19 +26,11 @@ in {
   src,
   # Any patches
   kernelPatches ? [],
-  # Patches for native compiling only
-  nativeKernelPatches ? [],
-  # Patches for cross compiling only
-  crossKernelPatches ? [],
-  # The native kernel .config file
+  # The kernel .config file
   configfile,
-  # The cross kernel .config file
-  crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
-  # Cross-compiling config
-  crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -61,8 +53,8 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
-    stdenv.platform.kernelMakeFlags;
+  ] ++ stdenv.lib.optionals (hostPlatform.platform ? kernelMakeFlags)
+    hostPlatform.platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let
@@ -105,7 +97,7 @@ let
             echo "stripping FHS paths in \`$mf'..."
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
-        sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
+        sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
       '';
 
       configurePhase = ''
@@ -211,7 +203,7 @@ let
         find -empty -type d -delete
 
         # Remove reference to kmod
-        sed -i Makefile -e 's|= ${kmod}/bin/depmod|= depmod|'
+        sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
@@ -239,13 +231,14 @@ in
 
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches configfile) // {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
-      ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools
+      ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ;
@@ -253,20 +246,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
   makeFlags = commonMakeFlags ++ [
-    "ARCH=${stdenv.platform.kernelArch}"
+    "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc"
+    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  karch = stdenv.platform.kernelArch;
-
-  crossAttrs = let cp = hostPlatform.platform; in
-    (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
-      makeFlags = commonMakeFlags ++ [
-        "ARCH=${cp.kernelArch}"
-        "CROSS_COMPILE=$(crossConfig)-"
-      ];
-
-      karch = cp.kernelArch;
-
-      nativeBuildInputs = optional (cp.kernelTarget == "uImage") ubootTools;
-  };
+  karch = hostPlatform.platform.kernelArch;
 })

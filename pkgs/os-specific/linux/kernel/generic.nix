@@ -1,4 +1,4 @@
-{ stdenv, perl, buildLinux
+{ stdenv, buildPackages, perl, buildLinux
 
 , # The kernel source tarball.
   src
@@ -23,7 +23,8 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.platform.name != "pc"
+, ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
+                       hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 , hostPlatform
 , ...
@@ -43,13 +44,11 @@ let
     netfilterRPFilter = true;
   } // features) kernelPatches;
 
-  configWithPlatform = kernelPlatform: import ./common-config.nix {
-    inherit stdenv version kernelPlatform extraConfig;
+  config = import ./common-config.nix {
+    inherit stdenv version extraConfig;
+    kernelPlatform = hostPlatform;
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform hostPlatform.platform;
 
   kernelConfigFun = baseConfig:
     let
@@ -65,31 +64,15 @@ let
 
     kernelConfig = kernelConfigFun config;
 
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl ];
 
-    platformName = stdenv.platform.name;
-    kernelBaseConfig = stdenv.platform.kernelBaseConfig;
-    kernelTarget = stdenv.platform.kernelTarget;
-    autoModules = stdenv.platform.kernelAutoModules;
-    preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
-    arch = stdenv.platform.kernelArch;
-
-    crossAttrs = let
-        cp = hostPlatform.platform;
-      in {
-        arch = cp.kernelArch;
-        platformName = cp.name;
-        kernelBaseConfig = cp.kernelBaseConfig;
-        kernelTarget = cp.kernelTarget;
-        autoModules = cp.kernelAutoModules;
-
-        # Just ignore all options that don't apply (We are lazy).
-        ignoreConfigErrors = true;
-
-        kernelConfig = kernelConfigFun configCross;
-
-        inherit (kernel.crossDrv) src patches preUnpack;
-      };
+    platformName = hostPlatform.platform.name;
+    kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
+    kernelTarget = hostPlatform.platform.kernelTarget;
+    autoModules = hostPlatform.platform.kernelAutoModules;
+    preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
+    arch = hostPlatform.platform.kernelArch;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -103,7 +86,7 @@ let
       cd $buildRoot
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
@@ -118,15 +101,9 @@ let
   };
 
   kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches stdenv extraMeta;
-
-    configfile = configfile.nativeDrv or configfile;
-
-    crossConfigfile = configfile.crossDrv or configfile;
+    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-
-    crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
   passthru = {
@@ -134,12 +111,4 @@ let
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
-  addPassthru' = lib.extendDerivation true passthru;
-
-  nativeDrv = addPassthru' kernel.nativeDrv;
-
-  crossDrv = addPassthru' kernel.crossDrv;
-
-in if kernel ? crossDrv
-   then nativeDrv // { inherit nativeDrv crossDrv; }
-   else addPassthru' kernel
+in lib.extendDerivation true passthru kernel
