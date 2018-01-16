@@ -739,6 +739,7 @@
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";
   xwvvvvwx = "David Terry <davidterry@posteo.de>";
   xzfc = "Albert Safin <xzfcpw@gmail.com>";
+  y0no = "Yoann Ono <y0no@y0no.fr>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yegortimoshenko = "Yegor Timoshenko <yegortimoshenko@gmail.com>";
   ylwghst = "Burim Augustin Berisa <ylwghst@onionmail.info>";
