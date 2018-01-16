@@ -14,7 +14,8 @@ stdenv.mkDerivation rec
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ unzip cmake openexr hdf5 ];
+  nativeBuildInputs = [ unzip cmake ];
+  buildInputs = [ openexr hdf5 ];
 
   sourceRoot = "${name}-src";
 
