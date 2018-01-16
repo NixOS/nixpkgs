@@ -144,6 +144,11 @@ following incompatible changes:</para>
       will be accessible at <literal>/run/memcached/memcached.sock</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

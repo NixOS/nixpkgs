@@ -30,6 +30,8 @@ python2Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $cli "$out $pythonPath"
   '';
 
+  doCheck = false;
+
   meta = {
     description = "Graphical tools for working with version control systems";
     homepage = http://rabbitvcs.org/;

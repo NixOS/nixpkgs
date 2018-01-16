@@ -29,6 +29,8 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
+  ethsign = callPackage ./ethsign { };
+
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
     inherit (darwin) libobjc;

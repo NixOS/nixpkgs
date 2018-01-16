@@ -3947,33 +3947,7 @@ in {
     };
   });
 
-  nose-parameterized = buildPythonPackage (rec {
-    name = "nose-parameterized-${version}";
-    version = "0.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-parameterized/${name}.tar.gz";
-      sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
-    };
-
-    # Tests require some python3-isms but code works without.
-    doCheck = isPy3k;
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ nose pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ self.six ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-
-    meta = {
-      description = "Parameterized testing with any Python test framework";
-      homepage = https://pypi.python.org/pypi/nose-parameterized;
-      license = licenses.bsd3;
-    };
-  });
+  nose-parameterized = callPackage ../development/python-modules/nose-parameterized {};
 
   neurotools = buildPythonPackage (rec {
     name = "NeuroTools-${version}";
@@ -6915,6 +6889,24 @@ in {
   };
 
   schema = callPackage ../development/python-modules/schema {};
+
+  stem = buildPythonPackage rec {
+    name = "stem-${version}";
+    version = "1.6.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/stem/${name}.tar.gz";
+      sha256 = "1va9p3ij7lxg6ixfsvaql06dn11l3fgpxmss1dhlvafm7sqizznp";
+    };
+
+    meta = {
+      description = "Controller library that allows applications to interact with Tor (https://www.torproject.org/";
+      homepage = https://stem.torproject.org/;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ phreedom ];
+    };
+
+  };
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
@@ -17752,7 +17744,7 @@ in {
   tiros = callPackage ../development/python-modules/tiros { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
-    
+
   # Tkinter/tkinter is part of the Python standard library.
   # The Python interpreters in Nixpkgs come without tkinter by default.
   # To make the module available, we make it available as any other

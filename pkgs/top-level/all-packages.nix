@@ -841,6 +841,8 @@ with pkgs;
 
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
+  bustle = haskellPackages.bustle;
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
@@ -1253,6 +1255,8 @@ with pkgs;
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  parallel-rust = callPackage ../tools/misc/parallel-rust { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   staccato = callPackage ../tools/text/staccato { };
@@ -1371,6 +1375,8 @@ with pkgs;
   };
 
   bepasty = callPackage ../tools/misc/bepasty { };
+
+  bettercap = callPackage ../tools/security/bettercap { };
 
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
@@ -2684,6 +2690,13 @@ with pkgs;
     inherit gfortran;
   });
 
+  hdf5-threadsafe = appendToName "threadsafe" (hdf5.overrideAttrs (oldAttrs: {
+      # Threadsafe hdf5
+      # However, hdf5 hl (High Level) library is not considered stable
+      # with thread safety and should be disabled.
+      configureFlags = oldAttrs.configureFlags ++ ["--enable-threadsafe" "--disable-hl" ];
+  }));
+
   hdfview = callPackage ../tools/misc/hdfview {
     javac = jdk;
   };
@@ -2819,7 +2832,7 @@ with pkgs;
   inadyn = callPackage ../tools/networking/inadyn { };
 
   inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
-  
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
@@ -3813,6 +3826,10 @@ with pkgs;
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
+
+  onioncircuits = callPackage ../tools/security/onioncircuits {
+    inherit (gnome3) defaultIconTheme;
+  };
 
   opencc = callPackage ../tools/text/opencc { };
 
@@ -10642,8 +10659,23 @@ with pkgs;
 
   libsForQt59 = lib.makeScope qt59.newScope mkLibsForQt5;
 
-  qt5 = qt59;
-  libsForQt5 = libsForQt59;
+  qt510 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.10) {
+      inherit newScope;
+      inherit stdenv fetchurl makeSetupHook makeWrapper;
+      bison = bison2; # error: too few arguments to function 'int yylex(...
+      inherit cups;
+      harfbuzz = harfbuzz-icu;
+      mesa = mesa_noglu;
+      inherit perl;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit (gnome3) gtk3 dconf;
+    });
+
+  libsForQt510 = recurseIntoAttrs (lib.makeScope qt510.newScope mkLibsForQt5);
+
+  qt5 = qt510;
+  libsForQt5 = libsForQt510;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -13185,6 +13217,8 @@ with pkgs;
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
+  go-protobuf = callPackage ../development/tools/go-protobuf { };
+
   gocode = callPackage ../development/tools/gocode { };
 
   goconvey = callPackage ../development/tools/goconvey { };
@@ -14169,6 +14203,7 @@ with pkgs;
 
 
   go-ethereum = self.altcoins.go-ethereum;
+  ethsign = self.altcoins.ethsign;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
@@ -16506,11 +16541,11 @@ with pkgs;
     plugins = [];
   };
 
-  pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
+  pidgin-latex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
     texLive = texlive.combined.scheme-basic;
   };
 
-  pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
+  pidgin-msn-pecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
   pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
 
@@ -16520,13 +16555,13 @@ with pkgs;
 
   pidgin-xmpp-receipts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-xmpp-receipts { };
 
-  pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
+  pidgin-otr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
-  pidginosd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
+  pidgin-osd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
 
-  pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
+  pidgin-sipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
-  pidginwindowmerge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
+  pidgin-window-merge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
@@ -17347,6 +17382,8 @@ with pkgs;
 
   urh = callPackage ../applications/misc/urh { };
 
+  uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
@@ -17415,9 +17452,13 @@ with pkgs;
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
-  neovim = callPackage ../applications/editors/neovim {
+  wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
+
+  neovim-unwrapped = callPackage ../applications/editors/neovim {
     luaPackages = luajitPackages;
   };
+
+  neovim = wrapNeovim neovim-unwrapped { };
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
@@ -18764,7 +18805,7 @@ with pkgs;
   };
 
   redshift = callPackage ../applications/misc/redshift {
-    inherit (python3Packages) python pygobject3 pyxdg;
+    inherit (python3Packages) python pygobject3 pyxdg wrapPython;
   };
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };

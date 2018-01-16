@@ -34,9 +34,9 @@ mkDerivation rec {
   postPatch = ''
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';
-  NIX_CFLAGS_COMPILE = [
+  CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
-    ''-DNIXPKGS_HWCLOCK="${lib.getBin utillinux}/sbin/hwclock"''
+    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin utillinux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"

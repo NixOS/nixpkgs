@@ -499,11 +499,11 @@
     };
   };
   kwidgetsaddons = {
-    version = "5.42.0";
+    version = "5.42.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.42/kwidgetsaddons-5.42.0.tar.xz";
-      sha256 = "19fhcscc0irznqmjpi57sl22vrv2lcmqbhkcg2smimgd0r7pm7wg";
-      name = "kwidgetsaddons-5.42.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.42/kwidgetsaddons-5.42.1.tar.xz";
+      sha256 = "0h0vfrfl5zi01fpvmd825kazzlyawz3i66qrfkymdrnvqmfzcmlg";
+      name = "kwidgetsaddons-5.42.1.tar.xz";
     };
   };
   kwindowsystem = {
