@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "01z7bx5rgpb5lc4c6dxfiv52ni25564djxmvmgy3d7r1x1mqhxgs";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   buildInputs = [ kernel libdrm ];
 
   makeFlags = [ "KVER=${kernel.modDirVersion}" "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
