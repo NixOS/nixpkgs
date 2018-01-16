@@ -1,0 +1,24 @@
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, xorgserver
+}:
+
+buildPythonPackage rec {
+  name = "${pname}-${version}";
+  pname = "xvfbwrapper";
+  version = "0.2.9";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
+  };
+  propagatedBuildInputs = [ xorgserver ];
+
+  meta = with stdenv.lib; {
+    description = "Run headless display inside X virtual framebuffer (Xvfb)";
+    homepage = https://github.com/cgoldberg/xvfbwrapper;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ashgillman ];
+  };
+}
