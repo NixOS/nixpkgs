@@ -9459,7 +9459,11 @@ with pkgs;
     x11Support = false;
   };
 
-  hydra = callPackage ../development/tools/misc/hydra { };
+  hydra = callPackage ../development/tools/misc/hydra {
+    stdenv = if stdenv.cc.isClang
+      then llvmPackages_5.stdenv
+      else overrideCC stdenv gcc6;
+  };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
