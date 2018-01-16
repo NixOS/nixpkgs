@@ -841,6 +841,8 @@ with pkgs;
 
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
+  bustle = haskellPackages.bustle;
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
