@@ -160,6 +160,17 @@ rec {
 
   };
 
+  Cosco = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "Cosco-2017-07-26";
+    src = fetchgit {
+      url = "git://github.com/lfilho/cosco.vim";
+      rev = "4a2a080415860196c936a32679d9032f41ba21e4";
+      sha256 = "0gljxy6shr7kmm8vvj6rm4c0lr0ydbny9lrsp64c3d4d0b2wnmig";
+    };
+    dependencies = [];
+
+  };
+
   Gist = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "Gist-2016-10-10";
     src = fetchgit {
