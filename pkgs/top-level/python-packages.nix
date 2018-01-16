@@ -15622,11 +15622,11 @@ in {
 
 
   rdflib = buildPythonPackage (rec {
-    name = "rdflib-4.1.2";
+    name = "rdflib-4.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rdflib/${name}.tar.gz";
-      sha256 = "0kvaf332cqbi47rqzlpdx4mbkvw12mkrzkj8n9l19wk713d4py9w";
+      sha256 = "0398c714znnhaa2x7v51b269hk20iz073knq2mvmqp2ma92z27fs";
     };
 
     # error: invalid command 'test'
