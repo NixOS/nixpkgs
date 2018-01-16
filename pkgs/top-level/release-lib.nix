@@ -58,6 +58,7 @@ rec {
      interested in the result of cross building a package. */
   crossMaintainers = [ maintainers.viric ];
 
+  forAllSystems = genAttrs supportedSystems;
   forTheseSystems = systems: f:
     genAttrs (filter (x: elem x supportedSystems) systems) f;
 

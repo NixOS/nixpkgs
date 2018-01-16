@@ -3,6 +3,7 @@
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 }:
 
+with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 with import ../lib;
 
 let
@@ -10,8 +11,6 @@ let
   version = fileContents ../.version;
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
-
-  forAllSystems = genAttrs supportedSystems;
 
   importTest = fn: args: system: import fn ({
     inherit system;
