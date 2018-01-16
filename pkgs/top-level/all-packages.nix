@@ -8264,6 +8264,7 @@ with pkgs;
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus-cpp  = callPackage ../development/libraries/dbus-cpp {boost = boost15x; };
+  libprocess-cpp  = callPackage ../development/libraries/libprocess-cpp  {boost = boost15x; };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
