@@ -13,7 +13,7 @@ let
 
   toCommandOptionsString = options:
     "${concatStringsSep ":" options}: ";
-    
+
   toCommandsString = commands:
     concatStringsSep ", " (
       map (command:
@@ -68,6 +68,23 @@ in
         Define specifc rules to be in the <filename>sudoers</filename> file.
       '';
       default = [];
+      example = [
+        # Allow execution of any command by all users in group sudo,
+        # requiring a password.
+        { groups = [ "sudo" ]; commands = [ "ALL" ]; }
+
+        # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
+        # and the group with GID `1006` without a password.
+        { users = [ "backup" ]; groups = [ 1006 ];
+          commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
+
+        # Allow all users of group `bar` to run two executables as user `foo`
+        # with arguments being pre-set.
+        { groups = [ "bar" ]; runAs = "foo";
+          commands =
+            [ "/home/baz/cmd1.sh hello-sudo"
+              { command = ''/home/baz/cmd2.sh ""''; options = [ "SETENV" ]; } ]; }
+      ];
       type = with types; listOf (submodule {
         options = {
           users = mkOption {
@@ -99,7 +116,7 @@ in
             default = "ALL:ALL";
             description = ''
               Under which user/group the specified command is allowed to run.
-              
+
               A user can be specified using just the username: <code>"foo"</code>.
               It is also possible to specify a user/group combination using <code>"foo:bar"</code>
               or to only allow running as a specific group with <code>":bar"</code>.
@@ -131,7 +148,7 @@ in
                 };
               };
 
-            })); 
+            }));
           };
         };
       });
@@ -155,12 +172,12 @@ in
       { groups = [ "wheel" ];
         commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "NOPASSWD" ] else [ ]); } ];
       }
-    ]; 
+    ];
 
     security.sudo.configFile =
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
-        # or ‘security.sudo.extraConfig’ instead.
+        # or ‘security.sudo.extraRules’ instead.
 
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
@@ -178,7 +195,7 @@ in
               ]
             ) cfg.extraRules
           )
-        )} 
+        )}
 
         ${cfg.extraConfig}
       '';
