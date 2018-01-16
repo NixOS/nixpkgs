@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar viric garbas chaoflow nckx ];
+    maintainers = with maintainers; [ domenkozar viric garbas chaoflow ];
     platforms = platforms.linux;
   };
 }

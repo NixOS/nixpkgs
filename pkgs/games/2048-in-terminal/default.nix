@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     description = "Animated console version of the 2048 game";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

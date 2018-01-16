@@ -32,7 +32,7 @@ let
       description = "VT220/xterm/ECMA-48 terminal emulator library";
       homepage = http://www.leonerd.org.uk/code/libvterm/;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx garbas ];
+      maintainers = with maintainers; [ garbas ];
       platforms = platforms.unix;
     };
   };

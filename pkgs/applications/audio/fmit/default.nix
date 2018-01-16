@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = http://gillesdegottex.github.io/fmit/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

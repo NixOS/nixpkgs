@@ -1304,7 +1304,6 @@ in {
       homepage = https://github.com/AmesCornish/buttersink/wiki;
       license = licenses.gpl3;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ nckx ];
     };
 
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
@@ -2393,7 +2392,6 @@ in {
         composable way, with as little code as necessary.
       '';
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8396,7 +8394,6 @@ in {
       homepage = https://github.com/terencehonles/fusepy;
       license = licenses.isc;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8490,7 +8487,6 @@ in {
       homepage = https://github.com/dsoprea/GDriveFS;
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8623,7 +8619,6 @@ in {
       '';
       homepage = http://gehrcke.de/gipc;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -12858,7 +12853,6 @@ in {
       description = "Meta-commands handler for Postgres Database";
       homepage = https://pypi.python.org/pypi/pgspecial;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -15056,7 +15050,6 @@ in {
       # From the README: "pythonwifi is licensed under LGPLv2+, however, the
       # examples (e.g. iwconfig.py and iwlist.py) are licensed under GPLv2+."
       license = with licenses; [ lgpl2Plus gpl2Plus ];
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -15449,7 +15442,6 @@ in {
       inherit (src.meta) homepage;
       description = "Check the status of code repositories under a root directory";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -17308,7 +17300,6 @@ in {
       '';
       homepage = https://github.com/andialbrecht/sqlparse;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -18622,7 +18613,6 @@ EOF
       '';
       homepage = https://github.com/jquast/wcwidth;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 

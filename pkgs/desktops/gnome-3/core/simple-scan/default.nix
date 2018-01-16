@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

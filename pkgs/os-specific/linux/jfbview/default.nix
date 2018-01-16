@@ -64,6 +64,5 @@ stdenv.mkDerivation rec {
     homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }
