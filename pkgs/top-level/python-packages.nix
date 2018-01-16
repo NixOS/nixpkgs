@@ -14580,6 +14580,29 @@ in {
     };
   });
 
+  progressbar2 = buildPythonPackage (rec {
+    name = "progressbar2-${version}";
+    version = "3.12.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "WoLpH";
+      repo = "python-progressbar";
+      rev = "v${version}";
+      sha256 = "1gk45sh8cd0kkyvzcvx95z6nlblmyx0x189mjfv3vfa43cr1mb0f";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ python-utils ];
+    doCheck = false;
+
+    meta = {
+      homepage = https://progressbar-2.readthedocs.io/en/latest/;
+      description = "Text progressbar library for python";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ashgillman ];
+    };
+  });
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
