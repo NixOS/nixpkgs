@@ -168,6 +168,7 @@
 "github:zig-lang/zig.vim"
 "goyo"
 "gruvbox"
+"jiangmiao-auto-pairs"
 "matchit.zip"
 "pathogen"
 "quickfixstatus"
