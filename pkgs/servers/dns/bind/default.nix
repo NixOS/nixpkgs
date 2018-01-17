@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.isc.org/software/bind;
     description = "Domain name server";
-    license = stdenv.lib.licenses.isc;
+    license = stdenv.lib.licenses.mpl20;
 
     maintainers = with stdenv.lib.maintainers; [viric peti];
     platforms = with stdenv.lib.platforms; unix;
