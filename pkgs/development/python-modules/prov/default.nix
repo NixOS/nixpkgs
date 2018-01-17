@@ -10,7 +10,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "prov";
   version = "1.5.0";
 
