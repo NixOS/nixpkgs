@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pydotplus
     rdflib
   ];
-  doCheck = false; # takes forever!
+  doCheck = false; # takes ~60 mins
 
   meta = with stdenv.lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";
