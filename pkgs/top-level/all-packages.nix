@@ -5116,6 +5116,8 @@ with pkgs;
 
   woff2 = callPackage ../development/web/woff2 { };
 
+  woof = callPackage ../tools/misc/woof { };
+
   wsmancli = callPackage ../tools/system/wsmancli {};
 
   wolfebin = callPackage ../tools/networking/wolfebin {
