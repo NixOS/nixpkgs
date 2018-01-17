@@ -3273,6 +3273,8 @@ with pkgs;
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
+  libprelude = callPackage ../development/libraries/libprelude { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libmpack = callPackage ../development/libraries/libmpack { };
@@ -4701,6 +4703,14 @@ with pkgs;
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
+
+  suricata = callPackage ../applications/networking/ids/suricata { libnet = libnet_1_1; };
+
+  suricata-full = callPackage ../applications/networking/ids/suricata {
+    libnet = libnet_1_1;
+    redisSupport = true;
+    rustSupport = true;
+  };
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
@@ -9755,6 +9765,8 @@ with pkgs;
   libmx = callPackage ../development/libraries/libmx { };
 
   libnet = callPackage ../development/libraries/libnet { };
+
+  libnet_1_1 = callPackage ../development/libraries/libnet/1.1.nix { };
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
@@ -15515,6 +15527,8 @@ with pkgs;
   hugo = callPackage ../applications/misc/hugo { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
+
+  hyperscan = callPackage ../development/libraries/hyperscan { };
 
   hyper = callPackage ../applications/misc/hyper { inherit (gnome2) GConf; };
   hyperterm = self.hyper;
