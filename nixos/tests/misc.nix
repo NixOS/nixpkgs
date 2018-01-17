@@ -115,11 +115,6 @@ import ./make-test.nix ({ pkgs, ...} : {
           $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
       };
 
-      # Test sudo
-      subtest "sudo", sub {
-          $machine->succeed("su - sybil -c 'sudo true'");
-      };
-
       # Test sysctl
       subtest "sysctl", sub {
           $machine->waitForUnit("systemd-sysctl.service");
