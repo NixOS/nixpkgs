@@ -257,6 +257,18 @@ following incompatible changes:</para>
         </listitem>
         <listitem>
           <para>
+            The default <option>serverName</option> for the nginx configuration changed from
+            <literal>piwik.${config.networking.hostName}</literal> to
+            <literal>matomo.${config.networking.hostName}.${config.networking.domain}</literal>
+            if <option>config.networking.domain</option> is set,
+            <literal>matomo.${config.networking.hostName}</literal> if it is not set.
+            If you change your <option>serverName</option>, remember you'll need to update the
+            <literal>trustedHosts[]</literal> array in <filename>/var/lib/matomo/config/config.ini.php</filename>
+            as well.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
             The <literal>piwik</literal> user was renamed to <literal>matomo</literal>.
             The service will adjust ownership automatically for files in the data directory.
             If you use unix socket authentication, remember to give the new <literal>matomo</literal> user

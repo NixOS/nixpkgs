@@ -14,6 +14,11 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
+  fqdn =
+    let
+      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
+     in join config.networking.hostName config.networking.domain;
+
 in {
   options = {
     services.matomo = {
@@ -75,15 +80,19 @@ in {
         );
         default = null;
         example = {
-          serverName = "stats.$\{config.networking.hostName\}";
+          serverAliases = [
+            "matomo.$\{config.networking.domain\}"
+            "stats.$\{config.networking.domain\}"
+          ];
           enableACME = false;
         };
         description = ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for matomo.
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
-            If enabled, then by default, the serverName is ${user}.$\{config.networking.hostName\}, SSL is active,
-            and certificates are acquired via ACME.
+            If enabled, then by default, the <option>serverName</option> is
+            <literal>${user}.$\{config.networking.hostName\}.$\{config.networking.domain\}</literal>,
+            SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';
       };
@@ -183,8 +192,7 @@ in {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      # TODO: better default
-      "${user}.${config.networking.hostName}" = mkMerge [ cfg.nginx {
+      "${user}.${fqdn}" = mkMerge [ cfg.nginx {
         # don't allow to override the root easily, as it will almost certainly break matomo.
         # disadvantage: not shown as default in docs.
         root = mkForce "${pkgs.matomo}/share";
