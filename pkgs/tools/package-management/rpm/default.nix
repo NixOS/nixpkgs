@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = with maintainers; [ mornfall copumpkin ];
+    maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
   };
 }
