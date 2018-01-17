@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m541czjwgi4rfhjr6rg9r9c3cp2ncnif4ln7ri926zigwlxs3l3";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   hardeningDisable = [ "pic" ];
 
   preBuild = ''
