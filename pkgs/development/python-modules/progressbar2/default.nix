@@ -1,23 +1,45 @@
 { stdenv
+, python
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, isPy3k
 , pytest
 , python-utils
+, sphinx
+, coverage
+, execnet
+, flake8
+, pytestpep8
+, pytestflakes
+, pytestcov
+, pytestcache
+, pep8
 }:
 
-buildPythonPackage (rec {
-  name = "${pname}-${version}";
+buildPythonPackage rec {
   pname = "progressbar2";
   version = "3.12.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "16r21cpjvv0spf4mymgpy7hx6977iy11k44n2w9kipwg4lhwh02k";
+  # Use source from GitHub, PyPI is missing tests
+  # https://github.com/WoLpH/python-progressbar/issues/151
+  src = fetchFromGitHub {
+    owner = "WoLpH";
+    repo = "python-progressbar";
+    rev = "v${version}";
+    sha256 = "1gk45sh8cd0kkyvzcvx95z6nlblmyx0x189mjfv3vfa43cr1mb0f";
   };
 
-  buildInputs = [ pytest ];
   propagatedBuildInputs = [ python-utils ];
-  doCheck = false;
+  checkInputs = [
+    pytest sphinx coverage execnet flake8 pytestpep8 pytestflakes pytestcov
+    pytestcache pep8
+  ];
+  # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} setup.py test --addopts "--ignore=nix_run_setup.py --ignore=.eggs"
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://progressbar-2.readthedocs.io/en/latest/;
@@ -25,4 +47,4 @@ buildPythonPackage (rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
   };
-})
+}
