@@ -58,6 +58,5 @@ stdenv.mkDerivation rec {
     homepage = http://netsniff-ng.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

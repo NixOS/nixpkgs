@@ -1304,7 +1304,6 @@ in {
       homepage = https://github.com/AmesCornish/buttersink/wiki;
       license = licenses.gpl3;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ nckx ];
     };
 
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
@@ -2393,7 +2392,6 @@ in {
         composable way, with as little code as necessary.
       '';
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8396,7 +8394,6 @@ in {
       homepage = https://github.com/terencehonles/fusepy;
       license = licenses.isc;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8490,7 +8487,6 @@ in {
       homepage = https://github.com/dsoprea/GDriveFS;
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8623,7 +8619,6 @@ in {
       '';
       homepage = http://gehrcke.de/gipc;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -11335,6 +11330,8 @@ in {
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
+  nimfa = callPackage ../development/python-modules/nimfa {};
+
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
@@ -12858,7 +12855,6 @@ in {
       description = "Meta-commands handler for Postgres Database";
       homepage = https://pypi.python.org/pypi/pgspecial;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -14572,6 +14568,8 @@ in {
     };
   });
 
+  progressbar2 = callPackage ../development/python-modules/progressbar2 { };
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
@@ -15056,7 +15054,6 @@ in {
       # From the README: "pythonwifi is licensed under LGPLv2+, however, the
       # examples (e.g. iwconfig.py and iwlist.py) are licensed under GPLv2+."
       license = with licenses; [ lgpl2Plus gpl2Plus ];
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -15449,7 +15446,6 @@ in {
       inherit (src.meta) homepage;
       description = "Check the status of code repositories under a root directory";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -17308,7 +17304,6 @@ in {
       '';
       homepage = https://github.com/andialbrecht/sqlparse;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -17593,23 +17588,7 @@ in {
     };
   };
 
-  terminado = buildPythonPackage rec {
-    name = "terminado-${version}";
-    version = "0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/terminado/${name}.tar.gz";
-      sha256 = "2c0ba1f624067dccaaead7d2247cfe029806355cef124dc2ccb53c83229f0126";
-    };
-
-    propagatedBuildInputs = with self; [ ptyprocess tornado ];
-
-    meta = {
-      description = "Terminals served to term.js using Tornado websockets";
-      homepage = https://github.com/takluyver/terminado;
-      license = licenses.bsd2;
-    };
-  };
+  terminado = callPackage ../development/python-modules/terminado { };
 
   terminaltables = buildPythonPackage rec {
     name = "terminaltables-${version}";
@@ -18622,7 +18601,6 @@ EOF
       '';
       homepage = https://github.com/jquast/wcwidth;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -21903,23 +21881,7 @@ EOF
     };
   };
 
-  send2trash = buildPythonPackage (rec {
-    name = "Send2Trash-1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Send2Trash/${name}.tar.gz";
-      sha256 = "1zjq5ki02l0vl4f1xymsnqyxipx6q81a435p46db07l3mqg4dx1k";
-    };
-
-    # no tests
-    doCheck = false;
-
-    meta = {
-      description = "Send file to trash natively under macOS, Windows and Linux";
-      homepage = https://github.com/hsoft/send2trash;
-      license = licenses.bsd3;
-    };
-  });
+  send2trash = callPackage ../development/python-modules/send2trash { };
 
   sigtools = buildPythonPackage rec {
     name = "sigtools-${version}";

@@ -925,7 +925,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the cairo 2D vector graphics library";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -6102,7 +6101,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl wrappers for the GLib utility and Object libraries";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -6294,7 +6292,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -10778,7 +10775,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Layout and render international text";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -10879,7 +10875,6 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       homepage = http://search.cpan.org/~jaybonci/Parse-DebControl;
       license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ nckx ];
     };
   };
 

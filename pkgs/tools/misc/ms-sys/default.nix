@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     description = "A program for writing Microsoft-compatible boot records";
     homepage = http://ms-sys.sourceforge.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nckx ];
     platforms = with platforms; linux;
   };
 }

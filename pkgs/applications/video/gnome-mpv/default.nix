@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/gnome-mpv/gnome-mpv;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }
