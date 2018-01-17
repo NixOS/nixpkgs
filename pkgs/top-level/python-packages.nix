@@ -4828,7 +4828,7 @@ in {
     };
     propagatedBuildInputs = with self; [tornado futures html5lib pkgs.openssl pkgs.cacert pkgs.openssh];
     meta = {
-      homepage = https://liftoffsoftware.com/;
+      homepage = https://liftoffsoftware.com/Products/GateOne;
       description = "GateOne is a web-based terminal emulator and SSH client";
       maintainers = with maintainers; [ tomberek ];
 
