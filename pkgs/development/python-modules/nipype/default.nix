@@ -25,7 +25,7 @@
 , which
 }:
 
-assert !isPy3k -> configparser;
+assert !isPy3k -> configparser != null;
 
 buildPythonPackage rec {
   pname = "nipype";
