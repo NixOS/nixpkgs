@@ -28,9 +28,9 @@
 }:
 let
     images = {
-        "armhf" = "https://build.anbox.io/android-images/2017/06/12/android_1_armhf.img";
-        "arm64" = "https://build.anbox.io/android-images/2017/08/04/android_1_arm64.img";
-        "amd64" = "https://build.anbox.io/android-images/2017/07/13/android_3_amd64.img";
+        "armv7l-linux" = "https://build.anbox.io/android-images/2017/06/12/android_1_armhf.img";
+        "aarch64-linux" = "https://build.anbox.io/android-images/2017/08/04/android_1_arm64.img";
+        "x86_64-linux" = "https://build.anbox.io/android-images/2017/07/13/android_3_amd64.img";
     };
     version = "2018-01-06";
 in
