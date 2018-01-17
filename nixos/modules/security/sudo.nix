@@ -189,10 +189,10 @@ in
         ${concatStringsSep "\n" (
           lists.flatten (
             map (
-              rule: [
+              rule: if (length rule.commands != 0) then [
                 (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
                 (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ]
+              ] else []
             ) cfg.extraRules
           )
         )}
