@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
     # traffic, so don't do that.
     preferLocalBuild = true;
 
-    nativeBuildInputs = [ git gnupg ];
-    NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    nativeBuildInputs = [ cacert git gnupg ];
   } ''
     git init src && (
       cd src

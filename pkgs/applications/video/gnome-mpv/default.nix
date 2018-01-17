@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Simple GTK+ frontend for the mpv video player";

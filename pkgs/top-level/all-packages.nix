@@ -10275,7 +10275,7 @@ with pkgs;
 
   ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
   ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
-  ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
+  ncurses = ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 

@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   meta = with stdenv.lib; {
     homepage = http://live.gnome.org/JsonGlib;
     description = "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";

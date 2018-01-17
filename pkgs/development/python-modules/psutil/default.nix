@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.4.2";
+  version = "5.4.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00a1f9ff8d1e035fba7bfdd6977fa8ea7937afdb4477339e5df3dba78194fe11";
+    sha256 = "e2467e9312c2fa191687b89ff4bc2ad8843be4af6fb4dc95a7cc5f7d7a327b18";
   };
 
   # No tests in archive

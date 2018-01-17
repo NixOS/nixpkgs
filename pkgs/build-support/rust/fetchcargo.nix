@@ -19,7 +19,6 @@ stdenv.mkDerivation {
         exit 1
     fi
 
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
 
     cargo vendor

@@ -6,15 +6,13 @@ stdenvNoCC.mkDerivation {
   name = "${name}-gxdeps";
   inherit src;
 
-  nativeBuildInputs = [ go gx gx-go ];
+  nativeBuildInputs = [ cacert go gx gx-go ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   buildPhase = ''
     export GOPATH=$(pwd)/vendor

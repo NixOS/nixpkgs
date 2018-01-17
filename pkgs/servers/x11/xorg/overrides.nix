@@ -546,7 +546,7 @@ in
           "--with-sha1=CommonCrypto"
         ];
         preConfigure = ''
-          ensureDir $out/Applications
+          mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
           substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';
