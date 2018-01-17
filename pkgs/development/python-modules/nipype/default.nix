@@ -28,7 +28,6 @@
 assert !isPy3k -> configparser != null;
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "nipype";
   version = "0.14.0";
 

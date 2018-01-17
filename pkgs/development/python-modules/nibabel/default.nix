@@ -7,7 +7,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "nibabel";
   version = "2.2.0";
 

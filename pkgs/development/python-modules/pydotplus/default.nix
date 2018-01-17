@@ -6,7 +6,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pydotplus";
   version = "2.0.2";
 
