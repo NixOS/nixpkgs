@@ -14,6 +14,7 @@
 , pytestcov
 , pytestcache
 , pep8
+, pytestrunner
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ python-utils ];
+  nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
     pytest sphinx coverage execnet flake8 pytestpep8 pytestflakes pytestcov
     pytestcache pep8

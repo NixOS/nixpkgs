@@ -3424,26 +3424,7 @@ in {
     };
   };
 
-  pytestrunner = buildPythonPackage rec {
-    version = "2.6.2";
-    name = "pytest-runner-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-runner/${name}.tar.gz";
-      sha256 = "e775a40ee4a3a1d45018b199c44cc20bbe7f3df2dc8882f61465bb4141c78cdb";
-    };
-
-    buildInputs = with self; [setuptools_scm pytest];
-
-    meta = {
-      description = "Invoke py.test as distutils command with dependency resolution";
-      homepage = https://bitbucket.org/pytest-dev/pytest-runner;
-      license = licenses.mit;
-    };
-
-    # Trying to run tests fails with # RuntimeError: dictionary changed size during iteration
-    doCheck = false;
-  };
+  pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
