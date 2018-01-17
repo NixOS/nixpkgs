@@ -1,0 +1,145 @@
+From 8395d4b2c3350356e2fb02f5e04f4f463c7388df Mon Sep 17 00:00:00 2001
+From: John Ericson <Ericson2314@Yahoo.com>
+Date: Wed, 6 Sep 2017 12:22:46 -0400
+Subject: [PATCH] ld: Add --dump-normalized-lib-args flag
+
+This allows scripts to see how cctools resolves inputs. The flags are
+\0-separated.
+
+Fixes #32; See that issue for a more in-depth explanation of the
+purpose of this change.
+---
+ cctools/ld64/src/ld/Options.cpp | 43 ++++++++++++++++++++++++++++++++++++++++-
+ cctools/ld64/src/ld/Options.h   |  6 ++++++
+ cctools/ld64/src/ld/ld.cpp      |  9 +++++++++
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+
+diff --git a/cctools/ld64/src/ld/Options.cpp b/cctools/ld64/src/ld/Options.cpp
+index d3f5697..7aa6938 100644
+--- a/cctools/ld64/src/ld/Options.cpp
++++ b/cctools/ld64/src/ld/Options.cpp
+@@ -137,6 +137,43 @@ bool Options::FileInfo::checkFileExists(const Options& options, const char *p)
+     return false;
+ }
+ 
++std::vector<std::string> Options::FileInfo::lib_cli_argument() const
++{
++	// fIndirectDylib unused
++	bool special = options.fReExport || options.fLazyLoad || options.fUpward;
++
++	if (options.fBundleLoader) {
++		if (special) throw "internal error; bundle loader cannot have these extra attributes";
++		return {"-bundle-loader", path};
++	} else {
++		std::vector<std::string> args = {};
++		if (options.fReExport) {
++			args.push_back("-reexport_library");
++			args.push_back(path);
++		}
++		else if (options.fLazyLoad) {
++			args.push_back("-lazy_library");
++			args.push_back(path);
++		}
++		else if (options.fUpward) {
++			args.push_back("-upward_library");
++			args.push_back(path);
++		}
++		else {
++			// bare path
++			args.push_back(path);
++		}
++
++		// This one alone can be combined with the others
++		if (options.fWeakImport) {
++			args.push_back("-weak_library");
++			args.push_back(path);
++		}
++
++		return args;
++	}
++}
++
+ 
+ Options::Options(int argc, const char* argv[])
+ 	: fOutputFile("a.out"), fArchitecture(0), fSubArchitecture(0), fArchitectureName("unknown"), fOutputKind(kDynamicExecutable), 
+@@ -202,7 +239,8 @@ Options::Options(int argc, const char* argv[])
+ 	  fPlatform(kPlatformUnknown), fDebugInfoStripping(kDebugInfoMinimal), fTraceOutputFile(NULL),
+ 	  fMacVersionMin(ld::macVersionUnset), fIOSVersionMin(ld::iOSVersionUnset), fWatchOSVersionMin(ld::wOSVersionUnset),
+ 	  fSaveTempFiles(false), fSnapshotRequested(false), fPipelineFifo(NULL),
+-	  fDependencyInfoPath(NULL), fDependencyFileDescriptor(-1), fMaxDefaultCommonAlign(0)
++	  fDependencyInfoPath(NULL), fDependencyFileDescriptor(-1), fMaxDefaultCommonAlign(0),
++	  fDumpNormalizedLibArgs(false)
+ {
+ 	this->checkForClassic(argc, argv);
+ 	this->parsePreCommandLineEnvironmentSettings();
+@@ -2379,6 +2417,9 @@ void Options::parse(int argc, const char* argv[])
+ 				fprintf (stdout, "ld64: For information on command line options please use 'man ld'.\n");
+ 				exit (0);
+ 			}
++			else if ( strcmp(arg, "--dump-normalized-lib-args") == 0 ) {
++				fDumpNormalizedLibArgs = true;
++			}
+ 			else if ( strcmp(arg, "-arch") == 0 ) {
+ 				parseArch(argv[++i]);
+ 			}
+diff --git a/cctools/ld64/src/ld/Options.h b/cctools/ld64/src/ld/Options.h
+index 69d863b..81cfacb 100644
+--- a/cctools/ld64/src/ld/Options.h
++++ b/cctools/ld64/src/ld/Options.h
+@@ -176,6 +176,10 @@ public:
+         // Returns true if a previous call to checkFileExists() succeeded.
+         // Returns false if the file does not exist of checkFileExists() has never been called.
+         bool missing() const { return modTime == -1; }
++
++        // Serialize the file info as a command line argument that would be parsed as the same file
++        // info. Best effort if some attributes cannot be preserved through the round trip.
++        std::vector<std::string> lib_cli_argument() const;
+ 	};
+ 
+ 	struct ExtraSection {
+@@ -484,6 +488,7 @@ public:
+ 	uint8_t						maxDefaultCommonAlign() const { return fMaxDefaultCommonAlign; }
+ 	bool						hasDataSymbolMoves() const { return !fSymbolsMovesData.empty(); }
+ 	bool						hasCodeSymbolMoves() const { return !fSymbolsMovesCode.empty(); }
++	bool						dumpNormalizedLibArgs() const { return fDumpNormalizedLibArgs; }
+ 
+ 	static uint32_t				parseVersionNumber32(const char*);
+ 
+@@ -796,6 +801,7 @@ private:
+ 	const char*							fDependencyInfoPath;
+ 	mutable int							fDependencyFileDescriptor;
+ 	uint8_t								fMaxDefaultCommonAlign;
++	bool								fDumpNormalizedLibArgs;
+ };
+ 
+ 
+diff --git a/cctools/ld64/src/ld/ld.cpp b/cctools/ld64/src/ld/ld.cpp
+index 0f69124..13ccf5c 100644
+--- a/cctools/ld64/src/ld/ld.cpp
++++ b/cctools/ld64/src/ld/ld.cpp
+@@ -49,6 +49,7 @@
+ #include <dlfcn.h>
+ #include <AvailabilityMacros.h>
+ 
++#include <iostream>
+ #include <string>
+ #include <map>
+ #include <set>
+@@ -1303,6 +1304,14 @@ int main(int argc, const char* argv[])
+ 		
+ 		// create object to track command line arguments
+ 		Options options(argc, argv);
++		if (options.dumpNormalizedLibArgs()) {
++			for (auto info : options.getInputFiles()) {
++				for (auto arg : info.lib_cli_argument()) {
++					std::cout << arg << '\0';
++				}
++			}
++			exit(0);
++		}
+ 		InternalState state(options);
+ 		
+ 		// allow libLTO to be overridden by command line -lto_library
+-- 
+2.10.1 (Apple Git-78)
+
