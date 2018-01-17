@@ -14568,6 +14568,8 @@ in {
     };
   });
 
+  progressbar2 = callPackage ../development/python-modules/progressbar2 { };
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
