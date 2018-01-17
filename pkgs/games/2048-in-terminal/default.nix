@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "2048-in-terminal-${version}";
-  version = "2015-01-15";
+  version = "2017-11-29";
 
   src = fetchFromGitHub {
-    sha256 = "1fdfmyhh60sz0xbilxkh2y09lvbcs9lamk2jkjkhxhlhxknmnfgs";
-    rev = "3e4e44fd360dfe114e81e6332a5a058a4b287cb1";
+    sha256 = "1cqv5z1i5zcrvj0w6pdfnnff8m6kjndqxwkwsw5ma9jz503bmyc6";
+    rev = "4e525066b0ef3442e92d2ba8dd373bdc205ece28";
     repo = "2048-in-terminal";
     owner = "alewmoose";
   };
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin
   '';
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = [ "DESTDIR=$(out)/bin" ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

@@ -3459,6 +3459,8 @@ with pkgs;
 
   memo = callPackage ../applications/misc/memo/default.nix { };
 
+  mencal = callPackage ../applications/misc/mencal/default.nix { } ;
+
   metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   metar = callPackage ../applications/misc/metar { };
@@ -5115,6 +5117,8 @@ with pkgs;
   whois = callPackage ../tools/networking/whois { };
 
   woff2 = callPackage ../development/web/woff2 { };
+
+  woof = callPackage ../tools/misc/woof { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
