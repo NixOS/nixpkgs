@@ -19,7 +19,7 @@
 let
   inherit (buildPackages) linuxHeaders;
   version = "2.25";
-  patchSuffix = "-49";
+  patchSuffix = "-123";
   sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
@@ -46,7 +46,8 @@ stdenv.mkDerivation ({
           $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
       */
       ./2.25-49.patch.gz
-      ./cve-2017-15670.patch
+      # contains fixes for CVE-2017-15670 and CVE-2018-1000001
+      ./2.25-49to123.diff.gz
       ./cve-2009-5064.patch
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
