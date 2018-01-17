@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = http://jonls.dk/redshift;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ mornfall yegortimoshenko ];
   };
 }
