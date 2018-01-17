@@ -36,9 +36,9 @@ buildPythonPackage rec {
     sha256 = "0airdrh93vwmbfkqxp5cqfzm0zzqcvjnvphv3zhg197y39xxpl1k";
   };
 
-  doCheck = false; # fails with TypeError: None is not callable
+  doCheck = false;  # fails with TypeError: None is not callable
   checkInputs = [ which ];
-  buildInputs = [ pytest mock ];
+  buildInputs = [ pytest mock ];  # required in installPhase
   propagatedBuildInputs = [
     click
     dateutil
