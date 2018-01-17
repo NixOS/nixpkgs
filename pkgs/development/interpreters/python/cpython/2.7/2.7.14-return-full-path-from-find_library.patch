@@ -1,0 +1,16 @@
+diff --git i/Lib/ctypes/util.py w/Lib/ctypes/util.py
+index ab10ec52ee..c27f7d3ef7 100644
+--- i/Lib/ctypes/util.py
++++ w/Lib/ctypes/util.py
+@@ -271,7 +271,10 @@ elif os.name == "posix":
+             return res.group(1)
+ 
+         def find_library(name):
+-            return _findSoname_ldconfig(name) or _get_soname(_findLib_gcc(name))
++            lib_path = _findLib_gcc(name)
++            if lib_path is None:
++                return lib_path
++            return os.path.realpath(lib_path)
+ 
+ ################################################################
+ # test code

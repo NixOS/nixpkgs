@@ -69,6 +69,9 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
+      # If find_library is used (e.g. by Salt), return a full path.
+      ./2.7.14-return-full-path-from-find_library.patch
+
     ] ++ optionals hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
