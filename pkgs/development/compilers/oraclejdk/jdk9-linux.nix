@@ -29,7 +29,7 @@ assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "9.0.1";
+  version = "9.0.4";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
 
@@ -52,7 +52,7 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
         url =  "${downloadUrlBase}/jdk9-downloads-3848520.html";
-        sha256 = "0560dc3icrwb0ifykshvzkr04b1jr153m26x1r8rp0nhjbzz1nic";
+        sha256 = "18nsjn64wkfmyb09wf2k7lvhazf83cs3dyichr038vl1gs3ymi4h";
       }
     else if packageType == "JRE" then
       requireFile {
