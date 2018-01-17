@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , numpy
 , scipy
 , matplotlib
@@ -8,7 +9,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "nimfa";
   version = "1.3.1";
 
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy ];
-  buildInputs = [ matplotlib pytest ];
-  doCheck = false; # errors
+  checkInputs = [ matplotlib pytest ];
+  doCheck = !isPy3k;  # https://github.com/marinkaz/nimfa/issues/42
 
   meta = with stdenv.lib; {
     description = "Nonnegative matrix factorization library";
