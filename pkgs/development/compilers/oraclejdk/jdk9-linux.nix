@@ -58,13 +58,13 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/jre9-downloads-3848532.html";
-        sha256 = "11pfcck8am48yv7riaj10g6h79xdiy8lm5a9wjqbm3g9cls9ar1w";
+        sha256 = "01fp079mr04nniyf06w8vd47qxr6rly1lbh8dqkddb8fp9h6a79k";
       }
     else if packageType == "ServerJRE" then
       requireFile {
         name = "serverjre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/server-jre9-downloads-3848530.html";
-        sha256 = "1biyks6jy0a2kksaj9qbsjifv34ym5mdw8akibmkwr1xh0wavygc";
+        sha256 = "1jlpa4mn306hx0p9jcw3i6cpdvnng29dwjsymgcan56810q6p6yj";
       }
     else abort "unknown package Type ${packageType}";
 
