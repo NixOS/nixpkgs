@@ -11330,6 +11330,8 @@ in {
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
+  nimfa = callPackage ../development/python-modules/nimfa {};
+
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
