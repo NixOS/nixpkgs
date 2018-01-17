@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 = "07apb0135rlbraqw3pmwf13jjhzgflr6qik0b0qxp8im0hwx082p";
+    sha256 = "18680qpdvhr16dx66jfia1zrg52005sgdy9yhl7vdhm4gcr7pxwc";
   };
 
   dontBuild         = true;
