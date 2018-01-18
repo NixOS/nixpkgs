@@ -543,11 +543,8 @@ self: super: {
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
 
-  # Install icons and metadata, remove broken hgettext dependency.
-  # https://github.com/vasylp/hgettext/issues/10
+  # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
-    configureFlags = drv.configureFlags or [] ++ ["-f-hgettext"];
-    executableHaskellDepends = pkgs.lib.remove self.hgettext drv.executableHaskellDepends;
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs; [ gettext perl help2man intltool ];
     doCheck = false; # https://github.com/wjt/bustle/issues/6
