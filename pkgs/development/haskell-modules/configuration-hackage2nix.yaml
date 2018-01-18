@@ -2703,6 +2703,7 @@ extra-packages:
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
+  - ShellCheck == 0.4.6                 # required by multi-ghc-travis
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
