@@ -136,6 +136,14 @@ in
           Specifies on which ports the SSH daemon listens.
         '';
       };
+      
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
+        '';
+      };
 
       openFirewall = mkOption {
         type = types.bool;
