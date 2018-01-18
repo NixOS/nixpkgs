@@ -19,6 +19,22 @@ let
     ${cfg.extraConfig}
   '';
 
+  /*
+    The sed command removes stateful parts of the config that won't work in this
+    derivation.  This method should be fine, as according to dnsmasq(8) (section
+    CONFIG FILE) "the format of this file consist of one option per line". It
+    does not mention any exceptions to this rule. The only caveat is that this
+    will not catch any problems with the config file involving options that
+    contain the string /etc/, but it's better than falsely rejecting a valid
+    config file.
+  */
+  configChecked = pkgs.runCommand "dnsmasq-config-checked" {} ''
+    sed '/\/etc\//d' ${dnsmasqConf} > dnsmasq.conf
+
+    ${dnsmasq}/bin/dnsmasq --test -C dnsmasq.conf && touch $out
+    echo "dnsmasq config file: ${dnsmasqConf}"
+  '';
+
 in
 
 {
@@ -92,6 +108,8 @@ in
       description = "Dnsmasq daemon user";
     };
 
+    system.extraDependencies = [ configChecked ];
+
     systemd.services.dnsmasq = {
         description = "Dnsmasq Daemon";
         after = [ "network.target" "systemd-resolved.service" ];
@@ -102,7 +120,6 @@ in
           touch ${stateDir}/dnsmasq.leases
           chown -R dnsmasq ${stateDir}
           touch /etc/dnsmasq-{conf,resolv}.conf
-          dnsmasq --test
         '';
         serviceConfig = {
           Type = "dbus";
