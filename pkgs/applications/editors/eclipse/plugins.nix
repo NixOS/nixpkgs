@@ -137,6 +137,29 @@ rec {
     };
   };
 
+  antlr-runtime_4_5 = buildEclipsePluginBase rec {
+    name = "antlr-runtime-4.5.3";
+
+    src = fetchurl {
+      url = "http://www.antlr.org/download/${name}.jar";
+      sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
+    };
+
+    buildCommand = ''
+      dropinDir="$out/eclipse/dropins/"
+      mkdir -p $dropinDir
+      cp -v $src $dropinDir/${name}.jar
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A powerful parser generator for processing structured text or binary files";
+      homepage = http://www.antlr.org/;
+      license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
     version = "2.7.1.201709201439";
@@ -392,6 +415,44 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+  jsonedit = buildEclipsePlugin rec {
+    name = "jsonedit-${version}";
+    version = "1.0.1";
+
+    srcFeature = fetchurl {
+      url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
+      sha256 = "19221409wzcsrlm2fqf6mrxzb5ip1x6y5ba8anw788p7aaz1w30k";
+    };
+
+    srcPlugins =
+      let
+        fetch = { n, h }:
+          fetchurl {
+            url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
+            sha256 = h;
+          };
+      in
+        map fetch [
+          { n = "core"; h = "05ipjbh9yz97zhqaqq6cja3zz44n0dn40ms13qnlgf4bxyaf0f6w"; }
+          { n = "editor"; h = "1i71rh2fd5hsx6gygnafz2gjz4hlb0ckazxn0maxmnlx4p5apjql"; }
+          { n = "folding"; h = "13p8vqdna23ln82w1jgchm59375f1ky0p2b1v7jih55yfhw1ymam"; }
+          { n = "model"; h = "0llswhsd58f0rjb9canjncavq4z7q8zidn26yl5gradbbz580p6w"; }
+          { n = "outline"; h = "1rs8g0iv2kklbl7j0p6nr26m6ii89yyr9bpi05mh21xva40pzkl5"; }
+          { n = "preferences"; h = "0vs074ahhiba7if43ryf9m8xd81sqj9grppy0pzcnkkdkbk870n0"; }
+          { n = "text"; h = "0nqpzjw8hhvh9jlpldpmcmg83a170wjdabgsvjq207j12jkvfiqq"; }
+        ];
+
+    propagatedBuildInputs = [ antlr-runtime_4_5 ];
+
+    meta = with stdenv.lib; {
+      description = "Adds support for JSON files to Eclipse";
+      homepage = https://github.com/boothen/Json-Eclipse-Plugin;
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
     };
   };
 
