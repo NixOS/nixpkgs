@@ -774,12 +774,12 @@ in {
   in buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "awscli";
-    version = "1.11.108";
+    version = "1.14.22";
     namePrefix = "";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1wz76hkljc25zzfa2l5jv0mbr5vx6d9ixq4sq0p3zf3l45ql6mdf";
+      sha256 = "13pivyyivwb3xy0l45083gcman2b0xiv00fl9ww0m8jccgxsdzd0";
     };
 
     # No tests included
@@ -2106,13 +2106,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.4";
+    version = "1.4.8";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
+      sha256 = "11ysd7a9l5y98q7b7az56phsj2m7w90abf4jabwrknp2c43sq9bi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -2126,9 +2126,6 @@ in {
       nosetests -d tests/unit --verbose
       runHook postCheck
     '';
-
-    # Network access
-    doCheck = false;
 
     meta = {
       homepage = https://github.com/boto/boto3;
@@ -2145,11 +2142,11 @@ in {
   botocore = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "botocore";
-    version = "1.5.71";
+    version = "1.8.26";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1fgg28halsy4g43wjpkbd6l0wqiwyzkd4zjrzbbyzw4dxbsf3xfm";
+      sha256 = "09j3b80l401hwc3ha0s2c2qq6z45x846an09ybc9y8cb1ky0kdlv";
     };
 
     propagatedBuildInputs =
@@ -19380,12 +19377,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.1.10";
+    version = "0.1.12";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
+      sha256 = "07hjj1cy62sc3rh5lhna9mhylp7h7aak4v6mf6809q4nc8j1p28h";
     };
 
     foo = 1;
