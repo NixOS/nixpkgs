@@ -219,7 +219,7 @@ in
        , ghc-mod-core, gitrev, haskell-lsp, hie-apply-refact, hie-base
        , hie-brittany, hie-build-plugin, hie-eg-plugin-async
        , hie-example-plugin2, hie-ghc-mod, hie-ghc-tree, hie-haddock
-       , hie-hare, hie-hoogle, hie-plugin-api, hoogle, hslogger, hspec
+       , hie-hare, hie-hoogle, hie-plugin-api, hoogle, hoogleLocal, hslogger, hspec
        , lens, mtl, optparse-simple, QuickCheck, quickcheck-instances
        , sorted-list, stm, text, time, transformers
        , unordered-containers, vector, vinyl, yaml, yi-rope
@@ -253,14 +253,20 @@ in
            quickcheck-instances stm text transformers unordered-containers
            vector vinyl yaml
          ];
-         preCheck = "export HOME=$NIX_BUILD_TOP/home; mkdir $HOME";
+
+         preCheck =
+           ''
+             export HOME=$NIX_BUILD_TOP/home
+             mkdir -p $HOME/.hoogle
+             ln -sv ${hoogleLocal}/share/doc/hoogle/default.hoo $HOME/.hoogle/default-haskell-${hoogle.version}.hoo
+           '';
          # https://github.com/haskell/haskell-ide-engine/issues/425
          # The disabled tests do work in a local nix-shell with cabal available.
          patches = [ ./patches/hie-testsuite.patch ];
          homepage = "http://github.com/githubuser/haskell-ide-engine#readme";
          description = "Provide a common engine to power any Haskell IDE";
          license = stdenv.lib.licenses.bsd3;
-      }) { inherit hoogle; };
+      }) { inherit hoogle; hoogleLocal = (self.hoogleLocal {}).override { inherit hoogle; }; };
     hie-apply-refact = callPackage
       ({ mkDerivation, aeson, apply-refact, base, either, extra, ghc-mod
        , ghc-mod-core, haskell-src-exts, hie-base, hie-plugin-api, hlint
