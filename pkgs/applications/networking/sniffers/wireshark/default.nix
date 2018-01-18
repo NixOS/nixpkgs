@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
     sha256 = "0n3g28hrhifnchlz4av0blq4ykm4zaxwwxbzdm9wsba27677b6h4";
   };
 
-  cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE";
+  cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE -DENABLE_QT5=FALSE";
 
   nativeBuildInputs = [
     bison cmake extra-cmake-modules flex
@@ -37,7 +37,8 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ]
+    ++ optional withGtk ./no-qt4.patch;
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''
