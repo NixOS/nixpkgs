@@ -10,7 +10,7 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.9";
+  majorVersion = "5.10";
   minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-    sha256 = "1q3kcnniyvnca1l7x10mbhp4xwjr03ajh2h8j6cbdllci38zdjy1";
+    sha256 = "10j1s6r6iv80nvpi6gv8w05v505h2ndj9xx31yz7d50ab04dfg23";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -78,17 +78,6 @@ in stdenv.mkDerivation rec {
   '';
 
   setupHook = python-setup-hook sitePackages;
-
-  postBuild = ''
-    pushd ./lib_pypy
-    ../pypy-c ./_audioop_build.py
-    ../pypy-c ./_curses_build.py
-    ../pypy-c ./_pwdgrp_build.py
-    ../pypy-c ./_sqlite3_build.py
-    ../pypy-c ./_syslog_build.py
-    ../pypy-c ./_tkinter/tklib_build.py
-    popd
-  '';
 
   doCheck = true;
   checkPhase = ''
