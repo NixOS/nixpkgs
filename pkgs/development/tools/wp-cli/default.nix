@@ -26,7 +26,7 @@ let
 
   ini = writeText "wp-cli.ini" ''
     [PHP]
-    memory_limit = 512M ; composer can be a bit of a memory pig
+    memory_limit = -1 ; composer uses a lot of memory
 
     [Phar]
     phar.readonly = Off
@@ -40,6 +40,9 @@ in stdenv.mkDerivation rec {
 
     ln      -s     ${bin}        $out/bin/wp
     install -Dm644 ${completion} $out/share/bash-completion/completions/wp
+
+    # this is a very basic run test
+    $out/bin/wp --info
   '';
 
   meta = with stdenv.lib; {
