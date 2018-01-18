@@ -79,17 +79,6 @@ in stdenv.mkDerivation rec {
 
   setupHook = python-setup-hook sitePackages;
 
-  postBuild = ''
-    pushd ./lib_pypy
-    ../pypy-c ./_audioop_build.py
-    ../pypy-c ./_curses_build.py
-    ../pypy-c ./_pwdgrp_build.py
-    ../pypy-c ./_sqlite3_build.py
-    ../pypy-c ./_syslog_build.py
-    ../pypy-c ./_tkinter/tklib_build.py
-    popd
-  '';
-
   doCheck = true;
   checkPhase = ''
     export TERMINFO="${ncurses.out}/share/terminfo/";
