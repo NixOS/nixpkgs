@@ -20,20 +20,32 @@ rec {
 
   # Helper for the common case where we have separate feature and
   # plugin JARs.
-  buildEclipsePlugin = { name, srcFeature, srcPlugin, ... } @ attrs:
-    buildEclipsePluginBase (attrs // {
-      srcs = [ srcFeature srcPlugin ];
+  buildEclipsePlugin =
+    { name, srcFeature, srcPlugin ? null, srcPlugins ? [], ... } @ attrs:
+      assert srcPlugin == null -> srcPlugins != [];
+      assert srcPlugin != null -> srcPlugins == [];
 
-      buildCommand = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+      let
 
-        mkdir -p $dropinDir/features
-        unzip ${srcFeature} -d $dropinDir/features/
+        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
 
-        mkdir -p $dropinDir/plugins
-        cp -v ${srcPlugin} $dropinDir/plugins/${name}.jar
-      '';
-    });
+      in
+
+        buildEclipsePluginBase (attrs // {
+          srcs = [ srcFeature ] ++ pSrcs;
+
+          buildCommand = ''
+            dropinDir="$out/eclipse/dropins/${name}"
+
+            mkdir -p $dropinDir/features
+            unzip ${srcFeature} -d $dropinDir/features/
+
+            mkdir -p $dropinDir/plugins
+            for plugin in ${toString pSrcs}; do
+              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+            done
+          '';
+        });
 
   # Helper for the case where the build directory has the layout of an
   # Eclipse update site, that is, it contains the directories
