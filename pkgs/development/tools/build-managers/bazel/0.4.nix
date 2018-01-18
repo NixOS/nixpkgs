@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
   sourceRoot = ".";
 
-  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+  patches = lib.optional enableNixHacks ./nix-hacks-0.4.patch;
 
   postPatch = ''
     for f in $(grep -l -r '/bin/bash'); do

@@ -7205,8 +7205,8 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
-  bazel_0_5 = callPackage ../development/tools/build-managers/bazel { };
-  bazel = bazel_0_5;
+  bazel_0_9 = callPackage ../development/tools/build-managers/bazel { };
+  bazel = bazel_0_9;
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
