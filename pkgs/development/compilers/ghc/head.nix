@@ -24,15 +24,13 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.5.20171209"
+, version ? "8.5.20180118"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
-
-  rev = "4335c07ca7e64624819b22644d7591853826bd75";
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = stdenv.lib.optionalString
@@ -69,13 +67,14 @@ let
 
 in
 stdenv.mkDerivation rec {
-  inherit version rev;
+  inherit version;
+  inherit (src) rev;
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    inherit rev;
-    sha256 = "19csad94sk0bw2nj97ppmnwh4c193jg0jmg5w2sx9rqm9ih4yg85";
+    rev = "e1d4140be4d2a1508015093b69e1ef53516e1eb6";
+    sha256 = "1gdcr10dd968d40qgljdwx9vfkva3yrvjm9a4nis7whaaac3ag58";
   };
 
   enableParallelBuilding = true;
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
 
     echo -n "${buildMK}" > mk/build.mk
     echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
+    echo ${src.rev} >GIT_COMMIT_ID
     ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
