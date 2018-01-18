@@ -136,6 +136,14 @@ in
           Specifies on which ports the SSH daemon listens.
         '';
       };
+      
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
+        '';
+      };
 
       listenAddresses = mkOption {
         type = with types; listOf (submodule {
@@ -302,7 +310,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;
