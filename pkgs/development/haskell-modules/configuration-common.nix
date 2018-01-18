@@ -845,8 +845,11 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs a newer version than lts-10 provides.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+  # Hoogle needs newer versions than lts-10 provides.
+  hoogle = super.hoogle.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    http-conduit = self.http-conduit_2_3_0;
+  };
 
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
