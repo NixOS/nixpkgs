@@ -17,25 +17,25 @@ in
 {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "384.98";
-    sha256_32bit = "0mxvndanbyvgaflpam2li7ilsxwfh0arqi059z1hypgwp0c8iqwk";
-    sha256_64bit = "1fxnqrin8clwl7g13zfnn4422ws0laraxwlvr9gqlp43k9nvc47v";
-    settingsSha256 = "081fmqk0d5fxn70kky59g9n024rb79ir6f5gf31mkw8zmyzqypvd";
-    persistencedSha256 = "1whhcsz6cij1c7pg4h8795rndp4rywx9k75cjlfh0s184lyi9wm2";
+    version = "384.111";
+    sha256_32bit = "13wly7hn7bp04kabmbiss85bf5ynhv68g5fxpq9d42mxd93gbzw9";
+    sha256_64bit = "1c8pw297pdp194hxbbjhk901w5s3ixihg92696l3pw3zsd96v245";
+    settingsSha256 = "0zyk1w4csq9nfhaakz8mivvml2vb5vd14c0dhj1z879inmg74fvf";
+    persistencedSha256 = "1y1738z4w21m5vx0q5wv44pvnsjwgx22wdg8qgkfrpkbp66kmjvr";
     prePatch = ''
       if [ "$system" = "x86_64-linux" ]; then
         local f="kernel/nvidia-uvm/uvm8_va_block.c"
         cat ${./task_stack.c} $f > $f.tmp
-	mv $f.tmp $f
+        mv $f.tmp $f
       fi
     '';
   };
 
   beta = generic {
     version = "381.22";
-    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
+    sha256_32bit = "13wly7hn7bp04kabmbiss85bf5ynhv68g5fxpq9d42mxd93gbzw9";
     sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
-    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
+    settingsSha256 = "0zyk1w4csq9nfhaakz8mivvml2vb5vd14c0dhj1z879inmg74fvf";
     persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
   };
 
