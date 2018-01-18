@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "A system call tracer for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mornfall jgeerds globin ];
+    maintainers = with maintainers; [ jgeerds globin ];
   };
 }

@@ -2481,10 +2481,7 @@ with pkgs;
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
 
-  gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
-    # Using pypy provides significant performance improvements (~2x)
-    pythonPackages = pypyPackages;
-  };
+  gprof2dot = callPackage ../development/tools/profiling/gprof2dot { };
 
   graphviz = callPackage ../tools/graphics/graphviz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -6677,7 +6674,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlangR18 erlangR19 erlangR20
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_6_rc elixir_1_5 elixir_1_4 elixir_1_3
+    elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
@@ -7208,8 +7205,8 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
-  bazel_0_5 = callPackage ../development/tools/build-managers/bazel { };
-  bazel = bazel_0_5;
+  bazel_0_9 = callPackage ../development/tools/build-managers/bazel { };
+  bazel = bazel_0_9;
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -7686,7 +7683,7 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { ghc = haskell.compiler.ghc802; };
+  multi-ghc-travis = haskell.lib.justStaticExecutables haskellPackages.multi-ghc-travis;
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
@@ -10504,7 +10501,9 @@ with pkgs;
 
   phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {};
 
-  physfs = callPackage ../development/libraries/physfs { };
+  inherit (callPackage ../development/libraries/physfs { })
+    physfs_2
+    physfs;
 
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
@@ -12795,8 +12794,7 @@ with pkgs;
   linux_beagleboard = callPackage ../os-specific/linux/kernel/linux-beagleboard.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.p9_fixes
-        kernelPatches.cpu-cgroup-v2."4.9"
+        kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ];
   };
@@ -17285,7 +17283,9 @@ with pkgs;
     gtk = gtk3;
   };
 
-  timbreid = callPackage ../applications/audio/pd-plugins/timbreid { };
+  timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
+    fftw = fftwSinglePrec;
+  };
 
   timescaledb = callPackage ../servers/sql/postgresql/timescaledb {};
 
@@ -18086,6 +18086,7 @@ with pkgs;
   asc = callPackage ../games/asc {
     lua = lua5_1;
     libsigcxx = libsigcxx12;
+    physfs = physfs_2;
   };
 
   astromenace = callPackage ../games/astromenace { };
@@ -18193,9 +18194,13 @@ with pkgs;
 
   dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
 
-  d1x_rebirth = callPackage ../games/d1x-rebirth { };
+  dxx-rebirth = callPackage ../games/dxx-rebirth {
+    physfs = physfs_2;
+  };
 
-  d2x_rebirth = callPackage ../games/d2x-rebirth { };
+  d1x_rebirth = dxx-rebirth;
+
+  d2x_rebirth = dxx-rebirth;
 
   easyrpg-player = callPackage ../games/easyrpg-player { };
 
@@ -18331,7 +18336,10 @@ with pkgs;
 
   lincity = callPackage ../games/lincity {};
 
-  lincity_ng = callPackage ../games/lincity/ng.nix {};
+  lincity_ng = callPackage ../games/lincity/ng.nix {
+    # https://github.com/lincity-ng/lincity-ng/issues/25
+    physfs = physfs_2;
+  };
 
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_1_8;
@@ -20042,7 +20050,7 @@ with pkgs;
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
-    webkit = webkitgtk24x-gtk2;
+    webkit = webkitgtk218x;
   };
   vimb = wrapFirefox vimb-unwrapped { };
 

@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "netdisco";
-  version = "1.2.3";
+  version = "1.2.4";
 
   disabled = !isPy3k;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = pname;
     rev = version;
-    sha256 = "137p7qlv85mva96v6kav8xxca7i09k4giayag4cglrgjd7q3lk1r";
+    sha256 = "170s9py8rw07cfgwvv7mf69g8jjg32m2rgw8x3kbvjqlmrdijxmm";
   };
 
   propagatedBuildInputs = [ requests zeroconf netifaces ];

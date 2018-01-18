@@ -875,6 +875,7 @@ self: super: {
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
+  gitHUD = dontCheck super.gitHUD;
 
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
@@ -941,4 +942,8 @@ self: super: {
 
   # Sporadically OOMs even with 16G
   ChasingBottoms = dontCheck super.ChasingBottoms;
+
+  # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
+  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis { ShellCheck = self.ShellCheck_0_4_6; };
+
 }
