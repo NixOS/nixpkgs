@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "shibboleth-sp-${version}";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-sp.git";
-    rev = "9ebba5c3a16d03769f436e383e4c4cdaa33f5509";
-    sha256 = "1b5r4nd098lnjwr2g13f04ycqv5fvbrhpwg6fsdk8xy9cigvfzxj";
+    rev = version;
+    sha256 = "01q13p7gc0janjfml6zs46na8qnval8hc833fk2wrnmi4w9xw4fd";
   };
 
   buildInputs = [ boost fcgi openssl opensaml-cpp log4shib pkgconfig xercesc xml-security-c xml-tooling-c ];
