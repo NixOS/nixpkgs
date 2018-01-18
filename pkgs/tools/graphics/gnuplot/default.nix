@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ];
 
+  preConfigure = lib.optionalString withTeXLive ''
+    configureFlagsArray+=(--with-texdir=$out/share/texmf-nix/tex/latex/gnuplot)
+  '';
+
   postInstall = lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
@@ -57,6 +61,9 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  # Set TEXINPUTS to include us
+  setupHook = lib.optionalString (withTeXLive) ./setup-hook.sh;
 
   meta = with lib; {
     homepage = http://www.gnuplot.info/;
