@@ -139,6 +139,8 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
 
+    inherit (haskellLib) packageSourceOverrides;
+
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
@@ -154,18 +156,6 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
               pkgs.lib.hasSuffix "package.yaml" path;
           };
       }) args) (_: { inherit src; });
-
-    # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
-    # Given a set whose values are either paths or version strings, produces
-    # a package override set (i.e. (self: super: { etc. })) that sets
-    # the packages named in the input set to the corresponding versions
-    packageSourceOverrides =
-      overrides: self: super: pkgs.lib.mapAttrs (name: src:
-        let isPath = x: builtins.substring 0 1 (toString x) == "/";
-            generateExprs = if isPath src
-                               then self.callCabal2nix
-                               else self.callHackage;
-        in generateExprs name src {}) overrides;
 
     # : { root : Path
     #   , source-overrides : Defaulted (Either Path VersionNumber)
