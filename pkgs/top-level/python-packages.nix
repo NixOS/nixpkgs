@@ -592,7 +592,7 @@ in {
   async = buildPythonPackage rec {
     name = "async-0.6.1";
     disabled = isPy3k;
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     buildInputs = with self; [ pkgs.zlib ];
     doCheck = false;
@@ -2047,7 +2047,7 @@ in {
 
   bunch = buildPythonPackage (rec {
     name = "bunch-1.0.1";
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bunch/${name}.tar.gz";
@@ -5002,7 +5002,7 @@ in {
 
     meta = {
       description = "Git Object Database";
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       homepage = https://github.com/gitpython-developers/gitdb;
       license = licenses.bsd3;
     };
@@ -5028,7 +5028,7 @@ in {
 
     meta = {
       description = "Python Git Library";
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       homepage = https://github.com/gitpython-developers/GitPython;
       license = licenses.bsd3;
     };
@@ -11911,7 +11911,7 @@ in {
 
   offtrac = buildPythonPackage rec {
     name = "offtrac-0.1.0";
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/offtrac/${name}.tar.gz";
@@ -17810,7 +17810,7 @@ in {
   smmap = buildPythonPackage rec {
     name = "smmap-0.9.0";
     disabled = isPyPy;  # This fails the tests if built with pypy
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     buildInputs = with self; [ nosexcover ];
 

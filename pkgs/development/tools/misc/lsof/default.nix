@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

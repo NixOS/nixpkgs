@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://w3m.sourceforge.net/;
     description = "A text-mode web browser";
-    maintainers = [ maintainers.mornfall maintainers.cstrahan ];
+    maintainers = [ maintainers.cstrahan ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
