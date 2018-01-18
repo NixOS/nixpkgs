@@ -4704,6 +4704,8 @@ in {
     };
   };
 
+  fritzconnection = callPackage ../development/python-modules/fritzconnection { };
+
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
 
