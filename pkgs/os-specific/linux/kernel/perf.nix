@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   makeFlags = if stdenv.hostPlatform == stdenv.buildPlatform
     then null
-    else "CROSS_COMPILE=${stdenv.cc.prefix}";
+    else "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   installFlags = "install install-man ASCIIDOC8=1";
 
