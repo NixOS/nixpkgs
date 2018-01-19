@@ -220,6 +220,7 @@
   ericson2314 = "John Ericson <John.Ericson@Obsidian.Systems>";
   erictapen = "Justin Humm <justin.humm@posteo.de>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
+  erosennin = "Andrey Golovizin <ag@sologoc.com>";
   ertes = "Ertugrul Söylemez <esz@posteo.de>";
   ethercrow = "Dmitry Ivanov <ethercrow@gmail.com>";
   etu = "Elis Hirwing <elis@hirwing.se>";
