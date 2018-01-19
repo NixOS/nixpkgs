@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, boost165, zlib, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch, boost, zlib, openssl }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yl5h7mls50vkg7x5510mljmgsm02arqhcanwkrqw4ilwvcp1mgz";
   };
 
-  buildInputs = [ boost165 zlib openssl ];
+  buildInputs = [ boost zlib openssl ];
   makeFlags = [ "USE_AESNI=no" "USE_AVX=no" ];
 
   installPhase = ''
