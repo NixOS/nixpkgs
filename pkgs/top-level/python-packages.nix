@@ -10065,6 +10065,24 @@ in {
     };
   };
 
+  mapsplotlib = buildPythonPackage rec {
+    name = "mapsplotlib-${version}";
+    version = "1.0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mapsplotlib/${name}.tar.gz";
+      sha256 = "09gpws3x0jd88n636baxx5izjffrpjy4j6jl8l7vj29yzvrdr2bp";
+    };
+
+    propagatedBuildInputs = with self; [ matplotlib scipy pandas requests pillow ];
+
+    meta = {
+      description = "Custom Python plots on a Google Maps background";
+      homepage = https://github.com/tcassou/mapsplotlib;
+      maintainers = [ maintainers.rob ];
+    };
+  };
+
   markdown = callPackage ../development/python-modules/markdown { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
