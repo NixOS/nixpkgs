@@ -205,6 +205,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  diff_cover = callPackage ../development/python-modules/diff_cover { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
