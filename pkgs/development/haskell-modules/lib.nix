@@ -40,6 +40,18 @@ rec {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
   };
 
+  # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
+  # Given a set whose values are either paths or version strings, produces
+  # a package override set (i.e. (self: super: { etc. })) that sets
+  # the packages named in the input set to the corresponding versions
+  packageSourceOverrides =
+    overrides: self: super: pkgs.lib.mapAttrs (name: src:
+      let isPath = x: builtins.substring 0 1 (toString x) == "/";
+          generateExprs = if isPath src
+                             then self.callCabal2nix
+                             else self.callHackage;
+      in generateExprs name src {}) overrides;
+
   /* doCoverage modifies a haskell package to enable the generation
      and installation of a coverage report.
 
