@@ -10069,6 +10069,8 @@ in {
     name = "mapsplotlib-${version}";
     version = "1.0.6";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mapsplotlib/${name}.tar.gz";
       sha256 = "09gpws3x0jd88n636baxx5izjffrpjy4j6jl8l7vj29yzvrdr2bp";
