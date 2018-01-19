@@ -20066,6 +20066,8 @@ with pkgs;
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
+  serviio = callPackage ../servers/serviio {};
+
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
   };
