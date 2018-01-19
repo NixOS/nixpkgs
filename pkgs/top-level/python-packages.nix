@@ -205,6 +205,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  diff_cover = callPackage ../development/python-modules/diff_cover { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
@@ -280,6 +282,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
+
+  pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
   pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
 
@@ -9470,6 +9474,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
   jmespath = buildPythonPackage rec {
     name = "jmespath-0.9.0";
