@@ -2,7 +2,7 @@
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, python3
+, python
 , gawk
 , perl
 , swig
@@ -53,7 +53,7 @@ let
 
     buildInputs = [
       perl
-      python3
+      python
     ];
 
     # required to build apparmor-parser
@@ -84,7 +84,7 @@ let
 
     buildInputs = [
       perl
-      python3
+      python
       libapparmor
       libapparmor.python
     ];
@@ -96,7 +96,7 @@ let
 
     postInstall = ''
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
       for prog in aa-notify ; do
