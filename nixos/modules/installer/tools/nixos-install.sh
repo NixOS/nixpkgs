@@ -7,6 +7,9 @@
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * install the boot loader
 
+# Maximum attempts for setting the root password
+MAX_PASSWD_ATTEMPTS=3
+
 # Ensure a consistent umask.
 umask 0022
 
@@ -199,7 +202,17 @@ chroot $mountPoint /nix/var/nix/profiles/system/activate
 # Ask the user to set a root password.
 if [ -z "$noRootPasswd" ] && chroot $mountPoint [ -x /run/wrappers/bin/passwd ] && [ -t 0 ]; then
     echo "setting root password..."
-    chroot $mountPoint /run/wrappers/bin/passwd
+
+    # Ask the password until it succeeds or MAX_PASSWD_ATTEMPTS is reached
+    for ATTEMPT in $(seq 1 $MAX_PASSWD_ATTEMPTS); do
+      chroot $mountPoint /run/wrappers/bin/passwd && break
+      if [ "$ATTEMPT" -lt "$MAX_PASSWD_ATTEMPTS" ]; then
+        echo "Wrong password - Attempt $(expr $ATTEMPT + 1) of $MAX_PASSWD_ATTEMPTS."
+      else
+        echo "Too many failed attempts, root won't have a password."
+        echo "Note: You can set one manually by running \"chroot $mountPoint passwd\"."
+      fi
+    done
 fi
 
 
