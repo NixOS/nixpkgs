@@ -246,6 +246,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
+    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -742,6 +743,11 @@ let
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
+    });
+
+    data_table = old.data_table.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
     });
 
     rpf = old.rpf.overrideDerivation (attrs: {
