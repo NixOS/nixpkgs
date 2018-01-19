@@ -2,11 +2,11 @@
 let
   inherit (stdenv) system;
 
-  version = "0.1.12";
+  version = "0.1.13";
 
   hashes = {
-    x86_64-linux = "1hxlavcxy374yypfamlkygjg662lhll8j434qcvdawkvlidg5ii5";
-    x86_64-darwin = "1jkvhh710gwjnnjx59kaplx2ncfvkx9agfa76rr94sbjqq4igddm";
+    x86_64-linux = "1znv8hm4z4bfb6kncf95jv6h20qkmz3yhhr8f4vz2wamynklm9pr";
+    x86_64-darwin = "0hcib4yli216qknjv7r2w8afakhl9yj19yyppp12c1p4pxhr1qr6";
   };
   hash = hashes. ${system} or badSystem;
 
