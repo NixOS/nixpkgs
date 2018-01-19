@@ -36,71 +36,8 @@ let
         else toString value);
     mkEntry = name: value: "${escape name} =${mkVal value}";
   in
-    concatStringsSep "\n" (mapAttrsToList mkEntry (recursiveUpdate defaultConf cfg.config))
+    concatStringsSep "\n" (mapAttrsToList mkEntry cfg.config)
       + "\n" + cfg.extraConfig;
-
-  defaultConf = {
-    compatibility_level  = "9999";
-    mail_owner           = user;
-    default_privs        = "nobody";
-
-    # NixOS specific locations
-    data_directory       = "/var/lib/postfix/data";
-    queue_directory      = "/var/lib/postfix/queue";
-
-    # Default location of everything in package
-    meta_directory       = "${pkgs.postfix}/etc/postfix";
-    command_directory    = "${pkgs.postfix}/bin";
-    sample_directory     = "/etc/postfix";
-    newaliases_path      = "${pkgs.postfix}/bin/newaliases";
-    mailq_path           = "${pkgs.postfix}/bin/mailq";
-    readme_directory     = false;
-    sendmail_path        = "${pkgs.postfix}/bin/sendmail";
-    daemon_directory     = "${pkgs.postfix}/libexec/postfix";
-    manpage_directory    = "${pkgs.postfix}/share/man";
-    html_directory       = "${pkgs.postfix}/share/postfix/doc/html";
-    shlib_directory      = false;
-    relayhost            = if cfg.relayHost == "" then "" else
-                             if cfg.lookupMX
-                             then "${cfg.relayHost}:${toString cfg.relayPort}"
-                             else "[${cfg.relayHost}]:${toString cfg.relayPort}";
-
-    mail_spool_directory = "/var/spool/mail/";
-    setgid_group         = setgidGroup;
-  }
-  // optionalAttrs config.networking.enableIPv6 { inet_protocols = "all"; }
-  // optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
-  // optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
-  // optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
-  // optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
-  // optionalAttrs (cfg.origin != "") { myorigin =  cfg.origin; }
-  // optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
-  // optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
-  // optionalAttrs (cfg.recipientDelimiter != "") { recipient_delimiter = cfg.recipientDelimiter; }
-  // optionalAttrs haveAliases { alias_maps = "${cfg.aliasMapType}:/etc/postfix/aliases"; }
-  // optionalAttrs haveTransport { transport_maps = "hash:/etc/postfix/transport"; }
-  // optionalAttrs haveVirtual { virtual_alias_maps = "${cfg.virtualMapType}:/etc/postfix/virtual"; }
-  // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
-  // optionalAttrs cfg.useSrs {
-    sender_canonical_maps = "tcp:127.0.0.1:10001";
-    sender_canonical_classes = "envelope_sender";
-    recipient_canonical_maps = "tcp:127.0.0.1:10002";
-    recipient_canonical_classes= "envelope_recipient";
-  }
-  // optionalAttrs cfg.enableHeaderChecks { header_checks = "regexp:/etc/postfix/header_checks"; }
-  // optionalAttrs (cfg.sslCert != "") {
-    smtp_tls_CAfile = cfg.sslCACert;
-    smtp_tls_cert_file = cfg.sslCert;
-    smtp_tls_key_file = cfg.sslKey;
-
-    smtp_use_tls = true;
-
-    smtpd_tls_CAfile = cfg.sslCACert;
-    smtpd_tls_cert_file = cfg.sslCert;
-    smtpd_tls_key_file = cfg.sslKey;
-
-    smtpd_use_tls = true;
-  };
 
   masterCfOptions = { options, config, name, ... }: {
     options = {
@@ -507,7 +444,6 @@ in
 
       config = mkOption {
         type = with types; attrsOf (either bool (either str (listOf str)));
-        default = defaultConf;
         description = ''
           The main.cf configuration file as key value set.
         '';
@@ -748,6 +684,67 @@ in
             ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
+
+      services.postfix.config = (mapAttrs (_: v: mkDefault v) {
+        compatibility_level  = "9999";
+        mail_owner           = cfg.user;
+        default_privs        = "nobody";
+
+        # NixOS specific locations
+        data_directory       = "/var/lib/postfix/data";
+        queue_directory      = "/var/lib/postfix/queue";
+
+        # Default location of everything in package
+        meta_directory       = "${pkgs.postfix}/etc/postfix";
+        command_directory    = "${pkgs.postfix}/bin";
+        sample_directory     = "/etc/postfix";
+        newaliases_path      = "${pkgs.postfix}/bin/newaliases";
+        mailq_path           = "${pkgs.postfix}/bin/mailq";
+        readme_directory     = false;
+        sendmail_path        = "${pkgs.postfix}/bin/sendmail";
+        daemon_directory     = "${pkgs.postfix}/libexec/postfix";
+        manpage_directory    = "${pkgs.postfix}/share/man";
+        html_directory       = "${pkgs.postfix}/share/postfix/doc/html";
+        shlib_directory      = false;
+        mail_spool_directory = "/var/spool/mail/";
+        setgid_group         = cfg.setgidGroup;
+      })
+      // optionalAttrs (cfg.relayHost != "") { relayhost = if cfg.lookupMX
+                                                           then "${cfg.relayHost}:${toString cfg.relayPort}"
+                                                           else "[${cfg.relayHost}]:${toString cfg.relayPort}"; }
+      // optionalAttrs config.networking.enableIPv6 { inet_protocols = mkDefault "all"; }
+      // optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
+      // optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
+      // optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
+      // optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
+      // optionalAttrs (cfg.origin != "") { myorigin =  cfg.origin; }
+      // optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
+      // optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
+      // optionalAttrs (cfg.recipientDelimiter != "") { recipient_delimiter = cfg.recipientDelimiter; }
+      // optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
+      // optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
+      // optionalAttrs haveVirtual { virtual_alias_maps = [ "${cfg.virtualMapType}:/etc/postfix/virtual" ]; }
+      // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
+      // optionalAttrs cfg.useSrs {
+        sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
+        sender_canonical_classes = [ "envelope_sender" ];
+        recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
+        recipient_canonical_classes = [ "envelope_recipient" ];
+      }
+      // optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
+      // optionalAttrs (cfg.sslCert != "") {
+        smtp_tls_CAfile = cfg.sslCACert;
+        smtp_tls_cert_file = cfg.sslCert;
+        smtp_tls_key_file = cfg.sslKey;
+
+        smtp_use_tls = true;
+
+        smtpd_tls_CAfile = cfg.sslCACert;
+        smtpd_tls_cert_file = cfg.sslCert;
+        smtpd_tls_key_file = cfg.sslKey;
+
+        smtpd_use_tls = true;
+      };
 
       services.postfix.masterConfig = {
         smtp_inet = {
