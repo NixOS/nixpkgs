@@ -14,7 +14,10 @@ let
       ++ optional (debug != null)
           (if debug then "CONFIG+=debug" else "CONFIG+=release");
 
-    NIX_CFLAGS_COMPILE = optional (debug != null) "-DQT_NO_DEBUG";
+    NIX_CFLAGS_COMPILE =
+      let arg = args.NIX_CFLAGS_COMPILE or []; in
+      optional (debug == true) "-DQT_NO_DEBUG"
+      ++ (if builtins.isList arg then arg else [arg]);
 
     cmakeFlags =
       (args.cmakeFlags or [])
