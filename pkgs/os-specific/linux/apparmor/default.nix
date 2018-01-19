@@ -2,13 +2,16 @@
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, pythonPackages
+, python3Packages
+, gawk
 , perl
 , swig
+, ncurses
 , pam
 }:
 
 let
+  python = python3Packages.python;
 
   apparmor-series = "2.12";
   apparmor-patchver = "0";
@@ -46,12 +49,13 @@ let
       flex
       pkgconfig
       swig
+      ncurses
       which
     ];
 
     buildInputs = [
       perl
-      pythonPackages.python
+      python
     ];
 
     # required to build apparmor-parser
@@ -61,7 +65,6 @@ let
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
     '';
-
     postPatch = "cd ./libraries/libapparmor";
     configureFlags = "--with-python --with-perl";
 
@@ -83,7 +86,7 @@ let
 
     buildInputs = [
       perl
-      pythonPackages.python
+      python
       libapparmor
       libapparmor.python
     ];
@@ -95,7 +98,7 @@ let
 
     postInstall = ''
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${pythonPackages.python.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
       for prog in aa-notify ; do
@@ -104,6 +107,29 @@ let
     '';
 
     meta = apparmor-meta "user-land utilities";
+  };
+
+  apparmor-bin-utils = stdenv.mkDerivation {
+    name = "apparmor-bin-utils-${apparmor-version}";
+    src = apparmor-sources;
+
+    nativeBuildInputs = [
+      pkgconfig
+      libapparmor
+      gawk
+      which
+    ];
+
+    buildInputs = [
+      libapparmor
+    ];
+
+    prePatch = prePatchCommon;
+    postPatch = "cd ./binutils";
+    makeFlags = ''LANGS= USE_SYSTEM=1'';
+    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin'';
+
+    meta = apparmor-meta "binary user-land utilities";
   };
 
   apparmor-parser = stdenv.mkDerivation {
@@ -172,6 +198,12 @@ let
 in
 
 {
-  inherit libapparmor apparmor-utils apparmor-parser apparmor-pam
-  apparmor-profiles apparmor-kernel-patches;
+  inherit
+    libapparmor
+    apparmor-utils
+    apparmor-bin-utils
+    apparmor-parser
+    apparmor-pam
+    apparmor-profiles
+    apparmor-kernel-patches;
 }
