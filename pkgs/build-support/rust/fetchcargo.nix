@@ -21,9 +21,8 @@ stdenv.mkDerivation {
 
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
 
-    cargo vendor
-
-    cp -ar vendor $out
+    mkdir -p "$out"
+    cargo vendor "$out/sources" | sed "s|$out|@out@|g" > "$out/config"
   '';
 
   outputHashAlgo = "sha256";

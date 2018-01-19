@@ -32,7 +32,7 @@ rec {
   cargo = callPackage ./cargo.nix rec {
     version = "0.23.0";
     srcSha = "14b2n1msxma19ydchj54hd7f2zdsr524fg133dkmdn7j65f1x6aj";
-    cargoSha256 = "1sj59z0w172qvjwg1ma5fr5am9dgw27086xwdnrvlrk4hffcr7y7";
+    cargoSha256 = "0m0dvm2zpr0ca8nqxy4aqfz4gq8bljqzl5wic897ggp5gjjn1iab";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

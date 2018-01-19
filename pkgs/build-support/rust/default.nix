@@ -48,14 +48,7 @@ in stdenv.mkDerivation (args // {
     chmod -R +w "$cargoDepsCopy"
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
-
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
-    EOF
+    substitute "$cargoDeps/config" .cargo/config --subst-var-by out "$cargoDeps"
 
     unset cargoDepsCopy
 
