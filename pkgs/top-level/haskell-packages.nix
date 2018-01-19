@@ -25,10 +25,14 @@ let
     inherit pkgs;
   };
 
+  haskellDevelEnv = import ../development/haskell-modules/devel-env.nix;
+
   callPackage = newScope { inherit haskellLib; };
 
 in rec {
   lib = haskellLib;
+
+  devel = haskellDevelEnv { inherit pkgs; inherit packages; };
 
   compiler = {
 

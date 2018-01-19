@@ -173,6 +173,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
             (extensible-self.extend (pkgs.lib.composeExtensions (self.packageSourceOverrides source-overrides) overrides)).callCabal2nix name root {};
       in if pkgs.lib.inNixShell then drv.env else drv;
 
+    extendHaskellPackages = { source-overrides ? {}, overrides ? super: {} }:
+      extensible-self.extend (pkgs.lib.composeExtensions (self.packageSourceOverrides source-overrides) (self: overrides));
+
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
     ghcWithHoogle = selectFrom:

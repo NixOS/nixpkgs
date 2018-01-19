@@ -397,6 +397,11 @@ stdenv.mkDerivation ({
         ${shellHook}
       '';
     };
+
+    export = {
+      inherit haskellBuildInputs systemBuildInputs;
+      pnames = [pname];
+    };
   };
 
   meta = { inherit homepage license platforms; }
