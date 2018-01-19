@@ -32,8 +32,6 @@ assert !enableIntegerSimple -> gmp != null;
 let
   inherit (bootPkgs) ghc;
 
-  rev = "3e3a096885c0fcd0703edbeffb4e47f5cbd8f4cc";
-
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
@@ -69,12 +67,13 @@ let
 
 in
 stdenv.mkDerivation rec {
-  inherit version rev;
+  inherit version;
+  inherit (src) rev;
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    inherit rev;
+    rev = "3e3a096885c0fcd0703edbeffb4e47f5cbd8f4cc";
     sha256 = "06slymbsd7vsfp4hh40v7cxf7nmp0kvlni2wfq7ag5wlqh04slgs";
   };
 
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
 
     echo -n "${buildMK}" > mk/build.mk
     echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
+    echo ${src.rev} >GIT_COMMIT_ID
     ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
