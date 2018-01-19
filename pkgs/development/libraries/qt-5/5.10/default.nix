@@ -24,7 +24,7 @@ top-level attribute to `top-level/all-packages.nix`.
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;

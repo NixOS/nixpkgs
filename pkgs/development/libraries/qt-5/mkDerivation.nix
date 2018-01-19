@@ -11,20 +11,18 @@ let
 
     qmakeFlags =
       (args.qmakeFlags or [])
-      ++ optional (debug != null)
-          (if debug then "CONFIG+=debug" else "CONFIG+=release");
+      ++ [ ("CONFIG+=" + (if debug then "debug" else "release")) ];
 
     NIX_CFLAGS_COMPILE =
-      let arg = args.NIX_CFLAGS_COMPILE or []; in
-      optional (debug == true) "-DQT_NO_DEBUG"
-      ++ (if builtins.isList arg then arg else [arg]);
+      optional (!debug) "-DQT_NO_DEBUG"
+      ++ lib.toList (args.NIX_CFLAGS_COMPILE or []);
 
     cmakeFlags =
       (args.cmakeFlags or [])
-      ++ [ "-DBUILD_TESTING=OFF" ]
-      ++ optional (debug != null)
-          (if debug then "-DCMAKE_BUILD_TYPE=Debug"
-                    else "-DCMAKE_BUILD_TYPE=Release");
+      ++ [
+        "-DBUILD_TESTING=OFF"
+        ("-DCMAKE_BUILD_TYPE=" + (if debug then "Debug" else "Release"))
+      ];
 
     enableParallelBuilding = args.enableParallelBuilding or true;
 
