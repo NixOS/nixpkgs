@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
