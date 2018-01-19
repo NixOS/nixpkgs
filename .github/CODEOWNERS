@@ -20,9 +20,9 @@
 /pkgs/top-level/impure.nix            @nbp @Ericson2314
 /pkgs/top-level/stage.nix             @nbp @Ericson2314
 /pkgs/stdenv
-/pkgs/build-support/cc-wrapper        @Ericson2314
-/pkgs/build-support/bintools-wrapper  @Ericson2314
-/pkgs/build-support/setup-hooks        @Ericson2314
+/pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
+/pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
+/pkgs/build-support/setup-hooks       @Ericson2314
 
 # NixOS Internals
 /nixos/default.nix          @nbp
