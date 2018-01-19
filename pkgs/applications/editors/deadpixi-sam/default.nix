@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.mk.def \
-      --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2"
+      --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2" \
+      --replace "CC=gcc" ""
   '';
 
+  CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [ libX11 libXt libXft ];
 
@@ -31,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Updated version of the sam text editor";
     license = with licenses; lpl-102;
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }
