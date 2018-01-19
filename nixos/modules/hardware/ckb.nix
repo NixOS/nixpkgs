@@ -10,6 +10,15 @@ in
     options.hardware.ckb = {
       enable = mkEnableOption "the Corsair keyboard/mouse driver";
 
+      gid = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 100;
+        description = ''
+          Limit access to the ckb daemon to a particular group.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.ckb;
@@ -26,7 +35,7 @@ in
       systemd.services.ckb = {
         description = "Corsair Keyboard Daemon";
         wantedBy = ["multi-user.target"];
-        script = "${cfg.package}/bin/ckb-daemon";
+        script = "${cfg.package}/bin/ckb-daemon${optionalString (cfg.gid != null) " --gid=${builtins.toString cfg.gid}"}";
         serviceConfig = {
           Restart = "always";
           StandardOutput = "syslog";
