@@ -27,12 +27,12 @@
 
 }:
 let
-    images = {
-        "armv7l-linux" = "https://build.anbox.io/android-images/2017/06/12/android_1_armhf.img";
-        "aarch64-linux" = "https://build.anbox.io/android-images/2017/08/04/android_1_arm64.img";
-        "x86_64-linux" = "https://build.anbox.io/android-images/2017/07/13/android_3_amd64.img";
-    };
-    version = "2018-01-06";
+  images = {
+    "armv7l-linux" = "https://build.anbox.io/android-images/2017/06/12/android_1_armhf.img";
+    "aarch64-linux" = "https://build.anbox.io/android-images/2017/08/04/android_1_arm64.img";
+    "x86_64-linux" = "https://build.anbox.io/android-images/2017/07/13/android_3_amd64.img";
+  };
+  version = "2018-01-06";
 in
 stdenv.mkDerivation {
   name = "anbox-${version}";
@@ -53,6 +53,8 @@ stdenv.mkDerivation {
     SDL2 SDL2_image
   ];
 
+  # see https://github.com/volth/nixpkgs/blob/5591b05bd5986ad94df34973841558a64c78fe98/pkgs/applications/virtualization/anbox/default.nix#L21
+  # regarding gmock
   patchPhase = ''
     sed -i '/GMock/d' CMakeLists.txt
 
