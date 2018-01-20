@@ -9795,24 +9795,6 @@ in {
 
   jedi = callPackage ../development/python-modules/jedi { };
 
-  jellyfish = buildPythonPackage rec {
-    version = "0.5.2";
-    name = "jellyfish-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
-    };
-
-    buildInputs = with self; [ pytest unicodecsv ];
-
-    meta = {
-      homepage = https://github.com/sunlightlabs/jellyfish;
-      description = "Approximate and phonetic matching of strings";
-      maintainers = with maintainers; [ koral ];
-    };
-  };
-
   j2cli = buildPythonPackage rec {
     name = "j2cli-${version}";
     version = "0.3.1-0";
@@ -23238,6 +23220,10 @@ EOF
   ephem = callPackage ../development/python-modules/ephem { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
+
+  jellyfish = callPackage ../development/python-modules/jellyfish { };
+
+  us = callPackage ../development/python-modules/us { };
 });
 
 in fix' (extends overrides packages)
