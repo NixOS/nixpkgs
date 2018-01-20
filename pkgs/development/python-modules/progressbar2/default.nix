@@ -14,6 +14,7 @@
 , pytestcov
 , pytestcache
 , pep8
+, pytestrunner
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ python-utils ];
+  nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
     pytest sphinx coverage execnet flake8 pytestpep8 pytestflakes pytestcov
     pytestcache pep8
@@ -37,7 +39,7 @@ buildPythonPackage rec {
   # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} setup.py test --addopts "--ignore=nix_run_setup.py --ignore=.eggs"
+    ${python.interpreter} setup.py test --addopts "--ignore=.eggs"
     runHook postCheck
   '';
 

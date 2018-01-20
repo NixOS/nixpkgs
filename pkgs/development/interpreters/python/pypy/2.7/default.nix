@@ -139,6 +139,6 @@ in stdenv.mkDerivation rec {
     description = "Fast, compliant alternative implementation of the Python language (2.7.13)";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }
