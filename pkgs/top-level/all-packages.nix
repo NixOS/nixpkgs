@@ -13202,6 +13202,8 @@ with pkgs;
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
+    tmon = callPackage ../os-specific/linux/tmon { };
+
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     usbip = callPackage ../os-specific/linux/usbip { };
