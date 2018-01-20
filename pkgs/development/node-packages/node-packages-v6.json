@@ -9,6 +9,7 @@
 , "clean-css"
 , "coffee-script"
 , "coinmon"
+, "configurable-http-proxy"
 , "cordova"
 , "csslint"
 , "dat"

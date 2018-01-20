@@ -6493,6 +6493,78 @@ let
         sha1 = "e667783d92e89dbd342818b5230b9d62a672ad18";
       };
     };
+    "http-proxy-1.16.2" = {
+      name = "http-proxy";
+      packageName = "http-proxy";
+      version = "1.16.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/http-proxy/-/http-proxy-1.16.2.tgz";
+        sha1 = "06dff292952bf64dbe8471fa9df73066d4f37742";
+      };
+    };
+    "lynx-0.2.0" = {
+      name = "lynx";
+      packageName = "lynx";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lynx/-/lynx-0.2.0.tgz";
+        sha1 = "79e6674530da4183e87953bd686171e070da50b9";
+      };
+    };
+    "strftime-0.10.0" = {
+      name = "strftime";
+      packageName = "strftime";
+      version = "0.10.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/strftime/-/strftime-0.10.0.tgz";
+        sha1 = "b3f0fa419295202a5a289f6d6be9f4909a617193";
+      };
+    };
+    "winston-2.4.0" = {
+      name = "winston";
+      packageName = "winston";
+      version = "2.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/winston/-/winston-2.4.0.tgz";
+        sha1 = "808050b93d52661ed9fb6c26b3f0c826708b0aee";
+      };
+    };
+    "eventemitter3-1.2.0" = {
+      name = "eventemitter3";
+      packageName = "eventemitter3";
+      version = "1.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/eventemitter3/-/eventemitter3-1.2.0.tgz";
+        sha1 = "1c86991d816ad1e504750e73874224ecf3bec508";
+      };
+    };
+    "requires-port-1.0.0" = {
+      name = "requires-port";
+      packageName = "requires-port";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz";
+        sha1 = "925d2601d39ac485e091cf0da5c6e694dc3dcaff";
+      };
+    };
+    "mersenne-0.0.4" = {
+      name = "mersenne";
+      packageName = "mersenne";
+      version = "0.0.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/mersenne/-/mersenne-0.0.4.tgz";
+        sha1 = "401fdec7ec21cdb9e03cd3d3021398da21b27085";
+      };
+    };
+    "statsd-parser-0.0.4" = {
+      name = "statsd-parser";
+      packageName = "statsd-parser";
+      version = "0.0.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/statsd-parser/-/statsd-parser-0.0.4.tgz";
+        sha1 = "cbd243953cc42effd548b5d22388ed689ec639bd";
+      };
+    };
     "configstore-2.1.0" = {
       name = "configstore";
       packageName = "configstore";
@@ -14929,33 +15001,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/sax/-/sax-1.1.4.tgz";
         sha1 = "74b6d33c9ae1e001510f179a91168588f1aedaa9";
-      };
-    };
-    "http-proxy-1.16.2" = {
-      name = "http-proxy";
-      packageName = "http-proxy";
-      version = "1.16.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/http-proxy/-/http-proxy-1.16.2.tgz";
-        sha1 = "06dff292952bf64dbe8471fa9df73066d4f37742";
-      };
-    };
-    "eventemitter3-1.2.0" = {
-      name = "eventemitter3";
-      packageName = "eventemitter3";
-      version = "1.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/eventemitter3/-/eventemitter3-1.2.0.tgz";
-        sha1 = "1c86991d816ad1e504750e73874224ecf3bec508";
-      };
-    };
-    "requires-port-1.0.0" = {
-      name = "requires-port";
-      packageName = "requires-port";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz";
-        sha1 = "925d2601d39ac485e091cf0da5c6e694dc3dcaff";
       };
     };
     "lodash.assign-3.2.0" = {
@@ -25127,15 +25172,6 @@ let
         sha1 = "3361a3971567504c351063abeaae0faa23dbf3f8";
       };
     };
-    "winston-2.4.0" = {
-      name = "winston";
-      packageName = "winston";
-      version = "2.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/winston/-/winston-2.4.0.tgz";
-        sha1 = "808050b93d52661ed9fb6c26b3f0c826708b0aee";
-      };
-    };
     "color-string-1.5.2" = {
       name = "color-string";
       packageName = "color-string";
@@ -28408,6 +28444,39 @@ in
       description = "A cryptocurrency price monitoring tool";
       homepage = "https://github.com/bichenkk/coinmon#readme";
       license = "MIT";
+    };
+    production = true;
+  };
+  configurable-http-proxy = nodeEnv.buildNodePackage {
+    name = "configurable-http-proxy";
+    packageName = "configurable-http-proxy";
+    version = "3.1.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/configurable-http-proxy/-/configurable-http-proxy-3.1.1.tgz";
+      sha512 = "13wdwd1dgc2laqsv0mjz91pz1mmfy0c0ihbgvmd4lqi6v5gas17cp85885nkdz2y5w87yizqlb2w4l04bbxwvcw6spaq2aw5q3z3rvv";
+    };
+    dependencies = [
+      sources."commander-2.13.0"
+      sources."http-proxy-1.16.2"
+      sources."lynx-0.2.0"
+      sources."strftime-0.10.0"
+      sources."winston-2.4.0"
+      sources."eventemitter3-1.2.0"
+      sources."requires-port-1.0.0"
+      sources."mersenne-0.0.4"
+      sources."statsd-parser-0.0.4"
+      sources."async-1.0.0"
+      sources."colors-1.0.3"
+      sources."cycle-1.0.3"
+      sources."eyes-0.1.8"
+      sources."isstream-0.1.2"
+      sources."stack-trace-0.0.10"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A configurable-on-the-fly HTTP Proxy";
+      homepage = "https://github.com/jupyterhub/configurable-http-proxy#readme";
+      license = "BSD-3-Clause";
     };
     production = true;
   };
