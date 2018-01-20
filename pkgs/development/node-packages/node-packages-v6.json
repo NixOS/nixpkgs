@@ -51,6 +51,7 @@
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lerna"
 , "less"
+, "less-plugin-clean-css"
 , "lcov-result-merger"
 , "livedown"
 , "live-server"

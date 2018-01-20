@@ -32903,6 +32903,28 @@ in
     };
     production = true;
   };
+  less-plugin-clean-css = nodeEnv.buildNodePackage {
+    name = "less-plugin-clean-css";
+    packageName = "less-plugin-clean-css";
+    version = "1.5.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/less-plugin-clean-css/-/less-plugin-clean-css-1.5.1.tgz";
+      sha1 = "cc57af7aa3398957e56decebe63cb60c23429703";
+    };
+    dependencies = [
+      sources."clean-css-3.4.28"
+      sources."commander-2.8.1"
+      sources."source-map-0.4.4"
+      sources."graceful-readlink-1.0.1"
+      sources."amdefine-1.0.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "clean-css plugin for less.js";
+      homepage = http://lesscss.org/;
+    };
+    production = true;
+  };
   lcov-result-merger = nodeEnv.buildNodePackage {
     name = "lcov-result-merger";
     packageName = "lcov-result-merger";
