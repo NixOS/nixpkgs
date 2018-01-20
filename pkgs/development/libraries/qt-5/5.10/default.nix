@@ -24,7 +24,7 @@ top-level attribute to `top-level/all-packages.nix`.
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;
@@ -37,7 +37,7 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ];
+    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];

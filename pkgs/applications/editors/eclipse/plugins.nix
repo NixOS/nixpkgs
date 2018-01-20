@@ -20,20 +20,32 @@ rec {
 
   # Helper for the common case where we have separate feature and
   # plugin JARs.
-  buildEclipsePlugin = { name, srcFeature, srcPlugin, ... } @ attrs:
-    buildEclipsePluginBase (attrs // {
-      srcs = [ srcFeature srcPlugin ];
+  buildEclipsePlugin =
+    { name, srcFeature, srcPlugin ? null, srcPlugins ? [], ... } @ attrs:
+      assert srcPlugin == null -> srcPlugins != [];
+      assert srcPlugin != null -> srcPlugins == [];
 
-      buildCommand = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+      let
 
-        mkdir -p $dropinDir/features
-        unzip ${srcFeature} -d $dropinDir/features/
+        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
 
-        mkdir -p $dropinDir/plugins
-        cp -v ${srcPlugin} $dropinDir/plugins/${name}.jar
-      '';
-    });
+      in
+
+        buildEclipsePluginBase (attrs // {
+          srcs = [ srcFeature ] ++ pSrcs;
+
+          buildCommand = ''
+            dropinDir="$out/eclipse/dropins/${name}"
+
+            mkdir -p $dropinDir/features
+            unzip ${srcFeature} -d $dropinDir/features/
+
+            mkdir -p $dropinDir/plugins
+            for plugin in ${toString pSrcs}; do
+              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+            done
+          '';
+        });
 
   # Helper for the case where the build directory has the layout of an
   # Eclipse update site, that is, it contains the directories
@@ -120,6 +132,29 @@ rec {
       homepage = "https://mihai-nita.net/java/#ePluginAEC";
       description = "Adds support for ANSI escape sequences in the Eclipse console";
       license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  antlr-runtime_4_5 = buildEclipsePluginBase rec {
+    name = "antlr-runtime-4.5.3";
+
+    src = fetchurl {
+      url = "http://www.antlr.org/download/${name}.jar";
+      sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
+    };
+
+    buildCommand = ''
+      dropinDir="$out/eclipse/dropins/"
+      mkdir -p $dropinDir
+      cp -v $src $dropinDir/${name}.jar
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A powerful parser generator for processing structured text or binary files";
+      homepage = http://www.antlr.org/;
+      license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
     };
@@ -256,7 +291,7 @@ rec {
     };
   };
 
-  cup = buildEclipsePluginBase rec {
+  cup = buildEclipsePlugin rec {
     name = "cup-${version}";
     version = "1.1.0.201604221613";
     version_ = "1.0.0.201604221613";
@@ -266,30 +301,19 @@ rec {
       sha256 = "13nnsf0cqg02z3af6xg45rhcgiffsibxbx6h1zahjv7igvqgkyna";
     };
 
-    srcPlugin1 = fetchurl {
-      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
-      sha256 = "0kif8kivrysprva1pxzajm88gi967qf7idhb6ga2xpvsdcris91j";
-    };
+    srcPlugins = [
+      (fetchurl {
+        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
+        sha256 = "0kif8kivrysprva1pxzajm88gi967qf7idhb6ga2xpvsdcris91j";
+      })
 
-    srcPlugin2 = fetchurl {
-      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
-      sha256 = "022phbrsny3gb8npb6sxyqqxacx138q5bd7dq3gqxh3kprx5chbl";
-    };
-
-    srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
+      (fetchurl {
+        url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+        sha256 = "022phbrsny3gb8npb6sxyqqxacx138q5bd7dq3gqxh3kprx5chbl";
+      })
+    ];
 
     propagatedBuildInputs = [ zest ];
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''
-      dropinDir="$out/eclipse/dropins/${name}"
-      mkdir -p $dropinDir/features
-      unzip ${srcFeature} -d $dropinDir/features/
-      mkdir -p $dropinDir/plugins
-      cp -v ${srcPlugin1} $dropinDir/plugins/''${srcPlugin1#*-}
-      cp -v ${srcPlugin2} $dropinDir/plugins/''${srcPlugin2#*-}
-    '';
 
     meta = with stdenv.lib; {
       homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
@@ -380,6 +404,44 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+  jsonedit = buildEclipsePlugin rec {
+    name = "jsonedit-${version}";
+    version = "1.0.1";
+
+    srcFeature = fetchurl {
+      url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
+      sha256 = "19221409wzcsrlm2fqf6mrxzb5ip1x6y5ba8anw788p7aaz1w30k";
+    };
+
+    srcPlugins =
+      let
+        fetch = { n, h }:
+          fetchurl {
+            url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
+            sha256 = h;
+          };
+      in
+        map fetch [
+          { n = "core"; h = "05ipjbh9yz97zhqaqq6cja3zz44n0dn40ms13qnlgf4bxyaf0f6w"; }
+          { n = "editor"; h = "1i71rh2fd5hsx6gygnafz2gjz4hlb0ckazxn0maxmnlx4p5apjql"; }
+          { n = "folding"; h = "13p8vqdna23ln82w1jgchm59375f1ky0p2b1v7jih55yfhw1ymam"; }
+          { n = "model"; h = "0llswhsd58f0rjb9canjncavq4z7q8zidn26yl5gradbbz580p6w"; }
+          { n = "outline"; h = "1rs8g0iv2kklbl7j0p6nr26m6ii89yyr9bpi05mh21xva40pzkl5"; }
+          { n = "preferences"; h = "0vs074ahhiba7if43ryf9m8xd81sqj9grppy0pzcnkkdkbk870n0"; }
+          { n = "text"; h = "0nqpzjw8hhvh9jlpldpmcmg83a170wjdabgsvjq207j12jkvfiqq"; }
+        ];
+
+    propagatedBuildInputs = [ antlr-runtime_4_5 ];
+
+    meta = with stdenv.lib; {
+      description = "Adds support for JSON files to Eclipse";
+      homepage = https://github.com/boothen/Json-Eclipse-Plugin;
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
     };
   };
 
