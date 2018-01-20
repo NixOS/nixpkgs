@@ -3396,16 +3396,15 @@ in {
 
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
-    version = "0.10.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tablib/tablib-${version}.tar.gz";
-      sha256 = "14wc8bmz60g35r6gsyhdzfvgfqpd3gw9lfkq49z5bxciykbxmhj1";
+      sha256 = "11wxchj0qz77dn79yiq30k4b4gsm429f4bizk4lm4rb63nk51kxq";
     };
 
-    buildInputs = with self; [ pytest ];
-
-    disabled = isPy3k;
+    buildInputs = with self; [ pytest unicodecsv pandas ];
+    propagatedBuildInputs = with self; [ xlwt openpyxl pyyaml xlrd odfpy ];
 
     meta = with stdenv.lib; {
       description = "Tablib: format-agnostic tabular dataset library";
