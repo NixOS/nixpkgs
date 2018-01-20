@@ -16746,39 +16746,8 @@ in {
     };
   };
 
-  secp256k1 = buildPythonPackage rec {
-    name = "secp256k1-${version}";
-    version = "0.12.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/secp256k1/${name}.tar.gz";
-      sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
-    };
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ self.pytest_28 self.pytestrunner ];
-    propagatedBuildInputs = [ self.cffi pkgs.secp256k1 ];
-
-    # Tests are not included in archive
-    doCheck = false;
-
-    preConfigure = ''
-      cp -r ${pkgs.secp256k1.src} libsecp256k1
-      touch libsecp256k1/autogen.sh
-      export INCLUDE_DIR=${pkgs.secp256k1}/include
-      export LIB_DIR=${pkgs.secp256k1}/lib
-    '';
-
-    checkPhase = ''
-      py.test tests
-    '';
-
-    meta = {
-      homepage = https://github.com/ludbb/secp256k1-py;
-      description = "Python FFI bindings for secp256k1";
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ chris-martin ];
-    };
+  secp256k1 = callPackage ../development/python-modules/secp256k1 {
+    inherit (pkgs) secp256k1 pkgconfig;
   };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
