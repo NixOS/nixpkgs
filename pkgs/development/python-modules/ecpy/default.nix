@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "ECPy";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0509a90714448ef47ef727cb7aee3415995c883c945e972521b5838fa4c50e24";
+    sha256 = "ef3d95419d53368f52fb7d4b883b8df0dfc2dd19a76243422d24981c3e5f27bd";
   };
 
   buildInputs = [ hidapi pycrypto pillow protobuf future ];
