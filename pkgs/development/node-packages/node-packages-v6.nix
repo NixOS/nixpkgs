@@ -18423,6 +18423,78 @@ let
         sha1 = "f012ccb8415b7096fc2daa1054c3d72389594c73";
       };
     };
+    "image-size-0.5.5" = {
+      name = "image-size";
+      packageName = "image-size";
+      version = "0.5.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/image-size/-/image-size-0.5.5.tgz";
+        sha1 = "09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c";
+      };
+    };
+    "request-2.81.0" = {
+      name = "request";
+      packageName = "request";
+      version = "2.81.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/request/-/request-2.81.0.tgz";
+        sha1 = "c6928946a0e06c5f8d6f8a9333469ffda46298a0";
+      };
+    };
+    "har-validator-4.2.1" = {
+      name = "har-validator";
+      packageName = "har-validator";
+      version = "4.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz";
+        sha1 = "33481d0f1bbff600dd203d75812a6a5fba002e2a";
+      };
+    };
+    "performance-now-0.2.0" = {
+      name = "performance-now";
+      packageName = "performance-now";
+      version = "0.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz";
+        sha1 = "33ef30c5c77d4ea21c5a53869d91b56d8f2555e5";
+      };
+    };
+    "qs-6.4.0" = {
+      name = "qs";
+      packageName = "qs";
+      version = "6.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/qs/-/qs-6.4.0.tgz";
+        sha1 = "13e26d28ad6b0ffaa91312cd3bf708ed351e7233";
+      };
+    };
+    "ajv-4.11.8" = {
+      name = "ajv";
+      packageName = "ajv";
+      version = "4.11.8";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ajv/-/ajv-4.11.8.tgz";
+        sha1 = "82ffb02b29e662ae53bdc20af15947706739c536";
+      };
+    };
+    "har-schema-1.0.5" = {
+      name = "har-schema";
+      packageName = "har-schema";
+      version = "1.0.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/har-schema/-/har-schema-1.0.5.tgz";
+        sha1 = "d263135f43307c02c602afc8fe95970c0151369e";
+      };
+    };
+    "json-stable-stringify-1.0.1" = {
+      name = "json-stable-stringify";
+      packageName = "json-stable-stringify";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz";
+        sha1 = "9a759d39c5f2ff503fd5300646ed445f88c4f9af";
+      };
+    };
     "vinyl-1.2.0" = {
       name = "vinyl";
       packageName = "vinyl";
@@ -18529,15 +18601,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/unique-stream/-/unique-stream-2.2.1.tgz";
         sha1 = "5aa003cfbe94c5ff866c4e7d668bb1c4dbadb369";
-      };
-    };
-    "json-stable-stringify-1.0.1" = {
-      name = "json-stable-stringify";
-      packageName = "json-stable-stringify";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz";
-        sha1 = "9a759d39c5f2ff503fd5300646ed445f88c4f9af";
       };
     };
     "markdown-it-8.4.0" = {
@@ -19206,15 +19269,6 @@ let
         sha512 = "2cwrivwc0ha272cly9r61bbb14kkl1s1hsmn53yr88b6pfjqj512nac6c5rphc6ak88v8gpl1f879qdd3v7386103zzr7miibpmbhis";
       };
     };
-    "request-2.81.0" = {
-      name = "request";
-      packageName = "request";
-      version = "2.81.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/request/-/request-2.81.0.tgz";
-        sha1 = "c6928946a0e06c5f8d6f8a9333469ffda46298a0";
-      };
-    };
     "detect-libc-1.0.3" = {
       name = "detect-libc";
       packageName = "detect-libc";
@@ -19231,51 +19285,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/tar-pack/-/tar-pack-3.4.1.tgz";
         sha512 = "0mgk8jd55vr7i3i29r1skhxwwbqkqfz6mbr32r5nn8h6v5xns8d2rc7835y7wj0zmppckxai7nm8r4s65kkg6yhirnwx33yixn75x1w";
-      };
-    };
-    "har-validator-4.2.1" = {
-      name = "har-validator";
-      packageName = "har-validator";
-      version = "4.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/har-validator/-/har-validator-4.2.1.tgz";
-        sha1 = "33481d0f1bbff600dd203d75812a6a5fba002e2a";
-      };
-    };
-    "performance-now-0.2.0" = {
-      name = "performance-now";
-      packageName = "performance-now";
-      version = "0.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/performance-now/-/performance-now-0.2.0.tgz";
-        sha1 = "33ef30c5c77d4ea21c5a53869d91b56d8f2555e5";
-      };
-    };
-    "qs-6.4.0" = {
-      name = "qs";
-      packageName = "qs";
-      version = "6.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/qs/-/qs-6.4.0.tgz";
-        sha1 = "13e26d28ad6b0ffaa91312cd3bf708ed351e7233";
-      };
-    };
-    "ajv-4.11.8" = {
-      name = "ajv";
-      packageName = "ajv";
-      version = "4.11.8";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-4.11.8.tgz";
-        sha1 = "82ffb02b29e662ae53bdc20af15947706739c536";
-      };
-    };
-    "har-schema-1.0.5" = {
-      name = "har-schema";
-      packageName = "har-schema";
-      version = "1.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/har-schema/-/har-schema-1.0.5.tgz";
-        sha1 = "d263135f43307c02c602afc8fe95970c0151369e";
       };
     };
     "fstream-ignore-1.0.5" = {
@@ -22628,15 +22637,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/httpolyglot/-/httpolyglot-0.1.2.tgz";
         sha1 = "e4d347fe8984a62f467d4060df527f1851f6997b";
-      };
-    };
-    "image-size-0.5.5" = {
-      name = "image-size";
-      packageName = "image-size";
-      version = "0.5.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/image-size/-/image-size-0.5.5.tgz";
-        sha1 = "09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c";
       };
     };
     "eventemitter2-3.0.2" = {
@@ -32822,6 +32822,84 @@ in
       description = "Tool for managing JavaScript projects with multiple packages";
       homepage = https://lernajs.io/;
       license = "MIT";
+    };
+    production = true;
+  };
+  less = nodeEnv.buildNodePackage {
+    name = "less";
+    packageName = "less";
+    version = "2.7.3";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/less/-/less-2.7.3.tgz";
+      sha512 = "04jbm6adzhknlcwjjdd94n8dhqwgsg0fyampis9854jf23z9g9lxs8593908ymwldl88bjipf9b9rw6xfibb29vv7s0c44wllj4ixr8";
+    };
+    dependencies = [
+      sources."errno-0.1.6"
+      sources."graceful-fs-4.1.11"
+      sources."image-size-0.5.5"
+      sources."mime-1.6.0"
+      sources."mkdirp-0.5.1"
+      sources."promise-7.3.1"
+      sources."source-map-0.5.7"
+      sources."request-2.81.0"
+      sources."prr-1.0.1"
+      sources."minimist-0.0.8"
+      sources."asap-2.0.6"
+      sources."aws-sign2-0.6.0"
+      sources."aws4-1.6.0"
+      sources."caseless-0.12.0"
+      sources."combined-stream-1.0.5"
+      sources."extend-3.0.1"
+      sources."forever-agent-0.6.1"
+      sources."form-data-2.1.4"
+      sources."har-validator-4.2.1"
+      sources."hawk-3.1.3"
+      sources."http-signature-1.1.1"
+      sources."is-typedarray-1.0.0"
+      sources."isstream-0.1.2"
+      sources."json-stringify-safe-5.0.1"
+      sources."mime-types-2.1.17"
+      sources."oauth-sign-0.8.2"
+      sources."performance-now-0.2.0"
+      sources."qs-6.4.0"
+      sources."safe-buffer-5.1.1"
+      sources."stringstream-0.0.5"
+      sources."tough-cookie-2.3.3"
+      sources."tunnel-agent-0.6.0"
+      sources."uuid-3.2.1"
+      sources."delayed-stream-1.0.0"
+      sources."asynckit-0.4.0"
+      sources."ajv-4.11.8"
+      sources."har-schema-1.0.5"
+      sources."co-4.6.0"
+      sources."json-stable-stringify-1.0.1"
+      sources."jsonify-0.0.0"
+      sources."hoek-2.16.3"
+      sources."boom-2.10.1"
+      sources."cryptiles-2.0.5"
+      sources."sntp-1.0.9"
+      sources."assert-plus-1.0.0"
+      sources."jsprim-1.4.1"
+      sources."sshpk-1.13.1"
+      sources."extsprintf-1.3.0"
+      sources."json-schema-0.2.3"
+      sources."verror-1.10.0"
+      sources."core-util-is-1.0.2"
+      sources."asn1-0.2.3"
+      sources."dashdash-1.14.1"
+      sources."getpass-0.1.7"
+      sources."jsbn-0.1.1"
+      sources."tweetnacl-0.14.5"
+      sources."ecc-jsbn-0.1.1"
+      sources."bcrypt-pbkdf-1.0.1"
+      sources."mime-db-1.30.0"
+      sources."punycode-1.4.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Leaner CSS";
+      homepage = http://lesscss.org/;
+      license = "Apache-2.0";
     };
     production = true;
   };

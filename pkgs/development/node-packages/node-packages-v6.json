@@ -50,6 +50,7 @@
 , "karma"
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lerna"
+, "less"
 , "lcov-result-merger"
 , "livedown"
 , "live-server"
