@@ -3,8 +3,6 @@
 buildPythonPackage rec {
   pname = "bpython";
   version = "0.17";
-  name  = "${pname}-${version}";
-
   # 0.17 is still missing on PyPI, https://github.com/bpython/bpython/issues/706
   src = fetchurl {
     url = "https://bpython-interpreter.org/releases/${pname}-${version}.tar.gz";
