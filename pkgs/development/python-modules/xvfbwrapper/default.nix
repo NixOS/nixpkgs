@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , xorgserver
+, mock
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,8 @@ buildPythonPackage rec {
     sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };
   propagatedBuildInputs = [ xorgserver ];
+
+  checkInputs = [ mock ];
 
   meta = with stdenv.lib; {
     description = "Run headless display inside X virtual framebuffer (Xvfb)";
