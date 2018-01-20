@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi
 , secretstorage
 , fs, gdata, python_keyczar, pyasn1, pycrypto, six, setuptools_scm
-, mock, pytest_28, pytestrunner }:
+, mock, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     fs gdata python_keyczar pyasn1 pycrypto six setuptools_scm
   ];
 
-  checkInputs = [ mock pytest_28 pytestrunner ];
+  checkInputs = [ mock pytest pytestrunner ];
 
   propagatedBuildInputs = [ secretstorage ];
 
