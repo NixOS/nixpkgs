@@ -13742,11 +13742,6 @@ in {
       export PYCURL_SSL_LIBRARY=openssl
     '';
 
-    #TODO no idea why this is needed
-    postInstall = ''
-      ln -s ${pkgs.openssl.out}/lib/libcrypto* $out/lib/
-    '';
-
     meta = {
       homepage = http://pycurl.sourceforge.net/;
       description = "Python wrapper for libcurl";
