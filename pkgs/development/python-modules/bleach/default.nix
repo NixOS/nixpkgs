@@ -19,6 +19,10 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ six html5lib ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace ",<3dev" ""
+  '';
+
   meta = {
     description = "An easy, HTML5, whitelisting HTML sanitizer";
     longDescription = ''
