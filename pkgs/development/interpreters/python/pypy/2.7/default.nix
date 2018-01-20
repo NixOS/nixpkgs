@@ -116,6 +116,8 @@ in stdenv.mkDerivation rec {
     inherit zlibSupport libPrefix sitePackages;
     executable = "pypy";
     isPypy = true;
+    isPy2 = true;
+    isPy27 = true;
     buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     interpreter = "${self}/bin/${executable}";
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
