@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     truncate -s 0 tests/CMakeLists.txt
   '';
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://dbus-cplusplus.sourceforge.net;
     description = "C++ API for D-BUS";
