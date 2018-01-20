@@ -79,9 +79,7 @@ in stdenv.mkDerivation rec {
     # disable shutils because it assumes gid 0 exists
     # disable socket because it has two actual network tests that fail
     # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-    # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
-    # disable test_zipfile64 because it causes ENOSPACE
-    ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_ssl or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil or test_zipfile64 )' lib-python
+    ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil )' lib-python
   '';
 
   installPhase = ''
