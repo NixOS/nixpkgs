@@ -2409,32 +2409,7 @@ in {
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
 
-  click-threading = buildPythonPackage rec {
-    version = "0.4.2";
-    name = "click-threading-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "400b0bb63d9096b6bf2806efaf742a1cc8b6c88e0484f0afe7d7a7f0e9870609";
-    };
-
-    checkInputs = with self; [ pytest_29 ];
-    propagatedBuildInputs = with self; [ click ] ++ optional (!isPy3k) futures;
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Tests are broken on 3.x
-    doCheck = !isPy3k;
-
-    meta = {
-      homepage = https://github.com/click-contrib/click-threading/;
-      description = "Multithreaded Click apps made easy";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  click-threading = callPackage ../development/python-modules/click-threading {};
 
   cligj = callPackage ../development/python-modules/cligj { };
 
