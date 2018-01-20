@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytest_30
+, pytest
 , mock
 , pytest_xdist
 , isPy3k
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytest_30
+    pytest
     mock
 #     Disable pytest_xdist tests for now, because our version seems to be too new.
 #     pytest_xdist
