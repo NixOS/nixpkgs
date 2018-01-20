@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     ./sdl2.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
     sh autogen.sh

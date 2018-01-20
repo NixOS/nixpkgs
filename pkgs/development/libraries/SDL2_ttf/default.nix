@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xljwcpvd2knrjdfag5b257xqayplz55mqlszrqp0kpnphh5xnrl";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
-
-  buildInputs = [ SDL2 freetype mesa_noglu ];
+  buildInputs = [ SDL2 freetype mesa_noglu ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with stdenv.lib; {
     description = "SDL TrueType library";

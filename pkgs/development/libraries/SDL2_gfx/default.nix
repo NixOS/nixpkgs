@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16jrijzdp095qf416zvj9gs2fqqn6zkyvlxs5xqybd0ip37cp6yn";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
-
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   configureFlags = if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx";
 

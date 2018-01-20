@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08cxc1bicmyk89kiks7izw1rlx5ng5n6xpy8fy0zxni3b9z8mkhm";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   propagatedBuildInputs = [ SDL2 ];
 
