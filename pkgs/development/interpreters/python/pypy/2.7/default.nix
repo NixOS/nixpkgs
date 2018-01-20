@@ -66,12 +66,7 @@ in stdenv.mkDerivation rec {
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
       -Ojit \
-      --batch pypy/goal/targetpypystandalone.py \
-      --withmod-_minimal_curses \
-      --withmod-unicodedata \
-      --withmod-thread \
-      --withmod-bz2 \
-      --withmod-_multiprocessing
+      --batch pypy/goal/targetpypystandalone.py
   '';
 
   setupHook = python-setup-hook sitePackages;
