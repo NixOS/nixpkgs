@@ -22479,6 +22479,8 @@ EOF
 
   vine = callPackage ../development/python-modules/vine { };
 
+  whitenoise = callPackage ../development/python-modules/whitenoise { };
+
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "wp_export_parser";
