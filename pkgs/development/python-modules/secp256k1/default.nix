@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pkgconfig
-, pytest_28
+, pytest
 , pytestrunner
 , cffi
 , secp256k1
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pytest_28 pytestrunner ];
+  checkInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ cffi secp256k1 ];
 
   # Tests are not included in archive
