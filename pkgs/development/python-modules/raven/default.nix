@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "raven";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00m985w9fja2jf8dpvdhygcr26rwabxkgvcc2v5j6v7d6lrvpvdq";
+    sha256 = "84da75114739191bdf2388f296ffd6177e83567a7fbaf2701e034ad6026e4f3b";
   };
 
   # way too many dependencies to run tests
