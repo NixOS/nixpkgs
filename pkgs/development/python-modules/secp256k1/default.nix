@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "secp256k1";
-  version = "0.12.1";
+  version = "0.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
+    sha256 = "a3b43e02d321c09eafa769a6fc2c156f555cab3a7db62175ef2fd21e16cdf20c";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,6 +33,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     py.test tests
+  '';
+
+  postPatch = ''
+    substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
   '';
 
   meta = {
