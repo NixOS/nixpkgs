@@ -10,19 +10,16 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "6.0";
-  minorVersion = "0";
-  minorVersionSuffix = "";
+  version = "6.0.0";
   pythonVersion = "2.7";
-  version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
-  libPrefix = "pypy${majorVersion}";
+  libPrefix = "pypy${pythonVersion}";
   sitePackages = "site-packages";
 
   pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
 
 in stdenv.mkDerivation rec {
   name = "pypy-${version}";
-  inherit majorVersion version pythonVersion;
+  inherit version pythonVersion;
 
   src = fetchurl {
     url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
