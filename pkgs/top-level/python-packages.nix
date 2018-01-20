@@ -9761,6 +9761,8 @@ in {
     ];
   };
 
+  python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
+
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
     version = "0.12.0";
