@@ -8053,6 +8053,8 @@ in {
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
+  flask-limiter = callPackage ../development/python-modules/flask-limiter { };
+
   flask_login = callPackage ../development/python-modules/flask-login { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
