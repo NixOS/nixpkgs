@@ -2,7 +2,7 @@
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
-  version = "2.02.176";
+  version = "2.02.177";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "0wx4rvy4frdmb66znh2xms2j2n06sm361ki6l5ks4y1ciii87kny";
+    sha256 = "1wl0isn0yz5wvglwylnlqkppafwmvhliq5bd92vjqp5ir4za49a0";
   };
 
   configureFlags = [
