@@ -9,7 +9,7 @@
 , httpretty
 , oauthlib
 , pyflakes
-, pytest_27
+, pytest
 , pytestcache
 , pytestcov
 , covCore
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "PyLTI";
-  version = "0.4.1";
+  version = "0.5.1";
 
   disabled = !isPy27;
 
@@ -33,13 +33,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
   checkInputs = [
-    flask httpretty oauthlib pyflakes pytest_27 pytestcache pytestcov covCore
+    flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
     pytestflakes pytestpep8 sphinx mock
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "076llj10j85zw3zq2gygx2pcfqi9rgcld5m4vq1iai1fk15x60fz";
+    sha256 = "32093d961bf95e508bf27667289155da1e082ed9989bb84a76c54c6974c941e1";
   };
 
   meta = {
