@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [  boost libproperties-cpp ];
   #sourceRoot = ".";
+
+  # Tests fail when built, so disable them:
   patchPhase = ''
     truncate -s 0 tests/CMakeLists.txt
   '';
