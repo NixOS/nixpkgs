@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2 }:
+{ stdenv, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_gfx-${version}";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/sdl2gfx/${name}.tar.gz";
     sha256 = "16jrijzdp095qf416zvj9gs2fqqn6zkyvlxs5xqybd0ip37cp6yn";
   };
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   buildInputs = [ SDL2 ];
 
@@ -38,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
 
     maintainers = with maintainers; [ bjg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
