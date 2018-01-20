@@ -15100,6 +15100,8 @@ in {
     };
   };
 
+  pytzdata = callPackage ../development/python-modules/pytzdata { };
+
   pyutil = buildPythonPackage (rec {
     name = "pyutil-2.0.0";
 
