@@ -1123,7 +1123,6 @@ default-package-overrides:
   - hjsonschema ==1.7.1
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.6.1
-  - hlint ==2.0.11
   - hmatrix ==0.18.1.0
   - hmatrix-gsl ==0.18.0.1
   - hmatrix-gsl-stats ==0.4.1.7
