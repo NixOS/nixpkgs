@@ -6174,6 +6174,8 @@ in {
     };
   };
 
+  prov = callPackage ../development/python-modules/prov { };
+
   pudb = buildPythonPackage rec {
     name = "pudb-2016.2";
 
@@ -6270,6 +6272,8 @@ in {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (pkgs.stdenv) mkDerivation;
   };
+
+  pydotplus = callPackage ../development/python-modules/pydotplus { };
 
   pyphen = callPackage ../development/python-modules/pyphen {};
 
@@ -11330,31 +11334,7 @@ in {
     };
   });
 
-  nibabel = buildPythonPackage rec {
-    version = "2.0.2";
-    name = "nibabel-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nibabel/${name}.tar.gz";
-      sha256 = "0k8mv5zmwb6vc8kwrydl3pp0pnw937rf5mz10figkxczrw6dkk7h";
-    };
-
-    propagatedBuildInputs = with self; [
-      numpy
-      nose
-    ];
-
-    # Failing tests
-    # nibabel.tests.test_minc1.test_old_namespace
-    # nisext.tests.test_testers.test_back_tick
-    doCheck = false;
-
-    meta = {
-      homepage = http://nipy.org/nibabel/;
-      description = "Access a multitude of neuroimaging data formats";
-      license = licenses.mit;
-    };
-  };
+  nibabel = callPackage ../development/python-modules/nibabel {};
 
   nilearn = callPackage ../development/python-modules/nilearn {};
 
@@ -11403,36 +11383,8 @@ in {
     };
   };
 
-  nipype = buildPythonPackage rec {
-    version = "0.10.0";
-    name = "nipype-${version}";
-
-    # Uses python 2 print. Master seems to be Py3 compatible.
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nipype/${name}.tar.gz";
-      sha256 = "7fb143cd4d05f18db1cb7f0b83dba13d3dcf55b4eb3d16df08c97033ccae507b";
-    };
-
-    # Tests fail due to getcwd returning ENOENT???
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-     numpy
-     dateutil
-     nose
-     traits
-     scipy
-     nibabel
-     networkx
-   ];
-
-    meta = {
-      homepage = http://nipy.org/nipype/;
-      description = "Neuroimaging in Python: Pipelines and Interfaces";
-      license = licenses.bsd3;
-    };
+  nipype = callPackage ../development/python-modules/nipype {
+    inherit (pkgs) which;
   };
 
   nose = buildPythonPackage rec {
@@ -15617,11 +15569,11 @@ in {
 
 
   rdflib = buildPythonPackage (rec {
-    name = "rdflib-4.1.2";
+    name = "rdflib-4.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rdflib/${name}.tar.gz";
-      sha256 = "0kvaf332cqbi47rqzlpdx4mbkvw12mkrzkj8n9l19wk713d4py9w";
+      sha256 = "0398c714znnhaa2x7v51b269hk20iz073knq2mvmqp2ma92z27fs";
     };
 
     # error: invalid command 'test'
@@ -17845,11 +17797,11 @@ in {
 
   traits = buildPythonPackage rec {
     name = "traits-${version}";
-    version = "4.5.0";
+    version = "4.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traits/${name}.tar.gz";
-      sha256 = "5293a8786030b0b243e059f52004355b6939d7c0f1be2eb5a605b63cca484c84";
+      sha256 = "0w43qv36wnrimlh0nzzgg81315a18yza3vk494wqxf1l19g390jx";
     };
 
     # Use pytest because its easier to discover tests
@@ -17862,7 +17814,7 @@ in {
     # https://github.com/enthought/traits/issues/187
     # https://github.com/enthought/traits/pull/188
     # Furthermore, some tests fail due to being in a chroot
-    doCheck = false;
+    doCheck = isPy33;
 
     propagatedBuildInputs = with self; [ numpy ];
 
@@ -21668,6 +21620,10 @@ EOF
       license = licenses.bsd2;
       maintainers = [ maintainers.makefu ];
     };
+  };
+
+  xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
+    inherit (pkgs.xorg) xorgserver;
   };
 
   hidapi = callPackage ../development/python-modules/hidapi {
