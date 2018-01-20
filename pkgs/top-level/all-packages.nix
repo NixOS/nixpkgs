@@ -2764,7 +2764,9 @@ with pkgs;
 
   i2p = callPackage ../tools/networking/i2p {};
 
-  i2pd = callPackage ../tools/networking/i2pd {};
+  i2pd = callPackage ../tools/networking/i2pd {
+    boost = boost165;
+  };
 
   i-score = libsForQt5.callPackage ../applications/audio/i-score { };
 
