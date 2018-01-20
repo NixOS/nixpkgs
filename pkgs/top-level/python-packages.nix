@@ -9841,6 +9841,8 @@ in {
   libxslt = disabledIf isPy3k
     (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
+  limits = callPackage ../development/python-modules/limits { };
+
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
     version = "2016.05.06";
