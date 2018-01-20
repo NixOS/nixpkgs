@@ -206,8 +206,8 @@ in
 
     systemd.services.stunnel = {
       description = "stunnel TLS tunneling service";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network.target" ];
+      wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."stunnel.cfg".source ];
       serviceConfig = {
