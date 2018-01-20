@@ -3245,8 +3245,6 @@ in {
 
   pytest = self.pytest_33;
 
-  pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
-
   pytest_28 = callPackage ../development/python-modules/pytest/2_8.nix {};
 
   pytest_29 = callPackage ../development/python-modules/pytest/2_9.nix {};
