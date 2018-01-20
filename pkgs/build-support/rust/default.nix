@@ -1,11 +1,7 @@
-{ fetchurl, stdenv, path, cacert, git, rust }:
+{ fetchurl, stdenv, path, cacert, git, rust, cargo-vendor-bin }:
 let
-  cargoVendor = import ./cargo-vendor.nix {
-    inherit fetchurl stdenv;
-  };
-
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargoVendor;
+    inherit stdenv cacert git rust cargo-vendor-bin;
   };
 in
 { name, cargoSha256

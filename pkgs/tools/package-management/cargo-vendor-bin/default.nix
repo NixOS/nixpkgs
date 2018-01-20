@@ -1,12 +1,12 @@
-{ fetchurl, stdenv }:
+{ stdenv, lib, fetchurl }:
 let
   inherit (stdenv) system;
 
-  version = "0.1.12";
+  version = "0.1.13";
 
   hashes = {
-    x86_64-linux = "1hxlavcxy374yypfamlkygjg662lhll8j434qcvdawkvlidg5ii5";
-    x86_64-darwin = "1jkvhh710gwjnnjx59kaplx2ncfvkx9agfa76rr94sbjqq4igddm";
+    x86_64-linux = "1znv8hm4z4bfb6kncf95jv6h20qkmz3yhhr8f4vz2wamynklm9pr";
+    x86_64-darwin = "0hcib4yli216qknjv7r2w8afakhl9yj19yyppp12c1p4pxhr1qr6";
   };
   hash = hashes. ${system} or badSystem;
 
@@ -19,7 +19,7 @@ let
   platform = platforms . ${system} or badSystem;
 
 in stdenv.mkDerivation {
-  name = "cargo-vendor-${version}";
+  name = "cargo-vendor-bin-${version}";
 
   src = fetchurl {
      url = "https://github.com/alexcrichton/cargo-vendor/releases/download/${version}/cargo-vendor-${version}-${platform}.tar.gz";
@@ -31,4 +31,12 @@ in stdenv.mkDerivation {
   installPhase = ''
     install -Dm755 cargo-vendor $out/bin/cargo-vendor
   '';
+
+  meta = with lib; {
+    description = "Cargo subcommand to vendor crates.io dependencies";
+    homepage = "https://github.com/alexcrichton/cargo-vendor";
+    licenses = licenses.asl20;
+    maintainers = with maintainers; [ zimbatm ];
+    platforms = builtins.attrNames hashes;
+  };
 }
