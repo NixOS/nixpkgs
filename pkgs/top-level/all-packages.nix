@@ -2520,6 +2520,8 @@ with pkgs;
 
   gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
 
+  gnuclad = callPackage ../applications/graphics/gnuclad { };
+
   gnufdisk = callPackage ../tools/system/fdisk {
     guile = guile_1_8;
   };
