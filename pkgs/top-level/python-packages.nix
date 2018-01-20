@@ -22595,6 +22595,8 @@ EOF
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
+
+  us = callPackage ../development/python-modules/us { };
 });
 
 in fix' (extends overrides packages)
