@@ -5621,35 +5621,7 @@ in {
     };
   };
 
-  PyLTI = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "PyLTI-${version}";
-
-    disabled = !isPy27;
-
-    # There is no need to fix mock. https://github.com/mitodl/pylti/pull/48
-    postPatch = ''
-      substituteInPlace setup.py --replace "mock==1.0.1" "mock"
-    '';
-
-    propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
-    buildInputs = with self; [
-      flask httpretty oauthlib pyflakes pytest_27 pytestcache pytestcov covCore
-      pytestflakes pytestpep8 sphinx mock
-    ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyLTI/${name}.tar.gz";
-      sha256 = "076llj10j85zw3zq2gygx2pcfqi9rgcld5m4vq1iai1fk15x60fz";
-    };
-
-    meta = {
-      description = "Implementation of IMS LTI interface that works with edX";
-      homepage = "https://github.com/mitodl/pylti";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  PyLTI = callPackage ../development/python-modules/pylti { };
 
   lmdb = buildPythonPackage rec {
     pname = "lmdb";
