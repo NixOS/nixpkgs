@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2 }:
+{ stdenv, darwin, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_gfx-${version}";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16jrijzdp095qf416zvj9gs2fqqn6zkyvlxs5xqybd0ip37cp6yn";
   };
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [ SDL2 ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   configureFlags = if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx";
 
@@ -38,6 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
 
     maintainers = with maintainers; [ bjg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
