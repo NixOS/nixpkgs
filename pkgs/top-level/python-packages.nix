@@ -10194,6 +10194,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { };
 
+  maya = callPackage ../development/python-modules/maya { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
