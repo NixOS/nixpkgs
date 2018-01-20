@@ -10442,6 +10442,8 @@ in {
     };
   };
 
+  pendulum = callPackage ../development/python-modules/pendulum { };
+
   pocket = buildPythonPackage rec {
     name = "pocket-${version}";
     version = "0.3.6";
