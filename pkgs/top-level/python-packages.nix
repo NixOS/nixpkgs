@@ -7153,6 +7153,8 @@ in {
 
   chardet = callPackage ../development/python-modules/chardet { };
 
+  crayons = callPackage ../development/python-modules/crayons{ };
+
   django = self.django_1_11;
 
   django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
