@@ -263,6 +263,8 @@ in {
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
+  oauthenticator = callPackage ../development/python-modules/oauthenticator { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
