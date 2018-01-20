@@ -10241,6 +10241,8 @@ in {
 
   meliae = callPackage ../development/python-modules/meliae {};
 
+  meinheld = callPackage ../development/python-modules/meinheld { };
+
   memcached = buildPythonPackage rec {
     name = "memcached-1.51";
 
