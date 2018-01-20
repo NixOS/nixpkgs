@@ -16,7 +16,8 @@ let
     inherit system;
   } // args);
 
-  callTest = fn: args: forAllSystems (system: hydraJob (importTest fn args system));
+  callTestOnTheseSystems = systems: fn: args: forTheseSystems systems (system: hydraJob (importTest fn args system));
+  callTest = callTestOnTheseSystems supportedSystems;
 
   callSubTests = fn: args: let
     discover = attrs: let
@@ -90,13 +91,13 @@ let
 
   makeNetboot = config:
     let
-      config_evaled = import lib/eval-config.nix config;
-      build = config_evaled.config.system.build;
-      kernelTarget = config_evaled.pkgs.stdenv.platform.kernelTarget;
+      configEvaled = import lib/eval-config.nix config;
+      build = configEvaled.config.system.build;
+      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
-        name="netboot";
-        paths=[
+        name = "netboot";
+        paths = [
           build.netbootRamdisk
           build.kernel
           build.netbootIpxeScript
@@ -107,6 +108,7 @@ let
           echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
           echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
+        preferLocalBuild = true;
       };
 
 
@@ -227,7 +229,7 @@ in rec {
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
-  tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
+  tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
@@ -242,12 +244,12 @@ in rec {
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.couchdb = callTest tests/couchdb.nix {};
-  tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
-  tests.docker-edge = hydraJob (import tests/docker-edge.nix { system = "x86_64-linux"; });
+  tests.docker = callTestOnTheseSystems ["x86_64-linux"] tests/docker.nix {};
+  tests.docker-edge = callTestOnTheseSystems ["x86_64-linux"] tests/docker-edge.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
-  tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
+  tests.dnscrypt-proxy = callTestOnTheseSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
+  tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
   tests.elk = callSubTests tests/elk.nix { system = "x86_64-linux"; };
@@ -255,7 +257,7 @@ in rec {
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
+  tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
@@ -302,6 +304,7 @@ in rec {
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.firewall-conntrack = callTest tests/nat.nix { withFirewall = true; withConntrackHelpers = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
@@ -315,7 +318,7 @@ in rec {
   tests.openssh = callTest tests/openssh.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
+  #tests.panamax = callTestOnTheseSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};

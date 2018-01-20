@@ -80,7 +80,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1fd7lyrwr60dp55swc5iwl0mkkzmdzpmj9qmx1qca2r7y9wc5w5k";
+      sha256 = "0vvh1k7i6y4bqy6fn8z5i6ndqv6x94hvk2zh5gw99na8kfri7sxq";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -543,11 +543,8 @@ self: super: {
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
 
-  # Install icons and metadata, remove broken hgettext dependency.
-  # https://github.com/vasylp/hgettext/issues/10
+  # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
-    configureFlags = drv.configureFlags or [] ++ ["-f-hgettext"];
-    executableHaskellDepends = pkgs.lib.remove self.hgettext drv.executableHaskellDepends;
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs; [ gettext perl help2man intltool ];
     doCheck = false; # https://github.com/wjt/bustle/issues/6
@@ -848,8 +845,11 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs a newer version than lts-10 provides.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+  # Hoogle needs newer versions than lts-10 provides.
+  hoogle = super.hoogle.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    http-conduit = self.http-conduit_2_3_0;
+  };
 
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });

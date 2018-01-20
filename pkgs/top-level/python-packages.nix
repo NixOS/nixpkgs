@@ -205,6 +205,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  diff_cover = callPackage ../development/python-modules/diff_cover { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
@@ -280,6 +282,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
+
+  pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
   pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
 
@@ -9471,6 +9475,8 @@ in {
     };
   };
 
+  jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
+
   jmespath = buildPythonPackage rec {
     name = "jmespath-0.9.0";
 
@@ -10062,6 +10068,26 @@ in {
       description = "A documentation builder";
       homepage = https://pypi.python.org/pypi/manuel;
       license = licenses.zpl20;
+    };
+  };
+
+  mapsplotlib = buildPythonPackage rec {
+    name = "mapsplotlib-${version}";
+    version = "1.0.6";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mapsplotlib/${name}.tar.gz";
+      sha256 = "09gpws3x0jd88n636baxx5izjffrpjy4j6jl8l7vj29yzvrdr2bp";
+    };
+
+    propagatedBuildInputs = with self; [ matplotlib scipy pandas requests pillow ];
+
+    meta = {
+      description = "Custom Python plots on a Google Maps background";
+      homepage = https://github.com/tcassou/mapsplotlib;
+      maintainers = [ maintainers.rob ];
     };
   };
 
