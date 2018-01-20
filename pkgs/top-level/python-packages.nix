@@ -10767,14 +10767,6 @@ in {
     ];
     LC_ALL = "en_US.UTF-8";
 
-    # Remove test that fails due to missing encoding in nix_run_setup.py, a
-    # file that buildPythonPackage copies to source trees at build time.
-    # PR with fix: https://github.com/NixOS/nixpkgs/pull/17430
-    # ("python: add file encoding to run_setup.py")
-    preBuild = ''
-      rm tests/test_encoding.py
-    '';
-
     meta = {
       description = "Python multimedia tagging library";
       homepage = http://code.google.com/p/mutagen;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    pytest --ignore=nix_run_setup.py .
+    pytest .
   '';
 
   meta = {
