@@ -7149,6 +7149,8 @@ in {
 
   chardet = callPackage ../development/python-modules/chardet { };
 
+  crayons = callPackage ../development/python-modules/crayons{ };
+
   django = self.django_1_11;
 
   django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
@@ -8039,11 +8041,15 @@ in {
     };
   };
 
+  flask_common = callPackage ../development/python-modules/flask-common { };
+
   flask-compress = callPackage ../development/python-modules/flask-compress { };
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
+
+  flask_limiter = callPackage ../development/python-modules/flask-limiter { };
 
   flask_login = callPackage ../development/python-modules/flask-login { };
 
@@ -9831,6 +9837,8 @@ in {
   libxslt = disabledIf isPy3k
     (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
+  limits = callPackage ../development/python-modules/limits { };
+
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
     version = "2016.05.06";
@@ -10182,6 +10190,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { };
 
+  maya = callPackage ../development/python-modules/maya { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
@@ -10226,6 +10236,8 @@ in {
   };
 
   meliae = callPackage ../development/python-modules/meliae {};
+
+  meinheld = callPackage ../development/python-modules/meinheld { };
 
   memcached = buildPythonPackage rec {
     name = "memcached-1.51";
@@ -10425,6 +10437,8 @@ in {
       maintainers = with maintainers; [ thoughtpolice ];
     };
   };
+
+  pendulum = callPackage ../development/python-modules/pendulum { };
 
   pocket = buildPythonPackage rec {
     name = "pocket-${version}";
@@ -15133,6 +15147,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  pytzdata = callPackage ../development/python-modules/pytzdata { };
 
   pyutil = buildPythonPackage (rec {
     name = "pyutil-2.0.0";
@@ -22506,6 +22522,8 @@ EOF
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
+
+  whitenoise = callPackage ../development/python-modules/whitenoise { };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
