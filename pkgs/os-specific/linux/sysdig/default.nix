@@ -3,13 +3,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "04bsb7g6mh6dwk023v1rbdcjwp898y6ixdvrd7nxzm186qpycpnn";
+    sha256 = "0nbsfm2jh5gjy2wh79f35rqk3c3z15lymmcz3gviw0jaxdv6drzw";
   };
 
   buildInputs = [

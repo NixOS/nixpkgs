@@ -2,7 +2,7 @@
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k
 }:
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "3.3.2";
   pname = "pytest";
 
   preCheck = ''
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
+    sha256 = "53548280ede7818f4dc2ad96608b9f08ae2cc2ca3874f2ceb6f97e3583f25bc4";
   };
 
   checkInputs = [ hypothesis ];

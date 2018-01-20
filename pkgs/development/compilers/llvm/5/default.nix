@@ -34,6 +34,7 @@ let
     llvm = overrideManOutput llvm;
     clang-unwrapped = overrideManOutput clang-unwrapped;
 
+    libclang = self.clang-unwrapped.lib;
     llvm-manpages = lowPrio self.llvm.man;
     clang-manpages = lowPrio self.clang-unwrapped.man;
 

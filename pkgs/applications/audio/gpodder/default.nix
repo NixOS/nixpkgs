@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod
+, ipodSupport ? false, libgpod, gobjectIntrospection
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -22,14 +22,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    python3Packages.wrapPython
     wrapGAppsHook
     glibcLocales
   ];
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 gobjectIntrospection ];
 
   checkInputs = with python3Packages; [
     coverage minimock

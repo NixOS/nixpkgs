@@ -39,13 +39,6 @@ rec {
       hardeningDisable = [ "fortify" ];
 
       buildInputs = [ removeReferencesTo go btrfs-progs ];
-
-      # This should go into the containerd derivation once 1.0.0 is out
-      preBuild = ''
-        export GOPATH=$(pwd)/vendor
-        mkdir $(pwd)/vendor/src
-        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
-      '' + oldAttrs.preBuild;
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {

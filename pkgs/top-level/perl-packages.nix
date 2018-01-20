@@ -925,7 +925,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the cairo 2D vector graphics library";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -2184,6 +2183,12 @@ let self = _self // overrides; _self = with self; {
       description = "Clipboard - Copy and Paste with any OS";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin MacPasteboard;
+    # Disable test on darwin because MacPasteboard fails when not logged in interactively.
+    # Mac OS error -4960 (coreFoundationUnknownErr): The unknown error at lib/Clipboard/MacPasteboard.pm line 3.
+    # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
+    #     Ssh sessions and cron jobs can not create the requisite pasteboard handles, giving coreFoundationUnknownErr (-4960)'
+    doCheck = !stdenv.isDarwin;
   };
 
 
@@ -6096,7 +6101,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl wrappers for the GLib utility and Object libraries";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -6288,7 +6292,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -8318,6 +8321,20 @@ let self = _self // overrides; _self = with self; {
 
   maatkit = import ../development/perl-modules/maatkit {
     inherit fetchurl buildPerlPackage stdenv DBDmysql;
+  };
+
+  MacPasteboard = buildPerlPackage rec {
+    name = "Mac-Pasteboard-0.009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WY/WYANT/${name}.tar.gz";
+      sha256 = "85b1d5e9630973b997c3c1634e2df964d6a8d6cb57d9abe1f7093385cf26cf54";
+    };
+    meta = with stdenv.lib; {
+      description = "Manipulate Mac OS X pasteboards";
+      license = with licenses; [ artistic1 gpl1Plus ];
+      platforms = platforms.darwin;
+    };
+    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
   };
 
   MailMaildir = buildPerlPackage rec {
@@ -10758,7 +10775,6 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Layout and render international text";
-      maintainers = with maintainers; [ nckx ];
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
@@ -10859,7 +10875,6 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       homepage = http://search.cpan.org/~jaybonci/Parse-DebControl;
       license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ nckx ];
     };
   };
 

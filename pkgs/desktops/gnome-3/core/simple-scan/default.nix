@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
   meta = with stdenv.lib; {
     description = "Simple scanning utility";
     longDescription = ''
@@ -54,6 +52,5 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

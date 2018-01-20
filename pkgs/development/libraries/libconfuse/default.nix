@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nckx ];
   };
 }

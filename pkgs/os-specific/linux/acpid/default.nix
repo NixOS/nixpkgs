@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     description = "A daemon for delivering ACPI events to userspace programs";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }
