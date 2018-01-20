@@ -346,6 +346,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+  
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
