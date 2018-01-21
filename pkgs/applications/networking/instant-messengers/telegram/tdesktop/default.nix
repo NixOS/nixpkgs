@@ -1,34 +1,33 @@
-{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
+{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake, gcc7
 , qtbase, qtimageformats
 , gtk3, libappindicator-gtk3, dee
-, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
-, gcc
+, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.1.23";
+  version = "1.2.1";
 
   # Submodules
   src = fetchgit {
     url = "git://github.com/telegramdesktop/tdesktop";
     rev = "v${version}";
-    sha256 = "0pdjrypjg015zvg8iydrja8kzvq0jsi1wz77r2cxvyyb4rkgyv7x";
+    sha256 = "1wgcwm9lcy9zw7jawsjj4c46p9mky611k6gjw1900llwxkfh4fh5";
     fetchSubmodules = true;
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
-    rev = "885d0594d8dfa0a17c14140579a3d27ef2b9bdd0";
-    sha256 = "0cdci8d8j3czhznp7gqn16w32j428njmzxr34pdsv40gggh0lbpn";
+    rev = "1ed27ce40913b9e6e87faf7a2310660c2790b98e";
+    sha256 = "1i7ipqgisaw54g1nbg2cvpbx89g9gyjjb3sak1486pxsasp1qhyc";
   };
 
   buildInputs = [
     gtk3 libappindicator-gtk3 dee qtbase qtimageformats ffmpeg openalSoft minizip
-    libopus alsaLib libpulseaudio
+    libopus alsaLib libpulseaudio range-v3
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake gcc ];
+  nativeBuildInputs = [ pkgconfig gyp cmake gcc7 ];
 
   patches = [ "${tgaur}/tdesktop.patch" ];
 
@@ -54,7 +53,7 @@ mkDerivation rec {
     "-I${libopus.dev}/include/opus"
     "-I${alsaLib.dev}/include/alsa"
     "-I${libpulseaudio.dev}/include/pulse"
-  ]) [ "QtCore" "QtGui" ];
+  ]) [ "QtCore" "QtGui" "QtDBus" ];
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
@@ -69,6 +68,9 @@ mkDerivation rec {
       -e 's,-flto,,g'
 
     sed -i Telegram/gyp/qt.gypi \
+      -e "s,/usr/include/qt/QtCore/,${qtbase.dev}/include/QtCore/,g" \
+      -e 's,\d+",\d+" | head -n1,g'
+    sed -i Telegram/gyp/qt_moc.gypi \
       -e "s,/usr/bin/moc,moc,g"
     sed -i Telegram/gyp/qt_rcc.gypi \
       -e "s,/usr/bin/rcc,rcc,g"
