@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.10-pre-20160920";
+  name = "patchelf-0.10-pre-20180108";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "327d80443672c397970738f9e216a7e86cbf3ad7";
-    sha256 = "0nghzywda4jrj70gvn4dnrzasafgdp0basj04wfir1smvsi047zr";
+    rev = "48452cf6b4ccba1c1f47a09f4284a253634ab7d1";
+    sha256 = "07vx75f2r1bh58qj4b6bl27v39srs2rfr1jrif7syspfhkn4qzw4";
   };
 
   setupHook = [ ./setup-hook.sh ];
