@@ -165,6 +165,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  astral = callPackage ../development/python-modules/astral { };
+
   astropy = callPackage ../development/python-modules/astropy {  };
 
   augeas = callPackage ../development/python-modules/augeas {
@@ -22511,6 +22513,8 @@ EOF
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
+
+  vincenty = callPackage ../development/python-modules/vincenty { };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
