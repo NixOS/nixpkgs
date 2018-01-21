@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, makeWrapper, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext }:
+SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa }:
 
 stdenv.mkDerivation rec {
   version = "2017-12-09";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ];
+  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Cocoa ];
 
   postPatch = ''
     patchShebangs .
@@ -26,7 +27,11 @@ stdenv.mkDerivation rec {
       -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
   '';
 
-  makeFlags = "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1";
+  makeFlags = [
+    "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "NATIVE=osx CLANG=1"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/cataclysm-tiles \
@@ -65,6 +70,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://en.cataclysmdda.com/;
     license = licenses.cc-by-sa-30;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
