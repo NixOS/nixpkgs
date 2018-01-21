@@ -9,6 +9,9 @@ symlinkJoin {
     wrapProgram $out/bin/idris \
       --suffix PATH : ${ stdenv.lib.makeBinPath path } \
       --suffix LIBRARY_PATH : ${stdenv.lib.makeLibraryPath lib}
+
+    mkdir -p $out/nix-support
+    substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
       '';
   }
 
