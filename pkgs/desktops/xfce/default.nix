@@ -157,7 +157,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4_power_manager_gtk3 = xfce4-power-manager.override { withGtk3 = true; };
 
-  #### ALIASES
+  #### ALIASES - added 2018-01
 
   terminal = xfce4-terminal;
   thunar-build = thunar-bare;
