@@ -201,6 +201,9 @@ let
             \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
             -delete
       done
+    '' + optionalString stdenv.isAarch64 ''
+      substituteInPlace build/toolchain/linux/BUILD.gn \
+        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '';
 
     gnFlags = mkGnFlags ({
