@@ -67,6 +67,7 @@
 "github:google/vim-codefmt"
 "github:google/vim-jsonnet"
 "github:google/vim-maktaba"
+"github:gregsexton/gitv"
 "github:heavenshell/vim-jsdoc"
 "github:hecal3/vim-leader-guide"
 "github:idris-hackers/idris-vim"
