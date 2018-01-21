@@ -499,13 +499,13 @@ let
         sha1 = "a8115c55e4a702fe4d150abd3872822a7e09fc98";
       };
     };
-    "class-utils-0.3.5" = {
+    "class-utils-0.3.6" = {
       name = "class-utils";
       packageName = "class-utils";
-      version = "0.3.5";
+      version = "0.3.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/class-utils/-/class-utils-0.3.5.tgz";
-        sha1 = "17e793103750f9627b2176ea34cfd1b565903c80";
+        url = "https://registry.npmjs.org/class-utils/-/class-utils-0.3.6.tgz";
+        sha512 = "1xcqwmfmsbrm2ck76brwiqjmcza655khgh5szh6wngk357i37sgwsga1pbarwzaz9hvzkriqhq6j0z5mv0pmz61cf9wxvk3y5mlzs58";
       };
     };
     "cliui-3.2.0" = {
@@ -814,6 +814,15 @@ let
         sha1 = "5783b4e1c459f06fa5ca27f991f3d06e7a310359";
       };
     };
+    "depd-1.1.2" = {
+      name = "depd";
+      packageName = "depd";
+      version = "1.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/depd/-/depd-1.1.2.tgz";
+        sha1 = "9bcd52e14c097763e749b274c4346ed2e560b5a9";
+      };
+    };
     "deprecated-0.0.1" = {
       name = "deprecated";
       packageName = "deprecated";
@@ -985,13 +994,13 @@ let
         sha1 = "26a71aaf073b39fb2127172746131c2704028db8";
       };
     };
-    "extglob-2.0.3" = {
+    "extglob-2.0.4" = {
       name = "extglob";
       packageName = "extglob";
-      version = "2.0.3";
+      version = "2.0.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/extglob/-/extglob-2.0.3.tgz";
-        sha512 = "31zb5fc59ps76hnxlnrcmm3lkv4pjd3cw55h5h7r9pn1q259bs15hw0bn4gp8kn91qwabgbj0cwkx9pxp8fgsj3ljlvmfv0xijnsah3";
+        url = "https://registry.npmjs.org/extglob/-/extglob-2.0.4.tgz";
+        sha512 = "2klp0045k4wnaspb9khqx90ddv7rjg997mlyp5qz41sl2yqdrpw8g8wji77qq16aawl4yhvg0f993ln48lja0kfmy0wnbh4g50zlrin";
       };
     };
     "extsprintf-1.3.0" = {
@@ -2956,13 +2965,13 @@ let
         sha1 = "bcd60c77d3eb93cde0050295c3f379389bc88f89";
       };
     };
-    "rc-1.2.3" = {
+    "rc-1.2.4" = {
       name = "rc";
       packageName = "rc";
-      version = "1.2.3";
+      version = "1.2.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/rc/-/rc-1.2.3.tgz";
-        sha1 = "51575a900f8dd68381c710b4712c2154c3e2035b";
+        url = "https://registry.npmjs.org/rc/-/rc-1.2.4.tgz";
+        sha1 = "a0f606caae2a3b862bbd0ef85482c0125b315fa3";
       };
     };
     "read-pkg-1.1.0" = {
@@ -3172,13 +3181,13 @@ let
         sha1 = "9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f";
       };
     };
-    "semver-5.4.1" = {
+    "semver-5.5.0" = {
       name = "semver";
       packageName = "semver";
-      version = "5.4.1";
+      version = "5.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/semver/-/semver-5.4.1.tgz";
-        sha512 = "2r13vwvb5ick34k6flr7vgbjfsdka8zbj5a74rd0ba4bp0nqmhppbaw3qlwn7f4smpifpa4iy4hxj137y598rbvsmy3h0d8vxgvzwar";
+        url = "https://registry.npmjs.org/semver/-/semver-5.5.0.tgz";
+        sha512 = "0h32zh035y8m6dzcqhcymbhwgmc8839fa1hhj0jfh9ivp9kmqfj1sbwnsnkzcn9qm3sqn38sa8ys2g4c638lpnmzjr0a0qndmv7f8p1";
       };
     };
     "send-0.16.1" = {
@@ -3802,13 +3811,13 @@ let
         sha1 = "9f95710f50a267947b2ccc124741c1028427e713";
       };
     };
-    "uuid-3.1.0" = {
+    "uuid-3.2.1" = {
       name = "uuid";
       packageName = "uuid";
-      version = "3.1.0";
+      version = "3.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uuid/-/uuid-3.1.0.tgz";
-        sha512 = "3x5mi85l1559nkb35pfksjjgiyfyqrcvmcf0nly1xjl1kb0d37jnxd6sk0b8d331waadnqbf60nfssb563x9pvnjcw87lrh976sv18c";
+        url = "https://registry.npmjs.org/uuid/-/uuid-3.2.1.tgz";
+        sha512 = "0843vl1c974n8kw5kn0kvhvhwk8y8jydr0xkwwl2963xxmkw4ingk6xj9c8m48jw2i95giglxzq5aw5v5mij9kv7fzln8pxav1cr6cd";
       };
     };
     "v8-debug-1.0.1" = {
@@ -4296,7 +4305,7 @@ in
                       sources."is-extendable-0.1.1"
                     ];
                   })
-                  (sources."extglob-2.0.3" // {
+                  (sources."extglob-2.0.4" // {
                     dependencies = [
                       (sources."expand-brackets-2.1.4" // {
                         dependencies = [
@@ -4449,7 +4458,7 @@ in
                               })
                             ];
                           })
-                          (sources."class-utils-0.3.5" // {
+                          (sources."class-utils-0.3.6" // {
                             dependencies = [
                               sources."arr-union-3.1.0"
                               (sources."define-property-0.2.5" // {
@@ -4475,23 +4484,6 @@ in
                                         ];
                                       })
                                       sources."kind-of-5.1.0"
-                                    ];
-                                  })
-                                ];
-                              })
-                              (sources."lazy-cache-2.0.2" // {
-                                dependencies = [
-                                  (sources."set-getter-0.1.0" // {
-                                    dependencies = [
-                                      (sources."to-object-path-0.3.0" // {
-                                        dependencies = [
-                                          (sources."kind-of-3.2.2" // {
-                                            dependencies = [
-                                              sources."is-buffer-1.1.6"
-                                            ];
-                                          })
-                                        ];
-                                      })
                                     ];
                                   })
                                 ];
@@ -5089,7 +5081,7 @@ in
             ];
           })
           sources."tunnel-agent-0.6.0"
-          sources."uuid-3.1.0"
+          sources."uuid-3.2.1"
         ];
       })
       sources."rimraf-2.6.2"
@@ -5328,6 +5320,7 @@ in
               sources."bytes-3.0.0"
               (sources."http-errors-1.6.2" // {
                 dependencies = [
+                  sources."depd-1.1.1"
                   sources."inherits-2.0.3"
                   sources."setprototypeof-1.0.3"
                 ];
@@ -5344,7 +5337,7 @@ in
           sources."content-type-1.0.4"
           sources."cookie-0.3.1"
           sources."cookie-signature-1.0.6"
-          sources."depd-1.1.1"
+          sources."depd-1.1.2"
           sources."encodeurl-1.0.1"
           sources."escape-html-1.0.3"
           sources."etag-1.8.1"
@@ -5377,6 +5370,7 @@ in
               sources."destroy-1.0.4"
               (sources."http-errors-1.6.2" // {
                 dependencies = [
+                  sources."depd-1.1.1"
                   sources."inherits-2.0.3"
                   sources."setprototypeof-1.0.3"
                 ];
@@ -5428,7 +5422,7 @@ in
         ];
       })
       sources."path-is-absolute-1.0.1"
-      (sources."rc-1.2.3" // {
+      (sources."rc-1.2.4" // {
         dependencies = [
           sources."deep-extend-0.4.2"
           sources."ini-1.3.5"
@@ -5607,7 +5601,7 @@ in
                     ];
                   })
                   sources."tunnel-agent-0.6.0"
-                  sources."uuid-3.1.0"
+                  sources."uuid-3.2.1"
                 ];
               })
               (sources."rimraf-2.6.2" // {
@@ -5640,7 +5634,7 @@ in
                   })
                 ];
               })
-              sources."semver-5.4.1"
+              sources."semver-5.5.0"
               (sources."tar-2.2.1" // {
                 dependencies = [
                   sources."block-stream-0.0.9"
@@ -5854,7 +5848,7 @@ in
                     ];
                   })
                   sources."tunnel-agent-0.6.0"
-                  sources."uuid-3.1.0"
+                  sources."uuid-3.2.1"
                 ];
               })
               (sources."rimraf-2.6.2" // {
@@ -5887,7 +5881,7 @@ in
                   })
                 ];
               })
-              sources."semver-5.4.1"
+              sources."semver-5.5.0"
               (sources."tar-2.2.1" // {
                 dependencies = [
                   sources."block-stream-0.0.9"
@@ -6087,7 +6081,7 @@ in
           sources."set-blocking-2.0.0"
         ];
       })
-      (sources."rc-1.2.3" // {
+      (sources."rc-1.2.4" // {
         dependencies = [
           sources."deep-extend-0.4.2"
           sources."ini-1.3.5"
@@ -6175,7 +6169,7 @@ in
             ];
           })
           sources."tunnel-agent-0.6.0"
-          sources."uuid-3.1.0"
+          sources."uuid-3.2.1"
         ];
       })
       (sources."rimraf-2.6.2" // {
@@ -6209,7 +6203,7 @@ in
           })
         ];
       })
-      sources."semver-5.4.1"
+      sources."semver-5.5.0"
       (sources."tar-2.2.1" // {
         dependencies = [
           sources."block-stream-0.0.9"
