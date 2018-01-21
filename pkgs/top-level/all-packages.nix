@@ -8927,6 +8927,8 @@ with pkgs;
 
   gts = callPackage ../development/libraries/gts { };
 
+  gumbo = callPackage ../development/libraries/gumbo { };
+
   gvfs = callPackage ../development/libraries/gvfs {
     gnome = self.gnome3;
   };
@@ -9504,8 +9506,6 @@ with pkgs;
   libguestfs = callPackage ../development/libraries/libguestfs {
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
   };
-
-  libgumbo = callPackage ../development/libraries/libgumbo { };
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
