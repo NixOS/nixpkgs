@@ -141,10 +141,12 @@ stdenv.mkDerivation {
     '')
 
     + ''
-      # Create a symlink to as (the assembler).
-      if [ -e $ldPath/${targetPrefix}as ]; then
-        ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
-      fi
+      # Create symlinks to programs that do not need wraps
+      for exe in addr2line coffdump gprof nm readelf strip ar dlltool objcopy size sysdump as dllwrap objdump srconv windmc c++filt elfedit nlmconv ranlib strings windres; do 
+        if [ -e $ldPath/${targetPrefix}$exe ]; then
+           ln -s $ldPath/${targetPrefix}$exe $out/bin/${targetPrefix}$exe
+        fi
+      done
 
     '' + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
