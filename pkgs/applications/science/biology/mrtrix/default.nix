@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   EIGEN_CFLAGS = "-isystem ${eigen}/include/eigen3";
   dontAddPrefix = true;
   configurePhase = ''
+    patchShebangs .
     runHook preConfigure
     LD=$CXX ./configure
   '';
