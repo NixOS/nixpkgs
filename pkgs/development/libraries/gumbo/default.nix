@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libgumbo-${version}";
+  name = "gumbo-${version}";
   version = "0.10.1";
 
   src = fetchFromGitHub {
