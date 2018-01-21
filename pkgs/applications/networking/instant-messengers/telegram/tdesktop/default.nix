@@ -1,35 +1,42 @@
-{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake, gcc7
-, qtbase, qtimageformats
-, gtk3, libappindicator-gtk3, dee
-, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+{ mkDerivation, lib, fetchgit, fetchpatch
+, pkgconfig, gyp, cmake, gcc7
+, qtbase, qtimageformats, gtk3, libappindicator-gtk3
+, dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.2.1";
+  version = "1.2.6";
 
   # Submodules
   src = fetchgit {
     url = "git://github.com/telegramdesktop/tdesktop";
     rev = "v${version}";
-    sha256 = "1wgcwm9lcy9zw7jawsjj4c46p9mky611k6gjw1900llwxkfh4fh5";
+    sha256 = "15g0m2wwqfp13wd7j31p8cx1kpylx5m8ljaksnsqdkgyr9l1ar8w";
     fetchSubmodules = true;
   };
 
+  # TODO: Not active anymore.
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
     rev = "1ed27ce40913b9e6e87faf7a2310660c2790b98e";
     sha256 = "1i7ipqgisaw54g1nbg2cvpbx89g9gyjjb3sak1486pxsasp1qhyc";
   };
 
-  buildInputs = [
-    gtk3 libappindicator-gtk3 dee qtbase qtimageformats ffmpeg openalSoft minizip
-    libopus alsaLib libpulseaudio range-v3
+  patches = [
+    (fetchpatch {
+      name = "tdesktop.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/tdesktop.patch?h=packages/telegram-desktop&id=f0eefac36f529295f8b065a14b6d5f1a51d7614d";
+      sha256 = "1a4wap5xnp6zn4913r3zdpy6hvkcfxcy4zzimy7fwzp7iwy20iqa";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig gyp cmake gcc7 ];
 
-  patches = [ "${tgaur}/tdesktop.patch" ];
+  buildInputs = [
+    qtbase qtimageformats gtk3 libappindicator-gtk3
+    dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
+  ];
 
   enableParallelBuilding = true;
 
@@ -107,6 +114,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ abbradar garbas ];
+    maintainers = with maintainers; [ abbradar garbas primeos ];
   };
 }
