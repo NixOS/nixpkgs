@@ -6492,6 +6492,7 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-vendor-bin = callPackage ../tools/package-management/cargo-vendor-bin { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
