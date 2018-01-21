@@ -20,7 +20,7 @@ let
       }));
   yarl = (stdenv.lib.overrideDerivation pythonPackages.yarl
     (oldAttrs:
-      { propagatedBuildInputs = [ multidict_3_1_3 ]; }));
+      { propagatedBuildInputs = [ multidict_3_1_3 pythonPackages.idna ]; }));
   aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
     (oldAttrs:
       rec {
