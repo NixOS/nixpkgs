@@ -485,6 +485,7 @@
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
   nixy = "Andrew R. M. <nixy@nixy.moe>";
+  nmattia = "Nicolas Mattia <nicolas@nmattia.com>";
   nocoolnametom = "Tom Doggett <nocoolnametom@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
