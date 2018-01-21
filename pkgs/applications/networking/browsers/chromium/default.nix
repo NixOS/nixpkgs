@@ -117,13 +117,19 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
     mkdir -p "$out/share/applications"
-    for f in '${chromium.browser}'/share/*; do
+    for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) packageName;
+  meta = chromium.browser.meta // {
+    broken = if enableWideVine then
+          builtins.trace "WARNING: WideVine is not functional, please only use for testing"
+             true
+        else false;
+  };
 
   passthru = {
     inherit (chromium) upstream-info browser;
