@@ -22,7 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ nmattia ];
     platforms = with platforms; linux ++ darwin;
-    downloadPage = "https://github.com/logological/gpp";
-    inherit version;
   };
 }
