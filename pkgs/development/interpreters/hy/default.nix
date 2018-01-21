@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "hy-${version}";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchurl {
     url = "mirror://pypi/h/hy/${name}.tar.gz";
