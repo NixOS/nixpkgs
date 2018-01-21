@@ -80,6 +80,7 @@
 , "pulp"
 , "quassel-webserver"
 , "react-tools"
+, "react-native-cli"
 , "s3http"
 , "semver"
 , "serve"

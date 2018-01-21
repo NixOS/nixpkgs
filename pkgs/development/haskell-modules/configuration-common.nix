@@ -605,6 +605,9 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
+  # Needs newer version of its dependencies than we have in LTS-10.x.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
+
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
