@@ -33,10 +33,6 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/cockroach
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://www.cockroachlabs.com;
     description = "A scalable, survivable, strongly-consistent SQL database";
