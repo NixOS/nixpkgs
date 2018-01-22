@@ -42,7 +42,7 @@ in
         is acquired using DHCP.
 
         You should add the module(s) required for your network card to
-        boot.initrd.availableKernelModules. lspci -v -s <ethernet controller>
+        boot.initrd.availableKernelModules. lspci -v -s &lt;ethernet controller&gt;
         will tell you which.
       '';
     };
