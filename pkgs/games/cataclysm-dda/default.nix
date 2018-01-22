@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     sed -i Makefile \
-      -e 's,-Werror,,g' \
-      -e 's,\(DATA_PREFIX=$(PREFIX)/share/\)cataclysm-dda/,\1,g'
+      -e 's,-Werror,,g'
 
     sed '1i#include <cmath>' \
       -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/cataclysm-tiles \
-      --add-flags "--datadir $out/share/"
+      --add-flags "--datadir $out/share/cataclysm-dda/"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
