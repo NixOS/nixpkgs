@@ -37,7 +37,7 @@ if isPyPy then null else buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = https://cffi.readthedocs.org/;
     license = with licenses; [ mit ];
     description = "Foreign Function Interface for Python calling C code";
