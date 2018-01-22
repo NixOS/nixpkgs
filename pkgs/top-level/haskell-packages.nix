@@ -1,4 +1,7 @@
-{ pkgs, lib, newScope, stdenv, buildPlatform, targetPlatform, cabal-install }:
+{ buildPackages, pkgs
+, newScope, stdenv
+, buildPlatform, targetPlatform
+}:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
@@ -65,38 +68,43 @@ in rec {
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
       bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
+      buildLlvmPackages = buildPackages.llvmPackages_35;
+      llvmPackages = pkgs.llvmPackages_35;
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
       bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
       sphinx = pkgs.python27Packages.sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_37;
+      llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) hscolour alex happy;
       inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
-      selfPkgs = packages.ghc822;
+      buildLlvmPackages = buildPackages.llvmPackages_39;
+      llvmPackages = pkgs.llvmPackages_39;
     };
     ghc841 = callPackage ../development/compilers/ghc/8.4.1.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy;
-      inherit buildPlatform targetPlatform;
-      selfPkgs = packages.ghc841;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) alex happy;
-      inherit buildPlatform targetPlatform;
-      selfPkgs = packages.ghcHEAD;
+      buildLlvmPackages = buildPackages.llvmPackages_5;
+      llvmPackages = pkgs.llvmPackages_5;
     };
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
-      inherit cabal-install;
+      inherit (pkgs) cabal-install;
     };
     ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
       bootPkgs = packages.ghc802;
-      inherit cabal-install;
+      inherit (pkgs) cabal-install;
     };
     ghcHaLVM240 = callPackage ../development/compilers/halvm/2.4.0.nix rec {
       bootPkgs = packages.ghc7103Binary;
@@ -110,80 +118,83 @@ in rec {
 
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
-    integer-simple =
-      let integerSimpleGhcNames =
-            pkgs.lib.filter (name: ! builtins.elem name integerSimpleExcludes)
-                            (pkgs.lib.attrNames compiler);
-          integerSimpleGhcs = pkgs.lib.genAttrs integerSimpleGhcNames
-                                (name: compiler."${name}".override { enableIntegerSimple = true; });
-      in pkgs.recurseIntoAttrs (integerSimpleGhcs // {
-           ghcHEAD = integerSimpleGhcs.ghcHEAD.override { selfPkgs = packages.integer-simple.ghcHEAD; };
-         });
-
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames compiler);
+    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
+      integerSimpleGhcNames
+      (name: compiler."${name}".override { enableIntegerSimple = true; }));
   };
 
-  packages = {
+  # Always get compilers from `buildPackages`
+  packages = let bh = buildPackages.haskell; in {
 
     ghc7103 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7103;
+      buildHaskellPackages = bh.packages.ghc7103;
+      ghc = bh.compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc7103Binary = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7103Binary;
+      buildHaskellPackages = bh.packages.ghc7103Binary;
+      ghc = bh.compiler.ghc7103Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc802 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc802;
+      buildHaskellPackages = bh.packages.ghc802;
+      ghc = bh.compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
-    ghc822 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc822;
+    ghc821Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc821Binary;
+      ghc = bh.compiler.ghc821Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghc821Binary = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc821Binary;
+    ghc822 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc822;
+      ghc = bh.compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghc841 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc841;
+      buildHaskellPackages = bh.packages.ghc841;
+      ghc = bh.compiler.ghc841;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHEAD;
+      buildHaskellPackages = bh.packages.ghcHEAD;
+      ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    # TODO Support for multiple variants here
-    ghcCross = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHEAD.crossCompiler;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
-    };
-    ghcjs = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcjs;
+    ghcjs = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcjsHEAD = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcjsHEAD;
+    ghcjsHEAD = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcHaLVM240 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghcHaLVM240;
+      buildHaskellPackages = bh.packages.ghcHaLVM240;
+      ghc = bh.compiler.ghcHaLVM240;
       compilerConfig = callPackage ../development/haskell-modules/configuration-halvm-2.4.0.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
     # using integer-simple instead of integer-gmp.
-    integer-simple =
-      let integerSimpleGhcNames =
-            pkgs.lib.filter (name: ! builtins.elem name integerSimpleExcludes)
-                            (pkgs.lib.attrNames packages);
-      in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
-       ghc = compiler.integer-simple."${name}";
-       overrides = _self : _super : {
-         integer-simple = null;
-         integer-gmp = null;
-       };
+    integer-simple = let
+      integerSimpleGhcNames = pkgs.lib.filter
+        (name: ! builtins.elem name integerSimpleExcludes)
+        (pkgs.lib.attrNames packages);
+    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages."${name}".override {
+      ghc = compiler.integer-simple."${name}";
+      overrides = _self : _super : {
+        integer-simple = null;
+        integer-gmp = null;
+      };
     });
 
   };
