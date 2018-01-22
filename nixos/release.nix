@@ -19,7 +19,8 @@ let
   callTestOnTheseSystems = systems: fn: args: forTheseSystems systems (system: hydraJob (importTest fn args system));
   callTest = callTestOnTheseSystems supportedSystems;
 
-  callSubTests = fn: args: let
+  callSubTests = callSubTestsOnTheseSystems supportedSystems;
+  callSubTestsOnTheseSystems = systems: fn: args: let
     discover = attrs: let
       subTests = filterAttrs (const (hasAttr "test")) attrs;
     in mapAttrs (const (t: hydraJob t.test)) subTests;
@@ -28,10 +29,7 @@ let
       ${system} = test;
     }) (discover (importTest fn args system));
 
-  # If the test is only for a particular system, use only the specified
-  # system instead of generating attributes for all available systems.
-  in if args ? system then discover (import fn args)
-     else foldAttrs mergeAttrs {} (map discoverForSystem supportedSystems);
+  in foldAttrs mergeAttrs {} (map discoverForSystem (intersectLists systems supportedSystems));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
@@ -230,7 +228,7 @@ in rec {
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
-  tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
+  tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -252,7 +250,7 @@ in rec {
   tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
-  tests.elk = callSubTests tests/elk.nix { system = "x86_64-linux"; };
+  tests.elk = callSubTestsOnTheseSystems ["x86_64-linux"] tests/elk.nix {};
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
@@ -346,7 +344,7 @@ in rec {
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
-  tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
+  tests.virtualbox = callSubTestsOnTheseSystems ["x86_64-linux"] tests/virtualbox.nix {};
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
