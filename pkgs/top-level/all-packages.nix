@@ -10452,7 +10452,7 @@ with pkgs;
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0_2;
+  openssl = openssl_1_1_0;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
