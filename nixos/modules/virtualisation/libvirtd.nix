@@ -128,6 +128,7 @@ in {
           dmidecode
           dnsmasq
           ebtables
+          cfg.qemuPackage # libvirtd requires qemu-img to manage disk images
         ]
         ++ optional vswitch.enable vswitch.package;
 

@@ -118,6 +118,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   ChengCat = "Yucheng Zhang <yu@cheng.cat>";
+  chiiruno = "Okina Matara <okinan@protonmail.com>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
   chreekat = "Bryan Richter <b@chreekat.net>";
@@ -485,6 +486,7 @@
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
   nixy = "Andrew R. M. <nixy@nixy.moe>";
+  nmattia = "Nicolas Mattia <nicolas@nmattia.com>";
   nocoolnametom = "Tom Doggett <nocoolnametom@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
-, asciidoc, docbook_xml_dtd_45, libxslt, docbook_xml_xslt, makeWrapper }:
+, asciidoc, docbook_xml_dtd_45, libxslt, docbook_xml_xslt, libiconv, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "newsboat-${version}";
@@ -12,16 +12,24 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace Makefile --replace "|| true" ""
+    # Allow other ncurses versions on Darwin
+    substituteInPlace config.sh \
+      --replace "ncurses5.4" "ncurses"
   '';
 
   nativeBuildInputs = [ pkgconfig asciidoc docbook_xml_dtd_45 libxslt docbook_xml_xslt ]
-                      ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
+                      ++ stdenv.lib.optional stdenv.isDarwin [ makeWrapper libiconv ];
 
   buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ];
 
-  installFlags = [ "DESTDIR=$(out)" "prefix=" ];
+  makeFlags = [ "prefix=$(out)" ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  doCheck = true;
+  checkTarget = "test";
+
+  postInstall = ''
+    cp -r contrib $out
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done
@@ -30,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = https://newsboat.org/;
     description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console.";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda nicknovitski ];
     license     = licenses.mit;
     platforms   = platforms.unix;
   };

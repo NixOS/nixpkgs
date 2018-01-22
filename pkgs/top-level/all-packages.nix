@@ -2470,6 +2470,8 @@ with pkgs;
 
   gpodder = callPackage ../applications/audio/gpodder { };
 
+  gpp = callPackage ../development/tools/gpp { };
+
   gpredict = callPackage ../applications/science/astronomy/gpredict { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
@@ -4823,6 +4825,8 @@ with pkgs;
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
   telepresence = callPackage ../tools/networking/telepresence { };
+
+  tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texlive.combined.scheme-small;
@@ -8929,6 +8933,8 @@ with pkgs;
 
   gts = callPackage ../development/libraries/gts { };
 
+  gumbo = callPackage ../development/libraries/gumbo { };
+
   gvfs = callPackage ../development/libraries/gvfs {
     gnome = self.gnome3;
   };
@@ -9506,8 +9512,6 @@ with pkgs;
   libguestfs = callPackage ../development/libraries/libguestfs {
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
   };
-
-  libgumbo = callPackage ../development/libraries/libgumbo { };
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
