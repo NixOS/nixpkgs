@@ -36,6 +36,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/cataclysm-tiles \
       --add-flags "--datadir $out/share/cataclysm-dda/"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    app=$out/Applications/Cataclysm.app
+    install -D -m 444 data/osx/Info.plist -t $app/Contents
+    install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
+    mkdir $app/Contents/MacOS
+    launcher=$app/Contents/MacOS/Cataclysm.sh
+    cat << SCRIPT > $launcher
+    #!/bin/sh
+    $out/bin/cataclysm-tiles
+    SCRIPT
+    chmod 555 $launcher
   '';
 
   # https://hydra.nixos.org/build/65193254
