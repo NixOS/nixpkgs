@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, makeWrapper, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
+{ fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
 SDL2_mixer, freetype, gettext, Cocoa, libicns }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "03sdzsk4qdq99qckq0axbsvg1apn6xizscd8pwp5w6kq2fyj5xkv";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
@@ -41,10 +41,7 @@ stdenv.mkDerivation rec {
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/cataclysm-tiles \
-      --add-flags "--datadir $out/share/cataclysm-dda/"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
