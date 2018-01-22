@@ -1,5 +1,6 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2
-, libstartup_notification, overrides ? {} }:
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, openssl_1_0_2
+, libstartup_notification, overrides ? {}
+}:
 
 let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
@@ -50,7 +51,7 @@ let overridden = set // overrides; set = with overridden; {
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
   python_rsvg = overridden.gnome_python_desktop;
 
-  gnome_vfs = callPackage ./platform/gnome-vfs { };
+  gnome_vfs = callPackage ./platform/gnome-vfs { openssl = openssl_1_0_2; };
 
   gnome_vfs_monikers = callPackage ./platform/gnome-vfs-monikers { };
 
