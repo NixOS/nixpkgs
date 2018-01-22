@@ -138,5 +138,6 @@ stdenv.mkDerivation rec {
       Supported hardware: at least :
     '' +
     stdenv.lib.concatStringsSep ", " (stdenv.lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    maintainers = with stdenv.lib.maintainers; [ symphorien ];
   };
 }
