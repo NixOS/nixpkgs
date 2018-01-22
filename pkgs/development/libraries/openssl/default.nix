@@ -110,13 +110,7 @@ in {
   openssl_1_1_0 = common {
     version = "1.1.0g";
     sha256 = "1bvka2wf33w2vxv7yw578nnjqyhz2b3chvfb0l4k2ffscw950kfy";
-    patches = [
-      (fetchpatch {
-        name = "CVE-2017-3738.patch";
-        url = "https://github.com/openssl/openssl/commit/563066.patch";
-        sha256 = "0ni9fwpxf8raw8b58pfa15akbqmxx4q64v0ldsm4b9dqhbxf8mkz";
-      })
-    ];
+    patches = [ ./CVE-2017-3738.patch ];
   };
 
 }
