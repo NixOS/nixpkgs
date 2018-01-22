@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmake, zlib }:
+{ stdenv, fetchFromGitHub, substituteAll, libudev, pkgconfig, qtbase, qmake, zlib, kmod }:
 
 stdenv.mkDerivation rec {
   version = "0.2.8";
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./ckb-animations-location.patch
+    (substituteAll {
+      name = "ckb-modprobe.patch";
+      src = ./ckb-modprobe.patch;
+      inherit kmod;
+    })
   ];
 
   doCheck = false;
