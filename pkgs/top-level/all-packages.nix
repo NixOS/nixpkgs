@@ -17928,6 +17928,8 @@ with pkgs;
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
+  xmonad-log = callPackage ../tools/misc/xmonad-log { };
+
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
     packages = self: [];
