@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
+  patches = [ ./patches/fix_locale_dir.patch ];
+
   postPatch = ''
     patchShebangs .
     sed -i Makefile \
