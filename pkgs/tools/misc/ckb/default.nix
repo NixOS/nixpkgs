@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmake, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.8";
+  version = "2018-01-01";
   name = "ckb-next-${version}";
 
   src = fetchFromGitHub {
     owner = "mattanger";
     repo = "ckb-next";
-    rev = "v${version}";
-    sha256 = "0b3h1d54mdyfcx46zvsd7dfqf2656h4jjkiw044170gnfdzxjb3w";
+    rev = "a0e35b5ba4d624210bf40f6c20891d8327ea17dc";
+    sha256 = "14lkhwmpka9vy2xrrsh3lbhqz3dkjvvqshqpg1h1w8qsqaqk3r6m";
   };
 
   buildInputs = [
