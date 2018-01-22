@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "NixOS";
     repo = "patchelf";
     rev = "48452cf6b4ccba1c1f47a09f4284a253634ab7d1";
-    sha256 = "07vx75f2r1bh58qj4b6bl27v39srs2rfr1jrif7syspfhkn4qzw4";
+    sha256 = "1f1s8q3as3nrhcc1a8qc2z7imm644jfz44msn9sfv4mdynp2m2yb";
   };
 
   setupHook = [ ./setup-hook.sh ];
