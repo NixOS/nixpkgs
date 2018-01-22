@@ -4,6 +4,10 @@
 { # package-set used for build tools (all of nixpkgs)
   buildPackages
 
+, # A haskell package set for Setup.hs, compiler plugins, and similar
+  # build-time uses.
+  buildHaskellPackages
+
 , # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
@@ -18,8 +22,8 @@
 , # compiler to use
   ghc
 
-, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and `self`
-  # as second, and returns a set of haskell packages
+, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
+  # `self` as second, and returns a set of haskell packages
   package-set
 
 , # The final, fully overriden package set usable with the nixpkgs fixpoint
@@ -36,15 +40,12 @@ let
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
-  buildHaskellPackages = if hostPlatform != buildPlatform
-                         then self.ghc.bootPkgs
-                         else self;
-
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit (buildHaskellPackages) jailbreak-cabal;
+    inherit buildHaskellPackages;
     inherit (self) ghc;
+    inherit (buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
@@ -119,7 +120,7 @@ let
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
+        cabal2nix --compiler=${ghc.haskellCompilerName} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
       '';
   };
 

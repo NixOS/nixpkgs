@@ -25,7 +25,12 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc";
+  };
 
   meta = {
     homepage = http://haskell.org/ghc;
