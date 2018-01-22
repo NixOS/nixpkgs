@@ -3,6 +3,7 @@
 , cmocka, systemd, dns-root-data, makeWrapper
 , extraFeatures ? false /* catch-all if defaults aren't enough */
 , hiredis, libmemcached, luajitPackages
+, fetchpatch
 }:
 
 let
@@ -16,6 +17,20 @@ stdenv.mkDerivation rec {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
     sha256 = "ac19c121fd687c7e4f5f907b46932d26f8f9d9e01626c4dadb3847e25ea31ceb";
   };
+
+  patches = [
+    # https://gitlab.labs.nic.cz/knot/knot-resolver/blob/v1.5.2/NEWS
+    (fetchurl {
+      name = "CVE-2018-1000002.diff";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/f90d27de49c.diff";
+      sha256 = "1j68zzb8a19kmsh3ggi7f2sghvvb60zm3yds01v2knw61bhyzh6c";
+    })
+    (fetchurl {
+      name = "CVE-2018-1000002-part2.diff";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/d296e36eb55.diff";
+      sha256 = "1yavahd7dyx8j9bdfgf46gl0swfr2835yjg8yxc4ra79x6n9mnf7";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
