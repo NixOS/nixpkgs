@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
   ];
 
-  postBuild = ''
+  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     # iconutil on macOS is not available in nixpkgs
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
   '';
