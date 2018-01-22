@@ -10,8 +10,6 @@ if isPyPy then null else buildPythonPackage rec {
     sha256 = "df9083a992b17a28cd4251a3f5c879e0198bb26c9e808c4647e0a18739f1d11d";
   };
 
-  patches = stdenv.lib.optional (isPy27 && stdenv.cc.isClang) ./clang.patch;
-
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ libffi pycparser ];
@@ -39,7 +37,7 @@ if isPyPy then null else buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = https://cffi.readthedocs.org/;
     license = with licenses; [ mit ];
     description = "Foreign Function Interface for Python calling C code";
