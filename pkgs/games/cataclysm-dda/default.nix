@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+    # "LANGUAGES=all"  # vanilla C:DDA installs all translations even without this flag!
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above

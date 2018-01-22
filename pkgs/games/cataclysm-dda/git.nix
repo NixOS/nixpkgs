@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+    "LANGUAGES=all"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
   ];
