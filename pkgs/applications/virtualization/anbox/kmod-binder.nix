@@ -1,18 +1,14 @@
 { stdenv, lib, fetchFromGitHub, fetchurl
 
 , linuxPackages
+, anbox
 }:
 let
   version = "2018-01-06";
 in
 stdenv.mkDerivation {
   name = "anbox-kmod-binder-${version}";
-  src = fetchFromGitHub {
-    owner = "anbox";
-    repo = "anbox";
-    rev = "da3319106e6f568680017592aecdee34f0e407ac";
-    sha256 = "0mgc6gp1km12qnshvsr26zn8bdd9gdix2s9xab594vq06ckznysd";
-  };
+  src = anbox.src;
 
   nativeBuildInputs = [ ];
   buildInputs = [

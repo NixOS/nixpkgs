@@ -459,7 +459,7 @@ with pkgs;
   anbox = callPackage ../applications/virtualization/anbox {
     boost = boost15x;
   };
-
+  # need to move to kmods section
   anbox-binder = callPackage ../applications/virtualization/anbox/kmod-binder.nix { };
   anbox-ashmem = callPackage ../applications/virtualization/anbox/kmod-ashmem.nix { };
 
@@ -12893,7 +12893,7 @@ with pkgs;
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
-
+    
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc { };
