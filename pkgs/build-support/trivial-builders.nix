@@ -58,6 +58,18 @@ rec {
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
   # Create a Shell script, check its syntax
+  writeShellScript = name : text :
+    writeTextFile {
+      inherit name;
+      executable = true;
+      text = ''
+        #!${stdenv.shell}
+        ${text}
+        '';
+      checkPhase = ''
+        ${stdenv.shell} -n $out
+      '';
+    };
   writeShellScriptBin = name : text :
     writeTextFile {
       inherit name;
