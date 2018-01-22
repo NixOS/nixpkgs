@@ -3887,13 +3887,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  openssh =
-    callPackage ../tools/networking/openssh {
-      hpnSupport = false;
-      withKerberos = stdenv.isDarwin;
-      etcDir = "/etc/ssh";
-      pam = if stdenv.isLinux then pam else null;
-    };
+  openssh = callPackage ../tools/networking/openssh {
+    hpnSupport = false;
+    withKerberos = stdenv.isDarwin;
+    etcDir = "/etc/ssh";
+    pam = if stdenv.isLinux then pam else null;
+    openssl = openssl_1_0_2;
+  };
 
   openssh_hpn = pkgs.appendToName "with-hpn" (openssh.override { hpnSupport = true; });
 
