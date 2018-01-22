@@ -21,8 +21,6 @@ stdenv.mkDerivation {
 
   BLAS_LIBS = "-L${openblas}/lib -lopenblas";
 
-  FFLAGS = optional openblas.blas64 "-fdefault-integer-8";
-
   INTERFACE64 = optional openblas.blas64 "1";
 
   preConfigure = ''
