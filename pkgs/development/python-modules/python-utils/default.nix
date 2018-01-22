@@ -23,7 +23,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   checkPhase = ''
-    rm nix_run_setup.py
     py.test
   '';
 

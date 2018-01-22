@@ -39,9 +39,7 @@ buildPythonPackage rec {
     sha256 = "9ffbfb74bf3fc3905be1b9b052ed865675651e38fcd972ed1ed5c64a02f93cbd";
   };
 
-  # do not run checks on nix_run_setup.py
-  patches = lib.singleton ./setup.patch
-         ++ lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
+  patches = lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
 
   # testing based on project's tox.ini
   checkPhase = ''

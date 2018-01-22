@@ -178,6 +178,6 @@ in stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan kragniz ];
+    maintainers = with maintainers; [ fridh kragniz ];
   };
 }

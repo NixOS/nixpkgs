@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , cython
 , pytest, psutil, pytestrunner
@@ -7,13 +7,13 @@
 }:
 
 let
+
+in buildPythonPackage rec {
   pname = "multidict";
   version = "4.0.0";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0y0pg3r9hlknny0zwg906wz81h8in6lgvnpbmzvl911bmnrqc95p";
   };
 
