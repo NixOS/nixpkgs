@@ -64,6 +64,13 @@ in stdenv.mkDerivation rec {
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
+    
+    # disable component updater and update check
+    substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
+      --replace "\"disable_updater\": false" "\"disable_updater\": true"
+    echo "
+    [component_manager]
+    disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
     mkdir -p "$out/etc/bash_completion.d/"
