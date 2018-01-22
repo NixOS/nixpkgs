@@ -4514,6 +4514,10 @@ with pkgs;
     quazip = quazip_qt4;
   };
 
+  screenkey = python2Packages.callPackage ../applications/video/screenkey {
+    inherit (gnome3) defaultIconTheme;
+  };
+
   quazip_qt4 = libsForQt5.quazip.override {
     qtbase = qt4; qmake = qmake4Hook;
   };
