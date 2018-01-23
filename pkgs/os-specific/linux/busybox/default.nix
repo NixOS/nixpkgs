@@ -1,10 +1,12 @@
 { stdenv, lib, buildPackages, fetchurl, fetchpatch
 , enableStatic ? false
 , enableMinimal ? false
-, useMusl ? false, musl
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 , buildPlatform, hostPlatform
 }:
+
+assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 
 let
   configParser = ''
@@ -24,6 +26,10 @@ let
     }
   '';
 
+  libcConfig = lib.optionalString useMusl ''
+    CONFIG_FEATURE_UTMP n
+    CONFIG_FEATURE_WTMP n
+  '';
 in
 
 stdenv.mkDerivation rec {
@@ -69,6 +75,7 @@ stdenv.mkDerivation rec {
 
     ${extraConfig}
     CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    ${libcConfig}
     EOF
 
     make oldconfig
