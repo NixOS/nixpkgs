@@ -3,7 +3,9 @@
 , python2Packages
 , eigen
 , mesa
-, qt56
+, qmake
+, qtscript
+, qtsvg
 , x11
 , zlib
 }:
@@ -20,15 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qt56.qmake
-    qt56.qtscript
+    qmake
   ];
   buildInputs = [
     python2Packages.python
     python2Packages.numpy
     eigen
     mesa
-    qt56.qtsvg
+    qtscript
+    qtsvg
     x11
     zlib
   ];
