@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
     # Set paths for console fonts.
     CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
+    # Bump from 4KB, much faster I/O
+    CONFIG_FEATURE_COPYBUF_KB 64
+
     ${extraConfig}
     CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
     EOF
