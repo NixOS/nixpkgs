@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "0y2z5hia4pr1rsyqhf4dmyc7mvhsbc298pg4j1iqikpvx9b5iwrr";
+    sha256 = "03sb05zz6qn966apcprdqhmirkz7kjdbx8hswbvgamk1s2xd7v6f";
   };
 
   outputs = [ "out" "dev" ];
