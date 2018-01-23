@@ -1,8 +1,6 @@
 { stdenv
 , fetch
 , fetchpatch
-, perl
-, groff
 , cmake
 , python
 , libffi
@@ -41,7 +39,7 @@ in stdenv.mkDerivation (rec {
   outputs = [ "out" ]
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ perl groff cmake python ]
+  nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
