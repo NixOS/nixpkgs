@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
-  crossAttrs.nativeBuildInputs = [ gettext buildPackages.stdenv.cc ];
-  crossAttrs.buildInputs = [ gettext ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ gettext ];
 
   postConfigure =
     stdenv.lib.optionalString stdenv.isSunOS
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # Thus, re-run it with Bash.
       "${stdenv.shell} config.status";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = true; # not cross
 
   meta = with stdenv.lib; {
     homepage = https://www.gnupg.org/related_software/libgpg-error/index.html;
