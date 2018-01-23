@@ -48,6 +48,9 @@ stdenv.mkDerivation {
   # remove dependency on bootstrap-tools in early stdenv build
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
+  '' + ''
+    substituteInPlace "$dev/bin/icu-config" \
+      --replace \''${pkglibdir}/Makefile.inc "$dev/lib/icu/Makefile.inc"
   '';
 
   postFixup = ''moveToOutput lib/icu "$dev" '';
