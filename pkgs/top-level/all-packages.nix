@@ -18985,6 +18985,8 @@ with pkgs;
 
   ### SCIENCE/MATH
 
+  almonds = pythonPackages.callPackage ../applications/science/math/almonds { };
+
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
   atlas = callPackage ../development/libraries/science/math/atlas {
