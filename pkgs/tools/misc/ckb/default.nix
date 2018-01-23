@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, substituteAll, libudev, pkgconfig, qtbase, qmake, zlib, kmod }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.8";
+  version = "0.2.9";
   name = "ckb-next-${version}";
 
   src = fetchFromGitHub {
-    owner = "mattanger";
+    owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    sha256 = "0b3h1d54mdyfcx46zvsd7dfqf2656h4jjkiw044170gnfdzxjb3w";
+    sha256 = "0hl41znyhp3k5l9rcgz0gig36gsg95ivrs1dyngv45q9jkr6fchm";
   };
 
   buildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
-    homepage = https://github.com/mattanger/ckb-next;
+    homepage = https://github.com/ckb-next/ckb-next;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kierdavis ];
