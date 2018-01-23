@@ -129,16 +129,16 @@ rec {
 
   autodetect-encoding = buildEclipsePlugin rec {
     name = "autodetect-encoding-${version}";
-    version = "1.8.4.201708052053";
+    version = "1.8.5.201801191359";
 
     srcFeature = fetchurl {
-      url = "https://cypher256.github.io/eclipse-encoding-plugin/features/eclipse.encoding.plugin.feature_${version}.jar";
-      sha256 = "1gbvib5dd75pp5mr17ckj2y66gnxjvpc067im5nsl9fyljdw867c";
+      url = "https://github.com/cypher256/eclipse-encoding-plugin/raw/master/eclipse.encoding.updatesite.snapshot/features/eclipse.encoding.plugin.feature_${version}.jar";
+      sha256 = "1m8ypsc1dwz0y6yhjgxsdi9813d38jllv7javgwvcd30g042a3kx";
     };
 
     srcPlugin = fetchurl {
-      url = "https://cypher256.github.io/eclipse-encoding-plugin/plugins/mergedoc.encoding_${version}.jar";
-      sha256 = "0728zsbfs1mc4qvx2p92hkxpnknckqk0xvqlmzivsnr62b5qd5im";
+      url = "https://github.com/cypher256/eclipse-encoding-plugin/raw/master/eclipse.encoding.updatesite.snapshot/plugins/mergedoc.encoding_${version}.jar";
+      sha256 = "1n2rzybfcwp3ss2qi0fhd8vm38vdwav8j837lqiqlfcnvzwsk86m";
     };
 
     meta = with stdenv.lib; {
