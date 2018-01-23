@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
     pkgconfig bison imake which jdk openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  '';
 
   preConfigure = ''
     configureFlagsArray=(
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
-      CC=$(type -p gcc)
-      CXX=$(type -p g++)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
@@ -50,8 +54,6 @@ stdenv.mkDerivation rec {
       --without-tcltk
       --without-aqua
       --disable-R-framework
-      CC="clang"
-      CXX="clang++"
       OBJC="clang"
   '' + ''
     )
