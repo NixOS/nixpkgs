@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
+  doCheck = true;
+
+  checkTarget = "test";
+
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
   prePatch = "rm BUILD";
