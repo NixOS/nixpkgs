@@ -138,7 +138,7 @@ in stdenv.mkDerivation rec {
     homepage = http://pypy.org/;
     description = "Fast, compliant alternative implementation of the Python language (2.7.13)";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ ];
   };
 }
