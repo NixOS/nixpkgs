@@ -314,6 +314,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
+  ./services/misc/home-assistant.nix
   ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
