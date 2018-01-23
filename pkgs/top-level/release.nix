@@ -43,6 +43,7 @@ let
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
               jobs.go.x86_64-darwin
+              jobs.haskellPackages.ghc-mod.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.nix-repl.x86_64-darwin
               jobs.nix.x86_64-darwin
