@@ -2628,6 +2628,17 @@ rec {
 
   };
 
+  vim-dirdiff = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-dirdiff-2017-01-19";
+    src = fetchgit {
+      url = "https://github.com/will133/vim-dirdiff";
+      rev = "db1fe77dcefa7a5b1089c8a84d1b401a4bd780bc";
+      sha256 = "1540h5skh8rcpzj0vp8sr53hg9jmmknj155pxs4z5w6gvzk7nx0p";
+    };
+    dependencies = [];
+
+  };
+
   vim-easy-align = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-easy-align-2017-06-03";
     src = fetchgit {
