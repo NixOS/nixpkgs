@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, unzip, which
-, libuuid, attr, xfsprogs, cppunit
+, libuuid, attr, xfsprogs, cppunit, rdma-core
 , zlib, openssl, sqlite, jre, openjdk, ant
 } :
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which unzip pkgconfig cppunit openjdk ant];
-  buildInputs = [ libuuid attr xfsprogs zlib openssl sqlite jre ];
+  buildInputs = [ libuuid attr xfsprogs zlib openssl sqlite jre rdma-core ];
 
   postPatch = ''
     patchShebangs ./
@@ -42,9 +42,9 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     for i in ${toString subdirs}; do
-      make -C $i
+      make -C $i BEEGFS_OPENTK_IBVERBS=1
     done
-    make -C beegfs_admon/build admon_gui
+    make -C beegfs_admon/build admon_gui BEEGFS_OPENTK_IBVERBS=1
   '';
 
   installPhase = ''
