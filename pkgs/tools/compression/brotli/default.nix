@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
   prePatch = "rm BUILD";
 
+  # Don't bother with "man" output for now,
+  # it currently only makes the manpages hard to use.
+  postInstall = ''
+    mkdir -p $out/share/man/man{1,3}
+    cp ../docs/*.1 $out/share/man/man1/
+    cp ../docs/*.3 $out/share/man/man3/
+  '';
+
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
 
