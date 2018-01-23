@@ -166,6 +166,7 @@
 "github:w0rp/ale"
 "github:wakatime/vim-wakatime"
 "github:wincent/command-t"
+"github:will133/vim-dirdiff"
 "github:xolox/vim-easytags"
 "github:xolox/vim-misc"
 "github:zah/nim.vim"
