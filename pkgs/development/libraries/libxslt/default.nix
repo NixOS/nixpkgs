@@ -40,15 +40,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
-  # TODO move cryptoSupport as last flag, when upgrading libxslt
-  configureFlags = []
-    ++ optional (buildPlatform != hostPlatform) "--with-libxml-prefix=${libxml2.dev}"
-    ++ optional (!cryptoSupport) "--without-crypto"
-    ++ [
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python2}";
+  ] ++ optional pythonSupport "--with-python=${python2}"
+    ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
