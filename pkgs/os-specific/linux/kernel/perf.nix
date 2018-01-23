@@ -46,9 +46,6 @@ stdenv.mkDerivation {
       --prefix PATH : "${binutils}/bin"
   '';
 
-
-  patches = optional (hasPrefix "4.9" kernel.version) [ ./perf-tools-fix-build-with-arch-x86_64.patch ];
-
   meta = {
     homepage = https://perf.wiki.kernel.org/;
     description = "Linux tools to profile with performance counters";
