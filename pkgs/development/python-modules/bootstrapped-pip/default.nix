@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  buildInputs = [ python makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
 
   installPhase = ''
 
