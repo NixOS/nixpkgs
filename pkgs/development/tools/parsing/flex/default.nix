@@ -19,31 +19,27 @@ stdenv.mkDerivation rec {
         + "/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
     sha256 = "1aarhcmz7mfrgh15pkj6f7ikxa2m0mllw1i1vscsf1kw5d05lw6f";
   })];
+  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile.in --replace "tests" " "
 
-  nativeBuildInputs = [ buildPackages.stdenv.cc autoreconfHook help2man ];
+    substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ autoreconfHook help2man ];
   buildInputs = [ bison ];
-  nativePropagatedBuildInputs = [ m4 ];
+  propagatedBuildInputs = [ m4 ];
+
+  preConfigure = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export ac_cv_func_malloc_0_nonnull=yes
+    export ac_cv_func_realloc_0_nonnull=yes
+  '';
 
   postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  crossAttrs = {
-    # disable tests which can't run on build machine
-    postPatch = ''
-      substituteInPlace Makefile.in --replace "tests" " "
-
-      substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
-    '';
-
-    preConfigure = ''
-      export ac_cv_func_malloc_0_nonnull=yes
-      export ac_cv_func_realloc_0_nonnull=yes
-    '';
-
-    # linux-pam derivation relies on static archive
-    dontDisableStatic = true;
-  };
+  dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
 
   meta = {
     homepage = https://github.com/westes/flex;
