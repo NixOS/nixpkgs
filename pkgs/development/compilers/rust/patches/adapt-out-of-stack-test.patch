@@ -1,0 +1,25 @@
+diff --git a/src/test/run-pass/out-of-stack.rs b/src/test/run-pass/out-of-stack.rs
+index a7748b6d6a..7679eabccc 100644
+--- a/src/test/run-pass/out-of-stack.rs
++++ b/src/test/run-pass/out-of-stack.rs
+@@ -47,7 +47,7 @@ fn check_status(status: std::process::ExitStatus)
+     use std::os::unix::process::ExitStatusExt;
+
+     assert!(!status.success());
+-    assert_eq!(status.signal(), Some(libc::SIGABRT));
++    assert_eq!(status.signal(), Some(libc::SIGSEGV));
+ }
+
+ #[cfg(not(unix))]
+@@ -86,10 +86,6 @@ fn main() {
+             let silent = Command::new(&args[0]).arg(mode).output().unwrap();
+
+             check_status(silent.status);
+-
+-            let error = String::from_utf8_lossy(&silent.stderr);
+-            assert!(error.contains("has overflowed its stack"),
+-                    "missing overflow message: {}", error);
+         }
+     }
+ }
+

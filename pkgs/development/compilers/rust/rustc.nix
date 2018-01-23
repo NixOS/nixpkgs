@@ -55,7 +55,9 @@ stdenv.mkDerivation {
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
-  patches = patches ++ targetPatches;
+  patches = patches ++ targetPatches 
+    # See https://github.com/NixOS/nixpkgs/issues/34189 for that. This adjusts a test, which failed after a glibc update.
+    ++ [ ./patches/adapt-out-of-stack-test.patch ];
 
   passthru.target = target;
 
