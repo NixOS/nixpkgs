@@ -86,6 +86,6 @@ stdenv.mkDerivation ( rec {
     homepage = http://www.ponylang.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ doublec kamilchm patternspandemic ];
-    platforms = subtractLists platforms.i686 platforms.unix;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 })
