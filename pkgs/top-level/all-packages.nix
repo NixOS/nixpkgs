@@ -18932,6 +18932,8 @@ with pkgs;
     neuron-version = neuron.version;
   };
 
+  kallisto = callPackage ../applications/science/biology/kallisto { };
+
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
   };
