@@ -7388,6 +7388,7 @@ with pkgs;
   python34Full = python34.override{x11Support=true;};
   python35Full = python35.override{x11Support=true;};
   python36Full = python36.override{x11Support=true;};
+  python37Full = python37.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
   pythonPackages = python.pkgs;
@@ -7410,6 +7411,10 @@ with pkgs;
     inherit (darwin) CF configd;
     self = python36;
   };
+  python37 = callPackage ../development/interpreters/python/cpython/3.7 {
+    inherit (darwin) CF configd;
+    self = python37;
+  };
 
   pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
     self = pypy27;
@@ -7422,6 +7427,7 @@ with pkgs;
   python34Packages = python34.pkgs;
   python35Packages = python35.pkgs;
   python36Packages = recurseIntoAttrs python36.pkgs;
+  python37Packages = python37.pkgs;
   pypyPackages = pypy.pkgs;
 
   # Should eventually be moved inside Python interpreters.
