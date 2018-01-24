@@ -1,12 +1,15 @@
 { stdenv, fetchurl, pkgconfig, unzip, which
 , libuuid, attr, xfsprogs, cppunit, rdma-core
 , zlib, openssl, sqlite, jre, openjdk, ant
+, openssh, perl, gfortran
 } :
 
 let
   version = "6.17";
 
   subdirs = [
+    "beeond_thirdparty/build"
+    "beeond_thirdparty_gpl/build"
     "beegfs_thirdparty/build"
     "beegfs_opentk_lib/build"
     "beegfs_common/build"
@@ -30,14 +33,34 @@ in stdenv.mkDerivation rec {
     sha256 = "10xs7gzdmlg23k6zn1b7jij3lljn7rr1j6h476hq4lbg981qk3n3";
   };
 
-  nativeBuildInputs = [ which unzip pkgconfig cppunit openjdk ant];
-  buildInputs = [ libuuid attr xfsprogs zlib openssl sqlite jre rdma-core ];
+  nativeBuildInputs = [ which unzip pkgconfig cppunit openjdk ant perl ];
+
+  buildInputs = [
+    libuuid
+    attr
+    xfsprogs
+    zlib
+    openssl
+    sqlite
+    jre
+    rdma-core
+    openssh
+    gfortran ];
+
+  hardeningDisable = [ "format" ]; # required for building beeond
 
   postPatch = ''
     patchShebangs ./
     find -type f -name Makefile -exec sed -i "s:/bin/bash:${stdenv.shell}:" \{} \;
     find -type f -name Makefile -exec sed -i "s:/bin/true:true:" \{} \;
     find -type f -name "*.mk" -exec sed -i "s:/bin/true:true:" \{} \;
+
+    # unpack manually and patch variable name
+    sed -i '/tar -C $(SOURCE_PATH) -xzf $(PCOPY_TAR)/d' beeond_thirdparty/build/Makefile
+    cd beeond_thirdparty/source
+    tar xf pcopy-0.96.tar.gz
+    sed -i 's/\([^_]\)rank/\1grank/' pcopy-0.96/src/pcp.cpp
+    cd ../..
   '';
 
   buildPhase = ''
@@ -93,6 +116,12 @@ in stdenv.mkDerivation rec {
 
     cp beegfs_client_devel/build/dist/usr/share/doc/beegfs-client-devel/examples/* $docDir
     cp -r beegfs_client_devel/include/* $includeDir
+
+    cp beeond_thirdparty_gpl/build/parallel $out/bin
+    cp beeond_thirdparty/build/pcopy/p* $out/bin
+    cp beeond_thirdparty/build/pcopy/s* $out/bin
+    cp -r beeond/scripts/* $out
+    cp beeond/source/* $out/bin
   '';
 
   postFixup = ''
@@ -100,6 +129,9 @@ in stdenv.mkDerivation rec {
       --replace " java " " ${jre}/bin/java " \
       --replace "/opt/beegfs/beegfs-admon-gui/beegfs-admon-gui.jar" \
                 "$libDirPkg/beegfs-admon-gui.jar"
+
+    substituteInPlace $out/bin/beeond \
+      --replace /opt/beegfs/sbin "$out/bin"
   '';
 
   doCheck = true;
