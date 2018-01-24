@@ -415,7 +415,7 @@
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
-  ./services/network-filesystems/openafs-client/default.nix
+  ./services/network-filesystems/openafs/client.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/tahoe.nix
