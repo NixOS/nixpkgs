@@ -1011,7 +1011,7 @@ in {
 
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
-  backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
+  backports_ssl_match_hostname_3_4_0_2 = if !(pythonOlder "3.5") then null else self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
     src = pkgs.fetchurl {
@@ -1025,7 +1025,7 @@ in {
     };
   };
 
-  backports_ssl_match_hostname = self.buildPythonPackage rec {
+  backports_ssl_match_hostname = if !(pythonOlder "3.5") then null else self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-${version}";
     version = "3.5.0.1";
 
