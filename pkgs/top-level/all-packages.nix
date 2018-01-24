@@ -18815,6 +18815,7 @@ with pkgs;
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
+    pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
