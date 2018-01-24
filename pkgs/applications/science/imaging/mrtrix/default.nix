@@ -37,9 +37,11 @@ stdenv.mkDerivation rec {
 
   EIGEN_CFLAGS = "-isystem ${eigen}/include/eigen3";
   dontAddPrefix = true;
+  enableParallelBuilding = true;
+  # We need qmake, but don't actually use qmakeConfigurePhase
   configurePhase = ''
-    patchShebangs .
     runHook preConfigure
+    patchShebangs .
     LD=$CXX ./configure
   '';
   buildPhase = ''
@@ -50,7 +52,6 @@ stdenv.mkDerivation rec {
     fi
     ./build
   '';
-  enableParallelBuilding = false;
   installPhase = ''
     mkdir -p $out
     mv release/{bin,lib} $out
