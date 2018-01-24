@@ -1,14 +1,12 @@
-{ stdenv, buildPythonPackage, fetchurl, pygments, greenlet, curtsies, urwid, requests, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, pygments, greenlet, curtsies, urwid, requests, mock }:
 
 buildPythonPackage rec {
   pname = "bpython";
   version = "0.17";
-  name  = "${pname}-${version}";
 
-  # 0.17 is still missing on PyPI, https://github.com/bpython/bpython/issues/706
-  src = fetchurl {
-    url = "https://bpython-interpreter.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "13fyyx06645ikvmj9zmkixr12kzk1c3a3f9s9i2rvaczjycn82lz";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1mbah208jhd7bsfaa17fwpi55f7fvif0ghjwgrjmpmx8w1vqab9l";
   };
 
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];

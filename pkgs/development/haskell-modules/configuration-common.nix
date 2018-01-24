@@ -605,6 +605,9 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
+  # Needs newer version of its dependencies than we have in LTS-10.x.
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
+
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
@@ -845,10 +848,17 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs newer versions than lts-10 provides.
+  # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
+  # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
     http-conduit = self.http-conduit_2_3_0;
+  };
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
+    haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
+  };
+  haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
   # These packages depend on each other, forming an infinite loop.
@@ -945,5 +955,8 @@ self: super: {
 
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis { ShellCheck = self.ShellCheck_0_4_6; };
+
+  # https://github.com/yesodweb/Shelly.hs/issues/162
+  shelly = dontCheck super.shelly;
 
 }

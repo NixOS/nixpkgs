@@ -2155,6 +2155,18 @@ rec {
 
   };
 
+  gitv = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "gitv-2017-11-26";
+    src = fetchgit {
+      url = "https://github.com/gregsexton/gitv";
+      rev = "4b7ecf354726a3d31d0ad9090efd27a79c850a35";
+      sha256 = "0n2ddq0kicl2xjrhxi5pqvpikxa7vbf0hp3lzwmpapmvx146wi3w";
+    };
+    dependencies = ["fugitive"];
+
+  };
+
+
   matchit-zip = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "matchit-zip";
     src = fetchurl {
@@ -2611,6 +2623,17 @@ rec {
       url = "git://github.com/itchyny/vim-cursorword";
       rev = "4878d6185b99131c5f610cc6ad0e223439ac4601";
       sha256 = "170nf0w7i5k3cr72dkvraq2p0lzsvb3cmdvslyz7cmxnz611n6bf";
+    };
+    dependencies = [];
+
+  };
+
+  vim-dirdiff = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-dirdiff-2017-01-19";
+    src = fetchgit {
+      url = "https://github.com/will133/vim-dirdiff";
+      rev = "db1fe77dcefa7a5b1089c8a84d1b401a4bd780bc";
+      sha256 = "1540h5skh8rcpzj0vp8sr53hg9jmmknj155pxs4z5w6gvzk7nx0p";
     };
     dependencies = [];
 

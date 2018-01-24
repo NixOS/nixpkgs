@@ -5,7 +5,7 @@
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
-  self = stdenv.mkDerivation {
+  self = stdenv.mkDerivation ({
     name = "clang-${version}";
 
     unpackPhase = ''
@@ -37,9 +37,8 @@ let
 
     patches = [ ./purity.patch ];
 
-    postBuild = stdenv.lib.optionalString enableManpages ''
-      cmake --build . --target docs-clang-man
-    '';
+    # XXX: TODO: This should be removed on next rebuild
+    postBuild = "";
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
@@ -50,8 +49,7 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" "lib" "python" ]
-      ++ stdenv.lib.optional enableManpages "man";
+    outputs = [ "out" "lib" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -62,6 +60,8 @@ let
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
+      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
@@ -70,13 +70,6 @@ let
       fi
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
-    ''
-    + stdenv.lib.optionalString enableManpages ''
-      # Manually install clang manpage
-      cp docs/man/*.1 $out/share/man/man1/
-
-      # Move it and other man pages to 'man' output
-      moveToOutput "share/man" "$man"
     '';
 
     enableParallelBuilding = true;
@@ -94,5 +87,23 @@ let
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
-  };
+  } // stdenv.lib.optionalAttrs enableManpages {
+    name = "clang-manpages-${version}";
+
+    buildPhase = ''
+      make docs-clang-man
+    '';
+
+    installPhase = ''
+      mkdir -p $out/share/man/man1
+      # Manually install clang manpage
+      cp docs/man/*.1 $out/share/man/man1/
+    '';
+
+    outputs = [ "out" ];
+
+    doCheck = false;
+
+    meta.description = "man page for Clang ${version}";
+  });
 in self

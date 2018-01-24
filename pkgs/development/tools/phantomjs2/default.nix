@@ -105,6 +105,7 @@ in stdenv.mkDerivation rec {
     $out/bin/phantomjs
   '' + ''
     wrapProgram $out/bin/phantomjs \
+    --set QT_QPA_PLATFORM offscreen \
     --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
   '';
 

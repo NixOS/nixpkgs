@@ -8052,10 +8052,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.704";
+    name = "Log-Any-1.705";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
-      sha256 = "57289d17b83bb5ce1d44148fd4e31a82b0d27e9104706ddc1ec5bb15461d0dd9";
+      sha256 = "85c7c5189a8bfc2ffb6f879b4cd04dd77f94bc5abc3800b4330f42f43fb9a696";
     };
     # Syslog test fails.
     preCheck = "rm t/syslog.t";
@@ -8068,10 +8068,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogContextual = buildPerlPackage rec {
-    name = "Log-Contextual-0.008000";
+    name = "Log-Contextual-0.008001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
-      sha256 = "acd804508740e35c208e0cff575f3dbca2e01b8e64ec00eec3f88c7c4e3d656c";
+      sha256 = "b93cbcfbb8796d51c836e3b00243cda5630808c152c14eee5f20ca09c9451993";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
@@ -8400,6 +8400,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0qzn8370cr91jnq1kawy6v16bcz49pch6inmw85rhzg87j1h6ica";
     };
     buildInputs = [ParseRecDescent];
+  };
+
+  MailPOP3Client = buildPerlPackage rec {
+    name = "Mail-POP3Client-2.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SD/SDOWD/${name}.tar.gz";
+      sha256 = "1142d6247a93cb86b23ed8835553bb2d227ff8213ee2743e4155bb93f47acb59";
+    };
+    meta = {
+      description = "Perl 5 module to talk to a POP3 (RFC1939) server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MailRFC822Address = buildPerlPackage {

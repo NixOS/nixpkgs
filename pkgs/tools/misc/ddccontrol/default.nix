@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "A program used to control monitor parameters by software";
     homepage = http://ddccontrol.sourceforge.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.pakhfn ];
   };
 }

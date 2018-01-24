@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
-  version = "39.1.2";
+  version = "39.2.0";
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "0j5pldc184xv1mhdrhsmp23g58cy9a2bba27djigkh2sd5rksgji";
+    sha256 = "1ddy9b9ly1231pnjs43gj7pvc77wjvs4j2rlympal81vyabaphmy";
   };
 
   outputs = [ "out" "layouts" ];

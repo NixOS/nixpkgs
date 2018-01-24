@@ -40,6 +40,8 @@ let
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
+      substituteInPlace $out/share/clang/cmake/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin

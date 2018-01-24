@@ -43,14 +43,14 @@ in stdenv.mkDerivation rec {
     SRC_HC_OPTS += ${ghcFlags}
     SRC_CC_OPTS += ${cFlags}
   '' + (if enableIntegerSimple then ''
-    INTEGER_LIBRARY=integer-simple
+    INTEGER_LIBRARY = integer-simple
   '' else ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
   '');
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
 
   '' + stdenv.lib.optionalString stdenv.isLinux ''
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     sed -i -e 's|"\$topdir"|"\$topdir" ${ghcFlags}|' ghc/ghc.wrapper
 
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+    export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     find . -name '*.hs'  | xargs sed -i -e 's|ASSERT (|ASSERT(|' -e 's|ASSERT2 (|ASSERT2(|' -e 's|WARN (|WARN(|'
     find . -name '*.lhs' | xargs sed -i -e 's|ASSERT (|ASSERT(|' -e 's|ASSERT2 (|ASSERT2(|' -e 's|WARN (|WARN(|'
@@ -82,7 +82,12 @@ in stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc";
+  };
 
   meta = {
     homepage = http://haskell.org/ghc;

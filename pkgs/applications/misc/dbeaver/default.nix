@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "dbeaver-ce-${version}";
-  version = "4.3.2";
+  version = "4.3.3";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.jkiss.org/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "0spiwx5dxchpl2qq10rinj9db723w2hf7inqmg4m7fjaj75bpl3s";
+    sha256 = "063h2za2m33b4k9s756lwicxwszzsqr2sqr2gi4ai05dqkgkw951";
   };
 
   installPhase = ''
