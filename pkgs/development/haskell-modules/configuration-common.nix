@@ -848,10 +848,17 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs newer versions than lts-10 provides.
+  # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
+  # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
     http-conduit = self.http-conduit_2_3_0;
+  };
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
+    haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
+  };
+  haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
   # These packages depend on each other, forming an infinite loop.

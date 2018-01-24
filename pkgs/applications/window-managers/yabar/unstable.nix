@@ -2,10 +2,10 @@
 
 let
   pkg = callPackage ./build.nix ({
-    version = "unstable-2018-01-02";
+    version = "unstable-2018-01-18";
 
-    rev    = "d9f75933f1fdd7bec24bf7db104c7e1df2728b98";
-    sha256 = "0ry2pgqsnl6cmvkhakm73cjqdnirkimldnmbngl6hbvggx32z8c9";
+    rev    = "c516e8e78d39dd2b339acadc4c175347171150bb";
+    sha256 = "1p9lx78cayyn7qc2q66id2xfs76jyddnqv2x1ypsvixaxwcvqgdb";
   } // attrs);
 in pkg.overrideAttrs (o: {
   buildInputs = o.buildInputs ++ [
