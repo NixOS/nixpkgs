@@ -17,7 +17,7 @@ let
     echo "/afs:${cfg.cacheDirectory}:${cfg.cacheSize}" > $out/cacheinfo
   '';
 
-  openafsPkgs = config.boot.kernelPackages.openafsClient;
+  openafsPkgs = config.boot.kernelPackages.openafs;
 in
 {
   ###### interface
