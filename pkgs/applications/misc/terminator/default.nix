@@ -11,8 +11,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69";
   };
 
-  nativeBuildInputs = [ file intltool ];
-  buildInputs = [ gtk3 gnome3.vte gobjectIntrospection wrapGAppsHook cairo ];
+  nativeBuildInputs = [ file intltool wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.vte gobjectIntrospection cairo ];
 
   pythonPath = with pythonPackages; [
     pygobject3 vte keybinder notify gettext psutil
