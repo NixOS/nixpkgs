@@ -81,6 +81,31 @@ rec {
   */
   mod = base: int: base - (int * (builtins.div base int));
 
+  /* C-style comparisons
+
+     a < b  => -1
+     a == b => 0
+     a > b  => 1
+  */
+  compare = a: b:
+    if a < b
+    then -1
+    else if a > b
+         then 1
+         else 0;
+
+  /* Split type into two subtypes by predicate `p`, assume
+
+       forall x y . x < y if p x == true && p y == false
+
+     compare elements of the same subtype with `yes` and `no`
+     comparisons respectively.
+  */
+  splitByAndCompare = p: yes: no: a: b:
+    if p a
+    then if p b then yes a b else -1
+    else if p b then 1 else no a b;
+
   /* Reads a JSON file. */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
