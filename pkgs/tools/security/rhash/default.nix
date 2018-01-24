@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # * .h files installed for static library target only
   # * .so.0 -> .so link only created in the static library install target
   buildPhase = ''
-    make lib-shared lib-static build-shared CC=cc PREFIX=$out
+    make lib-shared lib-static build-shared CC=$CC AR=$AR PREFIX=$out
   '';
 
   # we don't actually want the static library, so we remove it after it
