@@ -484,7 +484,7 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
+Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
 respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
@@ -533,6 +533,7 @@ sets are
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
+* `pkgs.python37Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
