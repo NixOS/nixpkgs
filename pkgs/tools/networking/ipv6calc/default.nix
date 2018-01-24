@@ -51,6 +51,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.deepspace6.net/projects/ipv6calc.html;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     in ''
       substituteInPlace tests/shar-1 --replace '${shar_sub}' '${shar_sub} -s submitter'
       substituteInPlace tests/shar-2 --replace '${shar_sub}' '${shar_sub} -s submitter'
+
+      substituteInPlace intl/Makefile.in --replace "AR = ar" ""
     '';
 
   doCheck = true;

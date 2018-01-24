@@ -25,19 +25,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "07p4ld07r2nml2bsbfb8h51hqilbqyhhdlia99y1gk7ibvhybv8i";
+    sha256 = "0ivb6z30d6qrrkwjm9fdz9jfs567q4b6dljwwxc9shmdr2l9chah";
   };
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
     ++ optionals stdenv.isLinux [ procps ];
-  buildInputs = [ pcre ]
+  buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
@@ -127,8 +127,6 @@ stdenv.mkDerivation rec {
     echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
-
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

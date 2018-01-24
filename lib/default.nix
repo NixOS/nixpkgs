@@ -87,13 +87,14 @@ let
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith addPassthru hydraJob makeScope;
+      callPackageWith callPackagesWith extendDerivation addPassthru
+      hydraJob makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
-      commitIdFromGitRepo cleanSourceWith;
+      commitIdFromGitRepo cleanSourceWith pathHasContext canCleanSource;
     inherit (modules) evalModules closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions

@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     description = "Free exFAT file system implementation";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nckx ];
   };
 }

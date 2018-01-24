@@ -32,18 +32,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.15.1";
+  version = "3.16.0";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "0hlm2jipyr4z6izlrpvabpz4ivh49i13avnm848kr1nv68pkq2cd";
+    sha256 = "1awpr3s7n8bq8p3w10a4j6lg5bizjxyiqp4rqzc2j8cn7lyi64n2";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [ ./mime.patch ];
-
-  hardeningDisable = [ "format" ];
 
   postPatch = ''
     substituteInPlace src/procmime.c \

@@ -118,8 +118,8 @@ in rec {
         initialPath  = [ bootstrapTools ];
 
         fetchurlBoot = import ../../build-support/fetchurl {
-          stdenv = stage0.stdenv;
-          curl   = bootstrapTools;
+          stdenvNoCC = stage0.stdenv;
+          curl = bootstrapTools;
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here
@@ -375,7 +375,7 @@ in rec {
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre.out gettext
+      gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils-raw.bintools binutils binutils.bintools
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [

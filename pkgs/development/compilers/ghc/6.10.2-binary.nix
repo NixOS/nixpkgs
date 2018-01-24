@@ -96,7 +96,11 @@ stdenv.mkDerivation rec {
     [ $(./main) == "yes" ]
   '';
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc";
+  };
 
   meta = {
     homepage = http://haskell.org/ghc;

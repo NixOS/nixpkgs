@@ -4,6 +4,10 @@
 { # package-set used for build tools (all of nixpkgs)
   buildPackages
 
+, # A haskell package set for Setup.hs, compiler plugins, and similar
+  # build-time uses.
+  buildHaskellPackages
+
 , # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
@@ -18,8 +22,8 @@
 , # compiler to use
   ghc
 
-, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and `self`
-  # as second, and returns a set of haskell packages
+, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
+  # `self` as second, and returns a set of haskell packages
   package-set
 
 , # The final, fully overriden package set usable with the nixpkgs fixpoint
@@ -36,15 +40,12 @@ let
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
-  buildHaskellPackages = if hostPlatform != buildPlatform
-                         then self.ghc.bootPkgs
-                         else self;
-
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit (buildHaskellPackages) jailbreak-cabal;
+    inherit buildHaskellPackages;
     inherit (self) ghc;
+    inherit (buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
@@ -119,7 +120,7 @@ let
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
+        cabal2nix --compiler=${ghc.haskellCompilerName} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
       '';
   };
 
@@ -139,39 +140,23 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
 
+    inherit (haskellLib) packageSourceOverrides;
+
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: args: if builtins.typeOf src != "path"
-      then self.callPackage (haskellSrc2nix { inherit name src; }) args
-      else
-        # When `src` is a Nix path literal, only use `cabal2nix` on
-        # the cabal file, so that the "import-from-derivation" is only
-        # recomputed when the cabal file changes, and so your source
-        # code isn't duplicated into the nix store on every change.
-        # This can only be done when `src` is a Nix path literal
-        # because that is the only kind of source that
-        # `builtins.filterSource` works on. But this filtering isn't
-        # usually important on other kinds of sources, like
-        # `fetchFromGitHub`.
-        overrideCabal (self.callPackage (haskellSrc2nix {
-          inherit name;
-          src = builtins.filterSource (path: type:
-            pkgs.lib.hasSuffix "${name}.cabal" path || pkgs.lib.hasSuffix "package.yaml" path
-          ) src;
-        }) args) (_: { inherit src; });
-
-    # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
-    # Given a set whose values are either paths or version strings, produces
-    # a package override set (i.e. (self: super: { etc. })) that sets
-    # the packages named in the input set to the corresponding versions
-    packageSourceOverrides =
-      overrides: self: super: pkgs.lib.mapAttrs (name: src:
-        let isPath = x: builtins.substring 0 1 (toString x) == "/";
-            generateExprs = if isPath src
-                               then self.callCabal2nix
-                               else self.callHackage;
-        in generateExprs name src {}) overrides;
+    callCabal2nix = name: src: args:
+      overrideCabal (self.callPackage (haskellSrc2nix {
+        inherit name;
+        src = pkgs.lib.cleanSourceWith
+          { src = if pkgs.lib.canCleanSource src
+                    then src
+                    else pkgs.safeDiscardStringContext src;
+            filter = path: type:
+              pkgs.lib.hasSuffix "${name}.cabal" path ||
+              pkgs.lib.hasSuffix "package.yaml" path;
+          };
+      }) args) (_: { inherit src; });
 
     # : { root : Path
     #   , source-overrides : Defaulted (Either Path VersionNumber)

@@ -64,6 +64,5 @@ in stdenv.mkDerivation rec {
     homepage = http://rockdaboot.github.io/libpsl/;
     license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ nckx ];
   };
 }

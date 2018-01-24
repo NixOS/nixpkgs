@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca30cf1786047925ebacd6f6faa3a993efaa004b584f7d83bc8b807f7cd3f6bb";
+    sha256 = "462790d46b244f0a631ea5e3cd5cdbad6874d5d24cc0ff512deb7c16cdf8653d";
   };
 
   checkInputs = [ ipykernel ipython mock pytest ];
@@ -28,10 +28,6 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
-
-  patches = [
-    ./wheel_workaround.patch
-  ];
 
   # Circular dependency with ipykernel
   doCheck = false;

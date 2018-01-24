@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "aenum";
@@ -10,12 +10,17 @@ buildPythonPackage rec {
     sha256 = "d98bc55136d696fcf323760c3db0de489da9e41fd51283fa6f90205deb85bf6a";
   };
 
-  doCheck = !isPy3k;
-  # The following tests fail (only in python3
-  # test_convert (aenum.test.TestIntEnumConvert)
-  # test_convert_value_lookup_priority (aenum.test.TestIntEnumConvert)
-  # test_convert (aenum.test.TestIntEnumConvert)
-  # test_convert_value_lookup_priority (aenum.test.TestIntEnumConvert)
+  # For Python 3, locale has to be set to en_US.UTF-8 for
+  # tests to pass
+  checkInputs = if isPy3k then [ glibcLocales ] else [];
+
+  checkPhase = ''
+  runHook preCheck
+  ${if isPy3k then "export LC_ALL=en_US.UTF-8" else ""}
+  PYTHONPATH=`pwd` ${python.interpreter} aenum/test.py
+  runHook postCheck
+  '';
+
 
   meta = {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";

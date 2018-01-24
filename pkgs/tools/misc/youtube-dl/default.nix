@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonApplication
+{ stdenv, targetPlatform, fetchurl, buildPythonApplication
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -8,7 +8,7 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? true
+, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
 , hlsEncryptedSupport ? true
 , makeWrapper }:
 
@@ -16,11 +16,11 @@ with stdenv.lib;
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2017.12.31";
+  version = "2018.01.21";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0cq10ii96lpq3z7l1js0s59sqb4h4yqwdqinl2yf7cdjynvj62xi";
+    sha256 = "14ggjxnhc2sxc93h7d5k3z4n35n5q3ffsif97np0ar93x5z3zgn5";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,15 +30,13 @@ buildPythonApplication rec {
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
-  postInstall = let
-    packagesToBinPath =
-    [ atomicparsley ]
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional rtmpSupport rtmpdump
-    ++ optional phantomjsSupport phantomjs2;
-  in ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesToBinPath}"
-  '';
+  makeWrapperArgs = let
+      packagesToBinPath =
+        [ atomicparsley ]
+        ++ optional ffmpegSupport ffmpeg
+        ++ optional rtmpSupport rtmpdump
+        ++ optional phantomjsSupport phantomjs2;
+    in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
 
   # Requires network
   doCheck = false;

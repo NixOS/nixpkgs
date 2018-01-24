@@ -29,12 +29,13 @@ let
 in python3Packages.buildPythonApplication rec {
   name = "qutebrowser-${version}${versionPostfix}";
   namePrefix = "";
-  version = "1.0.4";
+  version = "1.1.0";
   versionPostfix = "";
 
+  # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0z8zrgr914bfmimqk3l17dxyc7gzh42sw8lfp041zzvj6fxw3lkr";
+    sha256 = "1w02z5akr1v2517rbqrnv65vfsqvgw310g2nhanbwdg606crzr94";
   };
 
   # Needs tox
@@ -79,6 +80,8 @@ in python3Packages.buildPythonApplication rec {
     install -Dm644 icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" \
+      scripts/{importer.py,dictcli.py,keytester.py,open_url_in_instance.sh,utils.py}
   '';
 
   postFixup = lib.optionalString (! withWebEngineDefault) ''

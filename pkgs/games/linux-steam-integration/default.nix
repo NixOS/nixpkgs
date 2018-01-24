@@ -27,6 +27,8 @@ in stdenv.mkDerivation rec {
     sed -i -e "s|/usr/|$out/|g" src/shim/shim.c
     sed -i -e "s|/usr/|$out/|g" data/lsi-steam.desktop
     sed -i -e "s|zenity|${zenityBinPath}|g" src/lsi/lsi.c
+    sed -i -e "s|Name=Linux Steam Integration|Name=Linux Steam Integration Settings|" data/lsi-settings.desktop.in
+
   '';
 
   configurePhase = ''

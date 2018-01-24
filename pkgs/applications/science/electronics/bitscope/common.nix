@@ -9,7 +9,7 @@
 , makeWrapper
 , pango
 , stdenv
-, writeScriptBin
+, writeTextFile
 , xorg
 }:
 
@@ -60,8 +60,11 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
+  fhs = target: buildFHSUserEnv {
+    inherit (pkg) name;
+    runScript = target;
+  };
 in buildFHSUserEnv {
   name = attrs.toolName;
-  meta = pkg.meta;
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
-}
+} // { inherit (pkg) meta name; }

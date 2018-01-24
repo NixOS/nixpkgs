@@ -20,7 +20,7 @@
 
 let
   version = "2.26";
-  patchSuffix = "-115";
+  patchSuffix = "-131";
   sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
@@ -48,6 +48,9 @@ stdenv.mkDerivation ({
       */
       ./2.26-75.patch.gz
       ./2.26-75to115.diff.gz
+      # contains fix for CVE-2018-1000001 as the last commit:
+      # https://sourceware.org/git/?p=glibc.git;a=commit;h=fabef2edbc
+      ./2.26-115to131.diff.gz
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
@@ -73,7 +76,7 @@ stdenv.mkDerivation ({
         and we lose early mismatch detection on 2.6.32.
 
         On major glibc updates we should check that the patched kernel supports
-        all the required features.  ATM it's verified up to glibc-2.26-115.
+        all the required features.  ATM it's verified up to glibc-2.26-131.
         # HOWTO: check glibc sources for changes in kernel requirements
         git log -p glibc-2.25.. sysdeps/unix/sysv/linux/x86_64/kernel-features.h sysdeps/unix/sysv/linux/kernel-features.h
         # get kernel sources (update the URL)

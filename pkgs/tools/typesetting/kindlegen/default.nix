@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, unzip }:
 
 let
   version = "2.9";
@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
   };
 
   sourceRoot = ".";
+
+  nativeBuildInputs = stdenv.lib.optional (stdenv.lib.hasSuffix ".zip" url) unzip;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/kindlegen/doc

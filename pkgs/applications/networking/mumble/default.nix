@@ -119,14 +119,14 @@ let
   };
 
   gitSource = rec {
-    version = "2017-05-25";
+    version = "2018-01-12";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "3754898ac94ed3f1e86408114917d1b4c06f17b3";
-      sha256 = "1qh49x3y7m0c0h0gcs6amkf8nb75p6g611zwn19mbplwmi7h9y8f";
+      rev = "e348e47f4af68eaa8e0f87d1d9fc28c5583e421e";
+      sha256 = "12z41qfaq6w3i4wcw8pvyb8wwwa8gs3ar5zx6aqx6yssc6513lr3";
     };
   };
 in {

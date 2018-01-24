@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , supervise
+, isPy3k
+, whichcraft
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,11 @@ buildPythonPackage rec {
     sha256 = "e6982633a924cb5192d2291d25b366ff311876a31b0f5961471b39d87397ef5b";
   };
 
-  propagatedBuildInputs = [ supervise ];
+  propagatedBuildInputs = [
+    supervise
+  ] ++ lib.optionals ( !isPy3k ) [
+    whichcraft
+  ];
 
   # no tests
   doCheck = false;

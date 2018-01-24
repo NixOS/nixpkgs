@@ -113,7 +113,7 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      <literal>cc-wrapper</literal>has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      <literal>cc-wrapper</literal> has been split in two; there is now also a <literal>bintools-wrapper</literal>.
       The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
       Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
       Other more obscure ones are just moved.
@@ -133,10 +133,20 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      <literal>lib.addPassthru</literal> is removed.  Use <literal>lib.extendDerivation true</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The <literal>memcached</literal> service no longer accept dynamic socket
       paths via <option>services.memcached.socket</option>. Unix sockets can be
       still enabled by <option>services.memcached.enableUnixSocket</option> and
       will be accessible at <literal>/run/memcached/memcached.sock</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
     </para>
   </listitem>
 </itemizedlist>

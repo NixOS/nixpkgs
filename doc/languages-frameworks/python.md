@@ -191,7 +191,6 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
   toolz = buildPythonPackage rec {
     pname = "toolz";
     version = "0.7.4";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
@@ -237,7 +236,6 @@ with import <nixpkgs> {};
     my_toolz = python35.pkgs.buildPythonPackage rec {
       pname = "toolz";
       version = "0.7.4";
-      name = "${pname}-${version}";
 
       src = python35.pkgs.fetchPypi {
         inherit pname version;
@@ -283,15 +281,15 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 { # ...
 
   datashape = buildPythonPackage rec {
-    name = "datashape-${version}";
+    pname = "datashape";
     version = "0.4.7";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/D/DataShape/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
     };
 
-    buildInputs = with self; [ pytest ];
+    checkInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
 
     meta = {
@@ -318,10 +316,11 @@ when building the bindings and are therefore added as `buildInputs`.
 { # ...
 
   lxml = buildPythonPackage rec {
-    name = "lxml-3.4.4";
+    pname = "lxml";
+    version = "3.4.4";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lxml/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
     };
 
@@ -351,11 +350,11 @@ and `CFLAGS`.
 { # ...
 
   pyfftw = buildPythonPackage rec {
-    name = "pyfftw-${version}";
+    pname = "pyFFTW";
     version = "0.9.2";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
     };
 
@@ -440,11 +439,11 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 { pkgs, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "toolz-${version}";
+  pname = "toolz";
   version = "0.7.4";
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -549,25 +548,31 @@ The `buildPythonPackage` function is implemented in
 
 The following is an example:
 ```nix
-{ # ...
 
-  twisted = buildPythonPackage {
-    name = "twisted-8.1.0";
+buildPythonPackage rec {
+  version = "3.3.1";
+  pname = "pytest";
 
-    src = pkgs.fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
-      sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
-    };
+  preCheck = ''
+    # don't test bash builtins
+    rm testing/test_argcomplete.py
+  '';
 
-    propagatedBuildInputs = [ self.ZopeInterface ];
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
+  };
 
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      license = stdenv.lib.licenses.mit;
-    };
+  checkInputs = [ hypothesis ];
+  buildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ attrs py setuptools six pluggy ];
+
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    description = "Framework for writing tests";
   };
 }
+
 ```
 
 The `buildPythonPackage` mainly does four things:
@@ -623,7 +628,6 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: rec {
         version = "0.19.1";
-        name = "pandas-${version}";
         src =  super.fetchPypi {
           pname = "pandas";
           inherit version;

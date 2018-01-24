@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ bsd2 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.benf.org/other/cfr/;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

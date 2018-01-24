@@ -93,4 +93,8 @@ rec {
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);
     in lib.flip readCommitFromFile "HEAD";
+
+  pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
+
+  canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
 }

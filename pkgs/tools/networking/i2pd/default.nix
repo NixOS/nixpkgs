@@ -1,20 +1,33 @@
-{ stdenv, fetchFromGitHub, fetchpatch, boost, zlib, openssl }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, boost, zlib, openssl
+, upnpSupport ? true, miniupnpc ? null
+, aesniSupport ? false
+, avxSupport ? false
+}:
+
+assert upnpSupport -> miniupnpc != null;
 
 stdenv.mkDerivation rec {
 
   name = pname + "-" + version;
   pname = "i2pd";
-  version = "2.15.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "02nyk76q2ag0495ph62i0jij27nxpy6qvryjp25wah8f69k7bgfs";
+    sha256 = "1yl5h7mls50vkg7x5510mljmgsm02arqhcanwkrqw4ilwvcp1mgz";
   };
 
-  buildInputs = [ boost zlib openssl ];
-  makeFlags = [ "USE_AESNI=no" "USE_AVX=no" ];
+  buildInputs = with stdenv.lib; [ boost zlib openssl ]
+    ++ optional upnpSupport miniupnpc;
+  makeFlags =
+    let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
+    [ (ynf "USE_AESNI" aesniSupport)
+      (ynf "USE_AVX"   avxSupport)
+      (ynf "USE_UPNP"  upnpSupport)
+    ];
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd

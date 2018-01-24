@@ -402,7 +402,7 @@ let
       description = "Network support for Lua";
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       license = licenses.mit;
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
     };
   };

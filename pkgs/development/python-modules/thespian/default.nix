@@ -1,19 +1,19 @@
 { stdenv, fetchPypi, buildPythonPackage, lib }:
 
 buildPythonPackage rec {
-  version = "3.9.0";
+  version = "3.9.1";
   pname = "thespian";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e698e3c5369d7b06de5c4ce7b877ea65991c99f7b0fabd09f29e91bc981c7d22";
+    sha256 = "0b303bv85176xd5mf3q5j549s28wi70ck2xxgj1cvpydh23dzipb";
   };
 
-  # Do not run the test suite: it takes a long type and uses
+  # Do not run the test suite: it takes a long time and uses
   # significant system resources, including requiring localhost
-  # network operations.  Thespian tests are performed via it's Travis
+  # network operations.  Thespian tests are performed via its Travis
   # CI configuration and do not need to be duplicated here.
   doCheck = false;
 

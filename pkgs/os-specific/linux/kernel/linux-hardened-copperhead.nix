@@ -1,11 +1,11 @@
-{ stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 with stdenv.lib;
 
 let
-  version = "4.14.12";
+  version = "4.14.14";
   revision = "a";
-  sha256 = "002a3c177fix472wqc89zrpfzwk60l7dn76l869ivgnd60n6wqb2";
+  sha256 = "1jaln2xa6hhnd3vy6zmvhzq0hli2df3kw0ivcyrbrpw7p6h5z4ds";
 
   # modVersion needs to be x.y.z, will automatically add .0 if needed
   modVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));

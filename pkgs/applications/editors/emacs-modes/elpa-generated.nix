@@ -135,10 +135,10 @@
     arbitools = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "arbitools";
-        version = "0.93";
+        version = "0.94";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.93.el";
-          sha256 = "0z3lqp8dqfkams5h4sw569p48d2rvpd3d8lb4xaw0z8l49y2mvg8";
+          url = "https://elpa.gnu.org/packages/arbitools-0.94.el";
+          sha256 = "00iq8rr1275p48ic5mibcx657li723q8r7ax4g21w6bzwsj3gksd";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -564,10 +564,10 @@
     debbugs = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, soap-client }:
     elpaBuild {
         pname = "debbugs";
-        version = "0.14";
+        version = "0.15";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.14.tar";
-          sha256 = "07wgcvg038l88gxvjr0gjpjhyk743w22x1rqghz3gkmif0g70say";
+          url = "https://elpa.gnu.org/packages/debbugs-0.15.tar";
+          sha256 = "1x7jw2ldgkknyxg7x9fhnqkary691icnysmi3xw0g2fjrvllzhqw";
         };
         packageRequires = [ cl-lib soap-client ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.14";
+        version = "1.5.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.14.tar";
-          sha256 = "1qc30dia59i2bklhivfhmsghirnpgz5mvcjdc78n0r8nizb68jfp";
+          url = "https://elpa.gnu.org/packages/el-search-1.5.1.tar";
+          sha256 = "0bbq59d8x4ncrmpfq54w6rwpp604f1x834b81l7wflwxv7ni5msx";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -931,10 +931,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.3.3";
+        version = "0.3.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.3.3.tar";
-          sha256 = "0h3ps26sy4wp1s9vpsj066fpqjqacjlprz3kb09macgsg88k2c1p";
+          url = "https://elpa.gnu.org/packages/gited-0.3.4.tar";
+          sha256 = "0s03p0z5dqhigl01hzin2qy53nm7b4ilvfm83d0ca683i9rb7hx1";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1386,10 +1386,10 @@
     mines = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "mines";
-        version = "1.2";
+        version = "1.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/mines-1.2.tar";
-          sha256 = "1xwnw2hyk1qz98mdnckk0i05li0gzygq12kkmrlidxnk7ngbq9vw";
+          url = "https://elpa.gnu.org/packages/mines-1.5.tar";
+          sha256 = "1wpkn47iza78hzj396z5c05hsimnhhhmr1cq598azd6h8c1zca7g";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -2320,10 +2320,10 @@
       }) {};
     which-key = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "which-key";
-        version = "3.0.2";
+        version = "3.1.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/which-key-3.0.2.tar";
-          sha256 = "1s7bq7vq9xsf2pz1w03l743yzaxm9gk5qgympcwlkiq90ph13vcn";
+          url = "https://elpa.gnu.org/packages/which-key-3.1.0.tar";
+          sha256 = "17n09i92m7qdicybxl60j81c8fn7jcx25wds0sb7j8i364psjabq";
         };
         packageRequires = [ emacs ];
         meta = {

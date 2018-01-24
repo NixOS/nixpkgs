@@ -94,6 +94,7 @@ mapAliases (rec {
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
+  libgumbo = gumbo; # added 2018-01-21
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
@@ -121,7 +122,13 @@ mapAliases (rec {
   owncloudclient = owncloud-client;  # added 2016-08
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
-  pidginlatexSF = pidginlatex; # added 2014-11-02
+  pidginlatexSF = pidgin-latex; # added 2014-11-02
+  pidginlatex = pidgin-latex; # added 2018-01-08
+  pidginmsnpecan = pidgin-msn-pecan; # added 2018-01-08
+  pidginotr = pidgin-otr; # added 2018-01-08
+  pidginosd = pidgin-osd; # added 2018-01-08
+  pidginsipe = pidgin-sipe; # added 2018-01-08
+  pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   PPSSPP = ppsspp; # added 2017-10-01

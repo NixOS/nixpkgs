@@ -30,8 +30,8 @@ mkDerivation {
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  NIX_CFLAGS_COMPILE = [
-    ''-DNIXPKGS_XWAYLAND="${lib.getBin xwayland}/bin/Xwayland"''
+  CXXFLAGS = [
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''

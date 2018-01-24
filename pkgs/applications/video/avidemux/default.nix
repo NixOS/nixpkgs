@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, cmake, pkgconfig, lndir
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi, gtk3, qt4
+, alsaLib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -29,7 +30,7 @@ let
     enableParallelBuilding = false;
 
     nativeBuildInputs = [ cmake pkgconfig yasm ];
-    buildInputs = [ zlib gettext libvdpau libva libXv sqlite fribidi fontconfig freetype ]
+    buildInputs = [ zlib gettext libvdpau libva libXv sqlite fribidi fontconfig freetype alsaLib ]
                   ++ lib.optional withX264 x264
                   ++ lib.optional withX265 x265
                   ++ lib.optional withXvid xvidcore

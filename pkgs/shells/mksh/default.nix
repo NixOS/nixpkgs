@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.mirbsd.org/mksh.htm;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres nckx joachifm ];
+    maintainers = with maintainers; [ AndersonTorres joachifm ];
     platforms = platforms.unix;
   };
 

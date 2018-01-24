@@ -63,15 +63,15 @@ let
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
-      makeWrapper $out/share/pixie-vm $out/bin/pixie-vm \
+      makeWrapper $out/share/pixie-vm $out/bin/pixie \
         --prefix LD_LIBRARY_PATH : ${library-path} \
         --prefix C_INCLUDE_PATH : ${include-path} \
         --prefix LIBRARY_PATH : ${library-path} \
         --prefix PATH : ${bin-path}
       cat > $out/bin/pxi <<EOF
       #!$shell
-      >&2 echo "[\$\$] WARNING: 'pxi' is a deprecated alias for 'pixie-vm', please update your scripts."
-      exec $out/bin/pixie-vm "\$@"
+      >&2 echo "[\$\$] WARNING: 'pxi' and 'pixie-vm' are deprecated aliases for 'pixie', please update your scripts."
+      exec $out/bin/pixie "\$@"
       EOF
       chmod +x $out/bin/pxi
     '';
@@ -79,7 +79,8 @@ let
       description = "A clojure-like lisp, built with the pypy vm toolkit";
       homepage = https://github.com/pixie-lang/pixie;
       license = stdenv.lib.licenses.lgpl3;
-      platforms = ["x86_64-linux" "i686-linux"];
+      platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+      maintainers = with stdenv.lib.maintainers; [ bendlas ];
     };
   };
 in build (builtins.getAttr variant variants)

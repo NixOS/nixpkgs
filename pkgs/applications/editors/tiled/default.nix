@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
       gpl2Plus	# all the rest
     ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.nckx ];
   };
 }
