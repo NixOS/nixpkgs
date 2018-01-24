@@ -24,6 +24,8 @@ mkDerivation rec {
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];
 
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+
   meta = with lib; {
     description = "A personal finances manager, powered by KDE";
     license = with licenses; [ gpl3 ];
