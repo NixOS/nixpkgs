@@ -1,7 +1,7 @@
-{ stdenv, python27Packages, fetchFromGitHub }:
+{ stdenv, python2Packages, fetchFromGitHub }:
 
 let
-  pgdbconn = python27Packages.buildPythonPackage rec {
+  pgdbconn = python2Packages.buildPythonPackage rec {
     name = "pgdbconn-${version}";
     version = "0.8.0";
     src = fetchFromGitHub {
@@ -12,13 +12,13 @@ let
     };
     doCheck = false;
     propagatedBuildInputs = [
-      python27Packages.psycopg2
-      python27Packages.pytest
+      python2Packages.psycopg2
+      python2Packages.pytest
     ];
   };
 in
 
-python27Packages.buildPythonPackage rec {
+python2Packages.buildPythonPackage rec {
   name = "pyrseas-${version}";
   version = "0.8.0";
   src = fetchFromGitHub {
@@ -29,9 +29,9 @@ python27Packages.buildPythonPackage rec {
   };
   doCheck = false;
   propagatedBuildInputs = [
-    python27Packages.psycopg2
-    python27Packages.pytest
-    python27Packages.pyyaml
+    python2Packages.psycopg2
+    python2Packages.pytest
+    python2Packages.pyyaml
     pgdbconn
   ];
   meta = {
