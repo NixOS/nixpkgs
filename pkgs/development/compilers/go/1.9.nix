@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "07p4ld07r2nml2bsbfb8h51hqilbqyhhdlia99y1gk7ibvhybv8i";
+    sha256 = "0ivb6z30d6qrrkwjm9fdz9jfs567q4b6dljwwxc9shmdr2l9chah";
   };
 
   # perl is used for testing go vet
