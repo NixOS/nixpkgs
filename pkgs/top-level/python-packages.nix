@@ -316,6 +316,8 @@ in {
     callPackage = pkgs.callPackage;
   };
 
+  pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
