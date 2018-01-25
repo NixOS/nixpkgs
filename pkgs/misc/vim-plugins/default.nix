@@ -2001,6 +2001,17 @@ rec {
 
   };
 
+  vim-smalls = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-smalls-2015-05-02";
+    src = fetchgit {
+      url = "https://github.com/t9md/vim-smalls";
+      rev = "9619eae81626bd63f88165e0520c467698264e34";
+      sha256 = "0s5z3zv220cg95yky2av6w0jmpc56ysyhsx0596ksvgz5jwhpbad";
+    };
+    dependencies = [];
+
+  };
+
   vim-hardtime = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-hardtime-2017-03-31";
     src = fetchgit {
