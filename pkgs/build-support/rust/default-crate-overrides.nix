@@ -1,6 +1,6 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus_libs, dbus_glib, gdk_pixbuf, cairo, python3,
-  libsodium, ... }:
+  libsodium, postgresql, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation;
@@ -65,5 +65,8 @@ in
 
   thrussh-libsodium = attrs: {
     buildInputs = [ pkgconfig libsodium ];
+  };
+  pq-sys = attr: {
+    buildInputs = [ pkgconfig postgresql ];
   };
 }
