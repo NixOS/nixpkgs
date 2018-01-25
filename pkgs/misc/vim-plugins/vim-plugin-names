@@ -252,6 +252,7 @@
 "github:cespare/vim-toml"
 "github:ehamberg/vim-cute-python.git"
 "github:rhysd/committia.vim.git"
+"github:shougo/neco-syntax"
 "github:mhinz/vim-grepper.git"
 "github:janko-m/vim-test.git"
 "github:andsild/peskcolor.vim.git"

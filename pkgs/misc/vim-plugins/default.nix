@@ -1836,6 +1836,17 @@ rec {
 
   };
 
+  neco-syntax = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neco-syntax-2017-10-01";
+    src = fetchgit {
+      url = "https://github.com/shougo/neco-syntax";
+      rev = "98cba4a98a4f44dcff80216d0b4aa6f41c2ce3e3";
+      sha256 = "1cjcbgx3h00g91ifgw30q5n97x4nprsr4kwirydws79fcs4vkgip";
+    };
+    dependencies = [];
+
+  };
+
   neco-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "neco-vim-2017-10-01";
     src = fetchgit {
