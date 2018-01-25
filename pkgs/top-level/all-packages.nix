@@ -19999,6 +19999,8 @@ with pkgs;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
+  terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
+
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terragrunt_0_11_1 = callPackage ../applications/networking/cluster/terragrunt/0.11.1.nix {
