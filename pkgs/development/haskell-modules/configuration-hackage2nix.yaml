@@ -2712,6 +2712,7 @@ package-maintainers:
   peti:
     - cabal-install
     - cabal2nix
+    - cabal2spec
     - funcmp
     - git-annex
     - hackage-db
@@ -3463,7 +3464,6 @@ dont-distribute-packages:
   cabal2doap:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabal2ebuild:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabal2ghci:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
-  cabal2spec:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabalgraph:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabalish:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   cabalmdvrpm:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
