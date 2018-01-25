@@ -251,6 +251,7 @@
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
 "github:osyo-manga/vim-textobj-multiblock"
+"github:thinca/vim-themis"
 "github:cespare/vim-toml"
 "github:t9md/vim-smalls"
 "github:ehamberg/vim-cute-python.git"

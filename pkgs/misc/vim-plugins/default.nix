@@ -2056,6 +2056,17 @@ rec {
 
   };
 
+  vim-themis = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-themis-2017-12-28";
+    src = fetchgit {
+      url = "https://github.com/thinca/vim-themis";
+      rev = "691cd3912ba318dbd8d9fa0035fee629b424766d";
+      sha256 = "1mrdaah3iyg35v6cgvr3jav3386czialfcinwa3y9jy14basbqhd";
+    };
+    dependencies = [];
+
+  };
+
   molokai = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "molokai-2015-11-11";
     src = fetchgit {
