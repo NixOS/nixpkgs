@@ -1,8 +1,8 @@
-{ stdenv, python2Packages, fetchFromGitHub }:
+{ stdenv, pythonPackages, fetchFromGitHub }:
 
 let
-  pgdbconn = python2Packages.buildPythonPackage rec {
-    name = "pgdbconn-${version}";
+  pgdbconn = pythonPackages.buildPythonPackage rec {
+    pname = "pgdbconn";
     version = "0.8.0";
     src = fetchFromGitHub {
       owner = "perseas";
@@ -13,14 +13,14 @@ let
     # The tests are impure (they try to access a PostgreSQL server)
     doCheck = false;
     propagatedBuildInputs = [
-      python2Packages.psycopg2
-      python2Packages.pytest
+      pythonPackages.psycopg2
+      pythonPackages.pytest
     ];
   };
 in
 
-python2Packages.buildPythonPackage rec {
-  name = "pyrseas-${version}";
+pythonPackages.buildPythonApplication rec {
+  pname = "pyrseas";
   version = "0.8.0";
   src = fetchFromGitHub {
     owner = "perseas";
@@ -31,9 +31,9 @@ python2Packages.buildPythonPackage rec {
   # The tests are impure (they try to access a PostgreSQL server)
   doCheck = false;
   propagatedBuildInputs = [
-    python2Packages.psycopg2
-    python2Packages.pytest
-    python2Packages.pyyaml
+    pythonPackages.psycopg2
+    pythonPackages.pytest
+    pythonPackages.pyyaml
     pgdbconn
   ];
   meta = {
