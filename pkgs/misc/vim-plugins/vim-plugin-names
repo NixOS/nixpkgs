@@ -245,6 +245,7 @@
 "github:cespare/vim-toml"
 "github:ehamberg/vim-cute-python.git"
 "github:mhinz/vim-grepper.git"
+"github:janko-m/vim-test.git"
 "github:andsild/peskcolor.vim.git"
 "github:vim-scripts/mayansmoke.git"
 "github:chemzqm/denite-git"

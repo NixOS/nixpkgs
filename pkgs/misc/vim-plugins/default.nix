@@ -110,6 +110,7 @@ rec {
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
+  vim-test = vim-test-git;
   peskcolor = peskcolor-vim-git;
   mayansmoke = mayansmoke-git;
 
@@ -1084,6 +1085,17 @@ rec {
       url = "https://github.com/ivanov/vim-ipython";
       rev = "42499f094b805b90b683afa5009cee99abd0bb75";
       sha256 = "10wpfvfs8yv1bvzra4d5zy5glp62gbalpayxx7mkalhr2ccppy3x";
+    };
+    dependencies = [];
+
+  };
+
+  vim-test-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-test-git-2018-01-16";
+    src = fetchgit {
+      url = "https://github.com/janko-m/vim-test.git";
+      rev = "731ad6942f9449d2ed22f6d9ccc8d1ce613b1f19";
+      sha256 = "14xwsc23zmkfl6ydvqiqf7l0gn5nxqdm62rvgiky5j5ii9iqj3hr";
     };
     dependencies = [];
 
