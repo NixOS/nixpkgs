@@ -1553,6 +1553,17 @@ rec {
     ];
   };
 
+  vim-operator-surround = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-operator-surround-2017-12-23";
+    src = fetchgit {
+      url = "https://github.com/rhysd/vim-operator-surround";
+      rev = "001c0da077b5b38a723151b19760d220e02363db";
+      sha256 = "0c6w6id57faw6sjf5wvw9qp2a4i7xj65q0c4hjs0spgzycv2wpkh";
+    };
+    dependencies = [];
+
+  };
+
   vim-puppet = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-puppet-2017-08-25";
     src = fetchgit {
