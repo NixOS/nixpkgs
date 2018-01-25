@@ -14020,6 +14020,11 @@ with pkgs;
 
   ttf-envy-code-r = callPackage ../data/fonts/ttf-envy-code-r {};
 
+  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
+    inherit (nodePackages) svgo;
+    inherit (pythonPackages) scfbuild;
+  };
+
   tzdata = callPackage ../data/misc/tzdata { };
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
