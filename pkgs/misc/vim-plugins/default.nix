@@ -669,6 +669,17 @@ rec {
 
   };
 
+  denite-extra = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "denite-extra-2017-11-03";
+    src = fetchgit {
+      url = "https://github.com/chemzqm/denite-extra";
+      rev = "2cea3e857b51fcde425339adeec12854e6cecbb6";
+      sha256 = "1qa0ajs6vix0vvm1z7rhxq9bfx4aggq97gxghrxpvsc059c7w9wv";
+    };
+    dependencies = [];
+
+  };
+
   vim-sort-motion = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-sort-motion-2017-10-03";
     src = fetchgit {
