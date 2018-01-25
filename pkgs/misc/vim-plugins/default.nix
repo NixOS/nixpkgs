@@ -1308,6 +1308,17 @@ rec {
 
   };
 
+  vim-textobj-user = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-textobj-user-2017-09-28";
+    src = fetchgit {
+      url = "https://github.com/kana/vim-textobj-user";
+      rev = "e231b65797b5765b3ee862d71077e9bd56f3ca3e";
+      sha256 = "0zsgr2cn8s42d7jllnxw2cvqkl27lc921d1mkph7ny7jgnghaay9";
+    };
+    dependencies = [];
+
+  };
+
   latex-box = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "latex-box-2015-06-01";
     src = fetchgit {

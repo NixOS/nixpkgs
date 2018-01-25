@@ -249,6 +249,7 @@
 "github:kana/vim-operator-user"
 "github:kana/vim-niceblock"
 "github:kana/vim-operator-replace"
+"github:kana/vim-textobj-user"
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
 "github:osyo-manga/vim-textobj-multiblock"
