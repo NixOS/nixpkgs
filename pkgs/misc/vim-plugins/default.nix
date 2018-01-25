@@ -113,6 +113,7 @@ rec {
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
+  neoinclude = neoinclude-vim;
   committia = committia-vim-git;
   vim-test = vim-test-git;
   peskcolor = peskcolor-vim-git;
@@ -1864,6 +1865,17 @@ rec {
       url = "https://github.com/shougo/neocomplete.vim";
       rev = "46791e7692e07384a089d125c5c536246698d04c";
       sha256 = "1iqd6fqlkm8bvibsapcvqqmyklzjad2l0c745lppdgdb959v016a";
+    };
+    dependencies = [];
+
+  };
+
+  neoinclude-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neoinclude-vim-2017-10-01";
+    src = fetchgit {
+      url = "https://github.com/shougo/neoinclude.vim";
+      rev = "b5956ac824fdd60d6eacaa597c8d329252972d8b";
+      sha256 = "07x7hxqhklcr5y8zkw9939cwx7rpiicjlc65bn526fkmhcc2hng6";
     };
     dependencies = [];
 
