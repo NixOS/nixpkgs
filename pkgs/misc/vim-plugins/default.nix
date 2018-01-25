@@ -108,6 +108,7 @@ rec {
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
   concealedyank = concealedyank-vim;
+  cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
   peskcolor = peskcolor-vim-git;
   mayansmoke = mayansmoke-git;
@@ -830,6 +831,17 @@ rec {
       url = "https://github.com/editorconfig/editorconfig-vim";
       rev = "0abb0634a8bf3c760a283e9e7475594b83869a46";
       sha256 = "1wazl37ivn9nhsy296g1ncvvwc78930lbp8arhwavr52mzpfji21";
+    };
+    dependencies = [];
+
+  };
+
+  vim-cute-python-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-cute-python-git-2016-04-04";
+    src = fetchgit {
+      url = "https://github.com/ehamberg/vim-cute-python.git";
+      rev = "d7a6163f794500447242df2bedbe20bd751b92da";
+      sha256 = "1jrfd6z84cdzn3yxdfp0xfxygscq7s8kbzxk37hf9cf5pl9ln0qf";
     };
     dependencies = [];
 

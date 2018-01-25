@@ -242,6 +242,7 @@
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
 "github:cespare/vim-toml"
+"github:ehamberg/vim-cute-python.git"
 "github:mhinz/vim-grepper.git"
 "github:andsild/peskcolor.vim.git"
 "github:vim-scripts/mayansmoke.git"
