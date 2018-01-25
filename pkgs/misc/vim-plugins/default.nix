@@ -112,6 +112,7 @@ rec {
   neomru = neomru-vim;
   echodoc = echodoc-vim;
   context-filetype = context_filetype-vim;
+  open-browser = open-browser-vim;
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
@@ -2150,6 +2151,17 @@ rec {
       url = "https://github.com/twinside/vim-haskellconceal";
       rev = "802f82a5afee56e9e1251e6f756104a3bd114234";
       sha256 = "1kh6853hi4rgl4z1xs8kz9l1q9w7lh0r42y2m0rabfpr6yh3091r";
+    };
+    dependencies = [];
+
+  };
+
+  open-browser-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "open-browser-vim-2017-12-15";
+    src = fetchgit {
+      url = "https://github.com/tyru/open-browser.vim";
+      rev = "ee8decb2b26020320128eecd7a96383d995c8804";
+      sha256 = "1a9j13h174lkp1gqd80idwdb8d74gdkyfgvb2l153jcqyvwpzcl2";
     };
     dependencies = [];
 
