@@ -240,6 +240,7 @@
 "xterm-color-table"
 "zeavim"
 "github:rhysd/vim-operator-surround"
+"github:chikatoike/concealedyank.vim"
 "github:cespare/vim-toml"
 "github:mhinz/vim-grepper.git"
 "github:andsild/peskcolor.vim.git"

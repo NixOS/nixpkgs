@@ -107,6 +107,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  concealedyank = concealedyank-vim;
   vim-grepper = vim-grepper-git;
   peskcolor = peskcolor-vim-git;
   mayansmoke = mayansmoke-git;
@@ -686,6 +687,17 @@ rec {
       url = "https://github.com/chemzqm/denite-git";
       rev = "d40026c9b2c0e53ecdd3883d26260f19c74c7dfe";
       sha256 = "0c9602pj67hqfkyvanz5gw1s6vlf8q7s9r55g4dws5aakvjbqc0g";
+    };
+    dependencies = [];
+
+  };
+
+  concealedyank-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "concealedyank-vim-2013-03-24";
+    src = fetchgit {
+      url = "https://github.com/chikatoike/concealedyank.vim";
+      rev = "e7e65a395e0e6a266f3a808bc07441aa7d03ebbd";
+      sha256 = "0z7i8dmwfjh6mcrmgrxv3j86ic867617fas9mv4gqsrhhvrrkzsb";
     };
     dependencies = [];
 
