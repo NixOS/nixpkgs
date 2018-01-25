@@ -21,6 +21,17 @@ in
 
   options = {
 
+    boot.usePvKernel = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether this NixOS machine is a lightweight domU running
+        the paravirtualized kernel provided by dom0.  This is the
+        case if your host provides you with a kernel and initrd,
+        and you can not bring your own.
+      '';
+    };
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
@@ -158,7 +169,7 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (!config.boot.isContainer && !config.boot.usePvKernel) {
 
     system.build = { inherit kernel; };
 

@@ -480,7 +480,7 @@ in
 
   };
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (!config.boot.isContainer && !config.boot.usePvKernel) {
     assertions = [
       { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
