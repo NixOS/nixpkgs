@@ -1658,6 +1658,17 @@ rec {
 
   };
 
+  vim-wordy = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-wordy-2016-11-07";
+    src = fetchgit {
+      url = "https://github.com/reedes/vim-wordy";
+      rev = "bd37684a041fce85c34bb56c41c5a12c04a376ca";
+      sha256 = "0lv3ff1yfqdz2vj6lwaygslds1ccidbb09f4x1cdwlawxdgh3w2v";
+    };
+    dependencies = [];
+
+  };
+
   vim-grammarous = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-grammarous-2017-08-25";
     src = fetchgit {
