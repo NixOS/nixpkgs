@@ -107,6 +107,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  context-filetype = context_filetype-vim;
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
@@ -1795,6 +1796,17 @@ rec {
       url = "https://github.com/sheerun/vim-polyglot";
       rev = "11f53253ad9fd0cd3e7a44ed9f8c80a4f265b46e";
       sha256 = "1p1h0flhzcaivrpsxb1xc1lc0kc901aq80p32j15ia3g2ib8vl4y";
+    };
+    dependencies = [];
+
+  };
+
+  context_filetype-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "context_filetype-vim-2017-11-15";
+    src = fetchgit {
+      url = "https://github.com/shougo/context_filetype.vim";
+      rev = "6856503cd938d018c2d42277ee6ca896fd63f5a2";
+      sha256 = "1s4nimpvc5ps602h8xb231nvmk9jbzs981an5kxr3idmmk44j5ms";
     };
     dependencies = [];
 
