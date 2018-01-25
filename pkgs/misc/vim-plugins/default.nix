@@ -107,6 +107,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  vim-grepper = vim-grepper-git;
   peskcolor = peskcolor-vim-git;
 
   # do not auto-update this one, as the name clashes with vim-snippets
@@ -1320,12 +1321,23 @@ rec {
 
   };
 
+  vim-grepper-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-grepper-git-2018-01-16";
+    src = fetchgit {
+      url = "https://github.com/mhinz/vim-grepper.git";
+      rev = "4fd6260c56ffa0642095143f802d1cbfceb7437d";
+      sha256 = "11rhj6m85hxd4kf8yms4mab8553dcgl0yxm9r7nhdqpz6mljsir9";
+    };
+    dependencies = [];
+
+  };
+
   vim-startify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-startify-2017-12-06";
+    name = "vim-startify-2017-12-20";
     src = fetchgit {
       url = "https://github.com/mhinz/vim-startify";
-      rev = "c905a0c9598c72cb4311ca88f3eb664d05e4d66b";
-      sha256 = "1zdqr2lg1cf7dix6yvx7hmxcb698hb2zdimiqv2kgpdqlc40agcy";
+      rev = "5e476d8e00da70bc33c54a174fd8cb18ed991868";
+      sha256 = "07k7ddjqc2jisk0sh9k8w6r5xhh47cbzbxdnbkjz7bdskkwsdsay";
     };
     dependencies = [];
 

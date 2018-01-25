@@ -239,5 +239,6 @@
 "vundle"
 "xterm-color-table"
 "zeavim"
+"github:mhinz/vim-grepper.git"
 "github:andsild/peskcolor.vim.git"
 "github:bazelbuild/vim-bazel"
