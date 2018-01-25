@@ -108,6 +108,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  echodoc = echodoc-vim;
   context-filetype = context_filetype-vim;
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
@@ -1819,6 +1820,17 @@ rec {
       url = "https://github.com/shougo/denite.nvim";
       rev = "0d48d8d498d410a5ea4403648d528e7267d87461";
       sha256 = "1npag0da8s3jv4jm8waqvsdfg0gnqhkc07r3m17zp2r2bh3b9bjc";
+    };
+    dependencies = [];
+
+  };
+
+  echodoc-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "echodoc-vim-2018-01-12";
+    src = fetchgit {
+      url = "https://github.com/shougo/echodoc.vim";
+      rev = "410ead5a9fa4400b51771cba3b7599722c9e65b1";
+      sha256 = "01czpvn5rs37x0ml8bc5vwyhklm6fk3wl339smc3jvyr1w73rrf5";
     };
     dependencies = [];
 
