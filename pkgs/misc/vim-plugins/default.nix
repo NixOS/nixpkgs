@@ -108,6 +108,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  neomru = neomru-vim;
   echodoc = echodoc-vim;
   context-filetype = context_filetype-vim;
   concealedyank = concealedyank-vim;
@@ -1876,6 +1877,17 @@ rec {
       url = "https://github.com/shougo/neoinclude.vim";
       rev = "b5956ac824fdd60d6eacaa597c8d329252972d8b";
       sha256 = "07x7hxqhklcr5y8zkw9939cwx7rpiicjlc65bn526fkmhcc2hng6";
+    };
+    dependencies = [];
+
+  };
+
+  neomru-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neomru-vim-2017-10-01";
+    src = fetchgit {
+      url = "https://github.com/shougo/neomru.vim";
+      rev = "97540f54fa20b94daf306f0c1f3cce983bbf7a1d";
+      sha256 = "15d5hmh5v3hnjnfb5736n45rh5nyq41vqjp1cz4ls2rxmmfi3xa7";
     };
     dependencies = [];
 
