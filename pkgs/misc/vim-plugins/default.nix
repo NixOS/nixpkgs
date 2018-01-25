@@ -142,17 +142,6 @@ rec {
 
   # --- generated packages bellow this line ---
 
-  Auto_Pairs = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "Auto_Pairs-2017-07-03";
-    src = fetchgit {
-      url = "git://github.com/jiangmiao/auto-pairs";
-      rev = "f0019fc6423e7ce7bbd01d196a7e027077687fda";
-      sha256 = "1kzrdq3adwxwm3fw65g05ww9405lwqi368win5kayamyj9i0z7r6";
-    };
-    dependencies = [];
-
-  };
-
   CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "CSApprox-2013-07-26";
     src = fetchgit {
