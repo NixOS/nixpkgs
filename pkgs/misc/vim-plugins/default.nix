@@ -598,6 +598,17 @@ rec {
 
   };
 
+  vim-bazel = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-bazel-2018-01-10";
+    src = fetchgit {
+      url = "https://github.com/bazelbuild/vim-bazel";
+      rev = "ecafb17d5d1d3756e5ac0bd9f4812a450b8c91a3";
+      sha256 = "0ixhx9ssfygjy2v2ss02w28rcjxnvhj0caffj32cv3snwnpcz6fy";
+    };
+    dependencies = ["maktaba"];
+
+  };
+
   clighter8 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "clighter8-2017-11-30";
     src = fetchgit {
