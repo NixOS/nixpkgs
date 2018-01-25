@@ -268,4 +268,5 @@
 "github:chemzqm/denite-extra"
 "github:bazelbuild/vim-bazel"
 "github:reedes/vim-wordy"
+"github:vim-scripts/Improved-AnsiEsc"
 "github:itchyny/vim-gitbranch"
