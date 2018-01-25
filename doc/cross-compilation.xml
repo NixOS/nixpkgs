@@ -253,7 +253,8 @@
     or also with <varname>crossSystem</varname>, in which case packages run on the latter, but all building happens on the former.
     Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section.
     As mentioned above, <literal>lib.systems.examples</literal> has some platforms which are used as arguments for these parameters in practice.
-    You can use them programmatically, or on the command line like <command>nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).systems.examples.fooBarBaz'</command>.
+    You can use them programmatically, or on the command line: <programlisting>
+nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).systems.examples.fooBarBaz' -A whatever</programlisting>
   </para>
   <para>
     While one is free to pass both parameters in full, there's a lot of logic to fill in missing fields.
