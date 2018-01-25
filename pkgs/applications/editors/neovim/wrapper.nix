@@ -1,6 +1,5 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir
+{ stdenv, lib, makeDesktopItem, makeWrapper
 , vimUtils
-, neovim
 , bundlerEnv, ruby
 , pythonPackages
 , python3Packages
