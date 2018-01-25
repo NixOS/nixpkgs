@@ -240,6 +240,7 @@
 "xterm-color-table"
 "zeavim"
 "github:elzr/vim-json"
+"github:kana/vim-operator-user"
 "github:kana/vim-niceblock"
 "github:kana/vim-operator-replace"
 "github:rhysd/vim-operator-surround"
