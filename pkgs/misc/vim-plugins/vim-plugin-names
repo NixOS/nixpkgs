@@ -239,6 +239,7 @@
 "vundle"
 "xterm-color-table"
 "zeavim"
+"github:elzr/vim-json"
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
 "github:cespare/vim-toml"

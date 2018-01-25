@@ -880,12 +880,23 @@ rec {
 
   };
 
+  vim-json = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-json-2018-01-10";
+    src = fetchgit {
+      url = "https://github.com/elzr/vim-json";
+      rev = "3727f089410e23ae113be6222e8a08dd2613ecf2";
+      sha256 = "1c19pqrys45pzflj5jyrm4q6hcvs977lv6qsfvbnk7nm4skxrqp1";
+    };
+    dependencies = [];
+
+  };
+
   vim-localvimrc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-localvimrc-2017-07-06";
+    name = "vim-localvimrc-2018-01-04";
     src = fetchgit {
       url = "https://github.com/embear/vim-localvimrc";
-      rev = "48c01c214ea0312e8045aaa1a28b30850e98a194";
-      sha256 = "158ajdg3n8j0cxk2ry8rmnpfvnzmznhl573v8ddw6xni58b7bg4d";
+      rev = "b915ce29c619fb367ed41d4c95d57eaaaed31b39";
+      sha256 = "13bc3davmw2pms663yniiha8bayzy1m08xjhyrnlqqb2dz77m5gy";
     };
     dependencies = [];
 
