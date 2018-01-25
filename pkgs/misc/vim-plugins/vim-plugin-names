@@ -240,6 +240,7 @@
 "xterm-color-table"
 "zeavim"
 "github:shougo/denite.nvim"
+"github:shougo/tabpagebuffer.vim"
 "github:shougo/neomru.vim"
 "github:shougo/echodoc.vim"
 "github:shougo/context_filetype.vim"

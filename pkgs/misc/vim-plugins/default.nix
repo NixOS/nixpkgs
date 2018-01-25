@@ -96,6 +96,7 @@ rec {
   supertab            = Supertab;
   syntastic           = Syntastic;
   tabular             = Tabular;
+  tabpagebuffer       = tabpagebuffer-vim;
   tagbar              = Tagbar;
   thumbnail           = thumbnail-vim;
   tmux-navigator      = vim-tmux-navigator;
@@ -1922,6 +1923,17 @@ rec {
       url = "https://github.com/shougo/neoyank.vim.git";
       rev = "5d6e6f80e1920fc38ab5cf779c424a1fdb49202d";
       sha256 = "0l2gfwyiyzppb0hs9sx3x7ndq9zzinppzqq3njwjzd1qgfv29jpq";
+    };
+    dependencies = [];
+
+  };
+
+  tabpagebuffer-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "tabpagebuffer-vim-2014-09-30";
+    src = fetchgit {
+      url = "https://github.com/shougo/tabpagebuffer.vim";
+      rev = "4d95c3e6fa5ad887498f4cbe486c11e39d4a1fbc";
+      sha256 = "1z6zlpzkhwy1p2pmx9qrwb91dp9v4yi8jrdvm1if2k79ij4sl08f";
     };
     dependencies = [];
 
