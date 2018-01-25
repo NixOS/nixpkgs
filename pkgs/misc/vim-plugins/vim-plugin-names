@@ -250,3 +250,4 @@
 "github:chemzqm/denite-git"
 "github:chemzqm/denite-extra"
 "github:bazelbuild/vim-bazel"
+"github:itchyny/vim-gitbranch"
