@@ -259,6 +259,7 @@
 "github:janko-m/vim-test.git"
 "github:andsild/peskcolor.vim.git"
 "github:vim-scripts/mayansmoke.git"
+"github:shougo/neoyank.vim.git"
 "github:chemzqm/denite-git"
 "github:chemzqm/denite-extra"
 "github:bazelbuild/vim-bazel"

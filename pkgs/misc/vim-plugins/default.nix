@@ -117,6 +117,7 @@ rec {
   neoinclude = neoinclude-vim;
   committia = committia-vim-git;
   vim-test = vim-test-git;
+  neoyank = neoyank-vim-git;
   peskcolor = peskcolor-vim-git;
   mayansmoke = mayansmoke-git;
 
@@ -1910,6 +1911,17 @@ rec {
       url = "https://github.com/shougo/neosnippet.vim";
       rev = "9ee1b4e059d4ffcc02312da13ee36315dacbffe4";
       sha256 = "0c4pk02hnvzgj6pwy4lx481n7gj2fjwlsmcy7vxfps9h8h9qd6kw";
+    };
+    dependencies = [];
+
+  };
+
+  neoyank-vim-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neoyank-vim-git-2017-12-19";
+    src = fetchgit {
+      url = "https://github.com/shougo/neoyank.vim.git";
+      rev = "5d6e6f80e1920fc38ab5cf779c424a1fdb49202d";
+      sha256 = "0l2gfwyiyzppb0hs9sx3x7ndq9zzinppzqq3njwjzd1qgfv29jpq";
     };
     dependencies = [];
 
