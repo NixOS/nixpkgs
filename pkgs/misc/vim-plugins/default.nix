@@ -110,6 +110,7 @@ rec {
   concealedyank = concealedyank-vim;
   cute-python = vim-cute-python-git;
   vim-grepper = vim-grepper-git;
+  committia = committia-vim-git;
   vim-test = vim-test-git;
   peskcolor = peskcolor-vim-git;
   mayansmoke = mayansmoke-git;
@@ -1664,6 +1665,17 @@ rec {
       url = "https://github.com/reedes/vim-wordy";
       rev = "bd37684a041fce85c34bb56c41c5a12c04a376ca";
       sha256 = "0lv3ff1yfqdz2vj6lwaygslds1ccidbb09f4x1cdwlawxdgh3w2v";
+    };
+    dependencies = [];
+
+  };
+
+  committia-vim-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "committia-vim-git-2017-12-04";
+    src = fetchgit {
+      url = "https://github.com/rhysd/committia.vim.git";
+      rev = "51aec02e5ab07c89fa5d5445cfe3a8e0098bec27";
+      sha256 = "08nqncgnmbvhnn850s6hhp6p6scqg2iiwrl9air952yh9pl91h84";
     };
     dependencies = [];
 
