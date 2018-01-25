@@ -244,5 +244,6 @@
 "github:mhinz/vim-grepper.git"
 "github:andsild/peskcolor.vim.git"
 "github:vim-scripts/mayansmoke.git"
+"github:chemzqm/denite-git"
 "github:chemzqm/denite-extra"
 "github:bazelbuild/vim-bazel"
