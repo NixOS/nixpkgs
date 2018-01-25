@@ -239,6 +239,7 @@
 "vundle"
 "xterm-color-table"
 "zeavim"
+"github:shougo/denite.nvim"
 "github:shougo/context_filetype.vim"
 "github:elzr/vim-json"
 "github:kana/vim-operator-user"

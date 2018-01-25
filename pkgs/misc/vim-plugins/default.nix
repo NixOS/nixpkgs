@@ -63,6 +63,7 @@ rec {
   command_T           = command-t; # backwards compat, added 2014-10-18
   css_color_5056      = vim-css-color;
   ctrlp               = ctrlp-vim;
+  denite              = denite-nvim;
   easy-align          = vim-easy-align;
   easymotion          = vim-easymotion;
   eighties            = vim-eighties;
@@ -1807,6 +1808,17 @@ rec {
       url = "https://github.com/shougo/context_filetype.vim";
       rev = "6856503cd938d018c2d42277ee6ca896fd63f5a2";
       sha256 = "1s4nimpvc5ps602h8xb231nvmk9jbzs981an5kxr3idmmk44j5ms";
+    };
+    dependencies = [];
+
+  };
+
+  denite-nvim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "denite-nvim-2018-01-16";
+    src = fetchgit {
+      url = "https://github.com/shougo/denite.nvim";
+      rev = "0d48d8d498d410a5ea4403648d528e7267d87461";
+      sha256 = "1npag0da8s3jv4jm8waqvsdfg0gnqhkc07r3m17zp2r2bh3b9bjc";
     };
     dependencies = [];
 
