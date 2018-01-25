@@ -1266,6 +1266,17 @@ rec {
 
   };
 
+  vim-niceblock = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-niceblock-2015-08-22";
+    src = fetchgit {
+      url = "https://github.com/kana/vim-niceblock";
+      rev = "03c59f648fcadd415fc91d7b100cf48bd0a55fac";
+      sha256 = "05p3xr61v3infi07r9ahr30190kamgdjxkjjlawbqnrn8pv9fws4";
+    };
+    dependencies = [];
+
+  };
+
   latex-box = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "latex-box-2015-06-01";
     src = fetchgit {
