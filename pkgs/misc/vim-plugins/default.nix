@@ -107,6 +107,7 @@ rec {
   webapi-vim          = WebAPI;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
+  peskcolor = peskcolor-vim-git;
 
   # do not auto-update this one, as the name clashes with vim-snippets
   vim-docbk-snippets = buildVimPluginFrom2Nix {
@@ -548,6 +549,17 @@ rec {
       url = "https://github.com/alvan/vim-closetag";
       rev = "277e21d04c417112da6ecd3485373c6d3ff93b90";
       sha256 = "1wx9qqas0gd301pn9zabbl4b9v41i1hwbnd8fyy8kxxf0cbpdwaf";
+    };
+    dependencies = [];
+
+  };
+
+  peskcolor-vim-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "peskcolor-vim-git-2016-06-11";
+    src = fetchgit {
+      url = "https://github.com/andsild/peskcolor.vim.git";
+      rev = "cba4fc739bbebacd503158f6509d9c226651f363";
+      sha256 = "15hw3casr5y3ckgcn6aq8vhk6g2hym41w51nvgf34hbj9fx1nvkq";
     };
     dependencies = [];
 

@@ -239,3 +239,4 @@
 "vundle"
 "xterm-color-table"
 "zeavim"
+"github:andsild/peskcolor.vim.git"
