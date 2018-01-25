@@ -243,4 +243,5 @@
 "github:cespare/vim-toml"
 "github:mhinz/vim-grepper.git"
 "github:andsild/peskcolor.vim.git"
+"github:vim-scripts/mayansmoke.git"
 "github:bazelbuild/vim-bazel"

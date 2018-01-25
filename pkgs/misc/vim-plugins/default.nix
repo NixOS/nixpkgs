@@ -109,6 +109,7 @@ rec {
   yankring            = YankRing;
   vim-grepper = vim-grepper-git;
   peskcolor = peskcolor-vim-git;
+  mayansmoke = mayansmoke-git;
 
   # do not auto-update this one, as the name clashes with vim-snippets
   vim-docbk-snippets = buildVimPluginFrom2Nix {
@@ -2032,6 +2033,17 @@ rec {
       url = "https://github.com/vim-scripts/changeColorScheme.vim";
       rev = "b041d49f828629d72f2232531a230d1ec5de2405";
       sha256 = "0pybhsg9k9252d4ifdc4gsar8lkmfzbvs6xkzqq1m6f35l9wqk09";
+    };
+    dependencies = [];
+
+  };
+
+  mayansmoke-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "mayansmoke-git-2010-10-17";
+    src = fetchgit {
+      url = "https://github.com/vim-scripts/mayansmoke.git";
+      rev = "168883af7aec05f139af251f47eadd5dfb802c9d";
+      sha256 = "1xxcky7i6sx7f1q8xka4gd2xg78w6sqjvqrdwgrdzv93fhf82rpd";
     };
     dependencies = [];
 
