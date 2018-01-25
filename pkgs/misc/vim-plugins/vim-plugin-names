@@ -242,6 +242,7 @@
 "github:elzr/vim-json"
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
+"github:osyo-manga/vim-textobj-multiblock"
 "github:cespare/vim-toml"
 "github:ehamberg/vim-cute-python.git"
 "github:mhinz/vim-grepper.git"
