@@ -1277,6 +1277,17 @@ rec {
 
   };
 
+  vim-operator-replace = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-operator-replace-2015-02-25";
+    src = fetchgit {
+      url = "https://github.com/kana/vim-operator-replace";
+      rev = "1345a556a321a092716e149d4765a5e17c0e9f0f";
+      sha256 = "07cibp61zwbzpjfxqdc77fzrgnz8jhimmdhhyjr0lvgrjgvsnv6q";
+    };
+    dependencies = [];
+
+  };
+
   latex-box = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "latex-box-2015-06-01";
     src = fetchgit {

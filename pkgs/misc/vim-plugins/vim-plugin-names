@@ -241,6 +241,7 @@
 "zeavim"
 "github:elzr/vim-json"
 "github:kana/vim-niceblock"
+"github:kana/vim-operator-replace"
 "github:rhysd/vim-operator-surround"
 "github:chikatoike/concealedyank.vim"
 "github:osyo-manga/vim-textobj-multiblock"
