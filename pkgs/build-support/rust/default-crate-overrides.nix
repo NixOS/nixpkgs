@@ -1,4 +1,4 @@
-{ pkgconfig, sqlite, openssl, libsodium, ... }:
+{ pkgconfig, sqlite, openssl, libsodium, postgresql, ... }:
 
 {
   libsqlite3-sys = attrs: {
@@ -9,5 +9,8 @@
   };
   thrussh-libsodium = attrs: {
     buildInputs = [ pkgconfig libsodium ];
+  };
+  pq-sys = attr: {
+    buildInputs = [ pkgconfig postgresql ];
   };
 }
