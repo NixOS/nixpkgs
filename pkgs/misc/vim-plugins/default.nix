@@ -657,6 +657,17 @@ rec {
 
   };
 
+  vim-toml = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-toml-2017-12-10";
+    src = fetchgit {
+      url = "https://github.com/cespare/vim-toml";
+      rev = "b531aac0d45aaa373070c4cc30d7ead91960f5a7";
+      sha256 = "14g3zvyfvhilr5ka3jhja4jxjn99957sk6hlv13yfkg349f57dvg";
+    };
+    dependencies = [];
+
+  };
+
   vim-sort-motion = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-sort-motion-2017-10-03";
     src = fetchgit {
