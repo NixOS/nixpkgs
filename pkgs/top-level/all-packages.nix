@@ -5460,6 +5460,8 @@ with pkgs;
 
   yle-dl = callPackage ../tools/misc/yle-dl {};
 
+  you-get = python3Packages.callPackage ../tools/misc/you-get { };
+
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = callPackage ../tools/graphics/zbar { };
@@ -18029,8 +18031,6 @@ with pkgs;
   inherit (gnome3) yelp;
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
-
-  inherit (python3Packages) you-get;
 
   inherit (pythonPackages) youtube-dl;
 
