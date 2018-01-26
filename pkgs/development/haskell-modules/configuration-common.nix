@@ -605,7 +605,8 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
-  # Needs newer version of its dependencies than we have in LTS-10.x.
+  # Need newer versions of their dependencies than the ones we have in LTS-10.x.
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_22_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
