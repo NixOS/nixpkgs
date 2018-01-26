@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, zlib, gpgme, libidn, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.1";
+  version = "3.0.5";
   name = "gmime-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/3.0/${name}.tar.xz";
-    sha256 = "001y93b8mq9alzkvli6vfh3pzdcn5c5iy206ml23lzhhhvm5k162";
+    sha256 = "1q45gd1ahnz9q1milc2lqqwl7j3q0wd6kiswhp25iak222n56lrg";
   };
 
   outputs = [ "out" "dev" ];

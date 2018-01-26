@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     ++ optional (!gtkClient) "--enable-fcmp=cli"
     ++ optional (!server) "--disable-server";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Multiplayer (or single player), turn-based strategy game";
 

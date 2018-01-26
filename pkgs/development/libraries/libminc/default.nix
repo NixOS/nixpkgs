@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, cmake, zlib, netcdf, hdf5 }:
+{ stdenv, fetchFromGitHub, cmake, zlib, netcdf, hdf5 }:
 
 stdenv.mkDerivation rec {
-  _name = "libminc";
-  name  = "${_name}-2.3.00";
+  name = "${pname}-2.3.00";
+  pname = "libminc";
 
-  src = fetchurl {
-    url = "https://github.com/BIC-MNI/${_name}/archive/${_name}-2-3-00.tar.gz";
-    sha256 = "04ngqx4wkssxs9qqcgq2bvfs1cldcycmpcx587wy3b3m6lwf004c";
+  src = fetchFromGitHub {
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = builtins.replaceStrings [ "." ] [ "-" ] name;
+    sha256 = "1gv1rq1q1brhglll2256cm6sns77ph6fvgbzk3ihkzq46y07yi9s";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,6 +19,8 @@ stdenv.mkDerivation rec {
 
   checkPhase = "ctest";
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BIC-MNI/libminc;

@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's#\$djvulibre_bin_path#${djvulibre.bin}/bin#g' configure
+
+    # Configure skips the failing check for usability of windres when it is nonempty.
+    unset WINDRES
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Creates djvu files from PDF files";

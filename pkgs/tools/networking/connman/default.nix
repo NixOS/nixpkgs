@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     "--enable-datafiles"
     "--enable-pptp"
     "--with-pptp=${pptp}/sbin/pptp"
+    "--enable-iwd"
   ];
 
   postInstall = ''

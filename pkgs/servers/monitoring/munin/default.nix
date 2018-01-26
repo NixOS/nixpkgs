@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.33";
+  version = "2.0.34";
   name = "munin-${version}";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "0rs05b7926mjd58sdry33i91m1h3v3svl0wg2gmhljl8wqidac5w";
+    sha256 = "0mb5m0nc3nr9781d3s99sjdssmvkv37gxyplzr6d73i4hi31m7fr";
   };
 
   buildInputs = [ 
@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
 
     # https://github.com/munin-monitoring/munin/pull/134
     ./adding_servicedir_munin-node.patch
+
+    ./adding_sconfdir_munin-node.patch
+    ./preserve_environment.patch
   ];
 
   preBuild = ''
@@ -102,8 +105,8 @@ stdenv.mkDerivation rec {
     find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 \
         sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g" -e "s|\<bc\>|${bc}/bin/bc|g"
 
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 
     for file in "$out"/bin/munindoc "$out"/sbin/munin-* "$out"/lib/munin-* "$out"/www/cgi/*; do

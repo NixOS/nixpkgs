@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, curl }:
+{ stdenv, fetchurl, callPackage }:
 
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.19.0";
+  version = "1.21.0";
 
-  # fetch hashes by running `print-hashes.sh 1.19.0`
+  # fetch hashes by running `print-hashes.sh 1.21.0`
   hashes = {
-    i686-unknown-linux-gnu = "657b78f3c1a1b4412e12f7278e20cc318022fa276a58f0d38a0d15b515e39713";
-    x86_64-unknown-linux-gnu = "30ff67884464d32f6bbbde4387e7557db98868e87fb2afbb77c9b7716e3bff09";
-    i686-apple-darwin = "bdfd2189245dc5764c9f26bdba1429c2bf9d57477d8e6e3f0ba42ea0dc63edeb";
-    x86_64-apple-darwin = "5c668fb60a3ba3e97dc2cb8967fc4bb9422b629155284dcb89f94d116bb17820";
+    i686-unknown-linux-gnu = "b7caed0f602cdb8ef22e0bfa9125a65bec411e15c0b8901d937e43303ec7dbee";
+    x86_64-unknown-linux-gnu = "b41e70e018402bc04d02fde82f91bea24428e6be432f0df12ac400cfb03108e8";
+    armv7-unknown-linux-gnueabihf = "416fa6f107ad9e386002e6af1aec495472e2ee489c842183dd429a25b07488d6";
+    aarch64-unknown-linux-gnu = "491ee6c43cc672006968d665bd34c94cc2219ef3592d93d38097c97eaaa864c3";
+    i686-apple-darwin = "c8b0fabeebcde66b683f3a871187e614e07305adda414c2862cb332aecb2b3bf";
+    x86_64-apple-darwin = "75a7f4bd7c72948030bb9e421df27e8a650dea826fb5b836cf59d23d6f985a0d";
   };
 
   platform =
@@ -18,6 +20,10 @@ let
     then "i686-unknown-linux-gnu"
     else if stdenv.system == "x86_64-linux"
     then "x86_64-unknown-linux-gnu"
+    else if stdenv.system == "armv7l-linux"
+    then "armv7-unknown-linux-gnueabihf"
+    else if stdenv.system == "aarch64-linux"
+    then "aarch64-unknown-linux-gnu"
     else if stdenv.system == "i686-darwin"
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
@@ -29,9 +35,8 @@ let
      sha256 = hashes."${platform}";
   };
 
-in import ./binaryBuild.nix
-  { inherit stdenv fetchurl makeWrapper cacert zlib curl;
+in callPackage ./binaryBuild.nix
+  { inherit version src platform;
     buildRustPackage = null;
-    inherit version src platform;
     versionType = "bootstrap";
   }

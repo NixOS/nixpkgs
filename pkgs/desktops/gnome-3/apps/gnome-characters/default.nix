@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, gjs, gdk_pixbuf, librsvg }:
+, intltool, gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
   buildInputs = [
-    gtk3 wrapGAppsHook intltool gjs gdk_pixbuf
+    gtk3 gjs gdk_pixbuf gobjectIntrospection
     librsvg gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme
   ];
 

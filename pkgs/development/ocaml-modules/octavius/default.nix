@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.03"
 then throw "octavius is not available for OCaml ${ocaml.version}" else
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
 	unpackCmd = "tar xjf $src";
 
-	buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
 	inherit (topkg) buildPhase installPhase;
 

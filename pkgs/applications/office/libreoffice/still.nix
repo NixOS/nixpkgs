@@ -6,16 +6,15 @@
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw, libzmf
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, glibc, qt4, kdelibs4, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus_glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
+, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , defaultIconTheme, glib, ncurses
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" "hu" "it" ]
+, langs ? [ "ca" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" ]
 , withHelp ? true
-, kdeIntegration ? false
 }:
 
 let
@@ -162,10 +161,6 @@ in stdenv.mkDerivation rec {
 
     for a in sbase scalc sdraw smath swriter simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
-      wrapProgram "$out/bin/$a" \
-         --prefix XDG_DATA_DIRS : \
-         "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-         ;
     done
 
     ln -s $out/bin/soffice $out/bin/libreoffice
@@ -191,7 +186,6 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
-    (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"
     "--with-jdk-home=${jdk.home}"
@@ -247,15 +241,15 @@ in stdenv.mkDerivation rec {
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base gsettings_desktop_schemas glib
+      gst_all_1.gst-plugins-base glib
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew ncurses
-      libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
-    ]
-    ++ lib.optional kdeIntegration kdelibs4;
+      libodfgen CoinMP librdf_rasqal defaultIconTheme
+    ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   passthru = {
     inherit srcs;

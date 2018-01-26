@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/imatix/gsl/;
     description = "A universal code generator";
     platforms = platforms.unix;
-    maintainer = [ maintainers.moosingin3space ];
+    maintainers = [ maintainers.moosingin3space ];
   };
 }

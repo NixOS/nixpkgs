@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, astring }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, astring }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-fpath-0.7.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ astring ];
 

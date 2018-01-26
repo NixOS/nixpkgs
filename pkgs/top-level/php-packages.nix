@@ -8,20 +8,21 @@ let
     };
   isPhpOlder55 = pkgs.lib.versionOlder php.version "5.5";
   isPhp7 = pkgs.lib.versionAtLeast php.version "7.0";
+  isPhp72 = pkgs.lib.versionAtLeast php.version "7.2";
+  isPhpOlder7 = pkgs.lib.versionOlder php.version "7.0";
 
   apcu = if isPhp7 then apcu51 else apcu40;
 
   apcu40 = assert !isPhp7; buildPecl {
     name = "apcu-4.0.7";
-
     sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    buildInputs = [ pkgs.pcre ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
     name = "apcu-5.1.8";
-
     sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
-
+    buildInputs = [ pkgs.pcre ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
@@ -74,6 +75,21 @@ let
     ];
   };
 
+  php_excel = assert isPhp7; buildPecl rec {
+    name = "php_excel";
+    version = "1.0.2";
+    phpVersion = "php7";
+
+    buildInputs = [ pkgs.libxl ];
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
+    };
+
+    configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+  };
+
   igbinary = buildPecl {
     name = "igbinary-2.0.4";
 
@@ -86,11 +102,18 @@ let
     sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
   };
 
+  mailparse = assert isPhp7; buildPecl {
+    name = "mailparse-3.0.2";
+
+    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
+  };
+
   imagick = buildPecl {
     name = "imagick-3.4.3RC1";
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
     configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.pcre ];
   };
 
   # No support for PHP 7 yet
@@ -158,7 +181,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug25 else xdebug23;
+  xdebug = if isPhp72 then xdebug26 else if isPhp7 then xdebug25 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -169,10 +192,19 @@ let
     checkTarget = "test";
   };
 
-  xdebug25 = buildPecl {
+  xdebug25 = assert !isPhp72; buildPecl {
     name = "xdebug-2.5.0";
 
     sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
+
+    doCheck = true;
+    checkTarget = "test";
+  };
+
+  xdebug26 = assert !isPhpOlder7; buildPecl {
+    name = "xdebug-2.6.0beta1";
+
+    sha256 = "0zaj821jbpaqqcbr9a64sa27my9n980pmyy9kxrvvjqq3qg6dpj9";
 
     doCheck = true;
     checkTarget = "test";
@@ -307,12 +339,13 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.5.1";
+    version = "1.6.2";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "107v8hdgmi2s15zsd9ffrr3jyw01qkwv174y9gw9fbpdrjwffi97";
+      sha256 = "0xjjnbpzar6ybpad77r0b4a96bwrayza8s1s9vz6s634ir98dhvf";
     };
+
     unpackPhase = ":";
 
     buildInputs = [ pkgs.makeWrapper ];
@@ -329,6 +362,93 @@ let
       license = licenses.mit;
       homepage = https://getcomposer.org/;
       maintainers = with maintainers; [ globin offline ];
+    };
+  };
+
+  box = pkgs.stdenv.mkDerivation rec {
+    name = "box-${version}";
+    version = "2.7.5";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
+      sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/box/box.phar
+      makeWrapper ${php}/bin/php $out/bin/box \
+        --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "An application for building and managing Phars";
+      license = licenses.mit;
+      homepage = https://box-project.github.io/box2/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-cs-fixer = pkgs.stdenv.mkDerivation rec {
+    name = "php-cs-fixer-${version}";
+    version = "2.10.0";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
+      sha256 = "0mi72sg0gms2lg1r1b6qxhsxgi3v07kczmr1hnk7pwa47jb6572q";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
+      makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
+        --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "A tool to automatically fix PHP coding standards issues";
+      license = licenses.mit;
+      homepage = http://cs.sensiolabs.org/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-parallel-lint = pkgs.stdenv.mkDerivation rec {
+    name = "php-parallel-lint-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "JakubOnderka";
+      repo = "PHP-Parallel-Lint";
+      rev = "v${version}";
+      sha256 = "0dzyi6arwpwbjgr366vw3qxibc3naq863p75q433ahznbdygzzm1";
+    };
+
+    buildInputs = [ pkgs.makeWrapper composer box ];
+
+    buildPhase = ''
+      composer dump-autoload
+      box build
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
+      makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
+        --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "This tool check syntax of PHP files faster than serial check with fancier output";
+      license = licenses.bsd2;
+      homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
+      maintainers = with maintainers; [ jtojnar ];
     };
   };
 

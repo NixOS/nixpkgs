@@ -19,7 +19,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   aspell = all;
   at = linux;
   atlas = linux;
-  aterm25 = all;
   autoconf = all;
   automake = all;
   avahi = allBut cygwin;  # Cygwin builds fail
@@ -36,6 +35,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   cpio = all;
   cron = linux;
   cups = linux;
+  dbus = linux;
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
@@ -174,11 +174,5 @@ with import ./release-lib.nix { inherit supportedSystems; };
   xkeyboard_config = linux;
   zile = linux;
   zip = all;
-
-  dbus = {
-    libs = linux;
-    daemon = linux;
-    tools = linux;
-  };
 
 } ))

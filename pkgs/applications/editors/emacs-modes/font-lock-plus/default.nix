@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, melpaBuild }:
+{ fetchurl, lib, stdenv, melpaBuild }:
 
 melpaBuild {
   pname = "font-lock-plus";
-  version = "20170222.1755";
+  version = "20180101.25";
 
   src = fetchurl {
-    url = "https://www.emacswiki.org/emacs/download/font-lock+.el";
-    sha256 = "0iajkgh0n3pbrwwxx9rmrrwz8dw2m7jsp4mggnhq7zsb20ighs30";
+    url = "https://www.emacswiki.org/emacs/download/font-lock%2b.el?revision=25";
+    sha256 = "0197yzn4hbjmw5h3m08264b7zymw63pdafph5f3yzfm50q8p7kp4";
     name = "font-lock+.el";
   };
 
@@ -16,7 +16,7 @@ melpaBuild {
     name = "font-lock-plus";
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://melpa.org/#/font-lock+";
     license = lib.licenses.gpl2Plus;
   };

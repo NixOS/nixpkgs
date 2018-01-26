@@ -73,7 +73,7 @@ pythonPackages.buildPythonApplication {
     pyqt5
   ];
 
-  makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.

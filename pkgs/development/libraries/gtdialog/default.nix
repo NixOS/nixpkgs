@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="gtdialog";
-    version="1.3";
+    version="1.4";
     name="${baseName}-${version}";
-    hash="0y7sln877940bpj0s38cs5s97xg8csnaihh18lmnchf7c2kkbxpq";
-    url="http://foicica.com/gtdialog/download/gtdialog_1.3.zip";
-    sha256="0y7sln877940bpj0s38cs5s97xg8csnaihh18lmnchf7c2kkbxpq";
+    hash="1lhsaz56s8m838fi6vnfcd2r6djymvy3n2pbqhii88hraapq3rfk";
+    url="http://foicica.com/gtdialog/download/gtdialog_1.4.zip";
+    sha256="1lhsaz56s8m838fi6vnfcd2r6djymvy3n2pbqhii88hraapq3rfk";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

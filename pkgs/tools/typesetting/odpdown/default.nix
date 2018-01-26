@@ -12,6 +12,10 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [ libreoffice lpod lxml mistune pillow pygments ];
 
+  checkInputs = with pythonPackages; [
+    nose
+  ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/thorstenb/odpdown;
     repositories.git = https://github.com/thorstenb/odpdown.git;

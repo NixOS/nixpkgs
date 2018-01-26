@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # RCC: Error in 'Resources/application.qrc': Cannot find file 'translations/gc_fr.qm'
+  enableParallelBuilding = false;
+
   meta = {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = stdenv.lib.platforms.linux;

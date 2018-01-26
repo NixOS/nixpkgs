@@ -1,5 +1,5 @@
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 11fb52a0b1..a4cca1fdcb 100644
+index 11fb52a0b1..614fdbb046 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -35,7 +35,7 @@ index 11fb52a0b1..a4cca1fdcb 100644
 -    # installed in $${CMAKE_LIB_DIR}/cmake/Qt5$${CMAKE_MODULE_NAME}
 -    CMAKE_RELATIVE_INSTALL_DIR = "$${CMAKE_RELATIVE_INSTALL_LIBS_DIR}../../"
 -}
-+CMAKE_LIB_DIR = $$NIX_OUTPUT_DEV/lib/
++CMAKE_LIB_DIR = $$NIX_OUTPUT_OUT/lib/
 +CMAKE_LIB_DIR_IS_ABSOLUTE = True
  
 -CMAKE_BIN_DIR = $$cmakeRelativePath($$[QT_HOST_BINS], $$[QT_INSTALL_PREFIX])
@@ -64,7 +64,7 @@ index 11fb52a0b1..a4cca1fdcb 100644
 -    CMAKE_DLL_DIR = $$CMAKE_LIB_DIR
 -    CMAKE_DLL_DIR_IS_ABSOLUTE = $$CMAKE_LIB_DIR_IS_ABSOLUTE
 -}
-+CMAKE_DLL_DIR = $$NIX_OUTPUT_DEV/lib/
++CMAKE_DLL_DIR = $$NIX_OUTPUT_OUT/lib/
 +CMAKE_DLL_DIR_IS_ABSOLUTE = True
  
  static|staticlib:CMAKE_STATIC_TYPE = true
@@ -248,7 +248,7 @@ index d2358cae4b..61d8cc0471 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index b09d42a0a4..f076265bdd 100644
+index 47ebe78400..25aa2b93e7 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
 @@ -17,10 +17,7 @@ fq_qml_files = $$_PRO_FILE_PWD_/qmldir
@@ -310,7 +310,7 @@ index 1848f00e90..2af93675c5 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index c1809468af..0a12ec24db 100644
+index 08b3f3e5af..5ffeafd9d8 100644
 --- a/mkspecs/features/qt_common.prf
 +++ b/mkspecs/features/qt_common.prf
 @@ -30,8 +30,8 @@ contains(TEMPLATE, .*lib) {
@@ -377,7 +377,7 @@ index 4c68cfd72f..f422f18266 100644
  
      check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 4a1d265a8b..abe0da95f6 100644
+index 4a1d265a8b..d346424b5b 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
 @@ -70,7 +70,7 @@ defineTest(qtHaveModule) {
@@ -385,7 +385,7 @@ index 4a1d265a8b..abe0da95f6 100644
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("type -p $$2")
++        cmd = $$system("command -v $$2")
          exists($${cmd}.pl) {
              cmd = perl -w $$system_path($${cmd}.pl)
          } else: contains(QMAKE_HOST.os, Windows) {
@@ -539,7 +539,7 @@ index 706304cf34..546420f6ad 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index f5b15207cc..f85e0524bb 100644
+index bd3c12ce97..a796775970 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
 @@ -2533,6 +2533,15 @@ QStringList QCoreApplication::libraryPaths()
@@ -628,7 +628,7 @@ index 1d947159e2..b36865fc48 100644
  
      set_target_properties(Qt5::qdbusxml2cpp PROPERTIES
 diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
-index 07869efd7d..37b95d1b6b 100644
+index 07869efd7d..fb4183bada 100644
 --- a/src/gui/Qt5GuiConfigExtras.cmake.in
 +++ b/src/gui/Qt5GuiConfigExtras.cmake.in
 @@ -2,7 +2,7 @@
@@ -652,7 +652,7 @@ index 07869efd7d..37b95d1b6b 100644
  
  !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
 -    set(imported_implib \"${_qt5Gui_install_prefix}/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
-+    set(imported_implib \"$$NIX_OUTPUT_DEV/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
++    set(imported_implib \"$$NIX_OUTPUT_OUT/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ELSE
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
@@ -705,7 +705,7 @@ index 68caaeb6dc..fef4a81474 100644
              // specific curves requested, but not possible to set -> error
              sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));
 diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-index 44f1d7e6ba..e24fe54326 100644
+index 338c7ca3be..dd52114bac 100644
 --- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 +++ b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 @@ -251,12 +251,9 @@ void TableGenerator::initPossibleLocations()
@@ -723,7 +723,7 @@ index 44f1d7e6ba..e24fe54326 100644
  
  QString TableGenerator::findComposeFile()
 diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-index 9bdedcc830..2559b2066b 100644
+index c2b7a562a9..4fa5f6d6a5 100644
 --- a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 +++ b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 @@ -570,7 +570,14 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
@@ -742,7 +742,7 @@ index 9bdedcc830..2559b2066b 100644
  #endif
              }
 diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index b321ed95dc..9e7a72521c 100644
+index 4646ced954..ff3111f393 100644
 --- a/src/plugins/platforms/xcb/qxcbcursor.cpp
 +++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
 @@ -303,10 +303,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
@@ -758,6 +758,28 @@ index b321ed95dc..9e7a72521c 100644
              xcursorFound = xcursorLib.load();
          }
          if (xcursorFound) {
+diff --git a/src/testlib/qtestassert.h b/src/testlib/qtestassert.h
+index ca3e02ca06..28dd73d772 100644
+--- a/src/testlib/qtestassert.h
++++ b/src/testlib/qtestassert.h
+@@ -38,10 +38,13 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-
+-#define QTEST_ASSERT(cond) do { if (!(cond)) qt_assert(#cond,__FILE__,__LINE__); } while (0)
+-
+-#define QTEST_ASSERT_X(cond, where, what) do { if (!(cond)) qt_assert_x(where, what,__FILE__,__LINE__); } while (0)
++#if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
++#define QTEST_ASSERT(cond) do { } while ((false) && (cond))
++#define QTEST_ASSERT_X(cond, where, what) do { } while ((false) && (cond))
++#else
++#define QTEST_ASSERT(cond) do { if (!(cond)) qt_assert(#cond,__FILE__,__LINE__); } while (false)
++#define QTEST_ASSERT_X(cond, where, what) do { if (!(cond)) qt_assert_x(where, what,__FILE__,__LINE__); } while (false)
++#endif
+ 
+ QT_END_NAMESPACE
+ 
 diff --git a/src/widgets/Qt5WidgetsConfigExtras.cmake.in b/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 index 99d87e2e46..a4eab2aa72 100644
 --- a/src/widgets/Qt5WidgetsConfigExtras.cmake.in

@@ -1,17 +1,13 @@
-{ callPackage, runCommand, lib, writeScript, stdenv, coreutils, ruby }:
+{ callPackage, runCommand, lib, writeScript, stdenv, coreutils }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args@{ name, runScript ? "bash", extraBindMounts ? [], extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
+args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
 
 let
-  env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" "meta" "passthru" ]);
+  env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  # Sandboxing script
-  chroot-user = writeScript "chroot-user" ''
-    #! ${ruby}/bin/ruby
-    ${builtins.readFile ./chroot-user.rb}
-  '';
+  chrootenv = callPackage ./chrootenv {};
 
   init = run: writeScript "${name}-init" ''
     #! ${stdenv.shell}
@@ -32,8 +28,7 @@ in runCommand name {
   passthru = passthru // {
     env = runCommand "${name}-shell-env" {
       shellHook = ''
-        ${lib.optionalString (extraBindMounts != []) ''export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"''}
-        exec ${chroot-user} ${init "bash"} "$(pwd)"
+        exec ${chrootenv} ${init "bash"} "$(pwd)"
       '';
     } ''
       echo >&2 ""
@@ -46,8 +41,7 @@ in runCommand name {
   mkdir -p $out/bin
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
-  ${lib.optionalString (extraBindMounts != []) ''export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"''}
-  exec ${chroot-user} ${init runScript} "\$(pwd)" "\$@"
+  exec ${chrootenv} ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}
   ${extraInstallCommands}

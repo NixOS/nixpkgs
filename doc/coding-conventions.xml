@@ -18,9 +18,9 @@
   tab settings so it’s asking for trouble.</para></listitem>
 
   <listitem><para>Use <literal>lowerCamelCase</literal> for variable
-  names, not <literal>UpperCamelCase</literal>.  TODO: naming of
-  attributes in
-  <filename>all-packages.nix</filename>?</para></listitem>
+  names, not <literal>UpperCamelCase</literal>.  Note, this rule does
+  not apply to package attribute names, which instead follow the rules
+  in <xref linkend="sec-package-naming"/>.</para></listitem>
 
   <listitem><para>Function calls with attribute set arguments are
   written as
@@ -220,9 +220,10 @@ args.stdenv.mkDerivation (args // {
 
   <listitem><para>The variable name used for the instantiated package
   in <filename>all-packages.nix</filename>, and when passing it as a
-  dependency to other functions.  This is what Nix expression authors
-  see.  It can also be used when installing using <command>nix-env
-  -iA</command>.</para></listitem>
+  dependency to other functions.  Typically this is called the
+  <emphasis>package attribute name</emphasis>.  This is what Nix
+  expression authors see.  It can also be used when installing using
+  <command>nix-env -iA</command>.</para></listitem>
 
   <listitem><para>The filename for (the directory containing) the Nix
   expression.</para></listitem>
@@ -259,12 +260,12 @@ bound to the variable name <varname>e2fsprogs</varname> in
   Also append <literal>"unstable"</literal> to the name - e.g.,
   <literal>"pkgname-unstable-2014-09-23"</literal>.</para></listitem>
 
-  <listitem><para>Dashes in the package name should be preserved
-  in new variable names, rather than converted to underscores
-  (which was convention up to around 2013 and most names
-   still have underscores instead of dashes) — e.g.,
-  <varname>http-parser</varname> instead of
-  <varname>http_parser</varname>.</para></listitem>
+  <listitem><para>Dashes in the package name should be preserved in
+  new variable names, rather than converted to underscores or camel
+  cased — e.g., <varname>http-parser</varname> instead of
+  <varname>http_parser</varname> or <varname>httpParser</varname>.  The
+  hyphenated style is preferred in all three package
+  names.</para></listitem>
 
   <listitem><para>If there are multiple versions of a package, this
   should be reflected in the variable names in
@@ -661,8 +662,6 @@ src = fetchFromGitHub {
 </section>
 
 <section xml:id="sec-patches"><title>Patches</title>
-  <para>Only patches that are unique to <literal>nixpkgs</literal> should be
-    included in <literal>nixpkgs</literal> source.</para>
   <para>Patches available online should be retrieved using
     <literal>fetchpatch</literal>.</para>
   <para>
@@ -676,5 +675,30 @@ patches = [
 ];
 </programlisting>
   </para>
+  <para>Otherwise, you can add a <literal>.patch</literal> file to the
+  <literal>nixpkgs</literal> repository. In the interest of keeping our
+  maintenance burden to a minimum, only patches that are unique
+  to <literal>nixpkgs</literal> should be added in this way.</para>
+<para><programlisting>
+patches = [ ./0001-changes.patch ];
+</programlisting></para>
+  <para>If you do need to do create this sort of patch file,
+  one way to do so is with git:
+  <orderedlist>
+    <listitem><para>Move to the root directory of the source code
+    you're patching.<screen>
+$ cd the/program/source</screen></para></listitem>
+    <listitem><para>If a git repository is not already present,
+    create one and stage all of the source files.<screen>
+$ git init
+$ git add .</screen></para></listitem>
+    <listitem><para>Edit some files to make whatever changes need
+    to be included in the patch.</para></listitem>
+    <listitem><para>Use git to create a diff, and pipe the output
+    to a patch file:<screen>
+$ git diff > nixpkgs/pkgs/the/package/0001-changes.patch</screen>
+    </para></listitem>
+  </orderedlist></para>
 </section>
+
 </chapter>

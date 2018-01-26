@@ -1,31 +1,56 @@
 { stdenv, fetchurl, gtk_doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive
-, libsoup, docbook2x, gpgme, libxslt, libelf, libsmbios, efivar
-, fwupdate, libyaml, valgrind, meson, libuuid, pygobject3
-, pillow, ninja, gcab
+, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
+, libsoup, docbook2x, gpgme, libxslt, libelf, libsmbios, efivar, glibcLocales
+, fwupdate, libyaml, valgrind, meson, libuuid, pygobject3, colord
+, pillow, ninja, gcab, gnutls, python3Packages, wrapGAppsHook
 }:
-let version = "0.9.6";
-in
-  stdenv.mkDerivation
-    { name = "fwupd-${version}";
-      src = fetchurl
-        { url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-          sha256 = "0h3y4ygckvkjdx7yxwbm273iv84yk37ivlcf4xvq95g64vs8gfhf";
-        };
-      buildInputs =
-        [ gtk_doc pkgconfig gobjectIntrospection intltool libgudev
-          polkit appstream-glib gusb sqlite libarchive libsoup
-          docbook2x libxslt libelf libsmbios fwupdate libyaml valgrind
-          meson gpgme libuuid pygobject3 pillow ninja gcab
-        ];
-      patches = [ ./fix-missing-deps.patch ];
-      preConfigure = ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${efivar}/include/efivar"
-      '';
-      mesonFlags = [ "-Denable-colorhug=false" "-Denable-man=false" "-Denable-tests=false" "--localstatedir=/var" "-Denable-doc=false" "-Dwith-bootdir=/boot" ];
-      enableParallelBuilding = true;
-      meta =
-        { license = [ stdenv.lib.licenses.gpl2 ];
-          platforms = stdenv.lib.platforms.linux;
-        };
-    }
+let
+  version = "1.0.1";
+in stdenv.mkDerivation {
+  name = "fwupd-${version}";
+  src = fetchurl {
+    url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
+    sha256 = "1k627rja7df51dkzqvkzgbwrrj4049k6408d01m34n66zwr2fp59";
+  };
+
+  nativeBuildInputs = [
+    meson ninja gtk_doc pkgconfig gobjectIntrospection intltool glibcLocales
+    valgrind gcab docbook2x libxslt pygobject3 python3Packages.pycairo wrapGAppsHook
+  ];
+  buildInputs = [
+    polkit appstream-glib gusb sqlite libarchive libsoup libelf libsmbios fwupdate libyaml
+    libgudev colord gpgme libuuid pillow gnutls glib_networking
+  ];
+
+  LC_ALL = "en_US.UTF-8"; # For po/make-images
+
+  NIX_CFLAGS_COMPILE = [
+    "-I${efivar}/include/efivar"
+    # warning: "__LIBELF_INTERNAL__" is not defined
+    "-Wno-error=undef"
+  ];
+
+  patches = [
+    ./fix-missing-deps.patch
+  ];
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  mesonFlags = [
+    "-Denable-man=false"
+    "-Denable-tests=false"
+    "-Denable-doc=false"
+    "-Dwith-bootdir=/boot"
+    "-Dwith-udevdir=lib/udev"
+    "-Dwith-systemdunitdir=lib/systemd/system"
+    "--localstatedir=/var"
+  ];
+
+  enableParallelBuilding = true;
+  meta = {
+    homepage = https://fwupd.org/;
+    license = [ stdenv.lib.licenses.gpl2 ];
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

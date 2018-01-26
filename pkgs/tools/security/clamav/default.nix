@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
+{ stdenv, fetchurl, fetchpatch, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
 , libmilter, pcre }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     url = "https://www.clamav.net/downloads/production/${name}.tar.gz";
     sha256 = "0yh2q318bnmf2152g2h1yvzgqbswn0wvbzb8p4kf7v057shxcyqn";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-6420.patch";
+      url = "https://github.com/vrtadmin/clamav-devel/commit/dfc00cd3301a42b571454b51a6102eecf58407bc.patch";
+      sha256 = "08w3p3a4pmi0cmcmyxkagsbn3g0jgx1jqlc34pn141x0qzrlqr60";
+    })
+  ];
 
   # don't install sample config files into the absolute sysconfdir folder
   postPatch = ''

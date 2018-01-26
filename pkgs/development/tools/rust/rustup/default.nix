@@ -52,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "The Rust toolchain installer";
     homepage = https://www.rustup.rs/;
     license = licenses.mit;
-    maintainer = [ maintainers.mic92 ];
+    maintainers = [ maintainers.mic92 ];
   };
 }

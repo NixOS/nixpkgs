@@ -1,6 +1,6 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
-, libiberty, libaudit
+, libiberty, libaudit, libbfd
 , zlib, withGtk ? false, gtk2 ? null }:
 
 with lib;
@@ -11,7 +11,7 @@ assert versionAtLeast kernel.version "3.12";
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
-  inherit (kernel) src;
+  inherit (kernel) src makeFlags;
 
   preConfigure = ''
     cd tools/perf
@@ -21,10 +21,9 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
-  # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-      flex bison libiberty libaudit makeWrapper pkgconfig ];
-  buildInputs = [ elfutils python perl newt slang libunwind binutils zlib ] ++
+      flex bison libiberty libaudit makeWrapper pkgconfig python perl ];
+  buildInputs = [ elfutils newt slang libunwind libbfd zlib ] ++
     stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -46,15 +45,6 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/perf \
       --prefix PATH : "${binutils}/bin"
   '';
-
-  crossAttrs = {
-    /* I don't want cross-python or cross-perl -
-       I don't know if cross-python even works */
-    propagatedBuildInputs = [ elfutils.crossDrv newt.crossDrv ];
-    makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
-    elfutils = elfutils.crossDrv;
-    inherit (kernel.crossDrv) src patches;
-  };
 
   meta = {
     homepage = https://perf.wiki.kernel.org/;

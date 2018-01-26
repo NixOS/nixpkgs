@@ -25,8 +25,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Enable support for Qt 4-based applications. Particularly, install the
-          Qt 4 version of the Breeze theme and a default backend for Phonon.
+          Enable support for Qt 4-based applications. Particularly, install a
+          default backend for Phonon.
         '';
       };
 
@@ -142,11 +142,13 @@ in
 
           kde-gtk-config breeze-gtk
 
+          qtvirtualkeyboard
+
           libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
         ]
 
-        ++ lib.optionals cfg.enableQt4Support [ breeze-qt4 pkgs.phonon-backend-gstreamer ]
+        ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]
 
         # Optional hardware support features
         ++ lib.optional config.hardware.bluetooth.enable bluedevil
@@ -191,11 +193,6 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = mkDefault "breeze";
-      };
-
-      boot.plymouth = {
-        theme = mkDefault "breeze";
-        themePackages = mkDefault [ pkgs.breeze-plymouth ];
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

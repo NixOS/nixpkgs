@@ -8,7 +8,10 @@ let
 
   mysql = cfg.package;
 
-  atLeast55 = versionAtLeast mysql.mysqlVersion "5.5";
+  isMariaDB =
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in pName mysql == pName pkgs.mariadb;
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
@@ -23,13 +26,6 @@ let
     ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.replication.role == "slave" && !atLeast55)
-    ''
-      master-host = ${cfg.replication.masterHost}
-      master-user = ${cfg.replication.masterUser}
-      master-password = ${cfg.replication.masterPassword}
-      master-port = ${toString cfg.replication.masterPort}
-    ''}
     ${optionalString (cfg.ensureUsers != [])
     ''
       plugin-load-add = auth_socket.so
@@ -59,7 +55,7 @@ in
         type = types.package;
         example = literalExample "pkgs.mysql";
         description = "
-          Which MySQL derivation to use.
+          Which MySQL derivation to use. MariaDB packages are supported too.
         ";
       };
 
@@ -310,7 +306,7 @@ in
                     fi
                   '') cfg.initialDatabases}
 
-                ${optionalString (cfg.replication.role == "master" && atLeast55)
+                ${optionalString (cfg.replication.role == "master")
                   ''
                     # Set up the replication master
 
@@ -321,7 +317,7 @@ in
                     ) | ${mysql}/bin/mysql -u root -N
                   ''}
 
-                ${optionalString (cfg.replication.role == "slave" && atLeast55)
+                ${optionalString (cfg.replication.role == "slave")
                   ''
                     # Set up the replication slave
 
@@ -360,7 +356,7 @@ in
 
             ${concatMapStrings (user:
               ''
-                ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if mysql == pkgs.mariadb then "unix_socket" else "auth_socket"};"
+                ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
                   ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                   echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                   '') user.ensurePermissions)}

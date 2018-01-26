@@ -451,7 +451,6 @@ _host_statistics
 _host_statistics64
 _host_swap_exception_ports
 _host_virtual_physical_table_info
-_host_zone_info
 _i386_get_ldt
 _i386_set_ldt
 _important_boost_assertion_token

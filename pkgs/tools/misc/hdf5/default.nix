@@ -14,17 +14,14 @@
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
 
-# No point splitting version 1.8.18 into multiple outputs.
-# The library /lib/libhdf5.so has a reference to gcc-wrapper
-
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.8.18";
+  version = "1.10.1";
   name = "hdf5-${version}";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${name}/src/${name}.tar.bz2";
-    sha256 = "13542vrnl1p35n8vbq0wzk40vddmm33q5nh04j98c7r1yjnxxih1";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
+    sha256 = "1wpbi15za7kbsvih88kfcxblw412pjndl16x88dgnqr47piy2p4w";
  };
 
   passthru = {
@@ -59,8 +56,8 @@ stdenv.mkDerivation rec {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
-      I/O and for high volume and complex data. HDF5 is portable and is extensible, allowing 
-      applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and 
+      I/O and for high volume and complex data. HDF5 is portable and is extensible, allowing
+      applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = stdenv.lib.licenses.free; # BSD-like

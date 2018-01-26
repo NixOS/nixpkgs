@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     cp -v ca-bundle.crt $out/etc/ssl/certs
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = https://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";

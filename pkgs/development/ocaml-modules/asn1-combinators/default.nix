@@ -1,10 +1,22 @@
-{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, cstruct, zarith, ounit, result, topkg, opam }:
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib
+, cstruct, zarith, ounit, result, topkg, ptime
+}:
 
-let ocamlFlags = "-I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/"; in
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+    version = "0.2.0";
+    sha256 = "0yfq4hnyzx6hy05m60007cfpq88wxwa8wqzib19lnk2qrgy772mx";
+    propagatedBuildInputs = [ ptime ];
+  } else {
+    version = "0.1.3";
+    sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
+  propagatedBuildInputs = [ ];
+  };
+in
 
 buildOcaml rec {
   name = "asn1-combinators";
-  version = "0.1.3";
+  inherit (param) version;
 
   minimumSupportedOcamlVersion = "4.01";
 
@@ -12,23 +24,18 @@ buildOcaml rec {
     owner  = "mirleft";
     repo   = "ocaml-asn1-combinators";
     rev    = "v${version}";
-    sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ounit topkg opam ];
-  propagatedBuildInputs = [ result cstruct zarith ];
+  buildInputs = [ ocaml findlib ounit topkg ];
+  propagatedBuildInputs = [ result cstruct zarith ] ++ param.propagatedBuildInputs;
 
-  createFindlibDestdir = true;
+  buildPhase = "${topkg.run} build --tests true";
 
-  buildPhase = "ocaml ${ocamlFlags} pkg/pkg.ml build --tests true";
-
-  installPhase = ''
-    opam-installer --script --prefix=$out | sh
-    ln -s $out/lib/asn1-combinators $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  inherit (topkg) installPhase;
 
   doCheck = true;
-  checkPhase = "ocaml ${ocamlFlags} pkg/pkg.ml test";
+  checkPhase = "${topkg.run} test";
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-asn1-combinators;

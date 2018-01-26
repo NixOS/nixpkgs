@@ -1,11 +1,16 @@
 {stdenv, fetchurl, pkgconfig, libX11, gtk3, intltool}:
 
-stdenv.mkDerivation {
-  name = "libwnck-3.4.7";
+stdenv.mkDerivation rec{
+  name = "libwnck-${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+
+  majorVer = "3";
+  minorVer = "24";
+  patchVer = "1";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libwnck/3.4/libwnck-3.4.7.tar.xz;
-    sha256 = "d48ac9c7f50c0d563097f63d07bcc83744c7d92a1b4ef65e5faeab32b5ccb723";
+    url = "mirror://gnome/sources/libwnck/${majorVer}.${minorVer}/${name}.tar.xz";
+    sha256 = "010zk9zvydggxqnxfml3scml5yxmpjy90irpqcayrzw26lldr9mg";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "bashdb-4.4-0.92";
+  name = "bashdb-4.4-0.94";
 
   src = fetchurl {
     url =  "mirror://sourceforge/bashdb/${name}.tar.bz2";
-    sha256 = "6a8c2655e04339b954731a0cb0d9910e2878e45b2fc08fe469b93e4f2dbaaf92";
+    sha256 = "01n0dml866sacls7q8h1c6mm4nc47lq3vrar9idmkajky71aycar";
   };
 
-  meta = { 
+  meta = {
     description = "Bash script debugger";
     homepage = http://bashdb.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;

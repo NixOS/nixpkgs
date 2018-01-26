@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.4.2";
+let version = "3.4.10";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "0n8vspccrpd2z9xk3yjpz4gprd730dfacw914ksjzz9iadn0zdi9";
+    sha256 = "1wz2mhl9z0b1bdkg6m8v8mvw9k60mdv5ybq554xn3yjj9z500f24";
   };
 
   nativeBuildInputs = [ scons ];
@@ -60,12 +60,6 @@ in stdenv.mkDerivation rec {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";
         sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
-      })
-      # probably not needed for > 3.4.10
-      (fetchpatch {
-        url = https://github.com/mongodb/mongo/commit/218a7b1d4ea3d3b.diff;
-        name = "pcre-8.41.patch";
-        sha256 = "1dra51gw130bq78l2yfkdaj0jkha95ikpv4ig21rapbl63ip3znj";
       })
     ];
 

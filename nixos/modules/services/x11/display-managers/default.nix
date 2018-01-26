@@ -59,12 +59,6 @@ let
       # Now it should be safe to assume that the script was called with the
       # expected parameters.
 
-      ${optionalString cfg.displayManager.logToJournal ''
-        if [ -z "$_DID_SYSTEMD_CAT" ]; then
-          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$@"
-        fi
-      ''}
-
       . /etc/profile
       cd "$HOME"
 
@@ -72,14 +66,21 @@ let
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
 
-      ${optionalString (!cfg.displayManager.job.logsXsession && !cfg.displayManager.logToJournal) ''
-        exec > ~/.xsession-errors 2>&1
-      ''}
-
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
           exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
         fi
+      ''}
+
+      ${optionalString cfg.displayManager.job.logToJournal ''
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          export _DID_SYSTEMD_CAT=1
+          exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$sessionType"
+        fi
+      ''}
+
+      ${optionalString cfg.displayManager.job.logToFile ''
+        exec &> >(tee ~/.xsession-errors)
       ''}
 
       # Start PulseAudio if enabled.
@@ -306,26 +307,24 @@ in
           description = "Additional environment variables needed by the display manager.";
         };
 
-        logsXsession = mkOption {
+        logToFile = mkOption {
           type = types.bool;
           default = false;
           description = ''
-            Whether the display manager redirects the
-            output of the session script to
-            <filename>~/.xsession-errors</filename>.
+            Whether the display manager redirects the output of the
+            session script to <filename>~/.xsession-errors</filename>.
           '';
         };
 
-      };
+        logToJournal = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether the display manager redirects the output of the
+            session script to the systemd journal.
+          '';
+        };
 
-      logToJournal = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          By default, the stdout/stderr of sessions is written
-          to <filename>~/.xsession-errors</filename>. When this option
-          is enabled, it will instead be written to the journal.
-        '';
       };
 
     };

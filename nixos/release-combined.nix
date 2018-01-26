@@ -57,7 +57,7 @@ in rec {
         nixos.ova.x86_64-linux
 
         #(all nixos.tests.containers)
-        nixos.tests.chromium
+        nixos.tests.chromium.x86_64-linux
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
@@ -80,7 +80,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.hibernate)
-        nixos.tests.docker
+        nixos.tests.docker.x86_64-linux
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)
@@ -95,6 +95,7 @@ in rec {
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
+        (all nixos.tests.mutableUsers)
         (all nixos.tests.nat.firewall)
         (all nixos.tests.nat.standalone)
         (all nixos.tests.networking.scripted.loopback)
@@ -109,11 +110,13 @@ in rec {
         (all nixos.tests.nfs3)
         (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
+        (all nixos.tests.php-pcre)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.slim)
+        (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 

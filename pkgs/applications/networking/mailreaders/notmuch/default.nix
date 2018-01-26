@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.25";
+  version = "0.26";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "02z6d87ip1hkipz8d7w0sfklg8dd5fd5vlgp768640ixg0gqvlk5";
+    sha256 = "1pvn1n7giv8n3xlazi3wpscdqhd2yak0fgv68aj23myr5bnr9s6k";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -40,20 +40,14 @@ stdenv.mkDerivation rec {
   ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
   postPatch = ''
-    find test -type f -exec \
+    find test/ -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
-        -e "s|gpg |${gnupg}/bin/gpg |" \
-        -e "s| gpg| ${gnupg}/bin/gpg|" \
-        -e "s|gpgsm |${gnupg}/bin/gpgsm |" \
-        -e "s| gpgsm| ${gnupg}/bin/gpgsm|" \
-        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg|" \
         "{}" ";"
 
     for src in \
-      crypto.c \
-      notmuch-config.c \
-      emacs/notmuch-crypto.el
+      util/crypto.c \
+      notmuch-config.c
     do
       substituteInPlace "$src" \
         --replace \"gpg\" \"${gnupg}/bin/gpg\"
@@ -102,7 +96,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ chaoflow garbas ];
+    maintainers = with maintainers; [ chaoflow flokli garbas the-kenny ];
     platforms   = platforms.unix;
   };
 }

@@ -5,9 +5,9 @@
 }:
 
 let
-  # The prefix prepended to binary names to allow multiple binuntils on the
+  # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  prefix = stdenv.lib.optionalString
+  targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 in
@@ -19,7 +19,7 @@ assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
 let
   baseParams = rec {
-    name = "${prefix}cctools-port-${version}";
+    name = "${targetPrefix}cctools-port-${version}";
     version = "895";
 
     src = fetchFromGitHub {
@@ -28,6 +28,8 @@ let
       rev    = "2e569d765440b8cd6414a695637617521aa2375b"; # From branch 895-ld64-274.2
       sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
     };
+
+    outputs = [ "out" "dev" ];
 
     nativeBuildInputs = [ autoconf automake libtool_2 ];
     buildInputs = [ libuuid ] ++
@@ -39,9 +41,15 @@ let
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
     ];
 
+    __propagatedImpureHostDeps = [
+      # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
+      "/usr/lib/libobjc.A.dylib"
+      "/usr/lib/libobjc.dylib"
+    ];
+
     enableParallelBuilding = true;
 
-    # TODO(@Ericson2314): Always pass "--target" and always prefix.
+    # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
     configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
     configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
       "CXXFLAGS=-I${libcxx}/include/c++/v1"
@@ -105,7 +113,7 @@ let
       '';
 
     passthru = {
-      inherit prefix;
+      inherit targetPrefix;
     };
 
     meta = {

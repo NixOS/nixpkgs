@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/retrofe" \
       --prefix GST_PLUGIN_PATH : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --set    RETROFE_PATH      "\''${RETROFE_PATH:-\$PWD}"
+      --run 'export RETROFE_PATH=''${RETROFE_PATH:-$PWD}'
   '';
 
   meta = with stdenv.lib; {

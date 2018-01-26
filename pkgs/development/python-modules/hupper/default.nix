@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, python
+{ stdenv, buildPythonPackage, fetchPypi, python
 , pytest, pytestcov, watchdog, mock
 }:
 
@@ -16,5 +16,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  checkInputs = [ pytest pytestcov watchdog mock ];
+  # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent
+  # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
+  checkInputs = [ pytest pytestcov mock ] ++ stdenv.lib.optional (!stdenv.isDarwin) watchdog;
 }

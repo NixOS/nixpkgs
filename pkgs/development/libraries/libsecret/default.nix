@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk_doc
-, libgcrypt, gobjectIntrospection, vala_0_32 }:
+, libgcrypt, gobjectIntrospection, vala_0_38 }:
 let
   version = "0.18.5";
 in
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
-  buildInputs = [ libgcrypt gobjectIntrospection vala_0_32 ];
+  buildInputs = [ libgcrypt gobjectIntrospection vala_0_38 ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
   meta = {

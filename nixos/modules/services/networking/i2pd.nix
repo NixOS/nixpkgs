@@ -126,6 +126,7 @@ let
         [${tun.name}]
         type = client
         destination = ${tun.destination}
+        destinationport = ${toString tun.destinationPort}
         keys = ${tun.keys}
         address = ${tun.address}
         port = ${toString tun.port}
@@ -137,15 +138,15 @@ let
       '')
     }
     ${flip concatMapStrings
-      (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
-      (tun: let portStr = toString tun.port; in ''
+      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
+      (tun: ''
         [${tun.name}]
         type = server
         destination = ${tun.destination}
         keys = ${tun.keys}
         host = ${tun.address}
-        port = ${tun.port}
-        inport = ${tun.inPort}
+        port = ${toString tun.port}
+        inport = ${toString tun.inPort}
         accesslist = ${builtins.concatStringsSep "," tun.accessList}
       '')
     }
@@ -405,7 +406,13 @@ in
         default = {};
         type = with types; loaOf (submodule (
           { name, config, ... }: {
-            options = commonTunOpts name;
+            options = {
+              destinationPort = mkOption {
+                type = types.int;
+                default = 0;
+                description = "Connect to particular port at destination.";
+              };
+            } // commonTunOpts name;
             config = {
               name = mkDefault name;
             };

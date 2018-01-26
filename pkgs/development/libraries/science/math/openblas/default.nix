@@ -12,10 +12,26 @@ let blas64_ = blas64; in
 let
   # To add support for a new platform, add an element to this set.
   configs = {
+    armv6l-linux = {
+      BINARY = "32";
+      TARGET = "ARMV6";
+      DYNAMIC_ARCH = "0";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
     armv7l-linux = {
       BINARY = "32";
       TARGET = "ARMV7";
       DYNAMIC_ARCH = "0";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
+    aarch64-linux = {
+      BINARY = "64";
+      TARGET = "ARMV8";
+      DYNAMIC_ARCH = "1";
       CC = "gcc";
       USE_OPENMP = "1";
     };

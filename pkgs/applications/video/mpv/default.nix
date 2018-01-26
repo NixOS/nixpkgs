@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
@@ -90,7 +90,14 @@ in stdenv.mkDerivation rec {
     sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f.patch";
+      sha256 = "1sr0770rvhsgz8d7ysr9qqp4g9gwdhgj8g3rgnz90wl49lgrykhb";
+    })
+  ];
+
+  postPatch = ''
     patchShebangs ./TOOLS/
   '';
 
@@ -165,7 +172,7 @@ in stdenv.mkDerivation rec {
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
-      --prefix PYTHONPATH : "$(toPythonPath ${vapoursynth}):$PYTHONPATH"
+      --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '' + ''
 
     cp TOOLS/umpv $out/bin

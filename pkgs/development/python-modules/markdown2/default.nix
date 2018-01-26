@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.3.4";
+  version = "2.3.5";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/markdown2/${name}.zip";
-    sha256 = "264731e7625402227ff6fb01f2d814882da7705432659a18a419c508e8bfccb1";
+    sha256 = "8bb9a24eb2aa02f1427aabe46483f0f0215ab18c8a345315ae8e2ee3c3a09c03";
   };
 
   meta = with stdenv.lib; {

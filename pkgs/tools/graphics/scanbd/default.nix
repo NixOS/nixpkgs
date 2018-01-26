@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     downloadPage = http://sourceforge.net/projects/scanbd/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

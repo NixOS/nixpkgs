@@ -1,24 +1,19 @@
-{ stdenv, buildGoPackage, fetchurl, bash, go-bindata}:
+{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
 
 buildGoPackage rec {
   name = "traefik-${version}";
-  version = "1.3.8";
+  version = "1.4.6";
 
   goPackagePath = "github.com/containous/traefik";
 
-  src = fetchurl {
-    url = "https://github.com/containous/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    sha256 = "6fce36dd30bb5ae5f91e69f2950f22fe7a74b920e80c6b441a0721122f6a6174";
+  src = fetchFromGitHub {
+    owner = "containous";
+    repo = "traefik";
+    rev = "v${version}";
+    sha256 = "1sd7wfp1hvq505lgybbaiq9d1hyygzf5jgl0qidn103xnf1yqaw0";
   };
 
   buildInputs = [ go-bindata bash ];
-  unpackPhase = ''
-    runHook preUnpack
-    mkdir traefik
-    tar -C traefik -xvzf $src
-    export sourceRoot="traefik"
-    runHook postUnpack
-  '';
 
   buildPhase = ''
     runHook preBuild

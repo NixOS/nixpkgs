@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 , ApplicationServices
@@ -14,8 +14,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-21";
-    sha256 = "0241g3c207rawn61bz8rc5gz55k5mi2b0n3zlwa0jv9xczlkd6a9";
+    version = "6.9.9-33";
+    sha256 = "05931wfhllrb1c2g2nwnwaf1wazn60y5f70gd11qcqp46rif7z21";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -36,13 +36,10 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
   inherit (cfg) version;
 
-  src = fetchurl {
-    urls = [
-      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
-      # the original source above removes tarballs quickly
-      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
-      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
-    ];
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick";
+    rev = cfg.version;
     inherit (cfg) sha256;
   };
 

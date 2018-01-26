@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libiconv
+{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv
 , drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, qt5, boost
 , libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt
 , withGUI ? true
@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "17.0.0";
+  version = "19.0.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "1v74rxf9wm0sn2illy0hp36hpwz7q04y0k32wq6wn7qrnzkzcc88";
+    sha256 = "068g0mmi284zl9d9p9zhp55h6rj58j5c27czd3mg42kq74cwcsx9";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl libxslt ];

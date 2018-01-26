@@ -57,6 +57,6 @@ in stdenv.mkDerivation rec {
     license = with stdenv.lib.licenses; [ mpl11 gpl2 lgpl21 ];
     description = "A wrapper for using Windows plugins in Linux browsers";
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

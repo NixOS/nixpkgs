@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.32.1";
+  version = "3.33";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_32_1_RTM/src/${name}.tar.gz";
-    sha256 = "0lj6c94102aa81bnjisnix09zfjly9aa1d6vrzxmcjmzynkrrrad";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_33_RTM/src/${name}.tar.gz";
+    sha256 = "1r44qa4j7sri50mxxbnrpm6fxprwrhv76whi7bfq73j06syxmw4q";
   };
 
   buildInputs = [ perl zlib sqlite ];
@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
     [
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
       ./85_security_load.patch
+      ./ckpem.patch
     ];
 
   patchFlags = "-p0";
@@ -45,7 +46,8 @@ in stdenv.mkDerivation rec {
     "NSS_ENABLE_ECC=1"
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
-  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
+  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
+    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -84,15 +86,22 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     for libname in freebl3 nssdbm3 softokn3
-    do
-      libfile="$out/lib/lib$libname.so"
-      LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
+    do '' +
+    (if stdenv.isDarwin
+     then ''
+       libfile="$out/lib/lib$libname.dylib"
+       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+     '' else ''
+       libfile="$out/lib/lib$libname.so"
+       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
+     '') + ''
+        $out/bin/shlibsign -v -i "$libfile"
     done
 
     moveToOutput bin "$tools"
     moveToOutput bin/nss-config "$dev"
     moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
-    rm "$out"/lib/*.a
+    rm -f "$out"/lib/*.a
   '';
 
   meta = {

@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext}:
 
 stdenv.mkDerivation rec {
-  version = "1.4";
+  version = "1.5";
   name = "xbanish-${version}";
 
   buildInputs = [
@@ -15,13 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0n5aiqfwx9ga8qjszymfmbnmygcracrgvvpmgll7mflp2jnvzq6j";
   };
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-  '';
+  makeFlags=[ "PREFIX=$(out)" ];
 
   preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/man/man1
+    mkdir -p $out/bin $out/man/man1
   '';
 
   meta = {

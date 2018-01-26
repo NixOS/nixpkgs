@@ -6,8 +6,8 @@
 with stdenv.lib;
 
 let
-  baseVersion = "4.4";
-  revision = "1";
+  baseVersion = "4.5";
+  revision = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "0kn1k2zvc93xin4kdp2fpiz21i5j0qymyx6jjzkqp7r3x8yxwr06";
+    sha256 = "1yfrfma23xxzz8hl43g7pk7ay5lg25l9lscjlih617lyv6jmc0hl";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

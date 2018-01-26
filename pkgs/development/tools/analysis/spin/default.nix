@@ -35,6 +35,6 @@ in stdenv.mkDerivation rec {
     homepage = http://spinroot.com/;
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mornfall pSub ];
+    maintainers = with maintainers; [ pSub ];
   };
 }

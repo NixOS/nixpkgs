@@ -61,8 +61,8 @@ ${optionalString (versionAtLeast version "4.12") ''
 DEBUG_WX y # boot-time warning on RWX mappings
 
 # Stricter /dev/mem
-STRICT_DEVMEM y
-IO_STRICT_DEVMEM y
+STRICT_DEVMEM? y
+IO_STRICT_DEVMEM? y
 
 # Perform additional validation of commonly targeted structures.
 DEBUG_CREDENTIALS y
@@ -82,6 +82,10 @@ HARDENED_USERCOPY y
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y
 
+${optionalString (versionAtLeast version "4.14") ''
+  SLAB_FREELIST_HARDENED y
+''}
+
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
@@ -93,8 +97,14 @@ PANIC_TIMEOUT -1
 
 GCC_PLUGINS y # Enable gcc plugin options
 
+# Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
+GCC_PLUGIN_LATENT_ENTROPY y
+
 ${optionalString (versionAtLeast version "4.11") ''
   GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+${optionalString (versionAtLeast version "4.14") ''
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
 ''}
 
 # Disable various dangerous settings

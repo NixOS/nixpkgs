@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.4.2";
+  name = "R-3.4.3";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0r0cv2kc3x5z9xycpnxx6fbvv22psw2m342jhpslbxkc8g1307lp";
+    sha256 = "09pl0w01fr09bsrwd7nz2r5psysj0z93w4chz3hm2havvqqvhg3s";
   };
 
   buildInputs = [
@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
     pkgconfig bison imake which jdk openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
+
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+  '';
 
   preConfigure = ''
     configureFlagsArray=(
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
-      CC=$(type -p gcc)
-      CXX=$(type -p g++)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
@@ -50,8 +54,6 @@ stdenv.mkDerivation rec {
       --without-tcltk
       --without-aqua
       --disable-R-framework
-      CC="clang"
-      CXX="clang++"
       OBJC="clang"
   '' + ''
     )

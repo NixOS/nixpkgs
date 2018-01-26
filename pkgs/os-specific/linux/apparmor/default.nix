@@ -2,15 +2,18 @@
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, pythonPackages
+, python
+, gawk
 , perl
 , swig
+, ncurses
 , pam
 }:
 
 let
-  apparmor-series = "2.10";
-  apparmor-version = apparmor-series;
+  apparmor-series = "2.12";
+  apparmor-patchver = "0";
+  apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
     homepage = http://apparmor.net/;
@@ -21,8 +24,8 @@ let
   };
 
   apparmor-sources = fetchurl {
-    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "1x06qmmbha9krx7880pxj2k3l8fxy3nm945xjjv735m2ax1243jd";
+    url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-series}.tar.gz";
+    sha256 = "0mm0mcp0w18si9wl15drndysm7v27az2942p1xjd197shg80qawa";
   };
 
   prePatchCommon = ''
@@ -44,12 +47,13 @@ let
       flex
       pkgconfig
       swig
+      ncurses
       which
     ];
 
     buildInputs = [
       perl
-      pythonPackages.python
+      python
     ];
 
     # required to build apparmor-parser
@@ -59,7 +63,6 @@ let
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.cc.libc.dev}/include/netinet/in.h"
     '';
-
     postPatch = "cd ./libraries/libapparmor";
     configureFlags = "--with-python --with-perl";
 
@@ -81,7 +84,7 @@ let
 
     buildInputs = [
       perl
-      pythonPackages.python
+      python
       libapparmor
       libapparmor.python
     ];
@@ -93,15 +96,38 @@ let
 
     postInstall = ''
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${pythonPackages.python.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       done
 
-      for prog in aa-exec aa-notify ; do
+      for prog in aa-notify ; do
         wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
       done
     '';
 
     meta = apparmor-meta "user-land utilities";
+  };
+
+  apparmor-bin-utils = stdenv.mkDerivation {
+    name = "apparmor-bin-utils-${apparmor-version}";
+    src = apparmor-sources;
+
+    nativeBuildInputs = [
+      pkgconfig
+      libapparmor
+      gawk
+      which
+    ];
+
+    buildInputs = [
+      libapparmor
+    ];
+
+    prePatch = prePatchCommon;
+    postPatch = "cd ./binutils";
+    makeFlags = ''LANGS= USE_SYSTEM=1'';
+    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin'';
+
+    meta = apparmor-meta "binary user-land utilities";
   };
 
   apparmor-parser = stdenv.mkDerivation {
@@ -170,6 +196,12 @@ let
 in
 
 {
-  inherit libapparmor apparmor-utils apparmor-parser apparmor-pam
-  apparmor-profiles apparmor-kernel-patches;
+  inherit
+    libapparmor
+    apparmor-utils
+    apparmor-bin-utils
+    apparmor-parser
+    apparmor-pam
+    apparmor-profiles
+    apparmor-kernel-patches;
 }

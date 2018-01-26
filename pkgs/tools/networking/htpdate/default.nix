@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "INSTALL=install"
-    "STRIP=${stdenv.cc.bintools.prefix}strip"
+    "STRIP=${stdenv.cc.bintools.targetPrefix}strip"
     "prefix=$(out)"
   ];
 

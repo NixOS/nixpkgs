@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, which, autoreconfHook, writeScript, ncurses, perl
-, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+{ stdenv, fetchFromGitHub, which, autoreconfHook, makeWrapper, writeScript,
+ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl,
+lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -14,22 +15,25 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "20171027";
+  version = "20171208";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "0pwc5zdxc9h23658dfkzndfj1ld3ijyvcxmsiv793y3i4dig0s3n";
+    sha256 = "1fn28q4akfz0nq3ysp8n53j8yqp2mx6yhbvb59c4zm6zgd4qzgp1";
   };
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
+    mime-types
   ];
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which ];
+  nativeBuildInputs = [
+    autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
@@ -39,6 +43,11 @@ in stdenv.mkDerivation rec {
         --replace http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
         --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
+
+    # allow neomutt to map attachments to their proper mime.types if specified wrongly
+    # and use a far more comprehensive list than the one shipped with neomutt
+    substituteInPlace sendlib.c \
+      --replace /etc/mime.types ${mime-types}/etc/mime.types
   '';
 
   configureFlags = [
@@ -65,6 +74,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
   '';
 
   meta = with stdenv.lib; {

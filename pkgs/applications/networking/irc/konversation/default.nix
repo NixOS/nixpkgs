@@ -29,13 +29,13 @@
 
 let
   pname = "konversation";
-  version = "1.7.2";
+  version = "1.7.4";
 in mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0616h59bsw5c3y8lij56v3fhv9by0rwdfcaa83yfxqg4rs26xyaz";
+    sha256 = "0y4rj4fcl1wsi3y1fhnzad9nf4llwrnipfm9mfm55kqnx1zmpvqp";
   };
 
   buildInputs = [

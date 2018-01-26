@@ -9,11 +9,11 @@ assert pythonSupport -> python != null && swig != null;
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "libftdi1-1.3";
+  name = "libftdi1-1.4";
 
   src = fetchurl {
     url = "http://www.intra2net.com/en/developer/libftdi/download/${name}.tar.bz2";
-    sha256 = "1x41mbzh4qy7mrv2n86r2cr176rx03iacn0a99c3dkzv9g4rb34s";
+    sha256 = "0x0vncf6i92slgrn0h7ghkskqbglbs534220qa84d0qg114zndpc";
   };
 
   nativeBuildInputs = [ pkgconfig ];

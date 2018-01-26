@@ -6,9 +6,9 @@ Before a major version update, make a copy of this directory. (We like to
 keep the old version around for a short time after major updates.) Add a
 top-level attribute to `top-level/all-packages.nix`.
 
-1. Update the URL in `maintainers/scripts/generate-qt.sh`.
+1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
+   `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
 3. Update `qtCompatVersion` below if the minor version number changes.
 4. Check that the new packages build correctly.
 5. Commit the changes and open a pull request.
@@ -24,7 +24,7 @@ top-level attribute to `top-level/all-packages.nix`.
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;
@@ -91,6 +91,7 @@ let
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {};
@@ -104,7 +105,7 @@ let
         qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtx11extras qtxmlpatterns qtvirtualkeyboard
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 

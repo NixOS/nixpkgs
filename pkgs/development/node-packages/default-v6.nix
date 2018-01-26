@@ -6,6 +6,10 @@ let
   };
 in
 nodePackages // {
+  dat = nodePackages.dat.override (oldAttrs: {
+    buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-gyp-build ];
+  });
+
   dnschain =  nodePackages.dnschain.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper nodePackages.coffee-script ];
     postInstall = ''
@@ -16,7 +20,7 @@ nodePackages // {
   node-inspector = nodePackages.node-inspector.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-pre-gyp ];
   });
-  
+
   phantomjs = nodePackages.phantomjs.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
   });

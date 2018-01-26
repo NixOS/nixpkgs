@@ -16,7 +16,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobjectIntrospection libcap_ng numactl xen libapparmor
+    python pygobject2 gobjectIntrospection libcap_ng numactl libapparmor
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+    xen
   ];
 
   enableParallelBuilding = true;

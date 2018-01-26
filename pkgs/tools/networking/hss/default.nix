@@ -13,7 +13,7 @@ buildRubyGem rec {
   inherit ruby;
   gemName = "hss";
   version = "1.0.1";
-  sha256 = "0hdfpxxqsh6gisn8mm0knsl1aig9fir0h2x9sirk3gr36qbz5xa4";
+  source.sha256 = "0hdfpxxqsh6gisn8mm0knsl1aig9fir0h2x9sirk3gr36qbz5xa4";
 
   postInstall = ''
    substituteInPlace $GEM_HOME/gems/${gemName}-${version}/bin/hss \

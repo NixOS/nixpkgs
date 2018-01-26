@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = ''
+    ./autogen.sh
+
+    # Build fails on Linux with windres.
+    export ac_cv_prog_WINDRES=
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://gravit.slowchop.com;

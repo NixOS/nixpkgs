@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, libtool
 , glib, dbus, udev, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio, file, bzip2, lzma
-, libxml2, libxslt, docbook_xsl, samba, libmtp
+, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig intltool libtool file makeWrapper
-    libxml2 libxslt docbook_xsl
+    libxml2 libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   buildInputs =

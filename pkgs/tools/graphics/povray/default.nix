@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, boost
-, zlib, libpng, libjpeg, libtiff
+, zlib, libpng, libjpeg, libtiff, x11, SDL
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff ];
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff x11 SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
 
   enableParallelBuilding = true;
   

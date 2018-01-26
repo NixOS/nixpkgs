@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "An advanced and secure webserver";
     license = licenses.gpl2;
     homepage = https://www.hiawatha-webserver.org;
-    maintainer = [ maintainers.ndowens ];
+    maintainers = [ maintainers.ndowens ];
   };
 
 }

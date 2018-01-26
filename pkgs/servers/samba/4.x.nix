@@ -19,17 +19,18 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.6.8";
+  version = "4.7.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "0pap686cl0j5c9v1v09krpqdk416x3851fbcap5ysp1zajrfw7aq";
+    sha256 = "0iw290n0q4l5s92d0f9yz27yp3rdfr6bvsmvg1xvd19g8p2d04pv";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   patches =
     [ ./4.x-no-persistent-install.patch
+      ./patch-source3__libads__kerberos_keytab.c.patch
     ];
 
   buildInputs =

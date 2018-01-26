@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gettext readline ];
 
   preInstall = ''
-    touch locale
+    mkdir locale
   '';
 
   NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__"
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Console version of StarDict";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-rresult-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
 	unpackCmd = "tar xjf $src";
 
-	buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
 	inherit (topkg) buildPhase installPhase;
 

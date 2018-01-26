@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "piwik-${version}";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://builds.piwik.org/${name}.tar.gz";
-    sha512 = "21hss97mms5vavfzw41v2p3qsxx0ar8xa3dnr4d2fw2mps8jg3s5ng9i725lqrbl96q7855fh9ymabjsi1zr4q9nif2yap0izaakxib";
+    sha512 = "1yisgywz7dm6kygh9mc207xnqpvdxbw4pa2l9gjh495a6979x3chi7z5rf410z4dmrg0kbj8wqm8mmmslfn276xvw37l2d4h73ij1h2";
   };
 
   nativeBuildInputs = [ makeWrapper ];

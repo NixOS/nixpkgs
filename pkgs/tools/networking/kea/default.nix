@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-dhcp-pgsql=${postgresql}/bin/pg_config"
-    "--with-dhcp-mysql=${mysql.client.dev}/bin/mysql_config"
+    "--with-dhcp-mysql=${mysql.connector-c}/bin/mysql_config"
   ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    openssl log4cplus boost python3 mysql.client
+    openssl log4cplus boost python3 mysql.connector-c
     botan2 gmp bzip2
   ];
 

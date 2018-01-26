@@ -41,6 +41,5 @@ in stdenv.mkDerivation rec {
     homepage = http://www.hwaci.com/sw/lemon/;
     license = licenses.publicDomain;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx ];
   };
 }

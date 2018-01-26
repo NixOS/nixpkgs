@@ -4,7 +4,6 @@ qtDocPrefix=@qtDocPrefix@
 
 . @fix_qt_builtin_paths@
 . @fix_qt_module_paths@
-. @fix_qt_static_libs@
 
 providesQtRuntime() {
     [ -d "$1/$qtPluginPrefix" ] || [ -d "$1/$qtQmlPrefix" ]
@@ -33,7 +32,7 @@ addToQMAKEPATH() {
 # package depending on the building package. (This is necessary in case
 # the building package does not provide runtime dependencies itself and so
 # would not be propagated to the user environment.)
-qtCrossEnvHook() {
+qtEnvHook() {
     addToQMAKEPATH "$1"
     if providesQtRuntime "$1"; then
         if [ "z${!outputBin}" != "z${!outputDev}" ]; then
@@ -42,20 +41,7 @@ qtCrossEnvHook() {
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-crossEnvHooks+=(qtCrossEnvHook)
-
-qtEnvHook() {
-    addToQMAKEPATH "$1"
-    if providesQtRuntime "$1"; then
-        if [ "z${!outputBin}" != "z${!outputDev}" ]; then
-            propagatedNativeBuildInputs+=" $1"
-        fi
-        if [ -z "$crossConfig" ]; then
-        propagatedUserEnvPkgs+=" $1"
-        fi
-    fi
-}
-envHooks+=(qtEnvHook)
+envHostTargetHooks+=(qtEnvHook)
 
 postPatchMkspecs() {
     local bin="${!outputBin}"
@@ -75,13 +61,4 @@ postPatchMkspecs() {
 }
 if [ -z "$dontPatchMkspecs" ]; then
     postPhases="${postPhases}${postPhases:+ }postPatchMkspecs"
-fi
-
-postMoveQtStaticLibs() {
-    if [ "z${!outputLib}" != "z${!outputDev}" ]; then
-        fixQtStaticLibs "${!outputLib}" "${!outputDev}"
-    fi
-}
-if [ -z "$dontMoveQtStaticLibs" ]; then
-    postPhases="${postPhases}${postPhases:+ }postMoveQtStaticLibs"
 fi

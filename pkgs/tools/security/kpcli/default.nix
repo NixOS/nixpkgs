@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/kpcli
 
     wrapProgram $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; stdenv.lib.makePerlPath [
+      "${with perlPackages; stdenv.lib.makePerlPath ([
          CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
-      ]}"
+      ] ++ stdenv.lib.optional stdenv.isDarwin MacPasteboard)}"
   '';
 
 

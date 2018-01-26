@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, gdk_pixbuf, tracker
+{ stdenv, intltool, fetchurl, gdk_pixbuf, tracker, tracker-miners
 , libxml2, python3Packages, libnotify, wrapGAppsHook
 , pkgconfig, gtk3, glib, cairo
 , makeWrapper, itstool, gnome3, librsvg, gst_all_1 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                   python3Packages.pycairo python3Packages.dbus-python python3Packages.requests
                   python3Packages.pygobject3 gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad wrapGAppsHook
-                  gnome3.gsettings_desktop_schemas makeWrapper tracker ];
+                  gnome3.gsettings_desktop_schemas makeWrapper tracker tracker-miners ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

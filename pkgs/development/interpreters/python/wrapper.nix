@@ -2,18 +2,20 @@
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
-, ignoreCollisions ? false }:
+, ignoreCollisions ? false
+, requiredPythonModules
+, }:
 
 # Create a python executable that knows about additional packages.
 let
-  recursivePthLoader = import ../../python-modules/recursive-pth-loader/default.nix { stdenv = stdenv; python = python; };
   env = let
-    paths = stdenv.lib.closePropagation (extraLibs ++ [ python recursivePthLoader ] ) ;
+    paths = requiredPythonModules (extraLibs ++ [ python ] ) ;
   in buildEnv {
     name = "${python.name}-env";
 
     inherit paths;
-    inherit ignoreCollisions extraOutputsToInstall;
+    inherit ignoreCollisions;
+    extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
     postBuild = ''
       . "${makeWrapper}/nix-support/setup-hook"

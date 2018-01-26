@@ -11,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.19.4";
+  version = "4.19.5";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ca803c2ea268c6bdb541e2dac74a3af23cf4bf7b4132a6a78926d255f8c8df1";
+    sha256 = "df32e6f127dc0ccbc675eadb33f749abbcb8f174c5cb9ec49c0cdb73aa737377";
   };
 
   buildInputs = [ nose coverage glibcLocales flake8 ];
+
+  postPatch = ''
+    # Remove performance testing.
+    # Too sensitive for on Hydra.
+    rm tqdm/tests/tests_perf.py
+  '';
 
   LC_ALL="en_US.UTF-8";
 

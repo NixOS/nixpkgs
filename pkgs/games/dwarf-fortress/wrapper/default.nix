@@ -38,10 +38,10 @@ let
   };
 in
 
-assert lib.all (x: x.dfVersion == dwarf-fortress-original.dfVersion) pkgs;
-
 stdenv.mkDerivation rec {
   name = "dwarf-fortress-${dwarf-fortress-original.dfVersion}";
+
+  compatible = lib.all (x: assert (x.dfVersion == dwarf-fortress-original.dfVersion); true) pkgs;
 
   dfInit = substituteAll {
     name = "dwarf-fortress-init";

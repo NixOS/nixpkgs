@@ -36,10 +36,12 @@ python27Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --set QTILE_WRAPPER '$0' \
-      --set QTILE_SAVED_PYTHONPATH '$PYTHONPATH' \
-      --set QTILE_SAVED_PATH '$PATH'
+      --run 'export QTILE_WRAPPER=$0' \
+      --run 'export QTILE_SAVED_PYTHONPATH=$PYTHONPATH' \
+      --run 'export QTILE_SAVED_PATH=$PATH'
   '';
+
+  doCheck = false; # Requires X server.
 
   meta = with stdenv.lib; {
     homepage = http://www.qtile.org/;
@@ -49,4 +51,3 @@ python27Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ kamilchm ];
   };
 }
-

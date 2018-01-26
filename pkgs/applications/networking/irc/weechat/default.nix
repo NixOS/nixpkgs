@@ -11,7 +11,7 @@
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
-, configure ? null
+, configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
 
 let
@@ -29,22 +29,13 @@ let
   weechat =
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "1.9.1";
+      version = "2.0";
       name = "weechat-${version}";
 
       src = fetchurl {
         url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "1kgi079bq4n0wb7hc7mz8p7ay1b2m0a4wpvb92sfsxrnh10qr5m1";
+        sha256 = "0jd1l67k2k44xmfv0a71im3j4v0gss3a6bd5s84nj3f7lqnfmqdn";
       };
-
-      patches = [
-        # TODO: Remove this patch when weechat is updated to a release that
-        # incorporates weechat/weechat#971
-        (fetchpatch {
-          url = https://github.com/lheckemann/weechat/commit/45a4f0565cc745b9c6e943f20199015185696df0.patch;
-          sha256 = "0x7vv7g0k3b2hj444x2cinyv1mq5bkr6m18grfnyy6swbymzc9bj";
-        })
-      ];
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
@@ -121,9 +112,9 @@ in if configure == null then weechat else
         ln -s $plugin $out/plugins
       done
     '';
-  in writeScriptBin "weechat" ''
+  in (writeScriptBin "weechat" ''
     #!${stdenv.shell}
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
-  ''
+  '') // { unwrapped = weechat; }

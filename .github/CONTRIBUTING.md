@@ -12,11 +12,11 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
 ## Submitting changes
 
-* Format the commits in the following way:
+* Format the commit messages in the following way:
 
   ```
   (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
-  
+
   (Motivation for change. Additional information.)
   ```
 
@@ -25,10 +25,10 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   * nginx: init at 2.0.1
   * firefox: 54.0.1 -> 55.0
   * nixos/hydra: add bazBaz option
-  
+
     Dual baz behavior is needed to do foo.
   * nixos/nginx: refactor config generation
-    
+
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:

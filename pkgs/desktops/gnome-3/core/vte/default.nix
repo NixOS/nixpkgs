@@ -1,14 +1,13 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, gnome3, ncurses, gobjectIntrospection, vala_0_32, libxml2, gnutls
+, gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
 , fetchFromGitHub, autoconf, automake, libtool, gtk_doc, gperf, pcre2
 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gobjectIntrospection intltool gnome3.glib
-                  gnome3.gtk3 ncurses vala_0_32 libxml2 gperf ];
+  nativeBuildInputs = [ gobjectIntrospection intltool pkgconfig vala gperf libxml2 ];
+  buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];
 
   propagatedBuildInputs = [ gnutls pcre2 ];
 

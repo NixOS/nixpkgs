@@ -13,12 +13,19 @@ python2Packages.buildPythonApplication rec {
 
     propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
 
-    doCheck = false;
+    doCheck = true;
     dontStrip = true;
     buildPhase = "";
     installPhase = ''
       ${python2Packages.python.executable} setup.py install --prefix=$out
+      mkdir -p $out/share/doc/tortoisehg
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
       ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+    '';
+
+    checkPhase = ''
+      echo "test: thg version"
+      $out/bin/thg version
     '';
 
     meta = {

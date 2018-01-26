@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "symbiyosys-${version}";
-  version = "2017.11.05";
+  version = "2018.01.10";
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "symbiyosys";
-    rev    = "db9c7e97b8f84ef7e9b18ae630009897c7982a08";
-    sha256 = "0pyznkjm0vjmaf6mpwknmh052qrwy2fzi05h80ysx1bxc51ns0m0";
+    rev    = "25936009bbc2cffd289c607ddf42a578527aa59c";
+    sha256 = "06idd8vbn4s2k6bja4f6lxjc4qwgbak2fhfxj8f18ki1xb3yqfh6";
   };
 
   buildInputs = [ python3 yosys ];

@@ -15,7 +15,13 @@
 , orc
 , nss
 , nspr
-, qt5
+, qtbase
+, qtsvg
+, qtdeclarative
+, qtwebchannel
+, qtquickcontrols
+, qtwebkit
+, qtwebengine
 , sqlite
 , xorg
 , xlibs
@@ -25,6 +31,8 @@
 # will leave entries on your system after uninstalling mendeley.
 # (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
 , autorunLinkHandler ? true
+# Update script
+, writeScript
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -37,23 +45,23 @@ let
     then "i386"
     else "amd64";
 
-  shortVersion = "1.17.11-stable";
+  shortVersion = "1.17.13-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "033855ix5qj1gwd3pa6qws5k94hgbp6rvibrrxl3rn5bvhrvvbkq"
-    else "09h6br8qhvphkvzy28y1pnh7dhyigb3w41w3kjwqj6027i46chi7";
+    then "0q4x62k00whmq8lskphpcxc610cvclxzcr5k0v7pxjxs9sx5yx43"
+    else "01ylyily1hip35z0d4qkdpbzp5yn4r015psc5773xsqlgrnlwjm3";
 
   deps = [
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtdeclarative
-    qt5.qtwebchannel
-    qt5.qtquickcontrols
-    qt5.qtwebkit
-    qt5.qtwebengine
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtwebchannel
+    qtquickcontrols
+    qtwebkit
+    qtwebengine
     alsaLib
     dbus
     freetype
@@ -96,6 +104,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg which ] ++ deps;
 
+  propagatedUserEnvPkgs = [ gconf ];
+
   unpackPhase = "true";
 
   installPhase = ''
@@ -125,11 +135,14 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchElf = true;
 
-  meta = {
+  updateScript = import ./update.nix { inherit writeScript; };
+
+  meta = with stdenv.lib; {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers  = with maintainers; [ dtzWill ];
   };
 
 }

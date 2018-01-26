@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "16k9awrhdsymx7dnmvqcnkaq8lz8x8zppy6sh7ls8prpd6mkkjlb";
   };
 
+  patches = [ ./czmq3-gcc7.patch ];
+
   # Fix build on Glibc 2.24.
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, caja, mate-desktop, hicolor_icon_theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
@@ -23,12 +23,13 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     poppler
+    caja
+    mate-desktop
     hicolor_icon_theme
-    mate.mate-desktop
   ];
-
-  configureFlags = [ "--disable-caja" ];
   
+  makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
+
   meta = {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = http://mate-desktop.org;

@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "Keras";
-  version = "2.0.9";
+  version = "2.1.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b8572cf1b4a22fd0120b7c23382ba4fa04a6f0397e02af1249be9a7309d1767";
+    sha256 = "7ca3a381523bad40a6922e88951a316664cb088fd01cea07e5ec8ada3327e3c7";
   };
 
   checkInputs = [

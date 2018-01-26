@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch
 , enableStatic ? false
 , enableMinimal ? false
 , useMusl ? false, musl
@@ -27,19 +27,21 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.27.2";
+  name = "busybox-1.28.0";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1pv3vs2w4l2wnw5qb0rkbpvjjdd1fwjv87miavqq0r0ynqbfajwx";
+    sha256 = "1701carjf02y7r3djm1yvyd5kzrcxm4szinp7agfv7fmvfvm6ib0";
   };
 
   hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
 
-  patches = [ ./busybox-in-store.patch ];
+  patches = [
+    ./busybox-in-store.patch
+  ];
 
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
     ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
     EOF
 
     make oldconfig
@@ -75,10 +77,10 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=${stdenv.cc.prefix}gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
   '';
 
-  nativeBuildInputs = lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = lib.optionals (enableStatic && !useMusl) [ stdenv.cc.libc stdenv.cc.libc.static ];
 

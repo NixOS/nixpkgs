@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
   buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
 
   meta = with stdenv.lib; {

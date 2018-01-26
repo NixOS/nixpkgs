@@ -3,26 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
-  version = "1.6.21.1";
+  version = "1.6.22.1";
 
   src = fetchurl {
     url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
-    sha256 = "0nisxnfl8nllcfmi7mxj1gngkpxd4jp1wapbkhz07qwqynq9dn5f";
+    sha256 = "19nfbksw7b34jc3mxjk7cbz26zg9k5myhzpv2jf0fnmznr47jqaw";
   };
 
-  nativeBuildInputs = [ autoconf automake flex yacc perl which ];
+  nativeBuildInputs = [ autoconf automake flex yacc perl which ] ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ ncurses ];
 
   hardeningDisable = [ "pic" ];
-
-  patches = [
-   (fetchpatch {
-      name = "fix-stdint-include.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=c193e5cba18273a062d4162118c7055b54f7eb5e";
-      sha256 = "1yc4gygcazwsslf6mzk1ai92as5jbsjv7212jcbb2dw83jydhc09";
-    })
-  ];
 
   preConfigure = ''
     ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
@@ -38,7 +30,7 @@ stdenv.mkDerivation rec {
     ./regen.sh
 
     ${stdenv.lib.optionalString (kerberos != null)
-      "export KRB5_CONFIG=${kerberos}/bin/krb5-config"}
+      "export KRB5_CONFIG=${kerberos.dev}/bin/krb5-config"}
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"

@@ -1,6 +1,6 @@
 # this package was called gimp-print in the past
-{ stdenv, lib, fetchurl, pkgconfig
-, ijs, makeWrapper
+{ stdenv, lib, fetchurl, makeWrapper, pkgconfig
+, ijs, zlib
 , gimp2Support ? false, gimp
 , cupsSupport ? true, cups, libusb, perl
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs =
-    [ ijs ]
+    [ ijs zlib ]
     ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
     ++ lib.optionals cupsSupport [ cups libusb perl ];
 

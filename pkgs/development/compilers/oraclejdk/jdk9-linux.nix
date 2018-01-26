@@ -7,7 +7,6 @@
 , xorg ? null
 , packageType ? "JDK" # JDK, JRE, or ServerJRE
 , pluginSupport ? true
-, installjce ? false
 , glib
 , libxml2
 , ffmpeg_2
@@ -30,19 +29,9 @@ assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "9.0.1";
+  version = "9.0.4";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
-
-  jce =
-    if installjce then
-      requireFile {
-        name = "jce_policy-8.zip";
-        url = "${downloadUrlBase}/jce8-download-2133166.html";
-        sha256 = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
-      }
-    else
-      "";
 
   rSubPaths = [
     "lib/jli"
@@ -63,24 +52,23 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
         url =  "${downloadUrlBase}/jdk9-downloads-3848520.html";
-        sha256 = "0560dc3icrwb0ifykshvzkr04b1jr153m26x1r8rp0nhjbzz1nic";
+        sha256 = "18nsjn64wkfmyb09wf2k7lvhazf83cs3dyichr038vl1gs3ymi4h";
       }
     else if packageType == "JRE" then
       requireFile {
         name = "jre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/jre9-downloads-3848532.html";
-        sha256 = "11pfcck8am48yv7riaj10g6h79xdiy8lm5a9wjqbm3g9cls9ar1w";
+        sha256 = "01fp079mr04nniyf06w8vd47qxr6rly1lbh8dqkddb8fp9h6a79k";
       }
     else if packageType == "ServerJRE" then
       requireFile {
         name = "serverjre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/server-jre9-downloads-3848530.html";
-        sha256 = "1biyks6jy0a2kksaj9qbsjifv34ym5mdw8akibmkwr1xh0wavygc";
+        sha256 = "1jlpa4mn306hx0p9jcw3i6cpdvnng29dwjsymgcan56810q6p6yj";
       }
     else abort "unknown package Type ${packageType}";
 
-  nativeBuildInputs = [ file ]
-    ++ stdenv.lib.optional installjce unzip;
+  nativeBuildInputs = [ file ];
 
   buildInputs = [ makeWrapper ];
 
@@ -108,11 +96,6 @@ let result = stdenv.mkDerivation rec {
       fi
     done
 
-    if test -n "${jce}"; then
-      unzip ${jce}
-      cp -v UnlimitedJCEPolicy*/*.jar $out/lib/security
-    fi
-
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
     fi
@@ -124,7 +107,7 @@ let result = stdenv.mkDerivation rec {
     ln -s $out $out/jre
 
     mkdir -p $out/nix-support
-    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook

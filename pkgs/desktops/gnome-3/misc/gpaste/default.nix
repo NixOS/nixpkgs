@@ -2,12 +2,12 @@
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "3.24.2";
+  version = "3.26.0";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "16142jfpkz8qfs7zp9k3c5l9pnvxbr5yygj8jdpx6by1142s6340";
+    sha256 = "0xlcbm9qnw61h6xwa1c0lz5mp1ca3vjjn5wpk0ahhhl6k94mzjs7";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                   gtk3 gnome3.gnome_control_center dbus
                   clutter pango appstream-glib systemd gobjectIntrospection ];
 
-  configureFlags = [ "--with-controlcenterdir=$(out)/gnome-control-center/keybindings"
+  configureFlags = [ "--with-controlcenterdir=$(out)/share/gnome-control-center/keybindings"
                      "--with-dbusservicesdir=$(out)/share/dbus-1/services"
                      "--with-systemduserunitdir=$(out)/etc/systemd/user" ];
 

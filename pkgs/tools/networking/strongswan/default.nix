@@ -1,15 +1,22 @@
-{ stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
-, curl, trousers, sqlite, iptables, libxml2, openresolv
-, ldns, unbound, pcsclite, openssl, systemd, pam
-, enableTNC ? false }:
+{ stdenv, fetchurl
+, pkgconfig, autoreconfHook
+, gmp, python, iptables, ldns, unbound, openssl, pcsclite
+, openresolv
+, systemd, pam
+
+, enableTNC            ? false, curl, trousers, sqlite, libxml2
+, enableNetworkManager ? false, networkmanager
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.0";
+  version = "5.6.1";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "04vvha2zgsg1cq05cnn6sf7a4hq9ndnsfxpw1drm5v9l4vcw0kd1";
+    sha256 = "0lxbyiary8iapx3ysw40czrmxf983fhfzs5mvz2hk1j1mpc85hp0";
   };
 
   dontPatchELF = true;
@@ -17,8 +24,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
     [ gmp python iptables ldns unbound openssl pcsclite ]
-    ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ systemd.dev pam ];
+    ++ optionals enableTNC [ curl trousers sqlite libxml2 ]
+    ++ optionals stdenv.isLinux [ systemd.dev pam ]
+    ++ optionals enableNetworkManager [ networkmanager ];
 
   patches = [
     ./ext_auth-path.patch
@@ -54,9 +62,9 @@ stdenv.mkDerivation rec {
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
       "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly" ]
-    ++ stdenv.lib.optional stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock"
-    ++ stdenv.lib.optionals enableTNC [
+    ++ optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
+    ++ optional (stdenv.system == "i686-linux") "--enable-padlock"
+    ++ optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
          "--enable-curl"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
@@ -65,14 +73,15 @@ stdenv.mkDerivation rec {
          "--enable-tnc-ifmap" "--enable-tnc-imc" "--enable-tnc-imv"
          "--with-tss=trousers"
          "--enable-aikgen"
-         "--enable-sqlite" ];
+         "--enable-sqlite" ]
+    ++ optional enableNetworkManager "--enable-nm";
 
   NIX_LDFLAGS = "-lgcc_s" ;
 
   meta = {
     description = "OpenSource IPsec-based VPN Solution";
     homepage = https://www.strongswan.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 }

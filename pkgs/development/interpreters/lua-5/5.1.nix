@@ -8,7 +8,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "lua-5.1.5";
+  name = "lua-${version}";
+  version = "5.1.5";
   luaversion = "5.1";
 
   src = fetchurl {

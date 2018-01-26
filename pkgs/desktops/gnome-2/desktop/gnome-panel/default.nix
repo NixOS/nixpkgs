@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_glib, dbus, cairo, popt, which, libxml2Python, libxslt, bzip2, python
-, glib, gtk, pango, atk, libXau, libcanberra
+, glib, gtk, pango, atk, libXau, libcanberra_gtk2
 , intltool, ORBit2, libglade, libgnome, libgnomeui, libbonobo, libbonoboui, GConf, gnome_menus, gnome_desktop
 , libwnck, librsvg, libgweather, gnome_doc_utils, libgnomecanvas, libart_lgpl, libtasn1, libtool, xorg }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     [ gtk dbus_glib popt libxml2Python libxslt bzip2 python libXau intltool
       ORBit2 libglade libgnome libgnomeui libbonobo libbonoboui GConf
       gnome_menus gnome_desktop libwnck librsvg libgweather gnome_doc_utils
-      libtasn1 libtool libcanberra xorg.libICE xorg.libSM
+      libtasn1 libtool libcanberra_gtk2 xorg.libICE xorg.libSM
     ];
 
   nativeBuildInputs = [ pkgconfig intltool which ];

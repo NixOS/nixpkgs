@@ -10,18 +10,19 @@
 # This file
 /.github/CODEOWNERS @edolstra
 
-# Boostraping and core infra
-/pkgs/stdenv                    @edolstra
-/pkgs/build-support/cc-wrapper  @edolstra
-
 # Libraries
 /lib                        @edolstra @nbp
+/lib/systems                @nbp @ericson2314
 
 # Nixpkgs Internals
-/default.nix                @nbp
-/pkgs/top-level/default.nix @nbp
-/pkgs/top-level/impure.nix  @nbp
-/pkgs/top-level/stage.nix   @nbp
+/default.nix                          @nbp
+/pkgs/top-level/default.nix           @nbp @Ericson2314
+/pkgs/top-level/impure.nix            @nbp @Ericson2314
+/pkgs/top-level/stage.nix             @nbp @Ericson2314
+/pkgs/stdenv
+/pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
+/pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
+/pkgs/build-support/setup-hooks       @Ericson2314
 
 # NixOS Internals
 /nixos/default.nix          @nbp
@@ -80,3 +81,13 @@
 
 # Eclipse
 /pkgs/applications/editors/eclipse @rycee
+
+# https://github.com/NixOS/nixpkgs/issues/31401
+/lib/maintainers.nix @ghost
+/lib/licenses.nix @ghost
+
+# Qt / KDE
+/pkgs/applications/kde @ttuegel
+/pkgs/desktops/plasma-5 @ttuegel
+/pkgs/development/libraries/kde-frameworks @ttuegel
+/pkgs/development/libraries/qt-5 @ttuegel

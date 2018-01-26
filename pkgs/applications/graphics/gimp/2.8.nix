@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, libtiff
 , webkit, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, jasper
-, python2Packages, libart_lgpl, libexif, gettext, xorg
+, python2Packages, libexif, gettext, xorg
 , AppKit, Cocoa, gtk-mac-integration }:
 
 let
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     [ pkgconfig intltool babl gegl gtk2 glib gdk_pixbuf pango cairo
       freetype fontconfig lcms libpng libjpeg poppler libtiff webkit
       libmng librsvg libwmf zlib libzip ghostscript aalib jasper
-      python pygtk libart_lgpl libexif gettext xorg.libXpm
+      python pygtk libexif gettext xorg.libXpm
       wrapPython
     ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ];

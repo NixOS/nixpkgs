@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ maintainers.phreedom ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

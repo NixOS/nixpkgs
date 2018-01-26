@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk2, glib,
-  pcre, cfitsio, perl, gob2, vala_0_23, libtiff, json_glib }:
+  pcre, cfitsio, perl, gob2, vala, libtiff, json_glib }:
 
 stdenv.mkDerivation rec {
   name = "giv-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i s,/usr/bin/perl,${perl}/bin/perl, doc/eperl
-    sed -i s,/usr/local,$out, SConstruct 
+    sed -i s,/usr/local,$out, SConstruct
   '';
 
   patches = [ ./build.patch ];
@@ -25,15 +25,14 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gdk_pixbuf gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
-    json_glib ];
+  nativeBuildInputs = [ scons pkgconfig vala perl gob2 ];
+  buildInputs = [ gdk_pixbuf gtk2 glib pcre cfitsio libtiff json_glib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Cross platform image and hierarchical vector viewer based";
     homepage = http://giv.sourceforge.net/giv/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = with platforms; linux;
   };
 }

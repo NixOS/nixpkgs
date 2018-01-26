@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.18";
+  version = "1.8.19";
   name = "gnome-encfs-manager-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
-    sha256 = "1rpf683lxa78fmxxb0hnq7vdh3yn7qid2gqq67q9mk65sp9vdhdj";
+    sha256 = "1h6x8dyp1fvxvr8fwki98ppf4sa20qf7g59jc9797b2vrgm60h1i";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-appindicator" ];
 
   preFixup = ''gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)'';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.libertyzero.com/GEncfsM/;

@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, cmake, ccid, qttools, qttranslations, pkgconfig, pcsclite
-, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, ccid, qttools, qttranslations
+, pkgconfig, pcsclite, hicolor_icon_theme 
+}:
 
 stdenv.mkDerivation rec {
 
-  version = "3.12.5.1233";
+  version = "3.12.10";
   name = "qesteidutil-${version}";
-  
-  src = fetchurl {
-    url = "https://installer.id.ee/media/ubuntu/pool/main/q/qesteidutil/qesteidutil_${version}.orig.tar.xz";
-    sha256 = "b5f0361af1891cfab6f9113d6b2fab677cc4772fc18b62df7d6e997f13b97857";
-  };
 
-  unpackPhase = ''
-    mkdir src
-    tar xf $src -C src
-    cd src
-  '';
+  src = fetchFromGitHub {
+    owner = "open-eid";
+    repo = "qesteidutil";
+    # TODO: Switch back to this after next release.
+    #rev = "v${version}";
+    # We require the remove breakpad stuff
+    rev = "efdfe4c5521f68f206569e71e292a664bb9f46aa";
+    sha256 = "0zly83sdqsf9lxnfw4ir2a9vmmfba181rhsrz61ga2zzpm2wf0f0";
+    fetchSubmodules = true;
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ccid qttools pcsclite qttranslations

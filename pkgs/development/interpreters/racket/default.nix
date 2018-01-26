@@ -3,7 +3,7 @@
 , glib, gmp, gtk2, libedit, libffi, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
-, disableDocs ? true
+, disableDocs ? false
 }:
 
 let

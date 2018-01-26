@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.mythtv.org/;
     description = "Open Source DVR";
     license = licenses.gpl2;
-    meta.platforms = platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.titanous ];
   };
 }

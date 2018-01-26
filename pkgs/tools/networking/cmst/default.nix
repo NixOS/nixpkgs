@@ -1,41 +1,26 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, makeWrapper, libX11 }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";
-  version = "2017.03.18";
+  version = "2017.09.19";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = name;
-    sha256 = "0lsg8ya36df48ij0jawgli3f63hy6mn9zcla48whb1l4r7cih545";
+    sha256 = "14inss0mr9i4q6vfqqfxbjgpjaclp1kh60qlm5xv4cwnvi395rc7";
   };
 
-  nativeBuildInputs = [ makeWrapper qmake ];
+  nativeBuildInputs = [ qmake ];
 
   buildInputs = [ qtbase ];
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    substituteInPlace ./cmst.pro \
-      --replace "/usr/share" "$out/share"
-
-    substituteInPlace ./cmst.pri \
-      --replace "/usr/lib" "$out/lib" \
-      --replace "/usr/share" "$out/share"
-
-    substituteInPlace ./apps/cmstapp/cmstapp.pro \
-      --replace "/usr/bin" "$out/bin"
-
-    substituteInPlace ./apps/rootapp/rootapp.pro \
-      --replace "/etc" "$out/etc" \
-      --replace "/usr/share" "$out/share"
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/cmst \
-      --prefix "QTCOMPOSE" ":" "${libX11}/share/X11/locale"
+  postPatch = ''
+    for f in $(find . -name \*.cpp -o -name \*.pri -o -name \*.pro); do
+      substituteInPlace $f --replace /etc $out/etc --replace /usr $out
+    done
   '';
 
   meta = {

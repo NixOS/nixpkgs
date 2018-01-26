@@ -38,6 +38,9 @@ self:
       # upstream issue: mismatched filename
       ack-menu = markBroken super.ack-menu;
 
+      # Expects bash to be at /bin/bash
+      ac-rtags = markBroken super.ac-rtags;
+
       airline-themes = super.airline-themes.override {
         inherit (self.melpaPackages) powerline;
       };
@@ -46,8 +49,14 @@ self:
       bufshow = markBroken super.bufshow;
 
       # part of a larger package
+      caml = dontConfigure super.caml;
+
+      # part of a larger package
       # upstream issue: missing package version
       cmake-mode = markBroken (dontConfigure super.cmake-mode);
+
+      # Expects bash to be at /bin/bash
+      company-rtags = markBroken super.company-rtags;
 
       # upstream issue: missing file header
       connection = markBroken super.connection;
@@ -65,6 +74,9 @@ self:
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
 
+      # upstream issue: missing dependency redshank
+      emr = markBroken super.emr;
+
       ess-R-data-view = super.ess-R-data-view.override {
         inherit (self.melpaPackages) ess ctable popup;
       };
@@ -73,8 +85,20 @@ self:
         inherit (self.melpaPackages) ess popup;
       };
 
+      # upstream issue: doesn't build
+      eterm-256color = markBroken super.eterm-256color;
+
+      # upstream issue: missing dependency highlight
+      evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
+
+      # upstream issue: missing dependency highlight
+      floobits  = markBroken super.floobits;
+
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
+
+      # Expects bash to be at /bin/bash
+      flycheck-rtags = markBroken super.flycheck-rtags;
 
       # upstream issue: missing file header
       fold-dwim = markBroken super.fold-dwim;
@@ -85,11 +109,20 @@ self:
       # upstream issue: mismatched filename
       helm-lobsters = markBroken super.helm-lobsters;
 
+      # Expects bash to be at /bin/bash
+      helm-rtags = markBroken super.helm-rtags;
+
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # upstream issue: recipe fails
+      insert-shebang = markBroken super.insert-shebang;
+
+      # Expects bash to be at /bin/bash
+      ivy-rtags = markBroken super.ivy-rtags;
 
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
@@ -119,6 +152,9 @@ self:
       # missing OCaml
       ocp-indent = markBroken super.ocp-indent;
 
+      # upstream issue: missing file header
+      po-mode = markBroken super.po-mode;
+
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 
@@ -133,6 +169,9 @@ self:
 
       # upstream issue: missing file header
       stgit = markBroken super.stgit;
+
+      # upstream issue: missing file header
+      tawny-mode = markBroken super.tawny-mode;
 
       # upstream issue: missing file header
       textmate = markBroken super.textmate;

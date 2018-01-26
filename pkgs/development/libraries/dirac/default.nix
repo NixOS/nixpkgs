@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "A general-purpose video codec based on wavelets";
     platforms = platforms.linux;
     license = with licenses; [ mpl11 gpl2 lgpl21 ];
-    maintainer = maintainers.igsha;
+    maintainers = [ maintainers.igsha ];
   };
 }

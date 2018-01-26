@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, sqlite, kyotocabinet }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "leveldb-${version}";
@@ -11,19 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1bnsii47vbyqnbah42qgq6pbmmcg4k3fynjnw7whqfv6lpdgmb8d";
   };
 
-  buildInputs = [ sqlite kyotocabinet ];
-
   buildPhase = ''
-    make all db_bench{,_sqlite3,_tree_db} leveldbutil libmemenv.a
+    make all leveldbutil libmemenv.a
   '';
 
   installPhase = "
     mkdir -p $out/{bin,lib,include}
+
     cp -r include $out
-    cp lib* $out/lib
-    cp db_bench{,_sqlite3,_tree_db} leveldbutil $out/bin
     mkdir -p $out/include/leveldb/helpers
     cp helpers/memenv/memenv.h $out/include/leveldb/helpers
+
+    cp lib* $out/lib
+
+    cp leveldbutil $out/bin
   ";
 
   meta = with stdenv.lib; {

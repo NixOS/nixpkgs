@@ -1,4 +1,4 @@
-{ stdenv, callPackage
+{ stdenv, callPackage, fetchpatch
 # Darwin frameworks
 , Cocoa, CoreMedia
 , ...
@@ -6,7 +6,7 @@
 
 callPackage ./generic.nix (args // rec {
   version = "${branch}";
-  branch = "3.4";
-  sha256 = "0pn8g3ab937ahslqd41crk0g4j4fh7kwimsrlfc0rl0pc3z132ax";
+  branch = "3.4.1";
+  sha256 = "0b2aaxx8l7g3pvs4zd3mzig44cc73savrxzfm6w0lnaa2lh3wi7k";
   darwinFrameworks = [ Cocoa CoreMedia ];
 })

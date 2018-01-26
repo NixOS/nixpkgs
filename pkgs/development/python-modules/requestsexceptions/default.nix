@@ -22,6 +22,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/requestsexceptions";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];
-    patforms = platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,7 +1,10 @@
 { stdenv, fetchurl, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
-  name = "Pyro-3.16";
+  pname = "Pyro";
+  version = "3.16";
+  name = pname + "-" + version;
+
   disabled = isPy3k;
 
   src = fetchurl {

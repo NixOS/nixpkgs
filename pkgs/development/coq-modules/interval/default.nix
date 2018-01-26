@@ -1,28 +1,17 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp }:
-
-let param =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.5"
-  then {
-    version = "3.3.0";
-    url = "https://gforge.inria.fr/frs/download.php/file/37077/interval-3.3.0.tar.gz";
-    sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
-  } else {
-    version = "3.1.1";
-    url = "https://gforge.inria.fr/frs/download.php/file/36723/interval-3.1.1.tar.gz";
-    sha256 = "1sqsf075c7s98mwi291bhnrv5fgd7brrqrzx51747394hndlvfw3";
-  };
-in
+{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
+, bignums ? null }:
 
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-interval-${param.version}";
+  name = "coq${coq.coq-version}-interval-3.3.0";
 
   src = fetchurl {
-    inherit (param) url sha256;
+    url = "https://gforge.inria.fr/frs/download.php/file/37077/interval-3.3.0.tar.gz";
+    sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
   };
 
   nativeBuildInputs = [ which ];
   buildInputs = [ coq ];
-  propagatedBuildInputs = [ coquelicot flocq mathcomp ];
+  propagatedBuildInputs = [ bignums coquelicot flocq mathcomp ];
 
   configurePhase = "./configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Interval";
   buildPhase = "./remake";

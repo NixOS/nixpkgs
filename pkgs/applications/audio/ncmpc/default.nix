@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ncurses mpd_clientlib ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
-    homepage    = http://www.musicpd.org/clients/ncmpc/;
+    homepage    = https://www.musicpd.org/clients/ncmpc/;
     license     = licenses.gpl2Plus;
     platforms   = platforms.all;
     maintainers = with maintainers; [ fpletz ];

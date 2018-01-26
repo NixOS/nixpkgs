@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, python3, libftdi }:
+{ stdenv, fetchFromGitHub, python3, libftdi, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2017.11.05";
+  version = "2018.01.10";
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "3ba18d001754de563ab0baa2a1c8eecbe63ef121";
-    sha256 = "1c7yv91xi4vx0130xn2zq74gfjbf7fhm2q4fma9xgwj5xpdy8rmn";
+    rev    = "bca8c3c88f5707213a6cc55ec7b06b576ab98809";
+    sha256 = "00g1xd70dlgvyfyk5ivj71dpk0vzx3xka60f6x3hm4frl9ahyhj7";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 libftdi ];
   preBuild = ''
     makeFlags="PREFIX=$out $makeFlags"

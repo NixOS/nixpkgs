@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-utils-${version}";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2"
       "http://alsa.cybermirror.org/utils/${name}.tar.bz2"
     ];
-    sha256 = "17cxih9ibjp1193dyd79j50pyfa9dvrs6r9kpwrvzicjvr2110x7";
+    sha256 = "1s727md6mb408y2cfwzjkx23abxhampyrjdkgpyygdhxx62x42rj";
   };
 
   patchPhase = ''

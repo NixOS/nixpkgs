@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "1.1.1";
+  version = "1.1.4";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/borgbackup/borg/releases/download/"
       + "${version}/${name}.tar.gz";
-    sha256 = "0iik5lq349cl87imlwra2pp0j36wjhpn8r1d3778azvvqpyjq2d5";
+    sha256 = "1cicqwh85wfp65y00qaq6q4i4jcyy9b66qz5gpl80qc880wab912";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -16,11 +16,11 @@ python3Packages.buildPythonApplication rec {
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    acl lz4 openssl python3Packages.setuptools_scm
-  ];
+    lz4 openssl python3Packages.setuptools_scm
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython llfuse msgpack
-  ];
+    cython msgpack
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -41,14 +41,11 @@ python3Packages.buildPythonApplication rec {
     cp -R docs/_build/man $out/share/man/man1
   '';
 
-  # tests fail due to missing test command in nix_run_setup.py
-  doCheck = false;
-
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

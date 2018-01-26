@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Collection of utilities for interacting with PyPI";
     homepage = https://github.com/pypa/twine;
     license = lib.licenses.asl20;
-    maintainer = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

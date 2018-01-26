@@ -4,13 +4,13 @@
 
 python2Packages.buildPythonApplication rec {
   name = "certbot-${version}";
-  version = "0.11.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "0f8s6wzj69gnqld6iaskmmwyg5zy5v3zwhp1n1izxixm0vhkzgrq";
+    sha256 = "14i3q59v7j0q2pa1dri420fhil4h0vgl4vb471hp81f4y14gq6h7";
   };
 
   propagatedBuildInputs = with python2Packages; [

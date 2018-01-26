@@ -1,19 +1,20 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlidl, gmp, mpfr }:
+{ stdenv, fetchFromGitHub, perl, ocaml, findlib, camlidl, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-mlgmpidl-${version}";
-  version = "1.2.4";
+  version = "1.2.6";
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
     rev = version;
-    sha256 = "09f9rk2bavhb7cdwjpibjf8bcjk59z85ac9dr8nvks1s842dp65s";
+    sha256 = "1lq3yy10v3rvlchbl5kl75l9f8frgj6g9f1n14kj5qlxm5xsrvks";
   };
 
-  buildInputs = [ gmp mpfr ocaml findlib camlidl ];
+  buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
 
   configurePhase = ''
-    cp Makefile.config.model Makefile.config
+    echo CAML_PREFIX = ${ocaml} > Makefile.config
+    cat Makefile.config.model >> Makefile.config
     sed -i Makefile.config \
       -e 's|^MLGMPIDL_PREFIX.*$|MLGMPIDL_PREFIX = $out|' \
       -e 's|^GMP_PREFIX.*$|GMP_PREFIX = ${gmp.dev}|' \

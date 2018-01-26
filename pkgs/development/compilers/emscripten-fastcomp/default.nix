@@ -1,4 +1,4 @@
-{ newScope, stdenv, wrapCC, wrapCCWith, symlinkJoin }:
+{ newScope, stdenv, binutils-raw, wrapCCWith, symlinkJoin }:
 let
   callPackage = newScope (self // {inherit stdenv;});
 
@@ -6,6 +6,8 @@ let
     emscriptenfastcomp-unwrapped = callPackage ./emscripten-fastcomp.nix {};
     emscriptenfastcomp-wrapped = wrapCCWith {
       cc = self.emscriptenfastcomp-unwrapped;
+      # Never want Apple's cctools for WASM target
+      bintools = binutils-raw;
       libc = stdenv.cc.libc;
       extraBuildCommands = ''
         # hardening flags break WASM support

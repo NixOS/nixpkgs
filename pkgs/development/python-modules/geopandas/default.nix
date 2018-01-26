@@ -3,8 +3,9 @@
 , pytest }:
 
 buildPythonPackage rec {
-  name = "geopandas-${version}";
+  pname = "geopandas";
   version = "0.3.0";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "geopandas";

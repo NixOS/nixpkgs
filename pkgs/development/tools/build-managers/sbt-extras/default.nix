@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, which, curl, makeWrapper }:
+{ stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk }:
 
 let
-  rev = "77686b3dfa20a34270cc52377c8e37c3a461e484";
+  rev = "3c8fcadc3376edfd8e4b08b35f174935bf97bbac";
   version = stdenv.lib.strings.substring 0 7 rev;
 in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "1bhqigm0clv3i1gvn4gsllywcnwfsa73xvqp8m7pbvn8g7i2ws6x";
+    sha256 = "0r79w4kgdrsdnm4ma9rmb9k115rvidpaha7sr9rsxv68jpagwgrj";
   };
 
   dontBuild = true;
@@ -21,9 +21,12 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
+
+    substituteInPlace bin/sbt --replace 'declare java_cmd="java"' 'declare java_cmd="${jdk}/bin/java"'
+
     install bin/sbt $out/bin
 
-    wrapProgram $out/bin/sbt --prefix PATH : ${stdenv.lib.makeBinPath [ which curl]}
+    wrapProgram $out/bin/sbt --prefix PATH : ${stdenv.lib.makeBinPath [ which curl ]}
   '';
 
   meta = {

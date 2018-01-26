@@ -1,8 +1,10 @@
+# pcre functionality is tested in nixos/tests/php-pcre.nix
+
 { lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
 let
 
@@ -10,9 +12,8 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
         mysqlndSupport = config.php.mysqlnd or false;
-        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysql.connector-c;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -23,7 +24,7 @@ let
       enableParallelBuilding = true;
 
       nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ flex bison ]
+      buildInputs = [ flex bison pcre ]
         ++ lib.optional stdenv.isLinux systemd;
 
       CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++11";
@@ -119,7 +120,7 @@ let
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysqlHeaders}/bin/mysql_config"}"];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -130,7 +131,7 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysqlHeaders}"];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -224,6 +225,11 @@ let
         calendar = {
           configureFlags = ["--enable-calendar"];
         };
+
+        sodium = {
+          configureFlags = ["--with-sodium=${libsodium.dev}"];
+          buildInputs = [libsodium];
+        };
       };
 
       cfg = {
@@ -263,6 +269,7 @@ let
         mssqlSupport = (!php7) && (config.php.mssql or (!stdenv.isDarwin));
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
+        sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
       };
 
       hardeningDisable = [ "bindnow" ];
@@ -287,6 +294,7 @@ let
 
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
+        "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
         ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
 
@@ -330,17 +338,22 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.32";
-    sha256 = "0lfbmdkvijkm6xc4p9sykv66y8xwhws0vsmka8v5cax4bxx4xr1y";
+    version = "5.6.33";
+    sha256 = "1k1ip1slk89hkp57qiqp8k2m5yrg9lx5rja542g87k8xfslrdxh7";
   };
 
   php70 = generic {
-    version = "7.0.25";
-    sha256 = "09fc2lj447phprvilvq2sb6n0r1snj142f8faphrd896s6b4v8lm";
+    version = "7.0.27";
+    sha256 = "0ca174kp2l3fjcp8z0mqnkbjfhijjzz7rs7bkzg1qk2cpdijbylr";
   };
 
   php71 = generic {
-    version = "7.1.11";
-    sha256 = "0ww5493w8w3jlks0xqlfm3v6mm53vpnv5vjy63inkj8zf3gdfikn";
+    version = "7.1.13";
+    sha256 = "18cqry8jy7q9fp82p3n9ndxffyba6f6q3maz3100jq245lfsbz9m";
+  };
+
+  php72 = generic {
+    version = "7.2.1";
+    sha256 = "0ygbcilbp3fiswd240ib2mvnhy0yy0az8kjzpjfd4kca4qzpj1py";
   };
 }

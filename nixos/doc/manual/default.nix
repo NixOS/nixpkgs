@@ -106,13 +106,43 @@ let
       xmllint --xinclude --noxincludenode \
          --output ./man-pages-combined.xml ./man-pages.xml
 
-      xmllint --debug --noout --nonet \
-        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-        manual-combined.xml
-      xmllint --debug --noout --nonet \
-        --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-        man-pages-combined.xml
+      # outputs the context of an xmllint error output
+      # LEN lines around the failing line are printed
+      function context {
+        # length of context
+        local LEN=6
+        # lines to print before error line
+        local BEFORE=4
 
+        # xmllint output lines are:
+        # file.xml:1234: there was an error on line 1234
+        while IFS=':' read -r file line rest; do
+          echo
+          if [[ -n "$rest" ]]; then
+            echo "$file:$line:$rest"
+            local FROM=$(($line>$BEFORE ? $line - $BEFORE : 1))
+            # number lines & filter context
+            nl --body-numbering=a "$file" | sed -n "$FROM,+$LEN p"
+          else
+            if [[ -n "$line" ]]; then
+              echo "$file:$line"
+            else
+              echo "$file"
+            fi
+          fi
+        done
+      }
+
+      function lintrng {
+        xmllint --debug --noout --nonet \
+          --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
+          "$1" \
+          2>&1 | context 1>&2
+          # ^ redirect assumes xmllint doesn’t print to stdout
+      }
+
+      lintrng manual-combined.xml
+      lintrng man-pages-combined.xml
 
       mkdir $out
       cp manual-combined.xml $out/

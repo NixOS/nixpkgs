@@ -72,6 +72,7 @@ in
         (iface: if elem ":" (stringToCharacters iface) then "[${iface}]:53" else "${iface}:53")
         cfg.interfaces;
       socketConfig.ListenDatagram = listenStreams;
+      socketConfig.FreeBind = true;
     };
 
     systemd.sockets.kresd-control = rec {
@@ -82,20 +83,11 @@ in
       socketConfig = {
         FileDescriptorName = "control";
         Service = "kresd.service";
-        SocketMode = "0660"; # only root user/group may connect
+        SocketMode = "0660"; # only root user/group may connect and control kresd
       };
     };
 
-    # Create the cacheDir; tmpfiles don't work on nixos-rebuild switch.
-    systemd.services.kresd-cachedir = {
-      serviceConfig.Type = "oneshot";
-      script = ''
-        if [ ! -d '${cfg.cacheDir}' ]; then
-          mkdir -p '${cfg.cacheDir}'
-          chown kresd:kresd '${cfg.cacheDir}'
-        fi
-      '';
-    };
+    systemd.tmpfiles.rules = [ "d '${cfg.cacheDir}' 0770 kresd kresd - -" ];
 
     systemd.services.kresd = {
       description = "Knot-resolver daemon";
@@ -104,16 +96,15 @@ in
         User = "kresd";
         Type = "notify";
         WorkingDirectory = cfg.cacheDir;
+        Restart = "on-failure";
       };
 
       script = ''
         exec '${package}/bin/kresd' --config '${configFile}' \
-          -k '${cfg.cacheDir}/root.key'
+          -k '${pkgs.dns-root-data}/root.key'
       '';
 
-      after = [ "kresd-cachedir.service" ];
-      requires = [ "kresd.socket" "kresd-cachedir.service" ];
-      wantedBy = [ "sockets.target" ];
+      requires = [ "kresd.socket" ];
     };
   };
 }

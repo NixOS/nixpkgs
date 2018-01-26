@@ -10,6 +10,11 @@ qmakeConfigurePhase() {
           NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?} \
           $qmakeFlags
 
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "qmake: enabled parallel building"
+    fi
+
     runHook postConfigure
 }
 

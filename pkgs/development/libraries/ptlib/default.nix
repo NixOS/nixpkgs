@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     (fetchpatch { url = http://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/gcc-5_support;
       sha256 = "0pf2yj0150r4cnc6nv65mclrm3dillqh1xjk7m6gsjnk9b96i5d4";
     })
+    ./ptlib-2.10.11-glibc-2.26.patch
   ];
 
   meta = with stdenv.lib; {
@@ -41,4 +42,3 @@ stdenv.mkDerivation rec {
     };
   };
 }
-

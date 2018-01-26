@@ -11,6 +11,7 @@
 runCommand "dbus-1"
   {
     inherit serviceDirectories suidHelper;
+    preferLocalBuild = true;
     XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
       <?xml version="1.0"?>
       <!DOCTYPE catalog PUBLIC

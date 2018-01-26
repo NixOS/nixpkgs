@@ -1,18 +1,19 @@
-{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo, zlib
-, dejagnu, perl, pkgconfig
+{ stdenv
+
+# Build time
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+
+# Run time
+, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
 , buildPlatform, hostPlatform, targetPlatform
 
 , pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
 , guile ? null
 
-# Support all known targets in one gdb binary.
-, multitarget ? false
-
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
 
-, setupDebugInfoDirs
 }:
 
 let
@@ -58,10 +59,16 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = with stdenv.lib; [
-    "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
-    "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python"
-    ++ stdenv.lib.optional multitarget "--enable-targets=all";
+    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared" "--enable-static"
+    "--with-system-zlib"
+    "--with-system-readline"
+
+    "--with-gmp=${gmp.dev}"
+    "--with-mpfr=${mpfr.dev}"
+    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

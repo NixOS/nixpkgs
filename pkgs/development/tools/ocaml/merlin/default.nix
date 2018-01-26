@@ -4,7 +4,7 @@
 assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
 let
-  version = "3.0.3";
+  version = "3.0.5";
 in
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/ocaml/merlin/archive/v${version}.tar.gz";
-    sha256 = "19gz9vcdna84xcm2b53m6b5g4c7ppb61j05fnvry3shvjiz2p58p";
+    sha256 = "06h0klzzvb62rzb6m0pq8aa207fz7z54mjr05vky4wv8195bbjiy";
   };
 
   buildInputs = [ ocaml findlib yojson ]

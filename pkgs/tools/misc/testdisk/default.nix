@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.cgsecurity.org/wiki/TestDisk;
+    homepage = https://www.cgsecurity.org/wiki/TestDisk;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.eelco ];

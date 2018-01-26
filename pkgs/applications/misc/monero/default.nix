@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost, miniupnpc, openssl, pkgconfig, unbound }:
 
 let
-  version = "0.11.0.0";
+  version = "0.11.1.0";
 in
 stdenv.mkDerivation {
   name = "monero-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "041xxk9gznfpgn8f07m7sddr74cwm1sdyf9i85k10ndja87xc6y4";
+    sha256 = "0nrpxx6r63ia6ard85d504x2kgaikvrhb5sg93ml70l6djyy1148";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

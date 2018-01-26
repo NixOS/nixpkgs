@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A Task-Based Parallelization Framework";
     license = licenses.mit;
-    url = https://jug.readthedocs.io/;
+    homepage = https://jug.readthedocs.io/;
     maintainers = with maintainers; [ luispedro ];
   };
 }

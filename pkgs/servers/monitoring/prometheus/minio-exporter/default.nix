@@ -1,8 +1,8 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   name = "minio-exporter-${version}";
-  version = "0.1.0";
+  version = "0.2.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/joe-pll/minio-exporter";
@@ -11,8 +11,17 @@ buildGoPackage rec {
     inherit rev;
     owner = "joe-pll";
     repo = "minio-exporter";
-    sha256 = "14lz4dg0n213b6xy12fh4r20k1rcnflnfg6gjskk5zr8h7978hjx";
+    sha256 = "1my3ii5s479appiapw8gjzkq1pk62fl7d7if8ljvdj6qw4man6aa";
   };
+
+  # Required to make 0.2.0 build against latest dependencies
+  # TODO: Remove on update to 0.3.0
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/joe-pll/minio-exporter/commit/50ab89d42322dc3e2696326a9ae4d3f951f646de.patch";
+      sha256 = "0aiixhvb4x8c8abrlf1i4hmca9i6xd6b638a5vfkvawx0q7gxl97";
+    })
+  ];
 
   goDeps = ./deps.nix;
 

@@ -31,6 +31,10 @@ stdenv.mkDerivation rec{
     then "install -D bitcoin-qt $out/bin/memorycoin-qt"
     else "install -D bitcoind $out/bin/memorycoind";
 
+  # `make build/version.o`:
+  # make: *** No rule to make target 'build/build.h', needed by 'build/version.o'.  Stop.
+  enableParallelBuilding = false;
+
   meta = {
     description = "Peer-to-peer, CPU-based electronic cash system";
     longDescription= ''

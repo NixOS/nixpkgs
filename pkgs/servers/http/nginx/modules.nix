@@ -1,22 +1,22 @@
-{ fetchFromGitHub, pkgs }:
+{ fetchFromGitHub, fetchurl, lib, pkgs }:
 
 {
   brotli = {
     src = fetchFromGitHub {
       owner = "google";
       repo = "ngx_brotli";
-      rev = "788615eab7c5e0a984278113c55248305620df14";
-      sha256 = "02514bbjdhm9m38vljdh626d3c1783jxsxawv5c6bzblwmb8xgvf";
+      rev = "bfd2885b2da4d763fed18f49216bb935223cd34b";
+      sha256 = "04yx1n0wi3l2x37jd1ynl9951qxkn8xp42yv0mfp1qz9svips81n";
+      fetchSubmodules = true;
     };
-    inputs = [ pkgs.libbrotli ];
   };
 
-  rtmp = {
+  rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.1.11";
-      sha256 = "09zrnf8lk179mpqnx92zm24xl7m3bq4ca84wc2zwi5hc8kxjbwxc";
+      rev = "v1.2.1";
+      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
     };
   };
 
@@ -45,6 +45,16 @@
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.aprutil.dev}/include/apr-1 -I${pkgs.apacheHttpd.dev}/include -I${pkgs.apr.dev}/include/apr-1 -I${pkgs.yajl}/include"
     '';
+  };
+
+  modsecurity-nginx = {
+    src = fetchFromGitHub {
+      owner = "SpiderLabs";
+      repo = "ModSecurity-nginx";
+      rev = "v1.0.0";
+      sha256 = "0zzpdqhbdqqy8kjkszv0mrq6136ah9v3zwr1jbh312j8izmzdyi7";
+    };
+    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
 
   echo = {
@@ -143,7 +153,7 @@
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
         rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        sha256 = "176skx7zmi7islc1hmdxcynix4lkvgmr78lknn13s9gskc7qi25w";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -162,6 +172,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {

@@ -2,7 +2,7 @@
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
-  version = "2.02.175";
+  version = "2.02.177";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "0n95cc2b0jb0fh2pd9jyg9ww7lyzpia9n9sryw9f4aq8dpna7dsd";
+    sha256 = "1wl0isn0yz5wvglwylnlqkppafwmvhliq5bd92vjqp5ir4za49a0";
   };
 
   configureFlags = [
@@ -20,7 +20,11 @@ stdenv.mkDerivation {
     "--enable-pkgconfig"
     "--enable-applib"
     "--enable-cmdlib"
-  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
+  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libudev libuuid thin-provisioning-tools ];

@@ -2,20 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "5.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "17y2fr3faaf32lv171ppkgi55v5zxq97jiilsgmjcn00rd9i6v0j";
+    sha256 = "1l1p7jlrryd54jwwrwgvs4njr3r59m8xsh31z7db0bzpw3dk7n5k";
   };
 
-  cargoSha256 = "17f4plyj6mnz0d9f4ykgbmddsdp6c3f6q4kmgj406p49xsf0jjkc";
+  cargoSha256 = "1dikix9d46f0ydi81ray2vdvsy6y326w8ql6c89zx0p9cjm8m83r";
 
   preFixup = ''
     mkdir -p "$out/man/man1"
     cp "$src/doc/fd.1" "$out/man/man1"
+
+    mkdir -p "$out/share/"{bash-completion/completions,fish/completions,zsh/site-functions}
+    cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
+    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/completions/"
+    cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
   '';
 
   meta = with stdenv.lib; {

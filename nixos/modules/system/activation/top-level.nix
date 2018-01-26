@@ -26,7 +26,6 @@ let
      cloner false config.nesting.children
   ++ cloner true config.nesting.clone;
 
-
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
@@ -83,6 +82,7 @@ let
       done
 
       mkdir $out/bin
+      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 

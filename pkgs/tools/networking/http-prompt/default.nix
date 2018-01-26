@@ -20,6 +20,10 @@ pythonPackages.buildPythonApplication rec {
     six
   ];
 
+  checkPhase = ''
+    $out/bin/${name} --version | grep -q "${version}"
+  '';
+
   meta = with stdenv.lib; {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = https://github.com/eliangcs/http-prompt;

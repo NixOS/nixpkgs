@@ -1,11 +1,13 @@
 { stdenv, fetchurl, buildPythonPackage, pyparsing, argparse, robotframework }:
 
 buildPythonPackage rec {
-  name = "robomachine-0.6";
+  pname = "robomachine";
+  version = "0.8.0";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/R/RoboMachine/RoboMachine-0.6.tar.gz";
-    sha256 = "6c9a9bae7bffa272b2a09b05df06c29a3a776542c70cae8041a8975a061d2e54";
+    sha256 = "242cfd9be0f7591138eaeba03c9c190f894ce045e1767ab7b90eca330259fc45";
   };
 
   propagatedBuildInputs = [ pyparsing argparse robotframework ];

@@ -115,7 +115,7 @@ in
                 description = ''
                   Print global archive statistics upon completion.
                   The output is available via
-                  <command>systemctl status tarsnap@archive-name</command>.
+                  <command>systemctl status tarsnap-archive-name</command>.
                 '';
               };
 

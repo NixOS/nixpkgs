@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ocaml, findlib, camlp4, ounit, gettext, fileutils, camomile }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-gettext-${version}";
-  version = "0.3.5";
+  name = "ocaml${ocaml.version}-gettext-${version}";
+  version = "0.3.8";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1433/ocaml-gettext-${version}.tar.gz";
-    sha256 = "0s625h7y9xxqvzk4bnw45k4wvl4fn8gblv56bp47il0lgsx8956i";
+    url = "https://forge.ocamlcore.org/frs/download.php/1731/ocaml-gettext-${version}.tar.gz";
+    sha256 = "05wnpxwzzpn2qinah2wb5wzfh5iz8gyf8jyihdbjxc8mk4hf70qv";
   };
 
   propagatedBuildInputs = [ gettext fileutils camomile ];

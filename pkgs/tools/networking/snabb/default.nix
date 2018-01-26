@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools }:
+{ stdenv, lib, fetchFromGitHub, bash, makeWrapper, git, mysql, diffutils, which, coreutils, procps, nettools }:
 
 stdenv.mkDerivation rec {
   name = "snabb-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     done
 
     # We need a way to pass $PATH to the scripts
-    sed -i '2iexport PATH=${stdenv.lib.makeBinPath [ git mariadb which procps coreutils ]}' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
+    sed -i '2iexport PATH=${stdenv.lib.makeBinPath [ git mysql.client which procps coreutils ]}' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
     sed -i '2iexport PATH=${stdenv.lib.makeBinPath [ git coreutils diffutils nettools ]}' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
   '';
 
@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-  enableParallelBuilding = true;
+  # Dependencies are underspecified: "make -C src obj/arch/sse2_c.o" fails with
+  # "Fatal error: can't create obj/arch/sse2_c.o: No such file or directory".
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/SnabbCo/snabbswitch;
@@ -49,4 +51,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lukego maintainers.domenkozar ];
   };
 }
-

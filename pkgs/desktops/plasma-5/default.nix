@@ -58,11 +58,7 @@ let
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
                     if [ "$outputDev" != out ]; then
-                        if [ -n "$crossConfig" ]; then
-                          propagatedBuildInputs="$propagatedBuildInputs @dev@"
-                        else
-                          propagatedNativeBuildInputs="$propagatedNativeBuildInputs @dev@"
-                        fi
+                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
                     fi
                 fi
               '';
@@ -104,7 +100,6 @@ let
     in {
       bluedevil = callPackage ./bluedevil.nix {};
       breeze-gtk = callPackage ./breeze-gtk.nix {};
-      breeze-qt4 = callPackage ./breeze-qt4.nix {};
       breeze-qt5 = callPackage ./breeze-qt5.nix {};
       breeze-grub = callPackage ./breeze-grub.nix {};
       breeze-plymouth = callPackage ./breeze-plymouth {};

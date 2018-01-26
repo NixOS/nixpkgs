@@ -197,7 +197,7 @@ in
         "mmc_block"
 
         # Support USB keyboards, in case the boot fails and we only have
-        # a USB keyboard.
+        # a USB keyboard, or for LUKS passphrase prompt.
         "uhci_hcd"
         "ehci_hcd"
         "ehci_pci"
@@ -206,12 +206,13 @@ in
         "xhci_hcd"
         "xhci_pci"
         "usbhid"
-        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat" "hid_logitech_hidpp"
 
-        # Misc. keyboard stuff.
+      ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+        # Misc. x86 keyboard stuff.
         "pcips2" "atkbd" "i8042"
 
-        # Needed by the stage 2 init script.
+        # x86 RTC needed by the stage 2 init script.
         "rtc_cmos"
       ];
 

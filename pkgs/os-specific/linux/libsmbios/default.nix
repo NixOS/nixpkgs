@@ -1,36 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, perl, autoreconfHook, doxygen }:
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, libtool, gettext
+, libxml2, perl, doxygen }:
 
-let
-  version = "2.3.2";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   name = "libsmbios-${version}";
+  version = "2.3.3";
 
-  src = fetchurl {
-    url = "https://github.com/dell/libsmbios/archive/v${version}.tar.gz";
-    sha256 = "0kvi36jrvhspyyq0pjfdyvzvimdn27fvbdpf429qm3xdmfi78y2j";
+  src = fetchFromGitHub {
+    owner = "dell";
+    repo = "libsmbios";
+    rev = "v${version}";
+    sha256 = "1cl5nb6qk8ki87hwqf9n1dd9nlhkjnlpdxlhzvm82za16gs7apkl";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libxml2 perl doxygen ];
+  nativeBuildInputs = [ autoreconfHook doxygen gettext libtool perl pkgconfig ];
+  buildInputs = [ libxml2 ];
 
-  # It tries to install some Python stuff even when Python is disabled.
-  installFlags = "pkgpythondir=$(TMPDIR)/python";
+  configureFlags = [ "--disable-python" "--disable-graphviz" ];
+
+  enableParallelBuilding = true;
 
   postInstall =
     ''
       mkdir -p $out/include
-      cp -va "src/include/"* "$out/include/"
-      cp -va "out/public-include/"* "$out/include/"
+      cp -a src/include/smbios_c $out/include/
+      cp -a out/public-include/smbios_c $out/include/
     '';
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
 
   meta = {
-    homepage = http://linux.dell.com/libsmbios/main;
+    homepage = https://github.com/dell/libsmbios;
     description = "A library to obtain BIOS information";
-    license = stdenv.lib.licenses.gpl2Plus; # alternatively, under the Open Software License version 2.1
+    license = with stdenv.lib.licenses; [ osl21 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

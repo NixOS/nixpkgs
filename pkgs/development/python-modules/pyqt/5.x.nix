@@ -1,12 +1,19 @@
-{ lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
-, lndir, makeWrapper, qmake }:
+{ lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake
+, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
+, withWebSockets ? false, qtwebsockets
+, withConnectivity ? false, qtconnectivity
+}:
 
 let
-  version = "5.9";
+  pname = "PyQt";
+  version = "5.9.2";
+
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 in buildPythonPackage {
-  name = "PyQt-${version}";
+  pname = pname;
+  version = version;
   format = "other";
+  name = pname + "-" + version;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
@@ -18,14 +25,14 @@ in buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "15hh4z5vd45dcswjla58q6rrfr6ic7jfz2n7c8lwfb10rycpj3mb";
+    sha256 = "15439gxari6azbfql20ksz8h4gv23k3kfyjyr89h2yy9k32xm461";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
 
   buildInputs = [
     lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
-  ];
+  ] ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
 
   propagatedBuildInputs = [ sip ];
 

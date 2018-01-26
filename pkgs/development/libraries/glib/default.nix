@@ -43,7 +43,7 @@ let
   '';
 
   ver_maj = "2.54";
-  ver_min = "1";
+  ver_min = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -51,11 +51,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "50c01b1419324f10fbf9b9709ec2164b18586968bdce7540583bf32302cf47a3";
+    sha256 = "bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
-    ++ optional doCheck ./skip-timer-test.patch;
+    ++ optional doCheck ./skip-timer-test.patch
+    ++ [ ./schema-override-variable.patch ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";

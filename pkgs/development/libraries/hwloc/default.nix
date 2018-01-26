@@ -1,15 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11
-, pciutils, numactl }:
+{ stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
+, cairo, libX11
+, x11Support ? (!stdenv.isCygwin)
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.6";
+  name = "hwloc-1.11.8";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "1yl7dm2qplwmnidd712zy12qfvxk28k8ccs694n42ybwdjwzg1bn";
+    sha256 = "0karxv4r1r8sa7ki5aamlxdvyvz0bvzq4gdhq0yi5nc4a0k11vzc";
   };
+
+  hardeningDisable = [ "format" ];
+
+  configureFlags = [
+    "--localstatedir=/var"
+  ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
   nativeBuildInputs = [ pkgconfig ];
@@ -18,7 +26,7 @@ stdenv.mkDerivation rec {
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
    ([ expat ncurses ]
-     ++  (optionals (!stdenv.isCygwin) [ cairo libX11 ])
+     ++  (optionals x11Support [ cairo libX11 ])
      ++  (optionals stdenv.isLinux [ numactl ]));
 
   propagatedBuildInputs =
@@ -37,13 +45,15 @@ stdenv.mkDerivation rec {
              test -d "$numalibdir"
          fi
 
-         sed -i "$out/lib/libhwloc.la" \
+         sed -i "$lib/lib/libhwloc.la" \
              -e "s|-lnuma|-L$numalibdir -lnuma|g"
       '';
 
   # Checks disabled because they're impure (hardware dependent) and
   # fail on some build machines.
   doCheck = false;
+
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";

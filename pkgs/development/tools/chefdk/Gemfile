@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'chef-dk'
+gem 'chef-dk', '2.4.17'
 gem 'pry'
 gem 'test-kitchen'
 gem 'inspec'

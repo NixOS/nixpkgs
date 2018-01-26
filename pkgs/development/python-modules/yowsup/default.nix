@@ -1,9 +1,15 @@
-{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest }:
+{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest
+, isPy3k
+}:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "yowsup";
   version = "2.5.2";
+
+  # python2 is currently incompatible with yowsup:
+  # https://github.com/tgalal/yowsup/issues/2325#issuecomment-343516519
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tgalal";

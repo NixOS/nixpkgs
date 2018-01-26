@@ -32,7 +32,7 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ git rust.cargo rust.rustc ] ++ buildInputs;
+  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -43,6 +43,10 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
+    unpackFile "$cargoDeps"
+    cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+    chmod -R +w "$cargoDepsCopy"
+
     mkdir .cargo
     cat >.cargo/config <<-EOF
       [source.crates-io]
@@ -50,11 +54,12 @@ in stdenv.mkDerivation (args // {
       replace-with = 'vendored-sources'
 
       [source.vendored-sources]
-      directory = '$cargoDeps'
+      directory = '$(pwd)/$cargoDepsCopy'
     EOF
 
+    unset cargoDepsCopy
+
     export RUST_LOG=${logLevel}
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '' + (args.postUnpack or "");
 
   buildPhase = with builtins; args.buildPhase or ''

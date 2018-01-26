@@ -12,6 +12,8 @@ let
       inherit sha256;
     };
 
+    outputs = [ "out" "devdoc" ];
+
     nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
 
     buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
@@ -29,8 +31,8 @@ in rec {
 
   vala_0_23 = generic {
     major   = "0.23";
-    minor   = "2";
-    sha256  = "0g22ss9qbm3fqhx4fxhsyfmdc5g1hgdw4dz9d37f4489kl0qf8pl";
+    minor   = "3";
+    sha256  = "101xjbc818g4849n9a80c2aai13zakj7mpnd7470xnkvz5jwqq96";
   };
 
   vala_0_26 = generic {
@@ -41,8 +43,8 @@ in rec {
 
   vala_0_28 = generic {
     major   = "0.28";
-    minor   = "0";
-    sha256  = "0zwpzhkhfk3piya14m7p2hl2vaabahprphppfm46ci91z39kp7hd";
+    minor   = "1";
+    sha256  = "0isg327w6rfqqdjja6a8pc3xcdkj7pqrkdhw48bsyxab2fkaw3hw";
   };
 
   vala_0_32 = generic {
@@ -53,17 +55,23 @@ in rec {
 
   vala_0_34 = generic {
     major   = "0.34";
-    minor   = "1";
-    sha256  = "16cjybjw100qps6jg0jdyjh8hndz8a876zmxpybnf30a8vygrk7m";
+    minor   = "13";
+    sha256  = "0ahbnhgwhhjkndmbr1d039ws0g2bb324c60fk6wgx7py5wvmgcd2";
+  };
+
+  vala_0_36 = generic {
+    major   = "0.36";
+    minor   = "8";
+    sha256  = "1nz5a8kcb22ss9idb7k1higwpvghd617xwf40fi0a9ggws614lfz";
   };
 
   vala_0_38 = generic {
     major   = "0.38";
-    minor   = "1";
-    sha256  = "112hl3lkcyakrk8c3qgw12gzn3nxjkvx7bn0jhl5f2m57d7k8d8h";
+    minor   = "4";
+    sha256  = "1sg5gaq3jhgr9vzh2ypiw475167k150wmyglymr7wwqppmikmcrc";
     extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
     extraBuildInputs = [ graphviz ];
   };
 
-  vala = vala_0_34;
+  vala = vala_0_38;
 }

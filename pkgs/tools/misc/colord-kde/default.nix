@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "0brdnpflm95vf4l41clrqxwvjrdwhs859n7401wxcykkmw4m0m3c";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ki18n ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
-    kcmutils kio knotifications plasma-framework kwidgetsaddons
+    kcmutils ki18n kio knotifications plasma-framework kwidgetsaddons
     kwindowsystem kitemviews lcms2 libXrandr qtx11extras
   ];
 

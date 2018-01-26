@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurlBoot, enableThreading ? stdenv ? glibc }:
+{ lib, stdenv, fetchurlBoot, buildPackages, enableThreading ? stdenv ? glibc }:
 
 with lib;
 
@@ -19,7 +19,8 @@ let
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
-  common = { version, sha256 }: stdenv.mkDerivation rec {
+  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  common = { version, sha256 }: stdenv.mkDerivation (rec {
     name = "perl-${version}";
 
     src = fetchurlBoot {
@@ -32,9 +33,16 @@ let
     setOutputFlags = false;
 
     patches =
-      [ # Do not look in /usr etc. for dependencies.
-        ./no-sys-dirs.patch
-      ]
+      [ ]
+      # Do not look in /usr etc. for dependencies.
+      ++ optional (versionOlder version "5.26") ./no-sys-dirs.patch
+      ++ optional (versionAtLeast version "5.26") ./no-sys-dirs-5.26.patch
+      ++ optional (versionAtLeast version "5.24") (
+        # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
+        fetchurlBoot {
+          url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
+          sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
+        })
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optional stdenv.isDarwin ./cpp-precomp.patch
       ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch;
@@ -43,8 +51,9 @@ let
       pwd="$(type -P pwd)"
       substituteInPlace dist/PathTools/Cwd.pm \
         --replace "/bin/pwd" "$pwd"
+    '' + stdenv.lib.optionalString crossCompiling ''
+      substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
     '';
-    sandboxProfile = sandbox.allow "ipc-sysv-sem";
 
     # Build a thread-safe Perl with a dynamic libperls.o.  We need the
     # "installstyle" option to ensure that modules are put under
@@ -52,8 +61,10 @@ let
     # contains the string "perl", Configure would select $out/lib.
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
-      [ "-de"
-        "-Dcc=cc"
+      (if crossCompiling
+       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+       else [ "-de" "-Dcc=cc" ])
+      ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
         "-Duseshrplib"
@@ -63,14 +74,13 @@ let
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
-    configureScript = "${stdenv.shell} ./Configure";
+    configureScript = stdenv.lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
-    dontAddPrefix = true;
+    dontAddPrefix = !crossCompiling;
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = !crossCompiling;
 
-    preConfigure =
-      ''
+    preConfigure = optionalString (!crossCompiling) ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
       '' + optionalString (stdenv.isArm || stdenv.isMips) ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
@@ -115,7 +125,23 @@ let
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
     };
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+    crossVersion = "1.1.8";
+
+    perl-cross-src = fetchurlBoot {
+      url = "https://github.com/arsv/perl-cross/releases/download/${crossVersion}/perl-cross-${crossVersion}.tar.gz";
+      sha256 = "072j491rpz2qx2sngbg4flqh4lx5865zyql7b9lqm6s1kknjdrh8";
+    };
+
+    nativeBuildInputs = [ buildPackages.stdenv.cc ];
+
+    postUnpack = ''
+      unpackFile ${perl-cross-src}
+      cp -R perl-cross-${crossVersion}/* perl-${version}/
+    '';
+
+    configurePlatforms = [ "build" "host" "target" ];
+  });
 in rec {
   perl = perl524;
 
@@ -127,5 +153,10 @@ in rec {
   perl524 = common {
     version = "5.24.3";
     sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
+  };
+
+  perl526 = common {
+    version = "5.26.1";
+    sha256 = "1p81wwvr5jb81m41d07kfywk5gvbk0axdrnvhc2aghcdbr4alqz7";
   };
 }

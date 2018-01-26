@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lua }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.2";
+  version = "4.0.6";
   name = "redis-${version}";
 
   src = fetchurl {
     url = "http://download.redis.io/releases/${name}.tar.gz";
-    sha256 = "04s8cgvwjj1979s3hg8zkwc9pyn3jkjpz5zidp87kfcipifr385i";
+    sha256 = "1ypnwmxwm49l0b8i9swcbjdxnc6f0r9zyqm2h423wz13xilmv6vn";
   };
 
   buildInputs = [ lua ];

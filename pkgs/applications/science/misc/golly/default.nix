@@ -1,24 +1,17 @@
 {stdenv, fetchurl, wxGTK, perl, python2, zlib, mesa, libX11}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="golly";
-    version="2.8";
-    name="${baseName}-${version}";
-    hash="0a4vn2hm7h4b47v2iwip1z3n9y8isf79v08aipl2iqms2m3p5204";
-    url="mirror://sourceforge/project/golly/golly/golly-2.8/golly-2.8-src.tar.gz";
-    sha256="0a4vn2hm7h4b47v2iwip1z3n9y8isf79v08aipl2iqms2m3p5204";
+stdenv.mkDerivation rec {
+  baseName="golly";
+  version = "3.1";
+  name="${baseName}-${version}";
+
+  src = fetchurl {
+    sha256 = "0dn74k3rylhx023n047lz4z6qrqijfcxi0b6jryqklhmm2n532f7";
+    url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
+
   buildInputs = [
     wxGTK perl python2 zlib mesa libX11
   ];
-in
-stdenv.mkDerivation rec {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
 
   setSourceRoot = ''
     sourceRoot=$(echo */gui-wx/configure)
@@ -37,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (s) version;
+    inherit version;
     description = "Cellular automata simulation program";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];

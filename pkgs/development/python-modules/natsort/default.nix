@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "natsort";
-  version = "5.1.0";
+  version = "5.1.1";
 
   buildInputs = [
     hypothesis
@@ -36,12 +36,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5db0fd17c9f8ef3d54962a6e46159ce4807c630f0931169cd15ce54f2ac395b9";
+    sha256 = "9ffbfb74bf3fc3905be1b9b052ed865675651e38fcd972ed1ed5c64a02f93cbd";
   };
 
-  # do not run checks on nix_run_setup.py
-  patches = lib.singleton ./setup.patch
-         ++ lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
+  patches = lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
 
   # testing based on project's tox.ini
   checkPhase = ''

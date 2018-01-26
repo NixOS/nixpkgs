@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mp4v2-2.0.0";
@@ -18,10 +18,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = https://code.google.com/archive/p/mp4v2/;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mpl11;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mpl11;
   };
 }

@@ -3,15 +3,15 @@
 , xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk, pygobject3, pycairo, gobjectIntrospection
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
 , ffmpeg, x264, libvpx, libwebp
-, libfakeXinerama }:
+, libfakeXinerama, pam }:
 
 buildPythonApplication rec {
-  name = "xpra-0.16.2";
-  namePrefix = "";
+  name = "xpra-${version}";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "0h55rv46byzv2g8g77bm0a0py8jpz3gbr5fhr5jy9sisyr0vk6ff";
+    sha256 = "0r0l3p59q05fmvkp3jv8vmny2v8m1vyhqkg6b9r2qgxn1kcxx7rm";
   };
 
   patchPhase = ''
@@ -31,6 +31,8 @@ buildPythonApplication rec {
     ffmpeg libvpx x264 libwebp
 
     makeWrapper
+
+    pam
   ];
 
   propagatedBuildInputs = [
@@ -39,6 +41,7 @@ buildPythonApplication rec {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-3.0) $(pkg-config --cflags xtst)"
+    substituteInPlace xpra/server/auth/pam_auth.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
   '';
   setupPyBuildFlags = [ "--without-strict" "--with-gtk3" "--without-gtk2" "--with-Xdummy" ];
 
@@ -67,6 +70,8 @@ buildPythonApplication rec {
 
   meta = {
     homepage = http://xpra.org/;
+    downloadPage = "https://xpra.org/src/";
+    downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
     platforms = stdenv.lib.platforms.linux;
   };

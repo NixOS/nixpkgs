@@ -38,7 +38,8 @@ let
 
       patches = extraPatches;
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel kernel.moduleBuildDependencies;
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
@@ -125,7 +126,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        home = http://zfsonlinux.org/;
+        homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
@@ -140,9 +141,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.3";
+    version = "0.7.5";
 
-    sha256 = "1bbajrwfilnmfhn1n69gvsaznyc4q29wi7nkwc0p9r4dli37w28b";
+    sha256 = "086g4xjx05sy4fwn5709sm46m2yv35wb915xfmqjvpry46245nig";
 
     extraPatches = [
       (fetchpatch {
@@ -159,10 +160,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-10-16";
+    version = "2018-01-10";
 
-    rev = "7670f721fc82e6cdcdd31f83760a79b6f2f2b998";
-    sha256 = "0ask9d9936s7mhs9q5wzvn6c8fd322i76hs2n7fajfk17b1a1lkj";
+    rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
+    sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
     isUnstable = true;
 
     extraPatches = [

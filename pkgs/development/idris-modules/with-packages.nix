@@ -14,7 +14,7 @@
       fi
     }
 
-    envHooks+=(installIdrisLib)
+    envHostTargetHooks+=(installIdrisLib)
   '';
 
   unpackPhase = ''

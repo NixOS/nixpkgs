@@ -15,9 +15,15 @@ assert gtkSupport -> gtk3 != null;
 
 let
   inherit (stdenv.lib) optional optionalString;
+
+  # OpenJPEG version is hardcoded in package source
+  openJpegVersion = with stdenv;
+    lib.concatStringsSep "." (lib.lists.take 2
+      (lib.splitString "." (lib.getVersion openjpeg)));
+
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.12.2";
+  name = "gst-plugins-bad-1.12.3";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -32,9 +38,13 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
   };
 
+  patchPhase = ''
+    sed -i 's/openjpeg-2.2/openjpeg-${openJpegVersion}/' ext/openjpeg/*
+  '';
+
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "0dwyq03g2m0p16dwx8q5qvjn5x9ia72h21sf87mp97gmwkfpwb4w";
+    sha256 = "1v5z3i5ha20gmbb3r9dwsaaspv5fm1jfzlzwlzqx1gjj31v5kl1n";
   };
 
   outputs = [ "out" "dev" ];
@@ -60,4 +70,6 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) wildmidi;
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+
+  enableParallelBuilding = true;
 }

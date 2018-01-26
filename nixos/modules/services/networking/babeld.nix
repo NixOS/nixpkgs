@@ -6,8 +6,10 @@ let
 
   cfg = config.services.babeld;
 
+  conditionalBoolToString = value: if (isBool value) then (boolToString value) else (toString value);
+
   paramsString = params:
-    concatMapStringsSep "" (name: "${name} ${boolToString (getAttr name params)}")
+    concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (getAttr name params)}")
                    (attrNames params);
 
   interfaceConfig = name:
@@ -49,7 +51,7 @@ in
         type = types.nullOr (types.attrsOf types.unspecified);
         example =
           {
-            wired = true;
+            type = "tunnel";
             "split-horizon" = true;
           };
       };
@@ -63,7 +65,7 @@ in
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
           { enp0s2 =
-            { wired = true;
+            { type = "wired";
               "hello-interval" = 5;
               "split-horizon" = "auto";
             };

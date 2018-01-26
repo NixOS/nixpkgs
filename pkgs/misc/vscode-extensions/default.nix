@@ -1,7 +1,8 @@
 { stdenv, lib, fetchurl, callPackage, vscode-utils }:
 
 let
-  inherit (vscode-utils) buildVscodeExtension buildVscodeMarketplaceExtension;
+  inherit (vscode-utils) buildVscodeExtension buildVscodeMarketplaceExtension
+      extensionFromVscodeMarketplace;
 in
 #
 # Unless there is a good reason not to, we attemp to use the same name as the 
@@ -24,4 +25,6 @@ rec {
   };
 
   ms-vscode.cpptools = callPackage ./cpptools {};
+  
+  ms-python.python = callPackage ./python {};
 }

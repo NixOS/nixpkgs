@@ -13,7 +13,7 @@ the following highlights:
 <itemizedlist>
 
   <listitem><para>Installation on UEFI systems is now supported.  See
-  <xref linkend="sec-uefi-installation"/> for
+  <xref linkend="sec-installation"/> for
   details.</para></listitem>
 
   <listitem><para>Systemd has been updated to version 212, which has

@@ -36,7 +36,7 @@ jruby = stdenv.mkDerivation rec {
          addToSearchPath GEM_PATH \$1/${passthru.gemPath}
        }
 
-       envHooks+=(addGemPath)
+       addEnvHooks "$hostOffset" addGemPath
      EOF
   '';
 

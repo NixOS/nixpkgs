@@ -10,12 +10,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "105";
+  version = "106";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "1lpj345vlnwcywhzq1fzxwl08zc2x4d103rgyyp7yw8m0f8f9sdl";
+    sha256 = "063dzp9wrdnbvagraxi31xg0154y2gf67rrd0mnc8h104cgzjr35";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
           Game Boy, Game Boy Color, Game Boy Advance;
         - Sega's Master System, Game Gear, Mega Drive;
         - NEC's PC Engine, SuperGrafx;
-        - Bandai' WonderSwan, WonderSwan Color.
+        - Bandai's WonderSwan, WonderSwan Color.
     '';
     homepage = https://byuu.org/higan/;
     license = licenses.gpl3Plus;

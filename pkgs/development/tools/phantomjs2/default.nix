@@ -74,6 +74,10 @@ in stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-print.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
       sha256 = "1fydmdjxnplglpbd3ypaih5l237jkxjirpdhzz92mcpy29yla6jw";
     })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/unlock-qt.patch";
+      sha256 = "13bwz4iw17d6hq5pwkbpcckqyw7fhc6648lvs26m39pp31zwyp03";
+    })
     ./system-qtbase.patch
   ];
 
@@ -101,6 +105,7 @@ in stdenv.mkDerivation rec {
     $out/bin/phantomjs
   '' + ''
     wrapProgram $out/bin/phantomjs \
+    --set QT_QPA_PLATFORM offscreen \
     --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
   '';
 

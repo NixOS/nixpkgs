@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, requireFile, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
-  version = "17.3.0.271.2323";
+  version = "17.4.0.355.2349";
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       obtain it you need to
 
       - navigate to ${url}
-      - make sure that it says "Version ${version}" above the list of downloads 
+      - make sure that it says "Version ${version}" above the list of downloads
         - if it does not, click on the "Previous Version" link below the downloads
           and repeat until the version is correct. This is necessarry because as the
           time of this writing there exists no permanent link for the current version
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
     # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
-    sha256 = "06ba5920544bacbea83425548b1b8f69ab3e9bb279076321aece2c0c6d415dad";
+    sha256 = "70add9b5c998583416e3d127aeb63dde8e3d0489036982026b930c85496c7850";
   };
 
   buildInputs = [ makeWrapper unzip ];

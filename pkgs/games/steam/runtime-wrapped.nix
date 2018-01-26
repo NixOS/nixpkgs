@@ -5,7 +5,7 @@
 
 assert !(nativeOnly && runtimeOnly);
 
-let 
+let
   runtimePkgs = with pkgs; [
     # Required
     glib
@@ -88,6 +88,8 @@ let
     libva
     vulkan-loader
     gcc.cc
+    nss
+    nspr
   ];
 
   ourRuntime = if runtimeOnly then []
