@@ -14,7 +14,6 @@ rec {
     bigEndian = false;
     arch = "armv5tel";
     float = "soft";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.sheevaplug;
     openssl.system = "linux-generic32";
@@ -26,7 +25,6 @@ rec {
     arch = "armv6l";
     float = "hard";
     fpu = "vfp";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.raspberrypi;
     openssl.system = "linux-generic32";
@@ -38,7 +36,6 @@ rec {
     arch = "armv7-a";
     float = "hard";
     fpu = "vfpv3-d16";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
     openssl.system = "linux-generic32";
@@ -48,7 +45,6 @@ rec {
     config = "aarch64-unknown-linux-gnu";
     bigEndian = false;
     arch = "aarch64";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.aarch64-multiplatform;
   };
@@ -67,7 +63,6 @@ rec {
 
     libc = "glibc";
 
-    withTLS = true;
     openssl.system = "linux-generic32";
   };
 
@@ -76,7 +71,6 @@ rec {
     bigEndian = false;
     arch = "mips";
     float = "hard";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.fuloong2f_n32;
     openssl.system = "linux-generic32";
