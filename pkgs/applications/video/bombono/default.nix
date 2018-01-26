@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     ];
 
   buildPhase = ''
-    scons PREFIX=$out
+    scons PREFIX=$out -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
     '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     scons install
