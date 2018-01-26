@@ -6478,7 +6478,11 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
-  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_2;
+  carnix =
+    let carnix = callPackage ../build-support/rust/carnix.nix { };
+        carnixFeatures = carnix.carnix_0_6_0_features {};
+    in
+    carnix.carnix_0_6_0 carnixFeatures;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
