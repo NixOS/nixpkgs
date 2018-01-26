@@ -149,6 +149,17 @@ following incompatible changes:</para>
       The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The merging of config options for <varname>services.postfix.config</varname>
+      was buggy. Previously, if other options in the Postfix module like
+      <varname>services.postfix.useSrs</varname> were set and the user set config
+      options that were also set by such options, the resulting config wouldn't
+      include all options that were needed. They are now merged correctly. If
+      config options need to be overridden, <literal>lib.mkForce</literal> or
+      <literal>lib.mkOverride</literal> can be used.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
