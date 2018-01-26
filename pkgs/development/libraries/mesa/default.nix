@@ -11,6 +11,7 @@
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
+, useGLVND ? false, libglvnd
 }:
 
 /** Packaging design:
@@ -120,8 +121,6 @@ stdenv.mkDerivation {
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
     "--enable-dri"
     "--enable-driglx-direct"
-    "--enable-gles1"
-    "--enable-gles2"
     "--enable-glx"
     "--enable-glx-tls"
     "--enable-gallium-osmesa" # used by wine
@@ -137,6 +136,10 @@ stdenv.mkDerivation {
     "--enable-omx"
     "--enable-va"
     "--disable-opencl"
+  ] ++ optionals useGLVND [
+    "--disable-gles1"
+    "--disable-gles2"
+    "--enable-libglvnd"
   ];
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
@@ -152,7 +155,7 @@ stdenv.mkDerivation {
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2
-  ];
+  ] ++ optional useGLVND libglvnd;
 
 
   enableParallelBuilding = true;
@@ -162,6 +165,11 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
   ];
+
+  postBuild = optionalString useGLVND ''
+    substituteInPlace src/egl/Makefile.am \
+      --replace "@LIBGLVND_DATADIR@/glvnd/egl_vendor.d" "$out/share/glvnd/egl_vendor.d"
+  '';
 
   # TODO: probably not all .la files are completely fixed, but it shouldn't matter;
   postInstall = ''
@@ -188,7 +196,8 @@ stdenv.mkDerivation {
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
   '' + optionalString (vulkanDrivers != []) ''
     # move share/vulkan/icd.d/
-    mv $out/share/ $drivers/
+    mkdir -p $drivers/share
+    mv $out/share/vulkan $drivers/share/
     # Update search path used by Vulkan (it's pointing to $out but
     # drivers are in $drivers)
     for js in $drivers/share/vulkan/icd.d/*.json; do
@@ -209,7 +218,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru = { inherit libdrm version driverLink; };
+  passthru = {
+    inherit libdrm driverLink;
+    version = "${optionalString useGLVND "glvnd-"}${version}";
+  };
 
   meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
