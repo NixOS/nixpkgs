@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    sed -i Makefile \
-      -e 's,-Werror,,g'
-
-    sed '1i#include <cmath>' \
-      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
   '';
 
   makeFlags = [
@@ -35,6 +30,11 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
+  ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+    "WARNINGS+=-Wno-deprecated-declarations"
+    "WARNINGS+=-Wno-ignored-attributes"
+  ] ++ stdenv.lib.optionals stdenv.cc.isClang [
+    "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''

@@ -21,11 +21,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    sed -i Makefile \
-      -e 's,-Werror,,g'
-
-    sed '1i#include <cmath>' \
-      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
   '';
 
   makeFlags = [
