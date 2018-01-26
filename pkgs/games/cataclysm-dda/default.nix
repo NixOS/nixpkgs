@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, Cocoa, libicns }:
+SDL2_mixer, freetype, gettext, Cocoa, libicns, tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "0.C";
@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libicns ];
+    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ libicns ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ ncurses lua gettext ]
+    ++ stdenv.lib.optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir.patch ];
 
@@ -25,8 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+    "PREFIX=$(out) LUA=1 RELEASE=1 USE_HOME_DIR=1"
     # "LANGUAGES=all"  # vanilla C:DDA installs all translations even without this flag!
+  ] ++ stdenv.lib.optionals tiles [
+    "TILES=1 SOUND=1"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
@@ -37,12 +40,12 @@ stdenv.mkDerivation rec {
     "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
-  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  postBuild = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     # iconutil on macOS is not available in nixpkgs
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources

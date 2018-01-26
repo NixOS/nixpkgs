@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa }:
+SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa, tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "2017-12-09";
@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Cocoa ];
+  buildInputs = [ ncurses lua gettext ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ]
+    ++ stdenv.lib.optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir_git.patch ];
 
@@ -26,17 +28,19 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+    "PREFIX=$(out) LUA=1 RELEASE=1 USE_HOME_DIR=1"
     "LANGUAGES=all"
     "VERSION=git-${version}-${stdenv.lib.substring 0 8 src.rev}"
+  ] ++ stdenv.lib.optionals tiles [
+    "TILES=1 SOUND=1"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
   ];
 
-  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = stdenv.lib.optionalString (tiles && !stdenv.isDarwin) ''
     install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T $out/share/applications/cataclysm-dda.desktop
     install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
