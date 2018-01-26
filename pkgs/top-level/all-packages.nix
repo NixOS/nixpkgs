@@ -5363,7 +5363,6 @@ with pkgs;
           # Ben Nanonote system
           crossSystem = {
             config = crossPrefix;
-            bigEndian = true;
             arch = "mips";
             float = "soft";
             libc = "uclibc";

@@ -11,7 +11,6 @@ rec {
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    bigEndian = false;
     arch = "armv5tel";
     float = "soft";
     libc = "glibc";
@@ -21,7 +20,6 @@ rec {
 
   raspberryPi = rec {
     config = "armv6l-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv6l";
     float = "hard";
     fpu = "vfp";
@@ -32,7 +30,6 @@ rec {
 
   armv7l-hf-multiplatform = rec {
     config = "arm-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv7-a";
     float = "hard";
     fpu = "vfpv3-d16";
@@ -43,7 +40,6 @@ rec {
 
   aarch64-multiplatform = rec {
     config = "aarch64-unknown-linux-gnu";
-    bigEndian = false;
     arch = "aarch64";
     libc = "glibc";
     platform = platforms.aarch64-multiplatform;
@@ -68,7 +64,6 @@ rec {
 
   fuloongminipc = rec {
     config = "mips64el-unknown-linux-gnu";
-    bigEndian = false;
     arch = "mips";
     float = "hard";
     libc = "glibc";
