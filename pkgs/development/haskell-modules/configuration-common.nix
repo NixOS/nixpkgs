@@ -648,9 +648,6 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
-  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
-
   # vaultenv is not available from Hackage.
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
