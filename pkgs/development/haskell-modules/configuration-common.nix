@@ -960,4 +960,43 @@ self: super: {
     sha256 = "0i889zs46wn09d7iqdy99201zaqxb175cfs8jz2zi3mv4ywx3a0l";
   });
 
+  # Copy hledger man pages from data directory into the proper place. This code
+  # should be moved into the cabal2nix generator.
+  hledger = overrideCabal super.hledger (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir $out/share/info
+      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
+  hledger-ui = overrideCabal super.hledger-ui (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir $out/share/info
+      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
+  hledger-web = overrideCabal super.hledger-web (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir $out/share/info
+      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
+
 }
