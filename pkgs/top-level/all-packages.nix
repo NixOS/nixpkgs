@@ -7267,6 +7267,9 @@ with pkgs;
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
     pythonPackages = python2Packages;
   };
+  buildbot-pkg = callPackage ../development/tools/build-managers/buildbot/pkg.nix {
+    inherit (python2Packages) buildPythonPackage fetchPypi setuptools;
+  };
   buildbot-plugins = callPackages ../development/tools/build-managers/buildbot/plugins.nix {
     pythonPackages = python2Packages;
   };

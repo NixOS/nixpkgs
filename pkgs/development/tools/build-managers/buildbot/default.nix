@@ -1,4 +1,4 @@
-{ stdenv, lib, openssh, buildbot-worker, pythonPackages, runCommand, makeWrapper }:
+{ stdenv, lib, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
 
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {
@@ -36,6 +36,7 @@ let
       pyflakes
       openssh
       buildbot-worker
+      buildbot-pkg
       treq
     ];
 
