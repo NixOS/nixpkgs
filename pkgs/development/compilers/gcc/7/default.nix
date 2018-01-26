@@ -33,7 +33,6 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
-, flex ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -284,7 +283,7 @@ stdenv.mkDerivation ({
     ];
 
   buildInputs = [
-    gmp mpfr libmpc libelf flex
+    gmp mpfr libmpc libelf
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
