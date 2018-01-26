@@ -2725,6 +2725,8 @@ package-maintainers:
     - hsemail
     - hsyslog
     - jailbreak-cabal
+    - lambdabot-core
+    - lambdabot-irc-plugins
     - language-nix
     - logging-facade-syslog
     - pandoc
