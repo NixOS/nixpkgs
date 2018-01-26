@@ -16099,6 +16099,8 @@ with pkgs;
 
   monero = callPackage ../applications/altcoins/monero { };
 
+  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui { };
+
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     hwloc = hwloc-nox;
   };

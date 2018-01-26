@@ -1,0 +1,42 @@
+diff --git a/main.cpp b/main.cpp
+index 1a9a979..2316929 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -74,10 +74,6 @@ int main(int argc, char *argv[])
+ //    qDebug() << "High DPI auto scaling - enabled";
+ //#endif
+ 
+-    // Log settings
+-    Monero::Wallet::init(argv[0], "monero-wallet-gui");
+-//    qInstallMessageHandler(messageHandler);
+-
+     MainApp app(argc, argv);
+ 
+     qDebug() << "app startd";
+@@ -86,6 +82,13 @@ int main(int argc, char *argv[])
+     app.setOrganizationDomain("getmonero.org");
+     app.setOrganizationName("monero-project");
+ 
++    // Log settings
++    QString logfile =
++      QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
++      + "/monero-wallet-gui.log";
++    Monero::Wallet::init(argv[0], logfile.toUtf8().constData());
++
++
+     filter *eventFilter = new filter;
+     app.installEventFilter(eventFilter);
+ 
+diff --git a/src/libwalletqt/Wallet.cpp b/src/libwalletqt/Wallet.cpp
+index 8525bf3..6967b24 100644
+--- a/src/libwalletqt/Wallet.cpp
++++ b/src/libwalletqt/Wallet.cpp
+@@ -613,7 +613,7 @@ QString Wallet::getDaemonLogPath() const
+ 
+ QString Wallet::getWalletLogPath() const
+ {
+-    return QCoreApplication::applicationDirPath() + "/monero-wallet-gui.log";
++    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/monero-wallet-gui.log";
+ }
+ 
+ Wallet::Wallet(Monero::Wallet *w, QObject *parent)
