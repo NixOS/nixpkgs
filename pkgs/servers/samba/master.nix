@@ -5,13 +5,13 @@
 
   (samba4.overrideAttrs(oldAttrs: rec {
     name = "samba-master${version}";
-    version = "4.8_2017-12-25";
+    version = "4.8.0_2018-01-25";
 
     src = fetchFromGitHub {
       owner = "samba-team";
       repo = "samba";
-      rev = "8a42954775df6795efa9b5ba5676301d14b3efac";
-      sha256 = "19pdnvs23ny8cbfd119dqv8mc1qbay6c2ibsn0imc9cnl4wdzqdg";
+      rev = "849169a7b6ed0beb78bbddf25537521c1ed2f8e1";
+      sha256 = "1535w787cy1x5ia9arjrg6hhf926wi8wm9qj0k0jgydy3600zpbv";
     };
 
     # Remove unnecessary install flags, same as <4.8 patch
