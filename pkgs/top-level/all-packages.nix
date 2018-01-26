@@ -16097,7 +16097,7 @@ with pkgs;
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  monero = callPackage ../applications/misc/monero { };
+  monero = callPackage ../applications/altcoins/monero { };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     hwloc = hwloc-nox;
