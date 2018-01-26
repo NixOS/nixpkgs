@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+    sed -i data/xdg/com.cataclysmdda.cataclysm-dda.desktop \
+        -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
   '';
 
   makeFlags = [
@@ -31,7 +33,10 @@ stdenv.mkDerivation rec {
     "NATIVE=osx CLANG=1"
   ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T $out/share/applications/cataclysm-dda.desktop
+    install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
