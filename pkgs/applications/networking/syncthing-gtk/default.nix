@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, python2Packages, gobjectIntrospection }:
+{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3, bcrypt, gobjectIntrospection }:
 
-python2Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   version = "0.9.2.7";
   name = "syncthing-gtk-${version}";
 
@@ -24,7 +24,7 @@ python2Packages.buildPythonApplication rec {
     gnome3.gsettings_desktop_schemas
   ];
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [
     dateutil pyinotify pygobject3 bcrypt
   ];
 
