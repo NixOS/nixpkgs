@@ -17343,7 +17343,8 @@ in {
 
     propagatedBuildInputs = with self; [ pkgs.syncthing dateutil pyinotify
       pkgs.libnotify
-      (pkgs.librsvg.override { withGTK = true; })
+      (pkgs.librsvg.override { enableIntrospection = true; })
+      pkgs.gobjectIntrospection
       pkgs.psmisc pygobject3 pkgs.gtk3
     ];
 
