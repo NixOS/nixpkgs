@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, python2Packages }:
+{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, python2Packages, gobjectIntrospection }:
 
 python2Packages.buildPythonApplication rec {
   version = "0.9.2.7";
@@ -11,7 +11,11 @@ python2Packages.buildPythonApplication rec {
     sha256 = "08k7vkibia85klwjxbnzk67h4pphrizka5v9zxwvvv3cisjiclc2";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    # For setup hook populating GI_TYPELIB_PATH
+    gobjectIntrospection
+  ];
 
   buildInputs = [
     gtk3 (librsvg.override { enableIntrospection = true; })
