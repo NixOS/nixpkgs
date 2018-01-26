@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
   ];
 
+  patches = [ ./fd-leak.patch ];
+
   configureFlags = [
     "--sysconfdir=/etc/clamav"
     "--disable-llvm" # enabling breaks the build at the moment
