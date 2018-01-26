@@ -24,9 +24,11 @@ let
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
-    # "patches" array defaults to 'null' to avoid changing hash
-    # and causing mass rebuild
-    inherit patches;
+    # TODO no null hack next mass rebuild
+    patches =
+      if patches == [] && stdenvNoCC.hostPlatform == stdenvNoCC.buildPlatform
+      then null
+      else patches;
 
     # TODO avoid native hack next rebuild
     makeFlags = if stdenvNoCC.hostPlatform == stdenvNoCC.buildPlatform then null else [
