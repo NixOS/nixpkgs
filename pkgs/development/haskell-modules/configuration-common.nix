@@ -637,9 +637,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # tinc is a new build driver a la Stack that's not yet available from Hackage.
-  tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
-
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
