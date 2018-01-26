@@ -139,6 +139,8 @@ stdenv.mkDerivation rec {
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  # Hopefully avoids test timeouts on Hydra
+  GO_TEST_TIMEOUT_SCALE = 3;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
