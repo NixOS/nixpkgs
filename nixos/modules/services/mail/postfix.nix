@@ -15,20 +15,18 @@ let
   haveVirtual = cfg.virtual != "";
 
   clientAccess =
-    if (cfg.dnsBlacklistOverrides != "")
-    then [ "check_client_access hash:/etc/postfix/client_access" ]
-    else [];
+    optional (cfg.dnsBlacklistOverrides != "")
+      "check_client_access hash:/etc/postfix/client_access";
 
   dnsBl =
-    if (cfg.dnsBlacklists != [])
-    then [ (concatStringsSep ", " (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists)) ]
-    else [];
+    optionals (cfg.dnsBlacklists != [])
+      (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists);
 
   clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
 
   mainCf = let
     escape = replaceStrings ["$"] ["$$"];
-    mkList = items: "\n  " + concatStringsSep "\n  " items;
+    mkList = items: "\n  " + concatStringsSep ",\n  " items;
     mkVal = value:
       if isList value then mkList value
         else " " + (if value == true then "yes"
