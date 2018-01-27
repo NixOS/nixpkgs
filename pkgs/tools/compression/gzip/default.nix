@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "16h8g4acy7fgfxcjacr3wijjsnixwsfd2jhz3zwdi2qrzi262l5f";
   };
 
-  patches = stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
-
   outputs = [ "out" "man" "info" ];
 
   enableParallelBuilding = true;
