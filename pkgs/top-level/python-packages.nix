@@ -17533,6 +17533,8 @@ in {
 
   traitlets = callPackage ../development/python-modules/traitlets { };
 
+  transitions = callPackage ../development/python-modules/transitions { };
+
   python_mimeparse = buildPythonPackage rec {
     name = "python-mimeparse-${version}";
     version = "0.1.4";
