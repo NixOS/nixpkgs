@@ -5090,6 +5090,8 @@ in {
   then callPackage ../development/python-modules/gurobipy/linux.nix {}
   else throw "gurobipy not yet supported on ${stdenv.system}";
 
+  hbmqtt = callPackage ../development/python-modules/hbmqtt { };
+
   helper = buildPythonPackage rec {
     pname = "helper";
     version = "2.4.1";
