@@ -155,8 +155,7 @@ stdenv.mkDerivation ({
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}" +
-    lib.optionalString (cross != null) "-${cross.config}";
+  name = name + "-${version}${patchSuffix}";
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
@@ -190,11 +189,6 @@ stdenv.mkDerivation ({
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
     EOF
-
-    export BUILD_CC=gcc
-    export CC="$crossConfig-gcc"
-    export AR="$crossConfig-ar"
-    export RANLIB="$crossConfig-ranlib"
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
