@@ -17070,6 +17070,8 @@ with pkgs;
 
   peru = callPackage ../applications/version-management/peru {};
 
+  pmidi = callPackage ../applications/audio/pmidi { };
+
   printrun = callPackage ../applications/misc/printrun { };
 
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
