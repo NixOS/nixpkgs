@@ -18995,6 +18995,8 @@ with pkgs;
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
+  star = callPackage ../applications/science/biology/star { };
+
   varscan = callPackage ../applications/science/biology/varscan/default.nix { };
 
   bwa = callPackage ../applications/science/biology/bwa/default.nix { };
