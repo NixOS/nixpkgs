@@ -1205,6 +1205,8 @@ with pkgs;
 
   hr = callPackage ../applications/misc/hr { };
 
+  hyx = callPackage ../tools/text/hyx { };
+
   icdiff = callPackage ../tools/text/icdiff {};
 
   interlock = callPackage ../servers/interlock {};
