@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
        --replace "/usr/bin/iodine" "${iodine}/bin/iodine"
   '';
 
+  CFLAGS = [ "-Wno-error=deprecated-declarations" ];
+
   meta = {
     description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers platforms;
