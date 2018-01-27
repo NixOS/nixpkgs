@@ -4,7 +4,7 @@
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped
+, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at_spi2_atk
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -57,7 +57,7 @@ let
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap
+    bzip2 libcap at_spi2_atk
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
