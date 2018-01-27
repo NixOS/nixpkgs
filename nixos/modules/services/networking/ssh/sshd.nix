@@ -257,7 +257,8 @@ in
         service =
           { description = "SSH Daemon";
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
-            after = [ "network.target" ];
+            after = [ "network-online.target" ];
+            requires = [ "network-online.target" ];
             stopIfChanged = false;
             path = [ cfgc.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
