@@ -8038,9 +8038,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = callPackage ../development/tools/mypy {
-    inherit (python3Packages) fetchPypi buildPythonApplication lxml typed-ast;
-  };
+  mypy = python3Packages.callPackage ../development/tools/mypy { };
 
   ### DEVELOPMENT / LIBRARIES
 
