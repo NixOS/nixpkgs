@@ -18719,6 +18719,9 @@ with pkgs;
 
   vdrift = callPackage ../games/vdrift { };
 
+  # To ensure vdrift's code is built on hydra
+  vdrift-bin = vdrift.bin;
+
   vectoroids = callPackage ../games/vectoroids { };
 
   vessel = callPackage_i686 ../games/vessel { };
