@@ -84,8 +84,9 @@ stdenv.mkDerivation {
     #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
-    # Disable fragile linker-output-non-utf8 test
+    # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
+    rm -vr src/test/run-make/issue-26092.rs || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true
