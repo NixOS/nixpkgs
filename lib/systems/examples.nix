@@ -15,7 +15,6 @@ rec {
     float = "soft";
     libc = "glibc";
     platform = platforms.sheevaplug;
-    openssl.system = "linux-generic32";
   };
 
   raspberryPi = rec {
@@ -25,7 +24,6 @@ rec {
     fpu = "vfp";
     libc = "glibc";
     platform = platforms.raspberrypi;
-    openssl.system = "linux-generic32";
   };
 
   armv7l-hf-multiplatform = rec {
@@ -35,7 +33,6 @@ rec {
     fpu = "vfpv3-d16";
     libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
-    openssl.system = "linux-generic32";
   };
 
   aarch64-multiplatform = rec {
@@ -54,12 +51,8 @@ rec {
     arch = "armv5tel";
     config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
-
-    platform = platforms.pogoplug4;
-
     libc = "glibc";
-
-    openssl.system = "linux-generic32";
+    platform = platforms.pogoplug4;
   };
 
   fuloongminipc = rec {
@@ -68,7 +61,6 @@ rec {
     float = "hard";
     libc = "glibc";
     platform = platforms.fuloong2f_n32;
-    openssl.system = "linux-generic32";
   };
 
   #
