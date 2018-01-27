@@ -3,10 +3,10 @@
 , curl, tzdata, gdb, darwin
 , callPackage
 , bootstrapVersion ? false
-, version ? "2.078.0"
-, dmdSha256 ? "1ia4swyq0xqppnpmcalh2yxywdk2gv3kvni2abx1mq6wwqgmwlcr"
-, druntimeSha256 ? "0inyvcjc5qn8277d1zlfvgdgiss86rkjg9mhkw5l31hix8yan372"
-, phobosSha256 ? "1vb5xnysja9l8hvv9gy4c05vihmblz7ga005761jbazxkmlfirj4"
+, version ? "2.078.1"
+, dmdSha256 ? "0b9lphh4g3r9cyzv4wcfppv9j3w952vvwv615za23acgwav3mqg2"
+, druntimeSha256 ? "16jv40m073cflpkyl0vmg1g58cianybfcsgcvwli7pfryxbgsbrr"
+, phobosSha256 ? "08ircpf4ilznz638kra272hz8fi5ccvw2cswj5hqckssl1lyqzs8"
 }:
 
 let
