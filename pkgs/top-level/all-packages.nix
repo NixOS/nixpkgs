@@ -18962,6 +18962,8 @@ with pkgs;
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  muscle = callPackage ../applications/science/biology/muscle/default.nix { };
+
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
   };
