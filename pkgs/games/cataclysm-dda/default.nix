@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, makeWrapper, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
+{ fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
 SDL2_mixer, freetype, gettext, Cocoa, libicns }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "03sdzsk4qdq99qckq0axbsvg1apn6xizscd8pwp5w6kq2fyj5xkv";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     sed -i Makefile \
-      -e 's,-Werror,,g' \
-      -e 's,\(DATA_PREFIX=$(PREFIX)/share/\)cataclysm-dda/,\1,g'
+      -e 's,-Werror,,g'
 
     sed '1i#include <cmath>' \
       -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
@@ -32,6 +31,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+    # "LANGUAGES=all"  # vanilla C:DDA installs all translations even without this flag!
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "NATIVE=osx CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
@@ -42,10 +42,7 @@ stdenv.mkDerivation rec {
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/cataclysm-tiles \
-      --add-flags "--datadir $out/share/"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources

@@ -44,6 +44,10 @@ rec {
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
     mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+    riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
+    riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+    wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
+    wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
   };
 
   isVendor = isType "vendor";

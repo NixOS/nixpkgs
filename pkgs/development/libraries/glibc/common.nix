@@ -127,7 +127,6 @@ stdenv.mkDerivation ({
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (cross != null) [
-      (if cross.withTLS then "--with-tls" else "--without-tls")
       (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
     ] ++ lib.optionals (cross != null) [
       "--with-__thread"
@@ -156,8 +155,7 @@ stdenv.mkDerivation ({
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}" +
-    lib.optionalString (cross != null) "-${cross.config}";
+  name = name + "-${version}${patchSuffix}";
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
@@ -190,14 +188,7 @@ stdenv.mkDerivation ({
     libc_cv_forced_unwind=yes
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
-    # Only due to a problem in gcc configure scripts:
-    libc_cv_sparc64_tls=${if cross.withTLS then "yes" else "no"}
     EOF
-
-    export BUILD_CC=gcc
-    export CC="$crossConfig-gcc"
-    export AR="$crossConfig-ar"
-    export RANLIB="$crossConfig-ranlib"
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";

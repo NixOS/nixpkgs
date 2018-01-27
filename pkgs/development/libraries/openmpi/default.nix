@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran, perl, libibverbs
+{stdenv, fetchurl, gfortran, perl, rdma-core
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran ]
-    ++ optional (stdenv.isLinux || stdenv.isFreeBSD) libibverbs;
+    ++ optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
 

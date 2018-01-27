@@ -212,6 +212,15 @@ in {
     };
   };
 
+  tr = buildDict {
+    shortName = "tr-0.50-0";
+    fullName = "Turkish";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/tr/aspell-tr-0.50-0.tar.bz2;
+      sha256 = "0jpvpm96ga7s7rmsm6rbyrrr22b2dicxv2hy7ysv5y7bbq757ihb";
+    };
+  };
+
   uk = buildDict {
     shortName = "uk-1.4.0-0";
     fullName = "Ukrainian";
