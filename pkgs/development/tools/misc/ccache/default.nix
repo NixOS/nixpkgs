@@ -2,10 +2,10 @@
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchurl {
-    sha256 = "0ks0vk408mdppfbk8v38p46fqx3p30r9a9cwiia43373i7rmpw94";
+    sha256 = "1iih5d171rq29366c1z90dri2h8173yyc8rm2740wxiqx6k7c18r";
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
