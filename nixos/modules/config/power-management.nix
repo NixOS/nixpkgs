@@ -70,7 +70,7 @@ in
   config = mkIf cfg.enable {
 
     # Leftover for old setups, should be set by nixos-generate-config now
-    powerManagement.cpuFreqGovernor = mkDefault "ondemand";
+    powerManagement.cpuFreqGovernor = mkOptionDefault "ondemand";
 
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";
