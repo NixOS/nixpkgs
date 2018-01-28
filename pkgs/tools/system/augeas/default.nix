@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "augeas-${version}";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "http://download.augeas.net/${name}.tar.gz";
-    sha256 = "1yf93fqwav1zsl8dpyfkf0g11w05mmfckqy6qsjy5zkklnspbkv5";
+    sha256 = "04q2hr3xj71rdbjdj3jiygi8dbiq1x4szlyavxj1xjiw9jcgd41a";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libxml2 ];
