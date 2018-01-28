@@ -13200,8 +13200,8 @@ with pkgs;
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
-  mdadm = callPackage ../os-specific/linux/mdadm { };
-  mdadm4 = callPackage ../os-specific/linux/mdadm/4.nix { };
+  mdadm = mdadm4;
+  mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
