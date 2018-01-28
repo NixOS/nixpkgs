@@ -680,6 +680,7 @@
   ThomasMader = "Thomas Mader <thomas.mader@gmail.com>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   thpham = "Thomas Pham <thomas.pham@ithings.ch>";
+  tilpner = "Till Höppner <till@hoeppner.ws>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
   tiramiseb = "Sébastien Maccagnoni <sebastien@maccagnoni.eu>";
