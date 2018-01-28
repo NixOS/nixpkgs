@@ -3208,7 +3208,9 @@ with pkgs;
 
   npm2nix = nodePackages.npm2nix;
 
-  kea = callPackage ../tools/networking/kea { };
+  kea = callPackage ../tools/networking/kea {
+    boost = boost165;
+  };
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
