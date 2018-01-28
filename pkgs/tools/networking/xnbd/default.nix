@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib }:
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, glib, jansson, asciidoc, libxml2, libxslt, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "xnbd-0.3.0";
+  name = "xnbd-0.4.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/${name}.tar.bz2";
-    sha256 = "0jlv6cx85sjn8vjhgzmcs5mz2b6xf18mp0h61v1gl7xkbalw1flb";
+    url = "https://bitbucket.org/hirofuchi/xnbd/downloads/${name}.tgz";
+    sha256 = "00wkvsa0yaq4mabczcbfpj6rjvp02yahw8vdrq8hgb3wpm80x913";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  sourceRoot = "${name}/trunk";
 
-  buildInputs = [ glib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [ glib jansson asciidoc libxml2 libxslt docbook_xml_dtd_45 ];
 
   meta = {
     homepage = https://bitbucket.org/hirofuchi/xnbd;
