@@ -1227,6 +1227,8 @@ with pkgs;
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
+  ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
+
   lynis = callPackage ../tools/security/lynis { };
 
   mathics = pythonPackages.mathics;
