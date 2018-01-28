@@ -9901,6 +9901,8 @@ with pkgs;
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
+  libstemmer = callPackage ../development/libraries/libstemmer { };
+
   libstroke = callPackage ../development/libraries/libstroke { };
 
   libstrophe = callPackage ../development/libraries/libstrophe { };
