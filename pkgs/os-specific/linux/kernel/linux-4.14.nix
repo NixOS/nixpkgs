@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-import ./generic.nix (args // rec {
+buildLinux (args // rec {
   version = "4.14.17";
 
   # branchVersion needs to be x.y

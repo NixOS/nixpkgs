@@ -1,8 +1,8 @@
 { buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+, ncurses ? null
 , libelf
 , utillinux
 , writeTextFile, ubootTools
-, hostPlatform
 }:
 
 let
@@ -34,7 +34,9 @@ in {
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
-  allowImportFromDerivation ? false
+  allowImportFromDerivation ? false,
+
+  hostPlatform
 }:
 
 let
@@ -86,8 +88,6 @@ let
       inherit src;
 
       preUnpack = ''
-        mkdir build
-        export buildRoot="$(pwd)/build"
       '';
 
       patches = map (p: p.patch) kernelPatches;
@@ -102,7 +102,25 @@ let
 
       configurePhase = ''
         runHook preConfigure
+
+        mkdir build
+        export buildRoot="$(pwd)/build"
+
+        echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
+
+        if [[ -z "$buildRoot" || ! -d "$buildRoot" ]]; then
+          echo "set $buildRoot to the build folder please"
+          exit 1
+        fi
+
+        if [ -f "$buildRoot/.config" ]; then
+          echo "Could not link $buildRoot/.config : file exists"
+          exit 1
+        fi
         ln -sv ${configfile} $buildRoot/.config
+
+        # reads the existing .config file and prompts the user for options in
+        # the current kernel source that are not found in the file.
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
@@ -115,6 +133,8 @@ let
 
         # Note: we can get rid of this once http://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
         buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
+
+        cd $buildRoot
       '';
 
       buildFlags = [
@@ -136,7 +156,7 @@ let
 
       postInstall = ''
         mkdir -p $dev
-        cp $buildRoot/vmlinux $dev/
+        cp vmlinux $dev/
       '' + (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
@@ -151,7 +171,7 @@ let
         unlink $out/lib/modules/${modDirVersion}/source
 
         mkdir -p $dev/lib/modules/${modDirVersion}/build
-        cp -dpR ../$sourceRoot $dev/lib/modules/${modDirVersion}/source
+        cp -dpR .. $dev/lib/modules/${modDirVersion}/source
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
@@ -170,7 +190,7 @@ let
         # from drivers/ in the future; it adds 50M to keep all of its
         # headers on 3.10 though.
 
-        chmod u+w -R ../source
+        chmod u+w -R ..
         arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
 
         # Remove unused arches
