@@ -1205,6 +1205,8 @@ with pkgs;
 
   hr = callPackage ../applications/misc/hr { };
 
+  hyx = callPackage ../tools/text/hyx { };
+
   icdiff = callPackage ../tools/text/icdiff {};
 
   interlock = callPackage ../servers/interlock {};
@@ -2105,7 +2107,7 @@ with pkgs;
 
     cloudpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-cloudpinyin { };
 
-    libpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-libpinyin { };
+    libpinyin = libsForQt5.callPackage ../tools/inputmethods/fcitx-engines/fcitx-libpinyin { };
 
     skk = callPackage ../tools/inputmethods/fcitx-engines/fcitx-skk { };
   };
@@ -3206,7 +3208,9 @@ with pkgs;
 
   npm2nix = nodePackages.npm2nix;
 
-  kea = callPackage ../tools/networking/kea { };
+  kea = callPackage ../tools/networking/kea {
+    boost = boost165;
+  };
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
@@ -4327,6 +4331,8 @@ with pkgs;
 
   rc = callPackage ../shells/rc { };
 
+  rdma-core = callPackage ../os-specific/linux/rdma-core { };
+
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
   redir = callPackage ../tools/networking/redir { };
@@ -5363,10 +5369,8 @@ with pkgs;
           # Ben Nanonote system
           crossSystem = {
             config = crossPrefix;
-            bigEndian = true;
             arch = "mips";
             float = "soft";
-            withTLS = true;
             libc = "uclibc";
             platform = {
               name = "ben_nanonote";
@@ -7963,7 +7967,9 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
-  uhd = callPackage ../development/tools/misc/uhd { };
+  uhd = callPackage ../development/tools/misc/uhd {
+    boost = boost165;
+  };
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
@@ -8040,9 +8046,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = callPackage ../development/tools/mypy {
-    inherit (python3Packages) fetchPypi buildPythonApplication lxml typed-ast;
-  };
+  mypy = python3Packages.callPackage ../development/tools/mypy { };
 
   ### DEVELOPMENT / LIBRARIES
 
@@ -9900,6 +9904,8 @@ with pkgs;
   libssh2 = callPackage ../development/libraries/libssh2 { };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
+
+  libstemmer = callPackage ../development/libraries/libstemmer { };
 
   libstroke = callPackage ../development/libraries/libstroke { };
 
@@ -12255,6 +12261,7 @@ with pkgs;
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
+  prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
@@ -12264,6 +12271,7 @@ with pkgs;
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
+  prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
@@ -12333,8 +12341,9 @@ with pkgs;
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    # enableLDAP
   };
+
+  sambaMaster = callPackage ../servers/samba/master.nix { };
 
   samba = samba4;
 
@@ -13205,8 +13214,8 @@ with pkgs;
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
-  mdadm = callPackage ../os-specific/linux/mdadm { };
-  mdadm4 = callPackage ../os-specific/linux/mdadm/4.nix { };
+  mdadm = mdadm4;
+  mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
@@ -14027,6 +14036,11 @@ with pkgs;
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
   ttf-envy-code-r = callPackage ../data/fonts/ttf-envy-code-r {};
+
+  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
+    inherit (nodePackages) svgo;
+    inherit (pythonPackages) scfbuild;
+  };
 
   tzdata = callPackage ../data/misc/tzdata { };
 
@@ -15081,6 +15095,8 @@ with pkgs;
 
   gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
 
+  goxel = callPackage ../applications/graphics/goxel { };
+
   gpa = callPackage ../applications/misc/gpa { };
 
   gpicview = callPackage ../applications/graphics/gpicview {
@@ -15219,6 +15235,8 @@ with pkgs;
     };
 
   flac = callPackage ../applications/audio/flac { };
+
+  flameshot = libsForQt5.callPackage ../tools/misc/flameshot { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer {
     debug = config.flashplayer.debug or false;
@@ -15527,6 +15545,7 @@ with pkgs;
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
+  hledger-ui = haskell.lib.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web = haskell.lib.justStaticExecutables haskellPackages.hledger-web;
 
   homebank = callPackage ../applications/office/homebank {
@@ -16044,6 +16063,8 @@ with pkgs;
 
   meld = callPackage ../applications/version-management/meld { };
 
+  meme = callPackage ../applications/graphics/meme { };
+
   mcomix = callPackage ../applications/graphics/mcomix { };
 
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
@@ -16111,7 +16132,9 @@ with pkgs;
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  monero = callPackage ../applications/misc/monero { };
+  monero = callPackage ../applications/altcoins/monero { };
+
+  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui { };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     hwloc = hwloc-nox;
@@ -18716,6 +18739,9 @@ with pkgs;
 
   vdrift = callPackage ../games/vdrift { };
 
+  # To ensure vdrift's code is built on hydra
+  vdrift-bin = vdrift.bin;
+
   vectoroids = callPackage ../games/vectoroids { };
 
   vessel = callPackage_i686 ../games/vessel { };
@@ -18959,6 +18985,8 @@ with pkgs;
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  muscle = callPackage ../applications/science/biology/muscle/default.nix { };
+
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
   };
@@ -18988,6 +19016,8 @@ with pkgs;
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
+
+  star = callPackage ../applications/science/biology/star { };
 
   varscan = callPackage ../applications/science/biology/varscan/default.nix { };
 

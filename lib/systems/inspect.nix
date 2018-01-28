@@ -5,8 +5,6 @@ with lib.lists;
 
 rec {
   patterns = rec {
-    "32bit"      = { cpu = { bits = 32; }; };
-    "64bit"      = { cpu = { bits = 64; }; };
     i686         = { cpu = cpuTypes.i686; };
     x86_64       = { cpu = cpuTypes.x86_64; };
     PowerPC      = { cpu = cpuTypes.powerpc; };
@@ -14,6 +12,11 @@ rec {
     Arm          = { cpu = { family = "arm"; }; };
     Aarch64      = { cpu = { family = "aarch64"; }; };
     Mips         = { cpu = { family = "mips"; }; };
+    RiscV        = { cpu = { family = "riscv"; }; };
+    Wasm         = { cpu = { family = "wasm"; }; };
+
+    "32bit"      = { cpu = { bits = 32; }; };
+    "64bit"      = { cpu = { bits = 64; }; };
     BigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     LittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 

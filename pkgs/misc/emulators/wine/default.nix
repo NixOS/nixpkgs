@@ -57,7 +57,9 @@ let wine-build = build: release:
 
 in if wineRelease == "staging" then
   let wineUnstable = wine-build wineBuild "unstable"; in
-    builtins.trace "WARNING: wine staging is not yet at 3.0, using unstable" ( wineUnstable )
+    # wine staging is not yet at 3.0, using unstable
+    # FIXME update winestaging sources
+    wineUnstable
     # callPackage ./staging.nix {
     #   inherit libtxc_dxtn_Name wineUnstable;
     # }

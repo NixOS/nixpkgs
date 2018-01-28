@@ -610,6 +610,7 @@
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schneefux = "schneefux <schneefux+nixos_pkg@schneefux.xyz>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
+  scode = "Peter Schuller <peter.schuller@infidyne.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sdll = "Sasha Illarionov <sasha.delly@gmail.com>";
   SeanZicari = "Sean Zicari <sean.zicari@gmail.com>";
@@ -679,6 +680,7 @@
   ThomasMader = "Thomas Mader <thomas.mader@gmail.com>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   thpham = "Thomas Pham <thomas.pham@ithings.ch>";
+  tilpner = "Till Höppner <till@hoeppner.ws>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
   tiramiseb = "Sébastien Maccagnoni <sebastien@maccagnoni.eu>";
@@ -698,6 +700,7 @@
   tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
   tweber = "Thorsten Weber <tw+nixpkgs@360vier.de>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
+  unode = "Renato Alves <alves.rjc@gmail.com>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012

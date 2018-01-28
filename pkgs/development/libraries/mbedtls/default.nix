@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-2.6.0";
+  name = "mbedtls-2.6.1";
 
-  src = fetchurl {
-    url = "https://tls.mbed.org/download/${name}-gpl.tgz";
-    sha256 = "042q1l4708zjn5v72sa9qdvgx173kmy4hbcd23wj5vqd6vbmk6d9";
+  src = fetchFromGitHub {
+    owner = "ARMmbed";
+    repo = "mbedtls";
+    rev = name;
+    sha256 = "0d421w9bz4p1nw6kza3licv2w97y1364mcpb4fxvpgdqz48rc1vg";
   };
 
   nativeBuildInputs = [ perl ];

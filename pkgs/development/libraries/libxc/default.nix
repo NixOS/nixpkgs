@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
     description = "Library of exchange-correlation functionals for density-functional theory";
     homepage = http://octopus-code.org/wiki/Libxc;
     license = licenses.lgpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markuskowa ];
   };
 }
