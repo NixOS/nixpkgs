@@ -610,6 +610,7 @@
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schneefux = "schneefux <schneefux+nixos_pkg@schneefux.xyz>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
+  scode = "Peter Schuller <peter.schuller@infidyne.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sdll = "Sasha Illarionov <sasha.delly@gmail.com>";
   SeanZicari = "Sean Zicari <sean.zicari@gmail.com>";
