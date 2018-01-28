@@ -16038,6 +16038,8 @@ with pkgs;
     flavour = "git";
   };
 
+  looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
+
   lumail = callPackage ../applications/networking/mailreaders/lumail { };
 
   lv2bm = callPackage ../applications/audio/lv2bm { };
