@@ -3614,6 +3614,7 @@ with pkgs;
   nawk = callPackage ../tools/text/nawk { };
 
   nbd = callPackage ../tools/networking/nbd { };
+  xnbd = callPackage ../tools/networking/xnbd { };
 
   nccl = callPackage ../development/libraries/science/math/nccl {
     cudatoolkit = cudatoolkit8;
