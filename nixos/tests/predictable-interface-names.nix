@@ -1,9 +1,12 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem
+, pkgs ? import ../.. { inherit system; }
+}:
 with import ../lib/testing.nix { inherit system; };
 let boolToString = x: if x then "yes" else "no"; in
 let testWhenSetTo = predictable: withNetworkd:
 makeTest {
   name = "predictableInterfaceNames-${boolToString predictable}-with-networkd-${boolToString withNetworkd}";
+  meta = {};
 
   machine = { config, pkgs, ... }: {
     networking.usePredictableInterfaceNames = pkgs.stdenv.lib.mkForce predictable;
@@ -17,4 +20,8 @@ makeTest {
     $machine->fail("ip link show ${if predictable then "eth0" else "ens3"}");
   '';
 }; in
-map (f: map f [true false]) (map testWhenSetTo [ true false ])
+with pkgs.stdenv.lib.lists;
+with pkgs.stdenv.lib.attrsets;
+listToAttrs (map (drv: nameValuePair drv.name drv) (
+crossLists testWhenSetTo [[true false] [true false]]
+))
