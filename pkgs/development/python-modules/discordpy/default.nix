@@ -1,22 +1,27 @@
 { lib
-, fetchurl
-, buildPythonPackage
-, pythonOlder
+, python
 , withVoice ? true, libopus
-, asyncio
-, aiohttp
-, websockets
-, pynacl
 }:
 
 let
+  py = python.override {
+    packageOverrides = self: super: {
+      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1idwcdxd36q7ks5w1yjgg15d2sw81kg2lvk4dx60l06h3psvkra3";
+        };
+      });
+    };
+  };
+
+in with py.pkgs; buildPythonPackage rec {
   pname = "discord.py";
   version = "0.16.12";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "17fb8814100fbaf7a79468baa432184db6cef3bbea4ad194fe297c7407d50108";
   };
 
