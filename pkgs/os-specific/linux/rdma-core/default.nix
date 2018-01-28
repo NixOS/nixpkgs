@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, ethtool, libnl, libudev, python, perl
+, ethtool, nettools, libnl, libudev, python, perl
 } :
 
 let
@@ -16,10 +16,13 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libnl ethtool libudev python perl ];
+  buildInputs = [ libnl ethtool nettools libudev python perl ];
 
-  postFixup = ''
-    substituteInPlace $out/bin/rxe_cfg --replace ethtool "${ethtool}/bin/ethtool"
+  postPatch = ''
+    substituteInPlace providers/rxe/rxe_cfg.in \
+      --replace '@CMAKE_INSTALL_FULL_SHAREDSTATEDIR@' '/run' \
+      --replace ethtool "${ethtool}/bin/ethtool" \
+      --replace ifconfig "${nettools}/bin/ifconfig"
   '';
 
   meta = with stdenv.lib; {
