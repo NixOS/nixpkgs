@@ -61,7 +61,7 @@ let
 
     installFlags = "sysconfdir=$(out)/etc";
 
-    doInstallCheck = hostPlatform == buildPlatform;
+    doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
     preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
