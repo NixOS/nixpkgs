@@ -22323,6 +22323,8 @@ EOF
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
+  pulp  = callPackage ../development/python-modules/pulp { };
+
   behave = callPackage ../development/python-modules/behave { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
