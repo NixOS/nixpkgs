@@ -45,6 +45,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }
