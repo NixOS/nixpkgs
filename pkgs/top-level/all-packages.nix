@@ -17224,6 +17224,8 @@ with pkgs;
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
 
+  syncthing-gtk = callPackage ../applications/networking/syncthing-gtk { pythonPackages = python2Packages; };
+
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   # linux only by now
