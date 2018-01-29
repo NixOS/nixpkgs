@@ -6,7 +6,7 @@
 , callPackage
 }:
 
-{ stdenv, buildPackages, perl, buildLinux
+{ stdenv, stdenvNoCC, buildPackages, perl, buildLinux
 
 , # The kernel source tarball.
   src
@@ -66,7 +66,9 @@ let
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
-  configfile = stdenv.mkDerivation {
+  # Use stdNoCC as we don't need a C compiler here; moreover, we otherwise
+  # run into hook issues. See #34366.
+  configfile = stdenvNoCC.mkDerivation {
     inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 
