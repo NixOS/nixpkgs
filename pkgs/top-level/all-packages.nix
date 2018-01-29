@@ -7780,6 +7780,8 @@ with pkgs;
 
   pprof = callPackage ../development/tools/profiling/pprof { };
 
+  pyprof2calltree = callPackage ../development/tools/profiling/pyprof2calltree { };
+
   prelink = callPackage ../development/tools/misc/prelink { };
 
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
