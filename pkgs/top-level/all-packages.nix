@@ -386,6 +386,8 @@ with pkgs;
 
   acbuild = callPackage ../applications/misc/acbuild { };
 
+  acc = callPackage ../games/zdoom/acc.nix { };
+
   acct = callPackage ../tools/system/acct { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
