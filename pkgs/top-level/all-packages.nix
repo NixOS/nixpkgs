@@ -14977,7 +14977,9 @@ with pkgs;
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
 
-  keepass = callPackage ../applications/misc/keepass { };
+  keepass = callPackage ../applications/misc/keepass { 
+    buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
+  };
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
