@@ -1397,24 +1397,7 @@ in {
     };
   };
 
-  colorlog = buildPythonPackage rec {
-    name = "colorlog-${version}";
-    version = "2.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorlog/${name}.tar.gz";
-      sha256 = "0djv6ky1yk28s1l093w8plg19kp88q4nyrm1vfxyq0s9j4pix29l";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      description = "Log formatting with colors";
-      homepage = https://github.com/borntyping/python-colorlog;
-      license = licenses.free; # BSD-like
-    };
-  };
+  colorlog = callPackage ../development/python-modules/colorlog { };
 
   colour = buildPythonPackage rec {
     name = "${pname}-${version}";
