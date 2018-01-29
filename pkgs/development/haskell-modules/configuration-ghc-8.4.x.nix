@@ -41,4 +41,9 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
+  hspec = dontCheck super.hspec_2_4_7;        # test suite causes an infinite loop
+  test-framework = self.test-framework_0_8_2_0;
+
 }
