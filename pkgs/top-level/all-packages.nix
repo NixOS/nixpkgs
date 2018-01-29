@@ -12974,6 +12974,7 @@ with pkgs;
     callPackage = newScope self;
 
     inherit kernel;
+    stdenv = overrideCC pkgs.stdenv kernel.buildCc;
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
