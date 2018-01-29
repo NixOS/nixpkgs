@@ -75,7 +75,9 @@ stdenv.mkDerivation rec {
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional (stdenv.hostPlatform.libc != "glibc") "--with-libiconv=gnu"
+    # glibc inclues GNU libiconv, but Darwin's iconv function is good enonugh.
+    ++ optional (stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isDarwin)
+      "--with-libiconv=gnu"
     ++ optional stdenv.isSunOS "--disable-dtrace"
     # Can't run this test when cross-compiling
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
