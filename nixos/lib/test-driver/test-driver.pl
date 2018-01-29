@@ -158,6 +158,25 @@ sub runTests {
     }
 }
 
+sub record {
+    my ($name, $display) = @_;
+
+    my $n;
+    for ($n  = 899; $n >=0; $n--) {
+        $log->log("waiting for vnc for $name on display $display");
+        last if system("nc -z 127.0.0.1 590$display") == 0;
+        sleep 1;
+    }
+
+    $log->log("starting recording for $name on display $display");
+    my $recording = Cwd::abs_path "./$name-$display.flv";
+
+    my $pid = fork(); die "cannot fork" unless defined $pid;
+    if ($pid == 0) {
+        exec "flvrec.py -o $recording 127.0.0.1 590$display" or _exit(1);
+    }
+    die unless -e "$recording";
+}
 
 # Create an empty raw virtual disk with the given name and size (in
 # MiB).
