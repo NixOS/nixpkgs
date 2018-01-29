@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 , ApplicationServices
@@ -15,7 +15,7 @@ let
 
   cfg = {
     version = "7.0.7-22";
-    sha256 = "12c48cfhc2a3zvhgxdywrfy8b4m2vx85vn2qj69iyni5x849xpj9";
+    sha256 = "1ad7mwx48xrkvm3v060n2f67kmi0qk7gfql1shiwbkkjvzzaaiam";
     patches = [];
   };
 in
@@ -24,13 +24,10 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
   inherit (cfg) version;
 
-  src = fetchurl {
-    urls = [
-      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
-      # the original source above removes tarballs quickly
-      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
-      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
-    ];
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick";
+    rev = cfg.version;
     inherit (cfg) sha256;
   };
 
