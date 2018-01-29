@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, withDoc ? true, sphinx
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   patches = [ ./search-path-3.9.patch ]
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" ];
+  outputs = [ "out" "man" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ setupHook pkgconfig ]
     ++ optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ optional withDoc sphinx
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4
     ++ optional withQt5 qtbase;
@@ -67,6 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--docdir=share/doc/${name}" ]
+    ++ optional withDoc "--sphinx-man"
     ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ optional (useQt4 || withQt5) "--qt-gui"
     ++ optionals (!useNcurses) [ "--" "-DBUILD_CursesDialog=OFF" ];

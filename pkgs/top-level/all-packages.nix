@@ -7367,6 +7367,7 @@ with pkgs;
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
     inherit (darwin) ps;
+    inherit (python3Packages) sphinx;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
