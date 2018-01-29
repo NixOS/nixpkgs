@@ -1227,6 +1227,8 @@ with pkgs;
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
+  ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
+
   lynis = callPackage ../tools/security/lynis { };
 
   mathics = pythonPackages.mathics;
@@ -17107,6 +17109,8 @@ with pkgs;
 
   peru = callPackage ../applications/version-management/peru {};
 
+  pmidi = callPackage ../applications/audio/pmidi { };
+
   printrun = callPackage ../applications/misc/printrun { };
 
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
@@ -17225,6 +17229,8 @@ with pkgs;
   syncthing012 = callPackage ../applications/networking/syncthing012 { };
 
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
+
+  syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
 
