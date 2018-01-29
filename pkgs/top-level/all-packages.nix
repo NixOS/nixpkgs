@@ -8363,7 +8363,9 @@ with pkgs;
 
   grib-api = callPackage ../development/libraries/grib-api { };
 
-  grpc = callPackage ../development/libraries/grpc { };
+  grpc = callPackage ../development/libraries/grpc {
+    protobuf = protobuf3_4;
+  };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
@@ -10156,6 +10158,7 @@ with pkgs;
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
   protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
+  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
