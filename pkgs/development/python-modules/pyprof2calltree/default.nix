@@ -16,5 +16,6 @@ buildPythonApplication rec {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
     homepage = https://pypi.python.org/pypi/pyprof2calltree/;
     license = licenses.mit;
+    maintainer = sfrijters;
   };
 }
