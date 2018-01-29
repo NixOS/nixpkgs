@@ -7780,7 +7780,7 @@ with pkgs;
 
   pprof = callPackage ../development/tools/profiling/pprof { };
 
-  pyprof2calltree = callPackage ../development/tools/profiling/pyprof2calltree { };
+  pyprof2calltree = pythonPackages.callPackage ../development/tools/profiling/pyprof2calltree { };
 
   prelink = callPackage ../development/tools/misc/prelink { };
 
