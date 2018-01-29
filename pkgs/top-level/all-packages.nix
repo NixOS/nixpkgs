@@ -13159,7 +13159,10 @@ with pkgs;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
-  buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
+  buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {
+    # Build kernel with gcc 7.3.0 (or later) to have a retpoline enabled compiler.
+    buildPackages = buildPackages // { stdenv = overrideCC buildPackages.stdenv gcc7; };
+  });
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
