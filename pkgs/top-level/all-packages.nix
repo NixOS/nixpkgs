@@ -5231,7 +5231,7 @@ with pkgs;
 
   unrar = callPackage ../tools/archivers/unrar { };
 
-  xar = callPackage ../tools/compression/xar { };
+  xar = callPackage ../tools/compression/xar { openssl = openssl_1_0_2; };
 
   xarchive = callPackage ../tools/archivers/xarchive { };
 
