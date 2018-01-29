@@ -5,7 +5,7 @@ with import ../lib/testing.nix { inherit system; };
 let boolToString = x: if x then "yes" else "no"; in
 let testWhenSetTo = predictable: withNetworkd:
 makeTest {
-  name = "predictableInterfaceNames-${boolToString predictable}-with-networkd-${boolToString withNetworkd}";
+  name = "${if predictable then "" else "un"}predictableInterfaceNames${if withNetworkd then "-with-networkd" else ""}";
   meta = {};
 
   machine = { config, pkgs, ... }: {
