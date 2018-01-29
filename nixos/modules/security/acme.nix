@@ -6,7 +6,7 @@ let
 
   cfg = config.security.acme;
 
-  certOpts = { ... }: {
+  certOpts = { name, ... }: {
     options = {
       webroot = mkOption {
         type = types.str;
@@ -20,8 +20,8 @@ let
       };
 
       domain = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
+        default = name;
         description = "Domain to fetch certificate for (defaults to the entry name)";
       };
 
@@ -48,8 +48,38 @@ let
         default = false;
         description = ''
           Give read permissions to the specified group
-          (<option>security.acme.group</option>) to read SSL private certificates.
+          (<option>security.acme.cert.<name>.group</option>) to read SSL private certificates.
         '';
+      };
+
+      systemd = mkOption {
+        description = "submodule example";
+        default = {};
+        type = with types; submodule {
+          options = {
+
+            reload = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "postfix.service" ];
+              description = ''
+                A list of systemd services which are `reloaded` after certificates are re-issued.
+                A service is only `reloaded` once, even when mentioned serveral times in this list.
+                It is not reloaded if it is also listed in the `systemd.restart` list, then it is only restarted.
+              '';
+            };
+            
+            restart = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "postfix.service" ];
+              description = ''
+                A list of systemd services which are `restarted` after certificates are re-issued.
+                A service is only `restarted` once, even when mentioned serveral times in this list.
+              '';
+            };
+          };
+        };
       };
 
       postRun = mkOption {
@@ -60,6 +90,7 @@ let
           Commands to run after certificates are re-issued. Typically
           the web server and other servers using certificates need to
           be reloaded.
+          To avoid multiple restart/reloads of a single service better use `systemd.reload` or `systemd.restart` option instead of `postRun`.
         '';
       };
 
@@ -87,7 +118,7 @@ let
           }
         '';
         description = ''
-          Extra domain names for which certificates are to be issued, with their
+          A list of extra domain names, which are included in the one certificate to be issued, with their
           own server roots if needed.
         '';
       };
@@ -164,6 +195,7 @@ in
       certs = mkOption {
         default = { };
         type = with types; attrsOf (submodule certOpts);
+
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
@@ -193,10 +225,11 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                domain = if data.domain != null then data.domain else cert;
+                restartJobs = lib.unique data.systemd.restart;
+                reloadJobs = lib.subtractLists restartJobs (lib.unique data.systemd.reload);
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
+                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
@@ -240,6 +273,8 @@ in
                     if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
                       echo "Executing postRun hook..."
                       ${data.postRun}
+                      ${concatStringsSep "\n" (map (x: "systemctl restart " + x) restartJobs)}
+                      ${concatStringsSep "\n" (map (x: "systemctl reload " + x) reloadJobs)}
                     fi
                   '';
 
