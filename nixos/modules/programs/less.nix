@@ -28,24 +28,6 @@ let
             { src = pkgs.writeText "lessconfig" configFile; }
             "${pkgs.less}/bin/lesskey -o $out $src";
 
-  lessPipe = pkgs.writeScriptBin "lesspipe.sh" ''
-    #! /bin/sh
-    case "$1" in
-    *.gz)
-        ${pkgs.gzip}/bin/gunzip --stdout "$1" 2>/dev/null
-        ;;
-    *.xz)
-        ${pkgs.xz}/bin/unxz --stdout "$1" 2>/dev/null
-        ;;
-    *.bz2)
-        ${pkgs.bzip2}/bin/bunzip2 --stdout "$1" 2>/dev/null
-        ;;
-    *)  exit 1
-        ;;
-    esac
-    exit $?
-  '';
-
 in
 
 {
@@ -93,11 +75,19 @@ in
         description = "Defines environment variables.";
       };
 
-      autoExtract = mkOption {
-        type = types.bool;
-        default = true;
+      lessopen = mkOption {
+        type = types.nullOr types.str;
+        default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
         description = ''
-          When enabled less automatically extracts .gz .xz .bz2 files before reading them.
+          Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
+        '';
+      };
+
+      lessclose = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          When less closes a file opened in such a way, it will call another program, called the input postprocessor, which may  perform  any  desired  clean-up  action (such  as deleting the replacement file created by LESSOPEN).
         '';
       };
     };
@@ -107,8 +97,13 @@ in
 
     environment.systemPackages = [ pkgs.less ];
 
-    environment.variables."LESSKEY_SYSTEM" = toString lessKey;
-    environment.variables."LESSOPEN" = "|${lessPipe}/bin/lesspipe.sh %s";
+    environment.variables = {
+      "LESSKEY_SYSTEM" = toString lessKey;
+    } // optionalAttrs (cfg.lessopen != null) {
+      "LESSOPEN" = cfg.lessopen;
+    } // optionalAttrs (cfg.lessclose != null) {
+      "LESSCLOSE" = cfg.lessclose;
+    };
 
     warnings = optional (
       cfg.clearDefaultCommands && (all (x: x != "quit") (attrValues cfg.commands))
