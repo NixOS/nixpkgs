@@ -1,7 +1,6 @@
 { lib, buildPythonApplication, fetchPypi }:
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "pyprof2calltree";
   version = "1.4.3";
 
