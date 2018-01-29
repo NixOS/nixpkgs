@@ -2695,7 +2695,6 @@ extra-packages:
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hoogle == 5.0.14                    # required by hie-hoogle
-  - hpack == 0.20.*                     # required by stack-1.6.1
   - inline-c < 0.6                      # required on GHC 8.0.x
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
   - language-c == 0.7.0                 # required by c2hs hack to work around https://github.com/haskell/c2hs/issues/192.
