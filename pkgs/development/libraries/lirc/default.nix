@@ -2,11 +2,11 @@
 , libxslt, systemd, libusb, libftdi1 }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.10.0";
+  name = "lirc-0.10.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/lirc/${name}.tar.bz2";
-    sha256 = "0lzmqcw0sc28s19yd4bqvl52p4f77razq50w7z92a4xrn7l2sz75";
+    sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
 
   postPatch = ''
