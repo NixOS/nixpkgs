@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi }:
+{ lib, buildPythonApplication, fetchPypi, setuptools, python }:
 
 buildPythonApplication rec {
   pname = "pyprof2calltree";
@@ -9,7 +9,11 @@ buildPythonApplication rec {
     sha256 = "38a0774f7716d5303d4c57ff89ec24258154942666e4404558f6ac10f8bb1e52";
   };
 
-  doCheck = false;
+  checkInputs = [ setuptools ];
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s test
+  '';
+#  doCheck = false;
 
   meta = with lib; {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
