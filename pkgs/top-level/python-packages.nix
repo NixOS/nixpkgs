@@ -18664,11 +18664,11 @@ EOF
   persistent = callPackage ../development/python-modules/persistent {};
 
   xdot = buildPythonPackage rec {
-    name = "xdot-0.7";
+    name = "xdot-0.9";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xdot/xdot-0.7.tar.gz";
-      sha256 = "1q0f3pskb09saw1qkd2s6vmk80rq5zjhq8l93dfr2x6r04r0q46j";
+      url = "mirror://pypi/x/xdot/${name}.tar.gz";
+      sha256 = "01v9vmgdxz1q2m2vq2b4aqx4ycw7grc0l4is673ygvyg9rk02dx3";
     };
 
     nativeBuildInputs = with pkgs; [ wrapGAppsHook ];
