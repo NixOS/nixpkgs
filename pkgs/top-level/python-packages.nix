@@ -9553,6 +9553,10 @@ in {
   mozversion = callPackage ../development/python-modules/marionette-harness/mozversion.nix {};
   marionette-harness = callPackage ../development/python-modules/marionette-harness {};
 
+  marisa = callPackage ../development/python-modules/marisa {
+    marisa = pkgs.marisa;
+  };
+
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
     version = "1.0";
