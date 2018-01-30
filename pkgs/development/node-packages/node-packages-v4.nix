@@ -886,13 +886,13 @@ let
         sha1 = "590c61156b0ae2f4f0255732a158b266bc56b21d";
       };
     };
-    "encodeurl-1.0.1" = {
+    "encodeurl-1.0.2" = {
       name = "encodeurl";
       packageName = "encodeurl";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.1.tgz";
-        sha1 = "79e3d58655346909fe6f0f45a5de68103b294d20";
+        url = "https://registry.npmjs.org/encodeurl/-/encodeurl-1.0.2.tgz";
+        sha1 = "ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59";
       };
     };
     "end-of-stream-0.1.5" = {
@@ -1354,13 +1354,13 @@ let
         sha1 = "d9c8edde1da79d125a151b79533b978676346ae5";
       };
     };
-    "glogg-1.0.0" = {
+    "glogg-1.0.1" = {
       name = "glogg";
       packageName = "glogg";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/glogg/-/glogg-1.0.0.tgz";
-        sha1 = "7fe0f199f57ac906cf512feead8f90ee4a284fc5";
+        url = "https://registry.npmjs.org/glogg/-/glogg-1.0.1.tgz";
+        sha512 = "0vr9sdx0f84b9s5vy72ralm494844c0p9kqqgcvy25gcn9abv57y7hwwafdsswc3z283v8bqa50j8gp740dd4biyngi5f15p9f2lxna";
       };
     };
     "graceful-fs-1.2.3" = {
@@ -4150,7 +4150,7 @@ in
           })
           (sources."gulplog-1.0.0" // {
             dependencies = [
-              (sources."glogg-1.0.0" // {
+              (sources."glogg-1.0.1" // {
                 dependencies = [
                   sources."sparkles-1.0.0"
                 ];
@@ -5338,7 +5338,7 @@ in
           sources."cookie-0.3.1"
           sources."cookie-signature-1.0.6"
           sources."depd-1.1.2"
-          sources."encodeurl-1.0.1"
+          sources."encodeurl-1.0.2"
           sources."escape-html-1.0.3"
           sources."etag-1.8.1"
           (sources."finalhandler-1.1.0" // {

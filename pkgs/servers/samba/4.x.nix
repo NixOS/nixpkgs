@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./4.x-no-persistent-install.patch
       ./patch-source3__libads__kerberos_keytab.c.patch
+      ./4.x-no-persistent-install-dynconfig.patch
     ];
 
   buildInputs =

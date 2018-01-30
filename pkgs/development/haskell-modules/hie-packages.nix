@@ -72,6 +72,8 @@ in
          doCheck = false;
          description = "Simple interface to some of Cabal's configuration state, mainly used by ghc-mod";
          license = stdenv.lib.licenses.agpl3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
     ghc-dump-tree_hie = callPackage
       ({ mkDerivation, aeson, base, bytestring, ghc, optparse-applicative
@@ -95,6 +97,8 @@ in
          homepage = "https://github.com/edsko/ghc-dump-tree";
          description = "Dump GHC's parsed, renamed, and type checked ASTs";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
     ghc-mod-core = callPackage
       ({ mkDerivation, base, binary, bytestring, Cabal, cabal-helper
@@ -124,6 +128,8 @@ in
          homepage = "https://github.com/DanielG/ghc-mod";
          description = "Happy Haskell Hacking";
          license = stdenv.lib.licenses.agpl3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit cabal-helper; };
     ghc-mod_hie = callPackage
       ({ mkDerivation, base, binary, bytestring, Cabal, cabal-doctest
@@ -173,6 +179,8 @@ in
          homepage = "https://github.com/DanielG/ghc-mod";
          description = "Happy Haskell Hacking";
          license = stdenv.lib.licenses.agpl3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { shelltest = null; inherit cabal-helper; };
     HaRe_hie = callPackage
       ({ mkDerivation, attoparsec, base, base-prelude, Cabal, cabal-helper
@@ -211,6 +219,8 @@ in
          homepage = "https://github.com/RefactoringTools/HaRe/wiki";
          description = "the Haskell Refactorer";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit cabal-helper; };
     ### hie packages
     haskell-ide-engine = callPackage
@@ -266,6 +276,8 @@ in
          homepage = "http://github.com/githubuser/haskell-ide-engine#readme";
          description = "Provide a common engine to power any Haskell IDE";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
       }) { inherit hoogle; hoogleLocal = (self.hoogleLocal {}).override { inherit hoogle; }; };
     hie-apply-refact = callPackage
       ({ mkDerivation, aeson, apply-refact, base, either, extra, ghc-mod
@@ -283,6 +295,8 @@ in
          ];
          description = "Haskell IDE Apply Refact plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-mod; };
     hie-base = callPackage
       ({ mkDerivation, aeson, base, haskell-lsp, text }:
@@ -294,6 +308,8 @@ in
          libraryHaskellDepends = [ aeson base haskell-lsp text ];
          description = "Haskell IDE API base types";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
     hie-brittany = callPackage
       ({ mkDerivation, aeson, base, brittany, ghc-mod, ghc-mod-core
@@ -310,6 +326,8 @@ in
          ];
          description = "Haskell IDE Hoogle plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-mod; };
     hie-build-plugin = callPackage
       ({ mkDerivation, aeson, base, bytestring, Cabal, cabal-helper
@@ -328,6 +346,8 @@ in
          ];
          description = "Haskell IDE build plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit cabal-helper; };
     hie-eg-plugin-async = callPackage
       ({ mkDerivation, base, ghc-mod-core, hie-plugin-api, stm
@@ -343,6 +363,8 @@ in
          ];
          description = "Haskell IDE example plugin, using async processes";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
     hie-example-plugin2 = callPackage
       ({ mkDerivation, base, hie-plugin-api, text }:
@@ -354,6 +376,8 @@ in
          libraryHaskellDepends = [ base hie-plugin-api text ];
          description = "Haskell IDE example plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
     hie-ghc-mod = callPackage
       ({ mkDerivation, aeson, base, containers, ghc, ghc-mod, ghc-mod-core
@@ -370,6 +394,8 @@ in
          ];
          description = "Haskell IDE ghc-mod plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-mod; };
     hie-ghc-tree = callPackage
       ({ mkDerivation, aeson, base, ghc-dump-tree, ghc-mod, ghc-mod-core
@@ -386,6 +412,8 @@ in
          ];
          description = "Haskell IDE GHC Tree plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-dump-tree ghc-mod; };
     hie-haddock = callPackage
       ({ mkDerivation, aeson, base, containers, directory, either
@@ -407,6 +435,8 @@ in
          ];
          description = "Haskell IDE Haddock plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit haddock-library HaRe ghc-mod; };
     hie-hare = callPackage
       ({ mkDerivation, aeson, base, containers, Diff, either, ghc
@@ -426,6 +456,8 @@ in
          ];
          description = "Haskell IDE HaRe plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-mod HaRe; };
     hie-hoogle = callPackage
       ({ mkDerivation, aeson, base, directory, filepath, ghc-mod
@@ -442,6 +474,8 @@ in
          ];
          description = "Haskell IDE Hoogle plugin";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) { inherit ghc-mod hoogle; };
     hie-plugin-api = callPackage
       ({ mkDerivation, aeson, base, containers, Diff, directory, either
@@ -462,5 +496,7 @@ in
          ];
          description = "Haskell IDE API for plugin communication";
          license = stdenv.lib.licenses.bsd3;
+         hydraPlatforms = stdenv.lib.platforms.none;
+         broken = true;
        }) {};
   }

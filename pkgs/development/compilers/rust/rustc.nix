@@ -37,6 +37,12 @@ stdenv.mkDerivation {
   # The build will fail at the very end on AArch64 without this.
   dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
 
+  # Running the default `strip -S` command on Darwin corrupts the
+  # .rlib files in "lib/".
+  #
+  # See https://github.com/NixOS/nixpkgs/pull/34227
+  stripDebugList = if stdenv.isDarwin then [ "bin" ] else null;
+
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   # Enable nightly features in stable compiles (used for
@@ -78,8 +84,9 @@ stdenv.mkDerivation {
     #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
-    # Disable fragile linker-output-non-utf8 test
+    # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
+    rm -vr src/test/run-make/issue-26092.rs || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
 
 let
   version = "2.0.1";
@@ -36,9 +36,12 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
   ];
 
+  # PATH additions:
+  #   - libarchive: Make `bsdtar` available for extracting downloaded boxes
   postInstall = ''
     wrapProgram "$out/bin/vagrant" \
-      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}"
+      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
+      --prefix PATH ':' "${lib.getBin libarchive}/bin"
   '';
 
   passthru = {
