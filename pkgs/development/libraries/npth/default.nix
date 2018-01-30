@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hmkkp6vzyrh8v01c2ynzf9vwikyagp7p1lxhbnr4ysk3w66jji9";
   };
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "The New GNU Portable Threads Library";
     longDescription = ''
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
       that this is a solid way to provide a co-routine based framework.
     '';
     homepage = http://www.gnupg.org;
-    license = licenses.lgpl3;
+    license = licenses.lgpl2Plus;
     platforms = platforms.all;
   };
 }
