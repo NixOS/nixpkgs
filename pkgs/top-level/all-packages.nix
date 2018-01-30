@@ -12928,8 +12928,8 @@ with pkgs;
   lkl = callPackage ../applications/virtualization/lkl { };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { })
-    linuxHeaders_4_4 linuxHeaders_4_14;
-  linuxHeaders = if hostPlatform.isMusl then linuxHeaders_4_14 else linuxHeaders_4_4;
+    linuxHeaders_4_4 linuxHeaders_4_15;
+  linuxHeaders = if hostPlatform.isMusl then linuxHeaders_4_15 else linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 

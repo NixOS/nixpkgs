@@ -69,21 +69,8 @@ in {
     sha256 = "1kpjvvd9q9wwr3314q5ymvxii4dv2d27295bzly225wlc552xhja";
   };
 
-  linuxHeaders_4_14 = common {
-    version = "4.14.13";
-    sha256 = "0wjpwhrnnvf6l3zpkkxk34dl722w9yp8j3vnh0xzi3hgb8dnvd2a";
-
-    patches = [
-      (fetchurl {
-        name = "uapi_libc_compat.patch";
-        url = "https://patchwork.ozlabs.org/patch/854342/raw/";
-        sha256 = "0qczlgqfbw0czx63wg2zgla15zpmcc76d00cb7qwl514ysm4ihmj";
-      })
-      (fetchurl {
-        name = "struct_ethhdr.patch";
-        url = "https://patchwork.ozlabs.org/patch/855293/raw/";
-        sha256 = "0019nxilbgv986sswxyvii50l5l3n9yp4ysgnjdp9104plcq9956";
-      })
-    ];
+  linuxHeaders_4_15 = common {
+    version = "4.15";
+    sha256 = "0sd7l9n9h7vf9c6gd6ciji28hawda60yj0llh17my06m0s4lf9js";
   };
 }
