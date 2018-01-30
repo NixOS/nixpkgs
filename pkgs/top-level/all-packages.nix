@@ -1676,6 +1676,8 @@ with pkgs;
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
+    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
+
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
