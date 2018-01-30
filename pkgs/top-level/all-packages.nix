@@ -1665,6 +1665,10 @@ with pkgs;
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
+  libkkc-data = callPackage ../data/misc/libkkc-data {
+    inherit (pythonPackages) marisa;
+  };
+
   ibus = callPackage ../tools/inputmethods/ibus {
     inherit (gnome3) dconf gconf glib;
   };
