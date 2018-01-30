@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zr3gmmzjhp2d3d3h51x80r5q7gs9rv67ywx69sif6as99h8fbqm";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   hardeningDisable = [ "format" ];
 
   # needs fonts otherwise  don't know how to pass them
@@ -28,11 +30,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }
