@@ -1,21 +1,17 @@
-{ lib, buildPythonApplication, fetchPypi, setuptools, python }:
+{ lib, buildPythonApplication, fetchFromGitHub }:
 
 buildPythonApplication rec {
   pname = "pyprof2calltree";
   version = "1.4.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "38a0774f7716d5303d4c57ff89ec24258154942666e4404558f6ac10f8bb1e52";
+  # Fetch from GitHub because the PyPi packaged version does not
+  # include all test files.
+  src = fetchFromGitHub {
+    owner = "pwaller";
+    repo = "pyprof2calltree";
+    rev = "v" + version;
+    sha256 = "0i0a895zal193cpvzbv68fch606g4ik27rvzbby3vxk61zlxfqy5";
   };
-
-  # Check disabled because of upstream packaging bug
-  # https://github.com/NixOS/nixpkgs/pull/34379#discussion_r164498796
-  # checkInputs = [ setuptools ];
-  # checkPhase = ''
-  #   ${python.interpreter} -m unittest discover -s test
-  # '';
-  doCheck = false;
 
   meta = with lib; {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
