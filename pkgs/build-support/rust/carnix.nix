@@ -73,7 +73,7 @@ rec {
     crateName = "carnix";
     version = "0.6.4";
     authors = [ "pe@pijul.org <pe@pijul.org>" ];
-    src = include [ "Cargo.toml" "src/main.rs" "src/cache.rs" "src/cfg.rs" "src/krate/mod.rs" "src/krate/prefetch.rs" ] ./.;
+    sha256 = "0r7vk1xdfdnp4yi4fy3dmjc992ys8qr0mh8wyvwi2h2sdpm2mfbs";
     inherit dependencies buildDependencies features;
   };
   cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
