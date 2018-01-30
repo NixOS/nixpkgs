@@ -1,5 +1,5 @@
 { callPackage }:
 callPackage ./generic.nix {} {
-  version = "1.13.35.1"; # Latest beta, 2017-11-08
-  sha256  = "126823gpr3rdqakwixmr887rbvwhksr3xg14jnyzlp84q4hg1p0n";
+  version = "1.13.35.2"; # Latest beta, 2018-01-11
+  sha256  = "1z8m0qgvk5gqj37p4kps3y4h7jwaqk0rw0y513nlsb163z4b05f5";
 }
