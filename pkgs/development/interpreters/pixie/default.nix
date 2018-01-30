@@ -56,18 +56,31 @@ let
       RPYTHON="`pwd`/pypy-src/rpython/bin/rpython";
       cd pixie-src
       $PYTHON $RPYTHON ${common-flags} ${target}
-      export LD_LIBRARY_PATH="${library-path}:$LD_LIBRARY_PATH"
       find pixie -name "*.pxi" -exec ./pixie-vm -c {} \;
     )'';
+    LD_LIBRARY_PATH = library-path;
+    C_INCLUDE_PATH = include-path;
+    LIBRARY_PATH = library-path;
+    PATH = bin-path;
     installPhase = ''
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
       makeWrapper $out/share/pixie-vm $out/bin/pixie \
-        --prefix LD_LIBRARY_PATH : ${library-path} \
-        --prefix C_INCLUDE_PATH : ${include-path} \
-        --prefix LIBRARY_PATH : ${library-path} \
-        --prefix PATH : ${bin-path}
+        --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH} \
+        --prefix C_INCLUDE_PATH : ${C_INCLUDE_PATH} \
+        --prefix LIBRARY_PATH : ${LIBRARY_PATH} \
+        --prefix PATH : ${PATH}
+    '';
+    doCheck = true;
+    checkPhase = ''
+      RES=$(./pixie-src/pixie-vm -e "(print :ok)")
+      if [ "$RES" != ":ok" ]; then
+        echo "ERROR Unexpected output: '$RES'"
+        return 1
+      else
+        echo "$RES"
+      fi
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
