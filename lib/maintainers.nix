@@ -328,6 +328,7 @@
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   johbo = "Johannes Bornhold <johannes@bornhold.name>";
+  johnazoidberg = "Daniel Schäfer <git@danielschaefer.me>";
   johnmh = "John M. Harris, Jr. <johnmh@openblox.org>";
   johnramsden = "John Ramsden <johnramsden@riseup.net>";
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
