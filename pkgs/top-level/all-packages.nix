@@ -1661,6 +1661,10 @@ with pkgs;
     inherit (pythonPackages) marisa;
   };
 
+  libkkc = callPackage ../tools/inputmethods/libkkc {
+    inherit (gnome3) libgee;
+  };
+
   ibus = callPackage ../tools/inputmethods/ibus {
     inherit (gnome3) dconf gconf glib;
   };
