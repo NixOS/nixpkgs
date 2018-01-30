@@ -52,34 +52,26 @@ let
         '';
       };
 
-      systemd = mkOption {
-        description = "submodule example";
+      services = mkOption {
+        description = "associated systemd services to perform actions over";
         default = {};
-        type = with types; submodule {
+        example = literalExample ''
+          {
+            postfix.action = "restart";
+            dovecot.action = "reload";
+          };
+        '';
+        type = types.attrsOf (types.submodule {
           options = {
-
-            reload = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              example = [ "postfix.service" ];
+            action = mkOption {
+              type = enum [ "restart" "reload" ];
+              default = null;
               description = ''
-                A list of systemd services which are `reloaded` after certificates are re-issued.
-                A service is only `reloaded` once, even when mentioned serveral times in this list.
-                It is not reloaded if it is also listed in the `systemd.restart` list, then it is only restarted.
-              '';
-            };
-            
-            restart = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              example = [ "postfix.service" ];
-              description = ''
-                A list of systemd services which are `restarted` after certificates are re-issued.
-                A service is only `restarted` once, even when mentioned serveral times in this list.
+                An action to execute on systemd services after certificates are re-issues.
               '';
             };
           };
-        };
+        });
       };
 
       postRun = mkOption {
@@ -225,8 +217,8 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                restartJobs = lib.unique data.systemd.restart;
-                reloadJobs = lib.subtractLists restartJobs (lib.unique data.systemd.reload);
+                restartJobs = lib.attrNames (lib.filterAttrs (k: v: v.action == "restart") data.services);
+                reloadJobs = lib.attrNames (lib.filterAttrs (k: v: v.action == "reload") data.services);
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
