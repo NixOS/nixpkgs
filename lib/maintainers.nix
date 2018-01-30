@@ -617,6 +617,7 @@
   sellout = "Greg Pfeil <greg@technomadic.org>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
+  sfrijters = "Stefan Frijters <sfrijters@gmail.com>";
   shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";
   shawndellysse = "Shawn Dellysse <sdellysse@gmail.com>";
   sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";
