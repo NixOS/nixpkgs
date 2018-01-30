@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "2.1.4";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "0d2zczn5k7296sky5gllq55cxd586nx134y2iwjpkqqjr62g0h48";
+    sha256 = "1pgs2hghjhs3vkgxsi50i5myr7yac3jhpk4vi4bcra1cvdmkgr39";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildPhase = ''
-    scons platform=x11 prefix=$out -j $NIX_BUILD_CORES
+    # Disable touch because it's complaining about missing Xge.h during compilation.
+    scons platform=x11 touch=false prefix=$out -j $NIX_BUILD_CORES
   '';
 
   installPhase = ''
