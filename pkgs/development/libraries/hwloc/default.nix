@@ -6,14 +6,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.8";
+  name = "hwloc-1.11.9";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "0karxv4r1r8sa7ki5aamlxdvyvz0bvzq4gdhq0yi5nc4a0k11vzc";
+    sha256 = "0r2im1s5lp7zjwqalcqcnlxx0dsky1bnx5waf2r3rmj888c36hrr";
   };
-
-  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -75,8 +73,8 @@ stdenv.mkDerivation rec {
 
     # http://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-    homepage = http://www.open-mpi.org/projects/hwloc/;
-    maintainers = [ ];
+    homepage = https://www.open-mpi.org/projects/hwloc/;
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };
 }

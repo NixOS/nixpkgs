@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2015.03-1";
+  version = "2015.03-3";
   name = "openscad-${version}";
 
   src = fetchurl {
     url = "http://files.openscad.org/${name}.src.tar.gz";
-    sha256 = "61e0dd3cd107e5670d727526700104cca5ac54a1f0a84117fcc9e57bf3b6b279";
+    sha256 = "0djsgi9yx1nxr2gh1kgsqw5vrbncp8v5li0p1pp02higqf1psajx";
   };
 
   buildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = http://openscad.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; 
+    maintainers = with stdenv.lib.maintainers;
       [ bjornfor raskin the-kenny ];
   };
 }

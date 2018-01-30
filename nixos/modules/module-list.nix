@@ -84,6 +84,7 @@
   ./programs/info.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
+  ./programs/less.nix
   ./programs/light.nix
   ./programs/man.nix
   ./programs/mosh.nix
