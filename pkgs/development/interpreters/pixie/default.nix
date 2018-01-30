@@ -68,12 +68,6 @@ let
         --prefix C_INCLUDE_PATH : ${include-path} \
         --prefix LIBRARY_PATH : ${library-path} \
         --prefix PATH : ${bin-path}
-      cat > $out/bin/pxi <<EOF
-      #!$shell
-      >&2 echo "[\$\$] WARNING: 'pxi' and 'pixie-vm' are deprecated aliases for 'pixie', please update your scripts."
-      exec $out/bin/pixie "\$@"
-      EOF
-      chmod +x $out/bin/pxi
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
