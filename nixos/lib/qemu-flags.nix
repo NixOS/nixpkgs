@@ -1,4 +1,5 @@
 # QEMU flags shared between various Nix expressions.
+{ pkgs }:
 
 {
 
