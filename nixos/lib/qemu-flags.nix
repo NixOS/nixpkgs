@@ -8,4 +8,8 @@
       "-net vde,vlan=${toString nic},sock=$QEMU_VDE_SOCKET_${toString net}"
     ];
 
+  qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
+        else if pkgs.stdenv.isArm || pkgs.stdenv.isAarch64 then "ttyAMA0"
+        else throw "Unknown QEMU serial device for system '${pkgs.stdenv.system}'";
+
 }
