@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, zlib
+, libxml2
 , llvm
 , python
 , version
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetch "lld" "1yzq762bh375sskjgkcr0vqlhlii2br86z8wi2jbxmml0pj0xn99";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvm ];
+  buildInputs = [ llvm libxml2 ];
 
   outputs = [ "out" "dev" ];
 
