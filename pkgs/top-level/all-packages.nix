@@ -12209,6 +12209,7 @@ with pkgs;
     # https://sourceforge.net/p/net-snmp/bugs/2712/
     # remove after net-snmp > 5.7.3
     perl = perl522;
+    openssl = openssl_1_0_2;
   };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
