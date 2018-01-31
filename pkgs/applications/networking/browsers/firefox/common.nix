@@ -86,8 +86,18 @@ stdenv.mkDerivation (rec {
     rm -f js/src/configure
     rm -f .mozconfig*
 
+ '' + lib.optionalString (stdenv.lib.versionAtLeast version "58.0.0") ''
+    cat >.mozconfig <<END_MOZCONFIG
+    ${lib.concatStringsSep "\n" (map (flag: "ac_add_options ${flag}") configureFlags)}
+    END_MOZCONFIG
+  '' + lib.optionalString googleAPISupport ''
+    # Google API key used by Chromium and Firefox.
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys.
+    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+  '' + ''
     # this will run autoconf213
-    make -f client.mk configure-files
+    ${if (stdenv.lib.versionAtLeast version "58.0.0") then "./mach configure" else "make -f client.mk configure-files"}
 
     configureScript="$(realpath ./configure)"
 
@@ -97,11 +107,6 @@ stdenv.mkDerivation (rec {
     test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
     cd obj-*
-  '' + lib.optionalString googleAPISupport ''
-    # Google API key used by Chromium and Firefox.
-    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
   '';
 
   configureFlags = [
@@ -159,7 +164,7 @@ stdenv.mkDerivation (rec {
   ++ flag ffmpegSupport "ffmpeg"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
+  ++ lib.optional googleAPISupport "--with-google-api-keyfile=$TMPDIR/ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
