@@ -18313,6 +18313,8 @@ EOF
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
 
+  web_cache = callPackage ../development/python-modules/web_cache { };
+
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
     version = "0.12.1";

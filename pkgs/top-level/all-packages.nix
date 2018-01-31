@@ -4502,6 +4502,8 @@ with pkgs;
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
+  sacad = callPackage ../tools/misc/sacad { };
+
   safecopy = callPackage ../tools/system/safecopy { };
 
   safe-rm = callPackage ../tools/system/safe-rm { };
