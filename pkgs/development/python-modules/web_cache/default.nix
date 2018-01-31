@@ -12,6 +12,7 @@ buildPythonPackage rec {
     sha256 = "05mmxf5f312mi9g417zad20f8v76wjm36b0v75x96diffccaafp0";
   };
 
+  # ModuleNotFoundError: No module named 'tests'
   doCheck = false;
 
   meta = with stdenv.lib; {

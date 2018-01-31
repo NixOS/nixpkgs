@@ -28,6 +28,7 @@ buildPythonApplication rec {
   ]
   ++ stdenv.lib.optional enableCompression [ jpegoptim optipng ];
 
+  # ModuleNotFoundError: No module named 'tests'
   doCheck = false;
 
   meta = {
