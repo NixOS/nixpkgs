@@ -1,7 +1,7 @@
-{ pkgs, jpegoptim, optipng }:
-
+{ stdenv, python3, jpegoptim, optipng }:
+with python3.pkgs;
 let
-  inherit (pkgs.python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "sacad";
@@ -13,9 +13,7 @@ buildPythonApplication rec {
     sha256 = "1vb2y18lmsm742pwff9164plbji3vjmx06accc84vws1nv7d1rzg";
   };
 
-  doCheck = false;
-
-  propagatedBuildInputs = with pkgs.python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     appdirs
     cssselect
@@ -28,10 +26,12 @@ buildPythonApplication rec {
     optipng
   ];
 
+  doCheck = false;
+
   meta = {
     description = "Smart Automatic Cover Art Downloader";
-    license = pkgs.stdenv.lib.licenses.mpl20;
+    license = stdenv.lib.licenses.mpl20;
     homepage = https://github.com/desbma/sacad;
-    maintainers = with pkgs.stdenv.lib.maintainers; [ ayyjayess ];
+    maintainers = with stdenv.lib.maintainers; [ ayyjayess ];
   };
 }
