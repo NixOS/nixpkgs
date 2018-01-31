@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, python, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp, boost, jansson, zeromq, openssl , pam, libiodbc, kerberos, gcc, libcxx, which }:
+{ stdenv, fetchurl, python, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl , pam, libiodbc, kerberos, gcc, libcxx, which }:
 
 with stdenv;
 
+let
+  avro-cpp=avro-cpp_llvm;
+in
 let
   common = import ./common.nix {
     inherit stdenv bzip2 zlib autoconf automake cmake gnumake
@@ -13,13 +16,13 @@ in rec {
 
   # irods: libs and server package
   irods = stdenv.mkDerivation (common // rec {
-    version = "4.2.1";
+    version = "4.2.2";
     prefix = "irods";
     name = "${prefix}-${version}";
 
     src = fetchurl {
       url = "https://github.com/irods/irods/releases/download/${version}/irods-${version}.tar.gz";
-      sha256 = "07yj5g1mwra4sankhqx967mk4z28kc40rir5cb85x23ljql74abq";
+      sha256 = "0b89hs7sizwrs2ja7jl521byiwb58g297p0p7zg5frxmv4ig8dw7";
     };
 
     # Patches:
@@ -53,11 +56,11 @@ in rec {
 
   # icommands (CLI) package, depends on the irods package
   irods-icommands = stdenv.mkDerivation (common // rec {
-     version = "4.2.1";
+     version = "4.2.2";
      name = "irods-icommands-${version}";
      src = fetchurl {
        url = "http://github.com/irods/irods_client_icommands/archive/${version}.tar.gz";
-       sha256 = "1kg07frv2rf32nf53a1nxscwzgr0rpgxvp5fkmh5439knby10fqw";
+       sha256 = "15zcxrx0q5c3rli3snd0b2q4i0hs3zzcrbpnibbhsip855qvs77h";
      };
 
      buildInputs = common.buildInputs ++ [ irods ];
