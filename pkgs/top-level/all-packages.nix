@@ -10649,6 +10649,8 @@ with pkgs;
     # XXX: mariadb doesn't built on fbsd as of nov 2015
     mysql = if (!stdenv.isFreeBSD) then mysql else null;
 
+    openssl = openssl_1_0_2;
+
     inherit (pkgs.darwin) cf-private libobjc;
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
   };
@@ -15010,7 +15012,7 @@ with pkgs;
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
 
-  keepass = callPackage ../applications/misc/keepass { 
+  keepass = callPackage ../applications/misc/keepass {
     buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
   };
 
