@@ -273,11 +273,13 @@ let
       };
 
       virtualType = mkOption {
-        default = null;
-        type = with types; nullOr (enum [ "tun" "tap" ]);
+        default = if hasPrefix "tun" name then "tun" else "tap";
+        defaultText = ''if hasPrefix "tun" name then "tun" else "tap"'';
+        type = with types; enum [ "tun" "tap" ];
         description = ''
-          The explicit type of interface to create. Accepts tun or tap strings.
-          Also accepts null to implicitly detect the type of device.
+          The type of interface to create.
+          The default is TUN for an interface name starting
+          with "tun", otherwise TAP.
         '';
       };
 
