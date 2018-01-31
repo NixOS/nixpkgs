@@ -1,11 +1,9 @@
 # Checks derivation meta and attrs for problems (like brokenness,
 # licenses, etc).
 
-{ lib, config, system, meta, derivationArg, mkDerivationArg }:
+{ lib, config, system, meta }:
 
 let
-  attrs = mkDerivationArg; # TODO: probably get rid of passing this one
-
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
@@ -123,7 +121,7 @@ let
 
       '';
 
-  handleEvalIssue = { reason , errormsg ? "" }:
+  handleEvalIssue = attrs: { reason , errormsg ? "" }:
     let
       msg = ''
         Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
@@ -196,11 +194,13 @@ let
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };
 
-   validity = checkValidity attrs;
+  assertValidity = attrs: let
+      validity = checkValidity attrs;
+    in validity // {
+      # Throw an error if trying to evaluate an non-valid derivation
+      handled = if !validity.valid
+        then handleEvalIssue attrs (removeAttrs validity ["valid"])
+        else true;
+  };
 
-in validity // {
-  # Throw an error if trying to evaluate an non-valid derivation
-  handled = if !validity.valid
-    then handleEvalIssue (removeAttrs validity ["valid"])
-    else true;
-}
+in assertValidity
