@@ -70,6 +70,7 @@
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
   avnik = "Alexander V. Nikolaev <avn@avnik.info>";
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
+  ayyjayess = "Andrew Scott <3648487+ayyjayess@users.noreply.github.com>";
   bachp = "Pascal Bach <pascal.bach@nextrem.ch>";
   backuitist = "Bruno Bieth";
   badi = "Badi' Abdul-Wahid <abdulwahidc@gmail.com>";
