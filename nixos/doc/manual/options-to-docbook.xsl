@@ -116,11 +116,11 @@
 
   <xsl:template match="string">
     <xsl:choose>
-      <xsl:when test="(contains(@value, '&quot;') or contains(@value, '\')) and not(contains(@value, '&#010;'))">
-        <xsl:text>''</xsl:text><xsl:value-of select='str:replace(@value, "${", "&apos;&apos;${")' /><xsl:text>''</xsl:text>
+      <xsl:when test="contains(@value, '&#xA;')">
+        <xsl:text>''</xsl:text><xsl:value-of select='@value' /><xsl:text>''</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n'), '$', '\$')" /><xsl:text>"</xsl:text>
+        <xsl:text>"</xsl:text><xsl:value-of select="@value" /><xsl:text>"</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
