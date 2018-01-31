@@ -5611,9 +5611,7 @@ with pkgs;
     '';
   });
 
-  crystal = callPackage ../development/compilers/crystal {
-    llvm = llvm_5;
-  };
+  crystal = callPackage ../development/compilers/crystal { };
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 

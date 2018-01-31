@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages_5, kernel
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvmPackages_5.llvm llvmPackages_5.clang-unwrapped kernel
+    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
     elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 
