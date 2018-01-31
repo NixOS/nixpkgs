@@ -1,11 +1,23 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, runCommand }:
 
 with stdenv.lib;
 
+let
+  version = "0.1.27";
+
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "projectatomic";
+    repo = "skopeo";
+    sha256 = "1xwwzxjczz8qdk1rf0h78qd3vk9mxxb8yi6f8kfqvcdcsvkajd5g";
+  };
+
+  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
+
+in
 buildGoPackage rec {
   name = "skopeo-${version}";
-  version = "0.1.27";
-  rev = "v${version}";
+  inherit src;
 
   goPackagePath = "github.com/projectatomic/skopeo";
   excludedPackages = "integration";
@@ -13,25 +25,11 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree ];
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "projectatomic";
-    repo = "skopeo";
-    sha256 = "1xwwzxjczz8qdk1rf0h78qd3vk9mxxb8yi6f8kfqvcdcsvkajd5g";
-  };
-
-  patches = [
-    ./path.patch
-  ];
+  buildFlagsArray = "-ldflags= -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}";
 
   preBuild = ''
     export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
     export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
-  '';
-
-  postInstall = ''
-    mkdir $bin/etc
-    cp -v ./go/src/github.com/projectatomic/skopeo/default-policy.json $bin/etc/default-policy.json
   '';
 
   meta = {
