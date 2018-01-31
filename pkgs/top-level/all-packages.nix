@@ -10371,9 +10371,28 @@ with pkgs;
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
+  ## libGL/libGLU/Mesa stuff
+
+  # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
+  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`, 
+  # or other runtime dispatcher
+  libGL = mesa_noglu;
+
+  # Default libGLU
+  libGLU = mesa_glu;
+
+  # Combined derivation, contains both libGL and libGLU
+  # Please, avoid using this attribute.  It was meant as transitional hack
+  # for packages that assume that libGLU and libGL live in the same prefix.
+  # libGLU_combined propagates both libGL and libGLU
+  libGLU_combined = mesa;
+
+  # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
+  libGL_driver = mesa_drivers;
+
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  mesaDarwinOr = alternative: if stdenv.isDarwin
+  libGLDarwinOr = alternative: if stdenv.isDarwin
     then callPackage ../development/libraries/mesa-darwin {
       inherit (darwin.apple_sdk.frameworks) OpenGL;
       inherit (darwin.apple_sdk.libs) Xplugin;
@@ -10381,14 +10400,16 @@ with pkgs;
     }
     else alternative;
 
-  mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
+  # FIXME: should be `libGL = libGLDarwinOr mesa_nonglu` but this change cause mass rebuild,
+  # until all packages will refer to libGL/GLU/GLU combined
+  mesa_noglu = libGLDarwinOr (callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     # grsecEnabled = true; # no more support in nixpkgs ATM
   });
 
-  mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
-  mesa_drivers = mesaDarwinOr (
+  mesa_glu =  libGLDarwinOr (callPackage ../development/libraries/mesa-glu { });
+  mesa_drivers = libGLDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
       enableTextureFloats = true;
@@ -10400,13 +10421,15 @@ with pkgs;
   # for packages that assume that libGLU and libGL live in the same prefix.
   # Otherwise it's better to use mesa_glu or mesa_noglu, depending on whether
   # you need libGLU or not (_glu propagates _noglu).
-  mesa = mesaDarwinOr (buildEnv {
+  mesa = libGLDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
     };
   });
+
+  ## End libGL/libGLU/Mesa stuff
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
 
