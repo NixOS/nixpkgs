@@ -138,19 +138,14 @@ let
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
-    ] # As major versions are added, you can trawl the gentoo and arch repos at
+      # As major versions are added, you can trawl the gentoo and arch repos at
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
-      ++ optionals (versionRange "63" "64") [
-      ./patches/chromium-gcc5-r4.patch
-      (gentooPatch "chromium-gcc5-r5.patch" "0z7rggizzg85wfr8zhw0yfwd3q69lsh3yp297s939jgzp66cwwkw")
-      ./patches/include-math-for-round.patch
+
+    # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
     ] ++ optionals (versionRange "64" "65") [
-      ## This is a first guess on what patches are needed for 64
-      # (gentooPatch "chromium-memcpy-r0.patch" "1d3vra59wjg2lva7ddv55ff6l57mk9k50llsplr0b7vxk0lh0ps5")
       (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
-      # (gentooPatch "chromium-clang-r2.patch" "1lsqr7cbjsad5pyyp6kyrfmcgcqy2z2yzgp4zxwjq95fknrfi5a4")
       (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
     ]  ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -215,6 +210,7 @@ let
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
+      ## FIXME remove use_gconf after chromium 65 has become stable
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;

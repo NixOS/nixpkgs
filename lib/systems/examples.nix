@@ -11,44 +11,33 @@ rec {
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    bigEndian = false;
     arch = "armv5tel";
     float = "soft";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.sheevaplug;
-    openssl.system = "linux-generic32";
   };
 
   raspberryPi = rec {
     config = "armv6l-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv6l";
     float = "hard";
     fpu = "vfp";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.raspberrypi;
-    openssl.system = "linux-generic32";
   };
 
   armv7l-hf-multiplatform = rec {
     config = "arm-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv7-a";
     float = "hard";
     fpu = "vfpv3-d16";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
-    openssl.system = "linux-generic32";
   };
 
   aarch64-multiplatform = rec {
     config = "aarch64-unknown-linux-gnu";
-    bigEndian = false;
     arch = "aarch64";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.aarch64-multiplatform;
   };
@@ -62,24 +51,16 @@ rec {
     arch = "armv5tel";
     config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
-
-    platform = platforms.pogoplug4;
-
     libc = "glibc";
-
-    withTLS = true;
-    openssl.system = "linux-generic32";
+    platform = platforms.pogoplug4;
   };
 
   fuloongminipc = rec {
     config = "mips64el-unknown-linux-gnu";
-    bigEndian = false;
     arch = "mips";
     float = "hard";
-    withTLS = true;
     libc = "glibc";
     platform = platforms.fuloong2f_n32;
-    openssl.system = "linux-generic32";
   };
 
   #

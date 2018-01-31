@@ -133,7 +133,7 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      <literal>lib.addPassthru</literal> is removed.  Use <literal>lib.extendDerivation true</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
+      <literal>lib.addPassthru drv passthru</literal> is removed.  Use <literal>lib.extendDerivation true passthru drv</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
     </para>
   </listitem>
   <listitem>
@@ -147,6 +147,17 @@ following incompatible changes:</para>
   <listitem>
     <para>
       The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The merging of config options for <varname>services.postfix.config</varname>
+      was buggy. Previously, if other options in the Postfix module like
+      <varname>services.postfix.useSrs</varname> were set and the user set config
+      options that were also set by such options, the resulting config wouldn't
+      include all options that were needed. They are now merged correctly. If
+      config options need to be overridden, <literal>lib.mkForce</literal> or
+      <literal>lib.mkOverride</literal> can be used.
     </para>
   </listitem>
 </itemizedlist>
