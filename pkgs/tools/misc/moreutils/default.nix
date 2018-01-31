@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    sha256 = "0sk7rgqsqbdwr69mh7y4v9lv4v0nfmsrqgvbpy2gvy82snhfzar"2;
+    sha256 = "0sk7rgqsqbdwr69mh7y4v9lv4v0nfmsrqgvbpy2gvy82snhfzar2";
   };
 
   preBuild = ''
