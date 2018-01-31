@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
-                ++ [ "--enable-vendor" "--disable-locked-deps" ]
+                ++ [ "--enable-vendor" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
