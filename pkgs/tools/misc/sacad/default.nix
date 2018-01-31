@@ -1,4 +1,7 @@
-{ stdenv, python3, jpegoptim, optipng }:
+{ stdenv, python3, enableCompression ? true, jpegoptim, optipng }:
+
+assert enableCompression -> jpegoptim != null && optipng != null;
+
 with python3.pkgs;
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
@@ -22,9 +25,8 @@ buildPythonApplication rec {
     pillow
     tqdm
     web_cache
-    jpegoptim
-    optipng
-  ];
+  ]
+  ++ stdenv.lib.optional enableCompression [ jpegoptim optipng ];
 
   doCheck = false;
 
