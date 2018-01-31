@@ -63,4 +63,7 @@ rec {
     withGui = false;
     openssl = openssl_1_1_0;
   };
+
+  parity = callPackage ./parity { };
+  parity-beta = callPackage ./parity/beta.nix { };
 }
