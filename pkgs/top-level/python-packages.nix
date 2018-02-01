@@ -2014,6 +2014,7 @@ in {
     doCheck = false;
   });
 
+  can = callPackage ../development/python-modules/can {};
 
   cairocffi = buildPythonPackage rec {
     name = "cairocffi-0.7.2";
