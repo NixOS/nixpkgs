@@ -4834,6 +4834,8 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
+  teleport = callPackage ../tools/misc/teleport { };
+
   telepresence = callPackage ../tools/networking/telepresence { };
 
   tewisay = callPackage ../tools/misc/tewisay { };
