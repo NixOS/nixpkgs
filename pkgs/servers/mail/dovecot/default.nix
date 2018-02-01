@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap
 # Auth modules
@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.32";
+  name = "dovecot-2.2.33.2";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs = [ openssl bzip2 zlib clucene_core_2 icu openldap ]
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "0bmwyvi1crmrca2knvknsf517x53w7gxrclwyrvrhddgw98j22qn";
+    sha256 = "117f9i62liz2pm96zi2lpldzlj2knzj7g410zhifwmlsc1w3n7py";
   };
 
   preConfigure = ''
@@ -46,6 +46,16 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.2.x-module_dir.patch
+    (fetchpatch {
+      name = "CVE-2017-14132_part1.patch";
+      url = https://github.com/dovecot/core/commit/1a29ed2f96da1be22fa5a4d96c7583aa81b8b060.patch;
+      sha256 = "1pcfzxr8xlwbpa7z19grp7mlvdnan6ln8zw74dj4pdmynmlk4aw9";
+    })
+    (fetchpatch {
+      name = "CVE-2017-14132_part2.patch";
+      url = https://github.com/dovecot/core/commit/a9b135760aea6d1790d447d351c56b78889dac22.patch;
+      sha256 = "0082iid5rvjmh003xi9s09jld2rb31hbvni0yai1h1ggbmd5zf8l";
+    })
   ];
 
   configureFlags = [
