@@ -10,6 +10,7 @@ let
     options = {
       webroot = mkOption {
         type = types.str;
+        example = "/var/lib/acme/acme-challenges";
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
@@ -64,7 +65,7 @@ let
         type = types.attrsOf (types.submodule {
           options = {
             action = mkOption {
-              type = enum [ "restart" "reload" ];
+              type = types.enum [ "restart" "reload" ];
               default = null;
               description = ''
                 An action to execute on systemd services after certificates are re-issues.
