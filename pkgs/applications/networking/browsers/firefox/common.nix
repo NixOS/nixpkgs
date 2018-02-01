@@ -59,7 +59,7 @@
 , enableOfficialBranding ? true
 }:
 
-assert stdenv.cc ? libc && stdenv.cc.libc != null;
+assert stdenv.cc.libc or null != null;
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
