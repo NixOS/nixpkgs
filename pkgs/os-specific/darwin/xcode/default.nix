@@ -1,4 +1,4 @@
-{ stdenv, requireFile, xpwn }:
+{ stdenv, requireFile, libdmg-hfsplus }:
 
 with stdenv.lib;
 
@@ -17,13 +17,15 @@ in stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
   outputs = [ "out" "toolchain" ];
 
+  nativeBuildInputs = [ libdmg-hfsplus ];
+
 
   unpackCmd = let
     basePath = "Xcode.app/Contents/Developer/Platforms/MacOSX.platform";
     sdkPath = "${basePath}/Developer/SDKs";
   in ''
-    ${xpwn}/bin/dmg extract "$curSrc" main.hfs > /dev/null
-    ${xpwn}/bin/hfsplus main.hfs extractall "${sdkPath}" > /dev/null
+    dmg extract "$curSrc" main.hfs > /dev/null
+    hfsplus main.hfs extractall "${sdkPath}" > /dev/null
   '';
 
   setSourceRoot = "sourceRoot=MacOSX${osxVersion}.sdk";
@@ -38,7 +40,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$toolchain"
     pushd "$toolchain"
-    ${xpwn}/bin/hfsplus "$(dirs +1)/../main.hfs" extractall \
+    hfsplus "$(dirs +1)/../main.hfs" extractall \
       Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr \
       > /dev/null
     popd
