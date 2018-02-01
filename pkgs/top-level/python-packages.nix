@@ -14450,21 +14450,7 @@ in {
     };
   };
 
-  ptyprocess = buildPythonPackage rec {
-    name = "ptyprocess-${version}";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/ptyprocess/${name}.tar.gz";
-      sha256= "dcb78fb2197b49ca1b7b2f37b047bc89c0da7a90f90bd5bc17c3ce388bb6ef59";
-    };
-
-    meta = {
-      description = "Run a subprocess in a pseudo terminal";
-      homepage = https://github.com/pexpect/ptyprocess;
-      license = licenses.isc;
-    };
-  };
+  ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
