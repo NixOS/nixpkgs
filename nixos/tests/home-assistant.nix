@@ -17,13 +17,16 @@ in {
             homeassistant = {
               name = "Home";
               time_zone = "UTC";
+              latitude = "0.0";
+              longitude = "0.0";
+              elevation = 0;
             };
             frontend = { };
             http = { };
           };
         };
       };
-    };
+  };
 
   testScript = ''
     startAll;
@@ -37,5 +40,7 @@ in {
     $hass->waitForOpenPort(8123);
     $hass->succeed("curl --fail http://localhost:8123/states");
     $hass->succeed("curl --fail http://localhost:8123/api/ | grep 'API running'");
+
+    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
   '';
 })
