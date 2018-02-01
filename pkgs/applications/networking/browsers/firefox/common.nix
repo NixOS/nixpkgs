@@ -89,12 +89,14 @@ stdenv.mkDerivation (rec {
  '' + lib.optionalString (stdenv.lib.versionAtLeast version "58.0.0") ''
     cat >.mozconfig <<END_MOZCONFIG
     ${lib.concatStringsSep "\n" (map (flag: "ac_add_options ${flag}") configureFlags)}
+    ${lib.optionalString googleAPISupport "ac_add_options --with-google-api-keyfile=$TMPDIR/ga"}
     END_MOZCONFIG
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
     echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
   '' + ''
     # this will run autoconf213
     ${if (stdenv.lib.versionAtLeast version "58.0.0") then "./mach configure" else "make -f client.mk configure-files"}
@@ -164,7 +166,6 @@ stdenv.mkDerivation (rec {
   ++ flag ffmpegSupport "ffmpeg"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optional googleAPISupport "--with-google-api-keyfile=$TMPDIR/ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
