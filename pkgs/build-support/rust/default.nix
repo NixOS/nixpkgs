@@ -8,7 +8,7 @@ let
     inherit stdenv cacert git rust cargoVendor;
   };
 in
-{ name, cargoSha256
+{ name, cargoSha256 ? null
 , src ? null
 , srcs ? null
 , sourceRoot ? null
@@ -17,15 +17,31 @@ in
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+
+, cargoVendorDir ? null
 , ... } @ args:
+
+assert cargoVendorDir == null -> cargoSha256 != null;
 
 let
   lib = stdenv.lib;
 
-  cargoDeps = fetchcargo {
-    inherit name src srcs sourceRoot cargoUpdateHook;
-    sha256 = cargoSha256;
-  };
+  cargoDeps = if cargoVendorDir == null
+    then fetchcargo {
+        inherit name src srcs sourceRoot cargoUpdateHook;
+        sha256 = cargoSha256;
+      }
+    else null;
+
+  setupVendorDir = if cargoVendorDir == null
+    then ''
+      unpackFile "$cargoDeps"
+      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+      chmod -R +w "$cargoDepsCopy"
+    ''
+    else ''
+      cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
+    '';
 
 in stdenv.mkDerivation (args // {
   inherit cargoDeps;
@@ -43,9 +59,7 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    unpackFile "$cargoDeps"
-    cargoDepsCopy=$(stripHash $(basename $cargoDeps))
-    chmod -R +w "$cargoDepsCopy"
+    ${setupVendorDir}
 
     mkdir .cargo
     cat >.cargo/config <<-EOF
