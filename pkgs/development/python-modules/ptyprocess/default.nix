@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "ptyprocess";
-  version = "0.5";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dcb78fb2197b49ca1b7b2f37b047bc89c0da7a90f90bd5bc17c3ce388bb6ef59";
+    sha256 = "e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365";
   };
 
   meta = {
