@@ -7,17 +7,28 @@
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="fffe", ATTRS{idProduct}=="0002", MODE:="0666"
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="2500", ATTRS{idProduct}=="0002", MODE:="0666"
 
-stdenv.mkDerivation rec {
-  name = "uhd-${version}";
-  version = "3.10.3.0";
+let
+  uhdVer = "003_010_003_000";
+  ImgVer = stdenv.lib.replaceStrings ["_"] ["."] uhdVer;
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf...
+  version = "3.10.3.0";
+
+  # Firmware images are downloaded (pre-built) from:
+  # http://files.ettus.com/binaries/images/
+  uhdImagesSrc = fetchurl {
+    url = "http://files.ettus.com/binaries/images/uhd-images_${ImgVer}-release.tar.gz";
+    sha256 = "198awvw6zsh19ydgx5qry5yc6yahdval9wjrsqbyj51pnr6s5qvy";
+  };
+
+in stdenv.mkDerivation {
+  name = "uhd-${version}";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "release_003_010_003_000";
+    rev = "release_${uhdVer}";
     sha256 = "1aj8qizbyz4shwawj3qlhl6pyyda59hhgm9cwrj7s5kfdi4vdlc3";
   };
 
@@ -30,13 +41,6 @@ stdenv.mkDerivation rec {
 
   # Build only the host software
   preConfigure = "cd host";
-
-  # Firmware images are downloaded (pre-built)
-  uhdImagesName = "uhd-images_003.007.003-release";
-  uhdImagesSrc = fetchurl {
-    url = "http://files.ettus.com/binaries/maint_images/archive/${uhdImagesName}.tar.gz";
-    sha256 = "1pv5c5902041494z0jfw623ca29pvylrw5klybbhklvn5wwlr6cv";
-  };
 
   postPhases = [ "installFirmware" ];
 
