@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, ethtool, libnl, libudev, python, perl
+, ethtool, nettools, libnl, libudev, python, perl
 } :
 
 let
@@ -16,16 +16,24 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libnl ethtool libudev python perl ];
+  buildInputs = [ libnl ethtool nettools libudev python perl ];
 
-  postFixup = ''
-    substituteInPlace $out/bin/rxe_cfg --replace ethtool "${ethtool}/bin/ethtool"
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_RUNDIR=/run"
+    "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
+  ];
+
+  postPatch = ''
+    substituteInPlace providers/rxe/rxe_cfg.in \
+      --replace ethtool "${ethtool}/bin/ethtool" \
+      --replace ifconfig "${nettools}/bin/ifconfig"
   '';
 
   meta = with stdenv.lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
     homepage = https://github.com/linux-rdma/rdma-core;
     license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

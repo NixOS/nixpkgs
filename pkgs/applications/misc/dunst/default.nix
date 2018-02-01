@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "dunst-${version}";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "1085v4193yfj8ksngp4mk5n0nwzr3s5y3cs3c74ymaldfl20x91k";
+    sha256 = "0i518v2z9fklzl5w60gkwwmg30yz3bd0k4rxjrxjabx73pvxm1mz";
   };
 
   nativeBuildInputs = [ perl pkgconfig which systemd ];
