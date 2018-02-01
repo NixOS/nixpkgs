@@ -100,6 +100,12 @@ rec {
     libc = "libSystem";
     platform = {};
   };
+  darwin = {
+    config = "x86_64-darwin";
+    arch = "x86_64";
+    libc = "libSystem";
+    platform = {};
+  };
 
   #
   # Windows
