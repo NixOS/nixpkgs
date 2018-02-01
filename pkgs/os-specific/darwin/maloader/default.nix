@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, opencflite }:
+{ stdenv, fetchFromGitHub, opencflite, libuuid, zlib }:
 
 stdenv.mkDerivation {
-  name = "maloader-0git";
+  name = "maloader-2017-05-27";
 
-  src = fetchgit {
-    url = "git://github.com/shinh/maloader.git";
-    rev = "5f220393e0b7b9ad0cf1aba0e89df2b42a1f0442";
-    sha256 = "0dd1pn07x1y8pyn5wz8qcl1c1xwghyya4d060m3y9vx5dhv9xmzw";
+  src = fetchFromGitHub {
+    owner = "shinh";
+    repo = "maloader";
+    rev = "bdff0a61952c13d88a474986cabce2304e6b8e61";
+    sha256 = "0axvm9h2n0q81z811njxmjbx4j8q971aik2ip74fdq8b61g95hqz";
   };
 
   postPatch = ''
@@ -16,7 +17,11 @@ stdenv.mkDerivation {
       ld-mac.cc
   '';
 
+  buildInputs = [ libuuid zlib ];
+
   buildFlags = [ "USE_LIBCXX=1" "release" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
 
   installPhase = ''
     install -vD libmac.so "$out/lib/libmac.so"
