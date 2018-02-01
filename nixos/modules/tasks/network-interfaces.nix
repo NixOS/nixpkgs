@@ -274,7 +274,7 @@ let
 
       virtualType = mkOption {
         default = if hasPrefix "tun" name then "tun" else "tap";
-        defaultText = ''if hasPrefix "tun" name then "tun" else "tap"'';
+        defaultText = literalExample ''if hasPrefix "tun" name then "tun" else "tap"'';
         type = with types; enum [ "tun" "tap" ];
         description = ''
           The type of interface to create.
