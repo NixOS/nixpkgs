@@ -3052,6 +3052,8 @@ with pkgs;
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
+  libdmg-hfsplus = callPackage ../tools/filesystems/libdmg-hfsplus { };
+
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
