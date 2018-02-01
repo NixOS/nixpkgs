@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = https://buildkite.com/docs/agent;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.pawelpacana ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
