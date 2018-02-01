@@ -137,6 +137,24 @@ in rec {
       [ ./env_var_for_system_dir.patch ];
   } // commonAttrs) {};
 
-  tor-browser = tor-browser-7-0;
+  tor-browser-7-5 = common (rec {
+    pname = "tor-browser";
+    version = "7.5.2";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-52.6.2esr-7.5-2-slnos";
+      rev   = "cf1a504aaa26af962ae909a3811c0038db2d2eec";
+      sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
+    };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
+  } // commonAttrs) {};
+
+  tor-browser = tor-browser-7-5;
 
 })
