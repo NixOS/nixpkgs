@@ -21012,29 +21012,7 @@ EOF
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
-  xcffib = buildPythonPackage rec {
-    version = "0.3.2";
-    name = "xcffib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xcffib/${name}.tar.gz";
-      sha256 = "a84eecd5a1bb7570e26c83aca87a2016578ca4e353e1fa56189e95bdef063e6a";
-    };
-
-    patchPhase = ''
-      # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
-    '';
-
-    propagatedBuildInputs = [ self.cffi self.six ];
-
-    meta = {
-      description = "A drop in replacement for xpyb, an XCB python binding";
-      homepage = "https://github.com/tych0/xcffib";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ kamilchm ];
-    };
-  };
+  xcffib = callPackage ../development/python-modules/xcffib {};
 
   pafy = callPackage ../development/python-modules/pafy { };
 
