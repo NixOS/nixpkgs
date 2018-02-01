@@ -14479,6 +14479,8 @@ with pkgs;
     amdappsdk = amdappsdk28;
   };
 
+  charliecloud = callPackage ../applications/virtualization/charliecloud { };
+  
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
   chirp = callPackage ../applications/misc/chirp {
