@@ -20,7 +20,6 @@ in buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = src.meta.homepage;
     description = "Easy interface to the Bitcoin data structures and protocol";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ jb55 ];

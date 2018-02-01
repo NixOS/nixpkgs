@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A dynamic menu library and client program inspired by dmenu";
-    homepage = src.meta.homepage;
     license = with licenses; [ gpl3 lgpl3 ];
     platforms = platforms.linux;
   };

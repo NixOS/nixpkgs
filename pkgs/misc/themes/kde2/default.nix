@@ -22,7 +22,6 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "KDE 2 window decoration ported to Plasma 5";
-    homepage = src.meta.homepage;
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

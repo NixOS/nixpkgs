@@ -22,7 +22,6 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line interface for Zabbix";
-    homepage = src.meta.homepage;
     license = [ licenses.gpl3 ];
     maintainers = [ maintainers.womfoo ];
   };

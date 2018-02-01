@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
       reading points. This allows reading text at a much more rapid
       pace than usual as the eye can stay fixed on a single place.
     '';
-    homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.oxij ];

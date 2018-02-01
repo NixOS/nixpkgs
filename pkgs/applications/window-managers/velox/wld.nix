@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A primitive drawing library targeted at Wayland";
-    homepage    = src.meta.homepage;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
