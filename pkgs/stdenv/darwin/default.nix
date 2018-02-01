@@ -86,6 +86,7 @@ in rec {
         extraPackages = lib.optional (libcxx != null) libcxx;
 
         nativeTools  = false;
+        propagateDoc = false;
         nativeLibc   = false;
         inherit buildPackages coreutils gnugrep bintools;
         libc         = last.pkgs.darwin.Libsystem;

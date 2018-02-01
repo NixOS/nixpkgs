@@ -89,6 +89,7 @@ let
              then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
+          propagateDoc = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
