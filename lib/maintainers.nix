@@ -231,6 +231,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
+  f-breidenstein = "Felix Breidenstein <mail@felixbreidenstein.de>";
   fgaz = "Francesco Gazzetta <francygazz@gmail.com>";
   FireyFly = "Jonas Höglund <nix@firefly.nu>";
   flokli = "Florian Klink <flokli@flokli.de>";

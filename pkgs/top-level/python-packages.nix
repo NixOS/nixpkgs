@@ -165,6 +165,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  astral = callPackage ../development/python-modules/astral { };
+
   astropy = callPackage ../development/python-modules/astropy {  };
 
   augeas = callPackage ../development/python-modules/augeas {
@@ -3214,6 +3216,8 @@ in {
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
+
+  pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
