@@ -155,6 +155,16 @@ let
         description = "Name of the interface.";
       };
 
+      preferTempAddress = mkOption {
+        type = types.bool;
+        default = cfg.enableIPv6;
+        defaultText = literalExample "config.networking.enableIpv6";
+        description = ''
+          When using SLAAC prefer a temporary (IPv6) address over the EUI-64
+          address for originating connections. This is used to reduce tracking.
+        '';
+      };
+
       useDHCP = mkOption {
         type = types.nullOr types.bool;
         default = null;
@@ -941,6 +951,11 @@ in
         message = ''
           The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
         '';
+      })) ++ (flip map interfaces (i: {
+        assertion = i.preferTempAddress -> cfg.enableIPv6;
+        message = ''
+          Temporary addresses are only needed when IPv6 is enabled.
+        '';
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
@@ -963,9 +978,10 @@ in
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
-    } // listToAttrs (concatLists (flip map (filter (i: i.proxyARP) interfaces)
-        (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true))
-      ));
+    } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
+        (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true)))
+      // listToAttrs (flip map (filter (i: i.preferTempAddress) interfaces)
+        (i: nameValuePair "net.ipv6.conf.${i.name}.use_tempaddr" 2));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
