@@ -220,6 +220,7 @@ in rec {
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
+  tests.borgbackup = callTest tests/borgbackup.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix { system = "x86_64-linux"; };
