@@ -1802,6 +1802,20 @@ addEnvHooks "$hostOffset" myBashFunction
     disabled or patched to work with PaX.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term>autoPatchelfHook</term>
+    <listitem><para>This is a special setup hook which helps in packaging
+    proprietary software in that it automatically tries to find missing shared
+    library dependencies of ELF files. All packages within the
+    <envar>runtimeDependencies</envar> environment variable are unconditionally
+    added to executables, which is useful for programs that use
+    <citerefentry>
+      <refentrytitle>dlopen</refentrytitle>
+      <manvolnum>3</manvolnum>
+    </citerefentry>
+    to load libraries at runtime.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>
