@@ -232,6 +232,7 @@ rec {
               hasOutput = out: builtins.elem out outs;
             in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
         }
+        // attrs.src.meta or {}
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.
         // lib.optionalAttrs (pos != null) {
