@@ -5215,6 +5215,8 @@ in {
     };
   };
 
+  idna-ssl = callPackage ../development/python-modules/idna-ssl/default.nix { };
+
   ijson = callPackage ../development/python-modules/ijson/default.nix {};
 
   imagesize = buildPythonPackage rec {
