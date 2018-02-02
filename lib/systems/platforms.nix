@@ -479,6 +479,11 @@ rec {
     kernelPreferBuiltin = true;
     kernelTarget = "zImage";
     kernelExtraConfig = ''
+      # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+
       # Fix broken sunxi-sid nvmem driver.
       TI_CPTS y
 
