@@ -338,22 +338,21 @@ stdenv.mkDerivation ({
       "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include" ++
 
     # Basic configuration
+    optional (!crossDarwin) "--enable-lto" ++
     [
-      "--enable-lto"
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
         concatStrings (intersperse ","
-          (  optional langC        "c"
-          ++ optional langCC       "c++"
-          ++ optional langFortran  "fortran"
-          ++ optional langJava     "java"
-          ++ optional langGo       "go"
-          ++ optional langObjC     "objc"
-          ++ optional langObjCpp   "obj-c++"
-          ++ optionals crossDarwin [ "objc" "obj-c++" ]
+          (  optional langC                       "c"
+          ++ optional langCC                      "c++"
+          ++ optional langFortran                 "fortran"
+          ++ optional langJava                    "java"
+          ++ optional langGo                      "go"
+          ++ optional (langObjC || crossDarwin)   "objc"
+          ++ optional (langObjCpp || crossDarwin) "obj-c++"
           )
         )
       }"
