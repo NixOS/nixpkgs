@@ -46,7 +46,7 @@ let
 
   config = import ./common-config.nix {
     inherit stdenv version extraConfig;
-    kernelPlatform = hostPlatform;
+    kernelPlatform = hostPlatform.platform;
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
 
