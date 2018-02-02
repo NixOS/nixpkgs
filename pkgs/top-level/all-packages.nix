@@ -19045,6 +19045,7 @@ with pkgs;
   plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix { };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
