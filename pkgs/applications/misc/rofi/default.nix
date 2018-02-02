@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
+  version = "1.5.0";
   name = "rofi-${version}";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0ys7grazqz5hw3nx2393df54ykcd5gw0zn66kik5fvzijpg3qfcx";
+    sha256 = "0h068wqf0n6gmil2g3lh263pm7spkp4k5rxbnfp52n8izqgyf7al";
   };
 
   preConfigure = ''
