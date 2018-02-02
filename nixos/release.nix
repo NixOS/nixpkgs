@@ -333,6 +333,7 @@ in rec {
   tests.quake3 = callTest tests/quake3.nix {};
   tests.radicale = callTest tests/radicale.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
   tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
