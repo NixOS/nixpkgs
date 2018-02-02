@@ -105,9 +105,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A retargetable machine-code decompiler based on LLVM";
-    inherit (src.meta) homepage;
+    homepage = https://retdec.com;
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-
