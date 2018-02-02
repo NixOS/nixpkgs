@@ -1,183 +1,263 @@
-/* String manipulation functions. */
+/** \file strings.nix
+ * String manipulation functions.
+ */
 { lib }:
 let
 
 inherit (builtins) length;
-
+/** @private */
 in
-
 rec {
 
   inherit (builtins) stringLength substring head tail isString replaceStrings;
 
-  /* Concatenate a list of strings.
-
-     Example:
+  /**
+  * @hideinitializer
+  * @brief Concatenate a list of strings
+  * @param [string] strings
+  * @code
+       Example:
        concatStrings ["foo" "bar"]
        => "foobar"
+  * @endcode
   */
   concatStrings = builtins.concatStringsSep "";
 
-  /* Map a function over a list and concatenate the resulting strings.
-
-     Example:
-       concatMapStrings (x: "a" + x) ["foo" "bar"]
-       => "afooabar"
+  /**
+  * @hideinitializer
+  * @brief Map a function over a list and concatenate the resulting strings.
+  * @param func f
+  * @param [] list
+  * @code
+      Example:
+        concatMapStrings (x: "a" + x) ["foo" "bar"]
+        => "afooabar"
+  * @endcode
   */
   concatMapStrings = f: list: concatStrings (map f list);
 
-  /* Like `concatMapStrings' except that the f functions also gets the
-     position as a parameter.
-
-     Example:
-       concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
-       => "1-foo2-bar"
+  /**
+  * @hideinitializer
+  * @brief Like #concatMapStrings except that the f functions also gets the
+  *   position as a parameter.
+  * @param func f
+  * @param [string] list
+  * @code
+      Example:
+        concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
+        => "1-foo2-bar"
+  * @endcode
   */
   concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
-  /* Place an element between each element of a list
-
-     Example:
-       intersperse "/" ["usr" "local" "bin"]
-       => ["usr" "/" "local" "/" "bin"].
+  /**
+  * @hideinitializer
+  * @brief Place an element between each element of a list
+  * @param string separator
+  * @param [string] list
+  * @code
+       Example:
+         concatStringsSep "/" ["usr" "local" "bin"]
+          => "usr/local/bin"
+  * @endcode
   */
   intersperse = separator: list:
     if list == [] || length list == 1
     then list
     else tail (lib.concatMap (x: [separator x]) list);
 
-  /* Concatenate a list of strings with a separator between each element
-
-     Example:
-        concatStringsSep "/" ["usr" "local" "bin"]
-        => "usr/local/bin"
+  /**
+  * @hideinitializer
+  * @brief Concatenate a list of strings with a separator between each element
+  * @param string sep
+  * @param [string] list
+  * @code
+  *     Example:
+  *     concatStringsSep "/" ["usr" "local" "bin"]
+  *      => "usr/local/bin"
+  * @endcode
   */
   concatStringsSep = builtins.concatStringsSep or (separator: list:
     concatStrings (intersperse separator list));
 
-  /* First maps over the list and then concatenates it.
-
-     Example:
+  /**
+  * @hideinitializer
+  * @brief First maps over the list and then concatenates it.
+  * @param string sep
+  * @param func f
+  * @param [string] list
+  * @code
+      Example:
         concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
         => "FOO-BAR-BAZ"
+  * @endcode
   */
   concatMapStringsSep = sep: f: list: concatStringsSep sep (map f list);
 
-  /* First imaps over the list and then concatenates it.
-
-     Example:
-
-       concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
-       => "6-3-2"
+  /**
+  * @hideinitializer
+  * @brief First imaps over the list and then concatenates it.
+  * @param string sep
+  * @param func f
+  * @param [] list
+  * @code
+      Example:
+        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
+        => "6-3-2"
+  * @endcode
   */
   concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap1 f list);
 
-  /* Construct a Unix-style search path consisting of each `subDir"
+  /**
+  * @hideinitializer
+  * @brief Construct a Unix-style search path consisting of each `subDir"
      directory of the given list of packages.
-
+  * @param string subDir
+  * @param [string] packages
+  * @code
      Example:
        makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
        => "/root/bin:/usr/bin:/usr/local/bin"
        makeSearchPath "bin" ["/"]
        => "//bin"
+  * @endcode
   */
   makeSearchPath = subDir: packages:
     concatStringsSep ":" (map (path: path + "/" + subDir) packages);
 
-  /* Construct a Unix-style search path, using given package output.
+  /**
+  * @hideinitializer
+  * @brief Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.
-
-     Example:
-       makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+  * @param string output
+  * @param string subDir
+  * @param [string] pkgs
+  * @code
+      Example:
+        makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
+        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+  * @endcode
   */
   makeSearchPathOutput = output: subDir: pkgs: makeSearchPath subDir (map (lib.getOutput output) pkgs);
 
-  /* Construct a library search path (such as RPATH) containing the
+  /**
+  * @hideinitializer
+  * @brief Construct a library search path (such as RPATH) containing the
      libraries for a set of packages
-
-     Example:
-       makeLibraryPath [ "/usr" "/usr/local" ]
-       => "/usr/lib:/usr/local/lib"
-       pkgs = import <nixpkgs> { }
-       makeLibraryPath [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+  * @param [string] pkgs
+  * @code
+      Example:
+        makeLibraryPath [ "/usr" "/usr/local" ]
+        => "/usr/lib:/usr/local/lib"
+        pkgs = import <nixpkgs> { }
+        makeLibraryPath [ pkgs.openssl pkgs.zlib ]
+        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+  * @endcode
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
-  /* Construct a binary search path (such as $PATH) containing the
+  /**
+  * @hideinitializer
+  * @brief Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
-
-     Example:
-       makeBinPath ["/root" "/usr" "/usr/local"]
-       => "/root/bin:/usr/bin:/usr/local/bin"
+  * @param string _sep
+  * @param string _s
+  * @code
+      Example:
+        makeBinPath ["/root" "/usr" "/usr/local"]
+        => "/root/bin:/usr/bin:/usr/local/bin"
+  * @endcode
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
-
-  /* Construct a perl search path (such as $PERL5LIB)
-
-     FIXME(zimbatm): this should be moved in perl-specific code
-
-     Example:
-       pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.NetSMTP ]
-       => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+  /**
+  * @hideinitializer
+  * @brief Construct a binary search path (such as $PATH) containing the
+     binaries for a set of packages.
+  * @todo FIXME(zimbatm): this should be moved in perl-specific code
+  * @param string _sep
+  * @param string _s
+  * @code
+      Example:
+        pkgs = import <nixpkgs> { }
+        makePerlPath [ pkgs.perlPackages.NetSMTP ]
+        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+  * @endcode
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
-  /* Depending on the boolean `cond', return either the given string
-     or the empty string. Useful to concatenate against a bigger string.
-
-     Example:
-       optionalString true "some-string"
-       => "some-string"
-       optionalString false "some-string"
-       => ""
+  /**
+  * @hideinitializer
+  * @brief Return `string` if true, else ""
+  * @details Depending on the boolean `cond', return either the given string
+  *   or the empty string. Useful to concatenate against a bigger string.
+  * @param bool cond
+  * @param string string
+  * @code
+    Example:
+      optionalString true "some-string"
+      => "some-string"
+      optionalString false "some-string"
+      => ""
+  * @endcode
   */
   optionalString = cond: string: if cond then string else "";
 
-  /* Determine whether a string has given prefix.
-
-     Example:
-       hasPrefix "foo" "foobar"
-       => true
-       hasPrefix "foo" "barfoo"
-       => false
+  /**
+  * @hideinitializer
+  * @brief Determine whether a string has given prefix.
+  * @param string pref
+  * @param string str
+  * @code
+    Example:
+      hasPrefix "foo" "foobar"
+      => true
+      hasPrefix "foo" "barfoo"
+      => false
+  * @endcode
   */
   hasPrefix = pref: str:
     substring 0 (stringLength pref) str == pref;
 
-  /* Determine whether a string has given suffix.
 
-     Example:
-       hasSuffix "foo" "foobar"
-       => false
-       hasSuffix "foo" "barfoo"
-       => true
+  /**
+  * @hideinitializer
+  * @brief Determine whether a string has given suffix.
+  * @param string suffix
+  * @param string content
+  * @code
+      Example:
+        concatMapStrings (x: "a" + x) ["foo" "bar"]
+        => "afooabar"
+  * @endcode
   */
   hasSuffix = suffix: content:
     let
       lenContent = stringLength content;
       lenSuffix = stringLength suffix;
+    /** @private */
     in lenContent >= lenSuffix &&
        substring (lenContent - lenSuffix) lenContent content == suffix;
 
-  /* Convert a string to a list of characters (i.e. singleton strings).
-     This allows you to, e.g., map a function over each character.  However,
+  /**
+  * @hideinitializer
+  * @brief Convert a string to a list of characters (i.e. singleton strings).
+  * @details This allows you to, e.g., map a function over each character.  However,
      note that this will likely be horribly inefficient; Nix is not a
      general purpose programming language. Complex string manipulations
      should, if appropriate, be done in a derivation.
      Also note that Nix treats strings as a list of bytes and thus doesn't
      handle unicode.
-
-     Example:
-       stringToCharacters ""
-       => [ ]
-       stringToCharacters "abc"
-       => [ "a" "b" "c" ]
-       stringToCharacters "💩"
-       => [ "�" "�" "�" "�" ]
+  * @param string s
+  * @code
+    Example:
+      stringToCharacters ""
+      => [ ]
+      stringToCharacters "abc"
+      => [ "a" "b" "c" ]
+      stringToCharacters "💩"
+      => [ "�" "�" "�" "�" ]
+  * @endcode
   */
   stringToCharacters = s:
     map (p: substring p 1 s) (lib.range 0 (stringLength s - 1));
@@ -276,16 +356,20 @@ rec {
   */
   addContextFrom = a: b: substring 0 0 a + b;
 
-  /* Cut a string with a separator and produces a list of strings which
+  /**
+  * @hideinitializer
+  * @brief Cut a string with a separator and produces a list of strings which
      were separated by this separator.
-
-     NOTE: this function is not performant and should never be used.
-
-     Example:
-       splitString "." "foo.bar.baz"
-       => [ "foo" "bar" "baz" ]
-       splitString "/" "/usr/local/bin"
-       => [ "" "usr" "local" "bin" ]
+  * @warning This function is not performant and should never be used.
+  * @param string _sep
+  * @param string _s
+  * @code
+      Example:
+        splitString "." "foo.bar.baz"
+        => [ "foo" "bar" "baz" ]
+        splitString "/" "/usr/local/bin"
+        => [ "" "usr" "local" "bin" ]
+  * @endcode
   */
   splitString = _sep: _s:
     let
@@ -296,7 +380,7 @@ rec {
       lastSearch = sLen - sepLen;
       startWithSep = startAt:
         substring startAt sepLen s == sep;
-
+      /** @private */
       recurse = index: startAt:
         let cutUntil = i: [(substring startAt (i - startAt) s)]; in
         if index <= lastSearch then
