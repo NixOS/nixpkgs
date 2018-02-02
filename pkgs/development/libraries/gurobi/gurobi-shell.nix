@@ -13,5 +13,6 @@ in stdenv.mkDerivation  {
    export GUROBI_HOME="${myGurobi.out}/${gurobiPlatform}"
    export GUROBI_PATH="${myGurobi.out}/${gurobiPlatform}"
    export GRB_LICENSE_FILE="$HOME/gurobi.lic"
+   export LD_LIBRARY_PATH="${myGurobi.out}/linux64/lib"
   '';
-}  
+}
