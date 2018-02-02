@@ -7603,6 +7603,8 @@ with pkgs;
     guile = guile_2_0;
   };
 
+  hcloud = callPackage ../development/tools/hcloud { };
+
   help2man = callPackage ../development/tools/misc/help2man {
     inherit (perlPackages) LocaleGettext;
   };
