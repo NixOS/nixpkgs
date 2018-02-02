@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobjectIntrospection, vala }:
 
 let
   majorVersion = "0.10";
@@ -13,10 +13,15 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=791941
+    # Darwin compatibility (https://bugzilla.gnome.org/show_bug.cgi?id=791941)
     (fetchurl {
       url = https://bugzilla.gnome.org/attachment.cgi?id=365969;
       sha256 = "06w744acgnz3hym7sm8c245yzlg05ldkmwgiz3yz4pp6h72brizj";
+    })
+    # GIR & Vala bindings fix (https://bugzilla.gnome.org/show_bug.cgi?id=792431)
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=366662;
+      sha256 = "1ljb2pap5v9z3zhx69ghfyrbl2b62ck35nyn7h5h410d008lcb4v";
     })
   ];
 
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection vala ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ exiv2 ];
 
