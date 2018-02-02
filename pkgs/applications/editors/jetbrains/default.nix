@@ -299,12 +299,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.3.3"; /* updated by script */
+    version = "2017.3.4"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0mk4d2c41qvfz7sqxqw7adak86pm95wvhzxrfg32y01r5i5q0av7"; /* updated by script */
+      sha256 = "1hxkn0p0lp021bbysypwn8s69iggb76iwq38jv5a1ql7v5r1nwvd"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PS2017.3";
