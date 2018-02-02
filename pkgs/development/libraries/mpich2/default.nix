@@ -29,7 +29,7 @@ stdenv.mkDerivation  rec {
   '';
 
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Implementation of the Message Passing Interface (MPI) standard";
 
     longDescription = ''
@@ -38,9 +38,11 @@ stdenv.mkDerivation  rec {
       version 2.
     '';
     homepage = http://www.mcs.anl.gov/mpi/mpich2/;
-    license = "free, see http://www.mcs.anl.gov/research/projects/mpich2/downloads/index.php?s=license";
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    license = {
+      url = http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT;
+      fullName = "MPICH license (permissive)";
+    };
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.unix;
   };
 }
