@@ -1,0 +1,21 @@
+# Doxyfile 1.8.11
+
+# This file describes the settings to be used by the documentation system
+# doxygen (www.doxygen.org) for a project.
+#
+# All text after a double hash (##) is considered a comment and is placed in
+# front of the TAG it is preceding.
+#
+# All text after a single hash (#) is considered a comment and will be ignored.
+# The format is:
+# TAG = value [value, ...]
+# For lists, items can also be appended using:
+# TAG += value [value, ...]
+# Values that contain spaces should be placed between quotes (\" \").
+
+PROJECT_NAME           = "nixpkgs builtins"
+FILE_PATTERNS          = *.nix
+EXTENSION_MAPPING      = nix=c++
+INPUT                  = lib
+RECURSIVE              = YES
+TAB_SIZE               = 2
