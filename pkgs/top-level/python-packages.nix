@@ -20883,25 +20883,7 @@ EOF
     };
   };
 
-  ovh = buildPythonPackage rec {
-    name = "ovh-${version}";
-    version = "0.4.5";
-    doCheck = false; #test needs packages too explicit
-    buildInputs = with self; [ d2to1 ];
-    propagatedBuildInputs = with self; [ requests ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/ovh/ovh-${version}.tar.gz";
-      sha256 = "1wf2p1sbg34jpj97r3w5nx9pj6vp0mlprry3vw2xav3dv02qv2af";
-    };
-
-    meta = {
-      description = "Thin wrapper around OVH's APIs";
-      homepage = https://pypi.python.org/pypi/ovh;
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  ovh = callPackage ../development/python-modules/ovh { };
 
   willow = buildPythonPackage rec {
     name = "willow-${version}";
