@@ -225,6 +225,8 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  globus-sdk = callPackage ../development/python-modules/globus-sdk { };
+  
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
@@ -243,6 +245,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  mwoauth = callPackage ../development/python-modules/mwoauth { };
+  
   neuron = pkgs.neuron.override {
     inherit python;
   };
@@ -260,6 +264,8 @@ in {
   nltk = callPackage ../development/python-modules/nltk { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
+
+  oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -342,6 +348,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+  
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
