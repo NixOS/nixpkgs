@@ -15086,20 +15086,7 @@ in {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
-  quantities = buildPythonPackage rec {
-    name = "quantities-0.10.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/quantities/quantities-0.10.1.tar.gz";
-      sha256 = "2d27caf31a5e0c37130ac0c14bfa8f9412a5ff1fbf3378a1d6085594776c4315";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Quantities is designed to handle arithmetic and";
-      homepage = http://packages.python.org/quantities;
-      license = licenses.bsd2;
-    };
-  };
+  quantities = callPackage ../development/python-modules/quantities { };
 
   qutip = buildPythonPackage rec {
     name = "qutip-2.2.0";
