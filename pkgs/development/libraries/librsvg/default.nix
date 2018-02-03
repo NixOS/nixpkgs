@@ -6,7 +6,7 @@
 # no introspection by default, it's too big
 
 let
-  version = "2.42.0";
+  version = "2.42.2";
   releaseVersion = (lib.concatStringsSep "." (lib.lists.take 2
     (lib.splitString "." version)));
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "mirror://gnome/sources/librsvg/${releaseVersion}/${name}.tar.xz";
-    sha256 = "06j60hb1m96hnrp8phbqn8lfw2j8ai8dcddzc72yvrnrn8lagc4s";
+    sha256 = "0c550a0bffef768a436286116c03d9f6cd3f97f5021c13e7f093b550fac12562";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
