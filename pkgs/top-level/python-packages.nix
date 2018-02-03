@@ -18164,24 +18164,7 @@ EOF
     };
   };
 
-  webcolors = buildPythonPackage rec {
-    name = "webcolors-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/webcolors/${name}.tar.gz";
-      sha256 = "304fc95dab2848c7bf64f378356766e692c2f8b4a8b15fa3509544e6412936e8";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "Library for working with color names/values defined by the HTML and CSS specifications";
-      homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
-      license = licenses.bsd3;
-      platforms = platforms.unix;
-    };
-  };
+  webcolors = callPackage ../development/python-modules/webcolors { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
 
