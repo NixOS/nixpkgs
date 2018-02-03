@@ -22,6 +22,8 @@
 , # The final, fully overriden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
+
+, ...
 }:
 
 # return value: a function from self to the package set
