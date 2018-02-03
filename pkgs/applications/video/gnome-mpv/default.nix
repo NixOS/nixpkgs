@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Simple GTK+ frontend for the mpv video player";
@@ -38,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/gnome-mpv/gnome-mpv;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

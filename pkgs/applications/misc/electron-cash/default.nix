@@ -7,14 +7,14 @@ let
 in
 
 python3Packages.buildPythonApplication rec {
-  version = "3.0";
+  version = "3.1.2";
   name = "electron-cash-${version}";
 
   src = fetchurl {
     url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "f0e2bf5c6d29da714eddd50b45761fea9fc905a0172c7b92df8fca7427439f1a";
+    sha256 = "18h44jfbc2ksj34hdzgszvvq82xi28schl3wp3lkq9fjp7ny0mf3";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -35,6 +35,11 @@ python3Packages.buildPythonApplication rec {
     keepkey
     trezor
   ];
+
+  postPatch = ''
+    # Remove pyqt5 check
+    sed -i '/pyqt5/d' setup.py
+  '';
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -69,6 +74,7 @@ python3Packages.buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = https://www.electroncash.org/;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
   };

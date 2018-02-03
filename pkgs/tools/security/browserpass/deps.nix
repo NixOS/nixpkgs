@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-zglob";
-      rev = "4b74c24375b3b1ee226867156e01996f4e19a8d6";
-      sha256 = "1qc502an4q3wgvrd9zw6zprgm28d90d2f98bdamdf4js03jj22xn";
+      rev = "4959821b481786922ac53e7ef25c61ae19fb7c36";
+      sha256 = "0rwkdw143kphpmingsrw1zp030zf3p08f64h347jpdm4lz8z5449";
     };
   }
   {

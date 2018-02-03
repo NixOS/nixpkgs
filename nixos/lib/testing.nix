@@ -85,7 +85,7 @@ rec {
 
       testScript' =
         # Call the test script with the computed nodes.
-        if builtins.isFunction testScript
+        if lib.isFunction testScript
         then testScript { inherit nodes; }
         else testScript;
 

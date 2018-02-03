@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     homepage = http://gparted.org;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

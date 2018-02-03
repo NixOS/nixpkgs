@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , cmake, pkgconfig
 # Transport
 , curl
@@ -15,6 +15,7 @@
 , libappindicator-gtk3
 , libnotify
 , libxdg_basedir
+, wxGTK
 # GStreamer
 , gst_all_1
 # User-agent info
@@ -39,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "1m853gzh9r249crn0xyrq22x154r005j58b0kq3nsrgi5cps2zdv";
+    sha256 = "12mhi0q137cjdpmpczvrcr7szq1ja1r8bm0gh03b925y8xyrqp5z";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     glibmm hicolor_icon_theme gnome3.gsettings_desktop_schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
+    wxGTK
   ] ++ stdenv.lib.optional doCheck gmock
     ++ gstInputs
     ++ pythonInputs;
@@ -65,15 +67,13 @@ stdenv.mkDerivation rec {
       --replace /usr $out
     substituteInPlace include/radiotray-ng/common.hpp \
       --replace /usr $out
-  '';
 
-  patches = [
-    (fetchpatch {
-      # Fix menu separators and minor touchup to 'version'
-      url = "https://github.com/ebruck/radiotray-ng/commit/827e9f1baaa03ab4d8a5fb3aab043e72950eb965.patch";
-      sha256 = "1aykl6lq4pga34xg5r9mc616gxnd63q6gr8qzg57w6874cj3csrr";
-    })
-  ];
+    # We don't find the radiotray-ng-notification icon otherwise
+    substituteInPlace data/radiotray-ng.desktop \
+      --replace radiotray-ng-notification radiotray-ng-on
+    substituteInPlace data/rtng-bookmark-editor.desktop \
+      --replace radiotray-ng-notification radiotray-ng-on
+  '';
 
   enableParallelBuilding = true;
 

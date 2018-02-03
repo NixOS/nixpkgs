@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
       which only understands the MP3 format, or transcode files through
       simple drag-and-drop in a file browser.
     '';
-    homepage = http://khenriks.github.io/mp3fs/;
+    homepage = https://khenriks.github.io/mp3fs/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

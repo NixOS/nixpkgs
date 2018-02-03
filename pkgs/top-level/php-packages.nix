@@ -8,6 +8,8 @@ let
     };
   isPhpOlder55 = pkgs.lib.versionOlder php.version "5.5";
   isPhp7 = pkgs.lib.versionAtLeast php.version "7.0";
+  isPhp72 = pkgs.lib.versionAtLeast php.version "7.2";
+  isPhpOlder7 = pkgs.lib.versionOlder php.version "7.0";
 
   apcu = if isPhp7 then apcu51 else apcu40;
 
@@ -179,7 +181,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug25 else xdebug23;
+  xdebug = if isPhp72 then xdebug26 else if isPhp7 then xdebug25 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -190,10 +192,19 @@ let
     checkTarget = "test";
   };
 
-  xdebug25 = buildPecl {
+  xdebug25 = assert !isPhp72; buildPecl {
     name = "xdebug-2.5.0";
 
     sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
+
+    doCheck = true;
+    checkTarget = "test";
+  };
+
+  xdebug26 = assert !isPhpOlder7; buildPecl {
+    name = "xdebug-2.6.0beta1";
+
+    sha256 = "0zaj821jbpaqqcbr9a64sa27my9n980pmyy9kxrvvjqq3qg6dpj9";
 
     doCheck = true;
     checkTarget = "test";
@@ -328,12 +339,13 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.5.1";
+    version = "1.6.2";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "107v8hdgmi2s15zsd9ffrr3jyw01qkwv174y9gw9fbpdrjwffi97";
+      sha256 = "0xjjnbpzar6ybpad77r0b4a96bwrayza8s1s9vz6s634ir98dhvf";
     };
+
     unpackPhase = ":";
 
     buildInputs = [ pkgs.makeWrapper ];
@@ -382,11 +394,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.9.0";
+    version = "2.10.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "12z1fan4yyxll03an51zhx6npr1d49s84dvmrvnzzf9jhckl5mqd";
+      sha256 = "0mi72sg0gms2lg1r1b6qxhsxgi3v07kczmr1hnk7pwa47jb6572q";
     };
 
     phases = [ "installPhase" ];

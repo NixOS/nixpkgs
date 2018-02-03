@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   passthru.rustc = rustc;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ file curl python openssl cmake zlib makeWrapper libgit2 ]
+  buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
@@ -48,8 +48,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkPhase = ''
-    # Export SSL_CERT_FILE as without it one test fails with SSL verification error
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     # Disable cross compilation tests
     export CFG_DISABLE_CROSS_TESTS=1
     cargo test

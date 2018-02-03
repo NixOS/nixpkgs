@@ -32,7 +32,7 @@ in buildPythonApplication rec {
 
   meta = {
     description = "A build system for software projects in a variety of languages";
-    homepage    = "http://www.pantsbuild.org/";
+    homepage    = "https://www.pantsbuild.org/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.unix;

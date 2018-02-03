@@ -24,7 +24,11 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases (rec {
-  accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
+  _2048-in-terminal = "2048-in-terminal"; # added 2017-01-16
+  _2bwm = "2bwm"; # added 2017-01-16
+  _389-ds-base = "389-ds-base"; # added 2017-01-16
+  _90secondportraits = "90secondsportraits"; # added 2017-01-16
+  accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
   adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
   ammonite-repl = ammonite; # added 2017-05-02
@@ -79,7 +83,6 @@ mapAliases (rec {
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
-  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
@@ -94,7 +97,9 @@ mapAliases (rec {
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
+  libgumbo = gumbo; # added 2018-01-21
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
@@ -120,7 +125,13 @@ mapAliases (rec {
   owncloudclient = owncloud-client;  # added 2016-08
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
-  pidginlatexSF = pidginlatex; # added 2014-11-02
+  pidginlatexSF = pidgin-latex; # added 2014-11-02
+  pidginlatex = pidgin-latex; # added 2018-01-08
+  pidginmsnpecan = pidgin-msn-pecan; # added 2018-01-08
+  pidginotr = pidgin-otr; # added 2018-01-08
+  pidginosd = pidgin-osd; # added 2018-01-08
+  pidginsipe = pidgin-sipe; # added 2018-01-08
+  pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   PPSSPP = ppsspp; # added 2017-10-01
@@ -153,6 +164,8 @@ mapAliases (rec {
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  transmission_gtk = transmission-gtk; # added 2018-01-06
+  transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10

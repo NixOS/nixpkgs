@@ -208,6 +208,8 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+    dtoa = callPackage ../development/ocaml-modules/dtoa { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     eff = callPackage ../development/interpreters/eff { };
@@ -665,8 +667,12 @@ let
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
-    uri = callPackage ../development/ocaml-modules/uri { };
-    uri_p4 = callPackage ../development/ocaml-modules/uri {
+    uri =
+      if lib.versionAtLeast ocaml.version "4.3"
+      then callPackage ../development/ocaml-modules/uri { }
+      else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
     };
 
@@ -678,6 +684,8 @@ let
     vg = callPackage ../development/ocaml-modules/vg { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
+
+    wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 

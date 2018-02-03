@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, libtool, pkgconfig
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, gss, mysql }:
+, python, gss, mysql }:
 
 let
   p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "mailutils";
   version = "3.2";
@@ -16,11 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook gettext libtool pkgconfig
+    autoreconfHook gettext pkgconfig
   ] ++ stdenv.lib.optional doCheck dejagnu;
   buildInputs = [
     gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
-    gss mysql.lib
+    gss mysql.connector-c python
   ];
 
   patches = [
@@ -52,14 +51,20 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -e '/AM_GNU_GETTEXT_VERSION/s/0.18/0.19/' -i configure.ac
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
+    sed -i 's:/usr/lib/mysql:${mysql.connector-c}/lib/mysql:' configure.ac
+    sed -i 's/0\.18/0.19/' configure.ac
+    sed -i -e 's:mysql/mysql.h:mysql.h:' \
+           -e 's:mysql/errmsg.h:errmsg.h:' \
+      sql/mysql.c
   '';
 
+  NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql";
+
   preCheck = ''
-    # Add missing files.
+    # Add missing test files
     cp ${builtins.toString readmsg-tests} readmsg/tests/
     for f in hdr.at nohdr.at twomsg.at weed.at; do
       mv readmsg/tests/*-$f readmsg/tests/$f

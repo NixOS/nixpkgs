@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   # it's hard to cross-run tests and some check programs didn't compile anyway
   makeFlags = stdenv.lib.optional (!doCheck) "check_PROGRAMS=";
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   passthru = { inherit zlib; };
 

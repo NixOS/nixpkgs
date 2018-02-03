@@ -578,6 +578,18 @@ in {
           Extra config options for matrix-synapse.
         '';
       };
+      extraConfigFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          Extra config files to include.
+
+          The configuration files will be included based on the command line
+          argument --config-path. This allows to configure secrets without
+          having to go through the Nix store, e.g. based on deployment keys if
+          NixOPS is in use.
+        '';
+      };
       logConfig = mkOption {
         type = types.lines;
         default = readFile ./matrix-synapse-log_config.yaml;
@@ -627,7 +639,11 @@ in {
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory ${cfg.dataDir}";
+        ExecStart = ''
+          ${cfg.package}/bin/homeserver \
+            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            --keys-directory ${cfg.dataDir}
+        '';
         Restart = "on-failure";
       };
     };

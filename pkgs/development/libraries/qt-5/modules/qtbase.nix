@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (mysql != null) mysql.connector-c
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
@@ -93,11 +93,9 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  fix_qt_static_libs = ../hooks/fix-qt-static-libs.sh;
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_static_libs"
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
@@ -361,11 +359,6 @@ stdenv.mkDerivation {
     + ''
       fixQtModulePaths "''${!outputDev}/mkspecs/modules"
       fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-    ''
-
-    # Move static libraries and QMake library definitions into $dev.
-    + ''
-      fixQtStaticLibs "''${!outputLib}" "''${!outputDev}"
     ''
 
     # Move development tools to $dev

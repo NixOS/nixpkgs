@@ -21,7 +21,7 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this 
+          Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
       };
@@ -134,6 +134,14 @@ in
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
         '';
       };
 
@@ -302,7 +310,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;

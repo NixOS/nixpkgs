@@ -1,7 +1,8 @@
-{stdenv, fetchurl, gnome3, glib, json_glib, libxml2, libarchive, libsoup, gobjectIntrospection, meson, ninja, pkgconfig,  valadoc}:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, valadoc
+, gnome3, glib, json_glib, libarchive, libsoup, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  major = "0.4";
+  major = "0.6";
   minor = "5";
   version = "${major}.${minor}";
 
@@ -9,15 +10,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
-    sha256 = "07sgcw285rl9wqr5k7srs3fj7fhgrrw6w780jx8wy8jw2bfwlvj2";
+    sha256 = "0ksf6vqjyjii29dvy5147dmgqlqsq4d70xxai0p2prkx4jrwgj3z";
   };
 
-  nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
-  buildInputs = [ glib gnome3.libgee libxml2 json_glib libsoup libarchive ];
+  nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig valadoc ];
+  buildInputs = [ glib gnome3.libgee json_glib libsoup libarchive ];
+
+  mesonFlags = "-Denable_valadoc=true";
 
   doCheck = true;
 
   checkPhase = "./httpseverywhere_test";
+
+  outputs = [ "out" "devdoc" ];
 
   meta = {
     description = "library to use HTTPSEverywhere in desktop applications";

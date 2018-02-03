@@ -1,31 +1,36 @@
-{stdenv, lib, python, dbus, fetchgit, cmake, coreutils, jq, gobjectIntrospection, python27Packages, makeWrapper, gnome3, wrapGAppsHook}:
+{stdenv, fetchurl, cmake, ninja, jq, python3, gnome3, wrapGAppsHook}:
 
-stdenv.mkDerivation rec {
-name="chrome-gnome-shell";
-  src = fetchgit {
-    url = "git://git.gnome.org/chrome-gnome-shell";
-    rev = "7d99523e90805cb65027cc2f5f1191a957dcf276";
-    sha256 = "0qc34dbhsz5yf4z5bx6py08h561rcxw9928drgk9256g3vnygnbc";
+let
+  version = "9";
+
+  inherit (python3.pkgs) python pygobject3 requests;
+in stdenv.mkDerivation rec {
+  name = "chrome-gnome-shell-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${name}.tar.xz";
+    sha256 = "0j6lzlp3jvkpnkk8s99y3m14xiq94rjwjzy2pbfqgv084ahzmz8i";
   };
 
- buildInputs = [ gnome3.gnome_shell makeWrapper jq dbus gobjectIntrospection
- python python27Packages.requests python27Packages.pygobject3 wrapGAppsHook];
+  nativeBuildInputs = [ cmake ninja jq wrapGAppsHook ];
+  buildInputs = [ gnome3.gnome_shell python pygobject3 requests ];
 
- preConfigure = ''
-   mkdir build usr etc
-   cd build
-   ${cmake}/bin/cmake -DCMAKE_INSTALL_PREFIX=$out/usr -DBUILD_EXTENSION=OFF ../
-   substituteInPlace cmake_install.cmake --replace "/etc" "$out/etc"
- '';
-
- postInstall = ''
-    rm $out/etc/opt/chrome/policies/managed/chrome-gnome-shell.json
-    rm $out/etc/chromium/policies/managed/chrome-gnome-shell.json
-    wrapProgram $out/usr/bin/chrome-gnome-shell \
-      --prefix PATH : '"${dbus}/bin"' \
-      --prefix PATH : '"${gnome3.gnome_shell}/bin"' \
-      --prefix PYTHONPATH : "$PYTHONPATH"
-
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc"
   '';
+  # cmake setup hook changes /etc/opt into /var/empty
+  dontFixCmake = true;
 
+  cmakeFlags = [ "-DBUILD_EXTENSION=OFF" ];
+  wrapPrefixVariables = [ "PYTHONPATH" ];
+
+  meta = with stdenv.lib; {
+    description = "GNOME Shell integration for Chrome";
+    longDescription = ''
+      To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome/Installation">browser extension</link>, and then set <option>services.gnome3.chrome-gnome-shell.enable</option> to <literal>true</literal>. For Firefox based browsers, you will also need to build the wrappers with <option>nixpkgs.config.firefox.enableGnomeExtensions</option> set to <literal>true</literal>.
+    '';
+    license = licenses.gpl3;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
+  };
 }

@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Patched meson does not add internal libraries to rpath
-    for f in bin/.epiphany-wrapped libexec/.epiphany-search-provider-wrapped libexec/epiphany/.ephy-profile-migrator-wrapped lib/epiphany/web-extensions/libephywebextension.so; do
-      patchelf --set-rpath "$out/lib/epiphany:$(patchelf --print-rpath $out/$f)" "$out/$f"
+    for f in $out/bin/.*-wrapped $out/libexec/.*-wrapped $out/libexec/epiphany/.*-wrapped $out/lib/epiphany/*.so $out/lib/epiphany/web-extensions/*.so; do
+      patchelf --set-rpath "$out/lib/epiphany:$(patchelf --print-rpath $f)" "$f"
     done
   '';
 

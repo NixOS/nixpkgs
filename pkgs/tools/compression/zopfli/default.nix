@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ bobvanderlinden nckx ];
+    maintainers = with maintainers; [ bobvanderlinden ];
   };
 }

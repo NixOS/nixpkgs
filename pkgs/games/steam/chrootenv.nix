@@ -69,6 +69,9 @@ in buildFHSUserEnv rec {
     xlibs.libX11
     xlibs.libXfixes
 
+    # Needed to properly check for libGL.so.1 in steam-wrapper.sh
+    pkgsi686Linux.glxinfo
+
     # Not formally in runtime but needed by some games
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
@@ -103,7 +106,26 @@ in buildFHSUserEnv rec {
     export TZDIR=/etc/zoneinfo
   '';
 
-  runScript = "steam";
+  runScript = writeScript "steam-wrapper.sh" ''
+    #!${stdenv.shell}
+    if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
+      glxinfo >/dev/null 2>&1
+      # If there was an error running glxinfo, we know something is wrong with the configuration
+      if [ $? -ne 0 ]; then
+        cat <<EOF > /dev/stderr
+    **
+    WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
+    and then run \`sudo nixos-rebuild switch\`:
+    { 
+      hardware.opengl.driSupport32Bit = true;
+      hardware.pulseaudio.support32Bit = true;
+    }
+    **
+    EOF
+      fi
+    fi
+    steam
+  '';
 
   passthru.run = buildFHSUserEnv {
     name = "steam-run";

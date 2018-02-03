@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, wrapGAppsHook, autoreconfHook, gettext
+, wrapGAppsHook, cmake, gettext
 , maxima, wxGTK, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];
 
-  nativeBuildInputs = [ wrapGAppsHook autoreconfHook gettext ];
+  nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 
   preConfigure = ''
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)
   '';
-
-  doCheck = true;
 
   enableParallelBuilding = true;
 

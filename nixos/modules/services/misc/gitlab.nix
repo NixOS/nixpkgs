@@ -29,7 +29,11 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
+
+    [git]
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -70,7 +74,7 @@ let
       secret_key_base: ${cfg.secrets.secret}
       otp_key_base: ${cfg.secrets.otp}
       db_key_base: ${cfg.secrets.db}
-      jws_private_key: ${builtins.toJSON cfg.secrets.jws}
+      openid_connect_signing_key: ${builtins.toJSON cfg.secrets.jws}
   '';
 
   gitlabConfig = {
@@ -104,6 +108,7 @@ let
       ldap.enabled = false;
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
+      gitaly.client_path = "${cfg.packages.gitaly}/bin";
       backup.path = "${cfg.backupPath}";
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
@@ -117,8 +122,6 @@ let
       };
       git = {
         bin_path = "git";
-        max_size = 20971520; # 20MB
-        timeout = 10;
       };
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
@@ -489,7 +492,9 @@ in {
       after = [ "network.target" "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ];
+      environment.GEM_HOME = "${cfg.packages.gitaly.rubyEnv}/${ruby.gemPath}";
+      environment.GITLAB_SHELL_CONFIG_PATH = gitlabEnv.GITLAB_SHELL_CONFIG_PATH;
+      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ruby ];
       serviceConfig = {
         #PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";

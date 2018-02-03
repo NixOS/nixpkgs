@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
+  # Fixes deprecation errors with networkmanager 1.10.2
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
   configureFlags = [
     "${if withGnome then "--with-gnome" else "--without-gnome"}"
     "--disable-static"

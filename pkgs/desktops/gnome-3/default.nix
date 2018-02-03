@@ -36,6 +36,7 @@ let
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
+    gnome-power-manager
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -296,6 +297,8 @@ let
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
   };
+
+  gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
   gnome-weather = callPackage ./apps/gnome-weather { };
 

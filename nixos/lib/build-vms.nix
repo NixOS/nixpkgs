@@ -3,7 +3,7 @@
 let pkgs = import ../.. { inherit system config; }; in
 
 with pkgs.lib;
-with import ../lib/qemu-flags.nix;
+with import ../lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 

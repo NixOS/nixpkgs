@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
     description = "A dynamic menu library and client program inspired by dmenu";
     homepage = src.meta.homepage;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;
   };
 }

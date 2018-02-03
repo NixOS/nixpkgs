@@ -201,7 +201,8 @@ stdenv.mkDerivation {
       ln -s $ccPath/${targetPrefix}ghdl $out/bin/${targetPrefix}ghdl
     '';
 
-  propagatedBuildInputs = [ bintools ] ++ extraPackages;
+  propagatedBuildInputs = [ bintools ];
+  depsTargetTargetPropagated = extraPackages;
 
   setupHook = ./setup-hook.sh;
 
@@ -292,7 +293,7 @@ stdenv.mkDerivation {
       ## Hardening support
       ##
 
-      export hardening_unsupported_flags=""
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
     + optionalString hostPlatform.isCygwin ''

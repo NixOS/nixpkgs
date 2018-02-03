@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     description = "An encrypted filesystem in user-space via FUSE";
     homepage = https://vgough.github.io/encfs;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ nckx ];
     platforms = with platforms; linux;
   };
 }

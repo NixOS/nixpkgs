@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, perl522, python, ruby
+, makeWrapper, python, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -28,8 +28,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
-      stdenv python ruby;
-    perl = perl522; # avoid issues like #26890, probably remove after texlive upgrade
+      stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -38,8 +37,10 @@ let
     /* # beware: the URL below changes contents continuously
       curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
-    orig = import ./pkgs.nix tl; # XXX XXX XXX FIXME: the file is probably too big now XXX XXX XXX XXX XXX XXX
-    removeSelfDep = lib.mapAttrs (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; } else p);
+    orig = import ./pkgs.nix tl;
+    removeSelfDep = lib.mapAttrs
+      (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; }
+                         else p);
     clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
@@ -113,6 +114,10 @@ let
       urls = args.urls or (if args ? url then [ args.url ] else
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
+
+      # Upstream refuses to distribute stable tarballs, so we host snapshots on IPFS.
+      # Common packages should get served from the binary cache anyway.
+      # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
         http://146.185.144.154/texlive-2017
         # IPFS GW is second, as it doesn't have a good time-outing behavior

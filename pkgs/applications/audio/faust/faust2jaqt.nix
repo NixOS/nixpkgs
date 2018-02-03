@@ -2,6 +2,7 @@
 , jack2Full
 , opencv
 , qt4
+, libsndfile
 }:
 
 faust.wrapWithBuildEnv {
@@ -17,6 +18,7 @@ faust.wrapWithBuildEnv {
     jack2Full
     opencv
     qt4
+    libsndfile
   ];
 
 }

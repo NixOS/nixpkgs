@@ -14,12 +14,29 @@ rec {
   mkDerivation =
     { name ? ""
 
-    , nativeBuildInputs ? []
-    , buildInputs ? []
+    # These types of dependencies are all exhaustively documented in
+    # the "Specifying Dependencies" section of the "Standard
+    # Environment" chapter of the Nixpkgs manual.
 
-    , propagatedNativeBuildInputs ? []
-    , propagatedBuildInputs ? []
+    # TODO(@Ericson2314): Stop using legacy dep attribute names
 
+    #                           host offset -> target offset
+    , depsBuildBuild              ? [] # -1 -> -1
+    , depsBuildBuildPropagated    ? [] # -1 -> -1
+    , nativeBuildInputs           ? [] # -1 ->  0  N.B. Legacy name
+    , propagatedNativeBuildInputs ? [] # -1 ->  0  N.B. Legacy name
+    , depsBuildTarget             ? [] # -1 ->  1
+    , depsBuildTargetPropagated   ? [] # -1 ->  1
+
+    , depsHostHost                ? [] #  0 ->  0
+    , depsHostHostPropagated      ? [] #  0 ->  0
+    , buildInputs                 ? [] #  0 ->  1  N.B. Legacy name
+    , propagatedBuildInputs       ? [] #  0 ->  1  N.B. Legacy name
+
+    , depsTargetTarget            ? [] #  1 ->  1
+    , depsTargetTargetPropagated  ? [] #  1 ->  1
+
+    # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
@@ -28,6 +45,13 @@ rec {
       configurePlatforms ? lib.optionals
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
+
+    # Check phase
+    , doCheck ? false
+
+    # InstallCheck phase
+    , doInstallCheck ? false
+
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -44,6 +68,7 @@ rec {
 
     , hardeningEnable ? []
     , hardeningDisable ? []
+
     , ... } @ attrs:
 
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
@@ -56,15 +81,38 @@ rec {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let
-      dependencies = map lib.chooseDevOutputs [
-        (map (drv: drv.nativeDrv or drv) nativeBuildInputs
-           ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
-           ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
-        (map (drv: drv.crossDrv or drv) buildInputs)
+      references = nativeBuildInputs ++ buildInputs
+                ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
+
+      dependencies = map (map lib.chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
+          (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
+          (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
+          (map (drv: drv.crossDrv or drv) buildInputs)
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
+        ]
       ];
-      propagatedDependencies = map lib.chooseDevOutputs [
-        (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
-        (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+      propagatedDependencies = map (map lib.chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
+          (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
+          (map (drv: drv.__spliced.buildTarget or drv) depsBuildTargetPropagated)
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) depsHostHostPropagated)
+          (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
+        ]
       ];
 
       outputs' =
@@ -95,9 +143,12 @@ rec {
               (lib.concatLists propagatedDependencies));
         in
         {
-          name = name + lib.optionalString
+          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
+          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
+          name = assert validity.handled; name + lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform)
             ("-" + stdenv.hostPlatform.config);
+
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -105,11 +156,19 @@ rec {
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
-          nativeBuildInputs = lib.elemAt dependencies 0;
-          buildInputs = lib.elemAt dependencies 1;
+          depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
+          nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
+          depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
+          depsHostBuild               = lib.elemAt (lib.elemAt dependencies 1) 0;
+          buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
+          depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
-          propagatedNativeBuildInputs = lib.elemAt propagatedDependencies 0;
-          propagatedBuildInputs = lib.elemAt propagatedDependencies 1;
+          depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
+          propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
+          depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
+          depsHostBuildPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
+          propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
+          depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags = let inherit (lib) optional elem; in
@@ -134,50 +193,69 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // (if outputs' != [ "out" ] then {
+        } // lib.optionalAttrs (outputs' != [ "out" ]) {
           outputs = outputs';
-        } else { }));
+        } // lib.optionalAttrs (attrs ? doCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        } // lib.optionalAttrs (attrs ? doInstallCheck) {
+          # TODO(@Ericson2314): Make unconditional / resolve #33599
+          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        });
+
+      validity = import ./check-meta.nix {
+        inherit lib config meta derivationArg;
+        mkDerivationArg = attrs;
+        # Nix itself uses the `system` field of a derivation to decide where
+        # to build it. This is a bit confusing for cross compilation.
+        inherit (stdenv) system;
+      };
 
       # The meta attribute is passed in the resulting attribute set,
       # but it's not part of the actual derivation, i.e., it's not
       # passed to the builder and is not a dependency.  But since we
       # include it in the result, it *is* available to nix-env for queries.
-      meta = { }
+      meta = {
+          # `name` above includes cross-compilation cruft (and is under assert),
+          # lets have a clean always accessible version here.
+          inherit name;
+
           # If the packager hasn't specified `outputsToInstall`, choose a default,
           # which is the name of `p.bin or p.out or p`;
           # if he has specified it, it will be overridden below in `// meta`.
           #   Note: This default probably shouldn't be globally configurable.
           #   Services and users should specify outputs explicitly,
           #   unless they are comfortable with this default.
-        // { outputsToInstall =
-          let
-            outs = outputs'; # the value passed to derivation primitive
-            hasOutput = out: builtins.elem out outs;
-          in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+          outputsToInstall =
+            let
+              outs = outputs'; # the value passed to derivation primitive
+              hasOutput = out: builtins.elem out outs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
         }
         // attrs.meta or {}
-          # Fill `meta.position` to identify the source location of the package.
-        // lib.optionalAttrs (pos != null)
-          { position = pos.file + ":" + toString pos.line; }
-        ;
+        # Fill `meta.position` to identify the source location of the package.
+        // lib.optionalAttrs (pos != null) {
+          position = pos.file + ":" + toString pos.line;
+        # Expose the result of the checks for everyone to see.
+        } // {
+          evaluates = validity.valid
+                   && (if config.checkMetaRecursively or false
+                       then lib.all (d: d.meta.evaluates or true) references
+                       else true);
+        };
 
     in
 
-      lib.addPassthru
-        (derivation (import ./check-meta.nix
-          {
-            inherit lib config meta derivationArg;
-            mkDerivationArg = attrs;
-            # Nix itself uses the `system` field of a derivation to decide where
-            # to build it. This is a bit confusing for cross compilation.
-            inherit (stdenv) system;
-          }))
-        ( {
-            overrideAttrs = f: mkDerivation (attrs // (f attrs));
-            inherit meta passthru;
-          } //
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          passthru);
+      lib.extendDerivation
+        validity.handled
+        ({
+           overrideAttrs = f: mkDerivation (attrs // (f attrs));
+           inherit meta passthru;
+         } //
+         # Pass through extra attributes that are not inputs, but
+         # should be made available to Nix expressions using the
+         # derivation (e.g., in assertions).
+         passthru)
+        (derivation derivationArg);
+
 }

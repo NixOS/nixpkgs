@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus_glib, gupnp, mate, imagemagick }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus_glib, gupnp, caja, mate-desktop, imagemagick, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "caja-extensions-${version}";
@@ -14,14 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
     dbus_glib
     gupnp
-    mate.caja
-    mate.mate-desktop
+    caja
+    mate-desktop
     imagemagick
   ];
 

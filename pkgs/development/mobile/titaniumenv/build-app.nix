@@ -1,8 +1,8 @@
-{stdenv, androidsdk, titaniumsdk, titanium, alloy, xcodewrapper, jdk, python, nodejs, which, xcodeBaseDir}:
-{ name, src, target, androidPlatformVersions ? [ "23" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
+{stdenv, androidsdk, titaniumsdk, titanium, alloy, xcodewrapper, jdk, python, nodejs, which, file, xcodeBaseDir}:
+{ name, src, preBuild ? "", target, androidPlatformVersions ? [ "25" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "10.2"
-, enableWirelessDistribution ? false, installURL ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "11.2"
+, enableWirelessDistribution ? false, iosBuildStore ? false, installURL ? null
 }:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
@@ -19,6 +19,7 @@ let
   deleteKeychain = ''
     security default-keychain -s login.keychain
     security delete-keychain $keychainName
+    rm -f $HOME/lock-keychain
   '';
   
   # On macOS, the java executable shows an -unoffical postfix in the version
@@ -47,9 +48,11 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [ nodejs titanium alloy jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy jdk python which file ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
   
   buildPhase = ''
+    ${preBuild}
+
     export HOME=$TMPDIR
     
     ${stdenv.lib.optionalString (tiVersion != null) ''
@@ -77,9 +80,9 @@ stdenv.mkDerivation {
             export JAVA_HOME=${javaVersionFixWrapper}
             javac -version
           ''}
-          
-          titanium config --config-file $TMPDIR/config.json --no-colors android.sdk ${androidsdkComposition}/libexec
-          
+
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec
+
           export PATH=$(echo ${androidsdkComposition}/libexec/tools):$(echo ${androidsdkComposition}/libexec/build-tools/android-*):$PATH
           
           ${if release then
@@ -129,9 +132,20 @@ stdenv.mkDerivation {
               then
                   ln -s ${titaniumsdk}/modules modules
               fi
-              
+
+              # Take precautions to prevent concurrent builds blocking the keychain
+              while [ -f $HOME/lock-keychain ]
+              do
+                  echo "Keychain locked, waiting for a couple of seconds, or remove $HOME/lock-keychain to unblock..."
+                  sleep 3
+              done
+
+              touch $HOME/lock-keychain
+
+              security default-keychain -s $keychainName
+
               # Do the actual build
-              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target ${if iosBuildStore then "dist-appstore" else "dist-adhoc"} --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName-db --device-family universal --ios-version ${iosVersion} --output-dir $out
             
               # Remove our generated keychain
               ${deleteKeychain}
@@ -184,10 +198,10 @@ stdenv.mkDerivation {
            ''
              cp -av build/iphone/build/* $out
              mkdir -p $out/nix-support
-             echo "file binary-dist \"$(echo $out/Products/Release-iphoneos/*.ipa)\"" > $out/nix-support/hydra-build-products
+             echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
              
              ${stdenv.lib.optionalString enableWirelessDistribution ''
-               appname=$(basename $out/Products/Release-iphoneos/*.ipa .ipa)
+               appname=$(basename $out/*.ipa .ipa)
                bundleId=$(grep '<id>[a-zA-Z0-9.]*</id>' tiapp.xml | sed -e 's|<id>||' -e 's|</id>||' -e 's/ //g')
                version=$(grep '<version>[a-zA-Z0-9.]*</version>' tiapp.xml | sed -e 's|<version>||' -e 's|</version>||' -e 's/ //g')
                

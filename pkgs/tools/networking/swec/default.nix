@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   checkPhase = "make test";
 
   meta = {
-    homepage = http://random.zerodogg.org/swec/;
+    homepage = https://random.zerodogg.org/swec/;
 
     description = "Simple Web Error Checker (SWEC)";
 

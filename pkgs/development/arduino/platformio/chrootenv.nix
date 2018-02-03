@@ -18,8 +18,8 @@ buildFHSUserEnv {
       python27Packages.setuptools
       python27Packages.pip
       python27Packages.bottle
-      zlib
       python27Packages.platformio
+      zlib
     ]);
 
   meta = with stdenv.lib; {
@@ -29,6 +29,10 @@ buildFHSUserEnv {
     license = licenses.asl20;
     platforms = with platforms; linux;
   };
+
+  extraInstallCommands = ''
+    ln -s $out/bin/platformio $out/bin/pio
+  '';
 
   runScript = "platformio";
 }

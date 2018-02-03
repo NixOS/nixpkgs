@@ -66,7 +66,7 @@ let
 in
 
 let
-  version = "17.2.7";
+  version = "17.2.8";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0s3slgjxnx482yw0knn4a6alsy2cq28rah6hnjbmf12mvyldxksh";
+    sha256 = "0pq9kmmyllgd63d936f3x1zsg7sqaswx47khbn0gvbgari2h753f";
   };
 
   prePatch = "patchShebangs .";
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
-    "--sysconfdir=/etc"
+    "--sysconfdir=${driverLink}/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -197,7 +197,6 @@ stdenv.mkDerivation {
   '';
 
   # TODO:
-  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = ''
@@ -214,7 +213,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
-    homepage = http://www.mesa3d.org/;
+    homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ eduarrrd vcunat ];

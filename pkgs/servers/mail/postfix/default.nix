@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre
 , withPgSQL ? false, postgresql
-, withMySQL ? false, libmysql
+, withMySQL ? false, mysql
 , withSQLite ? false, sqlite
 , withLDAP ? false, openldap
 }:
@@ -11,7 +11,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${mysql.connector-c}/include/mysql" "-L${mysql.connector-c}/lib/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optional withLDAP "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
@@ -25,17 +25,17 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "1xn782bvzbrdwkz04smkq8ns89wbnqz11vnmz0m7jr545amfnmgc";
+    sha256 = "0xpky04a5xnzbcizqj4y1gyxqjrzvpjlvk1g757wdrs678fq82vx";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
                 ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL libmysql
+                ++ lib.optional withMySQL mysql.connector-c
                 ++ lib.optional withSQLite sqlite
                 ++ lib.optional withLDAP openldap;
 
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
-    license = lib.licenses.bsdOriginal;
+    license = with lib.licenses; [ ipl10 epl20 ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.rickynils ];
   };

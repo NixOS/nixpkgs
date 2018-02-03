@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json_glib }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json_glib, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "deepin-terminal-${version}";
@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     substituteInPlace ssh_login.sh --replace /usr/lib/deepin-terminal/zssh "${zssh}/bin/zssh"
   '';
 
-  nativeBuildInputs = [ pkgconfig vala cmake gettext ];
+  nativeBuildInputs = [
+    pkgconfig vala cmake gettext
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json_glib ];
 
   meta = with stdenv.lib; {

@@ -2,23 +2,25 @@
 , pympler, coverage, six, clang }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "attrs";
-  version = "17.2.0";
+  version = "17.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04gx08ikpk26wnq22f7l42gapcvk8iz1512r927k6sadz6cinkax";
+    sha256 = "1c7960ccfd6a005cd9f7ba884e6316b5e430a3f1a6c37c5f87d8b43f83b54ec9";
   };
 
   # macOS needs clang for testing
-  buildInputs = [
+  checkInputs = [
     pytest hypothesis zope_interface pympler coverage six
   ] ++ lib.optionals (stdenv.isDarwin) [ clang ];
 
   checkPhase = ''
     py.test
   '';
+
+  # To prevent infinite recursion with pytest
+  doCheck = false;
 
   meta = with lib; {
     description = "Python attributes without boilerplate";

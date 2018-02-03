@@ -3,12 +3,12 @@ nose, shouldbe, gss, krb5Full, which, darwin }:
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.2.0";
+  version = "1.3.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q6ccpz6anl9vggwxdq32wp6xjh2lyfbf7av6jqnmvmyqdfwh3b9";
+    sha256 = "765205082a9490c8e8be88ac16a6249d124396a671665edeec9927a7f244d712";
   };
 
   # It's used to locate headers

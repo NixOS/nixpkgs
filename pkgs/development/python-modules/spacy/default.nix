@@ -19,23 +19,12 @@
 , ftfy
 , thinc
 , pip
+, regex
 }:
-let
-  enableDebugging = true;
-  regexLocked = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "regex";
-    version = "2017.04.05";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0c95gf3jzz8mv52lkgq0h7sbasjwvdhghm4s0phmy5k9sr78f4fq";
-    };
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "spacy";
   version = "1.8.2";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "explosion";
@@ -56,7 +45,7 @@ in buildPythonPackage rec {
    ujson
    dill
    requests
-   regexLocked
+   regex
    ftfy
    thinc
    pytest

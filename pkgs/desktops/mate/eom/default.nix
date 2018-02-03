@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     pkgconfig
     intltool
     itstool
-    hicolor_icon_theme
     wrapGAppsHook
   ];
 
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
     gnome3.gtk
     gnome3.libpeas
     mate.mate-desktop
+    hicolor_icon_theme
   ];
 
   meta = {

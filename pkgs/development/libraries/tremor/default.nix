@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://xiph.org/tremor/;
+    homepage = https://xiph.org/tremor/;
     description = "Fixed-point version of the Ogg Vorbis decoder";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;

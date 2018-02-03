@@ -35,13 +35,13 @@ let
 in buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Theano";
-  version = "0.9.0";
+  version = "1.0.1";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05xwg00da8smkvkh6ywbywqzj8dw7x840jr74wqhdy9icmqncpbl";
+    sha256 = "88d8aba1fe2b6b75eacf455d01bc7e31e838c5a0fb8c13dde2d9472495ff4662";
   };
 
   postPatch = ''

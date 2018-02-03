@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "1.4.9";
   name = "tome4-${version}";
   src = fetchurl {
-    url = "http://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
     sha256 = "0c82m0g1ps64zghgdrp78m6bvfngcb75whhknqiailld7kz1g9xl";
   };
   nativeBuildInputs = [ premake4 ];
@@ -34,7 +34,7 @@ EOF
     cp -r game $out/opt/tome4
   '';
   meta = with stdenv.lib; {
-    homepage = http://te4.org/;
+    homepage = https://te4.org/;
     description = "Tales of Maj'eyal (rogue-like game)";
     maintainers = [ maintainers.chattered ];
     license = licenses.gpl3;

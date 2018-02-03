@@ -49,9 +49,6 @@ assert libelf != null -> zlib != null;
 # Make sure we get GNU sed.
 assert hostPlatform.isDarwin -> gnused != null;
 
-# Need c++filt on darwin
-assert hostPlatform.isDarwin -> targetPackages.stdenv.cc.bintools or null != null;
-
 # The go frontend is written in c++
 assert langGo -> langCC;
 
@@ -157,13 +154,9 @@ let version = "5.5.0";
           "--enable-threads=win32"
           "--enable-sjlj-exceptions"
           "--enable-hash-synchronization"
-          "--disable-libssp"
+          "--enable-libssp"
           "--disable-nls"
           "--with-dwarf2"
-          # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, mingw32 g++ linking is broken by default with shared libs,
-          # unless adding "-lsupc++" to any linking command. I don't know why.
-          "--disable-shared"
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
@@ -281,17 +274,27 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr libmpc libelf ]
-    ++ (optional (isl != null) isl)
+  # For building runtime libs
+  depsBuildTarget =
+    if hostPlatform == buildPlatform then [
+      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+    ] else assert targetPlatform == hostPlatform; [ # build != host == target
+      stdenv.cc
+    ];
+
+  buildInputs = [
+    gmp mpfr libmpc libelf
+    targetPackages.stdenv.cc.bintools # For linking code at run-time
+  ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-    ++ (optionals (buildPlatform != hostPlatform) [buildPackages.stdenv.cc])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
@@ -315,7 +318,7 @@ stdenv.mkDerivation ({
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
@@ -408,57 +411,12 @@ stdenv.mkDerivation ({
 
   /* For cross-built gcc (build != host == target) */
   crossAttrs = {
-    AR_FOR_BUILD = "ar";
-    AS_FOR_BUILD = "as";
-    LD_FOR_BUILD = "ld";
-    NM_FOR_BUILD = "nm";
-    OBJCOPY_FOR_BUILD = "objcopy";
-    OBJDUMP_FOR_BUILD = "objdump";
-    RANLIB_FOR_BUILD = "ranlib";
-    SIZE_FOR_BUILD = "size";
-    STRINGS_FOR_BUILD = "strings";
-    STRIP_FOR_BUILD = "strip";
-    CC_FOR_BUILD = "gcc";
-    CXX_FOR_BUILD = "g++";
-
-    AR = "${targetPlatform.config}-ar";
-    AS = "${targetPlatform.config}-as";
-    LD = "${targetPlatform.config}-ld";
-    NM = "${targetPlatform.config}-nm";
-    OBJCOPY = "${targetPlatform.config}-objcopy";
-    OBJDUMP = "${targetPlatform.config}-objdump";
-    RANLIB = "${targetPlatform.config}-ranlib";
-    SIZE = "${targetPlatform.config}-size";
-    STRINGS = "${targetPlatform.config}-strings";
-    STRIP = "${targetPlatform.config}-strip";
-    CC = "${targetPlatform.config}-gcc";
-    CXX = "${targetPlatform.config}-g++";
-
-    AR_FOR_TARGET = "${targetPlatform.config}-ar";
-    AS_FOR_TARGET = "${targetPlatform.config}-as";
-    LD_FOR_TARGET = "${targetPlatform.config}-ld";
-    NM_FOR_TARGET = "${targetPlatform.config}-nm";
-    OBJCOPY_FOR_TARGET = "${targetPlatform.config}-objcopy";
-    OBJDUMP_FOR_TARGET = "${targetPlatform.config}-objdump";
-    RANLIB_FOR_TARGET = "${targetPlatform.config}-ranlib";
-    SIZE_FOR_TARGET = "${targetPlatform.config}-size";
-    STRINGS_FOR_TARGET = "${targetPlatform.config}-strings";
-    STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
-    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
-    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-
     dontStrip = true;
     buildFlags = "";
   };
 
-  NIX_BUILD_BINTOOLS = buildPackages.stdenv.cc.bintools;
-  NIX_BUILD_CC = buildPackages.stdenv.cc;
-
-  # Needed for the cross compilation to work
-  AR = "ar";
-  LD = "ld";
   # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  CC = if stdenv.system == "x86_64-solaris" then "gcc -m64" else "gcc";
+  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.

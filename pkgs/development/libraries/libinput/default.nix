@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
 
   doCheck = testsSupport;
 
-  checkPhase = "meson test";
-
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
     homepage    = http://www.freedesktop.org/wiki/Software/libinput;

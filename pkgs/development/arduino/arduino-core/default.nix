@@ -20,8 +20,8 @@ let
   externalDownloads = import ./downloads.nix {inherit fetchurl; inherit (lib) optionalAttrs; inherit (stdenv) system;};
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
-       lib.optional (stdenv.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
-    ++ lib.optional (stdenv.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
+       lib.optional (stdenv.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
+    ++ lib.optional (stdenv.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino1.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
   ;
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
@@ -54,25 +54,25 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.2";
+  version = "1.8.5";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = "${version}";
-    sha256 = "1ssznjmzmahayslj2xnci9b5wpsl53nyg85say54akng93qipmfb";
+    sha256 = "0ww72qfk7fyvprz15lc80i1axfdacb5fij4h5j5pakrg76mng2c3";
   };
 
   teensyduino_src = fetchurl {
-    url = "https://www.pjrc.com/teensy/td_136/TeensyduinoInstall.${teensy_architecture}";
+    url = "https://www.pjrc.com/teensy/td_140/TeensyduinoInstall.${teensy_architecture}";
     sha256 =
       lib.optionalString ("${teensy_architecture}" == "linux64")
-        "0qvb5z9y6nsqy0kzib9fvvbn8dakl50vib6r3nm6bnpvyxzwjl2r"
+        "0127a1ak31252dbmr5niqa5mkvbm8dnz1cfcnmydzx9qn9rk00ir"
       + lib.optionalString ("${teensy_architecture}" == "linux32")
-        "14ca62vq7cpx269vfd92shi80qj8spf0dzli8gfcb39ss2zc4jf1"
+        "01mxj5xsr7gka652c9rp4szy5mkcka8mljk044v4agk3sxvx3v3i"
       + lib.optionalString ("${teensy_architecture}" == "linuxarm")
-        "122z1gxcgkmwjb8wdklb2w8c3qkj5rc1ap5n4a8fi3kjz29va9rx";
+        "1dff3alhvk9x8qzy3n85qrg6rfmy6l9pj6fmrlzpli63lzykvv4i";
   };
 
   buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline

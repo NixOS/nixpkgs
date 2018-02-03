@@ -1,12 +1,14 @@
 { pkgs
 , kernel ? pkgs.linux
-, img ? "bzImage"
+, img ? pkgs.stdenv.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" ]
+      ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
 with pkgs;
+with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
@@ -20,8 +22,6 @@ rec {
     };
     patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
   });
-
-  qemuProg = "${qemu}/bin/qemu-kvm";
 
 
   modulesClosure = makeModulesClosure {
@@ -196,22 +196,21 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/ttyS0 &> /dev/ttyS0
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
     fi
   '';
 
 
   qemuCommandLinux = ''
-    ${qemuProg} \
-      ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
+    ${qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      -drive file=$diskImage,if=virtio,cache=unsafe,werror=report \
+      ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -222,8 +221,6 @@ rec {
     PATH=${coreutils}/bin
     mkdir xchg
     mv saved-env xchg/
-
-    diskImage=''${diskImage:-/dev/null}
 
     eval "$preVM"
 
@@ -240,7 +237,7 @@ rec {
     # the -K option to preserve the temporary build directory).
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
-    diskImage=$diskImage
+    ''${diskImage:+diskImage=$diskImage}
     TMPDIR=$TMPDIR
     cd $TMPDIR
     ${qemuCommand}

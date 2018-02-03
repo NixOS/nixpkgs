@@ -3,14 +3,13 @@
 , pytest, pytestrunner
 , parse, six, enum34
 }:
+
 buildPythonPackage rec {
-  pname = "parse-type";
+  pname = "parse_type";
   version = "0.3.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
-    inherit version;
-    pname = "parse_type";
+    inherit pname version;
     sha256 = "3dd0b323bafcb8c25e000ce5589042a1c99cba9c3bec77b9f591e46bc9606147";
   };
 

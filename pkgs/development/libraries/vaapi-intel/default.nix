@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://cgit.freedesktop.org/vaapi/intel-driver/;
+    homepage = https://cgit.freedesktop.org/vaapi/intel-driver/;
     license = licenses.mit;
     description = "Intel driver for the VAAPI library";
     platforms = platforms.unix;

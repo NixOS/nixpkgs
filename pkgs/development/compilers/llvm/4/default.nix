@@ -20,7 +20,7 @@ let
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
     let drv-manpages = drv.override { enableManpages = true; }; in
-    drv // { man = drv-manpages.man; /*outputs = drv.outputs ++ ["man"];*/ };
+    drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
   llvm = callPackage ./llvm.nix {
     inherit compiler-rt_src stdenv;
@@ -34,6 +34,7 @@ let
     llvm = overrideManOutput llvm;
     clang-unwrapped = overrideManOutput clang-unwrapped;
 
+    libclang = self.clang-unwrapped.lib;
     llvm-manpages = lowPrio self.llvm.man;
     clang-manpages = lowPrio self.clang-unwrapped.man;
 
@@ -56,15 +57,11 @@ let
     stdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.clang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     libcxxStdenv = stdenv.override (drv: {
       allowedRequisites = null;
       cc = self.libcxxClang;
-      # Don't include the libc++ and libc++abi from the original stdenv.
-      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
     });
 
     lld = callPackage ./lld.nix {};

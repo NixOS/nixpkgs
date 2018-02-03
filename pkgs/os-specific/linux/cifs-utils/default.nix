@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = platforms.linux;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ nckx ];
   };
 }

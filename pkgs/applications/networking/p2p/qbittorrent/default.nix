@@ -10,11 +10,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "4.0.1";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0khy875ahh9rlk8lyfpwsbxjsbp7i1cwqvd1j1s4cqc812szh3z3";
+    sha256 = "1lkbrvpzdfbqwilj09a9vraai7pz6dh999w4vl51mj1adm7bh0ws";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free Software alternative to µtorrent";
-    homepage    = http://www.qbittorrent.org/;
+    homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ viric ];

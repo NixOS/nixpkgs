@@ -14,8 +14,8 @@ let
     };
 
   maybeDrv = name: data:
-    # vsphere is currently broken
-    if name == "vsphere" then null
+    # azure-classic is an archived repo
+    if name == "azure-classic" then null
     else toDrv data;
 in
   lib.mapAttrs maybeDrv list

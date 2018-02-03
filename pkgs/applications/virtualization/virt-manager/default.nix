@@ -17,7 +17,10 @@ python2Packages.buildPythonApplication rec {
     sha256 = "093azs8p4p7y4nf5j25xpsvdxww7gky1g0hs8mkcvmpxl2wjd0jj";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook intltool file ];
+  nativeBuildInputs = [
+    wrapGAppsHook intltool file
+    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+  ];
 
   buildInputs =
     [ libvirt-glib vte virtinst dconf gtkvnc gnome3.defaultIconTheme avahi

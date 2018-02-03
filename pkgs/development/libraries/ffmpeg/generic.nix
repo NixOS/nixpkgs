@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
     configureFlags = configureFlags ++ [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-      "--target_os=${hostPlatform.parsed.kernel}"
+      "--target_os=${hostPlatform.parsed.kernel.name}"
       "--arch=${hostPlatform.arch}"
     ];
   };

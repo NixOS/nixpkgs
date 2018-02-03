@@ -3,10 +3,10 @@
 , curl, tzdata, gdb, darwin
 , callPackage
 , bootstrapVersion ? false
-, version ? "2.075.1"
-, dmdSha256 ? "0kq6r8rcghvzk5jcphg89l85rg734s29bssd2rcw3fygx0k9a9k5"
-, druntimeSha256 ? "0idn2v1lmp7hl637g3i7pdfj9mjk4sclkz4cm77nl8873k2fhk8j"
-, phobosSha256 ? "1a7q5fd15yspgs5plxgx54jyrcwgzlyw3rahmz04jd2s5h56dj04"
+, version ? "2.078.1"
+, dmdSha256 ? "0b9lphh4g3r9cyzv4wcfppv9j3w952vvwv615za23acgwav3mqg2"
+, druntimeSha256 ? "16jv40m073cflpkyl0vmg1g58cianybfcsgcvwli7pfryxbgsbrr"
+, phobosSha256 ? "08ircpf4ilznz638kra272hz8fi5ccvw2cswj5hqckssl1lyqzs8"
 }:
 
 let
@@ -125,10 +125,6 @@ let
         # Use proper C++ compiler
         substituteInPlace ${dmdPath}/posix.mak \
             --replace g++ $CXX
-
-        # TODO
-        substituteInPlace druntime/src/core/memory.d \
-            --replace "assert(z is null);" "//assert(z is null);"
     ''
 
     + stdenv.lib.optionalString (!bootstrapVersion) ''

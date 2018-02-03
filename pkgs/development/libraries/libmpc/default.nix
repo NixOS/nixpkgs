@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "libmpc-${version}"; # to avoid clash with the MPD client
 
   src = fetchurl {
-    url = "http://www.multiprecision.org/mpc/download/mpc-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/mpc/mpc-${version}.tar.gz";
     sha256 = "1hzci2zrrd7v3g1jk35qindq05hbl0bhjcyyisq9z209xb3fqzb1";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${gmp.dev}/include";
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";

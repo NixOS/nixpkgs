@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd2 ];
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

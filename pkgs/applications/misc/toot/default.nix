@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "0.15.0";
+python3Packages.buildPythonApplication rec {
+  version = "0.17.1";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev    = "${version}";
-    sha256 = "08k913gw0ip2q686z9k63bcn1n5s4w6b7jj6jmmamm427xmibkph";
+    sha256 = "05fzsakm089bn03z8gip6yp4xfmwa054v40x2f3gqpl04r504gis";
   };
 
-  checkInputs = with pythonPackages; [ pytest ];
+  checkInputs = with python3Packages; [ pytest ];
 
-  propagatedBuildInputs = with pythonPackages;
+  propagatedBuildInputs = with python3Packages;
     [ requests beautifulsoup4 future ];
 
   checkPhase = ''

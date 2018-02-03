@@ -20,12 +20,12 @@
 , libtool ? null
 , lm_sensors ? null
 , lvm2 ? null
-, libmysql ? null
+, mysql ? null
 , postgresql ? null
 , protobufc ? null
 , python ? null
 , rabbitmq-c ? null
-, riemann ? null
+, riemann_c_client ? null
 , rrdtool ? null
 , udev ? null
 , varnish ? null
@@ -33,25 +33,30 @@
 , net_snmp ? null
 , hiredis ? null
 , libmnl ? null
+, mosquitto ? null
+, rdkafka ? null
+, mongoc ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.7.2";
+  version = "5.8.0";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "14p5cc3ys3qfg71xzxfvmxdmz5l4brpbhlmw1fwdda392lia084x";
+    sha256 = "1j8mxgfq8039js2bscphd6cnriy35hk4jrxfjz5k6mghpdvg8vxh";
   };
 
-  # on 5.7.2: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  # on 5.8.0: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     curl libdbi libgcrypt libmemcached
     cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
-    libxml2 libmysql postgresql protobufc rrdtool
+    libxml2 postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis libmicrohttpd
+    riemann_c_client mosquitto rdkafka mongoc
+  ] ++ stdenv.lib.optionals (mysql != null) [ mysql.connector-c
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
@@ -60,11 +65,7 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.ApplicationServices
   ];
 
-  # for some reason libsigrok isn't auto-detected
-  configureFlags =
-    [ "--localstatedir=/var" ] ++
-    stdenv.lib.optional (stdenv.isLinux && libsigrok != null) "--with-libsigrok" ++
-    stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
+  configureFlags = [ "--localstatedir=/var" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
@@ -76,6 +77,8 @@ stdenv.mkDerivation rec {
       mv $out/share/collectd/java $out/share/
     fi
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";

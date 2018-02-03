@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "bullet-${version}";
-  version = "2.86.1";
+  version = "2.87";
 
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
     rev = version;
-    sha256 = "1k81hr5y9rs2nsal6711fal21rxp6h573cpmjjk8x8ji2crqbqlz";
+    sha256 = "1msp7w3563vb43w70myjmqsdb97kna54dcfa7yvi9l3bvamb92w3";
   };
 
   buildInputs = [ cmake ] ++
     (if stdenv.isDarwin
      then with darwin.apple_sdk.frameworks; [ Cocoa OpenGL ]
      else [mesa freeglut]);
+
+  patches = [ ./gwen-narrowing.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage     = https://openwsman.github.io;
     license      = licenses.bsd3;
     maintainers  = with maintainers; [ deepfire ];
-    platforms    = platforms.unix;
+    platforms    = platforms.linux; # PAM is not available on Darwin
     inherit version;
   };
 }

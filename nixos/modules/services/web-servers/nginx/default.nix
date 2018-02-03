@@ -15,6 +15,9 @@ let
     } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
       sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
+    }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
+      sslCertificate = "/var/lib/acme/${vhostConfig.useACMEHost}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${vhostConfig.useACMEHost}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -168,13 +171,13 @@ let
         listenString = { addr, port, ssl, ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
-          + optionalString vhost.http2 "http2 "
+          + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
-        acmeLocation = ''
+        acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             root ${vhost.acmeRoot};
@@ -194,7 +197,7 @@ let
             ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${optionalString vhost.enableACME acmeLocation}
+            ${acmeLocation}
             location / {
               return 301 https://$host$request_uri;
             }
@@ -204,7 +207,7 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${optionalString vhost.enableACME acmeLocation}
+          ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
@@ -555,6 +558,14 @@ in
           are mutually exclusive.
         '';
       }
+
+      {
+        assertion = all (conf: !(conf.enableACME && conf.useACMEHost != null)) (attrValues virtualHosts);
+        message = ''
+          Options services.nginx.service.virtualHosts.<name>.enableACME and
+          services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+        '';
+      }
     ];
 
     systemd.services.nginx = {
@@ -580,7 +591,7 @@ in
     security.acme.certs = filterAttrs (n: v: v != {}) (
       let
         vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
-        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
+        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
             group = lib.mkDefault cfg.group;

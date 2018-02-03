@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    knownVulnerabilities = [ "CVE-2017-1000420" ];
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
     license = stdenv.lib.licenses.mpl20;

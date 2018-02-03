@@ -4,6 +4,16 @@
 # http://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
 # Triple::normalize. Parsing should essentially act as a more conservative
 # version of that last function.
+#
+# Most of the types below come in "open" and "closed" pairs. The open ones
+# specify what information we need to know about systems in general, and the
+# closed ones are sub-types representing the whitelist of systems we support in
+# practice.
+#
+# Code in the remainder of nixpkgs shouldn't rely on the closed ones in
+# e.g. exhaustive cases. Its more a sanity check to make sure nobody defines
+# systems that overlap with existing ones and won't notice something amiss.
+#
 { lib }:
 with lib.lists;
 with lib.types;
@@ -11,29 +21,52 @@ with lib.attrsets;
 with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
-  setTypesAssert = type: pred:
+  inherit (lib.options) mergeOneOption;
+
+  setTypes = type:
     mapAttrs (name: value:
-      assert pred value;
-      setType type ({ inherit name; } // value));
-  setTypes = type: setTypesAssert type (_: true);
+      assert type.check value;
+      setType type.name ({ inherit name; } // value));
 
 in
 
 rec {
 
-  isSignificantByte = isType "significant-byte";
-  significantBytes = setTypes "significant-byte" {
+  ################################################################################
+
+  types.openSignifiantByte = mkOptionType {
+    name = "significant-byte";
+    description = "Endianness";
+    merge = mergeOneOption;
+  };
+
+  types.significantByte = enum (attrValues significantBytes);
+
+  significantBytes = setTypes types.openSignifiantByte {
     bigEndian = {};
     littleEndian = {};
   };
 
-  isCpuType = isType "cpu-type";
-  cpuTypes = with significantBytes; setTypesAssert "cpu-type"
-    (x: elem x.bits [8 16 32 64 128]
-        && (if 8 < x.bits
-            then isSignificantByte x.significantByte
-            else !(x ? significantByte)))
-  {
+  ################################################################################
+
+  # Reasonable power of 2
+  types.bitWidth = enum [ 8 16 32 64 128 ];
+
+  ################################################################################
+
+  types.openCpuType = mkOptionType {
+    name = "cpu-type";
+    description = "instruction set architecture name and information";
+    merge = mergeOneOption;
+    check = x: types.bitWidth.check x.bits
+      && (if 8 < x.bits
+          then types.significantByte.check x.significantByte
+          else !(x ? significantByte));
+  };
+
+  types.cpuType = enum (attrValues cpuTypes);
+
+  cpuTypes = with significantBytes; setTypes types.openCpuType {
     arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
@@ -44,18 +77,40 @@ rec {
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
     mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+    riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
+    riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+    wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
+    wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
   };
 
-  isVendor = isType "vendor";
-  vendors = setTypes "vendor" {
+  ################################################################################
+
+  types.openVendor = mkOptionType {
+    name = "vendor";
+    description = "vendor for the platform";
+    merge = mergeOneOption;
+  };
+
+  types.vendor = enum (attrValues vendors);
+
+  vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
 
     unknown = {};
   };
 
-  isExecFormat = isType "exec-format";
-  execFormats = setTypes "exec-format" {
+  ################################################################################
+
+  types.openExecFormat = mkOptionType {
+    name = "exec-format";
+    description = "executable container used by the kernel";
+    merge = mergeOneOption;
+  };
+
+  types.execFormat = enum (attrValues execFormats);
+
+  execFormats = setTypes types.openExecFormat {
     aout = {}; # a.out
     elf = {};
     macho = {};
@@ -64,15 +119,33 @@ rec {
     unknown = {};
   };
 
-  isKernelFamily = isType "kernel-family";
-  kernelFamilies = setTypes "kernel-family" {
+  ################################################################################
+
+  types.openKernelFamily = mkOptionType {
+    name = "exec-format";
+    description = "executable container used by the kernel";
+    merge = mergeOneOption;
+  };
+
+  types.kernelFamily = enum (attrValues kernelFamilies);
+
+  kernelFamilies = setTypes types.openKernelFamily {
     bsd = {};
   };
 
-  isKernel = x: isType "kernel" x;
-  kernels = with execFormats; with kernelFamilies; setTypesAssert "kernel"
-    (x: isExecFormat x.execFormat && all isKernelFamily (attrValues x.families))
-  {
+  ################################################################################
+
+  types.openKernel = mkOptionType {
+    name = "kernel";
+    description = "kernel name and information";
+    merge = mergeOneOption;
+    check = x: types.execFormat.check x.execFormat
+        && all types.kernelFamily.check (attrValues x.families);
+  };
+
+  types.kernel = enum (attrValues kernels);
+
+  kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     darwin  = { execFormat = macho;   families = { }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
     hurd    = { execFormat = elf;     families = { }; };
@@ -89,8 +162,17 @@ rec {
     win32 = kernels.windows;
   };
 
-  isAbi = isType "abi";
-  abis = setTypes "abi" {
+  ################################################################################
+
+  types.openAbi = mkOptionType {
+    name = "abi";
+    description = "binary interface for compiled code and syscalls";
+    merge = mergeOneOption;
+  };
+
+  types.abi = enum (attrValues abis);
+
+  abis = setTypes types.openAbi {
     cygnus = {};
     gnu = {};
     msvc = {};
@@ -102,12 +184,24 @@ rec {
     unknown = {};
   };
 
+  ################################################################################
+
+  types.system = mkOptionType {
+    name = "system";
+    description = "fully parsed representation of llvm- or nix-style platform tuple";
+    merge = mergeOneOption;
+    check = { cpu, vendor, kernel, abi }:
+           types.cpuType.check cpu
+        && types.vendor.check vendor
+        && types.kernel.check kernel
+        && types.abi.check abi;
+  };
+
   isSystem = isType "system";
-  mkSystem = { cpu, vendor, kernel, abi }:
-    assert isCpuType cpu && isVendor vendor && isKernel kernel && isAbi abi;
-    setType "system" {
-      inherit cpu vendor kernel abi;
-    };
+
+  mkSystem = components:
+    assert types.system.check components;
+    setType "system" components;
 
   mkSkeletonFromList = l: {
     "2" = # We only do 2-part hacks for things Nix already supports
@@ -169,5 +263,7 @@ rec {
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
   in "${cpu.name}-${vendor.name}-${kernel.name}${optAbi}";
+
+  ################################################################################
 
 }

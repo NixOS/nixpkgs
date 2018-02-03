@@ -43,7 +43,7 @@ cmakeConfigurePhase() {
     # libraries are in a system path or in the same directory as the
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
-    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=$prefix/lib $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
 
@@ -72,11 +72,7 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
-if [ -n "$crossConfig" ]; then
-    crossEnvHooks+=(addCMakeParams)
-else
-    envHooks+=(addCMakeParams)
-fi
+addEnvHooks "$targetOffset" addCMakeParams
 
 makeCmakeFindLibs(){
   isystem_seen=
