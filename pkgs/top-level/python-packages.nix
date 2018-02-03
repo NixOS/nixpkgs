@@ -20370,21 +20370,7 @@ EOF
     };
   };
 
-  dicttoxml = buildPythonPackage rec {
-    name = "dicttoxml-1.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dicttoxml/dicttoxml-1.6.4.tar.gz";
-      sha256 = "5f29e95fec56680823dc41911c04c2af08727ee53c1b60e83c489212bab71161";
-    };
-
-    propagatedBuildInputs = with self; [  ];
-
-    meta = {
-      description = "Summary";
-      homepage = https://github.com/quandyfactory/dicttoxml;
-    };
-  };
+  dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
