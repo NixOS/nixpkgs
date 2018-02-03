@@ -4831,6 +4831,8 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
+  teleport = callPackage ../servers/teleport {};
+
   telepresence = callPackage ../tools/networking/telepresence { };
 
   tewisay = callPackage ../tools/misc/tewisay { };
@@ -7340,7 +7342,7 @@ with pkgs;
 
   cide = callPackage ../development/tools/continuous-integration/cide { };
 
-  "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
+  cl-launch = callPackage ../development/tools/misc/cl-launch {};
 
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
@@ -11780,7 +11782,7 @@ with pkgs;
 
   ### SERVERS
 
-  "389-ds-base" = callPackage ../servers/ldap/389 {
+  _389-ds-base = callPackage ../servers/ldap/389 {
     kerberos = libkrb5;
   };
 
@@ -11901,7 +11903,6 @@ with pkgs;
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
-  dovecot_antispam = callPackage ../servers/mail/dovecot/plugins/antispam { };
 
   dspam = callPackage ../servers/mail/dspam {
     inherit (perlPackages) NetSMTP;
@@ -11975,6 +11976,8 @@ with pkgs;
   hbase = callPackage ../servers/hbase {};
 
   hiawatha = callPackage ../servers/http/hiawatha {};
+
+  home-assistant = callPackage ../servers/home-assistant { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
@@ -14104,7 +14107,7 @@ with pkgs;
 
   ### APPLICATIONS
 
-  "2bwm" = callPackage ../applications/window-managers/2bwm {
+  _2bwm = callPackage ../applications/window-managers/2bwm {
     patches = config."2bwm".patches or [];
   };
 
@@ -15009,7 +15012,7 @@ with pkgs;
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
 
-  keepass = callPackage ../applications/misc/keepass { 
+  keepass = callPackage ../applications/misc/keepass {
     buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
   };
 
@@ -16036,6 +16039,8 @@ with pkgs;
   lilyterm-git = lilyterm.override {
     flavour = "git";
   };
+
+  looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail { };
 
@@ -18136,9 +18141,9 @@ with pkgs;
 
   ### GAMES
 
-  "2048-in-terminal" = callPackage ../games/2048-in-terminal { };
+  _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
-  "90secondportraits" = callPackage ../games/90secondportraits { love = love_0_10; };
+  _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
   adom = callPackage ../games/adom { };
 
@@ -18873,8 +18878,10 @@ with pkgs;
 
   gnomeExtensions = {
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
+    clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };

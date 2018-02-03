@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext, gobjectIntrospection, dbus, libintlOrEmpty }:
+{ stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext
+, gobjectIntrospection, dbus, libintlOrEmpty
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   name = "json-glib-${minVer}.2";
@@ -11,7 +14,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
-  buildInputs = libintlOrEmpty;
+  buildInputs = libintlOrEmpty
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 

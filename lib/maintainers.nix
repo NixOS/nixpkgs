@@ -231,6 +231,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
+  f-breidenstein = "Felix Breidenstein <mail@felixbreidenstein.de>";
   fgaz = "Francesco Gazzetta <francygazz@gmail.com>";
   FireyFly = "Jonas Höglund <nix@firefly.nu>";
   flokli = "Florian Klink <flokli@flokli.de>";
@@ -542,6 +543,7 @@
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmeunier = "Pierre-Étienne Meunier <pierre-etienne.meunier@inria.fr>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
+  pneumaticat = "Kevin Liu <kevin@potatofrom.space>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
   pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";

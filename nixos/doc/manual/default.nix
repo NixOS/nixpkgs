@@ -12,7 +12,7 @@ let
   substFunction = x:
     if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
     else if builtins.isList x then map substFunction x
-    else if builtins.isFunction x then "<function>"
+    else if lib.isFunction x then "<function>"
     else x;
 
   # Clean up declaration sites to not refer to the NixOS source tree.

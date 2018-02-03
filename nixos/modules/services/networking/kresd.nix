@@ -43,7 +43,7 @@ in
       type = with types; listOf str;
       default = [ "::1" "127.0.0.1" ];
       description = ''
-        What addresses the server should listen on.
+        What addresses the server should listen on. (UDP+TCP 53)
       '';
     };
     # TODO: perhaps options for more common stuff like cache size or forwarding
@@ -99,9 +99,9 @@ in
         Restart = "on-failure";
       };
 
+      # Trust anchor goes from dns-root-data by default.
       script = ''
-        exec '${package}/bin/kresd' --config '${configFile}' \
-          -k '${pkgs.dns-root-data}/root.key'
+        exec '${package}/bin/kresd' --config '${configFile}' --forks=1
       '';
 
       requires = [ "kresd.socket" ];

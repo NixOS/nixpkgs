@@ -40,7 +40,7 @@ let
   makeOverridablePythonPackage = f: origArgs:
     let
       ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
+      overrideWith = newArgs: origArgs // (if pkgs.lib.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff // {
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
@@ -164,6 +164,8 @@ in {
   asana = callPackage ../development/python-modules/asana { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
+
+  astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy {  };
 
@@ -3214,6 +3216,8 @@ in {
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
+
+  pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -14446,21 +14450,7 @@ in {
     };
   };
 
-  ptyprocess = buildPythonPackage rec {
-    name = "ptyprocess-${version}";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/ptyprocess/${name}.tar.gz";
-      sha256= "dcb78fb2197b49ca1b7b2f37b047bc89c0da7a90f90bd5bc17c3ce388bb6ef59";
-    };
-
-    meta = {
-      description = "Run a subprocess in a pseudo terminal";
-      homepage = https://github.com/pexpect/ptyprocess;
-      license = licenses.isc;
-    };
-  };
+  ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
@@ -21012,29 +21002,7 @@ EOF
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
-  xcffib = buildPythonPackage rec {
-    version = "0.3.2";
-    name = "xcffib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xcffib/${name}.tar.gz";
-      sha256 = "a84eecd5a1bb7570e26c83aca87a2016578ca4e353e1fa56189e95bdef063e6a";
-    };
-
-    patchPhase = ''
-      # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
-    '';
-
-    propagatedBuildInputs = [ self.cffi self.six ];
-
-    meta = {
-      description = "A drop in replacement for xpyb, an XCB python binding";
-      homepage = "https://github.com/tych0/xcffib";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ kamilchm ];
-    };
-  };
+  xcffib = callPackage ../development/python-modules/xcffib {};
 
   pafy = callPackage ../development/python-modules/pafy { };
 
