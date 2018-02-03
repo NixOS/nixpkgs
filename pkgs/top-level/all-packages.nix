@@ -1893,6 +1893,8 @@ with pkgs;
   };
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
+  doom-bcc-git = callPackage ../games/zdoom/bcc-git.nix { };
+
   slade = callPackage ../applications/misc/slade {
     wxGTK = wxGTK30;
   };
