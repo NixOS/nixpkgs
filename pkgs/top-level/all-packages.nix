@@ -13637,7 +13637,7 @@ with pkgs;
 
   inherit (callPackage ../os-specific/linux/zfs {
     configFile = "user";
-  }) zfsStable zfsUnstable;
+  }) zfsStable zfsUnstable zfsCryptoStability;
 
   zfs = zfsStable;
 

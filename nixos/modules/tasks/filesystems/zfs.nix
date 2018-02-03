@@ -31,7 +31,7 @@ let
   } else if config.boot.zfs.enableCryptoStability then {
     spl = kernel.splCryptoStability;
     zfs = kernel.zfsCryptoStability;
-    zfsUser = pkgs.zfsUnstable;
+    zfsUser = pkgs.zfsCryptoStability;
   } else {
     spl = kernel.spl;
     zfs = kernel.zfs;
@@ -88,7 +88,7 @@ in
           change for encrypted datasets. Old native encrypted datasets can still
           be accessed but as read-only.
           See https://github.com/zfsonlinux/zfs/pull/6864 for more details.
-          
+
           If you have not created the root dataset as encrypted dataset but
           used a childset as encryption root like the Nixos Wiki suggested ->
           zroot/root/nixos (where 'zroot' is not encrypted but 'root' is encryp-

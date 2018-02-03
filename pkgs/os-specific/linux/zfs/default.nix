@@ -172,7 +172,6 @@ in {
         url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
         sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
       })
-
     ];
 
     spl = splUnstable;
@@ -196,7 +195,6 @@ in {
         url = "https://github.com/sjau/zfs/commit/72591199b36e4b4bddb6650717b5bb3121d508da.patch";
         sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
       })
-
     ];
 
     spl = splCryptoStability;
