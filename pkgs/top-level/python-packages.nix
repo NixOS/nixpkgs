@@ -14946,23 +14946,7 @@ in {
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
-  pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.12";
-
-    src = pkgs.fetchurl {
-      url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "19s1lxi0idq4a0bpvld866pv5b16lqxypyswmsdi5ys4210jxj2s";
-    };
-
-    buildInputs = with self; [ pkgs.pyrex ];
-    propagatedBuildInputs = with self; [ pkgs.libyaml ];
-
-    meta = {
-      description = "The next generation YAML parser and emitter for Python";
-      homepage = http://pyyaml.org;
-      license = licenses.free; # !?
-    };
-  });
+  pyyaml = callPackage ../development/python-modules/pyyaml { };
 
   rabbitpy = buildPythonPackage rec {
     version = "0.26.2";
