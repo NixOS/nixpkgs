@@ -1,16 +1,14 @@
 { stdenv, fetchurl, gmp
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.1.3";
+  name = "mpfr-3.1.6";
 
   src = fetchurl {
-    url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "1z8akfw9wbmq91vrx04bw86mmnxw2sw5qm5cr8ix5b3w2mcv8fzn";
+    url = "mirror://gnu/mpfr/${name}.tar.xz";
+    sha256 = "0l598h9klpgkz2bp0rxiqb90mkqh9f2f81n5rpy191j00hdaqqks";
   };
-
-  patches = [ ./upstream.patch ];
 
   outputs = [ "out" "dev" "doc" "info" ];
 
