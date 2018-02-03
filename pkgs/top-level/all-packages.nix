@@ -13100,7 +13100,7 @@ with pkgs;
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {})
-      splStable splUnstable;
+      splStable splUnstable splCryptoStability;
 
     spl = splStable;
 
@@ -13131,7 +13131,7 @@ with pkgs;
     inherit (callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel spl;
-     }) zfsStable zfsUnstable;
+     }) zfsStable zfsUnstable zfsCryptoStability;
 
      zfs = zfsStable;
   });

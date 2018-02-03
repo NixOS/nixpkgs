@@ -5,7 +5,7 @@
 , zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null
+, kernel ? null, spl ? null, splUnstable ? null, splCryptoStability ? null
 }:
 
 with stdenv.lib;
@@ -19,6 +19,7 @@ let
     , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
+    , isCryptoStability ? false
     , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -171,8 +172,34 @@ in {
         url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
         sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
       })
+
     ];
 
     spl = splUnstable;
   };
+
+  zfsCryptoStability = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-02-02";
+
+    rev = "fbd42542686af053f0d162ec4630ffd4fff1cc30";
+    sha256 = "0qzkwnnk7kz1hwvcaqlpzi5yspfhhmd2alklc07k056ddzbx52qb";
+    isUnstable = true;
+    isCryptoStability = true;
+
+    extraPatches = [
+      # Mic92's patch updated for current zfs master
+      (fetchpatch {
+        url = "https://github.com/sjau/zfs/commit/72591199b36e4b4bddb6650717b5bb3121d508da.patch";
+        sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
+      })
+
+    ];
+
+    spl = splCryptoStability;
+  };
+  
 }
