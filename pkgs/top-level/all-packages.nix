@@ -6488,6 +6488,8 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
+  cargo-vendor = callPackage ../build-support/rust/cargo-vendor {};
+
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
