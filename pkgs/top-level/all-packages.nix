@@ -8086,6 +8086,8 @@ with pkgs;
 
   amrwb = callPackage ../development/libraries/amrwb { };
 
+  anttweakbar = callPackage ../development/libraries/AntTweakBar { };
+
   appstream = callPackage ../development/libraries/appstream { };
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
