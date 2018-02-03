@@ -8,8 +8,6 @@ let
     };
   isPhpOlder55 = pkgs.lib.versionOlder php.version "5.5";
   isPhp7 = pkgs.lib.versionAtLeast php.version "7.0";
-  isPhp72 = pkgs.lib.versionAtLeast php.version "7.2";
-  isPhpOlder7 = pkgs.lib.versionOlder php.version "7.0";
 
   apcu = if isPhp7 then apcu51 else apcu40;
 
@@ -181,7 +179,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp72 then xdebug26 else if isPhp7 then xdebug25 else xdebug23;
+  xdebug = if isPhp7 then xdebug26 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -192,19 +190,10 @@ let
     checkTarget = "test";
   };
 
-  xdebug25 = assert !isPhp72; buildPecl {
-    name = "xdebug-2.5.0";
+  xdebug26 = assert isPhp7; buildPecl {
+    name = "xdebug-2.6.0";
 
-    sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
-
-    doCheck = true;
-    checkTarget = "test";
-  };
-
-  xdebug26 = assert !isPhpOlder7; buildPecl {
-    name = "xdebug-2.6.0beta1";
-
-    sha256 = "0zaj821jbpaqqcbr9a64sa27my9n980pmyy9kxrvvjqq3qg6dpj9";
+    sha256 = "1p6b54ypi5lq4ka3pyy2gswdf1d5vjb9y8lp9fqcp3zn7g04q9mm";
 
     doCheck = true;
     checkTarget = "test";
