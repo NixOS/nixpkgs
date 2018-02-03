@@ -13728,17 +13728,6 @@ in {
 
   pygments = callPackage ../development/python-modules/Pygments { };
 
-  # For Pelican 3.6.3
-  pygments_2_0 = self.pygments.overrideAttrs( oldAttrs: rec {
-    version = "2.0.2";
-    name = "Pygments-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pygments/${name}.tar.gz";
-      sha256 = "7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51";
-    };
-  });
-
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pylint = callPackage ../development/python-modules/pylint { };
