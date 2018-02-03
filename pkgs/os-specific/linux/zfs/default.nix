@@ -192,7 +192,7 @@ in {
     extraPatches = [
       # Mic92's patch updated for current zfs master
       (fetchpatch {
-        url = "https://github.com/sjau/zfs/commit/72591199b36e4b4bddb6650717b5bb3121d508da.patch";
+        url = "https://raw.githubusercontent.com/sjau/nix-expressions/master/customPatches/nixos-zfs-2018-02-02.patch";
         sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
       })
     ];
