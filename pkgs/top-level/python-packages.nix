@@ -15440,24 +15440,7 @@ in {
   };
 
 
-  rdflib = buildPythonPackage (rec {
-    name = "rdflib-4.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rdflib/${name}.tar.gz";
-      sha256 = "0398c714znnhaa2x7v51b269hk20iz073knq2mvmqp2ma92z27fs";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ isodate html5lib SPARQLWrapper ];
-
-    meta = {
-      description = "A Python library for working with RDF, a simple yet powerful language for representing information";
-      homepage = http://www.rdflib.net/;
-    };
-  });
+  rdflib = callPackage ../development/python-modules/rdflib { };
 
   isodate = buildPythonPackage rec {
     name = "isodate-${version}";
