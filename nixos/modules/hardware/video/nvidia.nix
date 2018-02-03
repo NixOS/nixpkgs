@@ -1,26 +1,24 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, pkgs_i686, options, ... }:
 
 with lib;
 
 let
 
+  cfg = config.hardware.video.nvidia;
   drivers = config.services.xserver.videoDrivers;
 
-  # FIXME: should introduce an option like
-  # ‘hardware.video.nvidia.package’ for overriding the default NVIDIA
-  # driver.
   nvidiaForKernel = kernelPackages:
-    if elem "nvidia" drivers then
+    if elem "nvidia" cfg.package then
         kernelPackages.nvidia_x11
-    else if elem "nvidiaBeta" drivers then
+    else if elem "nvidiaBeta" cfg.package then
         kernelPackages.nvidia_x11_beta
-    else if elem "nvidiaLegacy173" drivers then
+    else if elem "nvidiaLegacy173" cfg.package then
       kernelPackages.nvidia_x11_legacy173
-    else if elem "nvidiaLegacy304" drivers then
+    else if elem "nvidiaLegacy304" cfg.package then
       kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" drivers then
+    else if elem "nvidiaLegacy340" cfg.package then
       kernelPackages.nvidia_x11_legacy340
     else null;
 
@@ -28,16 +26,31 @@ let
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
   nvidiaPackage = nvidia: pkgs:
-    if !nvidia.useGLVND then nvidia.out
+    assert config.hardware.opengl.useGLVND -> nvidia.useGLVND;
+    if !nvidia.useGLVND || config.hardware.opengl.useGLVND then nvidia.out
     else pkgs.buildEnv {
       name = "nvidia-libs";
       paths = [ pkgs.libglvnd nvidia.out ];
     };
 
+  package = nvidiaPackage nvidia_x11 pkgs;
+  package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
+
   enabled = nvidia_x11 != null;
+  optimus = config.hardware.nvidiaOptimus.enable;
 in
 
 {
+
+  options = {
+    hardware.video.nvidia.package = options.services.xserver.videoDrivers // {
+      default = drivers;
+      description = ''
+        Package to use. One of nvidia, nvidiaBeta, nvidiaLegacy173,
+        nvidiaLegacy304, nvidiaLegacy340.
+      '';
+    };
+  };
 
   config = mkIf enabled {
     assertions = [
@@ -47,10 +60,10 @@ in
       }
     ];
 
-    services.xserver.drivers = singleton
+    services.xserver.drivers = optional (!optimus)
       { name = "nvidia"; modules = [ nvidia_x11.bin ]; libPath = [ nvidia_x11 ]; };
 
-    services.xserver.screenSection =
+    services.xserver.screenSection = optionalString (!optimus)
       ''
         Option "RandRRotation" "on"
       '';
@@ -59,8 +72,13 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = nvidiaPackage nvidia_x11 pkgs;
-    hardware.opengl.package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
+    hardware.opengl = if (!optimus) then {
+      inherit package package32;
+    } else {
+      useGLVND = true;
+      extraPackages = singleton package;
+      extraPackages32 = singleton package32;
+    };
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
@@ -68,8 +86,8 @@ in
     boot.extraModulePackages = [ nvidia_x11.bin ];
 
     # nvidia-uvm is required by CUDA applications.
-    boot.kernelModules = [ "nvidia-uvm" ] ++
-      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
+    boot.kernelModules = optionals (!optimus) ([ "nvidia-uvm" ] ++
+      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ]);
 
 
     # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.

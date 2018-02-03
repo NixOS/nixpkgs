@@ -10229,6 +10229,14 @@ with pkgs;
     };
     in mo.drivers
   );
+  mesa_drivers_glvnd = mesaDarwinOr (
+    let mo = mesa_noglu.override {
+      grsecEnabled = config.grsecurity or false;
+      enableTextureFloats = true;
+      useGLVND = true;
+    };
+    in mo.drivers
+  );
 
   # Please, avoid using this attribute.  It was meant as transitional hack
   # for packages that assume that libGLU and libGL live in the same prefix.

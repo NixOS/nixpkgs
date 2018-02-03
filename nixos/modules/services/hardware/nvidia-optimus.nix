@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }:
 
-let kernel = config.boot.kernelPackages; in
+let
+  kernel = config.boot.kernelPackages;
+  cfg = config.hardware.nvidiaOptimus;
+in
 
 {
 
@@ -17,13 +20,19 @@ let kernel = config.boot.kernelPackages; in
       '';
     };
 
+    hardware.nvidiaOptimus.enable = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      internal = true;
+    };
+
   };
 
 
   ###### implementation
 
-  config = lib.mkIf config.hardware.nvidiaOptimus.disable {
-    boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidiafb"];
+  config = lib.mkIf (cfg.disable || cfg.enable) {
+    boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidiafb" "nvidia-drm"];
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
 
