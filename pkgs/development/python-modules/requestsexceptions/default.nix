@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "requestsexceptions";
-  version = "1.3.0";
+  version = "1.4.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gim00vi7vfq16y8b9m1vpy01grqvrdrbh88jb98qx6n6sk1n54g";
+    sha256 = "b095cbc77618f066d459a02b137b020c37da9f46d9b057704019c9f77dba3065";
   };
 
   propagatedBuildInputs = [ pbr ];
