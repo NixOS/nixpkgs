@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "pyOpenSSL";
-  version = "17.2.0";
+  version = "17.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
+    sha256 = "2c10cfba46a52c0b0950118981d61e72c1e5b1aac451ca1bc77de1a679456773";
   };
 
   outputs = [ "out" "dev" ];
