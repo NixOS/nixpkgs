@@ -6,7 +6,7 @@
 
 let
   pname = "PyQt";
-  version = "5.9.2";
+  version = "5.10";
 
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 in buildPythonPackage {
@@ -25,7 +25,7 @@ in buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "15439gxari6azbfql20ksz8h4gv23k3kfyjyr89h2yy9k32xm461";
+    sha256 = "0l2zy6b7bfjxmg4bb8yikg6i8iy2xdwmvk7knfmrzfpqbmkycbrl";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
