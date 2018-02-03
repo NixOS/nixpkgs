@@ -2841,20 +2841,7 @@ in {
     __impureHostDeps = [ "/usr/lib" ];
   };
 
-  cryptography_vectors = buildPythonPackage rec {
-      # also bump cryptography
-    pname = "cryptography_vectors";
-    version = self.cryptography.version;
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "beb831aa73663a224f4d7520483ed02da544533bb03b26ec07a5f9a0dd0941e1";
-    };
-
-    # No tests included
-    doCheck = false;
-  };
+  cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
