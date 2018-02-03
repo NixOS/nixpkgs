@@ -83,38 +83,16 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Use ZFS with latest crypto stability patches. This was merged into
-          zfs master on feb 2, 2018. Those stability patches features a format
-          change for encrypted datasets. Old native encrypted datasets can still
-          be accessed but as read-only.
-          See https://github.com/zfsonlinux/zfs/pull/6864 for more details.
+          Enabling this option will install a development version of ZFS on Linux
+          that contains a format change for encrypted dataset. Once installed and
+          booted, you can still access encrypted datasets that were created prior
+          to this version but they can only be mounted as read-only.
 
-          If you have not created the root dataset as encrypted dataset but
-          used a childset as encryption root like the Nixos Wiki suggested ->
-          zroot/root/nixos (where 'zroot' is not encrypted but 'root' is encryp-
-          ted and nixos is encrypted as well due to inheritance), then updating
-          to the new format is a simlpe matter - you just need to have the free
-          space to do so:
-          0. Create a snapshot:
-                zfs snapshot zpool/root/nixos@now
-          1. Create a custom Nixos iso with crypto stability patch enabled
-          2. Boot into that live environment
-          3. Import the pool and load the key
-          4. Create a new encrypted dataset, e.g.
-                zfs create -o encryption=aes-256-gcm -o keyformat=passphrase
-                -o mountpoint=none zroot/rootNEW
-          5. Use zfs send and receive to copy the data to new format:
-                zfs send zpool/root/nixos@now | zfs receive zpool/rootNew/nixos
-          6. Set correct mountpoint for the newly created dataset:
-                zfs set moutpoint=legacy zpool/root/New/nixos
-          7. Rename the old dataset and the new one:
-                zfs rename zpool/root zpool/rootOLD
-                zfs rename zpool/rootNEW zpool/root
-          8. That should allow to boot Nixos already with new format. If you
-          other encrypted mounts, you will probably need to convert them to new
-          format as well first.
-          If you have encrypted your root dataset you will need to nuke it
-          and re-create completely anew.
+          For migration strategies from old format to this new one, check the Wiki:
+          https://nixos.wiki/wiki/NixOS_on_ZFS#Encrypted_Dataset_Format_Change
+
+          See https://github.com/zfsonlinux/zfs/pull/6864 for more details about
+          the stability patches.
           '';
       };
 
