@@ -1897,7 +1897,7 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
-  slade-git = callPackage ../applications/misc/slade/git.nix {
+  sladeUnstable = callPackage ../applications/misc/slade/git.nix {
     wxGTK = wxGTK30;
   };
 
