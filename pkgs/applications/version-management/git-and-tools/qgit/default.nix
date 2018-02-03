@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     license = licenses.gpl2;
     homepage = http://libre.tibirna.org/projects/qgit/wiki/QGit;
