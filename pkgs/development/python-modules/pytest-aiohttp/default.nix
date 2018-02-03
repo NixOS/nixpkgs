@@ -11,6 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytest aiohttp ];
 
+  # There are no tests
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/aio-libs/pytest-aiohttp/;
     description = "Pytest plugin for aiohttp support";

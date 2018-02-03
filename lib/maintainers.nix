@@ -564,6 +564,7 @@
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   ravloony = "Tom Macdonald <ravloony@gmail.com>";
+  razvan = "Răzvan Flavius Panda <razvan.panda@gmail.com>";
   rbasso = "Rafael Basso <rbasso@sharpgeeks.net>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   redvers = "Redvers Davies <red@infect.me>";

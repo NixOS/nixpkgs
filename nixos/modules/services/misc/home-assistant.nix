@@ -70,7 +70,7 @@ in {
       default = true;
       type = types.bool;
       description = ''
-        If set to <literal>true</literal>, the components used in <literal>config</config>
+        If set to <literal>true</literal>, the components used in <literal>config</literal>
         are set as the specified package's <literal>extraComponents</literal>.
         This in turn adds all packaged dependencies to the derivation.
         You might still see import errors in your log.

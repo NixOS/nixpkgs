@@ -134,6 +134,9 @@ stdenv.mkDerivation rec {
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
+  # Hopefully avoids test timeouts on Hydra
+  GO_TEST_TIMEOUT_SCALE = 3;
+
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
   CC = if stdenv.isDarwin then "clang" else "cc";
