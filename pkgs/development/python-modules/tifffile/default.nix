@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "0.13.4";
+  version = "0.13.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43d3903e8ea4542aaa4759ec3683641555d3a15e68fa5a41aaf14cce4110641a";
+    sha256 = "bca0fc9eaf609a27ebd99d8466e05d5a6e79389957f17582b70643dbca65e3d8";
   };
 
   checkInputs = [ nose ];
