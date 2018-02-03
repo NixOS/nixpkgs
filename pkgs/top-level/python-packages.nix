@@ -2796,50 +2796,7 @@ in {
     };
   };
 
-  cryptography = buildPythonPackage rec {
-    # also bump cryptography_vectors
-    pname = "cryptography";
-    name = "${pname}-${version}";
-    version = "2.0.3";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a";
-    };
-
-    outputs = [ "out" "dev" ];
-
-    buildInputs = [ pkgs.openssl self.cryptography_vectors ]
-               ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
-    propagatedBuildInputs = with self; [
-      idna
-      asn1crypto
-      packaging
-      six
-    ] ++ optional (pythonOlder "3.4") enum34
-    ++ optional (pythonOlder "3.3") ipaddress
-    ++ optional (!isPyPy) cffi;
-
-    checkInputs = with self; [
-      pytest
-      pretend
-      iso8601
-      pytz
-      hypothesis
-    ];
-
-    # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
-    # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
-    # use it. This boils down to them checking compatibility with `getentropy` in two different places,
-    # so let's neuter the second test.
-    postPatch = ''
-      substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
-    '';
-
-    # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
-    # can do until nix 1.11's release
-    __impureHostDeps = [ "/usr/lib" ];
-  };
+  cryptography = callPackage ../development/python-modules/cryptography { };
 
   cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
 
