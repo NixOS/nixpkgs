@@ -6,6 +6,19 @@ let
   cfg = config.services.home-assistant;
 
   configFile = pkgs.writeText "configuration.yaml" (builtins.toJSON cfg.config);
+
+  availableComponents = pkgs.home-assistant.availableComponents;
+
+  # Returns whether component is used in config
+  useComponent = component: hasAttrByPath (splitString "." component) cfg.config;
+
+  # List of components used in config
+  extraComponents = filter useComponent availableComponents;
+
+  package = if cfg.autoExtraComponents
+    then (cfg.package.override { inherit extraComponents; })
+    else cfg.package;
+
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
 
@@ -29,6 +42,7 @@ in {
           };
           frontend = { };
           http = { };
+          feedreader.urls = [ "https://nixos.org/blogs.xml" ];
         }
       '';
       description = ''
@@ -48,10 +62,22 @@ in {
       '';
       description = ''
         Home Assistant package to use.
-        Most Home Assistant components require additional dependencies,
-        which are best specified by overriding <literal>pkgs.home-assistant</literal>.
-        You can find the dependencies by searching for failed imports in your log or by looking at this list:
-        <link xlink:href="https://github.com/home-assistant/home-assistant/blob/master/requirements_all.txt"/>
+        Override <literal>extraPackages</literal> in order to add additional dependencies.
+      '';
+    };
+
+    autoExtraComponents = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        If set to <literal>true</literal>, the components used in <literal>config</config>
+        are set as the specified package's <literal>extraComponents</literal>.
+        This in turn adds all packaged dependencies to the derivation.
+        You might still see import errors in your log.
+        In this case, you will need to package the necessary dependencies yourself
+        or ask for someone else to package them.
+        If a dependency is packaged but not automatically added to this list,
+        you might need to specify it in <literal>extraPackages</literal>.
       '';
     };
   };
@@ -67,7 +93,7 @@ in {
       '';
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/hass --config "${cfg.configDir}"
+          ${package}/bin/hass --config "${cfg.configDir}"
         '';
         User = "hass";
         Group = "hass";
