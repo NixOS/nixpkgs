@@ -14,3 +14,5 @@ result-*
 
 /pkgs/development/libraries/qt-5/*/tmp/
 /pkgs/desktops/kde-5/*/tmp/
+html
+latex
