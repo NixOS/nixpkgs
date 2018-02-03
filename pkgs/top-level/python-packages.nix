@@ -16328,33 +16328,7 @@ in {
     };
   };
 
-  sympy = buildPythonPackage rec {
-    name = "sympy-1.0";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/s/sympy/${name}.tar.gz";
-      sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ mpmath ];
-
-    # Bunch of failures including transients.
-    doCheck = false;
-
-    preCheck = ''
-      export LANG="en_US.UTF-8"
-    '';
-
-    meta = {
-      description = "A Python library for symbolic mathematics";
-      homepage    = http://www.sympy.org/;
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  sympy = callPackage ../development/python-modules/sympy { };
 
   pilkit = buildPythonPackage rec {
     name = "pilkit-1.1.4";
