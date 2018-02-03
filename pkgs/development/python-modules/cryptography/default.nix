@@ -20,14 +20,16 @@
 , hypothesis
 }:
 
-buildPythonPackage rec {
+let
+  version = "2.1.4";
+in assert version == cryptography_vectors.version; buildPythonPackage rec {
   # also bump cryptography_vectors
   pname = "cryptography";
-  version = "2.0.3";
+  inherit version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a";
+    sha256 = "e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291";
   };
 
   outputs = [ "out" "dev" ];
