@@ -80,9 +80,10 @@ in {
       # This is required so that GTK applications launched from Emacs
       # get properly themed:
       GTK_DATA_PREFIX = "${config.system.path}";
-    } // (if cfg.defaultEditor then {
-        EDITOR = mkOverride 900 "${editorScript}/bin/emacseditor";
-      } else {});
+    } // mkIf cfg.defaultEditor {
+      EDITOR = mkOverride 900 "${editorScript}/bin/emacseditor";
+      VISUAL = mkOverride 900 "${editorScript}/bin/emacseditor";
+    };
   };
 
   meta.doc = ./emacs.xml;
