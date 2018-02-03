@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, bazel, c-ares, backward-cpp
 , libevent, gtest, gperftools, http-parser, lightstep-tracer-cpp
-, nghttp2, protobuf, tclap, rapidjson, spdlog, boringssl, buildEnv
+, libnghttp2, protobuf, tclap, rapidjson, spdlog, boringssl, buildEnv
 }:
 
 let
@@ -77,8 +77,8 @@ let
       deps = ''[":protobuf"]'';
     };
 
-    nghttp2 = {
-      pkg = nghttp2;
+    libnghttp2 = {
+      pkg = libnghttp2;
       srcs = ''["lib/libnghttp2.so"]'';
       hdrs = ''glob(["include/nghttp2/**/*.h"])'';
       includes = ''["include"]'';
@@ -154,7 +154,7 @@ let
     )
     '';
 
-  workspaceFile = 
+  workspaceFile =
     ''
     workspace(name = "nix")
 
@@ -200,7 +200,7 @@ let
     gperftools
     http-parser
     lightstep-tracer-cpp
-    nghttp2
+    libnghttp2
     protobuf
     tclap
     rapidjson

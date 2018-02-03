@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl
-, http2Support ? true, nghttp2
+, http2Support ? true, libnghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
@@ -11,7 +11,7 @@
 , brotliSupport ? false, brotli ? null
 }:
 
-assert http2Support -> nghttp2 != null;
+assert http2Support -> libnghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with stdenv.lib;
-    optional http2Support nghttp2 ++
+    optional http2Support libnghttp2 ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++

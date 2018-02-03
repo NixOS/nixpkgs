@@ -1,0 +1,22 @@
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2017-10-29 15:23:30.464563326 +0000
++++ b/Makefile.am	2017-10-29 15:25:57.701496461 +0000
+@@ -20,8 +20,7 @@
+ # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-SUBDIRS = lib third-party src examples python tests integration-tests \
+-	doc contrib script
++SUBDIRS = lib tests
+ 
+ # Now with python setuptools, make uninstall will leave many files we
+ # cannot easily remove (e.g., easy-install.pth).  Disable it for
+@@ -30,7 +29,7 @@
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-dist_doc_DATA = README.rst
++dist_doc_DATA =
+ 
+ EXTRA_DIST = nghttpx.conf.sample proxy.pac.sample android-config android-make \
+ 	Dockerfile.android \
