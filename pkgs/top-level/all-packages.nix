@@ -1897,6 +1897,10 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  slade-git = callPackage ../applications/misc/slade/git.nix {
+    wxGTK = wxGTK30;
+  };
+
   drive = callPackage ../applications/networking/drive { };
 
   driftnet = callPackage ../tools/networking/driftnet {};
