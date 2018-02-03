@@ -10,12 +10,12 @@
 
 buildPythonApplication rec {
   pname = "spyder";
-  version = "3.2.4";
+  version = "3.2.6";
   namePrefix = "";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "028hg71gfq2yrplwhhl7hl4rbwji1l0zxzghblwmb0i443ki10v3";
+    sha256 = "87d6a4f5ee1aac4284461ee3584c3ade50cb53feb3fe35abebfdfb9be18c526a";
   };
 
   propagatedBuildInputs = [
