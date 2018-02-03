@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
+    sha256 = "ac5b57691bc43919dcc21167660a57cc51797c28a4301a6144eff07b751216a4";
   };
 
   checkInputs = [ glibcLocales ];
