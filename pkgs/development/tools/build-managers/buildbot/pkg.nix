@@ -12,6 +12,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
+  postPatch = ''
+    # Their listdir function filters out `node_modules` folders.
+    # Do we have to care about that with Nix...?
+    substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
     description = "Buildbot Packaging Helper";
