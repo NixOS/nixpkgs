@@ -2544,10 +2544,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CpanelJSONXS = buildPerlPackage rec {
-    name = "Cpanel-JSON-XS-3.0237";
+    name = "Cpanel-JSON-XS-4.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "da86fffdbe6c1b7a023e95e2b8db7d6b45a08871c8312f23e45253c78e662d07";
+      sha256 = "4dedf770cab3009b08bca108266b941097ae1c55c674c500e3145e2f23a628ac";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
