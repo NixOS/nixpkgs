@@ -5624,6 +5624,8 @@ in {
     };
   };
 
+  luftdaten = callPackage ../development/python-modules/luftdaten { };
+
   m2r = callPackage ../development/python-modules/m2r { };
 
   mailchimp = buildPythonPackage rec {
