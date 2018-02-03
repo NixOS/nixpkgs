@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, python3
+, extraComponents ? []
 , extraPackages ? ps: []
 , skipPip ? true }:
 
@@ -24,14 +25,25 @@ let
     };
   };
 
+  componentPackages = import ./component-packages.nix;
+
+  availableComponents = builtins.attrNames componentPackages.components;
+
+  getPackages = component: builtins.getAttr component componentPackages.components;
+
+  componentBuildInputs = map (component: getPackages component py.pkgs) extraComponents;
+
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages py.pkgs;
 
+  # Don't forget to run parse-requirements.py after updating
+  hassVersion = "0.62.1";
+
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
-  version = "0.62.1";
+  version = assert (componentPackages.version == hassVersion); hassVersion;
 
-  diabled = !isPy3k;
+  inherit availableComponents;
 
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
@@ -45,8 +57,8 @@ in with py.pkgs; buildPythonApplication rec {
     # From setup.py
     requests pyyaml pytz pip jinja2 voluptuous typing aiohttp yarl async-timeout chardet astral certifi
     # From the components that are part of the default configuration.yaml
-    sqlalchemy aiohttp-cors hass-frontend user-agents distro mutagen xmltodict netdisco 
-  ] ++ extraBuildInputs;
+    sqlalchemy aiohttp-cors hass-frontend user-agents distro mutagen xmltodict netdisco
+  ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
     pytest requests-mock pydispatcher pytest-aiohttp
