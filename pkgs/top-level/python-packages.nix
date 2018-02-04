@@ -623,6 +623,8 @@ in {
     };
   };
 
+  asynctest = callPackage ../development/python-modules/asynctest { };
+
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
