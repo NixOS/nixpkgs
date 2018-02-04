@@ -141,7 +141,7 @@ in {
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ]
-              ++ optional vswitch.enable "vswitchd.service";
+              ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 

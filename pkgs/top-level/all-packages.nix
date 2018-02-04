@@ -4501,6 +4501,8 @@ with pkgs;
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
+  openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
+
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
   };
