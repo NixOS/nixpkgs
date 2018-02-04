@@ -21,22 +21,37 @@
         <link href="$relpath^$stylesheet" rel="stylesheet" type="text/css" />
         $extrastylesheet
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="$relpath^doxy-boot.js"></script>
+        <link rel="stylesheet" href="https://nixos.org/bootstrap/css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="https://nixos.org/bootstrap/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script> -->
+        <!-- <script type="text/javascript" src="$relpath^doxy-boot.js"></script> -->
         <link href="https://nixos.org/css/nixos-site.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container">
-                    
-                <div class="navbar-header">
-                        <img src="https://nixos.org/logo/nix-wiki.png" alt="NixOS" class="logo">Nixpkgs
+            <div class="navbar navbar-fixed-top">
+                    <div class="navbar-inner">
+                      <div class="container">
+                        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+                        <li class="dropdown brand">
+                          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <img src="https://nixos.org/logo/nix-wiki.png" alt="NixOS" class="logo" />
+                              Nixpkgs Internals
+                          </a>
+                        </li>
+                        $search
+                        <form class="navbar-search" method="get" action="https://www.google.com/search">
+                            <input name="q" type="text" class="search-query span2" placeholder="Search nixos.org"/>
+                            <input name="sitesearch" type="hidden" value="nixos.org"/>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
 
-                    <!-- <a class="navbar-brand">$projectname $projectnumber</a> -->
-                </div>
-            </div>
-        </nav>
         <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
             <div class="content" id="content">
                 <div class="container">
