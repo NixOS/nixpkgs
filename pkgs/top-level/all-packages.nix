@@ -6886,6 +6886,11 @@ with pkgs;
     config.php.apxs2 = false;
   };
 
+  php72-embed = php72.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
+
 
   picoc = callPackage ../development/interpreters/picoc {};
 
