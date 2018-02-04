@@ -43,11 +43,21 @@
                               Nixpkgs Internals
                           </a>
                         </li>
-                        $search
-                        <form class="navbar-search" method="get" action="https://www.google.com/search">
-                            <input name="q" type="text" class="search-query span2" placeholder="Search nixos.org"/>
+                        <div class="navbar-search" method="get" action="javascript:void(0);">
+                            <input name="q" type="text" class="search-query span2" placeholder="Search internals"/>
                             <input name="sitesearch" type="hidden" value="nixos.org"/>
-                          </form>
+                        </div>
+
+                        <!-- <div id="MSearchBox" class="MSearchBoxInactive navbar-search">
+                                <span class="left">
+                                  <img id="MSearchSelect" src="search/mag_sel.png" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()" alt="">
+                                  <input type="text" id="MSearchField" class="search-query span2" value="Search" accesskey="S" onfocus="searchBox.OnSearchFieldFocus(true)" onblur="searchBox.OnSearchFieldFocus(false)" onkeyup="searchBox.OnSearchFieldChange(event)">
+                                  </span><span class="right">
+                                    <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()" style="display: none;"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""></a>
+                                  </span>
+                                </div> -->
+
+
                         </div>
                       </div>
                     </div>
