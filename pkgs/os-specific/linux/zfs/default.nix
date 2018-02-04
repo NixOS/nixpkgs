@@ -5,7 +5,7 @@
 , zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null, splLegacyCryptoVersion ? null
+, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
 }:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ let
     , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , isLegacyCryptoVersion ? false
+    , isLegacyCrypto ? false
     , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -45,7 +45,7 @@ let
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
         ++ optionals (buildUser && isUnstable) [ openssl ]
-        ++ optionals (buildUser && isLegacyCryptoVersion) [ openssl ];
+        ++ optionals (buildUser && isLegacyCrypto) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -179,7 +179,7 @@ in {
     spl = splUnstable;
   };
 
-  zfsLegacyCryptoVersion = common {
+  zfsLegacyCrypto = common {
     # comment/uncomment if breaking kernel versions are known
     incompatibleKernelVersion = null;
 
@@ -188,7 +188,7 @@ in {
 
     rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
     sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
-    isLegacyCryptoVersion = true;
+    isLegacyCrypto = true;
 
     extraPatches = [
       (fetchpatch {
@@ -197,7 +197,7 @@ in {
       })
     ];
 
-    spl = splLegacyCryptoVersion;
+    spl = splLegacyCrypto;
   };
   
 }

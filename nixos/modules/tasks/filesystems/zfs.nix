@@ -28,10 +28,10 @@ let
     spl = kernel.splUnstable;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
-  } else if config.boot.zfs.enableLegacyCryptoVersion then {
-    spl = kernel.splLegacyCryptoVersion;
-    zfs = kernel.zfsLegacyCryptoVersion;
-    zfsUser = pkgs.zfsLegacyCryptoVersion;
+  } else if config.boot.zfs.enableLegacyCrypto then {
+    spl = kernel.splLegacyCrypto;
+    zfs = kernel.zfsLegacyCrypto;
+    zfsUser = pkgs.zfsLegacyCrypto;
   } else {
     spl = kernel.spl;
     zfs = kernel.zfs;
@@ -79,7 +79,7 @@ in
           '';
       };
 
-      enableLegacyCryptoVersion = mkOption {
+      enableLegacyCrypto = mkOption {
         type = types.bool;
         default = false;
         description = ''

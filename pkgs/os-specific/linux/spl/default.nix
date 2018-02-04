@@ -71,7 +71,7 @@ in
       sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
     };
 
-    splLegacyCryptoVersion = common {
+    splLegacyCrypto = common {
       version = "2017-12-21";
       rev = "c9821f1ccc647dfbd506f381b736c664d862d126";
       sha256 = "08r6sa36jaj6n54ap18npm6w85v5yn3x8ljg792h37f49b8kir6c";
