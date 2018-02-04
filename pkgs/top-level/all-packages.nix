@@ -92,6 +92,11 @@ with pkgs;
     { substitutions = { gnu_config = gnu-config;}; }
     ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
+  gogUnpackHook = makeSetupHook {
+    name = "gog-unpack-hook";
+    deps = [ innoextract file-rename ]; }
+    ../build-support/setup-hooks/gog-unpack.sh;
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
