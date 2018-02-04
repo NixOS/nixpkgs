@@ -9,7 +9,7 @@ let
   glibc =
     if hostPlatform != buildPlatform
     then glibcCross
-    else assert stdenv ? glibc; stdenv.glibc;
+    else assert hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
   dots_in_usernames = fetchpatch {
     url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
