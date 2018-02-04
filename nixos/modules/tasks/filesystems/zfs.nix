@@ -84,7 +84,7 @@ in
         default = false;
         description = ''
           Enabling this option will allow you to continue to use the old format for
-          encrypted datasets. With the inclusion of stabiity patches the format of
+          encrypted datasets. With the inclusion of stability patches the format of
           encrypted datasets has changed. They can still be access and mounted but
           in read-only mode mounted. It is highly recommended to convert them to
           the new format.
