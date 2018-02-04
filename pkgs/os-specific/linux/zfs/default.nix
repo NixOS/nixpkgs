@@ -5,7 +5,7 @@
 , zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null, splCryptoStability ? null
+, kernel ? null, spl ? null, splUnstable ? null, splLegacyCryptoVersion ? null
 }:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ let
     , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , isCryptoStability ? false
+    , isLegacyCryptoVersion ? false
     , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -44,7 +44,8 @@ let
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
-        ++ optionals (buildUser && isUnstable) [ openssl ];
+        ++ optionals (buildUser && isUnstable) [ openssl ]
+        ++ optionals (buildUser && isLegacyCryptoVersion) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -161,33 +162,11 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-01-10";
-
-    rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
-    sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
-    isUnstable = true;
-
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
-        sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
-      })
-    ];
-
-    spl = splUnstable;
-  };
-
-  zfsCryptoStability = common {
-    # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
-
-    # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-02-02";
 
     rev = "fbd42542686af053f0d162ec4630ffd4fff1cc30";
     sha256 = "0qzkwnnk7kz1hwvcaqlpzi5yspfhhmd2alklc07k056ddzbx52qb";
     isUnstable = true;
-    isCryptoStability = true;
 
     extraPatches = [
       # Mic92's patch updated for current zfs master
@@ -197,7 +176,28 @@ in {
       })
     ];
 
-    spl = splCryptoStability;
+    spl = splUnstable;
+  };
+
+  zfsLegacyCryptoVersion = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-01-10";
+
+    rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
+    sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
+    isLegacyCryptoVersion = true;
+
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
+        sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
+      })
+    ];
+
+    spl = splLegacyCryptoVersion;
   };
   
 }

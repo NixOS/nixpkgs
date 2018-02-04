@@ -28,10 +28,10 @@ let
     spl = kernel.splUnstable;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
-  } else if config.boot.zfs.enableCryptoStability then {
-    spl = kernel.splCryptoStability;
-    zfs = kernel.zfsCryptoStability;
-    zfsUser = pkgs.zfsCryptoStability;
+  } else if config.boot.zfs.enableLegacyCryptoVersion then {
+    spl = kernel.splLegacyCryptoVersion;
+    zfs = kernel.zfsLegacyCryptoVersion;
+    zfsUser = pkgs.zfsLegacyCryptoVersion;
   } else {
     spl = kernel.spl;
     zfs = kernel.zfs;
@@ -79,14 +79,18 @@ in
           '';
       };
 
-      enableCryptoStability = mkOption {
+      enableLegacyCryptoVersion = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Enabling this option will install a development version of ZFS on Linux
-          that contains a format change for encrypted dataset. Once installed and
-          booted, you can still access encrypted datasets that were created prior
-          to this version but they can only be mounted as read-only.
+          Enabling this option will allow you to continue to use the old format for
+          encrypted datasets. With the inclusion of stabiity patches the format of
+          encrypted datasets has changed. They can still be access and mounted but
+          in read-only mode mounted. It is highly recommended to convert them to
+          the new format.
+
+          This option is only for convenience to people that cannot convert their
+          datasets to the new format yet and it will be removed in due time.
 
           For migration strategies from old format to this new one, check the Wiki:
           https://nixos.wiki/wiki/NixOS_on_ZFS#Encrypted_Dataset_Format_Change
