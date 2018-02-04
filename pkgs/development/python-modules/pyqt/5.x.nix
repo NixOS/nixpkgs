@@ -13,7 +13,6 @@ in buildPythonPackage {
   pname = pname;
   version = version;
   format = "other";
-  name = pname + "-" + version;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
@@ -28,7 +27,7 @@ in buildPythonPackage {
     sha256 = "0l2zy6b7bfjxmg4bb8yikg6i8iy2xdwmvk7knfmrzfpqbmkycbrl";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
+  nativeBuildInputs = [ pkgconfig qmake ];
 
   buildInputs = [
     lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
@@ -43,10 +42,10 @@ in buildPythonPackage {
     lndir ${dbus-python} $out
     rm -rf "$out/nix-support"
 
-    export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
+    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
 
     substituteInPlace configure.py \
-      --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
+      --replace 'install_dir=pydbusmoddir' "install_dir='$out/${python.sitePackages}/dbus/mainloop'" \
       --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
 
     ${python.executable} configure.py  -w \
