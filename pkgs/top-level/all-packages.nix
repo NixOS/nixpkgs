@@ -3212,6 +3212,8 @@ with pkgs;
 
   npm2nix = nodePackages.npm2nix;
 
+  file-rename = callPackage ../tools/filesystems/file-rename { };
+
   kea = callPackage ../tools/networking/kea {
     boost = boost165;
   };
@@ -15009,7 +15011,7 @@ with pkgs;
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
 
-  keepass = callPackage ../applications/misc/keepass { 
+  keepass = callPackage ../applications/misc/keepass {
     buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
   };
 
