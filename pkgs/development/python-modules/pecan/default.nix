@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pecan";
-  version = "1.2.1";
+  version = "1.3.2";
 
   patches = [
     ./python36_test_fix.patch
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ikc32rd2hr8j2jxc0mllvdjvxydx3fwfp3z8sdxmkzdkixlb5cd";
+    sha256 = "24f06cf88a488b75f433e62b33c1c97e4575d0cd91eec9eec841a81cecfd6de3";
   };
 
   propagatedBuildInputs = [ singledispatch logutils ];

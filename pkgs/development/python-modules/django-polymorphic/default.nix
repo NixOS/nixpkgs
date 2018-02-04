@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "1.3";
+  version = "2.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8737b465ebf5fad772b4c52272189c352f5904f468d298584a3469187e3207ad";
+    sha256 = "78f666149ea10cdda08ac6c25ddf4b4e582ee380be87e7968bfed008ef39dfa5";
   };
 
   checkInputs = [ django ];
