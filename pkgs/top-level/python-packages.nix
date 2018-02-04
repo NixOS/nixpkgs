@@ -12823,6 +12823,8 @@ in {
 
   kmsxx = callPackage ../development/libraries/kmsxx { };
 
+  pybase64 = callPackage ../development/python-modules/pybase64 { };
+
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
     version = "0.2.4";
