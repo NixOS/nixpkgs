@@ -1,5 +1,5 @@
-{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, ... }:
+{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libsodium, libssh2,
+  openssl, postgresql, sqlite, zlib, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation;
@@ -35,5 +35,11 @@ in
   };
   openssl-sys = attrs: {
     buildInputs = [ pkgconfig openssl ];
+  };
+  thrussh-libsodium = attrs: {
+    buildInputs = [ pkgconfig libsodium ];
+  };
+  pq-sys = attr: {
+    buildInputs = [ pkgconfig postgresql ];
   };
 }
