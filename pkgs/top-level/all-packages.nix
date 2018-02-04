@@ -18285,9 +18285,17 @@ with pkgs;
     physfs = physfs_2;
   };
 
+  # these are here for compatibility
   d1x_rebirth = dxx-rebirth;
-
   d2x_rebirth = dxx-rebirth;
+
+  inherit (callPackages ../games/dxx-rebirth/assets.nix { })
+    descent1-assets
+    descent2-assets;
+
+  inherit (callPackages ../games/dxx-rebirth/full.nix { })
+    d1x-rebirth-full
+    d2x-rebirth-full;
 
   easyrpg-player = callPackage ../games/easyrpg-player { };
 
