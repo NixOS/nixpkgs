@@ -3839,7 +3839,8 @@ in {
     };
   });
 
-  nose-parameterized = callPackage ../development/python-modules/nose-parameterized {};
+  nose-parameterized = warn "Warning: `nose-parameterized` is deprecated! Use `parameterized` instead."
+    (callPackage ../development/python-modules/nose-parameterized {});
 
   neurotools = buildPythonPackage (rec {
     name = "NeuroTools-${version}";
@@ -12396,6 +12397,8 @@ in {
       '';
     };
   };
+
+  parameterized = callPackage ../development/python-modules/parameterized { };
 
   paramz = callPackage ../development/python-modules/paramz { };
 
