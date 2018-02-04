@@ -671,6 +671,8 @@ let
       sed -i "s|/usr/local|$out|" lgi/Makefile
     '';
 
+    patches = [ ./lgi-find-cairo-through-typelib.patch ];
+
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
       homepage    = https://github.com/pavouk/lgi;
