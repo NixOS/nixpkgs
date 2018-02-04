@@ -5285,6 +5285,8 @@ in {
     };
   };
 
+  imaplib2 = callPackage ../development/python-modules/imaplib2 { };
+
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
     version = "0.4.2.post1";
