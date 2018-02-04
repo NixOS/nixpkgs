@@ -1,0 +1,24 @@
+--- a/swift-corelibs-libdispatch/libpwq/src/posix/manager.c
++++ b/swift-corelibs-libdispatch/libpwq/src/posix/manager.c
+@@ -273,9 +273,6 @@ static void sigmask_init(void)
+     sigdelset(&sigmask, SIGFPE);
+     sigdelset(&sigmask, SIGBUS);
+     sigdelset(&sigmask, SIGSEGV);
+-#if SIGSYS != SIGUNUSED
+-    sigdelset(&sigmask, SIGSYS);
+-#endif
+     sigdelset(&sigmask, SIGPIPE);
+     sigdelset(&sigmask, SIGPROF);
+ 
+
+--- a/swiftpm/Sources/Utility/Process.swift
++++ b/swiftpm/Sources/Utility/Process.swift
+@@ -140,7 +140,7 @@ public final class Process: ObjectIdentifierProtocol {
+         // modify, so we have to take care about the set we use.
+         var mostSignals = sigset_t()
+         sigemptyset(&mostSignals);
+-        for i in 1 ..< SIGUNUSED {
++        for i in 1 ..< SIGSYS {
+             if i == SIGKILL || i == SIGSTOP {
+                 continue
+             }

@@ -12,7 +12,6 @@
 , swig
 , bash
 , libxml2
-, llvm
 , clang
 , python
 , ncurses
@@ -28,8 +27,10 @@
 , git
 , libgit2
 , fetchFromGitHub
+, fetchpatch
 , paxctl
 , findutils
+, makeWrapper
 #, systemtap
 }:
 
@@ -47,7 +48,7 @@ let
       name = "${repo}-${version}-src";
     };
 
-sources = {
+  sources = {
     # FYI: SourceKit probably would work but currently requires building everything twice
     # For more inforation, see: https://github.com/apple/swift/pull/3594#issuecomment-234169759
     clang = fetch {
@@ -119,12 +120,28 @@ sources = {
   ];
 
   builder = ''
+    NIX_CFLAGS_COMPILE=$( echo ${clang.default_cxx_stdlib_compile} )
+
     $SWIFT_SOURCE_ROOT/swift/utils/build-script \
       --preset=buildbot_linux \
       installable_package=$INSTALLABLE_PACKAGE \
       install_prefix=$out \
       install_destdir=$SWIFT_INSTALL_DIR \
       extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"'';
+
+  # from llvm/4/llvm.nix
+  sigaltstackPatch = fetchpatch {
+    name = "sigaltstack.patch"; # for glibc-2.26
+    url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+    sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+  };
+
+  # https://bugs.swift.org/browse/SR-6409
+  sigunusedPatch = fetchpatch {
+    name = "sigunused.patch";
+    url = "https://github.com/apple/swift-llbuild/commit/303a89bc6da606c115560921a452686aa0655f5e.diff";
+    sha256 = "04sw7ym1grzggj1v3xrzr2ljxz8rf9rnn9n5fg1xjbwlrdagkc7m";
+  };
 
 in
 stdenv.mkDerivation rec {
@@ -145,6 +162,7 @@ stdenv.mkDerivation rec {
     rsync
     which
     findutils
+    makeWrapper
   ] ++ stdenv.lib.optional stdenv.needsPax paxctl;
 
   # TODO: Revisit what's propagated and how
@@ -209,6 +227,10 @@ stdenv.mkDerivation rec {
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
     patch -p1 -d swift -i ${./patches/0003-build-presets-linux-disable-tests.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
+    # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
+    patch -p1 -i ${./patches/remove_xlocale.patch}
+    # https://bugs.swift.org/browse/SR-4633
+    patch -p1 -d swift -i ${./patches/icu59.patch}
 
     substituteInPlace clang/lib/Driver/ToolChains.cpp \
       --replace '  addPathIfExists(D, SysRoot + "/usr/lib", Paths);' \
@@ -232,6 +254,11 @@ stdenv.mkDerivation rec {
       --replace usr "$PREFIX"
     substituteInPlace swiftpm/Utilities/bootstrap \
       --replace "usr" "$PREFIX"
+  '' + stdenv.lib.optionalString (stdenv ? glibc) ''
+    patch -p1 -d compiler-rt -i ${sigaltstackPatch}
+    patch -p1 -d compiler-rt -i ${./patches/sigaltstack.patch}
+    patch -p1 -d llbuild -i ${sigunusedPatch}
+    patch -p1 -i ${./patches/sigunused.patch}
   '';
 
   doCheck = false;
@@ -251,6 +278,10 @@ stdenv.mkDerivation rec {
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
     ln -s ${clang}/bin/* $out/bin/
     ln -s ${targetPackages.stdenv.cc.bintools}/bin/ar $out/bin/ar
+
+    wrapProgram $out/bin/swift \
+      --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
+      --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
@@ -263,7 +294,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     # Swift doesn't support 32bit Linux, unknown on other platforms.
     platforms = [ "x86_64-linux" ];
-    broken = true;
   };
 }
 
