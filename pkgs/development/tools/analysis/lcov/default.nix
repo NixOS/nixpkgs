@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ dezgeg mornfall ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.all;
   };
 }

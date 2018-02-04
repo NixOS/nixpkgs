@@ -1,7 +1,11 @@
 { stdenv, fetchFromGitHub, pkgs }:
 
-stdenv.mkDerivation rec {
+let
   version = "2.9.5-1";
+  pwdBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ coreutils ])}/pwd";
+  opensslBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ openssl ])}/openssl";
+
+in stdenv.mkDerivation rec {
   name = "testssl.sh-${version}";
 
   src = fetchFromGitHub {
@@ -17,8 +21,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./testssl.patch ];
 
-  pwdBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ coreutils ])}/pwd";
-  opensslBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ openssl ])}/openssl";
   postPatch = ''
     sed -i -e "s|/bin/pwd|${pwdBinPath}|g"                                     \
            -e "s|TESTSSL_INSTALL_DIR:-\"\"|TESTSSL_INSTALL_DIR:-\"$out\"|g"    \

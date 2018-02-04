@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
     ++ optionals stdenv.isLinux [ procps ];
-  buildInputs = [ pcre ]
+  buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isArm ''
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
-    echo '#!/usr/bin/env bash' > misc/cgo/testplugin/test.bash
+    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
@@ -122,8 +122,6 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.system == "i686-linux" then "386"
@@ -135,6 +133,9 @@ stdenv.mkDerivation rec {
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+
+  # Hopefully avoids test timeouts on Hydra
+  GO_TEST_TIMEOUT_SCALE = 3;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.

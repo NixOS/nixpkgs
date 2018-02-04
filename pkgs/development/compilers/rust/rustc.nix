@@ -17,13 +17,13 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
+  inherit (darwin.apple_sdk.frameworks) Security;
 
   procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
-
 in
 
 stdenv.mkDerivation {
@@ -36,6 +36,12 @@ stdenv.mkDerivation {
 
   # The build will fail at the very end on AArch64 without this.
   dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
+
+  # Running the default `strip -S` command on Darwin corrupts the
+  # .rlib files in "lib/".
+  #
+  # See https://github.com/NixOS/nixpkgs/pull/34227
+  stripDebugList = if stdenv.isDarwin then [ "bin" ] else null;
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
@@ -55,7 +61,6 @@ stdenv.mkDerivation {
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
-                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
@@ -79,8 +84,9 @@ stdenv.mkDerivation {
     #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
-    # Disable fragile linker-output-non-utf8 test
+    # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
+    rm -vr src/test/run-make/issue-26092.rs || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true
@@ -112,6 +118,10 @@ stdenv.mkDerivation {
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
+    rm -v src/test/run-pass/backtrace-debuginfo.rs
+
+    # error: No such file or directory
+    rm -v src/test/run-pass/issue-45731.rs
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
@@ -120,12 +130,6 @@ stdenv.mkDerivation {
         --replace 'home_dir().is_some()' true
     rm -v src/test/run-pass/fds-are-cloexec.rs  # FIXME: pipes?
     rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
-  '';
-
-  preConfigure = ''
-    # Needed flags as the upstream configure script has a broken prefix substitution
-    configureFlagsArray+=("--datadir=$out/share")
-    configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't
@@ -141,6 +145,7 @@ stdenv.mkDerivation {
     ++ optional (!stdenv.isDarwin) gdb;
 
   buildInputs = [ ncurses ] ++ targetToolchains
+    ++ optional stdenv.isDarwin Security
     ++ optional (!forceBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];
@@ -168,7 +173,7 @@ stdenv.mkDerivation {
   # enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.rust-lang.org/;
+    homepage = https://www.rust-lang.org/;
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
     license = [ licenses.mit licenses.asl20 ];

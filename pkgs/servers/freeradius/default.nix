@@ -13,7 +13,7 @@
 , withMemcached ? false
 , hiredis
 , withRedis ? false
-, libmysql
+, mysql
 , withMysql ? false
 , json_c
 , withJson ? false
@@ -29,7 +29,7 @@ assert withPcap -> libpcap != null;
 assert withCap -> libcap != null;
 assert withMemcached -> libmemcached != null;
 assert withRedis -> hiredis != null;
-assert withMysql -> libmysql != null;
+assert withMysql -> mysql != null;
 assert withYubikey -> libyubikey != null;
 assert withCollectd -> collectd != null;
 
@@ -40,11 +40,11 @@ assert withCollectd -> collectd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "freeradius-${version}";
-  version = "3.0.15";
+  version = "3.0.16";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "1qygf5if2xjzl7kfzwl428ydz5q1m0j5sx077n12v7znlgnwaagx";
+    sha256 = "062dw4ckaa7k2br16l3naz9dr7hvzqhpxdwam3klq1i44v4hvl1b";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ optional withCap libcap
     ++ optional withMemcached libmemcached
     ++ optional withRedis hiredis
-    ++ optional withMysql libmysql
+    ++ optional withMysql mysql.connector-c
     ++ optional withJson json_c
     ++ optional withYubikey libyubikey
     ++ optional withCollectd collectd;

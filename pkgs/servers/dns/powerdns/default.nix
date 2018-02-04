@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig,
   boost, libyamlcpp, libsodium, sqlite, protobuf,
-  libmysql, postgresql, lua, openldap, geoip, curl
+  mysql57, postgresql, lua, openldap, geoip, curl
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost libmysql postgresql lua openldap sqlite protobuf geoip libyamlcpp libsodium curl ];
+  buildInputs = [ boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip libyamlcpp libsodium curl ];
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''

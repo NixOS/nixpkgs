@@ -7,6 +7,7 @@
 , python
 , pexpect
 }:
+
 buildPythonPackage rec {
   pname = "bash_kernel";
   version = "0.7.1";
@@ -28,11 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ipykernel pexpect ];
 
+  # no tests
   doCheck = false;
 
   preBuild = ''
-    mkdir tmp
-    export HOME=$PWD/tmp
+    export HOME=$TMPDIR
   '';
 
   postInstall = ''

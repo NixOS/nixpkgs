@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
   # perl is only needed for patchShebangs fixup.
   buildInputs = [
     gmp mpfr pari ntl gsl blas mpfi liblapackWithAtlas
-    readline gettext libpng libao gfortran perl
+    readline gettext libpng libao perl
+    # gfortran.cc default output contains static libraries compiled without -fPIC
+    # we want libgfortran.so.3 instead
+    (stdenv.lib.getLib gfortran.cc)
   ] ++ stdenv.lib.optionals enableGUI [
     mesa fltk xorg.libX11
   ];

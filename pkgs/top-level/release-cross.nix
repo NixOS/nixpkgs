@@ -21,6 +21,8 @@ let
   gnuCommon = lib.recursiveUpdate common {
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
+    haskell.packages.ghcHEAD.hello = nativePlatforms;
+    haskell.packages.ghc822.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -41,6 +43,7 @@ let
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
     windows.wxMSW = nativePlatforms;
+    windows.mingw_w64_pthreads = nativePlatforms;
   };
 
   darwinCommon = {
@@ -74,7 +77,7 @@ in
         f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
-    testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
+    testEqual = path: systems: forTheseSystems systems (testEqualOne path);
 
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
@@ -118,11 +121,16 @@ in
     mpg123 = nativePlatforms;
   });
 
+  /* Linux on Aarch64 (TODO make android for real)  */
+  android = mapTestOnCross lib.systems.examples.aarch64-multiplatform (linuxCommon // {
+  });
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = drv: hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+    mkBootstrapToolsJob = drv:
+      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

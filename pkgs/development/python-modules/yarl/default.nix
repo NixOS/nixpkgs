@@ -1,28 +1,28 @@
-{ lib
-, fetchurl
+{ stdenv
+, fetchPypi
 , buildPythonPackage
 , multidict
 , pytestrunner
 , pytest
+, idna
 }:
 
-let
+buildPythonPackage rec {
   pname = "yarl";
-  version = "0.13.0";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "25fe681a982f2cec567df8abac7cbd2ac27016e4aec89193945cab0643bfdb42";
+  version = "1.1.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "162630v7f98l27h11msk9416lqwm2mpgxh4s636594nlbfs9by3a";
   };
 
-  buildInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict ];
+  checkInputs = [ pytest pytestrunner ];
+  propagatedBuildInputs = [ multidict idna ];
 
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Yet another URL library";
     homepage = https://github.com/aio-libs/yarl/;
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

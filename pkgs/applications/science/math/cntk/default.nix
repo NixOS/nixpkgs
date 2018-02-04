@@ -95,5 +95,6 @@ in stdenv.mkDerivation rec {
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     maintainers = with maintainers; [ abbradar ];
+    broken = true; # Never succeeded to build.
   };
 }

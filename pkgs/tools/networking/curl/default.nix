@@ -6,7 +6,7 @@
 , sslSupport ? false, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , scpSupport ? false, libssh2 ? null
-, gssSupport ? false, gss ? null
+, gssSupport ? false, kerberos ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -21,13 +21,14 @@ assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
+assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.57.0";
+  name = "curl-7.58.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "09j88lzqmi79rvvg2l7bjcs56330bq388f5p468hgblf6hdf6by9";
+    sha256 = "0cg7klhf1ksnbw5wvwa802qir877zv4y3dj7swz1xh07g3wq3c0w";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport gss ++
+    optional gssSupport kerberos ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
 
   CXX = "c++";
   CXXCPP = "c++ -E";

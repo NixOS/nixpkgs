@@ -27,7 +27,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Search engine library";
-      homepage = http://xapian.org/;
+      homepage = https://xapian.org/;
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ chaoflow ];
       platforms = platforms.unix;
@@ -36,5 +36,5 @@ let
 in {
   # xapian-ruby needs 1.2.22 as of 2017-05-06
   xapian_1_2_22 = generic "1.2.22" "0zsji22n0s7cdnbgj0kpil05a6bgm5cfv0mvx12d8ydg7z58g6r6";
-  xapian_1_4_4 = generic "1.4.4" "1n9j2w2as0flih3hgim7gprfxsx6gimijs91rxsjsi8shjlqbad6";
+  xapian_1_4 = generic "1.4.5" "0axhqrj202hbll9mcx1qdm8gsqj19216w3z02gyjbycxvr9gkdc5";
 }

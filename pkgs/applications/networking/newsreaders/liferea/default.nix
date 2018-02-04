@@ -6,13 +6,13 @@
 
 let
   pname = "liferea";
-  version = "1.12.0";
+  version = "1.12.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "02qzg85l2vrja2qwzdbrfa4z1lp5p6lp528bv74abmxz5wlpif70";
+    sha256 = "14qx3x2xjcnydc4ma8vdac63phas7jzwbjl4b9r5hf6vxv3mpvdq";
   };
 
   nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];

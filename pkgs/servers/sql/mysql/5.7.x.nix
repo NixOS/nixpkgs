@@ -3,7 +3,8 @@
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
-stdenv.mkDerivation rec {
+let
+self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
   version = "5.7.20";
 
@@ -22,15 +23,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "static" ];
+
   cmakeFlags = [
     "-DWITH_SSL=yes"
-    "-DWITH_READLINE=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
+    "-DWITH_UNITTEST=no"
     "-DWITH_ZLIB=yes"
+    "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
+    "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
+    "-DWITH_FEDERATED_STORAGE_ENGINE=yes"
+    "-DCMAKE_VERBOSE_MAKEFILE=yes"
     "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
-    "-DINSTALL_SYSCONFDIR=etc/mysql"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
@@ -50,15 +56,22 @@ stdenv.mkDerivation rec {
   '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
-    rm -r $out/mysql-test "$out"/lib/*.a
-    rm $out/share/man/man1/mysql-test-run.pl.1
+    install -vD $out/lib/*.a -t $static/lib
+    rm -r $out/mysql-test
+    rm $out/share/man/man1/mysql-test-run.pl.1 $out/lib/*.a
+    ln -s libmysqlclient.so $out/lib/libmysqlclient_r.so
   '';
 
-  passthru.mysqlVersion = "5.7";
+  passthru = {
+    client = self;
+    connector-c = self;
+    server = self;
+    mysqlVersion = "5.7";
+  };
 
   meta = {
     homepage = http://www.mysql.com/;
     description = "The world's most popular open source database";
     platforms = stdenv.lib.platforms.unix;
   };
-}
+}; in self

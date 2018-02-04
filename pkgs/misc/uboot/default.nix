@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, python2
+{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2
 , hostPlatform
 }:
 
@@ -7,6 +7,7 @@ let
             , filesToInstall
             , installDir ? "$out"
             , defconfig
+            , extraMakeFlags ? []
             , extraMeta ? {}
             , ... } @ args:
            stdenv.mkDerivation (rec {
@@ -42,11 +43,11 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc dtc python2 ];
+    nativeBuildInputs = [ bc dtc openssl python2 ];
 
     hardeningDisable = [ "all" ];
 
-    makeFlags = [ "DTC=dtc" ];
+    makeFlags = [ "DTC=dtc" ] ++ extraMakeFlags;
 
     configurePhase = ''
       make ${defconfig}
@@ -89,7 +90,15 @@ in rec {
     buildFlags = "tools NO_SDL=1";
     dontStrip = false;
     targetPlatforms = stdenv.lib.platforms.linux;
-    filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
+    # build tools/kwboot
+    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" ];
+    filesToInstall = [
+      "tools/dumpimage"
+      "tools/fdtgrep"
+      "tools/kwboot"
+      "tools/mkenvimage"
+      "tools/mkimage"
+    ];
   };
 
   ubootA20OlinuxinoLime = buildUBoot rec {
@@ -108,6 +117,13 @@ in rec {
     defconfig = "am335x_boneblack_defconfig";
     targetPlatforms = ["armv7l-linux"];
     filesToInstall = ["MLO" "u-boot.img"];
+  };
+
+  # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
+  ubootClearfog = buildUBoot rec {
+    defconfig = "clearfog_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-spl.kwb"];
   };
 
   ubootJetsonTK1 = buildUBoot rec {

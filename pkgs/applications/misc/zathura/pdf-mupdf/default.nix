@@ -2,12 +2,12 @@
 , libjpeg, jbig2dec, openjpeg, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.1";
+  version = "0.3.2";
   name = "zathura-pdf-mupdf-${version}";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/${name}.tar.gz";
-    sha256 = "06zqn8z6a0hfsx3s1kzqvqzb73afgcl6z5r062sxv7kv570fvffr";
+    sha256 = "0xkajc3is7ncmb2fmymbzfgrran2bz12i7zsm1vvxhxds728h7ck";
   };
 
   nativeBuildInputs = [ pkgconfig ];

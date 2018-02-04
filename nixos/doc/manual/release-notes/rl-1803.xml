@@ -20,6 +20,22 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
+      have been made to the infrastructure involved:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>libmysql</literal> has been deprecated, please use <literal>mysql.connector-c</literal>
+            instead, a compatibility passthru has been added to the MySQL packages.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <literal>mysql57</literal> package has a new <literal>static</literal> output containing
+            the static libraries including <literal>libmysqld.a</literal>
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
   </listitem>
 </itemizedlist>
@@ -74,6 +90,28 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      Package attributes starting with a digit have been prefixed with an
+      underscore sign. This is to avoid quoting in the configuration and
+      other issues with command-line tools like <literal>nix-env</literal>.
+      The change affects the following packages:
+      <itemizedlist>
+        <listitem>
+          <para><literal>2048-in-terminal</literal> → <literal>_2048-in-terminal</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>90secondportraits</literal> → <literal>_90secondportraits</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>2bwm</literal> → <literal>_2bwm</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>389-ds-base</literal> → <literal>_389-ds-base</literal></para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       <emphasis role="strong">
         The OpenSSH service no longer enables support for DSA keys by default,
         which could cause a system lock out. Update your keys or, unfavorably,
@@ -93,6 +131,55 @@ following incompatible changes:</para>
       After updating the keys to be stronger, anyone still on a pre-17.03
       version is safe to jump to 17.03, as vetted
       <link xlink:href="https://search.nix.gsc.io/?q=stateVersion">here</link>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal> has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
+      Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
+      Other more obscure ones are just moved.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The propagation logic has been changed.
+      The new logic, along with new types of dependencies that go with, is thoroughly documented in the "Specifying dependencies" section of the "Standard Environment" chapter of the nixpkgs manual.
+      <!-- That's <xref linkend="ssec-stdenv-attributes"> were we to merge the manuals. -->
+      The old logic isn't but is easy to describe: dependencies were propagated as the same type of dependency no matter what.
+      In practice, that means that many <function>propagatedNativeBuildInputs</function> should instead be  <function>propagatedBuildInputs</function>.
+      Thankfully, that was and is the least used type of dependency.
+      Also, it means that some <function>propagatedBuildInputs</function> should instead be <function>depsTargetTargetPropagated</function>.
+      Other types dependencies should be unaffected.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.addPassthru drv passthru</literal> is removed.  Use <literal>lib.extendDerivation true passthru drv</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>memcached</literal> service no longer accept dynamic socket
+      paths via <option>services.memcached.socket</option>. Unix sockets can be
+      still enabled by <option>services.memcached.enableUnixSocket</option> and
+      will be accessible at <literal>/run/memcached/memcached.sock</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The merging of config options for <varname>services.postfix.config</varname>
+      was buggy. Previously, if other options in the Postfix module like
+      <varname>services.postfix.useSrs</varname> were set and the user set config
+      options that were also set by such options, the resulting config wouldn't
+      include all options that were needed. They are now merged correctly. If
+      config options need to be overridden, <literal>lib.mkForce</literal> or
+      <literal>lib.mkOverride</literal> can be used.
     </para>
   </listitem>
 </itemizedlist>
@@ -143,6 +230,58 @@ following incompatible changes:</para>
       periodically check btrfs filesystems for data corruption.
       If there's a correct copy available, it will automatically repair
       corrupted blocks.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.clock-format.</literal>
+      has been added, the clock format string (as expected by
+      strftime, e.g. <literal>%H:%M</literal>) to use with the lightdm
+      gtk greeter panel.
+    </para>
+    <para>
+      If set to null the default clock format is used.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>displayManager.lightdm.greeters.gtk.indicators</literal>
+      has been added, a list of allowed indicator modules to use with
+      the lightdm gtk greeter panel.
+    </para>
+    <para>
+      Built-in indicators include <literal>~a11y</literal>,
+      <literal>~language</literal>, <literal>~session</literal>,
+      <literal>~power</literal>, <literal>~clock</literal>,
+      <literal>~host</literal>, <literal>~spacer</literal>. Unity
+      indicators can be represented by short name
+      (e.g. <literal>sound</literal>, <literal>power</literal>),
+      service file name, or absolute path.
+    </para>
+    <para>
+      If set to <literal>null</literal> the default indicators are
+      used.
+    </para>
+    <para>
+      In order to have the previous default configuration add
+<programlisting>
+  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [
+    "~host" "~spacer"
+    "~clock" "~spacer"
+    "~session"
+    "~language"
+    "~a11y"
+    "~power"
+  ];
+</programlisting>
+      to your <literal>configuration.nix</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The NixOS test driver supports user services declared by <literal>systemd.user.services</literal>.
+      The methods <literal>waitForUnit</literal>, <literal>getUnitInfo</literal>, <literal>startJob</literal>
+      and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
     </para>
   </listitem>
 </itemizedlist>

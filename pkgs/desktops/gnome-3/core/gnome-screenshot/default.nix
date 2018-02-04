@@ -7,9 +7,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "meson test";
-
-
   postPatch = ''
     chmod +x build-aux/postinstall.py # patchShebangs requires executable file
     patchShebangs build-aux/postinstall.py

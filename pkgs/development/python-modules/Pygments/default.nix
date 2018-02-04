@@ -23,6 +23,6 @@ buildPythonPackage rec {
     homepage = http://pygments.org/;
     description = "A generic syntax highlighter";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nckx garbas ];
+    maintainers = with lib.maintainers; [ garbas ];
   };
 }

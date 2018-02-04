@@ -8,9 +8,9 @@ let
 in rec {
   stable = mkStudio {
     pname = "android-studio";
-    version = "3.0.0.18"; # "Android Studio 3.0"
-    build = "171.4408382";
-    sha256Hash = "18npm7ckdybj6vc2vndr0wd50da19m9z2j7wld2mdidnl5ggk4br";
+    version = "3.0.1.0"; # "Android Studio 3.0.1"
+    build = "171.4443003";
+    sha256Hash = "1krahlqr70nq3csqiinq2m4fgs68j11hd9gg2dx2nrpw5zni0wdd";
 
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (stable version)";
@@ -27,9 +27,9 @@ in rec {
 
   preview = mkStudio {
     pname = "android-studio-preview";
-    version = "3.1.0.5"; # "Android Studio 3.1 Canary 6"
-    build = "173.4506631";
-    sha256Hash = "10yw27rxv6pfvyl9w18ch63lm85ykj7ssrv87pchvwkmsscaw2zn";
+    version = "3.1.0.9"; # "Android Studio 3.1 Beta 1"
+    build = "173.4567466";
+    sha256Hash = "01c6a46pk5zbhwk2w038nm68fkx86nafiw1v2i5rdr93mxvx9cag";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";

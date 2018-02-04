@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "owncloud-client-${version}";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "1r5ddln1wc9iyjizgqb104i0r6qhzsmm2wdnxfaif119cv0vphda";
+    sha256 = "1fpi1mlp2b8sx2993b4mava5c6qw794dmlayih430299z1l9wh49";
   };
 
   patches = [ ../nextcloud-client/find-sql.patch ];

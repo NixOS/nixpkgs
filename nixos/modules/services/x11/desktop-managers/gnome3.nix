@@ -136,7 +136,7 @@ in {
           # find theme engines
           export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
 
-          export XDG_MENU_PREFIX=gnome
+          export XDG_MENU_PREFIX=gnome-
 
           ${concatMapStrings (p: ''
             if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then

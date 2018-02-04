@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "rivet-${version}";
-  version = "2.5.4";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "1qi7am60f2l4krd3sbj95mbzfk82lir0wy8z27yr9ncq6qcm48kp";
+    sha256 = "1mvsa3v8d1pl2fj1dcdf8sikzm1yb2jcl0q34fyfsjw2cisxpv5f";
   };
-
-  postPatch = "patchShebangs ./src/Analyses/cat_with_lines";
 
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
@@ -29,6 +27,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
+  preConfigure = ''
+    substituteInPlace bin/rivet-buildplugin.in \
+      --replace '"which"' '"${which}/bin/which"' \
+      --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
+      --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
+  '';
+
   preInstall = ''
     substituteInPlace bin/make-plots \
       --replace '"which"' '"${which}/bin/which"' \
@@ -40,10 +45,6 @@ stdenv.mkDerivation rec {
       --replace '"convert"' '"${imagemagick.out}/bin/convert"'
     substituteInPlace bin/rivet \
       --replace '"less"' '"${less}/bin/less"'
-    substituteInPlace bin/rivet-buildplugin \
-      --replace '"which"' '"${which}/bin/which"' \
-      --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
-      --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
       --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"

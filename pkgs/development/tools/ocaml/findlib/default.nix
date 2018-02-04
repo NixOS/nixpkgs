@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
         fi
     }
 
-    envHooks+=(addOCamlPath)
+    addEnvHooks "$targetOffset" addOCamlPath
   '';
 
   meta = {

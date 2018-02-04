@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json_glib, zeitgeist, vala_0_34, hicolor_icon_theme
+, keybinder3, json_glib, zeitgeist, vala_0_34, hicolor_icon_theme, gobjectIntrospection
 }:
 
 let
@@ -12,7 +12,11 @@ in stdenv.mkDerivation rec {
     sha256 = "04cnsmwf9xa52dh7rpb4ia715c0ls8jg1p7llc9yf3lbg1m0bvzv";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool vala_0_34 ];
+  nativeBuildInputs = [
+    pkgconfig intltool vala_0_34
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [
     glib libnotify gtk3 libgee keybinder3 json_glib zeitgeist
     hicolor_icon_theme

@@ -1,13 +1,13 @@
 { stdenv, fetchgit, cmake, SDL2, qtbase, boost, curl, gtest }:
 
 stdenv.mkDerivation rec { 
-  name = "citra-2017-07-26";
+  name = "citra-2018-01-24";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "a724fb365787718f9e44adedc14e59d0854905a6";
-    sha256 = "0lkrwhxvq85c0smix27xvj8m463bxa67qhy8m8r43g39n0h8d5sf";
+    rev = "33b0b5163fdb08bc8aa1d7eb83e0931a14ed3046";
+    sha256 = "07z32d8lj84yy3l5iqpk37mnmvzjmppqhyqr64kbx14dh5hb6cbj";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -123,7 +123,10 @@ let
       stdenvBootstrapTools = with lib;
         genAttrs systemsWithAnySupport
           (system: {
-            inherit (import ../stdenv/linux/make-bootstrap-tools.nix { inherit system; })
+            inherit
+              (import ../stdenv/linux/make-bootstrap-tools.nix {
+                localSystem = { inherit system; };
+              })
               dist test;
           })
         # darwin is special in this

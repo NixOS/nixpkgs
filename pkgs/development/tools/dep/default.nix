@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "dep-${version}";
-  version = "0.3.1";
+  version = "0.4.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/golang/dep";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "golang";
     repo = "dep";
-    sha256 = "0dsiaqfrp7ihhx10qapkl6zm3dw3rwdgcr9rkvmq8zprcp7njz90";
+    sha256 = "0183xq5l4sinnclynv6xi85vmk69mqpy5wjfsgh8bxwziq3vkd7y";
   };
 
   buildFlagsArray = ("-ldflags=-s -w -X main.commitHash=${rev} -X main.version=${version}");

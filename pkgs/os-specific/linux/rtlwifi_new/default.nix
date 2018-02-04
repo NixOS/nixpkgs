@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "format" ];
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   makeFlags = "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   enableParallelBuilding = true;

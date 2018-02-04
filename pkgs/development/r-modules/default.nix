@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -246,6 +246,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
+    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -320,7 +321,7 @@ let
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql.lib pkgs.mariadb pkgs.openssl.dev ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
@@ -744,6 +745,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    data_table = old.data_table.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
+    });
+
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -798,10 +804,10 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      MYSQL_DIR="${pkgs.mysql.lib}";
+      MYSQL_DIR="${pkgs.mysql.connector-c}";
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
@@ -912,9 +918,7 @@ let
     });
 
     geojsonio = old.geojsonio.overrideDerivation (attrs: {
-      preConfigure = ''
-        export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-        '';
+      buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
     rstan = old.rstan.overrideDerivation (attrs: {

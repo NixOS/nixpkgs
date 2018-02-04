@@ -45,7 +45,10 @@ for a UEFI installation is by and large the same as a BIOS installation. The dif
   using <command>ifconfig</command>.</para>
   <para>To manually configure the network on the graphical installer,
   first disable network-manager with
-  <command>systemctl stop network-manager</command>.</para></listitem>
+  <command>systemctl stop network-manager</command>.</para>
+  <para>To manually configure the wifi on the minimal installer, run
+  <command>wpa_supplicant -B -i interface -c &lt;(wpa_passphrase 'SSID' 'key')</command>.</para></listitem>
+
 
   <listitem><para>If you would like to continue the installation from a different
   machine you need to activate the SSH daemon via <literal>systemctl start sshd</literal>.

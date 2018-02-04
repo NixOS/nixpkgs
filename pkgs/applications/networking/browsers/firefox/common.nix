@@ -38,12 +38,25 @@
 
 ## other
 
-# If you want the resulting program to call itself
-# "Firefox"/"Torbrowser" instead of "Nightly" or whatever, enable this
-# option. However, in Firefox's case, those binaries may not be
-# distributed without permission from the Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? isTorBrowserLike
+# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+# have permission to use the official firefox branding.
+#
+# Fur purposes of documentation the statement of @sylvestre:
+# > As the person who did part of the work described in the LWN article
+# > and release manager working for Mozilla, I can confirm the statement
+# > that I made in
+# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+# >
+# > @garbas shared with me the list of patches applied for the Nix package.
+# > As they are just for portability and tiny modifications, they don't
+# > alter the experience of the product. In parallel, Rok also shared the
+# > build options. They seem good (even if I cannot judge the quality of the
+# > packaging of the underlying dependencies like sqlite, png, etc).
+# > Therefor, as long as you keep the patch queue sane and you don't alter
+# > the experience of Firefox users, you won't have any issues using the
+# > official branding.
+, enableOfficialBranding ? true
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
@@ -88,8 +101,20 @@ stdenv.mkDerivation (rec {
     rm -f js/src/configure
     rm -f .mozconfig*
 
+ '' + lib.optionalString (stdenv.lib.versionAtLeast version "58.0.0") ''
+    cat >.mozconfig <<END_MOZCONFIG
+    ${lib.concatStringsSep "\n" (map (flag: "ac_add_options ${flag}") configureFlags)}
+    ${lib.optionalString googleAPISupport "ac_add_options --with-google-api-keyfile=$TMPDIR/ga"}
+    END_MOZCONFIG
+  '' + lib.optionalString googleAPISupport ''
+    # Google API key used by Chromium and Firefox.
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys.
+    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+  '' + ''
     # this will run autoconf213
-    make -f client.mk configure-files
+    ${if (stdenv.lib.versionAtLeast version "58.0.0") then "./mach configure" else "make -f client.mk configure-files"}
 
     configureScript="$(realpath ./configure)"
 
@@ -99,11 +124,6 @@ stdenv.mkDerivation (rec {
     test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
 
     cd obj-*
-  '' + lib.optionalString googleAPISupport ''
-    # Google API key used by Chromium and Firefox.
-    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
   '';
 
   configureFlags = [
@@ -132,7 +152,7 @@ stdenv.mkDerivation (rec {
   ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
+    "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "57") [
@@ -166,7 +186,6 @@ stdenv.mkDerivation (rec {
   ++ flag gssSupport "negotiateauth"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 

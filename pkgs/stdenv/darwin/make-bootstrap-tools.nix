@@ -15,6 +15,9 @@ in rec {
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
+  # Avoid messing with libkrb5.
+  curl_ = curl.override (args: { gssSupport = false; });
+
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
@@ -60,8 +63,8 @@ in rec {
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
-      cp ${curl.bin}/bin/curl $out/bin
-      cp -d ${curl.out}/lib/libcurl*.dylib $out/lib
+      cp ${curl_.bin}/bin/curl $out/bin
+      cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${openssl.out}/lib/*.dylib $out/lib
 

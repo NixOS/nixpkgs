@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam kerberos ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.eyrie.org/~eagle/software/pam-krb5/;
+    homepage = https://www.eyrie.org/~eagle/software/pam-krb5/;
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''
       pam_krb5 can optionally convert Kerberos 5 credentials to Kerberos IV
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wkennington mornfall ];
+    maintainers = with maintainers; [ wkennington ];
   };
 }

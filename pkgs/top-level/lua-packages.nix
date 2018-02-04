@@ -8,8 +8,8 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, libmysql, postgresql, cyrus_sasl
-, fetchFromGitHub, libmpack, which
+, mysql, postgresql, cyrus_sasl
+, fetchFromGitHub, libmpack, which, fetchpatch
 }:
 
 let
@@ -210,7 +210,7 @@ let
     };
     sourceRoot = ".";
 
-    buildInputs = [ libmysql postgresql sqlite ];
+    buildInputs = [ mysql.connector-c postgresql sqlite ];
 
     preConfigure = ''
       substituteInPlace Makefile --replace CC=gcc CC=cc
@@ -220,7 +220,8 @@ let
     '';
 
     NIX_CFLAGS_COMPILE = [
-      "-I${libmysql.dev}/include/mysql"
+      "-I${mysql.connector-c}/include/mysql"
+      "-L${mysql.connector-c}/lib/mysql"
       "-I${postgresql}/include/server"
     ];
 
@@ -401,7 +402,7 @@ let
       description = "Network support for Lua";
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       license = licenses.mit;
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
     };
   };
@@ -670,6 +671,14 @@ let
       sed -i "s|/usr/local|$out|" lgi/Makefile
     '';
 
+    patches = [
+        (fetchpatch {
+            name = "lgi-find-cairo-through-typelib.patch";
+            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
+            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
+        })
+    ];
+
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
       homepage    = https://github.com/pavouk/lgi;
@@ -717,13 +726,13 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.3.0";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "1mrd8c46ljilag8dljvnagaxnjnab8bmg9mcbnwvrivgjzgf6a1k";
+      sha256 = "1yzhjn8rsvjjsfycdc993ms6jy2j5jh7x3r2ax6g02z5n0anvnbx";
     };
 
     buildInputs = [ lua ];
@@ -735,7 +744,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      description = "Vicious widgets for window managers";
+      description = "A modular widget library for the awesome window manager";
       homepage    = https://github.com/Mic92/vicious;
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu mic92 ];

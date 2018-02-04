@@ -1,21 +1,18 @@
 { fetchFromGitHub, stdenv, autoreconfHook, coreutils, gawk
-, configFile ? "all"
 
 # Kernel dependencies
-, kernel ? null
+, kernel
 }:
 
 with stdenv.lib;
 
 let
-  buildKernel = any (n: n == configFile) [ "kernel" "all" ];
-  buildUser = any (n: n == configFile) [ "user" "all" ];
   common = { version
     , sha256
     , rev ? "spl-${version}"
     , broken ? false
     } @ args : stdenv.mkDerivation rec {
-      name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
+      name = "spl-${version}-${kernel.version}";
 
       src = fetchFromGitHub {
         owner = "zfsonlinux";
@@ -25,7 +22,7 @@ let
 
       patches = [ ./const.patch ./install_prefix.patch ];
 
-      nativeBuildInputs = [ autoreconfHook ];
+      nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
       hardeningDisable = [ "pic" ];
 
@@ -37,8 +34,7 @@ let
       '';
 
       configureFlags = [
-        "--with-config=${configFile}"
-      ] ++ optionals buildKernel [
+        "--with-config=kernel"
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       ];
@@ -62,17 +58,16 @@ let
       };
   };
 in
-  assert any (n: n == configFile) [ "kernel" "user" "all" ];
-  assert buildKernel -> kernel != null;
+  assert kernel != null;
 {
     splStable = common {
-      version = "0.7.4";
-      sha256 = "0vmakqi3zm8ka5cglif45ll2m6ynq7r55mhk8d1rzjkgi191cddh";
+      version = "0.7.5";
+      sha256 = "0njb3274bc5pfr80pzj94sljq457pr71n50s0gsccbz8ghk28rlr";
     };
 
     splUnstable = common {
-      version = "2017-11-16";
-      rev = "ed19bccfb651843fa208232b3a2d3d22a4152bc8";
-      sha256 = "08ihjbf5fhcnhq9zavcwswg9djlbalbx1bil4rcv6i3d617wammb";
+      version = "2017-12-21";
+      rev = "c9821f1ccc647dfbd506f381b736c664d862d126";
+      sha256 = "08r6sa36jaj6n54ap18npm6w85v5yn3x8ljg792h37f49b8kir6c";
     };
 }

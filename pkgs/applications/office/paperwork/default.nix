@@ -7,13 +7,13 @@
 python3Packages.buildPythonApplication rec {
   name = "paperwork-${version}";
   # Don't forget to also update paperwork-backend when updating this!
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     repo = "paperwork";
     owner = "openpaperwork";
     rev = version;
-    sha256 = "0lqnq74hdjj778j2k0syibwy4i37l8w932gmibs8617s4yi34rxz";
+    sha256 = "1nb5sna2s952xb7c89qccg9qp693pyqj8g7xz16ll16ydfqnzsdk";
   };
 
   # Patch out a few paths that assume that we're using the FHS:

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1f0vm20qdjxqsbciwgybxqqpn609gj5dy68an8lpi1wlk93s05w3";
+    sha256 = "1px9jp6lv7ff7kn4ns5r4dq7xl4wiz3h4ckgdhgvxs040njpdzy5";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  buildInputs = [ patchelf cdrkit makeWrapper dbus ];
+  buildInputs = [ patchelf cdrkit makeWrapper dbus ] ++ kernel.moduleBuildDependencies;
 
   installPhase = ''
     mkdir -p $out

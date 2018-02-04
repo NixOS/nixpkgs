@@ -1,33 +1,34 @@
 { stdenv
 , fetchurl
-, python2Packages
+, python3Packages
 }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "electrum-ltc-${version}";
-  version = "2.6.4.2";
+  version = "3.0.5.1";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "0sqcyk6n6kgaiinnwh6mzbbn4whk3ga59r5bw5rqmnnfqk1xdnb4";
+    sha256 = "1acsgzmd83cz6ha5fw63mi7123fr6gbiq537p5lxxfs2i8zrl63r";
   };
 
-  propagatedBuildInputs = with python2Packages; [
-    pyqt4
-    slowaes
+  propagatedBuildInputs = with python3Packages; [
+    pyaes
     ecdsa
     pbkdf2
     requests
     qrcode
-    ltc_scrypt
+    py_scrypt
+    pyqt5
     protobuf
     dnspython
-    jsonrpclib
+    jsonrpclib-pelix
+    pysocks
   ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
   '';
@@ -47,7 +48,7 @@ python2Packages.buildPythonApplication rec {
     '';
     homepage = https://electrum-ltc.org/;
     license = licenses.mit;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ asymmetric ];
   };
 }

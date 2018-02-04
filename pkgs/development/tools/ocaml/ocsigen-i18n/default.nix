@@ -7,6 +7,9 @@ stdenv.mkDerivation rec
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
 
+
+  dontStrip = true;
+
   installPhase = ''
     mkdir -p $out/bin
     make bindir=$out/bin install

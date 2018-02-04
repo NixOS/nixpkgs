@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python gyp
   ] ++ lib.optional stdenv.isLinux utillinux;
- 
+
   buildPhase = ''
     python ./gyp_bud -f make
     make -C out
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp out/Release/bud $out/bin
   '';
 

@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchurl {
     url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "1r9w7pmdw77h1hwxns6d0sdg8cndsq1lwkq0y5qiiqr91jz93ajm";
+    sha256 = "0nkfq6fx87g7kvxrb5lp8gkb75658cmyffnacpy8jq3a16py3jrr";
   };
 
   disabled = !pythonPackages.isPy3k;

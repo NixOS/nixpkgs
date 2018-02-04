@@ -8,7 +8,7 @@
 stdenv.mkDerivation {
   name = "squashfs.img";
 
-  buildInputs = [perl squashfsTools];
+  nativeBuildInputs = [perl squashfsTools];
 
   # For obtaining the closure of `storeContents'.
   exportReferencesGraph =

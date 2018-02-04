@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
-      --prefix PYTHONPATH : "$(toPythonPath ${vapoursynth}):$PYTHONPATH"
+      --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '' + ''
 
     cp TOOLS/umpv $out/bin

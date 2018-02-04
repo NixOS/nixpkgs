@@ -8,6 +8,7 @@
 , "node-gyp"
 , "node-gyp-build"
 , "node-pre-gyp"
+, "pnpm"
 , "semver"
 , "sloc"
 ]

@@ -15,9 +15,8 @@ in
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
       postInstall = ''
-        "$out/bin/stumpwm-lisp-launcher.sh" --eval '(asdf:make :stumpwm)' \
-          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :stumpwm)) (function stumpwm:stumpwm))' \
-          --eval '(asdf:perform (quote asdf:program-op) :stumpwm)'
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system stumpwm '(function stumpwm:stumpwm)'"
+        "$out/bin/stumpwm-lisp-launcher.sh"
 
         cp "$out/lib/common-lisp/stumpwm/stumpwm" "$out/bin"
       '';
@@ -53,11 +52,11 @@ in
   cl-async-ssl = addNativeLibs [pkgs.openssl];
   cl-async-test = addNativeLibs [pkgs.openssl];
   clsql = x: {
-    propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
+    propagatedBuildInputs = with pkgs; [mysql.connector-c postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.lib.getDev pkgs.mysql.client}/include/mysql"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.lib.getLib pkgs.mysql.client}/lib/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.connector-c}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.connector-c}/lib/mysql"
       '';
     };
   };
@@ -69,12 +68,10 @@ in
         export NIX_LISP_ASDF_PATHS="$NIX_LISP_ASDF_PATHS
 $out/lib/common-lisp/query-fs"
 	export HOME=$PWD
-        "$out/bin/query-fs-lisp-launcher.sh" --eval '(asdf:make :query-fs)' \
-          --eval "(progn $(for i in $linkedSystems; do echo "(asdf:make :$i)"; done) )" \
-          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :query-fs))
-                           (function query-fs:run-fs-with-cmdline-args))' \
-          --eval '(asdf:perform (quote asdf:program-op) :query-fs)'
-	cp "$out/lib/common-lisp/query-fs/query-fs" "$out/bin/"
+        export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system query-fs \
+                    '(function query-fs:run-fs-with-cmdline-args)' '$linkedSystems'"
+        "$out/bin/query-fs-lisp-launcher.sh"
+        cp "$out/lib/common-lisp/query-fs/query-fs" "$out/bin/"
       '';
     };
   };

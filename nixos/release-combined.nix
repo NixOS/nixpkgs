@@ -57,7 +57,7 @@ in rec {
         nixos.ova.x86_64-linux
 
         #(all nixos.tests.containers)
-        nixos.tests.chromium
+        nixos.tests.chromium.x86_64-linux
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
@@ -80,7 +80,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.hibernate)
-        nixos.tests.docker
+        nixos.tests.docker.x86_64-linux
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)

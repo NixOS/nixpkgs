@@ -17,7 +17,7 @@
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  version = "6.0.2";
+  version = "7.1";
 
 in stdenv.mkDerivation rec {
   name = "gradio-${version}";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     owner = "haecker-felix";
     repo = "gradio";
     rev = "v${version}";
-    sha256 = "05hg26yr7splgpkl8wjxcsdks9sm1is3hcnp7f5mjnp2ch0nn57s";
+    sha256 = "0x0hmcjvpgvsm64ywcc71srlwqybfhadn5nkwycq0lh7r49d89kx";
   };
 
   nativeBuildInputs = [

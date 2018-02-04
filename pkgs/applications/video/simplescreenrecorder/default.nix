@@ -1,22 +1,19 @@
 { stdenv, fetchurl, alsaLib, ffmpeg, libjack2, libX11, libXext
-, libXfixes, mesa, pkgconfig, libpulseaudio, qt4
+, libXfixes, mesa, pkgconfig, libpulseaudio, qt4, cmake, ninja
 }:
 
 stdenv.mkDerivation rec {
   name = "simplescreenrecorder-${version}";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchurl {
     url = "https://github.com/MaartenBaert/ssr/archive/${version}.tar.gz";
-    sha256 = "0v8w35n8w772s08w7k0icynqdsdakbrcanbgx6j847bfqfsg21gg";
+    sha256 = "1gnf9wbiq2fcbqcn1a5nfmp8r0nxrrlgh2wly2mfkkwymynhx0pk";
   };
 
   patches = [ ./fix-paths.patch ];
 
   postPatch = ''
-    # #455
-    sed '1i#include <random>' -i src/Benchmark.cpp
-
     for i in scripts/ssr-glinject src/AV/Input/GLInjectInput.cpp; do
       substituteInPlace $i \
         --subst-var out \
@@ -24,13 +21,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [  
+  nativeBuildInputs = [ pkgconfig cmake ninja ];
+  buildInputs = [
     alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa
     libpulseaudio qt4
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A screen recorder for Linux";

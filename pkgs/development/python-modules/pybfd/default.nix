@@ -1,15 +1,15 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPyPy, isPy3k, libbfd, libopcodes }:
 
 buildPythonPackage rec {
-  name = "pybfd-0.1.1";
+  name = "pybfd-0.1.1.2017-12-31";
 
   disabled = isPyPy || isPy3k;
 
   src = fetchFromGitHub {
     owner = "orivej";
     repo = "pybfd";
-    rev = "a2c3a7b94a3c9f7a353b863f69a79174c6a41ebe";
-    sha256 = "0wrz234dz25hs0ajzcz5w8lzc1yzf64wqa8fj01hhr4yy23vjkcr";
+    rev = "a10ada53f2a79de7f62f209567806ef1e91794c7";
+    sha256 = "0sxzhlqjyvvx1zr3qrkb57z6s3g6k3ksyn65fdm9lvl0k4dv2k9w";
   };
 
   LIBBFD_INCLUDE_DIR = "${libbfd.dev}/include";
