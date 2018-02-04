@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/dop251/spgz";
-      rev = "ca4328964eba8a1863356b3d927d4f6a10c966b5";
-      sha256 = "06m48hfgyj30704my205chw42xkpwfm6lv0jvhgqkkhhhs9sly62";
+      rev = "d50e5e978e08044da0cf9babc6b42b55ec8fe0d5";
+      sha256 = "11h8z6cwxw272rn5zc4y3w9d6py113iaimy681v6xxv26d30m8bx";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "95a4943f35d008beabde8c11e5075a1b714e6419";
-      sha256 = "0bkm0jx9mxmi1liabb9c04kf765n7d0062zdp3zmvzyamsq00lcx";
+      rev = "1875d0a70c90e57f11972aefd42276df65e895b9";
+      sha256 = "1kprrdzr4i4biqn7r9gfxzsmijya06i9838skprvincdb1pm0q2q";
     };
   }
 ]
