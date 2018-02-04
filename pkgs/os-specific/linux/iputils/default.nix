@@ -4,8 +4,6 @@
 , libidn, nettle
 , SGMLSpm, libgcrypt }:
 
-assert stdenv ? glibc;
-
 let
   time = "20161105";
 in
