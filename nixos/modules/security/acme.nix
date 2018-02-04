@@ -53,28 +53,6 @@ let
         '';
       };
 
-      services = mkOption {
-        description = "associated systemd services to perform actions over";
-        default = {};
-        example = literalExample ''
-          {
-            postfix.action = "restart";
-            dovecot.action = "reload";
-          };
-        '';
-        type = types.attrsOf (types.submodule {
-          options = {
-            action = mkOption {
-              type = types.enum [ "restart" "reload" ];
-              default = null;
-              description = ''
-                An action to execute on systemd services after certificates are re-issues.
-              '';
-            };
-          };
-        });
-      };
-
       postRun = mkOption {
         type = types.lines;
         default = "";
@@ -83,7 +61,6 @@ let
           Commands to run after certificates are re-issued. Typically
           the web server and other servers using certificates need to
           be reloaded.
-          To avoid multiple restart/reloads of a single service better use `systemd.reload` or `systemd.restart` option instead of `postRun`.
         '';
       };
 
@@ -218,8 +195,6 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                restartJobs = lib.attrNames (lib.filterAttrs (k: v: v.action == "restart") data.services);
-                reloadJobs = lib.attrNames (lib.filterAttrs (k: v: v.action == "reload") data.services);
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
@@ -266,8 +241,6 @@ in
                     if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
                       echo "Executing postRun hook..."
                       ${data.postRun}
-                      ${concatStringsSep "\n" (map (x: "systemctl restart " + x) restartJobs)}
-                      ${concatStringsSep "\n" (map (x: "systemctl reload " + x) reloadJobs)}
                     fi
                   '';
 
