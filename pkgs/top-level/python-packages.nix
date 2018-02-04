@@ -2028,6 +2028,11 @@ in {
     doCheck = false;
   });
 
+  can = callPackage ../development/python-modules/can {};
+
+  canopen = callPackage ../development/python-modules/canopen {};
+
+  canmatrix = callPackage ../development/python-modules/canmatrix {};
 
   cairocffi = buildPythonPackage rec {
     name = "cairocffi-0.7.2";
