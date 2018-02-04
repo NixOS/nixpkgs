@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+  makeFlags = ["CC=cc"];
 
   patches = [ ./bcc-warning-fix.patch ];
 
