@@ -1953,6 +1953,8 @@ with pkgs;
 
   ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { };
 
+  edid-decode = callPackage ../tools/misc/edid-decode { };
+
   editres = callPackage ../tools/graphics/editres { };
 
   edit = callPackage ../applications/editors/edit { };
