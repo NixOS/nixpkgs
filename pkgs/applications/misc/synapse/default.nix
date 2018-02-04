@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, libnotify, gtk3, libgee
-, keybinder3, json_glib, zeitgeist, vala_0_34, hicolor_icon_theme, gobjectIntrospection
+{ stdenv, fetchurl, gettext, pkgconfig, glib, libnotify, gtk3, libgee
+, keybinder3, json_glib, zeitgeist, vala_0_38, hicolor_icon_theme, gobjectIntrospection
 }:
 
 let
-  version = "0.2.99.2";
+  version = "0.2.99.3";
 in stdenv.mkDerivation rec {
   name = "synapse-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/synapse-project/0.3/${version}/+download/${name}.tar.xz";
-    sha256 = "04cnsmwf9xa52dh7rpb4ia715c0ls8jg1p7llc9yf3lbg1m0bvzv";
+    sha256 = "0rwd42164xqfi40r13yr29cx6zy3bckgxk00y53b376nl5yqacvy";
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool vala_0_34
+    pkgconfig gettext vala_0_38
     # For setup hook
     gobjectIntrospection
   ];
