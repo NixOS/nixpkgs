@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = http://assault.cubers.net;
+    maintainers = [ maintainers.genesis ];
     license = stdenv.lib.licenses.zlib;
   };
 
