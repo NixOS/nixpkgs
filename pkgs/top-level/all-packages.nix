@@ -3769,6 +3769,8 @@ with pkgs;
     graphicalSupport = true;
   };
 
+  nmapsi4 = libsForQt5.callPackage ../tools/security/nmap/qt.nix { };
+
   nnn = callPackage ../applications/misc/nnn { };
 
   notary = callPackage ../tools/security/notary { };
