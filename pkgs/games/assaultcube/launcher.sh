@@ -9,7 +9,7 @@ case $(basename "$0") in
     BINARYPATH=@out@/bin/ac_server
     ;;
   assaultcube)
-    CUBE_OPTIONS="--home=${HOME}/.assaultcube_v1.2/ --init"
+    CUBE_OPTIONS="--home=${HOME}/.assaultcube/v1.2next --init"
     BINARYPATH=@out@/bin/ac_client
     ;;
   *) echo "$0" is not supported.

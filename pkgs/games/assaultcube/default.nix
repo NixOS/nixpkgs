@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, makeDesktopItem, enet, openal, pkgconfig, libogg,
+{ fetchFromGitHub, stdenv, makeDesktopItem, openal, pkgconfig, libogg,
   libvorbis, SDL, SDL_image, makeWrapper, zlib,
   client ? true, server ? true }:
 
@@ -7,12 +7,15 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
-  name = "assaultcube";
+  pname = "assaultcube";
+  version = "01052017";
+  name = "${pname}-${version}";
 
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = http://assault.cubers.net;
     maintainers = [ maintainers.genesis ];
+    platforms = platforms.linux ++ platforms.darwin;
     license = stdenv.lib.licenses.zlib;
   };
 
@@ -24,18 +27,19 @@ stdenv.mkDerivation rec {
   };
 
   # ${branch} not accepted as a value ?
+  # TODO: write a functional BUNDLED_ENET option and restore it in deps.
   patches = [ ./assaultcube-next.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   # add optional for server only ?
-  buildInputs = [ makeWrapper enet openal SDL SDL_image libogg libvorbis zlib ];
+  buildInputs = [ makeWrapper openal SDL SDL_image libogg libvorbis zlib ];
 
   #makeFlags = [ "CXX=g++" ];
 
   targets = (optionalString server "server") + (optionalString client " client");
   buildPhase = ''
-    BUNDLED_ENET=NO make -C source/src ${targets}
+    make -C source/src ${targets}
   '';
 
   desktop = makeDesktopItem {
@@ -45,10 +49,10 @@ stdenv.mkDerivation rec {
     genericName = "First-person shooter";
     categories = "Application;Game;ActionGame;Shooter";
     icon = "assaultcube.png";
-    exec = "${name}";
+    exec = "${pname}";
   };
 
-  gamedatadir = "/share/games/${name}";
+  gamedatadir = "/share/games/${pname}";
 
   installPhase = ''
 
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
 
     if (test -e source/src/ac_server) then
       cp source/src/ac_server $bindir
-      ln -s $bindir/${name} $bindir/${name}-server
+      ln -s $bindir/${pname} $bindir/${pname}-server
     fi
     '';
 }
