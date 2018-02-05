@@ -281,6 +281,7 @@ self: super: {
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
   hath = dontCheck super.hath;
+  haxl = dontCheck super.haxl;                          # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
