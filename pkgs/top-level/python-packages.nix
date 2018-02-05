@@ -2129,26 +2129,6 @@ in {
     };
   };
 
-  github-cli = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "github-cli-${version}";
-    src = pkgs.fetchFromGitHub {
-      owner = "jsmits";
-      repo = "github-cli";
-      rev = version;
-      sha256 = "16bwn42wqd76zs97v8p6mqk79p5i2mb06ljk67lf8gy6kvqc1x8y";
-    };
-
-    buildInputs = with self; [ nose pkgs.git ];
-    propagatedBuildInputs = with self; [ simplejson ];
-
-    # skipping test_issues_cli.py since it requires access to the github.com
-    patchPhase = "rm tests/test_issues_cli.py";
-    checkPhase = "nosetests tests/";
-
-    meta.maintainers = with maintainers; [ garbas ];
-  };
-
   case = buildPythonPackage rec {
     name = "case-${version}";
     version = "1.5.2";
