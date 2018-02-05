@@ -165,6 +165,7 @@
 "github:vim-scripts/wombat256.vim"
 "github:w0rp/ale"
 "github:wakatime/vim-wakatime"
+"github:wellle/targets.vim"
 "github:wincent/command-t"
 "github:will133/vim-dirdiff"
 "github:xolox/vim-easytags"
