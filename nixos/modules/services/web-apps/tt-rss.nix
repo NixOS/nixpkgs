@@ -6,9 +6,9 @@ let
 
   configVersion = 26;
 
-  cacheDir = "cache";
-  lockDir = "lock";
-  feedIconsDir = "feed-icons";
+  cacheDir = "${cfg.root}/cache";
+  lockDir = "${cfg.root}/lock";
+  feedIconsDir = "${cfg.root}/feed-icons";
 
   dbPort = if cfg.database.port == null
     then (if cfg.database.type == "pgsql" then 5432 else 3306)
@@ -520,6 +520,22 @@ let
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
           chown -R "${cfg.user}" "${cfg.root}"
           chmod -R 755 "${cfg.root}"
+
+          chown -R ${cfg.user}:nginx \
+            "${cacheDir}/export" \
+            "${cacheDir}/images" \
+            "${cacheDir}/js" \
+            "${cacheDir}/upload" \
+            "${feedIconsDir}" \
+            "${lockDir}"
+
+          chmod -R g+w \
+            "${cacheDir}/export" \
+            "${cacheDir}/images" \
+            "${cacheDir}/js" \
+            "${cacheDir}/upload" \
+            "${feedIconsDir}" \
+            "${lockDir}"
         ''
 
         + (optionalString (cfg.database.type == "pgsql") ''
