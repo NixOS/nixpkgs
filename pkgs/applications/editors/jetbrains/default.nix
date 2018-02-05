@@ -234,12 +234,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.3.2"; /* updated by script */
+    version = "2017.3.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0lv0nwfgm6h67mxhh0a2154ym7wcbm1qp3k1k1i00lg0lwig1rcw"; /* updated by script */
+      sha256 = "0j090863y68ppw34qkldm8h4lpbhalhqn70gb0ifj9bglf17503d"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
