@@ -1,24 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5";
+  version = "2018-02-05";
   name = "rhash-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rhash/${name}-src.tar.gz";
-    sha256 = "0bhz3xdl6r06k1bqigdjz42l31iqz2qdpg7zk316i7p2ra56iq4q";
+  src = fetchFromGitHub {
+    owner = "rhash";
+    repo = "RHash";
+    rev = "cc26d54ff5df0f692907a5e3132a5eeca559ed61";
+    sha256 = "1ldagp931lmxxpyvsb9rrar4iqwmv94m6lfjzkbkshpmk3p5ng7h";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  nativeBuildInputs = [ which ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" "AR:=$(AR)" "CC:=$(CC)" ];
+  # configure script is not autotools-based, doesn't support these options
+  configurePlatforms = [ ];
 
-  buildFlags = [ "build-shared" "lib-shared" ];
-
-  installPhase = ''
-    make $makeFlags -C librhash install-lib-shared install-headers install-so-link
-    make $makeFlags install-shared
-  '';
+  installTargets = [ "install" "install-lib-shared" "install-lib-so-link" ];
+  postInstall = "make -C librhash install-headers";
 
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;
