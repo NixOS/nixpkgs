@@ -1,8 +1,8 @@
 { stdenv, fetchgit }:
-
-stdenv.mkDerivation rec {
-  name = "edid-decode-unstable";
+let
   version = "2017-09-18";
+in stdenv.mkDerivation rec {
+  name = "edid-decode-unstable-${version}";
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/xorg/app/edid-decode";
