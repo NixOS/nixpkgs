@@ -149,7 +149,7 @@ let
 
 in rec {
 
-  nix = nixStable;
+  nix = nixUnstable;
 
   nixStable = (common rec {
     name = "nix-1.11.16";
