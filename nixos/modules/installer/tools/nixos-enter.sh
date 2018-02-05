@@ -45,12 +45,8 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-# Set up some bind mounts we'll want regardless of chroot or not
-mkdir -m 0755 -p "$mountPoint/dev" "$mountPoint/proc" "$mountPoint/sys" "$mountPoint/run"
+mkdir -m 0755 -p "$mountPoint/dev"
 mount --rbind /dev "$mountPoint/dev"
-mount -t proc none "$mountPoint/proc"
-mount -t sysfs none "$mountPoint/sys"
-mount -t tmpfs none "$mountPoint/run"
 
 # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
 LOCALE_ARCHIVE=$system/sw/lib/locale/locale-archive chroot "$mountPoint" "$system/activate" >&2
