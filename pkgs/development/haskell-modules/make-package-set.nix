@@ -22,6 +22,11 @@
 , # The final, fully overriden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
+
+, # A haskell package set for Setup.hs, compiler plugins, and similar
+  # build-time uses.
+  # dummy argument for compatibility with nixpkgs-unstable channel
+  buildHaskellPackages ? null
 }:
 
 # return value: a function from self to the package set
