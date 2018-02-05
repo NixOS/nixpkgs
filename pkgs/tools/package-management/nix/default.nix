@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox
+, libseccomp, busybox-sandbox-shell
 , hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -10,29 +10,7 @@
 
 let
 
-  sh = busybox.override {
-    useMusl = true;
-    enableStatic = true;
-    enableMinimal = true;
-    extraConfig = ''
-      CONFIG_FEATURE_FANCY_ECHO y
-      CONFIG_FEATURE_SH_MATH y
-      CONFIG_FEATURE_SH_MATH_64 y
-
-      CONFIG_ASH y
-      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
-
-      CONFIG_ASH_ALIAS y
-      CONFIG_ASH_BASH_COMPAT y
-      CONFIG_ASH_CMDCMD y
-      CONFIG_ASH_ECHO y
-      CONFIG_ASH_GETOPTS y
-      CONFIG_ASH_INTERNAL_GLOB y
-      CONFIG_ASH_JOB_CONTROL y
-      CONFIG_ASH_PRINTF y
-      CONFIG_ASH_TEST y
-    '';
-  };
+  sh = busybox-sandbox-shell;
 
   common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;
