@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-${version}";
-  version = "7.6.2";
+  version = "7.6.4";
 
   src = fetchurl {
     urls = [
       "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
     ];
-    sha256 = "07nli9hgdzc09qzw169sn7gchkrn5kqgyniv2rspcy1xaq2j04dx";
+    sha256 = "076dzsqqyxd3nlzs0z277vvhqjp8nv5dqi763s0m90zr6ljiyk5r";
   };
 
   buildInputs = [ libatomic_ops ];
