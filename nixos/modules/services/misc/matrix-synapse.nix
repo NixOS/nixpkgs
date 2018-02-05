@@ -4,6 +4,8 @@ with lib;
 
 let
   cfg = config.services.matrix-synapse;
+  pg = config.services.postgresql;
+  usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
   mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
   mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
@@ -38,7 +40,7 @@ database: {
   name: "${cfg.database_type}",
   args: {
     ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${v}") cfg.database_args
+      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
     )}
   }
 }
@@ -155,7 +157,7 @@ in {
       tls_certificate_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
+        example = "${cfg.dataDir}/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -167,7 +169,7 @@ in {
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.key";
+        example = "${cfg.dataDir}/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
@@ -176,7 +178,7 @@ in {
       tls_dh_params_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
+        example = "${cfg.dataDir}/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
@@ -184,6 +186,7 @@ in {
       server_name = mkOption {
         type = types.str;
         example = "example.com";
+        default = config.networking.hostName;
         description = ''
           The domain name of the server, with optional explicit port.
           This is used by remote servers to connect to this server,
@@ -339,16 +342,39 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = "sqlite3";
+        default = if versionAtLeast config.system.stateVersion "18.03"
+          then "psycopg2"
+          else "sqlite3";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
       };
+      create_local_database = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to create a local database automatically.
+        '';
+      };
+      database_name = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+        description = "Database name.";
+      };
+      database_user = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+        description = "Database user name.";
+      };
       database_args = mkOption {
         type = types.attrs;
         default = {
-          database = "${cfg.dataDir}/homeserver.db";
-        };
+          sqlite3 = { database = "${cfg.dataDir}/homeserver.db"; };
+          psycopg2 = {
+            user = cfg.database_user;
+            database = cfg.database_name;
+          };
+        }."${cfg.database_type}";
         description = ''
           Arguments to pass to the engine.
         '';
@@ -623,15 +649,36 @@ in {
         gid = config.ids.gids.matrix-synapse;
       } ];
 
+    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" ];
+      after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
+      '' + optionalString (usePostgresql && cfg.create_local_database) ''
+        if ! test -e "${cfg.dataDir}/db-created"; then
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+            ${pg.package}/bin/createuser \
+            --login \
+            --no-createdb \
+            --no-createrole \
+            --encrypted \
+            ${cfg.database_user}
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+            ${pg.package}/bin/createdb \
+            --owner=${cfg.database_user} \
+            --encoding=UTF8 \
+            --lc-collate=C \
+            --lc-ctype=C \
+            --template=template0 \
+            ${cfg.database_name}
+          touch "${cfg.dataDir}/db-created"
+        fi
       '';
       serviceConfig = {
         Type = "simple";

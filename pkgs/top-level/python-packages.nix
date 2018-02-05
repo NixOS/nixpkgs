@@ -2028,6 +2028,11 @@ in {
     doCheck = false;
   });
 
+  can = callPackage ../development/python-modules/can {};
+
+  canopen = callPackage ../development/python-modules/canopen {};
+
+  canmatrix = callPackage ../development/python-modules/canmatrix {};
 
   cairocffi = buildPythonPackage rec {
     name = "cairocffi-0.7.2";
@@ -2122,26 +2127,6 @@ in {
       homepage = https://pypi.python.org/pypi/carrot;
       description = "AMQP Messaging Framework for Python";
     };
-  };
-
-  github-cli = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "github-cli-${version}";
-    src = pkgs.fetchFromGitHub {
-      owner = "jsmits";
-      repo = "github-cli";
-      rev = version;
-      sha256 = "16bwn42wqd76zs97v8p6mqk79p5i2mb06ljk67lf8gy6kvqc1x8y";
-    };
-
-    buildInputs = with self; [ nose pkgs.git ];
-    propagatedBuildInputs = with self; [ simplejson ];
-
-    # skipping test_issues_cli.py since it requires access to the github.com
-    patchPhase = "rm tests/test_issues_cli.py";
-    checkPhase = "nosetests tests/";
-
-    meta.maintainers = with maintainers; [ garbas ];
   };
 
   case = buildPythonPackage rec {
@@ -5567,6 +5552,8 @@ in {
       license = licenses.gpl3;
     };
   };
+
+  luftdaten = callPackage ../development/python-modules/luftdaten { };
 
   m2r = callPackage ../development/python-modules/m2r { };
 
