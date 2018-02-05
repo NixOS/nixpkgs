@@ -3842,7 +3842,8 @@ in {
     };
   });
 
-  nose-parameterized = callPackage ../development/python-modules/nose-parameterized {};
+  nose-parameterized = warn "Warning: `nose-parameterized` is deprecated! Use `parameterized` instead."
+    (callPackage ../development/python-modules/nose-parameterized {});
 
   neurotools = buildPythonPackage (rec {
     name = "NeuroTools-${version}";
@@ -12406,6 +12407,8 @@ in {
     };
   };
 
+  parameterized = callPackage ../development/python-modules/parameterized { };
+
   paramz = callPackage ../development/python-modules/paramz { };
 
   parsel = buildPythonPackage rec {
@@ -12828,6 +12831,8 @@ in {
   platformio = callPackage ../development/python-modules/platformio { };
 
   kmsxx = callPackage ../development/libraries/kmsxx { };
+
+  pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
