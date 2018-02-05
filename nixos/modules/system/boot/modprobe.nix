@@ -54,7 +54,7 @@ with lib;
 
     environment.systemPackages = [ pkgs.kmod ];
 
-    system.activationScripts.modprobe =
+    system.activationScripts.modprobe = stringAfter ["specialfs"]
       ''
         # Allow the kernel to find our wrapped modprobe (which searches
         # in the right location in the Nix store for kernel modules).
