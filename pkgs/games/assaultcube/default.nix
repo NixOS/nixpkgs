@@ -1,5 +1,5 @@
-{ fetchgit, stdenv, makeDesktopItem, curl, enet, openal, pkgconfig, libogg,
-  libvorbis, SDL, SDL_image, SDL_mixer, makeWrapper, zlib,
+{ fetchgit, stdenv, makeDesktopItem, enet, openal, pkgconfig, libogg,
+  libvorbis, SDL, SDL_image, makeWrapper, zlib,
   client ? true, server ? true }:
 
 with stdenv.lib;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/assaultcube/AC.git";
     rev = "9f537b0876a39d7686e773040469fbb1417de18b";
     branchName = "${branch}";
-    #sha256 = "";
+    sha256 = "1n9i0qi3gm04p0rd0ab83cnfn01v52a2416ibhi98j0jjlmf6ldf";
   };
 
   # ${branch} not accepted as a value ?
