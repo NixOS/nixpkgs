@@ -18195,6 +18195,8 @@ with pkgs;
     physfs = physfs_2;
   };
 
+  assaultcube = callPackage ../games/assaultcube { };
+
   astromenace = callPackage ../games/astromenace { };
 
   atanks = callPackage ../games/atanks {};
