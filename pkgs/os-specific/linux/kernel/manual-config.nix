@@ -41,6 +41,7 @@ let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
+  buildCc = buildPackages.stdenv.cc;
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
@@ -80,7 +81,7 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
+        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies buildCc;
       };
 
       inherit src;
@@ -236,7 +237,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
 
   enableParallelBuilding = true;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildCc ];
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
@@ -246,7 +247,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
   makeFlags = commonMakeFlags ++ [
-    "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc"
+    "HOSTCC=${buildCc.targetPrefix}gcc"
     "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
