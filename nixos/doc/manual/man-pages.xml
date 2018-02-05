@@ -15,7 +15,7 @@
     </author>
 
     <copyright>
-      <year>2007-2015</year>
+      <year>2007-2018</year>
       <holder>Eelco Dolstra</holder>
     </copyright>
 
@@ -25,6 +25,7 @@
   <xi:include href="man-nixos-build-vms.xml" />
   <xi:include href="man-nixos-generate-config.xml" />
   <xi:include href="man-nixos-install.xml" />
+  <xi:include href="man-nixos-enter.xml" />
   <xi:include href="man-nixos-option.xml" />
   <xi:include href="man-nixos-rebuild.xml" />
   <xi:include href="man-nixos-version.xml" />

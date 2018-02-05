@@ -1,7 +1,9 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
+
+with lib;
 
 let
   cfg = config.installer;
@@ -69,6 +71,11 @@ let
     inherit (config.system) nixosVersion nixosCodeName nixosRevision;
   };
 
+  nixos-enter = makeProg {
+    name = "nixos-enter";
+    src = ./nixos-enter.sh;
+  };
+
 in
 
 {
@@ -83,10 +90,11 @@ in
         nixos-generate-config
         nixos-option
         nixos-version
+        nixos-enter
       ];
 
     system.build = {
-      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild;
+      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
 
   };
