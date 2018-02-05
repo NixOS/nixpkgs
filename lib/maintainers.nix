@@ -231,6 +231,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
+  f-breidenstein = "Felix Breidenstein <mail@felixbreidenstein.de>";
   fgaz = "Francesco Gazzetta <francygazz@gmail.com>";
   FireyFly = "Jonas Höglund <nix@firefly.nu>";
   flokli = "Florian Klink <flokli@flokli.de>";
@@ -328,6 +329,7 @@
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   johbo = "Johannes Bornhold <johannes@bornhold.name>";
+  johnazoidberg = "Daniel Schäfer <git@danielschaefer.me>";
   johnmh = "John M. Harris, Jr. <johnmh@openblox.org>";
   johnramsden = "John Ramsden <johnramsden@riseup.net>";
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
@@ -459,6 +461,7 @@
   mounium = "Katona László <muoniurn@gmail.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   mpcsh = "Mark Cohen <m@mpc.sh>";
+  mpickering = "Matthew Pickering <matthewtpickering@gmail.com>";
   mpscholten = "Marc Scholten <marc@mpscholten.de>";
   mpsyco = "Francis St-Amour <fr.st-amour@gmail.com>";
   mrVanDalo = "Ingolf Wanger <contact@ingolf-wagner.de>";
@@ -541,6 +544,7 @@
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmeunier = "Pierre-Étienne Meunier <pierre-etienne.meunier@inria.fr>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
+  pneumaticat = "Kevin Liu <kevin@potatofrom.space>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
   pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
@@ -561,6 +565,7 @@
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   ravloony = "Tom Macdonald <ravloony@gmail.com>";
+  razvan = "Răzvan Flavius Panda <razvan.panda@gmail.com>";
   rbasso = "Rafael Basso <rbasso@sharpgeeks.net>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   redvers = "Redvers Davies <red@infect.me>";
@@ -617,6 +622,7 @@
   sellout = "Greg Pfeil <greg@technomadic.org>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
+  sfrijters = "Stefan Frijters <sfrijters@gmail.com>";
   shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";
   shawndellysse = "Shawn Dellysse <sdellysse@gmail.com>";
   sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";

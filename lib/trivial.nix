@@ -52,7 +52,7 @@ rec {
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
-    pathExists readFile isBool isFunction
+    pathExists readFile isBool
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
@@ -99,4 +99,29 @@ rec {
   */
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
+
+  # | Add metadata about expected function arguments to a function.
+  # The metadata should match the format given by
+  # builtins.functionArgs, i.e. a set from expected argument to a bool
+  # representing whether that argument has a default or not.
+  # setFunctionArgs : (a → b) → Map String Bool → (a → b)
+  #
+  # This function is necessary because you can't dynamically create a
+  # function of the { a, b ? foo, ... }: format, but some facilities
+  # like callPackage expect to be able to query expected arguments.
+  setFunctionArgs = f: args:
+    { # TODO: Should we add call-time "type" checking like built in?
+      __functor = self: f;
+      __functionArgs = args;
+    };
+
+  # | Extract the expected function arguments from a function.
+  # This works both with nix-native { a, b ? foo, ... }: style
+  # functions and functions with args set with 'setFunctionArgs'. It
+  # has the same return type and semantics as builtins.functionArgs.
+  # setFunctionArgs : (a → b) → Map String Bool.
+  functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
+
+  isFunction = f: builtins.isFunction f ||
+    (f ? __functor && isFunction (f.__functor f));
 }

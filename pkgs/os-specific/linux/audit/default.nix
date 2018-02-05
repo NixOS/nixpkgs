@@ -1,5 +1,5 @@
 {
-  stdenv, fetchurl,
+  stdenv, buildPackages, fetchurl,
   enablePython ? false, python ? null,
 }:
 
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = stdenv.lib.optional enablePython python;
 
   configureFlags = [

@@ -14,6 +14,8 @@ let
   libAttr = lib.attrsets;
 
   flipMapAttrs = flip libAttr.mapAttrs;
+
+  inherit (lib) isFunction;
 in
 
 rec {
@@ -110,7 +112,7 @@ rec {
     else if isString   v then "\"" + v + "\""
     else if null ==    v then "null"
     else if isFunction v then
-      let fna = functionArgs v;
+      let fna = lib.functionArgs v;
           showFnas = concatStringsSep "," (libAttr.mapAttrsToList
                        (name: hasDefVal: if hasDefVal then "(${name})" else name)
                        fna);

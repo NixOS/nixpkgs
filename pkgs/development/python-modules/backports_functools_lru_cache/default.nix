@@ -2,9 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
+, pythonOlder
 }:
 
-buildPythonPackage rec {
+if !(pythonOlder "3.3") then null else buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
   version = "1.4";
 

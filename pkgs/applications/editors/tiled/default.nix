@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "tiled-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = "tiled";
     rev = "v${version}";
-    sha256 = "1c6n5xshadxv5qwv8kfrj1kbfnkvx6nyxc9p4mpzkjrkxw1b1qf1";
+    sha256 = "1bzp89914rlrwf2whky3fx10rwxqiwbw9acyqllvam3l4hmv4nlz";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       bsd2	# libtiled and tmxviewer
       gpl2Plus	# all the rest
     ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;
   };
 }

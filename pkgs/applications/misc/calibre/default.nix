@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.15.0";
+  version = "3.16.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1zvk499g3ddl82f6655ddqzl7r62hj1fq3qjsxpn07an2lizail7";
+    sha256 = "0dsnn974lfd6xbnyjhgxl2hd07kjhm1w9plqi28mx8nqa8bwqira";
   };
 
   patches = [

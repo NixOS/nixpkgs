@@ -100,6 +100,8 @@ rec {
 
   gitflow = callPackage ./gitflow { };
 
+  grv = callPackage ./grv { };
+
   hub = callPackage ./hub {
     inherit (darwin) Security;
   };

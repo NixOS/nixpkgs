@@ -84,6 +84,7 @@
   ./programs/info.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
+  ./programs/less.nix
   ./programs/light.nix
   ./programs/man.nix
   ./programs/mosh.nix
@@ -314,6 +315,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
+  ./services/misc/home-assistant.nix
   ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
@@ -424,6 +426,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
   ./services/networking/amuled.nix
+  ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix

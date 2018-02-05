@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/cgit/rpms/p7zip.git/plain/${name}?id=4b3973f6a5d";
       sha256 = "09wbkzai46bwm8zmplsz0m4jck3qn7snr68i9p1gsih300zidj0m";
     })
+    (fetchpatch rec {
+      name = "CVE-2017-17969.patch";
+      url = "https://anonscm.debian.org/cgit/users/robert/p7zip.git/plain/debian/patches/13-${name}?h=debian/16.02%2bdfsg-5";
+      sha256 = "16lbf6rgyl7xwxfjgg1243jvi39yb3i5pgqfnxswyc0jzhxv81d7";
+    })
   ];
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional

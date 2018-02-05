@@ -2,22 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "exfat-${version}";
-  version = "1.2.4";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
-    sha256 = "0x8wjvvlqmp0g2361m6d24csi1p4df8za2cqhyys03s1hv1qmy0k";
-    rev = "v${version}";
-    repo = "exfat";
     owner = "relan";
+    repo = "exfat";
+    rev = "v${version}";
+    sha256 = "1sk4z133djh8sdvx2vvmd8kf4qfly2i3hdar4zpg0s41jpbzdx69";
   };
 
-  buildInputs = [ fuse ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ fuse ];
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
     description = "Free exFAT file system implementation";
-    platforms = platforms.linux;
+    inherit (src.meta) homepage;
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dywedir ];
+    platforms = platforms.linux;
   };
 }

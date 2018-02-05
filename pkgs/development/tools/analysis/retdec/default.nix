@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl,
+{ stdenv, fetchFromGitHub, fetchurl, fetchzip,
 # Native build inputs
 cmake,
 autoconf, automake, libtool,
@@ -15,6 +15,8 @@ ncurses,
 libffi,
 libxml2,
 zlib,
+# PE (Windows) data, huge space savings if not needed
+withPEPatterns ? false,
 }:
 
 let
@@ -53,9 +55,14 @@ let
     sha256 = "0r97n4n552ns571diz54qsgarihrxvbn7kvyv8wjyfs9ybrldxqj";
   };
 
-  retdec-support = fetchurl {
+  retdec-support = fetchzip {
     url = "https://github.com/avast-tl/retdec-support/releases/download/2017-12-12/retdec-support_2017-12-12.tar.xz";
-    sha256 = "6376af57a77147f1363896963d8c1b3745ddb9a6bcec83d63a5846c3f78aeef9";
+    sha256 = if withPEPatterns then "0pchl7hb42dm0sdbmpr8d3c6xc0lm6cs4p6g6kdb2cr9c99gjzn3"
+                               else "1hcyq6bf4wk739kb53ic2bs71gsbx6zd07pc07lzfnxf8k497mhv";
+    # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
+    extraPostFetch = stdenv.lib.optionalString (!withPEPatterns) ''
+      rm -rf $out/generic/yara_patterns/static-code/pe
+    '';
   };
 in stdenv.mkDerivation rec {
   name = "retdec-${version}";
@@ -90,12 +97,13 @@ in stdenv.mkDerivation rec {
     find . -wholename "*/deps/openssl/CMakeLists.txt" -print0 | \
       xargs -0 sed -i -e 's|OPENSSL_URL .*)|OPENSSL_URL ${openssl})|'
 
+    cat > cmake/install-share.sh <<EOF
+      #!/bin/sh
+      mkdir -p $out/share/retdec/
+      ln -s ${retdec-support} $out/share/retdec/support
+    EOF
     chmod +x cmake/*.sh
     patchShebangs cmake/*.sh
-
-    sed -i cmake/install-share.sh \
-      -e 's|WGET_PARAMS.*|cp ${retdec-support} "$INSTALL_PATH/$ARCH_NAME"|' \
-      -e '/echo "RUN: wget/,+7d'
 
     substituteInPlace scripts/unpack.sh --replace '	upx -d' '	${upx}/bin/upx -d'
     substituteInPlace scripts/config.sh --replace /usr/bin/time ${time}/bin/time
@@ -105,9 +113,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A retargetable machine-code decompiler based on LLVM";
-    inherit (src.meta) homepage;
+    homepage = https://retdec.com;
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-

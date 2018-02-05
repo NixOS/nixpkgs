@@ -8,6 +8,7 @@
 , enableQt ? false, pyqt4
 , libcxx
 , Cocoa
+, pythonOlder
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -39,8 +40,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype
-      libpng pkgconfig mock pytz backports_functools_lru_cache
-    ]
+      libpng pkgconfig mock pytz ]
+    ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]

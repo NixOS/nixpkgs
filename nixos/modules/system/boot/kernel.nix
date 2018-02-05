@@ -206,7 +206,8 @@ in
         "xhci_hcd"
         "xhci_pci"
         "usbhid"
-        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat" "hid_logitech_hidpp"
+        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_logitech_hidpp" "hid_logitech_dj"
 
       ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
         # Misc. x86 keyboard stuff.

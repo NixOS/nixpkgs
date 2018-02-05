@@ -5,6 +5,7 @@ symlinkJoin {
   src = idris.src;
   paths = [ idris ];
   buildInputs = [ makeWrapper ];
+  meta.platforms = idris.meta.platforms;
   postBuild = ''
     wrapProgram $out/bin/idris \
       --suffix PATH : ${ stdenv.lib.makeBinPath path } \
@@ -14,4 +15,3 @@ symlinkJoin {
     substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
       '';
   }
-

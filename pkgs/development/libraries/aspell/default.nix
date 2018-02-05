@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     patch interfaces/cc/aspell.h < ${./clang.patch}
   '';
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   doCheck = true;
 
