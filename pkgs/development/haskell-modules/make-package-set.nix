@@ -23,7 +23,10 @@
   # overriding functionality
   extensible-self
 
-, ...
+, # When argument list is extended in master, ellipsis prevent
+  # 'called with unexpected argument' errors and allows us to support
+  # both release and master versions
+  ...
 }:
 
 # return value: a function from self to the package set
