@@ -23,10 +23,10 @@
   # overriding functionality
   extensible-self
 
-, # When argument list is extended in master, ellipsis prevent
-  # 'called with unexpected argument' errors and allows us to support
-  # both release and master versions
-  ...
+, # A haskell package set for Setup.hs, compiler plugins, and similar
+  # build-time uses.
+  # dummy argument for compatibility with nixpkgs-unstable channel
+  buildHaskellPackages ? null
 }:
 
 # return value: a function from self to the package set
