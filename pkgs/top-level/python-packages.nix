@@ -155,6 +155,8 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  aioimaplib = callPackage ../development/python-modules/aioimaplib { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
@@ -622,6 +624,8 @@ in {
       sha256 = "1lfmjm8apy9qpnpbq8g641fd01qxh9jlya5g2d6z60vf8p04rla1";
     };
   };
+
+  asynctest = callPackage ../development/python-modules/asynctest { };
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
@@ -5262,6 +5266,8 @@ in {
       platforms = platforms.linux;
     };
   };
+
+  imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
