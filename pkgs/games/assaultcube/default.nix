@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, makeDesktopItem, enet, openal, pkgconfig, libogg,
+{ fetchFromGitHub, stdenv, makeDesktopItem, enet, openal, pkgconfig, libogg,
   libvorbis, SDL, SDL_image, makeWrapper, zlib,
   client ? true, server ? true }:
 
@@ -7,7 +7,6 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
-  branch = "master";
   name = "assaultcube";
 
   meta = {
@@ -17,12 +16,11 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.zlib;
   };
 
-  #sadless , fetchgit seems to refetch all stuff when man switch branch .
-  src = fetchgit {
-    url = "https://github.com/assaultcube/AC.git";
+  src = fetchFromGitHub {
+    owner = "assaultcube";
+    repo  = "AC";
     rev = "9f537b0876a39d7686e773040469fbb1417de18b";
-    branchName = "${branch}";
-    sha256 = "1n9i0qi3gm04p0rd0ab83cnfn01v52a2416ibhi98j0jjlmf6ldf";
+    sha256 = "0nvckn67mmfaa7x3j41xyxjllxqzfx1dxg8pnqsaak3kkzds34pl";
   };
 
   # ${branch} not accepted as a value ?
