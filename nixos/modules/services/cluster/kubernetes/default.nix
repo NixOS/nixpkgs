@@ -301,8 +301,8 @@ in {
           Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
           <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
         '';
-        default = ["RBAC"];
-        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC"]);
+        default = ["RBAC" "Node"];
+        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC" "Node"]);
       };
 
       authorizationPolicy = mkOption {
@@ -344,7 +344,7 @@ in {
           Kubernetes admission control plugins to use. See
           <link xlink:href="http://kubernetes.io/docs/admin/admission-controllers/"/>
         '';
-        default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds"];
+        default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds" "NodeRestriction"];
         example = [
           "NamespaceLifecycle" "NamespaceExists" "LimitRanger"
           "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
