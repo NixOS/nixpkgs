@@ -19,6 +19,8 @@ buildGoPackage {
     sha256 = "0q9gvxfw48d4kjpb2jx7lg577vazjg0n961y6ija5saja5n16mk2";
   };
 
+  buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
+
   meta = with stdenv.lib; {
     description = " GRV is a terminal interface for viewing git repositories";
     homepage = https://github.com/rgburke/grv;
