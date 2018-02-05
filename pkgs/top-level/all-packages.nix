@@ -7015,6 +7015,7 @@ with pkgs;
     # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
     stdenv = overrideCC stdenv gcc7;
   };
+  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
 
   rakudo = callPackage ../development/interpreters/rakudo {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
