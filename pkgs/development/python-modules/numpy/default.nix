@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.13.3";
+  version = "1.14.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "36ee86d5adbabc4fa2643a073f93d5504bdfed37a149a3a49f4dde259f35a750";
+    sha256 = "1ywrq31sy8hkgis1sv9kgac53v2478r1i01442s0f8r1bf9l7rix";
   };
 
   disabled = isPyPy;
