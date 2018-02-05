@@ -1,7 +1,7 @@
 { stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
 
 let
-  version = "1.7.5";
+  version = "1.7.11";
   name = "electron-${version}";
 
   meta = with stdenv.lib; {
@@ -17,7 +17,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-      sha256 = "1z1dzk6d2mfyms8lj8g6jn76m52izbd1d7c05k8h88m1syfsgav5";
+      sha256 = "0v22xhzbq9lcbc83laqs45pbx8gzv648qfkj01pxfsmv3lb4myrl";
       name = "${name}.zip";
     };
 
@@ -45,7 +45,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "1d3c3y5j99wbyxlzk1nkry0m1xgxy3mi4a6irvlgyxl729dnwi97";
+      sha256 = "19kfb09ap780ayk7miqfr6gmba9rd10f9q9aphj35yk7cl22znbr";
       name = "${name}.zip";
     };
 
