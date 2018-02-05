@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = http://assault.cubers.net;
     maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux; # should work on darwin with a little effort.
     license = stdenv.lib.licenses.zlib;
   };
 
