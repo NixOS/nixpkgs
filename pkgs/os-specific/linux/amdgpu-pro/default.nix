@@ -29,20 +29,18 @@ let
   ncurses5 = ncurses.override { abiVersion = "5"; };
 
 in stdenv.mkDerivation rec {
-
-  version = "17.10";
+  version = "17.50";
   pname = "amdgpu-pro";
-  build = "${version}-401251";
+  build = "${version}-511655";
 
   libCompatDir = "/run/lib/${libArch}";
 
   name = pname + "-" + version + (optionalString (!libsOnly) "-${kernelDir.version}");
 
   src = fetchurl {
-    url =
-    "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "004n0df8acjpjz72z3bjxb2a0b7qwln13jlknfn7xxqvhhwwy40a";
-    curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
+    url = "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
+    sha256 = "01zaf3z3wyc0np2jsw0b4dyq5y23g57k0c5x34g9ibfvgddzj8x6";
+    curlOpts = "--referer https://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-for-Linux-Release-Notes.aspx";
   };
 
   hardeningDisable = [ "pic" "format" ];
