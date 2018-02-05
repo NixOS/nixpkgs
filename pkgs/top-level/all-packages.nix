@@ -5822,6 +5822,8 @@ with pkgs;
     extraBuildInputs = lib.optional hostPlatform.isDarwin clang.cc;
   };
 
+  gcc7Stdenv = overrideCC gccStdenv gcc7;
+
   wrapCCMulti = cc:
     if system == "x86_64-linux" then let
       # Binutils with glibc multi
@@ -7102,7 +7104,8 @@ with pkgs;
     # racket 6.11 doesn't build with gcc6 + recent glibc:
     # https://github.com/racket/racket/pull/1886
     # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
-    stdenv = overrideCC stdenv gcc7;
+    stdenv = if stdenv.isDarwin then stdenv else gcc7Stdenv;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
   racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
 
