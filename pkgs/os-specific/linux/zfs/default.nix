@@ -184,16 +184,17 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-01-10";
+    version = "2018-02-01";
 
-    rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
-    sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
-    isLegacyCrypto = true;
+    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
+    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
+    isUnstable = true;
 
     extraPatches = [
+      # Mic92's patch updated for current zfs master
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
-        sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
+        url = "https://raw.githubusercontent.com/sjau/nix-expressions/master/customPatches/nixos-zfs-2018-02-02.patch";
+        sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
       })
     ];
 
