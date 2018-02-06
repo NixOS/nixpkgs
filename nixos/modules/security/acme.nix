@@ -6,10 +6,11 @@ let
 
   cfg = config.security.acme;
 
-  certOpts = { ... }: {
+  certOpts = { name, ... }: {
     options = {
       webroot = mkOption {
         type = types.str;
+        example = "/var/lib/acme/acme-challenges";
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
@@ -20,8 +21,8 @@ let
       };
 
       domain = mkOption {
-        type = types.nullOr types.str;
-        default = null;
+        type = types.str;
+        default = name;
         description = "Domain to fetch certificate for (defaults to the entry name)";
       };
 
@@ -48,7 +49,7 @@ let
         default = false;
         description = ''
           Give read permissions to the specified group
-          (<option>security.acme.group</option>) to read SSL private certificates.
+          (<option>security.acme.cert.<name>.group</option>) to read SSL private certificates.
         '';
       };
 
@@ -87,7 +88,7 @@ let
           }
         '';
         description = ''
-          Extra domain names for which certificates are to be issued, with their
+          A list of extra domain names, which are included in the one certificate to be issued, with their
           own server roots if needed.
         '';
       };
@@ -193,10 +194,9 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
+                cmdline = [ "-v" "-d" data.domain "--default_root" data.webroot "--valid_min" cfg.validMin "--tos_sha256" cfg.tosHash ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
