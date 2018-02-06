@@ -49,7 +49,7 @@ let
         default = false;
         description = ''
           Give read permissions to the specified group
-          (<option>security.acme.cert.<name>.group</option>) to read SSL private certificates.
+          (<option>security.acme.cert.&lt;name&gt;.group</option>) to read SSL private certificates.
         '';
       };
 
