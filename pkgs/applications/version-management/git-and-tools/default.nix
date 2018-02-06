@@ -117,6 +117,7 @@ rec {
     git = gitSVN;
   };
 
+  svn_all_fast_export = libsForQt5.callPackage ./svn-all-fast-export { };
 
   tig = callPackage ./tig { };
 
