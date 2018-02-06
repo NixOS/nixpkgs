@@ -678,7 +678,6 @@ rec {
   * @brief Read a list of paths from `file', relative to the `rootPath'. Lines
      beginning with `#' are treated as comments and ignored. Whitespace
      is significant.
-  * @warning this function is not performant and should be avoided
   * @param string rootpath
   * @param string file
   * @code
