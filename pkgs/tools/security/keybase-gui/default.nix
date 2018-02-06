@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     tar xf data.tar.xz
   '';
   installPhase = ''
-    mkdir -p $out/{bin,share}
+    mkdir -p $out/bin
+    mv usr/share $out/share
     mv opt/keybase $out/share/
 
     cat > $out/bin/keybase-gui <<EOF
@@ -78,6 +79,9 @@ stdenv.mkDerivation rec {
     exec $out/share/keybase/Keybase "\$@"
     EOF
     chmod +x $out/bin/keybase-gui
+
+    substituteInPlace $out/share/applications/keybase.desktop \
+      --replace run_keybase $out/bin/keybase-gui
   '';
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
