@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
-  nativeBuildInputs = [ buildPackages.stdenv.cc flex ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [ cracklib ];
 
