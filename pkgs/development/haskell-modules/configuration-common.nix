@@ -965,37 +965,37 @@ self: super: {
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
 
