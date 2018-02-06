@@ -545,9 +545,11 @@ rec {
   getVersion = x:
    let
      parse = drv: (builtins.parseDrvName drv).version;
+    /** @cond EXCLUDE_THIS */
    in if isString x
       then parse x
       else x.version or (parse x.name);
+    /** @endcond */
 
   /**
   * @hideinitializer
