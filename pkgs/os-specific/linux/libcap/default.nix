@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ stdenv.lib.optional (pam != null) "pam";
 
-  nativeBuildInputs = [ perl buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ pam ];
 
@@ -22,8 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "lib=lib"
     (stdenv.lib.optional (pam != null) "PAM_CAP=yes")
-    "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}gcc"
-    "CC=${stdenv.cc.targetPrefix}gcc"
+    "BUILD_CC=$(CC_FOR_BUILD)"
+    "CC:=$(CC)"
   ];
 
   prePatch = ''
