@@ -16444,6 +16444,8 @@ with pkgs;
 
   diffpdf = callPackage ../applications/misc/diffpdf { };
 
+  diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
+
   mlocate = callPackage ../tools/misc/mlocate { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
