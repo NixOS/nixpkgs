@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2_0_25, ncurses, pkgconfig, readline }:
 let
-  version = "0.1.0";
+  version = "0.1.1";
 in
 buildGoPackage {
   name = "grv-${version}";
@@ -16,7 +16,7 @@ buildGoPackage {
     owner = "rgburke";
     repo = "grv";
     rev = "v${version}";
-    sha256 = "1qd9kq8l29v3gwwls98933bk0rdw44mrbnqgb1r6hm9m6vzjfcn3";
+    sha256 = "0q9gvxfw48d4kjpb2jx7lg577vazjg0n961y6ija5saja5n16mk2";
   };
 
   meta = with stdenv.lib; {

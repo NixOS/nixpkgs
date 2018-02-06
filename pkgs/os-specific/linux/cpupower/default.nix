@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];
 
-  configurePhase = ''
+  postPatch = ''
     cd tools/power/cpupower
     sed -i 's,/bin/true,${buildPackages.coreutils}/bin/true,' Makefile
     sed -i 's,/bin/pwd,${buildPackages.coreutils}/bin/pwd,' Makefile
@@ -17,18 +17,16 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
 
-  installPhase = ''
-    make \
-      bindir="$out/bin" \
-      sbindir="$out/sbin" \
-      mandir="$out/share/man" \
-      includedir="$out/include" \
-      libdir="$out/lib" \
-      localedir="$out/share/locale" \
-      docdir="$out/share/doc/cpupower" \
-      confdir="$out/etc" \
-      install install-man
-  '';
+  installFlags = [
+    "bindir=$(out)/bin"
+    "sbindir=$(out)/sbin"
+    "mandir=$(out)/share/man"
+    "includedir=$(out)/include"
+    "libdir=$(out)/lib"
+    "localedir=$(out)/share/locale"
+    "docdir=$(out)/share/doc/cpupower"
+    "confdir=$(out)/etc"
+  ];
 
   enableParallelBuilding = true;
 

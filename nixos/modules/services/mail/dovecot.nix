@@ -104,7 +104,7 @@ let
   };
 
   mailboxConfig = mailbox: ''
-    mailbox ${mailbox.name} {
+    mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
       special_use = \${toString mailbox.specialUse}

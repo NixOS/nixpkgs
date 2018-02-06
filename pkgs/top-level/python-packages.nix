@@ -155,6 +155,8 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  aioimaplib = callPackage ../development/python-modules/aioimaplib { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
@@ -622,6 +624,8 @@ in {
       sha256 = "1lfmjm8apy9qpnpbq8g641fd01qxh9jlya5g2d6z60vf8p04rla1";
     };
   };
+
+  asynctest = callPackage ../development/python-modules/asynctest { };
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
@@ -2028,6 +2032,11 @@ in {
     doCheck = false;
   });
 
+  can = callPackage ../development/python-modules/can {};
+
+  canopen = callPackage ../development/python-modules/canopen {};
+
+  canmatrix = callPackage ../development/python-modules/canmatrix {};
 
   cairocffi = buildPythonPackage rec {
     name = "cairocffi-0.7.2";
@@ -2122,26 +2131,6 @@ in {
       homepage = https://pypi.python.org/pypi/carrot;
       description = "AMQP Messaging Framework for Python";
     };
-  };
-
-  github-cli = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "github-cli-${version}";
-    src = pkgs.fetchFromGitHub {
-      owner = "jsmits";
-      repo = "github-cli";
-      rev = version;
-      sha256 = "16bwn42wqd76zs97v8p6mqk79p5i2mb06ljk67lf8gy6kvqc1x8y";
-    };
-
-    buildInputs = with self; [ nose pkgs.git ];
-    propagatedBuildInputs = with self; [ simplejson ];
-
-    # skipping test_issues_cli.py since it requires access to the github.com
-    patchPhase = "rm tests/test_issues_cli.py";
-    checkPhase = "nosetests tests/";
-
-    meta.maintainers = with maintainers; [ garbas ];
   };
 
   case = buildPythonPackage rec {
@@ -3797,7 +3786,8 @@ in {
     };
   });
 
-  nose-parameterized = callPackage ../development/python-modules/nose-parameterized {};
+  nose-parameterized = warn "Warning: `nose-parameterized` is deprecated! Use `parameterized` instead."
+    (callPackage ../development/python-modules/nose-parameterized {});
 
   neurotools = buildPythonPackage (rec {
     name = "NeuroTools-${version}";
@@ -5222,6 +5212,8 @@ in {
     };
   };
 
+  imaplib2 = callPackage ../development/python-modules/imaplib2 { };
+
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
     version = "0.4.2.post1";
@@ -5567,6 +5559,8 @@ in {
       license = licenses.gpl3;
     };
   };
+
+  luftdaten = callPackage ../development/python-modules/luftdaten { };
 
   m2r = callPackage ../development/python-modules/m2r { };
 
@@ -12357,6 +12351,8 @@ in {
     };
   };
 
+  parameterized = callPackage ../development/python-modules/parameterized { };
+
   paramz = callPackage ../development/python-modules/paramz { };
 
   parsel = buildPythonPackage rec {
@@ -12779,6 +12775,8 @@ in {
   platformio = callPackage ../development/python-modules/platformio { };
 
   kmsxx = callPackage ../development/libraries/kmsxx { };
+
+  pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pth, libgpgerror }:
+{ fetchurl, stdenv, gettext, pth, libgpgerror }:
 
 stdenv.mkDerivation rec {
   name = "libassuan-2.5.1";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
-  buildInputs = [ libgpgerror pth ];
+  buildInputs = [ libgpgerror pth ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext;
 
   doCheck = true;
 
@@ -20,18 +21,16 @@ stdenv.mkDerivation rec {
     sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "IPC library used by GnuPG and related software";
-
     longDescription = ''
       Libassuan is a small library implementing the so-called Assuan
       protocol.  This protocol is used for IPC between most newer
       GnuPG components.  Both, server and client side functions are
       provided.
     '';
-
     homepage = http://gnupg.org;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
   };
 }

@@ -182,6 +182,20 @@ following incompatible changes:</para>
       <literal>lib.mkOverride</literal> can be used.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 18.03 or higher.
+      For <literal>stateVersion = "17.09"</literal> or lower the old behavior is preserved.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>matrix-synapse</literal> uses postgresql by default instead of sqlite.
+          Migration instructions can be found <link xlink:href="https://github.com/matrix-org/synapse/blob/master/docs/postgres.rst#porting-from-sqlite"> here </link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
 </itemizedlist>
 
 </section>

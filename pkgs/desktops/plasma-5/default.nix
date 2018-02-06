@@ -125,7 +125,7 @@ let
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
-      plasma-integration = callPackage ./plasma-integration.nix {};
+      plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
       plasma-vault = callPackage ./plasma-vault {};
