@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames
+{ stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+, which, perl
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
@@ -15,15 +18,16 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "5.1.2";
+  version = "5.10.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${version}";
-    sha256 = "1smahz67gcd86nkdqaml78lci89dza131mlj5472r4sxjdxsx277";
+    sha256 = "00qnd56v4qyzxg0b3ya3flf2jhbbfaibj1y53bd5ciaw3af6zxnd";
   };
-
+  
+  nativeBuildInputs = [ which perl ];
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
   postPatch = ''
@@ -39,16 +43,20 @@ stdenv.mkDerivation rec {
 
   ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
   ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
-
-  buildFlags = [
+  
+  buildAndInstallFlags = [
+    "USE_RTTI=1"
     "DEBUG_LEVEL=0"
+    "DISABLE_WARNING_AS_ERROR=1"     
+  ];
+
+  buildFlags = buildAndInstallFlags ++ [
     "shared_lib"
     "static_lib"
   ];
 
-  installFlags = [
+  installFlags = buildAndInstallFlags ++ [
     "INSTALL_PATH=\${out}"
-    "DEBUG_LEVEL=0"
     "install-shared"
     "install-static"
   ];
@@ -66,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
     platforms = platforms.allBut [ "i686-linux" ];
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ adev wkennington ];
   };
 }
