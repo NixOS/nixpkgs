@@ -23,7 +23,7 @@ TAB_SIZE               = 2
 HTML_HEADER            = doxygen/header.html
 HTML_FOOTER            = doxygen/footer.html
 
-#HTML_EXTRA_STYLESHEET  = doxygen/customdoxygen.css
+HTML_EXTRA_STYLESHEET  = doxygen/customdoxygen.css
 #HTML_EXTRA_FILES       = doxygen/doxy-boot.js
 DISABLE_INDEX = YES
 # Maybe include
