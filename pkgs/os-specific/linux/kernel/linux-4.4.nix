@@ -1,6 +1,6 @@
 { stdenv, buildPackages, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
+buildLinux (args // rec {
   version = "4.4.115";
   extraMeta.branch = "4.4";
 
