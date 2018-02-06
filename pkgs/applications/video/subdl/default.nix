@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "subdl";
+  name = "subdl-0.0pre.2017.11.06";
 
   src = fetchFromGitHub {
     owner = "alexanderwink";
