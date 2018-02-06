@@ -1480,9 +1480,8 @@ with pkgs;
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
+  ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
   ceph-dev = ceph;
-  #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
   cfdg = callPackage ../tools/graphics/cfdg {
     ffmpeg = ffmpeg_2;
