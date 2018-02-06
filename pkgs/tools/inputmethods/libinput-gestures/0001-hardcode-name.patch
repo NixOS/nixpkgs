@@ -1,0 +1,13 @@
+diff --git a/libinput-gestures b/libinput-gestures
+index f337ba3..fe56d66 100755
+--- a/libinput-gestures
++++ b/libinput-gestures
+@@ -6,7 +6,7 @@ from collections import OrderedDict
+ from pathlib import Path
+ from distutils.version import LooseVersion as Version
+ 
+-PROG = Path(sys.argv[0]).stem
++PROG = "libinput-gestures"
+ 
+ # Conf file containing gesture commands.
+ # Search first for user file then system file.
