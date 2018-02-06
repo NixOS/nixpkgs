@@ -26,3 +26,11 @@ HTML_FOOTER            = doxygen/footer.html
 #HTML_EXTRA_STYLESHEET  = doxygen/customdoxygen.css
 #HTML_EXTRA_FILES       = doxygen/doxy-boot.js
 DISABLE_INDEX = YES
+# Maybe include
+# https://github.com/NixOS/nix/blob/e3c19ff9bcbcaf2ec8e7c3d7f964e8d8aefaea43/doc/manual/expressions/builtins.xml
+#    Nix builtins???
+# would show up in search under nix-builtins/replaceStrings
+# which would be referenced by stdenv.lib.replaceStrings
+
+# Sorts members alphabetically. Disable when debugging why Doxygen won't pick up a function.
+SORT_BRIEF_DOCS   = YES
