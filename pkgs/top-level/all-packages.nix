@@ -16442,7 +16442,7 @@ with pkgs;
 
   mupdf = callPackage ../applications/misc/mupdf { };
 
-  diffpdf = callPackage ../applications/misc/diffpdf { };
+  diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
   mlocate = callPackage ../tools/misc/mlocate { };
 
