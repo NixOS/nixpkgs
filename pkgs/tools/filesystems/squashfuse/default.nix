@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem to mount squashfs archives";
     homepage = https://github.com/vasi/squashfuse;
     maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     license = "BSD-2-Clause";
   };
+
+  # platforms.darwin should be supported : see PLATFORMS file in src.
+  # we could use a nix fuseProvider, and let the derivation choose the OS
+  # specific implementation. 
 
 	src = fetchurl {
 	    url = "https://github.com/vasi/squashfuse/archive/${version}.tar.gz";
