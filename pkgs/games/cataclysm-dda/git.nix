@@ -1,5 +1,6 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa, tiles ? true }:
+SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa,
+tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "2017-12-09";
@@ -14,10 +15,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses lua gettext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ]
-    ++ stdenv.lib.optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
-    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ Cocoa ];
+  buildInputs = with stdenv.lib; [ ncurses lua gettext ]
+    ++ optionals stdenv.isDarwin [ CoreFoundation ]
+    ++ optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir_git.patch ];
 
@@ -27,20 +28,25 @@ stdenv.mkDerivation rec {
         -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
   '';
 
-  makeFlags = [
-    "PREFIX=$(out) LUA=1 RELEASE=1 USE_HOME_DIR=1"
+  makeFlags = with stdenv.lib; [
+    "PREFIX=$(out)"
+    "LUA=1"
+    "RELEASE=1"
+    "USE_HOME_DIR=1"
     "LANGUAGES=all"
-    "VERSION=git-${version}-${stdenv.lib.substring 0 8 src.rev}"
-  ] ++ stdenv.lib.optionals tiles [
-    "TILES=1 SOUND=1"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "NATIVE=osx CLANG=1"
+    "VERSION=git-${version}-${substring 0 8 src.rev}"
+  ] ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ] ++ optionals stdenv.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
   ];
 
-  postInstall = stdenv.lib.optionalString (tiles && !stdenv.isDarwin) ''
+  postInstall = with stdenv.lib; optionalString (tiles && !stdenv.isDarwin) ''
     install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T $out/share/applications/cataclysm-dda.desktop
     install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
-  '' + stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
+  '' + optionalString (tiles && stdenv.isDarwin) ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources

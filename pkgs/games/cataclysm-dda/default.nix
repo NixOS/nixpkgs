@@ -1,5 +1,6 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, Cocoa, libicns, tiles ? true }:
+SDL2_mixer, freetype, gettext, Cocoa, libicns,
+tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "0.C";
@@ -15,9 +16,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ libicns ];
 
-  buildInputs = [ ncurses lua gettext ]
-    ++ stdenv.lib.optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
-    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ Cocoa ];
+  buildInputs = with stdenv.lib; [ ncurses lua gettext ]
+    ++ optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir.patch ];
 
@@ -25,18 +26,23 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  makeFlags = [
-    "PREFIX=$(out) LUA=1 RELEASE=1 USE_HOME_DIR=1"
+  makeFlags = with stdenv.lib; [
+    "PREFIX=$(out)"
+    "LUA=1"
+    "RELEASE=1"
+    "USE_HOME_DIR=1"
     # "LANGUAGES=all"  # vanilla C:DDA installs all translations even without this flag!
-  ] ++ stdenv.lib.optionals tiles [
-    "TILES=1 SOUND=1"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "NATIVE=osx CLANG=1"
+  ] ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ] ++ optionals stdenv.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
-  ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+  ] ++ optionals stdenv.cc.isGNU [
     "WARNINGS+=-Wno-deprecated-declarations"
     "WARNINGS+=-Wno-ignored-attributes"
-  ] ++ stdenv.lib.optionals stdenv.cc.isClang [
+  ] ++ optionals stdenv.cc.isClang [
     "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
