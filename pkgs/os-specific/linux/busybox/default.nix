@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}gcc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
