@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, isPy3k
 , nose
-, nose-parameterized
+, parameterized
 , mock
 , glibcLocales
 , six
@@ -23,10 +23,16 @@ buildPythonPackage rec {
     sha256 = "0q2vyzvlj46r6pr0s6m1a0md1cpg9nv1n3xw286l4x2cc7fj2g3y";
   };
 
+  # Replace nose-parameterized by parameterized
+  prePatch = ''
+    sed -i s/nose_parameterized/parameterized/g tests/*.py
+    sed -i s/nose-parameterized/parameterized/g tests/requirements.txt
+  '';
+
   # Upstream Issue: https://github.com/scrapinghub/dateparser/issues/364
   disabled = isPy3k;
 
-  checkInputs = [ nose nose-parameterized mock glibcLocales ];
+  checkInputs = [ nose parameterized mock glibcLocales ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py
