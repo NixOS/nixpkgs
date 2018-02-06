@@ -59,6 +59,8 @@ rec {
 
   stellar-core = callPackage ./stellar-core.nix { };
 
+  sumokoin = callPackage ./sumokoin.nix { };
+
   zcash = callPackage ./zcash {
     withGui = false;
     openssl = openssl_1_1_0;
