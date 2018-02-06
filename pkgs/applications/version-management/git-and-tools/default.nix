@@ -117,7 +117,6 @@ rec {
     git = gitSVN;
   };
 
-  svn2git_kde = callPackage ./svn2git-kde { };
 
   tig = callPackage ./tig { };
 
