@@ -11310,7 +11310,7 @@ with pkgs;
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
-    stdenv = overrideCC stdenv gcc5;
+    stdenv = if stdenv.isDarwin then stdenv else overrideCC stdenv gcc5;
   };
 
   v8_6_x = callPackage ../development/libraries/v8/6_x.nix {
