@@ -4,9 +4,7 @@
 
 let
   pkgs = import ../../.. { inherit localSystem crossSystem; };
-  libc = if pkgs.hostPlatform != pkgs.buildPlatform
-          then pkgs.libcCross
-          else pkgs.glibc;
+  libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
 
