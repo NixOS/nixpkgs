@@ -11792,6 +11792,8 @@ in {
     };
   };
 
+  patator = callPackage ../development/python-modules/patator { };
+
   pathlib = buildPythonPackage rec {
     name = "pathlib-${version}";
     version = "1.0.1";
