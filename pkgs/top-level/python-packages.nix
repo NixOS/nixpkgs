@@ -10123,6 +10123,8 @@ in {
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
+  mysqlclient = callPackage ../development/python-modules/mysqlclient { };
+
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
     pname = "mwclient";
