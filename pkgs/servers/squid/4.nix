@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     perl openldap db cyrus_sasl expat libxml2 openssl
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap pam ];
 
+  prePatch = ''
+    substituteInPlace configure --replace "/usr/local/include/libxml2" "${libxml2.dev}/include/libxml2"
+  '';
+
   configureFlags = [
     "--enable-ipv6"
     "--disable-strict-error-checking"
