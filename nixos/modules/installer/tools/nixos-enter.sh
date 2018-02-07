@@ -4,13 +4,14 @@ set -e
 
 # Re-exec ourselves in a private mount namespace so that our bind
 # mounts get cleaned up automatically.
-if [ "$(id -u)" = 0 ]; then
-    if [ -z "$NIXOS_ENTER_REEXEC" ]; then
-        export NIXOS_ENTER_REEXEC=1
-        exec unshare --mount --uts -- "$0" "$@"
-    else
-        mount --make-rprivate /
+if [ -z "$NIXOS_ENTER_REEXEC" ]; then
+    export NIXOS_ENTER_REEXEC=1
+    if [ "$(id -u)" != 0 ]; then
+        extraFlags="-r"
     fi
+    exec unshare --fork --mount --uts --mount-proc --pid $extraFlags -- "$0" "$@"
+else
+    mount --make-rprivate /
 fi
 
 mountPoint=/mnt
@@ -54,6 +55,6 @@ mkdir -m 0755 -p "$mountPoint/dev"
 mount --rbind /dev "$mountPoint/dev"
 
 # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
-LOCALE_ARCHIVE=$system/sw/lib/locale/locale-archive chroot "$mountPoint" "$system/activate" >&2
+LOCALE_ARCHIVE=$system/sw/lib/locale/locale-archive chroot "$mountPoint" "$system/activate" >&2 || true
 
 exec chroot "$mountPoint" "${command[@]}"
