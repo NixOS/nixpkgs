@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, perl, python3
+, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
 
 , libffi, libiconv ? null, ncurses
 
@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [
+    (fetchpatch { # https://phabricator.haskell.org/D4388 for more determinism
+      url = "https://github.com/shlevy/ghc/commit/8b2dbd869d1a64de3e99fa8b1c9bb1140eee7099.patch";
+      sha256 = "0hxpiwhbg64rsyjdr4psh6dwyp58b96mad3adccvfr0x8hc6ba2m";
+    })
+  ];
 
   postPatch = "patchShebangs .";
 
