@@ -16,7 +16,7 @@ mountPoint=/mnt
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-        --max-jobs|-j|--cores|-I)
+        --max-jobs|-j|--cores|-I|--substituters)
             j="$1"; shift 1
             extraBuildFlags+=("$i" "$j")
             ;;
@@ -82,14 +82,14 @@ fi
 trap "rm -rf $tmpdir" EXIT
 tmpdir="$(mktemp -d)"
 
-subs="auto?trusted=1 https://cache.nixos.org/"
+sub="auto?trusted=1"
 
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
     echo "building the configuration in $NIXOS_CONFIG..."
     outLink="$tmpdir/system"
     nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
-        --substituters "$subs" \
+        --extra-substituters "$sub" \
         -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG"
     system=$(readlink -f $outLink)
 fi
@@ -98,7 +98,7 @@ fi
 # this with the previous step once we have a nix-env replacement with
 # a progress bar.
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
-        --substituters "$subs" \
+        --extra-substituters "$sub" \
         -p $mountPoint/nix/var/nix/profiles/system --set "$system"
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
@@ -108,7 +108,7 @@ if [[ -z $noChannelCopy ]]; then
     if [[ -n $channelPath ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
-        nix-env --store "$mountPoint" --substituters 'auto?trusted=1' "${extraBuildFlags[@]}" \
+        nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
                 -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
     fi
 fi
