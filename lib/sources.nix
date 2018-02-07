@@ -35,16 +35,55 @@ rec {
   #     lib.cleanSourceWith f (lib.cleanSourceWith g ./.)     # Succeeds!
   #     builtins.filterSource f (builtins.filterSource g ./.) # Fails!
   cleanSourceWith = { filter, src }:
-    let
-      isFiltered = src ? _isLibCleanSourceWith;
-      origSrc = if isFiltered then src.origSrc else src;
-      filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
-    in {
-      inherit origSrc;
-      filter = filter';
-      outPath = builtins.filterSource filter' origSrc;
-      _isLibCleanSourceWith = true;
-    };
+    composablePath { inherit filter; path = src; };
+
+  # | Like 'builtins.path', except composable, with underlying filters
+  # composed without adding paths to the store multiple times.
+  #
+  # The 'recursive' argument is not implemented because useful use of
+  # filters implies recursive = true.
+  #
+  # Uses filterSource where allowed by the arguments for backwards
+  # compatibility.
+  composablePath =
+    { path
+    , filter ? null
+    , name ? null
+    , sha256 ? null
+    }@args:
+      let path' = if path._isLibComposablePath or false
+                    then path
+                    else {};
+          hasName = args ? name || path' ? name;
+          hasFilter = args ? filter || path' ? filter;
+          filter =
+            if path' ? filter
+              then if args ? filter
+                     then name: type: args.filter name type &&
+                                        path'.filter name type
+                   else path'.filter
+            else args.filter;
+          name = args.name or path'.name;
+          needsPathBuiltin = hasName || args ? sha256;
+          origPath = path'.path or path;
+          inherit (lib) optionalAttrs;
+          optionalArgs =
+            (optionalAttrs hasName { inherit name; }) //
+            (optionalAttrs hasFilter { inherit filter; }) //
+            (optionalAttrs (args ? sha256) { inherit sha256; });
+      in
+        { _isLibComposablePath = true;
+          path = origPath;
+          outPath =
+            if needsPathBuiltin
+              then if builtins ? path
+                     then builtins.path
+                            ({ path = origPath; } // optionalArgs)
+                   else throw "You must be using at least nix 2.0 to use composablePath with a name or sha256"
+            else if hasFilter
+                   then builtins.filterSource filter origPath
+                 else throw "You must pass at least one of filter, name, or sha256 to composablePath";
+        } // (removeAttrs optionalArgs [ "sha256" ]);
 
   # Filter sources by a list of regular expressions.
   #
@@ -96,5 +135,5 @@ rec {
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
 
-  canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
+  canCleanSource = src: src ? _isLibComposablePath || !(pathHasContext (toString src));
 }
