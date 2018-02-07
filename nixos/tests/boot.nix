@@ -24,6 +24,7 @@ let
           my $machine = createMachine({ ${machineConfig}, qemuFlags => '-m 768' });
           $machine->start;
           $machine->waitForUnit("multi-user.target");
+          $machine->succeed("nix verify -r --no-trust /run/current-system");
           $machine->shutdown;
         '';
     };
