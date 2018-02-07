@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
@@ -90,7 +90,15 @@ in stdenv.mkDerivation rec {
     sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-6360.patch";
+      url = https://salsa.debian.org/multimedia-team/mpv/raw/ddface85a1adfdfe02ffb25b5ac7fac715213b97/debian/patches/09_ytdl-hook-whitelist-protocols.patch;
+      sha256 = "1gb1lkjbr8rv4v9ji6w5z97kbxbi16dbwk2255ajbvngjrc7vivv";
+    })
+  ];
+
+  postPatch = ''
     patchShebangs ./TOOLS/
   '';
 
