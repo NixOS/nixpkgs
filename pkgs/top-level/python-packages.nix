@@ -13302,33 +13302,6 @@ in {
     };
   };
 
-
-
-  vobject = buildPythonPackage rec {
-    version = "0.9.3";
-    name = "vobject-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "eventable";
-      repo = "vobject";
-      sha256 = "00vbii5awwqwfh5hfklj1q79w7d85gjigvf2imgyb71g03sb8cjv";
-      rev = version;
-    };
-
-    disabled = isPyPy;
-
-    propagatedBuildInputs = with self; [ dateutil ];
-
-    checkPhase = "${python.interpreter} tests.py";
-
-    meta = {
-      description = "Module for reading vCard and vCalendar files";
-      homepage = http://eventable.github.io/vobject/;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ ];
-    };
-  };
-
   pycarddav = buildPythonPackage rec {
     version = "0.7.0";
     name = "pycarddav-${version}";
@@ -22247,6 +22220,8 @@ EOF
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
+
+  vobject = callPackage ../development/python-modules/vobject { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
