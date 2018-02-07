@@ -11144,6 +11144,8 @@ with pkgs;
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
+  subdl = callPackage ../applications/video/subdl { };
+  
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   suil-qt4 = callPackage ../development/libraries/audio/suil {
@@ -12018,6 +12020,8 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  lwan = callPackage ../servers/http/lwan { };
+
   mailman = callPackage ../servers/mail/mailman { };
 
   mattermost = callPackage ../servers/mattermost { };
@@ -12099,6 +12103,7 @@ with pkgs;
 
   oauth2_proxy = callPackage ../servers/oauth2_proxy { };
 
+  openafs = callPackage ../servers/openafs { tsmbac = null; ncurses = null; };
   openpts = callPackage ../servers/openpts { };
 
   openresty = callPackage ../servers/http/openresty { };
@@ -13083,7 +13088,7 @@ with pkgs;
 
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
-    openafsClient = callPackage ../servers/openafs-client { };
+    openafs = callPackage ../servers/openafs/module.nix { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
@@ -14952,8 +14957,6 @@ with pkgs;
   emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
 
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
-    overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
-
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
     inherit emacs texinfo makeWrapper runCommand;
@@ -16443,6 +16446,8 @@ with pkgs;
   mupdf = callPackage ../applications/misc/mupdf { };
 
   diffpdf = callPackage ../applications/misc/diffpdf { };
+
+  diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
 
   mlocate = callPackage ../tools/misc/mlocate { };
 

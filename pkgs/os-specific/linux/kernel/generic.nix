@@ -55,7 +55,7 @@ let
   config = import ./common-config.nix {
     inherit stdenv version ;
     # append extraConfig for backwards compatibility but also means the user can't override the kernelExtraConfig part
-    extraConfig = extraConfig + lib.optionalString (hostPlatform ? kernelExtraConfig ) hostPlatform.kernelExtraConfig;
+    extraConfig = extraConfig + lib.optionalString (hostPlatform.platform ? kernelExtraConfig) hostPlatform.platform.kernelExtraConfig;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
