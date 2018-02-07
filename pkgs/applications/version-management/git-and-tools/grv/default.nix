@@ -18,6 +18,8 @@ buildGoPackage {
     fetchSubmodules = true;
   };
 
+  buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
+
   meta = with stdenv.lib; {
     description = " GRV is a terminal interface for viewing git repositories";
     homepage = https://github.com/rgburke/grv;
