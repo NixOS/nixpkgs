@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "lsusb command for Mac OS X";
     platforms = stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.varunpatro ];
   };
 }
