@@ -1,10 +1,12 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ...} : rec {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco chaoflow ];
   };
+
+  foo = pkgs.writeText "foo" "Hello World";
 
   machine =
     { config, lib, pkgs, ... }:
@@ -27,10 +29,17 @@ import ./make-test.nix ({ pkgs, ...} : {
       security.sudo = { enable = true; wheelNeedsPassword = false; };
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
+      system.extraDependencies = [ foo ];
     };
 
   testScript =
     ''
+      subtest "nix-db", sub {
+          my $json = $machine->succeed("nix path-info --json ${foo}");
+          $json =~ /"narHash":"sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"/ or die "narHash not set";
+          $json =~ /"narSize":128/ or die "narSize not set";
+      };
+
       subtest "nixos-version", sub {
           $machine->succeed("[ `nixos-version | wc -w` = 2 ]");
       };
