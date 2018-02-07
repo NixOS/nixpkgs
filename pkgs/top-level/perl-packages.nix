@@ -11884,6 +11884,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Rename = buildPerlPackage rec {
+    name = "rename-1.9";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEDERST/${name}.tar.gz";
+      sha256 = "183ycxqmgl333mngiiwhabr41s6k4vzi3l2fcz9sjdfk217p9i8p";
+    };
+    meta = {
+      description = "Bulk rename files according to a Perl rewrite expression";
+      homepage = http://search.cpan.org/~pederst/rename-1.9/bin/rename.PL;
+      maintainers = with maintainers; [ mkg ];
+      license = "unknown";
+    };
+  };
+
   RegexpParser = buildPerlPackage {
     name = "Regexp-Parser-0.21";
     src = fetchurl {
