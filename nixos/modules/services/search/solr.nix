@@ -15,8 +15,6 @@ let
       sha256 = "01mzvh53wrs1p2ym765jwd00gl6kn8f9k3nhdrnhdqr8dhimfb2p";
     };
 
-    buildPhases = [ "unpackPhase" "installPhase" ];
-
     installPhase = ''
       mkdir -p $out/lib
       cp common/lib/*.jar $out/lib/

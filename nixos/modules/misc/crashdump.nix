@@ -18,26 +18,23 @@ in
           default = false;
           description = ''
             If enabled, NixOS will set up a kernel that will
-            boot on crash, and leave the user to a stage1 debug1devices
-            interactive shell to be able to save the crashed kernel dump.
+            boot on crash, and leave the user in systemd rescue
+            to be able to save the crashed kernel dump at
+            /proc/vmcore.
             It also activates the NMI watchdog.
           '';
         };
-        kernelPackages = mkOption {
-          type = types.package;
-          default = pkgs.linuxPackages;
-          # We don't want to evaluate all of linuxPackages for the manual
-          # - some of it might not even evaluate correctly.
-          defaultText = "pkgs.linuxPackages";
-          example = literalExample "pkgs.linuxPackages_2_6_25";
+        reservedMemory = mkOption {
+          default = "128M";
           description = ''
-            This will override the boot.kernelPackages, and will add some
-            kernel configuration parameters for the crash dump to work.
+            The amount of memory reserved for the crashdump kernel.
+            If you choose a too high value, dmesg will mention
+            "crashkernel reservation failed".
           '';
         };
         kernelParams = mkOption {
           type = types.listOf types.str;
-          default = [ "debug1devices" ];
+          default = [ "1" "boot.shell_on_fail" ];
           description = ''
             Parameters that will be passed to the kernel kexec-ed on crash.
           '';
@@ -51,29 +48,29 @@ in
   config = mkIf crashdump.enable {
     boot = {
       postBootCommands = ''
+        echo "loading crashdump kernel...";
         ${pkgs.kexectools}/sbin/kexec -p /run/current-system/kernel \
         --initrd=/run/current-system/initrd \
-        --append="init=$(readlink -f /run/current-system/init) system=$(readlink -f /run/current-system) irqpoll maxcpus=1 reset_devices ${kernelParams}" --reset-vga --console-vga
+        --reset-vga --console-vga \
+        --command-line="systemConfig=$(readlink -f /run/current-system) init=$(readlink -f /run/current-system/init) irqpoll maxcpus=1 reset_devices ${kernelParams}"
       '';
       kernelParams = [
-       "crashkernel=64M"
+       "crashkernel=${crashdump.reservedMemory}"
        "nmi_watchdog=panic"
        "softlockup_panic=1"
        "idle=poll"
       ];
-      kernelPackages = mkOverride 50 (crashdump.kernelPackages // {
-        kernel = crashdump.kernelPackages.kernel.override 
-          (attrs: {
-            extraConfig = (optionalString (attrs ? extraConfig) attrs.extraConfig) +
-              ''
+      kernelPatches = [ {
+        name = "crashdump-config";
+        patch = null;
+        extraConfig = ''
                 CRASH_DUMP y
                 DEBUG_INFO y
                 PROC_VMCORE y
                 LOCKUP_DETECTOR y
                 HARDLOCKUP_DETECTOR y
               '';
-          });
-      });
+        } ];
     };
   };
 }

@@ -10,8 +10,14 @@ in
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
-  binutils = callPackage ../os-specific/darwin/binutils {
-    inherit (darwin) cctools;
+  binutils = pkgs.wrapBintoolsWith {
+    libc =
+      if pkgs.targetPlatform != pkgs.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = callPackage ../os-specific/darwin/binutils {
+      inherit (darwin) cctools;
+    };
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
@@ -31,6 +37,8 @@ in
     inherit (darwin) opencflite;
   };
 
+  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
+
   ios-cross = callPackage ../os-specific/darwin/ios-cross {
     inherit (darwin) binutils;
   };
@@ -48,6 +56,8 @@ in
   stubs = callPackages ../os-specific/darwin/stubs { };
 
   swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { };
+
+  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 

@@ -9,6 +9,26 @@ let
   opt    = name: value: optionalString (value != null) "${name} ${value}";
   optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
 
+  isolationOptions = {
+    type = types.listOf (types.enum [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ]);
+    default = [];
+    example = [
+      "IsolateClientAddr"
+      "IsolateSOCKSAuth"
+      "IsolateClientProtocol"
+      "IsolateDestPort"
+      "IsolateDestAddr"
+    ];
+    description = "Tor isolation options";
+  };
+
+
   torRc = ''
     User tor
     DataDirectory ${torDirectory}
@@ -20,10 +40,20 @@ let
     ${optint "ControlPort" cfg.controlPort}
   ''
   # Client connection config
-  + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+  + optionalString cfg.client.enable ''
+    SOCKSPort ${cfg.client.socksListenAddress} ${toString cfg.client.socksIsolationOptions}
     SOCKSPort ${cfg.client.socksListenAddressFaster}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
+
+    ${optionalString cfg.client.transparentProxy.enable ''
+    TransPort ${cfg.client.transparentProxy.listenAddress} ${toString cfg.client.transparentProxy.isolationOptions}
+    ''}
+
+    ${optionalString cfg.client.dns.enable ''
+    DNSPort ${cfg.client.dns.listenAddress} ${toString cfg.client.dns.isolationOptions}
+    AutomapHostsOnResolve 1
+    AutomapHostsSuffixes ${concatStringsSep "," cfg.client.dns.automapHostsSuffixes}
+    ''}
   ''
   # Relay config
   + optionalString cfg.relay.enable ''
@@ -152,6 +182,55 @@ in
             is set, we accept all (and only) requests from
             <option>socksListenAddress</option>.
           '';
+        };
+
+        socksIsolationOptions = mkOption (isolationOptions // {
+          default = ["IsolateDestAddr"];
+        });
+
+        transparentProxy = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor transaprent proxy";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9040";
+            example = "192.168.0.1:9040";
+            description = ''
+              Bind transparent proxy to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+        };
+
+        dns = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether to enable tor dns resolver";
+          };
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:9053";
+            example = "192.168.0.1:9053";
+            description = ''
+              Bind tor dns to this address.
+            '';
+          };
+
+          isolationOptions = mkOption isolationOptions;
+
+          automapHostsSuffixes = mkOption {
+            type = types.listOf types.str;
+            default = [".onion" ".exit"];
+            example = [".onion"];
+            description = "List of suffixes to use with automapHostsOnResolve";
+          };
         };
 
         privoxy.enable = mkOption {

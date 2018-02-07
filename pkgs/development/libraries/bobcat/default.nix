@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmilter libX11 openssl readline utillinux ];
   nativeBuildInputs = [ icmake yodl ];
 
-  sourceRoot = "bobcat-${version}-src/bobcat";
+  setSourceRoot = ''
+    sourceRoot=$(echo */bobcat)
+  '';
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
@@ -37,6 +39,5 @@ stdenv.mkDerivation rec {
     homepage = https://fbb-git.github.io/bobcat/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

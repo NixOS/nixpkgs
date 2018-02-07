@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kkf670abkq5ikm3mqls475lydfsd9by1kv5im4k757xrl1br1d4";
   };
 
-  buildInputs = [ autoconf gtk_doc automake libtool pkgconfig glib libsoup gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf gtk_doc automake libtool glib libsoup gobjectIntrospection ];
 
   preConfigure = "./autogen.sh";
 

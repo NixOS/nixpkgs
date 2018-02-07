@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "moonlight-embedded-${version}";
-  version = "2.4.2";
+  version = "2.4.6";
 
   # fetchgit used to ensure submodules are available
   src = fetchgit {
     url = "git://github.com/irtimmer/moonlight-embedded";
     rev = "refs/tags/v${version}";
-    sha256 = "0khdbwfclvpjgyk5ar1fs4j66zsjikaj422wlvrvqhyzi1v5arpr";
+    sha256 = "0vs6rjmz8058s9lscagiif6pcizwfrvfpk9rxxgacfi0xisfgmf1";
   };
 
   outputs = [ "out" "man" ];

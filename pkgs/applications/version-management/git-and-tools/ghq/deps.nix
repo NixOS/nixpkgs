@@ -1,11 +1,11 @@
 [
   {
-    goPackagePath = "github.com/codegangsta/cli";
+    goPackagePath = "github.com/daviddengcn/go-colortext";
     fetch = {
       type = "git";
-      url = "https://github.com/codegangsta/cli";
-      rev = "0bdeddeeb0f650497d603c4ad7b20cfe685682f6";
-      sha256 = "1ny63c7bfwfrsp7vfkvb4i0xhq4v7yxqnwxa52y4xlfxs4r6v6fg";
+      url = "https://github.com/daviddengcn/go-colortext";
+      rev = "805cee6e0d43c72ba1d4e3275965ff41e0da068a";
+      sha256 = "0z0ggqnprqchnd8zyrz99w53kr4sgv372lyx12z5nsh9q342pmyf";
     };
   }
   {
@@ -27,12 +27,12 @@
     };
   }
   {
-    goPackagePath = "github.com/daviddengcn/go-colortext";
+    goPackagePath = "github.com/urfave/cli";
     fetch = {
       type = "git";
-      url = "https://github.com/daviddengcn/go-colortext";
-      rev = "805cee6e0d43c72ba1d4e3275965ff41e0da068a";
-      sha256 = "0z0ggqnprqchnd8zyrz99w53kr4sgv372lyx12z5nsh9q342pmyf";
+      url = "https://github.com/urfave/cli";
+      rev = "f017f86fccc5a039a98f23311f34fdf78b014f78";
+      sha256 = "1biq4wl4z8l0ycinb39mfavnk13d0qnqqdplqybl7klxmk67cvhv";
     };
   }
 ]

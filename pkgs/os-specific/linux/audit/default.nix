@@ -1,20 +1,21 @@
 {
-  stdenv, fetchurl,
+  stdenv, buildPackages, fetchurl,
   enablePython ? false, python ? null,
 }:
 
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.7.7";
+  name = "audit-2.8.2";
 
   src = fetchurl {
     url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "1vvqw5xgirap0jdmajw7l3pq563aycvy3hlqvj3k2cac8i4jbqlq";
+    sha256 = "1fmw8whraz1q3y3z5mgdpgsa3wz6r3zq0kgsgbc9xvmgfwmrpdb7";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = stdenv.lib.optional enablePython python;
 
   configureFlags = [

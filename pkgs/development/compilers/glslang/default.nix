@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "glslang-git-${version}";
-  version = "2017-03-29";
+  version = "2017-08-31";
 
   # `vulkan-loader` requires a specific version of `glslang` as specified in
   # `<vulkan-loader-repo>/external_revisions/glslang_revision`.
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "714e58b2fc5a45714596e6aa2f6ac8f64260365c";
-    sha256 = "0ihnd0c4mr6ppbv9g7z1abrn8vx66simfzx5q48nqcpnywn35jxv";
+    rev = "3a21c880500eac21cdf79bef5b80f970a55ac6af";
+    sha256 = "1i15m17r0acmzjrkybris2rgw15il05a4w5h7vhhsiyngcvajcyn";
   };
 
   buildInputs = [ cmake bison ];

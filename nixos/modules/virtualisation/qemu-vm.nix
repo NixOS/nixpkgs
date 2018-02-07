@@ -10,6 +10,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
 let
 
@@ -23,7 +24,7 @@ let
   cfg = config.virtualisation;
 
   qemuGraphics = if cfg.graphics then "" else "-nographic";
-  kernelConsole = if cfg.graphics then "" else "console=ttyS0";
+  kernelConsole = if cfg.graphics then "" else "console=${qemuSerialDevice}";
   ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # Shell script to start the VM.
@@ -72,11 +73,10 @@ let
       '')}
 
       # Start QEMU.
-      exec ${qemu}/bin/qemu-kvm \
+      exec ${qemuBinary qemu} \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
-          ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
@@ -92,7 +92,7 @@ let
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -102,15 +102,7 @@ let
     '';
 
 
-  regInfo = pkgs.runCommand "reginfo"
-    { exportReferencesGraph =
-        map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
-      buildInputs = [ pkgs.perl ];
-      preferLocalBuild = true;
-    }
-    ''
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
-    '';
+  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.pathsInNixDB; };
 
 
   # Generate a hard disk image containing a /boot partition and GRUB
@@ -442,7 +434,9 @@ in
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
-    virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
+    # FIXME: Figure out how to make this work on non-x86
+    virtualisation.qemu.options =
+      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usbdevice tablet" ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to

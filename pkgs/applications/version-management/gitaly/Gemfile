@@ -1,5 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'github-linguist', '~> 4.7.0', require: 'linguist'
-gem 'gitaly-proto', '~> 0.37.0', require: 'gitaly'
+gem 'gitaly-proto', '~> 0.59.0', require: 'gitaly'
 gem 'activesupport'
+gem 'gollum-lib', '~> 4.2', require: false
+gem 'gollum-rugged_adapter', '~> 0.4.4', require: false
+
+group :development, :test do
+  gem 'gitlab-styles', '~> 2.0.0', require: false
+end

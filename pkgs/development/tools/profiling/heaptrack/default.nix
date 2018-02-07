@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "heaptrack-${version}";
-  version = "2017-02-14";
+  version = "2017-10-30";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "heaptrack";
-    rev = "2469003b3172874e1df7e1f81c56e469b80febdb";
-    sha256 = "0dqchd2r4khv9gzj4n0qjii2nqygkj5jclkji8jbvivx5qwsqznc";
+    rev = "2bf49bc4fed144e004a9cabd40580a0f0889758f";
+    sha256 = "0sqxk5cc8r2vsj5k2dj9jkd1f2x2yj3mxgsp65g7ls01bgga0i4d";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

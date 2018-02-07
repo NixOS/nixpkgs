@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s!/usr/bin/file!${file}/bin/file!g" configure
   '';
 
-  buildInputs = [ libpng pkgconfig nasm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng nasm ];
 
   meta = {
     description = "Mozilla JPEG Encoder Project";

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vz442kkjn2h0dlxppzi4m5zx8qfyrivq581n06xzvnyxi5rg6a7";
   };
 
-  buildInputs = [ pkgconfig libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsndfile ];
 
   hardeningDisable = [ "format" ];
 

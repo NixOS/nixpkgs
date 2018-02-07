@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "147cr4aw1kw4gv3bhn0cska855kmyah8m70vdw1q2lwz56lbf4mb";
   };
 
-  buildInputs = [ pkgconfig jansson libsailing ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ jansson libsailing ];
 
   INSTALL_PATH = "$(out)";
 

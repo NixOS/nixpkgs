@@ -1,11 +1,13 @@
---- old/build/pkgs/python2/spkg-install	2015-07-26 15:34:43.000000000 +0200
-+++ new/build/pkgs/python2/spkg-install	2015-09-16 20:48:51.904555797 +0200
-@@ -32,7 +32,7 @@
- done
+diff --git a/build/pkgs/python3/spkg-build b/build/pkgs/python3/spkg-build
+index 56db087ae5..b450703c5f 100644
+--- a/build/pkgs/python3/spkg-build
++++ b/build/pkgs/python3/spkg-build
+@@ -27,6 +27,8 @@ fi
+ export EXTRA_CFLAGS="`testcflags.sh -Wno-unused` $CFLAGS"
+ unset CFLAGS
  
- # We are setting LDFLAGS so that we pick up Sage's readline
--LDFLAGS="-L$SAGE_LOCAL/lib $LDFLAGS"
-+LDFLAGS="-L$SAGE_LOCAL/lib -lcrypt $LDFLAGS"
- export LDFLAGS
++export LDFLAGS="$LDFLAGS -lcrypt"
++
+ if [ "$UNAME" = Darwin ]; then
+     PYTHON_CONFIGURE="--disable-toolbox-glue $PYTHON_CONFIGURE"
  
- if [ "$SAGE_DEBUG" = "yes" ]; then

@@ -5,10 +5,9 @@
 , python
 }:
 
-let
+buildPythonPackage rec {
   pname = "u-msgpack-python";
   version = "2.4.1";
-in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

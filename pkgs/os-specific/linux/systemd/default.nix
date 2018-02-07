@@ -15,21 +15,24 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "systemd";
-    rev = "ba777535a890c2a2b7677dfacc63e12c578b9b3f";
-    sha256 = "1vb45fbqkrgczfwkb0y07ldnwhjqk2sh446hzfkdn8hrwl1lifg5";
+    rev = "eef5613fda5";
+    sha256 = "0wgh5y319v56hcs82mhs58ipb100cz4x41vz3kh4bq1n7sx88cdz";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
 
-  buildInputs =
-    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
-      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
-      iptables gnu-efi
+  nativeBuildInputs =
+    [ pkgconfig intltool gperf libxslt
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    ];
+  buildInputs =
+    [ linuxHeaders libcap kmod xz pam acl
+      /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror
+      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
+      iptables gnu-efi
     ];
 
   configureFlags =

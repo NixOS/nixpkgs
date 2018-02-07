@@ -8,8 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1qg5bygla8ka30b7wqvq6dv84xc7pq0jspffh2jz75d1njyi2kc0";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    scons zlib SDL lua5_1 pkgconfig
+    scons zlib SDL lua5_1
   ];
 
   phases = "unpackPhase buildPhase";

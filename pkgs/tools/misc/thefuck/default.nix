@@ -1,22 +1,32 @@
-{ fetchurl, stdenv, pkgs, ... }:
+{ stdenv, fetchFromGitHub, buildPythonApplication
+, colorama, decorator, psutil, pyte, six
+, pytest, pytest-mock
+}:
 
-pkgs.pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
+buildPythonApplication rec {
   pname = "thefuck";
-  version = "3.18";
+  version = "3.25";
 
-  src = fetchurl {
-    url = "https://github.com/nvbn/${pname}/archive/${version}.tar.gz";
-    sha256 = "1xsvkqh89rgxq5w03mnlcfkn9y39nfwhb2pjabjspcc2mi2mq5y6";
+  src = fetchFromGitHub {
+    owner = "nvbn";
+    repo = "${pname}";
+    rev = version;
+    sha256 = "090mg809aac932lgqmjxm4za53lg3bjprj562sp189k47xs4wijv";
   };
 
-  propagatedBuildInputs = with pkgs.pythonPackages; [
-    psutil
-    colorama
-    six
-    decorator
-    pathlib2
-  ];
+  propagatedBuildInputs = [ colorama decorator psutil pyte six ];
+
+  checkInputs = [ pytest pytest-mock ];
+
+  checkPhase = ''
+    export HOME=$TMPDIR
+    export LANG=en_US.UTF-8
+    export XDG_CACHE_HOME=$TMPDIR/cache
+    export XDG_CONFIG_HOME=$TMPDIR/config
+    py.test
+  '';
+
+  doCheck = false; # The above is only enough for tests to pass outside the sandbox.
 
   meta = with stdenv.lib; {
     homepage = https://github.com/nvbn/thefuck;

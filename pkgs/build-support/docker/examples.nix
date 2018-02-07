@@ -102,7 +102,7 @@ rec {
     ];
   };
 
-  # 5. nix example to play with the container nix store
+  # 6. nix example to play with the container nix store
   # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
   nix = buildImageWithNixDb {
     name = "nix";

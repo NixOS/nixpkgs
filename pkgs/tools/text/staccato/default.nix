@@ -11,9 +11,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zbd1gx0ik2r7bavcid776j37g6rzd3f6cs94kq1qar4gyf1gqjm";
   };
 
-  depsSha256 = "1gwfkh3ck8n3zcy43ch2mnc28a6y10p3srhnx9dh8gwnwbpb733c";
+  cargoSha256 = "074mfyanwdykg6wci2ia63wcnnyik741g8n624pac215sg4i95h7";
 
   meta = {
+    broken = true;
     description = "A command line program that lets you compute statistics from values from a file or standard input";
     longDescription = ''
       Staccato (`st` for short) is a command line program that lets you

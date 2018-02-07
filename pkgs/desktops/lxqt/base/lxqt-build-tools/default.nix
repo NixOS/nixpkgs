@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, qt5 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "lxqt-build-tools-${version}";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxqt-build-tools";
     rev = version;
-    sha256 = "1awd70ifbbi67pklhldjw968c1fw1lcif9nh4qbrjqmlg1gn3kmv";
+    sha256 = "0i3pzgyd80n73dnqs8f6axinaji7biflgqsi33baxn4r1hy58ym1";
   };
 
-  nativeBuildInputs = [ cmake qt5.qtbase ];
+  nativeBuildInputs = [ cmake pkgconfig pcre qt5.qtbase ];
+
+  preConfigure = ''cmakeFlags+=" -DLXQT_ETC_XDG_DIR=$out/etc/xdg"'';
 
   meta = with stdenv.lib; {
     description = "Various packaging tools and scripts for LXQt applications";

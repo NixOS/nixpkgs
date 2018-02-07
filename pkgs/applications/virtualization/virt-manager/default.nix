@@ -9,15 +9,18 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.4.2";
+  version = "1.4.3";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0x6mnqw8bng3r69pvmnq9q6yyhicxg22yz62b6dzbb4z16xl1r23";
+    sha256 = "093azs8p4p7y4nf5j25xpsvdxww7gky1g0hs8mkcvmpxl2wjd0jj";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook intltool file ];
+  nativeBuildInputs = [
+    wrapGAppsHook intltool file
+    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+  ];
 
   buildInputs =
     [ libvirt-glib vte virtinst dconf gtkvnc gnome3.defaultIconTheme avahi

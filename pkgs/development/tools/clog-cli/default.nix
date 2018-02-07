@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "1wxglc4n1dar5qphhj5pab7ps34cjr7jy611fwn72lz0f6c7jp3z";
   };
 
-  depsSha256 = "0gkg3bxx7nxsvff33n7pif731djfvlzk0msia27h0wq0mazq7kw3";
+  cargoSha256 = "1pi8fh6vz6m5hr38wm0v0hxp1yxm1ma8yzish3b78zkv8f90kmv0";
 
   meta = {
     description = "Generate changelogs from local git metadata";

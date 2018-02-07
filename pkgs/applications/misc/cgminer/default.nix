@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256  = "1xfzx91dpwjj1vmhas3v9ybs0p2i74lrhinijmpav15acfggm9fq";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk
+    autoconf automake libtool curl ncurses amdappsdk amdadlsdk
     xorg.libX11 xorg.libXext xorg.libXinerama jansson
   ];
   configureScript = "./autogen.sh";

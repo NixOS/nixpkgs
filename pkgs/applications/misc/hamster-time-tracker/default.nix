@@ -31,6 +31,10 @@ pythonPackages.buildPythonApplication rec {
     python waf build
   '';
 
+  postFixup = ''
+    wrapPythonProgramsIn $out/lib/hamster-time-tracker "$out $pythonPath"
+  '';
+
   installPhase = ''
     python waf install
   '';

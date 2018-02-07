@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
     ln -s /etc/spacefm/spacefm.conf $out/etc/spacefm/spacefm.conf 
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig
+    gtk3 udev desktop_file_utils shared_mime_info intltool
     wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks
   ] ++ (if ifuseSupport then [ ifuse ] else []);
   # Introduced because ifuse doesn't build due to CVEs in libplist

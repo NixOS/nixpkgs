@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "tiptop-${version}";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/${name}.tar.gz";
-    sha256 = "1jhqmcgx664ygayw471cg05bxc4ikxn35ccyiswymjhanicfj1rz";
+    sha256 = "10j1138y3cj3hsmfz4w0bmk90523b0prqwi9nhb4z8xvjnf49i2i";
   };
 
   patches = [(fetchpatch {

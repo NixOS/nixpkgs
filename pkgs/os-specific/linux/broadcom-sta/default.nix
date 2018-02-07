@@ -16,10 +16,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
-    sha256 = hashes."${stdenv.system}";
+    sha256 = hashes.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
   hardeningDisable = [ "pic" ];
+
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = [
     ./i686-build-failure.patch
@@ -31,6 +33,7 @@ stdenv.mkDerivation {
     ./linux-4.11.patch
     # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
     ./linux-4.12.patch
+    ./linux-4.15.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

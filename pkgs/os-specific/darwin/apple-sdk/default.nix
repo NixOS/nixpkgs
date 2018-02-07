@@ -136,10 +136,13 @@ let
     # don't use pure CF for dylibs that depend on frameworks
     setupHook = ./framework-setup-hook.sh;
 
-    # allows building the symlink tree
-    __impureHostDeps = [ "/System/Library/Frameworks/${name}.framework" ];
-
-    __propagatedImpureHostDeps = stdenv.lib.optional (name != "Kernel") "/System/Library/Frameworks/${name}.framework/${name}";
+    # Not going to be more specific than this for now
+    __propagatedImpureHostDeps = stdenv.lib.optionals (name != "Kernel") [
+      # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
+      "/System/Library/Frameworks/CoreFoundation.framework"
+      "/System/Library/Frameworks/${name}.framework"
+      "/System/Library/Frameworks/${name}.framework/${name}"
+    ];
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
@@ -195,22 +198,28 @@ in rec {
   };
 
   overrides = super: {
+    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/PrivateFrameworks/"
+      ];
+    });
+
+    CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
+      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
+        "/System/Library/Frameworks/CoreImage.framework"
+      ];
+    });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
+    });
+
     QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
-    });
-
-    CoreServices = stdenv.lib.overrideDerivation super.CoreServices (drv: {
-      __propagatedSandboxProfile = drv.__propagatedSandboxProfile ++ [''
-        (allow mach-lookup (global-name "com.apple.CoreServices.coreservicesd"))
-      ''];
-    });
-
-    Security = stdenv.lib.overrideDerivation super.Security (drv: {
-      setupHook = ./security-setup-hook.sh;
     });
   };
 

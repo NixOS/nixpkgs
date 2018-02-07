@@ -1,6 +1,5 @@
-{ bootPkgs }:
+{ bootPkgs, cabal-install }:
 
 bootPkgs.callPackage ./base.nix {
-  inherit bootPkgs;
-  broken = false;
+  inherit bootPkgs cabal-install;
 }

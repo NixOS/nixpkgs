@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1db65pb0j0mijmswrvpgkdabilqd23x22d95hp5kwxvcramq1dhm";
   };
 
-  buildInputs = [ pkgconfig intltool gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk2 ];
 
   meta = {
     description = "Theme engines for GTK+ 2";

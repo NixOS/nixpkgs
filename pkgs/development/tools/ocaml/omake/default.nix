@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "omake-${version}";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/${name}.tar.gz";
-    sha256 = "1znnlkpz89hk44byvnl1pr92ym6hwfyyw2qm9clq446r6l2z4m64";
+    sha256 = "07bdg1h5i7qnlv9xq81ad5hfypl10hxm771h4rjyl5cn8plhfcgz";
   };
 
   buildInputs = [ ocaml ncurses ];

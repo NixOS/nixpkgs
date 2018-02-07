@@ -11,7 +11,8 @@ stdenv.mkDerivation rec{
     sha256 = "d1c81a6a38c0faad02943ad65d6d0314bd205c6de841669a2efe43e4c503e63d";
   };
 
-  buildInputs = [ pkgconfig autoconf automake gettext fluxbox bc gtkmm2 glibmm libglademm libsigcxx ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake gettext fluxbox bc gtkmm2 glibmm libglademm libsigcxx ];
 
   preConfigure = ''
     ./autogen.sh

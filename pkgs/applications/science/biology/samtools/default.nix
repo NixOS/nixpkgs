@@ -1,20 +1,29 @@
-{ stdenv, fetchurl, zlib, htslib,  ncurses ? null }:
+{ stdenv, fetchurl, zlib, htslib, perl, ncurses ? null }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "samtools";
-  major = "1.5";
-  version = "${major}.0";
+  version = "1.7";
 
   src = fetchurl {
-    url = "https://github.com/samtools/samtools/releases/download/${major}/samtools-${major}.tar.bz2";
-    sha256 = "1xidmv0jmfy7l0kb32hdnlshcxgzi1hmygvig0cqrq1fhckdlhl5";
+    url = "https://github.com/samtools/samtools/releases/download/${version}/${name}.tar.bz2";
+    sha256 = "e7b09673176aa32937abd80f95f432809e722f141b5342186dfef6a53df64ca1";
   };
 
-  buildInputs = [ zlib ncurses ];
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ zlib ncurses htslib ];
 
   configureFlags = [ "--with-htslib=${htslib}" ]
     ++ stdenv.lib.optional (ncurses == null) "--without-curses";
+
+  preCheck = ''
+    patchShebangs test/
+  '';
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";

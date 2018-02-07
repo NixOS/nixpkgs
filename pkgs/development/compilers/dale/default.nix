@@ -20,7 +20,8 @@ in stdenv.mkDerivation {
     sha256 = "0dc5cjahv7lzlp92hidlh83rwgrpgb6xz2pnba2pm5xrv2pnsskl";
   };
 
-  buildInputs = [ cmake pkgconfig libffi llvm_35 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libffi llvm_35 ]
              ++ stdenv.lib.optional doCheck perl;
 
   patches = [ ./link-llvm.patch ];

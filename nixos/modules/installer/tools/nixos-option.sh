@@ -291,7 +291,7 @@ if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
   fi
   echo "Description:"
   echo
-  eval printf $(evalOpt "description")
+  echo $(evalOpt "description")
 
   echo $desc;
 

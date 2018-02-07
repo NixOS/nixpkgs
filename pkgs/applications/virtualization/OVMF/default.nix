@@ -66,7 +66,7 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
-    homepage = http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=OVMF;
+    homepage = https://sourceforge.net/apps/mediawiki/tianocore/index.php?title=OVMF;
     license = stdenv.lib.licenses.bsd2;
     platforms = ["x86_64-linux" "i686-linux"];
   };

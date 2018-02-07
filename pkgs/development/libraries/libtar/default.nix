@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
       (fp "th_get_size-unsigned-int"  "1ravbs5yrfac98mnkrzciw9hd2fxq4dc07xl3wx8y2pv1bzkwm41")
     ];
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   meta = with stdenv.lib; {
     description = "C library for manipulating POSIX tar files";

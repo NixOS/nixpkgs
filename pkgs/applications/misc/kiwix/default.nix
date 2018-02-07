@@ -62,8 +62,9 @@ stdenv.mkDerivation rec {
     sha256 = "0577phhy2na59cpcqjgldvksp0jwczyg0l6c9ghnr19i375l7yqc";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    zip pkgconfig python zlib xapian which icu libmicrohttpd
+    zip python zlib xapian which icu libmicrohttpd
     lzma zimlib ctpp2 aria2 wget bc libuuid makeWrapper pugixml
   ];
 

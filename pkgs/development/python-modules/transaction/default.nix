@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Transaction management";
-    homepage = http://pypi.python.org/pypi/transaction;
+    homepage = https://pypi.python.org/pypi/transaction;
     license = licenses.zpl20;
   };
 }

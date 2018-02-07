@@ -12,7 +12,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0b0rvgg3xsbbg2fdrpz0ywsy9rcahlyfskndaagd3yzm83gi6bhk";
   };
 
-  buildInputs = [ pkgconfig mono newtonsoft-json ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mono newtonsoft-json ];
 
   sourceRoot = "svn-r1217/clients/cs";
 

@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, harfbuzz, pkgconfig, qt4 }:
+{
+  stdenv, lib, fetchurl, pkgconfig, autoreconfHook
+, freetype, harfbuzz, libiconv, qtbase
+, enableGUI ? true
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.6";
+  version = "1.8.1";
   name = "ttfautohint-${version}";
-  
+
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.gz";
-    sha256 = "1r8vsznvh89ay35angxp3w1xljxjlpcv9wdjyn7m61n323vi6474";
+    sha256 = "1yflnydzdfkr8bi29yf42hb6h6525a4rdid3w8qjfk8rpqh53pqj";
   };
-  
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ harfbuzz qt4 ];
+
+  postAutoreconf = ''
+    substituteInPlace configure --replace "macx-g++" "macx-clang"
+  '';
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+
+  buildInputs = [ freetype harfbuzz libiconv ] ++ lib.optional enableGUI qtbase;
+
+  configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An automatic hinter for TrueType fonts";
@@ -23,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.freetype.org/ttfautohint;
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     maintainers = with maintainers; [ goibhniu ndowens ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

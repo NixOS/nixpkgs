@@ -1,33 +1,11 @@
-diff --git a/Makefile.PL b/Makefile.PL
-index 606b28d..0cea060 100644
---- a/Makefile.PL
-+++ b/Makefile.PL
-@@ -128,24 +128,10 @@ SCOPE: {
- # the system SQLite. We expect that anyone sophisticated enough to use
+--- a/Makefile.PL	2016-04-21 15:44:34.000000000 +0200
++++ b/Makefile.PL	2017-10-31 11:04:28.389959946 +0100
+@@ -129,7 +129,7 @@
  # a system sqlite is also sophisticated enough to have a patching system
  # that can change the if ( 0 ) to if ( 1 )
--my ($sqlite_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
+ my ($sqlite_local, $sqlite_base, $sqlite_lib, $sqlite_inc);
 -if ( 0 ) {
--	require File::Spec;
--	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
--		$sqlite_base =~ /=(.*)/;
--		$sqlite_base = $1;
--		$sqlite_lib = File::Spec->catdir( $sqlite_base, 'lib'     );
--		$sqlite_inc = File::Spec->catdir( $sqlite_base, 'include' );
--	}
--	if ( $sqlite_local = (grep(/USE_LOCAL_SQLITE=.*/, @ARGV))[0] ) {
--		$sqlite_local =~ /=(.*)/;
--		$sqlite_local = "$1" ? 1 : 0;
--		if ( $sqlite_local ) {
--			# Keep these from making into CFLAGS/LDFLAGS
--			undef $sqlite_lib;
--			undef $sqlite_inc;
--		}
--	}
-+my ($sqlite_local, $sqlite_lib, $sqlite_inc);
 +if ( 1 ) {
-+		$sqlite_lib = '@sqlite_out@/lib';
-+		$sqlite_inc = '@sqlite_dev@/include';
- 
- 	# Now check for a compatible sqlite3
- 	unless ( $sqlite_local ) {
+ 	require File::Spec;
+ 	if ( $sqlite_base = (grep(/SQLITE_LOCATION=.*/, @ARGV))[0] ) {
+ 		$sqlite_base =~ /=(.*)/;

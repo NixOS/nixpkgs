@@ -1,19 +1,17 @@
 { stdenv, ruby, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
-  version = "5.9.0";
+  version = "5.10.2";
   name = "gitlab-shell-${version}";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1zjlwivksaqlfxxhxjgpqa3293nhijw76fj7nv0l11820wplc7yf";
+    sha256 = "16lwnzsppql7pkf8fka6cwkghdr57g225zvln9ii29w7nzz1hvaf";
   };
 
-  buildInputs = [
-    ruby bundler go
-  ];
+  buildInputs = [ ruby bundler go ];
 
   patches = [ ./remove-hardcoded-locations.patch ./fixes.patch ];
 

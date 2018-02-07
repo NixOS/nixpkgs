@@ -1,4 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, wcwidth }:
+{ stdenv, buildPythonPackage, fetchPypi, six, wcwidth, pytest, mock
+, glibcLocales }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -9,6 +10,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0fv9f0074kxy1849h0kwwxw12sifpq3bv63pcz900zzjsigi4hi3";
   };
+
+  checkInputs = [ pytest mock glibcLocales ];
+
+  checkPhase = ''
+    LANG=en_US.utf-8 py.test blessed/tests
+  '';
 
   propagatedBuildInputs = [ wcwidth six ];
 

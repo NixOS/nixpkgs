@@ -3,14 +3,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "desktop-file-utils-0.22";
+  name = "desktop-file-utils-0.23";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.xz";
-    sha256 = "1ianvr2a69yjv4rpyv30w7yjsmnsb23crrka5ndqxycj4rkk4dc4";
+    sha256 = "119kj2w0rrxkhg4f9cf5waa55jz1hj8933vh47vcjipcplql02bc";
   };
 
-  buildInputs = [ pkgconfig glib libintlOrEmpty ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libintlOrEmpty ];
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 

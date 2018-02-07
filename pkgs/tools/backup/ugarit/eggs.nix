@@ -294,12 +294,12 @@ rec {
   };
 
   ssql = eggDerivation {
-    name = "ssql-0.2.2";
+    name = "ssql-0.2.4";
 
     src = fetchegg {
       name = "ssql";
-      version = "0.2.2";
-      sha256 = "10557ymy0fgvqqazsg2jsbqvng0b91jqcjfgsxkrq8xs3klyd5mf";
+      version = "0.2.4";
+      sha256 = "0qhnghhx1wrvav4s7l780mspwlh8s6kzq4bl0cslwp1km90fx9bk";
     };
 
     buildInputs = [

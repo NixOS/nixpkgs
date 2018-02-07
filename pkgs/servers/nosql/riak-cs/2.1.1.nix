@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Dynamo inspired NoSQL DB by Basho with S3 compatibility";
     platforms   = [ "x86_64-linux" "x86_64-darwin" ];
     license     = licenses.asl20;
-    maintainer  = with maintainers; [ mdaiter ];
+    maintainers = with maintainers; [ mdaiter ];
   };
 }

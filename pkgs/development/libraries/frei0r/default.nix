@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
   };
 
-  buildInputs = [ autoconf cairo opencv pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf cairo opencv ];
 
   meta = with stdenv.lib; {
     homepage = http://frei0r.dyne.org;

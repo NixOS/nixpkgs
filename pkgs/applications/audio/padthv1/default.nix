@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "padthv1-${version}";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/padthv1/${name}.tar.gz";
-    sha256 = "1p6wfgh90h7gj1j3hlvwik3zj07xamkxbya85va2lsj6fkkkk20r";
+    sha256 = "0dyrllxgd74nknixjcz6n7m4gw70v246s8z1qss7zfl5yllhb712";
   };
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools fftw ];

@@ -1,17 +1,13 @@
 { fetchurl, stdenv, pkgconfig, gnome3, gtk3, gobjectIntrospection
-, spidermonkey_38, pango, readline, glib, libxml2, dbus }:
+, spidermonkey_52, pango, readline, glib, libxml2, dbus }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ libxml2 gobjectIntrospection pkgconfig gtk3 glib pango readline dbus ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gobjectIntrospection gtk3 glib pango readline dbus ];
 
-  propagatedBuildInputs = [ spidermonkey_38 ];
-
-  # GJS expects mozjs-38.pc but spidermonkey_38 only provides js.pc
-  preConfigure = ''
-    sed -i s/mozjs-38/js/ configure
-  '';
+  propagatedBuildInputs = [ spidermonkey_52 ];
 
   postInstall = ''
     sed 's|-lreadline|-L${readline.out}/lib -lreadline|g' -i $out/lib/libgjs.la

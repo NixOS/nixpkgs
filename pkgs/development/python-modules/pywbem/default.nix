@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  name  = "pywbem-${version}";
+  pname = "pywbem";
   version = "0.10.0";
 
   src = fetchFromGitHub {

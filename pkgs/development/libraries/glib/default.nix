@@ -43,7 +43,7 @@ let
   '';
 
   ver_maj = "2.54";
-  ver_min = "0";
+  ver_min = "3";
 in
 
 stdenv.mkDerivation rec {
@@ -51,11 +51,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "fe22998ff0394ec31e6e5511c379b74011bee61a4421bca7fcab223dfbe0fc6a";
+    sha256 = "963fdc6685dc3da8e5381dfb9f15ca4b5709b28be84d9d05a9bb8e446abac0a8";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
-    ++ optional doCheck ./skip-timer-test.patch;
+    ++ optional doCheck ./skip-timer-test.patch
+    ++ [ ./schema-override-variable.patch ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
@@ -74,8 +75,15 @@ stdenv.mkDerivation rec {
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional (stdenv.isFreeBSD || stdenv.isSunOS) "--with-libiconv=gnu"
-    ++ optional stdenv.isSunOS "--disable-dtrace";
+    # glibc inclues GNU libiconv, but Darwin's iconv function is good enonugh.
+    ++ optional (stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isDarwin)
+      "--with-libiconv=gnu"
+    ++ optional stdenv.isSunOS "--disable-dtrace"
+    # Can't run this test when cross-compiling
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+       [ "glib_cv_stack_grows=no" "glib_cv_uscore=no" ]
+    # GElf only supports elf64 hosts
+    ++ optional (!stdenv.hostPlatform.is64bit) "--disable-libelf";
 
   NIX_CFLAGS_COMPILE = optional stdenv.isDarwin "-lintl"
     ++ optional stdenv.isSunOS "-DBSD_COMP";

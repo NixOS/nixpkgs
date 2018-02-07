@@ -12,8 +12,9 @@ stdenv.mkDerivation {
     sha256 = "1rni5lbic36v4cd1r0l28542x0hlmfqkl6nac79gln491in2l2sc";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig lua5_2 file ncurses gmime pcre-cpp
+    lua5_2 file ncurses gmime pcre-cpp
     perl perlPackages.JSON perlPackages.NetIMAPClient
   ];
 

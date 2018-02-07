@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rfkrk4mzi4w54mfqilvng9ar5swhmnwhsyjc54rx3fd0np3jiyl";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     autoconf
     automake
     which

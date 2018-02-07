@@ -17,5 +17,5 @@ mkDerivation {
     kcoreaddons kservice kwidgetsaddons plasma-framework qtscript qtx11extras
     qtwebkit
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 }

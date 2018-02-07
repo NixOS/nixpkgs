@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    dconf gtk3 gobjectIntrospection ibus python3
+    dconf gtk3 gobjectIntrospection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
   ];
 
   nativeBuildInputs = [ autoreconfHook docbook2x pkgconfig python3.pkgs.wrapPython ];

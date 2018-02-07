@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "01ygwrsxfii0pngfikgqsb4fxp8n1bbs47l7hck81h9b9bc1ah8i";
   };
 
-  buildInputs = [ libxkbcommon pkgconfig ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxkbcommon ] ++ lib.optionals stdenv.isDarwin [
     autoreconfHook
   ];
 

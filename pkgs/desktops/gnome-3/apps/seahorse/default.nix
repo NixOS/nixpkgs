@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, vala_0_32
+{ stdenv, intltool, fetchurl, vala
 , pkgconfig, gtk3, glib
 , wrapGAppsHook, itstool, gnupg, libsoup
 , gnome3, librsvg, gdk_pixbuf, gpgme
@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gcr
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool gnome3.gcr
                   gnome3.gsettings_desktop_schemas wrapGAppsHook gnupg
                   gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
-                  libsecret avahi libsoup p11_kit vala_0_32
+                  libsecret avahi libsoup p11_kit vala
                   openssh ];
 
   preFixup = ''

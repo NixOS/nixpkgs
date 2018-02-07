@@ -4,20 +4,12 @@
 let inherit (stdenv) lib system; in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-1.9.0";
+  name = "gpgme-1.10.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "1ssc0gs02r4fasabk7c6v6r865k2j02mpb5g1vkpbmzsigdzwa8v";
+    sha256 = "14q619lxbk64vz7lih5gjb928qm28jrnn1h3yhsrrff3jw8yv3qs";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commitdiff_plain;h=5d4f977dac542340c877fdd4b1304fa8f6e058e6";
-      sha256 = "0swpxzd3x3b6h2ry2py9j8l0xp3vdw8rixxhgfavzia5p869qyyx";
-      name = "qgpgme-format-security.patch";
-    })
-  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool

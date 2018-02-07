@@ -1,64 +1,44 @@
-{ stdenv, fetchurl, python2Packages, intltool
-, gst-python, withGstPlugins ? false, gst-plugins-base ? null
-, gst-plugins-good ? null, gst-plugins-ugly ? null, gst-plugins-bad ? null }:
+{ stdenv, fetchurl, python2Packages, wrapGAppsHook, gettext, intltool, libsoup, gnome3,
+  tag ? "",
+  gst_all_1, withGstPlugins ? true,
+  xineBackend ? false, xineLib,
+  withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
+  webkitgtk ? null,
+  keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
 
-assert withGstPlugins -> gst-plugins-base != null
-                         || gst-plugins-good != null
-                         || gst-plugins-ugly != null
-                         || gst-plugins-bad != null;
-
-let
-  version = "2.6.3";
-  inherit (python2Packages) buildPythonApplication python mutagen pygtk pygobject2 dbus-python;
-in buildPythonApplication {
-  # call the package quodlibet and just quodlibet
-  name = "quodlibet${stdenv.lib.optionalString (!withGstPlugins) "-without-gst-plugins"}-${version}";
+let optionals = stdenv.lib.optionals; in
+python2Packages.buildPythonApplication rec {
+  name = "quodlibet${tag}-${version}";
+  version = "3.9.1";
 
   # XXX, tests fail
   doCheck = false;
 
-  srcs = [
-    (fetchurl {
-      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-${version}.tar.gz";
-      sha256 = "0ilasi4b0ay8r6v6ba209wsm80fq2nmzigzc5kvphrk71jwypx6z";
-     })
-    (fetchurl {
-      url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-plugins-${version}.tar.gz";
-      sha256 = "1rv08rhdjad8sjhplqsspcf4vkazgkxyshsqmbfbrrk5kvv57ybc";
-     })
-  ];
+  src = fetchurl {
+    url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
+    sha256 = "d2b42df5d439213973dc97149fddc779a6c90cec389c24baf1c0bdcc39ffe591";
+  };
 
-  preConfigure = ''
-    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
-    sed -i /distclass/d setup.py
-  '';
+  nativeBuildInputs = [ wrapGAppsHook gettext intltool ];
+  # ++ (with python2Packages; [ pytest pyflakes pycodestyle polib ]); # test deps
 
-  sourceRoot = "quodlibet-${version}";
+  buildInputs = [ gnome3.defaultIconTheme libsoup webkitgtk keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi ]
+    ++ (if xineBackend then [ xineLib ] else with gst_all_1;
+    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
-  postUnpack = ''
-    # the patch searches for plugins in directory ../plugins
-    # so link the appropriate directory there
-    ln -sf quodlibet-plugins-${version} plugins
-  '';
+  propagatedBuildInputs = with python2Packages;
+    [ pygobject3 pycairo mutagen pygtk gst-python feedparser faulthandler futures ]
+      ++ optionals withDbusPython [ dbus-python ]
+      ++ optionals withPyInotify [ pyinotify ]
+      ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
+      ++ optionals stdenv.isDarwin [ pyobjc ]
+      ++ optionals withPahoMqtt [ paho-mqtt ];
 
-  patches = [ ./quodlibet-package-plugins.patch ];
-
-  buildInputs = stdenv.lib.optionals withGstPlugins [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-  ];
-
-  propagatedBuildInputs = [
-    mutagen pygtk pygobject2 dbus-python gst-python intltool
-  ];
-
-  postInstall = stdenv.lib.optionalString withGstPlugins ''
-    # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix \
-      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
-  '';
+  makeWrapperArgs = optionals (kakasi != null) [ "--prefix PATH : ${kakasi}/bin" ];
 
   meta = {
     description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
+    license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Quod Libet is a GTK+-based audio player written in Python, using
@@ -74,7 +54,7 @@ in buildPythonApplication {
       & internet radio, and all major audio formats.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.coroa ];
+    maintainers = with stdenv.lib.maintainers; [ coroa sauyon ];
     homepage = https://quodlibet.readthedocs.io/en/latest/;
   };
 }

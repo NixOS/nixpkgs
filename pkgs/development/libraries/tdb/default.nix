@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "0i1l38h0vyck6zkcj4fn2l03spadlmyr1qa1xpdp9dy2ccbm3s1r";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python pkgconfig readline libxslt docbook_xsl docbook_xml_dtd_42
+    python readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''

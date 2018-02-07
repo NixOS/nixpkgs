@@ -1,43 +1,34 @@
-{ stdenv, fetchFromGitHub, which, intltool, pkgconfig, libtool, makeWrapper,
-  dbus_glib, libcanberra_gtk2, gst_all_1, vala_0_32, gnome3, gtk3, gst-plugins-base,
-  glib, gobjectIntrospection, telepathy_glib
+{ stdenv, fetchFromGitHub, autoconf-archive, appstream-glib, intltool, pkgconfig, libtool, wrapGAppsHook,
+  dbus_glib, libcanberra, gst_all_1, vala, gnome3, gtk3, libxml2, autoreconfHook,
+  glib, gobjectIntrospection, libpeas
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.11.2";
+  version = "0.13.4";
   name = "gnome-shell-pomodoro-${version}";
 
   src = fetchFromGitHub {
-      owner = "codito";
-      repo = "gnome-pomodoro";
-      rev = "${version}";
-      sha256 = "0x656drq8vnvdj1x6ghnglgpa0z8yd2yj9dh5iqprwjv0z3qkw4l";
+    owner = "codito";
+    repo = "gnome-pomodoro";
+    rev = "${version}";
+    sha256 = "0fiql99nhj168wbfhvzrhfcm4c4569gikd2zaf10vzszdqjahrl1";
   };
 
-  configureScript = ''./autogen.sh'';
-
-  buildInputs = [
-    which intltool glib gobjectIntrospection pkgconfig libtool
-    makeWrapper dbus_glib libcanberra_gtk2 vala_0_32 gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
-    gnome3.gnome_common gnome3.gnome_shell gtk3 telepathy_glib
-    gnome3.defaultIconTheme
+  nativeBuildInputs = [
+    autoreconfHook vala autoconf-archive libtool intltool appstream-glib
+    wrapGAppsHook pkgconfig libxml2
   ];
 
-  preBuild = ''
-    sed -i 's|\$(INTROSPECTION_GIRDIR)|${gnome3.gnome_desktop}/share/gir-1.0|' \
-      vapi/Makefile
-  '';
-
-  preFixup = ''
-    wrapProgram $out/bin/gnome-pomodoro \
-        --prefix XDG_DATA_DIRS : \
-        "$out/share:$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS"
-  '';
+  buildInputs = [
+    glib gobjectIntrospection libpeas
+    dbus_glib libcanberra gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gnome3.gsettings_desktop_schemas
+    gnome3.gnome_shell gtk3 gnome3.defaultIconTheme
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/codito/gnome-shell-pomodoro;
+    homepage = http://gnomepomodoro.org/;
     description = "A time management utility for GNOME based on the pomodoro technique";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.

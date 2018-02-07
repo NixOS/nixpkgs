@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "1.2.0";
+  version = "1.2.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05c47dm20p7m0017p2h38il721rxag1q0457dj7whp0k8rc7qd1n";
+    sha256 = "c1303f77f1ba4d632f2958c83c0f457b2b969860b1ac9adfb872aefa1780baa7";
   };
 
   buildInputs = [ pytest ];

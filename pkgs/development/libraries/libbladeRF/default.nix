@@ -2,17 +2,18 @@
 , libusb1, udev }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.9.0";
   name = "libbladeRF-v${version}";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "1y00hqsmqaix4dql8mb75zx87zvn8b483yxv53x9qyjspksbs60c";
+    sha256 = "0frvphp4xxdxwzmi94b0asl7b891sd3fk8iw9kfk8h6f3cdhj8xa";
   };
 
-  buildInputs = [ pkgconfig cmake git doxygen help2man tecla libusb1 udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake git doxygen help2man tecla libusb1 udev ];
 
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
@@ -34,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ funfunctor ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux;
   };
 }

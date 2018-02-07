@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ pkgconfig intltool itstool libxml2 libxslt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool itstool libxml2 libxslt ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Yelp;

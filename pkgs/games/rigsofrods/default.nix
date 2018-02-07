@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
   '';
 
-  buildInputs = [ wxGTK30 freeimage cmake zziplib mesa boost pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ wxGTK30 freeimage cmake zziplib mesa boost
     libuuid openal ogre ois curl gtk2 mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 

@@ -268,7 +268,7 @@ in
       assertions = [
         {
           assertion = config.networking.hostId != null;
-          message = "ZFS requires config.networking.hostId to be set";
+          message = "ZFS requires networking.hostId to be set";
         }
         {
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;

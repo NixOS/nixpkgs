@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gjyvn8r66kp49gasd6sqfvg2pj0c6v67hnq7cqwl04kj69rfy86";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ]
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ]
     ++ optional stdenv.isLinux systemd;
 
   meta = {

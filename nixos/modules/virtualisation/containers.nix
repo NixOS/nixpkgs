@@ -537,7 +537,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Wether the container is automatically started at boot-time.
+                Whether the container is automatically started at boot-time.
               '';
             };
 
@@ -596,6 +596,8 @@ in
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql96;
+                    
+                    system.stateVersion = "17.03";
                   };
               };
           }
@@ -723,6 +725,11 @@ in
       '') config.containers);
 
     networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
+
+    services.udev.extraRules = optionalString config.networking.networkmanager.enable ''
+      # Don't manage interfaces created by nixos-container.
+      ENV{INTERFACE}=="v[eb]-*", ENV{NM_UNMANAGED}="1"
+    '';
 
     environment.systemPackages = [ pkgs.nixos-container ];
   });

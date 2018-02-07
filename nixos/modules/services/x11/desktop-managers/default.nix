@@ -87,11 +87,11 @@ in
 
       default = mkOption {
         type = types.str;
-        default = "";
-        example = "none";
+        default = "none";
+        example = "plasma5";
         description = "Default desktop manager loaded if none have been chosen.";
         apply = defaultDM:
-          if defaultDM == "" && cfg.session.list != [] then
+          if defaultDM == "none" && cfg.session.list != [] then
             (head cfg.session.list).name
           else if any (w: w.name == defaultDM) cfg.session.list then
             defaultDM
@@ -109,9 +109,5 @@ in
 
   };
 
-  config = {
-    services.xserver.displayManager.session = cfg.session.list;
-    environment.systemPackages =
-      mkIf cfg.session.needBGPackages [ pkgs.feh ]; # xsetroot via xserver.enable
-  };
+  config.services.xserver.displayManager.session = cfg.session.list;
 }

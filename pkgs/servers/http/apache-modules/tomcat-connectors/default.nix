@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-apxs=${apacheHttpd.dev}/bin/apxs --with-java-home=${jdk}";
 
-  sourceRoot = "${name}-src/native";
+  setSourceRoot = ''
+    sourceRoot=$(echo */native)
+  '';
 
   installPhase = ''
     mkdir -p $out/modules

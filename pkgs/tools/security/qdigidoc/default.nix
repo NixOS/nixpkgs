@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a7nsi28q57ic99hrb6x83qlvpqvzvk6acbfl6ncny2j4yaxa4jl";
   };
 
-  patches = [ ./certs.patch ];
+  patches = [ ./certs.patch ./glibc-2_26.patch ];
 
   unpackPhase = ''
     mkdir src
@@ -25,11 +25,14 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  buildInputs = [ cmake ccid qttools pkgconfig pcsclite qttranslations
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ccid qttools pcsclite qttranslations
                   hicolor_icon_theme libdigidocpp opensc shared_mime_info
                   openldap gettext desktop_file_utils makeWrapper
                 ];
-  
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Qt based UI application for verifying and signing digital signatures";
     homepage = http://www.id.ee/;

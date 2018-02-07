@@ -1,4 +1,4 @@
-{ stdenv, stdenv_gcc5, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
@@ -10,7 +10,7 @@
 
 with lib;
 
-(if cudaSupport then stdenv_gcc5 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "blender-2.79";
 
   src = fetchurl {
@@ -57,9 +57,8 @@ with lib;
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
     ++ optionals cudaSupport
       [ "-DWITH_CYCLES_CUDA_BINARIES=ON"
-        # Disable the sm_20 architecture to work around a segfault in
-        # ptxas, as suggested on #blendercoders.
-        "-DCYCLES_CUDA_BINARIES_ARCH=sm_21;sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
+        # Disable architectures before sm_30 to support new CUDA toolkits.
+        "-DCYCLES_CUDA_BINARIES_ARCH=sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
       ]
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 

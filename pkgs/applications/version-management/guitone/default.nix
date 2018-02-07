@@ -16,13 +16,17 @@ stdenv.mkDerivation rec {
     branch = "net.venge.monotone.guitone";
   };
 
-  buildInputs = [ qt4 qmake4Hook pkgconfig graphviz ];
+  patches = [ ./parallel-building.patch ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 qmake4Hook graphviz ];
 
   qmakeFlags = [ "guitone.pro" ];
 
   meta = {
     description = "Qt4 based GUI for monotone";
     homepage = http://guitone.thomaskeller.biz;
+    downloadPage = https://code.monotone.ca/p/guitone/;
     inherit (qt4.meta) platforms;
   };
 }

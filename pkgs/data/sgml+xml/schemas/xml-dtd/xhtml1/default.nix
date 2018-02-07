@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0rr0d89i0z75qvjbm8il93bippx09hbmjwy0y2sj44n9np69x3hl";
   };
 
-  buildInputs = [ libxml2 ];
+  nativeBuildInputs = [ libxml2 ];
 
   installPhase =
     ''

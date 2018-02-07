@@ -4,8 +4,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/iochan";
-      rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
-      sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
+      rev = "87b45ffd0e9581375c491fef3d32130bb15c5bd7";
+      sha256 = "1435kdcx3j1xgr6mm5c7w7hjx015jb20yfqlkp93q143hspf02fx";
     };
   }
 ]

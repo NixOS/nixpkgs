@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "High level chart types built on top of Bokeh";
-    homepage = http://github.com/bokeh/bkcharts;
+    homepage = https://github.com/bokeh/bkcharts;
     license = lib.licenses.bsd3;
   };
 }

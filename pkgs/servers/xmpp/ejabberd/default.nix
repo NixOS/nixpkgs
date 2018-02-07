@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    buildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

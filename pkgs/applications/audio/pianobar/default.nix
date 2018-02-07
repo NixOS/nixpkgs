@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0n9544bfsdp04xqcjm4nhfvp357dx0c3gpys0rjkq09nzv8b1vy6";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libao json_c libgcrypt libav curl
+    libao json_c libgcrypt libav curl
   ];
 
   makeFlags="PREFIX=$(out)";

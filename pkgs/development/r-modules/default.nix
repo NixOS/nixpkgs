@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -246,6 +246,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
+    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -253,6 +254,7 @@ let
     fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
+    gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
@@ -260,32 +262,36 @@ let
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
+    haven = [ pkgs.libiconv ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
-    igraph = [ pkgs.gmp ];
+    igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
+    magick = [ pkgs.imagemagick.dev ];
     mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    openssl = [ pkgs.openssl.dev ];
+    odbc = [ pkgs.unixODBC ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = [ pkgs.which ];
+    pdftools = [ pkgs.poppler.dev ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj ];
+    protolite = [ pkgs.protobuf ];
     qtbase = [ pkgs.qt4 ];
     qtpaint = [ pkgs.qt4 ];
     R2GUESS = [ pkgs.gsl_1 ];
@@ -293,11 +299,11 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
+    readxl = [ pkgs.libiconv ];
     rbamtools = [ pkgs.zlib.dev ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
-    RcppOctave = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.octave ];
     RcppZiggurat = [ pkgs.gsl_1 ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
@@ -315,14 +321,15 @@ let
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
+    rpanel = [ pkgs.bwidget ];
     rpg = [ pkgs.postgresql ];
     rphast = [ pkgs.pcre.dev pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgreSQL = [ pkgs.postgresql ];
+    RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl.dev ];
@@ -338,6 +345,7 @@ let
     seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
     seqinr = [ pkgs.zlib.dev ];
     seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
+    sf = [ pkgs.gdal pkgs.proj pkgs.geos ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
     SOD = [ pkgs.opencl-headers ];
@@ -349,12 +357,13 @@ let
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
+    tesseract = [ pkgs.tesseract pkgs.leptonica ];
     tiff = [ pkgs.libtiff.dev ];
     TKF = [ pkgs.gsl_1 ];
     tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
-    V8 = [ pkgs.v8 ];
+    V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
@@ -401,12 +410,20 @@ let
     chebpol = [ pkgs.pkgconfig ];
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
+    gdtools = [ pkgs.pkgconfig ];
     kza = [ pkgs.pkgconfig ];
+    magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
+    odbc = [ pkgs.pkgconfig ];
+    openssl = [ pkgs.pkgconfig ];
+    pdftools = [ pkgs.pkgconfig ];
+    sf = [ pkgs.pkgconfig ];
     showtext = [ pkgs.pkgconfig ];
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
+    sys = [ pkgs.libapparmor ];
     sysfonts = [ pkgs.pkgconfig ];
+    tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
@@ -728,6 +745,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    data_table = old.data_table.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
+    });
+
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -782,8 +804,10 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      patches = [ ./patches/RMySQL.patch ];
-      MYSQL_DIR="${pkgs.mysql.lib}";
+      MYSQL_DIR="${pkgs.mysql.connector-c}";
+      preConfigure = ''
+        patchShebangs configure
+      '';
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
@@ -817,7 +841,8 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {
@@ -835,7 +860,69 @@ let
     });
 
     V8 = old.V8.overrideDerivation (attrs: {
-      preConfigure = "export V8_INCLUDES=${pkgs.v8}/include";
+      preConfigure = ''
+        export INCLUDE_DIR=${pkgs.v8_3_14}/include
+        export LIB_DIR=${pkgs.v8_3_14}/lib
+        patchShebangs configure
+        '';
+    });
+
+    acs = old.acs.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    gdtools = old.gdtools.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+      NIX_LDFLAGS = "-lfontconfig -lfreetype";
+    });
+
+    magick = old.magick.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    protolite = old.protolite.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    rpanel = old.rpanel.overrideDerivation (attrs: {
+      preConfigure = ''
+        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
+      '';
+      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+    });
+
+    OpenMx = old.OpenMx.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    odbc = old.odbc.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    x13binary = old.x13binary.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    geojsonio = old.geojsonio.overrideDerivation (attrs: {
+      buildInputs = [ cacert ] ++ attrs.buildInputs;
+    });
+
+    rstan = old.rstan.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = "${attrs.NIX_CFLAGS_COMPILE} -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
     });
 
   };

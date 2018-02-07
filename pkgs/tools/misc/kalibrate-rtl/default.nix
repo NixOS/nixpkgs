@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig fftw rtl-sdr libusb1 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ fftw rtl-sdr libusb1 ];
 
   meta = with stdenv.lib; {
     description = "Calculate local oscillator frequency offset in RTL-SDR devices";

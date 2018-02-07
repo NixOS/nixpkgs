@@ -1,8 +1,9 @@
 { stdenv, intltool, fetchurl, exempi, libxml2
-, pkgconfig, gtk3, glib
+, pkgconfig, gtk3, glib, tracker, tracker-miners
 , makeWrapper, itstool, gegl, babl, lcms2
 , desktop_file_utils, gmp, libmediaart, wrapGAppsHook
-, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib }:
+, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib
+, dleyna-renderer }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -11,13 +12,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool gegl babl gnome3.libgdata
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool gegl babl gnome3.libgdata
                   gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart
                   gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
                   gnome3.gnome_online_accounts gnome3.gnome_desktop
-                  lcms2 libexif gnome3.tracker libxml2 desktop_file_utils
-                  wrapGAppsHook gexiv2 geocode_glib ];
+                  lcms2 libexif tracker tracker-miners libxml2 desktop_file_utils
+                  wrapGAppsHook gexiv2 geocode_glib dleyna-renderer ];
 
   enableParallelBuilding = true;
 

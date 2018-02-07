@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   #TODO: no perl bingings yet (ExtUtils::Depends, ExtUtils::PkgConfig, Glib)
-  buildInputs = [ pkgconfig intltool glib libxfce4util ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib libxfce4util ];
   propagatedBuildInputs = [ dbus_glib ];
 
   meta = with stdenv.lib; {

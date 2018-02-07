@@ -9,7 +9,11 @@ stdenv.mkDerivation {
     sha256 = "a28005986410d333e03d077679cdf6c504ec5a33342867dc0f9fb0b74285e333";
   };
 
-  patchPhase = "sed -e 's/lib64/lib/g' -i src/src.pro";
+  postPatch = ''
+    sed -i src/src.pro \
+        -e 's/lib64/lib/g' \
+        -e '/features.path =/ s|$$\[QMAKE_MKSPECS\]|$$NIX_OUTPUT_DEV/mkspecs|'
+  '';
 
   buildInputs = [ qt5.qtbase qca2-qt5 ];
   nativeBuildInputs = [ qt5.qmake ];

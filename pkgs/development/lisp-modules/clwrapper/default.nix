@@ -11,6 +11,7 @@ stdenv.mkDerivation {
     substituteAll ${./common-lisp.sh} "$out"/bin/common-lisp.sh
     substituteAll "${./build-with-lisp.sh}" "$out/bin/build-with-lisp.sh"
     substituteAll "${./cl-wrapper.sh}" "$out/bin/cl-wrapper.sh"
+    patchShebangs "$out/bin"
     chmod a+x "$out"/bin/*
 
     substituteAll "${./setup-hook.sh}" "setup-hook-parsed"

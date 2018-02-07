@@ -1,0 +1,9 @@
+--- a/backend/meson.build	2017-10-31 22:08:01.112927610 +0100
++++ b/backend/meson.build	2017-10-31 22:09:28.155264343 +0100
+@@ -43,5 +43,5 @@
+ 	'wlr_backend',
+ 	backend_files,
+ 	include_directories: wlr_inc,
+-	dependencies: [wayland_server, egl, gbm, libinput, systemd, elogind, wlr_render, wlr_protos],
++	dependencies: [wayland_server, egl, gbm, libinput, systemd, elogind, wlr_render, wlr_protos, drm],
+ )

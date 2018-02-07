@@ -1,13 +1,14 @@
 { stdenv, fetchurl, pkgconfig, perl, bison, flex, python, gobjectIntrospection
 , glib, makeWrapper
+, darwin
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-1.10.4";
+  name = "gstreamer-1.12.3";
 
   meta = {
     description = "Open source multimedia framework";
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "062jidnw17hkpva6ddygp80gyasyigfkpm1y7w56rk56a2pzbhjh";
+    sha256 = "0vi1g8rmmsnd630ds3jwv2iph46ll8y07fzf04mz15q88j9g926k";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig perl bison flex python gobjectIntrospection makeWrapper
   ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
 
   propagatedBuildInputs = [ glib ];
 

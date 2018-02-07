@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
 , libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
-, darwin, writeScriptBin, cups
+, darwin, writeScriptBin, cups, makeWrapper
 }:
 
 let
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     bison2 flex fontconfig freetype gperf icu openssl
     libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL
     darwin.libobjc fakeClang cups
@@ -73,6 +74,10 @@ in stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-print.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
       sha256 = "1fydmdjxnplglpbd3ypaih5l237jkxjirpdhzz92mcpy29yla6jw";
     })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/unlock-qt.patch";
+      sha256 = "13bwz4iw17d6hq5pwkbpcckqyw7fhc6648lvs26m39pp31zwyp03";
+    })
     ./system-qtbase.patch
   ];
 
@@ -98,10 +103,10 @@ in stdenv.mkDerivation rec {
         ${darwin.configd}/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration \
         /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration \
     $out/bin/phantomjs
-  '';
-
-  preFixup = ''
-    rm -r ../__nix_qt5__
+  '' + ''
+    wrapProgram $out/bin/phantomjs \
+    --set QT_QPA_PLATFORM offscreen \
+    --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
   '';
 
   meta = with stdenv.lib; {

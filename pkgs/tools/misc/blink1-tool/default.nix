@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "05hbnp20cdvyyqf6jr01waz1ycis20qzsd8hn27snmn6qd48igrb";
   };
 
-  buildInputs = [ libusb1 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb1 ];
 
   configurePhase = ''
     cd commandline

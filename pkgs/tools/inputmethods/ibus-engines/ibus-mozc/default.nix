@@ -15,7 +15,7 @@ in clangStdenv.mkDerivation rec {
   meta = with clangStdenv.lib; {
     isIbusEngine = true;
     description  = "Japanese input method from Google";
-    homepage     = http://code.google.com/p/mozc/;
+    homepage     = https://github.com/google/mozc;
     license      = licenses.free;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ gebner ericsagnes ];

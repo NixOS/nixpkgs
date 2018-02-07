@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.02";
 
-stdenv.mkDerivation {
-  name = "ocaml-lablgtk-extras-1.5";
-  src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1453/lablgtkextras-1.5.tar.gz;
-    sha256 = "1bgflgadmy2nqnqjf34zja0jy6f9wpqq8x22qcfilj9g8c9wkrmi";
+stdenv.mkDerivation rec {
+  version = "1.6";
+  name = "ocaml${ocaml.version}-lablgtk-extras-${version}";
+  src = fetchFromGitHub {
+    owner = "zoggy";
+    repo = "lablgtk-extras";
+    rev = "release-${version}";
+    sha256 = "1bbdp5j18s582mmyd7qiaq1p08g2ag4gl7x65pmzahbhg719hjda";
   };
 
   buildInputs = [ ocaml findlib camlp4 ];

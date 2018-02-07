@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${name}-src/ImageLounge";
+  setSourceRoot = ''
+    sourceRoot=$(echo */ImageLounge)
+  '';
 
   patches = [./fix-appdata-install.patch];
 

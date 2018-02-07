@@ -6,12 +6,12 @@
 
 pythonPackages.buildPythonPackage rec {
   pname = "ansible";
-  version = "2.3.1.0";
+  version = "2.3.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-    sha256 = "1xdr82fy8gahxh3586wm5k1bxksys7yl1f2n24shrk8gf99qyjyd";
+    sha256 = "1sv8666vw6fi93jlgkwd4lxkfn75yqczfvk129zlh8ll4wjv8qq5";
   };
 
   prePatch = ''
@@ -24,13 +24,13 @@ pythonPackages.buildPythonPackage rec {
   dontPatchShebangs = false;
 
   propagatedBuildInputs = with pythonPackages; [
-    pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dns
+    pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython
   ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
   meta = with stdenv.lib; {
     homepage = http://www.ansible.com;
     description = "A simple automation tool";
-    license = with licenses; [ gpl3] ;
+    license = with licenses; [ gpl3 ] ;
     maintainers = with maintainers; [
       jgeerds
       joamaki

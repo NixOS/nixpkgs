@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc } :
+{ stdenv, fetchurl, glibc, dns-root-data } :
 
 let
   version = "1.05";
@@ -18,11 +18,13 @@ stdenv.mkDerivation {
     sha256 = "0j3baf92vkczr5fxww7rp1b7gmczxmmgrqc8w2dy7kgk09m85k9w";
   };
 
-  patches = [ ./hier.patch ];
+  patches = [ ./hier.patch ./fix-nix-usernamespace-build.patch ];
 
   postPatch = ''
     echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
     echo $out > conf-home
+    # djbdns ships with an outdated list of root servers
+    awk '/^.?.ROOT-SERVERS.NET/ { print $4 }' ${dns-root-data}/root.hints > dnsroots.global
     sed -i "s|/etc/dnsroots.global|$out/etc/dnsroots.global|" dnscache-conf.c
   '';
 

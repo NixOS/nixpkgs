@@ -12,7 +12,7 @@ management.  In the declarative style, users are specified in
 states that a user account named <literal>alice</literal> shall exist:
 
 <programlisting>
-users.extraUsers.alice =
+users.users.alice =
   { isNormalUser = true;
     home = "/home/alice";
     description = "Alice Foobar";
@@ -34,7 +34,7 @@ to set a password, which is retained across invocations of
 
 <para>If you set users.mutableUsers to false, then the contents of /etc/passwd
 and /etc/group will be congruent to your NixOS configuration. For instance,
-if you remove a user from users.extraUsers and run nixos-rebuild, the user
+if you remove a user from users.users and run nixos-rebuild, the user
 account will cease to exist. Also, imperative commands for managing users
 and groups, such as useradd, are no longer available. Passwords may still be
 assigned by setting the user's <literal>hashedPassword</literal> option. A
@@ -54,7 +54,7 @@ to the user specification.</para>
 group named <literal>students</literal> shall exist:
 
 <programlisting>
-users.extraGroups.students.gid = 1000;
+users.groups.students.gid = 1000;
 </programlisting>
 
 As with users, the group ID (gid) is optional and will be assigned
@@ -68,8 +68,8 @@ account named <literal>alice</literal>:
 <screen>
 # useradd -m alice</screen>
 
-To make all nix tools available to this new user use `su - USER` which 
-opens a login shell (==shell that loads the profile) for given user. 
+To make all nix tools available to this new user use `su - USER` which
+opens a login shell (==shell that loads the profile) for given user.
 This will create the ~/.nix-defexpr symlink. So run:
 
 <screen>

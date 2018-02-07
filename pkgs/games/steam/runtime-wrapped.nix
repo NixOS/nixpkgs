@@ -1,11 +1,11 @@
-{ stdenv, lib, perl, pkgs, steam-runtime
+{ stdenv, steamArch, lib, perl, pkgs, steam-runtime
 , nativeOnly ? false
 , runtimeOnly ? false
 }:
 
 assert !(nativeOnly && runtimeOnly);
 
-let 
+let
   runtimePkgs = with pkgs; [
     # Required
     glib
@@ -26,7 +26,7 @@ let
     xlibs.libICE
     gnome2.GConf
     freetype
-    curl
+    (curl.override { gnutlsSupport = true; sslSupport = false; })
     nspr
     nss
     fontconfig
@@ -57,6 +57,7 @@ let
     glew110
     openssl
     libidn
+    tbb
 
     # Other things from runtime
     xlibs.libXinerama
@@ -87,6 +88,8 @@ let
     libva
     vulkan-loader
     gcc.cc
+    nss
+    nspr
   ];
 
   ourRuntime = if runtimeOnly then []
@@ -96,6 +99,13 @@ let
 
   allPkgs = ourRuntime ++ steamRuntime;
 
+  gnuArch = if steamArch == "amd64" then "x86_64-linux-gnu"
+            else if steamArch == "i386" then "i386-linux-gnu"
+            else abort "Unsupported architecture";
+
+  libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
+  bins = [ "bin" "usr/bin" ];
+
 in stdenv.mkDerivation rec {
   name = "steam-runtime-wrapped";
 
@@ -103,10 +113,13 @@ in stdenv.mkDerivation rec {
 
   builder = ./build-wrapped.sh;
 
-  installPhase = ''
-    buildDir "${toString steam-runtime.libs}" "${toString (map lib.getLib allPkgs)}"
-    buildDir "${toString steam-runtime.bins}" "${toString (map lib.getBin allPkgs)}"
-  '';
+  passthru = {
+    inherit gnuArch libs bins;
+    arch = steamArch;
+  };
 
-  meta.hydraPlatforms = [];
+  installPhase = ''
+    buildDir "${toString libs}" "${toString (map lib.getLib allPkgs)}"
+    buildDir "${toString bins}" "${toString (map lib.getBin allPkgs)}"
+  '';
 }

@@ -11,6 +11,7 @@
 , pytest
 , testpath
 , responses
+, pytoml
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -20,31 +21,28 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "0.11.4";
-  name = "${pname}-${version}";
-
-#   format = "wheel";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-#     url = https://files.pythonhosted.org/packages/24/98/50a090112a04d9e29155c31a222637668b0a4dd778fefcd3132adc50e877/flit-0.10-py3-none-any.whl;
-    sha256 = "8ba7603cc3bf4149d81811d40fe331abc45ff37a207c63f5f712a0fdb69297bb";
+    sha256 = "8f558351bf4bb82b872d3bdbea7055cbb2e33ed2bdf809284bf927d4c78bf0ee";
   };
 
   disabled = !isPy3k;
-  propagatedBuildInputs = [ docutils requests requests_download ] ++ lib.optional (pythonOlder "3.6") zipfile36;
+  propagatedBuildInputs = [ docutils requests requests_download pytoml ] ++ lib.optional (pythonOlder "3.6") zipfile36;
 
   checkInputs = [ pytest testpath responses ];
 
   # Disable test that needs some ini file.
+  # Disable test that wants hg
   checkPhase = ''
-    py.test -k "not test_invalid_classifier"
+    py.test -k "not test_invalid_classifier and not test_build_sdist"
   '';
 
   meta = {
     description = "A simple packaging tool for simple packages";
     homepage = https://github.com/takluyver/flit;
     license = lib.licenses.bsd3;
-    maintainer = lib.maintainers.fridh;
+    maintainers = [ lib.maintainers.fridh ];
   };
 }

@@ -50,5 +50,6 @@ in stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

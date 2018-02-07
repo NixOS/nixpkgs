@@ -1,4 +1,4 @@
-{ pkgs, idris, overrides ? (self: super: {}) }: let
+{ pkgs, idris-no-deps, overrides ? (self: super: {}) }: let
   inherit (pkgs.lib) callPackageWith fix' extends;
 
   /* Taken from haskell-modules/default.nix, should probably abstract this away */
@@ -33,7 +33,12 @@
 
     value = callPackage (./. + "/${name}.nix") {};
   }) files)) // {
-    inherit idris callPackage;
+    inherit idris-no-deps callPackage;
+    # See #10450 about why we have to wrap the executable
+    idris =
+        (pkgs.callPackage ./idris-wrapper.nix {})
+          idris-no-deps
+          { path = [ pkgs.gcc ]; lib = [pkgs.gmp]; };
 
     # A list of all of the libraries that come with idris
     builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;

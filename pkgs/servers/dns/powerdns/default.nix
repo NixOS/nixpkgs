@@ -1,18 +1,19 @@
 { stdenv, fetchurl, pkgconfig,
   boost, libyamlcpp, libsodium, sqlite, protobuf,
-  libmysql, postgresql, lua, openldap, geoip, curl
+  mysql57, postgresql, lua, openldap, geoip, curl
 }:
 
 stdenv.mkDerivation rec {
   name = "powerdns-${version}";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchurl {
     url = "http://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "10p2m2zbydbd5xjdgf8z4zgvl8diyb4k3bq1hzsl32r71daj3yk0";
+    sha256 = "097ci4s2c63gl0bil8yh87dsy0sk3fds4w8cpyjh5kns6zazmj2v";
   };
 
-  buildInputs = [ boost libmysql postgresql lua openldap sqlite protobuf geoip libyamlcpp pkgconfig libsodium curl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip libyamlcpp libsodium curl ];
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''
@@ -36,6 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # cannot find postgresql libs on macos x
     license = licenses.gpl2;
-    maintainers = [ maintainers.mic92 maintainers.nhooyr ];
+    maintainers = [ maintainers.mic92 ];
   };
 }

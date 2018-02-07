@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   version = "5.1.0";
   name = "libmusicbrainz-${version}";
 
-  buildInputs = [ cmake neon libdiscid libxml2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake neon libdiscid libxml2 ];
 
   src = fetchFromGitHub {
     owner  = "metabrainz";

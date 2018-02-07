@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, result, opam, js_of_ocaml }:
+{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
 
 buildOcaml rec {
   version = "0.8.3";
@@ -11,13 +11,11 @@ buildOcaml rec {
 
   unpackCmd = "tar -xf $curSrc";
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg opam js_of_ocaml ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg js_of_ocaml ];
 
   propagatedBuildInputs = [ result ];
 
-  buildPhase = ''
-    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build --with-js_of_ocaml true
-  '';
+  buildPhase = "${topkg.run} build --with-js_of_ocaml true";
 
   inherit (topkg) installPhase;
 

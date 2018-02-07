@@ -6,7 +6,7 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira.override {
+  pkg = pkgs.atlassian-jira.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -21,7 +21,7 @@ let
       session.validationinterval              ${toString cfg.sso.validationInterval}
       session.lastvalidation                  session.lastvalidation
     '';
-  };
+  });
 
 in
 
@@ -131,14 +131,11 @@ in
         };
       };
 
-      jrePackage = let
-        jreSwitch = unfree: free: if config.nixpkgs.config.allowUnfree or false then unfree else free;
-      in mkOption {
+      jrePackage = mkOption {
         type = types.package;
-        default = jreSwitch pkgs.oraclejre8 pkgs.openjdk8.jre;
-        defaultText = jreSwitch "pkgs.oraclejre8" "pkgs.openjdk8.jre";
-        example = literalExample "pkgs.openjdk8.jre";
-        description = "Java Runtime to use for JIRA. Note that Atlassian recommends the Oracle JRE.";
+        default = pkgs.oraclejre8;
+        defaultText = "pkgs.oraclejre8";
+        description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };
@@ -183,14 +180,13 @@ in
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/bin/start-jira.sh -fg";
-      stopScript  = "${pkg}/bin/stop-jira.sh";
-
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
         PermissionsStartOnly = true;
+        ExecStart = "${pkg}/bin/start-jira.sh -fg";
+        ExecStop = "${pkg}/bin/stop-jira.sh";
       };
     };
   };

@@ -14,7 +14,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2016";
+  year = "2017";
   version = year; # keep names simple for now
 
   common = rec {
@@ -22,9 +22,10 @@ let
       url = # "ftp://tug.org/historic/systems/texlive/${year}/"
       #"http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016"
       # FIXME: a proper mirror, though tarballs.nixos.org saves this case ATM
-        http://146.185.144.154/texlive-2016
-        + "/texlive-${year}0523b-source.tar.xz";
-      sha256 = "1v91vahxlxkdra0qz3f132vvx5d9cx2jy84yl1hkch0agyj2rcx8";
+      # http://146.185.144.154/texlive-2016
+      # + "/texlive-${year}0523b-source.tar.xz";
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0524-source.tar.xz";
+      sha256 = "1amjrxyasplv4alfwcxwnw4nrx7dz2ydmddkq16k6hg90i9njq81";
     };
 
     configureFlags = [
@@ -61,8 +62,8 @@ core = stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     /*teckit*/ zziplib poppler mpfr gmp
     pixman potrace gd freetype libpng libpaper zlib
     perl
@@ -156,6 +157,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   hardeningDisable = [ "format" ];
 
+  inherit (core) nativeBuildInputs;
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
 
   configureFlags = common.configureFlags
@@ -186,6 +188,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   '';
 
   preBuild = "cd texk/web2c";
+  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
   # now distribute stuff into outputs, roughly as upstream TL
@@ -209,7 +212,8 @@ dvisvgm = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ ghostscript zlib freetype potrace ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype potrace ];
 
   preConfigure = "cd texk/dvisvgm";
 
@@ -225,7 +229,8 @@ dvipng = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
 
   preConfigure = "cd texk/dvipng";
 
@@ -247,7 +252,8 @@ bibtex8 = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ icu ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ icu ];
 
   preConfigure = "cd texk/bibtex-x";
 
@@ -263,7 +269,8 @@ xdvi = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ freetype ghostscript ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ freetype ghostscript ]
     ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
 
   preConfigure = "cd texk/xdvik";

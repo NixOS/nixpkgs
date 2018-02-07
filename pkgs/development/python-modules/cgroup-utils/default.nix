@@ -2,7 +2,8 @@
 
 buildPythonPackage rec {
   version = "0.6";
-  name = "cgroup-utils-${version}";
+  pname = "cgroup-utils";
+  name = pname + "-" + version;
 
   buildInputs = [ pep8 nose ];
   # Pep8 tests fail...
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Utility tools for control groups of Linux";
     maintainers = with maintainers; [ layus ];
+    platforms = platforms.linux;
     license = licenses.gpl2;
   };
 }

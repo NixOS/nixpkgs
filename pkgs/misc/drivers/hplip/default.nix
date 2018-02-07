@@ -11,16 +11,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.17.9";
+  version = "3.17.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0y46jjq8jdfk9m4vjq55h8yggibvqbi9rl08vni7vbhxym1diamj";
+    sha256 = "0v27hg856b5z2rilczcbfgz8ksxn0n810g1glac3mxkj8qbl8wqg";
   };
 
   plugin = fetchurl {
-    url = "http://hplipopensource.com/hplip-web/plugin/${name}-plugin.run";
-    sha256 = "10z8vzwcwmwni7s4j9xp0fa7l4lwrhl4kp450dga3fj0cck1gxwq";
+    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
+    sha256 = "07am3dnl0ipgfswz5wndprryljh9rqbfhq7mm4d4yyj3bdnnzlig";
   };
 
   hplipState = substituteAll {
@@ -73,17 +73,17 @@ pythonPackages.buildPythonApplication {
     pyqt5
   ];
 
-  makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
-      -e s,/etc/hp,$out/etc/hp, \
-      -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0, \
-      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
-      -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
-      -e s,/var/lib/hp,$out/var/lib/hp, \
+      -e s,/etc/hp,$out/etc/hp,g \
+      -e s,/etc/sane.d,$out/etc/sane.d,g \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0,g \
+      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
+      -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
+      -e s,/var/lib/hp,$out/var/lib/hp,g \
       {} +
   '';
 
@@ -96,6 +96,8 @@ pythonPackages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
+      --disable-qt4
+      ${stdenv.lib.optionals withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -139,9 +141,6 @@ pythonPackages.buildPythonApplication {
 
     mkdir -p $out/var/lib/hp
     cp ${hplipState} $out/var/lib/hp/hplip.state
-
-    mkdir -p $out/etc/sane.d/dll.d
-    mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
 
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';

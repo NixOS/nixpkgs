@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-card-theme-formats=svg" ];
 
-  buildInputs = [ pkgconfig intltool itstool gtk3 wrapGAppsHook gconf
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool itstool gtk3 wrapGAppsHook gconf
                   librsvg libxml2 desktop_file_utils guile_2_0 libcanberra_gtk3 ];
 
   meta = with stdenv.lib; {

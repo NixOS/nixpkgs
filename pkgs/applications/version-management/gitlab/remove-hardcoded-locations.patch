@@ -27,20 +27,20 @@ diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
 index 0b33783869..cd4e41d9bd 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -521,7 +521,7 @@ production: &base
+@@ -574,7 +574,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
 -    bin_path: /usr/bin/git
 +    bin_path: git
-     # The next value is the maximum memory size grit can use
-     # Given in number of bytes per git object (e.g. a commit)
-     # This value can be increased if you have very large commits
+ 
+   ## Webpack settings
+   # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
 diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
 index 8ddf8e4d2e..559cf9adf7 100644
 --- a/config/initializers/1_settings.rb
 +++ b/config/initializers/1_settings.rb
-@@ -219,7 +219,7 @@ Settings.gitlab['user']       ||= 'git'
+@@ -252,7 +252,7 @@ Settings.gitlab['user']       ||= 'git'
  Settings.gitlab['user_home']  ||= begin
    Etc.getpwnam(Settings.gitlab['user']).dir
  rescue ArgumentError # no user configured
@@ -49,37 +49,28 @@ index 8ddf8e4d2e..559cf9adf7 100644
  end
  Settings.gitlab['time_zone'] ||= nil
  Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
-@@ -454,7 +454,7 @@ Settings.backup['upload']['storage_class'] ||= nil
+@@ -491,7 +491,7 @@ Settings.backup['upload']['storage_class'] ||= nil
+ # Git
  #
  Settings['git'] ||= Settingslogic.new({})
- Settings.git['max_size']  ||= 20971520 # 20.megabytes
--Settings.git['bin_path']  ||= '/usr/bin/git'
-+Settings.git['bin_path']  ||= 'git'
- Settings.git['timeout']   ||= 10
+-Settings.git['bin_path'] ||= '/usr/bin/git'
++Settings.git['bin_path'] ||= 'git'
  
  # Important: keep the satellites.path setting until GitLab 9.0 at
+ # least. This setting is fed to 'rm -rf' in
 diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
 index 59b21149a9..4f4a39a06c 100644
 --- a/lib/gitlab/logger.rb
 +++ b/lib/gitlab/logger.rb
-@@ -13,7 +13,7 @@
+@@ -26,7 +26,7 @@
      end
  
-     def self.read_latest
--      path = Rails.root.join("log", file_name)
-+      path = File.join(ENV["GITLAB_LOG_PATH"], file_name)
- 
-       return [] unless File.readable?(path)
- 
-@@ -22,7 +22,7 @@
+     def self.full_log_path
+-      Rails.root.join("log", file_name)
++      File.join(ENV["GITLAB_LOG_PATH"], file_name)
      end
  
-     def self.build
--      new(Rails.root.join("log", file_name))
-+      new(File.join(ENV["GITLAB_LOG_PATH"], file_name))
-     end
-   end
- end
+     def self.cache_key
 diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
 index b5f4124052..f72c556983 100644
 --- a/lib/gitlab/uploads_transfer.rb

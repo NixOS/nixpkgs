@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitLab, autoconf, automake, glib
 , gtk_doc, libtool, libxml2, libxslt, pkgconfig, sqlite }:
 
-let version = "1.18"; in
+let version = "1.23"; in
 stdenv.mkDerivation rec {
   name = "libaccounts-glib-${version}";
 
   src = fetchFromGitLab {
-    sha256 = "02p23vrqhw2l2w6nrwlk4bqxf7z9kplkc2d43716x9xakxr291km";
-    rev = version;
+    sha256 = "11cvl3ch0y93756k90mw1swqv0ylr8qgalmvcn5yari8z4sg6cgg";
+    rev = "VERSION_${version}";
     repo = "libaccounts-glib";
     owner = "accounts-sso";
   };

@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "02w94j344q0ywlj4mdf9fnzwggdsn3j1yn43sdlsddvr29lw239i";
   };
 
-  buildInputs = [ pkgconfig systemd ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ systemd ];
 
   configureFlags = [
     "--enable-rfc3195"

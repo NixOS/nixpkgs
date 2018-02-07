@@ -1,7 +1,7 @@
 { config, stdenv, fetchgit, makeWrapper, gnome3, at_spi2_core, libcxx,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
-  coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, binutils, ctags }:
+  coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, ctags }:
 
 with stdenv.lib;
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/bin/juci $out/bin/.juci
     makeWrapper "$out/bin/.juci" "$out/bin/juci" \
-      --set PATH "${stdenv.lib.makeBinPath [ ctags coreutils llvmPackages.clang.cc cmake gnumake binutils llvmPackages.clang ]}" \
+      --set PATH "${stdenv.lib.makeBinPath [ ctags coreutils llvmPackages.clang.cc cmake gnumake llvmPackages.clang.bintools llvmPackages.clang ]}" \
       --set NO_AT_BRIDGE 1 \
       --set ASPELL_CONF "dict-dir ${aspellDicts.en}/lib/aspell"
   '';

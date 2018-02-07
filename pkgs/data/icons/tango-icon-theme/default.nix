@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rsvg-convert.patch ];
 
-  buildInputs = [ intltool pkgconfig iconnamingutils imagemagick librsvg ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool iconnamingutils imagemagick librsvg ];
 
   configureFlags = "--enable-png-creation";
 

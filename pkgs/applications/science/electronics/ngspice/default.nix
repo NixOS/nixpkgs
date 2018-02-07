@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ readline libX11 flex bison libICE libXaw libXext ];
 
-  configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" ];
+  configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" "--with-ngshared" ];
 
   meta = with stdenv.lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";

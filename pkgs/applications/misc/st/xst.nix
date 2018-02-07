@@ -15,7 +15,8 @@ in stdenv.mkDerivation {
     sha256 = "1fh4y2w0icaij99kihl3w8j5d5b38d72afp17c81pi57f43ss6pc";
   };
 
-  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 ncurses libXext libXft fontconfig ];
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out
@@ -25,7 +26,7 @@ in stdenv.mkDerivation {
     homepage = https://github.com/neeasade/xst;
     description = "Simple terminal fork that can load config from Xresources";
     license = licenses.mit;
-    maintainers = maintainers.vyp;
+    maintainers = [ maintainers.vyp ];
     platforms = platforms.linux;
   };
 }

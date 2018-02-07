@@ -48,7 +48,7 @@ trouble with packages like `3dmodels` and `4Blocks`, because these names are
 invalid identifiers in the Nix language. The issue of how to deal with these
 rare corner cases is currently unresolved.)
 
-Haskell packages who's Nix name (second column) begins with a `haskell-` prefix
+Haskell packages whose Nix name (second column) begins with a `haskell-` prefix
 are packages that provide a library whereas packages without that prefix
 provide just executables. Libraries may provide executables too, though: the
 package `haskell-pandoc`, for example, installs both a library and an
@@ -334,14 +334,10 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080
+hoogle server -p 8080 --local
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/). Note, however, that Firefox and
-possibly other browsers disallow navigation from `http:` to `file:` URIs for
-security reasons, which might be quite an inconvenience. See [this
-page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
-workarounds.
+[Hoogle](https://www.haskell.org/hoogle/).
 
 ### How to build a Haskell project using Stack
 
@@ -581,8 +577,8 @@ nix-shell "<nixpkgs>" -A haskellPackages.bar.env
 Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
-library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.config/nixpkgs/config.nix` file:
+library profiling for all packages. To accomplish that add the following
+snippet to your `~/.config/nixpkgs/config.nix` file:
 ```nix
 {
   packageOverrides = super: let self = super.pkgs; in
@@ -777,14 +773,14 @@ to find out the store path of the system's zlib library. Now, you can
     stack --extra-lib-dirs=/nix/store/alsvwzkiw4b7ip38l4nlfjijdvg3fvzn-zlib-1.2.8/lib build
     ```
 
-    Typically, you'll need `--extra-include-dirs` as well. It's possible
-    to add those flag to the project's `stack.yaml` or your user's
-    global `~/.stack/global/stack.yaml` file so that you don't have to
-    specify them manually every time. But again, you're likely better off
-    using Stack's Nix support instead.
+Typically, you'll need `--extra-include-dirs` as well. It's possible
+to add those flag to the project's `stack.yaml` or your user's
+global `~/.stack/global/stack.yaml` file so that you don't have to
+specify them manually every time. But again, you're likely better off
+using Stack's Nix support instead.
 
-    The same thing applies to `cabal configure`, of course, if you're
-    building with `cabal-install` instead of Stack.
+The same thing applies to `cabal configure`, of course, if you're
+building with `cabal-install` instead of Stack.
 
 ### Creating statically linked binaries
 

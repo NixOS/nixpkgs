@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   })
   ];
 
+  postPatch = ''
+    rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
+  '';
+
   buildInputs = [ imagemagick ];
 
   nativeBuildInputs = [ cmake ];

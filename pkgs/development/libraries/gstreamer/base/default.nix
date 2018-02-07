@@ -4,18 +4,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.10.4";
+  name = "gst-plugins-base-1.12.3";
 
   meta = {
     description = "Base plugins and helper libraries";
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "1dsyjf6rncsbg4rfj40cvf1wwpjj9h3j3c7bh4zp7jylnfv4blpn";
+    sha256 = "19ffwdch7m777ragmwpy6prqmfb742ym1n3ki40s0zyki627plyk";
   };
 
   outputs = [ "out" "dev" ];

@@ -14,7 +14,8 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ SDL SDL_net SDL_sound libpng mesa autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ SDL SDL_net SDL_sound libpng mesa ];
 
   desktopItem = makeDesktopItem {
     name = "dosbox";

@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python pkgconfig readline tdb talloc tevent popt
+    python readline tdb talloc tevent popt
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 

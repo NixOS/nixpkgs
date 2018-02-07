@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0k06fw2n8nzp1pcdynhajp5prba03gfgsbj91bknyjr5xb5fd9hz";
   };
 
-  buildInputs = [ pkgconfig ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ];
 
   meta = {
     description = "Simulates the falling characters theme from The Matrix movie";

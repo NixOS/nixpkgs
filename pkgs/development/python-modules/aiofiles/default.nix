@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "0.3.1";
+  version = "0.3.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c4936cea65175277183553dbc27d08b286a24ae5bd86f44fbe485dfcf77a14a";
+    sha256 = "852a493a877b73e11823bfd4e8e5ef2610d70d12c9eaed961bcd9124d8de8c10";
   };
 
   disabled = pythonOlder "3.3";
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "File support for asyncio";
     homepage = https://github.com/Tinche/aiofiles;
     license = with lib.licenses; [ asl20 ];
-    maintainer = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

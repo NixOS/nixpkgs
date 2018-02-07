@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "04n1lyc823z3l1d7mnmqpc9z1pkn646szjchasbfkn74m7cb0qz7";
   };
-  buildInputs = [autoconf automake libtool autoreconfHook gmpxx];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [autoconf automake libtool gmpxx];
   meta = {
     inherit version;
     description = ''A C++ library for arithmetic and algebraic computations'';

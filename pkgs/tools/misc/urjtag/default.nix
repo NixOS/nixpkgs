@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pyl0y27136nr8mmjdml7zjnfnpbjmgqzkjk99j3hvj38k10wq7f";
   };
 
-  buildInputs = [ gettext pkgconfig autoconf automake libtool bison flex which
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext autoconf automake libtool bison flex which
     subversion makeWrapper readline libftdi libusb python3 ];
 
   configureFlags = ''

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cmakepaths.patch ];
 
-  buildInputs = [ cmake ogre cegui boost sfml openal ois pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ogre cegui boost sfml openal ois ];
 
   meta = with stdenv.lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius.";

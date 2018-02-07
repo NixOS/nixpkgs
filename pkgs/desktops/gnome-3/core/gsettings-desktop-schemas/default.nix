@@ -5,11 +5,15 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  postPatch = ''
-    for file in "background" "screensaver"; do
-      substituteInPlace "schemas/org.gnome.desktop.$file.gschema.xml.in" \
-        --replace "@datadir@" "${gnome3.gnome-backgrounds}/share/"
-    done
+  preInstall = ''
+    mkdir -p $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+    cat - > $out/share/gsettings-schemas/${name}/glib-2.0/schemas/remove-backgrounds.gschema.override <<- EOF
+      [org.gnome.desktop.background]
+      picture-uri='''
+
+      [org.gnome.desktop.screensaver]
+      picture-uri='''
+    EOF
   '';
 
   buildInputs = [ glib gobjectIntrospection ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "objconv-${version}";
-  version = "2.44";
+  version = "2.48";
 
   src = fetchurl {
     # Versioned archive of objconv sources maintained by orivej.
     url = "https://archive.org/download/objconv/${name}.zip";
-    sha256 = "1dlnpv8qwz0rwivpbgk84kmsjz3vh1i149z44ha2dvg8afzyfhjl";
+    sha256 = "1y4bmy99dfhyqykkib50fiwsha2a62s9ya1qsv5mwj21w1l0snj7";
   };
 
   nativeBuildInputs = [ unzip ];

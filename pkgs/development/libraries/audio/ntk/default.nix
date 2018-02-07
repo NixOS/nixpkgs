@@ -1,16 +1,18 @@
-{ stdenv, fetchgit, cairo, libjpeg, libXft, pkgconfig, python2 }:
+{ stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkgconfig, python2 }:
 
 stdenv.mkDerivation rec {
   name = "ntk-${version}";
-  version = "2017-04-22";
-  src = fetchgit {
-    url = "git://git.tuxfamily.org/gitroot/non/fltk.git";
-    rev = "92365eca0f9a6f054abc70489c009aba0fcde0ff";
-    sha256 = "0pph7hf07xaa011zr40cs62f3f7hclfbv5kcrl757gcp2s5pi2iq";
+  version = "1.3.1000";
+  src = fetchFromGitHub {
+    owner = "original-male";
+    repo = "ntk";
+    rev = "v${version}";
+    sha256 = "0j38mhnfqy6swcrnc5zxcwlqi8b1pgklyghxk6qs1lf4japv2zc0";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cairo libjpeg libXft pkgconfig python2
+    cairo libjpeg libXft python2
   ];
 
   buildPhase = ''
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     version = "${version}";
     homepage = http://non.tuxfamily.org/;
     license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    maintainers = with stdenv.lib.maintainers; [ magnetophon nico202 ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

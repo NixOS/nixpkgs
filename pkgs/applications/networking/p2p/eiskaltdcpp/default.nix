@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mqz0g69njmlghcra3izarjxbxi1jrhiwn4ww94b8jv8xb9cv682";
   };
 
-  buildInputs = [ cmake pkgconfig qt4 boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake qt4 boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext ];
 
   patches = [
     (fetchpatch {

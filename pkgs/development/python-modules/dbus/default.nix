@@ -14,7 +14,8 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
 
   postPatch = "patchShebangs .";
 
-  buildInputs = [ pkgconfig dbus dbus_glib ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus dbus_glib ]
     ++ lib.optionals doCheck [ dbus_tools pygobject3 ]
     # My guess why it's sometimes trying to -lncurses.
     # It seems not to retain the dependency anyway.

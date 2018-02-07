@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
         -i $out/share/fish-foreign-env/functions/*
   '';
 
-  patches = [ ./hide-path-warnings.patch ];
+  patches = [ ./suppress-harmless-warnings.patch ];
 
   meta = with stdenv.lib; {
     description = "A foreign environment interface for Fish shell";

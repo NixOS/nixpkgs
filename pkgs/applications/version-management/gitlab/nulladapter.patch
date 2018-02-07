@@ -7,14 +7,14 @@ index 4861171ef5..f6e701c548 100644
  
 +gem 'activerecord-nulldb-adapter'
 +
- gem 'rails', '4.2.8'
+ gem 'rails', '4.2.10'
  gem 'rails-deprecated_sanitizer', '~> 1.0.3'
  
 diff --git a/Gemfile.lock b/Gemfile.lock
 index 38944248f9..08ce4486ba 100644
 --- a/Gemfile.lock
 +++ b/Gemfile.lock
-@@ -32,6 +32,8 @@ GEM
+@@ -33,6 +33,8 @@ GEM
        activemodel (= 4.2.8)
        activesupport (= 4.2.8)
        arel (~> 6.0)
@@ -23,11 +23,11 @@ index 38944248f9..08ce4486ba 100644
      activerecord_sane_schema_dumper (0.2)
        rails (>= 4, < 5)
      activesupport (4.2.8)
-@@ -926,6 +928,7 @@ PLATFORMS
+@@ -963,6 +965,7 @@ PLATFORMS
  DEPENDENCIES
    RedCloth (~> 4.3.2)
    ace-rails-ap (~> 4.1.0)
 +  activerecord-nulldb-adapter
    activerecord_sane_schema_dumper (= 0.2)
    acts-as-taggable-on (~> 4.0)
-   addressable (~> 2.3.8)
+   addressable (~> 2.5.2)

@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, cmake, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff, libjpeg, mesa, glew, doxygen
-, libxslt, makeWrapper }:
+{ stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
+, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff, libjpeg, mesa, glew, libxslt }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.6";
+  version = "0.4.7.1";
   name = "freeorion-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/freeorion/freeorion/releases/download/v0.4.6/FreeOrion_v0.4.6_2016-09-16.49f9123_Source.tar.gz";
-    sha256 = "04g3x1cymf7mnmc2f5mm3c2r5izjmy7z3pvk2ykzz8f8b2kz6gry";
+  src = fetchFromGitHub {
+    owner  = "freeorion";
+    repo   = "freeorion";
+    rev    = "v${version}";
+    sha256 = "1m05l3a6ilqd7p2g3aqjpq89grb571cg8n9bpgz0y3sxskcym6sp";
   };
 
-  buildInputs = [ cmake boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew doxygen makeWrapper ];
+  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew ];
+
+  nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
+
+  enableParallelBuilding = true;
 
   patches = [
     ./fix_rpaths.patch
   ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/fixpaths
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = http://www.freeorion.org;
-    license = [ licenses.gpl2 licenses.cc-by-sa-30 ];
+    license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
   };
 }

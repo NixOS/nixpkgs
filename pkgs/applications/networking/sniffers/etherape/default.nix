@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libtool gtk2 libpcap libglade libgnome libgnomeui gnomedocutils
+    libtool gtk2 libpcap libglade libgnome libgnomeui gnomedocutils
     scrollkeeper libxslt
   ];
 

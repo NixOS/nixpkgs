@@ -1,11 +1,12 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
 , python2
 , libffi
-, binutils
+, libbfd
 , libxml2
 , valgrind
 , ncurses
@@ -39,6 +40,22 @@ in stdenv.mkDerivation rec {
     ../fix-llvm-config.patch
   ];
 
+  postPatch = stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+     cd projects/compiler-rt
+      patch -p1 -F3 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+
+      sed -i "s,#include <pthread.h>,&\n#include <signal.h>,g" \
+        lib/asan/asan_linux.cc
+    )
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/
@@ -50,7 +67,7 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_REQUIRES_RTTI=1"
-    "-DLLVM_BINUTILS_INCDIR=${stdenv.lib.getDev binutils}/include"
+    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) "-DBUILD_SHARED_LIBS=ON";
 

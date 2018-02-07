@@ -1,6 +1,10 @@
 #! @shell@
-set -eu -o pipefail
+set -eu -o pipefail +o posix
 shopt -s nullglob
+
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
 
 path_backup="$PATH"
 
@@ -11,11 +15,17 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
+source @out@/nix-support/utils.sh
+
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
 if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
-
-source @out@/nix-support/utils.sh
 
 
 # Parse command line options and set several variables.
@@ -55,12 +65,9 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
         cppInclude=0
-    elif [ "${p:0:1}" != - ]; then
+    elif [[ "$p" != -?* ]]; then
+        # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
-    elif [ "$p" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
     n+=1
 done
@@ -161,7 +168,7 @@ if [ "$*" = -v ]; then
 fi
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2

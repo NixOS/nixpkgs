@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.9.98";
 
   src = fetchurl {
-    url = "http://megatools.megous.com/builds/${name}.tar.gz";
+    url = "https://megatools.megous.com/builds/${name}.tar.gz";
     sha256 = "0vx1farp0dpg4zwvxdbfdnzjk9qx3sn109p1r1zl3g3xsaj221cv";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command line client for Mega.co.nz";
-    homepage = http://megatools.megous.com/;
+    homepage = https://megatools.megous.com/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.viric maintainers.AndersonTorres ];
     platforms = platforms.linux;

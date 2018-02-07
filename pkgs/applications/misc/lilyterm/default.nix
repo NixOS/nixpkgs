@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   inherit (stuff) src version;
 
-  buildInputs = [ pkgconfig autoconf automake intltool gettext gtk vte ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake intltool gettext gtk vte ];
 
   preConfigure = "sh autogen.sh";
 

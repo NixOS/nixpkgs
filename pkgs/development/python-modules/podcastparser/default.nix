@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "podcastparser";
-  version = "0.6.1";
+  version = "0.6.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
     rev = version;
-    sha256 = "0q3qc8adykmm692ha0c37xd6wbj830zlq900fyw6vrfan9bgdj5y";
+    sha256 = "1mhg7192d6s1ll9mx1b63yfj6k4cnv4i95jllbnydyjv9ykkv0k1";
   };
 
   propagatedBuildInputs = [ ];

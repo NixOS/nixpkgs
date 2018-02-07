@@ -24,7 +24,7 @@ buildGoPackage rec {
   meta = {
     homepage = https://github.com/sloonz/ua;
     license = stdenv.lib.licenses.isc;
-    shortDescription = "Universal Aggregator";
+    description = "Universal Aggregator";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
   };

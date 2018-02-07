@@ -23,8 +23,6 @@ let
     stats  = cfg.statsAddress;
     listen = cfg.listenAddress;
   });
-
-  script = "${pkgs.hologram.bin}/bin/hologram-server --debug --conf ${cfgFile}";
 in {
   options = {
     services.hologram-server = {
@@ -96,15 +94,9 @@ in {
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
 
-      inherit script;
-    };
-
-    docker-containers.hologram-server = {
-      inherit script;
-    };
-
-    trivial-services.hologram-server = {
-      inherit script;
+      serviceConfig = {
+        ExecStart = "${pkgs.hologram.bin}/bin/hologram-server --debug --conf ${cfgFile}";
+      };
     };
   };
 }

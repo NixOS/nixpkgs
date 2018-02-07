@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
-  version = "0.2.5";
+  version = "0.2.7";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd041143b68628c713c2227c78c40b0b4a0cb5d08df116f7bdc5f83c529be0e4";
+    sha256 = "7942fe2e7821d09206002ea7e820e694094b3f964885123eb6eee1167f39b8da";
   };
 
   buildInputs = [ pypandoc pandoc ];

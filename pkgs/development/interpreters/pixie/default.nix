@@ -3,7 +3,7 @@
   variant ? "jit", buildWithPypy ? false }:
 
 let
-  commit-count = "1356";
+  commit-count = "1364";
   common-flags = "--thread --gcrootfinder=shadowstack --continuation";
   variants = {
     jit = { flags = "--opt=jit"; target = "target.py"; };
@@ -13,8 +13,8 @@ let
   };
   pixie-src = fetchgit {
     url = "https://github.com/pixie-lang/pixie.git";
-    rev = "d2a4267ea088f711af36a74928e8dfd8360584ad";
-    sha256 = "1asf6yx7zy9cx4bsg8iai57dy3r3m45xcmkmw2vix70xvfy23ryf";
+    rev = "5eb0ccbe8b0087d3a5f2d0bbbc6998d624d3cd62";
+    sha256 = "0pf31x5h2m6dpxlidv98qay1y179qw40cw4cb4v4xa88gmq2f3vm";
   };
   pypy-tag = "91db1a9";
   pypy-src = fetchurl {
@@ -32,8 +32,8 @@ let
   build = {flags, target}: stdenv.mkDerivation rec {
     name = "pixie-${version}";
     version = "0-r${commit-count}-${variant}";
-    nativeBuildInputs = libs;
-    buildInputs = [ pkgconfig makeWrapper ];
+    nativeBuildInputs = [ makeWrapper pkgconfig ];
+    buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/.pypy-c-wrapped"
       else "${python2.interpreter}";
@@ -56,30 +56,38 @@ let
       RPYTHON="`pwd`/pypy-src/rpython/bin/rpython";
       cd pixie-src
       $PYTHON $RPYTHON ${common-flags} ${target}
-      export LD_LIBRARY_PATH="${library-path}:$LD_LIBRARY_PATH"
       find pixie -name "*.pxi" -exec ./pixie-vm -c {} \;
     )'';
+    LD_LIBRARY_PATH = library-path;
+    C_INCLUDE_PATH = include-path;
+    LIBRARY_PATH = library-path;
+    PATH = bin-path;
     installPhase = ''
       mkdir -p $out/share $out/bin
       cp pixie-src/pixie-vm $out/share/pixie-vm
       cp -R pixie-src/pixie $out/share/pixie
-      makeWrapper $out/share/pixie-vm $out/bin/pixie-vm \
-        --prefix LD_LIBRARY_PATH : ${library-path} \
-        --prefix C_INCLUDE_PATH : ${include-path} \
-        --prefix LIBRARY_PATH : ${library-path} \
-        --prefix PATH : ${bin-path}
-      cat > $out/bin/pxi <<EOF
-      #!$shell
-      >&2 echo "[\$\$] WARNING: 'pxi' is a deprecated alias for 'pixie-vm', please update your scripts."
-      exec $out/bin/pixie-vm "\$@"
-      EOF
-      chmod +x $out/bin/pxi
+      makeWrapper $out/share/pixie-vm $out/bin/pixie \
+        --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH} \
+        --prefix C_INCLUDE_PATH : ${C_INCLUDE_PATH} \
+        --prefix LIBRARY_PATH : ${LIBRARY_PATH} \
+        --prefix PATH : ${PATH}
+    '';
+    doCheck = true;
+    checkPhase = ''
+      RES=$(./pixie-src/pixie-vm -e "(print :ok)")
+      if [ "$RES" != ":ok" ]; then
+        echo "ERROR Unexpected output: '$RES'"
+        return 1
+      else
+        echo "$RES"
+      fi
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
       homepage = https://github.com/pixie-lang/pixie;
       license = stdenv.lib.licenses.lgpl3;
-      platforms = ["x86_64-linux" "i686-linux"];
+      platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+      maintainers = with stdenv.lib.maintainers; [ bendlas ];
     };
   };
 in build (builtins.getAttr variant variants)

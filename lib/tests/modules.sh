@@ -61,6 +61,16 @@ checkConfigError() {
 checkConfigOutput "false" config.enable ./declare-enable.nix
 checkConfigError 'The option .* defined in .* does not exist.' config.enable ./define-enable.nix
 
+# Check integer types.
+# unsigned
+checkConfigOutput "42" config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
+checkConfigError 'The option value .* in .* is not of type.*unsigned integer.*' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
+# positive
+checkConfigError 'The option value .* in .* is not of type.*positive integer.*' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
+# between
+checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
+checkConfigError 'The option value .* in .* is not of type.*between.*-21 and 43.*inclusive.*' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
+
 # Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput "true" "$@"
@@ -126,7 +136,7 @@ checkConfigOutput "true" "$@" ./define-module-check.nix
 # Check coerced value.
 checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'The option value .* in .* is not a string or integer.' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'The option value .* in .* is not.*string or signed integer.*' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 cat <<EOF
 ====== module tests ======

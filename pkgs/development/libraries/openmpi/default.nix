@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran, perl, libibverbs
+{stdenv, fetchurl, gfortran, perl, rdma-core
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran ]
-    ++ optional (stdenv.isLinux || stdenv.isFreeBSD) libibverbs;
+    ++ optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core;
 
   nativeBuildInputs = [ perl ];
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     homepage = http://www.open-mpi.org/;
     description = "Open source MPI-2 implementation";
     longDescription = "The Open MPI Project is an open source MPI-2 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

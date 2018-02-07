@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nhpgz0kg8r00z54q5i96pjk7s57krq3fvdypq496c7fmlv9kdap";
   };
 
-  buildInputs = [ pkgconfig glib dbus_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib dbus_glib ];
 
   meta = with stdenv.lib; {
     description = "Legacy D-Bus client library for Audacious";

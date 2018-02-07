@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "devmem2-2004-08-05";
 
   src = fetchurl {
-    url = "http://lartmaker.nl/lartware/port/devmem2.c";
+    urls = [
+      "http://lartmaker.nl/lartware/port/devmem2.c"
+      "https://raw.githubusercontent.com/hackndev/tools/7ed212230f8fbb1da3424a15ee88de3279bf96ec/devmem2.c"
+    ];
     sha256 = "14f1k7v6i1yaxg4xcaaf5i4aqn0yabba857zjnbg9wiymy82qf7c";
   };
 

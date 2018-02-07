@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  buildInputs = [ alsaLib minixml jack2Full pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib minixml jack2Full ];
 
   meta = with stdenv.lib; {
     description = "Tool for storing/restoring JACK and/or ALSA connections to/from cml files";
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://aj-snapshot.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.palo ];
+    maintainers = [ maintainers.mrVanDalo ];
     platforms = platforms.all;
   };
 }

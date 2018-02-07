@@ -2,7 +2,7 @@
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr
+, zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
 , kernel ? null, spl ? null, splUnstable ? null
@@ -38,9 +38,12 @@ let
 
       patches = extraPatches;
 
-      buildInputs = [ autoreconfHook nukeReferences ]
-        ++ optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ];
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel kernel.moduleBuildDependencies;
+      buildInputs =
+           optionals buildKernel [ spl ]
+        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals (buildUser && isUnstable) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -123,7 +126,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        home = http://zfsonlinux.org/;
+        homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
@@ -138,9 +141,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.1";
+    version = "0.7.5";
 
-    sha256 = "0czal6lpl8igrhwmqh5jcgx07rlcgnrfg6ywzf681vsyh3gaxj9n";
+    sha256 = "086g4xjx05sy4fwn5709sm46m2yv35wb915xfmqjvpry46245nig";
 
     extraPatches = [
       (fetchpatch {
@@ -157,10 +160,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-09-26";
+    version = "2018-01-10";
 
-    rev = "7e98073379353a05498ac5a2f1a5df2a2257d6b0";
-    sha256 = "1hydfhmngpq31gxkxipqxnin74l760d1ia202h12vsgix9sp32h7";
+    rev = "1d53657bf561564162e2ad6449f80fa0140f1dd6";
+    sha256 = "0ibkhfz06cypgl2c869dzdbdx2i3m8ywwdmnzscv0cin5gm31vhx";
     isUnstable = true;
 
     extraPatches = [

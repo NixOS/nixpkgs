@@ -85,7 +85,7 @@ rec {
 
       testScript' =
         # Call the test script with the computed nodes.
-        if builtins.isFunction testScript
+        if lib.isFunction testScript
         then testScript { inherit nodes; }
         else testScript;
 
@@ -113,8 +113,7 @@ rec {
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
               "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
-            --run "testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '$testScript' \
+            --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
@@ -149,6 +148,7 @@ rec {
           { key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
+            virtualisation.writableStore = false;
           }
         ];
 

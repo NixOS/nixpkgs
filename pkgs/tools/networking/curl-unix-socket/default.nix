@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ go ];
-  buildPhase = "go build";
-  installPhase = "install -D curl-unix-socket* $out/bin/curl-unix-socket";
+  buildPhase = "go build -o curl-unix-socket";
+  installPhase = "install -D curl-unix-socket $out/bin/curl-unix-socket";
 
   meta = with stdenv.lib; {
     description = "Run HTTP requests over UNIX socket";

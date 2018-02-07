@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   configurePhase = "./configure.sh --shared --trace";
 
   installPhase = ''
-   mkdir -p $out/bin $out/lib $out/include/picosat
+   mkdir -p $out/bin $out/lib $out/share $out/include/picosat
    cp picomus picomcs picosat picogcnf "$out"/bin
 
+   cp VERSION      "$out"/share/picosat.version
+   cp picosat.o    "$out"/lib
    cp libpicosat.a "$out"/lib
    cp libpicosat.so "$out"/lib
 

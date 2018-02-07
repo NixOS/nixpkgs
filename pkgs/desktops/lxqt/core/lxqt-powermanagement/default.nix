@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-powermanagement";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0rcjq20ap6kc3m1f2glb8c62qhsx8qh0rkzlj3rykdj6n4hc0x79";
+    sha256 = "1fxklxmvjaykdpf0nj6cpgwx4yf52087g25k1zdak9n0l9n7hm8d";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+
+  postPatch = ''
+    substituteInPlace autostart/CMakeLists.txt \
+      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+  '';
 
   meta = with stdenv.lib; {
     description = "Power management module for LXQt";

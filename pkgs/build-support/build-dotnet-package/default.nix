@@ -19,8 +19,8 @@ attrsOrig @
     attrs = {
       name = "${baseName}-${version}";
 
+      nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pkgconfig
         mono
         dotnetbuildhelpers
         makeWrapper

@@ -7,7 +7,7 @@ in stdenv.mkDerivation rec {
   version = "0.26";
 
   src = fetchurl {
-    url = "http://fedorahosted.org/releases/m/l/mlocate/${name}.tar.xz";
+    url = "https://releases.pagure.org/mlocate/${name}.tar.xz";
     sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
   };
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Merging locate is an utility to index and quickly search for files";
-    homepage = https://fedorahosted.org/mlocate/;
+    homepage = https://pagure.io/mlocate;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

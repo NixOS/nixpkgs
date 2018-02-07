@@ -9,11 +9,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.67-rc2";
+  version = "0.67";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "0l4q2dfnvyn0jr1lggf8g7515q4z7qr1lnmy0lsyhjf477ldszqf";
+    sha256 = "1gdbzy9qyzj3rn9fsl0ss7lbk9kyka99656bphx2dah694yyyz5k";
   };
 
   propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];

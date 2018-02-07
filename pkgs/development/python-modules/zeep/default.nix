@@ -20,17 +20,18 @@
 , pytestcov
 , requests-mock
 , testtools
+, tornado
 }:
 
 let
   pname = "zeep";
-  version = "2.3.0";
+  version = "2.5.0";
 in buildPythonPackage {
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b01d81c61d7b7858b7be001615d3c995a371815f5e6902c914fea9beba30b716";
+    sha256 = "4f9db52c7d269813fc6251da4cb050869158858aeea75a055b4550f19e52ac84";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,10 @@ in buildPythonPackage {
 
   # testtools dependency not supported for py3k
   doCheck = !isPy3k;
+
+  checkInputs = [
+    tornado
+  ];
 
   buildInputs = if isPy3k then [] else [
     freezegun

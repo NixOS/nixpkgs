@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mnemonic";
-  version = "0.17";
+  version = "0.18";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/${pname}/${name}.tar.gz";
-    sha256 = "1hq6xb47jagfqf65iwcrh0065mj3521d2mxmahg7vfraihqyqdjn";
+    sha256 = "02a7306a792370f4a0c106c2cf1ce5a0c84b9dbd7e71c6792fdb9ad88a727f1d";
   };
 
   propagatedBuildInputs = [ pbkdf2 ];

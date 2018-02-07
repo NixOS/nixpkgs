@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "go-ethereum-classic-${version}";
-  version = "3.5.86";
+  version = "4.0.0";
 
   goPackagePath = "github.com/ethereumproject/go-ethereum";
   subPackages = [ "cmd/evm" "cmd/geth" ];
@@ -10,7 +10,7 @@ buildGoPackage rec {
   src = fetchgit {
     rev = "v${version}";
     url = "https://github.com/ethereumproject/go-ethereum";
-    sha256 = "1k59hl3qvx4422zqlp259566fnxq5bs67jhm0v6a1zfr1k8iqzwh";
+    sha256 = "06f1w7s45q4zva1xjrx92xinsdrixl0m6zhx5hvdjmg3xqcbwr79";
   };
 
   goDeps = ./deps.nix;

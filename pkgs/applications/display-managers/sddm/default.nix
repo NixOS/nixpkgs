@@ -1,11 +1,10 @@
-{ mkDerivation, lib, copyPathsToStore, fetchFromGitHub, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
 
 let
-
-  version = "0.15.0";
+  version = "0.17.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -14,11 +13,10 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1wissgl7wd7fblq8ghz8n2fr6wqip7h88p9fiarfpvi1918fgng8";
+    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
-  patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [ ./sddm-ignore-config-mtime.patch ];
 
   postPatch =
     # Module Qt5::Test must be included in `find_package` before it is used.
@@ -50,12 +48,16 @@ in mkDerivation rec {
   postInstall = ''
     # remove empty scripts
     rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
+    for f in $out/share/sddm/themes/**/theme.conf ; do
+      substituteInPlace $f \
+        --replace 'background=' "background=$(dirname $f)/"
+    done
   '';
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage = https://github.com/sddm/sddm;
-    platforms = platforms.linux;
+    homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
+    platforms   = platforms.linux;
   };
 }

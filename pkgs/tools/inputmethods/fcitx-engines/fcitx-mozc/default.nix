@@ -33,7 +33,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   patch_version = "2.18.2612.102.1";
-  patches = [ 
+  patches = [
     (fetchpatch rec {
       name   = "fcitx-mozc-${patch_version}.patch";
       url    = "https://download.fcitx-im.org/fcitx-mozc/${name}";
@@ -43,7 +43,7 @@ in clangStdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/unix/fcitx/mozc.conf \
-      --replace "/usr/share/fcitx/mozc/icon/mozc.png" "mozc" 
+      --replace "/usr/share/fcitx/mozc/icon/mozc.png" "mozc"
   '';
 
   configurePhase = ''
@@ -91,7 +91,7 @@ in clangStdenv.mkDerivation rec {
   meta = with clangStdenv.lib; {
     isFcitxEngine = true;
     description   = "Fcitx engine for Google japanese input method";
-    homepage      = http://code.google.com/p/mozc/;
+    homepage      = https://github.com/google/mozc;
     downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
     license       = licenses.free;
     platforms     = platforms.linux;

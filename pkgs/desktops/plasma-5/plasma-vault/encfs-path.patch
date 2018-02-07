@@ -1,0 +1,24 @@
+diff --git a/kded/engine/backends/encfs/encfsbackend.cpp b/kded/engine/backends/encfs/encfsbackend.cpp
+index 47bb237..4ff064d 100644
+--- a/kded/engine/backends/encfs/encfsbackend.cpp
++++ b/kded/engine/backends/encfs/encfsbackend.cpp
+@@ -132,17 +132,16 @@ bool EncFsBackend::isInitialized(const Device &device) const
+ 
+ QProcess *EncFsBackend::encfs(const QStringList &arguments) const
+ {
+-    return process("encfs", arguments, {});
++    return process(NIXPKGS_ENCFS, arguments, {});
+ }
+ 
+ 
+ 
+ QProcess *EncFsBackend::encfsctl(const QStringList &arguments) const
+ {
+-    return process("encfsctl", arguments, {});
++    return process(NIXPKGS_ENCFSCTL, arguments, {});
+ }
+ 
+ 
+ 
+ } // namespace PlasmaVault
+-

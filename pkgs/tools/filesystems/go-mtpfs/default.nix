@@ -16,9 +16,5 @@ buildGoPackage rec {
     sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
   };
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath "$out/lib" $bin/bin/go-mtpfs
-  '';
-
   goDeps = ./deps.nix;
 }

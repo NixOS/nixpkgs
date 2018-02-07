@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dz28y4ay4lskhl0lawqy2dkcrhgfkbg06v22qxzzw8i6caizcmx";
   };
 
-  buildInputs = [ pkgconfig libpcap ncurses expat pcre libnl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap ncurses expat pcre libnl ];
   postConfigure = ''
     sed -e 's/-o $(INSTUSR)//' \
         -e 's/-g $(INSTGRP)//' \

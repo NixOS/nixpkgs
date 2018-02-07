@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
 
-  sourceRoot = "snes9x-${version}-src";
   preAutoreconf = "cd gtk; intltoolize";  
     
   buildInputs = [ SDL zlib gtk2 libxml2 libXv ];

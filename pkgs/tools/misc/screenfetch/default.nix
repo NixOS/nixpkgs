@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, coreutils, gawk, procps, gnused
+{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, gawk, procps, gnused
 , bc, findutils, xdpyinfo, xprop, gnugrep, ncurses
+, darwin
 }:
 
 stdenv.mkDerivation {
@@ -21,13 +22,22 @@ stdenv.mkDerivation {
     # Fix all of the depedencies of screenfetch
     patchShebangs $out/bin/screenfetch
     wrapProgram "$out/bin/screenfetch" \
-      --set PATH ${stdenv.lib.makeBinPath [
-        coreutils gawk procps gnused findutils xdpyinfo
-        xprop gnugrep ncurses bc
-      ]}
+      --set PATH ${lib.makeBinPath ([
+        coreutils gawk gnused findutils
+        gnugrep ncurses bc
+      ] ++ lib.optionals stdenv.isLinux [
+        procps
+        xdpyinfo
+        xprop
+      ] ++ lib.optionals stdenv.isDarwin (with darwin; [
+        adv_cmds
+        DarwinTools
+        system_cmds
+        "/usr" # some commands like defaults is not available to us
+      ]))}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
     screenFetch is a "Bash Screenshot Information Tool". This handy Bash
@@ -39,9 +49,9 @@ stdenv.mkDerivation {
     screenshot upon displaying info, and even customizing the screenshot
     command! This script is very easy to add to and can easily be extended.
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     homepage = http://git.silverirc.com/cgit.cgi/screenfetch-dev.git/;
-    maintainers = with stdenv.lib.maintainers; [relrod];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [relrod];
+    platforms = platforms.all;
   };
 }

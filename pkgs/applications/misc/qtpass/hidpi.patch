@@ -1,0 +1,13 @@
+diff --git a/main/main.cpp b/main/main.cpp
+index 8a18409c..1cddd911 100644
+--- a/main/main.cpp
++++ b/main/main.cpp
+@@ -35,7 +35,7 @@
+  * @return
+  */
+ int main(int argc, char *argv[]) {
+-  qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
++  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+   QString text = "";
+   for (int i = 1; i < argc; ++i) {
+     if (i > 1)

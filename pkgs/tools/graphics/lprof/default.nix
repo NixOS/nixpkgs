@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Little CMS ICC profile construction set";
-    homepage = http://sourceforge.net/projects/lprof;
+    homepage = https://sourceforge.net/projects/lprof;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

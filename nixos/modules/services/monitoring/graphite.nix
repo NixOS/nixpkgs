@@ -7,10 +7,23 @@ let
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
+  staticDir = cfg.dataDir + "/static";
+
+  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings"
+    {inherit graphiteLocalSettings;} ''
+    mkdir -p $out
+    ln -s $graphiteLocalSettings $out/graphite_local_settings.py
+  '';
+
+  graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
+    "STATIC_ROOT = '${staticDir}'\n" +
+    optionalString (! isNull config.time.timeZone) "TIME_ZONE = '${config.time.timeZone}'\n"
+    + cfg.web.extraConfig
+  );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
-    time_zone: ${config.time.timeZone}
     search_index: ${dataDir}/index
+    ${optionalString (!isNull config.time.timeZone) ''time_zone: ${config.time.timeZone}''}
     ${optionalString (cfg.api.finders != []) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
     ${optionalString (cfg.api.functions != []) ''functions:''}
@@ -93,6 +106,15 @@ in {
         description = "Graphite web frontend port.";
         default = 8080;
         type = types.int;
+      };
+
+      extraConfig = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Graphite webapp settings. See:
+          <link xlink:href="http://graphite.readthedocs.io/en/latest/config-local-settings.html"/>
+        '';
       };
     };
 
@@ -445,7 +467,15 @@ in {
       ];
     })
 
-    (mkIf cfg.web.enable {
+    (mkIf cfg.web.enable (let
+      python27' = pkgs.python27.override {
+        packageOverrides = self: super: {
+          django = self.django_1_8;
+          django_tagging = self.django_tagging_0_4_3;
+        };
+      };
+      pythonPackages = python27'.pkgs;
+    in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -455,14 +485,18 @@ in {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
                 extraLibs = [
-                  pkgs.python27Packages.graphite_web
-                  pkgs.python27Packages.pysqlite
+                  pythonPackages.graphite_web
+                  pythonPackages.pysqlite
                 ];
               };
               penvPack = "${penv}/${pkgs.python.sitePackages}";
-              # opt/graphite/webapp contains graphite/settings.py
-              # explicitly adding pycairo in path because it cannot be imported via buildEnv
-            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}";
+            in concatStringsSep ":" [
+                 "${graphiteLocalSettingsDir}"
+                 "${penvPack}/opt/graphite/webapp"
+                 "${penvPack}"
+                 # explicitly adding pycairo in path because it cannot be imported via buildEnv
+                 "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
+               ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
@@ -470,9 +504,9 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
-            --call django.core.handlers.wsgi:WSGIHandler'';
+            ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
+              --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
+          '';
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -482,21 +516,25 @@ in {
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            # populate database
-            ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
+            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
 
-            # create index
-            ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
-
-            chown -R graphite:graphite ${cfg.dataDir}
+            chown -R graphite:graphite ${dataDir}
 
             touch ${dataDir}/db-created
+          fi
+
+          # Only collect static files when graphite_web changes.
+          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite_web}" ]; then
+            mkdir -p ${staticDir}
+            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
+            chown -R graphite:graphite ${staticDir}
+            ln -sfT "${pythonPackages.graphite_web}" "${dataDir}/current_graphite_web"
           fi
         '';
       };
 
-      environment.systemPackages = [ pkgs.python27Packages.graphite_web ];
-    })
+      environment.systemPackages = [ pythonPackages.graphite_web ];
+    }))
 
     (mkIf cfg.api.enable {
       systemd.services.graphiteApi = {
@@ -506,7 +544,7 @@ in {
         environment = {
           PYTHONPATH = let
               aenv = pkgs.python.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo ] ++ cfg.api.finders;
+                extraLibs = [ cfg.api.package pkgs.cairo pkgs.pythonPackages.cffi ] ++ cfg.api.finders;
               };
             in "${aenv}/${pkgs.python.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;

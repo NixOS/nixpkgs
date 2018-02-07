@@ -1,12 +1,12 @@
 { stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
 
 stdenv.mkDerivation rec {
-  name = "atom-${version}";
-  version = "1.21.0-beta0";
+  name = "atom-beta-${version}";
+  version = "1.24.0-beta3";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "1syxlyb62vp9hmjdiazhmvq8w52b90l8mvf502xkdav4vi3yxzfz";
+    sha256 = "02nnjjwlkxafi2fbi4gz276nqkmi92kf3q414vw1k3kc8q5zvxrs";
     name = "${name}.deb";
   };
 

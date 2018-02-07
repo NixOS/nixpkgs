@@ -2,29 +2,29 @@
   libtoxcore,
   libpthreadstubs, libXdmcp, libXScrnSaver,
   qtbase, qtsvg, qttools, qttranslations,
-  ffmpeg, filter-audio, libsodium, libopus,
+  ffmpeg, filter-audio, libexif, libsodium, libopus,
   libvpx, openal, opencv, pcre, qrencode, sqlcipher }:
 
 mkDerivation rec {
   name = "qtox-${version}";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
-    owner  = "tux3";
+    owner  = "qTox";
     repo   = "qTox";
     rev    = "v${version}";
-    sha256 = "0h8v359h1xn2xm6xa9q56mjiw58ap1bpiwx1dxxmphjildxadwck";
+    sha256 = "08x71p23d0sp0w11k8z3wf3k56iclmdq9x652n8ggidgyrdi9f6y";
   };
 
   buildInputs = [
     libtoxcore
     libpthreadstubs libXdmcp libXScrnSaver
-    qtbase qtsvg qttools qttranslations
-    ffmpeg filter-audio libopus libsodium
+    qtbase qtsvg qttranslations
+    ffmpeg filter-audio libexif libopus libsodium
     libvpx openal opencv pcre qrencode sqlcipher
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 
@@ -37,6 +37,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt Tox client";
+    homepage    = https://tox.chat;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];
     platforms   = platforms.all;

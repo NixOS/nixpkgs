@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig gnome3.yelp itstool libxml2 intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gnome3.yelp itstool libxml2 intltool ];
 
   meta = with stdenv.lib; {
     homepage = "https://help.gnome.org/users/gnome-help/${gnome3.version}";

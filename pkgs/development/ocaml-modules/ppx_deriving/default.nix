@@ -9,8 +9,8 @@ let param =
     sha256 = "0cy9p8d8cbcxvqyyv8fz2z9ypi121zrgaamdlp4ld9f3jnwz7my9";
     extraPropagatedBuildInputs = [];
   } else {
-    version = "4.2";
-    sha256 = "0scsg45wp6xdqj648fz155r4yngyl2xcd3hdszfzqwdpbax33914";
+    version = "4.2.1";
+    sha256 = "1yhhjnncbbb7fsif7qplndh01s1xd72dqm8f3jkgx9y4ariqqvf9";
     extraPropagatedBuildInputs = [ ocaml-migrate-parsetree ppx_derivers ];
 }; in
 

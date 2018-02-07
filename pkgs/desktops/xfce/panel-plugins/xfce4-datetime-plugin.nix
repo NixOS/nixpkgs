@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0b4yril07qgkmywjym1qp12r4g35bnh96879zbjps7cd3rkxld4p";
   };
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfcegui4 xfce4panel gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfcegui4 xfce4panel gtk ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

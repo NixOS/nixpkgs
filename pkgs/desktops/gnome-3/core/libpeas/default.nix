@@ -7,7 +7,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-python3" ];
 
-  buildInputs =  [ intltool pkgconfig glib gtk3 gnome3.defaultIconTheme ncurses python3Packages.python python3Packages.pygobject3 gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs =  [ intltool glib gtk3 gnome3.defaultIconTheme ncurses python3Packages.python python3Packages.pygobject3 ];
+  propagatedBuildInputs = [
+    # Required by libpeas-1.0.pc
+    gobjectIntrospection
+  ];
 
   meta = with stdenv.lib; {
     description = "A GObject-based plugins engine";

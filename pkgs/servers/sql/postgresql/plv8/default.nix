@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "plv8-${version}";
-  version = "2.0.3";
+  version = "2.1.0";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "0cn7ynckmdb08dkzjilvc55xz61d1jiya7yrnphizw404j84y3qc";
+    sha256 = "1sfpxz0zcbinn6822j12lkwgrw9kfacrs83ic968rm489rl9w241";
   };
 
   preConfigure = ''

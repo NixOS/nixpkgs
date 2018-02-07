@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   preAutoreconf = "rm m4/*";
   postPatch = "sed -i -e 's:usr/local:usr:' examples/{instances,remove}_test.c";
 
-  buildInputs = [ pkgconfig autoreconfHook ladspaH openssl zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ladspaH openssl zlib ];
 
   propagatedBuildInputs = [ librdf_raptor2 ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "2.136";
+  version = "2.138";
 in fetchzip rec {
   name = "roboto-${version}";
 
@@ -9,10 +9,10 @@ in fetchzip rec {
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
   '';
 
-  sha256 = "02fanxx2hg0kvxl693rc0fkbrbr2i8b14qmpparkrwmv0j35wnd7";
+  sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
 
   meta = {
     homepage = https://github.com/google/roboto;

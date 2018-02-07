@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0cxyakc09bn6wjfj42gh508hc62awx825skzacpizx2bqs6v7xvb";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libtool autoconf automake cppunit
+    libtool autoconf automake cppunit
     libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c
   ];
 

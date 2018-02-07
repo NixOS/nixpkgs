@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "matchbox-${version}";
   version = "1.2";
 
-  buildInputs = [ libmatchbox pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmatchbox ];
 
   src = fetchurl {
     url = "http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/${version}/matchbox-window-manager-${version}.tar.bz2";

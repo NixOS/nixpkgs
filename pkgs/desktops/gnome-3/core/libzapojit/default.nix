@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0zn3s7ryjc3k1abj4k55dr2na844l451nrg9s6cvnnhh569zj99x";
   };
 
-  buildInputs = [ pkgconfig glib intltool json_glib rest libsoup gtk gnome_online_accounts ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib intltool json_glib rest libsoup gtk gnome_online_accounts ];
 
   meta = with stdenv.lib; {
+    description = "GObject wrapper for the SkyDrive and Hotmail REST APIs";
     platforms = platforms.linux;
   };
 }

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   # disable tests as we don't need to depend on gtk+(2/3)
   configureFlags = [ "--disable-tests" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ glib gdk_pixbuf gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook gobjectIntrospection ];
+  buildInputs = [ glib gdk_pixbuf ];
 
   meta = {
     homepage = https://developer.gnome.org/notification-spec/;

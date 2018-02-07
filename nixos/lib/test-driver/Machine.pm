@@ -146,6 +146,7 @@ sub start {
             ($self->{allowReboot} ? "" : "-no-reboot ") .
             "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
             "-device virtio-serial -device virtconsole,chardev=shell " .
+            "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};
@@ -361,8 +362,8 @@ sub mustFail {
 
 
 sub getUnitInfo {
-    my ($self, $unit) = @_;
-    my ($status, $lines) = $self->execute("systemctl --no-pager show '$unit'");
+    my ($self, $unit, $user) = @_;
+    my ($status, $lines) = $self->systemctl("--no-pager show \"$unit\"", $user);
     return undef if $status != 0;
     my $info = {};
     foreach my $line (split '\n', $lines) {
@@ -372,19 +373,40 @@ sub getUnitInfo {
     return $info;
 }
 
+sub systemctl {
+    my ($self, $q, $user) = @_;
+    if ($user) {
+        $q =~ s/'/\\'/g;
+        return $self->execute("su -l $user -c \$'XDG_RUNTIME_DIR=/run/user/`id -u` systemctl --user $q'");
+    }
+
+    return $self->execute("systemctl $q");
+}
+
+# Fail if the given systemd unit is not in the "active" state.
+sub requireActiveUnit {
+    my ($self, $unit) = @_;
+    $self->nest("checking if unit ‘$unit’ has reached state 'active'", sub {
+        my $info = $self->getUnitInfo($unit);
+        my $state = $info->{ActiveState};
+        if ($state ne "active") {
+            die "Expected unit ‘$unit’ to to be in state 'active' but it is in state ‘$state’\n";
+        };
+    });
+}
 
 # Wait for a systemd unit to reach the "active" state.
 sub waitForUnit {
-    my ($self, $unit) = @_;
+    my ($self, $unit, $user) = @_;
     $self->nest("waiting for unit ‘$unit’", sub {
         retry sub {
-            my $info = $self->getUnitInfo($unit);
+            my $info = $self->getUnitInfo($unit, $user);
             my $state = $info->{ActiveState};
             die "unit ‘$unit’ reached state ‘$state’\n" if $state eq "failed";
             if ($state eq "inactive") {
                 # If there are no pending jobs, then assume this unit
                 # will never reach active state.
-                my ($status, $jobs) = $self->execute("systemctl list-jobs --full 2>&1");
+                my ($status, $jobs) = $self->systemctl("list-jobs --full 2>&1", $user);
                 if ($jobs =~ /No jobs/) {  # FIXME: fragile
                     # Handle the case where the unit may have started
                     # between the previous getUnitInfo() and
@@ -418,14 +440,14 @@ sub waitForFile {
 }
 
 sub startJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl start $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("start $jobName", $user);
     # FIXME: check result
 }
 
 sub stopJob {
-    my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName");
+    my ($self, $jobName, $user) = @_;
+    $self->systemctl("stop $jobName", $user);
 }
 
 

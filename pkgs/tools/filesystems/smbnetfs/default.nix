@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16sikr81ipn8v1a1zrqgnsy2as3zcaxbzkr0bm5vxy012bq0plkd";
   };
 
-  buildInputs = [ fuse samba pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse samba glib ];
 
   meta = with stdenv.lib; {
     description = "A FUSE FS for mounting Samba shares";
@@ -18,6 +19,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     updateWalker = true;
     inherit version;
-    homepage = http://sourceforge.net/projects/smbnetfs/;
+    homepage = https://sourceforge.net/projects/smbnetfs/;
   };
 }

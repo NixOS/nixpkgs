@@ -21,11 +21,23 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd Qt4Qt5
+    ${if withQt5
+      then ''
+    sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
+           -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
+           -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/translations," \
+           -e "s,\$\$\\[QT_HOST_DATA\\]/mkspecs,$out/mkspecs," \
+           -e "s,\$\$\\[QT_INSTALL_DATA\\]/mkspecs,$out/mkspecs," \
+           -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share," \
+           qscintilla.pro
+    ''
+      else ''
     sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
            -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
            -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/share/qt/translations," \
            -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share/qt," \
            qscintilla.pro
+    ''}
   '';
 
   meta = with stdenv.lib; {

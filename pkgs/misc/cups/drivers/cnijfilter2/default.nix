@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
         --replace /usr/include/libusb-1.0 \
                   ${libusb.dev}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
+                   --datadir=$out/share \
                    --enable-libdir=/var/cache/cups
       make
     )

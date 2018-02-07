@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, standardPatch, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-about";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1pa68pr0iwvh34lippagc8kxdfd0l2071m0vh7dnvfqbnwly29dk";
+    sha256 = "13knjxbnq0mh9jgkllarf6rjxkvj2c93l0srnlrqp3939gcpwxh3";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";

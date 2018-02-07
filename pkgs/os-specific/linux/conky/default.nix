@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -64,13 +64,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.10.6";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "15j8h251v9jpdg6h6wn1vb45pkk806pf9s5n3rdrps9r185w8hn8";
+    sha256 = "1qx47m4c1j3wh1hmbn2h8wyvg0ncr3kz1zcdj9si2bdyz3s0i9w7";
   };
 
   postPatch = ''
@@ -80,17 +80,14 @@ stdenv.mkDerivation rec {
     # Drop examples, since they contain non-ASCII characters that break docbook2x :(
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
-    substituteInPlace cmake/Docbook.cmake \
-      --replace "http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl"
-    substituteInPlace doc/docs.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
     substituteInPlace cmake/Conky.cmake --replace "#set(RELEASE true)" "set(RELEASE true)"
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ pkgconfig glib cmake libXinerama ]
-    ++ optionals docsSupport        [ docbook2x libxslt man less ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glib libXinerama ]
+    ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper
     ++ optional  xdamageSupport     libXdamage
@@ -123,6 +120,10 @@ stdenv.mkDerivation rec {
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
     ;
+
+  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
+  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://conky.sourceforge.net/;

@@ -219,7 +219,6 @@ in
 
     users.extraUsers.redis =
       { name = cfg.user;
-        uid = config.ids.uids.redis;
         description = "Redis database user";
       };
 

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a6x2c5bvpnkn7lhmxkjgz4axmh93m1clrlv41s1wzkc48lnc9zq";
   };
 
-  buildInputs = [ libcddb pkgconfig ncurses help2man ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libcddb ncurses help2man ]
     ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   # Disabled because one test (check_paranoia.sh) fails.

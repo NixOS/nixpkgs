@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
   '';
 
-  buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons openssl protobuf boost zlib ];
 
   buildPhase = "scons";
 

@@ -90,16 +90,24 @@ in
       [ (allowdeny "allow" (cfg.allow))
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
-        { source = pkgs.writeText "fcron.conf" ''
-            fcrontabs   =       /var/spool/fcron
-            pidfile     =       /var/run/fcron.pid
-            fifofile    =       /var/run/fcron.fifo
-            fcronallow  =       /etc/fcron.allow
-            fcrondeny   =       /etc/fcron.deny
-            shell       =       /bin/sh
-            sendmail    =       /run/wrappers/bin/sendmail
-            editor      =       ${pkgs.vim}/bin/vim
-          '';
+        { source =
+            let
+              isSendmailWrapped =
+                lib.hasAttr "sendmail" config.security.wrappers;
+              sendmailPath =
+                if isSendmailWrapped then "/run/wrappers/bin/sendmail"
+                else "${config.system.path}/bin/sendmail";
+            in
+            pkgs.writeText "fcron.conf" ''
+              fcrontabs   =       /var/spool/fcron
+              pidfile     =       /var/run/fcron.pid
+              fifofile    =       /var/run/fcron.fifo
+              fcronallow  =       /etc/fcron.allow
+              fcrondeny   =       /etc/fcron.deny
+              shell       =       /bin/sh
+              sendmail    =       ${sendmailPath}
+              editor      =       ${pkgs.vim}/bin/vim
+            '';
           target = "fcron.conf";
           gid = config.ids.gids.fcron;
           mode = "0644";
@@ -137,10 +145,7 @@ in
       after = [ "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # FIXME use specific path
-      environment = {
-        PATH = "/run/current-system/sw/bin";
-      };
+      path = [ pkgs.fcron ];
 
       preStart = ''
         install \
@@ -149,7 +154,7 @@ in
           --group fcron \
           --directory /var/spool/fcron
         # load system crontab file
-        /run/wrappers/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+        /run/wrappers/bin/fcrontab -u systab - < ${pkgs.writeText "systab" cfg.systab}
       '';
 
       serviceConfig = {

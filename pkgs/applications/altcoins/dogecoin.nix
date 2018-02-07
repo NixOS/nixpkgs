@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvy";
+    sha256 = "04rddx20d4fps2w3h1jxa2j8iyqpjv2fh897z0z3r06qjvjzf7rr";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db5 openssl utillinux 
+  buildInputs = [ openssl db5 openssl utillinux
                   protobuf boost zlib miniupnpc ]
                   ++ optionals withGui [ qt4 qrencode ];
 

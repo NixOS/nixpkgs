@@ -50,6 +50,11 @@ let
               "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
           ${optionalString (cfg.down != "" || cfg.updateResolvConf)
               "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
+          ${optionalString (cfg.authUserPass != null)
+              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+                ${cfg.authUserPass.username}
+                ${cfg.authUserPass.password}
+              ''}"}
         '';
 
     in {
@@ -161,6 +166,29 @@ in
             '';
           };
 
+          authUserPass = mkOption {
+            default = null;
+            description = ''
+              This option can be used to store the username / password credentials
+              with the "auth-user-pass" authentication method.
+
+              WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
+            '';
+            type = types.nullOr (types.submodule {
+
+              options = {
+                username = mkOption {
+                  description = "The username to store inside the credentials file.";
+                  type = types.string;
+                };
+
+                password = mkOption {
+                  description = "The password to store inside the credentials file.";
+                  type = types.string;
+                };
+              };
+            });
+          };
         };
 
       });

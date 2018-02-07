@@ -1,50 +1,39 @@
-{ stdenv, fetchzip, autoconf, automake, openssl, libxml2, fetchFromGitHub, ncurses }:
+{ stdenv, cmake, fetchFromGitHub, ncurses, libsodium, json_c }:
 
-let
-  scrypt_src = fetchzip {
-    url = "http://www.tarsnap.com/scrypt/scrypt-1.2.0.tgz";
-    sha256 = "0ahylib2pimlhjcm566kpim6n16jci5v749xwdkr9ivgfjrv3xn4";
-  };
-
-in stdenv.mkDerivation {
-  name = "mpw-2.1-6834f36";
+stdenv.mkDerivation rec {
+  name = "mpw-2.6-f8043ae";
 
   src = fetchFromGitHub {
     owner = "Lyndir";
     repo = "MasterPassword";
-    rev = "6834f3689f5dfd4e59ad6959961d349c224977ee";
-    sha256 = "0zlpx3hb1y2l60hg961h05lb9yf3xb5phnyycvazah2674gkwb2p";
+    rev = "f8043ae16d73ddfb205aadd25c35cd9c5e95b228";
+    sha256 = "0hy02ri7y3sca85z3ff5i68crwav5cjd7rrdqj7jrnpp1bw4yapi";
   };
 
   postUnpack = ''
-    sourceRoot+=/MasterPassword/C
+    sourceRoot+=/platform-independent/cli-c
   '';
 
-  prePatch = ''
-    patchShebangs .
-    mkdir lib/scrypt/src
-    cp -R --no-preserve=ownership ${scrypt_src}/* lib/scrypt/src
-    chmod +w -R lib/scrypt/src
-    substituteInPlace lib/scrypt/src/libcperciva/cpusupport/Build/cpusupport.sh \
-      --replace dirname "$(type -P dirname)"
-    substituteInPlace lib/scrypt/src/Makefile.in --replace "command -p mv" "mv"
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace curses ncurses
+    echo ${name} > VERSION
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  dontUseCmakeBuildDir = true;
 
-  buildInputs = [ autoconf automake openssl libxml2 ncurses ];
+  nativeBuildInputs = [ cmake ];
 
-  buildPhase = ''
-    substituteInPlace build --replace '"curses"' '"ncurses"'
-    targets="mpw mpw-tests" ./build
-  '';
+  buildInputs = [ ncurses libsodium json_c ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv mpw $out/bin/mpw
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    homepage = http://masterpasswordapp.com/;
+    description = "A stateless password management solution";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

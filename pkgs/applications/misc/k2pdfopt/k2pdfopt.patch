@@ -17,11 +17,11 @@ index 4a2378b..502c477 100644
 -# willus.h
 -# HAVE_GSL_LIB
 +pkg_check_modules(GSL gsl)
-+if(MUPDF_FOUND)
++if(GSL_FOUND)
 +  set(HAVE_GSL_LIB 1)
 +  include_directories(SYSTEM ${GSL_INCLUDEDIR})
 +  set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${GSL_LDFLAGS})
-+endif(MUPDF_FOUND)
++endif(GSL_FOUND)
  
  
  # libfreetype6 (>= 2.3.9), libjbig2dec0, libjpeg8 (>= 8c), libx11-6, libxext6, zlib1g (>= 1:1.2.0)
@@ -30,7 +30,7 @@ index 4a2378b..502c477 100644
    message(STATUS "mupdf libraries: ${MUPDF_LDFLAGS}")
    set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${MUPDF_LDFLAGS} 
 -    -lmupdf-js-none -lopenjpeg -ljbig2dec -ljpeg -lfreetype
-+    -lopenjp2 -ljbig2dec -ljpeg -lfreetype -lharfbuzz
++ 
    )
  endif(MUPDF_FOUND)
  

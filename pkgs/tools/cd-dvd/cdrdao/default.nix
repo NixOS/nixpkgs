@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lame, libvorbis, libmad, pkgconfig, libao}:
+{stdenv, fetchurl, libvorbis, libmad, pkgconfig, libao}:
 
 stdenv.mkDerivation {
   name = "cdrdao-1.2.3";
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   makeFlags = "RM=rm LN=ln MV=mv";
 
-  buildInputs = [ lame libvorbis libmad pkgconfig libao ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libvorbis libmad libao ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl.bin git.out jq.out nodePackages.bower2nix
+#!nix-shell -i bash -p curl.bin git.out nix jq.out nodePackages.bower2nix
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -7,18 +7,18 @@ IFS=$'\n\t'
 # set -x
 
 REPO=sensu/uchiwa
+VERSION=0.0.1
 SHA="1111111111111111111111111111111111111111111111111111"
+DIR=$(pwd)
 
 write_src() {
-  cat <<_EOF > src.nix
+  cat <<_EOF > $DIR/src.nix
 {
-  version = "${VERSION}";
-  sha256  = "${SHA}";
+    version = "${VERSION}";
+    sha256  = "${SHA}";
 }
 _EOF
 }
-
-t=$(mktemp -d)
 
 LATEST_VERSION=$(curl https://api.github.com/repos/${REPO}/tags -s | jq '.[0]' -r | jq .name -r)
 echo "Latest version: ${LATEST_VERSION}"
@@ -26,17 +26,17 @@ echo "Latest version: ${LATEST_VERSION}"
 VERSION=${1:-${LATEST_VERSION}}
 echo "Updating to: ${VERSION}"
 
+TOP=$(git rev-parse --show-toplevel)
+
+cd $(dirname $0)
+
 write_src
-
-curl https://raw.githubusercontent.com/${REPO}/${VERSION}/bower.json -s > $t/bower.json
-bower2nix $t/bower.json $t/bower-packages.nix
-mv $t/bower-packages.nix .
-# sed -i 's@/@-@g' bower-packages.nix
-
-pushd $(git rev-parse --show-toplevel)
+pushd $TOP >/dev/null
 SHA=$(nix-prefetch-url -A uchiwa.src)
-popd
-
+popd >/dev/null
 write_src
 
-rm -r $t
+curl https://raw.githubusercontent.com/${REPO}/${VERSION}/bower.json -s > bower.json
+rm -f bower-packages.nix
+bower2nix bower.json $DIR/bower-packages.nix
+rm -f bower.json

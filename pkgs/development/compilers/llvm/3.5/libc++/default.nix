@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
                 '"${libcxxabi}/lib/libc++abi.dylib"'
   '';
 
-  patches = [ ./darwin.patch ];
+  patches = [
+    ./darwin.patch
+    # glibc 2.26 fix
+    ./xlocale-glibc-2.26.patch
+  ];
 
   buildInputs = [ cmake libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

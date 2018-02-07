@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "17ili8l7zqbbkzr1rcy4hlnazkf50mds41wg6n7bfdsx3c7cldgh";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ ucommon openssl libgcrypt ];
 
   configureFlags = [

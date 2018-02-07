@@ -14,6 +14,7 @@ in stdenv.mkDerivation {
     rev = "v${version}";
     sha256 = "0fm0z73afghwmbshpsn5jfbyyfzz1v8s7scwycnvsk2cgv5f4r86";
   };
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl ppp ];
 

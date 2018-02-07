@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchgit, python3Packages, docutils
-, acl, apktool, binutils, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, diffutils, dtc
+{ lib, stdenv, fetchgit, python3Packages, docutils, help2man
+, acl, apktool, libbfd, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, diffutils, dtc
 , e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnupg1, gnutar
 , gzip, imagemagick, jdk, libarchive, libcaca, llvm, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
 , squashfsTools, tcpdump, unoconv, unzip, xxd, xz
@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "86";
+  version = "90";
 
   src = fetchgit {
     url    = "git://anonscm.debian.org/reproducible/diffoscope.git";
     rev    = "refs/tags/${version}";
-    sha256 = "0jj3gn7pw7him12bxf0wbs6wkz32ydv909v5gi681p0dyzajd0zr";
+    sha256 = "1w16667j6ag2iim1xcy8y9v9965mq50k64wnf693mivddll62704";
   };
 
   patches = [
@@ -25,10 +25,12 @@ python3Packages.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
+  nativeBuildInputs = [ docutils help2man ];
+
   # Still missing these tools: docx2txt enjarify js-beautify oggDump Rscript
   # Also these libraries: python3-guestfs
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
-      acl binutils bzip2 cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
+      acl libbfd bzip2 cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
       fontforge-fonttools gettext gnutar gzip libarchive libcaca pgpdump sng sqlite
       squashfsTools unzip xxd xz
     ] ++ lib.optionals enableBloat [
@@ -37,10 +39,12 @@ python3Packages.buildPythonApplication rec {
     ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
+  checkInputs = with python3Packages; [ pytest ];
 
   postInstall = ''
+    make -C doc
     mkdir -p $out/share/man/man1
-    ${docutils}/bin/rst2man.py debian/diffoscope.1.rst $out/share/man/man1/diffoscope.1
+    cp doc/diffoscope.1 $out/share/man/man1/diffoscope.1
   '';
 
   meta = with stdenv.lib; {

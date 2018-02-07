@@ -31,7 +31,17 @@ in
           type = types.string;
 
           description = ''
-            The script to use when locking the computer.
+            The script to use when automatically locking the computer.
+          '';
+        };
+
+        nowlocker = mkOption {
+          default = null;
+          example = "i3lock -i /path/to/img";
+          type = types.nullOr types.string;
+
+          description = ''
+            The script to use when manually locking the computer with <command>xautolock -locknow</command>.
           '';
         };
 
@@ -45,11 +55,44 @@ in
         };
 
         notifier = mkOption {
-          default = "notify-send 'Locking in 10 seconds'";
-          type = types.string;
+          default = null;
+          example = literalExample ''
+            "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\""
+          '';
+          type = types.nullOr types.string;
 
           description = ''
             Notification script to be used to warn about the pending autolock.
+          '';
+        };
+
+        killer = mkOption {
+          default = null; # default according to `man xautolock` is none
+          example = "systemctl suspend";
+          type = types.nullOr types.string;
+
+          description = ''
+            The script to use when nothing has happend for as long as <option>killtime</option>
+          '';
+        };
+
+        killtime = mkOption {
+          default = 20; # default according to `man xautolock`
+          type = types.int;
+
+          description = ''
+            Minutes xautolock waits until it executes the script specified in <option>killer</option>
+            (Has to be at least 10 minutes)
+          '';
+        };
+
+        extraOptions = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "-detectsleep" ];
+          description = ''
+            Additional command-line arguments to pass to
+            <command>xautolock</command>.
           '';
         };
       };
@@ -57,16 +100,37 @@ in
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ xautolock ];
-
-      services.xserver.displayManager.sessionCommands = with builtins; with pkgs; ''
-        ${xautolock}/bin/xautolock \
-          ${concatStringsSep " \\\n" ([
-            "-time ${toString(cfg.time)}"
-            "-locker ${cfg.locker}"
-          ] ++ optional cfg.enableNotifier (concatStringsSep " " [ 
-            "-notify ${toString(cfg.notify)}"
-            "-notifier \"${cfg.notifier}\""
-          ]))} &
-      '';
+      systemd.user.services.xautolock = {
+        description = "xautolock service";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+        serviceConfig = with lib; {
+          ExecStart = strings.concatStringsSep " " ([
+            "${pkgs.xautolock}/bin/xautolock"
+            "-noclose"
+            "-time ${toString cfg.time}"
+            "-locker '${cfg.locker}'"
+          ] ++ optionals cfg.enableNotifier [
+            "-notify ${toString cfg.notify}"
+            "-notifier '${cfg.notifier}'"
+          ] ++ optionals (cfg.nowlocker != null) [
+            "-nowlocker '${cfg.nowlocker}'"
+          ] ++ optionals (cfg.killer != null) [
+            "-killer '${cfg.killer}'"
+            "-killtime ${toString cfg.killtime}"
+          ] ++ cfg.extraOptions);
+          Restart = "always";
+        };
+      };
+      assertions = [
+        {
+          assertion = cfg.enableNotifier -> cfg.notifier != null;
+          message = "When enabling the notifier for xautolock, you also need to specify the notify script";
+        }
+        {
+          assertion = cfg.killer != null -> cfg.killtime >= 10;
+          message = "killtime has to be at least 10 minutes according to `man xautolock`";
+        }
+      ];
     };
   }

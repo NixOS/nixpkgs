@@ -10,11 +10,11 @@
 
     installIdrisLib () {
       if [ -d $1/lib/${idris.name} ]; then
-        ln -sv $1/lib/${idris.name}/* $out/lib/${idris.name}
+        ln -fsv $1/lib/${idris.name}/* $out/lib/${idris.name}
       fi
     }
 
-    envHooks+=(installIdrisLib)
+    envHostTargetHooks+=(installIdrisLib)
   '';
 
   unpackPhase = ''
@@ -34,7 +34,7 @@
   '';
 
   buildPhase = ''
-    gcc -O3 -o idris idris.c
+    $CC -O3 -o idris idris.c
   '';
 
   installPhase = ''

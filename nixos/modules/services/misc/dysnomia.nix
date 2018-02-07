@@ -192,9 +192,11 @@ in
         mysqlPassword = builtins.readFile (config.services.mysql.rootPassword);
       };
     }
-    // lib.optionalAttrs (config.services.postgresql.enable && cfg.enableAuthentication) { postgresql-database = {
-      postgresqlUsername = "root";
-    }; }
+    // lib.optionalAttrs (config.services.postgresql.enable) { postgresql-database = {
+      } // lib.optionalAttrs (cfg.enableAuthentication) {
+        postgresqlUsername = "postgres";
+      };
+    }
     // lib.optionalAttrs (config.services.tomcat.enable) { tomcat-webapplication = {
       tomcatPort = 8080;
     }; }

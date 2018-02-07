@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib python libgudev libmbim ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib python libgudev libmbim ];
 
   configureFlags = ["--enable-mbim-qmux" ];
 

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "kops-${version}";
-  version = "1.6.2";
+  version = "1.8.0";
 
   goPackagePath = "k8s.io/kops";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = version;
     owner = "kubernetes";
     repo = "kops";
-    sha256 = "0bxknjhzj9xiws6sjw9knwqma3fjh496vnm90skl766bk4pafq9l";
+    sha256 = "0vaa18vhwk132fv7i896513isp66wnz9gn0b5613n3x28q0gvkmg";
   };
 
   buildInputs = [go-bindata];
@@ -39,7 +39,7 @@ buildGoPackage rec {
     description = "Easiest way to get a production Kubernetes up and running";
     homepage = https://github.com/kubernetes/kops;
     license = licenses.asl20;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [offline zimbatm];
     platforms = platforms.unix;
   };
 }

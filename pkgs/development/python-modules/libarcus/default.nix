@@ -7,13 +7,13 @@ else
 stdenv.mkDerivation rec {
   pname = "libarcus";
   name = "${pname}-${version}";
-  version = "2.6.1";
+  version = "3.0.3";
   
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1arh0gkwcjv0j3arh1w04gbwkn5glrs7gbli0b1ak7dalnicmn7c";
+    sha256 = "05dpd6nx32nws0ghsm365wlsb8hg2s3v9fqcmdk11biwfhnr6rjw";
   };
   
   propagatedBuildInputs = [ sip protobuf ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = https://github.com/Ultimaker/libArcus;
+    homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

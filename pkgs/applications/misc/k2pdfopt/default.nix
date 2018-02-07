@@ -1,8 +1,8 @@
 { stdenv, fetchzip, fetchurl, fetchpatch, cmake, pkgconfig
-, zlib, libpng
+, zlib, libpng, openjpeg
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
-, enableMuPDF ? true, jbig2dec, openjpeg, freetype, harfbuzz, mupdf
+, enableMuPDF ? true, mupdf
 , enableJPEG2K ? true, jasper
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
@@ -40,18 +40,34 @@ stdenv.mkDerivation rec {
       # Patches from previous 1.10a version in nixpkgs
       patches = [
         # Compatibility with new openjpeg
-        (fetchpatch {
-         name = "mupdf-1.9a-openjpeg-2.1.1.patch";
-         url = "https://git.archlinux.org/svntogit/community.git/plain/mupdf/trunk/0001-mupdf-openjpeg.patch?id=5a28ad0a8999a9234aa7848096041992cc988099";
-         sha256 = "1i24qr4xagyapx4bijjfksj4g3bxz8vs5c2mn61nkm29c63knp75";
-        })
+        ./load-jpx.patch
 
         (fetchurl {
          name = "CVE-2017-5896.patch";
          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
          sha256 = "14k7x47ifx82sds1c06ibzbmcparfg80719jhgwjk6w1vkh4r693";
         })
+
+        (fetchpatch {
+          name = "mupdf-1.10a-shared_libs-1.patch";
+          url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.10a-shared_libs-1.patch";
+          sha256 = "0kg4vahp7hlyyj5hl18brk8s8xcbqrx19pqjzkfq6ha8mqa3k4ab";
+        })
       ];
+
+      # Override this since the jpeg directory was renamed libjpeg in mupdf 1.11
+      preConfigure = ''
+        # Don't remove mujs because upstream version is incompatible
+        rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
+      '';
+      postPatch = let
+        # OpenJPEG version is hardcoded in package source
+        openJpegVersion = with stdenv;
+          lib.concatStringsSep "." (lib.lists.take 2
+          (lib.splitString "." (lib.getVersion openjpeg)));
+        in ''
+          sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+        '';
     });
     leptonica_modded = leptonica.overrideAttrs (attrs: {
       prePatch = ''
@@ -75,8 +91,8 @@ stdenv.mkDerivation rec {
     [ zlib libpng ] ++
     optional enableGSL gsl ++
     optional enableGhostScript ghostscript ++
-    optionals enableMuPDF [ jbig2dec openjpeg freetype harfbuzz mupdf_modded ] ++
-    optionals enableJPEG2K [ jasper ] ++
+    optional enableMuPDF mupdf_modded ++
+    optional enableJPEG2K jasper ++
     optional enableDJVU djvulibre ++
     optional enableGOCR gocr ++
     optionals enableTesseract [ leptonica_modded tesseract_modded ];

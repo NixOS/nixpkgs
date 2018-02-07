@@ -1,25 +1,23 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages, makeWrapper }:
+{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
+, asciidoc-full, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "http://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "01jrlswly28h4q4r3qfrzadz0pf0ms6wynmqhwddj1ahj31729h3";
+    sha256 = "1brnh5x3fd91j3v8rz3van08m9i0ym4lv4hqz274s86v1kx4k330";
   };
 
-  patches = [
-    # https://github.com/digint/btrbk/pull/74
-    ./btrbk-Prefix-PATH-instead-of-resetting-it.patch
-  ];
-
-  buildInputs = with perlPackages; [ makeWrapper perl DateCalc ];
+  buildInputs = with perlPackages; [ asciidoc-full makeWrapper perl DateCalc ];
 
   preInstall = ''
-    substituteInPlace Makefile \
-      --replace "/usr" "$out" \
-      --replace "/etc" "$out/etc"
+    for f in $(find . -name Makefile); do
+      substituteInPlace "$f" \
+        --replace "/usr" "$out" \
+        --replace "/etc" "$out/etc"
+    done
 
     # Tainted Mode disables PERL5LIB
     substituteInPlace btrbk --replace "perl -T" "perl"
@@ -31,9 +29,7 @@ stdenv.mkDerivation rec {
       --replace '$btrbk' 'btrbk'
   '';
 
-  fixupPhase = ''
-    patchShebangs $out/
-
+  preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ];
 
-  buildInputs = [ boost zlib botan libidn lua pcre sqlite pkgconfig expect 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost zlib botan libidn lua pcre sqlite expect 
     openssl gmp bzip2 ];
 
   postInstall = ''

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0z8ng5rhxc7fpsj3d50h25wkgcnxjfy030jm8r9w9m729w2c9hxb";
   };
 
-  buildInputs = [ libffcall gtk2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libffcall gtk2 ];
 
   configureOptions = [ "--with-gtk2" ];
 

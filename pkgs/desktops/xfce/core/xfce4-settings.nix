@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, intltool, exo, gtk, libxfce4util, libxfce4ui
-, libglade, xfconf, xorg, libwnck, libnotify, libxklavier, garcon, upower }:
+{ stdenv, fetchurl, pkgconfig, intltool, exo, gtk, garcon, libxfce4util
+, libxfce4ui, xfconf, libXi, upower ? null, libnotify ? null
+, libXcursor ? null, xf86inputlibinput ? null, libxklavier ? null }:
+
 let
   p_name  = "xfce4-settings";
   ver_maj = "4.12";
@@ -15,16 +17,32 @@ stdenv.mkDerivation rec {
 
   patches = [ ./xfce4-settings-default-icon-theme.patch ];
 
-  nativeBuildInputs =
-    [ pkgconfig intltool
-    ];
+  postPatch = ''
+    for f in $(find . -name \*.c); do
+      substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
+    done
+  '';
 
-  buildInputs =
-    [ exo gtk libxfce4util libxfce4ui libglade upower xfconf
-      xorg.libXi xorg.libXcursor libwnck libnotify libxklavier garcon
-    ]; #TODO: optional packages
+  nativeBuildInputs = [ pkgconfig intltool ];
+
+  buildInputs = [
+    exo
+    gtk
+    garcon
+    libxfce4util
+    libxfce4ui
+    xfconf
+    libXi
+    upower
+    libnotify
+    libXcursor
+    xf86inputlibinput
+    libxklavier
+  ];
 
   configureFlags = [ "--enable-pluggable-dialogs" "--enable-sound-settings" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.xfce.org/projects/xfce4-settings;
@@ -34,4 +52,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
   };
 }
-

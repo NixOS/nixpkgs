@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
+    perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif potrace cmake python2Env

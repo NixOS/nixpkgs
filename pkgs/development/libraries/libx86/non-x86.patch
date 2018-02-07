@@ -5,7 +5,7 @@ diff -Naur libx86-1.1+ds1.orig/Makefile libx86-1.1+ds1/Makefile
  ifeq ($(BACKEND),x86emu)
  	OBJECTS += thunk.o x86emu/decode.o x86emu/debug.o x86emu/fpu.o \
  	x86emu/ops.o x86emu/ops2.o x86emu/prim_ops.o x86emu/sys.o
-+	CFLAGS += -DX86EMU
++	CFLAGS += -DX86EMU -fno-delete-null-pointer-checks
  else
  	OBJECTS += lrmi.o
  endif

@@ -18,5 +18,5 @@ mkDerivation {
     kdbusaddons kguiaddons kdnssd kiconthemes ki18n kio khtml kdelibs4support
     kpty libmtp libssh openexr openslp phonon qtsvg samba solid
   ];
-  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 }

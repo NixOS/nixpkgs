@@ -6,7 +6,8 @@
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net];
       };
     };
   }
@@ -78,7 +79,7 @@ mkDerivation {
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
     # shut some warning up.., do not use set -e
-    sed -e 's@set -e@@' \
+    sed -e 's@set -eu@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
         -e '1i initialPath="${toString initialPath}"' \

@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, avahi, libjpeg, libusb1, libv4l, net_snmp
+, avahi, libjpeg, libusb1, libv4l, net_snmp, libpng
 , gettext, pkgconfig
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
 
-  buildInputs = [ avahi libusb1 libv4l net_snmp ];
+  buildInputs = [ avahi libusb1 libv4l net_snmp libpng ];
   nativeBuildInputs = [ gettext pkgconfig ];
   enableParallelBuilding = true;
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     homepage = http://www.sane-project.org/;
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ nckx peti ];
+    maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;
   };
 }

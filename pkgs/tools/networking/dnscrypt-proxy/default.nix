@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.9.5";
 
   src = fetchurl {
-    url = "https://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${name}.orig.tar.gz";
     sha256 = "1dhvklr4dg2vlw108n11xbamacaryyg3dbrg629b76lp7685p7z8";
   };
 

@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1lxpz316jmns6i143v4j6sd6k0a4a54alw08rvwjckf2rig57lj2";
   };
 
-  sourceRoot = "skype4pidgin-${version}-src/skypeweb";
+  setSourceRoot = ''
+    sourceRoot=$(echo */skypeweb)
+  '';
 
-  buildInputs = [ pkgconfig pidgin json_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pidgin json_glib ];
 
   makeFlags = [
     "PLUGIN_DIR_PURPLE=/lib/pidgin/"

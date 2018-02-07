@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     inherit sha256 rev;
   };
 
-  buildInputs = [ autoreconfHook glib pkgconfig libxml2 exiv2 imagemagick ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ glib libxml2 exiv2 imagemagick ];
 
   installPhase = ''
     mkdir $out/{bin,share} -p

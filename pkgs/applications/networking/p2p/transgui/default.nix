@@ -3,16 +3,17 @@ libX11, glib, gtk2, gdk_pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "transgui-5.0.1-svn-r${revision}";
-  revision = "986";
+  revision = "988";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/transgui/code/trunk/";
     rev = revision;
-    sha256 = "0z83hvlhllm6p1z4gkcfi1x3akgn2xkssnfhwp74qynb0n5362pi";
+    sha256 = "1i6ysxs6d2wsmqi6ha10rl3n562brmhizlanhcfad04i53y8pyxf";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig unzip fpc lazarus stdenv.cc
+    unzip fpc lazarus stdenv.cc
     libX11 glib gtk2 gdk_pixbuf pango atk cairo openssl
   ];
 
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
   '';
+
+  patches = [
+    ./r988-compile-fix.patch
+  ];
 
   makeFlags = [
     "FPC=fpc"

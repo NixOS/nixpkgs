@@ -1,27 +1,40 @@
-{ stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
-, version, srcRev, srcSha, depsSha256
-, patches ? []}:
+{ stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
+, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2, darwin
+, version, srcSha, cargoSha256
+, patches ? [] }:
+
+let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+in
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
   inherit version;
 
-  src = fetchgit {
-    url = "https://github.com/rust-lang/cargo";
-    rev = srcRev;
+  src = fetchFromGitHub {
+    owner  = "rust-lang";
+    repo   = "cargo";
+    rev    = version;
     sha256 = srcSha;
   };
 
-  inherit depsSha256;
+  inherit cargoSha256;
   inherit patches;
 
   passthru.rustc = rustc;
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper libgit2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
+
+  # FIXME: Use impure version of CoreFoundation because of missing symbols.
+  # CFURLSetResourcePropertyForKey is defined in the headers but there's no
+  # corresponding implementation in the sources from opensource.apple.com.
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
+  '';
 
   postInstall = ''
     # NOTE: We override the `http.cainfo` option usually specified in
@@ -31,13 +44,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/cargo" \
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      ${stdenv.lib.optionalString stdenv.isDarwin ''--suffix DYLD_LIBRARY_PATH : "${rustc}/lib"''}
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   checkPhase = ''
-    # Export SSL_CERT_FILE as without it one test fails with SSL verification error
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     # Disable cross compilation tests
     export CFG_DISABLE_CROSS_TESTS=1
     cargo test
@@ -51,6 +61,6 @@ rustPlatform.buildRustPackage rec {
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ wizeman retrry ];
     license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

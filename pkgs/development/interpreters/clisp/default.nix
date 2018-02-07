@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
     libX11 libXau libXt libXpm xproto libXext xextproto
   ];
 
-  patches = [ ./bits_ipctypes_to_sys_ipc.patch ]; # from Gentoo
+  patches = [
+    ./bits_ipctypes_to_sys_ipc.patch # from Gentoo
+    # The cfree alias no longer exists since glibc 2.26
+    ./remove-cfree-binding.patch
+  ];
 
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not

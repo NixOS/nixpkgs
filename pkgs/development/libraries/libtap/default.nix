@@ -11,7 +11,7 @@ stdenv.mkDerivation rec{
     sha256 = "1ms1770cx8c6q3lhn1chkzy12vzmjgvlms7cqhd2d3260j2wwv5s";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ cmake perl ];
 
   meta = {

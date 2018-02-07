@@ -1,11 +1,11 @@
-{ stdenv, fetchsvn, gcc, glibc, m4, coreutils }:
+{ stdenv, fetchurl, gcc, glibc, m4, coreutils }:
 
 let
   options = rec {
     /* TODO: there are also MacOS, FreeBSD and Windows versions */
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "0g6mkl207ri3ib9w85i9w0sv7srz784pbxidz0d95p6qkvg6shba";
+      sha256 = "0hs1f3z7crgzvinpj990kv9gvbsipxvcvwbmk54n51nasvc5025q";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
@@ -17,7 +17,7 @@ let
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = "0k6wxwyg3pmbb5xdkwma0i3rvbjmy3p604g4minjjc1drzsn1i0q";
+      sha256 = "0p0l1dzsygb6i1xxgbipjpxkn46xhq3jm41a34ga1qqp4x8lkr62";
       runtime = "armcl";
       kernel = "linuxarm";
     };
@@ -30,12 +30,10 @@ assert builtins.hasAttr stdenv.system options;
 
 stdenv.mkDerivation rec {
   name     = "ccl-${version}";
-  version  = "1.11";
-  revision = "16313";
+  version  = "1.11.5";
 
-  src = fetchsvn {
-    url = "http://svn.clozure.com/publicsvn/openmcl/release/${version}/${cfg.arch}/ccl";
-    rev = revision;
+  src = fetchurl {
+    url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
     sha256 = cfg.sha256;
   };
 
@@ -44,9 +42,8 @@ stdenv.mkDerivation rec {
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "svnversion" "echo ${revision}" \
       --replace "/bin/rm"    "${coreutils}/bin/rm" \
       --replace "/bin/echo"  "${coreutils}/bin/echo"
 

@@ -1,24 +1,38 @@
-{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
-, kdelibs4, boost, graphviz
+{ stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkgconfig, wrapGAppsHook
+, kconfig, kcrash, kinit, kdoctools, kiconthemes, kio, kparts, kwidgetsaddons
+, qtbase, qtsvg
+, boost, graphviz
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "kgraphviewer-${version}";
-  version = "2.2.0";
+  version = "2.4.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kgraphviewer/${version}/src/${name}.tar.xz";
-    sha256 = "1vs5x539mx26xqdljwzkh2bj7s3ydw4cb1wm9nlhgs18siw4gjl5";
+    url = "mirror://kde/stable/kgraphviewer/${version}/${name}.tar.xz";
+    sha256 = "1jc5zfgy4narwgn7rscfwz7l5pjy0jghal6yb3kd4sfadi78nhs9";
   };
 
-  buildInputs = [ kdelibs4 boost graphviz ];
-  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
+  buildInputs = [
+    qtbase qtsvg
+    boost graphviz
+  ];
+
+  nativeBuildInputs = [
+    cmake extra-cmake-modules pkgconfig wrapGAppsHook
+    kdoctools
+  ];
+
+  propagatedBuildInputs = [
+    kconfig kinit kio kparts kwidgetsaddons
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A Graphviz dot graph viewer for KDE";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ lethalman ];
+    platforms   = platforms.linux;
   };
 }
-

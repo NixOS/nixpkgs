@@ -1,31 +1,43 @@
-{ stdenv, lib, fetchurl, python, cffi, cryptography, pyopenssl, crcmod, google-compute-engine, makeWrapper }:
+# Make sure that the "with-gce" flag is set when building `google-cloud-sdk`
+# for GCE hosts. This flag prevents "google-compute-engine" from being a
+# default dependency which is undesirable because this package is
+#
+#   1) available only on GNU/Linux (requires `systemd` in particular)
+#   2) intended only for GCE guests (and is useless elsewhere)
+#   3) used by `google-cloud-sdk` only on GCE guests
+#
 
-# other systems not supported yet
+{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
+  crcmod, google-compute-engine, with-gce ? false }:
+
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod google-compute-engine ];
+  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
+                 ++ lib.optional (with-gce) google-compute-engine;
   pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
+
+  baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
+  sources = name: system: {
+    i686-linux = {
+      url = "${baseUrl}/${name}-linux-x86.tar.gz";
+      sha256 = "0fq8zw1a5c0mnmw6f7j9j80y6kq0f0v2wn1d7b8mfq8ih5x53a85";
+    };
+
+    x86_64-darwin = {
+      url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
+      sha256 = "1h4m70fk3hri4lgm9lh2pm0v196nc2r3hpf42h3xx5k7sqklsns2";
+    };
+
+    x86_64-linux = {
+      url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
+      sha256 = "1ynvllxzjr3y4qflw06njj7qqcf7539mbp06rs03i8hargsgbamx";
+    };
+  }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "171.0.0";
+  version = "184.0.0";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "0scp9nhd46mrnd02bw7skm5fa04i7azf68g08js8kawvjgbwq0sb";
-      }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "0xvrqsg0vqws9n20lvipxilb45aln5p9iy0ldjfxx8vvi0s42298";
-      }
-    else
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "0b9rqhwd30hn5l82a2x10rz86jz1j03b19di7bc3bqn4x041qii5";
-      };
-
+  src = fetchurl (sources name stdenv.system);
 
   buildInputs = [ python makeWrapper ];
 
@@ -52,6 +64,13 @@ in stdenv.mkDerivation rec {
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
+    
+    # disable component updater and update check
+    substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
+      --replace "\"disable_updater\": false" "\"disable_updater\": true"
+    echo "
+    [component_manager]
+    disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
     mkdir -p "$out/etc/bash_completion.d/"

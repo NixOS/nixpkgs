@@ -1,12 +1,13 @@
 { lib, fetchurl, buildPythonPackage, requests, six, zeroconf, protobuf }:
 
 buildPythonPackage rec {
-  name    = "PyChromecast-${version}";
-  version = "0.8.1";
+  pname = "PyChromecast";
+  version = "1.0.3";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";
-    sha256 = "05rlr2hjng0xg2a9k9vwmrlvd7vy9sjhxxfl96kx25xynlkq6yq6";
+    sha256 = "714a9e03e6a258081e3b6296ed15592e015facbe38bbe60819cca6f04c599f25";
   };
 
   propagatedBuildInputs = [ requests six zeroconf protobuf ];

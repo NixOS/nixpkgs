@@ -61,6 +61,7 @@ rec {
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} disk
             cd disk
+            mkdir proc sys dev
 
             # Run root script
             ${stdenv.lib.optionalString (runAsRoot != null) ''
@@ -92,8 +93,10 @@ rec {
             cd disk
 
             export PATH=$PATH:${e2fsprogs}/bin/
-            singularity create -s $((1 + size * 4 / 1024 + ${toString extraSpace})) $out
-            tar -c . | singularity import $out
+            echo creating
+            singularity image.create -s $((1 + size * 4 / 1024 + ${toString extraSpace})) $out
+            echo importing
+            tar -c . | singularity image.import $out
           '');
 
     in result;

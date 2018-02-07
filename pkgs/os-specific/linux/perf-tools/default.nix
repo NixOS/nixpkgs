@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation {
-  name = "perf-tools-20160418";
+  name = "perf-tools-20171219";
 
   src = fetchFromGitHub {
     owner = "brendangregg";
     repo = "perf-tools";
-    rev = "5a511f5f775cfbc0569e6039435361cecd22dd86";
-    sha256 = "1ab735idi0h62yvhzd7822jj3555vygixv4xjrfrdvi8d2hhz6qn";
+    rev = "98d42a2a1493d2d1c651a5c396e015d4f082eb20";
+    sha256 = "09qnss9pd4kr6qadvp62m2g8sfrj86fksi1rr8m8w4314pzfb93c";
   };
 
   buildInputs = [ perl ];

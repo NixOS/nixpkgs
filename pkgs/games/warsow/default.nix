@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
-  buildInputs = [ unzip pkgconfig zlib curl libjpeg libpng libvorbis libtheora
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip zlib curl libjpeg libpng libvorbis libtheora
                   libXxf86dga libXxf86vm libXinerama SDL mesa openal makeWrapper
                 ];
   installPhase = ''

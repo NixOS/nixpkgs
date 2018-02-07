@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xmbykdl42jn9cgzrqrys5lng67d26nk5xq10wkkvjqldiwdck56";
   };
 
-  buildInputs = [ graphviz gtk2 gtkmm2 pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ graphviz gtk2 gtkmm2 python ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

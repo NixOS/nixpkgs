@@ -1,17 +1,18 @@
 { stdenv, fetchurl, pkgconfig, fuse, libarchive }:
 
 let
-  name = "archivemount-0.8.3";
+  name = "archivemount-0.8.7";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://www.cybernoia.de/software/archivemount/${name}.tar.gz";
-    sha256 = "1zv1fvik76kpp1q5f2dz01f4fwg1m5a8rl168px47jy9nyl9k277";
+    sha256 = "1diiw6pnlnrnikn6l5ld92dx59lhrxjlqms8885vwbynsjl5q127";
   };
 
-  buildInputs = [ pkgconfig fuse libarchive ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse libarchive ];
 
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";

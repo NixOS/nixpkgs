@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     inherit (src.meta) homepage;
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
     license = licenses.asl20;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };
 }

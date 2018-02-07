@@ -24,10 +24,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ahwhmscrmnpvl1r732wg93dzkhv8c1sph2yrqgsrhr73c1616ix";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
-    pkgconfig cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
+    cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
   ] ++ lib.optionals withDocs [
-    doxygen Po4a w3m
+    doxygen Po4a w3m docbook_xml_dtd_45
   ] ++ lib.optionals withNLS [
     gettext
   ];
@@ -42,15 +44,6 @@ stdenv.mkDerivation rec {
       -DWITH_DOC=${if withDocs then "ON" else "OFF"}
       -DUSE_NLS=${if withNLS then "ON" else "OFF"}
     )
-
-    for f in doc/*; do
-      if [[ -f "$f" ]]; then
-        substituteInPlace "$f" \
-          --replace \
-            "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
-            "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
-      fi
-    done
   '';
 
   enableParallelBuilding = true;

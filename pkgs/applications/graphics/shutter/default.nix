@@ -11,20 +11,12 @@ let
     ];
 in
 stdenv.mkDerivation rec {
-  name = "shutter-0.93.1";
+  name = "shutter-0.94";
 
   src = fetchurl {
-    url = "http://shutter-project.org/wp-content/uploads/releases/tars/${name}.tar.gz";
-    sha256 = "09cn3scwy98wqxkrjhnmxhpfnnynlbb41856yn5m3zwzqrxiyvak";
+    url = "https://launchpad.net/shutter/0.9x/0.94/+download/shutter-0.94.tar.gz";
+    sha256 = "943152cdf9e1b2096d38e3da9622d8bf97956a08eda747c3e7fcc564a3f0f40d";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "http://svnweb.mageia.org/packages/cauldron/shutter/current/SOURCES/CVE-2015-0854.patch?revision=880308&view=co";
-      name = "CVE-2015-0854.patch";
-      sha256 = "14r18sxz3ylf39cn9b85snjhjxdk6ngq4vnpljwghw2q5430nb12";
-    })
-  ];
 
   buildInputs = [ perl makeWrapper gdk_pixbuf librsvg ] ++ perlModules;
 

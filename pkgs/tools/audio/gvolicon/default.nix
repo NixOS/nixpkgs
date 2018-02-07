@@ -8,8 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1sr9wyy7w898vq63yd003yp3k66hd4vm8b0qsm9zvmwmpiz4wvln";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.defaultIconTheme
+    makeWrapper alsaLib gnome3.gtk gdk_pixbuf gnome3.defaultIconTheme
     librsvg wrapGAppsHook
   ];
 

@@ -193,16 +193,11 @@ in
         "sd_mod"
         "sr_mod"
 
-        # Standard IDE stuff.
-        "ide_cd"
-        "ide_disk"
-        "ide_generic"
-
         # SD cards and internal eMMC drives.
         "mmc_block"
 
         # Support USB keyboards, in case the boot fails and we only have
-        # a USB keyboard.
+        # a USB keyboard, or for LUKS passphrase prompt.
         "uhci_hcd"
         "ehci_hcd"
         "ehci_pci"
@@ -211,22 +206,14 @@ in
         "xhci_hcd"
         "xhci_pci"
         "usbhid"
-        "hid_generic" "hid_lenovo"
-        "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
+        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_logitech_hidpp" "hid_logitech_dj"
 
-        # Misc. keyboard stuff.
+      ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+        # Misc. x86 keyboard stuff.
         "pcips2" "atkbd" "i8042"
 
-        # Temporary fix for https://github.com/NixOS/nixpkgs/issues/18451
-        # Remove as soon as upstream gets fixed - marking it:
-        # TODO
-        # FIXME
-        "i8042"
-
-        # To wait for SCSI devices to appear.
-        "scsi_wait_scan"
-
-        # Needed by the stage 2 init script.
+        # x86 RTC needed by the stage 2 init script.
         "rtc_cmos"
       ];
 

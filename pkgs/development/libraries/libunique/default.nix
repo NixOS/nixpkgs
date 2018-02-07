@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     ./1.1.6-include-terminator.patch
   ];
 
-  buildInputs = [ pkgconfig glib gtk2 dbus_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 dbus_glib ];
 
   # don't make deprecated usages hard errors
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';

@@ -329,7 +329,7 @@ in
       };
 
       mutable = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed

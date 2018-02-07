@@ -9,15 +9,11 @@ import ./make-test.nix ({ pkgs, ...} : {
       { pkgs, config, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql95; in {
+        services.postgresql = let mypg = pkgs.postgresql100; in {
             enable = true;
             package = mypg;
-            extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }).v_2_2_1 ];
-            initialScript =  pkgs.writeText "postgresql-init.sql"
-          ''
-          CREATE ROLE postgres WITH superuser login createdb;
-          '';
-          };
+            extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }).v_2_4_0 ];
+        };
       };
   };
 

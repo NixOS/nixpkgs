@@ -47,7 +47,7 @@ in
         export GTK_DATA_PREFIX=${config.system.path}
         # find theme engines
         export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
-        export XDG_MENU_PREFIX=enlightenment
+        export XDG_MENU_PREFIX=e-
 
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
 
@@ -61,7 +61,7 @@ in
       '';
     }];
 
-    security.wrappers.e_freqset.source = "${e.enlightenment.out}/bin/e_freqset";
+    security.wrappers = (import (builtins.toPath "${e.enlightenment}/e-wrappers.nix")).security.wrappers;
 
     environment.etc = singleton
       { source = xcfg.xkbDir;

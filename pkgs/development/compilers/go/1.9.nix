@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, fetchpatch
+, perl, which, pkgconfig, patch, procps
 , pcre, cacert, llvm
 , Security, Foundation, bash
 , makeWrapper, git, subversion, mercurial, bazaar }:
@@ -25,18 +25,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.9";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "06k66x387r93m7d3bd5yzwdm8f8xc43cdjfamqldfc1v8ngak0y9";
+    sha256 = "0ivb6z30d6qrrkwjm9fdz9jfs567q4b6dljwwxc9shmdr2l9chah";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ];
-  buildInputs = [ pcre ]
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
+    ++ optionals stdenv.isLinux [ procps ];
+  buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isArm ''
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
-    echo '#!/usr/bin/env bash' > misc/cgo/testplugin/test.bash
+    echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
@@ -118,15 +119,8 @@ stdenv.mkDerivation rec {
       ./ssl-cert-file-1.9.patch
       ./creds-test.patch
       ./remove-test-pie-1.9.patch
-
-      (fetchpatch {
-        url = "https://github.com/golang/go/commit/29415eb2b92e78481897c4161ba99f5b09fa6102.patch";
-        sha256 = "01jkm4b2dazzjnfla7rdd0w2clzplga3zza6ybpmkjkk3i4bp73d";
-      })
-      (fetchpatch {
-        url = "https://github.com/golang/go/commit/27e80f7c4d8001598367e15a1617fa524bd0fb11.patch";
-        sha256 = "1250nrc79jwcagkjqffn5srn78isykvjhvmqhwipwyqb99q85wcz";
-      })
+      ./go-1.9-skip-flaky-19608.patch
+      ./go-1.9-skip-flaky-20072.patch
     ];
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -134,18 +128,19 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.system == "i686-linux" then "386"
            else if stdenv.system == "x86_64-linux" then "amd64"
            else if stdenv.isArm then "arm"
+           else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported system";
   GOARM = optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  # Hopefully avoids test timeouts on Hydra
+  GO_TEST_TIMEOUT_SCALE = 3;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
@@ -156,6 +151,7 @@ stdenv.mkDerivation rec {
     export GOROOT=$out/share/go
     export GOBIN=$GOROOT/bin
     export PATH=$GOBIN:$PATH
+    ulimit -a
   '';
 
   postConfigure = optionalString stdenv.isDarwin ''

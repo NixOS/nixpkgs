@@ -9,16 +9,16 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "36.4.0";
+    version = "38.4.0";
     format = "wheel";
-    sha256 = "4d54c0bfee283e78609169213f9c075827d5837086f58b588b417b093c23464b";
+    sha256 = "155c2ec9fdcc00c3973d966b416e1cf3a1e7ce75f4c09fb760b23f94b935926e";
   };
 
   # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
   # https://github.com/NixOS/nixpkgs/issues/26392
   # https://github.com/pypa/setuptools/issues/885
   pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.4.0/pkg_resources/__init__.py";
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
     sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
   };
 
@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  buildInputs = [ python makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
 
   installPhase = ''
 

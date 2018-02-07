@@ -2,11 +2,11 @@
 
 let
   name = "wp-cli-${version}";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "0q5d32jq7a6rba77sr1yyj6ib6x838hw14mm186ah1xxgnn7rnry";
+    sha256 = "17dgbcalvz5gw6xqgcywh6jrybj0qlglm16cgbshjsp6axwxa5gn";
   };
 
   completion = fetchurl {
@@ -25,6 +25,9 @@ let
   '';
 
   ini = writeText "wp-cli.ini" ''
+    [PHP]
+    memory_limit = -1 ; no limit as composer uses a lot of memory
+
     [Phar]
     phar.readonly = Off
   '';
@@ -37,6 +40,9 @@ in stdenv.mkDerivation rec {
 
     ln      -s     ${bin}        $out/bin/wp
     install -Dm644 ${completion} $out/share/bash-completion/completions/wp
+
+    # this is a very basic run test
+    $out/bin/wp --info
   '';
 
   meta = with stdenv.lib; {

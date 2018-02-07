@@ -145,6 +145,16 @@ in {
     };
     users.groups.dnscrypt-wrapper = { };
 
+    security.polkit.extraConfig = ''
+      // Allow dnscrypt-wrapper user to restart dnscrypt-wrapper.service
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.systemd1.manage-units" &&
+              action.lookup("unit") == "dnscrypt-wrapper.service" &&
+              subject.user == "dnscrypt-wrapper") {
+              return polkit.Result.YES;
+          }
+        });
+    '';
 
     systemd.services.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon";

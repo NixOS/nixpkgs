@@ -1,13 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, scipy, cython, networkx, joblib, nose }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.7.7";
+  version = "0.8.1";
   name  = "${pname}-${version}";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b5b7a6256778fc4097ee77caec28ec845ec1fee3d701f3f26f83860b2d45c453";
+  
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "jmschrei";
+    rev = "v${version}";
+    sha256 = "085nka5bh88bxbd5vl1azyv9cfpp6grz2ngclc85f9kgccac1djr";
   };
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib ];

@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.0";
+  version = "3.16.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1wb0ixx11q0p5dzcszq1n2lx9bcl5dynr87d7anfiz73mxdq20za";
+    sha256 = "0dsnn974lfd6xbnyjhgxl2hd07kjhm1w9plqi28mx8nqa8bwqira";
   };
 
   patches = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw cssselect cssutils dateutil html5-parser lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil dnspython html5-parser lxml mechanize netifaces pillow
     python pyqt5 sip
     regex msgpack
     # the following are distributed with calibre, but we use upstream instead

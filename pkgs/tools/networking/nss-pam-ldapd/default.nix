@@ -5,11 +5,12 @@ stdenv.mkDerivation rec {
   version = "0.9.7";
   
   src = fetchurl {
-    url = "http://arthurdejong.org/nss-pam-ldapd/${name}.tar.gz";
+    url = "https://arthurdejong.org/nss-pam-ldapd/${name}.tar.gz";
     sha256 = "1sw36w6zkzvabvjckqick032j5p5xi0qi3sgnh0znzxz31jqvf0d";
   };
   
-  buildInputs = [ makeWrapper pkgconfig python openldap pam ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper python openldap pam ];
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "install-data-local: " "# install-data-local: "
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LDAP identity and authentication for NSS/PAM";
-    homepage = http://arthurdejong.org/nss-pam-ldapd/;
+    homepage = https://arthurdejong.org/nss-pam-ldapd/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

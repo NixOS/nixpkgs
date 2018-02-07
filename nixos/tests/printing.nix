@@ -39,7 +39,7 @@ import ./make-test.nix ({pkgs, ... }: {
       $client->waitForUnit("cups.service");
       $client->sleep(10); # wait until cups is fully initialized
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
-      $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
+      $client->succeed("lpstat -H") =~ "localhost:631" or die;
       $client->succeed("curl --fail http://localhost:631/");
       $client->succeed("curl --fail http://server:631/");
       $server->fail("curl --fail --connect-timeout 2  http://client:631/");

@@ -5,8 +5,9 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) src name;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook itstool libxml2 python3Packages.python python3Packages.pyatspi
+    gtk3 wrapGAppsHook itstool libxml2 python3Packages.python python3Packages.pyatspi
     python3Packages.pygobject3 python3Packages.ipython
     at_spi2_core dbus intltool libwnck3 gnome3.defaultIconTheme
   ];

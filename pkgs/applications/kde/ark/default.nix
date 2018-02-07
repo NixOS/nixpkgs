@@ -27,7 +27,7 @@ mkDerivation {
         lib.makeBinPath
         ([ p7zip unzip zip ] ++ lib.optional unfreeEnableUnrar unrar);
     in ''
-      wrapProgram "$out/bin/ark" --prefix PATH: "${PATH}"
+      wrapProgram "$out/bin/ark" --prefix PATH : "${PATH}"
     '';
   meta = {
     license = with lib.licenses;

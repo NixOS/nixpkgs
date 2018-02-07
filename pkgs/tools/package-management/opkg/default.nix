@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A lightweight package management system based upon ipkg";
-    homepage = http://code.google.com/p/opkg/;
+    homepage = https://git.yoctoproject.org/cgit/cgit.cgi/opkg/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

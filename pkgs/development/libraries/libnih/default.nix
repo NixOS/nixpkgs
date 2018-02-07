@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "01glc6y7z1g726zwpvp2zm79pyb37ki729jkh45akh35fpgp4xc9";
   };
 
-  buildInputs = [ pkgconfig dbus expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus expat ];
 
   meta = {
     description = "A small library for C application development";

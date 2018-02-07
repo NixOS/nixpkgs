@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchgit, pkgconfig , libssh2
+{ stdenv, lib, fetchgit, fetchpatch, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
-, qtsvg, qttools, qtquick1
+, qtsvg, qttools, qtquick1, qtcharts
 , qmake
 }:
 
@@ -15,30 +15,34 @@ in
 
 stdenv.mkDerivation rec {
   name = "redis-desktop-manager-${version}";
-  version = "0.8.3";
+  version = "0.9.0-alpha5";
 
   src = fetchgit {
     url = "https://github.com/uglide/RedisDesktopManager.git";
     fetchSubmodules = true;
     rev = "refs/tags/${version}";
-    sha256 = "0a7xa39qp1q32zkypw32mm3wi8wbhxhvrm6l3xsa3k1jzih7hzxr";
+    sha256 = "1grw4zng0ff0lvplzzld133hlz6zjn5f5hl3z6z7kc1nq5642yr9";
   };
 
-  nativeBuildInputs = [ qmake ];
-
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    pkgconfig libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols qtsvg qttools
+    libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
+    qtquick1 qtquickcontrols qtsvg qttools qtcharts
   ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google/breakpad/commit/bddcc58860f522a0d4cbaa7e9d04058caee0db9d.patch";
+      sha256 = "1bcamjkmif62rb0lbp111r0ppf4raqw664m5by7vr3pdkcjbbilq";
+    })
+  ];
+
+  patchFlags = "-d 3rdparty/gbreakpad -p1";
 
   dontUseQmakeConfigure = true;
 
   buildPhase = ''
     srcdir=$PWD
-
-    substituteInPlace src/resources/qml/ValueTabs.qml \
-      --replace "import QtQuick.Controls 1.4" \
-                "import QtQuick.Controls 1.2"
 
     cat <<EOF > src/version.h
 #ifndef RDM_VERSION
@@ -72,7 +76,7 @@ EOF
 
   meta = with lib; {
     description = "Cross-platform open source Redis DB management tool";
-    homepage = http://redisdesktop.com/;
+    homepage = https://redisdesktop.com/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

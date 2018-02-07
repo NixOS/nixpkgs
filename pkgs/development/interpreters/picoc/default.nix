@@ -47,6 +47,5 @@ stdenv.mkDerivation rec {
     downloadPage = https://code.google.com/p/picoc/downloads/list;
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

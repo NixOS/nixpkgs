@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     ./SConstruct.patch
   ];
 
-  buildInputs = [ libX11 scons pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 scons ];
   buildPhase = ''
     mkdir -p "$out"
     scons \

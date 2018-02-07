@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "lv2-unstable-${version}";
-  version = "2016-10-23";
+  version = "2017-07-08";
 
   src = fetchgit {
     url = "http://lv2plug.in/git/cgit.cgi/lv2.git";
-    rev = "b36868f3b96a436961c0c51b5b2dd71d05da9b12";
-    sha256 = "1sx39j0gary2nayzv7xgqcra7z1rcw9hrafkji05aksdwf7q0pdm";
+    rev = "39c7c726cd52b2863fcea356cafe1bcab2ba7f37";
+    sha256 = "1gp2rd99dfmpibvpixrqn115mrhybzf3if3h8bssf6siyi13f29r";
   };
 
-  buildInputs = [ gtk2 libsndfile pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 libsndfile python ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

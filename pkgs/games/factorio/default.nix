@@ -16,9 +16,9 @@ let
   #    where the ultimate "_" (before the version) is changed to a "-".
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
-      alpha    = bdist { sha256 = "0phikwv00mbwpz4207wm6gz6blarm0b9p1f013ha2w5g7c2dxq4s"; fetcher = authenticatedFetch; };
-      headless = bdist { sha256 = "1m170cl8ji6k3d3jm6n48wx3b7xfsxp4wkaixh0qszaqzafsglp0"; };
-      demo     = bdist { sha256 = "03nwn4838yhqq0r76pf2m4wxi32rsq0knsxmq3qq4ycji89q1dyc"; version = "0.15.33"; };
+      alpha    = bdist { sha256 = "1i25q8x80qdpmf00lvml67gyklrfvmr4gfyakrx954bq8giiy4ll"; fetcher = authenticatedFetch; };
+      headless = bdist { sha256 = "0v5sypz1q6x6hi6k5cyi06f9ld0cky80l0z64psd3v2ax9hyyh8h"; };
+      demo     = bdist { sha256 = "0aca8gks7wl7yi821bcca16c94zcc41agin5j0vfz500i0sngzzw"; version = "0.15.36"; };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
       alpha    = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; nameMut = asGz; };
@@ -29,7 +29,7 @@ let
   actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
-                       , version ? "0.15.34"
+                       , version ? "0.15.40"
                        , fetcher ? fetchurl
                        , nameMut ? x: x
                        }:

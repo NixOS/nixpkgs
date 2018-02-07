@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vmz82il796062jbla5pawsr5dqyhs7ald7xjp84zfccc09dg9kx";
   };
 
-  buildInputs = [ ibus ibus-table pkgconfig python3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ibus ibus-table python3 ];
 
   preBuild = ''
     export HOME=$(mktemp -d)/ibus-table-others

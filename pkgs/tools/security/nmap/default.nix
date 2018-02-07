@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
       wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath $pygtk)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pygobject)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pycairo)/gtk-2.0
   '';
 
-  buildInputs = with python2Packages; [ libpcap pkgconfig openssl ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with python2Packages; [ libpcap openssl ]
     ++ optionals pythonSupport [ makeWrapper python ]
     ++ optionals graphicalSupport [
       libX11 gtk2 pygtk pysqlite pygobject2 pycairo
@@ -57,6 +58,6 @@ in stdenv.mkDerivation rec {
     homepage    = http://www.nmap.org;
     license     = licenses.gpl2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ mornfall thoughtpolice fpletz ];
+    maintainers = with maintainers; [ thoughtpolice fpletz ];
   };
 }

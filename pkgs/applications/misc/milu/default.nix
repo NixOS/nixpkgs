@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, pkgconfig, glib, clang, gcc }:
+{ stdenv, fetchFromGitHub, unzip, pkgconfig, glib, llvmPackages }:
 
 stdenv.mkDerivation rec {
   name = "milu-nightly-${version}";
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's#/usr/bin/##g' Makefile
-    sed -i "s#-lclang#-L$(clang --print-search-dirs |
-            sed -ne '/libraries:/{s/libraries: =//; s/:/ -L/gp}') -lclang#g" Makefile
   '';
 
   installPhase = ''
@@ -24,12 +22,11 @@ stdenv.mkDerivation rec {
     cp bin/milu $out/bin
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-     pkgconfig
      glib
      unzip
-     clang
-     gcc
+     llvmPackages.libclang
   ];
 
   meta = {

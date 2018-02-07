@@ -2,8 +2,8 @@
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
-  version = "1.6.14";
-  name = "jsbeautifier-1.6.14";
+  version = "1.7.5";
+  name = "${pname}-${version}";
 
   propagatedBuildInputs = [ six ];
 
@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://pypi/j/jsbeautifier/${name}.tar.gz";
-    sha256 = "50b2af556aa1da7283a6a92eaa699668312cb91f2ba6b78a4422b1d42af964a2";
+    sha256 = "78eb1e5c8535484f0d0b588aca38da3fb5e0e34de2d1ab53c077e71c55757473";
   };
 
   meta = with stdenv.lib; {

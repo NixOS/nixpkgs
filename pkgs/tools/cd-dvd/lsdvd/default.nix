@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = http://sourceforge.net/projects/lsdvd/;
-    shortDescription = "Display information about audio, video, and subtitle tracks on a DVD";
+    homepage = https://sourceforge.net/projects/lsdvd/;
+    description = "Display information about audio, video, and subtitle tracks on a DVD";
     platforms = stdenv.lib.platforms.linux;
   };
 }

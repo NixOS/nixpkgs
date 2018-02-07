@@ -1,32 +1,33 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, wayland, pixman, libxkbcommon, libinput, libxcb, xcbutilwm, xcbutilimage, mesa
-, libdrm, udev, libX11, libXdamage, systemd, dbus_libs, wayland-protocols
-, libpthreadstubs, libXau, libXdmcp, libXext, libXxf86vm
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
+, wayland, pixman, libxkbcommon, libinput, xcbutilwm, xcbutilimage, mesa_noglu
+, libX11, dbus_libs, wayland-protocols
+, libpthreadstubs, libXdmcp, libXext
 , withOptionalPackages ? true, zlib, valgrind, doxygen
 }:
 
 stdenv.mkDerivation rec {
   name = "wlc-${version}";
-  version = "0.0.9"; # 0.0.10 currently causes segfaults
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = "wlc";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1r6jf64gs7n9a8129wsc0mdwhcv44p8k87kg0714rhx3g2w22asg";
+    sha256 = "1qnak907gjd35hq4b0rrhgb7kz5iwnirh8yk372yzxpgk7dq0gz9";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    wayland pixman libxkbcommon libinput libxcb xcbutilwm xcbutilimage mesa
-    libdrm udev libX11 libXdamage systemd dbus_libs wayland-protocols
-    libpthreadstubs libXau libXdmcp libXext libXxf86vm ]
+    wayland pixman libxkbcommon libinput xcbutilwm xcbutilimage mesa_noglu
+    libX11 dbus_libs wayland-protocols
+    libpthreadstubs libXdmcp libXext ]
     ++ stdenv.lib.optionals withOptionalPackages [ zlib valgrind doxygen ];
 
   doCheck = true;
   checkTarget = "test";
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A library for making a simple Wayland compositor";

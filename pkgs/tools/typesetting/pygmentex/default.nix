@@ -1,12 +1,14 @@
-{ stdenv, fetchzip, python2Packages }:
+{ stdenv, fetchFromBitbucket, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   name = "pygmentex-${version}";
   version = "0.8";
 
-  src = fetchzip {
-      url = "http://mirrors.ctan.org/macros/latex/contrib/pygmentex.zip";
-      sha256 = "1nm19pvhlv51mv2sdankndhw64ys9r7ch6szzd6i4jz8zr86kn9v";
+  src = fetchFromBitbucket {
+    owner = "romildo";
+    repo = "pygmentex";
+    rev = version;
+    sha256 = "07dnv7hgppy15bda2kcbrlvfqzl6lhza80klc7133dwg8q92hm6m";
   };
 
   pythonPath = [ python2Packages.pygments python2Packages.chardet ];
@@ -38,7 +40,7 @@ python2Packages.buildPythonApplication rec {
       texlive.combine.
     '';
     license = licenses.lppl13c;
-    maintainers = with maintainers; [ romildo ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

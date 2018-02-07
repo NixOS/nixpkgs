@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "ledgerblue";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42cbcd74615576294142d56eb9eaa7e1b67f9dd87eeb24d713336b56e8c01c5c";
+    sha256 = "eba56b887339fb5f8582771e4e398df4fa5a017183b908d4f8950588157c1504";
   };
 
   buildInputs = [ hidapi pycrypto pillow protobuf future ecpy ];

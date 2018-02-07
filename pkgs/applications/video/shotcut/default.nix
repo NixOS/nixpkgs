@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "17.09";
+  version = "17.11";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "061jmk1g2h7p82kyk2zgk19g0y3dgx3lppfnm6cdmi550b51qllb";
+    sha256 = "1bw2cjpzycddxi9b21haiaslv0ikia85wwgkfm2xl2m15w5j8510";
   };
 
   enableParallelBuilding = true;
@@ -52,9 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
-
-    # after qt5 bump it probably needs to be updated,
-    # but newer versions seem to need newer than the latest stable mlt
-    # broken = true;
   };
 }

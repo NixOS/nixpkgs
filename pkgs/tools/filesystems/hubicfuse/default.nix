@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1y4n63bk9vd6n1l5psjb9xm9h042kw4yh2ni33z7agixkanajv1s";
   };
 
-  buildInputs = [ pkgconfig curl openssl fuse libxml2 json_c file ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ curl openssl fuse libxml2 json_c file ];
   postInstall = ''
     install hubic_token $out/bin
     mkdir -p $out/sbin

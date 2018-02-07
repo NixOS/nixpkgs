@@ -11,10 +11,11 @@
   stripRoot ? true
 , url
 , extraPostFetch ? ""
+, name ? "source"
 , ... } @ args:
 
 lib.overrideDerivation (fetchurl ({
-  name = args.name or (baseNameOf url);
+  inherit name;
 
   recursiveHash = true;
 

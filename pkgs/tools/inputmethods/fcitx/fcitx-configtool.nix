@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ypr2jr3vzs2shqfrvhqy69xvagrn9x507180i9wxy14hb97a82r";
   };
 
-  buildInputs = [ makeWrapper fcitx cmake isocodes pkgconfig gtk3
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper fcitx cmake isocodes gtk3
     gnome3.defaultIconTheme ];
 
   preFixup = ''

@@ -28,10 +28,17 @@ in stdenv.mkDerivation rec {
     pkgconfig intltool fontconfig libzip zip zlib
   ];
 
+  preConfigure = ''
+    # Build fails on Linux with windres.
+    export ac_cv_prog_ac_ct_WINDRES=
+  '';
+
   postInstall = ''
     mkdir -p "$out/share/"
     ln -s ${freedink_data}/share/dink "$out/share/"
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A free, portable and enhanced version of the Dink Smallwood game engine";

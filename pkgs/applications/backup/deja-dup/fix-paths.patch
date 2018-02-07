@@ -1,0 +1,12 @@
+diff --git a/deja-dup/nautilus/meson.build b/deja-dup/nautilus/meson.build
+index 04b136f3..ed8f7cba 100644
+--- a/deja-dup/nautilus/meson.build
++++ b/deja-dup/nautilus/meson.build
+@@ -31,6 +31,6 @@ shared_module('deja-dup', ['NautilusExtension.c'],
+     link_with: [dirhandling],
+     dependencies: [nautilus_dep],
+     install: true,
+-    install_dir: nautilus_dep.get_pkgconfig_variable('extensiondir'))
++    install_dir: join_paths(get_option('libdir'), 'nautilus', 'extensions-3.0'))
+ 
+ endif

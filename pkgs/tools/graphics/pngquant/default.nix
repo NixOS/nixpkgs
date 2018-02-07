@@ -13,12 +13,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  buildInputs = [ pkgconfig libpng zlib lcms2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng zlib lcms2 ];
 
   meta = with stdenv.lib; {
     homepage = https://pngquant.org/;
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = [ maintainers.volth ];
   };

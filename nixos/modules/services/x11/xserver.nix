@@ -161,6 +161,15 @@ in
         '';
       };
 
+      plainX = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the X11 session can be plain (without DM/WM) and
+          the Xsession script will be used as fallback or not.
+        '';
+      };
+
       autorun = mkOption {
         type = types.bool;
         default = true;
@@ -539,7 +548,7 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config.xorg = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { abiCompat = "1.18"; };
+    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -552,6 +561,11 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
+      { assertion = cfg.desktopManager.default == "none" && cfg.windowManager.default == "none" -> cfg.plainX;
+        message = "Either the desktop manager or the window manager shouldn't be `none`! "
+                + "To explicitly allow this, you can also set `services.xserver.plainX` to `true`. "
+                + "The `default` value looks for enabled WMs/DMs and select the first one.";
+      }
     ];
 
     environment.etc =
@@ -564,6 +578,22 @@ in
             target = "X11/xkb";
           }
         ])
+      # localectl looks into 00-keyboard.conf
+      ++ [
+        {
+          text = ''
+            Section "InputClass"
+              Identifier "Keyboard catchall"
+              MatchIsKeyboard "on"
+              Option "XkbModel" "${cfg.xkbModel}"
+              Option "XkbLayout" "${cfg.layout}"
+              Option "XkbOptions" "${cfg.xkbOptions}"
+              Option "XkbVariant" "${cfg.xkbVariant}"
+            EndSection
+          '';
+          target = "X11/xorg.conf.d/00-keyboard.conf";
+        }
+      ]
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
         [{
@@ -681,16 +711,6 @@ in
         Section "Monitor"
           Identifier "Monitor[0]"
           ${cfg.monitorSection}
-        EndSection
-
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbRules" "base"
-          Option "XkbModel" "${cfg.xkbModel}"
-          Option "XkbLayout" "${cfg.layout}"
-          Option "XkbOptions" "${cfg.xkbOptions}"
-          Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
         # Additional "InputClass" sections

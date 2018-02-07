@@ -44,6 +44,11 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
+  gentooPatch = name: sha256: fetchurl {
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
+    inherit sha256;
+  };
+
   mkGnFlags =
     let
       # Serialize Nix types into GN types according to this document:
@@ -60,10 +65,12 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
+    # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
+                    # so we can't build with one from system and other from source
   ];
 
   opusWithCustomModes = libopus.override {
@@ -76,7 +83,9 @@ let
     libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
-    ffmpeg harfbuzz-icu libxslt libxml2
+    ffmpeg libxslt libxml2
+    # harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
+                   # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -129,28 +138,16 @@ let
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
-    ] # As major versions are added, you can trawl the gentoo and arch repos at
+      # As major versions are added, you can trawl the gentoo and arch repos at
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
-      ++ optionals (versionRange "61" "62") [
-      ./patches/chromium-gn-bootstrap-r14.patch
-      ./patches/chromium-gcc-r1.patch
-      ./patches/chromium-atk-r1.patch
-      ./patches/chromium-gcc5-r1.patch
-    ]
-      ++ optionals (versionRange "62" "63") [
-      ./patches/chromium-gn-bootstrap-r17.patch
-      ./patches/chromium-gcc5-r2.patch
-      ./patches/chromium-glibc2.26-r1.patch
-    ]
-      ++ optionals (versionAtLeast version "63") [
-      ./patches/chromium-gn-bootstrap-r19.patch
-      ./patches/chromium-gcc5-r2.patch
-      ./patches/chromium-glibc2.26-r1.patch
-      ./patches/chromium-sysroot-r1.patch
-    ]
-      ++ optional enableWideVine ./patches/widevine.patch;
+
+    # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ] ++ optionals (versionRange "64" "65") [
+      (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
+      (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
+    ]  ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -158,6 +155,9 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+        chrome/browser/shell_integration_linux.cc
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
@@ -196,6 +196,9 @@ let
             \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
             -delete
       done
+    '' + optionalString stdenv.isAarch64 ''
+      substituteInPlace build/toolchain/linux/BUILD.gn \
+        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '';
 
     gnFlags = mkGnFlags ({
@@ -207,6 +210,7 @@ let
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
+      ## FIXME remove use_gconf after chromium 65 has become stable
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
@@ -265,6 +269,12 @@ let
         ninja -C "${buildPath}"  \
           -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
           "${target}"
+        (
+          source chrome/installer/linux/common/installer.include
+          PACKAGE=$packageName
+          MENUNAME="Chromium"
+          process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+        )
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"
       '';

@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "1fcrbjwnhcz71i70ppy0rcgk5crwwmbkm9nrk1kapvks33pv0az7";
   };
 
-  depsSha256 = "05mj84a5k65ai492grwg03c3wq6ardhs114bv951fgysc9rs07p5";
+  cargoSha256 = "0kqkzjd90v19qvl3iv1vv2fi8h0z75b0yn0z5jq8w4m94fvh0p95";
 
   # some tests require a tty, this variable turns them off for Travis CI,
   # which we can also make use of

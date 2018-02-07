@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, go, procps, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.38";
+  version = "0.14.43";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "0afid083azvrihv1v2cas09dprr2fflmj9gi7iy18gvwy2pg0jj8";
+    sha256 = "1n09zmp9dqrl3y0fa0l1gx6f09j9mm3xdf7b58y03znspsg7mxhi";
   };
 
   buildInputs = [ go removeReferencesTo ];

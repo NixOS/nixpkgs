@@ -53,10 +53,6 @@ buildGoPackage rec {
     go generate github.com/drone/drone/store/datastore/ddl
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib -add_rpath $bin $bin/bin/drone
-  '';
-
   src = fetchFromGitHub {
     owner = "drone";
     repo = "drone";
@@ -65,7 +61,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    maintainer = with maintainers; [ avnik ];
+    maintainers = with maintainers; [ avnik ];
     license = licenses.asl20;
     description = "Continuous Integration platform built on container technology";
   };

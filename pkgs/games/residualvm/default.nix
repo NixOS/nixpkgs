@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Interpreter for LucasArts' Lua-based 3D adventure games";
     homepage = http://residualvm.org/;
     repositories.git = https://github.com/residualvm/residualvm.git;
-    licencse = licenses.gpl2;
+    license = licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

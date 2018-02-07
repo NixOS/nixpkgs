@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     sha256 = "0mnjhdryx94c106fghzz01dyc1vlp16wn6sajvpxffnqqx62rmfx";
   };
 
-  buildInputs = [ pkgconfig dbus_glib libxklavier glib gtk intltool GConf libglade ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus_glib libxklavier glib gtk intltool GConf libglade ];
 }

@@ -676,6 +676,7 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
+      '' + optionalString (!isNull config.time.timeZone) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"

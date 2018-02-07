@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ python softhsm openldap p11_kit.dev p11_kit.out gnupg ];
-  buildInputs = [ unbound pkgconfig unzip git libtasn1 db libmemcached cyrus_sasl openssl bash quickder
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unbound unzip git libtasn1 db libmemcached cyrus_sasl openssl bash quickder
                   libkrb5 ldns libtool swig pkgs.pythonPackages.pip gnutls-kdh ]
                 ++ stdenv.lib.optional useSystemd systemd;
 

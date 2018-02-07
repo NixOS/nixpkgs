@@ -10,21 +10,16 @@ assert pythonSupport -> libxml2.pythonSupport;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.29";
+  pname = "libxslt";
+  version = "1.1.32";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "1klh81xbm9ppzgqk339097i39b7fnpmlj8lzn8bpczl3aww6x5xm";
+    sha256 = "0q2l6m56iv3ysxgm2walhg4c9wp7q183jb328687i9zlp85csvjj";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-5029";
-      url = "https://git.gnome.org/browse/libxslt/"
-        + "patch/?id=08ab2774b870de1c7b5a48693df75e8154addae5";
-      sha256 = "10azfmyffjf9d7b5js4ipxw9f20qi0kw3zq34bpqmbcpq3l338ky";
-    })
-  ] ++ stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
+  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
   # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
   postPatch = optionalString hostPlatform.isCygwin ''
@@ -38,12 +33,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
-  # TODO move cryptoSupport as last flag, when upgrading libxslt
-  configureFlags = optional (!cryptoSupport) "--without-crypto" ++ [
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python2}";
+  ] ++ optional pythonSupport "--with-python=${python2}"
+    ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
@@ -51,7 +47,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '' + optionalString pythonSupport ''
     mkdir -p $py/nix-support
-    echo ${libxml2.py} >> $py/nix-support/propagated-native-build-inputs
+    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
     moveToOutput lib/python2.7 "$py"
   '';
 

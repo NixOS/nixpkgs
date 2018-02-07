@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ gtk2 glib pkgconfig mesa wxGTK libX11 xproto ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 glib mesa wxGTK libX11 xproto ];
 
   preBuild = ''
     sed -e '

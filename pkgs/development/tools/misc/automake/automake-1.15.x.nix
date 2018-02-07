@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bzd9g32dfm4rsbw93ld9x7b5nc1y6i4m6zp032qf1i28a8s6sxg";
   };
 
-  buildInputs = [ perl autoconf ];
+  nativeBuildInputs = [ autoconf perl ];
+  buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
 

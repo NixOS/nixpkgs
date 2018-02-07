@@ -4,8 +4,9 @@ let
   # treat versions newer than 3.22 as 3.22
   gnomeVersion = if stdenv.lib.versionOlder "3.22" gnome3.version then "3.22" else gnome3.version;
   pname = "arc-theme";
+in
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "2017-05-12";
 
@@ -17,8 +18,9 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gnome3.gtk ];
 
-  buildInputs = [ gtk-engine-murrine gnome3.gtk ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   preferLocalBuild = true;
 

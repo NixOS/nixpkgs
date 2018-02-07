@@ -5,22 +5,16 @@ let
   name = "zed-${version}";
   version = "1.1.0";
 
-  # When upgrading node.nix / node packages:
-  #   fetch package.json from Zed's repository
-  #   run `npm2nix package.json node.nix`
-  #   and replace node.nix with new one
-  nodePackages = import ../../../../pkgs/top-level/node-packages.nix {
+  nodePackages = import ./node.nix {
     inherit pkgs;
-    inherit (pkgs) stdenv nodejs fetchurl fetchgit;
-    neededNatives = [ pkgs.python ] ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.utillinux;
-    self = nodePackages;
-    generated = ./node.nix;
+    system = stdenv.system;
   };
 
   node_env = buildEnv {
     name = "node_env";
-    paths = [ nodePackages."body-parser" nodePackages.express
-      nodePackages.request nodePackages.tar nodePackages.ws ];
+    paths = [ nodePackages."body-parser-~1.6.3" nodePackages."express-~4.8.3"
+      nodePackages."request-~2.34.0" nodePackages."tar-~0.1.19"
+      nodePackages."ws-~0.4.32" ];
     pathsToLink = [ "/lib" ];
     ignoreCollisions = true;
   };
@@ -78,11 +72,11 @@ in stdenv.mkDerivation rec {
     ln -s ${zed_script} $out/bin/zed
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A fully offline-capable, open source, keyboard-focused, text and code editor for power users";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     homepage = http://zedapp.org/;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ matejc ma27 ];
+    platforms = platforms.linux;
   };
 }

@@ -15,34 +15,34 @@
 , mesa_noglu
 , makeWrapper
 , beignet
-}: 
+}:
 
 stdenv.mkDerivation rec {
   name = "beignet-${version}";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://01.org/sites/default/files/${name}-source.tar.gz"; 
-    sha256 = "07snrgjlhwl5fxz82dyqp632cnf5hp0gfqrjd2930jv79p37p6rr";
-  };  
+    sha256 = "0hqb04jhjjslnmi3fnpzphanz84zywwkyw2sjr1k5qlx2jxfsmf5";
+  };
 
-  patches = [ ./clang_llvm.patch ]; 
+  patches = [ ./clang_llvm.patch ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs src/git_sha1.sh
-  ''; 
+  '';
 
   cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${clang-unwrapped}/lib" ];
 
-  buildInputs = [ 
-    llvm 
+  buildInputs = [
+    llvm
     clang-unwrapped
-    libX11 
+    libX11
     libXext
     libpthreadstubs
-    libdrm 
+    libdrm
     libXdmcp
     libXdamage
     ocl-icd
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
       It supports the Intel OpenCL runtime library and compiler. 
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = with maintainers; [ artuuge zimbatm ];
     platforms = platforms.linux;
-  }; 
+  };
 }

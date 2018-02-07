@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib udev libgudev python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib udev libgudev python ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/software/libmbim/;

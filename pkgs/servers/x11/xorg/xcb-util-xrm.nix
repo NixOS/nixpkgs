@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, m4, libxcb, xcbutil, libX11 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.2";
   name = "xcb-util-xrm-${version}";
 
   src = fetchurl {
     url = "https://github.com/Airblader/xcb-util-xrm/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "1h5vxwpd37dqfw9yj1l4zd9c5dj30r3g0szgysr6kd7xrqgaq04l";
+    sha256 = "0vbqhag51i0njc8d5fc8c6aa12496cwrc3s6s7sa5kfc17cwhppp";
   };
 
-  buildInputs = [ pkgconfig m4 libxcb xcbutil ]
+  nativeBuildInputs = [ pkgconfig m4 ];
+  buildInputs = [ libxcb xcbutil ]
     ++ stdenv.lib.optional doCheck libX11;
   doCheck = true;
 

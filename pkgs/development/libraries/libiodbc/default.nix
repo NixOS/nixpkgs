@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16hjb6fcval85gnkgkxfhw4c5h3pgf86awyh8p2bhnnvzc0ma5hq";
   };
 
-  buildInputs = stdenv.lib.optionals useGTK [ gtk2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = stdenv.lib.optionals useGTK [ gtk2 ];
 
   preBuild =
     ''

@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig glibmm gtkmm gtksourceview ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glibmm gtkmm gtksourceview ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

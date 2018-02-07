@@ -15,7 +15,8 @@ buildGoPackage rec {
     sha256 = "1p7s340wlcjvna3xa2x13nsnixfhbn5b7dhf9cqvxds2slizlm3p";
   };
 
-  buildInputs = [ libvirt pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libvirt ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dhiltgen/docker-machine-kvm;

@@ -25,8 +25,13 @@ buildPythonApplication rec {
     sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
   };
 
+  checkInputs = [
+    pytest
+    selenium
+  ];
+
   meta = {
-    homepage = http://github.com/bepasty/bepasty-server;
+    homepage = https://github.com/bepasty/bepasty-server;
     description = "Binary pastebin server";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];

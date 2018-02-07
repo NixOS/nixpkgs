@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     description = "Direct access to I/O ports from the command line";
     homepage = http://people.redhat.com/rjones/ioport/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.cleverca22 ];
   };
 }

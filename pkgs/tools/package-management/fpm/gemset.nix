@@ -1,15 +1,6 @@
 {
-  archive-tar-minitar = {
-    source = {
-      fetchSubmodules = false;
-      rev = "dae32ca550a87dba32597115ae18805db4782ebe";
-      sha256 = "0fvxacbcb52fm5dis451kdd7dv74z8p6nm4vnfqf7jg2aghcxdkd";
-      type = "git";
-      url = "git://github.com/peterhoeg/archive-tar-minitar.git";
-    };
-    version = "0.5.2.1";
-  };
   arr-pm = {
+    dependencies = ["cabin"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "07yx1g1nh4zdy38i2id1xyp42fvj4vl6i196jn7szvjfm0jx98hg";
@@ -20,50 +11,60 @@
   backports = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1zcgqw7m7jb8n7b2jwla5cq0nw9wsgddxfmn0a9v89ihzd4i1a5k";
+      sha256 = "1agsk23kfr194s690jnrpijh9pf3hq4a9yy66j1wzzj2x19ss9y0";
       type = "gem";
     };
-    version = "3.6.8";
+    version = "3.10.3";
   };
   cabin = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06b5ri2629ad9xjc419xswz17zli90v8x640k2sd6v2yb90zkr1b";
+      sha256 = "0b3b8j3iqnagjfn1261b9ncaac9g44zrx1kcg81yg4z9i513kici";
       type = "gem";
     };
-    version = "0.8.1";
+    version = "0.9.0";
   };
   childprocess = {
+    dependencies = ["ffi"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1is253wm9k2s325nfryjnzdqv9flq8bm4y2076mhdrncxamrh7r2";
+      sha256 = "081hxbgrqjxha0jz0p0wkncdqawdvlsxb3awsx195g0pgkpqrcms";
       type = "gem";
     };
-    version = "0.5.9";
+    version = "0.8.0";
   };
   clamp = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vy6ghz9l84qazlza30z0dwwrlifc5c7akgrl1v72ivmmjga45hw";
+      sha256 = "0jb6l4scp69xifhicb5sffdixqkw8wgkk9k2q57kh2y36x1px9az";
       type = "gem";
     };
-    version = "1.0.0";
+    version = "1.0.1";
+  };
+  dotenv = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1pgzlvs0sswnqlgfm9gkz2hlhkc0zd3vnlp2vglb1wbgnx37pjjv";
+      type = "gem";
+    };
+    version = "2.2.1";
   };
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nkcrmxqr0vb1y4rwliclwlj2ajsi4ddpdx2gvzjy0xbkk5iqzfp";
+      sha256 = "034f52xf7zcqgbvwbl20jwdyjwznvqnwpbaps9nk18v9lgb1dpx0";
       type = "gem";
     };
-    version = "1.9.14";
+    version = "1.9.18";
   };
   fpm = {
+    dependencies = ["arr-pm" "backports" "cabin" "childprocess" "clamp" "ffi" "json" "pleaserun" "ruby-xz" "stud"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1ids20mcs6w8nf4bpjj749ayc7h637kqx0pdw5d5a0yzik34daaj";
+      sha256 = "0yvp9cifzfrxv3pr1kvcvvnyrcz8vxf6yd43hg5blaick50sbm23";
       type = "gem";
     };
-    version = "1.6.2";
+    version = "1.9.3";
   };
   insist = {
     source = {
@@ -84,10 +85,10 @@
   json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nsby6ry8l9xg3yw4adlhk2pnc7i0h0rznvcss4vk3v74qg0k8lc";
+      sha256 = "0qmj7fypgb9vag723w1a49qihxrcf5shzars106ynw2zk352gbv5";
       type = "gem";
     };
-    version = "1.8.3";
+    version = "1.8.6";
   };
   mustache = {
     source = {
@@ -98,14 +99,16 @@
     version = "0.99.8";
   };
   pleaserun = {
+    dependencies = ["cabin" "clamp" "dotenv" "insist" "mustache" "stud"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0s26216ip6skzbdl48z8wbrzqbvwq1q4s6sm8r209zvvlp0rinkw";
+      sha256 = "0hgnrl67zkqaxmfkwbyscawj4wqjm7h8khpbj58s6iw54wp3408p";
       type = "gem";
     };
-    version = "0.0.24";
+    version = "0.0.30";
   };
   ruby-xz = {
+    dependencies = ["ffi" "io-like"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "11bgpvvk0098ghvlxr4i713jmi2izychalgikwvdwmpb452r3ndw";
@@ -116,9 +119,9 @@
   stud = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1raavxgn5k4bxap5wqdl7zmfw5k4ndl8aagnajlfg4f0bmm8yni7";
+      sha256 = "0qpb57cbpm9rwgsygqxifca0zma87drnlacv49cqs2n5iyi6z8kb";
       type = "gem";
     };
-    version = "0.0.22";
+    version = "0.0.23";
   };
 }

@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 qt4 libX11 ];
   nativeBuildInputs = [ qmake4Hook ];
 
+  postInstall = ''
+    # Patch the `evopedia.desktop' file.
+    substituteInPlace $out/share/applications/evopedia.desktop \
+        --replace '/usr/bin/evopedia' $out/bin/evopedia
+  '';
+
   meta = with stdenv.lib; {
     description = "Offline Wikipedia Viewer";
     homepage = http://www.evopedia.info;

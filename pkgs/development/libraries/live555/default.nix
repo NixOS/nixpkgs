@@ -12,7 +12,12 @@ stdenv.mkDerivation {
     sha256 = "02z2f8z5cy0ajnh9pgar40lsxdknfw5cbyw52138hxnpr6adrvak";
   };
 
-  postPatch = "sed 's,/bin/rm,rm,g' -i genMakefiles";
+  postPatch = "sed 's,/bin/rm,rm,g' -i genMakefiles"
+  + stdenv.lib.optionalString (stdenv ? glibc) ''
+
+    substituteInPlace liveMedia/include/Locale.hh \
+      --replace '<xlocale.h>' '<locale.h>'
+  '';
 
   configurePhase = ''
     sed \

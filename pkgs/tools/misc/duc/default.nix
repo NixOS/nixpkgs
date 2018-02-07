@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h7vll8a78ijan9bmnimmsviywmc39x8h9iikx8vm98kwyxi4xif";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig tokyocabinet cairo pango ncurses ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ tokyocabinet cairo pango ncurses ];
 
   meta = with stdenv.lib; {
     homepage = http://duc.zevv.nl/;

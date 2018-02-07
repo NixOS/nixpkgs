@@ -49,8 +49,8 @@ def get_maintainers(attr_name):
 @click.command()
 @click.option(
     '--jobset',
-    default="nixos/release-17.03",
-    help='Hydra project like nixos/release-17.03')
+    default="nixos/release-17.09",
+    help='Hydra project like nixos/release-17.09')
 def cli(jobset):
     """
     Given a Hydra project, inspect latest evaluation

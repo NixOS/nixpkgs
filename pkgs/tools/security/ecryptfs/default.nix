@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ pkgconfig perl nss nspr python2 pam intltool makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl nss nspr python2 pam intltool makeWrapper ];
   propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];
 
   postInstall = ''

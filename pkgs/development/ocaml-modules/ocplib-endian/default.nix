@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
 
-let version = "0.8"; in
+let version = "1.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-ocplib-endian-${version}";
+  name = "ocaml${ocaml.version}-ocplib-endian-${version}";
 
   src = fetchzip {
     url = "https://github.com/OCamlPro/ocplib-endian/archive/${version}.tar.gz";
-    sha256 = "12xjvzw245mj4s02dgi4k2sx5gam7wxi4mbxmz6k18zg64n48yjd";
+    sha256 = "0s1ld3kavz892b8awyxyg1mr98h2g61gy9ci5v6yb49bsii6wicw";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cppo ];

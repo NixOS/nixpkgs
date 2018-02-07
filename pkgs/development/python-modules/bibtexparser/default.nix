@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Bibtex parser for python 2.7 and 3.3 and newer";
     homepage = https://github.com/sciunto-org/python-bibtexparser;
     license = with lib.licenses; [ gpl3 bsd3 ];
-    maintainer = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

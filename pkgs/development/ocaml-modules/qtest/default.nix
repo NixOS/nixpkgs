@@ -4,13 +4,13 @@ if !stdenv.lib.versionAtLeast ocaml.version "4"
 then throw "qtest is not available for OCaml ${ocaml.version}"
 else
 
-let version = "2.6"; in
+let version = "2.7"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-qtest-${version}";
+  name = "ocaml${ocaml.version}-qtest-${version}";
   src = fetchzip {
     url = "https://github.com/vincent-hugot/iTeML/archive/v${version}.tar.gz";
-    sha256 = "1v5c1n5p8rhnisn606fs05q8764lqwgw08w66y5dm8wgmxgmsb3k";
+    sha256 = "0z72m2drp67qchvsxx4sg2qjrrq8hp6p9kzdx16ibx58pvpw1sh2";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];

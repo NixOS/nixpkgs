@@ -1,24 +1,21 @@
-{ stdenv, intltool, fetchurl, python
-, pkgconfig, gtk3, glib
-, makeWrapper, itstool, libxml2, docbook_xsl
-, gnome3, librsvg, gdk_pixbuf, libxslt }:
+{ stdenv, intltool, fetchurl, python3
+, pkgconfig, gtk3, glib, gobjectIntrospection
+, wrapGAppsHook, itstool, libxml2, docbook_xsl
+, gnome3, gdk_pixbuf, libxslt }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 python
-                  gnome3.gsettings_desktop_schemas makeWrapper docbook_xsl
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg libxslt ];
+  nativeBuildInputs = [
+    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt gobjectIntrospection
+  ];
+  buildInputs = [
+    gtk3 glib libxml2 python3 python3.pkgs.pygobject3
+    gnome3.gsettings_desktop_schemas
+    gdk_pixbuf gnome3.defaultIconTheme
+  ];
 
   enableParallelBuilding = true;
-
-  preFixup = ''
-    wrapProgram "$out/bin/glade" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Glade;

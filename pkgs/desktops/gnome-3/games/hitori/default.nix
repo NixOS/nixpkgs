@@ -2,15 +2,11 @@
 , libxml2, intltool, itstool }:
 
 stdenv.mkDerivation rec {
-  name = "hitori-${gnome3.version}.1";
+  inherit (import ./src.nix fetchurl) name src;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/hitori/${gnome3.version}/${name}.tar.xz";
-    sha256 = "07pm3xl05jgb8x151k1j2ap57dmfvk2nkz9dmqnn5iywfigsysd1";
-  };
-
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2
+    gtk3 wrapGAppsHook intltool itstool libxml2
     gnome3.defaultIconTheme
   ];
 

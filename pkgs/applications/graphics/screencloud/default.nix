@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
     "-DCONSUMER_SECRET_SCREENCLOUD=${consumerSecret}"
   ];
 
-  sourceRoot = "screencloud-v${version}-src/screencloud";
+  setSourceRoot = ''
+    sourceRoot=$(echo */screencloud)
+  '';
 
   preConfigure = ''
     # This needs to be set in preConfigure instead of cmakeFlags in order to

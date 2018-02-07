@@ -7,7 +7,7 @@ let
 
   ipfsFlags = toString ([
     (optionalString  cfg.autoMount                   "--mount")
-    (optionalString  cfg.autoMigrate                 "--migrate")
+    #(optionalString  cfg.autoMigrate                 "--migrate")
     (optionalString  cfg.enableGC                    "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
     (optionalString (cfg.defaultMode == "offline")   "--offline")
@@ -36,10 +36,9 @@ let
 
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
+    # NB: migration must be performed prior to pre-start, else we get the failure message!
     preStart = ''
       ipfs repo fsck # workaround for BUG #4212 (https://github.com/ipfs/go-ipfs/issues/4214)
-      ipfs --local config Addresses.API ${cfg.apiAddress}
-      ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
     '' + optionalString cfg.autoMount ''
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
@@ -55,7 +54,11 @@ let
               EOF
               ipfs --local config --json "${concatStringsSep "." path}" "$value"
             '')
-            cfg.extraConfig)
+            ({ Addresses.API = cfg.apiAddress;
+               Addresses.Gateway = cfg.gatewayAddress;
+               Addresses.Swarm = cfg.swarmAddress;
+            } //
+            cfg.extraConfig))
         );
     serviceConfig = {
       ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
@@ -97,11 +100,17 @@ in {
         description = "systemd service that is enabled by default";
       };
 
+      /*
       autoMigrate = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether IPFS should try to migrate the file system automatically";
+        description = ''
+          Whether IPFS should try to migrate the file system automatically.
+
+          The daemon will need to be able to download a binary from https://ipfs.io to perform the migration.
+        '';
       };
+      */
 
       autoMount = mkOption {
         type = types.bool;
@@ -131,6 +140,12 @@ in {
         type = types.str;
         default = "/ip4/127.0.0.1/tcp/5001";
         description = "Where IPFS exposes its API to";
+      };
+
+      swarmAddress = mkOption {
+        type = types.listOf types.str;
+        default = [ "/ip4/0.0.0.0/tcp/4001" "/ip6/::/tcp/4001" ];
+        description = "Where IPFS listens for incoming p2p connections";
       };
 
       enableGC = mkOption {

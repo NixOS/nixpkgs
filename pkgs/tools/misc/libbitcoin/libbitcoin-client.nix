@@ -1,26 +1,29 @@
-{ stdenv, lib, fetchurl, pkgconfig, autoreconfHook
-, boost, libsodium, czmqpp, libbitcoin }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+, boost, libbitcoin, libbitcoin-protocol }:
 
 let
   pname = "libbitcoin-client";
-  version = "2.2.0";
+  version = "3.4.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/libbitcoin/libbitcoin-client/archive/v${version}.tar.gz";
-    sha256 = "1g79hl6jmf5dam7vq19h4dgdj7gcn19fa7q78vn573mg2rdyal53";
+  src = fetchFromGitHub {
+    owner = "libbitcoin";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1vdp6qgpxshh6nhdvr81z3nvh42wgmsm4prli4ajigwp970y8p56";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  propagatedBuildInputs = [ libbitcoin libbitcoin-protocol ];
 
-  propagatedBuildInputs = [ libsodium czmqpp libbitcoin ];
+  enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-tests=no"
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-bash-completiondir=$out/share/bash-completion/completions"
   ];
 
   meta = with stdenv.lib; {
@@ -29,8 +32,7 @@ in stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];
 
-    # https://wiki.unsystem.net/en/index.php/Libbitcoin/License
-    # AGPL with an additional clause
+    # AGPL with a lesser clause
     license = licenses.agpl3;
   };
 }

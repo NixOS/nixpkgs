@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openssl libidn glib zlib ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     description = "A lightweight C library for the Jabber protocol";

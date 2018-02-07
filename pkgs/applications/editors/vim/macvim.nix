@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gettext ncurses pkgconfig luajit ruby tcl perl python
+    gettext ncurses luajit ruby tcl perl python
   ];
 
   patches = [ ./macvim.patch ];

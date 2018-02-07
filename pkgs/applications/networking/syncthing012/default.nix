@@ -24,4 +24,12 @@ buildGoPackage rec {
   preBuild = ''
     export buildFlagsArray+=("-tags" "noupgrade release")
   '';
+
+  meta = {
+    knownVulnerabilities = [ "CVE-2017-1000420" ];
+    homepage = https://www.syncthing.net/;
+    description = "Open Source Continuous File Synchronization";
+    license = stdenv.lib.licenses.mpl20;
+    platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
+  };
 }

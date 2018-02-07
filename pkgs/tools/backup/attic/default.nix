@@ -10,7 +10,8 @@ let
       url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
       sha256 = "1imlqw9b73086y97izr036f58pgc5akv4ihc2rrf8j5h75jbrlaa";
     };
-    buildInputs = with python3Packages; [ pytest pkgconfig fuse attr which ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = with python3Packages; [ pytest fuse attr which ];
     propagatedBuildInputs = with python3Packages; [ contextlib2 ];
     checkPhase = ''
       py.test

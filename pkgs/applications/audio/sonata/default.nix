@@ -16,8 +16,9 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig intltool wrapGAppsHook
+    intltool wrapGAppsHook
     gnome3.gnome_themes_standard gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas
   ];

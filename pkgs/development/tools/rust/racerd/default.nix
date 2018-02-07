@@ -14,7 +14,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  depsSha256 = "0db18m0vxzvg821gb5g8njhlnxw7im81m089i4982n8hmnhm1497";
+  cargoSha256 = "1h7hm7vkk1grah6pn5ydfi5pzc2kd48lh2kxim5jlvrxhd2dingg";
 
   buildInputs = [ makeWrapper ];
 

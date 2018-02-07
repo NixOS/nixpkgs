@@ -51,7 +51,7 @@ with stdenv.lib;
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
-  ${optionalString (stdenv.system == "x86_64-linux" || stdenv.system == "aarch64-linux") ''
+  ${optionalString (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") ''
     NR_CPUS 384
   ''}
 
@@ -245,6 +245,9 @@ with stdenv.lib;
   USB_SERIAL_KEYSPAN_USA49W y
   USB_SERIAL_KEYSPAN_USA49WLC y
 
+  # Device mapper (RAID, LVM, etc.)
+  MD y
+
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
@@ -340,15 +343,16 @@ with stdenv.lib;
 
   # Security related features.
   RANDOMIZE_BASE? y
-  STRICT_DEVMEM y # Filter access to /dev/mem
+  STRICT_DEVMEM? y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-  '' else ''
-    CC_STACKPROTECTOR_REGULAR? y
-  ''}
+  ${optionalString (! stdenv.hostPlatform.isArm)
+    (if versionOlder version "3.14" then ''
+        CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
+      '' else ''
+        CC_STACKPROTECTOR_REGULAR? y
+      '')}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
@@ -365,6 +369,15 @@ with stdenv.lib;
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
+  ''}
+
+  ${optionalString (versionAtLeast version "4.10") ''
+    # Write Back Throttling
+    # https://lwn.net/Articles/682582/
+    # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
+    BLK_WBT y
+    BLK_WBT_SQ y
+    BLK_WBT_MQ y
   ''}
 
   # Misc. options.
@@ -568,8 +581,14 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.14") ''
     MEDIA_RC_SUPPORT y
   ''}
+  MEDIA_CONTROLLER y
   MEDIA_USB_SUPPORT y
   MEDIA_PCI_SUPPORT y
+  MEDIA_ANALOG_TV_SUPPORT y
+  VIDEO_STK1160_COMMON m
+  ${optionalString (versionOlder version "4.11") ''
+    VIDEO_STK1160_AC97 y
+  ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
   BINFMT_SCRIPT y

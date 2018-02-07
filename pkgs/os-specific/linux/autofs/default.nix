@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
     export E2FSCK=${e2fsprogs}/bin/fsck.ext2
     export E3FSCK=${e2fsprogs}/bin/fsck.ext3
     export E4FSCK=${e2fsprogs}/bin/fsck.ext4
+
+    unset STRIP # Makefile.rules defines a usable STRIP only without the env var.
   '';
 
   installPhase = ''

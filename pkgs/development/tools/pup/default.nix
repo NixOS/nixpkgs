@@ -1,15 +1,21 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "pup-${version}";
-  version = "20160425-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "e76307d03d4d2e0f01fb7ab51dee09f2671c3db6";
-  
+  version = "0.4.0";
+  rev = "v${version}";
+
   goPackagePath = "github.com/ericchiang/pup";
 
   src = fetchgit {
     inherit rev;
-    url = "https://github.com/ericchiang/pup";
-    sha256 = "15lwas4cjchlwhrwnd5l4gxcwqdfgazdyh466hava5qzxacqxrm5";
+    url = "https://${goPackagePath}";
+    sha256 = "0mnhw0yph5fvcnrcmj1kfbyw1a4lcg3k9f6y28kf44ihlq8h1dfz";
+  };
+
+  meta = with lib; {
+    description = "Streaming HTML processor/selector";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yegortimoshenko ];
   };
 }

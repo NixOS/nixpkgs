@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  buildInputs = [ boost doxygen gperf pkgconfig librevenge libxml2 perl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost doxygen gperf librevenge libxml2 perl ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.documentfoundation.org/DLP/Libraries/libabw;

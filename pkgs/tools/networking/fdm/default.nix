@@ -1,45 +1,31 @@
-{ stdenv, fetchurl
-  , openssl, tdb, zlib, flex, bison
-  }:
-let 
-  buildInputs = [ openssl tdb zlib flex bison ];
-  sourceInfo = rec {
-    baseName="fdm";
-    version = "1.8";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/${baseName}/${baseName}/${name}.tar.gz";
-    sha256 = "0hi39f31ipv8f9wxb41pajvl61w6vaapl39wq8v1kl9c7q6h0k2g";
-  };
+{ stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
+
+let
+
+  baseName = "fdm";
+  version = "1.9.0.20170124";
+
 in
-stdenv.mkDerivation {
-  src = fetchurl {
-    inherit (sourceInfo) url sha256;
+
+stdenv.mkDerivation rec {
+  name = "${baseName}-${version}";
+
+  src = fetchFromGitHub {
+    owner = "nicm";
+    repo = baseName;
+    rev = "cae4ea37b6b296d1b2e48f62934ea3a7f6085e33";
+    sha256 = "048191wdv1yprwinipmx2152gvd2iq1ssv7xfb1bzh6zirh1ya3n";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl tdb zlib flex bison ];
 
-  preBuild = ''
-    export makeFlags="$makeFlags PREFIX=$out"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Dbool=int"
 
-    sed -i */Makefile -i Makefile -e 's@ -g bin @ @'
-    sed -i */Makefile -i Makefile -e 's@ -o root @ @'
-    sed -i GNUmakefile -e 's@ -g $(BIN_OWNER) @ @'
-    sed -i GNUmakefile -e 's@ -o $(BIN_GROUP) @ @'
-    sed -i */Makefile -i Makefile -i GNUmakefile -e 's@-I-@@g'
-  '';
-      
-  meta = {
+  meta = with stdenv.lib; {
     description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
-    maintainers = with stdenv.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with stdenv.lib.platforms;
-      linux;
-    homepage = http://fdm.sourceforge.net/;
-    inherit (sourceInfo) version;
-    updateWalker = true;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux;
+    homepage = https://github.com/nicm/fdm;
+    downloadPage = https://github.com/nicm/fdm/releases;
   };
 }

@@ -62,14 +62,14 @@ let
       }
     '')
 
-    ''
+    (optionalString (cfg.mailboxes != []) ''
       protocol imap {
         namespace inbox {
           inbox=yes
           ${concatStringsSep "\n" (map mailboxConfig cfg.mailboxes)}
         }
       }
-    ''
+    '')
 
     (optionalString cfg.enableQuota ''
       mail_plugins = $mail_plugins quota
@@ -104,7 +104,7 @@ let
   };
 
   mailboxConfig = mailbox: ''
-    mailbox ${mailbox.name} {
+    mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
       special_use = \${toString mailbox.specialUse}

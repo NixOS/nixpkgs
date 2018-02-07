@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, gnupg1compat, makeWrapper }:
+{ fetchFromGitHub, git, gnupg1compat, makeWrapper, openssl, stdenv }:
 
 stdenv.mkDerivation rec {
 
@@ -14,9 +14,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl makeWrapper ];
 
+  patchPhase = ''
+    substituteInPlace commands.cpp \
+      --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
+  '';
+
   installPhase = ''
     make install PREFIX=$out
-    wrapProgram $out/bin/* --prefix PATH : ${gnupg1compat}/bin
+    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg1compat}/bin
   '';
 
   meta = with stdenv.lib; {

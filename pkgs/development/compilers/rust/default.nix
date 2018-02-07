@@ -6,30 +6,33 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.17.0";
+  version = "1.22.1";
 in
 rec {
   rustc = callPackage ./rustc.nix {
     inherit llvm targets targetPatches targetToolchains rustPlatform version;
 
+    forceBundledLLVM = true;
+
     configureFlags = [ "--release-channel=stable" ];
 
     src = fetchurl {
       url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-      sha256 = "4baba3895b75f2492df6ce5a28a916307ecd1c088dc1fd02dbfa8a8e86174f87";
+      sha256 = "1lrzzp0nh7s61wgfs2h6ilaqi6iq89f1pd1yaf65l87bssyl4ylb";
     };
 
     patches = [
-      ./patches/darwin-disable-fragile-tcp-tests.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
+      ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
+    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch
+      # https://github.com/rust-lang/rust/issues/45410
+      ++ stdenv.lib.optional stdenv.isAarch64 ./patches/aarch64-disable-test_loading_cosine.patch;
 
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.18.0";
-    srcRev = "fe7b0cdcf5ca7aab81630706ce40b70f6aa2e666";
-    srcSha = "164iywv1l3v87b0pznf5kkzxigd6w19myv9d7ka4c65zgrk9n9px";
-    depsSha256 = "1mrgd8ib48vxxbhkvsqqq4p19sc6b74x3cd8p6lhhlm6plrajrvm";
+    version = "0.23.0";
+    srcSha = "14b2n1msxma19ydchj54hd7f2zdsr524fg133dkmdn7j65f1x6aj";
+    cargoSha256 = "1sj59z0w172qvjwg1ma5fr5am9dgw27086xwdnrvlrk4hffcr7y7";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

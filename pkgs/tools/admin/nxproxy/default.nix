@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = http://wiki.x2go.org/doku.php/wiki:libs:nx-libs;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qfp4qvsx7rc2shj1chi2y7fxn10rwi70rw2y54b2i8a4jq7gpkb";
   };
 
-  buildInputs = [ pkgconfig which mono ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which mono ];
 
   dontStrip = true;
 

@@ -4,8 +4,9 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2 gnome3.defaultIconTheme
+    gtk3 wrapGAppsHook intltool itstool libxml2 gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

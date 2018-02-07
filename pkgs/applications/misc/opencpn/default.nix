@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m6fp9lf9ki9444h0dq6bj0vr7d0pcxkbjv3j2v76p0ksk2l8kw3";
   };
 
-  buildInputs = [ pkgconfig cmake gtk2 wxGTK30 libpulseaudio curl gettext
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake gtk2 wxGTK30 libpulseaudio curl gettext
                   glib portaudio ];
 
   cmakeFlags = [

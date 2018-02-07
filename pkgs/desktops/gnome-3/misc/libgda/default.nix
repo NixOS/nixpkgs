@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 openssl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool itstool libxml2 gtk3 openssl ];
 
   meta = with stdenv.lib; {
     description = "Database access library";

@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.1.7";
+  name = "tor-0.3.2.9";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "13y0v4zfla0vziy9kkahmhrwylv32ianjikcr46mwbxvji4dvx8x";
+    sha256 = "03qn55c969zynnx71r82iaqnadpzq0qclq0zmjhb3n4qma8pnnj3";
   };
 
   outputs = [ "out" "geoip" ];

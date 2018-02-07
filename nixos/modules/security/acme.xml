@@ -89,8 +89,5 @@ services.nginx = {
   };
 }
 </programlisting>
-
-<para>At the moment you still have to restart Nginx after the ACME
-certs arrive.</para>
 </section>
 </chapter>

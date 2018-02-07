@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "03vdbmqlbmk3j2ay1wy6snrm2y27faxz7qv81vyzjzngj345095a";
   };
 
-  buildInputs = [ gtk pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk ];
 
   installPhase = ''
     mkdir -p $out/bin

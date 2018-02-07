@@ -41,9 +41,10 @@ in stdenv.mkDerivation {
     sha256 = "044h0cl69r0kc43vk4n0akk0prwzb7inq324h5yfqb38sd4zkds1";
     message = ''
       In order to get the intro and ending sequences from the 3DO version, you
-      need to have the original 3DO Star Control II CD. Create an image from the
-      CD and use uqm3donix* to extract a tarball with the videos from it. The
-      reason for this is because the 3DO uses its own proprietary disk format.
+      need to have the original 3DO Star Control II CD. Create an image from
+      the CD and use uqm3donix* to extract a tarball with the videos from it.
+      The reason for this is because the 3DO uses its own proprietary disk
+      format.
 
       Save the file as videos.tar and use "nix-prefetch-url file://${name}" to
       add it to the Nix store.

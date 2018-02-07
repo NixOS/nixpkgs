@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "14k2p324sdr662f49299mv0bw5jmpj1i2iqn0xs5pgf80x6l3mg2";
   };
 
-  buildInputs = [ pkgconfig gettext gtk2 SDL2 zlib glib openal mesa lua freetype libmpeg2 zip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext gtk2 SDL2 zlib glib openal mesa lua freetype libmpeg2 zip ];
 
   meta = {
     description = "An accurate, customizable Amiga Emulator";

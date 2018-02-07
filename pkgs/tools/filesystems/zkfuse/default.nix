@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${zookeeper.name}/src/contrib/zkfuse";
 
-  buildInputs = [ autoreconfHook zookeeper_mt log4cxx boost fuse ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zookeeper_mt log4cxx boost fuse ];
 
   installPhase = ''
     mkdir -p $out/bin

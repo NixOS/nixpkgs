@@ -24,7 +24,8 @@ stdenvNoCC.mkDerivation {
 
   # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
   # We do this so we have a build->build, not build->host, C compiler.
-  nativeBuildInputs = [ buildPackages.stdenv.cc perl ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ perl ];
 
   extraIncludeDirs = lib.optional hostPlatform.isPowerPC ["ppc"];
 

@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "df374c20d53ed082b8cf0d0da52b1a181abf387b";
-      sha256 = "0my26kjx1inh0ajh85n34wrl18mizx627cl0xhxlhcyw01p24792";
+      rev = "00cca3f093a8236a93fbbeeae7d28ad83811683c";
+      sha256 = "1x2frsin6d9drx9k65pv0r0l0asj16fzj815s2a9db2mxh8jycsp";
     };
   }
   {
@@ -23,8 +23,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/go-errors/errors";
-      rev = "8fa88b06e5974e97fbf9899a7f86a344bfd1f105";
-      sha256 = "02mvb2clbmfcqb4yclv5zhs4clkk9jxi2hiawsynl5fwmgn0d3xa";
+      rev = "3afebba5a48dbc89b574d890b6b34d9ee10b4785";
+      sha256 = "1vwgczqzd5i6bx12g9ln5cqfsbc7g0f8cz8yvcrasss2injpndi0";
+    };
+  }
+  {
+    goPackagePath = "github.com/hashicorp/go-cleanhttp";
+    fetch = {
+      type = "git";
+      url = "https://github.com/hashicorp/go-cleanhttp";
+      rev = "d5fe4b57a186c716b0e00b8c301cbd9b4182694d";
+      sha256 = "1m20y90syky4xr81sm3980jpil81nnpzmi6kv0vjr6p584gl1hn8";
     };
   }
   {
@@ -32,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-getter";
-      rev = "6aae8e4e2dee8131187c6a54b52664796e5a02b0";
-      sha256 = "0hxjwph0ghx0732xq62bszk18wb18hdq6vzb6b6bdn3rsdva1d68";
+      rev = "285374cdfad63de2c43d7562f49ced6dde5a7ba0";
+      sha256 = "0xmwxfb0vm20ga1j1r3lavxm15vwqdkisdkshw1nia7byhwmb4xm";
     };
   }
   {
@@ -41,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-version";
-      rev = "03c5bf6be031b6dd45afec16b1cf94fc8938bc77";
-      sha256 = "0sjq57gpfznaqdrbyb2p0bn90g9h661cvr0jrk6ngags4pbw14ik";
+      rev = "4fe82ae3040f80a03d04d2cccb5606a626b8e1ee";
+      sha256 = "0gq4207s1yf2nq4c2ir3bsai29svzz4830g1vbvzdrpis58r1x4m";
     };
   }
   {
@@ -50,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/hcl";
-      rev = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca";
-      sha256 = "1rfm67kma2hpakabf7hxlj196jags4rpjpcirwg4kan4g9b6j0kb";
+      rev = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8";
+      sha256 = "0db4lpqb5m130rmfy3s3gjjf4dxllypmyrzxv6ggqhkmwmc7w4mc";
     };
   }
   {
@@ -59,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-zglob";
-      rev = "95345c4e1c0ebc9d16a3284177f09360f4d20fab";
-      sha256 = "012hrd67v4gp3b621rykg2kp6a7iq4dr585qavragbif0z1whckx";
+      rev = "4959821b481786922ac53e7ef25c61ae19fb7c36";
+      sha256 = "0rwkdw143kphpmingsrw1zp030zf3p08f64h347jpdm4lz8z5449";
     };
   }
   {
@@ -77,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/go-testing-interface";
-      rev = "9a441910b16872f7b8283682619b3761a9aa2222";
-      sha256 = "0gfi97m6sadrwbq56as3d368c3ipcn3wz8pxqkk7kkba0h5wjc7v";
+      rev = "a61a99592b77c9ba629d254a693acffaeb4b7e28";
+      sha256 = "139hq835jpgk9pjg94br9d08nka8bfm7zyw92zxlwrkska4pgigx";
     };
   }
   {
@@ -86,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/mapstructure";
-      rev = "d0303fe809921458f417bcf828397a65db30a7e4";
-      sha256 = "1fjwi5ghc1ibyx93apz31n4hj6gcq1hzismpdfbg2qxwshyg0ya8";
+      rev = "b4575eea38cca1123ec2dc90c26529b5c5acfcff";
+      sha256 = "1x80f3kcb1wd2mdxks3wcsp26q9g7ahr8b18z1anl5igg6zl61kf";
     };
   }
   {
@@ -95,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "05e8a0eda380579888eb53c394909df027f06991";
-      sha256 = "03l83nrgpbyc2hxxfi928gayj16fsclbr88dja6r9kikq19a6yhv";
+      rev = "12b6f73e6084dad08a7c6e575284b177ecafbc71";
+      sha256 = "01f80s0q64pw5drfgqwwk1wfwwkvd2lhbs56lhhkff4ni83k73fd";
     };
   }
   {
@@ -113,8 +122,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "4b90d79a682b4bf685762c7452db20f2a676ecb2";
-      sha256 = "0ls3lfmbfwirm9j95b6yrw41wgh72lfkp1cvs873zw04si4yvaqr";
+      rev = "75104e932ac2ddb944a6ea19d9f9f26316ff1145";
+      sha256 = "13iagavgqq3sn9m3sck0chydwy5rcbhj0ylvc1169vs8q2m13yh9";
     };
   }
 ]

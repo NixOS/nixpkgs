@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -48,7 +48,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.linux-phc.org/;
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

@@ -5,7 +5,7 @@
 buildPythonPackage rec {
   pname = "serpy";
   name = "${pname}-${version}";
-  version = "0.1.1";
+  version = "0.3.1";
 
   meta = {
     description = "ridiculously fast object serialization";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r9wn99x9nbqxfancnq9jh3cn83i1b6gc79xj0ipnxixp661yj5i";
+    sha256 = "3772b2a9923fbf674000ff51abebf6ea8f0fca0a2cfcbfa0d63ff118193d1ec5";
   };
 
   buildInputs = [ flake8 py pyflakes tox ];

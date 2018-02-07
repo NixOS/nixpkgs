@@ -55,6 +55,14 @@ in
         '';
       };
 
+      alwaysKeepRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, systemd will always respawn dnsmasq even if shut down manually. The default, disabled, will only restart it on error.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -101,10 +109,12 @@ in
           BusName = "uk.org.thekelleys.dnsmasq";
           ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          PrivateTmp = true;
+          ProtectSystem = true;
+          ProtectHome = true;
+          Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
         };
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
-
   };
-
 }
