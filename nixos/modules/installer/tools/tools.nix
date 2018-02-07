@@ -18,14 +18,6 @@ let
     src = ./nixos-build-vms/nixos-build-vms.sh;
   };
 
-  nixos-prepare-root = makeProg {
-    name = "nixos-prepare-root";
-    src = ./nixos-prepare-root.sh;
-
-    nix = pkgs.nixUnstable;
-    inherit (pkgs) perl pathsFromGraph rsync utillinux coreutils;
-  };
-
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
@@ -75,7 +67,6 @@ in
 
     environment.systemPackages =
       [ nixos-build-vms
-        nixos-prepare-root
         nixos-install
         nixos-rebuild
         nixos-generate-config
