@@ -1969,6 +1969,8 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  uudeview = callPackage ../tools/misc/uudeview { };
+
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   ### DEVELOPMENT / EMSCRIPTEN
