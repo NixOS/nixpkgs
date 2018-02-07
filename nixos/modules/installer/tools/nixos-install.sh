@@ -73,7 +73,7 @@ if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
     exit 1
 fi
 
-if [ ! -e "$NIXOS_CONFIG" ] && [ -z "$closure" ]; then
+if [[ ! -e $NIXOS_CONFIG && -z $system ]]; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
