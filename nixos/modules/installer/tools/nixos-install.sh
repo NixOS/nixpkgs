@@ -82,7 +82,7 @@ fi
 trap "rm -rf $tmpdir" EXIT
 tmpdir="$(mktemp -d)"
 
-subs="local?trusted=1 https://cache.nixos.org/"
+subs="auto?trusted=1 https://cache.nixos.org/"
 
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
@@ -108,7 +108,7 @@ if [[ -z $noChannelCopy ]]; then
     if [[ -n $channelPath ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
-        nix-env --store "$mountPoint" --substituters 'local?trusted=1' "${extraBuildFlags[@]}" \
+        nix-env --store "$mountPoint" --substituters 'auto?trusted=1' "${extraBuildFlags[@]}" \
                 -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
     fi
 fi
