@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
+{ stdenv, fetchurl, fetchpatch, perl, openldap, pam, db, cyrus_sasl, libcap
 , expat, libxml2, openssl }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     perl openldap pam db cyrus_sasl libcap expat libxml2 openssl
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-1000024.patch";
+      url = http://www.squid-cache.org/Versions/v3/3.5/changesets/SQUID-2018_1.patch;
+      sha256 = "0vzxr4rmybz0w4c1hi3szvqawbzl4r4b8wyvq9vgq1mzkk5invpg";
+    })
+    (fetchpatch {
+      name = "CVE-2018-1000027.patch";
+      url = http://www.squid-cache.org/Versions/v3/3.5/changesets/SQUID-2018_2.patch;
+      sha256 = "1a8hwk9z7h1j0c57anfzp3bwjd4pjbyh8aks4ca79nwz4d0y6wf3";
+    })
   ];
 
   configureFlags = [

@@ -2,16 +2,20 @@
 , expat, libxml2, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "squid-4.0.21";
+  name = "squid-4.0.23";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
-    sha256 = "0cwfj3qpl72k5l1h2rvkv1xg0720rifk4wcvi49z216hznyqwk8m";
+    sha256 = "0a8g0zs3xayfkxl8maq823b14lckvh9d5lf7ryh9rx303xh1mdqq";
   };
 
   buildInputs = [
     perl openldap pam db cyrus_sasl libcap expat libxml2 openssl
   ];
+
+  prePatch = ''
+    substituteInPlace configure --replace "/usr/local/include/libxml2" "${libxml2.dev}/include/libxml2"
+  '';
 
   configureFlags = [
     "--enable-ipv6"
