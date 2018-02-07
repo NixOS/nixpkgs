@@ -114,7 +114,7 @@ if [[ -z $noChannelCopy ]]; then
 fi
 
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
-mkdir -m 0755 "$mountPoint/etc"
+mkdir -m 0755 -p "$mountPoint/etc"
 touch "$mountPoint/etc/NIXOS"
 
 # Switch to the new system configuration.  This will install Grub with
