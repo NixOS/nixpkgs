@@ -169,10 +169,9 @@ in {
     isUnstable = true;
 
     extraPatches = [
-      # Mic92's patch updated for current zfs master
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/sjau/nix-expressions/master/customPatches/nixos-zfs-2018-02-02.patch";
-        sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
+        url = "https://github.com/Mic92/zfs/compare/fbd42542686af053f0d162ec4630ffd4fff1cc30...nixos-zfs-2018-02-02.patch";
+        sha256 = "05wqwjm9648x60vkwxbp8l6z1q73r2a5l2ni28i2f4pla8s3ahln";
       })
     ];
 
@@ -191,14 +190,13 @@ in {
     isUnstable = true;
 
     extraPatches = [
-      # Mic92's patch updated for current zfs master
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/sjau/nix-expressions/master/customPatches/nixos-zfs-2018-02-02.patch";
-        sha256 = "1vy0jv8q1zg778j6pf75acy89h2vlc4smy64incp6bdsykvy6xkb";
+        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
+        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
       })
     ];
 
     spl = splLegacyCrypto;
   };
-  
+
 }
