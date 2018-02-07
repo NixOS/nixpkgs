@@ -45,6 +45,11 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+if [[ ! -e $mountPoint/etc/NIXOS ]]; then
+    echo "$0: '$mountPoint' is not a NixOS installation" >&2
+    exit 126
+fi
+
 mkdir -m 0755 -p "$mountPoint/dev"
 mount --rbind /dev "$mountPoint/dev"
 
