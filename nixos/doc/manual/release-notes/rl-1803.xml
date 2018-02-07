@@ -38,6 +38,10 @@ has the following highlights: </para>
       </itemizedlist>
     </para>
   </listitem>
+
+  <listitem>
+    <para>PHP now defaults to PHP 7.2</para>
+  </listitem>
 </itemizedlist>
 
 </section>
