@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      "http://pkgs.fedoraproject.org/repo/pkgs/rogue/rogue5.4.4-src.tar.gz/033288f46444b06814c81ea69d96e075/rogue5.4.4-src.tar.gz"
+      "http://src.fedoraproject.org/repo/pkgs/rogue/rogue5.4.4-src.tar.gz/033288f46444b06814c81ea69d96e075/rogue5.4.4-src.tar.gz"
       "http://ftp.vim.org/ftp/pub/ftp/os/Linux/distr/slitaz/sources/packages-cooking/r/rogue5.4.4-src.tar.gz"
       "http://rogue.rogueforge.net/files/rogue5.4/rogue5.4.4-src.tar.gz"
     ];
