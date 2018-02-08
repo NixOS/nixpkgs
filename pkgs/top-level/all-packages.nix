@@ -19084,7 +19084,7 @@ with pkgs;
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
         inherit libsForQt5 lib fetchurl;
-        inherit (gnome3) gconf;
+        inherit (gnome3) gconf gsettings_desktop_schemas;
       };
     in
       recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
