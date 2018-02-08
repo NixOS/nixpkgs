@@ -1727,7 +1727,7 @@ with pkgs;
 
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
-    http2Support = !stdenv.isDarwin;
+    http2Support = true;
     zlibSupport = true;
     sslSupport = zlibSupport;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
@@ -13208,7 +13208,7 @@ with pkgs;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
-  buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
+  buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/generic.nix {});
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 

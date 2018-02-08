@@ -2,8 +2,8 @@
 
 with stdenv.lib;
 
-import ./generic.nix (args // rec {
-  version = "4.15.2";
+buildLinux (args // rec {
+  version = "4.15.1";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));

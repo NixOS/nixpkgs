@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "keyring";
-  version = "10.6.0";
+  version = "11.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69c2b69d66a0db1165c6875c1833c52f4dc62179959692b30c8c4a4b8390d895";
+    sha256 = "b4607520a7c97be96be4ddc00f4b9dac65f47a45af4b4cd13ed5a8879641d646";
   };
 
   buildInputs = [

@@ -15,7 +15,7 @@ let
 
   modDirVersion = "${modVersion}-hardened";
 in
-import ./generic.nix (args // {
+buildLinux (args // {
   inherit modDirVersion;
 
   version = "${version}-${revision}";
