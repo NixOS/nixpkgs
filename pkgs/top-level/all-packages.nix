@@ -5427,8 +5427,6 @@ with pkgs;
             platform = {
               name = "ben_nanonote";
               kernelMajor = "2.6";
-              # It's not a bcm47xx processor, but for the headers this should work
-              kernelHeadersBaseConfig = "bcm47xx_defconfig";
               kernelArch = "mips";
             };
             gcc = {
