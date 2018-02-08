@@ -198,7 +198,7 @@ in
       '' + concatStringsSep "\n" (
         mapAttrsToList (n: c:
           if c.hashedPassword != null then
-            "echo '${n}:${c.hashedPassword}' > ${cfg.dataDir}/passwd"
+            "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
           else optionalString (c.password != null)
             "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} ${c.password}"
         ) cfg.users);
