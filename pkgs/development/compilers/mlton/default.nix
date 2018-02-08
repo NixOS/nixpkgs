@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, gmp }:
+{ stdenv, fetchurl, fetchSources, patchelf, gmp }:
 
 let
   version = "20130715";
@@ -13,20 +13,22 @@ in
 stdenv.mkDerivation rec {
   name = "mlton-${version}";
 
-  binSrc =
-    if stdenv.system == "i686-linux" then (fetchurl {
+  binSrc = fetchSources {
+    i686-linux = fetchurl {
       url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.x86-linux.tgz";
       sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
-    })
-    else if stdenv.system == "x86_64-linux" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-linux.tgz";
-        sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
-    })
-    else if stdenv.system == "x86_64-darwin" then (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-darwin.gmp-macports.tgz";
-        sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
-    })
-    else throw "Architecture not supported";
+    };
+
+    x86_64-linux = fetchurl {
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-linux.tgz";
+      sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "mirror://sourceforge/project/mlton/mlton/${version}/${name}-1.amd64-darwin.gmp-macports.tgz";
+      sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
+    };
+  } stdenv.system;
 
   codeSrc =
     fetchurl {
