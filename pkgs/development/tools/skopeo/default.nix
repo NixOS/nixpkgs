@@ -1,15 +1,16 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, runCommand }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
+, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux }:
 
 with stdenv.lib;
 
 let
-  version = "0.1.27";
+  version = "0.1.28";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "1xwwzxjczz8qdk1rf0h78qd3vk9mxxb8yi6f8kfqvcdcsvkajd5g";
+    sha256 = "068nwrr3nr27alravcq1sxyhdd5jjr24213vdgn1dqva3885gbi0";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
@@ -23,7 +24,7 @@ buildGoPackage rec {
   excludedPackages = "integration";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree ];
+  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
 
   buildFlagsArray = "-ldflags= -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}";
 
