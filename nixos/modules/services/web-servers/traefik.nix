@@ -64,6 +64,12 @@ in {
       '';
     };
 
+    group = mkOption {
+      default = "docker";
+      type = types.string;
+      description = "set the group that traefik runs under";
+    };
+
     package = mkOption {
       default = pkgs.traefik;
       defaultText = "pkgs.traefik";
@@ -79,7 +85,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         PermissionsStartOnly = true;
-        ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
+        ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile} -l debug'';
         ExecStartPre = [
           ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
           ''${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"''
@@ -87,7 +93,7 @@ in {
         ];
         Type = "simple";
         User = "traefik";
-        Group = "traefik";
+        Group = cfg.group;
         Restart = "on-failure";
         StartLimitInterval = 86400;
         StartLimitBurst = 5;
