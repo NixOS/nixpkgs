@@ -1,5 +1,6 @@
 { stdenv, fetchurl, gmp, bison, perl, autoconf, ncurses, readline, coreutils, pkgconfig
 , asLibsingular ? false
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1j4mcpnwzdp3h4qspk6ww0m67rmx4s11cy17pvzbpf70lm0jzzh2";
   };
 
-  buildInputs = [ gmp perl ncurses readline ];
-  nativeBuildInputs = [ autoconf bison pkgconfig ];
+  buildInputs = [ autoreconfHook gmp perl ncurses readline ];
+  nativeBuildInputs = [ bison pkgconfig ];
 
   preConfigure = ''
     find . -type f -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
@@ -48,6 +49,6 @@ stdenv.mkDerivation rec {
     platforms = subtractLists platforms.i686 platforms.linux;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = http://www.singular.uni-kl.de/index.php;
-    downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
+    downloadPage = http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/;
   };
 }
