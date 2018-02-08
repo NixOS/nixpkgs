@@ -1,21 +1,21 @@
-{ stdenv, fetchzip, python27, python27Packages, makeWrapper }:
+{ stdenv, fetchzip, fetchSources, python27, python27Packages, makeWrapper }:
 
 with python27Packages;
 
 stdenv.mkDerivation rec {
   name = "google-app-engine-go-sdk-${version}";
   version = "1.9.61";
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
-        sha256 = "1i2j9ympl1218akwsmm7yb31v0gibgpzlb657bcravi1irfv1hhs";
-      }
-    else
-      fetchzip {
-        url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_darwin_amd64-${version}.zip";
-        sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
-      };
+  src = fetchSources {
+    x86_64-linux = fetchzip {
+      url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
+      sha256 = "1i2j9ympl1218akwsmm7yb31v0gibgpzlb657bcravi1irfv1hhs";
+    };
+    x86_64-darwin = fetchzip {
+      url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_darwin_amd64-${version}.zip";
+      sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
+    };
+  } stdenv.system;
+
 
   buildInputs = [python27 makeWrapper];
 
