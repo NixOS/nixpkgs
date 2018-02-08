@@ -85,7 +85,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         PermissionsStartOnly = true;
-        ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile} -l debug'';
+        ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
         ExecStartPre = [
           ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
           ''${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"''
