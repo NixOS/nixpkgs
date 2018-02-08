@@ -5,10 +5,7 @@
 
 assert hostPlatform.isLinux;
 
-with hostPlatform.platform.kernelHeadersBaseConfig;
-
 let
-  inherit (hostPlatform.platform) kernelHeadersBaseConfig;
   common = { version, sha256, patches ? null }: stdenvNoCC.mkDerivation {
     name = "linux-headers-${version}";
 
@@ -17,9 +14,7 @@ let
       inherit sha256;
     };
 
-    targetConfig = if hostPlatform != buildPlatform then hostPlatform.config else null;
-
-    platform = hostPlatform.platform.kernelArch;
+    ARCH = hostPlatform.platform.kernelArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
@@ -33,10 +28,6 @@ let
     inherit patches;
 
     buildPhase = ''
-      if test -n "$targetConfig"; then
-         export ARCH=$platform
-      fi
-      make ${kernelHeadersBaseConfig} SHELL=bash
       make mrproper headers_check SHELL=bash
     '';
 
