@@ -281,6 +281,8 @@ with pkgs;
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fetchSources = callPackage ../build-support/fetchsources { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
