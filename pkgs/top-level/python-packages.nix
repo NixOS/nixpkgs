@@ -13239,6 +13239,8 @@ in {
     };
   };
 
+  pysam = callPackage ../development/python-modules/pysam { };
+
   pysaml2 = buildPythonPackage rec {
     name = "pysaml2-${version}";
     version = "3.0.2";
