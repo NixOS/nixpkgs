@@ -15,13 +15,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pecan";
   version = "1.3.2";
-
-  patches = [
-    ./python36_test_fix.patch
-  ];
 
   src = fetchPypi {
     inherit pname version;
