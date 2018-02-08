@@ -5,20 +5,24 @@
 
 stdenv.mkDerivation rec {
   name = "singular-${version}";
-  version="3-1-7";
+  version="4-1-0";
 
   src = fetchurl {
-    url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/${version}/Singular-${version}.tar.gz";
-    sha256 = "1j4mcpnwzdp3h4qspk6ww0m67rmx4s11cy17pvzbpf70lm0jzzh2";
+    url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/${version}/singular-4.1.0p3.tar.gz";
+    sha256 = "105zs3zk46b1cps403ap9423rl48824ap5gyrdgmg8fma34680a4";
   };
 
   buildInputs = [ autoreconfHook gmp perl ncurses readline ];
   nativeBuildInputs = [ bison pkgconfig ];
 
+  postPatch=''
+    patchShebangs libpolys/tests/cxxtestgen.pl
+    patchShebangs git-version-gen
+  '';
+
   preConfigure = ''
     find . -type f -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
     find . -type f -exec sed -e 's@/bin/uname@${coreutils}&@g' -i '{}' ';'
-    ${stdenv.lib.optionalString asLibsingular ''NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DLIBSINGULAR"''}
   '';
 
   hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"
     cp -r Singular/LIB "$out/LIB"
-    make install${stdenv.lib.optionalString asLibsingular "-libsingular"}
+    make install
 
     binaries="$(find "$out"/* \( -type f -o -type l \) -perm -111 \! -name '*.so' -maxdepth 1)"
     ln -s "$out"/*/{include,lib} "$out"
