@@ -1,7 +1,7 @@
 {
   stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
   zlib, boost, libunwind, elfutils, sparsehash,
-  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons,
+  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     zlib boost libunwind elfutils sparsehash
-    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons
+    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ];
 
   meta = with stdenv.lib; {
