@@ -52,7 +52,8 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        (all nixos.iso_minimal)
+        nixos.iso_minimal.x86_64-linux
+        nixos.iso_minimal.i686-linux
         nixos.iso_graphical.x86_64-linux
         nixos.ova.x86_64-linux
 

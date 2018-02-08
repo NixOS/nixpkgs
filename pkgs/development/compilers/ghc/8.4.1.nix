@@ -24,7 +24,7 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.4.20180122"
+, version ? "8.4.0.20180204"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "61db0b8941cfb7ed8941ed29bdb04bd8ef3b71a5";
-    sha256 = "15sbpgkal4854jc1xn3sprvpnxwdj0fyy43y5am0h9vja3pjhjyi";
+    rev = "111737cd218751f06ea58d3cf2c7c144265b5dfc";
+    sha256 = "0ksp0k3sp928aq2cv6whgbfmjnr7l2j10diha13nncksp4byf0s9";
   };
 
   enableParallelBuilding = true;

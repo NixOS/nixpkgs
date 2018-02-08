@@ -203,6 +203,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  dendropy = callPackage ../development/python-modules/dendropy { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -13180,6 +13182,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  pysam = callPackage ../development/python-modules/pysam { };
 
   pysaml2 = buildPythonPackage rec {
     name = "pysaml2-${version}";

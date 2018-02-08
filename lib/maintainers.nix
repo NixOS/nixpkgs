@@ -718,6 +718,7 @@
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vanschelven = "Klaas van Schelven <klaas@vanschelven.com>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";
+  varunpatro = "Varun Patro <varun.kumar.patro@gmail.com>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
