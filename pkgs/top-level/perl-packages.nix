@@ -4834,10 +4834,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.93";
+    name = "Encode-2.95";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "2d06b0375c84a75cf3762685e6d94c3aef25833fd0427daa0ae87b04ae6f739c";
+      sha256 = "d662794c6f834382527f67ca62e1715887f504cfd09e119a1302e584dd3cdcde";
     };
     meta = {
       description = "Character encodings in Perl";
