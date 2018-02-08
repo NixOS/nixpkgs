@@ -15295,6 +15295,8 @@ with pkgs;
 
   freenet = callPackage ../applications/networking/p2p/freenet { };
 
+  freeplane = callPackage ../applications/misc/freeplane { };
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
@@ -17466,7 +17468,7 @@ with pkgs;
   testssl = callPackage ../applications/networking/testssl { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
-  
+
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
