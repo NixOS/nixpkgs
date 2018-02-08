@@ -1903,6 +1903,10 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  sladeUnstable = callPackage ../applications/misc/slade/git.nix {
+    wxGTK = wxGTK30;
+  };
+
   drive = callPackage ../applications/networking/drive { };
 
   driftnet = callPackage ../tools/networking/driftnet {};
