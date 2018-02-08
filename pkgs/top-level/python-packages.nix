@@ -4611,6 +4611,8 @@ in {
     };
   };
 
+  fpdf = callPackage ../development/python-modules/fpdf { };
+
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = buildPythonPackage rec {
