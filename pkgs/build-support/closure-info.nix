@@ -4,7 +4,7 @@
 # "nix-store --load-db" and "nix-store --register-validity
 # --hash-given".
 
-{ stdenv, coreutils, jq, perl, pathsFromGraph }:
+{ stdenv, coreutils, jq }:
 
 { rootPaths }:
 
