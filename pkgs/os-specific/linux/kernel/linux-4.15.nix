@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 import ./generic.nix (args // rec {
-  version = "4.15.1";
+  version = "4.15.2";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
@@ -13,6 +13,6 @@ import ./generic.nix (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "1pxgs5wqmidwa5lz6q1m9gz6jyvhvlgy8r5bs48cm08b0vcwsvlq";
+    sha256 = "16h346abbdi6k3handw8nblscyf966gx1q9xig4gbij73b10nspb";
   };
 } // (args.argsOverride or {}))
