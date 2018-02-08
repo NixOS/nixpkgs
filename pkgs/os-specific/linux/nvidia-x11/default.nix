@@ -25,11 +25,11 @@ in
   };
 
   beta = generic {
-    version = "381.22";
-    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
-    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
-    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
-    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
+    version = "390.12";
+    sha256_32bit = "1nkn7xvizfkqh2r9c1w740idb3d5x0df71bjmx4yskxjvrylqlxz";
+    sha256_64bit = "1qr8aj6r95hn75w9szpyca69m6xyjd0cf1cq8qjxp8miwpfjnszl";
+    settingsSha256 = "0n23nj3ljd2ra714dwrc1cq3xlq697qbbb2wc1zmi0zs85svx5j6";
+    persistencedSha256 = "0zk6zqk4i731b892dkgagr5xibs2l26q43djilfx9q98sqiq19jb";
   };
 
 
