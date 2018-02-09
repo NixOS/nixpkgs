@@ -1012,4 +1012,6 @@ self: super: {
           };
     in appendPatch super.liquidhaskell patch;
 
+  # https://github.com/nick8325/twee/pull/1
+  twee-lib = dontHaddock super.twee-lib;
 }
