@@ -10,6 +10,11 @@ buildPythonPackage rec {
     sha256 = "0wgxrhr8s5vk2xmcz9s1z1aml4ppawmhkbggl9rp94c747xc7pmv";
   };
 
+  prePatch = ''
+    substituteInPlace setup.py \
+        --replace 'Unidecode>=0.04.14,<0.05' 'Unidecode>=0.04.14'
+  '';
+
   patches = [
     ./slugify_filename_test.patch # fixes broken test by new unidecode
   ];
