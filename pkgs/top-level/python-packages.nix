@@ -613,6 +613,8 @@ in {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
+  arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
+
   async = buildPythonPackage rec {
     name = "async-0.6.1";
     disabled = isPy3k;
@@ -5809,6 +5811,8 @@ in {
   pants = pkgs.pants;
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
+
+  papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
   pathspec = callPackage ../development/python-modules/pathspec { };
 
@@ -12801,6 +12805,8 @@ in {
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
 
+  pylibgen = callPackage ../development/python-modules/pylibgen { };
+
   pymetar = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pymetar";
@@ -14043,6 +14049,8 @@ in {
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyocr = callPackage ../development/python-modules/pyocr { };
+
+  pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
