@@ -906,4 +906,13 @@ self: super: {
 
   # https://github.com/haskell-hvr/deepseq-generics/pull/4
   deepseq-generics = doJailbreak super.deepseq-generics;
+
+  # SMP compat
+  # https://github.com/vincenthz/hs-securemem/pull/12
+  securemem =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/vincenthz/hs-securemem/commit/6168d90b00bfc6a559d3b9160732343644ef60fb.patch;
+            sha256 = "0pfjmq57kcvxq7mhljd40whg2g77vdlvjyycdqmxxzz1crb6pipf";
+          };
+    in appendPatch super.securemem patch;
 }
