@@ -9,11 +9,10 @@ buildPerlPackage rec {
     rev = "d46f1d0ced25dc5849acb5d5974a3e2e9d97d536";
     sha256 = "0qahs1cqfaci2hdf1xncrz4k0z5skkfr43apnm3kybs7za33apzw";
   };
-  outputs = [ "out" ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "Rename files according to a Perl rewrite expression";
     homepage = http://search.cpan.org/~pederst/rename-1.9/bin/rename.PL;
-    maintainers = with stdenv.lib.maintainers; [ mkg ];
-    license = with stdenv.lib.licenses; [ gpl1Plus ];
+    maintainers = with maintainers; [ mkg ];
+    license = with licenses; [ gpl1Plus ];
   };
 }
