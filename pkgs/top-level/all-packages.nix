@@ -4400,6 +4400,10 @@ with pkgs;
     gsettings_desktop_schemas = gnome3.gsettings_desktop_schemas;
   };
 
+  rename = callPackage ../tools/misc/rename {
+    inherit (perlPackages) buildPerlPackage;
+  };
+
   renameutils = callPackage ../tools/misc/renameutils { };
 
   renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
