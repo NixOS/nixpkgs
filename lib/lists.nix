@@ -440,8 +440,12 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  /* FIXME(zimbatm) Not used anywhere
-   */
+  /* return the image of the cross product of some lists by a function
+
+    Example:
+      crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+      => [ "13" "14" "23" "24" ]
+  */
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
 

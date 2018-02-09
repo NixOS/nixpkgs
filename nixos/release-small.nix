@@ -41,6 +41,7 @@ in rec {
         nfs3
         openssh
         php-pcre
+        predictable-interface-names
         proxy
         simple;
       installer = {
