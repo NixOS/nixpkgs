@@ -4,8 +4,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/tools";
-      rev = "9ae4729fba20b3533d829a9c6ba8195b068f2abc";
-      sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
+      rev = "66487607e2081c7c2af2281c62c14ee000d5024b";
+      sha256 = "03wiraqkms4jb5gi7vmp52mpmp4av08yw4gr2nk31c2rnhyd3jv4";
     };
   }
 ]
