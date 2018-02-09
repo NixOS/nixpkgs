@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, python27Packages, fetchFromGitHub, python2 }:
+{ stdenv, makeWrapper, python2Packages, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "theHarvester";
@@ -12,16 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0gnm598y6paz0knwvdv1cx0w6ngdbbpzkdark3q5vs66yajv24w4";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   # add dependencies
-  propagatedBuildInputs = [
-    makeWrapper
-    python27Packages.requests
-  ];
+  propagatedBuildInputs = [ python2Packages.requests ];
 
   installPhase = ''
     # create dirs
-    mkdir -p $out/share/${pname}
-    mkdir -p $out/bin
+    mkdir -p $out/share/${pname} $out/bin
 
     # move project code
     mv * $out/share/${pname}/
@@ -29,11 +27,12 @@ stdenv.mkDerivation rec {
     # make project runnable
     chmod +x $out/share/${pname}/theHarvester.py
     cp -a $out/share/${pname}/theHarvester.py $out/bin
+
     wrapProgram "$out/bin/theHarvester.py" --prefix PYTHONPATH : $out/share/${pname}:$PYTHONPATH
   '';
 
   meta = with stdenv.lib; {
-    description = "E-mails, subdomains and names Harvester - OSINT";
+    description = "Gather E-mails, subdomains and names from different public sources";
     homepage = "https://github.com/laramies/theHarvester";
     platforms = platforms.all;
     maintainers = with maintainers; [ treemo ];
