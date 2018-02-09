@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     # make project runnable
     chmod +x $out/share/${pname}/theHarvester.py
-    cp -a $out/share/${pname}/theHarvester.py $out/bin
+    ln -s $out/share/${pname}/theHarvester.py $out/bin
 
     wrapProgram "$out/bin/theHarvester.py" --prefix PYTHONPATH : $out/share/${pname}:$PYTHONPATH
   '';
