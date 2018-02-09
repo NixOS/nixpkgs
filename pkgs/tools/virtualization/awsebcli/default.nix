@@ -34,16 +34,6 @@ let
           };
         });
 
-      pathspec = super.pathspec.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.0";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "07yx1gxj9v1iyyiy5fhq2wsmh4qfbrx158wi7jb0nx6lah80ffma";
-        };
-      });
-
       requests = super.requests.overridePythonAttrs (oldAttrs: rec {
         version = "2.9.1";
 
@@ -77,11 +67,11 @@ let
 in with localPython.pkgs; buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "awsebcli";
-  version = "3.12.1";
+  version = "3.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12v3zz69iql4ggiz9x7h27vyq9y9jlm46yczxyg62j89m2iyr5bl";
+    sha256 = "19sgx43fyq35rqp0q8zbqavgg0k0n46iy1fqsxvw9lf0g0v62pjh";
   };
 
   checkInputs = [

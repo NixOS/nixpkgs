@@ -44,6 +44,8 @@ in
   };
 
   libobjc = apple-source-releases.objc4;
+  
+  lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 

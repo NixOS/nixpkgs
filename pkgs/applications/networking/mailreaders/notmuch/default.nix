@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     [[ -s "$lib" ]] || die "couldn't find libnotmuch"
 
     badname="$(otool -L "$prg" | awk '$1 ~ /libtalloc/ { print $1 }')"
-    goodname="$(find "${talloc}/lib" -name 'libtalloc.?.?.?.dylib')"
+    goodname="$(find "${talloc}/lib" -name 'libtalloc.*.*.*.dylib')"
 
     [[ -n "$badname" ]]  || die "couldn't find libtalloc reference in binary"
     [[ -n "$goodname" ]] || die "couldn't find libtalloc in nix store"

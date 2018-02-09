@@ -11,19 +11,20 @@
 , ipython
 , mock
 , pytest
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "462790d46b244f0a631ea5e3cd5cdbad6874d5d24cc0ff512deb7c16cdf8653d";
+    sha256 = "83d5e23132f0d8f79ccd3939f53fb9fa97f88a896a85114dc48d0e86909b06c4";
   };
 
   checkInputs = [ ipykernel ipython mock pytest ];
-  propagatedBuildInputs = [traitlets jupyter_core pyzmq dateutil] ++ lib.optional isPyPy py;
+  propagatedBuildInputs = [traitlets jupyter_core pyzmq dateutil tornado ] ++ lib.optional isPyPy py;
 
   checkPhase = ''
     py.test

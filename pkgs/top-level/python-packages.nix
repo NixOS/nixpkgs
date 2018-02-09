@@ -203,6 +203,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  dendropy = callPackage ../development/python-modules/dendropy { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -2785,65 +2787,9 @@ in {
     };
   };
 
-  cryptography = buildPythonPackage rec {
-    # also bump cryptography_vectors
-    pname = "cryptography";
-    name = "${pname}-${version}";
-    version = "2.0.3";
+  cryptography = callPackage ../development/python-modules/cryptography { };
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a";
-    };
-
-    outputs = [ "out" "dev" ];
-
-    buildInputs = [ pkgs.openssl self.cryptography_vectors ]
-               ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
-    propagatedBuildInputs = with self; [
-      idna
-      asn1crypto
-      packaging
-      six
-    ] ++ optional (pythonOlder "3.4") enum34
-    ++ optional (pythonOlder "3.3") ipaddress
-    ++ optional (!isPyPy) cffi;
-
-    checkInputs = with self; [
-      pytest
-      pretend
-      iso8601
-      pytz
-      hypothesis
-    ];
-
-    # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
-    # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
-    # use it. This boils down to them checking compatibility with `getentropy` in two different places,
-    # so let's neuter the second test.
-    postPatch = ''
-      substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
-    '';
-
-    # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
-    # can do until nix 1.11's release
-    __impureHostDeps = [ "/usr/lib" ];
-  };
-
-  cryptography_vectors = buildPythonPackage rec {
-      # also bump cryptography
-    pname = "cryptography_vectors";
-    version = self.cryptography.version;
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "beb831aa73663a224f4d7520483ed02da544533bb03b26ec07a5f9a0dd0941e1";
-    };
-
-    # No tests included
-    doCheck = false;
-  };
+  cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
@@ -3206,9 +3152,9 @@ in {
     };
   };
 
-  pytest = self.pytest_33;
+  pytest = self.pytest_34;
 
-  pytest_33 = callPackage ../development/python-modules/pytest/default.nix{
+  pytest_34 = callPackage ../development/python-modules/pytest/default.nix{
     hypothesis = self.hypothesis.override {
       # hypothesis requires pytest that causes dependency cycle
       doCheck = false;
@@ -4598,6 +4544,8 @@ in {
       license = licenses.asl20;
     };
   };
+
+  fpdf = callPackage ../development/python-modules/fpdf { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
@@ -11400,7 +11348,7 @@ in {
 
     patches = singleton (pkgs.fetchurl {
       name = "libnotify07.patch";
-      url = "http://pkgs.fedoraproject.org/cgit/notify-python.git/plain/"
+      url = "http://src.fedoraproject.org/cgit/notify-python.git/plain/"
           + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
       sha256 = "1lqdli13mfb59xxbq4rbq1f0znh6xr17ljjhwmzqb79jl3dig12z";
     });
@@ -13237,6 +13185,8 @@ in {
     };
   };
 
+  pysam = callPackage ../development/python-modules/pysam { };
+
   pysaml2 = buildPythonPackage rec {
     name = "pysaml2-${version}";
     version = "3.0.2";
@@ -13394,7 +13344,7 @@ in {
     md5_path = "f6d33a8362dee358517d0a9e2ebdd044";
 
     src = pkgs.fetchurl rec {
-      url = "http://pkgs.fedoraproject.org/repo/pkgs/python-pyblock/"
+      url = "http://src.fedoraproject.org/repo/pkgs/python-pyblock/"
           + "${name}.tar.bz2/${md5_path}/${name}.tar.bz2";
       sha256 = "f6cef88969300a6564498557eeea1d8da58acceae238077852ff261a2cb1d815";
     };
@@ -13779,17 +13729,6 @@ in {
 
   pygments = callPackage ../development/python-modules/Pygments { };
 
-  # For Pelican 3.6.3
-  pygments_2_0 = self.pygments.overrideAttrs( oldAttrs: rec {
-    version = "2.0.2";
-    name = "Pygments-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pygments/${name}.tar.gz";
-      sha256 = "7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51";
-    };
-  });
-
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pylint = callPackage ../development/python-modules/pylint { };
@@ -14074,7 +14013,7 @@ in {
     md5_path = "d249f60aa89b1b4facd63f776925116d";
 
     src = pkgs.fetchurl rec {
-      url = "http://pkgs.fedoraproject.org/repo/pkgs/pykickstart/"
+      url = "http://src.fedoraproject.org/repo/pkgs/pykickstart/"
           + "${name}.tar.gz/${md5_path}/${name}.tar.gz";
       sha256 = "e0d0f98ac4c5607e6a48d5c1fba2d50cc804de1081043f9da68cbfc69cad957a";
     };
@@ -14639,39 +14578,7 @@ in {
     doCheck = false;
   };
 
-  pyopenssl = buildPythonPackage rec {
-    pname = "pyOpenSSL";
-    name = "${pname}-${version}";
-    version = "17.2.0";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
-    };
-
-    outputs = [ "out" "dev" ];
-
-    preCheck = ''
-      sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
-      # https://github.com/pyca/pyopenssl/issues/692
-      sed -i 's/test_fallback_default_verify_paths/noop/' tests/test_ssl.py
-    '';
-
-    checkPhase = ''
-      runHook preCheck
-      export LANG="en_US.UTF-8"
-      py.test
-      runHook postCheck
-    '';
-
-    # Seems to fail unpredictably on Darwin. See http://hydra.nixos.org/build/49877419/nixlog/1
-    # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
-    doCheck = !stdenv.isDarwin;
-
-    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales self.pretend self.flaky ];
-    propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
-  };
-
+  pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
   pyquery = buildPythonPackage rec {
     name = "pyquery-${version}";
@@ -14938,27 +14845,7 @@ in {
     };
   };
 
-  pytz = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytz";
-    version = "2017.2";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "12cmd3j46d2gcw08bspvp6s9icfcvx88zjz52n1bli9dyvl5dh7m";
-      extension = "zip";
-    };
-
-    checkPhase = ''
-      python -m unittest discover -s pytz/tests
-    '';
-
-    meta = {
-      description = "World timezone definitions, modern and historical";
-      homepage = "http://pythonhosted.org/pytz";
-      license = licenses.mit;
-    };
-  };
+  pytz = callPackage ../development/python-modules/pytz { };
 
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
@@ -15029,23 +14916,7 @@ in {
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
-  pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.12";
-
-    src = pkgs.fetchurl {
-      url = "http://pyyaml.org/download/pyyaml/${name}.zip";
-      sha256 = "19s1lxi0idq4a0bpvld866pv5b16lqxypyswmsdi5ys4210jxj2s";
-    };
-
-    buildInputs = with self; [ pkgs.pyrex ];
-    propagatedBuildInputs = with self; [ pkgs.libyaml ];
-
-    meta = {
-      description = "The next generation YAML parser and emitter for Python";
-      homepage = http://pyyaml.org;
-      license = licenses.free; # !?
-    };
-  });
+  pyyaml = callPackage ../development/python-modules/pyyaml { };
 
   rabbitpy = buildPythonPackage rec {
     version = "0.26.2";
@@ -15216,20 +15087,7 @@ in {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
-  quantities = buildPythonPackage rec {
-    name = "quantities-0.10.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/quantities/quantities-0.10.1.tar.gz";
-      sha256 = "2d27caf31a5e0c37130ac0c14bfa8f9412a5ff1fbf3378a1d6085594776c4315";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Quantities is designed to handle arithmetic and";
-      homepage = http://packages.python.org/quantities;
-      license = licenses.bsd2;
-    };
-  };
+  quantities = callPackage ../development/python-modules/quantities { };
 
   qutip = buildPythonPackage rec {
     name = "qutip-2.2.0";
@@ -15708,21 +15566,7 @@ in {
     };
   };
 
-  typing = buildPythonPackage rec {
-    name = "typing-${version}";
-    version = "3.5.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/typing/${name}.tar.gz";
-      sha256 = "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa";
-    };
-
-    meta = {
-      description = "Backport of typing module to Python versions older than 3.5";
-      homepage = "https://docs.python.org/3.5/library/typing.html";
-      license = licenses.psfl;
-    };
-  };
+  typing = callPackage ../development/python-modules/typing { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
@@ -15965,22 +15809,7 @@ in {
     };
   };
 
-  simplegeneric = buildPythonPackage rec {
-    version = "0.8.1";
-    name = "simplegeneric-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/simplegeneric/${name}.zip";
-      sha256 = "dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173";
-    };
-
-    meta = {
-      description = "Simple generic functions";
-      homepage = http://cheeseshop.python.org/pypi/simplegeneric;
-      license = licenses.zpl21;
-    };
-  };
-
+  simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
   shortuuid = buildPythonPackage rec {
     name = "shortuuid-${version}";
@@ -16462,33 +16291,7 @@ in {
     };
   };
 
-  sympy = buildPythonPackage rec {
-    name = "sympy-1.0";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/s/sympy/${name}.tar.gz";
-      sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ mpmath ];
-
-    # Bunch of failures including transients.
-    doCheck = false;
-
-    preCheck = ''
-      export LANG="en_US.UTF-8"
-    '';
-
-    meta = {
-      description = "A Python library for symbolic mathematics";
-      homepage    = http://www.sympy.org/;
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  sympy = callPackage ../development/python-modules/sympy { };
 
   pilkit = buildPythonPackage rec {
     name = "pilkit-1.1.4";
@@ -18324,24 +18127,7 @@ EOF
     };
   };
 
-  webcolors = buildPythonPackage rec {
-    name = "webcolors-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/webcolors/${name}.tar.gz";
-      sha256 = "304fc95dab2848c7bf64f378356766e692c2f8b4a8b15fa3509544e6412936e8";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "Library for working with color names/values defined by the HTML and CSS specifications";
-      homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
-      license = licenses.bsd3;
-      platforms = platforms.unix;
-    };
-  };
+  webcolors = callPackage ../development/python-modules/webcolors { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
 
@@ -20547,21 +20333,7 @@ EOF
     };
   };
 
-  dicttoxml = buildPythonPackage rec {
-    name = "dicttoxml-1.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dicttoxml/dicttoxml-1.6.4.tar.gz";
-      sha256 = "5f29e95fec56680823dc41911c04c2af08727ee53c1b60e83c489212bab71161";
-    };
-
-    propagatedBuildInputs = with self; [  ];
-
-    meta = {
-      description = "Summary";
-      homepage = https://github.com/quandyfactory/dicttoxml;
-    };
-  };
+  dicttoxml = callPackage ../development/python-modules/dicttoxml { };
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
@@ -21074,25 +20846,7 @@ EOF
     };
   };
 
-  ovh = buildPythonPackage rec {
-    name = "ovh-${version}";
-    version = "0.4.5";
-    doCheck = false; #test needs packages too explicit
-    buildInputs = with self; [ d2to1 ];
-    propagatedBuildInputs = with self; [ requests ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/ovh/ovh-${version}.tar.gz";
-      sha256 = "1wf2p1sbg34jpj97r3w5nx9pj6vp0mlprry3vw2xav3dv02qv2af";
-    };
-
-    meta = {
-      description = "Thin wrapper around OVH's APIs";
-      homepage = https://pypi.python.org/pypi/ovh;
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  ovh = callPackage ../development/python-modules/ovh { };
 
   willow = buildPythonPackage rec {
     name = "willow-${version}";
@@ -21756,26 +21510,6 @@ EOF
     };
   };
 
-  pybrain = buildPythonPackage rec {
-    name = "pybrain-${version}";
-    version = "0.3.3";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/pybrain/pybrain/archive/${version}.tar.gz";
-      sha256 = "114m99vsrps2gjqfm3i3kxx4nibjhjdzphsy2bhrxa5q3h2q14dz";
-    };
-
-    propagatedBuildInputs = with self; [ scipy ];
-
-    meta = {
-      homepage = "http://pybrain.org/";
-      description = "Modular Machine Learning Library for Python";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ NikolaMandic ];
-      broken = true; # See https://github.com/NixOS/nixpkgs/pull/29198
-    };
-  };
-
   threadpool = buildPythonPackage rec {
     name = "threadpool-${version}";
     version = "1.3.2";
@@ -22068,24 +21802,7 @@ EOF
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 
-  packet-python = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "packet-python";
-    version = "1.33";
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/eb/82/f0506bd964501f958ac6a37e843ccb7bd9e712732886258314d55f0ec710/packet-python-1.33.tar.gz";
-      sha256 = "0bmvfmvjm8jx0y8sv0jf5mhv0h3v8idx0sc5myxs7ig200584dd3";
-    };
-    propagatedBuildInputs = with self; [ requests ];
-
-    meta = {
-      description = "A Python client for the Packet API.";
-      homepage    = "https://github.com/packethost/packet-python";
-      license     = licenses.lgpl3;
-      maintainers = with maintainers; [ dipinhora ];
-      platforms   = platforms.all;
-    };
-  };
+  packet-python = callPackage ../development/python-modules/packet-python { };
 
   pwntools = callPackage ../development/python-modules/pwntools { };
 

@@ -375,9 +375,6 @@ in
         # LogLevel VERBOSE logs user's key fingerprint on login.
         # Needed to have a clear audit track of which key was used to log in.
         LogLevel VERBOSE
-
-        # Use kernel sandbox mechanisms where possible in unprivileged processes.
-        UsePrivilegeSeparation sandbox
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
