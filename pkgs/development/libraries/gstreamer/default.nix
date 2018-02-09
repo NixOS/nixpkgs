@@ -1,4 +1,4 @@
-{ callPackage, libva-full }:
+{ callPackage }:
 
 rec {
   gstreamer = callPackage ./core { };
@@ -23,7 +23,6 @@ rec {
 
   gst-vaapi = callPackage ./vaapi {
     inherit gst-plugins-base gstreamer gst-plugins-bad;
-    libva = libva-full; # looks also for libva-{x11,wayland}
   };
 
   gst-validate = callPackage ./validate { inherit gst-plugins-base; };

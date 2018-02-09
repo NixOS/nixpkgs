@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages, libffi, libomxil-bellagio, libva
+, llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
 , libglvnd
 , grsecEnabled ? false
@@ -151,7 +151,7 @@ let self = stdenv.mkDerivation {
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland wayland-protocols libvdpau libelf libXvMC
-    libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
+    libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2
   ];
 
