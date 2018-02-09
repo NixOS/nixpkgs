@@ -598,6 +598,8 @@ in {
 
   area53 = callPackage ../development/python-modules/area53 { };
 
+  arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
+
   chai = callPackage ../development/python-modules/chai { };
 
   chainmap = callPackage ../development/python-modules/chainmap { };
