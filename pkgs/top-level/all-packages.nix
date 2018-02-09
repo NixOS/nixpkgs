@@ -8003,9 +8003,7 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
-  uhd = callPackage ../development/tools/misc/uhd {
-    boost = boost165;
-  };
+  uhd = callPackage ../development/tools/misc/uhd { };
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
