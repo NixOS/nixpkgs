@@ -11167,7 +11167,7 @@ with pkgs;
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
   subdl = callPackage ../applications/video/subdl { };
-  
+
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   suil-qt4 = callPackage ../development/libraries/audio/suil {
@@ -14711,10 +14711,10 @@ with pkgs;
 
   inherit (callPackage ../applications/virtualization/docker { })
     docker_17_12
-    docker_18_01;
+    docker_18_02;
 
   docker = docker_17_12;
-  docker-edge = docker_18_01;
+  docker-edge = docker_18_02;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
