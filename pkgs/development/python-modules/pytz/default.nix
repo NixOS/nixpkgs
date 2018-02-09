@@ -2,12 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2017.3";
+  version = "2018.3";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "fae4cffc040921b8a2d60c6cf0b5d662c1190fe54d718271db4eb17d44a185b7";
+    sha256 = "410bcd1d6409026fbaa65d9ed33bf6dd8b1e94a499e32168acfc7b332e4095c0";
   };
 
   checkPhase = ''
