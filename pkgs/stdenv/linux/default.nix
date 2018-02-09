@@ -107,7 +107,8 @@ let
 
           # stdenv.glibc is used by GCC build to figure out the system-level
           # /usr/include directory.
-          # inherit (prevStage) glibc;
+          # TODO: Remove this!
+          inherit (prevStage) glibc;
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -333,7 +334,9 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # inherit (prevStage) glibc;
+        # TODO: remove this!
+        inherit (prevStage) glibc;
+
         inherit platform bootstrapTools;
         shellPackage = prevStage.bash;
       };
