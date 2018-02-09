@@ -17172,6 +17172,8 @@ with pkgs;
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
+  slic3r-prusa3d = callPackage ../applications/misc/slic3r-prusa3d { };
+
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
   cura_stable = callPackage ../applications/misc/cura/stable.nix {
     curaengine = curaengine_stable;
