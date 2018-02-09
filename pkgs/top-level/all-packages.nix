@@ -11090,6 +11090,8 @@ with pkgs;
 
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
 
+  spice-up = callPackage ../applications/office/spice-up { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srm = callPackage ../tools/security/srm { };
