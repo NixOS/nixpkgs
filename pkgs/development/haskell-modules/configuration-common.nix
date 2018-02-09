@@ -1014,4 +1014,7 @@ self: super: {
 
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
+
+  # Needs older hlint
+  hpio = dontCheck super.hpio;
 }
