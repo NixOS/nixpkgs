@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals (gtk2 != null) [
     (fetchpatch {
-       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0006-gtk2-Fix-a-problem-with-fvwm.patch;
+       url = https://salsa.debian.org/debian/pinentry/raw/a2d5f644e6fd439dd4b7dcc1b4a5f983471743d4/debian/patches/0006-gtk2-Fix-a-problem-with-fvwm.patch;
        sha256 = "1w3y4brqp74hy3fbfxqnqp6jf985bd6667ivy1crz50r3z9zsy09";
   })(fetchpatch {
        url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
