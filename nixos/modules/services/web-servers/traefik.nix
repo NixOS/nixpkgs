@@ -65,7 +65,7 @@ in {
     };
 
     group = mkOption {
-      default = "docker";
+      default = "traefik";
       type = types.string;
       description = "set the group that traefik runs under";
     };
