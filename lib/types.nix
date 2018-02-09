@@ -121,6 +121,13 @@ rec {
       merge = mergeOneOption;
     };
 
+    strMatching = pattern: mkOptionType {
+      name = "strMatching ${escapeNixString pattern}";
+      description = "string matching the pattern ${pattern}";
+      check = x: str.check x && builtins.match pattern x != null;
+      inherit (str) merge;
+    };
+
     # Merge multiple definitions by concatenating them (with the given
     # separator between the values).
     separatedString = sep: mkOptionType rec {

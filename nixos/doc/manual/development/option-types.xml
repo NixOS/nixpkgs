@@ -62,6 +62,12 @@
     <listitem><para>A string. Multiple definitions are concatenated with a 
         collon <literal>":"</literal>.</para></listitem>
   </varlistentry>
+  <varlistentry>
+    <term><varname>types.strMatching</varname></term>
+    <listitem><para>A string matching a specific regular expression. Multiple
+    definitions cannot be merged.  The regular expression is processed using
+    <literal>builtins.match</literal>.</para></listitem>
+  </varlistentry>
 </variablelist>
 
  </section>
