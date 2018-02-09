@@ -168,6 +168,8 @@ let version = "6.4.0";
             # In uclibc cases, libgomp needs an additional '-ldl'
             # and as I don't know how to pass it, I disable libgomp.
             "--disable-libgomp"
+            # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+            "--disable-libmpx"
           ] ++ [
           "--enable-threads=posix"
           "--enable-nls"
