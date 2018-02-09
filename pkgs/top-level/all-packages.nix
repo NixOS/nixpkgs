@@ -13985,6 +13985,8 @@ with pkgs;
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
 
+  papis = python3Packages.callPackage ../tools/misc/papis { };
+
   pecita = callPackage ../data/fonts/pecita {};
 
   paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
