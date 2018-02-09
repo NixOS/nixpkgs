@@ -67,7 +67,11 @@ in {
     group = mkOption {
       default = "traefik";
       type = types.string;
-      description = "set the group that traefik runs under";
+      example = "docker";
+      description = ''
+        Set the group that traefik runs under.
+        For the docker backend this needs to be set to <literal>docker</literal> instead.
+      '';
     };
 
     package = mkOption {
