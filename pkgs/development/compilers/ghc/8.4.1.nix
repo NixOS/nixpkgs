@@ -25,6 +25,10 @@
   enableShared ? true
 
 , version ? "8.4.0.20180204"
+, # Whether to backport https://phabricator.haskell.org/D4388 for
+  # deterministic profiling symbol names, at the cost of a slightly
+  # non-standard GHC API
+  deterministicProfiling ? false
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -81,12 +85,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = [
+  patches = stdenv.lib.optional deterministicProfiling
     (fetchpatch { # https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/8b2dbd869d1a64de3e99fa8b1c9bb1140eee7099.patch";
       sha256 = "0hxpiwhbg64rsyjdr4psh6dwyp58b96mad3adccvfr0x8hc6ba2m";
-    })
-  ];
+    });
 
   postPatch = "patchShebangs .";
 
