@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0vxhavlh55fdlm4zhvi21fyxzdydbn56y499bq5aghvsdsmwiy3d";
+    sha256 = "06p3n7ssxwfjbliipsg14hswkr8swfbh5ys0hpj8msbciibbbpzn";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -62,7 +62,6 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
-        patch -d vboxvideo -p6 < ${./linux-4.14.patch}
         find . -type f | xargs sed 's/depmod -a/true/' -i
         make
         cd ..
@@ -148,5 +147,8 @@ stdenv.mkDerivation {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
+    # video drivers are in kernel since 4.14, vboxsf etc. will follow with 4.16+
+    # guest additions currently fail to compile with anything >4.14
+    broken = (!lib.versionOlder kernel.version "4.15");
   };
 }
