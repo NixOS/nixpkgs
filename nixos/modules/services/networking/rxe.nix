@@ -47,10 +47,9 @@ in {
       path = with pkgs; [ kmod rdma-core ];
       description = "RoCE interfaces";
 
-      wantedBy = [ "sysinit.target" ];
-      after = [ "systemd-modules-load.service" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-modules-load.service" "network-online.target" ];
       wants = [ "network-pre.target" ];
-      before = [ "network-pre.target" ];
 
       serviceConfig = {
         Type = "oneshot";
