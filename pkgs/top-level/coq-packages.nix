@@ -75,7 +75,7 @@ in rec {
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages = coqPackages_8_6;
+  coqPackages = coqPackages_8_7;
   coq = coqPackages.coq;
 
 }
