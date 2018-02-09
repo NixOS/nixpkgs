@@ -900,4 +900,7 @@ self: super: {
     ## error: build of ‘/nix/store/iy6ccxh4dvp6plalx4ww81qrnhxm7jgr-wavefront-0.7.1.1.drv’ failed
     jailbreak       = true;
   });
+
+  # Needed for (<>) in prelude
+  funcmp = super.funcmp_1_9;
 }
