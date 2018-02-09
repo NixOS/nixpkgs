@@ -903,4 +903,7 @@ self: super: {
 
   # Needed for (<>) in prelude
   funcmp = super.funcmp_1_9;
+
+  # https://github.com/haskell-hvr/deepseq-generics/pull/4
+  deepseq-generics = doJailbreak super.deepseq-generics;
 }
