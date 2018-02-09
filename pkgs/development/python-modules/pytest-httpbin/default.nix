@@ -24,6 +24,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask decorator httpbin six requests ];
 
+  checkPhase = ''
+    py.test
+  '';
+
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";
     homepage = https://github.com/kevin1024/pytest-httpbin;
