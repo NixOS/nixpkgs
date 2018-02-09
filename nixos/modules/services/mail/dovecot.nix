@@ -113,7 +113,7 @@ let
   mailboxes = { lib, pkgs, ... }: {
     options = {
       name = mkOption {
-        type = types.strMatching ''[^"]+'';
+        type = types.str;
         example = "Spam";
         description = "The name of the mailbox.";
       };
