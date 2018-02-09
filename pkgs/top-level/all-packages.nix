@@ -8058,6 +8058,8 @@ with pkgs;
 
   yacc = bison;
 
+  yaml2json = callPackage ../development/tools/yaml2json { };
+
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     llvmPackages = llvmPackages_5;
