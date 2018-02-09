@@ -682,5 +682,22 @@ with stdenv.lib;
     WW_MUTEX_SELFTEST? n
   ''}
 
+  ${optionalString (features.criu or false)  ''
+    EXPERT y
+    CHECKPOINT_RESTORE y
+  ''}
+
+  ${optionalString ((features.criu or false) && (features.criu_revert_expert or true))
+    # Revert some changes, introduced by EXPERT, when necessary for criu
+  ''
+    RFKILL_INPUT? y
+    HID_PICOLCD_FB? y
+    HID_PICOLCD_BACKLIGHT? y
+    HID_PICOLCD_LCD? y
+    HID_PICOLCD_LEDS? y
+    HID_PICOLCD_CIR? y
+    DEBUG_MEMORY_INIT? y
+  ''}
+
   ${extraConfig}
 ''
