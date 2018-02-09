@@ -1000,4 +1000,15 @@ self: super: {
     '';
   });
 
+  # Fix for our backport of D4388 to GHC 8.2. This is in
+  # configuration-common because we will need the same patch if/when
+  # liquidhaskell is bumped to support GHC 8.4
+  # https://github.com/ucsd-progsys/liquidhaskell/pull/1233
+  liquidhaskell =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/ucsd-progsys/liquidhaskell/commit/635338e6ef0aec01d4f6a21058cabd24a521e63f.patch;
+            sha256 = "0lg40qn2w3kn6zk5r38mp6hndpnswzrqhk38059h0ljhw9md72s8";
+          };
+    in appendPatch super.liquidhaskell patch;
+
 }
