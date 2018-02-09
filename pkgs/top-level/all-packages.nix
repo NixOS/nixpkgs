@@ -10328,7 +10328,8 @@ with pkgs;
   });
 
   libva = callPackage ../development/libraries/libva { };
-  libva-full = libva.override { minimal = false; };
+  libva-minimal = libva.override { minimal = true; };
+  libva-full = libva;
   libva-utils = callPackage ../development/libraries/libva-utils { };
 
   libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
@@ -10336,9 +10337,7 @@ with pkgs;
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
-  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl {
-    libva = libva-full; # also wants libva-{x11}
-  };
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
@@ -11109,9 +11108,7 @@ with pkgs;
 
     libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
 
-    libqtav = callPackage ../development/libraries/libqtav {
-      libva = libva-full; # also wants libva-x11
-    };
+    libqtav = callPackage ../development/libraries/libqtav { };
 
     kpmcore = callPackage ../development/libraries/kpmcore { };
 
@@ -11644,13 +11641,9 @@ with pkgs;
 
   v8_static = lowPrio (self.v8.override { static = true; });
 
-  vaapiIntel = callPackage ../development/libraries/vaapi-intel {
-    libva = libva-full; # also wants libva-{x11,drm,wayland}
-  };
+  vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
-  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
-    libva = libva-full; # needs libva-{x11,glx}
-  };
+  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
   vale = callPackage ../tools/text/vale { };
 
@@ -14706,9 +14699,7 @@ with pkgs;
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux = libsForQt5.callPackage ../applications/video/avidemux {
-    libva = libva-full;
-  };
+  avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
@@ -16732,7 +16723,6 @@ with pkgs;
   mpv = callPackage ../applications/video/mpv rec {
     inherit (luaPackages) luasocket;
     youtube-dl = pythonPackages.youtube-dl;
-    libva      = libva-full;
     waylandSupport     = stdenv.isLinux;
     alsaSupport        = !stdenv.isDarwin;
     pulseSupport       = !stdenv.isDarwin;
@@ -18142,7 +18132,6 @@ with pkgs;
 
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2;
-    libva = libva-full; # also wants libva-x11
   };
 
   vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
@@ -18399,9 +18388,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  kodiPlain = callPackage ../applications/video/kodi {
-    libva = libva-full;
-  };
+  kodiPlain = callPackage ../applications/video/kodi { };
   xbmcPlain = kodiPlain;
 
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});

@@ -36,7 +36,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
-  ++ lib.optional vaSupport              pkgs.libva-full
+  ++ lib.optional vaSupport              pkgs.libva
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
   ++ lib.optional saneSupport            pkgs.sane-backends

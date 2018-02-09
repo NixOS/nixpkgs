@@ -1,11 +1,11 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
 , libGL, libGL_driver
-, minimal ? true, libva
+, minimal ? false, libva-minimal
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString (!minimal) "full-"}${version}";
+  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
   version = "2.1.0";
 
   # update libva-utils and vaapiIntel as well
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi libGL ];
+    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   enableParallelBuilding = true;
