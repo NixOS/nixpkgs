@@ -699,5 +699,9 @@ with stdenv.lib;
     DEBUG_MEMORY_INIT? y
   ''}
 
+  ${optionalString (features.debug or false)  ''
+    DEBUG_INFO y
+  ''}
+
   ${extraConfig}
 ''
