@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
        sha256 = "1w3y4brqp74hy3fbfxqnqp6jf985bd6667ivy1crz50r3z9zsy09";
   })(fetchpatch {
        url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
-       sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
+       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
   })];
 
   # configure cannot find moc on its own
