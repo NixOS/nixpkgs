@@ -5,7 +5,7 @@ with lib;
 let
 
   inherit (config.boot) kernelPatches;
-
+  inherit (config.boot.kernel) features;
   inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
@@ -21,11 +21,21 @@ in
 
   options = {
 
+    boot.kernel.features = mkOption {
+      default = {};
+      example = literalExample "{ debug = true; }";
+      description = ''
+        This option allows to enable or disable certain kernel features.
+        grep features pkgs/os-specific/linux/kernel/common-config.nix
+      '';
+    };
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          features = lib.recursiveUpdate super.kernel.features features;
         };
       });
       # We don't want to evaluate all of linuxPackages for the manual
