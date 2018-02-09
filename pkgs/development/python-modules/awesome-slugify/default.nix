@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "awesome-slugify";
   version = "1.6.5";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
