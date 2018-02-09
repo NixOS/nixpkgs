@@ -1099,6 +1099,8 @@ with pkgs;
 
   envconsul = callPackage ../tools/system/envconsul { };
 
+  eschalot = callPackage ../tools/security/eschalot { };
+
   esptool = callPackage ../tools/misc/esptool { };
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
