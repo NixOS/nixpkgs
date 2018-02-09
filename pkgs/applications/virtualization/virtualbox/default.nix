@@ -19,10 +19,10 @@ let
   python = python2;
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
-  extpack = "14f152228495a715f526eb74134d43c960919cc534d2bc67cfe34a63e6cf7721";
-  extpackRev = "117224";
-  main = "1af8h3d3sdpcxcp5g75qfq10z81l7m8gk0sz8zqix8c1wqsm0wdm";
-  version = "5.1.26";
+  extpack = "13n6d6wca3bnvqc1q0bapgwfjmfqm19nxn9c0vbzd28c4l88j991";
+  extpackRev = "120294";
+  main = "0agjldjn01p4x54m53db50xwamrphl7iqcrika3wa04rvlb36f40";
+  version = "5.1.32";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -89,7 +89,7 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch
-    ++ [ ./qtx11extras.patch ./linux-4.14.patch ];
+    ++ [ ./qtx11extras.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
