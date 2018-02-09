@@ -14412,6 +14412,8 @@ in {
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
+  pylibgen = callPackage ../development/python-modules/pylibgen { };
+
   pyliblo = buildPythonPackage rec {
     name = "pyliblo-${version}";
     version = "0.9.2";
