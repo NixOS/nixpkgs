@@ -144,9 +144,16 @@ let
       # for updated patches and hints about build flags
 
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ] ++ optionals (versionRange "64" "65") [
+    ]  ++ optionals (versionRange "64" "65") [
       (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
       (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
+    ]  ++ optionals (versionRange "65" "66") [
+      #(gentooPatch "chromium-gcc-r0.patch" "127xdwabizn5gz8rf1qsw62i7m0b5bsfjqxv4kdbsnizmjanddf8")
+      #(gentooPatch "chromium-memcpy-r0.patch" "1d3vra59wjg2lva7ddv55ff6l57mk9k50llsplr0b7vxk0lh0ps5")
+      (gentooPatch "chromium-webrtc-r0.patch" "0qj5b4w9kav51ylpdf38vm5w7p2gx4qp8p45vrfggp7miicg9cmw")
+      #(gentooPatch "chromium-vulkan-r0.patch" "1wphsbc6kyck5qanbc4bv14iw2s67fvp1c0kwz29a2avzkz19s84")
+      #(gentooPatch "chromium-ffmpeg-r0.patch" "0j58g24j6n6vpy6v9wwv34x0dd43m52wg0xcrfkzp72km9wiahff")
+      #(gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
     ]  ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
