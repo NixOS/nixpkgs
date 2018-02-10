@@ -10553,21 +10553,11 @@ in {
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
-  msgpack-python = buildPythonPackage rec {
-    name = "msgpack-python-${version}";
-    version = "0.4.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/msgpack-python/${name}.tar.gz";
-      sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
-    };
-
-    checkPhase = ''
-      py.test
+  msgpack-python = self.msgpack.overridePythonAttrs {
+    pname = "msgpack-python";
+    postPatch = ''
+      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
     '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ ];
   };
 
   msrplib = buildPythonPackage rec {
