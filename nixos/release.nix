@@ -336,6 +336,7 @@ in rec {
   tests.radicale = callTest tests/radicale.nix {};
   tests.rspamd = callSubTests tests/rspamd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
   tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
