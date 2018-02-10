@@ -2035,6 +2035,17 @@ rec {
     buildInputs = [ python ];
   };
 
+  targets-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "targets-vim-2017-12-03";
+    src = fetchgit {
+      url = "https://github.com/wellle/targets.vim";
+      rev = "6f809397526797f8f419a5d2b86d90e5aff68e66";
+      sha256 = "0djjm7b41kgrkz447br7qi3w96ayz9lyxd164gyp082qqxxpz63q";
+    };
+    dependencies = [];
+
+  };
+
   command-t = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "command-t-2017-11-16";
     src = fetchgit {
