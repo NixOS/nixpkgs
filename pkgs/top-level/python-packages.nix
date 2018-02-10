@@ -3642,7 +3642,7 @@ in {
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
       psutil botocore zict lz4 sortedcollections sortedcontainers
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
@@ -10551,7 +10551,7 @@ in {
     };
   };
 
-  msgpack = buildPythonPackage rec {
+  msgpack-python = buildPythonPackage rec {
     name = "msgpack-python-${version}";
     version = "0.4.7";
 
@@ -20440,7 +20440,7 @@ EOF
     # which we cannot add because of circular dependency.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ msgpack ]
+    propagatedBuildInputs = with self; [ msgpack-python ]
       ++ optional (!isPyPy) greenlet
       ++ optional (pythonOlder "3.4") trollius;
 
