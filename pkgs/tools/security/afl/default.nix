@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://lcamtuf.coredump.cx/afl/";
     license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = ["x86_64-linux" "i686-linux"];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
