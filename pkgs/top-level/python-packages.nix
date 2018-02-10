@@ -241,6 +241,8 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  habanero = callPackage ../development/python-modules/habanero { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
@@ -327,6 +329,8 @@ in {
     inherit (self) pyqt4;
     callPackage = pkgs.callPackage;
   };
+
+  pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
@@ -597,6 +601,8 @@ in {
   argcomplete = callPackage ../development/python-modules/argcomplete { };
 
   area53 = callPackage ../development/python-modules/area53 { };
+
+  arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   chai = callPackage ../development/python-modules/chai { };
 
@@ -5810,6 +5816,8 @@ in {
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
 
+  papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
+
   pathspec = callPackage ../development/python-modules/pathspec { };
 
   pathtools = buildPythonPackage rec {
@@ -9785,32 +9793,7 @@ in {
 
   py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
 
-  python_magic = buildPythonPackage rec {
-    name = "python-magic-0.4.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-magic/${name}.tar.gz";
-      sha256 = "1hx2sjd4fdswswj3yydn2azxb59rjmi9b7jzh94lf1wnxijjizbr";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.file ];
-
-    patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
-    '';
-
-    doCheck = false;
-
-    # TODO: tests are failing
-    #checkPhase = ''
-    #  ${python}/bin/${python.executable} ./test.py
-    #'';
-
-    meta = {
-      description = "A python interface to the libmagic file type identification library";
-      homepage = https://github.com/ahupp/python-magic;
-    };
-  };
+  python_magic = callPackage ../development/python-modules/python-magic { };
 
   magic = buildPythonPackage rec {
     name = "${pkgs.file.name}";
@@ -14403,6 +14386,8 @@ in {
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
+
+  pylibgen = callPackage ../development/python-modules/pylibgen { };
 
   pyliblo = buildPythonPackage rec {
     name = "pyliblo-${version}";
