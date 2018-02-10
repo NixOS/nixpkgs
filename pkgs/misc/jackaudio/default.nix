@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, python2Packages, makeWrapper
+{ stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 # Darwin Dependencies
 , aften, AudioToolbox, CoreAudio, CoreFoundation
@@ -41,22 +41,13 @@ stdenv.mkDerivation rec {
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
 
+  # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch ./darwin-cf.patch ];
+
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \
         --replace /bin/bash ${bash}/bin/bash
   '';
-
-  patches =
-    # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-    stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch ./darwin-cf.patch ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) [ # collides with ./clang.patch
-      (fetchpatch {
-        name = "gcc-7.patch";
-        url = "https://patch-diff.githubusercontent.com/raw/jackaudio/jack2/pull/277.diff";
-        sha256 = "003xy7rd0fa8ss7wy0qhl4rm8sv5w0y46r7x76iac0km318ydkbv";
-      })
-    ];
-
 
   # It looks like one of the frameworks depends on <CoreFoundation/CFAttributedString.h>
   # since frameworks are impure we also have to use the impure CoreFoundation here.
