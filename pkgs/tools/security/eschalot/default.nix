@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp eschalot worgen $out/bin
+    install -D -t $out/bin eschalot worgen
   '';
 
   meta = with stdenv.lib; {
