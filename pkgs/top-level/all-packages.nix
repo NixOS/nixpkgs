@@ -4815,6 +4815,8 @@ with pkgs;
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
 
+  otter-browser = qt5.callPackage ../applications/networking/browsers/otter {};
+
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
   };
