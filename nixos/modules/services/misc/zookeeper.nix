@@ -106,13 +106,19 @@ in {
       '';
     };
 
+    autoStart = mkOption {
+      default = true;
+      type = types.bool;
+      description = "Whether the Zookeeper service should be started automatically.";
+    };
+
   };
 
 
   config = mkIf cfg.enable {
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
       environment = { ZOOCFGDIR = configDir; };
       serviceConfig = {
