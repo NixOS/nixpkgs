@@ -17327,8 +17327,6 @@ with pkgs;
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
-  syncthing012 = callPackage ../applications/networking/syncthing012 { };
-
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
