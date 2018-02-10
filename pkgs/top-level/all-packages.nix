@@ -7447,6 +7447,8 @@ with pkgs;
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
+  librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
+
   libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
   libsigrok = callPackage ../development/tools/libsigrok { };
