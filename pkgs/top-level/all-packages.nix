@@ -2866,6 +2866,8 @@ with pkgs;
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
+  infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
+
   innoextract = callPackage ../tools/archivers/innoextract { };
 
   intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
