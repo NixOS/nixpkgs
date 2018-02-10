@@ -6883,6 +6883,8 @@ with pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
+  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+
   inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524 perl526;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
