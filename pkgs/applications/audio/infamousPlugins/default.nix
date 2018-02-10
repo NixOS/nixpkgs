@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "infamousPlugins-v${version}";
-  version = "0.2.03";
+  version = "0.2.04";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
     rev = "v${version}";
-    sha256 = "1pb7vmc703j25rnyx81cqlfzi66v7gm4a49s06dbgy8a66s1i2zl";
+    sha256 = "0hmqk80w4qxq09iag7b7srf2g0wigkyhzq0ywxvhz2iz0hq9k0dh";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
