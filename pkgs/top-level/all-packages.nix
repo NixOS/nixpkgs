@@ -8219,6 +8219,8 @@ with pkgs;
 
   bwidget = callPackage ../development/libraries/bwidget { };
 
+  bzrtp = callPackage ../development/libraries/bzrtp { };
+
   c-ares = callPackage ../development/libraries/c-ares {
     fetchurl = fetchurlBoot;
   };
