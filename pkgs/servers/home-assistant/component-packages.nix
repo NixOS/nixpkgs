@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.62.1";
+  version = "0.63";
   components = {
     "nuimo_controller" = ps: with ps; [  ];
     "bbb_gpio" = ps: with ps; [  ];
@@ -23,7 +23,7 @@
     "sensor.dnsip" = ps: with ps; [ aiodns ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "http" = ps: with ps; [ aiohttp-cors ];
-    "sensor.imap" = ps: with ps; [  ];
+    "sensor.imap" = ps: with ps; [ aioimaplib ];
     "light.lifx" = ps: with ps; [  ];
     "scene.hunterdouglas_powerview" = ps: with ps; [  ];
     "alarmdecoder" = ps: with ps; [  ];
@@ -160,10 +160,11 @@
     "media_player.liveboxplaytv" = ps: with ps; [  ];
     "lametric" = ps: with ps; [  ];
     "notify.lametric" = ps: with ps; [  ];
-    "sensor.luftdaten" = ps: with ps; [  ];
+    "sensor.luftdaten" = ps: with ps; [ luftdaten ];
     "sensor.lyft" = ps: with ps; [  ];
     "notify.matrix" = ps: with ps; [ matrix-client ];
     "maxcube" = ps: with ps; [  ];
+    "mercedesme" = ps: with ps; [  ];
     "notify.message_bird" = ps: with ps; [  ];
     "sensor.mfi" = ps: with ps; [  ];
     "switch.mfi" = ps: with ps; [  ];
@@ -216,6 +217,7 @@
     "light.rpi_gpio_pwm" = ps: with ps; [  ];
     "canary" = ps: with ps; [  ];
     "sensor.cpuspeed" = ps: with ps; [  ];
+    "melissa" = ps: with ps; [  ];
     "camera.synology" = ps: with ps; [  ];
     "hdmi_cec" = ps: with ps; [  ];
     "light.tplink" = ps: with ps; [  ];
@@ -271,6 +273,7 @@
     "lutron_caseta" = ps: with ps; [  ];
     "lutron" = ps: with ps; [  ];
     "notify.mailgun" = ps: with ps; [  ];
+    "media_player.mediaroom" = ps: with ps; [  ];
     "mochad" = ps: with ps; [  ];
     "modbus" = ps: with ps; [  ];
     "media_player.monoprice" = ps: with ps; [  ];
@@ -288,12 +291,14 @@
     "sensor.otp" = ps: with ps; [  ];
     "sensor.openweathermap" = ps: with ps; [  ];
     "weather.openweathermap" = ps: with ps; [  ];
+    "sensor.pollen" = ps: with ps; [  ];
     "qwikswitch" = ps: with ps; [  ];
     "rainbird" = ps: with ps; [  ];
     "climate.sensibo" = ps: with ps; [  ];
     "sensor.serial" = ps: with ps; [  ];
     "switch.acer_projector" = ps: with ps; [ pyserial ];
     "lock.sesame" = ps: with ps; [  ];
+    "goalfeed" = ps: with ps; [  ];
     "sensor.sma" = ps: with ps; [  ];
     "device_tracker.snmp" = ps: with ps; [ pysnmp ];
     "sensor.snmp" = ps: with ps; [ pysnmp ];
@@ -316,9 +321,10 @@
     "lirc" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [  ];
     "light.xiaomi_miio" = ps: with ps; [  ];
+    "remote.xiaomi_miio" = ps: with ps; [  ];
     "switch.xiaomi_miio" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [  ];
-    "media_player.mpd" = ps: with ps; [  ];
+    "media_player.mpd" = ps: with ps; [ mpd2 ];
     "light.mystrom" = ps: with ps; [  ];
     "switch.mystrom" = ps: with ps; [  ];
     "nest" = ps: with ps; [  ];
@@ -329,7 +335,7 @@
     "sensor.sochain" = ps: with ps; [  ];
     "sensor.synologydsm" = ps: with ps; [  ];
     "tado" = ps: with ps; [  ];
-    "telegram_bot" = ps: with ps; [  ];
+    "telegram_bot" = ps: with ps; [ python-telegram-bot ];
     "sensor.twitch" = ps: with ps; [  ];
     "velbus" = ps: with ps; [  ];
     "media_player.vlc" = ps: with ps; [  ];
@@ -380,6 +386,7 @@
     "media_player.snapcast" = ps: with ps; [  ];
     "sensor.speedtest" = ps: with ps; [  ];
     "recorder" = ps: with ps; [ sqlalchemy ];
+    "sensor.sql" = ps: with ps; [ sqlalchemy ];
     "statsd" = ps: with ps; [ statsd ];
     "sensor.steam_online" = ps: with ps; [  ];
     "tahoma" = ps: with ps; [  ];
