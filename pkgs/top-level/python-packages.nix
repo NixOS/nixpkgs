@@ -10551,6 +10551,8 @@ in {
     };
   };
 
+  msgpack = callPackage ../development/python-modules/msgpack {};
+
   msgpack-python = buildPythonPackage rec {
     name = "msgpack-python-${version}";
     version = "0.4.7";
