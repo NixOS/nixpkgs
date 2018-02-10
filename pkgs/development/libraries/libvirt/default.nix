@@ -43,7 +43,10 @@ stdenv.mkDerivation rec {
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
-  '' + ''
+  ''
+  # "patchShebangs" causes issues in the Darwin build.
+  # See https://github.com/NixOS/nixpkgs/pull/33084 regarding details.
+  + optionalString (! stdenv.isDarwin) ''
     PATH=${dnsmasq}/bin:$PATH
     patchShebangs . # fixes /usr/bin/python references
   '';
