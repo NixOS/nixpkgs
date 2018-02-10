@@ -1,8 +1,8 @@
-{ stdenv, cacert, git, rust, cargoVendor }:
+{ stdenv, cacert, git, rust, cargo-vendor }:
 { name ? "cargo-deps", src, srcs, sourceRoot, sha256, cargoUpdateHook ? "" }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
-  nativeBuildInputs = [ cacert cargoVendor git rust.cargo ];
+  nativeBuildInputs = [ cacert cargo-vendor git rust.cargo ];
   inherit src srcs sourceRoot;
 
   phases = "unpackPhase installPhase";

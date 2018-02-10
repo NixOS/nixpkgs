@@ -716,10 +716,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   bignum = buildPerlPackage rec {
-    name = "bignum-0.47";
+    name = "bignum-0.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "b084eac6d676d2acc4d60deed58e6e31b2f572b7b0be1aec9b93be92bad8261a";
+      sha256 = "28685b271251927d327851e5951e38649524a4e50cb0d1d35d649e2b814f212d";
     };
     buildInputs = [ MathBigInt MathBigRat ];
     meta = {
@@ -2544,10 +2544,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CpanelJSONXS = buildPerlPackage rec {
-    name = "Cpanel-JSON-XS-3.0237";
+    name = "Cpanel-JSON-XS-4.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "da86fffdbe6c1b7a023e95e2b8db7d6b45a08871c8312f23e45253c78e662d07";
+      sha256 = "4dedf770cab3009b08bca108266b941097ae1c55c674c500e3145e2f23a628ac";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -2722,10 +2722,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptJWT = buildPerlPackage rec {
-    name = "Crypt-JWT-0.018";
+    name = "Crypt-JWT-0.020";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "90e78f7f0ced17e5c2080ad8c7008ce3badd05186e2ff20cf9c7232ed863cdaf";
+      sha256 = "0587fc11435aecbbdc19b33f774d05ff31f19750b26a3588af93f33e8000d464";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
@@ -2931,10 +2931,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.055";
+    name = "CryptX-0.057";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "4d680e8356497fbd2c66114a2bfbde753d77930f997430ba077db66a4458cee9";
+      sha256 = "b85fffbc8ecc0b8f1f768926c6b31e755e6df15556462d101d45ef5c48f9d025";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -3835,15 +3835,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClass = buildPerlPackage rec {
-    # tests broken again
-    doCheck = false;
-    name = "DBIx-Class-0.082840";
+    name = "DBIx-Class-0.082841";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "4049afd175e315ebcab945b19030aec40bcec46cc5611b0286a5a267ca7181ef";
+      sha256 = "d705f85825aced299020534349778537524526d64f524217ca362787f683c3bd";
     };
-    patches = [ ../development/perl-modules/dbiclassx-fix.patch ]; # Remove after next release
-    buildInputs = [ DBDSQLite PackageStash SQLTranslator TestDeep TestException TestWarn ];
+    buildInputs = [ DBDSQLite PackageStash TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction HashMerge MROCompat ModuleFind Moo PathClass SQLAbstract ScopeGuard SubName TryTiny namespaceclean ];
     meta = {
       homepage = http://www.dbix-class.org/;
@@ -4837,10 +4834,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.93";
+    name = "Encode-2.95";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "2d06b0375c84a75cf3762685e6d94c3aef25833fd0427daa0ae87b04ae6f739c";
+      sha256 = "d662794c6f834382527f67ca62e1715887f504cfd09e119a1302e584dd3cdcde";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -6053,10 +6050,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GetoptLongDescriptive = buildPerlPackage rec {
-    name = "Getopt-Long-Descriptive-0.100";
+    name = "Getopt-Long-Descriptive-0.101";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "1451e79310d1630de37690e3aba5c38ea5f01a486c5a43f0cd95bef2a02dffb6";
+      sha256 = "752e898ea6eb8706ceb836668ca645704f5dcbc3124b6d1b21d04007dbc46948";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ ParamsValidate SubExporter ];
@@ -6064,7 +6061,6 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Getopt-Long-Descriptive;
       description = "Getopt::Long, but simpler and more powerful";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -11263,7 +11259,8 @@ let self = _self // overrides; _self = with self; {
       url = "https://alioth.debian.org/frs/download.php/file/4142/po4a-0.47.tar.gz";
       sha256 = "5010e1b7df1115cbd475f46587fc05fefc97301f9bba0c2f15106005ca017507";
     };
-    propagatedBuildInputs = [ pkgs.docbook_xml_xslt TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
+    nativeBuildInputs = [ pkgs.docbook_xml_xslt pkgs.docbook_xsl pkgs.docbook_xsl_ns ];
+    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
     buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.jade ];
     LC_ALL="en_US.UTF-8";
     SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
@@ -12313,17 +12310,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   SQLAbstract = buildPerlPackage rec {
-    name = "SQL-Abstract-1.81";
+    name = "SQL-Abstract-1.85";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "5f4d5618ce2424d62bbfdb5228b382e8be0e0ccedbb273d6d850e25d07e64f9f";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
+      sha256 = "9f44afe031a0cc63a6ccabaa46ba7ec58ef4db940559cee7fbc2dfbbf37bccab";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
-    propagatedBuildInputs = [ HashMerge MROCompat Moo ];
+    propagatedBuildInputs = [ HashMerge MROCompat Moo SubQuote ];
     meta = {
       description = "Generate SQL from Perl data structures";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -12863,10 +12859,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubQuote = buildPerlPackage rec {
-    name = "Sub-Quote-2.003001";
+    name = "Sub-Quote-2.005000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "9d471d8e13e7ce4793d5a5ec04a60fface14dd53be78dd94d228871915cfd1f9";
+      sha256 = "44b145111bee7b0001818e77f7ce587153232dbc97351f4c5ed34522372b64ff";
     };
     buildInputs = [ TestFatal ];
     meta = {

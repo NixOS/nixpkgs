@@ -81,8 +81,8 @@ let
       # lost on `.override`) but determine the auto-args based on `drv` (the problem here
       # is that nix has no way to "passthrough" args while preserving the reflection
       # info that callPackage uses to determine the arguments).
-      drv = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs drv) scope;
+      drv = if stdenv.lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (stdenv.lib.functionArgs drv) scope;
 
       # this wraps the `drv` function to add a `overrideScope` function to the result.
       drvScope = allArgs: drv allArgs // {
@@ -161,18 +161,19 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # : { root : Path
     #   , source-overrides : Defaulted (Either Path VersionNumber)
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
+    #   , modifier : Defaulted
     #   } -> NixShellAwareDerivation
     # Given a path to a haskell package directory whose cabal file is
     # named the same as the directory name, an optional set of
     # source overrides as appropriate for the 'packageSourceOverrides'
-    # function, and an optional set of arbitrary overrides,
-    # return a derivation appropriate for nix-build or nix-shell
-    # to build that package.
-    developPackage = { root, source-overrides ? {}, overrides ? self: super: {} }:
+    # function, an optional set of arbitrary overrides, and an optional
+    # haskell package modifier,  return a derivation appropriate
+    # for nix-build or nix-shell to build that package.
+    developPackage = { root, source-overrides ? {}, overrides ? self: super: {}, modifier ? drv: drv }:
       let name = builtins.baseNameOf root;
           drv =
             (extensible-self.extend (pkgs.lib.composeExtensions (self.packageSourceOverrides source-overrides) overrides)).callCabal2nix name root {};
-      in if pkgs.lib.inNixShell then drv.env else drv;
+      in if pkgs.lib.inNixShell then (modifier drv).env else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

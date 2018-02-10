@@ -40,7 +40,7 @@ packagesFun: # packages explicitly requested by the user
 
 let
   explicitRequires =
-    if builtins.isFunction packagesFun
+    if lib.isFunction packagesFun
       then packagesFun self
     else packagesFun;
 in

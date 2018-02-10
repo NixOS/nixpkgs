@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
   name = "${pname}-${kernel.version}";
-  version = "2.10.0";
+  version = "2.10.5";
 
   src = fetchurl {
     url = "http://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
-    sha256 = "1gzi7j97zymzfj6b7mlih35djflwfgg93b63q9rbs5w1kclmsrgz";
+    sha256 = "07rs01zwr4bmjamplix5qz1c6mb6wdawb68vyn0w6wx68ppbpnxq";
   };
 
   hardeningDisable = [ "pic" ];

@@ -253,8 +253,19 @@
     or also with <varname>crossSystem</varname>, in which case packages run on the latter, but all building happens on the former.
     Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section.
     As mentioned above, <literal>lib.systems.examples</literal> has some platforms which are used as arguments for these parameters in practice.
-    You can use them programmatically, or on the command line like <command>nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).systems.examples.fooBarBaz'</command>.
+    You can use them programmatically, or on the command line: <programlisting>
+nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).systems.examples.fooBarBaz' -A whatever</programlisting>
   </para>
+  <note>
+    <para>
+      Eventually we would like to make these platform examples an unnecessary convenience so that <programlisting>
+nix-build &lt;nixpkgs&gt; --arg crossSystem.config '&lt;arch&gt;-&lt;os&gt;-&lt;vendor&gt;-&lt;abi&gt;' -A whatever</programlisting>
+      works in the vast majority of cases.
+      The problem today is dependencies on other sorts of configuration which aren't given proper defaults.
+      We rely on the examples to crudely to set those configuration parameters in some vaguely sane manner on the users behalf.
+      Issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/34274">#34274</link> tracks this inconvenience along with its root cause in crufty configuration options.
+    </para>
+  </note>
   <para>
     While one is free to pass both parameters in full, there's a lot of logic to fill in missing fields.
     As discussed in the previous section, only one of <varname>system</varname>, <varname>config</varname>, and <varname>parsed</varname> is needed to infer the other two.

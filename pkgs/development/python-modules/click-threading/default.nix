@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "click-threading";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "400b0bb63d9096b6bf2806efaf742a1cc8b6c88e0484f0afe7d7a7f0e9870609";
+    sha256 = "b2b0fada5bf184b56afaccc99d0d2548d8ab07feb2e95e29e490f6b99c605de7";
   };
 
   checkInputs = [ pytest ];

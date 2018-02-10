@@ -858,11 +858,11 @@ rec {
   };
 
   vim-elixir = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-elixir-2017-10-20";
+    name = "vim-elixir-2018-02-01";
     src = fetchgit {
       url = "https://github.com/elixir-lang/vim-elixir";
-      rev = "3066d5fb5e1c694e607b2bb5d8277266ca524262";
-      sha256 = "1j5sic3rssh2kaj73lv4m5sck3irn1jzgkpdr5qw7qi0gyfgpg81";
+      rev = "8ca41c1f02208dd5ca68c7bcb6c71b3b92f46af6";
+      sha256 = "0dp9cqflbwc3h1hzgn9fyaxhcn6q9bclgfy9kkgywp8zk5kwzb7p";
     };
     dependencies = [];
 
@@ -2389,6 +2389,17 @@ rec {
     };
     dependencies = [];
     buildInputs = [ python ];
+  };
+
+  targets-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "targets-vim-2017-12-03";
+    src = fetchgit {
+      url = "https://github.com/wellle/targets.vim";
+      rev = "6f809397526797f8f419a5d2b86d90e5aff68e66";
+      sha256 = "0djjm7b41kgrkz447br7qi3w96ayz9lyxd164gyp082qqxxpz63q";
+    };
+    dependencies = [];
+
   };
 
   command-t = buildVimPluginFrom2Nix { # created by nix#NixDerivation

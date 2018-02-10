@@ -131,9 +131,6 @@ self:
       # upstream issue: mismatched filename
       link-hint = markBroken super.link-hint;
 
-      # part of a larger package
-      llvm-mode = dontConfigure super.llvm-mode;
-
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
 

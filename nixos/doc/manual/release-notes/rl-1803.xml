@@ -90,6 +90,28 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      Package attributes starting with a digit have been prefixed with an
+      underscore sign. This is to avoid quoting in the configuration and
+      other issues with command-line tools like <literal>nix-env</literal>.
+      The change affects the following packages:
+      <itemizedlist>
+        <listitem>
+          <para><literal>2048-in-terminal</literal> → <literal>_2048-in-terminal</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>90secondportraits</literal> → <literal>_90secondportraits</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>2bwm</literal> → <literal>_2bwm</literal></para>
+        </listitem>
+        <listitem>
+          <para><literal>389-ds-base</literal> → <literal>_389-ds-base</literal></para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       <emphasis role="strong">
         The OpenSSH service no longer enables support for DSA keys by default,
         which could cause a system lock out. Update your keys or, unfavorably,
@@ -148,6 +170,31 @@ following incompatible changes:</para>
     <para>
       The <varname>hardware.amdHybridGraphics.disable</varname> option was removed for lack of a maintainer. If you still need this module, you may wish to include a copy of it from an older version of nixos in your imports.
     </para>
+  </listitem>
+  <listitem>
+    <para>
+      The merging of config options for <varname>services.postfix.config</varname>
+      was buggy. Previously, if other options in the Postfix module like
+      <varname>services.postfix.useSrs</varname> were set and the user set config
+      options that were also set by such options, the resulting config wouldn't
+      include all options that were needed. They are now merged correctly. If
+      config options need to be overridden, <literal>lib.mkForce</literal> or
+      <literal>lib.mkOverride</literal> can be used.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 18.03 or higher.
+      For <literal>stateVersion = "17.09"</literal> or lower the old behavior is preserved.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>matrix-synapse</literal> uses postgresql by default instead of sqlite.
+          Migration instructions can be found <link xlink:href="https://github.com/matrix-org/synapse/blob/master/docs/postgres.rst#porting-from-sqlite"> here </link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </listitem>
 </itemizedlist>
 

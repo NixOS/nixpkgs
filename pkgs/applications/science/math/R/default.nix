@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, tzdata, fetchpatch
+, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
     pkgconfig bison imake which jdk openblas curl
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
 
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
       --without-aqua
       --disable-R-framework
       OBJC="clang"
+      CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
+      LDFLAGS="-L${libcxx}/lib"
   '' + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"

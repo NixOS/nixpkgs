@@ -2,17 +2,17 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "afew";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "121w7bd53xyibllxxbfykjj76n81kn1vgjqd22izyh67y8qyyk5r";
+    sha256 = "0105glmlkpkjqbz350dxxasvlfx9dk0him9vwbl86andzi106ygz";
   };
 
   buildInputs = with pythonPackages; [ setuptools_scm ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pythonPackages.notmuch chardet
+    pythonPackages.notmuch chardet dkimpy
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) subprocess32;
 
   makeWrapperArgs = [

@@ -20,15 +20,19 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses pcre ];
 
+  configureFlags = [
+    "--enable-maildir-support"
+    "--enable-multibyte"
+    "--with-tcsetpgrp"
+    "--enable-pcre"
+  ];
   preConfigure = ''
-    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp --enable-pcre"
+    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
   '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
-  checkFlagsArray = ''
-    (TESTNUM=A TESTNUM=B TESTNUM=C TESTNUM=D TESTNUM=E TESTNUM=V TESTNUM=W)
-  '';
+  checkFlags = map (T: "TESTNUM=${T}") (stdenv.lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''

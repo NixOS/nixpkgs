@@ -1,7 +1,6 @@
 { system ? builtins.currentSystem }:
 
 with import ../lib/testing.nix { inherit system; };
-with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let

@@ -281,6 +281,7 @@ self: super: {
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
   hath = dontCheck super.hath;
+  haxl = dontCheck super.haxl;                          # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
@@ -605,7 +606,8 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
-  # Needs newer version of its dependencies than we have in LTS-10.x.
+  # Need newer versions of their dependencies than the ones we have in LTS-10.x.
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_24_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -637,9 +639,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # tinc is a new build driver a la Stack that's not yet available from Hackage.
-  tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
-
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
@@ -647,9 +646,6 @@ self: super: {
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
-
-  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
-  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
 
   # vaultenv is not available from Hackage.
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
@@ -958,5 +954,50 @@ self: super: {
 
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
+
+  # Support ansi-terminal 0.7.x.
+  cabal-plan = appendPatch super.cabal-plan (pkgs.fetchpatch {
+    url = "https://github.com/haskell-hvr/cabal-plan/pull/16.patch";
+    sha256 = "0i889zs46wn09d7iqdy99201zaqxb175cfs8jz2zi3mv4ywx3a0l";
+  });
+
+  # Copy hledger man pages from data directory into the proper place. This code
+  # should be moved into the cabal2nix generator.
+  hledger = overrideCabal super.hledger (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
+  hledger-ui = overrideCabal super.hledger-ui (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
+  hledger-web = overrideCabal super.hledger-web (drv: {
+    postInstall = ''
+      for i in $(seq 1 9); do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+          mkdir -p $out/share/man/man$i
+          cp $j $out/share/man/man$i/
+        done
+      done
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+    '';
+  });
 
 }

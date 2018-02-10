@@ -297,9 +297,15 @@ in
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides }:
 
 let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
+    processedAttrs = [
+      "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
+      "buildDependencies" "dependencies" "features"
+      "crateName" "version" "build" "authors" "colors"
+    ];
+    extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
     buildInputs_ = buildInputs;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
 
     inherit (crate) crateName;
 
@@ -372,7 +378,7 @@ stdenv.mkDerivation rec {
     };
     installPhase = installCrate crateName;
 
-}) {
+} // extraDerivationAttrs)) {
   rust = rustc;
   release = true;
   verbose = true;

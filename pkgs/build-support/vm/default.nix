@@ -8,6 +8,7 @@
 }:
 
 with pkgs;
+with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
@@ -21,8 +22,6 @@ rec {
     };
     patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
   });
-
-  qemuProg = "${qemu}/bin/qemu-kvm";
 
 
   modulesClosure = makeModulesClosure {
@@ -197,14 +196,13 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/ttyS0 &> /dev/ttyS0
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
     fi
   '';
 
 
   qemuCommandLinux = ''
-    ${qemuProg} \
-      ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
+    ${qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
@@ -212,7 +210,7 @@ rec {
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 

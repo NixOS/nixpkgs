@@ -16,7 +16,7 @@
 
 */
 
-{ stdenv, version, kernelPlatform, extraConfig, features }:
+{ stdenv, version, extraConfig, features }:
 
 with stdenv.lib;
 
@@ -682,6 +682,5 @@ with stdenv.lib;
     WW_MUTEX_SELFTEST? n
   ''}
 
-  ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''

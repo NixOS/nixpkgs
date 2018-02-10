@@ -116,7 +116,9 @@ let
     lib.optionalAttrs allowCustomOverrides
       ((config.packageOverrides or (super: {})) super);
 
-  # The complete chain of package set builders, applied from top to bottom
+  # The complete chain of package set builders, applied from top to bottom.
+  # stdenvOverlays must be last as it brings package forward from the
+  # previous bootstrapping phases which have already been overlayed.
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
     platformCompat
@@ -125,9 +127,9 @@ let
     splice
     allPackages
     aliases
-    stdenvOverrides
     configOverrides
-  ] ++ overlays);
+  ] ++ overlays ++ [
+    stdenvOverrides ]);
 
 in
   # Return the complete set of packages.

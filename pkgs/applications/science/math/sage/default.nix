@@ -18,6 +18,7 @@
 # - https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/sagemath
 
 { stdenv
+, bash
 , fetchurl
 , perl
 , gfortran
@@ -26,13 +27,17 @@
 , gettext
 , which
 , texlive
+, texinfo
 , hevea
 }:
 
 stdenv.mkDerivation rec {
-  version = "8.0";
+  version = "8.1";
   name = "sage-${version}";
 
+  # Modified version of patchShebangs that patches to the sage-internal version if possible
+  # and falls back to the system version if not.
+  patchSageShebangs = ./patchSageShebangs.sh;
   src = fetchurl {
     # Note that the source is *not* fetched from github, since that doesn't
     # the upstream folder with all the source tarballs of the spkgs.
@@ -70,11 +75,12 @@ stdenv.mkDerivation rec {
       "http://www-ftp.lip6.fr/pub/math/sagemath/src/sage-${version}.tar.gz"
       "http://ftp.ntua.gr/pub/sagemath/src/sage-${version}.tar.gz"
     ];
-    sha256 = "1a9rhb8jby6fdqa2s7n2fl9jwqqlsl7qz7dbpbwvg6jwlrvni7fg";
+    sha256 = "1cpcs1mr0yii64s152xmxyd450bfzjb22jjj0zh9y3n6g9alzpyq";
   };
 
   postPatch = ''
     substituteAllInPlace src/bin/sage-env
+    bash=${bash} substituteAllInPlace build/bin/sage-spkg
   '';
 
   installPhase = ''
@@ -84,14 +90,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   buildInputs = [
+    bash # needed for the build
     perl # needed for the build
     python # needed for the build
-    gfortran # needed to build giac
+    gfortran # needed to build giac, openblas
     autoreconfHook # needed to configure sage with prefix
     gettext # needed to build the singular spkg
     hevea # needed to build the docs of the giac spkg
     which # needed in configure of mpir
     # needed to build the docs of the giac spkg
+    texinfo # needed to build maxima
     (texlive.combine { inherit (texlive)
       scheme-basic
       collection-pstricks # needed by giac
@@ -102,18 +110,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ gfortran perl which ];
+
   patches = [
     # fix usages of /bin/rm
     ./spkg-singular.patch
     # help python find the crypt library
-    ./spkg-python2.patch
-    ./spkg-python3.patch
+    # patches python3 and indirectly python2, since those installation files are symlinked
+    ./spkg-python.patch
     # fix usages of /usr/bin/perl
     ./spkg-git.patch
     # fix usages of /bin/cp and add necessary argument to function call
     ./spkg-giac.patch
     # environment
     ./env.patch
+    # adjust wrapper shebang and patch shebangs after each spkg build
+    ./shebangs.patch
   ];
 
   enableParallelBuilding = true;
@@ -144,7 +156,14 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # TODO do this conditionally
     export SAGE_SPKG_INSTALL_DOCS='no'
-    patchShebangs build
+    # symlink python to make sure the shebangs are patched to the sage path
+    # while still being able to use python before building it
+    # (this is important because otherwise sage will try to install python
+    # packages globally later on)
+    ln -s "${python}/bin/python2" $out/bin/python2
+    ln -s "$out/bin/python2" $out/bin/python
+    touch $out/bin/python3
+    bash $patchSageShebangs .
   '';
 
   postBuild = ''
@@ -153,9 +172,12 @@ stdenv.mkDerivation rec {
     rm -rf "$out/sage-root/src/.git"
     rm -r "$out/sage-root/logs"
     # Fix dependency cycle between out and doc
+    rm -f "$out/sage-root/config.log"
     rm -f "$out/sage-root/config.status"
     rm -f "$out/sage-root/build/make/Makefile-auto"
     rm -f "$out/sage-home/.sage/gap/libgap-workspace-"*
+    # Make sure all shebangs are properly patched
+    bash $patchSageShebangs $out
   '';
 
   # TODO there are some doctest failures, which seem harmless.
