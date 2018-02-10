@@ -19117,6 +19117,7 @@ with pkgs;
   });
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix { };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
