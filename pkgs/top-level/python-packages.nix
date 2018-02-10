@@ -21521,6 +21521,8 @@ EOF
     };
   };
 
+  python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
+
   irc = buildPythonPackage rec {
     name = "irc-${version}";
     version = "14.2.2";
