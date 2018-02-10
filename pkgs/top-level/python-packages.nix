@@ -20413,36 +20413,7 @@ EOF
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  neovim = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "neovim-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "1ywkgbrxd95cwlglihydmffcw2d2aji6562aqncymxs3ld5y02yn";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    # Tests require pkgs.neovim,
-    # which we cannot add because of circular dependency.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ msgpack-python ]
-      ++ optional (!isPyPy) greenlet
-      ++ optional (pythonOlder "3.4") trollius;
-
-    meta = {
-      description = "Python client for Neovim";
-      homepage = "https://github.com/neovim/python-client";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  neovim = callPackage ../development/python-modules/neovim {};
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
