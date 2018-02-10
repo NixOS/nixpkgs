@@ -19913,6 +19913,8 @@ with pkgs;
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
 
+  nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
+
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
