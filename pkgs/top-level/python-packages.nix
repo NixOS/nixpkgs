@@ -3642,7 +3642,7 @@ in {
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
       psutil botocore zict lz4 sortedcollections sortedcontainers
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
@@ -10551,21 +10551,13 @@ in {
     };
   };
 
-  msgpack = buildPythonPackage rec {
-    name = "msgpack-python-${version}";
-    version = "0.4.7";
+  msgpack = callPackage ../development/python-modules/msgpack {};
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/msgpack-python/${name}.tar.gz";
-      sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
-    };
-
-    checkPhase = ''
-      py.test
+  msgpack-python = self.msgpack.overridePythonAttrs {
+    pname = "msgpack-python";
+    postPatch = ''
+      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
     '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ ];
   };
 
   msrplib = buildPythonPackage rec {
@@ -20421,36 +20413,7 @@ EOF
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  neovim = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "neovim-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "1ywkgbrxd95cwlglihydmffcw2d2aji6562aqncymxs3ld5y02yn";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    # Tests require pkgs.neovim,
-    # which we cannot add because of circular dependency.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ msgpack ]
-      ++ optional (!isPyPy) greenlet
-      ++ optional (pythonOlder "3.4") trollius;
-
-    meta = {
-      description = "Python client for Neovim";
-      homepage = "https://github.com/neovim/python-client";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  neovim = callPackage ../development/python-modules/neovim {};
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
