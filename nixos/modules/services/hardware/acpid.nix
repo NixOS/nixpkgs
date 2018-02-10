@@ -31,7 +31,7 @@ let
           ''
             fn=$out/${name}
             echo "event=${handler.event}" > $fn
-            echo "action=${pkgs.writeScript "${name}.sh" (concatStringsSep "\n" [ "#! ${pkgs.bash}/bin/sh" handler.action ])}" >> $fn
+            echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action }/bin/${name}.sh '%e'" >> $fn
           '';
         in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // config.services.acpid.handlers))
       }
@@ -69,11 +69,33 @@ in
           };
         });
 
-        description = "Event handlers.";
+        description = ''
+          Event handlers.
+
+          <note><para>
+            Handler can be a single command.
+          </para></note>
+        '';
         default = {};
-        example = { mute = { event = "button/mute.*"; action = "amixer set Master toggle"; }; };
-
-
+        example = {
+          ac-power = {
+            event = "ac_adapter/*";
+            action = ''
+              vals=($1)  # space separated string to array of multiple values
+              case ''${vals[3]} in
+                  00000000)
+                      echo unplugged >> /tmp/acpi.log
+                      ;;
+                  00000001)
+                      echo plugged in >> /tmp/acpi.log
+                      ;;
+                  *)
+                      echo unknown >> /tmp/acpi.log
+                      ;;
+              esac
+            '';
+          };
+        };
       };
 
       powerEventCommands = mkOption {
