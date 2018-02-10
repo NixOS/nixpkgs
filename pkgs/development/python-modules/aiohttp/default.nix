@@ -9,7 +9,6 @@
 , idna-ssl
 , pytest
 , gunicorn
-, pytest-raisesregexp
 , pytest-mock
 }:
 
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.4";
 
-  checkInputs = [ pytest gunicorn pytest-raisesregexp pytest-mock ];
+  checkInputs = [ pytest gunicorn pytest-mock ];
 
   propagatedBuildInputs = [ async-timeout chardet multidict yarl ]
     ++ lib.optional (pythonOlder "3.7") idna-ssl;
