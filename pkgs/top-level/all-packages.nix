@@ -8180,6 +8180,8 @@ with pkgs;
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
+  belcard = callPackage ../development/libraries/belcard { };
+
   belr = callPackage ../development/libraries/belr { };
 
   beignet = callPackage ../development/libraries/beignet {
