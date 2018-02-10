@@ -3,6 +3,7 @@
 , libsoup, docbook2x, gpgme, libxslt, libelf, libsmbios, efivar, glibcLocales
 , fwupdate, libyaml, valgrind, meson, libuuid, pygobject3, colord
 , pillow, ninja, gcab, gnutls, python3Packages, wrapGAppsHook, json_glib
+, shared_mime_info
 }:
 let
   version = "1.0.4";
@@ -29,6 +30,10 @@ in stdenv.mkDerivation {
   ];
   postPatch = ''
     patchShebangs .
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
   '';
 
   mesonFlags = [
