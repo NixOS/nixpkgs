@@ -418,6 +418,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  aioconsole = callPackage ../development/python-modules/aioconsole { };
+
   aiodns = callPackage ../development/python-modules/aiodns { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
