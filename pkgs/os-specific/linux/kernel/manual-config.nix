@@ -3,6 +3,7 @@
 , utillinux ? null
 , writeTextFile, ubootChooser
 , hostPlatform
+, overrideCC, gcc7
 }:
 
 let
@@ -18,6 +19,10 @@ let
 in {
   # Allow overriding stdenv on each buildLinux call
   stdenv,
+  # Allow really overriding even our gcc7 default.
+  # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
+  stdenvNoOverride ? overrideCC stdenv gcc7,
+
   # The kernel version
   version,
   # The version of the kernel module directory
@@ -36,7 +41,7 @@ in {
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? stdenvNoOverride.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Cross-compiling config
   crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
   # Use defaultMeta // extraMeta
@@ -46,6 +51,8 @@ in {
 }:
 
 let
+  stdenv = stdenvNoOverride; # finish the rename
+
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
@@ -88,7 +95,8 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
+        inherit version modDirVersion config kernelPatches configfile
+          moduleBuildDependencies stdenv;
       };
 
       inherit src;
