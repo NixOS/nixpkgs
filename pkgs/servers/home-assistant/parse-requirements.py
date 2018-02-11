@@ -52,10 +52,16 @@ packages = json.loads(output)
 
 def name_to_attr_path(req):
     attr_paths = []
-    pattern = re.compile('python3\\.6-{}-\\d'.format(req), re.I)
-    for attr_path, package in packages.items():
-        if pattern.match(package['name']):
-            attr_paths.append(attr_path)
+    names = [req]
+    # E.g. python-mpd2 is actually called python3.6-mpd2
+    # instead of python-3.6-python-mpd2 inside Nixpkgs
+    if req.startswith('python-'):
+        names.append(req[len('python-'):])
+    for name in names:
+        pattern = re.compile('^python\\d\\.\\d-{}-\\d'.format(name), re.I)
+        for attr_path, package in packages.items():
+            if pattern.match(package['name']):
+                attr_paths.append(attr_path)
     # Let's hope there's only one derivation with a matching name
     assert(len(attr_paths) <= 1)
     if attr_paths:
@@ -64,6 +70,7 @@ def name_to_attr_path(req):
         return None
 
 version = get_version()
+print('Generating component-packages.nix for version {}'.format(version))
 requirements = fetch_reqs(version=version)
 build_inputs = {}
 for component, reqs in requirements.items():
