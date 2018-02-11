@@ -37,12 +37,25 @@
 
 ## other
 
-# If you want the resulting program to call itself
-# "Firefox"/"Torbrowser" instead of "Nightly" or whatever, enable this
-# option. However, in Firefox's case, those binaries may not be
-# distributed without permission from the Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? isTorBrowserLike
+# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+# have permission to use the official firefox branding.
+#
+# Fur purposes of documentation the statement of @sylvestre:
+# > As the person who did part of the work described in the LWN article
+# > and release manager working for Mozilla, I can confirm the statement
+# > that I made in
+# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+# >
+# > @garbas shared with me the list of patches applied for the Nix package.
+# > As they are just for portability and tiny modifications, they don't
+# > alter the experience of the product. In parallel, Rok also shared the
+# > build options. They seem good (even if I cannot judge the quality of the
+# > packaging of the underlying dependencies like sqlite, png, etc).
+# > Therefor, as long as you keep the patch queue sane and you don't alter
+# > the experience of Firefox users, you won't have any issues using the
+# > official branding.
+, enableOfficialBranding ? true
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
