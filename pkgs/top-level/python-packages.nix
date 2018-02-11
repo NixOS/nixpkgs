@@ -20998,8 +20998,6 @@ EOF
 
   trezor = callPackage ../development/python-modules/trezor { };
 
-  protocol = callPackage ../development/python-modules/protocol { };
-
   trezor_agent = buildPythonPackage rec{
     name = "${pname}-${version}";
     pname = "trezor_agent";
