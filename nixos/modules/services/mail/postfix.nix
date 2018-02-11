@@ -414,7 +414,10 @@ in
       postmasterAlias = mkOption {
         type = types.str;
         default = "root";
-        description = "Who should receive postmaster e-mail.";
+        description = "
+          Who should receive postmaster e-mail. Multiple values can be added by
+          separating values with comma.
+        ";
       };
 
       rootAlias = mkOption {
@@ -422,6 +425,7 @@ in
         default = "";
         description = "
           Who should receive root e-mail. Blank for no redirection.
+          Multiple values can be added by separating values with comma.
         ";
       };
 
