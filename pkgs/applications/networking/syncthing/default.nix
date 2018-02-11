@@ -25,6 +25,15 @@ stdenv.mkDerivation rec {
 
     install -Dm755 syncthing $out/bin/syncthing
 
+    # This installs man pages in the correct directory according to the suffix
+    # on the filename
+    for mf in man/*.[1-9]; do
+      mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
+      mandir="$out/share/man/man$mantype"
+      mkdir -p "$mandir"
+      install -Dm644 "$mf" "$mandir/$(basename "$mf")"
+    done
+
   '' + lib.optionalString (stdenv.isLinux) ''
     substitute etc/linux-systemd/system/syncthing-resume.service \
                $out/lib/systemd/system/syncthing-resume.service \
