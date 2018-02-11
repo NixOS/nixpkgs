@@ -14,6 +14,12 @@ buildPythonPackage rec {
     inherit mpi;
   };
 
+  postPatch = ''
+    substituteInPlace test/test_spawn.py --replace \
+                      "unittest.skipMPI('openmpi(<3.0.0)')" \
+                      "unittest.skipMPI('openmpi')"
+  '';
+
   configurePhase = "";
 
   installPhase = ''
