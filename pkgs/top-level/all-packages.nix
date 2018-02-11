@@ -1250,6 +1250,8 @@ with pkgs;
 
   masscan = callPackage ../tools/security/masscan { };
 
+  massren = callPackage ../tools/misc/massren { };
+
   meritous = callPackage ../games/meritous { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
