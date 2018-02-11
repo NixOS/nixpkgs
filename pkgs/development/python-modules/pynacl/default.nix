@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   #remove deadline from tests, see https://github.com/pyca/pynacl/issues/370
-  prePatch = ''
+  preCheck = ''
     sed -i 's/deadline=1500, //' tests/test_pwhash.py
     sed -i 's/deadline=1500, //' tests/test_aead.py
   '';
