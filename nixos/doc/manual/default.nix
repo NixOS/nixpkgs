@@ -63,8 +63,8 @@ let
   stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
 
   # Custom "less" that pushes up all the things ending in ".enable*"
-  # and ".package"
-  optionListLess = a: b:
+  # and ".package*"
+  optionLess = a: b:
     let
       ise = lib.hasPrefix "enable";
       isp = lib.hasPrefix "package";
@@ -73,7 +73,7 @@ let
     in lib.compareLists cmp a.loc b.loc < 0;
 
   # Customly sort option list for the man page.
-  optionsList = lib.sort optionListLess optionsListDesc;
+  optionsList = lib.sort optionLess optionsListDesc;
 
   # Convert the list of options into an XML file.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
