@@ -487,6 +487,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "PostgreSQL License";
   };
 
+  postman = {
+    fullName = "Postman EULA";
+    url = https://www.getpostman.com/licenses/postman_base_app;
+    free = false;
+  };
+
   psfl = spdx {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
