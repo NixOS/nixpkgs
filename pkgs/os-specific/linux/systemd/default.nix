@@ -1,194 +1,223 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
-, kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
-, iptables, gnu-efi
+, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
+, audit, lz4, bzip2, kexectools, libmicrohttpd
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, libseccomp, iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, ninja, meson, python3Packages, glibcLocales
+, patchelf
 }:
 
 assert stdenv.isLinux;
 
-stdenv.mkDerivation rec {
-  version = "234";
-  name = "systemd-${version}";
+let pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
-  src = fetchFromGitHub {
-    owner = "nixos";
-    repo = "systemd";
-    rev = "eef5613fda5";
-    sha256 = "0wgh5y319v56hcs82mhs58ipb100cz4x41vz3kh4bq1n7sx88cdz";
-  };
+in
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  stdenv.mkDerivation rec {
+    version = "237";
+    name = "systemd-${version}";
 
-  nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt
-      /* FIXME: we may be able to prevent the following dependencies
-         by generating an autoconf'd tarball, but that's probably not
-         worth it. */
-      autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-    ];
-  buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror
-      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
-      iptables gnu-efi
-    ];
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "systemd";
+      rev = "1e8830dfa77a7dc6976509f4a6edb7e012c50792";
+      sha256 = "1cw1k0i68azmzpqzi3r8jm6mbi2wqlql78fhcg0vvnv1ly8bf7vq";
+    };
 
-  configureFlags =
-    [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-rootprefix=$(out)"
-      "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
-      "--with-kbd-setfont=${kbd}/bin/setfont"
-      "--with-rootprefix=$(out)"
-      "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
-      "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
-      "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
-      "--with-tty-gid=3" # tty in NixOS has gid 3
-      "--disable-tests"
+    outputs = [ "out" "lib" "man" "dev" ];
 
-      "--enable-lz4"
-      "--enable-hostnamed"
-      "--enable-networkd"
-      "--disable-sysusers"
-      "--enable-timedated"
-      "--enable-timesyncd"
-      "--disable-firstboot"
-      "--enable-localed"
-      "--enable-resolved"
-      "--disable-split-usr"
-      "--disable-libcurl"
-      "--disable-libidn"
-      "--disable-quotacheck"
-      "--disable-ldconfig"
-      "--disable-smack"
+    nativeBuildInputs =
+      [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+        ninja meson
+        coreutils # meson calls date, stat etc.
+        pythonLxmlEnv glibcLocales
+        patchelf
+      ];
+    buildInputs =
+      [ linuxHeaders libcap kmod xz pam acl
+        /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror libidn2
+        libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
+        iptables gnu-efi
+      ];
 
-      (if stdenv.isArm then "--disable-gnuefi" else "--enable-gnuefi")
-      "--with-efi-libdir=${gnu-efi}/lib"
-      "--with-efi-includedir=${gnu-efi}/include"
-      "--with-efi-ldsdir=${gnu-efi}/lib"
+    #dontAddPrefix = true;
 
-      "--with-sysvinit-path="
-      "--with-sysvrcnd-path="
-      "--with-rc-local-script-path-stop=/etc/halt.local"
-    ];
+    mesonFlags = [
+      "-Dloadkeys-path=${kbd}/bin/loadkeys"
+      "-Dsetfont-path=${kbd}/bin/setfont"
+      "-Dtty-gid=3" # tty in NixOS has gid 3
+      # "-Dtests=" # TODO
+      "-Dlz4=true"
+      "-Dhostnamed=true"
+      "-Dnetworkd=true"
+      "-Dsysusers=false"
+      "-Dtimedated=true"
+      "-Dtimesyncd=true"
+      "-Dfirstboot=false"
+      "-Dlocaled=true"
+      "-Dresolve=true"
+      "-Dsplit-usr=false"
+      "-Dlibcurl=false"
+      "-Dlibidn=false"
+      "-Dlibidn2=true"
+      "-Dquotacheck=false"
+      "-Dldconfig=false"
+      "-Dsmack=true"
+      "-Dsystem-uid-max=499" #TODO: debug why awking around in /etc/login.defs doesn't work
+      "-Dsystem-gid-max=499"
+  #    "-Dtime-epoch=1"
 
-  hardeningDisable = [ "stackprotector" ];
+      (if stdenv.isArm then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+      "-Defi-libdir=${gnu-efi}/lib"
+      "-Defi-includedir=${gnu-efi}/include/efi"
+      "-Defi-ldsdir=${gnu-efi}/lib"
 
-  patches = [
-    # TODO: Remove this patch when we have a systemd version
-    # with https://github.com/systemd/systemd/pull/6678
-    (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/58a78ae77063eddfcd23ea272bd2e0ddc9ea3ff7.patch";
-        sha256 = "0g3pvqigs69mciw6lj3zg12dmxnhwxndwxdjg78af52xrp0djfg8";
-    })
-  ];
+      "-Dsysvinit-path="
+      "-Dsysvrcnd-path="
+      ];
 
-  preConfigure =
-    ''
-      unset RANLIB
+    preConfigure =
+      ''
+        mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+        mesonFlagsArray+=(-Ddbuspolicydir=$out/etc/dbus-1/system.d)
+        mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
+        mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
+        mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
+        mesonFlagsArray+=(-Dsysconfdir=$out/etc)
+        mesonFlagsArray+=(-Drootprefix=$out)
+        mesonFlagsArray+=(-Dlibdir=$lib/lib)
+        mesonFlagsArray+=(-Drootlibdir=$lib/lib)
+        mesonFlagsArray+=(-Dmandir=$man/lib)
+        mesonFlagsArray+=(-Dincludedir=$dev/include)
+        mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
+        mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
 
-      ./autogen.sh
+        # FIXME: Why aren't includedir and libdir picked up from mesonFlags while other options are?
+        substituteInPlace meson.build \
+          --replace "includedir = join_paths(prefixdir, get_option('includedir'))" \
+                    "includedir = '$dev/include'" \
+          --replace "libdir = join_paths(prefixdir, get_option('libdir'))" \
+                    "libdir = '$lib/lib'"
 
-      # FIXME: patch this in systemd properly (and send upstream).
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
-        test -e $i
-        substituteInPlace $i \
-          --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
-          --replace /bin/mount ${utillinux.bin}/bin/mount \
-          --replace /bin/umount ${utillinux.bin}/bin/umount \
-          --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
-          --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
-          --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
-          --replace /bin/echo ${coreutils}/bin/echo \
-          --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
-          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
-          --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
-      done
+        export LC_ALL="en_US.UTF-8";
+        # FIXME: patch this in systemd properly (and send upstream).
+        # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
+        for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
+          test -e $i
+          substituteInPlace $i \
+            --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
+            --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
+            --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
+            --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
+            --replace /bin/echo ${coreutils}/bin/echo \
+            --replace /bin/cat ${coreutils}/bin/cat \
+            --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
+            --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
+            --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
+        done
 
-      substituteInPlace src/journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+        for i in tools/xml_helper.py tools/make-directive-index.py tools/make-man-index.py test/sys-script.py; do
+          substituteInPlace $i \
+            --replace "#!/usr/bin/env python" "#!${pythonLxmlEnv}/bin/python"
+        done
 
-      configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+        for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
+          substituteInPlace $i \
+            --replace "#!/usr/bin/env python" "#!${python3Packages.python}/bin/python"
+        done
+
+        substituteInPlace src/journal/catalog.c \
+          --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+      '';
+
+    # These defines are overridden by CFLAGS and would trigger annoying
+    # warning messages
+    postConfigure = ''
+      substituteInPlace config.h \
+        --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
+        --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+        --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
     '';
 
-  PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
+    hardeningDisable = [ "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
-      "-fno-stack-protector"
+    NIX_CFLAGS_COMPILE =
+      [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+        # lead to a cyclic dependency.
+        "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+        # Set the release_agent on /sys/fs/cgroup/systemd to the
+        # currently running systemd (/run/current-system/systemd) so
+        # that we don't use an obsolete/garbage-collected release agent.
+        "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+        "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+      ];
 
-  installFlags =
-    [ "localstatedir=$(TMPDIR)/var"
-      "sysconfdir=$(out)/etc"
-      "sysvinitdir=$(TMPDIR)/etc/init.d"
-      "pamconfdir=$(out)/etc/pam.d"
-    ];
+    postInstall =
+      ''
+        # sysinit.target: Don't depend on
+        # systemd-tmpfiles-setup.service. This interferes with NixOps's
+        # send-keys feature (since sshd.service depends indirectly on
+        # sysinit.target).
+        mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
 
-  postInstall =
-    ''
-      # sysinit.target: Don't depend on
-      # systemd-tmpfiles-setup.service. This interferes with NixOps's
-      # send-keys feature (since sshd.service depends indirectly on
-      # sysinit.target).
-      mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
+        mkdir -p $out/example/systemd
+        mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+        mv $out/lib/systemd/{system,user} $out/example/systemd
 
-      mkdir -p $out/example/systemd
-      mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
-      mv $out/lib/systemd/{system,user} $out/example/systemd
+        rm -rf $out/etc/systemd/system
 
-      rm -rf $out/etc/systemd/system
+        # Install SysV compatibility commands.
+        mkdir -p $out/sbin
+        ln -s $out/lib/systemd/systemd $out/sbin/telinit
+        for i in init halt poweroff runlevel reboot shutdown; do
+          ln -s $out/bin/systemctl $out/sbin/$i
+        done
 
-      # Install SysV compatibility commands.
-      mkdir -p $out/sbin
-      ln -s $out/lib/systemd/systemd $out/sbin/telinit
-      for i in init halt poweroff runlevel reboot shutdown; do
-        ln -s $out/bin/systemctl $out/sbin/$i
+        # Fix reference to /bin/false in the D-Bus services.
+        for i in $out/share/dbus-1/system-services/*.service; do
+          substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+        done
+
+        rm -rf $out/etc/rpm
+
+        # "kernel-install" shouldn't be used on NixOS.
+        find $out -name "*kernel-install*" -exec rm {} \;
+
+        # Keep only libudev and libsystemd in the lib output.
+        mkdir -p $out/lib
+        mv $lib/lib/security $lib/lib/libnss* $out/lib/
+      ''; # */
+
+    enableParallelBuilding = true;
+
+    # The rpath to the shared systemd library is not added by meson. The
+    # functionality was removed by a nixpkgs patch because it would overwrite
+    # the existing rpath.
+    postFixup = ''
+      sharedLib=libsystemd-shared-${version}.so
+      for prog in `find $out -type f -executable`; do
+        (patchelf --print-needed $prog | grep $sharedLib > /dev/null) && (
+          patchelf --set-rpath `patchelf --print-rpath $prog`:"$out/lib/systemd" $prog
+        ) || true
       done
+    '';
 
-      # Fix reference to /bin/false in the D-Bus services.
-      for i in $out/share/dbus-1/system-services/*.service; do
-        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
-      done
+    # The interface version prevents NixOS from switching to an
+    # incompatible systemd at runtime.  (Switching across reboots is
+    # fine, of course.)  It should be increased whenever systemd changes
+    # in a backwards-incompatible way.  If the interface version of two
+    # systemd builds is the same, then we can switch between them at
+    # runtime; otherwise we can't and we need to reboot.
+    passthru.interfaceVersion = 2;
 
-      rm -rf $out/etc/rpm
-
-      rm $lib/lib/*.la
-
-      # "kernel-install" shouldn't be used on NixOS.
-      find $out -name "*kernel-install*" -exec rm {} \;
-
-      # Keep only libudev and libsystemd in the lib output.
-      mkdir -p $out/lib
-      mv $lib/lib/security $lib/lib/libnss* $out/lib/
-    ''; # */
-
-  enableParallelBuilding = true;
-
-  # The interface version prevents NixOS from switching to an
-  # incompatible systemd at runtime.  (Switching across reboots is
-  # fine, of course.)  It should be increased whenever systemd changes
-  # in a backwards-incompatible way.  If the interface version of two
-  # systemd builds is the same, then we can switch between them at
-  # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
-
-  meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
-    description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-  };
+    meta = {
+      homepage = http://www.freedesktop.org/wiki/Software/systemd;
+      description = "A system and service manager for Linux";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.eelco ];
+    };
 }
