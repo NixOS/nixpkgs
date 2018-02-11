@@ -4,9 +4,14 @@
 , utillinux
 , writeTextFile, ubootTools
 , callPackage
+, overrideCC, gcc7
 }:
 
 { stdenv, buildPackages, perl, buildLinux
+
+, # Allow really overriding even our gcc7 default.
+  # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
+  stdenvNoOverride ? overrideCC stdenv gcc7
 
 , # The kernel source tarball.
   src
@@ -32,11 +37,13 @@
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
 , ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
-                       hostPlatform != stdenv.buildPlatform
+                       hostPlatform != stdenvNoOverride.buildPlatform
 , extraMeta ? {}
 , hostPlatform
 , ...
 } @ args:
+
+let stdenv = stdenvNoOverride; in # finish the rename
 
 assert stdenv.isLinux;
 
