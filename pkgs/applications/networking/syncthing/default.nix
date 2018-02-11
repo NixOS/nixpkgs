@@ -14,14 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ go removeReferencesTo ];
 
   buildPhase = ''
-    mkdir -p src/github.com/syncthing
-    ln -s $(pwd) src/github.com/syncthing/syncthing
-    export GOPATH=$(pwd)
-
-    # Syncthing's build.go script expects this working directory
-    cd src/github.com/syncthing/syncthing
-
-    go run build.go -no-upgrade -version v${version} build
+    # Syncthing expects that it is checked out in $GOPATH, if that variable is
+    # set.  Since this isn't true when we're fetching source, we can explicitly
+    # unset it and force Syncthing to set up a temporary one for us.
+    env GOPATH= go run build.go -no-upgrade -version v${version} build
   '';
 
   installPhase = ''
