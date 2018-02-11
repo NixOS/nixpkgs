@@ -1396,6 +1396,8 @@ with pkgs;
 
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
+  bfs = callPackage ../tools/system/bfs { };
+
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber {

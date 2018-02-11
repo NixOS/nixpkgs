@@ -763,6 +763,7 @@
   y0no = "Yoann Ono <y0no@y0no.fr>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yegortimoshenko = "Yegor Timoshenko <yegortimoshenko@gmail.com>";
+  yesbox = "Jesper Geertsen Jonsson <jesper.geertsen.jonsson@gmail.com>";
   ylwghst = "Burim Augustin Berisa <ylwghst@onionmail.info>";
   yochai = "Yochai <yochai@titat.info>";
   yorickvp = "Yorick van Pelt <yorickvanpelt@gmail.com>";
