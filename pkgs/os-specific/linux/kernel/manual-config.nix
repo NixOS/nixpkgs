@@ -236,7 +236,7 @@ let
           "The Linux kernel" +
           (if kernelPatches == [] then "" else
             " (with patches: "
-            + stdenv.lib.concatStrings (stdenv.lib.intersperse ", " (map (x: x.name) kernelPatches))
+            + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
         license = stdenv.lib.licenses.gpl2;
         homepage = https://www.kernel.org/;

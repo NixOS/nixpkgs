@@ -241,6 +241,8 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  habanero = callPackage ../development/python-modules/habanero { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
@@ -327,6 +329,8 @@ in {
     inherit (self) pyqt4;
     callPackage = pkgs.callPackage;
   };
+
+  pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
@@ -597,6 +601,8 @@ in {
   argcomplete = callPackage ../development/python-modules/argcomplete { };
 
   area53 = callPackage ../development/python-modules/area53 { };
+
+  arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   chai = callPackage ../development/python-modules/chai { };
 
@@ -3636,7 +3642,7 @@ in {
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
       psutil botocore zict lz4 sortedcollections sortedcontainers
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
@@ -5809,6 +5815,8 @@ in {
   pants = pkgs.pants;
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
+
+  papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
   pathspec = callPackage ../development/python-modules/pathspec { };
 
@@ -9785,32 +9793,7 @@ in {
 
   py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
 
-  python_magic = buildPythonPackage rec {
-    name = "python-magic-0.4.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-magic/${name}.tar.gz";
-      sha256 = "1hx2sjd4fdswswj3yydn2azxb59rjmi9b7jzh94lf1wnxijjizbr";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.file ];
-
-    patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
-    '';
-
-    doCheck = false;
-
-    # TODO: tests are failing
-    #checkPhase = ''
-    #  ${python}/bin/${python.executable} ./test.py
-    #'';
-
-    meta = {
-      description = "A python interface to the libmagic file type identification library";
-      homepage = https://github.com/ahupp/python-magic;
-    };
-  };
+  python_magic = callPackage ../development/python-modules/python-magic { };
 
   magic = buildPythonPackage rec {
     name = "${pkgs.file.name}";
@@ -10568,21 +10551,13 @@ in {
     };
   };
 
-  msgpack = buildPythonPackage rec {
-    name = "msgpack-python-${version}";
-    version = "0.4.7";
+  msgpack = callPackage ../development/python-modules/msgpack {};
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/msgpack-python/${name}.tar.gz";
-      sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
-    };
-
-    checkPhase = ''
-      py.test
+  msgpack-python = self.msgpack.overridePythonAttrs {
+    pname = "msgpack-python";
+    postPatch = ''
+      substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
     '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ ];
   };
 
   msrplib = buildPythonPackage rec {
@@ -14403,6 +14378,8 @@ in {
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
+
+  pylibgen = callPackage ../development/python-modules/pylibgen { };
 
   pyliblo = buildPythonPackage rec {
     name = "pyliblo-${version}";
@@ -20436,36 +20413,7 @@ EOF
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  neovim = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "neovim-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "1ywkgbrxd95cwlglihydmffcw2d2aji6562aqncymxs3ld5y02yn";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    # Tests require pkgs.neovim,
-    # which we cannot add because of circular dependency.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ msgpack ]
-      ++ optional (!isPyPy) greenlet
-      ++ optional (pythonOlder "3.4") trollius;
-
-    meta = {
-      description = "Python client for Neovim";
-      homepage = "https://github.com/neovim/python-client";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  neovim = callPackage ../development/python-modules/neovim {};
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
@@ -21572,6 +21520,8 @@ EOF
       sha256 = "1495l2ml8mg120wfvqhikqkfczhwwaby40vdmsz8v2l69jps01fl";
     };
   };
+
+  python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 
   irc = buildPythonPackage rec {
     name = "irc-${version}";

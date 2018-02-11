@@ -63,8 +63,8 @@ in with py.pkgs; buildPythonApplication rec {
   propagatedBuildInputs = [
     # From setup.py
     requests pyyaml pytz pip jinja2 voluptuous typing aiohttp yarl async-timeout chardet astral certifi
-    # From the components that are part of the default configuration.yaml
-    sqlalchemy aiohttp-cors hass-frontend user-agents distro mutagen xmltodict netdisco
+    # From http, frontend and recorder components
+    sqlalchemy aiohttp-cors hass-frontend user-agents
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [

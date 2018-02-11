@@ -607,7 +607,7 @@ self: super: {
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_24_0; };
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_25_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -1000,4 +1000,21 @@ self: super: {
     '';
   });
 
+  # Add a flag to enable building against GHC with D4388 applied (the
+  # deterministic profiling symbols patch). The flag is disabled by
+  # default, so we can apply this patch globally.
+  #
+  # https://github.com/ucsd-progsys/liquidhaskell/pull/1233
+  liquidhaskell =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/ucsd-progsys/liquidhaskell/commit/1aeef1871760b2be46cc1cabd51311997d1d0bc0.patch;
+            sha256 = "0i55n6p3x9as648as0lvxy2alqb1n7c10xv9gp15cvq7zx6c8ydg";
+          };
+    in appendPatch super.liquidhaskell patch;
+
+  # https://github.com/nick8325/twee/pull/1
+  twee-lib = dontHaddock super.twee-lib;
+
+  # Needs older hlint
+  hpio = dontCheck super.hpio;
 }

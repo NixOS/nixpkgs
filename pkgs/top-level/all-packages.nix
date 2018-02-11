@@ -813,7 +813,7 @@ with pkgs;
 
   borgbackup = callPackage ../tools/backup/borg { };
 
-  boomerang = callPackage ../development/tools/boomerang { };
+  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
 
@@ -1102,6 +1102,8 @@ with pkgs;
   ent = callPackage ../tools/misc/ent { };
 
   envconsul = callPackage ../tools/system/envconsul { };
+
+  eschalot = callPackage ../tools/security/eschalot { };
 
   esptool = callPackage ../tools/misc/esptool { };
 
@@ -2863,6 +2865,8 @@ with pkgs;
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
+
+  infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
 
   innoextract = callPackage ../tools/archivers/innoextract { };
 
@@ -4710,8 +4714,6 @@ with pkgs;
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  squashfuse = callPackage ../tools/filesystems/squashfuse { };
-
   srcml = callPackage ../applications/version-management/srcml { };
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
@@ -4812,6 +4814,8 @@ with pkgs;
   stricat = callPackage ../tools/security/stricat { };
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
+
+  otter-browser = qt5.callPackage ../applications/networking/browsers/otter {};
 
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
@@ -6721,6 +6725,8 @@ with pkgs;
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
+  duktape = callPackage ../development/interpreters/duktape { };
+
   beam = callPackage ./beam-packages.nix { };
 
   inherit (beam.interpreters)
@@ -6876,6 +6882,8 @@ with pkgs;
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
+
+  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524 perl526;
 
@@ -7444,6 +7452,8 @@ with pkgs;
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
+
+  librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
   libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
@@ -11133,6 +11143,8 @@ with pkgs;
 
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
 
+  spice-up = callPackage ../applications/office/spice-up { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srm = callPackage ../tools/security/srm { };
@@ -12470,6 +12482,8 @@ with pkgs;
   slurm-full = appendToName "full" (callPackage ../servers/computing/slurm { });
   slurm-llnl-full = slurm-full; # renamed July 2017
 
+  slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
+
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
@@ -12891,16 +12905,12 @@ with pkgs;
       ];
   };
 
-  linux_hardened_copperhead = callPackage ../os-specific/linux/kernel/linux-hardened-copperhead.nix {
+  linux_copperhead = callPackage ../os-specific/linux/kernel/linux-copperhead-hardened.nix {
     kernelPatches = with kernelPatches; [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
       kernelPatches.tag_hardened
     ];
-    extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
-      inherit stdenv;
-      inherit (linux_hardened_copperhead) version;
-    };
   };
 
   # linux mptcp is based on the 4.4 kernel
@@ -13010,10 +13020,6 @@ with pkgs;
   linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.p9_fixes
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -13033,8 +13039,6 @@ with pkgs;
         kernelPatches.modinst_arg_list_too_long
     ];
   };
-
-  linux_samus_latest = linux_samus_4_12;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -13187,7 +13191,6 @@ with pkgs;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_beagleboard = linuxPackagesFor pkgs.linux_beagleboard;
-  linuxPackages_hardened_copperhead = linuxPackagesFor pkgs.linux_hardened_copperhead;
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
@@ -13210,22 +13213,36 @@ with pkgs;
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
 
   # Build a kernel for Xen dom0
+  linuxPackages_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   # Hardened linux
-  linux_hardened = let linux = pkgs.linuxPackages_latest.kernel; in linux.override {
+  hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
-      inherit (linux) version;
+      inherit (kernel) version;
     };
-  };
+  });
 
-  linuxPackages_hardened =
-    recurseIntoAttrs (linuxPackagesFor linux_hardened);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linux_hardened = linuxPackages_hardened.kernel;
+
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linux_latest_hardened = linuxPackages_latest_hardened.kernel;
+
+  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+
+  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+
+  linuxPackages_copperhead_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead);
+  linux_copperhead_hardened = linuxPackages_copperhead_hardened.kernel;
+  linux_hardened_copperhead = linux_copperhead_hardened; # alias for backward compatibility
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
-  linuxPackages_samus_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_latest);
+  linuxPackages_samus_latest = linuxPackages_samus_4_12;
+  linux_samus_latest = linuxPackages_samus_latest.kernel;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
@@ -13325,6 +13342,8 @@ with pkgs;
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
+
+  go-symbols = callPackage ../development/tools/go-symbols { };
 
   gocode = callPackage ../development/tools/gocode { };
 
@@ -13985,6 +14004,8 @@ with pkgs;
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme { };
+
+  papis = python3Packages.callPackage ../tools/misc/papis { };
 
   pecita = callPackage ../data/fonts/pecita {};
 
@@ -16816,6 +16837,8 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/misc/qmapshack { };
 
+  qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
+
   qmetro = callPackage ../applications/misc/qmetro { };
 
   qmidinet = callPackage ../applications/audio/qmidinet { };
@@ -17306,10 +17329,6 @@ with pkgs;
   syncplay = callPackage ../applications/networking/syncplay { };
 
   syncthing = callPackage ../applications/networking/syncthing { };
-
-  syncthing012 = callPackage ../applications/networking/syncthing012 { };
-
-  syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
@@ -18620,6 +18639,7 @@ with pkgs;
   quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
 
   quakespasm = callPackage ../games/quakespasm { };
+  vkquake = callPackage ../games/quakespasm/vulkan.nix { };
 
   ioquake3 = callPackage ../games/quake3/ioquake { };
 
@@ -19106,7 +19126,14 @@ with pkgs;
 
   plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
 
+  raxml = callPackage ../applications/science/biology/raxml { };
+
+  raxml-mpi = appendToName "mpi" (raxml.override {
+    mpi = true;
+  });
+
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+  samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix { };
 
   snpeff = callPackage ../applications/science/biology/snpeff/default.nix { };
 
@@ -19898,6 +19925,8 @@ with pkgs;
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
 
+  nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
+
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
@@ -20133,6 +20162,8 @@ with pkgs;
   terraform-full = terraform_0_11-full;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
+
+  terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
