@@ -1,8 +1,8 @@
 { lib }:
 let
   inherit (lib) lists;
-  parse = import ./parse.nix { inherit lib; };
-  inherit (import ./inspect.nix { inherit lib; }) predicates;
+  inherit (lib.systems) parse;
+  inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
   all = [

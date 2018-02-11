@@ -3,12 +3,14 @@
 , libwebp, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.26";
+  name = "gegl-0.3.28";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
-    sha256 = "1a9zbi6ws0r0sqynvg2fh3ad0ipnphg7w62y7whlcrbpqi29izvf";
+    sha256 = "1zr3gmmzjhp2d3d3h51x80r5q7gs9rv67ywx69sif6as99h8fbqm";
   };
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   hardeningDisable = [ "format" ];
 
@@ -28,11 +30,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore, fetchpatch,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
@@ -29,7 +29,14 @@ mkDerivation {
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series)
+    ++ [(fetchpatch {
+        name = "cmake-3.10.diff";
+        # included upstream for kwin >= 5.11.95
+        url = "https://github.com/KDE/kwin/commit/cd544890ced4192.diff";
+        sha256 = "0z5nbcg712v10mskb7r9v0jcx5h8q4ixb7fjbb0kicmzsc266yd5";
+    })]
+    ;
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

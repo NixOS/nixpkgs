@@ -1,18 +1,18 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi }:
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.38";
+  version = "0.1.39";
 
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "15b09ppn5sn3vpnwfb7gygrvn5v65k3zvahkfx2kqpk1xah0mqbf";
+  # PyPI tarball does not include tests/ directory
+  src = fetchFromGitHub {
+    owner = "danielperna84";
+    repo = pname;
+    rev = version;
+    sha256 = "1g181x2mrhxcaswr6vi2m7if97wv4rf2g2pny60334sciga8njfz";
   };
-
-  # Tests reuire network access
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python 3 Interface to interact with Homematic devices";

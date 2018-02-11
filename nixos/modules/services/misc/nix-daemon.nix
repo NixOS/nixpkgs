@@ -8,7 +8,7 @@ let
 
   nix = cfg.package.out;
 
-  isNix112 = versionAtLeast (getVersion nix) "1.12pre";
+  isNix20 = versionAtLeast (getVersion nix) "2.0pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -26,32 +26,40 @@ let
 
   nixConf =
     let
-      # If we're using sandbox for builds, then provide /bin/sh in
-      # the sandbox as a bind-mount to bash. This means we also need to
-      # include the entire closure of bash.
+      # In Nix < 2.0, If we're using sandbox for builds, then provide
+      # /bin/sh in the sandbox as a bind-mount to bash. This means we
+      # also need to include the entire closure of bash. Nix >= 2.0
+      # provides a /bin/sh by default.
       sh = pkgs.stdenv.shell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" {extraOptions = cfg.extraOptions; } ''
-        extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
+      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; inherit binshDeps; } ''
+        ${optionalString (!isNix20) ''
+          extraPaths=$(for i in $(cat binshDeps); do if test -d $i; then echo $i; fi; done)
+        ''}
         cat > $out <<END
         # WARNING: this file is generated from the nix.* options in
         # your NixOS configuration, typically
         # /etc/nixos/configuration.nix.  Do not edit it!
         build-users-group = nixbld
-        build-max-jobs = ${toString (cfg.maxJobs)}
-        build-cores = ${toString (cfg.buildCores)}
-        build-use-sandbox = ${if (builtins.isBool cfg.useSandbox) then boolToString cfg.useSandbox else cfg.useSandbox}
-        build-sandbox-paths = ${toString cfg.sandboxPaths} /bin/sh=${sh} $(echo $extraPaths)
-        binary-caches = ${toString cfg.binaryCaches}
-        trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
-        binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        ${if isNix20 then "max-jobs" else "build-max-jobs"} = ${toString (cfg.maxJobs)}
+        ${if isNix20 then "cores" else "build-cores"} = ${toString (cfg.buildCores)}
+        ${if isNix20 then "sandbox" else "build-use-sandbox"} = ${if (builtins.isBool cfg.useSandbox) then boolToString cfg.useSandbox else cfg.useSandbox}
+        ${if isNix20 then "extra-sandbox-paths" else "build-sandbox-paths"} = ${toString cfg.sandboxPaths} ${optionalString (!isNix20) "/bin/sh=${sh} $(echo $extraPaths)"}
+        ${if isNix20 then "substituters" else "binary-caches"} = ${toString cfg.binaryCaches}
+        ${if isNix20 then "trusted-substituters" else "trusted-binary-caches"} = ${toString cfg.trustedBinaryCaches}
+        ${if isNix20 then "trusted-public-keys" else "binary-cache-public-keys"} = ${toString cfg.binaryCachePublicKeys}
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        ${optionalString cfg.requireSignedBinaryCaches ''
-          signed-binary-caches = *
+        ${if isNix20 then ''
+          require-sigs = ${if cfg.requireSignedBinaryCaches then "true" else "false"}
+        '' else ''
+          signed-binary-caches = ${if cfg.requireSignedBinaryCaches then "*" else ""}
         ''}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
+        ${optionalString (isNix20 && !cfg.distributedBuilds) ''
+          builders =
+        ''}
         $extraOptions
         END
       '';
@@ -377,8 +385,9 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.openssl.bin pkgs.utillinux config.programs.ssh.package ]
-          ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
+      { path = [ nix pkgs.utillinux ]
+          ++ optionals cfg.distributedBuilds [ config.programs.ssh.package pkgs.gzip ]
+          ++ optionals (!isNix20) [ pkgs.openssl.bin ];
 
         environment = cfg.envVars
           // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
@@ -396,10 +405,9 @@ in
       };
 
     nix.envVars =
-      { NIX_CONF_DIR = "/etc/nix";
-      }
+      optionalAttrs (!isNix20) {
+        NIX_CONF_DIR = "/etc/nix";
 
-      // optionalAttrs (!isNix112) {
         # Enable the copy-from-other-stores substituter, which allows
         # builds to be sped up by copying build results from remote
         # Nix stores.  To do this, mount the remote file system on a
@@ -407,12 +415,8 @@ in
         NIX_OTHER_STORES = "/run/nix/remote-stores/*/nix";
       }
 
-      // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK =
-          if isNix112 then
-            "${nix}/libexec/nix/build-remote"
-          else
-            "${nix}/libexec/nix/build-remote.pl";
+      // optionalAttrs (cfg.distributedBuilds && !isNix20) {
+        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
       };
 
     # Set up the environment variables for running Nix.
@@ -420,7 +424,7 @@ in
       { NIX_PATH = concatStringsSep ":" cfg.nixPath;
       };
 
-    environment.extraInit =
+    environment.extraInit = optionalString (!isNix20)
       ''
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.

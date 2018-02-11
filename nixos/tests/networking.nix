@@ -433,6 +433,49 @@ let
           $client2->succeed("ip addr show dev vlan >&2");
         '';
     };
+    virtual = {
+      name = "Virtual";
+      machine = {
+        networking.interfaces."tap0" = {
+          ip4 = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          ip6 = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
+          virtual = true;
+        };
+        networking.interfaces."tun0" = {
+          ip4 = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          ip6 = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          virtual = true;
+        };
+      };
+
+      testScript = ''
+        my $targetList = <<'END';
+        tap0: tap UNKNOWN_FLAGS:800 user 0
+        tun0: tun UNKNOWN_FLAGS:800 user 0
+        END
+
+        # Wait for networking to come up
+        $machine->start;
+        $machine->waitForUnit("network.target");
+
+        # Test interfaces set up
+        my $list = $machine->succeed("ip tuntap list | sort");
+        "$list" eq "$targetList" or die(
+          "The list of virtual interfaces does not match the expected one:\n",
+          "Result:\n", "$list\n",
+          "Expected:\n", "$targetList\n"
+        );
+
+        # Test interfaces clean up
+        $machine->succeed("systemctl stop network-addresses-tap0");
+        $machine->succeed("systemctl stop network-addresses-tun0");
+        my $residue = $machine->succeed("ip tuntap list");
+        $residue eq "" or die(
+          "Some virtual interface has not been properly cleaned:\n",
+          "$residue\n"
+        );
+      '';
+    };
   };
 
 in mapAttrs (const (attrs: makeTest (attrs // {

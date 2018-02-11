@@ -281,6 +281,7 @@ self: super: {
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
   hath = dontCheck super.hath;
+  haxl = dontCheck super.haxl;                          # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
@@ -606,7 +607,7 @@ self: super: {
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_22_0; };
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_25_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -965,37 +966,55 @@ self: super: {
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
+
+  # Add a flag to enable building against GHC with D4388 applied (the
+  # deterministic profiling symbols patch). The flag is disabled by
+  # default, so we can apply this patch globally.
+  #
+  # https://github.com/ucsd-progsys/liquidhaskell/pull/1233
+  liquidhaskell =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/ucsd-progsys/liquidhaskell/commit/1aeef1871760b2be46cc1cabd51311997d1d0bc0.patch;
+            sha256 = "0i55n6p3x9as648as0lvxy2alqb1n7c10xv9gp15cvq7zx6c8ydg";
+          };
+    in appendPatch super.liquidhaskell patch;
+
+  # https://github.com/nick8325/twee/pull/1
+  twee-lib = dontHaddock super.twee-lib;
+
+  # Needs older hlint
+  hpio = dontCheck super.hpio;
 }

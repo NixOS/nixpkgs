@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "http://pkgs.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-agent-leaks.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
+      url = "http://src.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-agent-leaks.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
       sha256 = "1cxnhj0y30g7ldqq1y6zwsbdwcx7h97d3mpd3h5jy7dhg3h9ym91";
     })
     (fetchpatch {
-      url = "http://pkgs.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-polkitpermission-leak.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
+      url = "http://src.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-polkitpermission-leak.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
       sha256 = "1h1rkd4avqyyr8q6836zzr3w10jf521gcqnvhrhzwdpgp1ay4si7";
     })
     (fetchpatch {
-      url = "http://pkgs.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-itstool.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
+      url = "http://src.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-itstool.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
       sha256 = "0bxmjwp8ahy1y5g1l0kxmld0l3mlvb2l0i5n1qabia3d5iyjkyfh";
     })
   ];

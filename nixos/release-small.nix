@@ -2,7 +2,7 @@
 # small subset of Nixpkgs, mostly useful for servers that need fast
 # security updates.
 
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" ] # no i686-linux
 }:
@@ -41,6 +41,7 @@ in rec {
         nfs3
         openssh
         php-pcre
+        predictable-interface-names
         proxy
         simple;
       installer = {

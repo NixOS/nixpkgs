@@ -46,6 +46,18 @@ let
         '';
       };
 
+      googleAuthenticator = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, users with enabled Google Authenticator (created
+            <filename>~/.google_authenticator</filename>) will be required
+            to provide Google Authenticator token to log in.
+          '';
+        };
+      };
+
       usbAuth = mkOption {
         default = config.security.pam.usb.enable;
         type = types.bool;
@@ -284,7 +296,12 @@ let
           # prompts the user for password so we run it once with 'required' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount || cfg.enableKwallet || cfg.enableGnomeKeyring)) ''
+          (optionalString (cfg.unixAuth &&
+          (config.security.pam.enableEcryptfs
+            || cfg.pamMount
+            || cfg.enableKwallet
+            || cfg.enableGnomeKeyring
+            || cfg.googleAuthenticator.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -295,6 +312,8 @@ let
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
                 ("auth optional ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so")}
+              ${optionalString cfg.googleAuthenticator.enable
+                  "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}

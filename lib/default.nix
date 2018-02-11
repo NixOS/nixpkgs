@@ -51,12 +51,13 @@ let
 
     inherit (builtins) add addErrorContext attrNames
       concatLists deepSeq elem elemAt filter genericClosure genList
-      getAttr hasAttr head isAttrs isBool isFunction isInt isList
+      getAttr hasAttr head isAttrs isBool isInt isList
       isString length lessThan listToAttrs pathExists readFile
       replaceStrings seq stringLength sub substring tail;
     inherit (trivial) id const concat or and boolToString mergeAttrs
       flip mapNullable inNixShell min max importJSON warn info
-      nixpkgsVersion mod;
+      nixpkgsVersion mod compare splitByAndCompare
+      functionArgs setFunctionArgs isFunction;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -71,8 +72,8 @@ let
     inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
-      reverseList listDfs toposort sort take drop sublist last init
-      crossLists unique intersectLists subtractLists
+      reverseList listDfs toposort sort compareLists take drop sublist
+      last init crossLists unique intersectLists subtractLists
       mutuallyExclusive;
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep

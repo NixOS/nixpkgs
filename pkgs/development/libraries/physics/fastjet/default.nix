@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python2 ];
 
+  postPatch = ''
+    substituteInPlace plugins/SISCone/SISConeBasePlugin.cc \
+      --replace 'structure_of<UserScaleBase::StructureType>()' \
+                'structure_of<UserScaleBase>()'
+  '';
+
   configureFlags = [
     "--enable-allcxxplugins"
     "--enable-pyext"

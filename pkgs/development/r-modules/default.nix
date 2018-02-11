@@ -285,7 +285,7 @@ let
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
-    pbdZMQ = [ pkgs.which ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
@@ -393,6 +393,7 @@ let
     nat = [ pkgs.which ];
     nat_nblast = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
@@ -774,6 +775,14 @@ let
 
     Mposterior = old.Mposterior.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+    });
+
+    pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        for file in R/*.{r,r.in}; do
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+        done
+      '';
     });
 
     qtbase = old.qtbase.overrideDerivation (attrs: {

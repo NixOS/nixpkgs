@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "e2fsprogs-1.43.8";
@@ -10,14 +10,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libuuid ] ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
-
-  crossAttrs = {
-    preConfigure = ''
-      export CC=$crossConfig-gcc
-    '';
-  };
 
   configureFlags =
     if stdenv.isLinux then [

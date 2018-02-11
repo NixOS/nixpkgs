@@ -44,6 +44,6 @@ buildGoPackage {
     homepage = https://buildkite.com/docs/agent;
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

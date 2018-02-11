@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     patch -p1 < ${./data-dirs-from-nix-profiles.patch}
   '';
 
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   doCheck = true;
 

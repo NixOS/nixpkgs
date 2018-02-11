@@ -2,16 +2,14 @@
 
 with stdenv.lib;
 
-import ./generic.nix (args // rec {
-  version = "4.14.15";
-
-  # modDirVersion needs to be x.y.z, will automatically add .0 if needed
+buildLinux (args // rec {
+  version = "4.14.18";
 
   # branchVersion needs to be x.y
   extraMeta.branch = concatStrings (intersperse "." (take 2 (splitString "." version)));
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "0hk15qslkq15x53zkp70gnhdmjg5j9xigyykmig3g03gqsh97hzz";
+    sha256 = "0m73kz9jg6mylgql0zzypm76g6x7m3bq7dklivhkm4ldqg0r8sl6";
   };
 } // (args.argsOverride or {}))

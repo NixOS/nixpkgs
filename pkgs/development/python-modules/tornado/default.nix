@@ -6,6 +6,7 @@
 , backports_ssl_match_hostname
 , certifi
 , singledispatch
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,8 @@ buildPythonPackage rec {
   version = "4.5.3";
   name = "${pname}-${version}";
 
-  propagatedBuildInputs = [ backports_abc backports_ssl_match_hostname certifi singledispatch ];
+  propagatedBuildInputs = [ backports_abc  certifi singledispatch ]
+    ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname;
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634

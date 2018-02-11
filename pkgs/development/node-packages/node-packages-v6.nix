@@ -4135,6 +4135,15 @@ let
         sha1 = "4fa917c3e59c94a004cd61f8ee509da651687143";
       };
     };
+    "cli-color-0.1.7" = {
+      name = "cli-color";
+      packageName = "cli-color";
+      version = "0.1.7";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/cli-color/-/cli-color-0.1.7.tgz";
+        sha1 = "adc3200fa471cc211b0da7f566b71e98b9d67347";
+      };
+    };
     "cli-cursor-1.0.2" = {
       name = "cli-cursor";
       packageName = "cli-cursor";
@@ -6998,6 +7007,15 @@ let
         sha1 = "b5835739270cfe26acf632099fded2a07f209e5e";
       };
     };
+    "difflib-0.2.4" = {
+      name = "difflib";
+      packageName = "difflib";
+      version = "0.2.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/difflib/-/difflib-0.2.4.tgz";
+        sha1 = "b5e30361a6db023176d562892db85940a718f47e";
+      };
+    };
     "director-1.2.7" = {
       name = "director";
       packageName = "director";
@@ -7329,6 +7347,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/downgrade-root/-/downgrade-root-1.2.2.tgz";
         sha1 = "531319715b0e81ffcc22eb28478ba27643e12c6c";
+      };
+    };
+    "dreamopt-0.6.0" = {
+      name = "dreamopt";
+      packageName = "dreamopt";
+      version = "0.6.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/dreamopt/-/dreamopt-0.6.0.tgz";
+        sha1 = "d813ccdac8d39d8ad526775514a13dda664d6b4b";
       };
     };
     "dtrace-provider-0.6.0" = {
@@ -7888,6 +7915,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.38.tgz";
         sha512 = "0m7d1yd67hb93gsxv7790h9ayxg3pwf3vgih9v2kxqvsg073wim7jgwf3z57lksdczxnqv2d8gm4mfk4b29f6rc27a7c09vz9w348wc";
+      };
+    };
+    "es5-ext-0.8.2" = {
+      name = "es5-ext";
+      packageName = "es5-ext";
+      version = "0.8.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/es5-ext/-/es5-ext-0.8.2.tgz";
+        sha1 = "aba8d9e1943a895ac96837a62a39b3f55ecd94ab";
       };
     };
     "es5class-2.3.1" = {
@@ -11003,6 +11039,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/headless/-/headless-0.1.7.tgz";
         sha1 = "6e62fae668947f88184d5c156ede7c5695a7e9c8";
+      };
+    };
+    "heap-0.2.6" = {
+      name = "heap";
+      packageName = "heap";
+      version = "0.2.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/heap/-/heap-0.2.6.tgz";
+        sha1 = "087e1f10b046932fc8594dd9e6d378afc9d1e5ac";
       };
     };
     "help-me-1.1.0" = {
@@ -32647,6 +32692,30 @@ in
     meta = {
       description = "a 'json' command for massaging JSON on the command line";
       homepage = https://github.com/trentm/json;
+    };
+    production = true;
+    bypassCache = false;
+  };
+  json-diff = nodeEnv.buildNodePackage {
+    name = "json-diff";
+    packageName = "json-diff";
+    version = "0.5.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/json-diff/-/json-diff-0.5.2.tgz";
+      sha512 = "03nqzpjpb0422fm5k7prlfcyb7wbs7dq7arwzq0za8zq3jy4wvbjjsbm25vr8ar5y6y87k9y1iqyc018zfysh2b675ql3qx6jjimfip";
+    };
+    dependencies = [
+      sources."cli-color-0.1.7"
+      sources."difflib-0.2.4"
+      sources."dreamopt-0.6.0"
+      sources."es5-ext-0.8.2"
+      sources."heap-0.2.6"
+      sources."wordwrap-1.0.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "JSON diff";
+      homepage = https://github.com/andreyvit/json-diff;
     };
     production = true;
     bypassCache = false;
