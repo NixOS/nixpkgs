@@ -243,6 +243,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  i3ipc = callPackage ../development/python-modules/i3ipc { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
