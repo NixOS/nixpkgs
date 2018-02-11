@@ -10,10 +10,10 @@ let
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 in
   stdenv.mkDerivation (nodejs // rec {
-    version = "6.12.2";
+    version = "6.12.3";
     name = "${baseName}-${version}";
     src = fetchurl {
       url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz";
-      sha256 = "1z6sn4b973sxw0h9hd38rjq6cqdkzl5gsd48f793abvarwgpqrrk";
+      sha256 = "1p6w7ngp95lc3ksyklp1mwyq1f02vz62r1h60g1ri00pl8pnfn0s";
     };
   })
