@@ -715,6 +715,7 @@
   utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
   uwap = "uwap <me@uwap.name>";
+  va1entin = "Valentin Heidelberger <github@valentinsblog.com>";
   vaibhavsagar = "Vaibhav Sagar <vaibhavsagar@gmail.com>";
   valeriangalliat = "Valérian Galliat <val@codejam.info>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
