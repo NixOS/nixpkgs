@@ -7835,6 +7835,8 @@ with pkgs;
 
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
 
+  postman = callPackage ../development/web/postman {};
+
   pprof = callPackage ../development/tools/profiling/pprof { };
 
   pyprof2calltree = pythonPackages.callPackage ../development/tools/profiling/pyprof2calltree { };
