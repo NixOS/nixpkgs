@@ -66,15 +66,14 @@ let
   # and ".package"
   optionListLess = a: b:
     let
-      splt = lib.splitString ".";
       ise = lib.hasPrefix "enable";
       isp = lib.hasPrefix "package";
       cmp = lib.splitByAndCompare ise lib.compare
                                  (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp (splt a) (splt b) < 0;
+    in lib.compareLists cmp a.loc b.loc < 0;
 
   # Customly sort option list for the man page.
-  optionsList = lib.sort (a: b: optionListLess a.name b.name) optionsListDesc;
+  optionsList = lib.sort optionListLess optionsListDesc;
 
   # Convert the list of options into an XML file.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
