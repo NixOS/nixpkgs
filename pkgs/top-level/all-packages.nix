@@ -2035,6 +2035,10 @@ with pkgs;
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
+  uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
+    inherit (pythonPackages) sphinx;
+  };
+
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   ### DEVELOPMENT / EMSCRIPTEN
