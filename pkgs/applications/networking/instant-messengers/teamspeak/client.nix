@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
 
