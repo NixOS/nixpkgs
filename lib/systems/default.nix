@@ -26,7 +26,9 @@ rec {
       libc =
         /**/ if final.isDarwin then "libSystem"
         else if final.isMinGW  then "msvcrt"
-        else if final.isLinux  then "glibc"
+        else if final.isLinux && final.isGlibc then "glibc"
+        else if final.isLinux && final.isMusl  then "musl"
+        else if final.isLinux /* default */    then "glibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                        "native/impure";
       extensions = {
