@@ -79,6 +79,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''Beerware License'';
   };
 
+  bsd0 = spdx {
+    spdxId = "0BSD";
+    fullName = "BSD Zero Clause License";
+  };
+
   bsd2 = spdx {
     spdxId = "BSD-2-Clause";
     fullName = ''BSD 2-clause "Simplified" License'';
