@@ -282,6 +282,12 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
       if [ "$(ls -A target/lib)" ]; then
         mkdir -p $out/lib
         cp target/lib/* $out/lib #*/
+        for lib in $(ls target/lib); do
+          echo $lib | grep ${metadata}
+          if [[ "$?" -eq 0 ]]; then
+            ln -s $out/lib/$lib $out/lib/$(echo $lib | sed -e "s/-${metadata}//")
+          fi
+        done
       fi
       if [ "$(ls -A target/build)" ]; then # */
         mkdir -p $out/lib
