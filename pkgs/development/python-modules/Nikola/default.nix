@@ -6,7 +6,6 @@
 , glibcLocales
 , pytest
 , pytestcov
-, pytest-mock
 , mock
 , pygments
 , pillow
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   # other hand doesn't support Python 3.3). So, just disable Python 2.
   disabled = !isPy3k;
 
-  checkInputs = [ pytest pytestcov pytest-mock mock glibcLocales ];
+  checkInputs = [ pytest pytestcov mock glibcLocales ];
 
   propagatedBuildInputs = [
     pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
