@@ -491,7 +491,7 @@ in {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ garbas profpatsch ];
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -17837,7 +17837,7 @@ in {
     meta = {
       description = "Tree widgets for urwid";
       license = licenses.gpl3;
-      maintainers = with maintainers; [ profpatsch ];
+      maintainers = with maintainers; [ ];
     };
   };
 

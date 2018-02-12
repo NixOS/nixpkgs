@@ -224,7 +224,7 @@ in pythonPackages.buildPythonApplication rec {
     description = "Music tagger and library organizer";
     homepage = http://beets.radbox.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig domenkozar pjones profpatsch ];
+    maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;
   };
 }
