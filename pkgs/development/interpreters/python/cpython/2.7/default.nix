@@ -88,11 +88,6 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-
-    ] ++ [
-
-      # Don't use pass host PYTHONPATH to build python
-      #./cross-compile.patch
     ];
 
   preConfigure = ''
