@@ -18,7 +18,7 @@
       "mips64el-linux" = import ./bootstrap-files/loongson2f.nix;
     };
     "musl" = {
-      "x86_64-linux" = import ./bootstrap-files/musl64.nix;
+      "x86_64-linux" = import ./bootstrap-files/x86_64-musl.nix;
     };
   };
   archLookupTable = table.${localSystem.libc}
