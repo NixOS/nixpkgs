@@ -19,6 +19,6 @@ perlPackages.buildPerlPackage rec {
     description = "Perl extension for renaming multiple files";
     homepage = http://search.cpan.org/~rmbarker;
     license = licenses.artistic1;
-    maintainer = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }
