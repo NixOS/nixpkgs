@@ -23,7 +23,7 @@ in
 let pname = if set != null then "iosevka-${set}" else "iosevka"; in
 
 let
-  version = "1.13.3";
+  version = "1.14.0";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "be5invis";
