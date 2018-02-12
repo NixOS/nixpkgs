@@ -60,6 +60,8 @@ let
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
+    bitv = callPackage ../development/ocaml-modules/bitv { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
