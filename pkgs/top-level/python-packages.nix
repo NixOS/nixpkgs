@@ -3261,27 +3261,7 @@ in {
     };
   };
 
-  pytest-mock = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-mock";
-    version = "1.6.0";
-
-    buildInputs = with self; [ pytest setuptools_scm ];
-    propagatedBuildInputs = with self; [ mock ];
-
-    meta = {
-      description = "Thin-wrapper around the mock package for easier use with py.test.";
-      homepage    = "https://github.com/pytest-dev/pytest-mock";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "07qccww4bq9jxlc0fbhlspr13kcsixchsnl8vk4wdiyvsjy7r8c3";
-    };
-  };
+  pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
