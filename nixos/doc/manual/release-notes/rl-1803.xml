@@ -196,6 +196,12 @@ following incompatible changes:</para>
       </listitem>
     </itemizedlist>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>jid</literal> package has been removed, due to maintenance
+      overhead of a go package having non-versioned dependencies.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
