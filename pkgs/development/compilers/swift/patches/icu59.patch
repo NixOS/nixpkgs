@@ -99,3 +99,15 @@
    if (U_FAILURE(ErrorCode) && ErrorCode != U_BUFFER_OVERFLOW_ERROR) {
      swift::crash("u_strToLower: Unexpected error lowercasing unicode string.");
    }
+@@ -300,9 +300,9 @@
+ 
+ swift::__swift_stdlib_UBreakIterator *swift::__swift_stdlib_ubrk_open(
+     swift::__swift_stdlib_UBreakIteratorType type, const char *locale,
+-    const UChar *text, int32_t textLength, __swift_stdlib_UErrorCode *status) {
++    const __swift_stdlib_UChar * text, __swift_int32_t textLength, __swift_stdlib_UErrorCode *status) {
+   return ptr_cast<swift::__swift_stdlib_UBreakIterator>(
+-      ubrk_open(static_cast<UBreakIteratorType>(type), locale, text, textLength,
++      ubrk_open(static_cast<UBreakIteratorType>(type), locale, reinterpret_cast<const UChar *>(text), textLength,
+                 ptr_cast<UErrorCode>(status)));
+ }
+ 
