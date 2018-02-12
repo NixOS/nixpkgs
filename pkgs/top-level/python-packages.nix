@@ -19144,38 +19144,6 @@ EOF
     };
   };
 
-  screenkey = buildPythonPackage rec {
-    version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-    name = "screenkey-${version}";
-
-    propagatedBuildInputs = with self; [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace "/usr/share" "./share"
-
-      # disable the feature that binds a shortcut to turning on/off
-      # screenkey. This is because keybinder is not packages in Nix as
-      # of today.
-      substituteInPlace Screenkey/screenkey.py \
-        --replace "import keybinder" "" \
-        --replace "        keybinder.bind(self.options['hotkey'], self.hotkey_cb, show_item)" ""
-    '';
-
-    src = pkgs.fetchgit {
-        url = https://github.com/scs3jb/screenkey.git;
-        rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-        sha256 = "1535mpm5x6v85d4ghxhdiianhjrsz280dwvs61ss0yyjx4kivx3s";
-    };
-
-    meta = {
-      homepage = https://github.com/scs3jb/screenkey;
-      description = "A screencast tool to show your keys";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.linux;
-    };
-  };
-
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
