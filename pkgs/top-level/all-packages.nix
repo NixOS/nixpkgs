@@ -9336,7 +9336,9 @@ with pkgs;
 
   libchop = callPackage ../development/libraries/libchop { };
 
-  libclc = callPackage ../development/libraries/libclc { };
+  libclc = callPackage ../development/libraries/libclc {
+    inherit (llvmPackages_4) clang llvm;
+  };
 
   libcli = callPackage ../development/libraries/libcli { };
 
