@@ -33,6 +33,8 @@ rec {
     Windows      = { kernel = kernels.windows; };
     Cygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     MinGW        = { kernel = kernels.windows; abi = abis.gnu; };
+
+    Musl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
   };
 
   matchAnyAttrs = patterns:
