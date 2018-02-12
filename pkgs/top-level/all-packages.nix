@@ -18200,6 +18200,8 @@ with pkgs;
 
   inherit (gnome3) yelp;
 
+  yokadi = python3Packages.callPackage ../applications/misc/yokadi {};
+
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
   inherit (pythonPackages) youtube-dl;
