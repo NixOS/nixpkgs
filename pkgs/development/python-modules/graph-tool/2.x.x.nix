@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
 pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
-gobjectIntrospection, pygobject3, gtk3, matplotlib, ncurses }:
+gobjectIntrospection, pygobject3, gtk3, matplotlib, ncurses,
+buildPythonPackage }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
+  format = "other";
   version = "2.26";
   name = "${python.libPrefix}-graph-tool-${version}";
-
-  pythonModule = python;
 
   meta = with stdenv.lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
