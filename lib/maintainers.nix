@@ -47,6 +47,7 @@
   andir = "Andreas Rammhold <andreas@rammhold.de>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   andrestylianos = "Andre S. Ramos <andre.stylianos@gmail.com>";
+  andrew-d = "Andrew Dunham <andrew@du.nham.ca>";
   andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   andsild = "Anders Sildnes <andsild@gmail.com>";
   aneeshusa = "Aneesh Agrawal <aneeshusa@gmail.com>";

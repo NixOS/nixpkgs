@@ -3066,6 +3066,8 @@ with pkgs;
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
+  lego = callPackage ../tools/admin/lego { };
+
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
