@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.63";
+  version = "0.63.1";
   components = {
     "nuimo_controller" = ps: with ps; [  ];
     "bbb_gpio" = ps: with ps; [  ];
