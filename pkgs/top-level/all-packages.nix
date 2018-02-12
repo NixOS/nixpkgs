@@ -396,6 +396,8 @@ with pkgs;
     ffmpeg = ffmpeg_1;
   };
 
+  acpica-tools = callPackage ../tools/system/acpica-tools { };
+
   actdiag = pythonPackages.actdiag;
 
   actkbd = callPackage ../tools/system/actkbd { };
