@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, lib, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    PATH=${stdenv.shell}/bin:$PATH patchShebangs $out/sbin
+    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
   '';
 
   meta = with stdenv.lib; {
