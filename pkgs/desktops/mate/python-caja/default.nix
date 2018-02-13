@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, caja, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "python-caja-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.18.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "0n43cvvv29gq31hgrsf9al184cr87c3hzskrh2593rid52kwyz44";
   };
 
@@ -19,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    caja
+    mate.caja
     pythonPackages.python
     pythonPackages.pygobject3
   ];

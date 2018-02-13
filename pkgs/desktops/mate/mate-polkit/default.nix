@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gobjectIntrospection, libappindicator-gtk3, libindicator-gtk3, polkit }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gobjectIntrospection, libappindicator-gtk3, libindicator-gtk3, polkit, mate }:
 
 stdenv.mkDerivation rec {
   name = "mate-polkit-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.18.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "01mxl7wj1501d3clrwlwa54970vpkahp5968xpaxwfb2zbnqgjbd";
   };
 

@@ -2,12 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "pluma-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "3";
+  version = "1.18.3";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "1bz2jvjfz761hcvhcbkz8sc4xf0iyixh5w0k7bx69qkwwdc0gxi0";
   };
 

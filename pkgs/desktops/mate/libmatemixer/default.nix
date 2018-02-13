@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib
+{ stdenv, fetchurl, pkgconfig, intltool, glib, mate
 , alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
@@ -6,12 +6,10 @@
 
 stdenv.mkDerivation rec {
   name = "libmatemixer-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.18.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "09vyxnlnalws318gsafdfi5c6jwpp92pbafn1ddlqqds23ihk4mr";
   };
 

@@ -2,12 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "mate-power-manager-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.18.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "1sybc4j9bdnb2axmvpbbm85ixhdfa1k1yh769gns56ix0ryd9nr5";
   };
 
@@ -21,7 +19,6 @@ stdenv.mkDerivation rec {
      libnotify
      dbus_glib
      upower
-
      mate.mate-panel
   ];
 

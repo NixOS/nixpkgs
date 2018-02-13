@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libindicator-gtk3, mate-panel, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libindicator-gtk3, mate, hicolor_icon_theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-indicator-applet-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.18.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
     sha256 = "1h77f1gbz1a8l9xyq5fk75bs58mcwx6pbk6db33v0v1mwq6cidiv";
   };
 
@@ -20,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libindicator-gtk3
-    mate-panel
+    mate.mate-panel
     hicolor_icon_theme
   ];
 
