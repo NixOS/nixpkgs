@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl, fetchpatch, autoreconfHook264, bison, binutils-raw
+, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-raw
 , libiberty, zlib
 }:
 
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     cd bfd
   '';
+
+  postAutoreconf = ''
+    echo "Updating config.guess and config.sub from ${gnu-config}"
+    cp -f ${gnu-config}/config.{guess,sub} ../
+  '';
+
+  # We update these ourselves
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ autoreconfHook264 bison ];
   buildInputs = [ libiberty zlib ];
