@@ -8681,6 +8681,8 @@ with pkgs;
 
   getdata = callPackage ../development/libraries/getdata { };
 
+  getdns = callPackage ../development/libraries/getdns { };
+
   gettext = callPackage ../development/libraries/gettext { };
 
   gflags = callPackage ../development/libraries/gflags { };
