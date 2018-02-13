@@ -2,13 +2,17 @@
 
 {
   brotli = {
-    src = fetchFromGitHub {
-      owner = "google";
+    src = let gitsrc = pkgs.fetchFromGitHub {
+      owner = "eustas";
       repo = "ngx_brotli";
-      rev = "bfd2885b2da4d763fed18f49216bb935223cd34b";
-      sha256 = "04yx1n0wi3l2x37jd1ynl9951qxkn8xp42yv0mfp1qz9svips81n";
-      fetchSubmodules = true;
-    };
+      rev = "47550a25d07363f8eb87ef901b2de5883c46352b";
+      sha256 = "0ap1kf51hzb8yvvxjkcj9hnmsmmd5drcay64hd4n7vybf9dqw6g6";
+    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+      cp -a ${gitsrc} $out
+      substituteInPlace $out/config \
+        --replace /usr/local ${lib.getDev pkgs.brotli}
+    '';
+    inputs = [ pkgs.brotli ];
   };
 
   rtmp ={
