@@ -313,6 +313,7 @@ in rec {
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
+  tests.nginx-pagespeed = callTest tests/nginx-pagespeed.nix { };
   tests.nghttpx = callTest tests/nghttpx.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
