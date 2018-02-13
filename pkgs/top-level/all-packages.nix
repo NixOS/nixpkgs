@@ -6902,8 +6902,8 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php71;
-  phpPackages = php71Packages;
+  php = php72;
+  phpPackages = php72Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -6928,13 +6928,17 @@ with pkgs;
     php71
     php72;
 
-  php-embed = php71-embed;
+  php-embed = php72-embed;
 
   php71-embed = php71.override {
     config.php.embed = true;
     config.php.apxs2 = false;
   };
 
+  php72-embed = php72.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
 
   picoc = callPackage ../development/interpreters/picoc {};
 
