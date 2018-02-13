@@ -9762,7 +9762,7 @@ with pkgs;
   };
 
   # On non-GNU systems we need GNU Gettext for libintl.
-  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext;
 
   libid3tag = callPackage ../development/libraries/libid3tag {
     gperf = gperf_3_0;
