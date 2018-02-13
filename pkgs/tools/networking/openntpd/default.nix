@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1g6hi03ylhv47sbar3xxgsrar8schqfwn4glckh6m6lni67ndq85";
   };
 
+  prePatch = ''
+    sed -i '20i#include <sys/cdefs.h>' src/ntpd.h
+    sed -i '19i#include <sys/cdefs.h>' src/log.c
+  '';
+
   configureFlags = [
     "--with-privsep-path=${privsepPath}"
     "--with-privsep-user=${privsepUser}"
