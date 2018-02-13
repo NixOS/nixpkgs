@@ -73,7 +73,7 @@ let
             unpackdir rubySrc;
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-        NROFF = "${groff}/bin/nroff";
+        NROFF = if docSupport then "${groff}/bin/nroff" else null;
 
         nativeBuildInputs =
              ops useRailsExpress [ autoreconfHook bison ]
