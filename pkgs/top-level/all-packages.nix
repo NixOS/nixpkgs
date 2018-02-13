@@ -5544,6 +5544,8 @@ with pkgs;
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
+  zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
+
   zsh-git-prompt = callPackage ../shells/zsh-git-prompt { };
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
