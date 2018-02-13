@@ -16,13 +16,13 @@ with stdenv.lib.strings;
 
 let
 
-  version = "2.5.10";
+  version = "2.5.21";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = "v${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "0sjhy7axa2dj1977iz6zmqvz9qzalcfnrx2fqx3xmk9hly847d6z";
+    rev = "${version}";
+    sha256 = "1kfrcfhpzkpjxsrvgwmc2valgwfb4b7gfwwnlnjq6f6dp56yflpz";
     fetchSubmodules = true;
   };
 
