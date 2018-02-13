@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchgit, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
 
 let
   version = "0.4.19";
@@ -14,13 +14,15 @@ in
 stdenv.mkDerivation {
   name = "solc-${version}";
 
-  # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchgit {
-    url = "https://github.com/ethereum/solidity";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "solidity";
     inherit rev sha256;
   };
 
-  patchPhase = ''
+  patches = [ ./shared_install.patch ];
+
+  postPatch = ''
     echo >commit_hash.txt '${rev}'
     echo >prerelease.txt
     substituteInPlace cmake/jsoncpp.cmake \
@@ -30,11 +32,13 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DBoost_USE_STATIC_LIBS=OFF"
+    "-DBoost_USE_STATIC_LIBS=OFF -DTESTS=OFF -DBUILD_SHARED_LIBS=ON"
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost z3 ];
+
+  outputs = [ "out" "dev" ];
 
   meta = {
     description = "Compiler for Ethereum smart contract language Solidity";
