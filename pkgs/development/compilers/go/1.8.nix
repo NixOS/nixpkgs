@@ -25,19 +25,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.8.5";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1ab021l3v29ciaxp738cjpbkh1chlsl6928672q3i82anmdzn5m5";
+    sha256 = "06v83fb75079dy2dc1927sr9bwvcpkkzl9d4wcw10scj70vj4a0x";
   };
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
     ++ optionals stdenv.isLinux [ procps ];
-  buildInputs = [ pcre ]
+  buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
@@ -122,8 +122,6 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
   '';
 
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
            else if stdenv.system == "i686-linux" then "386"
@@ -135,6 +133,9 @@ stdenv.mkDerivation rec {
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+
+  # Hopefully avoids test timeouts on Hydra
+  GO_TEST_TIMEOUT_SCALE = 3;
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.

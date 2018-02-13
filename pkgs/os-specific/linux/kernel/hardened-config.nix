@@ -61,8 +61,8 @@ ${optionalString (versionAtLeast version "4.12") ''
 DEBUG_WX y # boot-time warning on RWX mappings
 
 # Stricter /dev/mem
-STRICT_DEVMEM y
-IO_STRICT_DEVMEM y
+STRICT_DEVMEM? y
+IO_STRICT_DEVMEM? y
 
 # Perform additional validation of commonly targeted structures.
 DEBUG_CREDENTIALS y

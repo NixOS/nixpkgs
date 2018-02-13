@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jgmenu-${version}";
-  version = "0.7.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = "jgmenu";
     rev = "v${version}";
-    sha256 = "13bmvg9kqjng8jqc3xiif587l05ygk5b3k9xn2lq8yxcwxi9p30v";
+    sha256 = "042nvix85a37aalc2rwg4yc2g3wyy6lym3c2ljj2xkl6c1b0c1r7";
   };
 
   nativeBuildInputs = [

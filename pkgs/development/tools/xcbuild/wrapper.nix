@@ -30,7 +30,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "xcbuild-wrapper";
+  name = "xcbuild-wrapper-${xcbuild.version}";
 
   buildInputs = [ xcbuild makeWrapper ];
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
   };
 
-  buildInputs = [ unzip bdftopcf mkfontdir mkfontscale ];
+  nativeBuildInputs = [ unzip bdftopcf mkfontdir mkfontscale ];
 
   dontBuild = true;
   patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";

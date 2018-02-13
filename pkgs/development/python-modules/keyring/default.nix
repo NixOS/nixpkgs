@@ -1,23 +1,23 @@
 { stdenv, buildPythonPackage, fetchPypi
 , secretstorage
 , fs, gdata, python_keyczar, pyasn1, pycrypto, six, setuptools_scm
-, mock, pytest_28, pytestrunner }:
+, mock, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "keyring";
-  version = "10.5.1";
+  version = "11.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f10674bb6ecbf82e2b713627c48ad0e84178e1c9d3dc1f0373261a0765402fb2";
+    sha256 = "b4607520a7c97be96be4ddc00f4b9dac65f47a45af4b4cd13ed5a8879641d646";
   };
 
   buildInputs = [
     fs gdata python_keyczar pyasn1 pycrypto six setuptools_scm
   ];
 
-  checkInputs = [ mock pytest_28 pytestrunner ];
+  checkInputs = [ mock pytest pytestrunner ];
 
   propagatedBuildInputs = [ secretstorage ];
 

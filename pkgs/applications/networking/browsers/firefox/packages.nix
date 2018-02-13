@@ -6,10 +6,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "57.0.4";
+    version = "58.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "58846037aebbf14b85e6b3a46dbe617c780c6916e437ea4ee32a2502a6b55e3689921a0be28b920dedf2f966195df04ac8e45411caeb2601a168ec08b4827cf0";
+      sha512 = "ff748780492fc66b3e44c7e7641f16206e4c09514224c62d37efac2c59877bdf428a3670bfb50407166d7b505d4e2ea020626fd776b87f6abb6bc5d2e54c773f";
     };
 
     patches =
@@ -32,10 +32,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.5.3esr";
+    version = "52.6.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7b9c87905c53bc681dc6475e05596449fed88850f9dc07c8223d0d3edd2dd9d8a0dd88ebae1cd59eced2165696df9370de5e85cc03cded58ec4d0f622634417f";
+      sha512 = "cf583df34272b7ff8841c3b093ca0819118f9c36d23c6f9b3135db298e84ca022934bcd189add6473922b199b47330c0ecf14c303ab4177c03dbf26e64476fa4";
     };
 
     patches =
@@ -99,26 +99,6 @@ rec {
 
 in rec {
 
-  tor-browser-6-5 = common (rec {
-    pname = "tor-browser";
-    version = "6.5.2";
-    isTorBrowserLike = true;
-    extraConfigureFlags = [ "--disable-loop" ];
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo = "tor-browser";
-      # branch "tor-browser-45.8.0esr-6.5-2-slnos"
-      rev = "e4140ea01b9906934f0347e95f860cec207ea824";
-      sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
-    };
-  } // commonAttrs) {
-    stdenv = overrideCC stdenv gcc5;
-    ffmpegSupport = false;
-    gssSupport = false;
-  };
-
   tor-browser-7-0 = common (rec {
     pname = "tor-browser";
     version = "7.0.1";
@@ -137,6 +117,24 @@ in rec {
       [ ./env_var_for_system_dir.patch ];
   } // commonAttrs) {};
 
-  tor-browser = tor-browser-7-0;
+  tor-browser-7-5 = common (rec {
+    pname = "tor-browser";
+    version = "7.5.2";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-52.6.2esr-7.5-2-slnos";
+      rev   = "cf1a504aaa26af962ae909a3811c0038db2d2eec";
+      sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
+    };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
+  } // commonAttrs) {};
+
+  tor-browser = tor-browser-7-5;
 
 })

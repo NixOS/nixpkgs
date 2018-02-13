@@ -47,6 +47,18 @@ in
             ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
           ''}
 
+          if [ -f "$HOME/.config/kdeglobals" ]
+          then
+              # Remove extraneous font style names.
+              # See also: https://phabricator.kde.org/D9070
+              ${getBin pkgs.gnused}/bin/sed -i "$HOME/.config/kdeglobals" \
+                  -e '/^fixed=/ s/,Regular$//' \
+                  -e '/^font=/ s/,Regular$//' \
+                  -e '/^menuFont=/ s/,Regular$//' \
+                  -e '/^smallestReadableFont=/ s/,Regular$//' \
+                  -e '/^toolBarFont=/ s/,Regular$//'
+          fi
+
           exec "${getBin plasma5.plasma-workspace}/bin/startkde"
         '';
       };

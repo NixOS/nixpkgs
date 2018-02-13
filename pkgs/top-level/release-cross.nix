@@ -21,6 +21,8 @@ let
   gnuCommon = lib.recursiveUpdate common {
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
+    haskell.packages.ghcHEAD.hello = nativePlatforms;
+    haskell.packages.ghc822.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -75,7 +77,7 @@ in
         f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
-    testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
+    testEqual = path: systems: forTheseSystems systems (testEqualOne path);
 
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
@@ -119,6 +121,9 @@ in
     mpg123 = nativePlatforms;
   });
 
+  /* Linux on Aarch64 (TODO make android for real)  */
+  android = mapTestOnCross lib.systems.examples.aarch64-multiplatform (linuxCommon // {
+  });
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let

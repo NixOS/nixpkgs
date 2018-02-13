@@ -3,14 +3,14 @@
 # tag="<tagname>" (get version by tag name)
 # If you don't specify neither one date="NOW" will be used (get latest)
 
-{stdenv, cvs}:
+{stdenvNoCC, cvs}:
 
 {cvsRoot, module, tag ? null, date ? null, sha256}:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "cvs-export";
   builder = ./builder.sh;
-  buildInputs = [cvs];
+  nativeBuildInputs = [cvs];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

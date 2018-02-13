@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.packagekit.org/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

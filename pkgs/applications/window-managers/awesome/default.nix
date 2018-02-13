@@ -41,7 +41,6 @@ with luaPackages; stdenv.mkDerivation rec {
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
-  LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
@@ -52,7 +51,6 @@ with luaPackages; stdenv.mkDerivation rec {
       --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"
 
     wrapProgram $out/bin/awesome-client \

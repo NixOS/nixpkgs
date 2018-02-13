@@ -18,6 +18,5 @@ python2Packages.buildPythonApplication rec {
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx ];
   };
 }

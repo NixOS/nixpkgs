@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, cctools
+, libintlOrEmpty, cctools, cairo
 , substituteAll, nixStoreDir ? builtins.storeDir
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
@@ -38,10 +38,17 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  patches = stdenv.lib.singleton (substituteAll {
-    src = ./absolute_shlib_path.patch;
-    inherit nixStoreDir;
-  });
+  patches = [
+    (substituteAll {
+      src = ./absolute_shlib_path.patch;
+      inherit nixStoreDir;
+    })
+    # https://github.com/NixOS/nixpkgs/issues/34080
+    (substituteAll {
+      src = ./absolute_gir_path.patch;
+      cairoLib = "${getLib cairo}/lib";
+    })
+  ];
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

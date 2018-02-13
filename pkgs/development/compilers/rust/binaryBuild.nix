@@ -91,6 +91,7 @@ rec {
     buildInputs = [ makeWrapper ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
     installPhase = ''
+      patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
 

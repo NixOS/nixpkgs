@@ -4,13 +4,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
 let
   kernel = config.boot.kernelPackages.kernel;
-  # FIXME: figure out a common place for this instead of copy pasting
-  serialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
-        else if pkgs.stdenv.isArm || pkgs.stdenv.isAarch64 then "ttyAMA0"
-        else throw "Unknown QEMU serial device for system '${pkgs.stdenv.system}'";
 in
 
 {
@@ -28,8 +25,8 @@ in
 
     systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-hvc0.device" "dev-${serialDevice}.device" ];
-        after = [ "dev-hvc0.device" "dev-${serialDevice}.device" ];
+        requires = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
+        after = [ "dev-hvc0.device" "dev-${qemuSerialDevice}.device" ];
         script =
           ''
             export USER=root
@@ -46,7 +43,7 @@ in
 
             cd /tmp
             exec < /dev/hvc0 > /dev/hvc0
-            while ! exec 2> /dev/${serialDevice}; do sleep 0.1; done
+            while ! exec 2> /dev/${qemuSerialDevice}; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
@@ -55,10 +52,10 @@ in
         serviceConfig.KillSignal = "SIGHUP";
       };
 
-    # Prevent agetty from being instantiated on ${serialDevice}, since it
-    # interferes with the backdoor (writes to ${serialDevice} will randomly fail
+    # Prevent agetty from being instantiated on the serial device, since it
+    # interferes with the backdoor (writes to it will randomly fail
     # with EIO).  Likewise for hvc0.
-    systemd.services."serial-getty@${serialDevice}".enable = false;
+    systemd.services."serial-getty@${qemuSerialDevice}".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
     boot.initrd.preDeviceCommands =
@@ -94,7 +91,7 @@ in
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=${serialDevice}" "panic=1" "boot.panic_on_fail" ];
+      [ "console=${qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];

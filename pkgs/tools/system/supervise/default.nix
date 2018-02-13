@@ -1,21 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
 
   name = "supervise-${version}";
-  version = "1.0.0";
+  version = "1.3.0";
 
-  src = fetchFromGitHub {
-    owner = "catern";
-    repo = "supervise";
-    rev = "v${version}";
-    sha256 = "1cjdxgns3gh2ir4kcmjdmc480w8sm49inws0ihhjmnisjy4100lg";
+  src = fetchzip {
+    url = "https://github.com/catern/supervise/releases/download/v${version}/supervise-${version}.tar.gz";
+    sha256 = "1y3jaqzprlkba2165nlcr250jc3mpxawd5sfjryb3db1nw66al04";
   };
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp supervise unlinkwait -t $out/bin
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/catern/supervise;

@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-ppcre-unicode'';
-  version = ''cl-ppcre-2.0.11'';
+  version = ''cl-ppcre-20171227-git'';
 
   parasites = [ "cl-ppcre-unicode-test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."cl-ppcre" args."cl-ppcre-test" args."cl-unicode" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-ppcre/2015-09-23/cl-ppcre-2.0.11.tgz'';
-    sha256 = ''1djciws9n0jg3qdrck3j4wj607zvkbir8p379mp0p7b5g0glwvb2'';
+    url = ''http://beta.quicklisp.org/archive/cl-ppcre/2017-12-27/cl-ppcre-20171227-git.tgz'';
+    sha256 = ''0vdic9kxjslplafh6d00m7mab38hw09ps2sxxbg3adciwvspvmw4'';
   };
 
   packageName = "cl-ppcre-unicode";
@@ -21,13 +21,13 @@ rec {
 }
 /* (SYSTEM cl-ppcre-unicode DESCRIPTION
     Perl-compatible regular expression library (Unicode) SHA256
-    1djciws9n0jg3qdrck3j4wj607zvkbir8p379mp0p7b5g0glwvb2 URL
-    http://beta.quicklisp.org/archive/cl-ppcre/2015-09-23/cl-ppcre-2.0.11.tgz
-    MD5 6d5250467c05eb661a76d395186a1da0 NAME cl-ppcre-unicode FILENAME
+    0vdic9kxjslplafh6d00m7mab38hw09ps2sxxbg3adciwvspvmw4 URL
+    http://beta.quicklisp.org/archive/cl-ppcre/2017-12-27/cl-ppcre-20171227-git.tgz
+    MD5 9d8ce62ef1a71a5e1e144a31be698d8c NAME cl-ppcre-unicode FILENAME
     cl-ppcre-unicode DEPS
     ((NAME cl-ppcre FILENAME cl-ppcre)
      (NAME cl-ppcre-test FILENAME cl-ppcre-test)
      (NAME cl-unicode FILENAME cl-unicode)
      (NAME flexi-streams FILENAME flexi-streams))
     DEPENDENCIES (cl-ppcre cl-ppcre-test cl-unicode flexi-streams) VERSION
-    cl-ppcre-2.0.11 SIBLINGS (cl-ppcre) PARASITES (cl-ppcre-unicode-test)) */
+    cl-ppcre-20171227-git SIBLINGS (cl-ppcre) PARASITES (cl-ppcre-unicode-test)) */

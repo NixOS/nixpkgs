@@ -1,11 +1,7 @@
-{ fetchurl, stdenv, path, cacert, git, rust }:
+{ callPackage, fetchurl, stdenv, path, cacert, git, rust, cargo-vendor }:
 let
-  cargoVendor = import ./cargo-vendor.nix {
-    inherit fetchurl stdenv;
-  };
-
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargoVendor;
+    inherit stdenv cacert git rust cargo-vendor;
   };
 in
 { name, cargoSha256
@@ -32,7 +28,7 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ git rust.cargo rust.rustc ] ++ buildInputs;
+  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -60,7 +56,6 @@ in stdenv.mkDerivation (args // {
     unset cargoDepsCopy
 
     export RUST_LOG=${logLevel}
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '' + (args.postUnpack or "");
 
   buildPhase = with builtins; args.buildPhase or ''

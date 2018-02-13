@@ -325,11 +325,14 @@ rec {
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = {name, vimrcConfig}: vimWithRC {
+    customize = { name, vimrcConfig }: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
       inherit name;
       vimrcFile = vimrcFile vimrcConfig;
     };
+
+    override = f: makeCustomizable (vim.override f);
+    overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {

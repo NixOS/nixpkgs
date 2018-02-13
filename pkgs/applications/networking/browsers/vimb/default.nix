@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "vimb-${version}";
-  version = "2.11";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
-    sha256 = "0d9rankzgmnx5423pyfkbxy0qxw3ck2vrdjdnlhddy15wkk87i9f";
+    sha256 = "1gws028c2v1zh6r142hmjvi2m447lwqqh65m6z3dzcar2yw35z3f";
   };
 
   nativeBuildInputs = [ pkgconfig ];

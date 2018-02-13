@@ -37,6 +37,5 @@ in fetchzip rec {
     */
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

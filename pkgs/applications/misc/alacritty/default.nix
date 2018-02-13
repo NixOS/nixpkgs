@@ -30,18 +30,18 @@ let
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2017-12-29";
+  version = "2018-01-31";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "0pk4b8kfxixmd9985v2fya1m7np8ggws8d9msw210drc0grwbfkd";
+    sha256 = "0jc8haijd6f8r5fqiknrvqnwc9q4cp93852lr2p7zak7dv29v45p";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0acj526cx4xl52vbcbd3hp1klh4p756j6alxqqz3x715zi2dqkzf";
+  cargoSha256 = "0023jpc6krilmp5wzbbwapxafsi6m1k13mvjh4zlvls1nyyhk808";
 
   nativeBuildInputs = [
     cmake

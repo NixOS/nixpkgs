@@ -1,4 +1,17 @@
-{ stdenv, perl, buildLinux
+{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+, ncurses
+, libelf
+, utillinux
+, writeTextFile, ubootTools
+, callPackage
+, overrideCC, gcc7
+}:
+
+{ stdenv, buildPackages, perl, buildLinux
+
+, # Allow really overriding even our gcc7 default.
+  # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
+  stdenvNoOverride ? overrideCC stdenv gcc7
 
 , # The kernel source tarball.
   src
@@ -23,11 +36,14 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.platform.name != "pc"
+, ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
+                       hostPlatform != stdenvNoOverride.buildPlatform
 , extraMeta ? {}
 , hostPlatform
 , ...
-}:
+} @ args:
+
+let stdenv = stdenvNoOverride; in # finish the rename
 
 assert stdenv.isLinux;
 
@@ -43,13 +59,13 @@ let
     netfilterRPFilter = true;
   } // features) kernelPatches;
 
-  configWithPlatform = kernelPlatform: import ./common-config.nix {
-    inherit stdenv version kernelPlatform extraConfig;
+  config = import ./common-config.nix {
+    inherit stdenv version ;
+    # append extraConfig for backwards compatibility but also means the user can't override the kernelExtraConfig part
+    extraConfig = extraConfig + lib.optionalString (hostPlatform.platform ? kernelExtraConfig) hostPlatform.platform.kernelExtraConfig;
+
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
-
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform hostPlatform.platform;
 
   kernelConfigFun = baseConfig:
     let
@@ -65,31 +81,17 @@ let
 
     kernelConfig = kernelConfigFun config;
 
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl ];
 
-    platformName = stdenv.platform.name;
-    kernelBaseConfig = stdenv.platform.kernelBaseConfig;
-    kernelTarget = stdenv.platform.kernelTarget;
-    autoModules = stdenv.platform.kernelAutoModules;
-    preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
-    arch = stdenv.platform.kernelArch;
-
-    crossAttrs = let
-        cp = hostPlatform.platform;
-      in {
-        arch = cp.kernelArch;
-        platformName = cp.name;
-        kernelBaseConfig = cp.kernelBaseConfig;
-        kernelTarget = cp.kernelTarget;
-        autoModules = cp.kernelAutoModules;
-
-        # Just ignore all options that don't apply (We are lazy).
-        ignoreConfigErrors = true;
-
-        kernelConfig = kernelConfigFun configCross;
-
-        inherit (kernel.crossDrv) src patches preUnpack;
-      };
+    platformName = hostPlatform.platform.name;
+    # e.g. "defconfig"
+    kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
+    # e.g. "bzImage"
+    kernelTarget = hostPlatform.platform.kernelTarget;
+    autoModules = hostPlatform.platform.kernelAutoModules;
+    preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
+    arch = hostPlatform.platform.kernelArch;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -100,33 +102,27 @@ let
     inherit (kernel) src patches preUnpack;
 
     buildPhase = ''
-      cd $buildRoot
+      export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > kernel-config
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
+      echo "$kernelConfig" > "$buildRoot/kernel-config"
+      DEBUG=1 ARCH=$arch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+           PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';
 
-    installPhase = "mv .config $out";
+    installPhase = "mv $buildRoot/.config $out";
 
     enableParallelBuilding = true;
   };
 
-  kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches stdenv extraMeta;
-
-    configfile = configfile.nativeDrv or configfile;
-
-    crossConfigfile = configfile.crossDrv or configfile;
+  kernel = (callPackage ./manual-config.nix {}) {
+    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile hostPlatform;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-
-    crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
   passthru = {
@@ -134,10 +130,4 @@ let
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
-  nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
-
-  crossDrv = lib.addPassthru kernel.crossDrv passthru;
-
-in if kernel ? crossDrv
-   then nativeDrv // { inherit nativeDrv crossDrv; }
-   else lib.addPassthru kernel passthru
+in lib.extendDerivation true passthru kernel

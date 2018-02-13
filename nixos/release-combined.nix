@@ -2,7 +2,7 @@
 # and nixos-14.04). The channel is updated every time the ‘tested’ job
 # succeeds, and all other jobs have finished (they may fail).
 
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
@@ -52,12 +52,13 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        (all nixos.iso_minimal)
+        nixos.iso_minimal.x86_64-linux
+        nixos.iso_minimal.i686-linux
         nixos.iso_graphical.x86_64-linux
         nixos.ova.x86_64-linux
 
         #(all nixos.tests.containers)
-        nixos.tests.chromium
+        nixos.tests.chromium.x86_64-linux
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
@@ -80,7 +81,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.hibernate)
-        nixos.tests.docker
+        nixos.tests.docker.x86_64-linux
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)

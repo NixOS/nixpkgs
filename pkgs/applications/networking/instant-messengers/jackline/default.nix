@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "05z9kvd7gwr59ic7hnmbayhwyyqd41xxz01cvdlcgplk3z7zlwg5";
   };
 
+  patches = [ ./tls-0.9.0.patch ];
+
   buildInputs = with ocamlPackages; [
                   ocaml ocamlbuild findlib topkg ppx_sexp_conv
                   erm_xmpp_0_3 tls nocrypto x509 ocaml_lwt otr astring

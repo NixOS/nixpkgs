@@ -1,11 +1,11 @@
-{ callPackage, boost155, boost162, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
+{ callPackage, boost155, boost164, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
 
 rec {
 
   aeon = callPackage ./aeon { };
 
-  bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
-  bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  bitcoin  = libsForQt5.callPackage ./bitcoin.nix { boost = boost164; miniupnpc = miniupnpc_2; withGui = true; };
+  bitcoind = callPackage ./bitcoin.nix { boost = boost164; miniupnpc = miniupnpc_2; withGui = false; };
 
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };
@@ -26,8 +26,12 @@ rec {
 
   dashpay = callPackage ./dashpay.nix { };
 
+  dero = callPackage ./dero.nix { };
+
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
+
+  ethsign = callPackage ./ethsign { };
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
@@ -56,6 +60,8 @@ rec {
   primecoind = callPackage ./primecoin.nix { withGui = false; };
 
   stellar-core = callPackage ./stellar-core.nix { };
+
+  sumokoin = callPackage ./sumokoin.nix { };
 
   zcash = callPackage ./zcash {
     withGui = false;

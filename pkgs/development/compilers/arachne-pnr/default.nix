@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "arachne-pnr-${version}";
-  version = "2017.12.06";
+  version = "2018.02.04";
 
   src = fetchFromGitHub {
     owner  = "cseed";
     repo   = "arachne-pnr";
-    rev    = "a32dd2c137b2bb6ba6704b25109790ac76bc2f45";
-    sha256 = "16pfm8spcm3nsrdsjdj22v7dddnwzlhbj1y71wflvvb84xnbga2y";
+    rev    = "c21df0062c6ee13e8c8280cefbb7c017823336c0";
+    sha256 = "1ah1gn07av3ff5lnay4p7dahaacbyj0mfakbx7g5fs3p1m1m8p1k";
   };
 
   enableParallelBuilding = true;

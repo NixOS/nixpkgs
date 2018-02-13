@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1l1p7jlrryd54jwwrwgvs4njr3r59m8xsh31z7db0bzpw3dk7n5k";
+    sha256 = "1q666k7rssjd2cbkm8bm2gsn5shlkh756qpam53kibi5ahrwa7dc";
   };
 
   cargoSha256 = "1dikix9d46f0ydi81ray2vdvsy6y326w8ql6c89zx0p9cjm8m83r";
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
   };
 }

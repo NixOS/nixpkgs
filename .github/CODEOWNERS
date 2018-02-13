@@ -12,17 +12,17 @@
 
 # Libraries
 /lib                        @edolstra @nbp
-/lib/systems                @edolstra @nbp @ericson2314
+/lib/systems                @nbp @ericson2314
 
 # Nixpkgs Internals
 /default.nix                          @nbp
 /pkgs/top-level/default.nix           @nbp @Ericson2314
 /pkgs/top-level/impure.nix            @nbp @Ericson2314
 /pkgs/top-level/stage.nix             @nbp @Ericson2314
-/pkgs/stdenv                          @edolstra
-/pkgs/build-support/cc-wrapper        @edolstra @Ericson2314
-/pkgs/build-support/bintools-wrapper  @edolstra @Ericson2314
-/pkgs/build-support/setup-hooks       @edolstra @Ericson2314
+/pkgs/stdenv
+/pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
+/pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
+/pkgs/build-support/setup-hooks       @Ericson2314
 
 # NixOS Internals
 /nixos/default.nix          @nbp

@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     lz4 openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython msgpack
+    cython msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
@@ -41,14 +41,11 @@ python3Packages.buildPythonApplication rec {
     cp -R docs/_build/man $out/share/man/man1
   '';
 
-  # tests fail due to missing test command in nix_run_setup.py
-  doCheck = false;
-
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

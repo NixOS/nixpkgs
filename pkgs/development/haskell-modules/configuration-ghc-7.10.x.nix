@@ -186,6 +186,7 @@ self: super: {
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   bytes = addBuildDepend super.bytes self.doctest;
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  contravariant = addBuildDepend super.contravariant self.semigroups;
   dependent-map = addBuildDepend super.dependent-map self.semigroups;
   distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   Glob = addBuildDepends super.Glob (with self; [semigroups]);

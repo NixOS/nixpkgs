@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libappindicator-gtk3, libindicator-gtk3, polkit }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gobjectIntrospection, libappindicator-gtk3, libindicator-gtk3, polkit }:
 
 stdenv.mkDerivation rec {
   name = "mate-polkit-${version}";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
+    gobjectIntrospection
     libappindicator-gtk3
     libindicator-gtk3
     polkit

@@ -17,17 +17,17 @@
 , ipykernel
 , terminado
 , requests
+, send2trash
 , pexpect
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.2.2";
-  name = "${pname}-${version}";
+  version = "5.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bb54fb61b9c5426bc116f840541b973431198e00ea2896122d05fc122dbbd67";
+    sha256 = "dd431fad9bdd25aa9ff8265da096ef770475e21bf1d327982611a7de5cd904ca";
   };
 
   LC_ALL = "en_US.utf8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core
+    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
   ];
 

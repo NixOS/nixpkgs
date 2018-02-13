@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
-    "XFT_PACKAGE=--libs=\{-lX11 -lXft\}"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isLinux "XFT_PACKAGE=--libs=\{-lX11 -lXft\}";
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
@@ -37,11 +36,12 @@ stdenv.mkDerivation rec {
   ];
 
   # To be able to find <Xft.h>
-  NIX_CFLAGS_COMPILE = "-I${libXft.dev}/include/X11";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''
     wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
   '';
 
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://cowlark.com/wordgrinder;
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

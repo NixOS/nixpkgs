@@ -20,11 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1avx4p71g9m3zvynhhhysxnpkqyhhlv42xiv9502bvp3nwfkgnqs";
   };
 
-  buildInputs = [ liburcu python ];
+  buildInputs = [ python ];
 
   preConfigure = ''
     patchShebangs .
   '';
+  
+  propagatedBuildInputs = [ liburcu ];
 
   meta = with stdenv.lib; {
     description = "LTTng Userspace Tracer libraries";

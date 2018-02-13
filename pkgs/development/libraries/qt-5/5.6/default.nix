@@ -33,7 +33,7 @@ existing packages here and modify it as necessary.
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;

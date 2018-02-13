@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -246,6 +246,7 @@ let
     ChemmineOB = [ pkgs.openbabel pkgs.pkgconfig ];
     cit = [ pkgs.gsl_1 ];
     curl = [ pkgs.curl.dev ];
+    data_table = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -284,7 +285,7 @@ let
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
-    pbdZMQ = [ pkgs.which ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
@@ -392,6 +393,7 @@ let
     nat = [ pkgs.which ];
     nat_nblast = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
@@ -744,6 +746,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    data_table = old.data_table.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
+    });
+
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -768,6 +775,14 @@ let
 
     Mposterior = old.Mposterior.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+    });
+
+    pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        for file in R/*.{r,r.in}; do
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+        done
+      '';
     });
 
     qtbase = old.qtbase.overrideDerivation (attrs: {
@@ -912,9 +927,7 @@ let
     });
 
     geojsonio = old.geojsonio.overrideDerivation (attrs: {
-      preConfigure = ''
-        export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-        '';
+      buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
     rstan = old.rstan.overrideDerivation (attrs: {
