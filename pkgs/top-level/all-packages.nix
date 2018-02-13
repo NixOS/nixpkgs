@@ -1672,7 +1672,7 @@ with pkgs;
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
 
   cloc = callPackage ../tools/misc/cloc {
-    inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
+    inherit (perlPackages) perl AlgorithmDiff ParallelForkManager RegexpCommon;
   };
 
   cloog = callPackage ../development/libraries/cloog {
