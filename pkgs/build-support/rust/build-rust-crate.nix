@@ -291,6 +291,7 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
         mkdir -p $out/bin
         cp -P target/bin/* $out/bin # */
       fi
+      runHook postInstall
     '';
 in
 
