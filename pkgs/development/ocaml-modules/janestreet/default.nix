@@ -238,6 +238,10 @@ rec {
     name = "ppx_expect";
     hash = "1bik53k51wcqv088f0h10n3ms9h51yvg6ha3g1s903i2bxr3xs6b";
     propagatedBuildInputs = [ ppx_inline_test ppx_fields_conv ppx_custom_printf ppx_assert ppx_variants_conv re ];
+    moveStubs = ''
+      mv "$out/lib/ocaml/${ocaml.version}/site-lib/stubslibs/dllexpect_test_collector_stubs.so" "$out/lib/ocaml/${ocaml.version}/site-lib/ppx_expect/collector/dllexpect_test_collector_stubs.so"
+    '';
+
     meta.description = "Cram like framework for OCaml";
   };
 
