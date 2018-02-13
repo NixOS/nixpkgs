@@ -9,6 +9,7 @@ bundlerEnv {
   buildInputs = [ perl autoconf ];
 
   meta = with lib; {
+    broken = true; # needs ruby 2.0
     description = "Backup and restore your Redis data to and from JSON";
     homepage    = http://delanotes.com/redis-dump/;
     license     = licenses.mit;
