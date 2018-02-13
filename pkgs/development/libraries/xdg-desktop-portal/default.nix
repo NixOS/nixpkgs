@@ -14,6 +14,10 @@ in stdenv.mkDerivation rec {
     sha256 = "06gipd51snvlp2jp68v2c8rwbsv36kjzg9xacm81n1w4b2dpz4g0";
   };
 
+  patches = [
+    ./respect-path-env-var.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 ];
   buildInputs = [ glib pipewire fuse ];
 
