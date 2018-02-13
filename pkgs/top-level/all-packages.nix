@@ -4190,6 +4190,8 @@ with pkgs;
     libpng = libpng12;
   };
 
+  plotinus = callPackage ../tools/misc/plotinus { };
+
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
