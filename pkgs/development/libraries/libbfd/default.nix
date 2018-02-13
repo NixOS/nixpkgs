@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
   ];
 
   # We just want to build libbfd
-  postAutoreconf = ''
+  postPatch = ''
     cd bfd
   '';
 
   nativeBuildInputs = [ autoreconfHook264 bison ];
   buildInputs = [ libiberty zlib ];
 
+  configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--enable-install-libbfd"
