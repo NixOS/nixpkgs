@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
+
   patchFlags = "-p0";
 
   installPhase = ''
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Library for inspecting program's backtrace";
+    description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
     license = licenses.bsd2;
     homepage = https://www.freshports.org/devel/libexecinfo;
     maintainers = with maintainers; [ dtzWill ];
