@@ -12,17 +12,16 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ gnum4 buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin && stdenv.buildPlatform == stdenv.hostPlatform);
+  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
               ./cygwin.patch;
-
-  configureFlags = '' CC_FOR_BUILD=${buildPackages.stdenv.cc.targetPrefix}gcc '';
 
   meta = with stdenv.lib; {
     description = "Cryptographic library";
