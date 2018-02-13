@@ -7,11 +7,18 @@
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
+, musl-getent ? null
 }:
 
 assert stdenv.isLinux;
 
-let pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+let
+  pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+  getent-bin =
+         if stdenv.hostPlatform.libc == "glibc" then stdenv.cc.libc.bin
+    else if stdenv.hostPlatform.isMusl then "${musl-getent}"
+    else throw "unsupported abi for systemd";
+  getent = "${getent-bin}/bin/getent";
 
 in
 
@@ -107,7 +114,7 @@ in
         for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
           test -e $i
           substituteInPlace $i \
-            --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
+            --replace /usr/bin/getent ${getent} \
             --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
             --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
             --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
