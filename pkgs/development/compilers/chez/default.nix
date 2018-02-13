@@ -2,8 +2,7 @@
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
-  version = "9.5-${dver}";
-  dver    = "20171109";
+  version = "9.5.1";
 
   src = fetchgit {
     url    = "https://github.com/cisco/chezscheme.git";
@@ -13,10 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ coreutils ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
-
   buildInputs = [ ncurses libiconv libX11 ];
 
-  /* We patch out a very annoying 'feature' in ./configure, which
+  enableParallelBuilding = true;
+
+  /*
+  ** We patch out a very annoying 'feature' in ./configure, which
   ** tries to use 'git' to update submodules.
   **
   ** We have to also fix a few occurrences to tools with absolute
@@ -38,19 +39,47 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/libtool" libtool
   '';
 
-  /* Don't use configureFlags, since that just implicitly appends
+  /*
+  ** Don't use configureFlags, since that just implicitly appends
   ** everything onto a --prefix flag, which ./configure gets very angry
   ** about.
+  **
+  ** Also, carefully set a manual workarea argument, so that we
+  ** can later easily find the machine type that we built Chez
+  ** for.
   */
   configurePhase = ''
-    ./configure --threads --installprefix=$out --installman=$out/share/man
+    ./configure --threads \
+      --installprefix=$out --installman=$out/share/man \
+      --workarea=work
   '';
 
-  enableParallelBuilding = true;
+  /*
+  ** Install the kernel.o file, so we can compile C applications that
+  ** link directly to the Chez runtime (for booting their own files, or
+  ** embedding.)
+  **
+  ** Ideally in the future this would be less of a hack and could be
+  ** done by Chez itself. Alternatively, there could just be a big
+  ** case statement matching to the different stdenv.platform values...
+  */
+  postInstall = ''
+    m="$(ls ./work/boot)"
+    if [ "x''${m[1]}" != "x" ]; then
+      >&2 echo "ERROR: more than one bootfile build found; this is a nixpkgs error"
+      exit 1
+    fi
+
+    kernel=./work/boot/$m/kernel.o
+    kerneldest=$out/lib/csv${version}/$m/
+
+    echo installing $kernel to $kerneldest
+    cp $kernel $kerneldest/kernel.o
+  '';
 
   meta = {
     description = "A powerful and incredibly fast R6RS Scheme compiler";
-    homepage    = "http://www.scheme.com";
+    homepage    = https://cisco.github.io/ChezScheme/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];

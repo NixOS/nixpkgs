@@ -26,6 +26,8 @@ rec {
 
   dashpay = callPackage ./dashpay.nix { };
 
+  dero = callPackage ./dero.nix { };
+
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
@@ -58,6 +60,8 @@ rec {
   primecoind = callPackage ./primecoin.nix { withGui = false; };
 
   stellar-core = callPackage ./stellar-core.nix { };
+
+  sumokoin = callPackage ./sumokoin.nix { };
 
   zcash = callPackage ./zcash {
     withGui = false;

@@ -43,11 +43,18 @@ in
   sdImage = {
     populateBootCommands = let
       configTxt = pkgs.writeText "config.txt" ''
+        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+        # when attempting to show low-voltage or overtemperature warnings.
+        avoid_warnings=1
+
         [pi2]
         kernel=u-boot-rpi2.bin
 
         [pi3]
         kernel=u-boot-rpi3.bin
+
+        # U-Boot used to need this to work, regardless of whether UART is actually used or not.
+        # TODO: check when/if this can be removed.
         enable_uart=1
       '';
       in ''

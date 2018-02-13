@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, perl, python3
+, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
 
 , libffi, libiconv ? null, ncurses
 
@@ -24,7 +24,11 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.4.20180122"
+, version ? "8.4.0.20180204"
+, # Whether to backport https://phabricator.haskell.org/D4388 for
+  # deterministic profiling symbol names, at the cost of a slightly
+  # non-standard GHC API
+  deterministicProfiling ? false
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -73,13 +77,19 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "61db0b8941cfb7ed8941ed29bdb04bd8ef3b71a5";
-    sha256 = "15sbpgkal4854jc1xn3sprvpnxwdj0fyy43y5am0h9vja3pjhjyi";
+    rev = "111737cd218751f06ea58d3cf2c7c144265b5dfc";
+    sha256 = "0ksp0k3sp928aq2cv6whgbfmjnr7l2j10diha13nncksp4byf0s9";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = stdenv.lib.optional deterministicProfiling
+    (fetchpatch { # https://phabricator.haskell.org/D4388 for more determinism
+      url = "https://github.com/shlevy/ghc/commit/8b2dbd869d1a64de3e99fa8b1c9bb1140eee7099.patch";
+      sha256 = "0hxpiwhbg64rsyjdr4psh6dwyp58b96mad3adccvfr0x8hc6ba2m";
+    });
 
   postPatch = "patchShebangs .";
 

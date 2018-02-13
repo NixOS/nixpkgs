@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "keepalived-${version}";
-  version = "1.3.6";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${version}";
-    sha256 = "05088vv510dlflzyg8sh8l8qfscnvxl6n6pw9ycp27zhb6r5cr5y";
+    sha256 = "1d3jnfhj9mpnc27wvgsiz2vr4lnvvccw3v128z16jpyibyv20ph0";
   };
 
   buildInputs = [

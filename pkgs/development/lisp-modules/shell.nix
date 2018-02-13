@@ -10,6 +10,6 @@ self = rec {
     lispPackages.quicklisp-to-nix lispPackages.quicklisp-to-nix-system-info
   ];
   CPATH = "${libfixposix}/include";
-  LD_LIBRARY_PATH = "${openssl.out}/lib:${fuse}/lib:${libuv}/lib:${libev}/lib:${mysql.connector-c}/lib:${postgresql.lib}/lib:${sqlite.out}/lib:${libfixposix}/lib:${freetds}/lib";
+  LD_LIBRARY_PATH = "${openssl.out}/lib:${fuse}/lib:${libuv}/lib:${libev}/lib:${mysql.connector-c}/lib:${mysql.connector-c}/lib/mysql:${postgresql.lib}/lib:${sqlite.out}/lib:${libfixposix}/lib:${freetds}/lib";
 };
 in stdenv.mkDerivation self

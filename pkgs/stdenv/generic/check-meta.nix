@@ -96,8 +96,7 @@ let
     ''
 
       Known issues:
-
-    '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
         You can install it anyway by whitelisting this package, using the
         following methods:

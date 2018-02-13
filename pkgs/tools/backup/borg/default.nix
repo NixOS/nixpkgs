@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     lz4 openssl python3Packages.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython msgpack
+    cython msgpack-python
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''

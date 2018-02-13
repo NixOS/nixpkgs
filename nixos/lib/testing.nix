@@ -29,7 +29,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${lib.makeBinPath [ qemu vde2 netpbm coreutils ]}" \
+          --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -85,7 +85,7 @@ rec {
 
       testScript' =
         # Call the test script with the computed nodes.
-        if builtins.isFunction testScript
+        if lib.isFunction testScript
         then testScript { inherit nodes; }
         else testScript;
 

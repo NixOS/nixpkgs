@@ -4,7 +4,8 @@
 { lib, writeText, inherit-local }:
 
 rec {
-  withPackages = pkgs: let
+  withPackages = pkgs': let
+      pkgs = builtins.filter (x: x != null) pkgs';
       extras = map (x: x.emacsBufferSetup pkgs) (builtins.filter (builtins.hasAttr "emacsBufferSetup") pkgs);
     in writeText "dir-locals.el" ''
       (require 'inherit-local "${inherit-local}/share/emacs/site-lisp/elpa/inherit-local-${inherit-local.version}/inherit-local.elc")

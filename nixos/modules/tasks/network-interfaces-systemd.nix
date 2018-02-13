@@ -74,21 +74,17 @@ in
         networks."99-main" = genericNetwork mkDefault;
       }
       (mkMerge (flip map interfaces (i: {
-        netdevs = mkIf i.virtual (
-          let
-            devType = if i.virtualType != null then i.virtualType
-              else (if hasPrefix "tun" i.name then "tun" else "tap");
-          in {
-            "40-${i.name}" = {
-              netdevConfig = {
-                Name = i.name;
-                Kind = devType;
-              };
-              "${devType}Config" = optionalAttrs (i.virtualOwner != null) {
-                User = i.virtualOwner;
-              };
+        netdevs = mkIf i.virtual ({
+          "40-${i.name}" = {
+            netdevConfig = {
+              Name = i.name;
+              Kind = i.virtualType;
             };
-          });
+            "${i.virtualType}Config" = optionalAttrs (i.virtualOwner != null) {
+              User = i.virtualOwner;
+            };
+          };
+        });
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr

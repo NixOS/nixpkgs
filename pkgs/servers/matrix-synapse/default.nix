@@ -42,7 +42,7 @@ in pythonPackages.buildPythonApplication rec {
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
-    psutil msgpack lxml matrix-synapse-ldap3
+    psutil msgpack-python lxml matrix-synapse-ldap3
     phonenumbers jsonschema affinity bcrypt
   ];
 

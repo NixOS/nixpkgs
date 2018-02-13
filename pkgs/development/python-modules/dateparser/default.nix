@@ -1,41 +1,40 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, isPy3k
+{ lib, fetchPypi, buildPythonPackage, isPy3k
 , nose
-, nose-parameterized
+, parameterized
 , mock
 , glibcLocales
 , six
 , jdatetime
-, pyyaml
 , dateutil
 , umalqurra
 , pytz
 , tzlocal
 , regex
 , ruamel_yaml }:
+
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "scrapinghub";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "0q2vyzvlj46r6pr0s6m1a0md1cpg9nv1n3xw286l4x2cc7fj2g3y";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "940828183c937bcec530753211b70f673c0a9aab831e43273489b310538dff86";
   };
 
-  # Upstream Issue: https://github.com/scrapinghub/dateparser/issues/364
-  disabled = isPy3k;
-
-  checkInputs = [ nose nose-parameterized mock glibcLocales ];
+  checkInputs = [ nose mock parameterized six glibcLocales ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py
   '';
 
-  propagatedBuildInputs = [ six jdatetime pyyaml dateutil
-            umalqurra pytz tzlocal regex ruamel_yaml ];
+  propagatedBuildInputs = [
+    # install_requires
+    dateutil pytz regex tzlocal
+    # extra_requires
+    jdatetime ruamel_yaml umalqurra
+  ];
 
-  meta = with stdenv.lib;{
+  meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = https://github.com/scrapinghub/dateparser;
     license = licenses.bsd3;

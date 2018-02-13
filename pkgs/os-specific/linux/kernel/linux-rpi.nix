@@ -4,7 +4,7 @@ let
   modDirVersion = "4.9.59";
   tag = "1.20171029";
 in
-stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
+stdenv.lib.overrideDerivation (buildLinux (args // rec {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
 

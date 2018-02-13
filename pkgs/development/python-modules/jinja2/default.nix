@@ -1,16 +1,13 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, markupsafe }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.9.6";
-  name = "${pname}-${version}";
+  version = "2.10";
 
-  src = fetchFromGitHub {
-    owner = "pallets";
-    repo = "jinja";
-    rev = version;
-    sha256 = "1xxc5vdhz214aawmllv0fi4ak6d7zac662yb7gn1xfgqfz392pg5";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4";
   };
 
   checkInputs = [ pytest ];
@@ -29,7 +26,6 @@ buildPythonPackage rec {
       Django inspired non-XML syntax but supports inline expressions and
       an optional sandboxed environment.
     '';
-    platforms = platforms.all;
     maintainers = with maintainers; [ pierron garbas sjourdois ];
   };
 }

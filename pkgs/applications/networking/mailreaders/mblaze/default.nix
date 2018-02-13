@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "mblaze-${version}";
-  version = "0.3";
+  version = "0.3.1";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "chneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "1jrn81rvw6qanlfppc12dkvpbmidzrq1lx3rfhvcsna55k3gjyw9";
+    sha256 = "1a4rqadq3dm6r11v7akng1qy88zpiq5qbqdryb8df3pxkv62nm1a";
   };
 
   makeFlags = "PREFIX=$(out)";

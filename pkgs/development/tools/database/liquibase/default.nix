@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Version Control for your database";
     homepage = http://www.liquibase.org/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus profpatsch ];
+    maintainers = with maintainers; [ nequissimus ];
     platforms = with platforms; unix;
   };
 }
