@@ -13365,10 +13365,10 @@ with pkgs;
     if hostPlatform.isMusl then musl-getent
     # This may not be right on other platforms, but preserves existing behavior
     else /* if hostPlatform.libc == "glibc" then */ glibc.bin;
+
   getconf =
     if hostPlatform.isMusl then musl-getconf
-    # This may not be right on other platforms, but preserves existing behavior
-    else /* if hostPlatform.libc == "glibc" then */ glibc.bin;
+    else lib.getBin stdenv.cc.libc;
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
