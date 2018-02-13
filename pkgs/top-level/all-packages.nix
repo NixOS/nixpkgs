@@ -2299,6 +2299,8 @@ with pkgs;
 
   flatpak = callPackage ../development/libraries/flatpak { };
 
+  flatpak-builder = callPackage ../development/tools/flatpak-builder { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
