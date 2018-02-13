@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     [ ./glib-2.32.patch
       ./libressl.patch
       ./parallel-configure.patch
+      ./clang-5-darwin.patch
       ./qt-4.8.7-unixmake-darwin.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
