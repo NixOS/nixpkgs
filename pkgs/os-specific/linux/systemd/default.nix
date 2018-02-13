@@ -40,7 +40,7 @@ in
         ninja meson
         coreutils # meson calls date, stat etc.
         pythonLxmlEnv glibcLocales
-        patchelf
+        patchelf getent-bin
       ];
     buildInputs =
       [ linuxHeaders libcap kmod xz pam acl
