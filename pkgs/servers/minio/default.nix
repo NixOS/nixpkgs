@@ -22,7 +22,7 @@ buildGoPackage rec {
     homepage = https://www.minio.io/;
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];
-    platforms = platforms.x86_64 ++ ["aarch64-linux"];
+    platforms = platforms.unix;
     license = licenses.asl20;
   };
 }
