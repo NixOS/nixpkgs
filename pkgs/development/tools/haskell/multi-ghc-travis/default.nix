@@ -8,8 +8,8 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "hvr";
     repo = "multi-ghc-travis";
-    rev = "0d1b4089f6829659149747c9551712d24fd0b124";
-    sha256 = "00dbg8hbncv74c2baskyhg4h0yv8wrz0fnkvw2bzcn0cjrz7xqwr";
+    rev = "612a29439ba61b01efb98ea6d36b7ffd987dc5a0";
+    sha256 = "0q416rzzwipbnvslhwmm43w38dwma3lks12fghb0svcwj5lzgxsf";
   };
   isLibrary = true;
   isExecutable = true;
