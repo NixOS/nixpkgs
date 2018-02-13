@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nix, boehmgc, cmake, pkgconfig }:
+{ stdenv, fetchFromGitHub, nix, cmake, pkgconfig }:
 let version = "3.0.1"; in
 stdenv.mkDerivation {
   name = "nix-plugins-${version}";
@@ -10,7 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1pmk2m0kc6a3jqygm5cy1fl5gbcy0ghc2xs4ww0gh20walrys82r";
   };
 
-  buildInputs = [ cmake pkgconfig nix ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ nix ];
 
   meta = {
     description = "Collection of miscellaneous plugins for the nix expression language";
