@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
     ++ ["--"]
     ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ]
     ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}g++"
-      "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}gcc"
+      "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
+      "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
       "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
       "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
       "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"

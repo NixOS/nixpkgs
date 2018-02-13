@@ -37,8 +37,8 @@ cmakeConfigurePhase() {
         # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
         # strip. Otherwise they are taken to be relative to the source root of
         # the package being built.
-        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ $cmakeFlags"
-        cmakeFlags="-DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
+        cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-c++ $cmakeFlags"
+        cmakeFlags="-DCMAKE_C_COMPILER=$crossConfig-cc $cmakeFlags"
         cmakeFlags="-DCMAKE_AR=$(command -v $crossConfig-ar) $cmakeFlags"
         cmakeFlags="-DCMAKE_RANLIB=$(command -v $crossConfig-ranlib) $cmakeFlags"
         cmakeFlags="-DCMAKE_STRIP=$(command -v $crossConfig-strip) $cmakeFlags"
