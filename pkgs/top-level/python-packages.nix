@@ -243,6 +243,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  i3ipc = callPackage ../development/python-modules/i3ipc { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
@@ -416,6 +418,8 @@ in {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  aioconsole = callPackage ../development/python-modules/aioconsole { };
+
   aiodns = callPackage ../development/python-modules/aiodns { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
@@ -487,7 +491,7 @@ in {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ garbas profpatsch ];
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -2231,39 +2235,7 @@ in {
     '';
   };
 
-  celery = buildPythonPackage rec {
-    name = "celery-${version}";
-    version = "4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/celery/${name}.tar.gz";
-      sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
-    };
-
-    # Fixes testsuite for python-3.6
-    # From ubuntu packaging: https://launchpad.net/ubuntu/+archive/primary/+files/celery_4.0.2-0ubuntu1.debian.tar.xz
-    # (linked from https://launchpad.net/ubuntu/+source/celery)
-    # https://github.com/celery/celery/pull/3736#issuecomment-274155454 from upstream
-    patches = [ ../development/python-modules/celery/fix_endless_python3.6_loop_logger_isa.patch ];
-
-    # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-    preCheck = ''
-      export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
-        LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-    '';
-    postCheck = ''
-      unset NIX_REDIRECTS LD_PRELOAD
-    '';
-
-    buildInputs = with self; [ pytest case ];
-    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
-
-    meta = {
-      homepage = https://github.com/celery/celery/;
-      description = "Distributed task queue";
-      license = licenses.bsd3;
-    };
-  };
+  celery = callPackage ../development/python-modules/celery { pytest = self.pytest_32; };
 
   cerberus = buildPythonPackage rec {
     name = "Cerberus-${version}";
@@ -3168,6 +3140,15 @@ in {
     };
   };
 
+  # Needed for celery
+  pytest_32 = self.pytest_34.overrideAttrs( oldAttrs: rec {
+    version = "3.2.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
+    };
+  });
+
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
@@ -3280,27 +3261,7 @@ in {
     };
   };
 
-  pytest-mock = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-mock";
-    version = "1.6.0";
-
-    buildInputs = with self; [ pytest setuptools_scm ];
-    propagatedBuildInputs = with self; [ mock ];
-
-    meta = {
-      description = "Thin-wrapper around the mock package for easier use with py.test.";
-      homepage    = "https://github.com/pytest-dev/pytest-mock";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "07qccww4bq9jxlc0fbhlspr13kcsixchsnl8vk4wdiyvsjy7r8c3";
-    };
-  };
+  pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
@@ -17856,7 +17817,7 @@ in {
     meta = {
       description = "Tree widgets for urwid";
       license = licenses.gpl3;
-      maintainers = with maintainers; [ profpatsch ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -19983,23 +19944,7 @@ EOF
     propagatedBuildInputs = with self; [ pynacl six ];
   };
 
-  pynacl = buildPythonPackage rec {
-    name = "pynacl-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyNaCl/PyNaCl-0.3.0.tar.gz";
-      sha256 = "1hknxlp3a3f8njn19w92p8nhzl9jkfwzhv5fmxhmyq2m8hqrfj8j";
-    };
-
-    buildInputs = with self; [ pytest coverage ];
-    propagatedBuildInputs = with self; [pkgs.libsodium six cffi pycparser];
-
-    checkPhase = ''
-      coverage run --source nacl --branch -m pytest
-    '';
-
-  };
+  pynacl = callPackage ../development/python-modules/pynacl { };
 
   service-identity = callPackage ../development/python-modules/service_identity { };
 
@@ -20120,26 +20065,7 @@ EOF
     };
   };
 
-  weboob = buildPythonPackage rec {
-    name = "weboob-1.1";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/324/${name}.tar.gz";
-      sha256 = "0736c5wsck2abxlwvx8i4496kafk9xchkkzhg4dcfbj0isldih6b";
-    };
-
-    setupPyBuildFlags = ["--qt" "--xdg"];
-
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures pdfminer termcolor ];
-
-    meta = {
-      homepage = http://weboob.org;
-      description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  weboob = callPackage ../development/python-modules/weboob { };
 
   datadiff = buildPythonPackage rec {
     name = "datadiff-1.1.6";

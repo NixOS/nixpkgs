@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
 , makeWrapper, xfce4mixer, hicolor_icon_theme
-, withGtk3 ? false, gtk3, gettext
+, withGtk3 ? false, gtk3, gettext, glib_networking
 }:
 let
   inherit (stdenv.lib) optional;
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xfce4-panel" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';
 
   enableParallelBuilding = true;

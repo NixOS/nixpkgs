@@ -82,7 +82,8 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile moduleBuildDependencies;
+        inherit version modDirVersion config kernelPatches configfile
+          moduleBuildDependencies stdenv;
       };
 
       inherit src;
@@ -265,8 +266,10 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
+  # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = commonMakeFlags ++ [
-    "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc"
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
     "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"

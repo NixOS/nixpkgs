@@ -85,6 +85,7 @@ rec {
     concatMap (opt:
       let
         docOption = rec {
+          loc = opt.loc;
           name = showOption opt.loc;
           description = opt.description or (throw "Option `${name}' has no description.");
           declarations = filter (x: x != unknownModule) opt.declarations;

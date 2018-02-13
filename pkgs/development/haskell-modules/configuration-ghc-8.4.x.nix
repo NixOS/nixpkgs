@@ -61,7 +61,7 @@ self: super: {
   ##       callStackDoc, called at compiler/utils/Outputable.hs:1150:37 in ghc:Outputable
   ##       pprPanic, called at utils/haddock/haddock-api/src/Haddock/Interface/Create.hs:1013:16 in main:Haddock.Interface.Create
   ## Please report this as a GHC bug:  http://www.haskell.org/ghc/reportabug
-  hspec = dontHaddock (dontCheck super.hspec_2_4_7);        # test suite causes an infinite loop
+  hspec = dontHaddock (dontCheck super.hspec_2_4_8);        # test suite causes an infinite loop
 
   ## Setup: Encountered missing dependencies:
   ## QuickCheck >=2.3 && <2.10
@@ -88,7 +88,7 @@ self: super: {
   ##       from the context: a
   constraints = super.constraints_0_10;
 
-  hspec-core = overrideCabal super.hspec-core_2_4_7 (drv: {
+  hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
     ## Needs bump to a versioned attribute
     ## 
     ##     • No instance for (Semigroup Summary)
@@ -102,7 +102,7 @@ self: super: {
   ## breaks hspec:
   ## Setup: Encountered missing dependencies:
   ## hspec-discover ==2.4.7
-  hspec-discover = super.hspec-discover_2_4_7;
+  hspec-discover = super.hspec-discover_2_4_8;
 
   ## Needs bump to a versioned attribute
   ## 

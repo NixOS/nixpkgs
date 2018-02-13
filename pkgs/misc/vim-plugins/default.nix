@@ -3127,6 +3127,18 @@ rec {
 
   };
 
+  vim-pencil = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-pencil-2017-06-14";
+    src = fetchgit {
+      url = "git://github.com/reedes/vim-pencil";
+      rev = "2dcd974b7255e4af83cf79a208f04a3489065e22";
+      sha256 = "0swc6sszj1f4h5hgi7z7j1xw54d69mg7f18rk2kf5y453qwg4jc0";
+    };
+    dependencies = [];
+
+  };
+
+
   vim-ruby = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-ruby-2017-06-22";
     src = fetchgit {

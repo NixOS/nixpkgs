@@ -38,6 +38,10 @@ has the following highlights: </para>
       </itemizedlist>
     </para>
   </listitem>
+
+  <listitem>
+    <para>PHP now defaults to PHP 7.2</para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -206,6 +210,12 @@ following incompatible changes:</para>
         </para>
       </listitem>
     </itemizedlist>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>jid</literal> package has been removed, due to maintenance
+      overhead of a go package having non-versioned dependencies.
+    </para>
   </listitem>
 </itemizedlist>
 

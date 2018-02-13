@@ -47,6 +47,7 @@
   andir = "Andreas Rammhold <andreas@rammhold.de>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   andrestylianos = "Andre S. Ramos <andre.stylianos@gmail.com>";
+  andrew-d = "Andrew Dunham <andrew@du.nham.ca>";
   andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   andsild = "Anders Sildnes <andsild@gmail.com>";
   aneeshusa = "Aneesh Agrawal <aneeshusa@gmail.com>";
@@ -492,6 +493,7 @@
   nicknovitski = "Nick Novitski <nixpkgs@nicknovitski.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
+  nipav = "Niko Pavlinek <niko.pavlinek@gmail.com>";
   nixy = "Andrew R. M. <nixy@nixy.moe>";
   nmattia = "Nicolas Mattia <nicolas@nmattia.com>";
   nocoolnametom = "Tom Doggett <nocoolnametom@gmail.com>";
@@ -552,7 +554,7 @@
   pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
   primeos = "Michael Weiss <dev.primeos@gmail.com>";
-  profpatsch = "Profpatsch <mail@profpatsch.de>";
+  Profpatsch = "Profpatsch <mail@profpatsch.de>";
   proglodyte = "Proglodyte <proglodyte23@gmail.com>";
   pshendry = "Paul Hendry <paul@pshendry.com>";
   psibi = "Sibi <sibi@psibi.in>";
@@ -715,6 +717,7 @@
   utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
   uwap = "uwap <me@uwap.name>";
+  va1entin = "Valentin Heidelberger <github@valentinsblog.com>";
   vaibhavsagar = "Vaibhav Sagar <vaibhavsagar@gmail.com>";
   valeriangalliat = "Valérian Galliat <val@codejam.info>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
@@ -762,6 +765,7 @@
   y0no = "Yoann Ono <y0no@y0no.fr>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yegortimoshenko = "Yegor Timoshenko <yegortimoshenko@gmail.com>";
+  yesbox = "Jesper Geertsen Jonsson <jesper.geertsen.jonsson@gmail.com>";
   ylwghst = "Burim Augustin Berisa <ylwghst@onionmail.info>";
   yochai = "Yochai <yochai@titat.info>";
   yorickvp = "Yorick van Pelt <yorickvanpelt@gmail.com>";

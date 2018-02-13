@@ -112,7 +112,7 @@ let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      nativeBuildInputs = [ pkgs.buildPackages.haskellPackages.cabal2nix ];
+      nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
       preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
