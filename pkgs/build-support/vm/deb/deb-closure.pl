@@ -9,6 +9,7 @@ my @toplevelPkgs = @ARGV;
 
 
 my %packages;
+my %provides;
 
 
 # Parse the Packages file.
@@ -36,8 +37,19 @@ sub getDeps {
         }
         return @res;
     } elsif ($deps->isa('Dpkg::Deps::OR')) {
-        # Arbitrarily pick the first alternative.
-        return getDeps(($deps->get_deps())[0]);
+        # Arbitrarily pick the first viable alternative
+      alternative:
+        foreach my $try ($deps->get_deps()) {
+            my @tryNames = getDeps($try);
+            foreach my $dep (@tryNames) {
+                if (!defined $packages{$dep} && !defined $provides{$dep}) {
+                    print STDERR "Warning: unknown optional package $dep, skipping alternative\n";
+                    next alternative;
+                }
+            }
+            return @tryNames;
+        }
+        die "no viable alternatives found";
     } elsif ($deps->isa('Dpkg::Deps::Simple')) {
         return ($deps->{package});
     } else {
@@ -48,8 +60,6 @@ sub getDeps {
 
 # Process the "Provides" and "Replaces" fields to be able to resolve
 # virtual dependencies.
-my %provides;
-
 foreach my $cdata (values %packages) {
     if (defined $cdata->{Provides}) {
         my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
@@ -82,8 +92,6 @@ sub closePackage {
     my $cdata = $packages{$pkgName};
 
     if (!defined $cdata) {
-        die "unknown (virtual) package $pkgName"
-            unless defined $provides{$pkgName};
         print STDERR "virtual $pkgName: using $provides{$pkgName}\n";
         $pkgName = $provides{$pkgName};
         $cdata = $packages{$pkgName};
