@@ -12048,6 +12048,8 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
+  h2o = callPackage ../servers/http/h2o { };
+
   haka = callPackage ../tools/security/haka { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
