@@ -40,7 +40,22 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  configFile = if cfg.reformatConfigFile then configFileFormatted else configFileUnformatted;
+
+  configFileFormatted = pkgs.runCommand "nginx.conf" {
+    inherit configFileUnformatted;
+    passAsFile = [ "configFileUnformatted" ];
+    # configFileUnformatted is created locally, therefore so should this be.
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  } ''
+    cp ${configFileUnformatted} nginx.conf
+    chmod u+w nginx.conf
+    ${pkgs.nginx-config-formatter}/bin/nginxfmt nginx.conf
+    cp nginx.conf $out
+  '';
+
+  configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
@@ -301,6 +316,14 @@ in
         type = types.bool;
         description = "
           Enable recommended proxy settings.
+        ";
+      };
+
+      reformatConfigFile = mkOption {
+        default = true;
+        type = types.bool;
+        description = "
+          Reformat the nginx config file to improve readability.
         ";
       };
 
