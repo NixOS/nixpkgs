@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, gtk, zathura_core, girara, libspectre, gettext }:
+{ stdenv, lib, fetchurl, pkgconfig, gtk2, zathura_core, girara, libspectre, gettext }:
 
 stdenv.mkDerivation rec {
   name = "zathura-ps-0.2.5";
@@ -8,9 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "1x4knqja8pw2a5cb3y2209nr3iddj1z8nwasy48v5nprj61fdxqj";
   };
 
-  buildInputs = [ pkgconfig libspectre gettext zathura_core gtk girara ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libspectre gettext zathura_core gtk2 girara ];
 
   patches = [ ./gtkflags.patch ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
+    makefileC2=$(echo "$makefileC1" | sed 's|-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}|-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}|g' )
+    echo "$makefileC2" > Makefile
+    echo "$makefileC2"
+  '';
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
@@ -22,7 +30,7 @@ stdenv.mkDerivation rec {
       libspectre library.
       '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan garbas ];
   };
 }

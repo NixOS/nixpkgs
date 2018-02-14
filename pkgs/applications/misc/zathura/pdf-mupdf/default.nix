@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, pkgconfig, zathura_core, gtk, girara, mupdf, openssl
-, libjpeg, jbig2dec, openjpeg, fetchpatch }:
+{ stdenv, lib, fetchurl, pkgconfig, zathura_core, gtk,
+gtk-mac-integration, girara, mupdf, openssl , libjpeg, jbig2dec,
+openjpeg, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "0.3.2";
@@ -10,7 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0xkajc3is7ncmb2fmymbzfgrran2bz12i7zsm1vvxhxds728h7ck";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf libjpeg jbig2dec openjpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [
+    zathura_core gtk girara openssl mupdf libjpeg jbig2dec openjpeg
+    gtk-mac-integration
+  ];
+
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    string1='-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}'
+    string2='-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}'
+    makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
+    echo "''${makefileC1/$string1/$string2}" > Makefile
+  '';
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
@@ -22,7 +35,7 @@ stdenv.mkDerivation rec {
       using the mupdf rendering library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }
