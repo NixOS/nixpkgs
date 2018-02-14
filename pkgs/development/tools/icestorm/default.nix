@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 libftdi ];
   makeFlags = [ "PREFIX=$(out)" ];
 
+  # fix icebox_vlog chipdb path. icestorm issue:
+  #   https://github.com/cliffordwolf/icestorm/issues/125
+  patchPhase = ''
+    substituteInPlace ./icebox/icebox_vlog.py \
+      --replace /usr/local/share "$out/share"
+  '';
+
   meta = {
     description = "Documentation and tools for Lattice iCE40 FPGAs";
     longDescription = ''
