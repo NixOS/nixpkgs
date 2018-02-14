@@ -22,7 +22,7 @@
 }:
 
 let
-  src = fetch "llvm" "0dsik1l6jshd617fh4qs1373s6dfkq4gsjhyf6zq2qb6kyisy2vd";
+  src = fetch "llvm" "1jnk30b7csdldar88pws2b000k3n1484k6gg2sxgz2fc6j7ldkzn";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
