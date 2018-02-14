@@ -1,23 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, asciidocFull }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "ripgrep-${version}";
-  version = "0.7.1";
+  version = "0.8.0";
+
+  buildInputs = [
+    asciidocFull # needed for manpage generation (see build.rs)
+  ];
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = "${version}";
-    sha256 = "0z3f83vhy464k93bc55i9lr6z41163q96if938p9ndhx2q3a20ql";
+    sha256 = "0ha46vhma2diqxfgasdc9gwlkcrlhc4l65nayvdy4m2ah5bm4qp6";
   };
 
-  cargoSha256 = "1d6s01gmyfzb0vdf7flq6nvlapwcgbj0mzcprzyg4nj5gjkvznrn";
+  cargoSha256 = "0q44qa9myrzg42q0lvclpk5nypmf0q7v3xy5nnsb28j3imvcrs4p";
 
-  preFixup = ''
+  postInstall = ''
     mkdir -p "$out/man/man1"
-    cp "$src/doc/rg.1" "$out/man/man1"
+    find target/release -name 'rg.1' -exec cp "{}" $out/man/man1 \;
   '';
 
   meta = with stdenv.lib; {
