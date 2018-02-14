@@ -7613,6 +7613,8 @@ with pkgs;
 
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
+  gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
+
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
