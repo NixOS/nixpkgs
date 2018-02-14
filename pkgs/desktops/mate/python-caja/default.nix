@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "python-caja-${version}";
-  version = "1.18.1";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0n43cvvv29gq31hgrsf9al184cr87c3hzskrh2593rid52kwyz44";
+    sha256 = "0bcgg3p01zik53l5ns48575yw0k88fyc044yvp9fvwy5jqqg1ykk";
   };
 
   nativeBuildInputs = [

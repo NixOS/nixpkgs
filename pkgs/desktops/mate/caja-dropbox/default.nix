@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "caja-dropbox-${version}";
-  version = "1.18.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "18wd8abjaxa68n1yjmvh9az1m8lqa2wing73xdymz0d5gmxmk25g";
+    sha256 = "0xjqcfi5n6hsfyw77blplkn30as0slkfzngxid1n6z7jz5yjq7vj";
   };
 
   nativeBuildInputs = [
