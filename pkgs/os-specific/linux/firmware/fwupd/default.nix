@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, gtk_doc, pkgconfig, gobjectIntrospection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
-, libsoup, docbook2x, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
+, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json_glib
 , shared_mime_info, umockdev
@@ -16,11 +16,11 @@ in stdenv.mkDerivation {
     sha256 = "1n4d6fw3ffg051072hbxn106s52x2wlh5dh2kxwdfjsb5kh03ra3";
   };
 
-  outputs = [ "out" "devdoc" "installedTests" ];
+  outputs = [ "out" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
     meson ninja gtk_doc pkgconfig gobjectIntrospection intltool glibcLocales shared_mime_info
-    valgrind gcab docbook_xml_dtd_43 docbook_xsl docbook2x libxslt python wrapGAppsHook
+    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook
   ];
   buildInputs = [
     polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
@@ -35,6 +35,11 @@ in stdenv.mkDerivation {
     (fetchpatch {
       url = https://github.com/hughsie/fwupd/commit/bd6082574989e4f48b66c7270bb408d439b77a06.patch;
       sha256 = "17pixyizkmn6wlsjmr1wwya17ivn770hdv9mp769vifxinya8w9y";
+    })
+    # drop docbook2man
+    (fetchpatch {
+      url = https://github.com/hughsie/fwupd/commit/2c43d3e6e65868b66a9a64a76123697e259ec7c2.patch;
+      sha256 = "0vjv7jnai0g96frlipk2sc59pj3mhq9di01hajycjv7y5v6qqrmc";
     })
     # https://github.com/hughsie/fwupd/issues/405
     (fetchpatch {
@@ -59,7 +64,6 @@ in stdenv.mkDerivation {
   '';
 
   mesonFlags = [
-    "-Dman=false"
     "-Dplugin_dummy=true"
     "-Dbootdir=/boot"
     "-Dudevdir=lib/udev"
