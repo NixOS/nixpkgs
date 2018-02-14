@@ -177,7 +177,7 @@ in buildFHSUserEnv rec {
   '';
 
   profile = ''
-    export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
+    export STEAM_RUNTIME=/steamrt
   '';
 
   runScript = writeScript "steam-wrapper.sh" ''
