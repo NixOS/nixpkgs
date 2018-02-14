@@ -4145,6 +4145,10 @@ with pkgs;
     gtk2 = null;
   };
 
+  pinentry_emacs = pinentry_ncurses.override {
+    enableEmacs = true;
+  };
+
   pinentry_gnome = pinentry_ncurses.override {
     gcr = gnome3.gcr;
   };
