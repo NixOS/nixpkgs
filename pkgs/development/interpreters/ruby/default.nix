@@ -87,8 +87,6 @@ let
 
         enableParallelBuilding = true;
 
-        hardeningDisable = lib.optional isRuby20 "format";
-
         patches =
           (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops;
@@ -100,16 +98,9 @@ let
           pushd ${sourceRoot}/rubygems
           patch -p1 < ${rubygemsPatch}
           popd
-        '' + opString isRuby21 ''
-          rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
 
-        postPatch = if isRuby21 then ''
-          rm tool/config_files.rb
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
-        ''
-        else if isRuby25 then ''
+        postPatch = if isRuby25 then ''
           sed -i configure.ac -e '/config.guess/d'
           cp ${config}/config.guess tool/
           cp ${config}/config.sub tool/
@@ -189,31 +180,7 @@ let
     ) args; in self;
 
 in {
-  ruby_2_0_0 = generic {
-    version = rubyVersion "2" "0" "0" "p648";
-    sha256 = {
-      src = "1y3n4c6xw2wki7pyjpq5zpbgxnw5i3jc8mcpj6rk7hs995mvv446";
-      git = "0ncjfq4hfqj9kcr8pbll6kypwnmcgs8w7l4466qqfyv7jj3yjd76";
-    };
-  };
-
-  ruby_2_1_10 = generic {
-    version = rubyVersion "2" "1" "10" "";
-    sha256 = {
-      src = "086x66w51lg41abjn79xb7f6xsryymkcc3nvakmkjnjyg96labpv";
-      git = "133phd5r5y0np5lc9nqif93l7yb13yd52aspyl6c46z5jhvhyvfi";
-    };
-  };
-
-  ruby_2_2_9 = generic {
-    version = rubyVersion "2" "2" "9" "";
-    sha256 = {
-      src = "19m1ximl7vcrsvq595dgrjh4yb6kar944095wbywqh7waiqcfirg";
-      git = "03qrjh55098wcqh2khxryzkzfqkznjrcdgwf27r2bgcycbg5ca5q";
-    };
-  };
-
-  ruby_2_3_6 = generic {
+  ruby_2_3 = generic {
     version = rubyVersion "2" "3" "6" "";
     sha256 = {
       src = "07jpa7fw1gyf069m7alf2b0zm53qm08w2ns45mhzmvgrg4r528l3";
@@ -221,7 +188,7 @@ in {
     };
   };
 
-  ruby_2_4_3 = generic {
+  ruby_2_4 = generic {
     version = rubyVersion "2" "4" "3" "";
     sha256 = {
       src = "161smb52q19r9lrzy22b3bhnkd0z8wjffm0qsfkml14j5ic7a0zx";
@@ -229,7 +196,7 @@ in {
     };
   };
 
-  ruby_2_5_0 = generic {
+  ruby_2_5 = generic {
     version = rubyVersion "2" "5" "0" "";
     sha256 = {
       src = "1azj0d2lzziw6iml7bx3sxpxzcdmfwfq3yhm7djyp20q1xiz7rj6";
