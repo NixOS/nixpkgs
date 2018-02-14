@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, gtk_doc, pkgconfig, gobjectIntrospection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
 , libsoup, docbook2x, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
-, fwupdate, libyaml, valgrind, meson, libuuid, colord
+, fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
 , ninja, gcab, gnutls, python3, wrapGAppsHook, json_glib
 , shared_mime_info, umockdev
 }:
@@ -16,11 +16,11 @@ in stdenv.mkDerivation {
     sha256 = "1n4d6fw3ffg051072hbxn106s52x2wlh5dh2kxwdfjsb5kh03ra3";
   };
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [ "out" "devdoc" "installedTests" ];
 
   nativeBuildInputs = [
     meson ninja gtk_doc pkgconfig gobjectIntrospection intltool glibcLocales shared_mime_info
-    valgrind gcab docbook2x libxslt python wrapGAppsHook
+    valgrind gcab docbook_xml_dtd_43 docbook_xsl docbook2x libxslt python wrapGAppsHook
   ];
   buildInputs = [
     polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
@@ -61,7 +61,6 @@ in stdenv.mkDerivation {
   mesonFlags = [
     "-Dman=false"
     "-Dplugin_dummy=true"
-    "-Dgtkdoc=false"
     "-Dbootdir=/boot"
     "-Dudevdir=lib/udev"
     "-Dsystemdunitdir=lib/systemd/system"
