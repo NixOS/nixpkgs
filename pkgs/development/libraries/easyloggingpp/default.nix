@@ -4,13 +4,14 @@
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   name = "easyloggingpp-${version}";
-  version = "9.95.0";
+  version = "9.96.0";
   src = fetchFromGitHub {
     owner = "muflihun";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "0gzmznw6ffag9x55lixxffy6x7mvb7691x0md4q9rbh88zkws7kq";
+    sha256 = "134arh13rksfsxa80h6xw104458ihzp1mpblz5sprx5gxkq7yqfv";
   };
+
   nativeBuildInputs = [cmake];
   buildInputs = [gtest];
   cmakeFlags = [ "-Dtest=ON" ];
@@ -19,15 +20,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/include
     cp ../src/easylogging++.cc $out/include
-    mkdir -p $out/lib/pkgconfig
-    cat << EOF > $out/lib/pkgconfig/easyloggingpp.pc
-    Name: easyloggingpp
-    Description: A C++ Logging Library
-    Version: ${version}
-    prefix=$out
-    includedir=\''${prefix}/include
-    Cflags: -I\''${includedir}
-    EOF
   '';
   meta = {
     description = "C++ logging library";
