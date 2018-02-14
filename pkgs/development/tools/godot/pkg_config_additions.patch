@@ -1,9 +1,12 @@
 +++ build/platform/x11/detect.py
-@@ -139,6 +139,10 @@
-     env.ParseConfig('pkg-config xinerama --cflags --libs')
+@@ -142,3 +142,10 @@
      env.ParseConfig('pkg-config xcursor --cflags --libs')
+     env.ParseConfig('pkg-config xinerama --cflags --libs')
      env.ParseConfig('pkg-config xrandr --cflags --libs')
 +    env.ParseConfig('pkg-config xrender --cflags --libs')
++    env.ParseConfig('pkg-config xi --cflags --libs')
++    env.ParseConfig('pkg-config xext --cflags --libs')
++    env.ParseConfig('pkg-config xfixes --cflags --libs')
 +    env.ParseConfig('pkg-config oslibGLU_combined --cflags')
 +    env.ParseConfig('pkg-config glu --cflags --libs')
 +    env.ParseConfig('pkg-config zlib --cflags --libs')
