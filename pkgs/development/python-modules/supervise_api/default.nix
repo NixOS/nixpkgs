@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "supervise_api";
-  version = "0.3.0";
+  version = "0.4.0";
 
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13gy2m14zh6lbdm45b40ffjnw8y3dapz9hvzpwk8vyvbxj4f1vaf";
+    sha256 = "029h1mlfhkm9lw043rawh24ld8md620y94k6c1l9hs5vvyq4fs84";
   };
 
   propagatedBuildInputs = [
