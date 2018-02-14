@@ -18567,7 +18567,9 @@ with pkgs;
     libpng = libpng12;
   };
 
-  mnemosyne = callPackage ../games/mnemosyne { };
+  mnemosyne = callPackage ../games/mnemosyne {
+    python = python3;
+  };
 
   mrrescue = callPackage ../games/mrrescue { };
 
