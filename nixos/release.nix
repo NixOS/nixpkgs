@@ -260,6 +260,7 @@ in rec {
   tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
+  tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
