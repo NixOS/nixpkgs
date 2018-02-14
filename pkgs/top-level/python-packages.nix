@@ -181,6 +181,8 @@ in {
 
   # packages defined elsewhere
 
+  authres = callPackage ../development/python-modules/authres {};
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   bap = callPackage ../development/python-modules/bap {
