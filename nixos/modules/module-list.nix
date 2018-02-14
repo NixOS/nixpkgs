@@ -114,6 +114,7 @@
   ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
+  ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
@@ -201,6 +202,7 @@
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix

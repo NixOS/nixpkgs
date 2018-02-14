@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    broken = true; # needs ruby 2.1
     homepage = https://github.com/CenturyLinkLabs/panamax-api;
     description = "The API behind The Panamax UI";
     license = licenses.asl20;

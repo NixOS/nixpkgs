@@ -872,6 +872,8 @@ with pkgs;
 
   btfs = callPackage ../os-specific/linux/btfs { };
 
+  buildah = callPackage ../development/tools/buildah { };
+
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
   c3d = callPackage ../applications/graphics/c3d {
@@ -1672,7 +1674,7 @@ with pkgs;
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
 
   cloc = callPackage ../tools/misc/cloc {
-    inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
+    inherit (perlPackages) perl AlgorithmDiff ParallelForkManager RegexpCommon;
   };
 
   cloog = callPackage ../development/libraries/cloog {
@@ -5546,6 +5548,8 @@ with pkgs;
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
+  zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
+
   zsh-git-prompt = callPackage ../shells/zsh-git-prompt { };
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
@@ -7029,6 +7033,8 @@ with pkgs;
   pew = callPackage ../development/tools/pew {};
   pipenv = callPackage ../development/tools/pipenv {};
 
+  pipewire = callPackage ../development/libraries/pipewire {};
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
@@ -7069,21 +7075,11 @@ with pkgs;
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
 
   inherit (callPackage ../development/interpreters/ruby { inherit (darwin.apple_sdk.frameworks) Foundation; })
-    ruby_2_0_0
-    ruby_2_1_10
-    ruby_2_2_9
-    ruby_2_3_6
-    ruby_2_4_3
-    ruby_2_5_0;
+    ruby_2_3
+    ruby_2_4
+    ruby_2_5;
 
-  # Ruby aliases
-  ruby = ruby_2_3;
-  ruby_2_0 = ruby_2_0_0;
-  ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_9;
-  ruby_2_3 = ruby_2_3_6;
-  ruby_2_4 = ruby_2_4_3;
-  ruby_2_5 = ruby_2_5_0;
+  ruby = ruby_2_4;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -7614,6 +7610,8 @@ with pkgs;
 
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
+  gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
+
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
@@ -7908,9 +7906,7 @@ with pkgs;
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
-  redis-dump = callPackage ../development/tools/redis-dump {
-    ruby = ruby_2_0;
-  };
+  redis-dump = callPackage ../development/tools/redis-dump { };
 
   redo = callPackage ../development/tools/build-managers/redo { };
 
@@ -8674,6 +8670,8 @@ with pkgs;
   geos = callPackage ../development/libraries/geos { };
 
   getdata = callPackage ../development/libraries/getdata { };
+
+  getdns = callPackage ../development/libraries/getdns { };
 
   gettext = callPackage ../development/libraries/gettext { };
 
@@ -10181,23 +10179,6 @@ with pkgs;
       };
   });
 
-  # interception-tools needs this. This should be removed when there is a new
-  # release of libyamlcpp, i.e. when the version of libyamlcpp is newer than
-  # 0.5.3.
-  libyamlcppWithoutBoost = libyamlcpp.overrideAttrs (oldAttrs: rec {
-    name = "libyaml-cpp-${version}";
-    version = "2017-08-25";
-
-    src = fetchFromGitHub {
-      owner = "jbeder";
-      repo = "yaml-cpp";
-      rev = "beb44b872c07c74556314e730c6f20a00b32e8e5";
-      sha256 = "1qkr3i5lin6m36w5rbimc7pjx3nx686xnjb6lw00xf67iqrl4h4m";
-    };
-
-    buildInputs = [ cmake ];
-  });
-
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
 
   libytnef = callPackage ../development/libraries/libytnef { };
@@ -10416,7 +10397,8 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins
+    { nix = nixUnstable; };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -13393,7 +13375,10 @@ with pkgs;
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
+
   go-symbols = callPackage ../development/tools/go-symbols { };
+
+  go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
 
@@ -13409,9 +13394,13 @@ with pkgs;
 
   goimports = callPackage ../development/tools/goimports { };
 
+  gopkgs = callPackage ../development/tools/gopkgs { };
+
   govers = callPackage ../development/tools/govers { };
 
   gotools = callPackage ../development/tools/gotools { };
+
+  gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
@@ -14569,9 +14558,7 @@ with pkgs;
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
-  catfish = callPackage ../applications/search/catfish {
-    pythonPackages = python2Packages;
-  };
+  catfish = callPackage ../applications/search/catfish { };
 
   cava = callPackage ../applications/audio/cava { };
 
@@ -15194,6 +15181,8 @@ with pkgs;
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
+
+  ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
   gksu = callPackage ../applications/misc/gksu { };
 
@@ -16454,12 +16443,8 @@ with pkgs;
 
   ostinato = callPackage ../applications/networking/ostinato { };
 
-  panamax_api = callPackage ../applications/networking/cluster/panamax/api {
-    ruby = ruby_2_1;
-  };
-  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui {
-    ruby = ruby_2_1;
-  };
+  panamax_api = callPackage ../applications/networking/cluster/panamax/api { };
+  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui { };
 
   partio = callPackage ../development/libraries/partio {};
 
@@ -17411,7 +17396,7 @@ with pkgs;
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
-  taskjuggler = callPackage ../applications/misc/taskjuggler { ruby = ruby_2_0; };
+  uaskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
 
@@ -17631,7 +17616,7 @@ with pkgs;
     inherit (gnome3) defaultIconTheme;
   };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; ruby = ruby_2_2; };
+  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
 
   vimHugeX = vim_configurable;
 
@@ -18031,7 +18016,6 @@ with pkgs;
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  # v1.3.2 segfaults with qt 5.7
   xca = libsForQt5.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
@@ -18597,7 +18581,9 @@ with pkgs;
     libpng = libpng12;
   };
 
-  mnemosyne = callPackage ../games/mnemosyne { };
+  mnemosyne = callPackage ../games/mnemosyne {
+    python = python3;
+  };
 
   mrrescue = callPackage ../games/mrrescue { };
 
@@ -19026,6 +19012,7 @@ with pkgs;
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
+    remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
@@ -19097,7 +19084,7 @@ with pkgs;
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
         inherit libsForQt5 lib fetchurl;
-        inherit (gnome3) gconf;
+        inherit (gnome3) gconf gsettings_desktop_schemas;
       };
     in
       recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
@@ -19497,7 +19484,7 @@ with pkgs;
   };
 
   z3_4_5_0 = callPackage ../applications/science/logic/z3/4.5.0.nix {};
-  z3 = callPackage ../applications/science/logic/z3 {};
+  z3 = callPackage ../applications/science/logic/z3 { python = python2; };
 
   aiger = callPackage ../applications/science/logic/aiger {};
 

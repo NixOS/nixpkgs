@@ -122,6 +122,7 @@ mapAliases (rec {
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06
   opencl-icd = ocl-icd; # added 2017-01-20
+  openssh_with_kerberos = openssh; # added 2018-01-28
   owncloudclient = owncloud-client;  # added 2016-08
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
@@ -146,7 +147,12 @@ mapAliases (rec {
   rdmd = dtools;  # added 2017-08-19
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
-  openssh_with_kerberos = openssh; # added 2018-01-28
+  ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_2_9 = throw "deprecated 2018-0213: use ruby_2_2 instead";
+  ruby_2_3_6 = throw "deprecated 2018-0213: use ruby_2_3 instead";
+  ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
+  ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
