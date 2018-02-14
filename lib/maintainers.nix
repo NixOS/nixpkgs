@@ -7,7 +7,6 @@
   to ping a package @<handle>), and <Real Name> is your real name, not
   a pseudonym. Please keep the list alphabetically sorted. */
 {
-  0x4A6F = "Joachim Ernst <0x4A6F@shackspace.de>";
   a1russell = "Adam Russell <adamlr6+pub@gmail.com>";
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
@@ -757,6 +756,7 @@
   womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
+  x4A6F = "Joachim Ernst <0x4A6F@shackspace.de>";
   xaverdh = "Dominik Xaver Hörl <hoe.dom@gmx.de>";
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
   xurei = "Olivier Bourdoux <olivier.bourdoux@gmail.com>";
