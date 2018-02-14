@@ -1,6 +1,8 @@
 # verifies:
 #   1. nginx generates config file with shared http context definitions above
 #      generated virtual hosts config.
+#
+#   2. nginx runs with a config file that contains non-ascii letters.
 
 import ./make-test.nix ({ pkgs, ...} : {
   name = "nginx";
@@ -28,6 +30,8 @@ import ./make-test.nix ({ pkgs, ...} : {
         services.nginx.virtualHosts."0.my.test" = {
           extraConfig = ''
             access_log syslog:server=unix:/dev/log,facility=user,tag=mytag,severity=info ceeformat;
+            # This comment is lifted from bug #22883:
+            # Statusseite für Monitoring freigeben
           '';
         };
       };
