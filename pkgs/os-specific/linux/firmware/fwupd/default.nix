@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gtk_doc, pkgconfig, gobjectIntrospection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib_networking
-, libsoup, docbook2x, gpgme, libxslt, libelf, libsmbios, efivar, glibcLocales
+, libsoup, docbook2x, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , fwupdate, libyaml, valgrind, meson, libuuid, pygobject3, colord
 , pillow, ninja, gcab, gnutls, python3Packages, wrapGAppsHook, json_glib
 , shared_mime_info
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     valgrind gcab docbook2x libxslt pygobject3 python3Packages.pycairo wrapGAppsHook
   ];
   buildInputs = [
-    polkit appstream-glib gusb sqlite libarchive libsoup libelf libsmbios fwupdate libyaml
+    polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
     libgudev colord gpgme libuuid pillow gnutls glib_networking efivar json_glib
   ];
 
