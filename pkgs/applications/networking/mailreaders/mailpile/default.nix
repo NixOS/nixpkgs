@@ -2,13 +2,13 @@
 
 python2Packages.buildPythonApplication rec {
   name = "mailpile-${version}";
-  version = "1.0.0rc1";
+  version = "1.0.0rc2";
 
   src = fetchFromGitHub {
     owner = "mailpile";
     repo = "Mailpile";
     rev = "${version}";
-    sha256 = "0hl42ljdzk57ndndff9f1yh08znxwj01kjdmx019vmml0arv0jga";
+    sha256 = "1z5psh00fjr8gnl4yjcl4m9ywfj24y1ffa2rfb5q8hq4ksjblbdj";
   };
 
   postPatch = ''
