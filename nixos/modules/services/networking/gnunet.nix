@@ -137,6 +137,8 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.gnunet pkgs.miniupnpc ];
+      environment.TMPDIR = "/tmp";
+      serviceConfig.PrivateTemp = true;
       serviceConfig.ExecStart = "${pkgs.gnunet}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
