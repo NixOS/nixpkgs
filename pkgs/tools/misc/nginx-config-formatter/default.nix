@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-16";
+  version = "2017-07-26";
   name = "nginx-config-formatter-${version}";
 
   src = fetchFromGitHub {
     owner = "1connect";
     repo = "nginx-config-formatter";
-    rev = "fe5c77d2a503644bebee2caaa8b222c201c0603d";
-    sha256 = "0akpkbq5136k1i1z1ls6yksis35hbr70k8vd10laqwvr1jj41bga";
+    rev = "f5a26225bd7ad5ea97fc6f681cc66fef2f43d5b6";
+    sha256 = "1wm6dfn797fdwjp6cpy70ngws6m9bh64xi1vinm43b3qms81cnb9";
   };
 
   buildInputs = [ python3 ];
