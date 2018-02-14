@@ -1,13 +1,18 @@
-{stdenv, fetchFromGitHub, bash}: stdenv.mkDerivation rec {
+{ stdenv, fetchFromGitHub, bash }:
+
+stdenv.mkDerivation rec {
   name = "zsh-autoenv-${version}";
   version = "2017-12-16";
+
   src = fetchFromGitHub {
     owner = "Tarrasch";
     repo = "zsh-autoenv";
     rev = "2c8cfbcea8e7286649840d7ec98d7e9d5e1d45a0";
     sha256 = "004svkfzhc3ab6q2qvwzgj36wvicg5bs8d2gcibx6adq042di7zj";
   };
-  buildPhase = "true";
+
+  buildPhase = ":";
+
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp -R $src $out/share/zsh-autoenv
@@ -20,8 +25,9 @@
     SCRIPT
     chmod +x $out/bin/zsh-autoenv-share
   '';
-  meta = {
-    description = "zsh-autoenv automatically sources whitelisted .autoenv.zsh files";
+
+  meta = with stdenv.lib; {
+    description = "Automatically sources whitelisted .autoenv.zsh files";
     longDescription = ''
       zsh-autoenv automatically sources (known/whitelisted)
       .autoenv.zsh files, typically used in project root directories.
