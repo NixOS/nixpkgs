@@ -1,12 +1,10 @@
 { stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
 
 let
-  common =
-    args@{ name, target, installPhase }:
-
+  common = { stname, target, installPhase, patches ? null}:
     stdenv.mkDerivation rec {
       version = "0.14.44";
-      name = "${args.name}-${version}";
+      name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
@@ -15,7 +13,10 @@ let
         sha256 = "1gdkx6lbzmdz2hqc9slbq41rwgkxmdisnj0iywx4mppmc2b4v6wh";
       };
 
-      buildInputs = [ go removeReferencesTo ];
+      inherit patches;
+
+      buildInputs = [ go ];
+      nativeBuildInputs = [ removeReferencesTo ];
 
       buildPhase = ''
         # Syncthing expects that it is checked out in $GOPATH, if that variable is
@@ -24,7 +25,7 @@ let
         env GOPATH= go run build.go -no-upgrade -version v${version} build ${target}
       '';
 
-      inherit (args) installPhase;
+      inherit installPhase;
 
       preFixup = ''
         find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
@@ -34,19 +35,18 @@ let
         homepage = https://www.syncthing.net/;
         description = "Open Source Continuous File Synchronization";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ pshendry joko peterhoeg ];
+        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
         platforms = platforms.unix;
       };
     };
 
 in {
   syncthing = common {
-    name = "syncthing";
+    stname = "syncthing";
     target = "syncthing";
 
     installPhase = ''
-      mkdir -p $out/lib/systemd/{system,user}
-
+      mkdir -p $out/bin
       install -Dm755 syncthing $out/bin/syncthing
 
       # This installs man pages in the correct directory according to the suffix
@@ -59,6 +59,8 @@ in {
       done
 
     '' + lib.optionalString (stdenv.isLinux) ''
+      mkdir -p $out/lib/systemd/{system,user}
+
       substitute etc/linux-systemd/system/syncthing-resume.service \
                  $out/lib/systemd/system/syncthing-resume.service \
                  --replace /usr/bin/pkill ${procps}/bin/pkill
@@ -73,24 +75,38 @@ in {
     '';
   };
 
+  syncthing-cli = common {
+    stname = "syncthing-cli";
+
+    patches = [ ./add-stcli-target.patch ];
+    target = "stcli";
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -Dm755 stcli $out/bin/stcli
+    '';
+  };
+
   syncthing-discovery = common {
-    name = "syncthing-discovery";
+    stname = "syncthing-discovery";
     target = "stdiscosrv";
 
     installPhase = ''
+      mkdir -p $out/bin
       install -Dm755 stdiscosrv $out/bin/stdiscosrv
     '';
   };
 
   syncthing-relay = common {
-    name = "syncthing-relay";
+    stname = "syncthing-relay";
     target = "strelaysrv";
 
     installPhase = ''
-      mkdir -p $out/lib/systemd/system $out/bin
-
+      mkdir -p $out/bin
       install -Dm755 strelaysrv $out/bin/strelaysrv
     '' + lib.optionalString (stdenv.isLinux) ''
+      mkdir -p $out/lib/systemd/system
+
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
                  --replace /usr/bin/strelaysrv $out/bin/strelaysrv
