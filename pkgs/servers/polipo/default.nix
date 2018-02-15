@@ -18,5 +18,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ phreedom ehmry ];
     platforms = platforms.all;
+    knownVulnerabilities = [
+      "Unmaintained upstream: https://github.com/jech/polipo/commit/4d42ca1b5849"
+    ];
   };
 }

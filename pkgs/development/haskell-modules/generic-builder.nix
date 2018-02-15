@@ -72,8 +72,7 @@ assert enableSplitObjs == null;
 let
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
-                       concatStringsSep enableFeature optionalAttrs toUpper
-                       filter makeLibraryPath;
+                       concatStringsSep enableFeature optionalAttrs toUpper;
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
@@ -384,7 +383,7 @@ stdenv.mkDerivation ({
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
       buildInputs = systemBuildInputs;
-      nativeBuildInputs = [ ghcEnv ];
+      nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs;
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
@@ -392,9 +391,6 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         # TODO: is this still valid?
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}${
-          makeLibraryPath (filter (x: !isNull x) systemBuildInputs)
-        }"
         ${if isHaLVM
             then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
             else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}

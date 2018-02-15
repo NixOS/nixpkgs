@@ -8,33 +8,16 @@
 # plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.37";
+  version = "2.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1wfbpfjng1blzkbjnxsdnny544297bm9869ianbr6l0hrvcgv3qx";
+    sha256 = "0m33gfpvv01xc28k4rrc8llbyk6qanm9rsqcnv8ydms0cr78dbbk";
   };
 
   sourceRoot = ".";
 
   buildInputs = [ unzip makeWrapper icoutils ];
-
-  pluginLoadPathsPatch =
-    let outputLc = toString (add 7 (length plugins));
-        patchTemplate = readFile ./keepass-plugins.patch;
-        loadTemplate  = readFile ./keepass-plugins-load.patch;
-        loads =
-          lib.concatStrings
-            (map
-              (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
-              plugins);
-    in replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
-
-  passAsFile = [ "pluginLoadPathsPatch" ];
-  postPatch = ''
-    sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
-    patch -p1 <$pluginLoadPathsPatchPath
-  '';
 
   preConfigure = ''
     rm -rvf Build/*

@@ -768,10 +768,10 @@
     el-search = callPackage ({ cl-print, elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.5.3";
+        version = "1.5.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.5.3.tar";
-          sha256 = "095gpanpf88j65cbf4r6c787qxi07kqpvdsh0dsdpg9m3ivmxbra";
+          url = "https://elpa.gnu.org/packages/el-search-1.5.4.tar";
+          sha256 = "1k0makrk3p6hknpnr3kbiszqzw3rpw18gnx2m8scr9vv0wif4qmk";
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
@@ -1040,10 +1040,10 @@
       }) {};
     hook-helpers = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "hook-helpers";
-        version = "1.1";
+        version = "1.1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/hook-helpers-1.1.tar";
-          sha256 = "0xvabl0lfc0ijr98clsyh0bqk2fdi1ncl0knn58j2p30gn9958i5";
+          url = "https://elpa.gnu.org/packages/hook-helpers-1.1.1.tar";
+          sha256 = "05nqlshdqh32smav58hzqg8wp04h7w9sxr239qrz4wqxwlxlv9im";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1637,10 +1637,10 @@
       }) {};
     paced = callPackage ({ async, elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "paced";
-        version = "1.0.1";
+        version = "1.1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/paced-1.0.1.tar";
-          sha256 = "1y2sl3iqz2vjgkbc859sm3h9jhnrgla9ynazy9d5rql0nsb6sn8p";
+          url = "https://elpa.gnu.org/packages/paced-1.1.2.tar";
+          sha256 = "1hxbzlzmlndj2gs9n741whi7rj6vbcnxdn89lg2l0997pqmsx58y";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -2014,10 +2014,10 @@
       }) {};
     sql-indent = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "sql-indent";
-        version = "1.0";
+        version = "1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/sql-indent-1.0.tar";
-          sha256 = "02cmi96mqk3bfmdh0xv5s0qx310cirs6kq0jqwk1ga41rpp596vl";
+          url = "https://elpa.gnu.org/packages/sql-indent-1.1.tar";
+          sha256 = "06q41msfir178f50nk8fnyc1rwgyq5iyy17pv8mq0zqbacjbp88z";
         };
         packageRequires = [];
         meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt }:
+{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
 with stdenv.lib;
 
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     rev = "7482d117cc85523e840dff595134dcb9cdc62207";
     sha256 = "08j611y192n9vln9i94ldlvz3k0sg79dkmfc0b1vczrmaxhpgpfh";
   };
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses boost asciidoc docbook_xsl libxslt ];
 
   postPatch = ''

@@ -46,6 +46,15 @@ in
         What addresses the server should listen on. (UDP+TCP 53)
       '';
     };
+    listenTLS = mkOption {
+      type = with types; listOf str;
+      default = [];
+      example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
+      description = ''
+        Addresses on which kresd should provide DNS over TLS (see RFC 7858).
+        For detailed syntax see ListenStream in man systemd.socket.
+      '';
+    };
     # TODO: perhaps options for more common stuff like cache size or forwarding
   };
 
@@ -75,6 +84,18 @@ in
       socketConfig.FreeBind = true;
     };
 
+    systemd.sockets.kresd-tls = mkIf (cfg.listenTLS != []) rec {
+      wantedBy = [ "sockets.target" ];
+      before = wantedBy;
+      partOf = [ "kresd.socket" ];
+      listenStreams = cfg.listenTLS;
+      socketConfig = {
+        FileDescriptorName = "tls";
+        FreeBind = true;
+        Service = "kresd.service";
+      };
+    };
+
     systemd.sockets.kresd-control = rec {
       wantedBy = [ "sockets.target" ];
       before = wantedBy;
@@ -97,6 +118,8 @@ in
         Type = "notify";
         WorkingDirectory = cfg.cacheDir;
         Restart = "on-failure";
+        Sockets = [ "kresd.socket" "kresd-control.socket" ]
+          ++ optional (cfg.listenTLS != []) "kresd-tls.socket";
       };
 
       # Trust anchor goes from dns-root-data by default.

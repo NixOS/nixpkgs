@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libdaemon-0.14";
 
   src = fetchurl {
@@ -24,4 +24,8 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ ];
   };
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  # This patch should be applied unconditionally, but doing so will cause mass rebuild.
+  patches = ./fix-includes.patch;
+})
+

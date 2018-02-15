@@ -4,18 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "fscryptctl-unstable-${version}";
-  version = "2017-09-12";
+  version = "2017-10-23";
 
   goPackagePath = "github.com/google/fscrypt";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscryptctl";
-    rev = "f037dcf4354ce8f25d0f371b58dfe7a7ac27576f";
-    sha256 = "1dw1y6jbm2ibn7npvpw6cl28rcz0jz4as2yl6walz7ppmqbj9scf";
+    rev = "142326810eb19d6794793db6d24d0775a15aa8e5";
+    sha256 = "1853hlpklisbqnkb7a921dsf0vp2nr2im26zpmrs592cnpsvk3hb";
   };
-
-  patches = [ ./install.patch ];
 
   makeFlags = [ "DESTDIR=$(out)/bin" ];
 

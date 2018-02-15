@@ -42,6 +42,6 @@ in stdenv.mkDerivation rec {
     homepage = http://ultrastardx.sourceforge.net/;
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ profpatsch ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

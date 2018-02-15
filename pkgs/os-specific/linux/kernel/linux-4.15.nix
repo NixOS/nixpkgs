@@ -2,8 +2,8 @@
 
 with stdenv.lib;
 
-import ./generic.nix (args // rec {
-  version = "4.15.1";
+buildLinux (args // rec {
+  version = "4.15.3";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
@@ -13,6 +13,6 @@ import ./generic.nix (args // rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "1pxgs5wqmidwa5lz6q1m9gz6jyvhvlgy8r5bs48cm08b0vcwsvlq";
+    sha256 = "055p02in09rj95z9hc1kjh4r12ydwdcl3ds2cp4dckhlnyhnxf4g";
   };
 } // (args.argsOverride or {}))

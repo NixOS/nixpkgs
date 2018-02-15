@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''s-sql'';
-  version = ''postmodern-20170403-git'';
+  version = ''postmodern-20180131-git'';
 
   description = '''';
 
-  deps = [ args."cl-postgres" args."md5" ];
+  deps = [ args."cl-postgres" args."md5" args."split-sequence" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz'';
-    sha256 = ''1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p'';
+    url = ''http://beta.quicklisp.org/archive/postmodern/2018-01-31/postmodern-20180131-git.tgz'';
+    sha256 = ''0mz5pm759py1iscfn44c00dal2fijkyp5479fpx9l6i7wrdx2mki'';
   };
 
   packageName = "s-sql";
@@ -18,9 +18,12 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM s-sql DESCRIPTION NIL SHA256
-    1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p URL
-    http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz
-    MD5 7a4145a0a5ff5bcb7a4bf29b5c2915d2 NAME s-sql FILENAME s-sql DEPS
-    ((NAME cl-postgres FILENAME cl-postgres) (NAME md5 FILENAME md5))
-    DEPENDENCIES (cl-postgres md5) VERSION postmodern-20170403-git SIBLINGS
-    (cl-postgres postmodern simple-date) PARASITES NIL) */
+    0mz5pm759py1iscfn44c00dal2fijkyp5479fpx9l6i7wrdx2mki URL
+    http://beta.quicklisp.org/archive/postmodern/2018-01-31/postmodern-20180131-git.tgz
+    MD5 a3b7bf25eb342cd49fe144fcd7ddcb16 NAME s-sql FILENAME s-sql DEPS
+    ((NAME cl-postgres FILENAME cl-postgres) (NAME md5 FILENAME md5)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME usocket FILENAME usocket))
+    DEPENDENCIES (cl-postgres md5 split-sequence usocket) VERSION
+    postmodern-20180131-git SIBLINGS (cl-postgres postmodern simple-date)
+    PARASITES NIL) */

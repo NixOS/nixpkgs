@@ -61,13 +61,19 @@ in
   assert kernel != null;
 {
     splStable = common {
-      version = "0.7.5";
-      sha256 = "0njb3274bc5pfr80pzj94sljq457pr71n50s0gsccbz8ghk28rlr";
+      version = "0.7.6";
+      sha256 = "1l641d89k48ngmarx9mxh8gw2zzrf7fw7n8zmslhz4h1152plddb";
     };
 
     splUnstable = common {
-      version = "2017-12-21";
-      rev = "c9821f1ccc647dfbd506f381b736c664d862d126";
-      sha256 = "08r6sa36jaj6n54ap18npm6w85v5yn3x8ljg792h37f49b8kir6c";
+      version = "2018-01-24";
+      rev = "23602fdb39e1254c669707ec9d2d0e6bcdbf1771";
+      sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
+    };
+
+    splLegacyCrypto = common {
+      version = "2018-01-24";
+      rev = "23602fdb39e1254c669707ec9d2d0e6bcdbf1771";
+      sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
     };
 }

@@ -25,11 +25,13 @@ cl-dbi
 cl-emb
 cl-fuse
 cl-fuse-meta-fs
+cl-html-parse
 cl-json
 cl-l10n
 cl-libuv
 cl-mysql
 closer-mop
+closure-html
 cl-ppcre
 cl-ppcre-template
 cl-ppcre-unicode

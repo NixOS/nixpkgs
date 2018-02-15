@@ -81,6 +81,42 @@ rec {
   */
   mod = base: int: base - (int * (builtins.div base int));
 
+  /* C-style comparisons
+
+     a < b,  compare a b => -1
+     a == b, compare a b => 0
+     a > b,  compare a b => 1
+  */
+  compare = a: b:
+    if a < b
+    then -1
+    else if a > b
+         then 1
+         else 0;
+
+  /* Split type into two subtypes by predicate `p`, take all elements
+     of the first subtype to be less than all the elements of the
+     second subtype, compare elements of a single subtype with `yes`
+     and `no` respectively.
+
+     Example:
+
+       let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
+
+       cmp "a" "z" => -1
+       cmp "fooa" "fooz" => -1
+
+       cmp "f" "a" => 1
+       cmp "fooa" "a" => -1
+       # while
+       compare "fooa" "a" => 1
+
+  */
+  splitByAndCompare = p: yes: no: a: b:
+    if p a
+    then if p b then yes a b else -1
+    else if p b then 1 else no a b;
+
   /* Reads a JSON file. */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);

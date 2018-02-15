@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
   buildInputs = [ libgpgerror ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
   # Make sure libraries are correct for .pc and .la files

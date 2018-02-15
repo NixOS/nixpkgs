@@ -104,7 +104,7 @@ let
   };
 
   mailboxConfig = mailbox: ''
-    mailbox ${mailbox.name} {
+    mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
   '' + optionalString (mailbox.specialUse != null) ''
       special_use = \${toString mailbox.specialUse}
@@ -113,7 +113,7 @@ let
   mailboxes = { lib, pkgs, ... }: {
     options = {
       name = mkOption {
-        type = types.str;
+        type = types.strMatching ''[^"]+'';
         example = "Spam";
         description = "The name of the mailbox.";
       };

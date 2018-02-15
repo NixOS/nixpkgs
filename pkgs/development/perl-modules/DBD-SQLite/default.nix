@@ -2,11 +2,11 @@
 
 buildPerlPackage rec {
   name = "DBD-SQLite-${version}";
-  version = "1.54";
+  version = "1.55_07";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/${name}.tar.gz";
-    sha256 = "3929a6dbd8d71630f0cb57f85dcef9588cd7ac4c9fa12db79df77b9d3a4d7269";
+    url = "https://github.com/DBD-SQLite/DBD-SQLite/archive/${version}.tar.gz";
+    sha256 = "0213a31eb7b5afc2d7b3775ca2d1717d07fc7e9ed21ae73b2513a8d54ca222d8";
   };
 
   propagatedBuildInputs = [ DBI ];
@@ -17,8 +17,7 @@ buildPerlPackage rec {
     ./external-sqlite.patch
   ];
 
-  SQLITE_INC = sqlite.dev + "/include";
-  SQLITE_LIB = sqlite.out + "/lib";
+  makeMakerFlags = "SQLITE_INC=${sqlite.dev}/include SQLITE_LIB=${sqlite.out}/lib";
 
   preBuild =
     ''

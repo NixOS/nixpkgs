@@ -79,6 +79,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''Beerware License'';
   };
 
+  bsd0 = spdx {
+    spdxId = "0BSD";
+    fullName = "BSD Zero Clause License";
+  };
+
   bsd2 = spdx {
     spdxId = "BSD-2-Clause";
     fullName = ''BSD 2-clause "Simplified" License'';
@@ -480,6 +485,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   postgresql = spdx {
     spdxId = "PostgreSQL";
     fullName = "PostgreSQL License";
+  };
+
+  postman = {
+    fullName = "Postman EULA";
+    url = https://www.getpostman.com/licenses/postman_base_app;
+    free = false;
   };
 
   psfl = spdx {

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.8.4";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88d87aab9c7889b3ab29dd74aac1a5493ed78b9bf5afba1c069c9dd5531f951d";
+    sha256 = "b61d3a7c45aa08f15dfa735a6a8282b5097be91ff36ad347594d3945ffc12181";
   };
 
   propagatedBuildInputs = [ six protobuf ]

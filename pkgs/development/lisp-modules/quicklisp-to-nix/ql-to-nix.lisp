@@ -98,7 +98,10 @@ will use it instead of re-computing the system data.")
   "Return the path to the file that (if it exists) contains
 pre-computed system data."
   (when *system-data-memoization-path*
-    (merge-pathnames (make-pathname :name system :type "txt") *system-data-memoization-path*)))
+    (merge-pathnames
+      (make-pathname
+        :name (escape-filename (string system))
+        :type "txt") *system-data-memoization-path*)))
 
 (defun memoized-system-data (system)
   "Attempts to locate memoized system data in the path specified by

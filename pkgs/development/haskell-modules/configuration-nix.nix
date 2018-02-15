@@ -258,7 +258,7 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_5; };
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;

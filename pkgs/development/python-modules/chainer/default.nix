@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mbc8kwk7pvg03bf0j57a48gr6rsdg4lzmyj0dak8y2l4lmyskpw";
+    sha256 = "0669375e5b09d687781a37d6c025ee0a6015f575b4d2c70a2ad09c33b8228f86";
   };
 
   checkInputs = [

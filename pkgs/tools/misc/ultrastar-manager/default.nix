@@ -115,6 +115,6 @@ in stdenv.mkDerivation {
     description = "Ultrastar karaoke song manager";
     homepage = https://github.com/UltraStar-Deluxe/UltraStar-Manager;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ profpatsch ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

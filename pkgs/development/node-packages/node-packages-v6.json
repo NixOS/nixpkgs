@@ -44,6 +44,7 @@
 , "js-beautify"
 , "jsonlint"
 , "jsontool"
+, "json-diff"
 , "json-refs"
 , "json-server"
 , "js-yaml"

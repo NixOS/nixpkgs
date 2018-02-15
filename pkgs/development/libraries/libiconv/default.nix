@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform
 }:
 
-assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
+# assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   name = "libiconv-${version}";

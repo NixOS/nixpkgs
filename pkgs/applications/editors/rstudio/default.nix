@@ -4,7 +4,10 @@
 }:
 
 let
-  version = "1.1.414";
+  verMajor = "1";
+  verMinor = "1";
+  verPatch = "423";
+  version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "1.5";
   gwtVer = "2.7.0";
 in
@@ -19,44 +22,28 @@ stdenv.mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "1rr2zkv53r8swhq5d745jpp0ivxpsizzh7srf34isqpkn5pgx3v8";
+    sha256 = "02kpmzh0vr0gb5dhiwcm4gwjbc3biwz0km655mgzmx9j64cyd3nf";
   };
 
   # Hack RStudio to only use the input R.
   patches = [ ./r-location.patch ];
   postPatch = "substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}";
 
-  inherit ginVer;
   ginSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gin-${ginVer}.zip";
     sha256 = "155bjrgkf046b8ln6a55x06ryvm8agnnl7l8bkwwzqazbpmz8qgm";
   };
 
-  inherit gwtVer;
   gwtSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gwt-${gwtVer}.zip";
     sha256 = "1cs78z9a1jg698j2n35wsy07cy4fxcia9gi00x0r0qc3fcdhcrda";
   };
 
-  hunspellDictionaries = builtins.attrValues hunspellDicts;
+  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
-  };
-
-  rmarkdownSrc = fetchFromGitHub {
-    owner = "rstudio";
-    repo = "rmarkdown";
-    rev = "v1.8";
-    sha256 = "1blqxdr1vp2z5wd52nmf8hq36sdd4s2pyms441dqj50v35f8girb";
-  };
-
-  rsconnectSrc = fetchFromGitHub {
-    owner = "rstudio";
-    repo = "rsconnect";
-    rev = "953c945779dd180c1bfe68f41c173c13ec3e222d";
-    sha256 = "1yxwd9v4mvddh7m5rbljicmssw7glh1lhin7a9f01vxxa92vpj7z";
   };
 
   rstudiolibclang = fetchurl {
@@ -71,31 +58,31 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      export RSTUDIO_VERSION_MAJOR=${verMajor}
+      export RSTUDIO_VERSION_MINOR=${verMinor}
+      export RSTUDIO_VERSION_PATCH=${verPatch}
+
       GWT_LIB_DIR=src/gwt/lib
 
-      mkdir -p $GWT_LIB_DIR/gin/$ginVer
-      unzip $ginSrc -d $GWT_LIB_DIR/gin/$ginVer
+      mkdir -p $GWT_LIB_DIR/gin/${ginVer}
+      unzip ${ginSrc} -d $GWT_LIB_DIR/gin/${ginVer}
 
-      unzip $gwtSrc
+      unzip ${gwtSrc}
       mkdir -p $GWT_LIB_DIR/gwt
-      mv gwt-$gwtVer $GWT_LIB_DIR/gwt/$gwtVer
+      mv gwt-${gwtVer} $GWT_LIB_DIR/gwt/${gwtVer}
 
       mkdir dependencies/common/dictionaries
-      for dict in $hunspellDictionaries; do
-          for i in "$dict/share/hunspell/"*
-	  do ln -sv $i dependencies/common/dictionaries/
-	  done
+      for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
+        for i in "$dict/share/hunspell/"*; do
+          ln -sv $i dependencies/common/dictionaries/
+        done
       done
 
-      unzip $mathJaxSrc -d dependencies/common/mathjax-26
-      mkdir -p dependencies/common/rmarkdown
-      ln -s $rmarkdownSrc dependencies/common/rmarkdown/
-      mkdir -p dependencies/common/rsconnect
-      ln -s $rsconnectSrc dependencies/common/rsconnect/
+      unzip ${mathJaxSrc} -d dependencies/common/mathjax-26
       mkdir -p dependencies/common/libclang/3.5
-      unzip $rstudiolibclang -d dependencies/common/libclang/3.5
+      unzip ${rstudiolibclang} -d dependencies/common/libclang/3.5
       mkdir -p dependencies/common/libclang/builtin-headers
-      unzip $rstudiolibclangheaders -d dependencies/common/libclang/builtin-headers
+      unzip ${rstudiolibclangheaders} -d dependencies/common/libclang/builtin-headers
 
       mkdir -p dependencies/common/pandoc
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/

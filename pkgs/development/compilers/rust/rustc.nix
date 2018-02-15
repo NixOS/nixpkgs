@@ -86,7 +86,7 @@ stdenv.mkDerivation {
 
     # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
-    rm -vr src/test/run-make/issue-26092.rs || true
+    rm -vr src/test/run-make/issue-26092 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true

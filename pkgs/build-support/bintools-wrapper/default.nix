@@ -51,6 +51,7 @@ let
   # shell glob that ought to match it.
   dynamicLinker =
     /**/ if libc == null then null
+    else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".

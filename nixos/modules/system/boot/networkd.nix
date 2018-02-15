@@ -700,7 +700,6 @@ in
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"
-      "org.freedesktop.network1.busname"
     ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links

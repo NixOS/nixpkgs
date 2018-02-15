@@ -14,7 +14,7 @@ let
         sha256 = "18clfpw03g8dxm61bmdkmccyaxir3gnq451z6xqa2ilm3j820aa5";
       });
 in
-{
+rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
     version = "390.25";
@@ -24,13 +24,7 @@ in
     persistencedSha256 = "033azbhi50f1b0lw759sncgf7ckh2m2c0khj5v15sch9kl1fzk8i";
   };
 
-  beta = generic {
-    version = "381.22";
-    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
-    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
-    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
-    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
-  };
+  beta = stable; # not enough interest to maintain beta ATM
 
 
   legacy_340 = generic {
