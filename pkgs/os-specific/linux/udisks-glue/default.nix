@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, udisks, dbus-glib, glib, confuse }:
+{ stdenv, fetchurl, pkgconfig, automake, autoconf, udisks1, dbus-glib, glib, confuse }:
 
 stdenv.mkDerivation {
   name = "udisks-glue-1.3.5";
@@ -8,8 +8,8 @@ stdenv.mkDerivation {
     sha256 = "317d25bf249278dc8f6a5dcf18f760512427c772b9afe3cfe34e6e1baa258176";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ automake autoconf udisks dbus-glib glib confuse ];
+  nativeBuildInputs = [ pkgconfig automake autoconf ];
+  buildInputs = [ udisks1 dbus-glib glib confuse ];
 
   preConfigure = "sh autogen.sh";
 
