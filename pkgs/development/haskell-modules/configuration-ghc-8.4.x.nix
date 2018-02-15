@@ -106,13 +106,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## 
-  ##     • No instance for (Semigroup Metadatas)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid Metadatas’
-  JuicyPixels = super.JuicyPixels_3_2_9_4;
-
-  ## Needs bump to a versioned attribute
-  ## 
   ##     • Could not deduce (Semigroup (a :->: b))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (HasTrie a, Monoid b)
