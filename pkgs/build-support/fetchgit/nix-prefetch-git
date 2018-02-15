@@ -208,11 +208,12 @@ clone(){
     init_remote "$url"
 
     # Download data from the repository.
-    checkout_ref "$hash" "$ref" ||
-    checkout_hash "$hash" "$ref" || (
-        echo 1>&2 "Unable to checkout $hash$ref from $url."
-        exit 1
-    )
+    exit_status=$(checkout_ref "$hash" "$ref" || checkout_hash "$hash" "$ref")
+
+    if [ $exit_status ]; then
+      echo 1>&2 "Unable to checkout $hash$ref from $url."
+      exit 1
+    fi
 
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
@@ -314,11 +315,12 @@ clone_user_rev() {
         errfile="$(mktemp "${TMPDIR:-/tmp}/git-checkout-err-XXXXXXXX")"
         # shellcheck disable=SC2064
         trap "rm -rf \"$errfile\"" EXIT
-        _clone_user_rev "$@" 2> "$errfile" || (
-            status="$?"
-            cat "$errfile" >&2
-            exit "$status"
-        )
+        _clone_user_rev "$@" 2> "$errfile"
+        status=$?
+        if [ $status -ne 0 ]; then
+          cat "$errfile" >&2
+          exit $status
+        fi
     fi
 }
 
