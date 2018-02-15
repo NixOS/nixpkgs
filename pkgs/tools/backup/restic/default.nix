@@ -19,8 +19,16 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin/
+    mkdir -p \
+      $bin/bin \
+      $bin/etc/bash_completion.d \
+      $bin/share/zsh/vendor-completions \
+      $bin/share/man/man1
     cp restic $bin/bin/
+    $bin/bin/restic generate \
+      --bash-completion $bin/etc/bash_completion.d/restic.sh \
+      --zsh-completion $bin/share/zsh/vendor-completions/restic.sh \
+      --man $bin/share/man/man1
   '';
 
   meta = with stdenv.lib; {
