@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gtkflags.patch ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
     makefileC2=$(echo "$makefileC1" | sed 's|-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}|-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}|g' )
     echo "$makefileC2" > Makefile
