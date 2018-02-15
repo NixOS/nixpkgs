@@ -19907,6 +19907,8 @@ with pkgs;
 
   hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
 
+  hyperfine = callPackage ../tools/misc/hyperfine { };
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   illum = callPackage ../tools/system/illum { };
