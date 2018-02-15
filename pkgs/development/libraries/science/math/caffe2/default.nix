@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
   ;
   propagatedBuildInputs = [ numpy future six python-protobuf pydot ];
 
+  patches = if stdenv.cc.isClang then [ ./update_clang_cvtsh_bugfix.patch ] else [ ];
+
   cmakeFlags = [ ''-DBUILD_TEST=OFF''
                  ''-DBUILD_PYTHON=ON''
                  ''-DUSE_CUDA=${if useCuda then ''ON''else ''OFF''}''
