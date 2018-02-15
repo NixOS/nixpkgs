@@ -5290,6 +5290,8 @@ in {
 
   internetarchive = callPackage ../development/python-modules/internetarchive {};
 
+  JPype1 = callPackage ../development/python-modules/JPype1 {};
+
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
   jug = callPackage ../development/python-modules/jug {};
