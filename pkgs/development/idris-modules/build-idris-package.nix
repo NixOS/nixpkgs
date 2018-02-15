@@ -1,23 +1,46 @@
 # Build an idris package
-#
-# args: Additional arguments to pass to mkDerivation. Generally should include at least
-#       name and src.
-{ stdenv, idris, gmp }: args: stdenv.mkDerivation ({
-  buildPhase = ''
-    idris --build *.ipkg
+{ stdenv, idrisPackages, gmp }:
+  { idrisDeps ? []
+  , name
+  , version
+  , src
+  , meta
+  , extraBuildInputs ? []
+  , postUnpack ? ""
+  , doCheck ? true
+  }:
+let
+  idris-with-packages = idrisPackages.with-packages idrisDeps;
+in
+stdenv.mkDerivation ({
+
+  name = "${name}-${version}";
+
+  inherit postUnpack src doCheck meta;
+
+
+  # Some packages use the style
+  # opts = -i ../../path/to/package
+  # rather than the declarative pkgs attribute so we have to rewrite the path.
+  postPatch = ''
+    sed -i *.ipkg -e "/^opts/ s|-i \\.\\./|-i ${idris-with-packages}/libs/|g"
   '';
 
-  doCheck = true;
+  buildPhase = ''
+    ${idris-with-packages}/bin/idris --build *.ipkg
+  '';
 
   checkPhase = ''
     if grep -q test *.ipkg; then
-      idris --testpkg *.ipkg
+      ${idris-with-packages}/bin/idris --testpkg *.ipkg
     fi
   '';
 
   installPhase = ''
-    idris --install *.ipkg --ibcsubdir $IBCSUBDIR
+    ${idris-with-packages}/bin/idris --install *.ipkg --ibcsubdir $out/libs
   '';
 
-  buildInputs = [ gmp idris ];
-} // args)
+  buildInputs = [ gmp ] ++ extraBuildInputs;
+
+  propagatedBuildInputs = idrisDeps;
+})

@@ -1,17 +1,20 @@
-{ pkgs
+{ curl
 , build-idris-package
 , fetchFromGitHub
 , lightyear
 , contrib
+, effects
+, prelude
+, base
 , lib
 , idris
 }:
 
 let
-  date = "2016-12-20";
 in
 build-idris-package {
-  name = "httpclient-${date}";
+  name = "httpclient";
+  version = "2016-12-20";
 
   src = fetchFromGitHub {
     owner = "justjoheinz";
@@ -20,11 +23,14 @@ build-idris-package {
     sha256 = "0sy0q7gri9lwbqdmx9720pby3w1470w7wzn62bf2rir532219hhl";
   };
 
-  propagatedBuildInputs = [ pkgs.curl lightyear contrib ];
+  idrisDeps = [ prelude base effects lightyear contrib ];
+
+  extraBuildInputs = [ curl ];
 
   meta = {
     description = "HTTP Client for Idris";
     homepage = https://github.com/justjoheinz/idris-httpclient;
     inherit (idris.meta) platforms;
+    broken = true;
   };
 }
