@@ -1,7 +1,7 @@
 { stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
 
 let
-  common = { stname, target, installPhase, patches ? null}:
+  common = { stname, target, installPhase, patches ? [] }:
     stdenv.mkDerivation rec {
       version = "0.14.44";
       name = "${stname}-${version}";
@@ -46,7 +46,6 @@ in {
     target = "syncthing";
 
     installPhase = ''
-      mkdir -p $out/bin
       install -Dm755 syncthing $out/bin/syncthing
 
       # This installs man pages in the correct directory according to the suffix
@@ -82,7 +81,6 @@ in {
     target = "stcli";
 
     installPhase = ''
-      mkdir -p $out/bin
       install -Dm755 stcli $out/bin/stcli
     '';
   };
@@ -92,7 +90,6 @@ in {
     target = "stdiscosrv";
 
     installPhase = ''
-      mkdir -p $out/bin
       install -Dm755 stdiscosrv $out/bin/stdiscosrv
     '';
   };
@@ -102,7 +99,6 @@ in {
     target = "strelaysrv";
 
     installPhase = ''
-      mkdir -p $out/bin
       install -Dm755 strelaysrv $out/bin/strelaysrv
     '' + lib.optionalString (stdenv.isLinux) ''
       mkdir -p $out/lib/systemd/system
