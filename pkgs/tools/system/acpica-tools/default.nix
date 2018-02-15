@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildFlags = stdenv.lib.concatStringsSep " " [
+  buildFlags = [
     "acpibin"
     "acpidump"
     "acpiexec"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "acpixtract"
   ];
 
-  buildInputs = [ bison flex ];
+  nativeBuildInputs = [ bison flex ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
