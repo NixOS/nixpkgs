@@ -17327,15 +17327,14 @@ with pkgs;
 
   syncplay = callPackage ../applications/networking/syncplay { };
 
-  syncthing = callPackage ../applications/networking/syncthing { };
-
-  syncthing-discovery = callPackage ../applications/networking/syncthing/discovery.nix { };
+  inherit (callPackages ../applications/networking/syncthing { })
+    syncthing
+    syncthing-discovery
+    syncthing-relay;
 
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
-
-  syncthing-relay = callPackage ../applications/networking/syncthing/relay.nix { };
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
