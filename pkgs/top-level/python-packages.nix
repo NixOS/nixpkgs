@@ -5286,6 +5286,8 @@ in {
     };
   };
 
+  JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi {};
+
   jdcal = callPackage ../development/python-modules/jdcal { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive {};
