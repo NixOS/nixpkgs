@@ -59,7 +59,7 @@ $ git checkout -b 'fix/pkg-name-update'
 </listitem>
 
 <listitem>
-<para>Format the commit in a following way:</para>
+<para>It is recommended to format the commit in a following way:</para>
 <programlisting>
 (pkg-name | nixos/&lt;module>): (from -> to | init at version | refactor | etc)
 Additional information.
