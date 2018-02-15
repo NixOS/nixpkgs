@@ -261,14 +261,13 @@ index 55c74aad66..0bbc8718eb 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index e645ba5803..a0e5c68b7e 100644
+index 50a1ec6764..d6368b769e 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
-@@ -24,166 +24,3 @@ qt {
-         }
+@@ -25,188 +25,3 @@ qt {
      }
  }
--
+ 
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
 -!no_default_rpath {
@@ -291,6 +290,29 @@ index e645ba5803..a0e5c68b7e 100644
 -}
 -
 -macx-xcode {
+-    qmake_pkginfo_typeinfo.name = QMAKE_PKGINFO_TYPEINFO
+-    !isEmpty(QMAKE_PKGINFO_TYPEINFO): \
+-        qmake_pkginfo_typeinfo.value = $$QMAKE_PKGINFO_TYPEINFO
+-    else: \
+-        qmake_pkginfo_typeinfo.value = "????"
+-    QMAKE_MAC_XCODE_SETTINGS += qmake_pkginfo_typeinfo
+-
+-    !isEmpty(VERSION) {
+-        l = $$split(VERSION, '.') 0 0  # make sure there are at least three
+-        VER_MAJ = $$member(l, 0, 0)
+-        VER_MIN = $$member(l, 1, 1)
+-        VER_PAT = $$member(l, 2, 2)
+-        unset(l)
+-
+-        qmake_full_version.name = QMAKE_FULL_VERSION
+-        qmake_full_version.value = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
+-        QMAKE_MAC_XCODE_SETTINGS += qmake_full_version
+-
+-        qmake_short_version.name = QMAKE_SHORT_VERSION
+-        qmake_short_version.value = $${VER_MAJ}.$${VER_MIN}
+-        QMAKE_MAC_XCODE_SETTINGS += qmake_short_version
+-    }
+-
 -    !isEmpty(QMAKE_XCODE_DEBUG_INFORMATION_FORMAT) {
 -        debug_information_format.name = DEBUG_INFORMATION_FORMAT
 -        debug_information_format.value = $$QMAKE_XCODE_DEBUG_INFORMATION_FORMAT
@@ -432,10 +454,10 @@ index e645ba5803..a0e5c68b7e 100644
 -
 -QMAKE_XCODE_LIBRARY_SUFFIX = $$qtPlatformTargetSuffix()
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index 44636f2288..3b01424e67 100644
+index f1a4ca77b2..3b01424e67 100644
 --- a/mkspecs/features/mac/default_pre.prf
 +++ b/mkspecs/features/mac/default_pre.prf
-@@ -1,56 +1,2 @@
+@@ -1,67 +1,2 @@
  CONFIG = asset_catalogs rez $$CONFIG
  load(default_pre)
 -
@@ -492,6 +514,17 @@ index 44636f2288..3b01424e67 100644
 -# feature, which allows Xcode to choose the Qt libraries to link to
 -# at build time, depending on the current Xcode SDK and configuration.
 -QMAKE_XCODE_LIBRARY_SUFFIX_SETTING = QT_LIBRARY_SUFFIX
+-
+-xcode_copy_phase_strip_setting.name = COPY_PHASE_STRIP
+-xcode_copy_phase_strip_setting.value = NO
+-QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
+-
+-xcode_product_bundle_identifier_setting.name = PRODUCT_BUNDLE_IDENTIFIER
+-xcode_product_bundle_identifier_setting.value = $$QMAKE_TARGET_BUNDLE_PREFIX
+-isEmpty(xcode_product_bundle_identifier_setting.value): \
+-    xcode_product_bundle_identifier_setting.value = "com.yourcompany"
+-xcode_product_bundle_identifier_setting.value = "$${xcode_product_bundle_identifier_setting.value}.${PRODUCT_NAME:rfc1034identifier}"
+-QMAKE_MAC_XCODE_SETTINGS += xcode_product_bundle_identifier_setting
 diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
 index 3f6dc076ca..e69de29bb2 100644
 --- a/mkspecs/features/mac/sdk.prf
@@ -676,10 +709,10 @@ index 72dde61a40..f891a2baed 100644
      INSTALLS += inst_qch_docs
  
 diff --git a/mkspecs/features/qt_example_installs.prf b/mkspecs/features/qt_example_installs.prf
-index 668669e4cd..eb4840a0aa 100644
+index c9ce926b1a..f00868a031 100644
 --- a/mkspecs/features/qt_example_installs.prf
 +++ b/mkspecs/features/qt_example_installs.prf
-@@ -82,7 +82,7 @@ sourcefiles += \
+@@ -88,7 +88,7 @@ sourcefiles += \
      $$SOURCES $$HEADERS $$FORMS $$RESOURCES $$TRANSLATIONS \
      $$DBUS_ADAPTORS $$DBUS_INTERFACES
  addInstallFiles(sources.files, $$sourcefiles)
@@ -765,7 +798,7 @@ index 90d84cc535..387481bfc6 100644
          INSTALLS += privpritarget
      }
 diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
-index 62e1b69fde..abd63123f9 100644
+index 14fc5f9a94..2a0f2cd27f 100644
 --- a/mkspecs/features/qt_plugin.prf
 +++ b/mkspecs/features/qt_plugin.prf
 @@ -88,7 +88,7 @@ CONFIG(static, static|shared)|prefix_build {
@@ -851,10 +884,10 @@ index 706304cf34..546420f6ad 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index 609e52d9d2..f0f29ce61f 100644
+index 3814894630..3c6468277c 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
-@@ -2580,6 +2580,15 @@ QStringList QCoreApplication::libraryPaths()
+@@ -2601,6 +2601,15 @@ QStringList QCoreApplication::libraryPaths()
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -871,7 +904,7 @@ index 609e52d9d2..f0f29ce61f 100644
          if (!libPathEnv.isEmpty()) {
              QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);
 diff --git a/src/corelib/tools/qtimezoneprivate_tz.cpp b/src/corelib/tools/qtimezoneprivate_tz.cpp
-index bcc1285472..a77eb472a3 100644
+index 6a5df6272a..a6136ca4cd 100644
 --- a/src/corelib/tools/qtimezoneprivate_tz.cpp
 +++ b/src/corelib/tools/qtimezoneprivate_tz.cpp
 @@ -70,7 +70,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
@@ -969,10 +1002,10 @@ index 07869efd7d..fb4183bada 100644
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
 diff --git a/src/network/kernel/qdnslookup_unix.cpp b/src/network/kernel/qdnslookup_unix.cpp
-index 1da00813ce..0bf877afcb 100644
+index ce1ec6442a..4f75655abe 100644
 --- a/src/network/kernel/qdnslookup_unix.cpp
 +++ b/src/network/kernel/qdnslookup_unix.cpp
-@@ -92,7 +92,7 @@ static bool resolveLibraryInternal()
+@@ -95,7 +95,7 @@ static bool resolveLibraryInternal()
      if (!lib.load())
  #endif
      {
@@ -1013,10 +1046,10 @@ index b5a0a5bbeb..6c20305f4d 100644
  
  QString TableGenerator::findComposeFile()
 diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-index 3bc8590d36..2a78fde518 100644
+index a59dc15b0e..a13ee89b5a 100644
 --- a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 +++ b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-@@ -580,7 +580,14 @@ QFunctionPointer QGLXContext::getProcAddress(const char *procName)
+@@ -584,7 +584,14 @@ QFunctionPointer QGLXContext::getProcAddress(const char *procName)
  #if QT_CONFIG(library)
                  extern const QString qt_gl_library_name();
  //                QLibrary lib(qt_gl_library_name());
