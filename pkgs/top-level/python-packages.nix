@@ -230,7 +230,7 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
-  
+
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
@@ -254,7 +254,7 @@ in {
   };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
-  
+
   neuron = pkgs.neuron.override {
     inherit python;
   };
@@ -359,7 +359,7 @@ in {
   };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
-  
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
@@ -14657,7 +14657,7 @@ in {
       substituteInPlace "setup.cfg"                                     \
               --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
               --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
-      export LDSHARED="$CC -pthread -shared"
+      ${stdenv.lib.optionalString (!stdenv.isDarwin) ''export LDSHARED="$CC -pthread -shared"''}
     '';
 
     meta = {
