@@ -5286,9 +5286,36 @@ in {
     };
   };
 
+  JayDeBeApi = buildPythonPackage {
+    name = "JayDeBeApi-1.1.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/J/JayDeBeApi/JayDeBeApi-1.1.1.tar.gz";
+      sha256 = "0a189xs9zw81jvwwglvf2qyqnk6ra0biljssx9n4ffayqn9glbds";
+    };
+    propagatedBuildInputs = [ self.JPype1 ];
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://github.com/baztian/jaydebeapi";
+      license = licenses.lgpl2;
+      description = "Use JDBC database drivers from Python 2/3 or Jython with a DB-API.";
+    };
+  };
+
   jdcal = callPackage ../development/python-modules/jdcal { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive {};
+
+  JPype1 = buildPythonPackage {
+    name = "JPype1-0.6.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/J/JPype1/JPype1-0.6.2.tar.gz";
+      sha256 = "09bzmnzkjbrf60h39wapxc1l8mb3r9km486cly0mm78bv096884r";
+    };
+    meta = with pkgs.stdenv.lib; {
+      homepage = "https://github.com/originell/jpype/";
+      license = "License :: OSI Approved :: Apache Software License";
+      description = "A Python to Java bridge.";
+    };
+  };
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
