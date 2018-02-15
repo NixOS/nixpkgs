@@ -1,7 +1,7 @@
 { stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
 
 let
-  common = { stname, target, installPhase, patches ? [] }:
+  common = { stname, target, patches ? [], postInstall ? "" }:
     stdenv.mkDerivation rec {
       version = "0.14.44";
       name = "${stname}-${version}";
@@ -25,7 +25,12 @@ let
         env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
       '';
 
-      inherit installPhase;
+      installPhase = ''
+        install -Dm755 ${target} $out/bin/${target}
+        runHook postInstall
+      '';
+
+      inherit postInstall;
 
       preFixup = ''
         find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
@@ -45,15 +50,12 @@ in {
     stname = "syncthing";
     target = "syncthing";
 
-    installPhase = ''
-      install -Dm755 syncthing $out/bin/syncthing
-
+    postInstall = ''
       # This installs man pages in the correct directory according to the suffix
       # on the filename
       for mf in man/*.[1-9]; do
         mantype="$(echo "$mf" | awk -F"." '{print $NF}')"
         mandir="$out/share/man/man$mantype"
-        mkdir -p "$mandir"
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
@@ -79,28 +81,18 @@ in {
 
     patches = [ ./add-stcli-target.patch ];
     target = "stcli";
-
-    installPhase = ''
-      install -Dm755 stcli $out/bin/stcli
-    '';
   };
 
   syncthing-discovery = common {
     stname = "syncthing-discovery";
     target = "stdiscosrv";
-
-    installPhase = ''
-      install -Dm755 stdiscosrv $out/bin/stdiscosrv
-    '';
   };
 
   syncthing-relay = common {
     stname = "syncthing-relay";
     target = "strelaysrv";
 
-    installPhase = ''
-      install -Dm755 strelaysrv $out/bin/strelaysrv
-    '' + lib.optionalString (stdenv.isLinux) ''
+    postInstall = lib.optionalString (stdenv.isLinux) ''
       mkdir -p $out/lib/systemd/system
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
