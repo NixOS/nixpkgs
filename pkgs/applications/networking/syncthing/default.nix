@@ -1,37 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, go, procps, removeReferencesTo }:
+{ stdenv, lib, pkgs, go, procps, removeReferencesTo }:
 
-stdenv.mkDerivation rec {
-  version = "0.14.44";
-  name = "syncthing-${version}";
-
-  src = fetchFromGitHub {
-    owner  = "syncthing";
-    repo   = "syncthing";
-    rev    = "v${version}";
-    sha256 = "1gdkx6lbzmdz2hqc9slbq41rwgkxmdisnj0iywx4mppmc2b4v6wh";
+let
+  common = import ./common.nix {
+    inherit pkgs;
   };
 
-  outputs = [ "out" "server" ];
+in stdenv.mkDerivation rec {
+  inherit (common) version src buildInputs preFixup meta;
 
-  buildInputs = [ go removeReferencesTo ];
-
-  buildPhase = ''
-    # Syncthing expects that it is checked out in $GOPATH, if that variable is
-    # set.  Since this isn't true when we're fetching source, we can explicitly
-    # unset it and force Syncthing to set up a temporary one for us.
-    for bin in syncthing stdiscosrv strelaysrv; do
-      env GOPATH= go run build.go -no-upgrade -version v${version} build $bin
-    done
-  '';
+  name = "syncthing-${version}";
+  buildPhase = common.makeBuildPhase "syncthing";
 
   installPhase = ''
     mkdir -p $out/lib/systemd/{system,user}
-    mkdir -p $server/lib/systemd/system $server/bin
 
     install -Dm755 syncthing $out/bin/syncthing
-    for sbin in stdiscosrv strelaysrv; do
-      install -Dm755 $sbin $server/bin/$sbin
-    done
 
     # This installs man pages in the correct directory according to the suffix
     # on the filename
@@ -54,21 +37,5 @@ stdenv.mkDerivation rec {
     substitute etc/linux-systemd/user/syncthing.service \
                $out/lib/systemd/user/syncthing.service \
                --replace /usr/bin/syncthing $out/bin/syncthing
-
-    substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
-               $server/lib/systemd/system/strelaysrv.service \
-               --replace /usr/bin/strelaysrv $server/bin/strelaysrv
   '';
-
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.syncthing.net/;
-    description = "Open Source Continuous File Synchronization";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ pshendry joko peterhoeg ];
-    platforms = platforms.unix;
-  };
 }

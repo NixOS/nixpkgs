@@ -17329,9 +17329,13 @@ with pkgs;
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
+  syncthing-discovery = callPackage ../applications/networking/syncthing/discovery.nix { };
+
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
+
+  syncthing-relay = callPackage ../applications/networking/syncthing/relay.nix { };
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
