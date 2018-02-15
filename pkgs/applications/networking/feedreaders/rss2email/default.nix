@@ -16,6 +16,12 @@ buildPythonApplication rec {
 
   outputs = [ "out" "man" "doc" ];
 
+  postPatch = ''
+    # sendmail executable is called from PATH instead of sbin by default
+    sed -e 's|/usr/sbin/sendmail|sendmail|' \
+        -i rss2email/config.py
+  '';
+
   postInstall = ''
     install -Dm 644 r2e.1 $man/share/man/man1/r2e.1
     # an alias for better finding the manpage
