@@ -1,4 +1,4 @@
-{ stdenv, lib, config, fetchurl, fetchFromGitHub
+{ stdenv, lib, config, fetchFromGitHub
 , cmake
 , glog, google-gflags, gtest
 , protobuf, snappy
@@ -61,10 +61,11 @@ in
 stdenv.mkDerivation rec {
   name = "caffe2-${version}";
   version = "0.8.1";
-  src = fetchurl {
-    name = "caffe2-0.8.1.tar.gz";
-    url = "https://github.com/caffe2/caffe2/archive/v0.8.1.tar.gz";
-    sha256 = "1a798nlh69hjw55grl4nwk5n7j5df63yhlfyzninsqmg9i8khy9b";
+  src = fetchFromGitHub {
+    owner = "caffe2";
+    repo = "caffe2";
+    rev = "v${version}";
+    sha256 = "18y7zjc69j6n5642l9caddl641b0djf3pjn4wacdsc1wk1jiyqk8";
   };
 
   nativeBuildInputs = [ cmake doxygen gtest ];
