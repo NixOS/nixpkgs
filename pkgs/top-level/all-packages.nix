@@ -14379,9 +14379,6 @@ with pkgs;
   dapp = self.altcoins.dapp;
   hevm = self.altcoins.hevm;
 
-  zcash = self.altcoins.zcash;
-  zcashNh = self.altcoins.zcashNh;
-
   stellar-core = self.altcoins.stellar-core;
 
   aumix = callPackage ../applications/audio/aumix {
