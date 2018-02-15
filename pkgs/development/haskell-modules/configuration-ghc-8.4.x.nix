@@ -137,15 +137,6 @@ self: super: {
   ##       from the context: Applicative f
   tasty = super.tasty_1_0_1;
 
-  ## Needs bump to a versioned attribute
-  ## 
-  ## Setup: Encountered missing dependencies:
-  ## template-haskell >=2.4 && <2.13
-  ## builder for ‘/nix/store/sq6cc33h4zk1wns2fsyv8cj6clcf6hwi-th-lift-0.7.7.drv’ failed with exit code 1
-  ## error: build of ‘/nix/store/sq6cc33h4zk1wns2fsyv8cj6clcf6hwi-th-lift-0.7.7.drv’ failed
-  th-lift = super.th-lift_0_7_8;
-
-
   ## On Hackage:
 
   happy = overrideCabal super.happy (drv: {
