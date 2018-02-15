@@ -232,18 +232,23 @@ with stdenv.lib;
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
-  USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
-  USB_SERIAL_KEYSPAN_USA28 y
-  USB_SERIAL_KEYSPAN_USA28X y
-  USB_SERIAL_KEYSPAN_USA28XA y
-  USB_SERIAL_KEYSPAN_USA28XB y
-  USB_SERIAL_KEYSPAN_USA19 y
-  USB_SERIAL_KEYSPAN_USA18X y
-  USB_SERIAL_KEYSPAN_USA19W y
-  USB_SERIAL_KEYSPAN_USA19QW y
-  USB_SERIAL_KEYSPAN_USA19QI y
-  USB_SERIAL_KEYSPAN_USA49W y
-  USB_SERIAL_KEYSPAN_USA49WLC y
+
+  # Include firmware for various USB serial devices.
+  # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
+  ${optionalString (versionOlder version "4.16") ''
+    USB_SERIAL_KEYSPAN_MPR y
+    USB_SERIAL_KEYSPAN_USA28 y
+    USB_SERIAL_KEYSPAN_USA28X y
+    USB_SERIAL_KEYSPAN_USA28XA y
+    USB_SERIAL_KEYSPAN_USA28XB y
+    USB_SERIAL_KEYSPAN_USA19 y
+    USB_SERIAL_KEYSPAN_USA18X y
+    USB_SERIAL_KEYSPAN_USA19W y
+    USB_SERIAL_KEYSPAN_USA19QW y
+    USB_SERIAL_KEYSPAN_USA19QI y
+    USB_SERIAL_KEYSPAN_USA49W y
+    USB_SERIAL_KEYSPAN_USA49WLC y
+  ''}
 
   # Device mapper (RAID, LVM, etc.)
   MD y
