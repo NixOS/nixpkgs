@@ -494,6 +494,7 @@
   nicknovitski = "Nick Novitski <nixpkgs@nicknovitski.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
+  ninjatrappeur = "Félix Baylac-Jacqué <felix@alternativebit.fr>";
   nipav = "Niko Pavlinek <niko.pavlinek@gmail.com>";
   nixy = "Andrew R. M. <nixy@nixy.moe>";
   nmattia = "Nicolas Mattia <nicolas@nmattia.com>";
