@@ -135,7 +135,7 @@ self: super: {
   ##     • Could not deduce (Semigroup (Traversal f))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: Applicative f
-  tasty = super.tasty_1_0_0_1;
+  tasty = super.tasty_1_0_1;
 
   ## Needs bump to a versioned attribute
   ## 
