@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
 
 let version = "1.9.0.326"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0sf8gy39iz4jxj2wic1lbdwdwbj90k3awhr0kq76gr1z1dwbj6s9";
   };
 
-  buildInputs = [ jdk makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     pwd
@@ -20,6 +20,9 @@ stdenv.mkDerivation {
     cp -f clojure-tools-${version}.jar $out/libexec
     sed -i -e "s@PREFIX@$out@g" clojure
     cp -f clj clojure $out/bin
+    for program in $out/bin/{clojure,clj}; do
+      wrapProgram $program --suffix PATH : $out/bin:${jdk.jre}/bin:${rlwrap}/bin
+    done
   '';
 
   meta = with stdenv.lib; {
