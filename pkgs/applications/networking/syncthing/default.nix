@@ -22,7 +22,7 @@ let
         # Syncthing expects that it is checked out in $GOPATH, if that variable is
         # set.  Since this isn't true when we're fetching source, we can explicitly
         # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= go run build.go -no-upgrade -version v${version} build ${target}
+        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
       '';
 
       inherit installPhase;
