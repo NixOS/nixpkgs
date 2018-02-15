@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     string1='-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}'
     string2='-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}'
     makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
