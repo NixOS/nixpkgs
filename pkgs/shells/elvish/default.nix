@@ -20,4 +20,8 @@ buildGoPackage rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; linux ++ darwin;
   };
+
+  passthru = {
+    shellPath = "/bin/elvish";
+  };
 }
