@@ -17073,6 +17073,8 @@ with pkgs;
     vte = gnome3.vte;
   };
 
+  sayonara = callPackage ../applications/audio/sayonara { };
+
   sbagen = callPackage ../applications/misc/sbagen { };
 
   scantailor = callPackage ../applications/graphics/scantailor { };
