@@ -10697,9 +10697,7 @@ with pkgs;
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
-  pybind11 = callPackage ../development/libraries/pybind11 {
-    inherit (python3Packages) python pytest numpy;
-  };
+  pybind11 = callPackage ../development/libraries/pybind11 { };
 
   re2 = callPackage ../development/libraries/re2 { };
 

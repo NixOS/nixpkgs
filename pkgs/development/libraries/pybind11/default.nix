@@ -1,7 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
-# test deps
-, catch, python, pytest, numpy, eigen
-}:
+{ stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
   name = "pybind-${version}";
@@ -13,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "0x71i1n5d02hjbdcnkscrwxs9pb8kplmdpqddhsimabfp84fip48";
   };
 
-  nativeBuildInputs = [ cmake catch pytest eigen numpy ];
+  nativeBuildInputs = [ cmake ];
 
   # disable tests as some tests (test_embed/test_interpreter) are failing at the moment
   cmakeFlags = [
-    "-DPYTHON_EXECUTABLE=${python.interpreter}"
-    "-DPYBIND11_TEST=0"
+     "-DPYTHON_EXECUTABLE=${python.interpreter}"
+     "-DPYBIND11_TEST=0"
   ];
   doCheck = false;
 
