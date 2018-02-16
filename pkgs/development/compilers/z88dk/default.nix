@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
 
-  pname = "z88dk";
-  version = "20180217";
+  repo = "z88dk";
+  version = "unstable-2018-02-17";
   rev = "49a7c6032b2675af742f5b0b3aa5bd5260bdd814";
   short_rev = "${builtins.substring 0 7 rev}";
-  name = "${pname}-${version}-${short_rev}";
+  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
+    inherit rev repo;
     owner = "z88dk";
-    repo  = "${pname}";
-    rev = "${rev}";
     sha256 = "0jd312jcl0rqn15c2nbllpqz2x67hwvkhlz2smbqjyv8mrbhqbcc";
   };
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage    = https://www.z88dk.org;
     description = "z80 Development Kit";
     license     = "Clarified-Artistic";
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ maintainers.bignaux ];
     platforms = platforms.linux;
   };
 
