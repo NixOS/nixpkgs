@@ -19553,6 +19553,13 @@ with pkgs;
     cudnnSupport = cudaSupport;
   };
 
+  caffe2 = callPackage ../development/libraries/science/math/caffe2 {
+    eigen3 = eigen3_3;
+    inherit (python3Packages) python future six numpy pydot;
+    protobuf = protobuf3_1;
+    python-protobuf = python3Packages.protobuf3_1;
+  };
+
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
