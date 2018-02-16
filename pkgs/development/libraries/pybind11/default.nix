@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       bindings of existing C++ code.
     '';
     platforms = with stdenv.lib.platforms; unix;
-    license = stdenv.lib.licenses.bsd;
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
   };
 
