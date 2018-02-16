@@ -2511,6 +2511,8 @@ with pkgs;
 
   gource = callPackage ../applications/version-management/gource { };
 
+  govc = callPackage ../tools/virtualization/govc { };
+
   gpart = callPackage ../tools/filesystems/gpart { };
 
   gparted = callPackage ../tools/misc/gparted { };
