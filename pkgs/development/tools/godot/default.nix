@@ -37,8 +37,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -r bin $out
+    mkdir -p $out/bin
+    cp -r bin/godot.x11.tools.64 $out/bin/godot
   '';
 
   meta = {
