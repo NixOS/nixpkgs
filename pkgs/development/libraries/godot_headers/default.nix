@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0z562pqm8y8wldmfiya72cvwwpvcfznpl0wypagw50v0f41ilywh";
   };
   buildPhase = "true";
-  installPhase = "cp -r . $out";
+  installPhase = ''
+    mkdir $out
+    cp -r . $out/include
+  '';
   meta = {
     homepage = "https://github.com/GodotNativeTools/godot_headers/";
     description = "Headers for the Godot API supplied by the GDNative module";
