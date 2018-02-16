@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
   version = "1.38.7";
 
+  enableParallelBuilding = true;
+
   buildInputs = [
     cmake
     perl
