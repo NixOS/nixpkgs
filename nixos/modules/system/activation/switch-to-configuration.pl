@@ -330,6 +330,7 @@ foreach my $device (keys %$prevSwaps) {
 
 
 # Should we have systemd re-exec itself?
+my $prevSystemdConfig = abs_path("/etc/systemd/system.conf") or die;
 my $prevSystemd = abs_path("/proc/1/exe") // "/unknown";
 my $newSystemd = abs_path("@systemd@/lib/systemd/systemd") or die;
 my $restartSystemd = $prevSystemd ne $newSystemd;
@@ -383,8 +384,11 @@ my $res = 0;
 print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
+my $newSystemdConfig = abs_path("/etc/systemd/system.conf") or die;
+my $reconfigureSystemd = $prevSystemdConfig ne $newSystemdConfig;
+
 # Restart systemd if necessary.
-if ($restartSystemd) {
+if ($restartSystemd || $reconfigureSystemd) {
     print STDERR "restarting systemd...\n";
     system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
 }
