@@ -16495,6 +16495,8 @@ with pkgs;
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
 
+  stride = callPackage ../applications/networking/instant-messengers/stride { };
+
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
