@@ -16568,6 +16568,8 @@ with pkgs;
 
   pamixer = callPackage ../applications/audio/pamixer { };
 
+  ncpamixer = callPackage ../applications/audio/ncpamixer { };
+
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
   };
