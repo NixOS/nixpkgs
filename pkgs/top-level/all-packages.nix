@@ -19928,6 +19928,8 @@ with pkgs;
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
+  idsk = callPackage ../tools/filesystems/idsk { };
+
   illum = callPackage ../tools/system/illum { };
 
   # using the new configuration style proposal which is unstable
