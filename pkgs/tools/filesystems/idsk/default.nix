@@ -1,26 +1,23 @@
-
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
 
-	pname = "idsk";
-  version = "0.16";
-  rev = "1846729ac3432aa8c2c0525be45cfff8a513e007";
-  short_rev = "${builtins.substring 0 7 rev}";
-	name = "${pname}-${version}-${short_rev}";
+	repo = "idsk";
+	version = "unstable-2018-02-11";
+	rev = "1846729ac3432aa8c2c0525be45cfff8a513e007";
+	name = "${repo}-${version}";
 
-  meta = with stdenv.lib; {
-    description = "manipulating cpc dsk images and files";
-    homepage = https://github.com/cpcsdk/idsk ;
-    license = "unknown";
-    maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
-  };
+	meta = with stdenv.lib; {
+		description = "Manipulating CPC dsk images and files";
+		homepage = https://github.com/cpcsdk/idsk ;
+		license = "unknown";
+		maintainers = [ maintainers.bignaux ];
+		platforms = platforms.linux;
+	};
 
 	src = fetchFromGitHub {
+		inherit rev repo;
 		owner = "cpcsdk";
-		repo  = "${pname}";
-		rev = "${rev}";
 		sha256 = "0d891lvf2nc8bys8kyf69k54rf3jlwqrcczbff8xi0w4wsiy5ckv";
 	};
 
