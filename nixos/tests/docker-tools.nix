@@ -9,28 +9,31 @@ import ./make-test.nix ({ pkgs, ... }: {
   nodes = {
     docker =
       { config, pkgs, ... }: {
-        virtualisation.docker.enable = true;
+        virtualisation = {
+          diskSize = 1024;
+          docker.enable = true;
+        };
       };
   };
 
   testScript =
-    let
-      dockerImage = pkgs.dockerTools.buildImage {
-        name = "hello-docker";
-        contents = [ pkgs.hello ];
-        tag = "sometag";
-
-        # TODO: create another test checking whether runAsRoot works as intended.
-
-        config = {
-          Cmd = [ "hello" ];
-        };
-      };
-
-    in ''
+    ''
       $docker->waitForUnit("sockets.target");
-      $docker->succeed("docker load --input='${dockerImage}'");
-      $docker->succeed("docker run hello-docker:sometag");
-    '';
 
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bash}'");
+      $docker->succeed("docker run ${pkgs.dockerTools.examples.bash.imageName} /bin/bash --version");
+
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nix}'");
+      $docker->succeed("docker run ${pkgs.dockerTools.examples.nix.imageName} /bin/nix-store -qR ${pkgs.nix}");
+
+      # To test the pullImage tool
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nixFromDockerHub}'");
+      $docker->succeed("docker run nixos/nix:1.11 nix-store --version");
+
+      # To test runAsRoot and entry point
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.nginx}'");
+      $docker->succeed("docker run --name nginx -d -p 8000:80 ${pkgs.dockerTools.examples.nginx.imageName}");
+      $docker->waitUntilSucceeds('curl http://localhost:8000/');
+      $docker->succeed("docker rm --force nginx");
+    '';
 })
