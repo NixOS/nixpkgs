@@ -1,8 +1,8 @@
-{ emacsPackages, writeScriptBin }:
+{ emacsPackagesNg, writeScriptBin }:
 let
 
-  emacs = emacsPackages.emacsWithPackages (epkgs: [ epkgs.cask-package-toolset ]);
-  cpt = emacsPackages.cask-package-toolset;
+  emacs = emacsPackagesNg.emacsWithPackages (epkgs: [ epkgs.cask-package-toolset ]);
+  cpt = emacsPackagesNg.cask-package-toolset;
 
 in writeScriptBin "cask" ''
 #!/bin/sh
