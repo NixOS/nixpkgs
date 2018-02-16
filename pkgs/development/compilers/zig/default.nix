@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages_5, llvm_5 }:
+{ stdenv, fetchFromGitHub, cmake, llvmPackages }:
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "01yqjyi25f99bfmxxwyh45k7j84z0zg7n9jl8gg0draf96mzdh06";
   };
 
-  buildInputs = [ cmake llvmPackages_5.clang-unwrapped llvm_5 ];
+  buildInputs = [ cmake llvmPackages.clang-unwrapped llvmPackages.llvm ];
 
   cmakeFlags = [
     "-DZIG_LIBC_INCLUDE_DIR=${stdenv.cc.libc_dev}/include"

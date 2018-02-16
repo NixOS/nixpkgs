@@ -2,7 +2,6 @@
 rec {
   pcBase = {
     name = "pc";
-    kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
@@ -30,7 +29,6 @@ rec {
     };
 
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v5_defconfig";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -54,7 +52,6 @@ rec {
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v5_defconfig";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -168,7 +165,6 @@ rec {
   raspberrypi = {
     name = "raspberrypi";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "bcm2835_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
@@ -347,7 +343,6 @@ rec {
   utilite = {
     name = "utilite";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -379,13 +374,11 @@ rec {
     # patch.
 
     kernelBaseConfig = "guruplug_defconfig";
-    #kernelHeadersBaseConfig = "guruplug_defconfig";
   };
 
   fuloong2f_n32 = {
     name = "fuloong2f_n32";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "fuloong2e_defconfig";
     kernelBaseConfig = "lemote2f_defconfig";
     kernelArch = "mips";
     kernelAutoModules = false;
@@ -471,7 +464,6 @@ rec {
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelDTB = true;
@@ -517,7 +509,6 @@ rec {
   aarch64-multiplatform = {
     name = "aarch64-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     kernelArch = "arm64";
     kernelDTB = true;

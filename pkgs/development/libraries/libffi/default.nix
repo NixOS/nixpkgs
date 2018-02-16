@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dejagnu, doCheck ? false
+{ stdenv, fetchurl, fetchpatch,  dejagnu, doCheck ? false
 , buildPlatform, hostPlatform
 }:
 
@@ -10,11 +10,28 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch ++
-    stdenv.lib.optional stdenv.isAarch64 (fetchurl {
+  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch
+    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
       url = https://src.fedoraproject.org/rpms/libffi/raw/ccffc1700abfadb0969495a6e51b964117fc03f6/f/libffi-aarch64-rhbz1174037.patch;
       sha256 = "1vpirrgny43hp0885rswgv3xski8hg7791vskpbg3wdjdpb20wbc";
-    });
+    })
+    ++ stdenv.lib.optional hostPlatform.isMusl (fetchpatch {
+      name = "gnu-linux-define.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/libffi/gnu-linux-define.patch?id=bb024fd8ec6f27a76d88396c9f7c5c4b5800d580";
+      sha256 = "11pvy3xkhyvnjfyy293v51f1xjy3x0azrahv1nw9y9mw8bifa2j2";
+    })
+    ++ stdenv.lib.optionals stdenv.isMips [
+      (fetchpatch {
+        name = "0001-mips-Use-compiler-internal-define-for-linux.patch";
+        url = "http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-support/libffi/libffi/0001-mips-Use-compiler-internal-define-for-linux.patch?id=318e33a708378652edcf61ce7d9d7f3a07743000";
+        sha256 = "1gc53lw90p6hc0cmhj3csrwincfz7va5ss995ksw5gm0yrr9mrvb";
+      })
+      (fetchpatch {
+        name = "0001-mips-fix-MIPS-softfloat-build-issue.patch";
+        url = "http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-support/libffi/libffi/0001-mips-fix-MIPS-softfloat-build-issue.patch?id=318e33a708378652edcf61ce7d9d7f3a07743000";
+        sha256 = "0l8xgdciqalg4z9rcwyk87h8fdxpfv4hfqxwsy2agpnpszl5jjdq";
+      })
+    ];
 
   outputs = [ "out" "dev" "man" "info" ];
 

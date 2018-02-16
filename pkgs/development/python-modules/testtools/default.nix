@@ -4,33 +4,26 @@
 , pbr
 , python_mimeparse
 , extras
-, lxml
 , unittest2
 , traceback2
-, isPy3k
-, fixtures
-, pyrsistent
+, testscenarios
 }:
-
-
 
 buildPythonPackage rec {
   pname = "testtools";
   version = "2.3.0";
-
-  # Python 2 only judging from SyntaxError
-#   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "5827ec6cf8233e0f29f51025addd713ca010061204fdea77484a2934690a0559";
   };
 
-  propagatedBuildInputs = [ pbr python_mimeparse extras lxml unittest2 pyrsistent ];
+  propagatedBuildInputs = [ pbr python_mimeparse extras unittest2 ];
   buildInputs = [ traceback2 ];
 
-  # No tests in archive
+  # testscenarios has a circular dependency on testtools
   doCheck = false;
+  checkInputs = [ testscenarios ];
 
   # testtools 2.0.0 and up has a circular run-time dependency on futures
   postPatch = ''

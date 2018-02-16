@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "--with-logpath=/var/log/sudo.log"
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
+    "--enable-tmpfiles.d=no"
   ] ++ stdenv.lib.optional withInsults [
     "--with-insults"
     "--with-all-insults"
