@@ -1005,4 +1005,8 @@ self: super: {
 
   # Needs older hlint
   hpio = dontCheck super.hpio;
+
+  # https://github.com/ucsd-progsys/liquidhaskell/issues/1238
+  liquidhaskell = dontHaddock super.liquidhaskell;
+
 }
