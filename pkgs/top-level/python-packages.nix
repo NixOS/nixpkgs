@@ -3706,6 +3706,8 @@ in {
     };
   });
 
+  requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
+
   howdoi = buildPythonPackage (rec {
     name = "howdoi-${version}";
     version = "1.1.7";
