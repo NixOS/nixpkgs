@@ -98,19 +98,6 @@ stdenv.mkDerivation {
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
 
-    # Disable some failing gdb tests. Try re-enabling these when gdb
-    # is updated past version 7.12.
-    rm src/test/debuginfo/basic-types-globals.rs
-    rm src/test/debuginfo/basic-types-mut-globals.rs
-    rm src/test/debuginfo/c-style-enum.rs
-    rm src/test/debuginfo/lexical-scopes-in-block-expression.rs
-    rm src/test/debuginfo/limited-debuginfo.rs
-    rm src/test/debuginfo/simple-struct.rs
-    rm src/test/debuginfo/simple-tuple.rs
-    rm src/test/debuginfo/union-smoke.rs
-    rm src/test/debuginfo/vec-slices.rs
-    rm src/test/debuginfo/vec.rs
-
     # Useful debugging parameter
     # export VERBOSE=1
   ''
