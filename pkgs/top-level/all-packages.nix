@@ -1266,6 +1266,8 @@ with pkgs;
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  mp3blaster = callPackage ../applications/audio/mp3blaster { };
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdas = callPackage ../tools/audio/mpdas { };
