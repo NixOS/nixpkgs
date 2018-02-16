@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dovecot, openssl }:
+{ lib, stdenv, fetchpatch, fetchurl, dovecot, openssl }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
@@ -11,6 +11,11 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ dovecot openssl ];
+
+  patches = [
+    # Fix mtime comparison so that scripts can be precompiled
+    ./0001-binary-mtime.patch
+  ];
 
   preConfigure = ''
     substituteInPlace src/managesieve/managesieve-settings.c --replace \

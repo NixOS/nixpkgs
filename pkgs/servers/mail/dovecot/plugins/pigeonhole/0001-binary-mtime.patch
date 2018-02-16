@@ -1,0 +1,39 @@
+From 31287bdc3487c3a710a27a3c1721bf88bfa23210 Mon Sep 17 00:00:00 2001
+From: Brian Olsen <brian@maven-group.org>
+Date: Sun, 4 Feb 2018 04:36:03 +0100
+Subject: [PATCH] When binary and script have same mtime count as up-to-date
+
+---
+ src/lib-sieve/storage/file/sieve-file-script.c | 2 +-
+ src/lib-sieve/storage/ldap/sieve-ldap-script.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib-sieve/storage/file/sieve-file-script.c b/src/lib-sieve/storage/file/sieve-file-script.c
+index 3c4ec606..27d1bd04 100644
+--- a/src/lib-sieve/storage/file/sieve-file-script.c
++++ b/src/lib-sieve/storage/file/sieve-file-script.c
+@@ -493,7 +493,7 @@ static int sieve_file_script_binary_read_metadata
+ 
+ 	if ( bstat->st_mtime < sstat->st_mtime ||
+ 		(bstat->st_mtime == sstat->st_mtime &&
+-			ST_MTIME_NSEC(*bstat) <= ST_MTIME_NSEC(*sstat)) ) {
++			ST_MTIME_NSEC(*bstat) < ST_MTIME_NSEC(*sstat)) ) {
+ 		if ( svinst->debug ) {
+ 			e_debug(script->event,
+ 				"Sieve binary `%s' is not newer "
+diff --git a/src/lib-sieve/storage/ldap/sieve-ldap-script.c b/src/lib-sieve/storage/ldap/sieve-ldap-script.c
+index 1c732db0..4a1f74ff 100644
+--- a/src/lib-sieve/storage/ldap/sieve-ldap-script.c
++++ b/src/lib-sieve/storage/ldap/sieve-ldap-script.c
+@@ -132,7 +132,7 @@ static int sieve_ldap_script_binary_read_metadata
+ 	string_t *dn, *modattr;
+ 
+ 	/* config file changed? */
+-	if ( bmtime <= lstorage->set_mtime ) {
++	if ( bmtime < lstorage->set_mtime ) {
+ 		if ( svinst->debug ) {
+ 			e_debug(script->event,
+ 				"Sieve binary `%s' is not newer "
+-- 
+2.39.3 (Apple Git-145)
+
