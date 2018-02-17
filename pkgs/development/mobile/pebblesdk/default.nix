@@ -1,12 +1,15 @@
-{ pkgs, stdenv, lib, fetchurl, makeWrapper
-, python27, python27Packages
+{ stdenv, lib, fetchurl, makeWrapper
+, python27
 , dtc, glib, pixman, SDL, xlibs
 , nodejs, freetype, zlib }:
 
 let
   qemu-rpath = lib.makeLibraryPath [ dtc glib pixman SDL xlibs.libX11 zlib stdenv.cc.cc.lib ];
   pebble-rpath = lib.makeLibraryPath [ freetype zlib stdenv.cc.cc.lib ];
-  pebble-libs = import ./pebble-libs.nix { inherit pkgs python27Packages; };
+  pebble-libs = import ./pebble-libs.nix { inherit lib fetchurl python27; };
+  pythonEnv = (python27.withPackages (ps: with ps; builtins.attrValues pebble-libs ++
+    [ colorama httplib2 oauth2client packaging progressbar2 pyasn1 pygeoip
+      pyparsing pyqrcode requests virtualenv websocket_client wrapPython ]));
 in
 stdenv.mkDerivation rec {
   name = "pebble-sdk-${version}";
@@ -16,10 +19,6 @@ stdenv.mkDerivation rec {
     url = "https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/${name}-linux64.tar.bz2";
     sha256 = "15yiypx9rnwyzsn4s4z1wmn1naw6mk7dpsiljmw3078ag66z1ca7";
   };
-
-  pythonEnv = (python27.withPackages (ps: with ps; builtins.attrValues pebble-libs ++
-    [ colorama httplib2 oauth2client packaging progressbar2 pyasn1 pygeoip
-      pyparsing pyqrcode requests virtualenv websocket_client wrapPython ]));
 
   buildInputs = [ makeWrapper pythonEnv ];
   # Pebble needs some extra environment variables, and the compiler needs to be
