@@ -5748,7 +5748,8 @@ with pkgs;
 
   compcert = callPackage ../development/compilers/compcert { };
 
-
+  cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
+  
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
