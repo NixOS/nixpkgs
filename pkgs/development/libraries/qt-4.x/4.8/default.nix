@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
     ++ optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  NIX_LDFLAGS = optional (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
+  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
   preBuild = optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error
