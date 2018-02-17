@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
      use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
      This package contains Microsoft's implementation of GSL.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = stdenv.lib.platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ yuriaisaka ];
   };
