@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, mesa_glu }:
+  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, mesa_glu,
+  glew, eigen }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -34,10 +35,14 @@ stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
   version = "1.38.7";
 
+  enableParallelBuilding = true;
+
   buildInputs = [
     cmake
     perl
     makeWrapper
+    eigen
+    glew
     tbb
     which
     Wx

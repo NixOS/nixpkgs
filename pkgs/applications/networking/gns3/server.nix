@@ -4,6 +4,16 @@
 
 let
   pythonPackages = python3Packages;
+  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
+    (oldAttrs:
+      rec {
+        pname = "aiohttp";
+        version = "2.3.10";
+        src = pythonPackages.fetchPypi {
+          inherit pname version;
+          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
+        };
+      }));
   aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
     (oldAttrs:
       rec {
@@ -14,6 +24,10 @@ let
           inherit pname version;
           sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
         };
+        propagatedBuildInputs = [ aiohttp ]
+          ++ stdenv.lib.optional
+               (pythonPackages.pythonOlder "3.5")
+               pythonPackages.typing;
       }));
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";

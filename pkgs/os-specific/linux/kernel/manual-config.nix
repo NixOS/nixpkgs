@@ -1,4 +1,4 @@
-{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
 , ncurses ? null
 , libelf
 , utillinux
@@ -41,10 +41,10 @@ in {
 
 let
   inherit (stdenv.lib)
-    hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
+    hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -262,6 +262,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];

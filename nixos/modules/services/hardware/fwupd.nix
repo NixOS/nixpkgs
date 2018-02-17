@@ -87,4 +87,8 @@ in {
       "d /var/lib/fwupd 0755 root root -"
     ];
   };
+
+  meta = {
+    maintainers = pkgs.fwupd.maintainers;
+  };
 }

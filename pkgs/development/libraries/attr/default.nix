@@ -12,15 +12,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
-  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
+  configureFlags = [ "MAKE=make" "MSGFMT=msgfmt" "MSGMERGE=msgmerge" "XGETTEXT=xgettext" "ECHO=echo" "SED=sed" "AWK=gawk" ];
 
-  installTargets = "install install-lib install-dev";
+  installTargets = [ "install" "install-lib" "install-dev" ];
 
   patches = if (hostPlatform.libc == "musl") then [ ./fix-headers-musl.patch ] else null;
 
-  meta = {
-    homepage = http://savannah.nongnu.org/projects/attr/;
+  meta = with stdenv.lib; {
+    homepage = "http://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

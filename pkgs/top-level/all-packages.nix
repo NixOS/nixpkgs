@@ -171,6 +171,8 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  graph-easy = callPackage ../tools/graphics/graph-easy { };
+
   packer = callPackage ../development/tools/packer { };
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
@@ -318,9 +320,9 @@ with pkgs;
   makeWrapper = makeSetupHook { deps = [ dieHook ]; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
+  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
-      inherit kernel rootModules allowMissing;
+      inherit kernel firmware rootModules allowMissing;
     };
 
   mkShell = callPackage ../build-support/mkshell { };
@@ -404,6 +406,8 @@ with pkgs;
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_1;
   };
+
+  acpica-tools = callPackage ../tools/system/acpica-tools { };
 
   actdiag = pythonPackages.actdiag;
 
@@ -1261,6 +1265,8 @@ with pkgs;
   meritous = callPackage ../games/meritous { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
+
+  mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
@@ -2504,6 +2510,8 @@ with pkgs;
   google-compute-engine = python2.pkgs.google-compute-engine;
 
   gource = callPackage ../applications/version-management/gource { };
+
+  govc = callPackage ../tools/virtualization/govc { };
 
   gpart = callPackage ../tools/filesystems/gpart { };
 
@@ -4190,6 +4198,8 @@ with pkgs;
     libpng = libpng12;
   };
 
+  plotinus = callPackage ../tools/misc/plotinus { };
+
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
@@ -4409,6 +4419,8 @@ with pkgs;
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
+
+  reflex = callPackage ../development/tools/reflex { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
@@ -7281,8 +7293,7 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
-  bazel_0_9 = callPackage ../development/tools/build-managers/bazel { };
-  bazel = bazel_0_9;
+  bazel = callPackage ../development/tools/build-managers/bazel { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -12050,6 +12061,8 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
+  h2o = callPackage ../servers/http/h2o { };
+
   haka = callPackage ../tools/security/haka { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
@@ -12732,7 +12745,7 @@ with pkgs;
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
-  fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
+  fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
@@ -14158,6 +14171,8 @@ with pkgs;
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
+  tex-gyre = callPackage ../data/fonts/tex-gyre { };
+
   tex-gyre-bonum-math = callPackage ../data/fonts/tex-gyre-math { variant = "bonum"; };
 
   tex-gyre-pagella-math = callPackage ../data/fonts/tex-gyre-math { variant = "pagella"; };
@@ -14567,6 +14582,8 @@ with pkgs;
   catfish = callPackage ../applications/search/catfish { };
 
   cava = callPackage ../applications/audio/cava { };
+
+  cask = callPackage ../development/tools/build-managers/cask { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
@@ -16488,6 +16505,8 @@ with pkgs;
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
 
+  stride = callPackage ../applications/networking/instant-messengers/stride { };
+
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
@@ -16664,6 +16683,8 @@ with pkgs;
   pamix = callPackage ../applications/audio/pamix { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
+
+  ncpamixer = callPackage ../applications/audio/ncpamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
@@ -17368,7 +17389,11 @@ with pkgs;
 
   syncplay = callPackage ../applications/networking/syncplay { };
 
-  syncthing = callPackage ../applications/networking/syncthing { };
+  inherit (callPackages ../applications/networking/syncthing { })
+    syncthing
+    syncthing-cli
+    syncthing-discovery
+    syncthing-relay;
 
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
@@ -18437,6 +18462,8 @@ with pkgs;
 
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
+  factorio-experimental = callPackage ../games/factorio { releaseType = "alpha"; experimental = true; };
+
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
   factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
@@ -19010,6 +19037,7 @@ with pkgs;
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
   gnomeExtensions = {
+    appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
@@ -19545,6 +19573,13 @@ with pkgs;
     cudnnSupport = cudaSupport;
   };
 
+  caffe2 = callPackage ../development/libraries/science/math/caffe2 {
+    eigen3 = eigen3_3;
+    inherit (python3Packages) python future six numpy pydot;
+    protobuf = protobuf3_1;
+    python-protobuf = python3Packages.protobuf3_1;
+  };
+
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
@@ -19915,6 +19950,8 @@ with pkgs;
   hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
   hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
+
+  hyperfine = callPackage ../tools/misc/hyperfine { };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
@@ -20596,4 +20633,6 @@ with pkgs;
   tlwg = callPackage ../data/fonts/tlwg { };
 
   safeDiscardStringContext = callPackage ../build-support/safe-discard-string-context.nix { };
+
+  simplehttp2server = callPackage ../servers/simplehttp2server { };
 }
