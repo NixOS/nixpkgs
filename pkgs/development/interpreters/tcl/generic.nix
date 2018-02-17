@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # Note: using $out instead of $man to prevent a runtime dependency on $man.
-    configureFlagsArray+=(--mandir=$out/share/man --enable-man-symlinks)
+    configureFlagsArray+=(--mandir=$out/share/man --enable-man-symlinks --enable-64bit)
 
     # Don't install tzdata because NixOS already has a more up-to-date copy.
     configureFlagsArray+=(--with-tzdata=no)
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
+    ln -s $out/lib/libtcl${release}.so $out/lib/libtcl.so
   '';
 
   meta = with stdenv.lib; {

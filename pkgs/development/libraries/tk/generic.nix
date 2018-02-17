@@ -10,13 +10,14 @@ stdenv.mkDerivation {
   setOutputFlags = false;
 
   preConfigure = ''
-    configureFlagsArray+=(--mandir=$man/share/man --enable-man-symlinks)
+    configureFlagsArray+=(--mandir=$man/share/man --enable-man-symlinks --enable-64bit)
     cd unix
   '';
 
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
+    ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
   '';
 
   configureFlags = [
