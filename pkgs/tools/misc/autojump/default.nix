@@ -22,6 +22,9 @@ in
       mkdir -p "$out/etc/bash_completion.d"
       cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
 
+      mkdir -p $out/share/fish/vendor_completions.d/
+      cp -v $out/share/autojump/autojump.fish "$out/share/fish/vendor_completions.d/autojump.fish"
+
       cat <<SCRIPT > $out/bin/autojump-share
       #!/bin/sh
       # Run this script to find the autojump shared folder where all the shell
