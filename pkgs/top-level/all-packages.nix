@@ -3156,6 +3156,8 @@ with pkgs;
 
   minisign = callPackage ../tools/security/minisign { };
 
+  ministat = callPackage ../tools/misc/ministat { };
+
   mmv = callPackage ../tools/misc/mmv { };
 
   morituri = callPackage ../applications/audio/morituri { };
