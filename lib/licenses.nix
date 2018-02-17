@@ -2,7 +2,7 @@
 let
 
   spdx = lic: lic // {
-    url = "http://spdx.org/licenses/${lic.spdxId}";
+    url = "http://spdx.org/licenses/${lic.spdxId}.html";
   };
 
 in
@@ -580,6 +580,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Vovida Software License v1.0";
   };
 
+  watcom = spdx {
+    spdxId = "Watcom-1.0";
+    fullName = "Sybase Open Watcom Public License 1.0";
+  };
+
   w3c = spdx {
     spdxId = "W3C";
     fullName = "W3C Software Notice and License";
@@ -614,5 +619,4 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
-
 }
