@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  pname = "caprice32";
-  version = "2018-02-10";
+  repo = "caprice32";
+  version = "unstable-2018-02-10";
   rev = "53de69543300f81af85df32cbd21bb5c68cab61e";
-  short_rev = "${builtins.substring 0 7 rev}";
-  name = "${pname}-${version}-${short_rev}";
+  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
+    inherit rev repo;
     owner = "ColinPitrat";
-    repo  = "caprice32";
     sha256 = "12yv56blm49qmshpk4mgc802bs51wv2ra87hmcbf2wxma39c45fy";
   };
 
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "A complete emulation of CPC464, CPC664 and CPC6128";
     homepage = https://github.com/ColinPitrat/caprice32 ;
     license = licenses.gpl2;
-    maintainers = [ maintainers.bignaux ];
+    maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;
   };
 
