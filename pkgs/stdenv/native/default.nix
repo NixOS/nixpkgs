@@ -131,7 +131,7 @@ in
     };
 
     fetchurl = import ../../build-support/fetchurl {
-      inherit stdenv;
+      inherit lib stdenvNoCC;
       # Curl should be in /usr/bin or so.
       curl = null;
     };
