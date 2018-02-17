@@ -18361,6 +18361,7 @@ with pkgs;
 
   cataclysm-dda = callPackage ../games/cataclysm-dda {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    ncurses = ncurses5;
   };
 
   cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix {

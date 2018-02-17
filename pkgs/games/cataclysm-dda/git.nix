@@ -1,5 +1,6 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa }:
+SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa,
+tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "2017-12-09";
@@ -14,28 +15,38 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Cocoa ];
+  buildInputs = with stdenv.lib; [ ncurses lua gettext ]
+    ++ optionals stdenv.isDarwin [ CoreFoundation ]
+    ++ optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir_git.patch ];
 
   postPatch = ''
     patchShebangs .
-    sed -i Makefile \
-      -e 's,-Werror,,g'
-
-    sed '1i#include <cmath>' \
-      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
+    sed -i data/xdg/com.cataclysmdda.cataclysm-dda.desktop \
+        -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
   '';
 
-  makeFlags = [
-    "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+  makeFlags = with stdenv.lib; [
+    "PREFIX=$(out)"
+    "LUA=1"
+    "RELEASE=1"
+    "USE_HOME_DIR=1"
     "LANGUAGES=all"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "NATIVE=osx CLANG=1"
+    "VERSION=git-${version}-${substring 0 8 src.rev}"
+  ] ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ] ++ optionals stdenv.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
   ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = with stdenv.lib; optionalString (tiles && !stdenv.isDarwin) ''
+    install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T $out/share/applications/cataclysm-dda.desktop
+    install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
+  '' + optionalString (tiles && stdenv.isDarwin) ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
@@ -78,7 +89,7 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
-    homepage = http://en.cataclysmdda.com/;
+    homepage = http://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
   };
