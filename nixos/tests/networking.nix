@@ -530,7 +530,7 @@ let
           $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
 
           # Test address used is temporary
-          $client->succeed("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+          $client->waitUntilSucceeds("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
         '';
     };
   };
