@@ -91,6 +91,7 @@ in
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
           address = flip map (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
       })))
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
