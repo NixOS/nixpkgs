@@ -489,6 +489,8 @@ with pkgs;
 
   apulse = callPackage ../misc/apulse { };
 
+  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -1572,6 +1574,8 @@ with pkgs;
   connman = callPackage ../tools/networking/connman { };
 
   connman-gtk = callPackage ../tools/networking/connman-gtk { };
+
+  connman-ncurses = callPackage ../tools/networking/connman-ncurses { };
 
   connman-notify = callPackage ../tools/networking/connman-notify { };
 
@@ -2697,6 +2701,8 @@ with pkgs;
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hash_extender = callPackage ../tools/security/hash_extender { };
+
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
@@ -3153,6 +3159,8 @@ with pkgs;
   minidlna = callPackage ../tools/networking/minidlna { };
 
   minisign = callPackage ../tools/security/minisign { };
+
+  ministat = callPackage ../tools/misc/ministat { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
@@ -5740,7 +5748,8 @@ with pkgs;
 
   compcert = callPackage ../development/compilers/compcert { };
 
-
+  cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
+  
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
@@ -6359,6 +6368,8 @@ with pkgs;
   });
 
   julia = julia_06;
+
+  jwasm =  callPackage ../development/compilers/jwasm { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -12319,7 +12330,8 @@ with pkgs;
 
   softether_4_18 = callPackage ../servers/softether/4.18.nix { };
   softether_4_20 = callPackage ../servers/softether/4.20.nix { };
-  softether = softether_4_20;
+  softether_4_25 = callPackage ../servers/softether/4.25.nix { };
+  softether = softether_4_25;
 
   qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
 
@@ -13419,6 +13431,8 @@ with pkgs;
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
+  gotests = callPackage ../development/tools/gotests { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
@@ -13868,6 +13882,8 @@ with pkgs;
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
+
+  fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
 
   emacs-all-the-icons-fonts = callPackage ../data/fonts/emacs-all-the-icons-fonts { };
 
@@ -17379,6 +17395,8 @@ with pkgs;
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
+  sunvox = callPackage ../applications/audio/sunvox { };
+
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
@@ -17985,6 +18003,8 @@ with pkgs;
       );
   };
 
+  wsjtx = qt5.callPackage ../applications/misc/wsjtx { };
+
   wtftw = callPackage ../applications/window-managers/wtftw {};
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
@@ -18359,6 +18379,7 @@ with pkgs;
 
   cataclysm-dda = callPackage ../games/cataclysm-dda {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    ncurses = ncurses5;
   };
 
   cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix {

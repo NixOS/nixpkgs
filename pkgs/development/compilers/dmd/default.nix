@@ -3,9 +3,9 @@
 , curl, tzdata, gdb, darwin
 , callPackage
 , bootstrapVersion ? false
-, version ? "2.078.1"
-, dmdSha256 ? "0b9lphh4g3r9cyzv4wcfppv9j3w952vvwv615za23acgwav3mqg2"
-, druntimeSha256 ? "16jv40m073cflpkyl0vmg1g58cianybfcsgcvwli7pfryxbgsbrr"
+, version ? "2.078.2"
+, dmdSha256 ? "0x9q4aw4jl36dz7m5111y2sm8jdaj3zg36zhj6vqg1lqpdn3bhls"
+, druntimeSha256 ? "0nfqjcmwqc490bzi3582x1c3zigkf306g4nyd1cyd3vs8lfm6x66"
 , phobosSha256 ? "08ircpf4ilznz638kra272hz8fi5ccvw2cswj5hqckssl1lyqzs8"
 }:
 
@@ -111,7 +111,7 @@ let
     ''
 
     + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
-        # See https://github.com/NixOS/nixpkgs/issues/29443
+        # See https://github.com/dlang/phobos/pull/5960
         substituteInPlace phobos/std/path.d \
             --replace "\"/root" "\"${ROOT_HOME_DIR}"
     '';

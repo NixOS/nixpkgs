@@ -370,6 +370,7 @@
   kristoff3r = "Kristoffer Søholm <k.soeholm@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   kuznero = "Roman Kuznetsov <roman@kuznero.com>";
+  lasandell = "Luke Sandell <lasandell@gmail.com>";
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";
   ldesgoui = "Lucas Desgouilles <ldesgoui@gmail.com>";
@@ -479,6 +480,7 @@
   mudri = "James Wood <lamudri@gmail.com>";
   muflax = "Stefan Dorn <mail@muflax.com>";
   myrl = "Myrl Hex <myrl.0xf@gmail.com>";
+  nadrieril = "Nadrieril Feneanar <nadrieril@gmail.com>";
   namore = "Roman Naumann <namor@hemio.de>";
   nand0p = "Fernando Jose Pando <nando@hex7.com>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
@@ -494,6 +496,7 @@
   nicknovitski = "Nick Novitski <nixpkgs@nicknovitski.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
+  ninjatrappeur = "Félix Baylac-Jacqué <felix@alternativebit.fr>";
   nipav = "Niko Pavlinek <niko.pavlinek@gmail.com>";
   nixy = "Andrew R. M. <nixy@nixy.moe>";
   nmattia = "Nicolas Mattia <nicolas@nmattia.com>";

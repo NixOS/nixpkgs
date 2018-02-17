@@ -13,13 +13,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  patchPhase = ''
+  patches = [ ./wallabag-data.patch ]; # exposes $WALLABAG_DATA
+
+  prePatch = ''
     rm Makefile # use the "shared hosting" package with bundled dependencies
-    substituteInPlace app/AppKernel.php \
-      --replace "__DIR__" "getenv('WALLABAG_DATA')"
-    substituteInPlace var/bootstrap.php.cache \
-      --replace "\$this->rootDir = \$this->getRootDir()" "\$this->rootDir = getenv('WALLABAG_DATA')"
-  ''; # exposes $WALLABAG_DATA
+  '';
 
   installPhase = ''
     mkdir $out/
@@ -31,11 +29,12 @@ stdenv.mkDerivation rec {
     longDescription = ''
       wallabag is a self hostable application for saving web pages.
 
-      To use, point the environment variable $WALLABAG_DATA to a directory called `app` that contains the folder `config` with wallabag's configuration files. These need to be updated every package upgrade. In `app`'s parent folder, a directory called `var` containing wallabag's data will be created.
+      Point the environment variable $WALLABAG_DATA to a data directory that contains the folder `app/config` which must be a clone of wallabag's configuration files with your customized `parameters.yml`. These need to be updated every package upgrade.
       After a package upgrade, empty the `var/cache` folder.
     '';
     license = licenses.mit;
     homepage = http://wallabag.org;
+    maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };
 }
