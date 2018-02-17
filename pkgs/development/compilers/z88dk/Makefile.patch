@@ -1,5 +1,5 @@
---- joachifm-rtfm/Makefile	1970-01-01 01:00:01.000000000 +0100
-+++ joachifm/Makefile	2018-02-16 13:28:44.979280387 +0100
+--- z88dk.orig/Makefile	1970-01-01 01:00:01.000000000 +0100
++++ z88dk/Makefile	2018-02-16 13:28:44.979280387 +0100
 @@ -8,32 +8,32 @@
  # ---> Configurable parameters are below his point
  prefix ?= /usr/local
