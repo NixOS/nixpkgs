@@ -11473,6 +11473,7 @@ with pkgs;
   webkitgtk218x = callPackage ../development/libraries/webkitgtk/2.18.nix {
     harfbuzz = harfbuzz-icu;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
+    stdenv = overrideCC stdenv gcc6;
   };
 
   webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
