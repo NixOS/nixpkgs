@@ -9,7 +9,7 @@
 , enableJPEG2K ? true, jasper
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all
-, enableEigen ? false, eigen
+, enableEigen ? true, eigen
 , darwin
 }:
 
