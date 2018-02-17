@@ -2,11 +2,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pafy";
-  version = "0.5.3.1";
+  version = "0.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a7dxi95m1043rxx1r5x3ngb66nwlq6aqcasyqqjzmmmjps4zrim";
+    sha256 = "e842dc589a339a870b5869cc3802f2e95824edf347f65128223cd5ebdff21024";
   };
 
   # No tests included in archive
