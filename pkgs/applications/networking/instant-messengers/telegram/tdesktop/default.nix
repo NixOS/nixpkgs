@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchgit, fetchpatch
-, pkgconfig, gyp, cmake, gcc7, makeWrapper
+, pkgconfig, gyp, cmake, makeWrapper
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -31,7 +31,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake gcc7 makeWrapper ];
+  nativeBuildInputs = [ pkgconfig gyp cmake makeWrapper ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3

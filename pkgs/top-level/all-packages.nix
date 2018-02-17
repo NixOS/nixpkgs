@@ -7055,12 +7055,7 @@ with pkgs;
 
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  racket = callPackage ../development/interpreters/racket {
-    # racket 6.11 doesn't build with gcc6 + recent glibc:
-    # https://github.com/racket/racket/pull/1886
-    # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
-    stdenv = overrideCC stdenv gcc7;
-  };
+  racket = callPackage ../development/interpreters/racket { };
 
   rakudo = callPackage ../development/interpreters/rakudo {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -18661,9 +18656,7 @@ with pkgs;
 
   openmw = callPackage ../games/openmw { };
 
-  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
-    stdenv = overrideCC stdenv gcc7;
-  };
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
