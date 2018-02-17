@@ -14530,11 +14530,9 @@ with pkgs;
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux_unwrapped = callPackage ../applications/video/avidemux {
-    libva = libva-full; # also wants libva-x11
+  avidemux = libsForQt5.callPackage ../applications/video/avidemux {
+    libva = libva-full;
   };
-
-  avidemux = callPackage ../applications/video/avidemux/wrapper.nix { };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
