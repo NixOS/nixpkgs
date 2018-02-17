@@ -108,9 +108,26 @@ let
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 
+  valid = (builtins.tryEval urls_).success && (builtins.tryEval hash_).success;
+
 in
 
-stdenvNoCC.mkDerivation {
+if !valid
+then
+
+  # Fail lazily on invalid inputs. This allows some nifty tricks.
+  # For instance,
+  #
+  #   fetchurl ({
+  #     meta = { ... };
+  #     url = throw "unsupported on ${stdenv.system}";
+  #   } // optionalAttrs (stdenv.system == "x86_64-linux") {
+  #     url = ...;
+  #     sha256 = ...;
+  #   })
+
+  extendDerivation (urls_ != null && hash_ != null) ({ inherit meta; } // passthru) (derivation {})
+else stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
