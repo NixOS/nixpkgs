@@ -5897,22 +5897,7 @@ in {
     };
   };
 
-  peewee = buildPythonPackage rec {
-    name = "peewee-2.8.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/peewee/${name}.tar.gz";
-      sha256 = "1l99j1pa6ijxd42xdwgl72w8apa34c03ixw2dcmfdkcfrz4s2wj5";
-    };
-
-    # Tries and fails to pull in pytest-mock
-    doCheck = false;
-
-    meta = with pkgs.stdenv.lib; {
-      homepage = https://github.com/coleifer/peewee;
-      license = licenses.mit;
-      description = "a small, expressive orm";
-    };
-  };
+  peewee = callPackage ../development/python-modules/peewee { };
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
@@ -6118,19 +6103,7 @@ in {
 
   pyphen = callPackage ../development/python-modules/pyphen {};
 
-  pypng = buildPythonPackage rec {
-    name = "pypng-0.0.18";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pypng/${name}.tar.gz";
-      sha256 = "0cnrxh7m5vcv502fq7rfms0z5w50lyayrarxrgi8fccy64316nlq";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      homepage = "https://github.com/drj11/pypng";
-      license = licenses.mit;
-      description = "Pure Python PNG image encoder/decoder";
-    };
-  };
+  pypng = callPackage ../development/python-modules/pypng {};
 
   pypoppler = buildPythonPackage rec {
     name = "pypoppler-${version}";
@@ -16272,23 +16245,7 @@ in {
       };
     in if isPy3k then py3 else py2;
 
-  pyqrcode = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "PyQRCode";
-    version = "1.2.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1m9ln8k9v7dfbh1i81225hx5mdsh8mpf9g7r4wpbfmiyfcs7dgzx";
-    };
-
-    meta = {
-      description = "A QR code generator written purely in Python with SVG, EPS, PNG and terminal output";
-      home = "https://pypi.python.org/pypi/PyQRCode/";
-      license = "bsd";
-    };
-  };
-
+  pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pythondaemon = buildPythonPackage rec {
     name = "python-daemon-${version}";
@@ -18289,19 +18246,7 @@ EOF
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
-  wsgiref = buildPythonPackage rec {
-    name = "wsgiref-0.1.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wsgiref/${name}.zip";
-      sha256 = "0y8fyjmpq7vwwm4x732w97qbkw78rjwal5409k04cw4m03411rn7";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      homepage = https://pypi.python.org/pypi/wsgiref;
-      license = "PSF or ZPL";
-      description = "WSGI (PEP 333) Reference Library";
-    };
-  };
+  wsgiref = callPackage ../development/python-modules/wsgiref { };
 
   wsgiproxy2 = buildPythonPackage rec {
     name = "WSGIProxy2-0.4.2";
