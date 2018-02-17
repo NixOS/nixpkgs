@@ -184,7 +184,7 @@ in
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
       optionals config.boot.vesa [ "vga=0x317" ];
 
-    boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
+    boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
     boot.kernelModules = [ "loop" "atkbd" ];
 
