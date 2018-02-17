@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    sed -i -e 's/8\.6\.1|8\.7\.0|8\.7\.1)/8.6.1|8.7.0|8.7.1|8.7.2)/' configure
+  '';
+
   configurePhase = ''
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
     ./configure -clightgen -prefix $out -toolprefix ${tools}/bin/ '' +

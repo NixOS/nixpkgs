@@ -6,7 +6,7 @@ with stdenv.lib;
 assert imagePreviewSupport -> w3m != null;
 
 pythonPackages.buildPythonApplication rec {
-  name = "ranger-v${version}";
+  name = "ranger-${version}";
   version = "1.9.0";
 
   src = fetchFromGitHub {

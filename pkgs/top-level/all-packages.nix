@@ -171,6 +171,8 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  graph-easy = callPackage ../tools/graphics/graph-easy { };
+
   packer = callPackage ../development/tools/packer { };
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
@@ -318,9 +320,9 @@ with pkgs;
   makeWrapper = makeSetupHook { deps = [ dieHook ]; }
                               ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
+  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
-      inherit kernel rootModules allowMissing;
+      inherit kernel firmware rootModules allowMissing;
     };
 
   mkShell = callPackage ../build-support/mkshell { };
@@ -404,6 +406,8 @@ with pkgs;
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_1;
   };
+
+  acpica-tools = callPackage ../tools/system/acpica-tools { };
 
   actdiag = pythonPackages.actdiag;
 
@@ -1262,6 +1266,8 @@ with pkgs;
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  mp3blaster = callPackage ../applications/audio/mp3blaster { };
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdas = callPackage ../tools/audio/mpdas { };
@@ -1566,6 +1572,8 @@ with pkgs;
   connman = callPackage ../tools/networking/connman { };
 
   connman-gtk = callPackage ../tools/networking/connman-gtk { };
+
+  connman-ncurses = callPackage ../tools/networking/connman-ncurses { };
 
   connman-notify = callPackage ../tools/networking/connman-notify { };
 
@@ -2505,6 +2513,8 @@ with pkgs;
 
   gource = callPackage ../applications/version-management/gource { };
 
+  govc = callPackage ../tools/virtualization/govc { };
+
   gpart = callPackage ../tools/filesystems/gpart { };
 
   gparted = callPackage ../tools/misc/gparted { };
@@ -2688,6 +2698,8 @@ with pkgs;
   hardlink = callPackage ../tools/system/hardlink { };
 
   hashcat = callPackage ../tools/security/hashcat { };
+
+  hash_extender = callPackage ../tools/security/hash_extender { };
 
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
@@ -3145,6 +3157,8 @@ with pkgs;
   minidlna = callPackage ../tools/networking/minidlna { };
 
   minisign = callPackage ../tools/security/minisign { };
+
+  ministat = callPackage ../tools/misc/ministat { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
@@ -4190,6 +4204,8 @@ with pkgs;
     libpng = libpng12;
   };
 
+  plotinus = callPackage ../tools/misc/plotinus { };
+
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
@@ -4409,6 +4425,8 @@ with pkgs;
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
+
+  reflex = callPackage ../development/tools/reflex { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
@@ -7279,8 +7297,7 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
-  bazel_0_9 = callPackage ../development/tools/build-managers/bazel { };
-  bazel = bazel_0_9;
+  bazel = callPackage ../development/tools/build-managers/bazel { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -12044,6 +12061,8 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
 
+  h2o = callPackage ../servers/http/h2o { };
+
   haka = callPackage ../tools/security/haka { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
@@ -12302,7 +12321,8 @@ with pkgs;
 
   softether_4_18 = callPackage ../servers/softether/4.18.nix { };
   softether_4_20 = callPackage ../servers/softether/4.20.nix { };
-  softether = softether_4_20;
+  softether_4_25 = callPackage ../servers/softether/4.25.nix { };
+  softether = softether_4_25;
 
   qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
 
@@ -12726,7 +12746,7 @@ with pkgs;
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
-  fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
+  fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
@@ -13401,6 +13421,8 @@ with pkgs;
   gotools = callPackage ../development/tools/gotools { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
+
+  gotests = callPackage ../development/tools/gotests { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
@@ -14152,6 +14174,8 @@ with pkgs;
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
+  tex-gyre = callPackage ../data/fonts/tex-gyre { };
+
   tex-gyre-bonum-math = callPackage ../data/fonts/tex-gyre-math { variant = "bonum"; };
 
   tex-gyre-pagella-math = callPackage ../data/fonts/tex-gyre-math { variant = "pagella"; };
@@ -14561,6 +14585,8 @@ with pkgs;
   catfish = callPackage ../applications/search/catfish { };
 
   cava = callPackage ../applications/audio/cava { };
+
+  cask = callPackage ../development/tools/build-managers/cask { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
@@ -16482,6 +16508,8 @@ with pkgs;
 
   smtube = libsForQt5.callPackage ../applications/video/smtube {};
 
+  stride = callPackage ../applications/networking/instant-messengers/stride { };
+
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
   speedread = callPackage ../applications/misc/speedread { };
@@ -16658,6 +16686,8 @@ with pkgs;
   pamix = callPackage ../applications/audio/pamix { };
 
   pamixer = callPackage ../applications/audio/pamixer { };
+
+  ncpamixer = callPackage ../applications/audio/ncpamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
@@ -17354,6 +17384,8 @@ with pkgs;
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
+  sunvox = callPackage ../applications/audio/sunvox { };
+
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
@@ -17362,7 +17394,11 @@ with pkgs;
 
   syncplay = callPackage ../applications/networking/syncplay { };
 
-  syncthing = callPackage ../applications/networking/syncthing { };
+  inherit (callPackages ../applications/networking/syncthing { })
+    syncthing
+    syncthing-cli
+    syncthing-discovery
+    syncthing-relay;
 
   syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
 
@@ -17956,6 +17992,8 @@ with pkgs;
       );
   };
 
+  wsjtx = qt5.callPackage ../applications/misc/wsjtx { };
+
   wtftw = callPackage ../applications/window-managers/wtftw {};
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
@@ -18330,6 +18368,7 @@ with pkgs;
 
   cataclysm-dda = callPackage ../games/cataclysm-dda {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    ncurses = ncurses5;
   };
 
   cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix {
@@ -18430,6 +18469,8 @@ with pkgs;
   exult = callPackage ../games/exult { };
 
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+
+  factorio-experimental = callPackage ../games/factorio { releaseType = "alpha"; experimental = true; };
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
@@ -19004,6 +19045,7 @@ with pkgs;
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
   gnomeExtensions = {
+    appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
@@ -19539,6 +19581,13 @@ with pkgs;
     cudnnSupport = cudaSupport;
   };
 
+  caffe2 = callPackage ../development/libraries/science/math/caffe2 {
+    eigen3 = eigen3_3;
+    inherit (python3Packages) python future six numpy pydot;
+    protobuf = protobuf3_1;
+    python-protobuf = python3Packages.protobuf3_1;
+  };
+
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
@@ -19909,6 +19958,8 @@ with pkgs;
   hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
   hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
+
+  hyperfine = callPackage ../tools/misc/hyperfine { };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
@@ -20590,4 +20641,6 @@ with pkgs;
   tlwg = callPackage ../data/fonts/tlwg { };
 
   safeDiscardStringContext = callPackage ../build-support/safe-discard-string-context.nix { };
+
+  simplehttp2server = callPackage ../servers/simplehttp2server { };
 }

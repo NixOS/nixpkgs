@@ -106,13 +106,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## 
-  ##     • No instance for (Semigroup Metadatas)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid Metadatas’
-  JuicyPixels = super.JuicyPixels_3_2_9_4;
-
-  ## Needs bump to a versioned attribute
-  ## 
   ##     • Could not deduce (Semigroup (a :->: b))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (HasTrie a, Monoid b)
@@ -135,16 +128,7 @@ self: super: {
   ##     • Could not deduce (Semigroup (Traversal f))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: Applicative f
-  tasty = super.tasty_1_0_0_1;
-
-  ## Needs bump to a versioned attribute
-  ## 
-  ## Setup: Encountered missing dependencies:
-  ## template-haskell >=2.4 && <2.13
-  ## builder for ‘/nix/store/sq6cc33h4zk1wns2fsyv8cj6clcf6hwi-th-lift-0.7.7.drv’ failed with exit code 1
-  ## error: build of ‘/nix/store/sq6cc33h4zk1wns2fsyv8cj6clcf6hwi-th-lift-0.7.7.drv’ failed
-  th-lift = super.th-lift_0_7_8;
-
+  tasty = super.tasty_1_0_1;
 
   ## On Hackage:
 

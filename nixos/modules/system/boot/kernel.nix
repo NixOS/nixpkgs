@@ -5,7 +5,7 @@ with lib;
 let
 
   inherit (config.boot) kernelPatches;
-
+  inherit (config.boot.kernel) features;
   inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
@@ -21,11 +21,25 @@ in
 
   options = {
 
+    boot.kernel.features = mkOption {
+      default = {};
+      example = literalExample "{ debug = true; }";
+      internal = true;
+      description = ''
+        This option allows to enable or disable certain kernel features.
+        It's not API, because it's about kernel feature sets, that
+        make sense for specific use cases. Mostly along with programs,
+        which would have separate nixos options.
+        `grep features pkgs/os-specific/linux/kernel/common-config.nix`
+      '';
+    };
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          features = lib.recursiveUpdate super.kernel.features features;
         };
       });
       # We don't want to evaluate all of linuxPackages for the manual
@@ -170,7 +184,7 @@ in
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
       optionals config.boot.vesa [ "vga=0x317" ];
 
-    boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
+    boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
     boot.kernelModules = [ "loop" "atkbd" ];
 

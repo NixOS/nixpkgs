@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, which, autoreconfHook, makeWrapper, writeScript,
-ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl,
-lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
+{ stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
+, ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -15,14 +15,14 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "20171208";
+  version = "20171215";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "1fn28q4akfz0nq3ysp8n53j8yqp2mx6yhbvb59c4zm6zgd4qzgp1";
+    sha256 = "1c7vjl5cl0k41vrxp6l1sj72idz70r2rgaxa2m1yir6zb6qsrsd8";
   };
 
   buildInputs = [
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which makeWrapper
+    docbook_xsl docbook_xml_dtd_42 gettext libxslt.bin makeWrapper tcl which
   ];
 
   enableParallelBuilding = true;
@@ -51,18 +51,14 @@ in stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-debug"
-    "--enable-gpgme"
-    "--enable-notmuch"
-    "--with-curses"
-    "--with-gss"
+    "--gpgme"
+    "--gss"
+    "--lmdb"
+    "--notmuch"
+    "--ssl"
+    "--sasl"
     "--with-homespool=mailbox"
-    "--with-idn"
-    "--with-lmdb"
     "--with-mailpath="
-    "--with-sasl"
-    "--with-ssl"
-
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
   ];

@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  configureFlags = with stdenv; []
+  configureFlags = with stdenv; [ "--disable-mca-dso" ]
     ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"

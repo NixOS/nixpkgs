@@ -258,8 +258,10 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
+  #tests.fwupd = callTest tests/fwupd.nix {}; # build during evaluation
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
+  tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
@@ -277,6 +279,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.plasma5 = callTest tests/plasma5.nix {};
+  tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};

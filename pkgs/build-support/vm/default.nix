@@ -26,6 +26,7 @@ rec {
 
   modulesClosure = makeModulesClosure {
     inherit kernel rootModules;
+    firmware = kernel;
   };
 
 

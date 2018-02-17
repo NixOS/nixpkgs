@@ -1,4 +1,4 @@
-{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
 , ncurses
 , libelf
 , utillinux
@@ -82,7 +82,8 @@ let
     kernelConfig = kernelConfigFun config;
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = hostPlatform.platform.name;
     # e.g. "defconfig"

@@ -13,12 +13,14 @@ let
 
   kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
+  firmware = config.hardware.firmware;
 
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
+    firmware = firmware;
     allowMissing = true;
   };
 

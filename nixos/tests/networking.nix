@@ -476,6 +476,63 @@ let
         );
       '';
     };
+    privacy = {
+      name = "Privacy";
+      nodes.router = { config, pkgs, ... }: {
+        virtualisation.vlans = [ 1 ];
+        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+        networking = {
+          useNetworkd = networkd;
+          interfaces.eth1 = {
+            ipv6Address = "fd00:1234:5678:1::1";
+            ipv6PrefixLength = 64;
+          };
+        };
+        services.radvd = {
+          enable = true;
+          config = ''
+            interface eth1 {
+              AdvSendAdvert on;
+              AdvManagedFlag on;
+              AdvOtherConfigFlag on;
+
+              prefix fd00:1234:5678:1::/64 {
+                AdvAutonomous on;
+                AdvOnLink on;
+              };
+            };
+          '';
+        };
+      };
+      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = true;
+          interfaces.eth1 = {
+            preferTempAddress = true;
+            ip4 = mkOverride 0 [ ];
+            ip6 = mkOverride 0 [ ];
+          };
+        };
+      };
+      testScript = { nodes, ... }:
+        ''
+          startAll;
+
+          $client->waitForUnit("network.target");
+          $router->waitForUnit("network-online.target");
+
+          # Wait until we have an ip address
+          $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
+
+          # Test vlan 1
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+
+          # Test address used is temporary
+          $client->succeed("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
+        '';
+    };
   };
 
 in mapAttrs (const (attrs: makeTest (attrs // {

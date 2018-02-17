@@ -75,6 +75,7 @@
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/criu.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/fish.nix
@@ -92,6 +93,7 @@
   ./programs/nano.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/plotinus.nix
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
@@ -102,6 +104,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
+  ./programs/systemtap.nix
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
