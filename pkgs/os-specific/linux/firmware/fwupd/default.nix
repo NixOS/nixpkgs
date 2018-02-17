@@ -6,6 +6,7 @@
 , shared_mime_info, umockdev
 }:
 let
+  # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
   version = "1.0.5";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
@@ -65,6 +66,20 @@ in stdenv.mkDerivation {
     wrapProgram $installedTests/share/installed-tests/fwupd/hardware.py \
       --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0:${libsoup}/lib/girepository-1.0"
   '';
+
+  passthru = {
+    filesInstalledToEtc = [
+      "fwupd/remotes.d/fwupd.conf"
+      "fwupd/remotes.d/lvfs-testing.conf"
+      "fwupd/remotes.d/lvfs.conf"
+      "fwupd/remotes.d/vendor.conf"
+      "pki/fwupd/GPG-KEY-Hughski-Limited"
+      "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA.pem"
+      "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA.pem"
+    ];
+  };
 
   meta = with stdenv.lib; {
     homepage = https://fwupd.org/;
