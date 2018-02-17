@@ -17,6 +17,10 @@ buildGoPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # on Linux, the TMPDIR is /build which is the same prefix as this package
+  # remove once #35068 is merged
+  noAuditTmpdir = stdenv.isLinux;
+
   postInstall = ''
     # Install bootstrap.sh
     mkdir -p $bin/libexec/buildkite-agent
