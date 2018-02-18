@@ -931,6 +931,8 @@ with pkgs;
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catdocx = callPackage ../tools/text/catdocx { };
+
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
