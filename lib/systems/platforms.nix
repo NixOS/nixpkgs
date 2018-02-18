@@ -541,6 +541,12 @@ rec {
     };
   };
 
+  riscv-multiplatform = bits: {
+    name = "riscv-multiplatform";
+    kernelArch = "riscv";
+    bfdEmulation = "elf${bits}lriscv";
+  };
+
   selectBySystem = system: {
       "i686-linux" = pc32;
       "x86_64-linux" = pc64;
