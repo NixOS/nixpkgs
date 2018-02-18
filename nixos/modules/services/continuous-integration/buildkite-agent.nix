@@ -196,13 +196,10 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.buildkite-agent =
-      let copy = x: target: perms:
-                 "cp -f ${x} ${target}; ${pkgs.coreutils}/bin/chmod ${toString perms} ${target}; ";
-      in
       { description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = cfg.runtimePackages;
+        path = cfg.runtimePackages ++ [ pkgs.coreutils ];
         environment = config.networking.proxy.envVars // {
           HOME = cfg.dataDir;
           NIX_REMOTE = "daemon";
@@ -210,10 +207,14 @@ in
 
         ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
         ##     don't end up in the Nix store.
-        preStart = ''
-            ${pkgs.coreutils}/bin/mkdir -m 0700 -p ${cfg.dataDir}/.ssh
-            ${copy (toString cfg.openssh.privateKeyPath) "${cfg.dataDir}/.ssh/id_rsa"     600}
-            ${copy (toString cfg.openssh.publicKeyPath)  "${cfg.dataDir}/.ssh/id_rsa.pub" 600}
+        preStart = let
+          sshDir = "${cfg.dataDir}/.ssh";
+        in
+          ''
+            mkdir -m 0700 -p "${sshDir}"
+            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
+            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
+            chmod 600 "${sshDir}"/id_rsa*
 
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
