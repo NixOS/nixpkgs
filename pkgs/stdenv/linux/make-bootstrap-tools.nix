@@ -5,6 +5,7 @@
 let
   pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
+  isl = with pkgs; if targetPlatform.isRiscV then isl_0_17 else isl_0_14;
 in with pkgs; rec {
 
 
@@ -19,7 +20,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = true;
+    useMusl = !targetPlatform.isRiscV;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -143,7 +144,7 @@ in with pkgs; rec {
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_14.out}/lib/libisl*.so* $out/lib
+        cp -d ${isl.out}/lib/libisl*.so* $out/lib
 
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
