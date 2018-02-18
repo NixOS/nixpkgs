@@ -19946,18 +19946,7 @@ EOF
     propagatedBuildInputs = with self; [];
   };
 
-  pymacaroons-pynacl = buildPythonPackage rec {
-    name = "pymacaroons-pynacl-${version}";
-    version = "0.9.3";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/pymacaroons.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0bykjk01zdndp6gjr30x46blsn0cvxa7j0zh5g8raxwaawchjhii";
-    };
-
-    propagatedBuildInputs = with self; [ pynacl six ];
-  };
+  pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
 
