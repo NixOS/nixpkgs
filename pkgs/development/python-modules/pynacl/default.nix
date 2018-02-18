@@ -17,6 +17,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest hypothesis ];
   propagatedBuildInputs = [ libsodium cffi six ];
 
+  SODIUM_INSTALL = "system";
+
   checkPhase = ''
     py.test
   '';
