@@ -109,7 +109,6 @@ in
             meta-data="${cfg.meta-data}"
             hooks-path="${toString cfg.hooksPath}"
             build-path="/var/lib/buildkite-agent/builds"
-            bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
             EOF
           '';
 
