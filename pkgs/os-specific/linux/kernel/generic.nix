@@ -11,7 +11,7 @@
 
 , # Allow really overriding even our gcc7 default.
   # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
-  stdenvNoOverride ? overrideCC stdenv gcc7
+  stdenvNoOverride ? overrideCC stdenv buildPackages.gcc7
 
 , # The kernel source tarball.
   src
