@@ -5,7 +5,7 @@
 
 with stdenv.lib;
 
-{ enableNpm ? true, version, sha256, patches }:
+{ enableNpm ? true, version, sha256, patches } @args:
 
 let
 
@@ -53,6 +53,8 @@ in
     passthru.interpreterName = "nodejs";
 
     setupHook = ./setup-hook.sh;
+
+    pos = builtins.unsafeGetAttrPos "version" args;
 
     inherit patches;
 
