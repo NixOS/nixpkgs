@@ -160,7 +160,7 @@ in
     in
       { description = "DHCP Client";
 
-        wantedBy = optional (!hasDefaultGatewaySet) "network-online.target";
+        wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         after = [ "network.target" ];
         wants = [ "network.target" ];
 
