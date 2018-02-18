@@ -63,6 +63,24 @@ stdenv.mkDerivation rec {
       -SYSCONFDIR="@sysconfdir_POST@"
       +SYSCONFDIR="/etc"
       '')
+
+    # we must quote "$UNAME_CMD", or the dash in /nix/store/...-coreutils-.../bin/uname
+    # will be interpreted as IFS -> error. this might be considered an upstream bug
+    # but only appears when there are dashes in the command path
+    (pkgs.writeText "firehol-uname-command.patch"
+      ''
+      --- a/sbin/firehol
+      +++ b/sbin/firehol
+      @@ -10295,7 +10295,7 @@
+       	kmaj=$1
+       	kmin=$2
+       
+      -	set -- $($UNAME_CMD -r)
+      +	set -- $("$UNAME_CMD" -r)
+       	eval $kmaj=\$1 $kmin=\$2
+       }
+       kernel_maj_min KERNELMAJ KERNELMIN
+      '')
   ];
   
   nativeBuildInputs = [ autoconf automake ];
