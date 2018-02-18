@@ -101,10 +101,11 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" ([
+      full = env "qt-full-${qtbase.version}" ([
         qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
+        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
         qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);

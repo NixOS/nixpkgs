@@ -375,6 +375,10 @@ let
       lwt = lwt3;
     };
 
+    lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
+      lwt = lwt3;
+    };
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };

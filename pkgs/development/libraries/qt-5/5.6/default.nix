@@ -113,7 +113,7 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
+      full = env "qt-full-${qtbase.version}" [
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects qtimageformats
         qtlocation qtmultimedia qtquickcontrols qtquickcontrols2 qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland

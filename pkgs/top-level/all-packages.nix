@@ -489,6 +489,8 @@ with pkgs;
 
   apulse = callPackage ../misc/apulse { };
 
+  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -929,6 +931,8 @@ with pkgs;
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catdocx = callPackage ../tools/text/catdocx { };
+
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
@@ -1366,6 +1370,8 @@ with pkgs;
 
   appdata-tools = callPackage ../tools/misc/appdata-tools { };
 
+  arping = callPackage ../tools/networking/arping { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (python2Packages) matplotlib numpy aafigure recursivePthLoader;
     w3m = w3m-batch;
@@ -1675,6 +1681,8 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
+  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+
   clamav = callPackage ../tools/security/clamav { };
 
   clex = callPackage ../tools/misc/clex { };
@@ -1697,9 +1705,9 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
-
   compass = callPackage ../development/tools/compass { };
+
+  conda = callPackage ../tools/package-management/conda { };
 
   convmv = callPackage ../tools/misc/convmv { };
 
@@ -5746,7 +5754,8 @@ with pkgs;
 
   compcert = callPackage ../development/compilers/compcert { };
 
-
+  cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
+  
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
@@ -6365,6 +6374,8 @@ with pkgs;
   });
 
   julia = julia_06;
+
+  jwasm =  callPackage ../development/compilers/jwasm { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -8741,6 +8752,9 @@ with pkgs;
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc {
+    installLocales = config.glibc.locales or false;
+  };
+  glibc_2_27 = callPackage ../development/libraries/glibc/2.27.nix {
     installLocales = config.glibc.locales or false;
   };
 
@@ -13874,6 +13888,8 @@ with pkgs;
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
+  fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
+
   emacs-all-the-icons-fonts = callPackage ../data/fonts/emacs-all-the-icons-fonts { };
 
   emojione = callPackage ../data/fonts/emojione {
@@ -16893,6 +16909,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
     inherit (darwin.stubs) rez setfile;
   };
+
+  qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
 
   qgis = callPackage ../applications/gis/qgis {};
 

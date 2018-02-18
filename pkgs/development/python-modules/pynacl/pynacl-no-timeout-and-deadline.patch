@@ -1,0 +1,49 @@
+diff --git a/tests/test_pwhash.py b/tests/test_pwhash.py
+index 9634c85..7f20316 100644
+--- a/tests/test_pwhash.py
++++ b/tests/test_pwhash.py
+@@ -20,7 +20,7 @@ import os
+ import sys
+ import unicodedata as ud
+ 
+-from hypothesis import given, settings
++from hypothesis import given, settings, unlimited
+ from hypothesis.strategies import integers, text
+ 
+ import pytest
+@@ -411,7 +411,7 @@ def test_str_verify_argon2_ref_fail(password_hash, password):
+        integers(min_value=1024 * 1024,
+                 max_value=16 * 1024 * 1024)
+        )
+-@settings(deadline=1500, max_examples=20)
++@settings(timeout=unlimited, deadline=None, max_examples=20)
+ def test_argon2i_str_and_verify(password, ops, mem):
+     _psw = password.encode('utf-8')
+     pw_hash = nacl.pwhash.argon2i.str(_psw, opslimit=ops, memlimit=mem)
+@@ -425,7 +425,7 @@ def test_argon2i_str_and_verify(password, ops, mem):
+        integers(min_value=1024 * 1024,
+                 max_value=16 * 1024 * 1024)
+        )
+-@settings(deadline=1500, max_examples=20)
++@settings(timeout=unlimited, deadline=None, max_examples=20)
+ def test_argon2id_str_and_verify(password, ops, mem):
+     _psw = password.encode('utf-8')
+     pw_hash = nacl.pwhash.argon2id.str(_psw, opslimit=ops, memlimit=mem)
+@@ -439,7 +439,7 @@ def test_argon2id_str_and_verify(password, ops, mem):
+        integers(min_value=1024 * 1024,
+                 max_value=16 * 1024 * 1024)
+        )
+-@settings(deadline=1500, max_examples=20)
++@settings(timeout=unlimited, deadline=None, max_examples=20)
+ def test_argon2i_str_and_verify_fail(password, ops, mem):
+     _psw = password.encode('utf-8')
+     pw_hash = nacl.pwhash.argon2i.str(_psw, opslimit=ops, memlimit=mem)
+@@ -448,7 +448,7 @@ def test_argon2i_str_and_verify_fail(password, ops, mem):
+ 
+ 
+ @given(text(alphabet=PASSWD_CHARS, min_size=5, max_size=20))
+-@settings(deadline=1500, max_examples=5)
++@settings(timeout=unlimited, deadline=None, max_examples=5)
+ def test_pwhash_str_and_verify(password):
+     _psw = password.encode('utf-8')
+ 
