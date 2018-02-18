@@ -9126,8 +9126,14 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { };
 
-  icu58 = callPackage ../development/libraries/icu/58.nix { };
-  icu59 = callPackage ../development/libraries/icu/59.nix { };
+  icu58 = callPackage ../development/libraries/icu/58.nix
+    (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    });
+  icu59 = callPackage ../development/libraries/icu/59.nix
+    (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    });
 
   icu = icu59;
 
