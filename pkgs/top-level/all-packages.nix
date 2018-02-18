@@ -5185,6 +5185,8 @@ with pkgs;
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
+  watchexec = callPackage ../tools/misc/watchexec { };
+
   watchman = callPackage ../development/tools/watchman { };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
