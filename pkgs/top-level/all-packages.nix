@@ -5790,8 +5790,12 @@ with pkgs;
   gambit = callPackage ../development/compilers/gambit { };
   gerbil = callPackage ../development/compilers/gerbil { };
 
-  gccFun = callPackage ../development/compilers/gcc/6;
-  gcc = gcc6;
+  # !!! When updating to gcc7 everywhere we can get rid of the
+  # isRiscV overrides here and in gccCrossStageStatic
+  gccFun6 = callPackage ../development/compilers/gcc/6;
+  gccFun7 = callPackage ../development/compilers/gcc/7;
+  gccFun = if targetPlatform.isRiscV then gccFun7 else gccFun6;
+  gcc = if targetPlatform.isRiscV then gcc7 else gcc6;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -5871,6 +5875,7 @@ with pkgs;
       bintools = binutils-unwrapped;
       libc = libcCross1;
     };
+    isl = if targetPlatform.isRiscV then isl_0_17 else isl_0_14;
     in wrapCCWith {
       name = "gcc-cross-wrapper";
       cc = gccFun {
@@ -5878,7 +5883,7 @@ with pkgs;
         inherit noSysDirs;
         # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
         profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-        isl = if !stdenv.isDarwin then isl_0_14 else null;
+        isl = if !stdenv.isDarwin then isl else null;
 
         # just for stage static
         crossStageStatic = true;
@@ -8764,7 +8769,11 @@ with pkgs;
   };
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
-  glibcCross = callPackage ../development/libraries/glibc {
+  glibcCross = let
+    expr = if hostPlatform.isRiscV
+             then ../development/libraries/glibc/2.27.nix
+           else ../development/libraries/glibc;
+  in callPackage expr {
     installLocales = config.glibc.locales or false;
     stdenv = crossLibcStdenv;
   };
@@ -12943,7 +12952,7 @@ with pkgs;
 
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders_4_4 linuxHeaders_4_15;
-  linuxHeaders = if hostPlatform.isMusl then linuxHeaders_4_15 else linuxHeaders_4_4;
+  linuxHeaders = if hostPlatform.isMusl || hostPlatform.isRiscV then linuxHeaders_4_15 else linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 

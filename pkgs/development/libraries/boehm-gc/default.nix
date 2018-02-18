@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
   patches = [ (fetchpatch {
     url = "https://raw.githubusercontent.com/gentoo/musl/85b6a600996bdd71162b357e9ba93d8559342432/dev-libs/boehm-gc/files/boehm-gc-7.6.0-sys_select.patch";
     sha256 = "1gydwlklvci30f5dpp5ccw2p2qpph5y41r55wx9idamjlq66fbb3";
-  }) ];
+  }) ] ++
+    # https://github.com/ivmai/bdwgc/pull/208
+    lib.optional hostPlatform.isRiscV ./riscv.patch;
 
   configureFlags =
     [ "--enable-cplusplus" ]
