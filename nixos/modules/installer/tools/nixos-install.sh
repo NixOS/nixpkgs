@@ -157,7 +157,7 @@ mkfifo $system_closure
 
 if [ -z "$closure" ]; then
     expr="(import <nixpkgs/nixos> {}).system"
-    system_root="$(nix-build -E "$expr")"
+    system_root="$(nix-build "${extraBuildFlags[@]}" -E "$expr")"
     system_closure="$(closure "$expr")"
 else
     system_root=$closure
