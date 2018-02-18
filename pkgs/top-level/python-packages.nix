@@ -15644,6 +15644,10 @@ in {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  gast = callPackage ../development/python-modules/gast { };
+
+  pythran = callPackage ../development/python-modules/pythran { };
+
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
     version = "0.12.3";
@@ -20179,6 +20183,7 @@ EOF
   };
 
   networkx = callPackage ../development/python-modules/networkx { };
+  networkx2 = callPackage ../development/python-modules/networkx/2.nix { };
 
   ofxclient = callPackage ../development/python-modules/ofxclient {};
 

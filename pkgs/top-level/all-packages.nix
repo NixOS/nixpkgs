@@ -20655,4 +20655,10 @@ with pkgs;
   safeDiscardStringContext = callPackage ../build-support/safe-discard-string-context.nix { };
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
+
+  xtl = callPackage ../development/libraries/xtl { };
+
+  xsimd = callPackage ../development/libraries/xsimd { buildTests = true; };
+
+  xtensor = callPackage ../development/libraries/xtensor { };
 }

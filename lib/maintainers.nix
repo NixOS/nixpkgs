@@ -470,6 +470,7 @@
   mpickering = "Matthew Pickering <matthewtpickering@gmail.com>";
   mpscholten = "Marc Scholten <marc@mpscholten.de>";
   mpsyco = "Francis St-Amour <fr.st-amour@gmail.com>";
+  mredaelli = "Massimo Redaelli <m.redaelli@gmail.com>";
   mrVanDalo = "Ingolf Wanger <contact@ingolf-wagner.de>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
