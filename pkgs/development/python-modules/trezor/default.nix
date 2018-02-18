@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "trezor";
-  version = "0.7.16";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6bdb69fc125ba705854e21163be6c7da3aa17c2a3a84f40b6d8a3f6e4a8cb314";
+    sha256 = "2dd01e11d669cb8f5e40fcf1748bcabc41fb5f41edb010fc807dc3088f9bd7de";
   };
 
   propagatedBuildInputs = [ protobuf hidapi requests mnemonic ];

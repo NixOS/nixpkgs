@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "0.6.2";
+  version = "1.0.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5888219ac5db1c63ae0ad4db52ec7ad87fe7a32bd60e62ee87bceedb8ebf73b8";
+    sha256 = "cc41cdd8332c2bf44b97daf1f135f4f267c3b744c33976655cd270b66f964c0a";
   };
 
   # No tests in archive
