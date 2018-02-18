@@ -4,6 +4,31 @@ with lib;
 
 let
   cfg = config.services.buildkite-agent;
+
+  mkHookOption = { name, description, example ? null }: {
+    inherit name;
+    value = mkOption {
+      default = null;
+      inherit description;
+      type = types.nullOr types.lines;
+    } // (if example == null then {} else { inherit example; });
+  };
+  mkHookOptions = hooks: listToAttrs (map mkHookOption hooks);
+
+  hooksDir = let
+    mkHookEntry = name: value: ''
+      cat > $out/${name} <<EOF
+      #! ${pkgs.stdenv.shell}
+      set -e
+      ${value}
+      EOF
+      chmod 755 $out/${name}
+    '';
+  in pkgs.runCommand "buildkite-agent-hooks" {} ''
+    mkdir $out
+    ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
+  '';
+
 in
 
 {
@@ -48,15 +73,6 @@ in
         '';
       };
 
-      hooksPath = mkOption {
-        type = types.path;
-        default = "${pkgs.buildkite-agent}/share/hooks";
-        defaultText = "${pkgs.buildkite-agent}/share/hooks";
-        description = ''
-          Path to the directory storing the hooks.
-        '';
-      };
-
       meta-data = mkOption {
         type = types.str;
         default = "";
@@ -94,6 +110,74 @@ in
             '';
           };
         };
+
+      hooks = mkHookOptions [
+        { name = "checkout";
+          description = ''
+            The `checkout` hook script will replace the default checkout routine of the
+            bootstrap.sh script. You can use this hook to do your own SCM checkout
+            behaviour
+          ''; }
+        { name = "command";
+          description = ''
+            The `command` hook script will replace the default implementation of running
+            the build command.
+          ''; }
+        { name = "environment";
+          description = ''
+            The `environment` hook will run before all other commands, and can be used
+            to set up secrets, data, etc. Anything exported in hooks will be available
+            to the build script.
+
+            Note: the contents of this file will be copied to the world-readable
+            Nix store.
+          '';
+          example = ''
+            export SECRET_VAR=`head -1 /run/keys/secret`
+          ''; }
+        { name = "post-artifact";
+          description = ''
+            The `post-artifact` hook will run just after artifacts are uploaded
+          ''; }
+        { name = "post-checkout";
+          description = ''
+            The `post-checkout` hook will run after the bootstrap script has checked out
+            your projects source code.
+          ''; }
+        { name = "post-command";
+          description = ''
+            The `post-command` hook will run after the bootstrap script has run your
+            build commands
+          ''; }
+        { name = "pre-artifact";
+          description = ''
+            The `pre-artifact` hook will run just before artifacts are uploaded
+          ''; }
+        { name = "pre-checkout";
+          description = ''
+            The `pre-checkout` hook will run just before your projects source code is
+            checked out from your SCM provider
+          ''; }
+        { name = "pre-command";
+          description = ''
+            The `pre-command` hook will run just before your build command runs
+          ''; }
+        { name = "pre-exit";
+          description = ''
+            The `pre-exit` hook will run just before your build job finishes
+          ''; }
+      ];
+
+      hooksPath = mkOption {
+        type = types.path;
+        default = hooksDir;
+        defaultText = "generated from services.buildkite-agent.hooks";
+        description = ''
+          Path to the directory storing the hooks.
+          Consider using <option>services.buildkite-agent.hooks.&lt;name&gt;</option>
+          instead.
+        '';
+      };
     };
   };
 
@@ -147,6 +231,15 @@ in
             TimeoutSec = 10;
           };
       };
+
+    assertions = [
+      { assertion = cfg.hooksPath == hooksDir || all isNull (attrValues cfg.hooks);
+        message = ''
+          Options `services.buildkite-agent.hooksPath' and
+          `services.buildkite-agent.hooks.<name>' are mutually exclusive.
+        '';
+      }
+    ];
   };
   imports = [
     (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                [ "services" "buildkite-agent" "tokenPath" ])
