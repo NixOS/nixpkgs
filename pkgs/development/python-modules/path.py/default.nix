@@ -5,6 +5,7 @@
 , pytestrunner
 , pytest
 , glibcLocales
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,8 @@ buildPythonPackage rec {
     sha256 = "16134e5b287aba4a4125a6722e7837cf2a149fccc5000c500ae6c71a5525488b";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  buildInputs = [setuptools_scm glibcLocales ];
+  checkInputs = [ pytest pytestrunner glibcLocales packaging ];
+  buildInputs = [ setuptools_scm ];
 
   LC_ALL="en_US.UTF-8";
 
