@@ -1,5 +1,8 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
+# Updater dependencies
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, gnupg
 , darwin ? null
 }:
 
@@ -85,6 +88,12 @@ in
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
     '';
+
+    passthru.updateScript = import ./update.nix {
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit (stdenv) lib;
+      majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
+    };
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
