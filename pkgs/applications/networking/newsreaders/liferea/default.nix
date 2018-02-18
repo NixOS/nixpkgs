@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
   pythonPath = with python3Packages; [ pygobject3 pycairo ];
 
   preFixup = ''
+    rm "$out/share/icons/hicolor/icon-theme.cache"
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';

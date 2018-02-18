@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.6.2";
+  version = "27.7.2";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "0ickxrwl36iyqj3v9qq6hnfl2y652f2ppwi949pfh4f6shm9x0ri";
+    sha256 = "19ki6gp6bhcvhjnclalviiyp93mqsgc22xjl0gm9x5y4sxdb5wlq";
   };
 
   desktopItem = makeDesktopItem {
@@ -101,10 +101,20 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A web browser";
+    longDescription = ''
+      Pale Moon is an Open Source, Goanna-based web browser focusing on
+      efficiency and customization.
+
+      Pale Moon offers you a browsing experience in a browser completely built
+      from its own, independently developed source that has been forked off from
+      Firefox/Mozilla code a number of years ago, with carefully selected
+      features and optimizations to improve the browser's stability and user
+      experience, while offering full customization and a growing collection of
+      extensions and themes to make the browser truly your own.
+    '';
     homepage    = https://www.palemoon.org/;
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj AndersonTorres ];
     platforms   = platforms.linux;
   };
-
 }

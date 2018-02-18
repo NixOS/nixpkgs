@@ -30,7 +30,7 @@ let
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli ] # Since 1.12
-      ++ lib.optional stdenv.isLinux libseccomp
+      ++ lib.optional (stdenv.isLinux && !hostPlatform.isRiscV) libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -55,7 +55,9 @@ let
       ]
       ++ lib.optional (
           hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
-      ) ''--with-system=${hostPlatform.nix.system}'';
+      ) ''--with-system=${hostPlatform.nix.system}''
+         # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+      ++ lib.optional hostPlatform.isRiscV "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -124,12 +126,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
-    suffix = "pre5950_3a5a241b";
+    suffix = "pre5951_690ac7c9";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "3a5a241b3209f14f8801b902ba20b5cb0666c9df";
-      sha256 = "0cwjyhgyfzi2dz561nj897zhkbyx6lzi49avcyia2pr4498jcl6k";
+      rev = "690ac7c90b5bf3c599e210c53365c7d229c8b0ff";
+      sha256 = "1yn2p38kp1i67makbawr1rhdiwihgnvk2zwrz0gvf6q65mj2k89c";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

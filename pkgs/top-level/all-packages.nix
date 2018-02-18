@@ -931,6 +931,8 @@ with pkgs;
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catdocx = callPackage ../tools/text/catdocx { };
+
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
@@ -1368,6 +1370,8 @@ with pkgs;
 
   appdata-tools = callPackage ../tools/misc/appdata-tools { };
 
+  arping = callPackage ../tools/networking/arping { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (python2Packages) matplotlib numpy aafigure recursivePthLoader;
     w3m = w3m-batch;
@@ -1677,6 +1681,8 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
+  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+
   clamav = callPackage ../tools/security/clamav { };
 
   clex = callPackage ../tools/misc/clex { };
@@ -1699,9 +1705,9 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
-
   compass = callPackage ../development/tools/compass { };
+
+  conda = callPackage ../tools/package-management/conda { };
 
   convmv = callPackage ../tools/misc/convmv { };
 
@@ -5872,7 +5878,7 @@ with pkgs;
         inherit noSysDirs;
         # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
         profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-        isl = if !stdenv.isDarwin then isl_0_14 else null;
+        isl = if !stdenv.isDarwin then isl_0_17 else null;
 
         # just for stage static
         crossStageStatic = true;
@@ -8745,6 +8751,9 @@ with pkgs;
   glibc = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
   };
+  glibc_2_27 = callPackage ../development/libraries/glibc/2.27.nix {
+    installLocales = config.glibc.locales or false;
+  };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
     installLocales = false;
@@ -8752,7 +8761,11 @@ with pkgs;
   };
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
-  glibcCross = callPackage ../development/libraries/glibc {
+  glibcCross = let
+    expr = if hostPlatform.isRiscV
+             then ../development/libraries/glibc/2.27.nix
+           else ../development/libraries/glibc;
+  in callPackage expr {
     installLocales = config.glibc.locales or false;
     stdenv = crossLibcStdenv;
   };
@@ -12944,7 +12957,7 @@ with pkgs;
 
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders_4_4 linuxHeaders_4_15;
-  linuxHeaders = if hostPlatform.isMusl then linuxHeaders_4_15 else linuxHeaders_4_4;
+  linuxHeaders = if hostPlatform.isMusl || hostPlatform.isRiscV then linuxHeaders_4_15 else linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -16914,6 +16927,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
     inherit (darwin.stubs) rez setfile;
   };
+
+  qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
 
   qgis = callPackage ../applications/gis/qgis {};
 
