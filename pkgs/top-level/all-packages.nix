@@ -13541,6 +13541,8 @@ with pkgs;
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
+  riscv-pk = callPackage ../misc/riscv-pk { };
+
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
