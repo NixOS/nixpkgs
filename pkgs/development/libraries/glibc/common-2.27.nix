@@ -192,6 +192,8 @@ stdenv.mkDerivation ({
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
   } // meta;
+
+  passthru = { inherit version; };
 }
 
 // lib.optionalAttrs (cross != null) {
