@@ -10372,24 +10372,8 @@ in {
     };
   };
 
-  moinmoin = buildPythonPackage (rec {
-    name = "moinmoin-${ver}";
-    disabled = isPy3k;
-    ver = "1.9.8";
-
-    src = pkgs.fetchurl {
-      url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
-      sha256 = "19hi16iy75lpx9ch799djc4hr4gai5rmvi542n29x6zhikysfjx7";
-    };
-
-    meta = {
-      description = "Advanced, easy to use and extensible WikiEngine";
-
-      homepage = http://moinmo.in/;
-
-      license = licenses.gpl2Plus;
-    };
-  });
+  # Needed here because moinmoin is loaded as a Python library.
+  moinmoin = callPackage ../development/python-modules/moinmoin { };
 
   moretools = callPackage ../development/python-modules/moretools { };
 
