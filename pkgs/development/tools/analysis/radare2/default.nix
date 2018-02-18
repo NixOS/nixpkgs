@@ -13,14 +13,14 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.2.0";
+  version = "2.3.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0rd1dfgwdpn3x1pzi67sw040vxywbg5h6yw0mj317p0p1cvlyihl";
+    sha256 = "0x5vcprqf0fnj876mdvryfvg7ymbrw1cxrr7a06v0swg7yql1lpw";
   };
 
   postPatch = let
