@@ -1654,6 +1654,8 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
+  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+
   clamav = callPackage ../tools/security/clamav { };
 
   clex = callPackage ../tools/misc/clex { };
@@ -1676,9 +1678,9 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
-
   compass = callPackage ../development/tools/compass { };
+
+  conda = callPackage ../tools/package-management/conda { };
 
   convmv = callPackage ../tools/misc/convmv { };
 
@@ -6942,8 +6944,6 @@ with pkgs;
     llvm = llvm_35;
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
-
-  conda = callPackage ../development/interpreters/conda { };
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
