@@ -2,15 +2,19 @@
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "riscv-qemu";
-    rev = "713f2c116481d568702759bcb1b7fed835a2d575";
-    sha256 = "0y4zrgidpc19pxwqqxcmj0ld50fdkf8b8c87xfcn88zrk8798qz4";
+    rev = "af435b709d4a5de3ec2e59ff4dcd05b0b295a730";
+    sha256 = "1kqcsn8yfdg3zyd991i4v5dxznd1l4a4hjry9304lvsm3sz2wllw";
     fetchSubmodules = true;
   };
   version = "2.11.50";
-  date = "20180203";
-  revCount = "57991";
-  shortRev = "713f2c1164";
+  revCount = "58771";
+  shortRev = "af435b709d";
+  targets = [ "riscv32-linux-user" "riscv32-softmmu"
+              "riscv64-linux-user" "riscv64-softmmu"
+            ];
 in lib.overrideDerivation qemu (orig: {
   name = "${(builtins.parseDrvName qemu.name).name}-${version}pre${revCount}_${shortRev}";
   inherit src;
+  configureFlags = orig.configureFlags ++ [ "--target-list=${lib.concatStringsSep "," targets}" ];
+  postInstall = null;
 })
