@@ -171,16 +171,63 @@ fi
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
-    printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
+    printf "  %q\n" "${extraBefore+"${extraBefore[@]}"}"  >&2
     echo "original flags to @prog@:" >&2
-    printf "  %q\n" ${params+"${params[@]}"} >&2
+    printf "  %q\n" "${params+"${params[@]}"}" >&2
     echo "extra flags after to @prog@:" >&2
-    printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
+    printf "  %q\n" "${extraAfter+"${extraAfter[@]}"}" >&2
 fi
 
 PATH="$path_backup"
-# Old bash workaround, see above.
-exec @prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+params=(${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"})
+
+# If the response files args have been expanded we can safely put the
+# params into a response file
+nParams=${#params[@]}
+if [ -x "@expandResponseParams@" ] && (( "$nParams" >= 500 )); then
+    # Convert -L and -l linker options to a response file
+    if [ "$dontLink" != 1 ]; then
+        rest=()
+        link=()
+        declare -i n=0
+        while (( "$n" < "$nParams" )); do
+            p=${params[n]}
+            p2=${params[n+1]:-} # handle `p` being last one
+            if [ "$p" = -L ]; then
+                n+=1; link+=("$p"); link+=("$p2")
+            elif [ "${p:0:2}" = -L ]; then
+                link+=("$p")
+            elif [ "$p" = -l ]; then
+                n+=1; link+=("$p"); link+=("$p2")
+            elif [ "${p:0:2}" = -l ]; then
+                link+=("$p");
+            else
+                rest+=("$p")
+            fi
+            n+=1
+        done
+        if [ "${#link[@]}" != 0 ]; then
+            # Make a response file with linker only flags
+            linkerResponseFile=$(mktemp)
+            printf " %q\n" "${link+"${link[@]}"}" >$linkerResponseFile
+            rest+=("-Wl,@$linkerResponseFile")
+            params=(${rest+"${rest[@]}"})
+        fi
+    fi
+
+    # Make a response file with $params in it
+    responseFile=$(mktemp)
+    printf " %q\n" "${params+"${params[@]}"}" >$responseFile
+
+    if (( "${NIX_DEBUG:-0}" >= 1 )); then
+        echo "response file $responseFile for @prog@:" >&2
+        cat $responseFile >&2
+    fi
+
+    @prog@ "@$responseFile"
+else
+    exec @prog@ ${params+"${params[@]}"}
+fi

@@ -3,7 +3,7 @@
 let
   makeBigExe = stdenv: prefix: rec {
 
-    count = 320;
+    count = 500;
 
     sillyLibs = lib.genList (i: stdenv.mkDerivation rec {
       name = "${prefix}-fluff-${toString i}";

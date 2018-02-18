@@ -202,9 +202,16 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-PATH="$path_backup"
-# Old bash workaround, see above.
-exec @prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+params=(${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"})
+
+if [ "$(basename @prog@)" = "ld-reexport-delegate" ]; then
+    responseFile=$(mktemp)
+    printf " %q\n" "${params+"${params[@]}"}" >$responseFile
+    PATH="$path_backup"
+    exec @prog@ "@$responseFile"
+else
+    PATH="$path_backup"
+    exec @prog@ ${params+"${params[@]}"}
+fi
