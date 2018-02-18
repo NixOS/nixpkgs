@@ -103,9 +103,10 @@ let
       env = callPackage ../qt-env.nix {};
       full = env "qt-${qtbase.version}" ([
         qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns qtvirtualkeyboard
+        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
+        qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 
