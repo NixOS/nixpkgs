@@ -317,12 +317,16 @@ let
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];
-            script = ''
+            preStart = ''
               echo "Removing old Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n}
 
               echo "Adding Open vSwitch ${n}..."
-              ovs-vsctl -- add-br ${n} ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
+              ovs-vsctl -- add-br ${n} 
+            '';
+            script = ''
+              echo "Configuring Open vSwitch ${n}..."
+              ovs-vsctl ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
                 ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
                 ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
 
