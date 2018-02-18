@@ -65,6 +65,15 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = "debug=true";
+        description = ''
+          Extra lines to be added verbatim to the configuration file.
+        '';
+      };
+
       openssh =
         { privateKeyPath = mkOption {
             type = types.path;
@@ -126,6 +135,7 @@ in
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
+            ${cfg.extraConfig}
             EOF
           '';
 
