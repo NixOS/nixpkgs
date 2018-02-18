@@ -52,6 +52,17 @@ stdenv.mkDerivation rec {
 
            AS_IF([test "x$ac_cv_ping_6_opt" = "xyes"],[
       '')
+
+    # put firehol config files in /etc/firehol (not $out/etc/firehol)
+    # to avoid error on startup, see #35114
+    (pkgs.writeText "firehol-sysconfdir.patch"
+      ''
+      --- a/sbin/install.config.in.in
+      +++ b/sbin/install.config.in.in
+      @@ -4 +4 @@
+      -SYSCONFDIR="@sysconfdir_POST@"
+      +SYSCONFDIR="/etc"
+      '')
   ];
   
   nativeBuildInputs = [ autoconf automake ];
