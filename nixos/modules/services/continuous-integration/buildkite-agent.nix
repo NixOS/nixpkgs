@@ -76,8 +76,10 @@ in
       meta-data = mkOption {
         type = types.str;
         default = "";
+        example = "queue=default,docker=true,ruby2=true";
         description = ''
-          Meta data for the agent.
+          Meta data for the agent. This is a comma-separated list of
+          <code>key=value</code> pairs.
         '';
       };
 
