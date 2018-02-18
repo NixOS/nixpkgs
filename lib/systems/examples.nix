@@ -68,6 +68,14 @@ rec {
   musl64 = { config = "x86_64-unknown-linux-musl"; };
   musl32  = { config = "i686-unknown-linux-musl"; };
 
+  riscv = bits: {
+    config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform bits;
+  };
+  riscv64 = riscv "64";
+  riscv32 = riscv "32";
+
+
   #
   # Darwin
   #
