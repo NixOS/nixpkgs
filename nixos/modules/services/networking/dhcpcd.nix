@@ -156,7 +156,7 @@ in
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
-                          || (cfgN.defaultGateway6 != null && cfgN.defaultGateway6.address != "");
+                          && (!cfgN.enableIPv6 || (cfgN.defaultGateway6 != null && cfgN.defaultGateway6.address != ""));
     in
       { description = "DHCP Client";
 
