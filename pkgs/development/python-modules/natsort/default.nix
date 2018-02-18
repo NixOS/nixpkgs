@@ -16,7 +16,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "natsort";
   version = "5.2.0";
 
@@ -38,8 +37,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "c960082d2145b04723041c4b85092546560538e29664dd197a1344d5b090bc91";
   };
-
-  patches = lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
 
   # testing based on project's tox.ini
   checkPhase = ''
