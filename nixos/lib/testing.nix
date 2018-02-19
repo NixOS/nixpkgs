@@ -78,7 +78,15 @@ rec {
     } @ t:
 
     let
-      testDriverName = "nixos-test-driver-${name}";
+      maxTestNameLen = 50;
+      testNameLen = builtins.stringLength name;
+
+      testDriverName = with builtins;
+        if testNameLen > maxTestNameLen then
+          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+            "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));
