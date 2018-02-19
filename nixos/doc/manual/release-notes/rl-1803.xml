@@ -231,6 +231,14 @@ following incompatible changes:</para>
       <literal>Option "XkbRules" "base"</literal> may result in broken keyboard layout.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>attic</literal> package was removed. A maintained fork called
+      <link xlink:href="https://www.borgbackup.org/">Borg</link> should be used instead.
+      Migration instructions can be found
+      <link xlink:href="http://borgbackup.readthedocs.io/en/stable/usage/upgrade.html#attic-and-borg-0-xx-to-borg-1-x">here</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

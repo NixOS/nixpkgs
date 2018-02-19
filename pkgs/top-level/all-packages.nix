@@ -546,10 +546,6 @@ with pkgs;
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
 
-  attic = callPackage ../tools/backup/attic {
-    python3Packages = python34Packages;
-  };
-
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
