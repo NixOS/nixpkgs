@@ -1,17 +1,17 @@
-{ pkgs, stdenv, lib, fetchurl, makeWrapper, jre }:
+{ pkgs, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   name = "metabase-${version}";
-  version = "0.27.2";
+  version = "0.28.1";
 
   jar = fetchurl {
     url = "http://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "1xsd6k362kajbf6sw0pb7zkd686i350fqqin858a5mmjlm5jkci7";
+    sha256 = "1nv3y4pnvzd7lwyj14nmhr3k52qd8hilcjxvd7qr3hb7kzmjvbzk";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  phases = "installPhase";
+  unpackPhase = "true";
 
   installPhase = ''
     mkdir -p $out/share/java
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $out/share/java/metabase.jar"
   '';
 
-  meta = with lib; {
-    description = "Metabase is the easy, open source way for everyone in your company to ask questions and learn from data.";
+  meta = with stdenv.lib; {
+    description = "The easy, open source way for everyone in your company to ask questions and learn from data.";
     homepage = https://metabase.com;
     license = licenses.agpl3;
     maintainers = with maintainers; [ schneefux ];
