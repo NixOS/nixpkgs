@@ -1,16 +1,12 @@
-{ stdenv, lib, bundlerEnv, ruby
-, withOptionalDependencies ? false
-}:
+{ stdenv, lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
   name = pname + "-" + version;
   pname = "jekyll";
-  version = (import "${gemdir}/gemset.nix").jekyll.version;
+  version = (import ./gemset.nix).jekyll.version;
 
   inherit ruby;
-  gemdir = if withOptionalDependencies
-    then ./full
-    else ./basic;
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Simple, blog aware, static site generator";
