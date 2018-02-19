@@ -2,37 +2,38 @@
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
+, python
+, spake2
+, pynacl
+, six
+, attrs
+, twisted
+, autobahn
+, automat
+, hkdf
+, tqdm
+, click
+, humanize
+, ipaddress
+, txtorcon
 , nettools
 , glibcLocales
-, autobahn
-, cffi
-, click
-, hkdf
-, pynacl
-, spake2
-, tqdm
-, python
 , mock
-, ipaddress
-, humanize
-, pyopenssl
-, service-identity
-, txtorcon
+, magic-wormhole-transit-relay
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
   version = "0.10.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "9558ea1f3551e535deec3462cd5c8391cb32ebb12ecd8b40b36861dbee4917ee";
   };
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock magic-wormhole-transit-relay ];
   buildInputs = [ nettools glibcLocales ];
-  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ipaddress humanize pyopenssl service-identity txtorcon ];
+  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize ipaddress txtorcon ];
 
   postPatch = ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
