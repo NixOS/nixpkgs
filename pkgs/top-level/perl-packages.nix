@@ -6292,6 +6292,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Gtk2GladeXML = buildPerlPackage rec {
+    name = "Gtk2-GladeXML-1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TS/TSCH/${name}.tar.gz";
+      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libglade pkgs.gtk2 ];
+    meta = {
+      description = "Create user interfaces directly from Glade XML files";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   Gtk2AppIndicator = buildPerlPackage rec {
     name = "Gtk2-AppIndicator-0.15";
     src = fetchurl {
