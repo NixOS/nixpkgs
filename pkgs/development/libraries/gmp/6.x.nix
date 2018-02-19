@@ -42,7 +42,7 @@ let self = stdenv.mkDerivation rec {
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = true; # not cross;
+  doCheck = false; # not cross;
 
   dontDisableStatic = withStatic;
 
