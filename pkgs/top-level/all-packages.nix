@@ -3431,6 +3431,8 @@ with pkgs;
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
+  mackup = callPackage ../tools/backup/mackup { };
+
   madlang = haskell.lib.justStaticExecutables haskellPackages.madlang;
 
   mailcheck = callPackage ../applications/networking/mailreaders/mailcheck { };
