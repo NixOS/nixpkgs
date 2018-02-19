@@ -28,6 +28,13 @@ let
           sha256 = "14zbnbn53yvrpv79ch6n02myq9b4winjkaykzi356sfqb7f3d16g";
         };
       });
+      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "15i3gaap8ilhpbah1ffc6q415wkvliqxilc6s69a4rinvkw6cx3s";
+        };
+      });
       hass-frontend = super.callPackage ./frontend.nix { };
     };
   };
