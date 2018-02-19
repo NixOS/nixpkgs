@@ -18310,6 +18310,8 @@ with pkgs;
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
+  yarssr = callPackage ../applications/misc/yarssr { };
+
   yate = callPackage ../applications/misc/yate { };
 
   yed = callPackage ../applications/graphics/yed {};
