@@ -3138,6 +3138,16 @@ rec {
 
   };
 
+  vim-rooter = buildVimPluginFrom2Nix {
+    name = "vim-rooter-2017-11-20";
+    src = fetchgit {
+      url = "git://github.com/airblade/vim-rooter";
+      rev = "3509dfb80d0076270a04049548738daeedf6dfb9";
+      sha256 = "03j26fw0dcvcc81fn8hx1prdwlgnd3g340pbxrzgbgxxq5kr0bwl";
+    };
+    dependencies = [];
+
+  };
 
   vim-ruby = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-ruby-2017-06-22";
