@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
   buildInputs = [
     libsysfs openssl libcap libgcrypt libidn2 nettle
-  ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
+  ];
 
   buildFlags = "man all ninfod";
 
