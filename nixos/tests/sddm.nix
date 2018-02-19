@@ -5,18 +5,16 @@ with import ../lib/testing.nix { inherit system; };
 let
   inherit (pkgs) lib;
 
-  tests = {
-    default = {
-      name = "sddm";
+  mkLoginTest = suffix: extraMachineConfig: {
+      name = "sddm-${suffix}";
 
-      machine = { lib, ... }: {
+      machine = { lib, ... }: lib.recursiveUpdate {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.windowManager.default = "icewm";
         services.xserver.windowManager.icewm.enable = true;
-        services.xserver.desktopManager.default = "none";
-      };
+      } extraMachineConfig;
 
       enableOCR = true;
 
@@ -31,7 +29,11 @@ let
         $machine->succeed("xauth merge ~alice/.Xauthority");
         $machine->waitForWindow("^IceWM ");
       '';
-    };
+  };
+
+  tests = {
+    default = mkLoginTest "default" {};
+    plasma5 = mkLoginTest "with-plasma5" { services.xserver.desktopManager.plasma5.enable = true; };
 
     autoLogin = {
       name = "sddm-autologin";
