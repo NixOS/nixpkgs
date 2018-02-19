@@ -7662,6 +7662,7 @@ with pkgs;
   gnumake3 = gnumake382;
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = gnumake42;
+  gnumake42HEAD = callPackage ../development/tools/build-managers/gnumake/4.2/head.nix { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
