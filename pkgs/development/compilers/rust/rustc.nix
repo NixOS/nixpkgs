@@ -72,6 +72,8 @@ stdenv.mkDerivation {
   passthru.target = target;
 
   postPatch = ''
+    patchShebangs src/etc
+
     # Fix dynamic linking against llvm
     #${optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
 
