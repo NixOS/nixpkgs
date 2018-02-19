@@ -238,9 +238,9 @@ rec {
           position = pos.file + ":" + toString pos.line;
         # Expose the result of the checks for everyone to see.
         } // {
-          evaluates = validity.valid
+          available = validity.valid
                    && (if config.checkMetaRecursively or false
-                       then lib.all (d: d.meta.evaluates or true) references
+                       then lib.all (d: d.meta.available or true) references
                        else true);
         };
 
