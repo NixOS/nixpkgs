@@ -66,7 +66,7 @@ let makeDeps = dependencies:
         i=$1
 	dest=target/deps
 	if [ ! -z "$2" ]; then
-           if [[ "$2" -eq "--buildDep" ]]; then
+           if [[ "$2" == "--buildDep" ]]; then
              dest=target/buildDeps
            fi
 	fi
@@ -87,8 +87,12 @@ let makeDeps = dependencies:
         symlink_dependency $i
       done
       for i in ${completeBuildDepsDir}; do
+         echo "BUILDDEPS"
          symlink_dependency $i --buildDep
       done
+      echo ">>>>>>>>>>>>>>"
+      find target/buildDeps
+      echo "<<<<<<<<<<<<<<"
       if [[ -e target/link ]]; then
         sort -u target/link > target/link.sorted
         mv target/link.sorted target/link
