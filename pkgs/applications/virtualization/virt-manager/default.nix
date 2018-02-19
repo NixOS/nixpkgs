@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha512 = "b375927776b9132fbd9dacd8223b6c94b89c32d6812394ec7e18df7c66f7e6dec853885e85e2b4b4ffd283e8afe0dd2526bafeac4b55511a4a115ef5798f97da";
+    sha256 = "d43a7b99d40acdcb8e9455e7874beee132cfcfce9eed0d6252e8f254a82cadc6";
   };
 
   nativeBuildInputs = [
