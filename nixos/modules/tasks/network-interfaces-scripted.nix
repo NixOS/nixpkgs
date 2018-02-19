@@ -73,8 +73,7 @@ let
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
-        hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
-                            || (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
+        hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "");
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];
