@@ -1,19 +1,18 @@
 { stdenv, lib, bundlerEnv, ruby }:
 
 bundlerEnv rec {
-  name = "jekyll-${version}";
+  name = pname + "-" + version;
+  pname = "jekyll";
+  version = (import ./gemset.nix).jekyll.version;
 
-  version = (import gemset).jekyll.version;
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Simple, blog aware, static site generator";
-    homepage    =  https://jekyllrb.com/;
+    homepage    = https://jekyllrb.com/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ pesterhazy ];
+    maintainers = with maintainers; [ primeos pesterhazy ];
     platforms   = platforms.unix;
   };
 }
