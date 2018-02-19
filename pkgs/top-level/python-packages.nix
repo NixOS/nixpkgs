@@ -17749,23 +17749,7 @@ EOF
 
   persistent = callPackage ../development/python-modules/persistent {};
 
-  xdot = buildPythonPackage rec {
-    name = "xdot-0.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xdot/${name}.tar.gz";
-      sha256 = "01v9vmgdxz1q2m2vq2b4aqx4ycw7grc0l4is673ygvyg9rk02dx3";
-    };
-
-    nativeBuildInputs = with pkgs; [ wrapGAppsHook ];
-    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pygobject3 pkgs.graphviz pkgs.gnome3.gtk ];
-
-    meta = {
-      description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
-      homepage = https://github.com/jrfonseca/xdot.py;
-      license = licenses.lgpl3Plus;
-    };
-  };
+  xdot = callPackage ../development/python-modules/xdot { };
 
   zetup = callPackage ../development/python-modules/zetup { };
 
