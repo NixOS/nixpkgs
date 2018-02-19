@@ -195,7 +195,7 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
-    inherit stdenvNoCC;
+    inherit lib stdenvNoCC;
     # On darwin, libkrb5 needs bootstrap_cmds which would require
     # converting many packages to fetchurl_boot to avoid evaluation cycles.
     curl = buildPackages.curl.override (lib.optionalAttrs stdenv.isDarwin { gssSupport = false; });
@@ -7661,7 +7661,10 @@ with pkgs;
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake3 = gnumake382;
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
-  gnumake = gnumake42;
+  gnumake = if hostPlatform.isRiscV # Technically this check should be for glibc version.
+    then gnumake42HEAD
+  else gnumake42;
+  gnumake42HEAD = callPackage ../development/tools/build-managers/gnumake/4.2/head.nix { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
@@ -13104,6 +13107,13 @@ with pkgs;
       ];
   };
 
+  linux_riscv = callPackage ../os-specific/linux/kernel/linux-riscv.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.modinst_arg_list_too_long
+    ] ++ lib.optionals hostPlatform.isRiscV [ kernelPatches.riscv_modules kernelPatches.riscv_irq_busy kernelPatches.riscv_install ];
+  };
+
   linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -13321,7 +13331,7 @@ with pkgs;
   linux_samus_latest = linuxPackages_samus_latest.kernel;
 
   # A function to build a manually-configured kernel
-  linuxManualConfig = pkgs.buildLinux;
+  linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
   buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/generic.nix {});
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
@@ -13554,6 +13564,10 @@ with pkgs;
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
   riscv-pk = callPackage ../misc/riscv-pk { };
+
+  riscv-pk-with-kernel = riscv-pk.override {
+    payload = "${linux_riscv}/vmlinux";
+  };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
@@ -17164,6 +17178,8 @@ with pkgs;
     vte = gnome3.vte;
   };
 
+  sayonara = callPackage ../applications/audio/sayonara { };
+
   sbagen = callPackage ../applications/misc/sbagen { };
 
   scantailor = callPackage ../applications/graphics/scantailor { };
@@ -20661,6 +20677,8 @@ with pkgs;
     cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
     cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
     cc-wrapper-libcxx-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.libcxxStdenv; };
+    cc-wrapper-clang-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.stdenv; };
+    cc-wrapper-libcxx-4 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_4.libcxxStdenv; };
     cc-wrapper-clang-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.stdenv; };
     cc-wrapper-libcxx-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
     stdenv-inputs = callPackage ../test/stdenv-inputs { };

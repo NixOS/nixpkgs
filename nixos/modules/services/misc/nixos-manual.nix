@@ -16,10 +16,10 @@ let
     It isn't perfect, but it seems to cover a vast majority of use cases.
     Caveat: even if the package is reached by a different means,
     the path above will be shown and not e.g. `${config.services.foo.package}`. */
-  manual = import ../../../doc/manual {
+  manual = import ../../../doc/manual rec {
     inherit pkgs config;
-    version = config.system.nixosRelease;
-    revision = "release-${config.system.nixosRelease}";
+    version = config.system.nixos.release;
+    revision = "release-${version}";
     options =
       let
         scrubbedEval = evalModules {

@@ -35,8 +35,8 @@ let
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;
-      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    { system.nixos.versionSuffix = versionSuffix;
+      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
 

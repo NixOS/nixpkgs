@@ -4,8 +4,6 @@ assert guileSupport -> ( pkgconfig != null && guile != null );
 
 let
   version = "4.2.1";
-
-  needGlibcPatch = (stdenv.cc.libc.version or "") == "2.27";
 in
 stdenv.mkDerivation {
   name = "gnumake-${version}";
@@ -22,7 +20,7 @@ stdenv.mkDerivation {
     # included Makefiles, don't look in /usr/include and friends.
     ./impure-dirs.patch
     ./pselect.patch
-  ] ++ stdenv.lib.optional needGlibcPatch ./glibc-2.27.patch;
+  ];
 
   nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];
   buildInputs = stdenv.lib.optionals guileSupport [ guile ];
