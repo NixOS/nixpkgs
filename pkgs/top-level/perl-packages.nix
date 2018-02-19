@@ -6292,6 +6292,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Gtk2TrayIcon = buildPerlPackage rec {
+    name = "Gtk2-TrayIcon-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORUP/${name}.tar.gz";
+      sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gtk2 ];
+    meta = {
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   Gtk2AppIndicator = buildPerlPackage rec {
     name = "Gtk2-AppIndicator-0.15";
     src = fetchurl {
