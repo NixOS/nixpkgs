@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }: let
+{ stdenv, fetchFromGitHub, autoreconfHook, payload ? null }: let
   rev = "e5846a2bc707eaa58dc8ab6a8d20a090c6ee8570";
   sha256 = "1clynpp70fnbgsjgxx7xi0vrdrj1v0h8zpv0x26i324kp2gwylf4";
   revCount = "438";
@@ -20,6 +20,9 @@ in stdenv.mkDerivation {
   '';
 
   configureScript = "../configure";
+
+  configureFlags = stdenv.lib.optional (payload != null)
+    "--with-payload=${payload}";
 
   hardeningDisable = [ "all" ];
 

@@ -13565,6 +13565,10 @@ with pkgs;
 
   riscv-pk = callPackage ../misc/riscv-pk { };
 
+  riscv-pk-with-kernel = riscv-pk.override {
+    payload = "${linux_riscv}/vmlinux";
+  };
+
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
