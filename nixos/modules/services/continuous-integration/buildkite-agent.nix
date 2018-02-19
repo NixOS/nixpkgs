@@ -68,6 +68,7 @@ in
 
       name = mkOption {
         type = types.str;
+        default = "%hostname-%n";
         description = ''
           The name of the agent.
         '';
