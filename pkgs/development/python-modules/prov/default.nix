@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7a2d72b0df43cd9c6e374d815c8ce3cd5ca371d54f98f837853ac9fcc98aee4c";
+    sha256 = "640dc158d931403bc6c1a0ad80702caae71f810bac21f90ec605865c8444b7bb";
   };
 
   propagatedBuildInputs = [
