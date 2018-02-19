@@ -70,10 +70,10 @@ stdenv.mkDerivation {
     ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
     ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1"
     ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
-    ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"]);
+    ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"])
     # XXX: USE_PCRE2 might be useful in general, look into it
     # XXX other alpine options?
-    ++ stdenv.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"];
 
 
   # build git-credential-osxkeychain if darwin
