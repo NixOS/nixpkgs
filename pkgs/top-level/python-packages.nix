@@ -18170,6 +18170,8 @@ EOF
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
+  magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
+
   wsgiproxy2 = buildPythonPackage rec {
     name = "WSGIProxy2-0.4.2";
 
