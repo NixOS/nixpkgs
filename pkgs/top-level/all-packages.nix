@@ -7920,6 +7920,7 @@ with pkgs;
     rubyBindings = config.radare.rubyBindings or false;
     luaBindings = config.radare.luaBindings or false;
   };
+  radare2-cutter = libsForQt5.callPackage ../development/tools/analysis/radare2-cutter { };
 
   ragel = ragelStable;
 
@@ -13545,6 +13546,8 @@ with pkgs;
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
+
+  riscv-pk = callPackage ../misc/riscv-pk { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
