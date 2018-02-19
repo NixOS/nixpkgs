@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: investigate test-rwlock1 failure during cross-compilation.
-  doCheck = !stdenv.hostPlatform.isMusl && fallse;
+  doCheck = !stdenv.hostPlatform.isMusl && false;
 
   enableParallelBuilding = true;
 
