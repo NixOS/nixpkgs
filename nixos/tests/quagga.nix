@@ -8,7 +8,7 @@
 import ./make-test.nix ({ pkgs, ... }:
   let
 
-    ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ip4).address;
+    ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
 
     ospfConf = ''
       interface eth2
