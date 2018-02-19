@@ -1,17 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pyparsing
+, future
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
   version = "1.0.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "cc41cdd8332c2bf44b97daf1f135f4f267c3b744c33976655cd270b66f964c0a";
   };
+
+  propagatedBuildInputs = [ pyparsing future ];
 
   # No tests in archive
   doCheck = false;
