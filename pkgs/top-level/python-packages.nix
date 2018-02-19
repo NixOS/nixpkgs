@@ -15889,29 +15889,7 @@ in {
     };
   };
 
-  spake2 = buildPythonPackage rec {
-    name = "spake2-${version}";
-    version = "0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/spake2/${name}.tar.gz";
-      sha256 = "0rmplicbbid41qrvwc1ckyp211ban01ardms5yqqq16ixrc18a6j";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ hkdf ];
-
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "SPAKE2 password-authenticated key exchange library";
-      homepage = "http://github.com/warner/python-spake2";
-      license = licenses.mit;
-    };
-  };
+  spake2 = callPackage ../development/python-modules/spake2 { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
