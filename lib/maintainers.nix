@@ -385,6 +385,7 @@
   lheckemann = "Linus Heckemann <git@sphalerite.org>";
   lhvwb = "Nathaniel Baxter <nathaniel.baxter@gmail.com>";
   lihop = "Leroy Hopson <nixos@leroy.geek.nz>";
+  limeytexan = "Michael Brantley <limeytexan@gmail.com>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
   linus = "Linus Arver <linusarver@gmail.com>";
   lluchs = "Lukas Werling <lukas.werling@gmail.com>";
