@@ -207,7 +207,7 @@ if [ -z "$noRootPasswd" ] && chroot $mountPoint [ -x /run/wrappers/bin/passwd ] 
     for ATTEMPT in $(seq 1 $MAX_PASSWD_ATTEMPTS); do
       chroot $mountPoint /run/wrappers/bin/passwd && break
       if [ "$ATTEMPT" -lt "$MAX_PASSWD_ATTEMPTS" ]; then
-        echo "Wrong password - Attempt $(expr $ATTEMPT + 1) of $MAX_PASSWD_ATTEMPTS."
+        echo "Wrong password - Attempt $(("$ATTEMPT" + 1)) of $MAX_PASSWD_ATTEMPTS."
       else
         echo "Too many failed attempts, root won't have a password."
         echo "Note: You can set one manually by running \"chroot $mountPoint passwd\"."
