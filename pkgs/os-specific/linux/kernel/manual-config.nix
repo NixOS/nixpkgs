@@ -155,14 +155,13 @@ let
                           if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
                           "install") ];
 
-      postInstall = ''
-        mkdir -p $dev
-        cp vmlinux $dev/
-      '' + (optionalString installsFirmware ''
+      postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
         make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
       '' else "") + (if isModular then ''
+        mkdir -p $dev
+        cp vmlinux $dev/
         if [ -z "$dontStrip" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
