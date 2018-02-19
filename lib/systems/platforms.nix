@@ -545,6 +545,12 @@ rec {
     name = "riscv-multiplatform";
     kernelArch = "riscv";
     bfdEmulation = "elf${bits}lriscv";
+    kernelTarget = "vmlinux";
+    kernelAutoModules = true;
+    kernelBaseConfig = "defconfig";
+    kernelExtraConfig = ''
+      FTRACE n
+    '';
   };
 
   selectBySystem = system: {

@@ -1,0 +1,65 @@
+commit 365fc1312f4911bfae25c5914c398f9aca21948f
+Author: Shea Levy <shea@shealevy.com>
+Date:   Mon Feb 19 10:50:58 2018 -0500
+
+    riscv: Add install target to Makefile.
+    
+    Signed-off-by: Shea Levy <shea@shealevy.com>
+
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 6719dd30ec5b..26892daefa05 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -70,3 +70,7 @@ core-y += arch/riscv/kernel/ arch/riscv/mm/
+ libs-y += arch/riscv/lib/
+ 
+ all: vmlinux
++
++PHONY += install
++install: vmlinux
++	sh $(srctree)/arch/riscv/install.sh $(KERNELRELEASE) $< System.map "$(INSTALL_PATH)"
+diff --git a/arch/riscv/install.sh b/arch/riscv/install.sh
+new file mode 100644
+index 000000000000..8b3155a11a4a
+--- /dev/null
++++ b/arch/riscv/install.sh
+@@ -0,0 +1,39 @@
++#!/bin/sh
++#
++# arch/riscv/install.sh
++#
++# This file is subject to the terms and conditions of the GNU General Public
++# License.  See the file "COPYING" in the main directory of this archive
++# for more details.
++#
++# Copyright (C) 1995 by Linus Torvalds
++#
++# Adapted from code in arch/ia64/Makefile by Shea Levy
++#
++# "make install" script for riscv architecture
++#
++# Arguments:
++#   $1 - kernel version
++#   $2 - kernel image file
++#   $3 - kernel map file
++#   $4 - default install path (blank if root directory)
++#
++
++# User may have a custom install script
++
++if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
++if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
++
++# Default install - no bootloader configuration (yet?)
++base=$(basename $2)
++
++if [ -f $4/$base ]; then
++	mv $4/$base $4/$base.old
++fi
++
++if [ -f $4/System.map ]; then
++	mv $4/System.map $4/System.old
++fi
++
++cat $2 > $4/$base
++cp $3 $4/System.map

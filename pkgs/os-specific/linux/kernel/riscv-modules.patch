@@ -1,0 +1,11 @@
+diff -Naur linux-4.15.4-orig/arch/riscv/configs/defconfig linux-4.15.4/arch/riscv/configs/defconfig
+--- linux-4.15.4-orig/arch/riscv/configs/defconfig	2018-02-16 14:07:01.000000000 -0500
++++ linux-4.15.4/arch/riscv/configs/defconfig	2018-02-18 18:33:09.488431900 -0500
+@@ -12,6 +12,7 @@
+ CONFIG_NAMESPACES=y
+ CONFIG_USER_NS=y
+ CONFIG_BLK_DEV_INITRD=y
++CONFIG_MODULES=y
+ CONFIG_EXPERT=y
+ CONFIG_CHECKPOINT_RESTORE=y
+ CONFIG_BPF_SYSCALL=y
