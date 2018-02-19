@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyparsing
 , future
+, nose
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -19,8 +21,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing future ];
 
-  # No tests in archive
-  doCheck = false;
+  checkInputs = [ nose glibcLocales ];
+
+  checkPhase = ''
+    LC_ALL="en_US.UTF-8" nosetests
+  '';
 
   meta = {
     description = "Bibtex parser for python 2.7 and 3.3 and newer";
