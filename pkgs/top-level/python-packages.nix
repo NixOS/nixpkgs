@@ -20168,21 +20168,7 @@ EOF
     };
   };
 
-  termstyle = buildPythonPackage rec {
-    name = "python-termstyle-${version}";
-    version = "0.1.10";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-termstyle/${name}.tar.gz";
-      sha256 = "1qllzkx1alf14zcfapppf8w87si4cpa7lgjmdp3f5idzdyqnnapl";
-    };
-
-    meta = {
-      description = "Console colouring for python";
-      homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
-      license = licenses.bsdOriginal;
-    };
-
-  };
+  termstyle = callPackage ../development/python-modules/termstyle { };
 
   green = buildPythonPackage rec {
     name = "green-${version}";
