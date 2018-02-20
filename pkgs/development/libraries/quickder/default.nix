@@ -29,19 +29,21 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./CMakeLists.txt \
       --replace "get_version_from_git" "set (Quick-DER_VERSION 1.2) #"
     substituteInPlace ./CMakeLists.txt \
       --replace \$\{ARPA2CM_TOOLCHAIN_DIR} "$out/share/ARPA2CM/toolchain/"
-    '';
+    patchShebangs python/scripts/
+  '';
 
-   cmakeFlags = [ "-DNO_TESTING=ON"
-   		  "-DARPA2CM_TOOLCHAIN_DIR=$out/share/ARPA2CM/toolchain/"
-  		  "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON"
-  		  "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON"
-  		  "-DPACKAGE_NO_PACKAGE_REGISTRY=ON"
-	        ];
+  cmakeFlags = [
+    "-DNO_TESTING=ON"
+    "-DARPA2CM_TOOLCHAIN_DIR=$out/share/ARPA2CM/toolchain/"
+    "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON"
+    "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON"
+    "-DPACKAGE_NO_PACKAGE_REGISTRY=ON"
+  ];
 
   preConfigure = ''
     export PREFIX=$out
