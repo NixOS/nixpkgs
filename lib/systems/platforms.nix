@@ -550,6 +550,7 @@ rec {
     kernelBaseConfig = "defconfig";
     kernelExtraConfig = ''
       FTRACE n
+      SERIAL_OF_PLATFORM y
     '';
   };
 
