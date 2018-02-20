@@ -4628,6 +4628,8 @@ with pkgs;
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
+  shocco = callPackage ../tools/text/shocco { };
+
   shotwell = callPackage ../applications/graphics/shotwell { };
 
   shout = nodePackages.shout;
