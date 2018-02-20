@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
 
@@ -16,7 +16,8 @@ in stdenv.mkDerivation rec {
     sha256 = "186x33wsk4mzjz7dzbn8p0py9a0nzkgzpfkdv4rlyy5gghv5vhd3";
   };
 
-  buildInputs = [ perl zlib sqlite ];
+  buildInputs = [ perl zlib sqlite ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ nspr ];
 
@@ -32,6 +33,10 @@ in stdenv.mkDerivation rec {
     ];
 
   patchFlags = "-p0";
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+  '';
 
   outputs = [ "out" "dev" "tools" ];
 
