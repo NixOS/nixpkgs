@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
 buildPythonPackage rec {
-  version = "2.1.5";
+  version = "2.1.6";
   pname = "asgiref";
 
   # PyPI tarball doesn't include tests directory
@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "1khhgg9cwjh4lax5c9aacp42a8sj0icdbrbzwp53if7f1irva58l";
+    sha256 = "12p1i2ai03x2hx6b3i7xgicyfi2x11is6pkbdac4jpz7fmbz3zlh";
   };
 
   propagatedBuildInputs = [ async-timeout ];
