@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "mirror://gnu/ncurses/${name}.tar.gz";
+    url = "mirror://gnu/ncurses/ncurses-${version}.tar.gz";
     sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
   };
 
@@ -117,6 +117,8 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tic" "$out"
     moveToOutput "bin/tput" "$out"
     moveToOutput "bin/tset" "$out"
+    moveToOutput "bin/captoinfo" "$out"
+    moveToOutput "bin/infotocap" "$out"
   '';
 
   preFixup = lib.optionalString (!hostPlatform.isCygwin) ''
