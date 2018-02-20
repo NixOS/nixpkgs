@@ -11376,6 +11376,47 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  POE = buildPerlPackage rec {
+    name = "POE-1.367";
+    patches = [
+      ../development/perl-modules/perl-POE-1.367-pod_linkcheck.patch
+      ../development/perl-modules/perl-POE-1.367-pod_no404s.patch
+    ];
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/POE-1.367.tar.gz";
+      sha256 = "0b9s7yxaa2lgzyi56brgygycfjk7lz33d1ddvc1wvwwvm45p4wmp";
+    };
+    # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
+    # this module don't disable themselves when "run_network_tests" is
+    # not present (see below).
+    buildInputs = [
+      Curses EmailMIME HTTPMessage IOTty LWPProtocolHttps POETestLoops
+      TermReadKey TestPod TestPodCoverage TestPodNo404s YAML
+    ];
+    propagatedBuildInputs = [ pkgs.cacert IOPipely ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Portable multitasking and networking framework for any event loop";
+      license = stdenv.lib.licenses.artistic2;
+    };
+    preCheck = ''
+      set -x
+
+      : Makefile.PL touches the following file as a "marker" to indicate
+      : it should perform tests which use the network. Delete this file
+      : for sandbox builds.
+      rm -f run_network_tests
+
+      : Certs are required if not running in a sandbox.
+      export SSL_CERT_FILE=${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt
+
+      : The following flag enables extra tests not normally performed.
+      export RELEASE_TESTING=1
+
+      set +x
+    '';
+  };
+
   POETestLoops = buildPerlPackage rec {
     name = "POE-Test-Loops-1.360";
     src = fetchurl {
