@@ -20595,7 +20595,10 @@ with pkgs;
 
   spdlog = callPackage ../development/libraries/spdlog { };
 
-  dart = callPackage ../development/interpreters/dart { };
+  dart = dart_stable;
+  dart_old = callPackage ../development/interpreters/dart { version = "1.16.1"; };
+  dart_stable = callPackage ../development/interpreters/dart { version = "1.24.3"; };
+  dart_dev = callPackage ../development/interpreters/dart { version = "2.0.0-dev.26.0"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 
