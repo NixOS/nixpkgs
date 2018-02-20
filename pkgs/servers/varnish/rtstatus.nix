@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Varnish realtime status page";
     homepage = https://github.com/varnish/libvmod-rtstatus;
     inherit (varnish.meta) license platforms maintainers;
+    broken = true; # it has not ported to varnish 5.2 yet (5.1 is ok)
   };
 }

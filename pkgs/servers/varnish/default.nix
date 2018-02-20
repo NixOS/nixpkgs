@@ -2,12 +2,12 @@
 , python, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.3";
+  version = "5.2.1";
   name = "varnish-${version}";
 
   src = fetchurl {
-    url = "http://repo.varnish-cache.org/source/${name}.tar.gz";
-    sha256 = "0km50hzjzi1kq85lr3hq519nrp261wb91ixq48vhyd41llycjfbl";
+    url = "http://varnish-cache.org/_downloads/${name}.tgz";
+    sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.varnish-cache.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ garbas fpletz ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
