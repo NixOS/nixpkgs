@@ -69,7 +69,10 @@ let
         fontconfig perl file bootjdk
       ];
 
-    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+    NIX_CFLAGS_COMPILE = [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=format-overflow" # newly detected by gcc7
+    ];
 
     NIX_LDFLAGS = if minimal then null else "-lfontconfig -lXcursor -lXinerama";
 

@@ -33,7 +33,6 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
-, flex ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -295,7 +294,7 @@ stdenv.mkDerivation ({
     ];
 
   buildInputs = [
-    gmp mpfr libmpc libelf flex
+    gmp mpfr libmpc libelf
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
@@ -408,9 +407,8 @@ stdenv.mkDerivation ({
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
-  buildFlags = if bootstrap then
-    (if profiledCompiler then "profiledbootstrap" else "bootstrap")
-    else "";
+  buildFlags =
+    optional bootstrap (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   installTargets =
     if stripped
@@ -523,7 +521,7 @@ stdenv.mkDerivation ({
 }
 
 # Strip kills static libs of other archs (hence targetPlatform != hostPlatform)
-// optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+// optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )

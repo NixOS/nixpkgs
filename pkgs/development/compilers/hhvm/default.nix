@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
       hphp/runtime/ext/std/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.h
+    sed '1i#include <functional>' -i third-party/mcrouter/src/mcrouter/lib/cycles/Cycles.h
     patchShebangs .
   '';
 

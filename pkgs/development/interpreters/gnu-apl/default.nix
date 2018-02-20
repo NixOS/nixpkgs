@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
+  # Needed with GCC 7
+  NIX_CFLAGS_COMPILE = "-Wno-error=int-in-bool-context";
+
   patchPhase = optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';

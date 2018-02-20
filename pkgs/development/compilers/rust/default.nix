@@ -10,7 +10,7 @@ let
 in
 rec {
   rustc = callPackage ./rustc.nix {
-    inherit llvm targets targetPatches targetToolchains rustPlatform version;
+    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version;
 
     forceBundledLLVM = true;
 
@@ -34,6 +34,7 @@ rec {
     srcSha = "14b2n1msxma19ydchj54hd7f2zdsr524fg133dkmdn7j65f1x6aj";
     cargoSha256 = "1sj59z0w172qvjwg1ma5fr5am9dgw27086xwdnrvlrk4hffcr7y7";
 
+    inherit stdenv;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

@@ -1,4 +1,4 @@
-commit d3282d2512774dc5027c98930a3852b2b6e8407a
+commit 909fe47c7009aa9a75fe9470c5f8d3dd5b50917a
 Author: Shea Levy <shea@shealevy.com>
 Date:   Sun Feb 18 13:50:11 2018 -0500
 
@@ -59,7 +59,7 @@ index 82b35a6bdf..77481eca2c 100644
              unlock_user_struct(target_stfs, arg2, 1);
          }
 diff --git a/linux-user/syscall_defs.h b/linux-user/syscall_defs.h
-index a35c52a60a..9f90451caf 100644
+index a35c52a60a..64aa49d3c5 100644
 --- a/linux-user/syscall_defs.h
 +++ b/linux-user/syscall_defs.h
 @@ -362,7 +362,14 @@ struct kernel_statfs {
@@ -77,49 +77,46 @@ index a35c52a60a..9f90451caf 100644
  };
  
  struct target_dirent {
-@@ -2223,7 +2230,13 @@ struct target_statfs {
+@@ -2223,7 +2230,12 @@ struct target_statfs {
  	/* Linux specials */
  	target_fsid_t		f_fsid;
  	int32_t			f_namelen;
 +#ifdef HAVE_STATFS_FLAGS
-+	int32_t			f_frsize;
 +	int32_t			f_flags;
-+	int32_t			f_spare[4];
++	int32_t			f_spare[5];
 +#else
  	int32_t			f_spare[6];
 +#endif
  };
  #else
  struct target_statfs {
-@@ -2239,7 +2252,13 @@ struct target_statfs {
+@@ -2239,7 +2251,12 @@ struct target_statfs {
  	/* Linux specials */
  	target_fsid_t		f_fsid;
  	abi_long		f_namelen;
 +#ifdef HAVE_STATFS_FLAGS
-+	abi_long		f_frsize;
 +	abi_long		f_flags;
-+	abi_long		f_spare[4];
++	abi_long		f_spare[5];
 +#else
  	abi_long		f_spare[6];
 +#endif
  };
  #endif
  
-@@ -2255,7 +2274,13 @@ struct target_statfs64 {
+@@ -2255,7 +2272,12 @@ struct target_statfs64 {
  	uint64_t	f_bavail;
  	target_fsid_t	f_fsid;
  	uint32_t	f_namelen;
 +#ifdef HAVE_STATFS_FLAGS
-+	uint32_t	f_frsize;
 +	uint32_t	f_flags;
-+	uint32_t	f_spare[4];
++	uint32_t	f_spare[5];
 +#else
  	uint32_t	f_spare[6];
 +#endif
  };
  #elif (defined(TARGET_PPC64) || defined(TARGET_X86_64) || \
         defined(TARGET_SPARC64) || defined(TARGET_AARCH64)) && \
-@@ -2271,7 +2296,12 @@ struct target_statfs {
+@@ -2271,7 +2293,12 @@ struct target_statfs {
  	target_fsid_t f_fsid;
  	abi_long f_namelen;
  	abi_long f_frsize;
@@ -132,7 +129,7 @@ index a35c52a60a..9f90451caf 100644
  };
  
  struct target_statfs64 {
-@@ -2285,7 +2315,12 @@ struct target_statfs64 {
+@@ -2285,7 +2312,12 @@ struct target_statfs64 {
  	target_fsid_t f_fsid;
  	abi_long f_namelen;
  	abi_long f_frsize;
@@ -145,7 +142,7 @@ index a35c52a60a..9f90451caf 100644
  };
  #elif defined(TARGET_S390X)
  struct target_statfs {
-@@ -2299,7 +2334,13 @@ struct target_statfs {
+@@ -2299,7 +2331,13 @@ struct target_statfs {
      kernel_fsid_t f_fsid;
      int32_t  f_namelen;
      int32_t  f_frsize;
@@ -159,7 +156,7 @@ index a35c52a60a..9f90451caf 100644
  };
  
  struct target_statfs64 {
-@@ -2313,7 +2354,12 @@ struct target_statfs64 {
+@@ -2313,7 +2351,12 @@ struct target_statfs64 {
      kernel_fsid_t f_fsid;
      int32_t  f_namelen;
      int32_t  f_frsize;
@@ -172,7 +169,7 @@ index a35c52a60a..9f90451caf 100644
  };
  #else
  struct target_statfs {
-@@ -2327,7 +2373,12 @@ struct target_statfs {
+@@ -2327,7 +2370,12 @@ struct target_statfs {
  	target_fsid_t f_fsid;
  	uint32_t f_namelen;
  	uint32_t f_frsize;
@@ -185,7 +182,7 @@ index a35c52a60a..9f90451caf 100644
  };
  
  struct target_statfs64 {
-@@ -2341,7 +2392,12 @@ struct target_statfs64 {
+@@ -2341,7 +2389,12 @@ struct target_statfs64 {
  	target_fsid_t f_fsid;
          uint32_t f_namelen;
  	uint32_t f_frsize;
