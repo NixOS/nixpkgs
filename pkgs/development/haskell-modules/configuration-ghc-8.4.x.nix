@@ -42,6 +42,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Use more recent doctest version to fix build errors.
+  doctest = self.doctest_0_14_0;
+  doctest_0_14_0 = dontCheck super.doctest_0_14_0; # https://github.com/sol/doctest/issues/189
+  QuickCheck = self.QuickCheck_2_11_3;             # needed by doctest-0.14.0
+
   # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
   ## haddock: panic! (the 'impossible' happened)
   ##   (GHC version 8.4.20180122 for x86_64-unknown-linux):
@@ -82,14 +87,14 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ## 
+  ##
   ##     • Could not deduce (Semigroup (Dict a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: a
   constraints = super.constraints_0_10;
 
   ## Needs bump to a versioned attribute
-  ## 
+  ##
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
@@ -97,7 +102,7 @@ self: super: {
 
   funcmp = overrideCabal super.funcmp_1_9 (drv: {
     ## Needs bump to a versioned attribute
-    ## 
+    ##
     ## Needed for (<>) in prelude
     ## Setup: Encountered missing dependencies:
     ## base >=3 && <4.11
@@ -106,7 +111,7 @@ self: super: {
 
   hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
     ## Needs bump to a versioned attribute
-    ## 
+    ##
     ##     • No instance for (Semigroup Summary)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Summary’
@@ -120,7 +125,7 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  ## 
+  ##
   ## breaks hspec:
   ## Setup: Encountered missing dependencies:
   ## hspec-discover ==2.4.7
@@ -128,7 +133,7 @@ self: super: {
 
   lens = overrideCabal super.lens_4_16 (drv: {
     ## Needs bump to a versioned attribute
-    ## 
+    ##
     ##     • Could not deduce (Apply f)
     ##         arising from the superclasses of an instance declaration
     ##       from the context: (Contravariant f, Applicative f)
@@ -140,7 +145,7 @@ self: super: {
 
   semigroupoids = overrideCabal super.semigroupoids_5_2_2 (drv: {
     ## Needs bump to a versioned attribute
-    ## 
+    ##
     ##     • Variable not in scope: mappend :: Seq a -> Seq a -> Seq a
     ## Setup: Encountered missing dependencies:
     ## ghc >=7.0 && <8.4
@@ -149,14 +154,14 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  ## 
+  ##
   ##     • No instance for (Semigroup Builder)
   ##         arising from the superclasses of an instance declaration
   ##     • In the instance declaration for ‘Monoid Builder’
   stringbuilder = super.stringbuilder_0_5_1;
 
   ## Needs bump to a versioned attribute
-  ## 
+  ##
   ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
   ##    |
   ## 80 | import Data.Semigroup (Semigroup(..), Monoid(..))
@@ -167,7 +172,7 @@ self: super: {
 
   tasty = overrideCabal super.tasty (drv: {
     ## On Hackage, awaiting for import
-    ## 
+    ##
     ##     • No instance for (Semigroup OptionSet)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid OptionSet’
@@ -180,7 +185,7 @@ self: super: {
 
   haskell-gi = overrideCabal super.haskell-gi (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*
     src = pkgs.fetchFromGitHub {
@@ -197,7 +202,7 @@ self: super: {
 
   haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.21.*
     ## cannot build derivation ‘/nix/store/b3d6yr1rzk4hpzg87yk4n5i4321i824f-gi-cairo-1.0.14.drv’: 1 dependencies couldn't be built
@@ -212,7 +217,7 @@ self: super: {
 
   haskell-src-exts = overrideCabal super.haskell-src-exts (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ##     • Could not deduce (Semigroup (ParseResult m))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: Monoid m
@@ -226,7 +231,7 @@ self: super: {
 
   lambdacube-compiler = overrideCabal super.lambdacube-compiler (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12,
     ## base >=4.7 && <4.10,
@@ -243,7 +248,7 @@ self: super: {
 
   lambdacube-ir = overrideCabal super.lambdacube-ir (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12, base >=4.8 && <4.10, vector ==0.11.*
     src = pkgs.fetchFromGitHub {
@@ -257,7 +262,7 @@ self: super: {
 
   simple-reflect = overrideCabal super.simple-reflect (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ##     • No instance for (Semigroup Expr)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Expr’
@@ -271,7 +276,7 @@ self: super: {
 
   singletons = overrideCabal super.singletons (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## th-desugar ==1.7.*
     src = pkgs.fetchFromGitHub {
@@ -284,7 +289,7 @@ self: super: {
 
   th-desugar = overrideCabal super.th-desugar (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ##     • Could not deduce (MonadIO (DsM q))
     ##         arising from the 'deriving' clause of a data type declaration
     ##       from the context: Quasi q
@@ -298,7 +303,7 @@ self: super: {
 
   websockets = overrideCabal super.websockets (drv: {
     ## Upstreamed, awaiting a Hackage release
-    ## 
+    ##
     ##     • No instance for (Semigroup SizeLimit)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid SizeLimit’
@@ -315,7 +320,7 @@ self: super: {
 
   blaze-builder = overrideCabal super.blaze-builder (drv: {
     ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
-    ## 
+    ##
     ##     • No instance for (Semigroup Poke)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Poke’
@@ -329,7 +334,7 @@ self: super: {
 
   bytestring-trie = overrideCabal super.bytestring-trie (drv: {
     ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
-    ## 
+    ##
     ##     • Could not deduce (Semigroup (Trie a))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: Monoid a
@@ -352,7 +357,7 @@ self: super: {
 
   gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
     ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
-    ## 
+    ##
     ## Setup: Encountered missing dependencies:
     ## Cabal >=1.24.0.0 && <2.1
     src = pkgs.fetchFromGitHub {
@@ -366,7 +371,7 @@ self: super: {
 
   hashtables = overrideCabal super.hashtables (drv: {
     ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
-    ## 
+    ##
     ##     • No instance for (Semigroup Slot)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Slot’
@@ -380,7 +385,7 @@ self: super: {
 
   language-c = overrideCabal super.language-c (drv: {
     ## Unmerged.  PR: https://github.com/visq/language-c/pull/45
-    ## 
+    ##
     ##     Ambiguous occurrence ‘<>’
     ##     It could refer to either ‘Prelude.<>’,
     ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
@@ -396,7 +401,7 @@ self: super: {
 
   language-c_0_7_0 = overrideCabal super.language-c_0_7_0 (drv: {
     ## Unmerged.  PR: https://github.com/visq/language-c/pull/45
-    ## 
+    ##
     ##     Ambiguous occurrence ‘<>’
     ##     It could refer to either ‘Prelude.<>’,
     ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
@@ -412,7 +417,7 @@ self: super: {
 
   monadplus = overrideCabal super.monadplus (drv: {
     ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
-    ## 
+    ##
     ##     • No instance for (Semigroup (Partial a b))
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid (Partial a b)’
@@ -426,7 +431,7 @@ self: super: {
 
   reflex = overrideCabal super.reflex (drv: {
     ## Unmerged.  PR: https://github.com/reflex-frp/reflex/pull/158
-    ## 
+    ##
     ##     • Could not deduce (Semigroup (Event t a))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: (Semigroup a, Reflex t)
@@ -454,7 +459,7 @@ self: super: {
 
   regex-tdfa = overrideCabal super.regex-tdfa (drv: {
     ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
-    ## 
+    ##
     ##     • No instance for (Semigroup (CharMap a))
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid (CharMap a)’
@@ -468,7 +473,7 @@ self: super: {
 
   securemem = overrideCabal super.securemem (drv: {
     ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
-    ## 
+    ##
     ##     • No instance for (Semigroup SecureMem)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid SecureMem’
@@ -482,7 +487,7 @@ self: super: {
 
   text-format = overrideCabal super.text-format (drv: {
     ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
-    ## 
+    ##
     ##     • No instance for (Semigroup Format)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Format’
@@ -496,7 +501,7 @@ self: super: {
 
   wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
     ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
-    ## 
+    ##
     ##     Ambiguous occurrence ‘<>’
     ##     It could refer to either ‘PP.<>’,
     ##                              imported from ‘Prelude.Compat’ at Text/PrettyPrint/Leijen/Text/Monadic.hs:73:1-36
