@@ -1031,6 +1031,8 @@ with pkgs;
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
+  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
