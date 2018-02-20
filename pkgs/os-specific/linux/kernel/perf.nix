@@ -49,6 +49,7 @@ stdenv.mkDerivation {
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
 
+  separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1";
 
   preFixup = ''
