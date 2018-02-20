@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
     homepage = http://www.spice-space.org/;
     license = licenses.lgpl21;
-
+    maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;
   };
 }
