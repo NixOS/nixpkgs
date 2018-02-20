@@ -289,10 +289,10 @@ in
                     # Create initial databases
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
-                        ( echo "create database `${database.name}`;"
+                        ( echo 'create database `${database.name}`;'
 
                           ${optionalString (database ? "schema") ''
-                          echo "use `${database.name}`;"
+                          echo 'use `${database.name}`;'
 
                           if [ -f "${database.schema}" ]
                           then
