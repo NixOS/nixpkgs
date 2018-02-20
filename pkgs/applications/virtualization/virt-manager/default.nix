@@ -61,6 +61,8 @@ python2Packages.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
+    # exclude Darwin since libvirt-glib currently doesn't build there
+    platforms = platforms.linux;
     maintainers = with maintainers; [ qknight offline fpletz ];
   };
 }
