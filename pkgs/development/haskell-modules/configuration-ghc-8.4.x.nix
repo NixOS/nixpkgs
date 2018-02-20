@@ -47,6 +47,9 @@ self: super: {
   doctest_0_14_0 = dontCheck super.doctest_0_14_0; # https://github.com/sol/doctest/issues/189
   QuickCheck = self.QuickCheck_2_11_3;             # needed by doctest-0.14.0
 
+  # https://github.com/tmhedberg/here/pull/22
+  here = doJailbreak super.here;
+
   # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
   ## haddock: panic! (the 'impossible' happened)
   ##   (GHC version 8.4.20180122 for x86_64-unknown-linux):
