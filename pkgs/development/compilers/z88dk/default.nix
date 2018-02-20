@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "z80 Development Kit";
     license     = licenses.clArtistic;
     maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
