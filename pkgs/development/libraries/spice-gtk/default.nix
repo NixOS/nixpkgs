@@ -25,12 +25,9 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   preAutoreconf = ''
-    substituteInPlace src/Makefile.am \
-          --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
   '';
 
   configureFlags = [
-    "--disable-maintainer-mode"
     "--with-gtk3"
   ];
 
