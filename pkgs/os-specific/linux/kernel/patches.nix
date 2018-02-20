@@ -88,4 +88,14 @@ rec {
     patch = ./riscv-install.patch;
   };
 
+  riscv_initrd = {
+    name = "riscv-initrd";
+    patch = ./riscv-initrd.patch;
+  };
+
+  riscv_initrd_free = {
+    name = "riscv-initrd-free";
+    patch = ./riscv-initrd-free.patch;
+  };
+
 }

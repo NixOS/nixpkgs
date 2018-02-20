@@ -1,0 +1,21 @@
+commit b1fbec8b74ace263ce1371e6bcfdd1dd71b52070
+Author: Shea Levy <shea@shealevy.com>
+Date:   Tue Feb 20 08:48:12 2018 -0500
+
+    riscv: Implement free_initrd_mem.
+    
+    v2: Remove incorrect page alignment.
+    
+    Signed-off-by: Shea Levy <shea@shealevy.com>
+
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index c77df8142be2..1b6daa5184e0 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -66,5 +66,6 @@ void free_initmem(void)
+ #ifdef CONFIG_BLK_DEV_INITRD
+ void free_initrd_mem(unsigned long start, unsigned long end)
+ {
++	free_reserved_area((void *)start, (void *)end, -1, "initrd");
+ }
+ #endif /* CONFIG_BLK_DEV_INITRD */
