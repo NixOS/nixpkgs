@@ -19708,6 +19708,8 @@ with pkgs;
 
   pcalc = callPackage ../applications/science/math/pcalc { };
 
+  bcal = callPackage ../applications/science/math/bcal { };
+
   pspp = callPackage ../applications/science/math/pspp {
     inherit (gnome3) gtksourceview;
   };
