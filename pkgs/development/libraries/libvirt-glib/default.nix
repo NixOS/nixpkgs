@@ -35,6 +35,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = http://libvirt.org/;
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
