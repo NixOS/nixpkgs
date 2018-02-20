@@ -3236,6 +3236,8 @@ with pkgs;
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
+
   nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
@@ -5755,7 +5757,7 @@ with pkgs;
   compcert = callPackage ../development/compilers/compcert { };
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
-  
+
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
