@@ -6289,6 +6289,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       license = stdenv.lib.licenses.lgpl21Plus;
+      platforms   = stdenv.lib.platforms.linux;
     };
   };
 
