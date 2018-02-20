@@ -5,7 +5,7 @@
     src = let gitsrc = pkgs.fetchFromGitHub {
       owner = "eustas";
       repo = "ngx_brotli";
-      rev = "47550a25d07363f8eb87ef901b2de5883c46352b";
+      rev = "8cd9dd5fc232d3a01644584921e52dae99034779";
       sha256 = "0ap1kf51hzb8yvvxjkcj9hnmsmmd5drcay64hd4n7vybf9dqw6g6";
     }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
