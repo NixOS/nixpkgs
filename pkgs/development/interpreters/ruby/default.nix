@@ -122,6 +122,12 @@ let
             "--with-setjmp-type=setjmp"
           ];
 
+        preInstall = ''
+          # Ruby installs gems here itself now.
+          mkdir -pv "$out/${passthru.gemPath}"
+          export GEM_HOME="$out/${passthru.gemPath}"
+        '';
+
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
@@ -134,7 +140,6 @@ let
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
           # Bundler tries to create this directory
-          mkdir -pv $out/${passthru.gemPath}
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
