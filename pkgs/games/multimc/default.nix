@@ -1,31 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, quazip }:
 
-let
-  libnbt = fetchFromGitHub {
-    owner = "MultiMC";
-    repo = "libnbtplusplus";
-    rev = "4b305bb";
-    sha256 = "1zj7pxk0g5zl16hrngb4rss00hi019rylin7zgf18kaymc54nbcs";
-  };
-in
 stdenv.mkDerivation {
-  name = "multimc-0.5.1";
+  name = "multimc-0.6.1";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = "0.5.1";
-    sha256 = "0wmlnwcq3gxrbmc53j96aa64pp1kmnlxiifhzngcb5kfmbbc8a20";
+    rev = "0.6.1";
+    sha256 = "0glsf4vfir8w24bpinf3cx2ninrcp7hpq9cl463wl78dvqfg47kx";
+    fetchSubmodules = true;
   };
   buildInputs = [ cmake qtbase jdk zlib file makeWrapper ];
 
   libpath = with xorg; [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
-  postUnpack = ''
-    rmdir $sourceRoot/libraries/libnbtplusplus
-    cp -r ${libnbt} $sourceRoot/libraries/libnbtplusplus
-    chmod 755 -R $sourceRoot/libraries/libnbtplusplus
-    mkdir -pv $sourceRoot/build/
-    cp -v ${quazip.src} $sourceRoot/build/quazip-0.7.1.tar.gz
-  '';
 
   enableParallelBuilding = true;
 
