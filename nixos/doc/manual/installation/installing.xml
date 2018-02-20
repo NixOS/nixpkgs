@@ -279,7 +279,15 @@ Retype new UNIX password: ***
 
   </listitem>
 
-  <listitem><para>If everything went well:
+  <listitem>
+    <note>
+      <para>
+        To prevent the password prompt, set <code>users.mutableUsers = false;</code> in
+        <filename>configuration.nix</filename>, which allows unattended installation
+        necessary in automation.
+      </para>
+    </note>
+    <para>If everything went well:
 
 <screen>
 # reboot</screen>
