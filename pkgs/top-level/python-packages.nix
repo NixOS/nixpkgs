@@ -15482,6 +15482,8 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
+  text-unidecode = callPackage ../development/python-modules/text-unidecode { };
+
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
