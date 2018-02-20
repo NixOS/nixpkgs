@@ -198,6 +198,7 @@ self: super: {
   natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
+  reflection = addBuildDepend super.reflection self.semigroups;
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
