@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, quazip }:
+{ stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
 
 let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
@@ -12,7 +12,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0glsf4vfir8w24bpinf3cx2ninrcp7hpq9cl463wl78dvqfg47kx";
     fetchSubmodules = true;
   };
-  buildInputs = [ cmake qtbase jdk zlib file makeWrapper ];
+  nativeBuildInputs = [ cmake file makeWrapper ];
+  buildInputs = [ qtbase jdk zlib ];
 
   enableParallelBuilding = true;
 
