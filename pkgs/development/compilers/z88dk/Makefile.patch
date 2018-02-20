@@ -1,0 +1,60 @@
+--- z88dk.orig/Makefile	1970-01-01 01:00:01.000000000 +0100
++++ z88dk/Makefile	2018-02-16 13:28:44.979280387 +0100
+@@ -8,32 +8,32 @@
+ # ---> Configurable parameters are below his point
+ prefix ?= /usr/local
+ prefix_share = $(prefix)/share/z88dk
+-git_rev = $(shell git rev-parse --short HEAD)
+-git_count = $(shell git rev-list --count HEAD)
+-version := $(shell date +%Y%m%d)
++git_rev ?= $(shell git rev-parse --short HEAD)
++git_count ?= $(shell git rev-list --count HEAD)
++version ?= $(shell date +%Y%m%d)
+ 
+ INSTALL ?= install
+ CFLAGS ?= -O2
+ CC ?= gcc
+ # Prefix for executables (eg z88dk-, hence z88dk-z80asm, z88dk-copt etc)
+-EXEC_PREFIX ?= 
++EXEC_PREFIX ?=
+ CROSS ?= 0
+ 
+ # --> End of Configurable Options
+ 
+-export CC INSTALL CFLAGS EXEC_PREFIX CROSS 
++export CC INSTALL CFLAGS EXEC_PREFIX CROSS
+ 
+ all: setup appmake copt zcpp ucpp sccz80 z80asm zcc zpragma zx7 z80nm lstmanip ticks z80svg testsuite z88dk-lib
+ 
+ setup:
+ 	$(shell if [ "${git_count}" != "" ]; then \
+-	    echo '#define PREFIX "${prefix_share}"' > src/config.h; \
++	    echo '#define PREFIX "${DESTDIR}${prefix_share}"' > src/config.h; \
+ 	    echo '#define UNIX 1' >> src/config.h; \
+ 	    echo '#define EXEC_PREFIX "${EXEC_PREFIX}"' >> src/config.h; \
+ 	    echo '#define Z88DK_VERSION "${git_count}-${git_rev}-${version}"' >> src/config.h; \
+ 	fi)
+ 	$(shell if [ ! -f src/config.h ]; then \
+-	    echo '#define PREFIX "${prefix_share}"' > src/config.h; \
++	    echo '#define PREFIX "${DESTDIR}${prefix_share}"' > src/config.h; \
+ 	    echo '#define UNIX 1' >> src/config.h; \
+ 	    echo '#define EXEC_PREFIX "${EXEC_PREFIX}"' >> src/config.h; \
+ 	    echo '#define Z88DK_VERSION "unknown-unknown-${version}"' >> src/config.h; \
+@@ -103,7 +103,7 @@
+ 	cd libsrc ; $(MAKE) install
+ 
+ install: install-clean
+-	install -d $(DESTDIR)/$(prefix) $(DESTDIR)/$(prefix_share)/lib 
++	install -d $(DESTDIR)/$(prefix) $(DESTDIR)/$(prefix_share)/lib
+ 	$(MAKE) -C src/appmake PREFIX=$(DESTDIR)/$(prefix) install
+ 	$(MAKE) -C src/copt PREFIX=$(DESTDIR)/$(prefix) install
+ 	$(MAKE) -C src/ucpp PREFIX=$(DESTDIR)/$(prefix) install
+@@ -131,7 +131,7 @@
+ test:
+ 	$(MAKE) -C test
+ 
+-testsuite: 
++testsuite:
+ 	$(MAKE) -C testsuite
+ 
+ install-clean:
