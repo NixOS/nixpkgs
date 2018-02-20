@@ -50,6 +50,9 @@ self: super: {
   # https://github.com/tmhedberg/here/pull/22
   here = doJailbreak super.here;
 
+  # https://github.com/pcapriotti/optparse-applicative/issues/288
+  optparse-applicative = dontCheck super.optparse-applicative;
+
   # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
   ## haddock: panic! (the 'impossible' happened)
   ##   (GHC version 8.4.20180122 for x86_64-unknown-linux):
