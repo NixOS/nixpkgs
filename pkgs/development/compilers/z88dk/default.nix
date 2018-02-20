@@ -3,15 +3,15 @@
 stdenv.mkDerivation rec {
 
   repo = "z88dk";
-  version = "unstable-2018-02-17";
-  rev = "49a7c6032b2675af742f5b0b3aa5bd5260bdd814";
+  version = "unstable-2018-02-20";
+  rev = "da4648333983e4b6755a343ba917a7e4af23de7c";
   short_rev = "${builtins.substring 0 7 rev}";
   name = "${repo}-${version}";
 
   src = fetchFromGitHub {
     inherit rev repo;
     owner = "z88dk";
-    sha256 = "0jd312jcl0rqn15c2nbllpqz2x67hwvkhlz2smbqjyv8mrbhqbcc";
+    sha256 = "1iq9m9sjbsmwb39fdzii8lwjk3d8zq92jhh8dd7nmcdggqg81sy9";
   };
 
   meta = with stdenv.lib; {
