@@ -14871,6 +14871,8 @@ with pkgs;
 
   docker-distribution = callPackage ../applications/virtualization/docker-distribution { };
 
+  docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
