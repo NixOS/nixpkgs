@@ -342,6 +342,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
