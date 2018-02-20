@@ -295,8 +295,9 @@ let makeDeps = dependencies:
       ''}
       # Remove object files to avoid "wrong ELF type"
       find target -type f -name "*.o" -print0 | xargs -0 rm -f
+    '' + finalBins + ''
       runHook postBuild
-    '' + finalBins;
+    '';
 
     installCrate = crateName: metadata: ''
       runHook preInstall
