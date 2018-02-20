@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "12mhi0q137cjdpmpczvrcr7szq1ja1r8bm0gh03b925y8xyrqp5z";
+    sha256 = "0hqg6vn8hv5pic96klf1d9vj8fibrgiqnqb5vwrg3wvakx0y32kr";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -63,10 +63,9 @@ stdenv.mkDerivation rec {
     ++ pythonInputs;
 
   prePatch = ''
-    substituteInPlace debian/CMakeLists.txt \
-      --replace /usr $out
-    substituteInPlace include/radiotray-ng/common.hpp \
-      --replace /usr $out
+    for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+      substituteInPlace $x --replace /usr $out
+    done
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
@@ -74,6 +73,8 @@ stdenv.mkDerivation rec {
     substituteInPlace data/rtng-bookmark-editor.desktop \
       --replace radiotray-ng-notification radiotray-ng-on
   '';
+
+  cmakeFlags = stdenv.lib.optional doCheck "-DBUILD_TESTS=ON";
 
   enableParallelBuilding = true;
 

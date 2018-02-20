@@ -231,6 +231,14 @@ following incompatible changes:</para>
       <literal>Option "XkbRules" "base"</literal> may result in broken keyboard layout.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>attic</literal> package was removed. A maintained fork called
+      <link xlink:href="https://www.borgbackup.org/">Borg</link> should be used instead.
+      Migration instructions can be found
+      <link xlink:href="http://borgbackup.readthedocs.io/en/stable/usage/upgrade.html#attic-and-borg-0-xx-to-borg-1-x">here</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -261,10 +269,42 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      The option <option>services.xserver.desktopManager.default</option> is now <literal>none</literal> by default.
-      An assertion failure is thrown if WM's and DM's default are <literal>none</literal>.
-      To explicitly run a plain X session without and DM or WM, the newly introduced option <option>services.xserver.plainX</option>
-      must be set to true.
+      In the module <option>networking.interfaces.&lt;name&gt;</option> the
+      following options have been removed:
+      <itemizedlist>
+        <listitem>
+          <para><option>ipAddress</option></para>
+        </listitem>
+        <listitem>
+          <para><option>ipv6Address</option></para>
+        </listitem>
+        <listitem>
+          <para><option>prefixLength</option></para>
+        </listitem>
+        <listitem>
+          <para><option>ipv6PrefixLength</option></para>
+        </listitem>
+        <listitem>
+          <para><option>subnetMask</option></para>
+        </listitem>
+      </itemizedlist>
+      To assign static addresses to an interface the options
+      <option>ipv4.addresses</option> and <option>ipv6.addresses</option>
+      should be used instead.
+      The options <option>ip4</option> and <option>ip6</option> have been
+      renamed to <option>ipv4.addresses</option> <option>ipv6.addresses</option>
+      respectively.
+      The new options <option>ipv4.routes</option> and <option>ipv6.routes</option>
+      have been added to set up static routing.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The option <option>services.xserver.desktopManager.default</option> is now
+      <literal>none</literal> by default. An assertion failure is thrown if WM's
+      and DM's default are <literal>none</literal>.
+      To explicitly run a plain X session without and DM or WM, the newly
+      introduced option <option>services.xserver.plainX</option> must be set to true.
     </para>
   </listitem>
   <listitem>

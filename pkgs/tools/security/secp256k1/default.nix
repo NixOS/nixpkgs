@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.
-  version = "2016-11-27";
+  version = "2017-12-18";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
-    rev = "2928420c1b8e1feee8c20dff4e3cc41a0de2fc22";
-    sha256 = "1djsr2vrhh88353czlwb8bwlyabf008w1f7xg0fs3q33rf42w5gm";
+    rev = "f54c6c5083307b18224c953cf5870ea7ffce070b";
+    sha256 = "0bxqmimm627g9klalg1vdbspmn52588v4a6cli3p8bn84ibsnzbm";
   };
 
   buildInputs = optionals enableJNI [ jdk ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags =
+    [ "--enable-benchmark=no" "--enable-tests=no" "--enable-exhaustive-tests=no" ] ++
     optionals enableECDH [ "--enable-module-ecdh" "--enable-experimental" ] ++
     optionals enableRecovery [ "--enable-module-recovery" ] ++
     optionals enableJNI [ "--enable-jni" ];

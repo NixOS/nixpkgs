@@ -780,6 +780,20 @@ let self = _self // overrides; _self = with self; {
     perlPreHook = "export LD=$CC";
   };
 
+  BSDResource = buildPerlPackage rec {
+    name = "BSD-Resource-1.2911";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-1.2911.tar.gz";
+      sha256 = "0g8c7825ng2m0yz5sy6838rvfdl8j3vm29524wjgf66ccfhgn74x";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "BSD process resource limit and priority functions";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   BusinessHours = buildPerlPackage rec {
     name = "Business-Hours-0.12";
     src = fetchurl {
@@ -6289,6 +6303,31 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       license = stdenv.lib.licenses.lgpl21Plus;
+      platforms   = stdenv.lib.platforms.linux;
+    };
+  };
+
+  Gtk2GladeXML = buildPerlPackage rec {
+    name = "Gtk2-GladeXML-1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TS/TSCH/${name}.tar.gz";
+      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libglade pkgs.gtk2 ];
+    meta = {
+      description = "Create user interfaces directly from Glade XML files";
+    };
+  };
+  
+  Gtk2TrayIcon = buildPerlPackage rec {
+    name = "Gtk2-TrayIcon-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORUP/${name}.tar.gz";
+      sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gtk2 ];
+    meta = {
+      license = stdenv.lib.licenses.gpl2;
     };
   };
 

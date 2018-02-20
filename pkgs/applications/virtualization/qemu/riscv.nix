@@ -15,6 +15,8 @@
 in lib.overrideDerivation qemu (orig: {
   name = "${(builtins.parseDrvName qemu.name).name}-${version}pre${revCount}_${shortRev}";
   inherit src;
+  # https://github.com/riscv/riscv-qemu/pull/109
+  patches = orig.patches ++ [ ./riscv-initrd.patch ];
   configureFlags = orig.configureFlags ++ [ "--target-list=${lib.concatStringsSep "," targets}" ];
   postInstall = null;
 })

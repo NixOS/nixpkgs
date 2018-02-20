@@ -60,6 +60,7 @@
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
+  ./misc/label.nix
   ./misc/locate.nix
   ./misc/meta.nix
   ./misc/nixpkgs.nix
@@ -156,6 +157,7 @@
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
+  ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -509,6 +511,7 @@
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
+  ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l4jjlf05li2mc6g8nrss3h435wjhmnqd8m7v3kha3x0x7cbfzxa";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gettext libnl ncurses pciutils zlib ];
 

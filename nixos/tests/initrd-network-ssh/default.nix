@@ -11,9 +11,7 @@ import ../make-test.nix ({ pkgs, lib, ... }:
       { config, pkgs, ... }:
       {
         boot.kernelParams = [
-          "ip=${
-            (head config.networking.interfaces.eth1.ip4).address
-          }:::255.255.255.0::eth1:none"
+          "ip=${config.networking.primaryIPAddress}:::255.255.255.0::eth1:none"
         ];
         boot.initrd.network = {
           enable = true;
