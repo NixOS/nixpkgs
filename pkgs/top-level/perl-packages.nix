@@ -8457,6 +8457,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MailSendmail = buildPerlPackage rec {
+    name = "Mail-Sendmail-0.80";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
+      sha256 = "1r38qbkj7jwj8cqy1rnqzkk81psxi08b1aiq392817f3bk5ri2jv";
+    };
+    propagatedBuildInputs = [ DigestMD5 MIMEBase64 Socket TimeLocal ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Simple platform independent mailer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MailSPF = buildPerlPackage rec {
     name = "Mail-SPF-v2.9.0";
     #src = /root/nixops/Mail-SPF-v2.9.0;
