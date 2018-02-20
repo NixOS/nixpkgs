@@ -15932,6 +15932,8 @@ with pkgs;
 
   inspectrum = libsForQt5.callPackage ../applications/misc/inspectrum { };
 
+  intellij-ultimate = callPackage ../applications/editors/intellij-ultimate { };
+
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
   };
