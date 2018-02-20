@@ -78,6 +78,10 @@ rec {
     } @ t:
 
     let
+      # A standard store path to the vm monitor is built like this:
+      #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
+      # The max filename length of a unix domain socket is 108 bytes.
+      # This means $name can at most be 50 bytes long.
       maxTestNameLen = 50;
       testNameLen = builtins.stringLength name;
 
