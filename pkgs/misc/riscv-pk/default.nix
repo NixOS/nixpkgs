@@ -26,6 +26,12 @@ in stdenv.mkDerivation {
 
   hardeningDisable = [ "all" ];
 
+  postInstall = ''
+    mv $out/* $out/.cleanup
+    mv $out/.cleanup/* $out
+    rmdir $out/.cleanup
+  '';
+
   meta = {
     description = "RISC-V Proxy Kernel and Bootloader.";
     homepage = https://github.com/riscv/riscv-pk;
