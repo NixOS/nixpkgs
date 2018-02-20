@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     description = "An online backup solution";
     homepage = http://www.crashplan.com/business/;
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ xvapx ];
   };
 
