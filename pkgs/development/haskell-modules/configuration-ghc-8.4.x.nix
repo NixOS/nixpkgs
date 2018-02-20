@@ -53,6 +53,9 @@ self: super: {
   # https://github.com/pcapriotti/optparse-applicative/issues/288
   optparse-applicative = dontCheck super.optparse-applicative;
 
+  # https://github.com/haskell/test-framework/issues/35
+  test-framework-quickcheck2 = doJailbreak super.test-framework-quickcheck2;
+
   # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
   ## haddock: panic! (the 'impossible' happened)
   ##   (GHC version 8.4.20180122 for x86_64-unknown-linux):
