@@ -780,6 +780,20 @@ let self = _self // overrides; _self = with self; {
     perlPreHook = "export LD=$CC";
   };
 
+  BSDResource = buildPerlPackage rec {
+    name = "BSD-Resource-1.2911";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-1.2911.tar.gz";
+      sha256 = "0g8c7825ng2m0yz5sy6838rvfdl8j3vm29524wjgf66ccfhgn74x";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "BSD process resource limit and priority functions";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   BusinessHours = buildPerlPackage rec {
     name = "Business-Hours-0.12";
     src = fetchurl {
