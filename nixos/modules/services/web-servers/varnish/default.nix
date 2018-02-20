@@ -1,9 +1,13 @@
 { config, lib, pkgs, ...}:
+
+with lib;
+
 let
   cfg = config.services.varnish;
 
+  commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}" +
+      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([pkgs.varnish] ++ cfg.extraModules)}' -r vmod_path";
 in
-with lib;
 {
   options = {
     services.varnish = {
@@ -69,8 +73,7 @@ with lib;
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -f ${pkgs.writeText "default.vcl" cfg.config} -n ${cfg.stateDir} -F ${cfg.extraCommandLine}"
-          + optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([pkgs.varnish] ++ cfg.extraModules)}' -r vmod_path";
+        ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -n ${cfg.stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
         Restart = "always";
         RestartSec = "5s";
         User = "varnish";
@@ -82,6 +85,14 @@ with lib;
     };
 
     environment.systemPackages = [ pkgs.varnish ];
+
+    # check .vcl syntax at compile time (e.g. before nixops deployment)
+    system.extraDependencies = [
+      (pkgs.stdenv.mkDerivation {
+        name = "check-varnish-syntax";
+        buildCommand = "${pkgs.varnish}/sbin/varnishd -C ${commandLine} 2> $out";
+      })
+    ];
 
     users.extraUsers.varnish = {
       group = "varnish";
