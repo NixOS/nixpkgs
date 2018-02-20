@@ -4498,6 +4498,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roundup = callPackage ../tools/misc/roundup { };
+
   routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
