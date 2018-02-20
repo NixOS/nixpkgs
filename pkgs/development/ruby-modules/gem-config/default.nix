@@ -92,7 +92,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
-        --replace "libcurl" "${curl.out}/lib/libcurl.so"
+        --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
   }; 
 
