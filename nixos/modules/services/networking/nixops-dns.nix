@@ -22,6 +22,8 @@ in
         type = types.str;
         description = ''
           The user the nixops-dns daemon should run as.
+          This should be the user, which is also used for nixops and
+          have the .nixops directory in its home.
         '';
       };
 
