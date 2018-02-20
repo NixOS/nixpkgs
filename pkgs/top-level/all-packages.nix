@@ -1040,6 +1040,8 @@ with pkgs;
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
+  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
@@ -4507,6 +4509,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roundup = callPackage ../tools/misc/roundup { };
+
   routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
@@ -4636,6 +4640,8 @@ with pkgs;
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
+
+  shocco = callPackage ../tools/text/shocco { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
