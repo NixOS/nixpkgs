@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     )
   '';
 
-  buildInputs = [ ncurses ];
+  propagatedBuildInputs = [ ncurses ];
 
   configureFlags = "--without-x --with-ncurses=${ncurses.dev}";
 
