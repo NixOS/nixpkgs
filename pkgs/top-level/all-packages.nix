@@ -7422,8 +7422,6 @@ with pkgs;
   binutils =
     if targetPlatform.isDarwin
     then darwin.binutils
-    else if targetPlatform.isRiscV
-    then binutils_2_30
     else binutils-raw;
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
@@ -7434,15 +7432,6 @@ with pkgs;
     libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
     bintools = binutils-unwrapped;
   };
-  binutils-unwrapped_2_30 = callPackage ../development/tools/misc/binutils/2.30.nix {
-    # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-  };
-  binutils-raw_2_30 = wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
-    bintools = binutils-unwrapped_2_30;
-  };
-  binutils_2_30 = binutils-raw_2_30;
 
   binutils_nogold = lowPrio (binutils-raw.override {
     bintools = binutils-raw.bintools.override {
