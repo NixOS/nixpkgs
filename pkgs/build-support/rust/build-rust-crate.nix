@@ -62,16 +62,11 @@ let makeDeps = dependencies:
       ${echo_build_heading colors}
       ${noisily colors verbose}
       symlink_dependency() {
-      # $1 is the nix-store path of a dependency
+        # $1 is the nix-store path of a dependency
+        # $2 is the target path
         i=$1
-	dest=target/deps
-	if [ ! -z "$2" ]; then
-           if [[ "$2" == "--buildDep" ]]; then
-             dest=target/buildDeps
-           fi
-	fi
-        ln -s -f $i/lib/*.rlib $dest #*/
-        ln -s -f $i/lib/*.so $i/lib/*.dylib $dest #*/
+        ln -s -f $i/lib/*.rlib $2 #*/
+        ln -s -f $i/lib/*.so $i/lib/*.dylib $2 #*/
         if [ -e "$i/lib/link" ]; then
             cat $i/lib/link >> target/link
             cat $i/lib/link >> target/link.final
@@ -84,15 +79,11 @@ let makeDeps = dependencies:
       mkdir -p target/{deps,lib,build,buildDeps}
       chmod uga+w target -R
       for i in ${completeDepsDir}; do
-        symlink_dependency $i
+        symlink_dependency $i target/deps
       done
       for i in ${completeBuildDepsDir}; do
-         echo "BUILDDEPS"
-         symlink_dependency $i --buildDep
+         symlink_dependency $i target/buildDeps
       done
-      echo ">>>>>>>>>>>>>>"
-      find target/buildDeps
-      echo "<<<<<<<<<<<<<<"
       if [[ -e target/link ]]; then
         sort -u target/link > target/link.sorted
         mv target/link.sorted target/link
