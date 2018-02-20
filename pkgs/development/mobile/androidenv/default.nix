@@ -1,8 +1,10 @@
-{pkgs, pkgs_i686, includeSources ? true}:
+{ buildPackages, pkgs, pkgs_i686, targetPackages
+, includeSources ? true
+}:
 
 rec {
   platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip zlib;
+    inherit buildPackages pkgs;
   };
 
   buildTools = import ./build-tools.nix {
@@ -214,14 +216,20 @@ rec {
   };
 
   androidndk = import ./androidndk.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
 
   androidndk_r8e = import ./androidndk_r8e.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
 
