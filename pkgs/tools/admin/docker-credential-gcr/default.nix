@@ -13,8 +13,6 @@ buildGoPackage rec {
     sha256 = "1xb88xjyyrdmjcgfv7fqdkv1ip3dpzsdif5vm7vkqvn83s5wj5df";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
     description = "A Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
