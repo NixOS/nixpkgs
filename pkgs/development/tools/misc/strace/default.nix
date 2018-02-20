@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libunwind ]; # support -k
 
+  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 "--enable-mpers=no";
+
   meta = with stdenv.lib; {
     homepage = http://strace.sourceforge.net/;
     description = "A system call tracer for Linux";
