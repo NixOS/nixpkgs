@@ -1,22 +1,25 @@
-{stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, pyperclip, six, pyparsing
+{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
+, pyperclip, six, pyparsing, vim
 , contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which
+, pytest, mock, which, fetchFromGitHub, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
   version = "0.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1fmpn3dwc0pyhdi6q877mb8i4vw9p9a0lgmrvsaclfah62grsfjb";
+  src = fetchFromGitHub {
+    owner = "python-cmd2";
+    repo = "cmd2";
+    rev = version;
+    sha256 = "0nw2b7n7zg51bc3glxw0l9fn91mwjnjshklhmxhyvjbsg7khf64z";
   };
 
-  # 25 out of 191 tests failed
-  doCheck=false;
-  checkInputs= [ pytest mock which ];
+  LC_ALL="en_US.UTF-8";
+
+  checkInputs= [ pytest mock which vim glibcLocales ];
   checkPhase = ''
-    py.test
+    # test_path_completion_user_expansion might be fixed in the next release
+    py.test -k 'not test_path_completion_user_expansion'
   '';
 
   propagatedBuildInputs = [
