@@ -72,4 +72,34 @@ rec {
       sha256 = "09096npxpgvlwdz3pb3m9brvxh7vy0xc9z9p8hh85xyczyzcsjhr";
     };
   };
+
+  riscv_modules = {
+    name = "riscv-modules";
+    patch = ./riscv-modules.patch;
+  };
+
+  # http://lists.infradead.org/pipermail/linux-riscv/2018-February/000054.html
+  riscv_irq_busy = {
+    name = "riscv-irq-busy";
+    patch = ./riscv-irq-busy.patch;
+  };
+
+  # http://lists.infradead.org/pipermail/linux-riscv/2018-February/000059.html
+  riscv_install = {
+    name = "riscv-install";
+    patch = ./riscv-install.patch;
+  };
+
+  # http://lists.infradead.org/pipermail/linux-riscv/2018-February/000056.html
+  riscv_initrd = {
+    name = "riscv-initrd";
+    patch = ./riscv-initrd.patch;
+  };
+
+  # http://lists.infradead.org/pipermail/linux-riscv/2018-February/000058.html
+  riscv_initrd_free = {
+    name = "riscv-initrd-free";
+    patch = ./riscv-initrd-free.patch;
+  };
+
 }

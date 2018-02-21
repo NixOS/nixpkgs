@@ -1,0 +1,48 @@
+commit 1e5f6473492f41355289d022003a049ebf8995fa
+Author: Shea Levy <shea@shealevy.com>
+Date:   Tue Feb 20 07:52:14 2018 -0500
+
+    riscv: Respect the initrd found in the dt, if any.
+    
+    Signed-off-by: Shea Levy <shea@shealevy.com>
+
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 41d34008faf6..c4ebc907af34 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -88,15 +88,20 @@ static void __init setup_initrd(void)
+ 	extern unsigned long __initramfs_size;
+ 	unsigned long size;
+ 
++	if (initrd_start)
++		goto found;
++
+ 	if (__initramfs_size > 0) {
+ 		initrd_start = (unsigned long)(&__initramfs_start);
+ 		initrd_end = initrd_start + __initramfs_size;
+ 	}
+ 
++	initrd_below_start_ok = 1;
+ 	if (initrd_start >= initrd_end) {
+ 		printk(KERN_INFO "initrd not found or empty");
+ 		goto disable;
+ 	}
++found:
+ 	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
+ 		printk(KERN_ERR "initrd extends beyond end of memory");
+ 		goto disable;
+@@ -104,13 +109,13 @@ static void __init setup_initrd(void)
+ 
+ 	size =  initrd_end - initrd_start;
+ 	memblock_reserve(__pa(initrd_start), size);
+-	initrd_below_start_ok = 1;
+ 
+ 	printk(KERN_INFO "Initial ramdisk at: 0x%p (%lu bytes)\n",
+ 		(void *)(initrd_start), size);
+ 	return;
+ disable:
+ 	pr_cont(" - disabling initrd\n");
++	initrd_below_start_ok = 0;
+ 	initrd_start = 0;
+ 	initrd_end = 0;
+ }

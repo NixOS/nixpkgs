@@ -36,9 +36,7 @@ stdenv.mkDerivation rec {
     "--enable-removal-policies=lru,heap"
     "--enable-delay-pools"
     "--enable-x-accelerator-vary"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    "--enable-linux-netfilter"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) "--enable-linux-netfilter";
 
   meta = with stdenv.lib; {
     description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";

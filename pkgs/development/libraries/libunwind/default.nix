@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./version-1.2.1.patch
+    ./backtrace-only-with-glibc.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

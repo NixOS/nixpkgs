@@ -40,7 +40,13 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ]
+    # https://code.wireshark.org/review/#/c/23728/
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "fix-timeout.patch";
+      url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=8b5b843fcbc3e03e0fc45f3caf8cf5fc477e8613;hp=94af9724d140fd132896b650d10c4d060788e4f0";
+      sha256 = "1g2dm7lwsnanwp68b9xr9swspx7hfj4v3z44sz3yrfmynygk8zlv";
+    });
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''

@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1c2nkxx83vmlh1v3ib6r2xqh121gdb1rharwsimcb2h0xwc558dm";
   };
 
+  outputs = [ "out" "man" ];
+
   makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man";
 
   preBuild = ''

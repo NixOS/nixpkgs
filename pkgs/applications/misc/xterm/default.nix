@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
+{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
 , enableDecLocator ? true
 }:
 
@@ -20,7 +20,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sixel-256.support.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
+    (fetchpatch {
+      name = "posix-ptys.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
+      sha256 = "0czgnsxkkmkrk1idw69qxbprh0jb4sw3c24zpnqq2v76jkl7zvlr";
+    });
 
   configureFlags = [
     "--enable-wide-chars"

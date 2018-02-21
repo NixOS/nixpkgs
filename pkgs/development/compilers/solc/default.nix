@@ -1,17 +1,13 @@
 { stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
 
 let
-  version = "0.4.19";
-  rev = "c4cbbb054b5ed3b8ceaa21ee5b47b0704762ff40";
-  sha256 = "1h2ziwdswghj4aa3vd3k3y2ckfiwjk6x38w2kp4m324k2ydxd15c";
+  version = "0.4.20";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
     sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
   };
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "solc-${version}";
 
   src = fetchFromGitHub {

@@ -780,6 +780,20 @@ let self = _self // overrides; _self = with self; {
     perlPreHook = "export LD=$CC";
   };
 
+  BSDResource = buildPerlPackage rec {
+    name = "BSD-Resource-1.2911";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-1.2911.tar.gz";
+      sha256 = "0g8c7825ng2m0yz5sy6838rvfdl8j3vm29524wjgf66ccfhgn74x";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "BSD process resource limit and priority functions";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   BusinessHours = buildPerlPackage rec {
     name = "Business-Hours-0.12";
     src = fetchurl {
@@ -4834,10 +4848,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.95";
+    name = "Encode-2.96";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "d662794c6f834382527f67ca62e1715887f504cfd09e119a1302e584dd3cdcde";
+      sha256 = "5dcb19fa5e62c6ca9294f28e9f4676f36477b1025f7e0dca92479633334b3cb1";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -6289,6 +6303,31 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       license = stdenv.lib.licenses.lgpl21Plus;
+      platforms   = stdenv.lib.platforms.linux;
+    };
+  };
+
+  Gtk2GladeXML = buildPerlPackage rec {
+    name = "Gtk2-GladeXML-1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TS/TSCH/${name}.tar.gz";
+      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libglade pkgs.gtk2 ];
+    meta = {
+      description = "Create user interfaces directly from Glade XML files";
+    };
+  };
+  
+  Gtk2TrayIcon = buildPerlPackage rec {
+    name = "Gtk2-TrayIcon-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORUP/${name}.tar.gz";
+      sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gtk2 ];
+    meta = {
+      license = stdenv.lib.licenses.gpl2;
     };
   };
 
@@ -10787,6 +10826,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ParallelForkManager = buildPerlPackage rec {
+    name = "Parallel-ForkManager-1.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YANICK/${name}.tar.gz";
+      sha256 = "f1de2e9875eeb77d65f80338905dedd522f3913822502982f805aa71cde5a472";
+    };
+    buildInputs = [ TestWarn ];
+    meta = {
+      homepage = https://github.com/dluxhu/perl-parallel-forkmanager;
+      description = "A simple parallel processing fork manager";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   ParallelPrefork = buildPerlPackage {
     name = "Parallel-Prefork-0.17";
     src = fetchurl {
@@ -15065,6 +15119,8 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
       license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
+      # bogus use of glibc, pretty sure, think this is what we have glibcLocales for?
+      broken = stdenv.hostPlatform.libc != "glibc";
     };
   };
 

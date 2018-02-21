@@ -5,7 +5,7 @@
 , wrapPython
 , setuptools
 , unzip
-, ensureNewerSourcesHook
+, ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
 , namePrefix
@@ -69,7 +69,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   name = namePrefix + name;
 
-  nativeBuildInputs = [ (ensureNewerSourcesHook { year = "1980"; }) ]
+  nativeBuildInputs = [ ensureNewerSourcesForZipFilesHook ]
     ++ nativeBuildInputs;
 
   buildInputs = [ wrapPython ]

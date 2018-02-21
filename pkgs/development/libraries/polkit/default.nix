@@ -37,7 +37,15 @@ stdenv.mkDerivation rec {
       url = "http://src.fedoraproject.org/cgit/rpms/polkit.git/plain/polkit-0.113-itstool.patch?id=fa6fd575804de92886c95d3bc2b7eb2abcd13760";
       sha256 = "0bxmjwp8ahy1y5g1l0kxmld0l3mlvb2l0i5n1qabia3d5iyjkyfh";
     })
-  ];
+  ]
+  # Could be applied uncondtionally but don't want to trigger rebuild
+  # https://bugs.freedesktop.org/show_bug.cgi?id=50145
+  ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+    name = "netgroup-optional.patch";
+    url = "https://bugs.freedesktop.org/attachment.cgi?id=118753";
+    sha256 = "1zq51dhmqi9zi86bj9dq4i4pxlxm41k3k4a091j07bd78cjba038";
+  });
+
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 

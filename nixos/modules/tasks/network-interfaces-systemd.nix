@@ -9,14 +9,8 @@ let
   interfaces = attrValues cfg.interfaces;
 
   interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+    i.ipv4.addresses
+    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
 
@@ -91,6 +85,7 @@ in
             (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
           address = flip map (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
       })))
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {

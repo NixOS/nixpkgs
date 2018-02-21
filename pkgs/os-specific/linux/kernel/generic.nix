@@ -1,4 +1,4 @@
-{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
 , ncurses
 , libelf
 , utillinux
@@ -11,7 +11,7 @@
 
 , # Allow really overriding even our gcc7 default.
   # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
-  stdenvNoOverride ? overrideCC stdenv gcc7
+  stdenvNoOverride ? overrideCC stdenv buildPackages.gcc7
 
 , # The kernel source tarball.
   src
@@ -82,7 +82,8 @@ let
     kernelConfig = kernelConfigFun config;
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = hostPlatform.platform.name;
     # e.g. "defconfig"

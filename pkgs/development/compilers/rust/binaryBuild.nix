@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl, darwin
+{ stdenv, fetchurl, makeWrapper, bash, cacert, zlib, buildRustPackage, curl, darwin
 , version
 , src
 , platform
@@ -34,9 +34,11 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    phases = ["unpackPhase" "installPhase" "fixupPhase"];
+    buildInputs = [ bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    postPatch = ''
+      patchShebangs .
+    '';
 
     installPhase = ''
       ./install.sh --prefix=$out \
@@ -86,9 +88,11 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    phases = ["unpackPhase" "installPhase" "fixupPhase"];
+    buildInputs = [ makeWrapper bash ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-    buildInputs = [ makeWrapper ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+    postPatch = ''
+      patchShebangs .
+    '';
 
     installPhase = ''
       patchShebangs ./install.sh

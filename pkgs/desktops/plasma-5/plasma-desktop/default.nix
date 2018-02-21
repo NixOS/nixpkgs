@@ -12,7 +12,7 @@
   kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
   kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
   kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace,
+  plasma-workspace, xf86inputlibinput
 }:
 
 mkDerivation rec {
@@ -41,6 +41,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${lib.getDev xf86inputsynaptics}/include/xorg"
+    "-DXORGLIBINPUT_INCLUDE_DIRS=${lib.getDev xf86inputlibinput}/include/xorg"
   ];
   postInstall = ''
     # Display ~/Desktop contents on the desktop by default.
