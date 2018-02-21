@@ -9186,6 +9186,7 @@ with pkgs;
 
   icu58 = callPackage ../development/libraries/icu/58.nix { };
   icu59 = callPackage ../development/libraries/icu/59.nix { };
+  icu60 = callPackage ../development/libraries/icu/60.nix { };
 
   icu = icu59;
 
