@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
+  makeFlags = ["CC=cc"];
+
   installPhase = ''
     install --directory --mode=755 $out/bin
     install --mode=755 cue2pops $out/bin
