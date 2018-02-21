@@ -23,7 +23,7 @@ with lib;
         example = "2G";
         type = types.str;
         description = ''
-          Maximum amount of that the crashplan engine should use.
+          Maximum amount of ram that the crashplan engine should use.
         '';
       };
       openPorts = mkOption {
@@ -52,28 +52,13 @@ with lib;
       after    = [ "network.target" "local-fs.target" ];
 
       preStart = ''
-        ensureDir() {
-          dir=$1
-          mode=$2
-
-          if ! test -e $dir; then
-            ${pkgs.coreutils}/bin/mkdir -m $mode -p $dir
-          elif [ "$(${pkgs.coreutils}/bin/stat -c %a $dir)" != "$mode" ]; then
-            ${pkgs.coreutils}/bin/chmod $mode $dir
-          fi
-        }
-
-        ensureDir ${crashplansb.vardir} 755
-        ensureDir ${crashplansb.vardir}/conf 700
-        ensureDir ${crashplansb.manifestdir} 700
-        ensureDir ${crashplansb.vardir}/cache 700
-        ensureDir ${crashplansb.vardir}/backupArchives 700
-        ensureDir ${crashplansb.vardir}/log 777
+        install -d -m 755 ${crashplansb.vardir}
+        install -d -m 700 ${crashplansb.vardir}/conf
+        install -d -m 700 ${crashplansb.manifestdir}
+        install -d -m 700 ${crashplansb.vardir}/cache
+        install -d -m 700 ${crashplansb.vardir}/backupArchives
+        install -d -m 777 ${crashplansb.vardir}/log
         cp -avn ${crashplansb}/conf.template/* ${crashplansb.vardir}/conf
-        #for x in bin install.vars lang lib libc42archive64.so libc42core.so libjniwrap64.so libjtux64.so libleveldb64.so libnetty-tcnative.so share upgrade; do
-        #  rm -f ${crashplansb.vardir}/$x;
-        #  ln -sf ${crashplansb}/$x ${crashplansb.vardir}/$x;
-        #done
       '';
 
       serviceConfig = {
