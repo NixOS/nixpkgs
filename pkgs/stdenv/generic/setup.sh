@@ -866,7 +866,7 @@ unpackPhase() {
     # necessary when sources have been copied from other store
     # locations.
     if [ "${dontMakeSourcesWritable:-0}" != 1 ]; then
-        chmod -R u+w "$sourceRoot"
+        chmod -R u+w -- "$sourceRoot"
     fi
 
     runHook postUnpack

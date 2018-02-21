@@ -6,6 +6,9 @@ stdenv.mkDerivation rec {
     url    = "https://github.com/json-c/json-c/archive/json-c-0.11-20130402.tar.gz";
     sha256 = "1m8fy7lbahv1r7yqbhw4pl057sxmmgjihm1fsvc3h66710s2i24r";
   };
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+
   meta = with stdenv.lib; {
     description = "A JSON implementation in C";
     homepage    = https://github.com/json-c/json-c/wiki;

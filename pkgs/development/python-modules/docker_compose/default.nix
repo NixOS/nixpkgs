@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02zgbwf0ffiazswhyangdfhnxia2i43a40rbi67sz2nqnzjf09zj";
+    sha256 = "f227e0e4b7d88aaf8f892b03a2068942c56ea16bcf2a0fb9fe2a3a071c5fef0b";
   };
 
   # lots of networking and other fails
