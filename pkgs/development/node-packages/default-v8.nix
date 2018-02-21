@@ -17,6 +17,13 @@ nodePackages // {
     '';
   });
 
+  ijavascript = nodePackages.ijavascript.override (oldAttrs: {
+    preRebuild = ''
+      export NPM_CONFIG_ZMQ_EXTERNAL=true
+    '';
+    buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-gyp-build pkgs.zeromq ];
+  });
+
   node-inspector = nodePackages.node-inspector.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-pre-gyp ];
   });

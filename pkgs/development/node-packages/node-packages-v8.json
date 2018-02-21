@@ -3,6 +3,7 @@
 , "coffee-script"
 , "dat"
 , "grunt-cli"
+, "ijavascript"
 , "mocha"
 , "nijs"
 , "node-gyp"

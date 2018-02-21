@@ -22,6 +22,19 @@ let
       logo32 = "${env.sitePackages}/ipykernel/resources/logo-32x32.png";
       logo64 = "${env.sitePackages}/ipykernel/resources/logo-64x64.png";
     };
+
+    javascript = let
+      env = pkgs.nodePackages_8_x.ijavascript;
+    in {
+      displayName = "JavaScript";
+      argv = [
+        "${env}/bin/ijskernel"
+        "{connection_file}"
+      ];
+      language = "javascript";
+      logo32 = "${env}/images/logo-32x32.png";
+      logo64 = "${env}/images/logo-64x64.png";
+    };
   };
 
 in
