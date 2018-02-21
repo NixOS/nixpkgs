@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pomegranate";
   version = "0.8.1";
-  name  = "${pname}-${version}";
   
   src = fetchFromGitHub {
     repo = pname;
@@ -21,5 +20,9 @@ buildPythonPackage rec {
     homepage = https://github.com/jmschrei/pomegranate;
     license = licenses.mit;
     maintainers = with maintainers; [ rybern ];
+
+    # "pomegranate does not yet work with networkx 2.0"
+    # see https://github.com/jmschrei/pomegranate/issues/209
+    broken = true; 
   };
 }
