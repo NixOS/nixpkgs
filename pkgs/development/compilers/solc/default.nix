@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchurl, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake, z3 }:
 
 let
   version = "0.4.20";
@@ -7,18 +7,20 @@ let
     url = jsoncppURL;
     sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
   };
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "solc-${version}";
 
-  # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchurl {
-    url = "https://github.com/ethereum/solidity/releases/download/v${version}/solidity_${version}.tar.gz";
-    sha256 = "0jyqnykj537ksfsf2m6ww9vganmpa6yd5fmlfpa5qm1076kq7zd6";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "solidity";
+    inherit rev sha256;
   };
 
-  patchPhase = ''
+  patches = [ ./shared_install.patch ];
+
+  postPatch = ''
+    echo >commit_hash.txt '${rev}'
+    echo >prerelease.txt
     substituteInPlace cmake/jsoncpp.cmake \
       --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
@@ -26,11 +28,13 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DBoost_USE_STATIC_LIBS=OFF"
+    "-DBoost_USE_STATIC_LIBS=OFF -DTESTS=OFF -DBUILD_SHARED_LIBS=ON"
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost z3 ];
+
+  outputs = [ "out" "dev" ];
 
   meta = {
     description = "Compiler for Ethereum smart contract language Solidity";
