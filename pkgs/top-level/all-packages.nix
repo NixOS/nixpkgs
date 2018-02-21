@@ -19190,6 +19190,7 @@ with pkgs;
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
+    no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
     pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
