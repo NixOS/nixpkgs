@@ -93,7 +93,7 @@ in
       default = {};
       example = literalExample
         ''
-          { firefox.enableGeckoMediaPlayer = true; }
+          { allowBroken = true; allowUnfree = true; }
         '';
       type = configType;
       description = ''
