@@ -671,6 +671,7 @@
   stumoss = "Stuart Moss <samoss@gmail.com>";
   SuprDewd = "Bjarki Ágúst Guðmundsson <suprdewd@gmail.com>";
   suvash = "Suvash Thapaliya <suvash+nixpkgs@gmail.com>";
+  svsdep = "Vasyl Solovei <svsdep@gmail.com>";
   swarren83 = "Shawn Warren <shawn.w.warren@gmail.com>";
   swflint = "Samuel W. Flint <swflint@flintfam.org>";
   swistak35 = "Rafał Łasocha <me@swistak35.com>";
