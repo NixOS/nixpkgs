@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3Packages.pytest ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
   checkPhase = ''
     python3 -m pytest test.py
   '';
