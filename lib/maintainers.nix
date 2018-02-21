@@ -765,6 +765,7 @@
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   xaverdh = "Dominik Xaver Hörl <hoe.dom@gmx.de>";
+  xeji = "xeji <xeji@cat3.de>";
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
   xurei = "Olivier Bourdoux <olivier.bourdoux@gmail.com>";
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";

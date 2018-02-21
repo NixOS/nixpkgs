@@ -35,8 +35,13 @@ stdenv.mkDerivation rec {
   name = "racket-${version}";
   version = "6.12";
 
-  src = fetchurl {
-    url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+  src = (stdenv.lib.makeOverridable ({ name, sha256 }:
+    fetchurl rec {
+      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+      inherit sha256;
+    }
+  )) {
+    inherit name;
     sha256 = "0cwcypzjfl9py1s695mhqkiapff7c1w29llsmdj7qgn58wl0apk5";
   };
 

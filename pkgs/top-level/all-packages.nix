@@ -687,6 +687,13 @@ with pkgs;
 
   androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
 
+  webos = recurseIntoAttrs {
+    cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
+
+    novacom = callPackage ../development/mobile/webos/novacom.nix { };
+    novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
+  };
+
   arc-theme = callPackage ../misc/themes/arc { };
 
   arc-kde-theme = callPackage ../misc/themes/arc-kde { };
@@ -884,6 +891,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
+
   cabal2nix = haskell.lib.overrideCabal haskellPackages.cabal2nix (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
@@ -1032,6 +1041,8 @@ with pkgs;
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
+
+  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
 
@@ -1511,9 +1522,8 @@ with pkgs;
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
+  ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
   ceph-dev = ceph;
-  #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
   cfdg = callPackage ../tools/graphics/cfdg {
     ffmpeg = ffmpeg_2;
@@ -4500,6 +4510,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roundup = callPackage ../tools/misc/roundup { };
+
   routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
@@ -4629,6 +4641,8 @@ with pkgs;
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
+
+  shocco = callPackage ../tools/text/shocco { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
@@ -5757,7 +5771,7 @@ with pkgs;
   compcert = callPackage ../development/compilers/compcert { };
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
-  
+
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
@@ -6749,6 +6763,8 @@ with pkgs;
 
   yosys = callPackage ../development/compilers/yosys { };
 
+  z88dk = callPackage ../development/compilers/z88dk { };
+
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu9 = callPackage ../development/compilers/zulu { };
   zulu = zulu9;
@@ -7082,7 +7098,13 @@ with pkgs;
 
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    # racket 6.11 doesn't build with gcc6 + recent glibc:
+    # https://github.com/racket/racket/pull/1886
+    # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
+    stdenv = overrideCC stdenv gcc7;
+  };
+  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
 
   rakudo = callPackage ../development/interpreters/rakudo {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -7318,6 +7340,8 @@ with pkgs;
 
   bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
   bazel = callPackage ../development/tools/build-managers/bazel { };
+
+  buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -16949,6 +16973,8 @@ with pkgs;
 
   ptask = callPackage ../applications/misc/ptask { };
 
+  pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
+
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
   puredata = callPackage ../applications/audio/puredata { };
@@ -18576,6 +18602,8 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
+  flock = callPackage ../development/tools/flock { };
+
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv { };
@@ -19133,6 +19161,7 @@ with pkgs;
 
   gnomeExtensions = {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
+    battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
@@ -19142,6 +19171,7 @@ with pkgs;
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     pixel-saver = callPackage ../desktops/gnome-3/extensions/pixel-saver { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
+    taskwhisperer = callPackage ../desktops/gnome-3/extensions/taskwhisperer { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
   };
 
@@ -19722,6 +19752,8 @@ with pkgs;
 
   pcalc = callPackage ../applications/science/math/pcalc { };
 
+  bcal = callPackage ../applications/science/math/bcal { };
+
   pspp = callPackage ../applications/science/math/pspp {
     inherit (gnome3) gtksourceview;
   };
@@ -20278,6 +20310,9 @@ with pkgs;
 
   mfcl2700dncupswrapper = callPackage ../misc/cups/drivers/mfcl2700dncupswrapper { };
   mfcl2700dnlpr = callPackage_i686 ../misc/cups/drivers/mfcl2700dnlpr { };
+
+  mfcl2720dwcupswrapper = callPackage ../misc/cups/drivers/mfcl2720dwcupswrapper { };
+  mfcl2720dwlpr = callPackage ../misc/cups/drivers/mfcl2720dwlpr { };
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };

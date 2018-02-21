@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   name = "gpodder-${version}";
-  version = "3.10.0";
+  version = "3.10.1";
 
   format = "other";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "gpodder";
     repo = "gpodder";
     rev = version;
-    sha256 = "0f3m1kcj641xiwsxan66k81lvslkl3aziakn5z17y4mmdci79jv0";
+    sha256 = "1cqhm5h0kkdb2m691dbj8i3bixl7bw0iww2pl6k1jkz8mgafyd9d";
   };
 
   postPatch = with stdenv.lib; ''
@@ -26,7 +26,11 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
   ];
 
-  buildInputs = [ python3 gobjectIntrospection ];
+  buildInputs = [
+    python3
+    gobjectIntrospection
+    gnome3.defaultIconTheme
+  ];
 
   checkInputs = with python3Packages; [
     coverage minimock
