@@ -1,5 +1,8 @@
+# FIXME: make gdk_pixbuf dependency optional
 { buildPythonPackage
-, fetchurl
+, fetchPypi
+, lib
+, substituteAll
 , makeFontsConf
 , freefont_ttf
 , pytest
@@ -8,16 +11,16 @@
 , cffi
 , withXcffib ? false, xcffib
 , python
-, fetchpatch
 , glib
 , gdk_pixbuf }:
 
 buildPythonPackage rec {
-  name = "cairocffi-0.7.2";
+  pname = "cairocffi";
+  version = "0.8.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/c/cairocffi/${name}.tar.gz";
-    sha256 = "e42b4256d27bd960cbf3b91a6c55d602defcdbc2a73f7317849c80279feeb975";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0i9m3p39g9wrkpjvpawch2qmnmm3cnim7niz3nmmbcp2hrkixwk5";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -35,31 +38,21 @@ buildPythonPackage rec {
     py.test $out/${python.sitePackages}
   '';
 
-  # FIXME: make gdk_pixbuf dependency optional
-  # Happens with 0.7.1 and 0.7.2
-  # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
-
   patches = [
-    # This patch from PR substituted upstream
-    (fetchpatch {
-      url = "https://github.com/avnik/cairocffi/commit/2266882e263c5efc87350cf016d117b2ec6a1d59.patch";
-      sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
+    # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
+    (substituteAll {
+      src = ./dlopen-paths.patch;
+      cairo = cairo.out;
+      glib = glib.out;
+      gdk_pixbuf = gdk_pixbuf.out;
     })
-
-    ./dlopen-paths.patch
     ./fix_test_scaled_font.patch
   ];
 
-  postPatch = ''
-    # Hardcode cairo library path
-    substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${cairo.out}
-    substituteInPlace cairocffi/__init__.py --subst-var-by glib ${glib.out}
-    substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${gdk_pixbuf.out}
-  '';
-
-  meta = {
+  meta = with lib; {
     homepage = https://github.com/SimonSapin/cairocffi;
-    license = "bsd";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [];
     description = "cffi-based cairo bindings for Python";
   };
 }
