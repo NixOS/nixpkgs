@@ -23,10 +23,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     gcc5 scons libX11 libXcursor libXinerama libXrandr libXrender
     libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
-    libGLU zlib
+    libGLU zlib yasm
   ];
 
-  patches = [ ./pkg_config_additions.patch ];
+  patches = [
+    ./pkg_config_additions.patch
+    ./dont_clobber_environment.patch
+  ];
 
   enableParallelBuilding = true;
 
