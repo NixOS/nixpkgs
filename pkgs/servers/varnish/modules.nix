@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, varnish, python, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.10.2";
+  version = "0.13.0";
   name = "varnish-modules-${version}";
 
   src = fetchurl {
     url = "https://download.varnish-software.com/varnish-modules/varnish-modules-${version}.tar.gz";
-    sha256 = "0inw76pm8kcidh0lq7gm3c3bh8v6yps0z7j6ar617b8wf730w1im";
+    sha256 = "1nj52va7cp0swcv87zd3si80knpaa4a7na37cy9wkvgyvhf9k8mh";
   };
 
   nativeBuildInputs = [ pkgconfig docutils removeReferencesTo ];
