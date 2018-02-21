@@ -9139,7 +9139,9 @@ with pkgs;
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
-  haxor-news = callPackage ../applications/misc/haxor-news { };
+  haxor-news = callPackage ../applications/misc/haxor-news {
+    python = python3;
+  };
 
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
