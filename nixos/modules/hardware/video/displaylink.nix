@@ -50,7 +50,7 @@ in
       path = [ pkgs.kmod ];
 
       serviceConfig = {
-        ExecStart = "${displaylink}/bin/DisplayLinkManager";
+        ExecStart = "${displaylink}/bin/displayLink";
         Restart = "always";
         RestartSec = 5;
       };
