@@ -281,6 +281,11 @@
     github = "akc";
     name = "Anders Claesson";
   };
+  akru = {
+    email = "mail@akru.me";
+    github = "akru";
+    name = "Alexander Krupenkin ";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
