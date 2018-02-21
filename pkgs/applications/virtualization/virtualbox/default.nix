@@ -19,7 +19,8 @@ let
   python = python2;
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
-  extpack = "13n6d6wca3bnvqc1q0bapgwfjmfqm19nxn9c0vbzd28c4l88j991";
+  # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
+  extpack = "21258910250c89f6d7062cd96e53a8d855e9f8bb6a011c18de760dc5b869c68e";
   extpackRev = "120294";
   main = "0agjldjn01p4x54m53db50xwamrphl7iqcrika3wa04rvlb36f40";
   version = "5.1.32";
