@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, contextlib2, blinker }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+, contextlib2, blinker
+}:
 
 buildPythonPackage rec {
   pname = "raven";
-  version = "6.5.0";
+  version = "6.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "84da75114739191bdf2388f296ffd6177e83567a7fbaf2701e034ad6026e4f3b";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "raven-python";
+    rev = version;
+    sha256 = "184wpr0zdcm260pxqll9kpmp2ywisn75k8pdm8gc6xmk740in1hj";
   };
 
   # way too many dependencies to run tests
