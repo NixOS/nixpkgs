@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtkmm, glibmm, gtksourceview }:
+{ stdenv, fetchurl, pkgconfig, gtkmm, glibmm, gtksourceview, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gtksourceviewmm-${version}";
