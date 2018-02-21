@@ -11298,6 +11298,8 @@ in {
     };
   });
 
+  notify2 = callPackage ../development/python-modules/notify2 {};
+
   notmuch = buildPythonPackage rec {
     name = "python-${pkgs.notmuch.name}";
 
