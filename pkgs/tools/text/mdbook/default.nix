@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices ? null }:
+{ stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   name = "mdbook-${version}";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "19hpr78p9rzgirq6fjw8v11d5mgcglms6vbqgjyvg49xmkklsqzr";
   depsSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
 
-  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     description = "Create books from MarkDown";
