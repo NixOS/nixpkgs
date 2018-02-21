@@ -20,7 +20,7 @@ buildPythonApplication rec {
     six
   ];
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock pexpect ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests -v
