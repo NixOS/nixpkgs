@@ -15237,9 +15237,10 @@ with pkgs;
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
-  keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
-
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
+
+  keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
+  keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
