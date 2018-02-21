@@ -29,7 +29,7 @@ fi
 mesonCheckPhase() {
     runHook preCheck
 
-    meson test
+    meson test --print-errorlogs
 
     runHook postCheck
 }
