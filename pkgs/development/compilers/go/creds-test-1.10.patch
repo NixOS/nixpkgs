@@ -1,0 +1,15 @@
+diff --git a/src/syscall/creds_test.go b/src/syscall/creds_test.go
+index 524689ae2d..c7993ceab8 100644
+--- a/src/syscall/creds_test.go
++++ b/src/syscall/creds_test.go
+@@ -76,8 +76,8 @@ func TestSCMCredentials(t *testing.T) {
+ 			if sys, ok := err.(*os.SyscallError); ok {
+ 				err = sys.Err
+ 			}
+-			if err != syscall.EPERM {
+-				t.Fatalf("WriteMsgUnix failed with %v, want EPERM", err)
++			if err != syscall.EPERM && err != syscall.EINVAL {
++				t.Fatalf("WriteMsgUnix failed with %v, want EPERM or EINVAL", err)
+ 			}
+ 		}
+ 
