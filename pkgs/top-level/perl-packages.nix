@@ -6331,10 +6331,12 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libglade pkgs.gtk2 ];
     meta = {
+      homepage = https://metacpan.org/pod/Gtk2::GladeXML;
       description = "Create user interfaces directly from Glade XML files";
+      license = stdenv.lib.licenses.lgpl2Plus;
     };
   };
-  
+
   Gtk2TrayIcon = buildPerlPackage rec {
     name = "Gtk2-TrayIcon-0.06";
     src = fetchurl {
