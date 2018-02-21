@@ -6292,6 +6292,22 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DataUUID CryptCBC ];
   };
 
+  GSSAPI = buildPerlPackage rec {
+    name = "GSSAPPI-0.28";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
+      sha256 = "1mkhwxjjlhr58pd770i9gnf7zy7jj092iv6jfbnb8bvnc5xjr3vx";
+    };
+    buildInputs = [ TestPod ];
+    propagatedBuildInputs = [ pkgs.heimdalFull ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Perl extension providing access to the GSSAPIv2 library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+    makeMakerFlags = "--gssapiimpl ${pkgs.heimdalFull.out}";
+  };
+
   Gtk2 = buildPerlPackage rec {
     name = "Gtk2-1.2498";
     src = fetchurl {
