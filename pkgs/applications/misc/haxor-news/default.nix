@@ -23,7 +23,7 @@ buildPythonApplication rec {
   checkInputs = [ mock pexpect ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
+    PATH=$out/bin:$PATH ${python.interpreter} -m unittest discover -s tests -v
   '';
 
   meta = with stdenv.lib; {
