@@ -5,7 +5,9 @@ with stdenv.lib;
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+  ## mojo_platform_bindings is built ahead of chrome, because of spurious
+  ## build errors, see https://github.com/NixOS/nixpkgs/issues/35296
+  buildTargets = [ "mksnapshot" "mojo_platform_bindings" "chrome_sandbox" "chrome" ];
 
   outputs = ["out" "sandbox"];
 
