@@ -1056,7 +1056,10 @@ with pkgs;
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
-  dbus-broker = callPackage ../os-specific/linux/dbus-broker {};
+  # dbus-broker needs kernel 4.14+
+  dbus-broker = callPackage ../os-specific/linux/dbus-broker {
+    linuxHeaders = linuxHeaders_4_15;
+  };
 
   ioport = callPackage ../os-specific/linux/ioport {};
 
