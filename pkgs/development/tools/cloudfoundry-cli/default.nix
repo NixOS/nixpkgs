@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, go }:
+{ stdenv, buildGoPackage, fetchFromGitHub, go_1_9 }:
 
 buildGoPackage rec {
   name = "cloudfoundry-cli-${version}";
@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   installPhase = ''
     install -Dm555 go/bin/cli "$out/bin/cf"
-    remove-references-to -t ${go} "$out/bin/cf"
+    remove-references-to -t ${go_1_9} "$out/bin/cf"
     install -Dm444 -t "$out/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
   '';
 
