@@ -111,8 +111,6 @@ stdenv.mkDerivation rec {
     sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
-
-    sed -i '1 a\exit 0' misc/cgo/errors/test.bash
   '';
 
   patches = [
