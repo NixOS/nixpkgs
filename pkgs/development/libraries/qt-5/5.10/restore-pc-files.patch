@@ -1,0 +1,15 @@
+Partially reverts <https://codereview.qt-project.org/#/c/140954/>.
+
+diff --git i/mkspecs/features/qt_module.prf w/mkspecs/features/qt_module.prf
+index bb28af97..36bb6483 100644
+--- i/mkspecs/features/qt_module.prf
++++ w/mkspecs/features/qt_module.prf
+@@ -245,7 +245,7 @@ load(qt_installs)
+ load(qt_targets)
+
+ # this builds on top of qt_common
+-!internal_module:!lib_bundle:if(unix|mingw) {
++!internal_module:if(unix|mingw) {
+     CONFIG += create_pc
+     QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+     host_build: \
