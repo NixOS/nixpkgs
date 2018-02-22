@@ -22,17 +22,3 @@
  	// sync tests
  	t.tests = append(t.tests, distTest{
  		name:    "sync_cpu",
-@@ -705,11 +690,11 @@
- 			heading: "API check",
- 			fn: func(dt *distTest) error {
- 				if t.compileOnly {
--return nil
-+					return nil
- 					t.addCmd(dt, "src", "go", "build", filepath.Join(goroot, "src/cmd/api/run.go"))
- 					return nil
- 				}
--return nil
-+				return nil
- 				t.addCmd(dt, "src", "go", "run", filepath.Join(goroot, "src/cmd/api/run.go"))
- 				return nil
- 			},
