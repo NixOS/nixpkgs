@@ -12778,10 +12778,7 @@ with pkgs;
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    # Go 1.9 build fails with "go1.8.* required (see CONTRIBUTING.md)".
-    buildGoPackage = buildGo18Package;
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
