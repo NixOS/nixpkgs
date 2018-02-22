@@ -8242,6 +8242,8 @@ with pkgs;
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
 
+  appstream-qt = libsForQt5.callPackage ../development/libraries/appstream/qt.nix { };
+
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
