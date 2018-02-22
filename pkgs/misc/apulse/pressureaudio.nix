@@ -1,9 +1,9 @@
-{ stdenv, apulse, libpulseaudio, pkgconfig, intltool, autoreconfHook }:
+{ stdenv, apulse, pulseaudioLib, pkgconfig, intltool, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "libpressureaudio-${apulse.version}";
 
-  src = libpulseaudio.src;
+  src = pulseaudioLib.src;
 
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     cat >> $out/lib/pkgconfig/libpulse.pc << EOF
     Name: libpulse
     Description: PulseAudio Client Interface
-    Version: ${libpulseaudio.version}-rebootstrapped
+    Version: ${pulseaudioLib.version}-rebootstrapped
     Libs: -L$out/lib -lpulse 
     Cflags: -I$out/include -D_REENTRANT
     EOF
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     cat >> $out/lib/pkgconfig/libpulse-simple.pc << EOF
     Name: libpulse-simple
     Description: PulseAudio Simplified Synchronous Client Interface
-    Version: ${libpulseaudio.version}-rebootstrapped
+    Version: ${pulseaudioLib.version}-rebootstrapped
     Libs: -L$out/lib -lpulse-simple 
     Cflags: -I$out/include -D_REENTRANT
     Requires: libpulse
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     cat >> $out/lib/pkgconfig/libpulse-mainloop-glib.pc << EOF
     Name: libpulse-mainloop-glib
     Description: PulseAudio GLib 2.0 Main Loop Wrapper
-    Version: ${libpulseaudio.version}-rebootstrapped
+    Version: ${pulseaudioLib.version}-rebootstrapped
     Libs: -L$out/lib -lpulse-mainloop-glib 
     Cflags: -I$out/include -D_REENTRANT
     Requires: libpulse glib-2.0
@@ -60,22 +60,22 @@ stdenv.mkDerivation {
   '';
 
   meta = apulse.meta // {
-    description = "libpulseaudio without any sound daemons over pure ALSA";
+    description = "libpulse without any sound daemons over pure ALSA";
     longDescription = ''
-      apulse (${apulse.meta.homepage}) implements most of libpulseaudio
+      apulse (${apulse.meta.homepage}) implements most of libpulse
       API over pure ALSA in 5% LOC of the original PulseAudio.
 
       But apulse is made to be used as a wrapper that substitutes its
       replacement libs into LD_LIBRARY_PATH. The problem with that is
-      that you still have to link against the original libpulseaudio.
+      that you still have to link against the original libpulse.
 
       pressureaudio (http://git.r-36.net/pressureaudio/) wraps apulse
-      with everything you need to replace libpulseaudio completely.
+      with everything you need to replace libpulse completely.
 
       This derivation is a reimplementation of pressureaudio in pure
       nix.
 
-      You can simply override libpulseaudio with this and most
+      You can simply override libpulse with this and most
       packages would just work.
     '';
   };

@@ -489,10 +489,6 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  apulse = callPackage ../misc/apulse { };
-
-  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
-
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -12300,10 +12296,7 @@ with pkgs;
 
   pshs = callPackage ../servers/http/pshs { };
 
-  libpulseaudio = callPackage ../servers/pulseaudio {
-    libOnly = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
+  # PulseAudio daemons
 
   # Name is changed to prevent use in packages;
   # please use libpulseaudio instead.
@@ -12322,6 +12315,32 @@ with pkgs;
     zeroconfSupport = true;
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
+
+  # libpulse implementations
+
+  apulse = callPackage ../misc/apulse { };
+
+  pressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
+  libpressureaudio = pressureaudio;
+
+  pulseaudioLib = callPackage ../servers/pulseaudio {
+    libOnly = true;
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
+
+  # We link against pressureaudio by default to provide `libpulse` API
+  # over pure ALSA to apps that refuse to properly work over ALSA
+  # themselves (e.g. Firefox).
+  #
+  # NixOS then overrides this with `pulseaudioLib` via
+  # `LD_LIBRARY_PATH` when user enables the daemon service
+  # (`pressureaudio` and `pulseaudioLib` are link-time-compatible).
+  #
+  # This way users that don't run PulseAudio daemon and don't want to
+  # link against `pulseaudioLib` for ethical, religious, and/or
+  # security reasons don't need to make any overrides, while
+  # PulseAudio daemon users stay happy.
+  libpulseaudio = pressureaudio;
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 

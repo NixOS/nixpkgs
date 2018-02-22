@@ -1,8 +1,8 @@
 { config, stdenv, fetchurl, lib, pkgconfig, alsaLib, libogg
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, pulseaudioLib ? null
 , jackSupport ? stdenv.isLinux, libjack2 ? null }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
+assert pulseaudioSupport -> pulseaudioLib != null;
 assert jackSupport -> libjack2 != null;
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # ToDo: a52, etc.?
   buildInputs =
     [ pkgconfig alsaLib libogg ]
-    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional pulseaudioSupport pulseaudioLib
     ++ lib.optional jackSupport libjack2;
 
   meta = with lib; {
