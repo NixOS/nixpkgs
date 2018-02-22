@@ -135,6 +135,7 @@ let
       powerdevil = callPackage ./powerdevil.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
+      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
     };
 in
 lib.makeScope libsForQt5.newScope packages
