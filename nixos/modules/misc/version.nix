@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -77,6 +77,11 @@ in
   };
 
   config = {
+
+    warnings = lib.optional (options.system.stateVersion.highestPrio == 1001) ''
+      You don't have `system.stateVersion` explicitly set. Expect things to break.
+      See release notes and grep for "stateVersion" in `nixpkgs/nixos` tree.
+    '';
 
     system.nixos = {
       # These defaults are set here rather than up there so that
