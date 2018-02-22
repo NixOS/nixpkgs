@@ -1,11 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage, hidapi
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k, hidapi
 , pycrypto, pillow, protobuf, future, ecpy
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "ECPy";
   version = "0.8.3";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
