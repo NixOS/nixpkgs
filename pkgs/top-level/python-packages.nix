@@ -4895,14 +4895,14 @@ in {
   };
 
   grip = buildPythonPackage rec {
-    version = "4.3.2";
+    version = "4.4.0";
     name = "grip-${version}";
 
     src = pkgs.fetchFromGitHub {
       owner = "joeyespo";
       repo = "grip";
       rev = "v${version}";
-      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
+      sha256 = "1768n3w40qg1njkzqjyl5gkva0h31k8h250821v69imj1zimymag";
     };
     buildInputs = with self; [ pytest responses ];
 
