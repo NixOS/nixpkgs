@@ -9429,6 +9429,8 @@ with pkgs;
     stdenv = llvmPackages_4.stdenv;
   };
 
+  isso = callPackage ../servers/isso { };
+
   itk = callPackage ../development/libraries/itk { };
 
   jasper = callPackage ../development/libraries/jasper { };
