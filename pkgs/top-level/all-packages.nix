@@ -6200,10 +6200,6 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_7 = callPackage ../development/compilers/go/1.7.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_8 = callPackage ../development/compilers/go/1.8.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -11849,10 +11845,6 @@ with pkgs;
   buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
-
-  buildGo17Package = callPackage ../development/go-modules/generic {
-    go = go_1_7;
-  };
 
   buildGo18Package = callPackage ../development/go-modules/generic {
     go = go_1_8;
