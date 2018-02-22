@@ -78,7 +78,7 @@ in
   ###### implementation
 
   config = {
-      sound.enable = mkDefault !(versionAtLeast config.system.stateVersion "18.03")
+      sound.enable = mkDefault !(versionAtLeast config.system.stateVersion "18.03");
     } // mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
