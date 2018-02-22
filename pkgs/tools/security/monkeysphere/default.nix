@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
         CryptOpenSSLRSA
         CryptOpenSSLBignum
       ]}"
+    wrapProgram $out/bin/monkeysphere --prefix PERL5LIB :\
+      "${with perlPackages; stdenv.lib.makePerlPath [
+        CryptOpenSSLRSA
+        CryptOpenSSLBignum
+      ]}"
   '';
 
   meta = with stdenv.lib; {
