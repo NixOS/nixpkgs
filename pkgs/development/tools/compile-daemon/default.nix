@@ -19,7 +19,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Very simple compile daemon for Go";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ profpatsch ];
+    maintainers = with maintainers; [ ];
     inherit (src.meta) homepage;
   };
 }

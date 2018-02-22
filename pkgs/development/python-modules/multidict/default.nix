@@ -1,8 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, cython
-, pytest, psutil, pytestrunner
+, pytest, pytestrunner
 , isPy3k
 }:
 
@@ -15,8 +14,7 @@ buildPythonPackage rec {
     sha256 = "0liazqlyk2nmr82nhiw2z72j7bjqxaisifkj476msw140d4i4i7v";
   };
 
-  buildInputs = [ cython ];
-  checkInputs = [ pytest psutil pytestrunner ];
+  checkInputs = [ pytest pytestrunner ];
 
   disabled = !isPy3k;
 

@@ -1,5 +1,6 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus_libs, dbus_glib, gdk_pixbuf, cairo, python3, ... }:
+  openssl, sqlite, zlib, dbus_libs, dbus_glib, gdk_pixbuf, cairo, python3,
+  libsodium, postgresql, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation;
@@ -36,6 +37,7 @@ in
   openssl-sys = attrs: {
     buildInputs = [ pkgconfig openssl ];
   };
+
   dbus = attrs: {
     buildInputs = [ pkgconfig dbus_libs ];
   };
@@ -59,5 +61,12 @@ in
   };
   xcb = attrs: {
     buildInputs = [ python3 ];
+  };
+
+  thrussh-libsodium = attrs: {
+    buildInputs = [ pkgconfig libsodium ];
+  };
+  pq-sys = attr: {
+    buildInputs = [ pkgconfig postgresql ];
   };
 }

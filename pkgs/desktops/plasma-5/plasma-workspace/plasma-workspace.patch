@@ -1,5 +1,5 @@
 diff --git a/applets/batterymonitor/package/contents/ui/BatteryItem.qml b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
-index 7e2d9758..40a5797b 100644
+index 7e2d975..40a5797 100644
 --- a/applets/batterymonitor/package/contents/ui/BatteryItem.qml
 +++ b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
 @@ -26,7 +26,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -12,7 +12,7 @@ index 7e2d9758..40a5797b 100644
  Item {
      id: batteryItem
 diff --git a/applets/batterymonitor/package/contents/ui/batterymonitor.qml b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
-index ae6d5919..c2f99c86 100644
+index 50deee5..45b6b37 100644
 --- a/applets/batterymonitor/package/contents/ui/batterymonitor.qml
 +++ b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
 @@ -25,7 +25,7 @@ import org.kde.plasma.plasmoid 2.0
@@ -25,7 +25,7 @@ index ae6d5919..c2f99c86 100644
  Item {
      id: batterymonitor
 diff --git a/applets/lock_logout/contents/ui/lockout.qml b/applets/lock_logout/contents/ui/lockout.qml
-index 80e7e53b..0083cf01 100644
+index 80e7e53..0083cf0 100644
 --- a/applets/lock_logout/contents/ui/lockout.qml
 +++ b/applets/lock_logout/contents/ui/lockout.qml
 @@ -23,7 +23,7 @@ import org.kde.plasma.plasmoid 2.0
@@ -38,7 +38,7 @@ index 80e7e53b..0083cf01 100644
  Flow {
      id: lockout
 diff --git a/applets/notifications/package/contents/ui/main.qml b/applets/notifications/package/contents/ui/main.qml
-index acdda88f..989de8ab 100644
+index cb15cfa..a6976ba 100644
 --- a/applets/notifications/package/contents/ui/main.qml
 +++ b/applets/notifications/package/contents/ui/main.qml
 @@ -28,7 +28,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
@@ -51,7 +51,7 @@ index acdda88f..989de8ab 100644
  MouseEventListener {
      id: notificationsApplet
 diff --git a/krunner/dbus/org.kde.krunner.service.in b/krunner/dbus/org.kde.krunner.service.in
-index 85715214..294eab08 100644
+index 8571521..294eab0 100644
 --- a/krunner/dbus/org.kde.krunner.service.in
 +++ b/krunner/dbus/org.kde.krunner.service.in
 @@ -1,4 +1,4 @@
@@ -61,7 +61,7 @@ index 85715214..294eab08 100644
 +Exec=@CMAKE_INSTALL_FULL_BINDIR@/krunner
  
 diff --git a/kuiserver/org.kde.kuiserver.service.in b/kuiserver/org.kde.kuiserver.service.in
-index 7a86d07f..5b3030cc 100644
+index 7a86d07..5b3030c 100644
 --- a/kuiserver/org.kde.kuiserver.service.in
 +++ b/kuiserver/org.kde.kuiserver.service.in
 @@ -1,3 +1,3 @@
@@ -70,7 +70,7 @@ index 7a86d07f..5b3030cc 100644
 -Exec=@CMAKE_INSTALL_PREFIX@/bin/kuiserver5
 +Exec=@CMAKE_INSTALL_FULL_BINDIR@/kuiserver5
 diff --git a/startkde/CMakeLists.txt b/startkde/CMakeLists.txt
-index fe29f57a..247db953 100644
+index fe29f57..247db95 100644
 --- a/startkde/CMakeLists.txt
 +++ b/startkde/CMakeLists.txt
 @@ -3,11 +3,6 @@ add_subdirectory(kstartupconfig)
@@ -86,7 +86,7 @@ index fe29f57a..247db953 100644
  configure_file(startplasmacompositor.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasmacompositor  @ONLY)
  configure_file(startplasma.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasma  @ONLY)
 diff --git a/startkde/kstartupconfig/kstartupconfig.cpp b/startkde/kstartupconfig/kstartupconfig.cpp
-index c9927855..bd506ce2 100644
+index c992785..bd506ce 100644
 --- a/startkde/kstartupconfig/kstartupconfig.cpp
 +++ b/startkde/kstartupconfig/kstartupconfig.cpp
 @@ -147,5 +147,5 @@ int main()
@@ -97,7 +97,7 @@ index c9927855..bd506ce2 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index e9fa0bee..79e50a96 100644
+index b3117b4..e70110e 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -142,11 +142,10 @@ index e9fa0bee..79e50a96 100644
  fi
  
  # Boot sequence:
-@@ -33,59 +42,132 @@ fi
+@@ -33,61 +42,133 @@ fi
  #
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
--# We need to create config folder so we can write startupconfigkeys
 -if [  ${XDG_CONFIG_HOME} ]; then
 -  configDir=$XDG_CONFIG_HOME;
 -else
@@ -174,7 +173,9 @@ index e9fa0bee..79e50a96 100644
 +if [ -e $XDG_CONFIG_HOME/Trolltech.conf ]; then
 +    @NIXPKGS_SED@ -e '/nix\\store\|nix\/store/ d' -i $XDG_CONFIG_HOME/Trolltech.conf
  fi
+ sysConfigDirs=${XDG_CONFIG_DIRS:-/etc/xdg}
  
+-# We need to create config folder so we can write startupconfigkeys
 -mkdir -p $configDir
 +@NIXPKGS_KBUILDSYCOCA5@
 +
@@ -297,13 +298,14 @@ index e9fa0bee..79e50a96 100644
      exit 1
  fi
 -[ -r $configDir/startupconfig ] && . $configDir/startupconfig
+-
 +if [ -r "$XDG_CONFIG_HOME/startupconfig" ]; then
 +    . "$XDG_CONFIG_HOME/startupconfig"
 +fi
  
- if [ "$kdeglobals_kscreen_screenscalefactors" ]; then
-     export QT_SCREEN_SCALE_FACTORS="$kdeglobals_kscreen_screenscalefactors"
-@@ -94,26 +176,33 @@ fi
+ #Do not sync any of this section with the wayland versions as there scale factors are
+ #sent properly over wl_output
+@@ -99,26 +180,33 @@ fi
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND manually scaled by us
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
  
@@ -350,7 +352,7 @@ index e9fa0bee..79e50a96 100644
  Xft.dpi: $kcmfonts_general_forcefontdpi
  EOF
  fi
-@@ -122,11 +211,11 @@ dl=$DESKTOP_LOCKED
+@@ -127,11 +215,11 @@ dl=$DESKTOP_LOCKED
  unset DESKTOP_LOCKED # Don't want it in the environment
  
  ksplash_pid=
@@ -364,14 +366,13 @@ index e9fa0bee..79e50a96 100644
        ;;
      None)
        ;;
-@@ -135,71 +224,6 @@ if test -z "$dl"; then
+@@ -140,69 +228,6 @@ if test -z "$dl"; then
    esac
  fi
  
 -# Source scripts found in <config locations>/plasma-workspace/env/*.sh
 -# (where <config locations> correspond to the system and user's configuration
--# directories, as identified by Qt's qtpaths,  e.g.  $HOME/.config
--# and /etc/xdg/ on Linux)
+-# directory.
 -#
 -# This is where you can define environment variables that will be available to
 -# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
@@ -382,11 +383,10 @@ index e9fa0bee..79e50a96 100644
 -# For anything else (that doesn't set env vars, or that needs a window manager),
 -# better use the Autostart folder.
 -
--scriptpath=`qtpaths --locate-dirs GenericConfigLocation plasma-workspace | tr ':' '\n'`
+-scriptpath=`echo "$configDir:$sysConfigDirs" | tr ':' '\n'`
 -
--# Add /env/ to the directory to locate the scripts to be sourced
 -for prefix in `echo $scriptpath`; do
--  for file in "$prefix"/env/*.sh; do
+-  for file in "$prefix"/plasma-workspace/env/*.sh; do
 -    test -r "$file" && . "$file" || true
 -  done
 -done
@@ -436,7 +436,7 @@ index e9fa0bee..79e50a96 100644
  # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
  # from some users that they're confused and don't know what to do. This is
  # especially necessary on slow machines, where starting KDE takes one or two
-@@ -208,28 +232,10 @@ xset fp rehash
+@@ -211,28 +236,10 @@ xset fp rehash
  # If the user has overwritten fonts, the cursor font may be different now
  # so don't move this up.
  #
@@ -466,7 +466,7 @@ index e9fa0bee..79e50a96 100644
  # Mark that full KDE session is running (e.g. Konqueror preloading works only
  # with full KDE running). The KDE_FULL_SESSION property can be detected by
  # any X client connected to the same X session, even if not launched
-@@ -254,44 +260,65 @@ export XDG_DATA_DIRS
+@@ -257,44 +264,65 @@ export XDG_DATA_DIRS
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -545,7 +545,7 @@ index e9fa0bee..79e50a96 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -303,34 +330,37 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
+@@ -306,34 +334,37 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  # We only check for 255 which means that the ksmserver process could not be
  # started, any problems thereafter, e.g. ksmserver failing to initialize,
  # will remain undetected.
@@ -594,7 +594,7 @@ index e9fa0bee..79e50a96 100644
              done
              break
          fi
-@@ -339,15 +369,17 @@ fi
+@@ -342,15 +373,17 @@ fi
  
  echo 'startkde: Shutting down...'  1>&2
  # just in case
@@ -617,7 +617,7 @@ index e9fa0bee..79e50a96 100644
  
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index 9f875110..2a7a2a70 100644
+index a5d09fa..d42c284 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -714,7 +714,7 @@ index 9f875110..2a7a2a70 100644
  # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
  # from some users that they're confused and don't know what to do. This is
  # especially necessary on slow machines, where starting KDE takes one or two
-@@ -100,35 +56,25 @@ xset fp rehash
+@@ -100,22 +56,13 @@ xset fp rehash
  # If the user has overwritten fonts, the cursor font may be different now
  # so don't move this up.
  #
@@ -738,6 +738,10 @@ index 9f875110..2a7a2a70 100644
 +@NIXPKGS_XPROP@ -root -f KDE_FULL_SESSION 8t -set KDE_FULL_SESSION true
 +@NIXPKGS_XPROP@ -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
  
+ # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
+ if which dbus-update-activation-environment >/dev/null 2>/dev/null ; then
+@@ -131,16 +78,15 @@ fi
+ 
  # We set LD_BIND_NOW to increase the efficiency of kdeinit.
  # kdeinit unsets this variable before loading applications.
 -LD_BIND_NOW=true @CMAKE_INSTALL_FULL_LIBEXECDIR_KF5@/start_kdeinit_wrapper --kded +kcminit_startup
@@ -755,17 +759,8 @@ index 9f875110..2a7a2a70 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -143,27 +89,26 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
- # If the session should be locked from the start (locked autologin),
- # lock now and do the rest of the KDE startup underneath the locker.
- KSMSERVEROPTIONS=" --no-lockscreen"
--kwrapper5 @CMAKE_INSTALL_FULL_BINDIR@/ksmserver $KDEWM $KSMSERVEROPTIONS
-+@NIXPKGS_KWRAPPER5@ @CMAKE_INSTALL_FULL_BINDIR@/ksmserver $KDEWM $KSMSERVEROPTIONS
- if test $? -eq 255; then
-   # Startup error
-   echo 'startplasma: Could not start ksmserver. Check your installation.'  1>&2
-   test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
--  xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
+@@ -163,19 +109,19 @@ if test $? -eq 255; then
+   xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
  fi
  
 -wait_drkonqi=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true`
@@ -791,13 +786,13 @@ index 9f875110..2a7a2a70 100644
              done
              break
          fi
-@@ -172,15 +117,17 @@ fi
+@@ -184,15 +130,17 @@ fi
  
  echo 'startplasma: Shutting down...'  1>&2
  # just in case
 -test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 +if [ -n "$ksplash_pid" ]; then
-+    kill "$ksplash_pid" 2>/dev/null
++ "$ksplash_pid" 2>/dev/null
 +fi
  
  # Clean up
@@ -814,27 +809,21 @@ index 9f875110..2a7a2a70 100644
  
  echo 'startplasma: Done.'  1>&2
 diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacompositor.cmake
-index 417a87d4..3f62745a 100644
+index 8ac47aa..49970ef 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
-@@ -1,173 +1,171 @@
+@@ -1,118 +1,165 @@
  #!/bin/sh
  #
 -#  DEFAULT Plasma STARTUP SCRIPT ( @PROJECT_VERSION@ )
 +#  NIXPKGS Plasma STARTUP SCRIPT ( @PROJECT_VERSION@ )
  #
  
--# in case we have been started with full pathname spec without being in PATH
--bindir=`echo "$0" | sed -n 's,^\(/.*\)/[^/][^/]*$,\1,p'`
--if [ -n "$bindir" ]; then
--  qbindir=`qtpaths --binaries-dir`
--  qdbus=$qbindir/qdbus
--  case $PATH in
--    $bindir|$bindir:*|*:$bindir|*:$bindir:*) ;;
--    *) PATH=$bindir:$PATH; export PATH;;
--  esac
+-# We need to create config folder so we can write startupconfigkeys
+-if [  ${XDG_CONFIG_HOME} ]; then
+-  configDir=$XDG_CONFIG_HOME;
 -else
--  qdbus=qdbus
+-  configDir=${HOME}/.config; #this is the default, http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 +# we have to unset this for Darwin since it will screw up KDE's dynamic-loading
 +unset DYLD_FORCE_FLAT_NAMESPACE
 +
@@ -860,13 +849,8 @@ index 417a87d4..3f62745a 100644
 +# Qt from doing this wackiness in the first place.
 +if [ -e $XDG_CONFIG_HOME/Trolltech.conf ]; then
 +    @NIXPKGS_SED@ -e '/nix\\store\|nix\/store/ d' -i $XDG_CONFIG_HOME/Trolltech.conf
- fi
- 
--# We need to create config folder so we can write startupconfigkeys
--if [  ${XDG_CONFIG_HOME} ]; then
--  configDir=$XDG_CONFIG_HOME;
--else
--  configDir=${HOME}/.config; #this is the default, http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
++fi
++
 +@NIXPKGS_KBUILDSYCOCA5@
 +
 +# Set the default GTK 2 theme
@@ -891,7 +875,9 @@ index 417a87d4..3f62745a 100644
 +gtk-button-images=1
 +EOF
  fi
+ sysConfigDirs=${XDG_CONFIG_DIRS:-/etc/xdg}
  
+-# We need to create config folder so we can write startupconfigkeys
 -mkdir -p $configDir
 +# Set the default GTK 3 theme
 +gtk3_settings="$XDG_CONFIG_HOME/gtk-3.0/settings.ini"
@@ -1012,8 +998,8 @@ index 417a87d4..3f62745a 100644
 -    }
  fi
  
--kstartupconfig5
--returncode=$?
+ kstartupconfig5
+ returncode=$?
 -if test $returncode -ne 0; then
 +if ! @CMAKE_INSTALL_FULL_BINDIR@/kstartupconfig5; then
      exit 1
@@ -1047,7 +1033,7 @@ index 417a87d4..3f62745a 100644
 -        XCURSOR_THEME="$kcminputrc_mouse_cursortheme"
 -        export XCURSOR_THEME
 +if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
-+    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
++    #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 +    if [ $? -eq 10 ]; then
 +        export XCURSOR_THEME=breeze_cursors
 +    elif [ -n "$kcminputrc_mouse_cursortheme" ]; then
@@ -1066,6 +1052,23 @@ index 417a87d4..3f62745a 100644
      export QT_WAYLAND_FORCE_DPI=$kcmfonts_general_forcefontdpiwayland
  else
      export QT_WAYLAND_FORCE_DPI=96
+@@ -120,12 +167,12 @@ fi
+ 
+ # Get a property value from org.freedesktop.locale1
+ queryLocale1() {
+-    qdbus --system org.freedesktop.locale1 /org/freedesktop/locale1 "$1"
++    @NIXPKGS_QDBUS@ --system org.freedesktop.locale1 /org/freedesktop/locale1 "$1"
+ }
+ 
+ # Query whether org.freedesktop.locale1 is available. If it is, try to
+ # set XKB_DEFAULT_{MODEL,LAYOUT,VARIANT,OPTIONS} accordingly.
+-if qdbus --system org.freedesktop.locale1 >/dev/null 2>/dev/null; then
++if @NIXPKGS_QDBUS@ --system org.freedesktop.locale1 >/dev/null 2>/dev/null; then
+     # Do not overwrite existing values. There is no point in setting only some
+     # of them as then they would not match anymore.
+     if [ -z "${XKB_DEFAULT_MODEL}" -a -z "${XKB_DEFAULT_LAYOUT}" -a \
+@@ -141,41 +188,10 @@ if qdbus --system org.freedesktop.locale1 >/dev/null 2>/dev/null; then
+     fi
  fi
  
 -# Source scripts found in <config locations>/plasma-workspace/env/*.sh
@@ -1082,13 +1085,11 @@ index 417a87d4..3f62745a 100644
 -# For anything else (that doesn't set env vars, or that needs a window manager),
 -# better use the Autostart folder.
 -
--# TODO: Use GenericConfigLocation once we depend on Qt 5.4
--scriptpath=`qtpaths --paths ConfigLocation | tr ':' '\n' | sed 's,$,/plasma-workspace,g'`
+-scriptpath=`echo "$configDir:$sysConfigDirs" | tr ':' '\n'`
 -
--# Add /env/ to the directory to locate the scripts to be sourced
 -for prefix in `echo $scriptpath`; do
--  for file in "$prefix"/env/*.sh; do
--    test -r "$file" && . "$file"
+-  for file in "$prefix"/plasma-workspace/env/*.sh; do
+-    test -r "$file" && . "$file" || true
 -  done
 -done
 -
@@ -1104,14 +1105,12 @@ index 417a87d4..3f62745a 100644
 -export XDG_DATA_DIRS
 -
  # Make sure that D-Bus is running
--if $qdbus >/dev/null 2>/dev/null; then
--    : # ok
--else
-+if ! @NIXPKGS_QDBUS@ >/dev/null 2>/dev/null; then
+-if qdbus >/dev/null 2>/dev/null; then
++if @NIXPKGS_QDBUS@ >/dev/null 2>/dev/null; then
+     : # ok
+ else
      echo 'startplasmacompositor: Could not start D-Bus. Can you call qdbus?'  1>&2
-     test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-     exit 1
-@@ -202,7 +200,7 @@ export KDE_FULL_SESSION
+@@ -212,7 +228,7 @@ export KDE_FULL_SESSION
  KDE_SESSION_VERSION=5
  export KDE_SESSION_VERSION
  
@@ -1120,7 +1119,7 @@ index 417a87d4..3f62745a 100644
  export KDE_SESSION_UID
  
  XDG_CURRENT_DESKTOP=KDE
-@@ -212,26 +210,47 @@ export XDG_CURRENT_DESKTOP
+@@ -222,20 +238,41 @@ export XDG_CURRENT_DESKTOP
  QT_QPA_PLATFORM=wayland
  export QT_QPA_PLATFORM
  
@@ -1148,7 +1147,8 @@ index 417a87d4..3f62745a 100644
 +    done
 +done
 +
- # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
+ # kwin_wayland can possibly also start dbus-activated services which need env variables.
+ # In that case, the update in startplasma might be too late.
 -if which dbus-update-activation-environment >/dev/null 2>/dev/null ; then
 -    dbus-update-activation-environment --systemd --all
 -else
@@ -1171,17 +1171,8 @@ index 417a87d4..3f62745a 100644
  
  echo 'startplasmacompositor: Shutting down...'  1>&2
  
- unset KDE_FULL_SESSION
--xprop -root -remove KDE_FULL_SESSION
-+@NIXPKGS_XPROP@ -root -remove KDE_FULL_SESSION
- unset KDE_SESSION_VERSION
--xprop -root -remove KDE_SESSION_VERSION
-+@NIXPKGS_XPROP@ -root -remove KDE_SESSION_VERSION
- unset KDE_SESSION_UID
- 
- echo 'startplasmacompositor: Done.'  1>&2
 diff --git a/startkde/waitforname/org.kde.plasma.Notifications.service.in b/startkde/waitforname/org.kde.plasma.Notifications.service.in
-index 0a51b84b..f48b5d8a 100644
+index 0a51b84..f48b5d8 100644
 --- a/startkde/waitforname/org.kde.plasma.Notifications.service.in
 +++ b/startkde/waitforname/org.kde.plasma.Notifications.service.in
 @@ -1,3 +1,3 @@

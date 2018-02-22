@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, dbus_glib, libnotify, libxml2, libcanberra_gtk3, caja, mod_dnssd, apacheHttpd, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, dbus_glib, libnotify, libxml2, libcanberra_gtk3, mod_dnssd, apacheHttpd, hicolor_icon_theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-user-share-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0w7r7jmm12n41hcxj1pfk3f0xy69cddx7ga490x191rdpcb3ry1n";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "0lv5ndjk2br4w7cw8gsgj7aa2iadxv7m4wii4c49pajmd950iff2";
   };
 
   nativeBuildInputs = [
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
     libnotify
     libcanberra_gtk3
     libxml2
-    caja
+    mate.caja
     hicolor_icon_theme
     # Should mod_dnssd and apacheHttpd be runtime dependencies?
     # In gnome-user-share they are not.

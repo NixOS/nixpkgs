@@ -1,4 +1,4 @@
-#!@stdenv_shell@
+#!@bash@/bin/bash
 # Part of NixPkgs package collection
 # This script can be used at your option under the same license as NixPkgs or
 # under MIT/X11 license

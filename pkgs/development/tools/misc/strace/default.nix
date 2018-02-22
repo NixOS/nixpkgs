@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "strace-${version}";
-  version = "4.20";
+  version = "4.21";
 
   src = fetchurl {
     url = "mirror://sourceforge/strace/${name}.tar.xz";
-    sha256 = "08y5b07vb8jc7ak5xc3x2kx1ly6xiwv1gnppcqjs81kks66i9wsv";
+    sha256 = "1dvrwi6v9j6b9j6852zzlc61hxgiciadi1xsl89wzbzqlkxnahbd";
   };
 
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ libunwind ]; # support -k
+
+  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 "--enable-mpers=check";
 
   meta = with stdenv.lib; {
     homepage = http://strace.sourceforge.net/;

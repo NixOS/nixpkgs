@@ -1,25 +1,28 @@
-{ stdenv, fetchurl, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
 
-let version = "1.9.0.273"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "clojure-${version}";
+  version = "1.9.0.329";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "0xmrq3xvr002jgq8m1j0y5ld0rcr49608g3gqxgyxzjqswacglb4";
+    sha256 = "1g1mi75285z977vrqbihmmmrmdcnznxbw3r6wkzh571sc1yyrlrj";
   };
 
-  buildInputs = [ jdk makeWrapper ];
+  buildInputs = [ makeWrapper ];
+
+  outputs = [ "out" "prefix" ];
 
   installPhase = ''
-    pwd
-    ls -la
-    mkdir -p $out/libexec $out/bin
-    cp -f deps.edn example-deps.edn $out
-    cp -f clojure-tools-${version}.jar $out/libexec
-    sed -i -e "s@PREFIX@$out@g" clojure
-    cp -f clj clojure $out/bin
+    mkdir -p $prefix/libexec
+    cp clojure-tools-${version}.jar $prefix/libexec
+    cp {,example-}deps.edn $prefix
+
+    substituteInPlace clojure --replace PREFIX $prefix
+
+    install -Dt $out/bin clj clojure
+    wrapProgram $out/bin/clj --suffix PATH ${rlwrap}/bin
+    wrapProgram $out/bin/clojure --suffix PATH ${jdk}/bin
   '';
 
   meta = with stdenv.lib; {

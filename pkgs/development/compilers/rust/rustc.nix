@@ -57,9 +57,9 @@ stdenv.mkDerivation {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
-                ++ [ "--enable-vendor" "--disable-locked-deps" ]
+                ++ [ "--enable-vendor" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
+                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
@@ -72,6 +72,8 @@ stdenv.mkDerivation {
   passthru.target = target;
 
   postPatch = ''
+    patchShebangs src/etc
+
     # Fix dynamic linking against llvm
     #${optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
 
@@ -86,7 +88,7 @@ stdenv.mkDerivation {
 
     # Disable fragile tests.
     rm -vr src/test/run-make/linker-output-non-utf8 || true
-    rm -vr src/test/run-make/issue-26092.rs || true
+    rm -vr src/test/run-make/issue-26092 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
     rm -vr src/test/run-pass/issue-36023.rs || true
@@ -97,19 +99,6 @@ stdenv.mkDerivation {
 
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
-
-    # Disable some failing gdb tests. Try re-enabling these when gdb
-    # is updated past version 7.12.
-    rm src/test/debuginfo/basic-types-globals.rs
-    rm src/test/debuginfo/basic-types-mut-globals.rs
-    rm src/test/debuginfo/c-style-enum.rs
-    rm src/test/debuginfo/lexical-scopes-in-block-expression.rs
-    rm src/test/debuginfo/limited-debuginfo.rs
-    rm src/test/debuginfo/simple-struct.rs
-    rm src/test/debuginfo/simple-tuple.rs
-    rm src/test/debuginfo/union-smoke.rs
-    rm src/test/debuginfo/vec-slices.rs
-    rm src/test/debuginfo/vec.rs
 
     # Useful debugging parameter
     # export VERBOSE=1

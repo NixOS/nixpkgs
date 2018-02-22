@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages_5, kernel
-, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, llvmPackages, kernel
+, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf, libelf
+, systemtap
+}:
 
 stdenv.mkDerivation rec {
   version = "0.5.0";
@@ -13,8 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvmPackages_5.llvm llvmPackages_5.clang-unwrapped kernel
+    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
     elfutils python pythonPackages.netaddr luajit netperf iperf
+    systemtap.stapBuild
   ];
 
   patches = [
@@ -29,7 +32,12 @@ stdenv.mkDerivation rec {
     # libelf is incompatible with elfutils-libelf
     ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
-  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
+  cmakeFlags =
+    [ "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
+      "-DREVISION=${version}"
+      "-DENABLE_USDT=ON"
+      "-DENABLE_CPP_API=ON"
+    ];
 
   postInstall = ''
     mkdir -p $out/bin $out/share

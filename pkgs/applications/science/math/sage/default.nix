@@ -29,6 +29,7 @@
 , texlive
 , texinfo
 , hevea
+, buildDocs ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     # Sage installs during first `make`, `make install` is no-op and just takes time.
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ] ++ stdenv.lib.optionals (buildDocs) [ "doc" ];
 
   buildInputs = [
     bash # needed for the build
@@ -135,13 +136,16 @@ stdenv.mkDerivation rec {
     # TODO could be patched with `sed s|printf(ctime(\(.*\)))|%s... or fixed upstream
   ];
 
+  configureFlags = stdenv.lib.optionals(buildDocs) [ "--docdir=$(doc)" ];
   preConfigure = ''
-    export SAGE_NUM_THREADS=$NIX_BUILD_CORES
+    export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
     export SAGE_ATLAS_ARCH=fast
 
-    export HOME=$out/sage-home
-    mkdir -p $out/sage-home
+    export HOME=/tmp/sage-home
+    export SAGE_ROOT="$PWD"
+    export SAGE_SRC="$PWD"
 
+    mkdir -p "$HOME"
     mkdir -p "$out"
 
     # we need to keep the source around
@@ -150,12 +154,18 @@ stdenv.mkDerivation rec {
     mv "$dir" "$out/sage-root"
 
     cd "$out/sage-root" # build in target dir, since `make` is also `make install`
+  ''
+  + stdenv.lib.optionalString (buildDocs) ''
+    mkdir -p "$doc"
+    export SAGE_DOC="$doc"
+    export SAGE_DOCBUILD_OPTS="--no-pdf-links -k"
+    export SAGE_SPKG_INSTALL_DOCS='no'
   '';
+
+  buildFlags = if (buildDocs) then "doc" else "build";
 
   # for reference: http://doc.sagemath.org/html/en/installation/source.html
   preBuild = ''
-    # TODO do this conditionally
-    export SAGE_SPKG_INSTALL_DOCS='no'
     # symlink python to make sure the shebangs are patched to the sage path
     # while still being able to use python before building it
     # (this is important because otherwise sage will try to install python
@@ -167,10 +177,15 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
+    # Clean up
     rm -r "$out/sage-root/upstream" # don't keep the sources of all the spkgs
-    rm -r "$out/sage-root/src/build"
-    rm -rf "$out/sage-root/src/.git"
+    rm -rf "$out/sage-root/src/build"
+    rm -rf "$out/sage-root/src/autom4te.cache"
+    rm -rf "$out/sage-root/src/config"
+    rm -rf "$out/sage-root/src/m4"
+    rm -rf "$out/sage-root/.git"
     rm -r "$out/sage-root/logs"
+    rm -r "$out"/lib/python*/test
     # Fix dependency cycle between out and doc
     rm -f "$out/sage-root/config.log"
     rm -f "$out/sage-root/config.status"

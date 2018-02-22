@@ -26,6 +26,10 @@
     !(targetPlatform.isDarwin
       # On iOS, dynamic linking is not supported
       && (targetPlatform.isAarch64 || targetPlatform.isArm))
+, # Whether to backport https://phabricator.haskell.org/D4388 for
+  # deterministic profiling symbol names, at the cost of a slightly
+  # non-standard GHC API
+  deterministicProfiling ? false
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -85,7 +89,11 @@ stdenv.mkDerivation rec {
       url = "https://git.haskell.org/ghc.git/commitdiff_plain/2fc8ce5f0c8c81771c26266ac0b150ca9b75c5f3";
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
-  ];
+  ] ++ stdenv.lib.optional deterministicProfiling
+    (fetchpatch { # Backport of https://phabricator.haskell.org/D4388 for more determinism
+      url = "https://github.com/shlevy/ghc/commit/fec1b8d3555c447c0d8da0e96b659be67c8bb4bc.patch";
+      sha256 = "1lyysz6hfd1njcigpm8xppbnkadqfs0kvrp7s8vqgb38pjswj5hg";
+    });
 
   postPatch = "patchShebangs .";
 

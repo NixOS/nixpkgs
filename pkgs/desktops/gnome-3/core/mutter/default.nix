@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra_gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, libgudev, libwacom, xwayland, autoreconfHook }:
+, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-x"
     "--disable-static"
+    "--enable-remote-desktop"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"
@@ -16,6 +17,15 @@ stdenv.mkDerivation rec {
     "--enable-verbose-mode"
     "--with-libcanberra"
     "--with-xwayland-path=${xwayland}/bin/Xwayland"
+  ];
+
+  patches = [
+    # Pipewire 0.1.8 compatibility
+    (fetchurl {
+      name = "mutter-pipewire-0.1.8-compat.patch";
+      url = https://bugzilla.gnome.org/attachment.cgi?id=367356;
+      sha256 = "10bx5zf11wwhhy686w11ggikk56pbxydpbk9fbd947ir385x92cz";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -30,7 +40,7 @@ stdenv.mkDerivation rec {
     gnome_desktop cairo pango cogl clutter zenity libstartup_notification
     gnome3.geocode_glib libinput libgudev libwacom
     libcanberra_gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon
+    libxkbcommon pipewire
   ];
 
   preFixup = ''

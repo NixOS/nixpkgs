@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar }:
+{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "06z0a5p1jg93jialphslip8d72q9yg3651qqaf494gs3h9kw1sv1";
+    sha256 = "01dnqiazjl2avrmdiq68absjvcfv24446y759z2s9dwk8ywzjkrg";
   };
+
+  patches = [
+    # Trezor compat patch should be included in electrum > 3.0.6
+    (fetchpatch {
+      name = "trezor-compat.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/spesmilo/electrum/pull/3621.patch";
+      sha256 = "1bk1r2ikhnvw1fpfh71y4za2lnskcbkv50k8ynjxi5slx2wrfpl0";
+    })
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     dnspython

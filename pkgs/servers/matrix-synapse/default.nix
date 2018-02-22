@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, pythonPackages, fetchurl, fetchFromGitHub }:
+{ lib, pkgs, stdenv, pythonPackages, fetchurl, fetchFromGitHub, fetchpatch }:
 let
   matrix-angular-sdk = pythonPackages.buildPythonPackage rec {
     name = "matrix-angular-sdk-${version}";
@@ -35,14 +35,20 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "1ggdnb4c8y835j9lxsglxry6fqy7d190s70rccjrc3rj0p5vwlyj";
   };
 
-  patches = [ ./matrix-synapse.patch ];
+  patches = [
+    (fetchpatch { # Update pynacl dependency
+      url = "https://github.com/matrix-org/synapse/pull/2888.patch";
+      sha256 = "0gr9vwv02ps17d6pzassp9xmj1qbdgxwn1z4kckx4x964zzhyn4f";
+    })
+    ./matrix-synapse.patch
+  ];
 
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
-    psutil msgpack lxml matrix-synapse-ldap3
+    psutil msgpack-python lxml matrix-synapse-ldap3
     phonenumbers jsonschema affinity bcrypt
   ];
 

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "076rrczmyhapj87pxqldsar5pbz4mid6cm9l1n91zh2q403chdkb";
+    sha256 = "0bn9flsjbzlwmlbv2gphqwgzy9sx8ahch28z6dzgak4csbz5wcws";
   };
 
   buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]

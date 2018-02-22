@@ -65,7 +65,7 @@ in stdenv.mkDerivation (rec {
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -80,6 +80,9 @@ in stdenv.mkDerivation (rec {
     )
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -i ${../TLI-musl.patch}
+    patch -p1 -i ${./dynamiclibrary-musl.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -110,6 +113,14 @@ in stdenv.mkDerivation (rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ]
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
   ];
 
   postBuild = ''

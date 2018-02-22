@@ -2,18 +2,18 @@
 
 buildGoPackage rec {
   name = "mattermost-${version}";
-  version = "4.4.1";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "0imda96wgr2nkkxs2jfcqszx1fqgmbbrh7zqmgjh6ks3an1v4m3c";
+    sha256 = "11rw2m26mf4x6xbxkf37c1j16kyxx059jv3cdajkpv31xn82s7iv";
   };
 
   webApp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "1gnzv9xkqawi36z7v9xsy1gk16x71qf0kn8r059qvyarjlyp7888";
+    sha256 = "09dzkvrwj4ynk8yqrcbnhmv9hm3z3r3vyjrbzpvmznfrwcccc7lr";
   };
 
   goPackagePath = "github.com/mattermost/mattermost-server";

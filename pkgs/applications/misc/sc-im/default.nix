@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "0.7.0";
   name = "sc-im-${version}";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "02ak3b0vv72mv38cwvy7qp0y6hgrzcgahkv1apgks3drpnz5w1sj";
+    sha256 = "0xi0n9qzby012y2j7hg4fgcwyly698sfi4i9gkvy0q682jihprbk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     cd src
+
+    sed 's/LDLIBS += -lm/& -lncurses/' -i Makefile
 
     sed -e "\|^prefix  = /usr/local|   s|/usr/local|$out|" \
         -e "\|^#LDLIBS += -lxlsreader| s|^#||            " \

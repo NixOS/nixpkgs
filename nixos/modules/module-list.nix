@@ -60,6 +60,7 @@
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
+  ./misc/label.nix
   ./misc/locate.nix
   ./misc/meta.nix
   ./misc/nixpkgs.nix
@@ -75,6 +76,7 @@
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/criu.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/fish.nix
@@ -92,6 +94,7 @@
   ./programs/nano.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/plotinus.nix
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
@@ -102,6 +105,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
+  ./programs/systemtap.nix
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
@@ -111,8 +115,10 @@
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
+  ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
@@ -151,6 +157,7 @@
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
+  ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -200,6 +207,7 @@
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
@@ -238,6 +246,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
+  ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
@@ -334,6 +343,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
@@ -417,7 +427,8 @@
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
-  ./services/network-filesystems/openafs-client/default.nix
+  ./services/network-filesystems/openafs/client.nix
+  ./services/network-filesystems/openafs/server.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/tahoe.nix
@@ -491,6 +502,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/mosquitto.nix
+  ./services/networking/monero.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
@@ -501,6 +513,7 @@
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
+  ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
@@ -528,6 +541,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
   ./services/networking/rpcbind.nix
+  ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
@@ -685,6 +699,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/binfmt.nix
   ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix

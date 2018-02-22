@@ -18,8 +18,8 @@
 
 with stdenv.lib;
 let
-  version = "2.11.0";
-  sha256 = "1jvzw6rdhimn583dz6an8xiw07n3ycvxmj3jpv1s312scv3k9w64";
+  version = "2.11.1";
+  sha256 = "1jrcff0szyjxc3vywyiclwdzk0xgq4cxvjbvmcfyjcpdrq9j5pyr";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./no-etc-install.patch ]
+  patches = [ ./no-etc-install.patch ./statfs-flags.patch ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch;
 
@@ -100,6 +100,10 @@ stdenv.mkDerivation rec {
     else if stdenv.isArm     then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else "";
+
+  passthru = {
+    qemu-system-i386 = "bin/qemu-system-i386";
+  };
 
   meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;

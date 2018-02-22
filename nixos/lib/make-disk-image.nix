@@ -85,7 +85,7 @@ let format' = format; in let
   nixpkgs = cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
-  channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
     mkdir -p $out
     cp -prd ${nixpkgs} $out/nixos
     chmod -R u+w $out/nixos
@@ -93,7 +93,7 @@ let format' = format; in let
       ln -s . $out/nixos/nixpkgs
     fi
     rm -rf $out/nixos/.git
-    echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
+    echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
   binPath = with pkgs; makeBinPath (

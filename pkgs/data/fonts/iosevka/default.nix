@@ -7,6 +7,7 @@
   # Custom font set options.
   # See https://github.com/be5invis/Iosevka#build-your-own-style
   design ? [], upright ? [], italic ? [], oblique ? [],
+  family ? null, weights ? [],
   # Custom font set name. Required if any custom settings above.
   set ? null
 }:
@@ -15,6 +16,8 @@ assert (design != []) -> set != null;
 assert (upright != []) -> set != null;
 assert (italic != []) -> set != null;
 assert (oblique != []) -> set != null;
+assert (family != null) -> set != null;
+assert (weights != []) -> set != null;
 
 let
   installPackageLock = import ./package-lock.nix { inherit fetchurl lib; };
@@ -23,13 +26,13 @@ in
 let pname = if set != null then "iosevka-${set}" else "iosevka"; in
 
 let
-  version = "1.13.3";
+  version = "1.14.0";
   name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "be5invis";
     repo ="Iosevka";
     rev = "v${version}";
-    sha256 = "0wfhfiahllq8ngn0mybvp29cfcm7b8ndk3fyhizd620wrj50bazf";
+    sha256 = "0mmdlrd9a0rhmmdqwkk6v7cdvbi23djr5kkiyv38llk11j3w0clp";
   };
 in
 
@@ -44,8 +47,11 @@ let
     (param "upright" upright)
     (param "italic" italic)
     (param "oblique" oblique)
+    (if family != null then "family='${family}'" else null)
+    (param "weights" weights)
   ]);
-  custom = design != [] || upright != [] || italic != [] || oblique != [];
+  custom = design != [] || upright != [] || italic != [] || oblique != []
+    || family != null || weights != [];
 in
 
 stdenv.mkDerivation {

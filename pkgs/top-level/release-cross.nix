@@ -16,6 +16,8 @@ let
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
+    nix = nativePlatforms;
+    nixUnstable = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
@@ -50,6 +52,15 @@ let
     buildPackages.binutils = darwin;
   };
 
+  rpiCommon = linuxCommon // {
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
+  };
 in
 
 {
@@ -111,19 +122,14 @@ in
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
   /* Linux on Raspberrypi */
-  rpi = mapTestOnCross lib.systems.examples.raspberryPi (linuxCommon // {
-    vim = nativePlatforms;
-    unzip = nativePlatforms;
-    ddrescue = nativePlatforms;
-    lynx = nativePlatforms;
-    patchelf = nativePlatforms;
-    buildPackages.binutils = nativePlatforms;
-    mpg123 = nativePlatforms;
-  });
+  rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
+  rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
 
   /* Linux on Aarch64 (TODO make android for real)  */
-  android = mapTestOnCross lib.systems.examples.aarch64-multiplatform (linuxCommon // {
-  });
+  android = mapTestOnCross lib.systems.examples.aarch64-multiplatform linuxCommon;
+  aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
+
+  x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let

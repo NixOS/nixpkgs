@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, intltool }:
+{ stdenv, fetchurl, intltool, mate }:
 
 stdenv.mkDerivation rec {
   name = "mate-backgrounds-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "06q8ksjisijps2wn959arywsimhzd3j35mqkr048c26ck24d60zi";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "0pcnjcw00y8hf2bwfrb5sbk2511cbg4fr8vgvgqswcwjp9y15cjp";
   };
 
   nativeBuildInputs = [ intltool ];

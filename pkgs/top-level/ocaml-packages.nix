@@ -60,6 +60,8 @@ let
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
+    bitv = callPackage ../development/ocaml-modules/bitv { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -372,6 +374,10 @@ let
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
+      lwt = lwt3;
+    };
+
+    lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
       lwt = lwt3;
     };
 

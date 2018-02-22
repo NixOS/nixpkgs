@@ -38,6 +38,16 @@ has the following highlights: </para>
       </itemizedlist>
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      The GNOME version is now 3.26.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>PHP now defaults to PHP 7.2</para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -135,6 +145,17 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      The <literal>openssh</literal> package
+      now includes Kerberos support by default;
+      the <literal>openssh_with_kerberos</literal> package
+      is now a deprecated alias.
+      If you do not want Kerberos support,
+      you can do <literal>openssh.override { withKerboros = false; }</literal>.
+      Note, this also applies to the <literal>openssh_hpn</literal> package.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       <literal>cc-wrapper</literal> has been split in two; there is now also a <literal>bintools-wrapper</literal>.
       The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
       Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
@@ -196,6 +217,28 @@ following incompatible changes:</para>
       </listitem>
     </itemizedlist>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>jid</literal> package has been removed, due to maintenance
+      overhead of a go package having non-versioned dependencies.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      When using <option>services.xserver.libinput</option> (enabled by default in GNOME),
+      it now handles all input devices, not just touchpads. As a result, you might need to
+      re-evaluate any custom Xorg configuration. In particular,
+      <literal>Option "XkbRules" "base"</literal> may result in broken keyboard layout.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>attic</literal> package was removed. A maintained fork called
+      <link xlink:href="https://www.borgbackup.org/">Borg</link> should be used instead.
+      Migration instructions can be found
+      <link xlink:href="http://borgbackup.readthedocs.io/en/stable/usage/upgrade.html#attic-and-borg-0-xx-to-borg-1-x">here</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -226,10 +269,42 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      The option <option>services.xserver.desktopManager.default</option> is now <literal>none</literal> by default.
-      An assertion failure is thrown if WM's and DM's default are <literal>none</literal>.
-      To explicitly run a plain X session without and DM or WM, the newly introduced option <option>services.xserver.plainX</option>
-      must be set to true.
+      In the module <option>networking.interfaces.&lt;name&gt;</option> the
+      following options have been removed:
+      <itemizedlist>
+        <listitem>
+          <para><option>ipAddress</option></para>
+        </listitem>
+        <listitem>
+          <para><option>ipv6Address</option></para>
+        </listitem>
+        <listitem>
+          <para><option>prefixLength</option></para>
+        </listitem>
+        <listitem>
+          <para><option>ipv6PrefixLength</option></para>
+        </listitem>
+        <listitem>
+          <para><option>subnetMask</option></para>
+        </listitem>
+      </itemizedlist>
+      To assign static addresses to an interface the options
+      <option>ipv4.addresses</option> and <option>ipv6.addresses</option>
+      should be used instead.
+      The options <option>ip4</option> and <option>ip6</option> have been
+      renamed to <option>ipv4.addresses</option> <option>ipv6.addresses</option>
+      respectively.
+      The new options <option>ipv4.routes</option> and <option>ipv6.routes</option>
+      have been added to set up static routing.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The option <option>services.xserver.desktopManager.default</option> is now
+      <literal>none</literal> by default. An assertion failure is thrown if WM's
+      and DM's default are <literal>none</literal>.
+      To explicitly run a plain X session without and DM or WM, the newly
+      introduced option <option>services.xserver.plainX</option> must be set to true.
     </para>
   </listitem>
   <listitem>

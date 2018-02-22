@@ -9,8 +9,27 @@ let
 
   availableComponents = pkgs.home-assistant.availableComponents;
 
+  # Given component "parentConfig.platform", returns whether config.parentConfig
+  # is a list containing a set with set.platform == "platform".
+  #
+  # For example, the component sensor.luftdaten is used as follows:
+  # config.sensor = [ {
+  #   platform = "luftdaten";
+  #   ...
+  # } ];
+  useComponentPlatform = component:
+    let
+      path = splitString "." component;
+      parentConfig = attrByPath (init path) null cfg.config;
+      platform = last path;
+    in isList parentConfig && any
+      (item: item.platform or null == platform)
+      parentConfig;
+
   # Returns whether component is used in config
-  useComponent = component: hasAttrByPath (splitString "." component) cfg.config;
+  useComponent = component:
+    hasAttrByPath (splitString "." component) cfg.config
+    || useComponentPlatform component;
 
   # List of components used in config
   extraComponents = filter useComponent availableComponents;

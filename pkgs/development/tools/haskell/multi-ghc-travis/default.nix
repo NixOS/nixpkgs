@@ -6,10 +6,10 @@ mkDerivation {
   pname = "make-travis-yml";
   version = "0";
   src = fetchFromGitHub {
-    owner = "hvr";
-    repo = "multi-ghc-travis";
-    rev = "0d1b4089f6829659149747c9551712d24fd0b124";
-    sha256 = "00dbg8hbncv74c2baskyhg4h0yv8wrz0fnkvw2bzcn0cjrz7xqwr";
+    owner = "haskell-CI";
+    repo = "haskell-ci";
+    rev = "36b2ee58b9fd160d606608832625b2b6c32aec43";
+    sha256 = "16g99jh5bszvfvb7mmyhl95mkf1l3ydyax8d9py91hi3m8r0c2x0";
   };
   isLibrary = true;
   isExecutable = true;
@@ -22,7 +22,7 @@ mkDerivation {
     base bytestring Diff directory filepath tasty tasty-golden
     transformers
   ];
-  homepage = "https://github.com/hvr/multi-ghc-travis";
+  homepage = "https://github.com/haskell-CI/haskell-ci";
   description = "Script generator for Travis-CI";
   license = stdenv.lib.licenses.bsd3;
 }

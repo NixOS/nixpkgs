@@ -6,6 +6,7 @@ let
     };
   };
 in rec {
+  # linux-bundle
   stable = mkStudio {
     pname = "android-studio";
     version = "3.0.1.0"; # "Android Studio 3.0.1"
@@ -25,11 +26,12 @@ in rec {
     };
   };
 
+  # linux-beta-bundle
   preview = mkStudio {
     pname = "android-studio-preview";
-    version = "3.1.0.9"; # "Android Studio 3.1 Beta 1"
-    build = "173.4567466";
-    sha256Hash = "01c6a46pk5zbhwk2w038nm68fkx86nafiw1v2i5rdr93mxvx9cag";
+    version = "3.1.0.11"; # "Android Studio 3.1 Beta 3"
+    build = "173.4595152";
+    sha256Hash = "0106ggrf4mkxx3a2dn02km8rdq23sf15ifysykcay29skgdmq6wx";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";

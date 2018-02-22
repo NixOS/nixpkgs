@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dfile.patch ];
 
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  '';
+
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";

@@ -1,29 +1,33 @@
 { stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
-, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
+, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
 , mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
 , libmatroska, bcunit, doxygen, gdk_pixbuf, glib, cairo, pango, polarssl
+, python, graphviz, belcard
 }:
 
 stdenv.mkDerivation rec {
   baseName = "linphone";
-  version = "3.10.2";
+  version = "3.12.0";
   name = "${baseName}-${version}";
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
     repo = "${baseName}";
     rev = "${version}";
-    sha256 = "053gad4amdbq5za8f2n9j5q59nkky0w098zbsa3dvpcqvv7ar16p";
+    sha256 = "0az2ywrpx11sqfb4s4r2v726avcjf4k15bvrqj7xvhz7hdndmh0j";
   };
 
   buildInputs = [
     readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
     polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
-    bctoolbox libmatroska bcunit gdk_pixbuf glib cairo pango
+    bctoolbox libmatroska bcunit gdk_pixbuf glib cairo pango bzrtp belcard
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig makeWrapper cmake doxygen ];
+  nativeBuildInputs = [
+    intltool pkgconfig makeWrapper cmake doxygen graphviz
+    (python.withPackages (ps: [ ps.pystache ps.six ]))
+  ];
 
   NIX_CFLAGS_COMPILE = " -Wno-error -I${glib.dev}/include/glib-2.0
     -I${glib.out}/lib/glib-2.0/include -I${gtk2.dev}/include/gtk-2.0/

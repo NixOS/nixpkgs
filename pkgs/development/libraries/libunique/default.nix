@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     ./1.1.6-fix-test.patch
     ./1.1.6-G_CONST_RETURN.patch
     ./1.1.6-include-terminator.patch
-  ];
+  ]
+    ++ [ ./gcc7-bug.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib gtk2 dbus_glib ];
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://live.gnome.org/LibUnique;
+    homepage = https://wiki.gnome.org/Attic/LibUnique;
     description = "A library for writing single instance applications";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;

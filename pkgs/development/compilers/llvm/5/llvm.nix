@@ -36,7 +36,7 @@ in stdenv.mkDerivation (rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  outputs = [ "out" ]
+  outputs = [ "out" "python" ]
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python ]
@@ -74,6 +74,11 @@ in stdenv.mkDerivation (rec {
     patch -p1 -i ${./compiler-rt-codesign.patch} -d projects/compiler-rt
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -i ${../TLI-musl.patch}
+    substituteInPlace unittests/Support/CMakeLists.txt \
+      --replace "add_subdirectory(DynamicLibrary)" ""
+    rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -104,6 +109,14 @@ in stdenv.mkDerivation (rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ]
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
   ];
 
   postBuild = ''
@@ -120,7 +133,11 @@ in stdenv.mkDerivation (rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
-  postInstall = stdenv.lib.optionalString enableSharedLibraries ''
+  postInstall = ''
+    mkdir -p $python/share
+    mv $out/share/opt-viewer $python/share/opt-viewer
+  ''
+  + stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \

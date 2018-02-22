@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   libsForQt5, lib, fetchurl,
-  gconf,
+  gconf, gsettings_desktop_schemas,
   debug ? false,
 }:
 
@@ -105,7 +105,7 @@ let
       breeze-plymouth = callPackage ./breeze-plymouth {};
       kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
       kde-cli-tools = callPackage ./kde-cli-tools.nix {};
-      kde-gtk-config = callPackage ./kde-gtk-config {};
+      kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings_desktop_schemas; };
       kdecoration = callPackage ./kdecoration.nix {};
       kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
       kgamma5 = callPackage ./kgamma5.nix {};
@@ -135,6 +135,7 @@ let
       powerdevil = callPackage ./powerdevil.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
+      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
     };
 in
 lib.makeScope libsForQt5.newScope packages

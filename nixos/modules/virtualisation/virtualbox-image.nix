@@ -22,7 +22,7 @@ in {
 
   config = {
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
-      name = "nixos-ova-${config.system.nixosLabel}-${pkgs.stdenv.system}";
+      name = "nixos-ova-${config.system.nixos.label}-${pkgs.stdenv.system}";
 
       inherit pkgs lib config;
       partitionTableType = "legacy";
@@ -37,7 +37,7 @@ in {
           VBoxManage internalcommands createrawvmdk -filename disk.vmdk -rawdisk $diskImage
 
           echo "creating VirtualBox VM..."
-          vmName="NixOS ${config.system.nixosLabel} (${pkgs.stdenv.system})"
+          vmName="NixOS ${config.system.nixos.label} (${pkgs.stdenv.system})"
           VBoxManage createvm --name "$vmName" --register \
             --ostype ${if pkgs.stdenv.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
           VBoxManage modifyvm "$vmName" \
@@ -53,7 +53,7 @@ in {
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
-          fn="$out/nixos-${config.system.nixosLabel}-${pkgs.stdenv.system}.ova"
+          fn="$out/nixos-${config.system.nixos.label}-${pkgs.stdenv.system}.ova"
           VBoxManage export "$vmName" --output "$fn"
 
           rm -v $diskImage

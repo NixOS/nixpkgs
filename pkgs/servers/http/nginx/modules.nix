@@ -152,8 +152,8 @@
       moduleSrc = fetchFromGitHub {
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
-        rev    = "v${version}-beta";
-        sha256 = "176skx7zmi7islc1hmdxcynix4lkvgmr78lknn13s9gskc7qi25w";
+        rev    = "v${version}-stable";
+        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
 
       ngx_pagespeed = pkgs.runCommand

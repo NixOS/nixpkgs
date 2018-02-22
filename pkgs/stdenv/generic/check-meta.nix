@@ -96,8 +96,7 @@ let
     ''
 
       Known issues:
-
-    '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
         You can install it anyway by whitelisting this package, using the
         following methods:
@@ -160,7 +159,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    evaluates = bool;
+    available = bool;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
