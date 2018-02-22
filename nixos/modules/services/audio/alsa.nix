@@ -77,9 +77,11 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkMerge [
+    ({
       sound.enable = mkDefault (!versionAtLeast config.system.stateVersion "18.03");
-    } // mkIf config.sound.enable {
+    })
+    (mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
@@ -125,6 +127,6 @@ in
       ];
     };
 
-  };
+  })];
 
 }
