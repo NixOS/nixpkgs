@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  postPatch = ''
+  postConfigure = ''
     find . -name Makefile.in -exec sed -i -r 's#^pkgdatadir\s*=.+$#pkgdatadir = ${dataDir}#' {} \;
   '';
 
