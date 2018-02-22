@@ -21,7 +21,8 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = config.services.xserver.enable;
+        defaultText = "config.services.xserver.enable";
         description = ''
           Whether to enable ALSA sound.
         '';
