@@ -210,6 +210,9 @@ following incompatible changes:</para>
     </para>
     <itemizedlist>
       <listitem>
+         <literal>sound.enable</literal> now defaults to false.
+      </listitem>
+      <listitem>
         <para>
           <literal>matrix-synapse</literal> uses postgresql by default instead of sqlite.
           Migration instructions can be found <link xlink:href="https://github.com/matrix-org/synapse/blob/master/docs/postgres.rst#porting-from-sqlite"> here </link>.
