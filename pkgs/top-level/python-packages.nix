@@ -10476,24 +10476,6 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
-  mysql_connector_repackaged = buildPythonPackage rec {
-    name = "mysql-connector-repackaged-0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mysql-connector-repackaged/${name}.tar.gz";
-      sha256 = "170fbf11c54def1b5fcc919be0a890b760bb2eca81f56123a5dda0c69b5b099e";
-    };
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.linux;
-    };
-  };
-
-
   namebench = buildPythonPackage (rec {
     name = "namebench-1.3.1";
     disabled = isPy3k || isPyPy;
