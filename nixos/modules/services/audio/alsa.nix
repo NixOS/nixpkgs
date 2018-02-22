@@ -21,7 +21,8 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = !versionAtLeast config.system.stateVersion "18.03";
+        defaultText = "!versionAtLeast system.stateVersion \"18.03\"";
         description = ''
           Whether to enable ALSA sound.
         '';
