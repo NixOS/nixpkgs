@@ -8,8 +8,10 @@ let
 
   nodejs = nodejs-8_x;
 
-  yarn2nix = (import (fetchTarball {
-    url = https://github.com/moretea/yarn2nix/archive/d6e05a521bd92b2647bb7e853363d234f21b2cfd.tar.gz;
+  yarn2nix = (import (fetchFromGitHub {
+    owner = "moretea";
+    repo = "yarn2nix";
+    rev = "d6e05a521bd92b2647bb7e853363d234f21b2cfd";
     sha256 = "1nvpii9p41vrb6zvr8rqcvmycrl6lnzzaif85qj1aavizncgb4wy";
   }) {
     inherit nodejs;
