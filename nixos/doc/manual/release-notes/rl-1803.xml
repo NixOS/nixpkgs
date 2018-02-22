@@ -210,7 +210,9 @@ following incompatible changes:</para>
     </para>
     <itemizedlist>
       <listitem>
-         <literal>sound.enable</literal> now defaults to false.
+        <para>
+          <literal>sound.enable</literal> now defaults to false.
+        </para>
       </listitem>
       <listitem>
         <para>
