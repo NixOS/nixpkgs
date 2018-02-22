@@ -4027,6 +4027,8 @@ with pkgs;
     nix = nixUnstable;
   };
 
+  packagekit-qt = libsForQt5.callPackage ../tools/package-management/packagekit/qt.nix { };
+
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
   padthv1 = callPackage ../applications/audio/padthv1 { };
