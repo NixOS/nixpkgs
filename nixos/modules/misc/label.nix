@@ -65,8 +65,8 @@ in
     # This is set here rather than up there so that changing it would
     # not rebuild the manual
     system.nixos.label = mkDefault (maybeEnv "NIXOS_LABEL"
-                                             (concatStringsSep "-" (sort (x: y: x < y) cfg.tags)
-                                             + "-" + maybeEnv "NIXOS_LABEL_VERSION" cfg.version));
+                                             (concatStringsSep "-" ((sort (x: y: x < y) cfg.tags)
+                                              ++ [ (maybeEnv "NIXOS_LABEL_VERSION" cfg.version) ])));
   };
 
 }
