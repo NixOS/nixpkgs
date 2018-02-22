@@ -7159,6 +7159,8 @@ with pkgs;
 
   red = callPackage ../development/interpreters/red { };
 
+  regextester = callPackage ../applications/misc/regextester { };
+
   regina = callPackage ../development/interpreters/regina { };
 
   inherit (ocamlPackages) reason;
