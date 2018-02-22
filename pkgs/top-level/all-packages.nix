@@ -5755,7 +5755,7 @@ with pkgs;
   compcert = callPackage ../development/compilers/compcert { };
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
-  
+
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
@@ -8184,6 +8184,8 @@ with pkgs;
   appstream = callPackage ../development/libraries/appstream { };
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
+
+  appstream-qt = libsForQt5.callPackage ../development/libraries/appstream/qt.nix { };
 
   apr = callPackage ../development/libraries/apr { };
 
