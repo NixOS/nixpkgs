@@ -9117,6 +9117,7 @@ with pkgs;
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
 
   granite = callPackage ../development/libraries/granite { };
+  elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
