@@ -182,6 +182,6 @@ stdenv.mkDerivation rec {
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan orivej wkennington velovix ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }
