@@ -4098,6 +4098,8 @@ with pkgs;
 
   patchutils = callPackage ../tools/text/patchutils { };
 
+  patchwork = callPackage ../applications/networking/instant-messengers/patchwork { };
+
   parted = callPackage ../tools/misc/parted { hurd = null; };
 
   pell = callPackage ../applications/misc/pell { };
