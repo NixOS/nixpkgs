@@ -87,7 +87,7 @@ in {
     hardware.pulseaudio = {
       enable = mkOption {
         type = types.bool;
-        default = false;
+        defaultText = "config.sound.enable";
         description = ''
           Whether to enable the PulseAudio sound server.
         '';
@@ -207,6 +207,8 @@ in {
         target = "pulse/client.conf";
         source = clientConf;
       };
+
+      hardware.pulseaudio.enable = mkDefault config.sound.enable;
 
       hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
     }
