@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.9.4";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "15d9lfiy1cjfz6nqnig5884ykqckx58cynd1bva1xna7bwcwwp2r";
+    sha256 = "1dzs1mz3zxgg1qyi2lrlxdz1lsvazxvmj9cb69pgqnwjlh3jpw0l";
   };
 
   # perl is used for testing go vet
@@ -111,18 +111,16 @@ stdenv.mkDerivation rec {
     sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
-
-    sed -i '1 a\exit 0' misc/cgo/errors/test.bash
   '';
 
-  patches =
-    [ ./remove-tools-1.9.patch
-      ./ssl-cert-file-1.9.patch
-      ./creds-test-1.9.patch
-      ./remove-test-pie-1.9.patch
-      ./go-1.9-skip-flaky-19608.patch
-      ./go-1.9-skip-flaky-20072.patch
-    ];
+  patches = [
+    ./remove-tools-1.9.patch
+    ./ssl-cert-file-1.9.patch
+    ./remove-test-pie.patch
+    ./creds-test.patch
+    ./go-1.9-skip-flaky-19608.patch
+    ./go-1.9-skip-flaky-20072.patch
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
@@ -181,7 +179,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej wkennington ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
