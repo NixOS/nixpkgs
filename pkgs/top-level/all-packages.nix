@@ -12423,7 +12423,21 @@ with pkgs;
     libpulseaudio = libpulseaudio-vanilla; # meta only
   };
 
-  libpulseaudio = libpulseaudio-vanilla;
+  # See `longDescription` of `libcardiacarrest`. We use
+  # `libcardiacarrest` as our default `libpulse` implementation, NixOS
+  # then overrides it at run-time with `libpulseaudio-vanilla` via
+  # `LD_LIBRARY_PATH` when the user enables the daemon service.
+  #
+  # This way
+  # - users that don't run PulseAudio daemon benefit from smaller
+  #   closure sizes,
+  # - users that don't run PulseAudio daemon and don't want to even
+  #   link against `libpulseaudio-vanilla` for ethical, religious,
+  #   and/or security reasons don't need to make any overrides and
+  #   benefit from hydra cache,
+  # - while users that do run PulseAudio daemon don't really notice
+  #   anything.
+  libpulseaudio = libcardiacarrest;
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 

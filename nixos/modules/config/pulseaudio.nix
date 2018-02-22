@@ -228,6 +228,9 @@ in {
           source = writeText "libao.conf" "default_driver=pulse"; }
       ];
 
+      environment.sessionVariables.LD_LIBRARY_PATH =
+        [ "${getLib overriddenPackage}/lib" ];
+
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
