@@ -67,11 +67,11 @@ let
 in with localPython.pkgs; buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "awsebcli";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19sgx43fyq35rqp0q8zbqavgg0k0n46iy1fqsxvw9lf0g0v62pjh";
+    sha256 = "0jj6xhvsrgvc5pm05zbd95zvx36ssywq70j6q1kzcdv1flfzzyp9";
   };
 
   checkInputs = [
