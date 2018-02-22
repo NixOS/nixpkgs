@@ -21807,6 +21807,8 @@ EOF
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   us = callPackage ../development/python-modules/us { };
+
+  sabyenc = callPackage ../development/python-modules/sabyenc { };
 });
 
 in fix' (extends overrides packages)
