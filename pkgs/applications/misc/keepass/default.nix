@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, gtk2, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
 
 # KeePass looks for plugins in under directory in which KeePass.exe is
 # located. It follows symlinks where looking for that directory, so
@@ -18,6 +19,15 @@ with builtins; buildDotnetPackage rec {
   sourceRoot = ".";
 
   buildInputs = [ unzip makeWrapper icoutils ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xorg.xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+    })
+  ];
 
   preConfigure = ''
     rm -rvf Build/*
