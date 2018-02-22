@@ -4690,6 +4690,8 @@ with pkgs;
 
   sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
+  sit = callPackage ../applications/version-management/sit { };
+
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   sks = callPackage ../servers/sks { inherit (ocamlPackages_4_02) ocaml camlp4; };
