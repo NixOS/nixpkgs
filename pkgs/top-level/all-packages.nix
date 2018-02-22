@@ -423,7 +423,7 @@ with pkgs;
     automationSupport = config.aegisub.automationSupport or true;
     openalSupport     = config.aegisub.openalSupport or false;
     alsaSupport       = config.aegisub.alsaSupport or true;
-    pulseaudioSupport = config.aegisub.pulseaudioSupport or true;
+    pulseaudioSupport = config.aegisub.pulseaudioSupport or false;
     portaudioSupport  = config.aegisub.portaudioSupport or false;
   };
 
@@ -1447,7 +1447,7 @@ with pkgs;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
-    withPulseAudio = config.pulseaudio or true;
+    withPulseAudio = config.pulseaudio or false;
   };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
@@ -8629,7 +8629,7 @@ with pkgs;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
     libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
-    libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
+    libpulseaudio = if config.pulseaudio or false then libpulseaudio else null;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
@@ -9371,7 +9371,7 @@ with pkgs;
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
 
   libao = callPackage ../development/libraries/libao {
-    usePulseAudio = config.pulseaudio or stdenv.isLinux;
+    usePulseAudio = config.pulseaudio or false;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
@@ -10681,7 +10681,7 @@ with pkgs;
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib {
-    pulseaudioSupport = config.pulseaudio or true;
+    pulseaudioSupport = config.pulseaudio or false;
   };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
@@ -11141,7 +11141,7 @@ with pkgs;
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or false;
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
   };
 
@@ -11167,7 +11167,7 @@ with pkgs;
     x11Support = !stdenv.isCygwin;
     waylandSupport = stdenv.isLinux;
     udevSupport = stdenv.isLinux;
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or false;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
@@ -14648,7 +14648,7 @@ with pkgs;
 
   bomi = libsForQt5.callPackage ../applications/video/bomi {
     youtube-dl = pythonPackages.youtube-dl;
-    pulseSupport = config.pulseaudio or true;
+    pulseSupport = config.pulseaudio or false;
     ffmpeg = ffmpeg_2;
   };
 
@@ -14861,7 +14861,7 @@ with pkgs;
   ddgr = callPackage ../applications/misc/ddgr { };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
-    pulseSupport = config.pulseaudio or true;
+    pulseSupport = config.pulseaudio or false;
   };
 
   deadbeef-mpris2-plugin = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
@@ -15782,7 +15782,7 @@ with pkgs;
   gv = callPackage ../applications/misc/gv { };
 
   guvcview = callPackage ../os-specific/linux/guvcview {
-    pulseaudioSupport = config.pulseaudio or true;
+    pulseaudioSupport = config.pulseaudio or false;
     ffmpeg = ffmpeg_2;
   };
 
@@ -16733,7 +16733,7 @@ with pkgs;
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
-    pulseaudioSupport = config.pulseaudio or true;
+    pulseaudioSupport = config.pulseaudio or false;
   };
 
   octoprint = callPackage ../applications/misc/octoprint { };
@@ -17851,7 +17851,7 @@ with pkgs;
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
     enableExtensionPack = config.virtualbox.enableExtensionPack or false;
-    pulseSupport = config.pulseaudio or true;
+    pulseSupport = config.pulseaudio or false;
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
@@ -20514,7 +20514,7 @@ with pkgs;
       cairoSupport = true;
       cursesSupport = true;
       saneSupport = true;
-      pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+      pulseaudioSupport = config.pulseaudio or false;
       udevSupport = true;
       xineramaSupport = true;
       xmlSupport = true;

@@ -232,6 +232,8 @@ in {
       security.rtkit.enable = true;
 
       systemd.packages = [ overriddenPackage ];
+
+      nixpkgs.config.pulseaudio = true;
     })
 
     (mkIf hasZeroconf {

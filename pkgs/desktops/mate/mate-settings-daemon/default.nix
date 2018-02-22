@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, dbus_glib, libxklavier, libcanberra_gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
-, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
+, pulseaudioSupport ? stdenv.config.pulseaudio or false, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
