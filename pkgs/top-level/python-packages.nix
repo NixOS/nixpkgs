@@ -4904,9 +4904,18 @@ in {
       rev = "v${version}";
       sha256 = "1768n3w40qg1njkzqjyl5gkva0h31k8h250821v69imj1zimymag";
     };
+
+    patches = [
+      # Render "front matter", used in our RFC template and elsewhere
+      (pkgs.fetchpatch {
+        url = https://github.com/joeyespo/grip/pull/249.patch;
+        sha256 = "07za5iymfv647dfrvi6hhj54a96hgjyarys51zbi08c51shqyzpg";
+      })
+    ];
+
     buildInputs = with self; [ pytest responses ];
 
-    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests ];
+    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests tabulate ];
 
     checkPhase = ''
       export PATH="$PATH:$out/bin"
