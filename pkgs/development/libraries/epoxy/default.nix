@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python
-, mesa, libX11
+, mesa_noglu, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +16,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
-  buildInputs = [ mesa libX11 ];
+  buildInputs = [ mesa_noglu libX11 ];
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     substituteInPlace configure --replace build_glx=no build_glx=yes
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
+  '';
+
+  # add mesa_nonglu to rpath because libepoxy dlopen()s libEGL
+  postFixup = ''
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ mesa_noglu ]}:$(patchelf --print-rpath $out/lib/libepoxy.so.0.0.0)" $out/lib/libepoxy.so.0.0.0
   '';
 
   meta = with stdenv.lib; {
