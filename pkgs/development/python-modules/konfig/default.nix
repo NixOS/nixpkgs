@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, writeText, configparser, six, pytest, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, writeText, configparser, six }:
 
 buildPythonPackage rec {
   pname = "konfig";
@@ -8,12 +8,9 @@ buildPythonPackage rec {
   # the standard library in python 3.2 or above.
   disabled = isPy3k;
 
-  # PyPI tarball is missing utf8.ini, required for tests
-  src = fetchFromGitHub {
-    owner = "mozilla-services";
-    repo = pname;
-    rev = version;
-    sha256 = "1h780fbrv275dcik4cs3rincza805z6q726b48r4a0qmh5d8160c";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "7aa4c6463d6c13f4c98c02a998cbef4729da9ad69b676627acc8d3b3efb02b57";
   };
 
   propagatedBuildInputs = [ configparser six ];
@@ -33,12 +30,6 @@ buildPythonPackage rec {
            zip_safe=False,
            classifiers=classifiers,
   '') ];
-
-  checkInputs = [ pytest glibcLocales ];
-
-  checkPhase = ''
-    LC_ALL=en_US.utf8 pytest -v konfig/tests
-  '';
 
   meta = with lib; {
     description = "Yet Another Config Parser";
