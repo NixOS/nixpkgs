@@ -58,6 +58,8 @@ in stdenv.mkDerivation rec {
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=noexcept-type" ];
+
   meta = {
     description = "A C++ interface for Amazon Web Services";
     homepage = https://github.com/awslabs/aws-sdk-cpp;

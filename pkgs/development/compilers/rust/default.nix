@@ -14,7 +14,7 @@ let
   };
 in rec {
   rustc = callPackage ./rustc.nix {
-    inherit llvm targets targetPatches targetToolchains rustPlatform version src;
+    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
 
     forceBundledLLVM = true;
 
@@ -31,6 +31,7 @@ in rec {
   cargo = callPackage ./cargo.nix rec {
     version = cargoVersion;
     inherit src;
+    inherit stdenv;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

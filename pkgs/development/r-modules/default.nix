@@ -42,16 +42,17 @@ let
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, rVersion}: "https://bioconductor.org/packages/${rVersion}/bioc/html/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/bioc/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
+                                             "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
-    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
+    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
@@ -230,6 +231,7 @@ let
   packagesWithNativeBuildInputs = {
     abn = [ pkgs.gsl_1 ];
     adimpro = [ pkgs.imagemagick ];
+    animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
@@ -313,7 +315,7 @@ let
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
-    Rhtslib = [ pkgs.zlib.dev ];
+    Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
     RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
     rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
@@ -350,7 +352,6 @@ let
     simplexreg = [ pkgs.gsl_1 ];
     SOD = [ pkgs.opencl-headers ];
     spate = [ pkgs.fftw.dev ];
-    sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
     stringi = [ pkgs.icu.dev ];
@@ -384,7 +385,6 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib.dev ];
-    gputools = [ pkgs.pcre.dev pkgs.lzma.dev pkgs.zlib.dev pkgs.bzip2.dev pkgs.icu.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -398,7 +398,6 @@ let
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
-    gmatrix = [ pkgs.cudatoolkit pkgs.which ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
@@ -427,12 +426,10 @@ let
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
-    qtutils = [ pkgs.qt4 ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
     gridGraphics = [ pkgs.which ];
-    gputools = [ pkgs.which pkgs.cudatoolkit ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
     PET = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     dti = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
@@ -498,7 +495,6 @@ let
     "EnQuireR"
     "eVenn"
     "exactLoglinTest"
-    "FAiR"
     "fat2Lpoly"
     "fbati"
     "FD"
@@ -519,7 +515,6 @@ let
     "geoR"
     "geoRglm"
     "georob"
-    "GeoXp"
     "GGEBiplotGUI"
     "gnm"
     "GPCSIV"
@@ -535,7 +530,6 @@ let
     "HH"
     "HiveR"
     "HomoPolymer"
-    "iBUGS"
     "ic50"
     "iDynoR"
     "in2extRemes"
@@ -591,10 +585,8 @@ let
     "prefmod"
     "PrevMap"
     "ProbForecastGOP"
-    "QCAGUI"
     "qtbase"
     "qtpaint"
-    "qtutils"
     "R2STATS"
     "r4ss"
     "RandomFields"
@@ -700,16 +692,11 @@ let
 
   packagesToSkipCheck = [
     "Rmpi"     # tries to run MPI processes
-    "gmatrix"  # requires CUDA runtime
-    "gputools" # requires CUDA runtime
-    "sprint"   # tries to run MPI processes
     "pbdMPI"   # tries to run MPI processes
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
-    "gputools"                        # depends on non-free cudatoolkit-8.0.61
-    "gmatrix"                         # depends on non-free cudatoolkit-8.0.61
   ];
 
   otherOverrides = old: new: {
@@ -838,15 +825,6 @@ let
 
     spMC = old.spMC.overrideDerivation (attrs: {
       patches = [ ./patches/spMC.patch ];
-    });
-
-    BayesLogit = old.BayesLogit.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesLogit.patch ];
-      buildInputs = (attrs.buildInputs or []) ++ [ pkgs.openblasCompat ];
-    });
-
-    BayesBridge = old.BayesBridge.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesBridge.patch ];
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
