@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
   '';
-  configureFlags = [ "--disable-appliance" "--disable-daemon" ]
+  configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
     ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
