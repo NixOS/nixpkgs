@@ -16,6 +16,8 @@ let
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
+    nix = nativePlatforms;
+    nixUnstable = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
