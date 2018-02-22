@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     inherit llvmPackages;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc";
+    haskellCompilerName = "ghc-8.5";
   };
 
   meta = {

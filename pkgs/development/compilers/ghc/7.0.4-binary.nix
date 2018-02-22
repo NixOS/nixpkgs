@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc";
+    haskellCompilerName = "ghc-7.0.4";
   };
 
   meta.license = stdenv.lib.licenses.bsd3;
