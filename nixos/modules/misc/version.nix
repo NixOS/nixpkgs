@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -75,6 +75,9 @@ in
   };
 
   config = {
+
+    warnings = lib.optional (options.system.nixos.stateVersion.highestPrio > 1000)
+      "You don't have `system.nixos.stateVersion` explicitly set. Expect things to break.";
 
     system.nixos = {
       # These defaults are set here rather than up there so that
