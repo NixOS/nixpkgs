@@ -3265,9 +3265,6 @@ with pkgs;
 
   nodejs-slim = nodejs-slim-6_x;
 
-  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {};
-  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix { enableNpm = false; };
-
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {};
   nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix { enableNpm = false; };
 
@@ -3283,10 +3280,6 @@ with pkgs;
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
-  };
-
-  nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix {
-    nodejs = pkgs.nodejs-4_x;
   };
 
   nodePackages = nodePackages_6_x;
