@@ -1047,7 +1047,7 @@ with pkgs;
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
-  dbus-broker = callPackage ../os-specific/linux/dbus-broker {};
+  dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
   ioport = callPackage ../os-specific/linux/ioport {};
 
@@ -5755,7 +5755,7 @@ with pkgs;
   compcert = callPackage ../development/compilers/compcert { };
 
   cpp-gsl = callPackage ../development/libraries/cpp-gsl { };
-  
+
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
   cryptol = haskellPackages.cryptol.overrideDerivation (oldAttrs: {
