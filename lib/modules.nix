@@ -310,6 +310,7 @@ rec {
 
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+        inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         inherit (res) isDefined;
@@ -317,7 +318,7 @@ rec {
 
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
-    defsFinal =
+    defsFinal' =
       let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (m:
@@ -325,15 +326,20 @@ rec {
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides defs';
+        defs'' = filterOverrides' defs';
 
         # Sort mkOrder properties.
         defs''' =
           # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''
-          then sortProperties defs''
-          else defs'';
-      in defs''';
+          if any (def: def.value._type or "" == "order") defs''.values
+          then sortProperties defs''.values
+          else defs''.values;
+      in {
+        values = defs''';
+        inherit (defs'') highestPrio;
+      };
+
+    defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them.
     mergedValue = foldl' (res: def:
@@ -416,13 +422,18 @@ rec {
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides = defs:
+  filterOverrides = defs: (filterOverrides' defs).values;
+
+  filterOverrides' = defs:
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
-    in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
+    in {
+      values = concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
+      inherit highestPrio;
+    };
 
   /* Sort a list of properties.  The sort priority of a property is
      1000 by default, but can be overridden by wrapping the property
