@@ -124,7 +124,7 @@ in
 
       listenAddresses = mkOption {
         type = types.listOf types.str;
-        default = [ "localhost:631" ];
+        default = [ "127.0.0.1:631" ];
         example = [ "*:631" ];
         description = ''
           A list of addresses and ports on which to listen.
@@ -321,10 +321,7 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled
