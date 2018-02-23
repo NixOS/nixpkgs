@@ -82,6 +82,11 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>sound.enable</literal> now defaults to false.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       Dollar signs in options under <option>services.postfix</option> are
       passed verbatim to Postfix, which will interpret them as the beginning of
       a parameter expression. This was already true for string-valued options
@@ -209,11 +214,6 @@ following incompatible changes:</para>
       For <literal>stateVersion = "17.09"</literal> or lower the old behavior is preserved.
     </para>
     <itemizedlist>
-      <listitem>
-        <para>
-          <literal>sound.enable</literal> now defaults to false.
-        </para>
-      </listitem>
       <listitem>
         <para>
           <literal>matrix-synapse</literal> uses postgresql by default instead of sqlite.
