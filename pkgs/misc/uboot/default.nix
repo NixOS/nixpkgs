@@ -1,16 +1,8 @@
 { stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2, swig
-, armTrustedFirmwareAllwinner
 , hostPlatform, buildPackages
 }:
 
 let
-  # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
-  sunxiPatch = fetchpatch {
-    name = "sunxi.patch";
-    url = "https://github.com/u-boot/u-boot/compare/v2018.03...dezgeg:2018-03-sunxi.patch";
-    sha256 = "1pqn7c6c06hfygwpcgaraqvqxcjhz99j0rx5psfhj8igy0qvk2dq";
-  };
-
   buildUBoot = { filesToInstall
             , installDir ? "$out"
             , defconfig
@@ -81,8 +73,6 @@ let
     # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
     enableParallelBuilding = false;
 
-    dontStrip = true;
-
     meta = with stdenv.lib; {
       homepage = http://www.denx.de/wiki/U-Boot/;
       description = "Boot loader for embedded systems";
@@ -97,11 +87,12 @@ in rec {
   ubootTools = buildUBoot rec {
     defconfig = "allnoconfig";
     installDir = "$out/bin";
+    buildFlags = "tools NO_SDL=1";
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = stdenv.lib.platforms.linux;
     # build tools/kwboot
-    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" ];
     postConfigure = ''
       sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
     '';
@@ -174,14 +165,6 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
-  ubootPine64 = buildUBoot rec {
-    extraPatches = [sunxiPatch];
-    defconfig = "pine64_plus_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
   ubootQemuAarch64 = buildUBoot rec {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
@@ -215,12 +198,6 @@ in rec {
   ubootRaspberryPi3_64bit = buildUBoot rec {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
-    filesToInstall = ["u-boot.bin"];
-  };
-
-  ubootSheevaplug = buildUBoot rec {
-    defconfig = "sheevaplug_defconfig";
-    extraMeta.platforms = ["armv5tel-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
