@@ -642,7 +642,8 @@ fi
 
 substituteStream() {
     local var=$1
-    shift
+    local description=$2
+    shift 2
 
     while (( "$#" )); do
         case "$1" in
@@ -650,6 +651,14 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
+                local savedvar
+                savedvar="${!var}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
+                if [ "$pattern" != "$replacement" ]; then
+                    if [ "${!var}" == "$savedvar" ]; then
+                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                    fi
+                fi
                 ;;
 
             --subst-var)
@@ -662,11 +671,13 @@ substituteStream() {
                 fi
                 pattern="@$varName@"
                 replacement="${!varName}"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var-by)
                 pattern="@$2@"
                 replacement="$3"
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 shift 3
                 ;;
 
@@ -675,8 +686,6 @@ substituteStream() {
                 return 1
                 ;;
         esac
-
-        eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
     done
 
     printf "%s" "${!var}"
@@ -704,7 +713,7 @@ substitute() {
     consumeEntire content < "$input"
 
     if [ -e "$output" ]; then chmod +w "$output"; fi
-    substituteStream content "$@" > "$output"
+    substituteStream content "file '$input'" "$@" > "$output"
 }
 
 substituteInPlace() {
@@ -726,7 +735,7 @@ substituteAllStream() {
     local -a args=()
     _allFlags
 
-    substituteStream "$1" "${args[@]}"
+    substituteStream "$1" "$2" "${args[@]}"
 }
 
 # Substitute all environment variables that start with a lowercase character and
@@ -1137,7 +1146,7 @@ fixupPhase() {
         for hook in $setupHooks; do
             local content
             consumeEntire content < "$hook"
-            substituteAllStream content >> "${!outputDev}/nix-support/setup-hook"
+            substituteAllStream content "file '$hook'" >> "${!outputDev}/nix-support/setup-hook"
             unset -v content
         done
         unset -v hook
