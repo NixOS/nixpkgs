@@ -14862,9 +14862,7 @@ with pkgs;
 
   ddgr = callPackage ../applications/misc/ddgr { };
 
-  deadbeef = callPackage ../applications/audio/deadbeef {
-    pulseSupport = config.pulseaudio or true;
-  };
+  deadbeef = callPackage ../applications/audio/deadbeef { };
 
   deadbeef-mpris2-plugin = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
 
