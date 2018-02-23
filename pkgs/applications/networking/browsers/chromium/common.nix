@@ -28,7 +28,7 @@
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, libpulseaudio ? null
+, pulseaudioSupport ? false, libpulseaudio ? null
 
 , upstream-info
 }:
@@ -131,7 +131,7 @@ let
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseaudioSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
@@ -245,7 +245,7 @@ let
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs pulseSupport {
+    } // optionalAttrs pulseaudioSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
     } // (extraAttrs.gnFlags or {}));

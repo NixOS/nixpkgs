@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper, makeDesktopItem, ed
+{ config, newScope, stdenv, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings_desktop_schemas
 
 # package customization
@@ -11,7 +11,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , cupsSupport ? true
-, pulseSupport ? false
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
@@ -23,7 +23,7 @@ let
 
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableNaCl enableHotwording gnomeSupport gnome
-              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
+              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseaudioSupport
               enableWideVine;
     };
 

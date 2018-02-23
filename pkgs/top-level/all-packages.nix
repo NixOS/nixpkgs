@@ -14736,7 +14736,6 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
-    pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
     gnome = gnome2;
