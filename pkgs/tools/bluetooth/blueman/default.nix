@@ -1,7 +1,8 @@
-{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
+{ config, stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
 , hicolor_icon_theme, librsvg, wrapGAppsHook, gobjectIntrospection
-, withPulseAudio ? true, libpulseaudio }:
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+}:
 
 let
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
@@ -22,9 +23,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor_icon_theme ]
                 ++ pythonPath
-                ++ lib.optional withPulseAudio libpulseaudio;
+                ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  postPatch = lib.optionalString withPulseAudio ''
+  postPatch = lib.optionalString pulseaudioSupport ''
     sed -i 's,CDLL(",CDLL("${libpulseaudio.out}/lib/,g' blueman/main/PulseAudioUtils.py
   '';
 
@@ -32,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ obex_data_server ];
 
-  configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
+  configureFlags = [ (lib.enableFeature pulseaudioSupport "pulseaudio") ];
 
   postFixup = ''
     makeWrapperArgs="--prefix PATH ':' ${binPath}"
