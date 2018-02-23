@@ -1,7 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
-, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+{ config, lib, stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
+, fluidsynth ? null, lame ? null, libgig ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qttools, SDL ? null }:
+, qtbase, qttools, SDL ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, jackSupport ? stdenv.isLinux, libjack2 ? null
+}:
+
+with lib;
+
+assert pulseaudioSupport -> libpulseaudio != null;
+assert jackSupport -> libjack2 != null;
 
 stdenv.mkDerivation rec {
   name = "lmms-${version}";
@@ -23,8 +31,6 @@ stdenv.mkDerivation rec {
     fluidsynth
     lame
     libgig
-    libjack2
-    libpulseaudio
     libsamplerate
     libsndfile
     libsoundio
@@ -32,7 +38,9 @@ stdenv.mkDerivation rec {
     portaudio
     qtbase
     SDL # TODO: switch to SDL2 in the next version
-  ];
+  ]
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional jackSupport libjack2;
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
   enableParallelBuilding = true;
