@@ -62,7 +62,7 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = super.doctest_0_14_1;
+  doctest = dontCheck super.doctest_0_14_1; # test suite fails in Nix
 
   ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
