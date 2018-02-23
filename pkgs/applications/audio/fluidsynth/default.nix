@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, alsaLib, glib, libjack2, libsndfile, libpulseaudio
+{ config, stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, alsaLib, glib, libsndfile
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, jackSupport ? stdenv.isLinux, libjack2 ? null
 }:
+
+assert pulseaudioSupport -> libpulseaudio != null;
+assert jackSupport -> libjack2 != null;
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
@@ -17,7 +22,9 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [ glib libsndfile ]
-    ++ lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ]
+    ++ lib.optional  stdenv.isLinux alsaLib
+    ++ lib.optional  pulseaudioSupport libpulseaudio
+    ++ lib.optional  jackSupport libjack2
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = lib.optional stdenv.isDarwin "-Denable-framework=off";
