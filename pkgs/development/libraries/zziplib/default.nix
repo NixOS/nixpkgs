@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
+{ docbook_xml_dtd_412, fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
 
 stdenv.mkDerivation rec {
   name = "zziplib-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sed -i -e s,--export-dynamic,, configure
   '';
 
-  buildInputs = [ perl python2 zip xmlto zlib ];
+  buildInputs = [ docbook_xml_dtd_412 perl python2 zip xmlto zlib ];
 
   doCheck = true;
 
