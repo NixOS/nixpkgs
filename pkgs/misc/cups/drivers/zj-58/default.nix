@@ -12,21 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "1w2qkspm4qqg5h8n6gmakzhiww7gag64chvy9kf89xsl3wsyp6pi";
   };
 
-  buildInputs = [cups];
+  buildInputs = [ cups ];
 
   installPhase = ''
-    mkdir -p $out/lib/cups/filter
-    cp rastertozj $out/lib/cups/filter
-
-    mkdir -p $out/share/cups/model/zjiang
-    cp ZJ-58.ppd $out/share/cups/model/zjiang/
+    install -D rastertozj $out/lib/cups/filter/rastertozj
+    install -D ZJ-58.ppd $out/share/cups/model/zjiang/ZJ-58.ppd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "CUPS filter for thermal printer Zjiang ZJ-58";
     homepage = https://github.com/klirichek/zj-58;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
-    license = stdenv.lib.licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ makefu ];
+    license = licenses.bsd2;
   };
 }
