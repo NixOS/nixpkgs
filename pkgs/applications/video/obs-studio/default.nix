@@ -1,4 +1,5 @@
-{ stdenv
+{ config
+, stdenv
 , fetchFromGitHub
 , cmake
 , fdk_aac
@@ -19,11 +20,14 @@
 , pkgconfig
 , vlc
 
-, alsaSupport ? false
-, alsaLib
-, pulseaudioSupport ? false
-, libpulseaudio
+, alsaSupport ? stdenv.isLinux
+, alsaLib ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
 }:
+
+assert alsaSupport -> alsaLib != null;
+assert pulseaudioSupport -> libpulseaudio != null;
 
 let
   optional = stdenv.lib.optional;
