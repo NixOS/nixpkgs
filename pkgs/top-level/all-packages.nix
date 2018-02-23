@@ -3172,6 +3172,10 @@ with pkgs;
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  mdbook = callPackage ../tools/text/mdbook {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   memtester = callPackage ../tools/system/memtester { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
