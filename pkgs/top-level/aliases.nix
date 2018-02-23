@@ -49,6 +49,7 @@ mapAliases (rec {
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
+  deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # added 2018-02-23
   debian_devscripts = debian-devscripts; # added 2016-03-23
   digikam5 = digikam; # added 2017-02-18
   double_conversion = double-conversion; # 2017-11-22
