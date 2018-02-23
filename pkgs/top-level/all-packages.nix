@@ -3246,6 +3246,8 @@ with pkgs;
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
+
   nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
