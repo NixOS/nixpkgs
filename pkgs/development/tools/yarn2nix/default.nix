@@ -3,22 +3,32 @@
 let
   unlessNull = item: alt:
     if item == null then alt else item;
-in rec {
-  yarn2nixSource = fetchFromGitHub {
+
+  src = fetchFromGitHub {
     owner = "moretea";
     repo =  "yarn2nix";
-    rev = "d6e05a521bd92b2647bb7e853363d234f21b2cfd";
-    sha256 = "1nvpii9p41vrb6zvr8rqcvmycrl6lnzzaif85qj1aavizncgb4wy";
+    rev = "v1.0.0";
+    sha256 = "02bzr9j83i1064r1r34cn74z7ccb84qb5iaivwdplaykyyydl1k8";
   };
 
-  # Export yarn again to make it easier to find out which yarn was used.
-  inherit yarn;
-
   yarn2nix = mkYarnPackage {
+    inherit src;
+
     # yarn2nix is the only package that requires the yarnNix option.
     # All the other projects can auto-generate that file.
-    src = yarn2nixSource;
     yarnNix = ./yarn.nix;
+
+    passthru = {
+      inherit
+        defaultYarnFlags
+        linkNodeModulesHook
+        mkYarnModules
+        mkYarnNix
+        mkYarnPackage
+        # Export yarn again to make it easier to find out which yarn was used.
+        yarn
+        ;
+    };
   };
 
   # Generates the yarn.nix from the yarn.lock file
@@ -177,7 +187,7 @@ in rec {
         rm -rf $out/node_modules/${pname}/node_modules
 
         mkdir $out/bin
-        node ${"${yarn2nixSource}/nix/fixup_bin.js"} $out ${lib.concatStringsSep " " publishBinsFor_}
+        node ${"${src}/nix/fixup_bin.js"} $out ${lib.concatStringsSep " " publishBinsFor_}
 
         runHook postInstall
       '';
@@ -188,4 +198,5 @@ in rec {
 
       # TODO: populate meta automatically
     });
-}
+in
+  yarn2nix
