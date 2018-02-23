@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, texinfo, alsaLib, libpulseaudio, CoreAudio }:
+{ config, stdenv, fetchurl, texinfo, alsaLib, CoreAudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null }:
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
@@ -11,10 +12,12 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ]
-    ++ optionals stdenv.isLinux [ alsaLib libpulseaudio ]
+    ++ optional stdenv.isLinux alsaLib
+    ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin CoreAudio;
+
   propagatedBuildInputs =
-    optional stdenv.isLinux libpulseaudio;
+    optional pulseaudioSupport libpulseaudio;
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
 
