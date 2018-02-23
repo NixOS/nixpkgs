@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, mate
 , alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
+, pulseaudioSupport ? stdenv.config.pulseaudio or stdenv.isLinux, libpulseaudio
 , ossSupport ? false
  }:
 
