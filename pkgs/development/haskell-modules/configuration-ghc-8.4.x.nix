@@ -62,13 +62,7 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = overrideCabal super.doctest_0_14_0 (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ##
-    ##        uncaught exception: IOException of type NoSuchThing (test/integration/testImport: changeWorkingDirectory: does not exist (No such file or directory))
-    doCheck         = false;
-  });
+  doctest = super.doctest_0_14_1;
 
   ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
@@ -481,11 +475,6 @@ self: super: {
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## https://github.com/haskell-hvr/deepseq-generics/pull/4
     jailbreak       = true;
-  });
-
-  doctest_0_14_0 = overrideCabal super.doctest_0_14_0 (drv: {
-    ##        uncaught exception: IOException of type NoSuchThing (test/integration/testImport: changeWorkingDirectory: does not exist (No such file or directory))
-    doCheck         = false;
   });
 
   exception-transformers = overrideCabal super.exception-transformers (drv: {
