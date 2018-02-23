@@ -4,6 +4,8 @@
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
+with lib;
+
 mkDerivation rec {
   name = "telegram-desktop-${version}";
   version = "1.2.6";
@@ -45,7 +47,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  GYP_DEFINES = lib.concatStringsSep "," [
+  GYP_DEFINES = concatStringsSep "," [
     "TDESKTOP_DISABLE_CRASH_REPORTS"
     "TDESKTOP_DISABLE_AUTOUPDATE"
     "TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
@@ -57,14 +59,14 @@ mkDerivation rec {
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
     "-I${minizip}/include/minizip"
     # See Telegram/gyp/qt.gypi
-    "-I${qtbase.dev}/mkspecs/linux-g++"
-  ] ++ lib.concatMap (x: [
-    "-I${qtbase.dev}/include/${x}"
-    "-I${qtbase.dev}/include/${x}/${qtbase.version}"
-    "-I${qtbase.dev}/include/${x}/${qtbase.version}/${x}"
-    "-I${libopus.dev}/include/opus"
-    "-I${alsaLib.dev}/include/alsa"
-    "-I${libpulseaudio.dev}/include/pulse"
+    "-I${getDev qtbase}/mkspecs/linux-g++"
+  ] ++ concatMap (x: [
+    "-I${getDev qtbase}/include/${x}"
+    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
+    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
+    "-I${getDev libopus}/include/opus"
+    "-I${getDev alsaLib}/include/alsa"
+    "-I${getDev libpulseaudio}/include/pulse"
   ]) [ "QtCore" "QtGui" "QtDBus" ];
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
@@ -121,7 +123,7 @@ mkDerivation rec {
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
