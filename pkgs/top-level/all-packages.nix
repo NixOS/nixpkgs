@@ -6206,10 +6206,6 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_8 = callPackage ../development/compilers/go/1.8.nix {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   go_1_9 = callPackage ../development/compilers/go/1.9.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
@@ -11857,10 +11853,6 @@ with pkgs;
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo18Package = callPackage ../development/go-modules/generic {
-    go = go_1_8;
-  };
-
   buildGo19Package = callPackage ../development/go-modules/generic {
     go = go_1_9;
   };
@@ -12786,10 +12778,7 @@ with pkgs;
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    # Go 1.9 build fails with "go1.8.* required (see CONTRIBUTING.md)".
-    buildGoPackage = buildGo18Package;
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
@@ -14694,7 +14683,10 @@ with pkgs;
     openjpeg = openjpeg_1;
   };
 
-  perkeep = callPackage ../applications/misc/perkeep { };
+  perkeep = callPackage ../applications/misc/perkeep {
+    # Perkeep is very particular about which go version to build with.
+    go = go_1_9;
+  };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
