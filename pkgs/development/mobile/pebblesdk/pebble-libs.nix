@@ -11,13 +11,13 @@ rec {
       sha256 = "16n69xxma7k8mhl8birdwa0fsqvf902g08s80mjb477s4dcxrvaz";
     };
 
-    # Tries and fails to pull in pytest-mock
+    # The libpebble distribution on pypi doesn't include tests.
     doCheck = false;
 
     propagatedBuildInputs = [ enum34 pyserial six websocket_client ];
 
     meta = with lib; {
-      homepage = "";
+      homepage = https://github.com/pebble/libpebble2;
       license = licenses.mit;
       description = "Library for communicating with pebbles over pebble protocol";
     };
@@ -48,7 +48,7 @@ rec {
       wsgiref
     ];
 
-    patchPhase = ''
+    prePatch = ''
       substituteInPlace requirements.txt --replace "==" ">="
     '';
 

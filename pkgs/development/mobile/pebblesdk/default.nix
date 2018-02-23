@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = https://developer.pebble.com/sdk;
     description = "SDK to build applications for the Pebble smartwatch";
 
-    license = https://developer.pebble.com/legal/sdk-license/;
+    license = licenses.unfree; # https://developer.pebble.com/legal/sdk-license/
 
     # It's supported on other platforms, but I can't easily test them.
     platforms = platforms.linux;

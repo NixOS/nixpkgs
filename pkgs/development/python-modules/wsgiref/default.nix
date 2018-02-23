@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = https://pypi.python.org/pypi/wsgiref;
-    license = "PSF or ZPL";
+    license = with licenses; [ psfl zpl21 ];
     description = "WSGI (PEP 333) Reference Library";
   };
 }

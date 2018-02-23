@@ -11,13 +11,13 @@ buildPythonPackage rec {
     sha256 = "1l99j1pa6ijxd42xdwgl72w8apa34c03ixw2dcmfdkcfrz4s2wj5";
   };
 
-  # Tries and fails to pull in pytest-mock
+  # The peewee distribution on pypi doesn't include tests.
   doCheck = false;
 
   meta = with lib; {
     homepage = https://github.com/coleifer/peewee;
     license = licenses.mit;
-    description = "a small, expressive orm";
+    description = "A small, expressive orm";
   };
 }
 
