@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
 , libXrandr, libXinerama
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
@@ -7,7 +7,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
       libXmu libpng patchelfUnstable python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
+    ++ optional pulseaudioSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
     ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
@@ -79,7 +79,7 @@ in stdenv.mkDerivation {
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
-      ${optionalString pulseSupport
+      ${optionalString pulseaudioSupport
         ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
 
     grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
       ${optionalString headless "--build-headless"} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      ${optionalString (!pulseSupport) "--disable-pulse"} \
+      ${optionalString (!pulseaudioSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
