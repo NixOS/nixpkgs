@@ -1,4 +1,4 @@
-{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, m4 }: let
+{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, substituteAll }: let
   targetPrefix = lib.optionalString stdenv.isCross
                    (targetPlatform.config + "-");
 in python3Packages.buildPythonApplication rec {
@@ -27,11 +27,17 @@ in python3Packages.buildPythonApplication rec {
     # We patch Meson to add a --fallback-library-path argument with
     # library install_dir to g-ir-scanner.
     ./gir-fallback-path.patch
-  ];
 
-  postPatch = ''
-    sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
-  '';
+    # In common distributions, RPATH is only needed for internal libraries so
+    # meson removes everything else. With Nix, the locations of libraries
+    # are not as predictable, therefore we need to keep them in the RPATH.
+    # At the moment we are keeping the paths starting with /nix/store.
+    # https://github.com/NixOS/nixpkgs/issues/31222#issuecomment-365811634
+    (substituteAll {
+      src = ./fix-rpath.patch;
+      inherit (builtins) storeDir;
+    })
+  ];
 
   setupHook = ./setup-hook.sh;
 
