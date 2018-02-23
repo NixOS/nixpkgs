@@ -1,7 +1,7 @@
 { mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, procps ? null
 , qtbase, qtwebengine, qtwebkit
 , cmake
-, syncthing, syncthing-inotify ? null
+, syncthing
 , preferQWebView ? false
 , preferNative   ? true }:
 
@@ -34,7 +34,6 @@ mkDerivation rec {
     ${lib.optionalString stdenv.isLinux ''
       substituteInPlace includes/platforms/linux/posixUtils.hpp \
         --replace '"/usr/local/bin/syncthing"'         '"${syncthing}/bin/syncthing"' \
-        --replace '"/usr/local/bin/syncthing-inotify"' '"${syncthing-inotify}/bin/syncthing-inotify"' \
         --replace '"pgrep -x'                          '"${procps}/bin/pgrep -x'
     ''}
 
