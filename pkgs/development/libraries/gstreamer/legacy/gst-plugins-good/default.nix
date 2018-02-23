@@ -1,11 +1,14 @@
-{ fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
+{ config, fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
-, libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
+, libiec61883, libavc1394, taglib, gdk_pixbuf, orc
 , glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintlOrEmpty
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
   minimalDeps ? false
 }:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-0.10.31";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig glib gstreamer gst-plugins-base ]
-    ++ lib.optional stdenv.isLinux libpulseaudio
+    ++ lib.optional pulseaudioSupport libpulseaudio
     ++ libintlOrEmpty
     ++ lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex
