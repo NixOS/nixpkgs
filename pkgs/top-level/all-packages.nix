@@ -17199,6 +17199,8 @@ with pkgs;
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
+  rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };
+
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
