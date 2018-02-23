@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib }:
+{ stdenv, fetchFromGitHub, fetchpatch, alsaLib, cmake, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "apulse-${version}";
@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "16l278q0czca2794fj388ql6qn1zrw24a0p6k7bayrrf5h32fdzd";
   };
+
+  patches = [(fetchpatch {
+    url = "https://github.com/oxij/apulse/commit/9060039d8518f39710f8afd6507a05dc8581d556.patch";
+    sha256 = "1z7f5lv25fjrgzvx61qliijmf0wigh29ddi4zhqz1f5mzsphy761";
+  })];
 
   enableParallelBuilding = true;
 
