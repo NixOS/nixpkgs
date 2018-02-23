@@ -13162,13 +13162,7 @@ with pkgs;
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-    ] ++ lib.optionals hostPlatform.isRiscV [
-      kernelPatches.riscv_modules
-      kernelPatches.riscv_irq_busy
-      kernelPatches.riscv_install
-      kernelPatches.riscv_initrd
-      kernelPatches.riscv_initrd_free
-   ];
+    ];
   };
 
   linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
@@ -13179,7 +13173,7 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-    ];
+      ];
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
