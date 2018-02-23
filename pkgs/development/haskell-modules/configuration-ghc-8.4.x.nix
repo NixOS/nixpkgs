@@ -113,12 +113,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_4_8;
 
   ## Needs bump to a versioned attribute
-  ##     Ambiguous occurrence ‘<>’
-  ##     It could refer to either ‘Prelude.<>’,
-  ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
-  language-c = super.language-c_0_7_2;
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## free ==4.*, template-haskell >=2.4 && <2.13
   lens = super.lens_4_16;
