@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
 
   outputs = ["out" "man" "pause"];
 
+  # patch broken go version check, see issue #35403
+  # patch is from https://github.com/kubernetes/kubernetes/pull/58207
+  #TODO: patch already merged upstream - remove for next k8s version
+  patches = [ ./go-version-check.patch ];
+
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
