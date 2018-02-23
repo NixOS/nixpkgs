@@ -29,6 +29,13 @@ let
         yarn
         ;
     };
+
+    meta = with lib; {
+      description = "generate nix expressions from a yarn.lock file";
+      homepage = "https://github.com/moretea/yarn2nix";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ manveru zimbatm ];
+    };
   };
 
   # Generates the yarn.nix from the yarn.lock file
