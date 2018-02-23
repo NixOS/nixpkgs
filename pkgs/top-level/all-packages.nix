@@ -6649,6 +6649,7 @@ with pkgs;
   scalafmt = callPackage ../development/tools/scalafmt { };
 
   sdcc = callPackage ../development/compilers/sdcc { };
+  zsdcc = callPackage ../development/compilers/sdcc/zsdcc.nix { };
 
   serpent = callPackage ../development/compilers/serpent { };
 
