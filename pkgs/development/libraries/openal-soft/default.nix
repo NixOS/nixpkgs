@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, cmake
+{ config, stdenv, fetchurl, cmake
 , alsaSupport ? !stdenv.isDarwin, alsaLib ? null
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
 with stdenv.lib;
 
 assert alsaSupport -> alsaLib != null;
-assert pulseSupport -> libpulseaudio != null;
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "1.18.2";
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport libpulseaudio
+    ++ optional pulseaudioSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
   NIX_LDFLAGS = []
     ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse";
+    ++ optional pulseaudioSupport "-lpulse";
 
   meta = {
     description = "OpenAL alternative";
