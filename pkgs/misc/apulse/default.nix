@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib glib ];
 
+  cmakeFlags = [ "-DWITH_TRACE=1" ];
+
   meta = with stdenv.lib; {
     description = "PulseAudio emulation for ALSA";
     homepage = https://github.com/i-rinat/apulse;
