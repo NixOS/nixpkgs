@@ -423,7 +423,7 @@ with pkgs;
     automationSupport = config.aegisub.automationSupport or true;
     openalSupport     = config.aegisub.openalSupport or false;
     alsaSupport       = config.aegisub.alsaSupport or true;
-    pulseaudioSupport = config.aegisub.pulseaudioSupport or true;
+    pulseaudioSupport = config.aegisub.pulseaudioSupport or config.pulseaudio or stdenv.isLinux;
     portaudioSupport  = config.aegisub.portaudioSupport or false;
   };
 
