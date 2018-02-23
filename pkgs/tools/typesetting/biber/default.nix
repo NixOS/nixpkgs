@@ -6,6 +6,7 @@ in
 
 perlPackages.buildPerlModule rec {
   name = "biber-${version}";
+  doUseWrapper = true;
   inherit (biberSource) version;
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";

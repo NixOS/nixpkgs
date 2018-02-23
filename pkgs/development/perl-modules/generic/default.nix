@@ -1,6 +1,14 @@
-{ lib, stdenv, perl, buildPackages, toPerlModule }:
+{ lib, stdenv, perl, buildPackages, toPerlModule, makeWrapper }:
 
-{ nativeBuildInputs ? [], name, ... } @ attrs:
+{ nativeBuildInputs ? [], doUseWrapper ? false, name, ... } @ attrs:
+# By default, executables produced by this function use the shebang as a way of injecting
+# dependent module paths. This can go over the shebang character limit which results
+# in the shebang being ignored. On Darwin, the limit appears to be 512 characters.
+#
+# See: https://github.com/boronine/shebang-test
+#
+# Use `doUseWrapper = true` to enable an alternative `makeWrapper` method of injecting
+# dependent module paths.
 
 toPerlModule(stdenv.mkDerivation (
   (
@@ -33,10 +41,20 @@ toPerlModule(stdenv.mkDerivation (
   attrs
   )
   //
-  {
-    name = "perl${perl.version}-${name}";
-    builder = ./builder.sh;
-    nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    perl = buildPackages.perl;
-  }
+  (
+  if doUseWrapper then
+    {
+      name = "perl${perl.version}-${name}";
+      builder = ./builder_wrap.sh;
+      nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) makeWrapper ];
+      perl = buildPackages.perl;
+    }
+  else
+    {
+      name = "perl${perl.version}-${name}";
+      builder = ./builder.sh;
+      nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
+      perl = buildPackages.perl;
+    }
+  )
 ))
