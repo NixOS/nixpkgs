@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--with-rundir=/run"
     "--enable-raw-printing"
     "--enable-threads"
   ] ++ optionals stdenv.isLinux [
