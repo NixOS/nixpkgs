@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/drj11/pypng";
+    homepage = https://github.com/drj11/pypng;
     license = licenses.mit;
     description = "Pure Python PNG image encoder/decoder";
   };

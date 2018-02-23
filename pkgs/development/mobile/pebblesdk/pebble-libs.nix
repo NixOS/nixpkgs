@@ -67,7 +67,6 @@ rec {
     src = fetchPypi {
       inherit pname version;
       sha256 = "155pf01ca6jrl9jyjr80fprnzjy33mxrnsdj1pjwiqzbab3zyrl3";
-
     };
 
     nativeBuildInputs = [ pytestrunner ];
