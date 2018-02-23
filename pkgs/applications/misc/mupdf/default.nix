@@ -29,6 +29,11 @@ in stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
       sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
     })
+    (fetchpatch {
+      name = "CVE-2018-6544.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=b03def134988da8c800adac1a38a41a1f09a1d89;hp=26527eef77b3e51c2258c8e40845bfbc015e405d";
+      sha256 = "1rlmjibl73ls8xfpsz69axa3lw5l47vb0a1dsjqziszsld4lpj5i";
+    })
   ]
 
   # Use shared libraries to decrease size
