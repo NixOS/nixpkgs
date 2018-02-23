@@ -12,21 +12,27 @@ preConfigure() {
 
     eval "$oldPreConfigure"
 
-    find . | while read fn; do
-        if test -f "$fn"; then
-            first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
-            if test "$first" = "#!"; then
-                echo "patching $fn..."
-                sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1$perlFlags|"
+    if test -z "$doUseWrapper"; then
+        find . | while read fn; do
+            if test -f "$fn"; then
+                first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
+                if test "$first" = "#!"; then
+                    echo "patching $fn..."
+                    sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1$perlFlags|"
+                fi
             fi
-        fi
-    done
+        done
+    fi
 
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
 }
 
 
 postFixup() {
+    if test -n "$doUseWrapper"; then
+        wrapProgram "$fn" --prefix PERL5LIB : "$PERL5LIB"
+    fi
+
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't
     # have something like an RPATH, so the only way to find the
