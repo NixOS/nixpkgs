@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0802kdxwxx9zanpwb4w4wfi3blwhv0ri05mzdgd35j5sva5ify0j";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s,--export-dynamic,, configure
   '';
 
