@@ -598,6 +598,8 @@ with pkgs;
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
+  autokey = callPackage ../tools/x11/autokey { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
