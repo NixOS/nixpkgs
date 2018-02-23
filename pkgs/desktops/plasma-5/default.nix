@@ -135,6 +135,7 @@ let
       powerdevil = callPackage ./powerdevil.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
+      user-manager = callPackage ./user-manager.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
     };
 in

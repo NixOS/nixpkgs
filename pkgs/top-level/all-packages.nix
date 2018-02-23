@@ -19274,7 +19274,7 @@ with pkgs;
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop
     plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-    systemsettings xdg-desktop-portal-kde;
+    systemsettings user-manager xdg-desktop-portal-kde;
 
   ### SCIENCE
 
