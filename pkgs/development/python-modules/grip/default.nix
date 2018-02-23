@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ pytest responses ];
+  checkInputs = [ pytest responses ];
 
   propagatedBuildInputs = [ docopt flask markdown path-and-address pygments requests tabulate ];
 
