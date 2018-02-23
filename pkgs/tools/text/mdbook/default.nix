@@ -22,5 +22,9 @@ rustPlatform.buildRustPackage rec {
     license = [ licenses.asl20 licenses.mit ];
     maintainers = [ maintainers.havvy ];
     platforms = platforms.all;
+
+    # Because CoreServices needs to be updated,
+    # but Apple won't release the source.
+    broken = stdenv.isDarwin;
   };
 }
