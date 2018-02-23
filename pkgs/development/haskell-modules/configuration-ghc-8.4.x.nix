@@ -120,12 +120,6 @@ self: super: {
   semigroupoids = super.semigroupoids_5_2_2;
 
   ## Needs bump to a versioned attribute
-  ##     • No instance for (Semigroup Builder)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid Builder’
-  stringbuilder = super.stringbuilder_0_5_1;
-
-  ## Needs bump to a versioned attribute
   ## Issue: https://github.com/haskell/test-framework/issues/35
   test-framework = overrideCabal super.test-framework_0_8_2_0 (drv: {
     ##     • No instance for (Semigroup (TestOptions' Maybe))
