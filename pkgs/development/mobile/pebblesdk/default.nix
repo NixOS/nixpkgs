@@ -8,7 +8,7 @@ let
   pebble-rpath = lib.makeLibraryPath [ freetype zlib stdenv.cc.cc.lib ];
   pebble-libs = import ./pebble-libs.nix { inherit lib fetchurl python27; };
   pythonEnv = (python27.withPackages (ps: with ps; builtins.attrValues pebble-libs ++
-    [ colorama httplib2 oauth2client packaging progressbar2 pyasn1 pygeoip
+    [ colorama httplib2 oauth2client packaging pyasn1 pygeoip
       pyparsing pyqrcode requests virtualenv websocket_client wrapPython ]));
 in
 stdenv.mkDerivation rec {

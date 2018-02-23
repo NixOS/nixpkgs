@@ -58,4 +58,24 @@ rec {
       description = "A Pebble phone app simulator written in Python";
     };
   };
+
+  # progressbar2 version 3 has incompatible changes, so use an old version here
+  progressbar2 = buildPythonPackage rec {
+    pname = "progressbar2";
+    version = "2.7.3";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "155pf01ca6jrl9jyjr80fprnzjy33mxrnsdj1pjwiqzbab3zyrl3";
+
+    };
+
+    nativeBuildInputs = [ pytestrunner ];
+
+    meta = with stdenv.lib; {
+      homepage = https://progressbar-2.readthedocs.io/en/latest/;
+      description = "Text progressbar library for python";
+      license = licenses.bsd3;
+    };
+  };
 }
