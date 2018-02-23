@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   # TODO : v4l, libvisual
   buildInputs =
     [ pkgconfig glib cairo orc ]
-    # can't build alsaLib on darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
+    ++ stdenv.lib.optional stdenv.isLinux alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
       [ xorg.xlibsWrapper xorg.libXv libogg libtheora libvorbis freetype pango
         liboil ]
