@@ -1381,6 +1381,8 @@ with pkgs;
 
   arping = callPackage ../tools/networking/arping { };
 
+  arpoison = callPackage ../tools/networking/arpoison { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (python2Packages) matplotlib numpy aafigure recursivePthLoader;
     w3m = w3m-batch;
