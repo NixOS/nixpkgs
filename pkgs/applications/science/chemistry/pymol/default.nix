@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem
 , python3, python3Packages
-, glew, freeglut, libpng, libxml2, tk, freetype }:
+, glew, freeglut, libpng, libxml2, tk, freetype, libmsgpack }:
 
 
 with stdenv.lib;
@@ -8,7 +8,7 @@ with stdenv.lib;
 let
   pname = "pymol";
   ver_maj = "1.8";
-  ver_min = "4";
+  ver_min = "6";
   version = "${ver_maj}.${ver_min}.0";
   description = "A Python-enhanced molecular graphics tool";
 
@@ -16,7 +16,7 @@ let
     name = "${pname}";
     exec = "${pname}";
     desktopName = "PyMol Molecular Graphics System";
-    genericName = "Molecular Modeller";
+    genericName = "Molecular Modeler";
     comment = description;
     mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
     categories = "Graphics;Education;Science;Chemistry;";
@@ -26,10 +26,10 @@ python3Packages.buildPythonApplication {
   name = "pymol-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/project/pymol/pymol/${ver_maj}/pymol-v${version}.tar.bz2";
-    sha256 = "0yfj8g5yic9zz6f0bw2n8h6ifvgsn8qvhq84alixsi28wzppn55n";
+    sha256 = "0rf5lcvwv41x2fbxdqfc0dj5n6v3nda13nqw55lhkgp1q45gkaky";
   };
 
-  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype ];
+  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype libmsgpack ];
   NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
   installPhase = ''
