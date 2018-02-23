@@ -74,6 +74,7 @@ let
       Listen ${addr}
     '') cfg.listenAddresses}
     Listen /var/run/cups/cups.sock
+    Listen /var/run/cups.sock
 
     SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
