@@ -25,7 +25,7 @@ let
     name = "neovim-ruby-env";
     gemdir = ./ruby_provider;
     postBuild = ''
-      ln -s ${ruby}/bin/* $out/bin
+      ln -sf ${ruby}/bin/* $out/bin
     '';
   };
 

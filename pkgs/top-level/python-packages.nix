@@ -3902,6 +3902,8 @@ in {
 
   discogs_client = callPackage ../development/python-modules/discogs_client { };
 
+  dmenu-python = callPackage ../development/python-modules/dmenu { };
+
   dnspython = callPackage ../development/python-modules/dnspython { };
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
 

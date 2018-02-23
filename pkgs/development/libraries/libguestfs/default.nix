@@ -9,16 +9,16 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.36.3";
+  version = "1.38.0";
 
   appliance = fetchurl {
-    url = "http://libguestfs.org/download/binaries/appliance/appliance-1.36.1.tar.xz";
-    sha256 = "1klvr13gpg615hgjvviwpxlj839lbwwsrq7x100qg5zmmjfhl125";
+    url = "http://libguestfs.org/download/binaries/appliance/appliance-1.38.0.tar.xz";
+    sha256 = "05481qxgidakga871yb5rgpyci2jaxmplmkh6y79anfh5m19nzhy";
   };
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.36-stable/libguestfs-${version}.tar.gz";
-    sha256 = "0dhb69b7svjgnrmbyvizdz5vsgsrr95ypz0qvp3kz83jyj6sa76m";
+    url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
+    sha256 = "0cgapiad3x5ggwm097mq62hng3bv91p5gmrikrb6adfaasr1l6m3";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
   '';
-  configureFlags = [ "--disable-appliance" "--disable-daemon" ]
+  configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
     ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";

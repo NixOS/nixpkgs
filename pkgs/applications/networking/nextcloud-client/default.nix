@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchgit {
     url = "git://github.com/nextcloud/client_theming.git";
-    rev = "1ee750d1aeaaefc899629e85c311594603e9ac1b";
-    sha256 = "0dxyng8a7cg78z8yngiqypsb44lf5c6vkabvkfch0cl0cqmarc1a";
+    rev = "ab40efe1e1475efddd636c09251d8917627261da";
+    sha256 = "19a1kqydgx47sa1a917j46zlbc5g9nynsanasyad9c8sqi0qvyip";
     fetchSubmodules = true;
   };
 

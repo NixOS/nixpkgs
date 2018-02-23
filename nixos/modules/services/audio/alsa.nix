@@ -21,7 +21,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        defaultText = "!versionAtLeast system.stateVersion \"18.03\"";
         description = ''
           Whether to enable ALSA sound.
         '';
@@ -78,7 +78,11 @@ in
 
   ###### implementation
 
-  config = mkIf config.sound.enable {
+  config = mkMerge [
+    ({
+      sound.enable = mkDefault (!versionAtLeast config.system.stateVersion "18.03");
+    })
+    (mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
@@ -124,6 +128,6 @@ in
       ];
     };
 
-  };
+  })];
 
 }

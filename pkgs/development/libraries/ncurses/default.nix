@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
+      # Remove this mirror on next upgrade, it's only needed because upstream took ncurses-6.0-20171125.tgz down!
+      "http://bld1.alpinelinux.org/distfiles/v3.5/ncurses-${version}.tgz"
+
       "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
       "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
     ];

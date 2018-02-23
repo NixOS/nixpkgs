@@ -14,6 +14,6 @@ racket.overrideAttrs (oldAttrs: rec {
       as well as libraries that live in collections. In particular, raco
       and the pkg library are still bundled.
     '';
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 })

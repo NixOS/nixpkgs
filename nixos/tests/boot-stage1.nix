@@ -9,6 +9,7 @@ import ./make-test.nix ({ pkgs, ... }: {
         kver = config.boot.kernelPackages.kernel.modDirVersion;
         ksrc = "${kdev}/lib/modules/${kver}/build";
         hardeningDisable = [ "pic" ];
+        nativeBuildInputs = kdev.moduleBuildDependencies;
       } ''
         echo "obj-m += $name.o" > Makefile
         echo "$source" > "$name.c"

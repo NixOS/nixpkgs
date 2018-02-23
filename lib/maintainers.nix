@@ -671,6 +671,7 @@
   stumoss = "Stuart Moss <samoss@gmail.com>";
   SuprDewd = "Bjarki Ágúst Guðmundsson <suprdewd@gmail.com>";
   suvash = "Suvash Thapaliya <suvash+nixpkgs@gmail.com>";
+  svsdep = "Vasyl Solovei <svsdep@gmail.com>";
   swarren83 = "Shawn Warren <shawn.w.warren@gmail.com>";
   swflint = "Samuel W. Flint <swflint@flintfam.org>";
   swistak35 = "Rafał Łasocha <me@swistak35.com>";
@@ -713,6 +714,7 @@
   treemo = "Matthieu Chevrier <matthieu.chevrier@treemo.fr>";
   trevorj = "Trevor Joynson <nix@trevor.joynson.io>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
+  troydm = "Dmitry Geurkov <d.geurkov@gmail.com>";
   tstrobel = "Thomas Strobel <4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains>";
   ttuegel = "Thomas Tuegel <ttuegel@mailbox.org>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";

@@ -52,8 +52,7 @@ in
         description = "Chromium default search provider url.";
         default = null;
         example =
-          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:
-        ↪searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
+          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = mkOption {

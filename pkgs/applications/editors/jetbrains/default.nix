@@ -247,25 +247,25 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2017.2.3"; /* updated by script */
+    version = "2017.3.5"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0yp5h8ps5hfi07gsz14pp61skibfx48klg8qmc4f6q6xzcfdqxsf"; /* updated by script */
+      sha256 = "1hfy0mxdsvydjjklh8fwdz6f6qxajhngmcmyyzw0gdfhw6ldrv9c"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = "datagrip_2017_2";
+    update-channel = "datagrip_2017_3";
   };
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2017.3.1"; /* updated by script */
+    version = "2017.3.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0cfjfv01ra67sr8n8ijqwd9zm2yzb1nm447kf0mr5cynr124ch0z"; /* updated by script */
+      sha256 = "0bhvj1xqlpy58yq2s5nrhhaw53i913zpr135b1f6r5s22nvkigvm"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "goland_release";
@@ -338,15 +338,15 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2017.2.1"; /* updated by script */
+    version = "2017.3.1"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/resharper/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1zviknxamp1y7lrlg5qfj3ijp96z0dqvcr42ca0fbx1xb887wzww"; /* updated by script */
+      sha256 = "0k9yc00lmk826pylfs9jyxqnlczk9vhq7bs61b8nyfam1dqbgikv"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider_2017_2";
+    update-channel = "rider_2017_3";
   };
 
   ruby-mine = buildRubyMine rec {
