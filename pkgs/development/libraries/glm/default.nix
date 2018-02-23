@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, cmake }:
+{ stdenv, fetchurl, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
   version = "0.9.8.5";
@@ -15,9 +15,16 @@ stdenv.mkDerivation rec {
 
   cmakeConfigureFlags = [ "-DGLM_INSTALL_ENABLE=off" ];
 
+  # fetch newer version of platform.h which correctly supports gcc 7.3
+  gcc7PlatformPatch = fetchurl {
+    url = "https://raw.githubusercontent.com/g-truc/glm/dd48b56e44d699a022c69155c8672caacafd9e8a/glm/simd/platform.h";
+    sha256 = "0y91hlbgn5va7ijg5mz823gqkq9hqxl00lwmdwnf8q2g086rplzw";
+  };
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace '"''${CMAKE_CURRENT_BINARY_DIR}/''${GLM_INSTALL_CONFIGDIR}' '"''${GLM_INSTALL_CONFIGDIR}'
+    cp ${gcc7PlatformPatch} glm/simd/platform.h
   '';
 
   postInstall = ''
