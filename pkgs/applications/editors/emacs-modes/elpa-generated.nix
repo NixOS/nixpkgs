@@ -400,10 +400,10 @@
       }) {};
     company = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "company";
-        version = "0.9.4";
+        version = "0.9.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-0.9.4.tar";
-          sha256 = "1wm2nzjfn9cmjb6f5yvawrss7pg1r0swwwqqx602wg8hjrsiabay";
+          url = "https://elpa.gnu.org/packages/company-0.9.5.tar";
+          sha256 = "1x9c5dw884rv0lvl24ggzdxp2k484w543azdiw55bw01635pg531";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -713,10 +713,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.4.2";
+        version = "0.4.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.4.2.tar";
-          sha256 = "1j9hgxa6csj3iz5vrl22xvhl9lxhig0n1cixgzhs1sb3z3nn2li6";
+          url = "https://elpa.gnu.org/packages/ebdb-0.4.3.tar";
+          sha256 = "1xq0nhhgzgzrvxbb0lgpz71rfd0dcjakh87wg8wi3cpiw9w7zx41";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -1637,10 +1637,10 @@
       }) {};
     paced = callPackage ({ async, elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "paced";
-        version = "1.1.2";
+        version = "1.1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/paced-1.1.2.tar";
-          sha256 = "1hxbzlzmlndj2gs9n741whi7rj6vbcnxdn89lg2l0997pqmsx58y";
+          url = "https://elpa.gnu.org/packages/paced-1.1.3.tar";
+          sha256 = "1gaszf68h0nnv6p6yzv48m24csw6v479nsq0f02y6slixxaflnwl";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -1704,10 +1704,10 @@
     python = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "python";
-        version = "0.25.2";
+        version = "0.26";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/python-0.25.2.el";
-          sha256 = "1ac2ipyg49sb0lz3n0ykj2s6592abd38l5d1cpbmv73j13l8zq5i";
+          url = "https://elpa.gnu.org/packages/python-0.26.el";
+          sha256 = "197sq42xd4ryqq2zy1802pns6wf6n4vzx90yxgn1zzqpwffpv317";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
