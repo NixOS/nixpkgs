@@ -714,8 +714,9 @@ let
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime num;
-      inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
+      inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
     };
 
