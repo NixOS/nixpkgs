@@ -147,7 +147,7 @@ let
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          ${buildRuby} setup.rb
+          $out/bin/ruby setup.rb
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
