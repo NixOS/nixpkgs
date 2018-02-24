@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
     sha256 = "0p0vr67lnqdsgdv2y144xmjqa1a2nijrrd3clc8dc2f46pn5mzc9";
   };
+  # https://sourceforge.net/p/gptfdisk/code/merge-requests/9/
+  patches = [ ./cross-makefile.patch ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.mac --replace \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
     substituteInPlace Makefile.mac --replace \
