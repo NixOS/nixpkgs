@@ -169,7 +169,7 @@ let
           ./${prefixWithBitness}/hinst
 
         # Run the installer...
-        ./${prefixWithBitness}/hinst CDROM "`pwd`"
+        bash ./${prefixWithBitness}/hinst CDROM "`pwd`"
 
         echo "Deleting broken links..."
         for link in `find $ICAInstDir -type l `
