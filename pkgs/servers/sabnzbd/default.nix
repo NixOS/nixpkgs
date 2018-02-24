@@ -1,7 +1,8 @@
-{stdenv, fetchFromGitHub, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
+{stdenv, fetchFromGitHub, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper, python2Packages}:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc sabyenc ]);
+  sabyenc = python2Packages.callPackage ./sabyenc.nix {};
+  pythonEnv = python2.withPackages(ps: [ ps.cryptography ps.cheetah sabyenc ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
   version = "2.3.2";
