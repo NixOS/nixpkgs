@@ -129,6 +129,12 @@ in rec {
     filesToInstall = ["u-boot-spl.kwb"];
   };
 
+  ubootGuruplug = buildUBoot rec {
+    defconfig = "guruplug_defconfig";
+    extraMeta.platforms = ["armv5tel-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -180,6 +186,12 @@ in rec {
   ubootRaspberryPi3_64bit = buildUBoot rec {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootSheevaplug = buildUBoot rec {
+    defconfig = "sheevaplug_defconfig";
+    extraMeta.platforms = ["armv5tel-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
