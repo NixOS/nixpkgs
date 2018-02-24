@@ -1,21 +1,25 @@
-{ sdcc, fetchzip, ... }:
+{ stdenv, sdcc, fetchFromGitHub, ... }:
 # https://www.z88dk.org/wiki/doku.php?id=temp:front#sdcc1
+# https://github.com/z88dk/z88dk/blob/master/src/zsdcc/readme.md
 
 sdcc.overrideAttrs (oldAttrs: rec {
-  name = "zsdcc-${oldAttrs.version}";
+  version = "20180224";
+  name = "zsdcc-Unstable-${version}"; # ${oldAttrs.version}
 
-  patchrev = "a82f0ac5ed282038ba56ef490e6afcf1c3d38a63";
+  meta = oldAttrs.meta // {
+    description = "SDCC with z88dk patches";
+    maintainers = with stdenv.lib.maintainers; [ genesis ];
+  };
 
-  patches = [(fetchzip {
-    url = "https://github.com/z88dk/z88dk/raw/${patchrev}/libsrc/_DEVELOPMENT/sdcc_z88dk_patch.zip";
-    sha256 = "0hnf0cyr5cgrv0scr5r5qlj3icdbl55icy6nic9bpz4vmdjpdcx7";
-    # Removing Windows executables.
-    extraPostFetch = ''
-      rm $out/*.exe
-      mkdir -p $out/sdcc
-      mv $out/sdcc-z88dk.patch $out/sdcc'';
-    stripRoot = false;
-  })];
+  src = fetchFromGitHub {
+    owner = "z88dk";
+    repo = "zsdcc";
+    rev = "f914e938ee8bf7849d9b0883206a67c7b9dcc560";
+    sha256 = "04q750q3y3hl2wilapwhiwrz6i4sl8p76jiy64520cyr71rbf0vh";
+  };
+
+  preConfigure = "cd sdcc";
+  makeFlags = [ "sdcc-cc" ];
 
   # we need only Z80
   configureFlags = [
@@ -36,12 +40,12 @@ sdcc.overrideAttrs (oldAttrs: rec {
       "--disable-device-lib"
       "--disable-packihx"
       "--disable-sdcdb"
-      "--disable-sdbinutils"
       "--disable-non-free"
     ];
 
-    meta = oldAttrs.meta // {
-      description = "SDCC with z88dk patches";
-      /* maintainers = [ maintainers.genesis ]; */
-  };
+  installPhase = ''
+    mkdir -p $out/bin
+    cp bin/sdcpp $out/bin/zsdcpp
+    cp bin/sdcc  $out/bin/zsdcc
+  '';
 })
