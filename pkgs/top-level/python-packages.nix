@@ -14444,11 +14444,11 @@ in {
       url = "mirror://pypi/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
       sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
-    propagatedBuildInputs = [ pkgs.mesa pkgs.freeglut self.pillow ];
+    propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut self.pillow ];
     patchPhase = ''
       sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
       sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-      sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+      sed -i "s|'GLU',|'${pkgs.libGLU_combined}/lib/libGLU.so',|" OpenGL/platform/glx.py
       sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
     '';
     meta = {
@@ -21583,7 +21583,7 @@ EOF
       sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
     };
     disabled = isPy3k; # Judging from SyntaxError
-    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
+    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.libGLU_combined pkgs.xorg.libXi ];
   };
 
   smugpy = callPackage ../development/python-modules/smugpy { };
