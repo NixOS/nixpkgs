@@ -3,8 +3,8 @@
 # https://github.com/z88dk/z88dk/blob/master/src/zsdcc/readme.md
 
 sdcc.overrideAttrs (oldAttrs: rec {
-  version = "20180224";
-  name = "zsdcc-Unstable-${version}"; # ${oldAttrs.version}
+  version = "2018-02-24";
+  name = "zsdcc-unstable-${version}"; # ${oldAttrs.version}
 
   meta = oldAttrs.meta // {
     description = "SDCC with z88dk patches";
