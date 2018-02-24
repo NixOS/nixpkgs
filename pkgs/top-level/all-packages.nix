@@ -13257,6 +13257,8 @@ with pkgs;
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
+    rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
+
     rtlwifi_new = callPackage ../os-specific/linux/rtlwifi_new { };
 
     openafs = callPackage ../servers/openafs/module.nix { };
