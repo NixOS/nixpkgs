@@ -18543,12 +18543,13 @@ with pkgs;
   confd = callPackage ../tools/system/confd { };
 
   construoBase = lowPrio (callPackage ../games/construo {
-    mesa = null;
+    libGL = null;
     freeglut = null;
   });
 
   construo = construoBase.override {
-    inherit mesa freeglut;
+    inherit  freeglut;
+    libGL = libGLU_combined;
   };
 
   crack_attack = callPackage ../games/crack-attack { };
