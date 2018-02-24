@@ -62,13 +62,7 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = overrideCabal super.doctest_0_14_0 (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ##
-    ##        uncaught exception: IOException of type NoSuchThing (test/integration/testImport: changeWorkingDirectory: does not exist (No such file or directory))
-    doCheck         = false;
-  });
+  doctest = dontCheck super.doctest_0_14_1; # test suite fails in Nix
 
   ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
@@ -113,12 +107,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_4_8;
 
   ## Needs bump to a versioned attribute
-  ##     Ambiguous occurrence ‘<>’
-  ##     It could refer to either ‘Prelude.<>’,
-  ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
-  language-c = super.language-c_0_7_2;
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## free ==4.*, template-haskell >=2.4 && <2.13
   lens = super.lens_4_16;
@@ -130,12 +118,6 @@ self: super: {
   ## Setup: Encountered missing dependencies:
   ## doctest >=0.11.1 && <0.14
   semigroupoids = super.semigroupoids_5_2_2;
-
-  ## Needs bump to a versioned attribute
-  ##     • No instance for (Semigroup Builder)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid Builder’
-  stringbuilder = super.stringbuilder_0_5_1;
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/haskell/test-framework/issues/35
@@ -487,11 +469,6 @@ self: super: {
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## https://github.com/haskell-hvr/deepseq-generics/pull/4
     jailbreak       = true;
-  });
-
-  doctest_0_14_0 = overrideCabal super.doctest_0_14_0 (drv: {
-    ##        uncaught exception: IOException of type NoSuchThing (test/integration/testImport: changeWorkingDirectory: does not exist (No such file or directory))
-    doCheck         = false;
   });
 
   exception-transformers = overrideCabal super.exception-transformers (drv: {

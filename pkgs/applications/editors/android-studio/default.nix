@@ -29,9 +29,9 @@ in rec {
   # linux-beta-bundle
   preview = mkStudio {
     pname = "android-studio-preview";
-    version = "3.1.0.11"; # "Android Studio 3.1 Beta 3"
-    build = "173.4595152";
-    sha256Hash = "0106ggrf4mkxx3a2dn02km8rdq23sf15ifysykcay29skgdmq6wx";
+    version = "3.1.0.12"; # "Android Studio 3.1 Beta 4"
+    build = "173.4615496";
+    sha256Hash = "0rp0vg5hwv7kdrirydvnwznpfwibwwm2dxsbhbxfkyahph10ly72";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";

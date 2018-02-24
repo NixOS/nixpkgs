@@ -19934,6 +19934,8 @@ with pkgs;
 
   cups-toshiba-estudio = callPackage ../misc/cups/drivers/estudio {};
 
+  cups-zj-58 =  callPackage ../misc/cups/drivers/zj-58 { };
+
   crashplan = callPackage ../applications/backup/crashplan { };
   crashplansb = callPackage ../applications/backup/crashplan/crashplan-small-business.nix { inherit (gnome3) gconf; };
 
