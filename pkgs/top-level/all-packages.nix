@@ -14049,15 +14049,12 @@ with pkgs;
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
     ubootSheevaplug
-    ubootSopine
     ubootUtilite
     ubootWandboard
     ;
 
   # Non-upstream U-Boots:
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
-
-  ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
 
   ubootRock64 = callPackage ../misc/uboot/rock64.nix { };
 

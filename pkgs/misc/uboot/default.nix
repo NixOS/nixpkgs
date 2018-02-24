@@ -201,12 +201,10 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootSopine = buildUBoot rec {
-    extraPatches = [sunxiPatch];
-    defconfig = "sopine_baseboard_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  ubootSheevaplug = buildUBoot rec {
+    defconfig = "sheevaplug_defconfig";
+    extraMeta.platforms = ["armv5tel-linux"];
+    filesToInstall = ["u-boot.bin"];
   };
 
   ubootUtilite = buildUBoot rec {
