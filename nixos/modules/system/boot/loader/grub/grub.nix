@@ -110,7 +110,7 @@ in
 
       device = mkOption {
         default = "";
-        example = "/dev/hda";
+        example = "/dev/disk/by-id/wwn-0x500001234567890a";
         type = types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
@@ -123,7 +123,7 @@ in
 
       devices = mkOption {
         default = [];
-        example = [ "/dev/hda" ];
+        example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
         type = types.listOf types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
@@ -135,8 +135,8 @@ in
       mirroredBoots = mkOption {
         default = [ ];
         example = [
-          { path = "/boot1"; devices = [ "/dev/sda" ]; }
-          { path = "/boot2"; devices = [ "/dev/sdb" ]; }
+          { path = "/boot1"; devices = [ "/dev/disk/by-id/wwn-0x500001234567890a" ]; }
+          { path = "/boot2"; devices = [ "/dev/disk/by-id/wwn-0x500009876543210a" ]; }
         ];
         description = ''
           Mirror the boot configuration to multiple partitions and install grub
@@ -178,7 +178,7 @@ in
 
             devices = mkOption {
               default = [ ];
-              example = [ "/dev/sda" "/dev/sdb" ];
+              example = [ "/dev/disk/by-id/wwn-0x500001234567890a" "/dev/disk/by-id/wwn-0x500009876543210a" ];
               type = types.listOf types.str;
               description = ''
                 The path to the devices which will have the GRUB MBR written.
