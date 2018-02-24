@@ -19029,6 +19029,7 @@ with pkgs;
       })
     nix
     nixStable
+    nixStable2
     nixUnstable;
 
   nixops = callPackage ../tools/package-management/nixops { };
