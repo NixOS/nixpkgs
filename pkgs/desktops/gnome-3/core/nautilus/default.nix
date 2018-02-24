@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${shared_mime_info}/share"
     )
   '';
 
