@@ -1,0 +1,14 @@
+--- geeqie-1.4.orig/Makefile.am	2017-12-31 07:31:21.000000000 -0500
++++ geeqie-1.4/Makefile.am	2018-01-01 15:05:58.742068166 -0500
+@@ -10,9 +10,9 @@
+ readmedir = @readmedir@
+ 
+ if HAVE_MARKDOWN
+-readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS README.html ChangeLog.html
++readme_DATA = README.md COPYING TODO README.lirc AUTHORS README.html
+ else
+-readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS ChangeLog.html
++readme_DATA = README.md COPYING TODO README.lirc AUTHORS
+ endif
+ 
+ desktopdir = $(datadir)/applications
