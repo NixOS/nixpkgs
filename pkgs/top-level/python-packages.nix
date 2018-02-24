@@ -279,6 +279,8 @@ in {
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
+  py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
+
   pyaes = callPackage ../development/python-modules/pyaes { };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
