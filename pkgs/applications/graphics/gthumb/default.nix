@@ -1,7 +1,7 @@
 { stdenv,  fetchurl, gnome3, itstool, libxml2, pkgconfig, intltool,
   exiv2, libjpeg, libtiff, gstreamer, libraw, libsoup, libsecret,
   libchamplain, librsvg, libwebp, json_glib, webkit, lcms2, bison,
-  flex, hicolor_icon_theme, wrapGAppsHook }:
+  flex, hicolor_icon_theme, wrapGAppsHook, shared_mime_info }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
       librsvg libwebp json_glib webkit lcms2 bison flex hicolor_icon_theme defaultIconTheme ];
 
   enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/gthumb;
