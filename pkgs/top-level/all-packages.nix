@@ -18677,6 +18677,8 @@ with pkgs;
 
   gnugo = callPackage ../games/gnugo { };
 
+  gnujump = callPackage ../games/gnujump { };
+
   gogui = callPackage ../games/gogui {};
 
   gtetrinet = callPackage ../games/gtetrinet {
