@@ -6991,7 +6991,8 @@ with pkgs;
   inherit (
     if stdenv.buildPlatform == stdenv.hostPlatform
     then (callPackages ../development/interpreters/perl {})
-    else (callPackages ../development/interpreters/perl-cross {})
+    else (callPackages ../development/interpreters/perl-cross { stdenv = overrideCC stdenv gcc6; })
+         # perl-cross segfaults when built with gcc7
   ) perl perl522 perl524 perl526;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
