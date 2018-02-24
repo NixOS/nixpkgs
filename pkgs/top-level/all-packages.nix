@@ -502,6 +502,8 @@ with pkgs;
 
   libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
 
+  libcardiacarrest = callPackage ../misc/libcardiacarrest { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
