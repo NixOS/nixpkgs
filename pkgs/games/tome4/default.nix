@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openal, libpng, libvorbis, mesa_glu, premake4, SDL2, SDL2_image, SDL2_ttf }:
+{stdenv, fetchurl, openal, libpng, libvorbis, libGLU, premake4, SDL2, SDL2_image, SDL2_ttf }:
 
 stdenv.mkDerivation rec {
   version = "1.4.9";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ premake4 ];
   buildInputs = [
-    mesa_glu openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
+    libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2_image}/include/SDL2"

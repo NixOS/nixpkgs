@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, blas, liblapack, gfortran, gmm, fltk, libjpeg
-, zlib, mesa, mesa_glu, xorg }:
+, zlib, mesa, libGLU, xorg }:
 
 let version = "3.0.5"; in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   patches = [ ./CMakeLists.txt.patch ];
 
   buildInputs = [ cmake blas liblapack gfortran gmm fltk libjpeg zlib mesa
-    mesa_glu xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
+    libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
 

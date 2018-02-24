@@ -2,7 +2,7 @@
 , jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
-, enableGL ? true, freeglut, mesa_glu
+, enableGL ? true, freeglut, libGLU
 }:
 
 let
@@ -53,14 +53,14 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut mesa_glu ]
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
                 ++ lib.optionals enableGL (
                   if stdenv.isDarwin then
                     with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
                   else
-                    [ freeglut mesa_glu ])
+                    [ freeglut libGLU ])
                 ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

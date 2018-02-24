@@ -5,7 +5,7 @@
 , agg, alsaLib, soundtouch, openal
 , desktop_file_utils
 , gtk2, gtkglext, libglade, pangox_compat
-, mesa_glu, libpcap, SDL, zziplib }:
+, libGLU, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
     openal desktop_file_utils gtk2 gtkglext libglade pangox_compat
-    mesa_glu libpcap SDL zziplib ];
+    libGLU libpcap SDL zziplib ];
 
   configureFlags = [
     "--disable-glade"  # Failing on compile step
