@@ -18,21 +18,22 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
-    substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
-    substituteInPlace ./Makefile --replace /sbin/depmod \#
-    substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    substituteInPlace ./Makefile \
+      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
+      --replace /sbin/depmod \# \
+      --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = https://github.com/zebulon2/rtl8814au;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.lassulus ];
+    license = licenses.gpl2;
+    maintainers = [ maintainers.lassulus ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
