@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
-, zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, mesa_noglu, alsaLib
+, zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, libGL, alsaLib
 , fontconfig, freetype, gnome2, cairo, gdk_pixbuf, atk, xorg
 , swingSupport ? true }:
 
@@ -15,7 +15,7 @@ let
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
 
   libraries = [
-    stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
     gnome2.gtk cairo gdk_pixbuf atk
   ] ++ (lib.optionals swingSupport (with xorg; [

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
-, mesa_noglu, glew, ocl-icd, python3
+, libGL, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs =
-    [ cmake pkgconfig mesa_glu mesa_noglu ocl-icd python3
+    [ cmake pkgconfig mesa_glu libGL ocl-icd python3
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
       xorg.libXinerama xorg.libXi

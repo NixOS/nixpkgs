@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkgconfig, python2
-, intel-gpu-tools, libdrm, libva, libX11, mesa_noglu, wayland, libXext
+, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gnum4 pkgconfig python2 ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext mesa_noglu wayland ];
+  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libGL wayland ];
 
   enableParallelBuilding = true;
 
