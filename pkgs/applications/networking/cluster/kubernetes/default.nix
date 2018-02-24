@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -29,10 +29,13 @@ stdenv.mkDerivation rec {
 
   outputs = ["out" "man" "pause"];
 
-  # patch broken go version check, see issue #35403
-  # patch is from https://github.com/kubernetes/kubernetes/pull/58207
-  #TODO: patch already merged upstream - remove for next k8s version
-  patches = [ ./go-version-check.patch ];
+  patches = [
+    # patch is from https://github.com/kubernetes/kubernetes/pull/58207
+    (fetchpatch {
+      url = "https://github.com/kubernetes/kubernetes/commit/a990b04dc8a7d8408a71eee40db93621cf2b6d1b.patch";
+      sha256 = "0piqilc5c9frikl74hamkffawwg1mvdwfxqvjnmk6wdma43dbb7w";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
