@@ -1,21 +1,26 @@
-{ fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
+{ docbook_xml_dtd_412, fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
 
 stdenv.mkDerivation rec {
   name = "zziplib-${version}";
-  version = "0.13.67";
+  version = "0.13.68";
 
   src = fetchurl {
     url = "https://github.com/gdraheim/zziplib/archive/v${version}.tar.gz";
-    sha256 = "0802kdxwxx9zanpwb4w4wfi3blwhv0ri05mzdgd35j5sva5ify0j";
+    sha256 = "0chhl6m02562z6c4hjy568mh11pbq2qngw6g2x924ajr8sdr2q4l";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s,--export-dynamic,, configure
   '';
 
-  buildInputs = [ perl python2 zip xmlto zlib ];
+  # TODO: still an issue: https://github.com/gdraheim/zziplib/issues/27
 
-  doCheck = true;
+  buildInputs = [ docbook_xml_dtd_412 perl python2 zip xmlto zlib ];
+
+  # tests are broken (https://github.com/gdraheim/zziplib/issues/20),
+  # and test/zziptests.py requires network access
+  # (https://github.com/gdraheim/zziplib/issues/24)
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Library to extract data from files archived in a zip file";
