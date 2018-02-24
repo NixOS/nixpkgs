@@ -269,22 +269,34 @@ let
 
   luaposix = buildLuaPackage rec {
     name = "posix-${version}";
-    version = "33.4.0";
+    version = "34.0.4";
 
     src = fetchFromGitHub {
       owner = "luaposix";
       repo = "luaposix";
       rev = "release-v${version}";
-      sha256 = "0y531p54lx2yf243bcsyp6sv8fvbqidp20yry0xvb85p8zw9dlrq";
+      sha256 = "0p5583vidsm7s97zihf47c34vscwgbl86axrnj44j328v45kxb2z";
     };
 
-    buildInputs = [ perl ];
+    propagatedBuildInputs = [ std.normalize bit32 ];
+
+    buildPhase = ''
+      ${lua}/bin/lua build-aux/luke \
+        package="luaposix" \
+        version="${version}"
+    '';
+
+    installPhase = ''
+      ${lua}/bin/lua build-aux/luke install --quiet \
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}" \
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+    '';
 
     meta = with stdenv.lib; {
       description = "Lua bindings for POSIX API";
       homepage = "https://github.com/luaposix/luaposix";
       license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
+      maintainers = with maintainers; [ vyp lblasc ];
       platforms = platforms.unix;
     };
   };
