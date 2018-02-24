@@ -12505,8 +12505,6 @@ with pkgs;
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
-  pumpio = callPackage ../servers/web-apps/pump.io { };
-
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
 
   pyIRCt = callPackage ../servers/xmpp/pyIRCt {};
