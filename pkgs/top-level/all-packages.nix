@@ -19419,6 +19419,8 @@ with pkgs;
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
+  rrootage = callPackage ../games/rrootage { };
+
   saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
