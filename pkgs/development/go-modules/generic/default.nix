@@ -196,6 +196,9 @@ go.stdenv.mkDerivation (
     find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
 
+  # Disable go cache, which is not reused in nix anyway
+  GOCACHE = "off";
+
   shellHook = ''
     d=$(mktemp -d "--suffix=-$name")
   '' + toString (map (dep: ''
