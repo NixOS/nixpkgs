@@ -8636,6 +8636,8 @@ with pkgs;
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  bulletml = callPackage ../development/libraries/bulletml { };
+
   bwidget = callPackage ../development/libraries/bwidget { };
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
