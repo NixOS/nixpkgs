@@ -6809,6 +6809,8 @@ with pkgs;
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
+  lumo = callPackage ../development/interpreters/clojure/lumo.nix { };
+
   dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
