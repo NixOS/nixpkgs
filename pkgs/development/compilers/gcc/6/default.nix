@@ -62,7 +62,8 @@ let version = "6.4.0";
     enableParallelBuilding = true;
 
     patches =
-      [ ../use-source-date-epoch.patch ]
+      [ ../use-source-date-epoch.patch
+        ./explicit-fallthrus.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its

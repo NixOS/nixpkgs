@@ -1,0 +1,16 @@
+--- libiberty/cp-demangle.c.old	2018-02-24 12:06:13.627323349 -0500
++++ libiberty/cp-demangle.c	2018-02-24 12:07:39.323206522 -0500
+@@ -5794,11 +5794,13 @@
+     case DEMANGLE_COMPONENT_REFERENCE_THIS:
+       /* For the ref-qualifier, put a space before the &.  */
+       d_append_char (dpi, ' ');
++      /* FALLTHRU */
+     case DEMANGLE_COMPONENT_REFERENCE:
+       d_append_char (dpi, '&');
+       return;
+     case DEMANGLE_COMPONENT_RVALUE_REFERENCE_THIS:
+       d_append_char (dpi, ' ');
++      /* FALLTHRU */
+     case DEMANGLE_COMPONENT_RVALUE_REFERENCE:
+       d_append_string (dpi, "&&");
+       return;
