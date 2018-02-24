@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which, pkgconfig, xlibsWrapper, SDL2, mesa, openalSoft
+{ lib, stdenv, fetchFromGitHub, which, pkgconfig, xlibsWrapper, SDL2, libGLU_combined, openalSoft
 , curl, speex, opusfile, libogg, libopus, libjpeg, mumble, freetype
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which pkgconfig ];
-  buildInputs = [ xlibsWrapper SDL2 mesa openalSoft curl speex opusfile libogg libopus libjpeg freetype mumble ];
+  buildInputs = [ xlibsWrapper SDL2 libGLU_combined openalSoft curl speex opusfile libogg libopus libjpeg freetype mumble ];
 
   enableParallelBuilding = true;
 

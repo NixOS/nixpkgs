@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, SDL, mesa, openal, curl, libXxf86vm }:
+{ stdenv, fetchurl, unzip, SDL, libGLU_combined, openal, curl, libXxf86vm }:
 
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
        })
     ];
 
-  buildInputs = [ unzip SDL mesa openal curl libXxf86vm ];
+  buildInputs = [ unzip SDL libGLU_combined openal curl libXxf86vm ];
   sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
   configurePhase = ''
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     p=$out/opt/urbanterror/Quake3-UrT
     cur_rpath=$(patchelf --print-rpath $p)
-    patchelf --set-rpath $cur_rpath:${mesa}/lib $p
+    patchelf --set-rpath $cur_rpath:${libGLU_combined}/lib $p
   '';
 
   hardeningDisable = [ "format" ];

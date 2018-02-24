@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL2_image, freetype, glew, mesa, boost, glm
+, SDL2_image, freetype, glew, libGLU_combined, boost, glm
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glew SDL2 ftgl libpng libjpeg pcre SDL2_image mesa
+    glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU_combined
     boost glm freetype
   ];
 

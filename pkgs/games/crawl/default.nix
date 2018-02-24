@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype, pngcrush, advancecomp
+, dejavu_fonts, libpng, SDL2, SDL2_image, libGLU_combined, freetype, pngcrush, advancecomp
 , tileMode ? false
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype mesa ];
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ];
 
   preBuild = ''
     cd crawl-ref/source

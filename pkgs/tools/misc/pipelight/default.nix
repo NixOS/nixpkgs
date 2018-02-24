@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, mesa, perl, wineStaging
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, perl, wineStaging
  }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1i440rf22fmd2w86dlm1mpi3nb7410rfczc0yldnhgsvp5p3sm5f";
   };
 
-  buildInputs = [ wine_custom libX11 mesa curl ];
+  buildInputs = [ wine_custom libX11 libGLU_combined curl ];
 
   propagatedbuildInputs = [ curl cabextract ];
 

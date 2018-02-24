@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libxml2, freetype, mesa, glew, qt4
+{ fetchurl, stdenv, libxml2, freetype, libGLU_combined, glew, qt4
 , cmake, makeWrapper, libjpeg, python }:
 
 let version = "4.9.0"; in
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0phc7972brvm0v6lfk4ghq9b2b4jsj6c15xlbgnvhhcxhc99wba3";
   };
 
-  buildInputs = [ libxml2 freetype glew mesa qt4 libjpeg python ];
+  buildInputs = [ libxml2 freetype glew libGLU_combined qt4 libjpeg python ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 

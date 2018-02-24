@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, coreutils, which, pkgconfig
-, ffmpeg, mesa, freetype, libxml2, python34
+, ffmpeg, libGLU_combined, freetype, libxml2, python34
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , alsaLib ? null, libv4l ? null
 , udev ? null, libX11 ? null, libXext ? null, libXxf86vm ? null
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ffmpeg mesa freetype libxml2 coreutils python34 which SDL ]
+  buildInputs = [ ffmpeg libGLU_combined freetype libxml2 coreutils python34 which SDL ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optionals stdenv.isLinux [ udev alsaLib libX11 libXext libXxf86vm libXdmcp libv4l libpulseaudio ];
 

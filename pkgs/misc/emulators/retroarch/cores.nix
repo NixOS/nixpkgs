@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, makeWrapper, python27, retroarch
-, alsaLib, fluidsynth, curl, hidapi, mesa, gettext, glib, gtk2, portaudio, SDL
+, alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
 
@@ -140,7 +140,7 @@ in
     description = "Port of Dolphin to libretro";
 
     extraBuildInputs = [
-      cmake curl mesa pcre pkgconfig sfml miniupnpc
+      cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
       libevdev libudev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
@@ -213,7 +213,7 @@ in
     };
     description = "Port of MAME to libretro";
 
-    extraBuildInputs = [ alsaLib mesa portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsaLib libGLU_combined portaudio python27 xorg.libX11 ];
   }).override {
     postPatch = ''
       # Prevent the failure during the parallel building of:
@@ -241,7 +241,7 @@ in
     };
     description = "Libretro port of Mupen64 Plus, GL only";
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -267,7 +267,7 @@ in
     };
     description = "Parallel Mupen64plus rewrite for libretro.";
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -295,7 +295,7 @@ in
       sha256 = "06k1gzmypz61dslynrw4b5i161rhj43y6wnr2nhbzvwcv5bw8w8r";
     };
     description = "ppsspp libretro port";
-    extraBuildInputs = [ mesa ffmpeg ];
+    extraBuildInputs = [ libGLU_combined ffmpeg ];
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -332,7 +332,7 @@ in
       sha256 = "0d8wzpv7pcyh437gmvi439vim26wyrjmi5hj97wvyvggywjwrx8m";
     };
     description = "Reicast libretro port";
-    extraBuildInputs = [ mesa ];
+    extraBuildInputs = [ libGLU_combined ];
   }).override {
     buildPhase = "make";
   };
@@ -345,7 +345,7 @@ in
       sha256 = "097i2dq3hw14hicsplrs36j1qa3r45vhzny5v4aw6qw4aj34hksy";
     };
     description = "Libretro port of ScummVM";
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis mesa SDL ];
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU_combined SDL ];
   }).override {
     buildPhase = "cd backends/platform/libretro/build && make";
   };

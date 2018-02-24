@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
+, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost cmake ffmpeg gettext glew ilmbase
       libXi libX11 libXext libXrender
-      freetype libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+      freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU_combined openal
       opencolorio openexr openimageio openjpeg_1 python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
     ]

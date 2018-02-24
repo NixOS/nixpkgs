@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, zlib, xproto, mesa ? null, freeglut ? null }:
+{ stdenv, fetchurl, libX11, zlib, xproto, libGLU_combined ? null, freeglut ? null }:
 
 stdenv.mkDerivation rec {
   name = "construo-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libX11 zlib xproto ]
-    ++ stdenv.lib.optional (mesa != null) mesa
+    ++ stdenv.lib.optional (libGLU_combined != null) mesa
     ++ stdenv.lib.optional (freeglut != null) freeglut;
 
   preConfigure = ''

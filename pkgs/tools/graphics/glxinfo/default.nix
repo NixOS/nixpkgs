@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "glxinfo-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${version}/mesa-demos-${version}.tar.bz2";
+    url = "ftp://ftp.freedesktop.org/pub/libGLU_combined/demos/${version}/mesa-demos-${version}.tar.bz2";
     sha256 = "1vqb7s5m3fcg2csbiz45mha1pys2xx6rhw94fcyvapqdpm5iawy1";
   };
 

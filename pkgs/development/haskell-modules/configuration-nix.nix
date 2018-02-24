@@ -221,7 +221,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.mesa);
+  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.

@@ -20,7 +20,7 @@ let
    boehmgc ncurses readline gsl libsigsegv
    python zlib perl texLive texinfo xz ]
    ++ stdenv.lib.optionals stdenv.isLinux
-     [ freeglut libGLU libGL mesa_noglu.osmesa ]
+     [ freeglut libGLU libGL libGLU_combined_noglu.osmesa ]
    ++ stdenv.lib.optionals stdenv.isDarwin
      (with darwin.apple_sdk.frameworks; [ OpenGL GLUT Cocoa ])
    ;

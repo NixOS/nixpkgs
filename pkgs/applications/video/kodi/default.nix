@@ -8,7 +8,7 @@
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
 , libXtst, libXfixes, fixesproto, systemd
-, alsaLib, mesa, glew, fontconfig, freetype, ftgl
+, alsaLib, libGLU_combined, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -125,7 +125,7 @@ in stdenv.mkDerivation rec {
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto libXtst libXfixes fixesproto
-      alsaLib mesa glew fontconfig freetype ftgl
+      alsaLib libGLU_combined glew fontconfig freetype ftgl
       libjpeg jasper libpng libtiff wayland
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd

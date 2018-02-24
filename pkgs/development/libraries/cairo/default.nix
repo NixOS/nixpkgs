@@ -2,7 +2,7 @@
 , libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? true, libGL ? null # mesa is no longer a big dependency
+, glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchgit, cmake, writeScriptBin, callPackage
 , perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, mesa
+, enableStoneSense ? false,  allegro5, libGLU_combined
 }:
 
 let
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
   buildInputs = [ zlib ]
-             ++ lib.optionals enableStoneSense [ allegro5 mesa ];
+             ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
 
   preConfigure = ''
     # Trick build system into believing we have .git
