@@ -9210,7 +9210,7 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { };
 
-  icu58 = callPackage ../development/libraries/icu/58.nix {
+  icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) {
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
   } //
     (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
