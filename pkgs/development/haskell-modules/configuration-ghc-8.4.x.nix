@@ -62,7 +62,13 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = dontCheck super.doctest_0_14_1; # test suite fails in Nix
+  doctest = overrideCabal super.doctest_0_14_1 (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## ghc >=7.0 && <8.4
+    ##
+    ##        uncaught exception: IOException of type NoSuchThing (test/integration/testImport: changeWorkingDirectory: does not exist (No such file or directory))
+    doCheck         = false;
+  });
 
   ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
@@ -151,6 +157,21 @@ self: super: {
 
 
   ## Upstreamed
+
+  ## Upstreamed, awaiting a Hackage release
+  deriving-compat = overrideCabal super.deriving-compat (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## template-haskell >=2.5 && <2.13
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell-compat";
+      repo   = "deriving-compat";
+      rev    = "e592c6f8af53866dcf6f5700175a3b02bb4f77d3";
+      sha256 = "0h4qadk7fmz5v3lbdsxfbf3ha81f73xn7v0s6wia16ika5yvfggs";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## th-abstraction >=0.2.2 && <1
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ th-abstraction ]);
+  });
 
   ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
@@ -306,7 +327,7 @@ self: super: {
     doCheck         = false;
     ## Setup: Encountered missing dependencies:
     ## data-or ==1.0.*
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.data-or ];
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-or ]);
   });
 
   ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
@@ -372,7 +393,7 @@ self: super: {
     ## monad-control -any,
     ## prim-uniq -any,
     ## reflection -any,
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.data-default self.haskell-src-exts self.lens self.monad-control self.prim-uniq self.reflection self.split self.template-haskell self.unbounded-delays ];
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
   });
 
   ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
@@ -502,6 +523,12 @@ self: super: {
     jailbreak       = true;
   });
 
+  hnix = overrideCabal super.hnix (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## deriving-compat ==0.3.*
+    jailbreak       = true;
+  });
+
   integer-logarithms = overrideCabal super.integer-logarithms (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.3 && <4.11
@@ -625,4 +652,5 @@ self: super: {
     ## base >=4.8 && <4.11
     jailbreak       = true;
   });
+
 }
