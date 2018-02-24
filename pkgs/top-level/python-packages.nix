@@ -9303,6 +9303,8 @@ in {
 
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
+  jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
+
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
     version = "1.4.0";
