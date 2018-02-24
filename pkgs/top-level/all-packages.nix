@@ -18124,6 +18124,7 @@ with pkgs;
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
+      ++ optional (config.kodi.enablePVRIPTVSimple or false) pvr-iptvsimple
       );
   };
 

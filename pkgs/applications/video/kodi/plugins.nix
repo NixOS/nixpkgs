@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
 
 with (callPackage ./commons.nix {});
 
@@ -313,5 +313,29 @@ rec {
 
     extraBuildInputs = [ jsoncpp libhdhomerun ];
 
+  };
+
+  pvr-iptvsimple = mkKodiABIPlugin rec {
+
+    plugin = "pvr-iptvsimple";
+    namespace = "pvr.iptvsimple";
+    version = "2.4.14";
+
+    src = fetchFromGitHub {
+      owner = "kodi-pvr";
+      repo = "pvr.iptvsimple";
+      rev = "2a649d7e21b64c4fa4a8b14c2cc139261eebc7e8";
+      sha256 = "1f1im2gachrxnr3z96h5cg2c13vapgkvkdwvrbl4hxlnyp1a6jyz";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/kodi-pvr/pvr.iptvsimple;
+      description = "Kodi's IPTV Simple client addon";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ ];
+      license = licenses.gpl2Plus;
+    };
+
+    extraBuildInputs = [ zlib ];
   };
 }
