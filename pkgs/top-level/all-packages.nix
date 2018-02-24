@@ -9543,7 +9543,7 @@ with pkgs;
 
   libdevil-nox = libdevil.override {
     libX11 = null;
-    mesa_noglu = null;
+    libGL = null;
   };
 
   libdigidoc = callPackage ../development/libraries/libdigidoc { };
