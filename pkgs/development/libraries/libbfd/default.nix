@@ -1,7 +1,9 @@
-{ stdenv
-, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison, binutils-raw
+{ stdenv, buildPackages
+, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison
 , libiberty, zlib
 }:
+
+let inherit (buildPackages.buildPackages) binutils-raw; in
 
 stdenv.mkDerivation rec {
   name = "libbfd-${version}";
