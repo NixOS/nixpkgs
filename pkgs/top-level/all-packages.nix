@@ -12996,8 +12996,6 @@ with pkgs;
 
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
-    armTrustedFirmwareAllwinner
-    armTrustedFirmwareQemu
     armTrustedFirmwareRK3328
     ;
 
