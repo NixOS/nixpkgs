@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     -qt-gif
     -I${xextproto}/include
     ${if openglSupport then "-dlopen-opengl
-      -L${libGLU_combined}/lib -I${mesa}/include
+      -L${libGLU_combined}/lib -I${libGLU_combined}/include
       -L${libXmu.out}/lib -I${libXmu.dev}/include" else ""}
     ${if threadSupport then "-thread" else "-no-thread"}
     ${if xrenderSupport then "-xrender -L${libXrender.out}/lib -I${libXrender.dev}/include" else "-no-xrender"}
