@@ -8,6 +8,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "8ed6c9ac6b7565b226b4da2da48876c9198d76401ec8d9c5e4c69b45423e33f8";
   };
+  
+  # TODO: Remove when next version is released
+  patches = [ ./fix-python-3-compatibility.patch ];
 
   propagatedBuildInputs = [ pytest ] ++ lib.optional (!isPy3k) mock;
   nativeBuildInputs = [ setuptools_scm ];
