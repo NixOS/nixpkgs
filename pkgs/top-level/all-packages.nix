@@ -10630,6 +10630,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit VideoDecodeAcceleration;
   };
 
+  opencv3WithoutCuda = opencv3.override {
+    enableCuda = false;
+  };
+
   # this ctl version is needed by openexr_viewers
   openexr_ctl = ctl;
 
@@ -18577,6 +18581,7 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
     inherit (kdeApplications) kcalcore;
+    opencv3 = opencv3WithoutCuda;
   };
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
@@ -19740,9 +19745,7 @@ with pkgs;
     cudaSupport = config.caffe.cudaSupport or config.cudaSupport or false;
     cudnnSupport = cudaSupport;
     # Used only for image loading.
-    opencv3 = self.opencv3.override {
-      enableCuda = false;
-    };
+    opencv3 = opencv3WithoutCuda;
   };
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 {
@@ -19751,9 +19754,7 @@ with pkgs;
     protobuf = protobuf3_1;
     python-protobuf = python3Packages.protobuf3_1;
     # Used only for image loading.
-    opencv3 = self.opencv3.override {
-      enableCuda = false;
-    };
+    opencv3 = opencv3WithoutCuda;
   };
 
   cntk = callPackage ../applications/science/math/cntk rec {
@@ -19761,9 +19762,7 @@ with pkgs;
     cudnnSupport = cudaSupport;
     inherit (linuxPackages) nvidia_x11;
     # Used only for image loading.
-    opencv3 = self.opencv3.override {
-      enableCuda = false;
-    };
+    opencv3 = opencv3WithoutCuda;
   };
 
   ecm = callPackage ../applications/science/math/ecm { };
