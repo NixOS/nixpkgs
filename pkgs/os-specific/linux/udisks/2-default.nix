@@ -1,39 +1,51 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnused
-, expat, acl, systemd, glib, libatasmart, polkit
-, libxslt, docbook_xsl, utillinux, mdadm, libgudev
-, gobjectIntrospection
+{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
+, gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
+, expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
+, gobjectIntrospection, docbook_xml_dtd_43
 }:
 
-stdenv.mkDerivation rec {
-  name = "udisks-2.1.6";
+let
+  version = "2.7.6";
+in stdenv.mkDerivation rec {
+  name = "udisks-${version}";
 
-  src = fetchurl {
-    url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
+  src = fetchFromGitHub {
+    owner = "storaged-project";
+    repo = "udisks";
+    rev = name;
+    sha256 = "16kf104vv2xbk8cdgaqygszcl69d7lz9gf3vmi7ggywn7nfbp2ks";
   };
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "man" "dev" "devdoc" ];
 
-  patches = [ ./force-path.patch ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      parted = "${parted}/bin/parted";
+      mdadm = "${mdadm}/bin/mdadm";
+      blkid = "${utillinux}/bin/blkid";
+      sh = "${bash}/bin/sh";
+      bash = "${bash}/bin/bash";
+      sed = "${gnused}/bin/sed";
+      true = "${coreutils}/bin/true";
+      sleep = "${coreutils}/bin/sleep";
+      false = "${coreutils}/bin/false";
+    })
+  ];
 
-  # FIXME remove /var/run/current-system/sw/* references
-  # FIXME add references to parted, cryptsetup, etc (see the sources)
-  postPatch =
-    ''
-      substituteInPlace src/main.c --replace \
-        "@path@" \
-        "${utillinux}/bin:${mdadm}/bin:/run/current-system/sw/bin"
-      substituteInPlace data/80-udisks2.rules \
-        --replace "/bin/sh" "${stdenv.shell}" \
-        --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
-        --replace " sed " " ${gnused}/bin/sed "
-    '';
+  nativeBuildInputs = [
+    pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
+    gtk-doc libxslt docbook_xml_dtd_43 docbook_xsl
+  ];
 
-  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
+  buildInputs = [
+    expat libgudev libblockdev acl systemd glib libatasmart polkit
+  ];
 
-  buildInputs = [ libxslt docbook_xsl libgudev expat acl systemd glib libatasmart polkit ];
+  preConfigure = "./autogen.sh";
 
   configureFlags = [
+    "--enable-gtk-doc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
@@ -44,9 +56,11 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
-  meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/udisks;
-    description = "A daemon and command-line utility for querying and manipulating storage devices";
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
+    homepage = https://www.freedesktop.org/wiki/Software/udisks/;
+    license = licenses.gpl2Plus; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
+    maintainers = with maintainers; [];
+    platforms = platforms.linux;
   };
 }
