@@ -11035,7 +11035,7 @@ let self = _self // overrides; _self = with self; {
     # tests fail; look unfinished
     doCheck = false;
     meta = {
-      homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-perl/";
+      homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-perl/;
       description = "Communicate with a smart card using PC/SC";
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with maintainers; [ abbradar ];

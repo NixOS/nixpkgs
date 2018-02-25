@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    homepage = "https://github.com/Microsoft/CNTK";
+    homepage = https://github.com/Microsoft/CNTK;
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     maintainers = with maintainers; [ abbradar ];
