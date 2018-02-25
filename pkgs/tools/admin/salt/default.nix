@@ -20,7 +20,7 @@ python2Packages.buildPythonApplication rec {
     futures
     jinja2
     markupsafe
-    msgpack
+    msgpack-python
     pycrypto
     pyyaml
     pyzmq
