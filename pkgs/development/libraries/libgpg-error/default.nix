@@ -1,6 +1,21 @@
-{ stdenv, buildPackages, fetchurl, gettext }:
+{ stdenv, buildPackages, fetchurl, gettext
+, genPosixLockObjOnly ? false
+}: let
+  genPosixLockObjOnlyAttrs = stdenv.lib.optionalAttrs genPosixLockObjOnly {
+    buildPhase = ''
+      cd src
+      make gen-posix-lock-obj
+    '';
 
-stdenv.mkDerivation rec {
+    installPhase = ''
+      mkdir -p $out/bin
+      install -m755 gen-posix-lock-obj $out/bin
+    '';
+
+    outputs = [ "out" ];
+    outputBin = "out";
+  };
+in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
   version = "1.27";
 
@@ -49,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.fuuzetsu maintainers.vrthra ];
   };
-}
+} // genPosixLockObjOnlyAttrs)
