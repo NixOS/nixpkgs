@@ -508,6 +508,7 @@
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
+  ./services/networking/ndppd.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
