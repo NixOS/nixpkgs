@@ -9255,23 +9255,7 @@ in {
 
   pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
-  pylru = buildPythonPackage rec {
-    name = "pylru-${version}";
-    version = "1.0.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pylru/${name}.tar.gz";
-      sha256 = "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi";
-    };
-
-    meta = {
-      homepage = "https://github.com/jlhutch/pylru";
-      description = "A least recently used (LRU) cache implementation";
-      license = licenses.gpl2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  pylru = callPackage ../development/python-modules/pylru/default.nix { };
 
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
