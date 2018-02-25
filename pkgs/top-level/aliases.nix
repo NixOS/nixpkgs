@@ -66,6 +66,7 @@ mapAliases (rec {
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
+  font-awesome-ttf = font-awesome_4; # 2018-02-25
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11
   gettextWithExpat = gettext; # 2016-02-19
