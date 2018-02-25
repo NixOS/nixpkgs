@@ -6168,32 +6168,6 @@ in {
 
   pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
 
-  pypolicyd-spf = buildPythonPackage rec {
-    name = "pypolicyd-spf-${version}";
-    majorVersion = "2.0";
-    version = "${majorVersion}.1";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
-      sha256 = "09yi8y7pij5vzzrkc9sdw01x8w5n758d0qg7wv5hxd1l6if8c94i";
-    };
-
-    propagatedBuildInputs = with self; [ pyspf ];
-
-    preBuild = ''
-      substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
-    '';
-
-    meta = {
-      homepage = "https://launchpad.net/pypolicyd-spf/";
-      description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
-      maintainers = with maintainers; [ abbradar ];
-      license = licenses.asl20;
-      platforms = platforms.all;
-    };
-  };
-
   pyramid = buildPythonPackage rec {
     pname = "pyramid";
     version = "1.9.1";

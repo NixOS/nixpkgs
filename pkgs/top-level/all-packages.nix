@@ -12513,6 +12513,8 @@ with pkgs;
 
   pyMAILt = callPackage ../servers/xmpp/pyMAILt {};
 
+  pypolicyd-spf = python3.pkgs.callPackage ../servers/mail/pypolicyd-spf { };
+
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
   };
