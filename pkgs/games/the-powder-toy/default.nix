@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
-  version = "92.0.331";
+  version = "92.5";
 
   src = fetchFromGitHub {
     owner = "simtr";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "185zlg20qk6ic9llyf4xka923snqrpdazg568raz0jiafzzsirax";
+    sha256 = "1n15kgl4qnz55b32ddgmhrv64cl3awbds8arycn7mkf7akwdg1g6";
   };
 
   patches = [ ./fix-env.patch ];
