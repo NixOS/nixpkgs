@@ -38,13 +38,6 @@ stdenv.mkDerivation rec {
     patchShebangs post_install.py
   '';
 
-  postFixup = ''
-    # Patched meson does not add internal libraries to rpath
-    for f in $out/bin/.*-wrapped $out/libexec/.*-wrapped $out/libexec/epiphany/.*-wrapped $out/lib/epiphany/*.so $out/lib/epiphany/web-extensions/*.so; do
-      patchelf --set-rpath "$out/lib/epiphany:$(patchelf --print-rpath $f)" "$f"
-    done
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Epiphany;
     description = "WebKit based web browser for GNOME";
