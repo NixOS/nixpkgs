@@ -465,6 +465,18 @@ self: super: {
     prePatch        = "cd core; ";
   });
 
+  ## Unmerged.  PR: https://github.com/Soostone/uri-bytestring/pull/0
+  uri-bytestring = overrideCabal super.uri-bytestring (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## template-haskell >=2.9 && <2.13
+    src = pkgs.fetchFromGitHub {
+      owner  = "koenigmaximilian";
+      repo   = "uri-bytestring";
+      rev    = "105d5855bbf9c78d1e48394677b42a058e242fc9";
+      sha256 = "144hr12k0d61zpgxv62vwlzy6bfs01fqh7qr4qsbv457sznmbb9d";
+    };
+  });
+
   ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
   wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
     ##     Ambiguous occurrence ‘<>’
