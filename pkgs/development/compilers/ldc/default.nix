@@ -2,8 +2,8 @@
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage
 , bootstrapVersion ? false
-, version ? "1.7.0"
-, ldcSha256 ? "1g8qvmlzvsp030z2rw6lis4kclsd9mlmnbim5kas0k1yr9063m3w"
+, version ? "1.8.0"
+, ldcSha256 ? "0zswjlibj8zcdj06nn09jjhbd99chsa5f4kps8xifzgrpgsa28g4"
 }:
 
 let
@@ -29,16 +29,12 @@ let
       sha256 = ldcSha256;
     };
 
-    sourceRoot = ".";
-
     postUnpack = ''
-        cd ldc-${version}-src/
-
         patchShebangs .
 
         # Remove cppa test for now because it doesn't work.
-        rm tests/d2/dmd-testsuite/runnable/cppa.d
-        rm tests/d2/dmd-testsuite/runnable/extra-files/cppb.cpp
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/cppa.d
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/extra-files/cppb.cpp
     ''
 
     + stdenv.lib.optionalString (bootstrapVersion) ''
@@ -55,12 +51,15 @@ let
         #
         #==============================
         #Test failed: expected rc == 0, exited with rc == 1
-        rm tests/d2/dmd-testsuite/runnable/variadic.d
+        rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/variadic.d
     ''
 
     + stdenv.lib.optionalString (!bootstrapVersion) ''
 	    # http://forum.dlang.org/thread/xtbbqthxutdoyhnxjhxl@forum.dlang.org
-	    rm -r tests/dynamiccompile
+	    rm -r ldc-${version}-src/tests/dynamiccompile
+
+            # https://github.com/NixOS/nixpkgs/issues/34817
+	    rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
     '';
 
     ROOT_HOME_DIR = "$(echo ~root)";
@@ -190,8 +189,6 @@ let
 
     src = ldcBuild.src;
 
-    sourceRoot = ".";
-
     postUnpack = ldcBuild.postUnpack;
 
     postPatch = ldcBuild.postPatch;
@@ -212,7 +209,7 @@ let
                         "-DLDC_WITH_LLD=OFF"
                         # Xcode 9.0.1 fixes that bug according to ldc release notes
                         "-DRT_ARCHIVE_WITH_LDC=OFF"
-                        "-DD_COMPILER=${ldcBuild}/bin/ldmd2"
+                        "-DD_COMPILER=${ldcBuild.out}/bin/ldmd2"
                       )
     '';
 
@@ -223,7 +220,7 @@ let
     buildCmd = if bootstrapVersion then
       "ctest -V -R \"build-druntime-ldc-unittest|build-phobos2-ldc-unittest\""
     else
-      "make -j$NIX_BUILD_CORES DMD=${ldcBuild}/bin/ldc2 druntime-test-runner druntime-test-runner-debug phobos2-test-runner phobos2-test-runner-debug";
+      "make -j$NIX_BUILD_CORES DMD=${ldcBuild.out}/bin/ldc2 phobos2-test-runner phobos2-test-runner-debug";
 
     testCmd = if bootstrapVersion then
       "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest|llvm-ir-testsuite\""
@@ -232,6 +229,7 @@ let
 
     buildPhase = ''
         ${buildCmd}
+        ln -s ${ldcBuild.out}/bin/ldmd2 $PWD/bin/ldmd2
         ${testCmd}
     '';
 
