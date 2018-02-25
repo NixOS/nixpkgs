@@ -1,0 +1,29 @@
+From 9214b5eaf45bbe99c86700dc998fd6ad97406cc5 Mon Sep 17 00:00:00 2001
+From: Ghislain Antony Vaillant <ghisvail@users.noreply.github.com>
+Date: Mon, 19 Feb 2018 08:51:25 +0000
+Subject: [PATCH] Fix Python 3 compatibility
+
+---
+ setup.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 095629c..cc3e87b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,5 +1,6 @@
+ from setuptools import setup
+ 
++from io import open
+ 
+ setup(
+     name='pytest-mock',
+@@ -20,7 +21,7 @@
+     author='Bruno Oliveira',
+     author_email='nicoddemus@gmail.com',
+     description='Thin-wrapper around the mock package for easier use with py.test',
+-    long_description=open('README.rst').read(),
++    long_description=open('README.rst', encoding='utf-8').read(),
+     keywords="pytest mock",
+     classifiers=[
+         'Development Status :: 5 - Production/Stable',
