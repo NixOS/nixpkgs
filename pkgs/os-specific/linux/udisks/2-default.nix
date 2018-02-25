@@ -2,6 +2,7 @@
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
 , gobjectIntrospection, docbook_xml_dtd_43
+, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, udftools, ntfs3g
 }:
 
 let
@@ -21,15 +22,18 @@ in stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      parted = "${parted}/bin/parted";
-      mdadm = "${mdadm}/bin/mdadm";
-      blkid = "${utillinux}/bin/blkid";
-      sh = "${bash}/bin/sh";
       bash = "${bash}/bin/bash";
-      sed = "${gnused}/bin/sed";
-      true = "${coreutils}/bin/true";
-      sleep = "${coreutils}/bin/sleep";
+      blkid = "${utillinux}/bin/blkid";
       false = "${coreutils}/bin/false";
+      mdadm = "${mdadm}/bin/mdadm";
+      sed = "${gnused}/bin/sed";
+      sh = "${bash}/bin/sh";
+      sleep = "${coreutils}/bin/sleep";
+      true = "${coreutils}/bin/true";
+    })
+    (substituteAll {
+      src = ./force-path.patch;
+      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils libxfs ntfs3g parted utillinux ];
     })
   ];
 

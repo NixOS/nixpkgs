@@ -1,0 +1,13 @@
+diff -ruN udisks-2.1.0.orig/src/main.c udisks-2.1.0/src/main.c
+--- udisks-2.1.0.orig/src/main.c	2013-04-02 10:43:41.629332135 +0000
++++ udisks-2.1.0/src/main.c	2013-04-02 11:04:55.635342823 +0000
+@@ -140,8 +140,7 @@
+         }
+     }
+ 
+-  if (g_getenv ("PATH") == NULL)
+-    g_setenv ("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", TRUE);
++  g_setenv ("PATH", "@path@", TRUE);
+ 
+   udisks_notice ("udisks daemon version %s starting", PACKAGE_VERSION);
+ 

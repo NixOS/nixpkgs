@@ -129,23 +129,3 @@
    udisks_spawned_job_start (job);
    g_object_unref (job);
  }
---- a/src/udiskslinuxfsinfo.c
-+++ b/src/udiskslinuxfsinfo.c
-@@ -211,7 +211,7 @@
-       NULL,
-       FALSE, /* supports_online_label_rename */
-       FALSE, /* supports_owners */
--      "parted --script $DEVICE mktable msdos",
-+      "@parted@ --script $DEVICE mktable msdos",
-       NULL,
-     },
-     {
-@@ -220,7 +220,7 @@
-       NULL,
-       FALSE, /* supports_online_label_rename */
-       FALSE, /* supports_owners */
--      "parted --script $DEVICE mktable gpt",
-+      "@parted@ --script $DEVICE mktable gpt",
-       NULL,
-     },
-     /* empty */
