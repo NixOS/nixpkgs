@@ -4947,6 +4947,8 @@ with pkgs;
 
   texmaker = callPackage ../applications/editors/texmaker { };
 
+  texpretty = callPackage ../tools/text/texpretty { };
+
   texstudio = callPackage ../applications/editors/texstudio { };
 
   textadept = callPackage ../applications/editors/textadept { };
