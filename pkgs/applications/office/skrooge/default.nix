@@ -24,6 +24,13 @@ mkDerivation rec {
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];
 
+  # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
+  # This is needed ONLY for developers. So NOT NEEDED for end user.
+  # Source: https://forum.kde.org/viewtopic.php?f=210&t=143375#p393675
+  cmakeFlags = [
+    "-DSKG_DESIGNER=OFF"
+  ];
+
   meta = with lib; {
     description = "A personal finances manager, powered by KDE";
     license = with licenses; [ gpl3 ];
