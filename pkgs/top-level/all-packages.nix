@@ -19744,14 +19744,20 @@ with pkgs;
     inherit (python3Packages) python future six numpy pydot;
     protobuf = protobuf3_1;
     python-protobuf = python3Packages.protobuf3_1;
+    # Used only for image loading.
+    opencv3 = self.opencv3.override {
+      enableCuda = false;
+    };
   };
 
   cntk = callPackage ../applications/science/math/cntk rec {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudnnSupport = cudaSupport;
     inherit (linuxPackages) nvidia_x11;
-    cudatoolkit = cudatoolkit8;
-    cudnn = cudnn6_cudatoolkit8;
+    # Used only for image loading.
+    opencv3 = self.opencv3.override {
+      enableCuda = false;
+    };
   };
 
   ecm = callPackage ../applications/science/math/ecm { };
