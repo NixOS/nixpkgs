@@ -43,6 +43,35 @@ let
     inherit lua;
   };
 
+  bit32 = buildLuaPackage rec {
+    version = "5.3.0";
+    name = "bit32-${version}";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "lua-compat-5.2";
+      rev = "bitlib-${version}";
+      sha256 = "1ipqlbvb5w394qwhm2f3w6pdrgy8v4q8sps5hh3pqz14dcqwakhj";
+    };
+
+    buildPhase = ''
+      cc ${if stdenv.isDarwin then "-bundle -undefined dynamic_lookup -all_load" else "-shared"} -Ic-api lbitlib.c -o bit32.so
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p bit32.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Lua 5.2 bit manipulation library";
+      homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms = platforms.unix;
+    };
+  };
+
   luabitop = buildLuaPackage rec {
     version = "1.0.2";
     name = "bitop-${version}";
