@@ -644,6 +644,8 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
