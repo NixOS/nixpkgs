@@ -19,7 +19,8 @@ let common = {perlVersion, perlSha256}:
     ];
     sourceRoot = "perl-${perlVersion}";
 
-    nativeBuildInputs = [ buildPackages.stdenv.cc ];
+    # gcc7 appears to miscompile, resulting in segmentation faults
+    nativeBuildInputs = [ buildPackages.gcc6 ];
 
     postUnpack = "cp -R perl-cross-${crossVersion}/* perl-${perlVersion}";
 
