@@ -16,6 +16,9 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
+> You may also want the following for building crates with C dependencies:
+> `binutils gcc gnumake`
+
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
@@ -76,7 +79,7 @@ an example for a minimal `hello` crate:
      Compiling hello v0.1.0 (file:///tmp/hello)
       Finished dev [unoptimized + debuginfo] target(s) in 0.20 secs
     $ carnix -o hello.nix --src ./. Cargo.lock --standalone
-    $ nix-build hello.nix
+    $ nix-build hello.nix -A hello_0_1_0
 
 Now, the file produced by the call to `carnix`, called `hello.nix`, looks like:
 
@@ -260,6 +263,43 @@ general. A number of other parameters can be overridden:
     '';
   };
   ```
+
+### Setting Up `nix-shell`
+Oftentimes you want to develop code using `nix-shell`. Using the example above,
+we want to do the following:
+
+- Have access to `cargo` and `rustc`
+- Have the `openssl` library available to the rust crate through
+  it's _normal_ compilation mechanism (`pkg-config`).
+
+`default.nix`:
+```
+with import <nixpkgs> {};
+((import ./hello.nix).hello {}).override {
+  crateOverrides = defaultCrateOverrides // {
+    hello = attrs: {
+        buildInputs = [
+        # Some example external dependencies
+        openssl xorg.libX11 xorg.libXtst
+        # For `nix-shell`
+        rustc cargo openssl pkgconfig
+      ];
+
+      # Set Relevant ENV Variables
+      RUST_BACKTRACE=1;
+    };
+  };
+}
+```
+
+You should now be able to run the following:
+```
+$ nix-shell --pure
+$ cargo build
+$ cargo test
+```
+
+Crates that have the above dependencies will still compile.
 
 ### Features
 
