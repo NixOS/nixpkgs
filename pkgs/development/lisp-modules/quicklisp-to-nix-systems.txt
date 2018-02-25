@@ -21,11 +21,13 @@ cl-base64
 cl-cli
 cl-colors
 cl-cookie
+cl-csv
 cl-dbi
 cl-emb
 cl-fuse
 cl-fuse-meta-fs
 cl-html-parse
+cl-html5-parser
 cl-json
 cl-l10n
 cl-libuv
@@ -57,6 +59,7 @@ clx
 clx-truetype
 command-line-arguments
 css-lite
+css-selectors
 cxml
 dbd-mysql
 dbd-postgres

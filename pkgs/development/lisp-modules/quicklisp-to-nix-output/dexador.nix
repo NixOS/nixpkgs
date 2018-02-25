@@ -5,7 +5,7 @@ rec {
 
   description = ''Yet another HTTP client for Common Lisp'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."chipz" args."chunga" args."cl+ssl" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."local-time" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."usocket" args."xsubseq" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."local-time" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/dexador/2017-11-30/dexador-20171130-git.tgz'';
@@ -25,7 +25,7 @@ rec {
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
      (NAME chipz FILENAME chipz) (NAME chunga FILENAME chunga)
-     (NAME cl+ssl FILENAME cl+ssl) (NAME cl-base64 FILENAME cl-base64)
+     (NAME cl+ssl FILENAME cl_plus_ssl) (NAME cl-base64 FILENAME cl-base64)
      (NAME cl-cookie FILENAME cl-cookie) (NAME cl-fad FILENAME cl-fad)
      (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-reexport FILENAME cl-reexport)
      (NAME cl-utilities FILENAME cl-utilities)
