@@ -4,11 +4,6 @@
 
 assert delugeSupport -> deluge != null;
 
-# Flexget have been a trouble maker in the past,
-# if you see flexget breaking when updating packages, don't worry.
-# The current state is that we have no active maintainers for this package.
-# -- Mic92
-
 let
   python' = python.override { inherit packageOverrides; };
 
@@ -67,6 +62,6 @@ buildPythonApplication rec {
     homepage    = https://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
     license     = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ domenkozar tari ];
   };
 }
