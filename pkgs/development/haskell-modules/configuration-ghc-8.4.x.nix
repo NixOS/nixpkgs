@@ -213,6 +213,22 @@ self: super: {
   });
 
   ## Upstreamed, awaiting a Hackage release
+  http-api-data = overrideCabal super.http-api-data (drv: {
+    ##     • No instance for (Semigroup Form)
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
+    src = pkgs.fetchFromGitHub {
+      owner  = "fizruk";
+      repo   = "http-api-data";
+      rev    = "83aac9540f4a304927c601c5db12f4dc2bf93816";
+      sha256 = "14hy13szr09vsisxi25a4qfajqjwznvn222bqk55dcdlnrgf0zi9";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.7 && <4.11
+    jailbreak       = true;
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   lambdacube-compiler = overrideCabal super.lambdacube-compiler (drv: {
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12,
