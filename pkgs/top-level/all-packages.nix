@@ -9644,7 +9644,9 @@ with pkgs;
 
   libgroove = callPackage ../development/libraries/libgroove { };
 
-  libseccomp = callPackage ../development/libraries/libseccomp { };
+  libseccomp =  if hostPlatform.isSeccomputable
+                  then callPackage ../development/libraries/libseccomp { }
+                else null;
 
   libsecret = callPackage ../development/libraries/libsecret { };
 
