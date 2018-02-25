@@ -81,6 +81,10 @@ let
     cp -v ${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
 
+    # Compatibility with *bad UEFI*
+    mkdir -p $out/EFI/Microsoft/Boot
+    cp $out/EFI/boot/boot${targetArch}.efi $out/EFI/Microsoft/Boot/bootmgfw.efi
+
     cat << EOF > $out/loader/entries/nixos-iso.conf
     title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     linux /boot/${config.system.boot.loader.kernelFile}
