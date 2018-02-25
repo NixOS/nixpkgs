@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3
-, gnome_doc_utils, intltool, which, libuuid, vala
-, desktop_file_utils, itstool, wrapGAppsHook, appdata-tools }:
+, gnome-doc-utils, intltool, which, libuuid, vala
+, desktop-file-utils, itstool, wrapGAppsHook, appdata-tools }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools
+  buildInputs = [ gnome3.gtk gnome3.gsettings-desktop-schemas gnome3.vte appdata-tools
                   gnome3.dconf itstool gnome3.nautilus ];
 
-  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2
-                        vala desktop_file_utils wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which libuuid libxml2
+                        vala desktop-file-utils wrapGAppsHook ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.
   postPatch = ''
-    substituteInPlace configure --replace '$(eval echo $(eval echo $(eval echo ''${dbusinterfacedir})))/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome_shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
-    substituteInPlace src/Makefile.in --replace '$(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome_shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
+    substituteInPlace configure --replace '$(eval echo $(eval echo $(eval echo ''${dbusinterfacedir})))/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
+    substituteInPlace src/Makefile.in --replace '$(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml' "${gnome3.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml"
   '';
 
   # FIXME: enable for gnome3

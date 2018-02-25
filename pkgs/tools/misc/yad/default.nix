@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, hicolor_icon_theme
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, hicolor-icon-theme
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # for gcc5: c11 inline semantics breaks the build
   NIX_CFLAGS_COMPILE = "-fgnu89-inline";
 
-  buildInputs = [ gtk2 hicolor_icon_theme ];
+  buildInputs = [ gtk2 hicolor-icon-theme ];
 
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
 

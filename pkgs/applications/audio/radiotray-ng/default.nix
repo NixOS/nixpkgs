@@ -11,7 +11,7 @@
 , dbus
 , glibmm
 , gnome3
-, hicolor_icon_theme
+, hicolor-icon-theme
 , libappindicator-gtk3
 , libnotify
 , libxdg_basedir
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     boost jsoncpp libbsd pcre
-    glibmm hicolor_icon_theme gnome3.gsettings_desktop_schemas libappindicator-gtk3 libnotify
+    glibmm hicolor-icon-theme gnome3.gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
     wxGTK

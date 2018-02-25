@@ -3,7 +3,7 @@
 , isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
+, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
@@ -73,7 +73,7 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
-    dbus dbus_glib pango freetype fontconfig xorg.libXi
+    dbus dbus-glib pango freetype fontconfig xorg.libXi
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     nspr libnotify xorg.pixman yasm mesa
     xorg.libXScrnSaver xorg.scrnsaverproto

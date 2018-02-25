@@ -4876,32 +4876,7 @@ in {
     };
   };
 
-  grip = buildPythonPackage rec {
-    version = "4.3.2";
-    name = "grip-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "joeyespo";
-      repo = "grip";
-      rev = "v${version}";
-      sha256 = "05a169sfaj280k7gibbc1rznjn43l5m6l1gpl6a5cmp5r8827khs";
-    };
-    buildInputs = with self; [ pytest responses ];
-
-    propagatedBuildInputs = with self; [ docopt flask markdown path-and-address pygments requests ];
-
-    checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -xm "not assumption"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Preview GitHub Markdown files like Readme locally before committing them";
-      homepage = https://github.com/joeyespo/grip;
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  grip = callPackage ../development/python-modules/grip { };
 
   gst-python = callPackage ../development/python-modules/gst-python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
@@ -11216,7 +11191,7 @@ in {
     '';
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with self; [ python pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
+    buildInputs = with self; [ python pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus-glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 

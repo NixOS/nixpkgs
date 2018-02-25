@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, intltool, gtk, libical, dbus_glib
+{ stdenv, fetchurl, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib
 , libnotify, popt, xfce
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool bison flex ];
   
-  buildInputs = [ gtk libical dbus_glib libnotify popt xfce.libxfce4util
+  buildInputs = [ gtk libical dbus-glib libnotify popt xfce.libxfce4util
     xfce.xfce4panel ];
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache ";

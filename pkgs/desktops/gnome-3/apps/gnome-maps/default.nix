@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool gobjectIntrospection wrapGAppsHook
                   gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
-                  gnome3.geocode_glib libchamplain file libsoup
+                  gnome3.geocode-glib libchamplain file libsoup
                   gdk_pixbuf librsvg libgweather autoreconfHook
-                  gnome3.gsettings_desktop_schemas gnome3.evolution_data_server
-                  gnome3.gnome_online_accounts gnome3.defaultIconTheme
+                  gnome3.gsettings-desktop-schemas gnome3.evolution-data-server
+                  gnome3.gnome-online-accounts gnome3.defaultIconTheme
                   webkitgtk ];
 
   # The .service file isn't wrapped with the correct environment

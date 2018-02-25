@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "caja-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     mate.mate-desktop
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   patches = [

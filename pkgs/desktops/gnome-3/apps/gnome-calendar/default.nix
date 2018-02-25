@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
-, gettext, libxml2, gnome3, gtk, evolution_data_server, libsoup
-, glib, gnome_online_accounts, gsettings_desktop_schemas }:
+, gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
+, glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
   buildInputs = [
-    gtk evolution_data_server libsoup glib gnome_online_accounts
-    gsettings_desktop_schemas gnome3.defaultIconTheme
+    gtk evolution-data-server libsoup glib gnome-online-accounts
+    gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
 
   postPatch = ''

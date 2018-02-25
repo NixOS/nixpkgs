@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
-, glib, gtk3, gtk_doc, libgudev, pkgconfig, systemd }:
+, glib, gtk3, gtk-doc, libgudev, pkgconfig, systemd }:
 
 stdenv.mkDerivation rec {
   name = "iio-sensor-proxy-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    gtk_doc
+    gtk-doc
     libgudev
     systemd
   ];

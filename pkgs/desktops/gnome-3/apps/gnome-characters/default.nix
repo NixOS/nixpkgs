@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
   buildInputs = [
     gtk3 gjs gdk_pixbuf gobjectIntrospection
-    librsvg gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme
+    librsvg gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

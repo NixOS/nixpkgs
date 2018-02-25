@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt
-, gnome3, icu, libuuid, networkmanager, libsoup, json_glib }:
+, gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ vala pkgconfig intltool libxslt wrapGAppsHook ];
   # TODO: add libstemmer
   buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json_glib
+    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib
   ];
 
-  # TODO: figure out wrapping unit tests, some of them fail on missing gsettings_desktop_schemas
+  # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
   configureFlags = [ "--disable-unit-tests" ];
 
   postPatch = ''

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, intltool, gst_all_1, clutter
-, clutter_gtk, clutter-gst, python3Packages, shared_mime_info
+, clutter-gtk, clutter-gst, python3Packages, shared-mime-info
 , pkgconfig, gtk3, glib, gobjectIntrospection
-, bash, wrapGAppsHook, itstool, libxml2, dbus_glib, vala, gnome3, librsvg
+, bash, wrapGAppsHook, itstool, libxml2, dbus-glib, vala, gnome3, librsvg
 , gdk_pixbuf, file, tracker, nautilus }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool file wrapGAppsHook ];
-  buildInputs = [ gtk3 glib gnome3.grilo clutter_gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
+  buildInputs = [ gtk3 glib gnome3.grilo clutter-gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-                  gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared_mime_info dbus_glib
-                  gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome_desktop
-                  gnome3.gsettings_desktop_schemas tracker nautilus ];
+                  gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared-mime-info dbus-glib
+                  gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome-desktop
+                  gnome3.gsettings-desktop-schemas tracker nautilus ];
 
   propagatedBuildInputs = [ gobjectIntrospection python3Packages.pylint python3Packages.pygobject2 ];
 

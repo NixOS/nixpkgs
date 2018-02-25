@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
-, clutter_gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
+, clutter-gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
 , webkitgtk, libmusicbrainz5, icu, makeWrapper, gst_all_1
 , gdk_pixbuf, librsvg, gtk3, harfbuzz }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ file intltool gobjectIntrospection glib gtk3
-                  clutter_gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
+                  clutter-gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
                   librsvg gnome3.defaultIconTheme libmusicbrainz5 webkitgtk
                   gnome3.evince icu makeWrapper harfbuzz ];
 

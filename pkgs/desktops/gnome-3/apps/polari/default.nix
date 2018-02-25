@@ -1,17 +1,17 @@
 { stdenv, itstool, fetchurl, fetchpatch, gdk_pixbuf, adwaita-icon-theme
-, telepathy_glib, gjs, meson, ninja, gettext, telepathy_idle, libxml2, desktop_file_utils
+, telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
 , pkgconfig, gtk3, glib, libsecret, libsoup, gobjectIntrospection, appstream-glib
-, gnome3, wrapGAppsHook, telepathy_logger, gspell }:
+, gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ telepathy_idle telepathy_logger ];
+  propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 
   nativeBuildInputs = [ meson ninja pkgconfig itstool gettext wrapGAppsHook libxml2
-                        desktop_file_utils gobjectIntrospection appstream-glib ];
-  buildInputs = [ gtk3 glib adwaita-icon-theme gnome3.gsettings_desktop_schemas
-                  telepathy_glib telepathy_logger gjs gspell gdk_pixbuf libsecret libsoup ];
+                        desktop-file-utils gobjectIntrospection appstream-glib ];
+  buildInputs = [ gtk3 glib adwaita-icon-theme gnome3.gsettings-desktop-schemas
+                  telepathy-glib telepathy-logger gjs gspell gdk_pixbuf libsecret libsoup ];
 
   patches = [
     (fetchpatch {

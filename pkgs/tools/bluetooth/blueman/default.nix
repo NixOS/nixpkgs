@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
-, hicolor_icon_theme, librsvg, wrapGAppsHook, gobjectIntrospection
+, hicolor-icon-theme, librsvg, wrapGAppsHook, gobjectIntrospection
 , withPulseAudio ? true, libpulseaudio }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     pythonPackages.wrapPython wrapGAppsHook
   ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor_icon_theme ]
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor-icon-theme ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 

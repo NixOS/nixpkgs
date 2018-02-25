@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, fetchpatch, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
+, gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
 # input plugins
 , vorbisSupport ? true, libvorbis ? null
 , mp123Support ? true, libmad ? null
@@ -30,7 +30,7 @@
 
 assert gtk2Support || gtk3Support;
 assert gtk2Support -> gtk2 != null;
-assert gtk3Support -> gtk3 != null && gsettings_desktop_schemas != null && wrapGAppsHook != null;
+assert gtk3Support -> gtk3 != null && gsettings-desktop-schemas != null && wrapGAppsHook != null;
 assert vorbisSupport -> libvorbis != null;
 assert mp123Support -> libmad != null;
 assert flacSupport -> flac != null;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib; [ jansson ]
     ++ optional gtk2Support gtk2
-    ++ optionals gtk3Support [ gtk3 gsettings_desktop_schemas ]
+    ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
     ++ optional vorbisSupport libvorbis
     ++ optional mp123Support libmad
     ++ optional flacSupport flac

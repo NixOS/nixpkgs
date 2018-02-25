@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for f in $out/bin/*; do #*/
-      wrapProgram $f --prefix PATH : "${stdenv.lib.makeBinPath [ xdpyinfo wmctrl byzanz gnome3.gnome_terminal ]}:$out/bin"
+      wrapProgram $f --prefix PATH : "${stdenv.lib.makeBinPath [ xdpyinfo wmctrl byzanz gnome3.gnome-terminal ]}:$out/bin"
     done
 
     rm -r screenkey/.bzr

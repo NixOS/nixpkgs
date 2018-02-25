@@ -21,7 +21,7 @@ buildPythonApplication rec {
     gtk3 (librsvg.override { enableIntrospection = true; })
     libnotify
     # Schemas with proxy configuration
-    gnome3.gsettings_desktop_schemas
+    gnome3.gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [

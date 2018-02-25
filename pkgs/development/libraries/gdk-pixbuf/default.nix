@@ -5,7 +5,7 @@ let
   ver_maj = "2.36";
   ver_min = "7";
   # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
-  # which apparently requires access to shared_mime_info files during runtime.
+  # which apparently requires access to shared-mime-info files during runtime.
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";

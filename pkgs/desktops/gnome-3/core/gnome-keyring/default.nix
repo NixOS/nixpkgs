@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python2, glib, libxslt
-, intltool, pango, gcr, gdk_pixbuf, atk, p11_kit, wrapGAppsHook
+, intltool, pango, gcr, gdk_pixbuf, atk, p11-kit, wrapGAppsHook
 , docbook_xsl, docbook_xml_dtd_42, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = with gnome3; [
-    dbus libgcrypt pam gtk3 libgnome_keyring
-    pango gcr gdk_pixbuf atk p11_kit
+    dbus libgcrypt pam gtk3 libgnome-keyring
+    pango gcr gdk_pixbuf atk p11-kit
   ];
 
   # In 3.20.1, tests do not support Python 3

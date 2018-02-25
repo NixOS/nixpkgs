@@ -38,7 +38,7 @@ let
     libcap
     SDL2
     libusb1
-    dbus_glib
+    dbus-glib
     libav
     atk
     # Only libraries are needed from those two

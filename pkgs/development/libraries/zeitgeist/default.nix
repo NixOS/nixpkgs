@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pkgconfig, glib, sqlite, gnome3, vala_0_38
-, intltool, libtool, dbus_libs, telepathy_glib
-, gtk3, json_glib, librdf_raptor2, dbus_glib
+, intltool, libtool, dbus_libs, telepathy-glib
+, gtk3, json-glib, librdf_raptor2, dbus-glib
 , pythonSupport ? true, python2Packages
 }:
 
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
 
-  nativeBuildInputs = [ pkgconfig gnome3.gnome_common intltool libtool vala_0_38 ];
-  buildInputs = [ glib sqlite dbus_libs telepathy_glib dbus_glib
-                  gtk3 json_glib librdf_raptor2 python2Packages.rdflib ];
+  nativeBuildInputs = [ pkgconfig gnome3.gnome-common intltool libtool vala_0_38 ];
+  buildInputs = [ glib sqlite dbus_libs telepathy-glib dbus-glib
+                  gtk3 json-glib librdf_raptor2 python2Packages.rdflib ];
 
   prePatch = "patchShebangs .";
 

@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja jq wrapGAppsHook ];
-  buildInputs = [ gnome3.gnome_shell python pygobject3 requests ];
+  buildInputs = [ gnome3.gnome-shell python pygobject3 requests ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc"

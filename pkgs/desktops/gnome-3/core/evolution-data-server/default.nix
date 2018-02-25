@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, python3, dconf
 , intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
-, vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json_glib }:
+, p11-kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
+, vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     cmake pkgconfig intltool python3 gperf makeWrapper
   ] ++ stdenv.lib.optional valaSupport vala;
   buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome_online_accounts
-    gcr p11_kit libgweather libgdata libaccounts-glib json_glib
+    glib libsoup libxml2 gtk gnome-online-accounts
+    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
     icu sqlite kerberos openldap webkitgtk
   ];
 

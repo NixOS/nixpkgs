@@ -1,7 +1,7 @@
 { fetchurl, stdenv, dpkg, which
 , makeWrapper
 , alsaLib
-, desktop_file_utils
+, desktop-file-utils
 , dbus
 , libcap
 , fontconfig
@@ -129,7 +129,7 @@ stdenv.mkDerivation {
 
     # Patch up link handler script
     wrapProgram $out/bin/install-mendeley-link-handler.sh \
-      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop_file_utils ] }
+      --prefix PATH ':' ${stdenv.lib.makeBinPath [ which gconf desktop-file-utils ] }
   '';
 
   dontStrip = true;

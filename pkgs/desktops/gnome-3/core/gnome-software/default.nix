@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
 , glib, appstream-glib, libsoup, polkit, attr, acl, libyaml, isocodes, gtkspell3, libxslt
-, json_glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk_doc, desktop_file_utils }:
+, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook libxslt docbook_xml_dtd_42
-                        valgrind-light docbook_xsl gtk_doc desktop_file_utils ];
+                        valgrind-light docbook_xsl gtk-doc desktop-file-utils ];
   buildInputs = [ gnome3.gtk glib packagekit appstream-glib libsoup
-                  gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
-                  gtkspell3 json_glib libsecret ostree
+                  gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
+                  gtkspell3 json-glib libsecret ostree
                   polkit attr acl libyaml ];
   propagatedBuildInputs = [ isocodes ];
 

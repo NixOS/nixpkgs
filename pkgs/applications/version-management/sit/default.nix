@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "sit-${version}";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "sit-it";
     repo = "sit";
     rev = "v${version}";
-    sha256 = "0fvxv9x971s5qvhw6gpbw9ggsxynkwfy1fn5rln50gn9yrjf7612";
+    sha256 = "1ysy1lhb7fxy02a3c9xk2awa49svnfa8bqcz2aj4x56r2f8vhj0h";
   };
 
   cargoSha256 = "1y8a8a9jn9f374sy5fs1snmpiqyckqc0aw7idwnpfr912c1zzrxw";

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome3, wrapGAppsHook
-, json_glib, qqwing, itstool, libxml2 }:
+, json-glib, qqwing, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool wrapGAppsHook gtk3 gnome3.libgee
-                  json_glib qqwing itstool libxml2 ];
+                  json-glib qqwing itstool libxml2 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Sudoku;
