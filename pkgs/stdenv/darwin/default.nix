@@ -61,12 +61,14 @@ in rec {
                           libcxx,
                           allowedRequisites ? null}:
     let
+      name = "bootstrap-stage${toString step}";
+
       buildPackages = lib.optionalAttrs (last ? stdenv) {
         inherit (last) stdenv;
       };
 
-      coreutils = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
-      gnugrep   = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
+      coreutils = { name = "${name}-coreutils"; outPath = bootstrapTools; };
+      gnugrep   = { name = "${name}-gnugrep";   outPath = bootstrapTools; };
 
       bintools = import ../../build-support/bintools-wrapper {
         inherit shell;
@@ -76,7 +78,7 @@ in rec {
         nativeLibc   = false;
         inherit buildPackages coreutils gnugrep;
         libc         = last.pkgs.darwin.Libsystem;
-        bintools     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
+        bintools     = { name = "${name}-binutils"; outPath = bootstrapTools; };
       };
 
       cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
@@ -91,16 +93,16 @@ in rec {
         inherit buildPackages coreutils gnugrep bintools;
         libc         = last.pkgs.darwin.Libsystem;
         isClang      = true;
-        cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
+        cc           = { name = "${name}-clang"; outPath = bootstrapTools; };
       };
 
       thisStdenv = import ../generic {
+        name = "${name}-stdenv-darwin";
+
         inherit config shell extraNativeBuildInputs extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
           cc.expand-response-params cc.bintools
         ];
-
-        name = "stdenv-darwin-boot-${toString step}";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
@@ -146,7 +148,7 @@ in rec {
     overrides = self: super: with stage0; rec {
       darwin = super.darwin // {
         Libsystem = stdenv.mkDerivation {
-          name = "bootstrap-Libsystem";
+          name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
             mkdir -p $out
             ln -s ${bootstrapTools}/lib $out/lib
@@ -157,7 +159,7 @@ in rec {
       };
 
       libcxx = stdenv.mkDerivation {
-        name = "bootstrap-libcxx";
+        name = "bootstrap-stage0-libcxx";
         phases = [ "installPhase" "fixupPhase" ];
         installPhase = ''
           mkdir -p $out/lib $out/include
@@ -169,7 +171,7 @@ in rec {
       };
 
       libcxxabi = stdenv.mkDerivation {
-        name = "bootstrap-libcxxabi";
+        name = "bootstrap-stage0-libcxxabi";
         buildCommand = ''
           mkdir -p $out/lib
           ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
@@ -325,10 +327,10 @@ in rec {
       inherit binutils binutils-raw;
     };
   in import ../generic rec {
+    name = "stdenv-darwin";
+
     inherit config;
     inherit (pkgs.stdenv) fetchurlBoot;
-
-    name = "stdenv-darwin";
 
     buildPlatform = localSystem;
     hostPlatform = localSystem;
