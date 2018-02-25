@@ -490,6 +490,34 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509 = overrideCabal super.x509 (drv: {
+    ##     • No instance for (Semigroup DistinguishedName)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid DistinguishedName’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509; ";
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509-store = overrideCabal super.x509-store (drv: {
+    ##     • No instance for (Semigroup CertificateStore)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid CertificateStore’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509-store; ";
+  });
+
 
   ## Non-code, configuration-only change
 
