@@ -4626,6 +4626,8 @@ with pkgs;
     qtbase = qt4; qmake = qmake4Hook;
   };
 
+  scfbuild = python2.pkgs.callPackage ../tools/misc/scfbuild { };
+
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrypt = callPackage ../tools/security/scrypt { };
@@ -14012,7 +14014,6 @@ with pkgs;
 
   emojione = callPackage ../data/fonts/emojione {
     inherit (nodePackages) svgo;
-    inherit (pythonPackages) scfbuild;
   };
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
@@ -14327,7 +14328,6 @@ with pkgs;
 
   twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
     inherit (nodePackages) svgo;
-    inherit (pythonPackages) scfbuild;
   };
 
   tzdata = callPackage ../data/misc/tzdata { };

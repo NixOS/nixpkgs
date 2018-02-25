@@ -6635,37 +6635,6 @@ in {
     };
   };
 
-  scfbuild = self.buildPythonPackage rec {
-    name = "scfbuild-${version}";
-    version = "1.0.3";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "eosrei";
-      repo = "scfbuild";
-      rev = "c179c8d279b7cc0a9a3536a713ac880ac6010318";
-      sha256 = "1bsi7k4kkj914pycp1g92050hjxscyvc9qflqb3cv5yz3c93cs46";
-    };
-
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
-    propagatedBuildInputs = with self; [ pyyaml fonttools fontforge ];
-
-    installPhase = ''
-      mkdir -p $out/${python.sitePackages}
-      cp -r scfbuild $out/${python.sitePackages}
-      cp -r bin $out
-    '';
-
-    meta = with stdenv.lib; {
-      description = "SVGinOT color font builder";
-      homepage = "https://github.com/eosrei/scfbuild";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
-
   schedule = buildPythonPackage rec {
     name = "schedule-0.3.2";
 
