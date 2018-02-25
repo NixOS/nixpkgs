@@ -38,7 +38,8 @@ rec {
 
     Kexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })
                      [ "x86" "arm" "aarch64" "mips" ];
-    Efi          = map (family: { cpu.family = family; }) [ "x86" "arm" ];
+    Efi          = map (family: { cpu.family = family; })
+                     [ "x86" "arm" "aarch64" ];
   };
 
   matchAnyAttrs = patterns:
