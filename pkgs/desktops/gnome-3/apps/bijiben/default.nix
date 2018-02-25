@@ -5,7 +5,17 @@
 , gnome3, librsvg, gdk_pixbuf, libxml2 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "bijiben-${version}";
+  version = "3.27.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/bijiben/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7b4623467f3cb745c4b268d6fb2d9da32cbc96ffb5b1bbf2a153b692e295ac64";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "bijiben"; attrPath = "gnome3.bijiben"; };
+  };
 
   doCheck = true;
 

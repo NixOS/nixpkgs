@@ -3,7 +3,17 @@
 , docbook_xsl, docbook_xml_dtd_42, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-keyring-${version}";
+  version = "3.20.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-keyring/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "134ci3mn6jjap59z3lrvyiip7zf2nlw5xvanr44yajs57xr4x5lp";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-keyring"; attrPath = "gnome3.gnome-keyring"; };
+  };
 
   outputs = [ "out" "dev" ];
 

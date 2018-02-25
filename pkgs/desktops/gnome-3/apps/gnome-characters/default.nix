@@ -2,7 +2,17 @@
 , intltool, gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-characters-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-characters/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "69d0218b4ce16451bef0e6ee9f9f18f5b7851aa3a758b13315d592b077374f7b";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-characters"; attrPath = "gnome3.gnome-characters"; };
+  };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
   buildInputs = [

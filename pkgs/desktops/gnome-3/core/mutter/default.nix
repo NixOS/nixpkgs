@@ -4,7 +4,17 @@
 , pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "mutter-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/mutter/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "83309feb05a4635c47713665c0592af8ab6d7f17a36e4bd626d67609b6422fab";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
+  };
 
   configureFlags = [
     "--with-x"

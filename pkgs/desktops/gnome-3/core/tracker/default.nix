@@ -3,7 +3,17 @@
 , gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "tracker-${version}";
+  version = "2.0.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/tracker/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "ece71a56c29151a76fc1b6e43c15dd1b657b37162dc948fa2487faf5ddb47fda";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "tracker"; attrPath = "gnome3.tracker"; };
+  };
 
   enableParallelBuilding = true;
 

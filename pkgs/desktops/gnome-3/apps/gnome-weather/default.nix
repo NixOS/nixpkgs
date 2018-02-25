@@ -2,7 +2,17 @@
 , libgweather, intltool, itstool, geoclue2 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-weather-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-weather/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "965cc0d1b4d4e53c06d494db96f0b124d232af5c0e731ca900edd10f77a74c78";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-weather"; attrPath = "gnome3.gnome-weather"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

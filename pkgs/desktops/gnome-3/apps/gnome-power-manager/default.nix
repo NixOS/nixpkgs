@@ -12,7 +12,17 @@
 , gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-power-manager-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-power-manager/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "20aee0b0b4015e7cc6fbabc3cbc4344c07c230fe3d195e90c8ae0dc5d55a2d4e";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-power-manager"; attrPath = "gnome3.gnome-power-manager"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

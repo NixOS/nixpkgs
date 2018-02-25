@@ -4,7 +4,17 @@
 , gdk_pixbuf, librsvg, gtk3, harfbuzz }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "sushi-${version}";
+  version = "3.24.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/sushi/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "f90bb95172664486f8d529995007fd12f0df9d0c998e20658b6203f46ce70d48";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "sushi"; attrPath = "gnome3.sushi"; };
+  };
 
   propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 

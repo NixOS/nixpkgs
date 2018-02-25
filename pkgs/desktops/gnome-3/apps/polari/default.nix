@@ -4,7 +4,17 @@
 , gnome3, wrapGAppsHook, telepathy-logger, gspell }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "polari-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/polari/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "2f36361dacf5d924d134f231fdb36ec4539f7495fce325d9b2f2728bd17cc190";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "polari"; attrPath = "gnome3.polari"; };
+  };
 
   propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
 

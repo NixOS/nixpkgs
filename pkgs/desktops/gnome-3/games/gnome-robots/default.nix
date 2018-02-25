@@ -3,7 +3,17 @@
 , libgee}:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-robots-${version}";
+  version = "3.22.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-robots/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "c5d63f0fcae66d0df9b10e39387d09875555909f0aa7e57ef8552621d852082f";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-robots"; attrPath = "gnome3.gnome-robots"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

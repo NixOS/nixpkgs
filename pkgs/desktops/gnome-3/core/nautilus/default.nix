@@ -3,7 +3,17 @@
 , exempi, librsvg, tracker, tracker-miners, libselinux, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "nautilus-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/nautilus/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "79c99404c665ea76b3db86f261fbd28a62b54c51429b05c3314462c9de2614b4";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "nautilus"; attrPath = "gnome3.nautilus"; };
+  };
 
   nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext wrapGAppsHook desktop-file-utils ];
 
