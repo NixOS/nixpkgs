@@ -8,16 +8,16 @@
 }:
 
 let
-  date = "2017-11-11";
+  versionString = "0.3.0";
 in
 build-idris-package {
   name = "specdris";
-  version = date;
+  version = versionString;
 
   src = fetchgit {
     url = "https://github.com/pheymann/specdris";
-    rev = "88b80334b8e0b6601324e2410772d35022fc8eaa";
-    sha256 = "4813c4be1d4c3dd1dad35964b085f83cf9fb44b16824257c72b468d4bafd0e4f";
+    rev = "v" + versionString;
+    sha256 = "1gc717xf4i7z75aqazy5wqm7b1dqfyx5pprdypxz1h3980m67fsa";
   };
 
   idrisDeps = [ prelude base effects idris ];
@@ -26,7 +26,8 @@ build-idris-package {
   doCheck = false;
 
   meta = {
-    description = "A testing library for Idris";
+    maintainers = [ lib.maintainers.brandondyck ];
+	description = "A testing library for Idris";
     homepage = https://github.com/pheymann/specdris;
     license = lib.licenses.mit;
   };
