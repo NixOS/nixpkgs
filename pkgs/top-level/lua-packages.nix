@@ -753,6 +753,36 @@ let
     };
   };
 
+  std.normalize = buildLuaPackage rec {
+    name = "std.normalize-${version}";
+    version = "2.0.1";
+
+    src = fetchFromGitHub {
+      owner = "lua-stdlib";
+      repo = "normalize";
+      rev = "v${version}";
+      sha256 = "1yz96r28d2wcgky6by92a21755bf4wzpn65rdv2ps0fxywgw5rda";
+    };
+
+    propagatedBuildInputs = [ std._debug ];
+
+    # No Makefile.
+    dontBuild = true;
+
+    installPhase = ''
+      mkdir -p $out/share/lua/${lua.luaversion}/std
+      cp -r lib/std/normalize $out/share/lua/${lua.luaversion}/std/
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Normalized Lua Functions";
+      homepage    = https://lua-stdlib.github.io/normalize;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms   = platforms.unix;
+    };
+  };
+
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
