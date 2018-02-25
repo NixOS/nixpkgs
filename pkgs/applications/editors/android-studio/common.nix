@@ -106,6 +106,7 @@ let
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
     name = "${pname}-fhs-env";
+    multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 
 in
