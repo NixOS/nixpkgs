@@ -409,6 +409,12 @@ in
         description = "Additional prosody configuration";
       };
 
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/lib/prosody";
+        description = "Directory holding prosody stateful data";
+      };
+
     };
   };
 
@@ -421,11 +427,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text = ''
 
-      pidfile = "/var/lib/prosody/prosody.pid"
+      pidfile = "/run/prosody/prosody.pid"
 
       log = "*syslog"
 
-      data_path = "/var/lib/prosody"
+      data_path = "${cfg.dataDir}"
       plugin_paths = {
         ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
       }
@@ -474,7 +480,7 @@ in
       description = "Prosody user";
       createHome = true;
       group = "prosody";
-      home = "/var/lib/prosody";
+      home = cfg.dataDir;
     };
 
     users.extraGroups.prosody = {
@@ -490,7 +496,9 @@ in
       serviceConfig = {
         User = "prosody";
         Type = "forking";
-        PIDFile = "/var/lib/prosody/prosody.pid";
+        # create /run/prosody folder
+        RuntimeDirectory = [ "prosody" ];
+        PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
       };
     };
