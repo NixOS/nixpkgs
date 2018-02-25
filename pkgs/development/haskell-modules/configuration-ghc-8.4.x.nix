@@ -451,6 +451,20 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-tls/pull/270
+  tls = overrideCabal super.tls (drv: {
+    ##     • No instance for (Semigroup Credentials)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid Credentials’
+    src = pkgs.fetchFromGitHub {
+      owner  = "ocheron";
+      repo   = "hs-tls";
+      rev    = "763656fbc6c2edabb43fc63d8717960f4b26e6e7";
+      sha256 = "0v7f9b78w6prkbscdx5ggjixll9z1zfqzm5x0ap4wvynnflkspqb";
+    };
+    prePatch        = "cd core; ";
+  });
+
   ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
   wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
     ##     Ambiguous occurrence ‘<>’
