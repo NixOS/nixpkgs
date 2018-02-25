@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
-, caffe, glog, boost, google-gflags, protobuf
+, glog, boost, google-gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -188,7 +188,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost google-gflags protobuf ]
-    ++ lib.optional (!stdenv.isDarwin) caffe
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -227,6 +226,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_PROTOBUF=OFF"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_PERF_TESTS=OFF"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
