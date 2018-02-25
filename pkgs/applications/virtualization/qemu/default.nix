@@ -10,7 +10,7 @@
 , sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
-, virglrendererSupport ? false, virglrenderer
+, virglrendererSupport ? false, virglrenderer ? null
 , openglSupport ? virglrendererSupport, mesa_noglu, libdrm, epoxy
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
