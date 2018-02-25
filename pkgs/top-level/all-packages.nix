@@ -19737,6 +19737,10 @@ with pkgs;
   caffe = callPackage ../applications/science/math/caffe rec {
     cudaSupport = config.caffe.cudaSupport or config.cudaSupport or false;
     cudnnSupport = cudaSupport;
+    # Used only for image loading.
+    opencv3 = self.opencv3.override {
+      enableCuda = false;
+    };
   };
 
   caffe2 = callPackage ../development/libraries/science/math/caffe2 {
