@@ -133,7 +133,9 @@ let
       sha256 = "072j491rpz2qx2sngbg4flqh4lx5865zyql7b9lqm6s1kknjdrh8";
     };
 
-    nativeBuildInputs = [ buildPackages.stdenv.cc ];
+    # Hacky! But not sure how else we can access a native-targeted gcc6
+    # https://github.com/arsv/perl-cross/issues/60
+    nativeBuildInputs = [ buildPackages.buildPackages.gcc6 ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
