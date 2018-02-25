@@ -42,10 +42,10 @@ in stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
     "--with-mpi=${openmpi}"
-  ] ++ lib.optionals cudaSupport [
-    "--cuda=yes"
+    "--cuda=${if cudaSupport then "yes" else "no"}"
     # FIXME
     "--asgd=no"
+  ] ++ lib.optionals cudaSupport [
     "--with-cuda=${cudatoolkit}"
     "--with-gdk-include=${cudatoolkit}/include"
     "--with-gdk-nvml-lib=${nvidia_x11}/lib"
