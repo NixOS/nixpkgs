@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "keybase-${version}";
-  version = "1.0.40";
+  version = "1.0.42";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner  = "keybase";
     repo   = "client";
     rev    = "v${version}";
-    sha256 = "05x0h87dinl8zaqikr1sx38bv1n6ymxqp440b384d8y76w66rphi";
+    sha256 = "0vjwyg542hiswcs89csh2vbkfyixlzk3zswjn7x7d1pifrckys0r";
   };
 
   buildFlags = [ "-tags production" ];
