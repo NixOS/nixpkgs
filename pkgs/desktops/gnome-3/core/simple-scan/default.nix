@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://launchpad.net/simple-scan;
     license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }
