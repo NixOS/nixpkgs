@@ -725,6 +725,34 @@ let
     };
   };
 
+  std._debug = buildLuaPackage rec {
+    name = "std._debug-${version}";
+    version = "1.0";
+
+    src = fetchFromGitHub {
+      owner = "lua-stdlib";
+      repo = "_debug";
+      rev = "v${version}";
+      sha256 = "01kfs6k9j9zy4bvk13jx18ssfsmhlciyrni1x32qmxxf4wxyi65n";
+    };
+
+    # No Makefile.
+    dontBuild = true;
+
+    installPhase = ''
+      mkdir -p $out/share/lua/${lua.luaversion}/std
+      cp -r lib/std/_debug $out/share/lua/${lua.luaversion}/std/
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Manage an overall debug state, and associated hint substates.";
+      homepage    = https://lua-stdlib.github.io/_debug;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms   = platforms.unix;
+    };
+  };
+
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
     version = "2.3.1";
