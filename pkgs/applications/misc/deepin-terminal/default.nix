@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json_glib, gobjectIntrospection }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json-glib, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "deepin-terminal-${version}";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # For setup hook
     gobjectIntrospection
   ];
-  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json_glib ];
+  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json-glib ];
 
   meta = with stdenv.lib; {
     description = "The default terminal emulation for Deepin";

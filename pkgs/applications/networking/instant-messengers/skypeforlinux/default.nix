@@ -27,7 +27,7 @@ let
     gnome2.gtk
     gnome2.pango
 
-    gnome2.gnome_keyring
+    gnome2.gnome-keyring
 
     libnotify
     libpulseaudio

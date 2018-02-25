@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra_gtk3, clutter_gtk, intltool, itstool
+, librsvg, libcanberra-gtk3, clutter-gtk, intltool, itstool
 , libxml2, libgee, libgames-support }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 wrapGAppsHook intltool itstool libxml2
-    librsvg libcanberra_gtk3 clutter_gtk gnome3.defaultIconTheme
+    librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
     libgee libgames-support
   ];
 

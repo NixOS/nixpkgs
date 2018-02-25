@@ -1,10 +1,10 @@
 { stdenv, fetchurl, lib, wrapGAppsHook
 , pkgconfig, gnome3, gtk3, glib, intltool, libXtst, libnotify, libsoup
-, telepathySupport ? false, dbus_glib ? null, telepathy_glib ? null
+, telepathySupport ? false, dbus-glib ? null, telepathy-glib ? null
 , libsecret ? null, gnutls ? null, libgcrypt ? null, avahi ? null
 , zlib ? null, libjpeg ? null
 , libXdamage ? null, libXfixes ? null, libXext ? null
-, gnomeKeyringSupport ? false, libgnome_keyring3 ? null
+, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , networkmanager ? null }:
 
 with lib;
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wrapGAppsHook
     pkgconfig gnome3.defaultIconTheme gtk3 glib intltool libXtst libnotify libsoup
-  ] ++ optionals telepathySupport [ dbus_glib telepathy_glib ]
-    ++ optional gnomeKeyringSupport libgnome_keyring3
+  ] ++ optionals telepathySupport [ dbus-glib telepathy-glib ]
+    ++ optional gnomeKeyringSupport libgnome-keyring3
     ++ filter (p: p != null) [
       libsecret gnutls libgcrypt avahi zlib libjpeg
       libXdamage libXfixes libXext networkmanager

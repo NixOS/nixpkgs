@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, dbus_glib, libcanberra_gtk3,
+{ stdenv, fetchurl, pkgconfig, intltool, dbus-glib, libcanberra-gtk3,
   libnotify, libwnck3, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus_glib
-    libcanberra_gtk3
+    dbus-glib
+    libcanberra-gtk3
     libnotify
     libwnck3
     gnome3.gtk

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, intltool, itstool, gtk3
-, wrapGAppsHook, gconf, librsvg, libxml2, desktop_file_utils
-, guile_2_0, libcanberra_gtk3 }:
+, wrapGAppsHook, gconf, librsvg, libxml2, desktop-file-utils
+, guile_2_0, libcanberra-gtk3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool itstool gtk3 wrapGAppsHook gconf
-                  librsvg libxml2 desktop_file_utils guile_2_0 libcanberra_gtk3 ];
+                  librsvg libxml2 desktop-file-utils guile_2_0 libcanberra-gtk3 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Aisleriot;

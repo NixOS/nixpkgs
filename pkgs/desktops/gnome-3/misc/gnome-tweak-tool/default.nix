@@ -6,17 +6,17 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxml2 file wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 glib gnome3.gsettings_desktop_schemas
+    gtk3 glib gnome3.gsettings-desktop-schemas
     gdk_pixbuf gnome3.defaultIconTheme librsvg
-    libnotify gnome3.gnome_shell python3Packages.pygobject3
-    libsoup gnome3.gnome_settings_daemon gnome3.nautilus
-    gnome3.mutter gnome3.gnome_desktop gobjectIntrospection
+    libnotify gnome3.gnome-shell python3Packages.pygobject3
+    libsoup gnome3.gnome-settings-daemon gnome3.nautilus
+    gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
   ];
 
   postPatch = ''

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK
-, desktop_file_utils, libSM, imagemagick }:
+, desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
   version = "17.10";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libzen libmediainfo wxGTK desktop_file_utils libSM
+  buildInputs = [ libzen libmediainfo wxGTK desktop-file-utils libSM
                   imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";

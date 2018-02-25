@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "libunique-1.1.6";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ++ [ ./gcc7-bug.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gtk2 dbus_glib ];
+  buildInputs = [ glib gtk2 dbus-glib ];
 
   # don't make deprecated usages hard errors
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';

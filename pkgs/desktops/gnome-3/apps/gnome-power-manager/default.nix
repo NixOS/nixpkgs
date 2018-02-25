@@ -7,14 +7,14 @@
 , meson
 , ninja
 , upower
-, desktop_file_utils
+, desktop-file-utils
 , wrapGAppsHook
 , gnome3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [
     meson
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     # needed by meson_post_install.sh
     glib.dev
-    desktop_file_utils
+    desktop-file-utils
   ];
 
   buildInputs = [

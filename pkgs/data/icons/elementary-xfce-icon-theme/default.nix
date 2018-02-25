@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "elementary-xfce-icon-theme-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15n28f2pw8b0y5pi8ydahg31v6hhh7zvpvymi8jaafdc9bn18z3y";
   };
 
-  nativeBuildInputs = [ gtk3 hicolor_icon_theme ];
+  nativeBuildInputs = [ gtk3 hicolor-icon-theme ];
 
   installPhase = ''
     mkdir -p $out/share/icons

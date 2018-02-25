@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, mate, hicolor_icon_theme }:
+{ stdenv, fetchurl, autoreconfHook, mate, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-faenza-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ mate.mate-icon-theme hicolor_icon_theme ];
+  buildInputs = [ mate.mate-icon-theme hicolor-icon-theme ];
   
   meta = {
     description = "Faenza icon theme from MATE";

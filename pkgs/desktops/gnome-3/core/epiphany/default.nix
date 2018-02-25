@@ -1,8 +1,8 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
-, webkitgtk, libsoup, glib_networking, libsecret, gnome_desktop, libnotify, p11_kit
-, sqlite, gcr, isocodes, desktop_file_utils, file
-, gdk_pixbuf, gnome_common, gst_all_1, json_glib }:
+, webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
+, sqlite, gcr, isocodes, desktop-file-utils, file
+, gdk_pixbuf, gnome-common, gst_all_1, json-glib }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
   # Tests need an X display
   mesonFlags = [ "-Dunit_tests=false" ];
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
-  nativeBuildInputs = [ meson ninja libxslt pkgconfig itstool gettext file wrapGAppsHook desktop_file_utils ];
+  nativeBuildInputs = [ meson ninja libxslt pkgconfig itstool gettext file wrapGAppsHook desktop-file-utils ];
 
-  buildInputs = [ gtk glib webkitgtk libsoup libxml2 libsecret gnome_desktop libnotify
-                  sqlite isocodes p11_kit icu gnome3.yelp_tools
-                  gdk_pixbuf gnome3.defaultIconTheme gnome_common gcr
-                  glib_networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  buildInputs = [ gtk glib webkitgtk libsoup libxml2 libsecret gnome-desktop libnotify
+                  sqlite isocodes p11-kit icu gnome3.yelp-tools
+                  gdk_pixbuf gnome3.defaultIconTheme gnome-common gcr
+                  glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-                  gst_all_1.gst-libav json_glib ];
+                  gst_all_1.gst-libav json-glib ];
 
   enableParallelBuilding = true;
 

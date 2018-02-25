@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gnome3, libtool, pkgconfig, vala, libssh2
-, gtk_doc, gobjectIntrospection, libgit2, glib }:
+, gtk-doc, gobjectIntrospection, libgit2, glib }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   nativeBuildInputs = [
-    gnome3.gnome_common libtool pkgconfig vala gtk_doc gobjectIntrospection
+    gnome3.gnome-common libtool pkgconfig vala gtk-doc gobjectIntrospection
   ];
 
   propagatedBuildInputs = [

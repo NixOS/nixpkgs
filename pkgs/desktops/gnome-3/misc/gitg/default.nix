@@ -1,6 +1,6 @@
 { stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
-, json_glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg, libsecret
+, json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
+, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, librsvg, libsecret
 , libsoup }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  propagatedUserEnvPkgs = [ shared_mime_info
-                            gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ shared-mime-info
+                            gnome3.gnome-themes-standard ];
 
-  buildInputs = [ gtk3 glib json_glib libgee libpeas gnome3.libsoup
-                  libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings_desktop_schemas
+  buildInputs = [ gtk3 glib json-glib libgee libpeas gnome3.libsoup
+                  libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings-desktop-schemas
                   librsvg libsecret gobjectIntrospection gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ vala wrapGAppsHook intltool pkgconfig ];

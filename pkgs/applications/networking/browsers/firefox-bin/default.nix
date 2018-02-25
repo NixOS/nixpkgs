@@ -4,7 +4,7 @@
 , cairo
 , curl
 , cups
-, dbus_glib
+, dbus-glib
 , dbus_libs
 , fontconfig
 , freetype
@@ -27,7 +27,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra_gtk2
+, libcanberra-gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
@@ -92,7 +92,7 @@ stdenv.mkDerivation {
       cairo
       curl
       cups
-      dbus_glib
+      dbus-glib
       dbus_libs
       fontconfig
       freetype
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra_gtk2
+      libcanberra-gtk2
       libgnome
       libgnomeui
       mesa

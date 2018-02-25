@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lightdm, pkgconfig, intltool
-, hicolor_icon_theme, makeWrapper
+, hicolor-icon-theme, makeWrapper
 , useGTK2 ? false, gtk2, gtk3 # gtk3 seems better supported
 , exo
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
       --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
     wrapProgram "$out/sbin/lightdm-gtk-greeter" \
-      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
+      --prefix XDG_DATA_DIRS ":" "${hicolor-icon-theme}/share"
   '';
 
   meta = with stdenv.lib; {

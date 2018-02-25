@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, iconnamingutils, gtk, gdk_pixbuf, librsvg, hicolor_icon_theme }:
+, iconnamingutils, gtk, gdk_pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # For convenience, we can specify adwaita-icon-theme only in packages
-  propagatedBuildInputs = [ hicolor_icon_theme ];
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   buildInputs = [ gdk_pixbuf librsvg ];
 

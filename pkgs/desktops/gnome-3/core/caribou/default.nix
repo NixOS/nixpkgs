@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, python3Packages, libxml2
-, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core, autoreconfHook
+, libxklavier, libXtst, gtk2, intltool, libxslt, at-spi2-core, autoreconfHook
 , wrapGAppsHook }:
 
 let
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool libxslt libxml2 autoreconfHook wrapGAppsHook ];
 
   buildInputs = with gnome3;
-    [ glib gtk clutter at_spi2_core dbus pythonEnv python3Packages.pygobject3
+    [ glib gtk clutter at-spi2-core dbus pythonEnv python3Packages.pygobject3
       libXtst gtk2 ];
 
   propagatedBuildInputs = [ gnome3.libgee libxklavier ];

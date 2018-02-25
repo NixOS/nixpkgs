@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 wrapGAppsHook gjs intltool itstool
-    libgweather gnome3.defaultIconTheme geoclue2 gnome3.gsettings_desktop_schemas
+    libgweather gnome3.defaultIconTheme geoclue2 gnome3.gsettings-desktop-schemas
   ];
 
   # The .service file isn't wrapped with the correct environment

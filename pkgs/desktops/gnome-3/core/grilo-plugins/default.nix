@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, glib, sqlite
-, gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp_av
-, gmime, json_glib, avahi, tracker, dleyna-server, itstool }:
+, gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av
+, gmime, json-glib, avahi, tracker, dleyna-server, itstool }:
 
 stdenv.mkDerivation rec {
   major = "0.3";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
-                  lua5 liboauth gupnp_av sqlite gnome3.gnome_online_accounts
-                  gnome3.totem-pl-parser gnome3.rest gmime json_glib
+                  lua5 liboauth gupnp-av sqlite gnome3.gnome-online-accounts
+                  gnome3.totem-pl-parser gnome3.rest gmime json-glib
                   avahi gnome3.libmediaart tracker dleyna-server intltool itstool ];
 
   meta = with stdenv.lib; {

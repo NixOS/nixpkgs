@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
     gnome3.libgda gnome3.gtksourceview
-    gnome3.gsettings_desktop_schemas
+    gnome3.gsettings-desktop-schemas
   ];
 
   preFixup = ''

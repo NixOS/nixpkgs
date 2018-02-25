@@ -4,7 +4,7 @@
 , makeWrapper
 , pkgconfig
 , wrapGAppsHook
-, gsettings_desktop_schemas
+, gsettings-desktop-schemas
 
 , qtbase
 , qttools
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
                  libraw
                  libtiff
                  quazip
-                 gsettings_desktop_schemas];
+                 gsettings-desktop-schemas];
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libwnck3, libnotify, dbus_glib, makeWrapper, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, glib, libwnck3, libnotify, dbus-glib, makeWrapper, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "notify-osd-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib libwnck3 libnotify dbus_glib makeWrapper
-    gnome3.gsettings_desktop_schemas
+    glib libwnck3 libnotify dbus-glib makeWrapper
+    gnome3.gsettings-desktop-schemas
   ];
 
   configureFlags = "--libexecdir=$(out)/bin";
