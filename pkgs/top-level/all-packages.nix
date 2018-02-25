@@ -8995,7 +8995,9 @@ with pkgs;
 
   gnu-config = callPackage ../development/libraries/gnu-config { };
 
-  gnu-efi = callPackage ../development/libraries/gnu-efi { };
+  gnu-efi = if hostPlatform.isEfi
+              then callPackage ../development/libraries/gnu-efi { }
+            else null;
 
   gnutls = callPackage
     (if stdenv.isDarwin
