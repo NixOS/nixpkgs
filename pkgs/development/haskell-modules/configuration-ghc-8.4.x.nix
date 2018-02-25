@@ -685,12 +685,19 @@ self: super: {
     jailbreak       = true;
   });
 
+  ## Issue: https://github.com/ChrisPenner/rasa/issues/54
   text-lens = overrideCabal super.text-lens (drv: {
+    ## Failures:
+    ##   test/Spec.hs:136:
+    ##   1) TextLens.range gets "" if invalid range
+    ##        uncaught exception: ErrorCall (Data.Text.Array.new: size overflow
+    ##        CallStack (from HasCallStack):
+    ##          error, called at libraries/text/Data/Text/Array.hs:132:20 in text-1.2.3.0:Data.Text.Array)
+    ## Randomized with seed 2114194349
+    ## Finished in 0.0017 seconds
+    doCheck         = false;
     ## Setup: Encountered missing dependencies:
-    ## base >=4.9.0.0 && <4.10,
-    ## extra >=1.4.10 && <1.5,
-    ## hspec >=2.2.4 && <2.3,
-    ## lens ==4.14.*
+    ## extra >=1.4.10 && <1.5, lens ==4.14.*
     jailbreak       = true;
   });
 
