@@ -9,12 +9,13 @@
 , patchelf
 , getent
 , hostPlatform
+, buildPackages
 }:
 
 assert stdenv.isLinux;
 
 let
-  pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in
 
@@ -35,7 +36,7 @@ in
       [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
         ninja meson
         coreutils # meson calls date, stat etc.
-        pythonLxmlEnv glibcLocales
+        glibcLocales
         patchelf getent
       ];
     buildInputs =
@@ -43,6 +44,8 @@ in
         /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror libidn2
         libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
         iptables gnu-efi
+        # This is actually native, but we already pull it from buildPackages
+        pythonLxmlEnv
       ];
 
     #dontAddPrefix = true;
@@ -128,7 +131,7 @@ in
 
         for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
           substituteInPlace $i \
-            --replace "#!/usr/bin/env python" "#!${python3Packages.python}/bin/python"
+            --replace "#!/usr/bin/env python" "#!${buildPackages.python3Packages.python}/bin/python"
         done
 
         substituteInPlace src/journal/catalog.c \
