@@ -102,7 +102,7 @@ in rec {
       CONFIG_SPL_RSA=y
     '';
     installDir = "$out/bin";
-    buildFlags = "tools NO_SDL=1";
+    buildFlags = "tools envtools NO_SDL=1";
     dontStrip = false;
     targetPlatforms = stdenv.lib.platforms.linux;
     # build tools/kwboot
@@ -113,7 +113,11 @@ in rec {
       "tools/kwboot"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/env/fw_printenv"
     ];
+    postInstall = ''
+      ln -s $out/bin/fw_printenv $out/bin/fw_setenv
+    '';
   };
 
   ubootA20OlinuxinoLime = buildUBoot rec {
