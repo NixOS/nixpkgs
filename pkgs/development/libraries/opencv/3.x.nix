@@ -12,12 +12,12 @@
 , enableJPEG2K    ? true, jasper
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
+, enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enableContrib   ? false
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3

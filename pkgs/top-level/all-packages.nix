@@ -18577,7 +18577,6 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
     inherit (kdeApplications) kcalcore;
-    opencv3 = opencv3.override { enableContrib = true; };
   };
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
