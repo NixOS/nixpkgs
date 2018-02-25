@@ -47,11 +47,6 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Unwrap accidentally wrapped library
     mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
-
-    # Patched meson does not add internal libraries to rpath
-    for elf in "$out/bin/.deja-dup-wrapped" "$out/libexec/deja-dup/.deja-dup-monitor-wrapped" "$out/libexec/deja-dup/tools/libduplicity.so"; do
-      patchelf --set-rpath "$(patchelf --print-rpath "$elf"):$out/lib/deja-dup" "$elf"
-    done
   '';
 
   meta = with stdenv.lib; {
