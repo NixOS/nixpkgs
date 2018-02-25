@@ -67,11 +67,6 @@ in stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  postFixup = ''
-    # Patched meson does not add internal libraries to rpath
-    patchelf --set-rpath "$out/lib/gnome-shell:$(patchelf --print-rpath $out/bin/.gnome-shell-wrapped)" $out/bin/.gnome-shell-wrapped
-  '';
-
   enableParallelBuilding = true;
 
   passthru = {
