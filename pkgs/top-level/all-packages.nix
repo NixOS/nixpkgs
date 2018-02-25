@@ -6823,7 +6823,7 @@ with pkgs;
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
+  dhall = callPackage ../development/interpreters/dhall { };
 
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
