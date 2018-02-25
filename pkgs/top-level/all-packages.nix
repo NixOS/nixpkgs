@@ -9790,6 +9790,8 @@ with pkgs;
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
+  libblockdev = callPackage ../development/libraries/libblockdev { };
+
   libblocksruntime = callPackage ../development/libraries/libblocksruntime { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
