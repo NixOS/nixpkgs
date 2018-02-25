@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     description = "Database access library";
     homepage = http://www.gnome-db.org/;
     license = [ licenses.lgpl2 licenses.gpl2 ];
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }
