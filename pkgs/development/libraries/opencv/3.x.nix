@@ -242,15 +242,15 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
-  ]
-    ++ lib.optionals stdenv.isDarwin [
-      "-DWITH_OPENCL=OFF"
-      "-DWITH_LAPACK=OFF"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DWITH_OPENCL=OFF"
+    "-DWITH_LAPACK=OFF"
 
-      # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
-      "-DBUILD_opencv_dnn_modern=OFF"
-    ];
+    # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
+    "-DBUILD_opencv_dnn_modern=OFF"
+  ];
 
   enableParallelBuilding = true;
 
