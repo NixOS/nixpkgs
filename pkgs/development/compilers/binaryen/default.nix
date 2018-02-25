@@ -1,14 +1,14 @@
 { stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "42";
+  version = "44";
   rev = "version_${version}";
   name = "binaryen-${version}";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
-    sha256 = "0b8qc9cd7ncshgfjwv4hfapmwa81gmniaycnxmdkihq9bpm26x2k";
+    sha256 = "0zsqppc05fm62807w6vyccxkk2y2gar7kxbxxixq8zz3xsp6w84p";
     inherit rev;
   };
 
