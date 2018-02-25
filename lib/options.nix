@@ -132,7 +132,8 @@ rec {
     # adds qoutes when string isn't valid nix identifier
     # https://github.com/NixOS/nix/blob/a5e761dddb6b090b233aebe29dc30ebfbc058dab/src/libexpr/lexer.l#L87
     quotesWhenNeeded = x:
-      if builtins.match ''[a-zA-Z\_][a-zA-Z0-9\_\'\-]*'' x != null
+      if x == "<name>" || x == "<name?>" || x == "*"  # special cases needed for documentation
+          || builtins.match ''[a-zA-Z\_][a-zA-Z0-9\_\'\-]*'' x != null
         then x
         else "\"" + (lib.escape [ "\"" ] x) + "\"";
   in concatMapStringsSep "." quotesWhenNeeded;

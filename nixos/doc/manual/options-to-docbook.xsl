@@ -19,7 +19,7 @@
       <variablelist>
 
         <xsl:for-each select="attrs">
-          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), '?', '_'))" />
+          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), '?', '_'), '&quot;', '_'))" />
           <varlistentry>
             <term xlink:href="#{$id}">
               <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
