@@ -5512,6 +5512,8 @@ with pkgs;
 
   vobsub2srt = callPackage ../tools/cd-dvd/vobsub2srt { };
 
+  volume_key = callPackage ../development/libraries/volume-key { };
+
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
