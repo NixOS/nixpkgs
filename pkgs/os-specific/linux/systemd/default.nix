@@ -33,14 +33,14 @@ in
 
     nativeBuildInputs =
       [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-        ninja meson
+        ninja meson m4
         coreutils # meson calls date, stat etc.
         pythonLxmlEnv glibcLocales
         patchelf getent
       ];
     buildInputs =
       [ linuxHeaders libcap kmod xz pam acl
-        /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror libidn2
+        /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
         libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
         iptables gnu-efi
       ];
