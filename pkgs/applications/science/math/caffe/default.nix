@@ -14,10 +14,12 @@
 , openblas
 , cudaSupport ? true, cudatoolkit
 , cudnnSupport ? false, cudnn ? null
+, ncclSupport ? false, nccl ? null
 , pythonSupport ? false, python ? null, numpy ? null
 }:
 
 assert cudnnSupport -> cudaSupport;
+assert ncclSupport -> cudaSupport;
 assert pythonSupport -> (python != null && numpy != null);
 
 stdenv.mkDerivation rec {
@@ -41,11 +43,13 @@ stdenv.mkDerivation rec {
     ] ++ (if cudaSupport then [
            "-DCUDA_ARCH_NAME=All"
            "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
-         ] else [ "-DCPU_ONLY=ON" ]);
+         ] else [ "-DCPU_ONLY=ON" ])
+      ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
   buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
+                ++ lib.optional ncclSupport nccl
                 ++ lib.optionals pythonSupport [ python numpy ];
 
   propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
