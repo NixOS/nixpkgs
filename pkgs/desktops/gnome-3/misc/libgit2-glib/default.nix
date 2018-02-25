@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libssh2 ];
 
   meta = with stdenv.lib; {
+    description = "A glib wrapper library around the libgit2 git access library";
+    homepage = https://wiki.gnome.org/Projects/Libgit2-glib;
+    license = licenses.lgpl21;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }
