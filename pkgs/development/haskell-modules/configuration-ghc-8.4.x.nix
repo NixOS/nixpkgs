@@ -213,6 +213,22 @@ self: super: {
   });
 
   ## Upstreamed, awaiting a Hackage release
+  http-api-data = overrideCabal super.http-api-data (drv: {
+    ##     • No instance for (Semigroup Form)
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
+    src = pkgs.fetchFromGitHub {
+      owner  = "fizruk";
+      repo   = "http-api-data";
+      rev    = "83aac9540f4a304927c601c5db12f4dc2bf93816";
+      sha256 = "14hy13szr09vsisxi25a4qfajqjwznvn222bqk55dcdlnrgf0zi9";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.7 && <4.11
+    jailbreak       = true;
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   lambdacube-compiler = overrideCabal super.lambdacube-compiler (drv: {
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12,
@@ -263,6 +279,19 @@ self: super: {
       repo   = "singletons";
       rev    = "23aa4bdaf05ce025a2493b35ec3c26cc94e3fdce";
       sha256 = "0hw12v4z8jxmykc3j8z6g27swmfpxv40bgnx7nl0ialpwbz9mz27";
+    };
+  });
+
+  ## Upstreamed, awaiting a Hackage release
+  tar = overrideCabal super.tar (drv: {
+    ##     • No instance for (Semigroup (Entries e))
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid (Entries e)’
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell";
+      repo   = "tar";
+      rev    = "abf2ccb8f7da0514343a0b2624cabebe081bdfa8";
+      sha256 = "0s33lgrr574i1r7zc1jqahnwx3dv47ny30mbx5zfpdzjw0jdl5ny";
     };
   });
 
@@ -435,6 +464,32 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-tls/pull/270
+  tls = overrideCabal super.tls (drv: {
+    ##     • No instance for (Semigroup Credentials)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid Credentials’
+    src = pkgs.fetchFromGitHub {
+      owner  = "ocheron";
+      repo   = "hs-tls";
+      rev    = "763656fbc6c2edabb43fc63d8717960f4b26e6e7";
+      sha256 = "0v7f9b78w6prkbscdx5ggjixll9z1zfqzm5x0ap4wvynnflkspqb";
+    };
+    prePatch        = "cd core; ";
+  });
+
+  ## Unmerged.  PR: https://github.com/Soostone/uri-bytestring/pull/0
+  uri-bytestring = overrideCabal super.uri-bytestring (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## template-haskell >=2.9 && <2.13
+    src = pkgs.fetchFromGitHub {
+      owner  = "koenigmaximilian";
+      repo   = "uri-bytestring";
+      rev    = "105d5855bbf9c78d1e48394677b42a058e242fc9";
+      sha256 = "144hr12k0d61zpgxv62vwlzy6bfs01fqh7qr4qsbv457sznmbb9d";
+    };
+  });
+
   ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
   wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
     ##     Ambiguous occurrence ‘<>’
@@ -446,6 +501,34 @@ self: super: {
       rev    = "615b83d1e5be52d1448aa1ab2517b431a617027b";
       sha256 = "1p67v9s878br0r152h4n37smqhkg78v8zxhf4qm6d035s4rzj76i";
     };
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509 = overrideCabal super.x509 (drv: {
+    ##     • No instance for (Semigroup DistinguishedName)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid DistinguishedName’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509; ";
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509-store = overrideCabal super.x509-store (drv: {
+    ##     • No instance for (Semigroup CertificateStore)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid CertificateStore’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509-store; ";
   });
 
 
@@ -615,12 +698,19 @@ self: super: {
     jailbreak       = true;
   });
 
+  ## Issue: https://github.com/ChrisPenner/rasa/issues/54
   text-lens = overrideCabal super.text-lens (drv: {
+    ## Failures:
+    ##   test/Spec.hs:136:
+    ##   1) TextLens.range gets "" if invalid range
+    ##        uncaught exception: ErrorCall (Data.Text.Array.new: size overflow
+    ##        CallStack (from HasCallStack):
+    ##          error, called at libraries/text/Data/Text/Array.hs:132:20 in text-1.2.3.0:Data.Text.Array)
+    ## Randomized with seed 2114194349
+    ## Finished in 0.0017 seconds
+    doCheck         = false;
     ## Setup: Encountered missing dependencies:
-    ## base >=4.9.0.0 && <4.10,
-    ## extra >=1.4.10 && <1.5,
-    ## hspec >=2.2.4 && <2.3,
-    ## lens ==4.14.*
+    ## extra >=1.4.10 && <1.5, lens ==4.14.*
     jailbreak       = true;
   });
 
