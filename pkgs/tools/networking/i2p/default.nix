@@ -1,6 +1,10 @@
-{ stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ stdenv, procps, coreutils, fetchurl, openjdk8, ant, gettext, which }:
 
-let wrapper = stdenv.mkDerivation rec {
+let
+jdk = openjdk8;
+jre = openjdk8;
+
+wrapper = stdenv.mkDerivation rec {
   name = "wrapper-${version}";
   version = "3.5.32";
   src = fetchurl {
