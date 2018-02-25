@@ -7818,6 +7818,8 @@ with pkgs;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
+  kubectl = callPackage ../tools/admin/kubectl { };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   Literate = callPackage ../development/tools/literate-programming/Literate {};

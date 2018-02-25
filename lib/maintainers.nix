@@ -308,6 +308,7 @@
   ixxie = "Matan Bendix Shenhav <matan@fluxcraft.net>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
+  jamesthompson = "James Thompson <jamesthompsonoxford@gmail.com>";
   jammerful = "jammerful <jammerful@gmail.com>";
   jansol = "Jan Solanti <jan.solanti@paivola.fi>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
