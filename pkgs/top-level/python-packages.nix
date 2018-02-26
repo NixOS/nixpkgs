@@ -9202,6 +9202,8 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
+  kubernetes = callPackage ../development/python-modules/kubernetes/default.nix { };
+
   pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
   pylru = callPackage ../development/python-modules/pylru/default.nix { };
