@@ -229,6 +229,7 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
   tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
+  tests.ceph = callTestOnTheseSystems ["x86_64-linux"] tests/ceph.nix {};
   tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
