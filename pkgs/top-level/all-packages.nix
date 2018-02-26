@@ -8940,6 +8940,7 @@ with pkgs;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
+  goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
 
   google-gflags = callPackage ../development/libraries/google-gflags { };
 
