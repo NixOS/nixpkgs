@@ -411,6 +411,7 @@ let
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
+    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -757,6 +758,17 @@ let
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
         export JAVA_HOME=${pkgs.jdk}
+      '';
+    });
+
+    JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
+      postPatch = ''
+        for file in {R,src}/*.R; do
+            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+        done
+      '';
+      preConfigure = ''
+        patchShebangs configure
       '';
     });
 
