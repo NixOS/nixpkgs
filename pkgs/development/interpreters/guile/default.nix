@@ -1,6 +1,6 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
 , libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
-, hostPlatform
+, hostPlatform, buildPackages
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -20,7 +20,9 @@
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ] ++
+    stdenv.lib.optional stdenv.isCross buildPackages.buildPackages.guile;
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [ gmp boehmgc ]
@@ -30,13 +32,11 @@
     # see below.
     ++ [ libtool libunistring ];
 
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfNativeBuildInput = true;
-
   enableParallelBuilding = true;
 
   patches = [
     ./eai_system.patch
+    ./riscv.patch
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
