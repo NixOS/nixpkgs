@@ -369,7 +369,7 @@ let
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
-    xml2 = [ pkgs.libxml2.dev ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     bamsignals = [ pkgs.zlib.dev ];
