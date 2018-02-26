@@ -35,6 +35,13 @@ let
           sha256 = "15i3gaap8ilhpbah1ffc6q415wkvliqxilc6s69a4rinvkw6cx3s";
         };
       });
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
+        };
+      });
       hass-frontend = super.callPackage ./frontend.nix { };
     };
   };
