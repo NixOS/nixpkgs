@@ -165,17 +165,18 @@ in
         type = with types; listOf str;
         default = [];
         example = ''
-          [ "0" "1" ];
+          [ "name1" "name2" ];
         '';
         description = ''
-          A list of monitor daemons that should have a service created.
+          A list of names for manager daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
       };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
         description = ''
-          Extra configuration to add to the monitor section.
+          Extra configuration to add to the global section for manager daemons.
         '';
       };
     };
@@ -186,10 +187,11 @@ in
         type = with types; listOf str;
         default = [];
         example = ''
-          [ "0" "1" ];
+          [ "name1" "name2" ];
         '';
         description = ''
-          A list of monitor daemons that should have a service created. 
+          A list of monitor daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
       };
       extraConfig = mkOption {
@@ -207,10 +209,11 @@ in
         type = with types; listOf str;
         default = [];
         example = ''
-          [ "0" "1" ];
+          [ "name1" "name2" ];
         '';
         description = ''
-          A list of OSD daemons that should have a service created.
+          A list of OSD daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
       };
       extraConfig = mkOption {
@@ -235,10 +238,11 @@ in
         type = with types; listOf str;
         default = [];
         example = ''
-          [ "0" "1" ];
+          [ "name1" "name2" ];
         '';
         description = ''
-          A list of metadata service daemons that should have a service created.
+          A list of metadata service daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
       };
       extraConfig = mkOption {
@@ -256,10 +260,13 @@ in
         type = with types; listOf str;
         default = [];
         example = ''
-          [ "0" "1" ];
+          [ "name1" "name2" ];
         '';
         description = ''
-          A list of rados gateway daemons that should have a service created.
+          A list of rados gateway daemons that should have a service created. The names correspond
+          to the id part in ceph i.e. [ "name1" ] would result in client.name1, radosgw daemons
+          aren't daemons to cluster in the sense that OSD, MGR or MON daemons are. They are simply
+          daemons, from ceph, that uses the cluster as a backend.
         '';
       };
     };
@@ -271,6 +278,8 @@ in
         default = {};
         example = ''
           {
+            # This would create a section for a radosgw daemon named node0 and related
+            # configuration for it
             "client.radosgw.node0" = { "some config option" = "true"; };
           };
         '';
