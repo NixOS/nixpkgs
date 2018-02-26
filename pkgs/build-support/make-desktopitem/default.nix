@@ -6,7 +6,7 @@
 , comment ? ""
 , terminal ? "false"
 , desktopName
-, genericName
+, genericName ? ""
 , mimeType ? ""
 , categories ? "Application;Other;"
 , startupNotify ? null
