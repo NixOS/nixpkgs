@@ -5,7 +5,8 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+{ name ? ""
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
@@ -14,7 +15,7 @@
 
 with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
+assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   cc != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
@@ -84,7 +85,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
     # "cc" is the generic name for a C compiler, but there is no one for package
@@ -115,7 +116,7 @@ stdenv.mkDerivation {
     ''
       set -u
 
-      mkdir -p $out/bin $out/nix-support $man/nix-support
+      mkdir -p $out/bin $out/nix-support
 
       wrap() {
         local dst="$1"
@@ -246,7 +247,6 @@ stdenv.mkDerivation {
     ''
 
     + optionalString (!nativeTools) ''
-
       ##
       ## Initial CFLAGS
       ##
@@ -276,19 +276,19 @@ stdenv.mkDerivation {
 
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
+    ''
 
+    + optionalString propagateDoc ''
       ##
-      ## User env support
+      ## Man page and info support
       ##
 
-      # Propagate the wrapped cc so that if you install the wrapper,
-      # you get tools like gcov, the manpages, etc. as well (including
-      # for binutils and Glibc).
+      mkdir -p $man/nix-support $info/nix-support
       printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
+      printWords ${cc.info or ""}  > $info/nix-support/propagated-user-env-packages
     ''
 
     + ''
-
       ##
       ## Hardening support
       ##
@@ -308,8 +308,8 @@ stdenv.mkDerivation {
       ##
       ## Extra custom steps
       ##
-
     ''
+
     + extraBuildCommands;
 
   inherit expand-response-params;
