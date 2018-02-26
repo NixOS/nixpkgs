@@ -520,6 +520,7 @@
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   orivej = "Orivej Desh <orivej@gmx.fr>";
   osener = "Ozan Sener <ozan@ozansener.com>";
+  othercriteria = "Daniel Klein <othercriteria@gmail.com>";
   otwieracz = "Slawomir Gonet <slawek@otwiera.cz>";
   oxij = "Jan Malakhovski <oxij@oxij.org>";
   paholg = "Paho Lurie-Gregg <paho@paholg.com>";
