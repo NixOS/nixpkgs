@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
     ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "ac_cv_func_setpgrp_void=yes"
-      "AR=${stdenv.cc.bintools.targetPrefix}arc"
+      "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ]
     ++ optional graphicsSupport "--enable-image=${optionalString x11Support "x11,"}fb";
 
