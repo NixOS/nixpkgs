@@ -4,13 +4,14 @@
 , fetchPypi
 , isPy3k
 , blessings
+, mozterm
+, six
 , mozfile
 }:
 
 buildPythonPackage rec {
   pname = "mozlog";
   version = "3.7";
-  name = "${pname}-${version}";
 
   disabled = isPy3k;
 
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "414141131c4f5e7242e69a939d2b74f4ed8dbac12bef93eee4e7125cd1a131e9";
   };
 
-  propagatedBuildInputs = [ blessings mozfile ];
+  propagatedBuildInputs = [ blessings mozterm six ];
+
+  checkInputs = [ mozfile ];
 
   meta = {
     description = "Mozilla logging library";
