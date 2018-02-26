@@ -38,6 +38,9 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace contrib/smime_keys \
+      --replace /usr/bin/openssl ${openssl}/bin/openssl
+
     for f in doc/*.{xml,xsl}*  ; do
       substituteInPlace $f \
         --replace http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
