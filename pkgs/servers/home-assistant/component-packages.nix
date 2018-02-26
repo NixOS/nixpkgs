@@ -145,8 +145,8 @@
     "insteon_local" = ps: with ps; [  ];
     "insteon_plm" = ps: with ps; [  ];
     "verisure" = ps: with ps; [  ];
-    "media_player.kodi" = ps: with ps; [  ];
-    "notify.kodi" = ps: with ps; [  ];
+    "media_player.kodi" = ps: with ps; [ jsonrpc-async jsonrpc-websocket ];
+    "notify.kodi" = ps: with ps; [ jsonrpc-async ];
     "device_tracker.owntracks" = ps: with ps; [ libnacl ];
     "device_tracker.owntracks_http" = ps: with ps; [ libnacl ];
     "dyson" = ps: with ps; [  ];
@@ -346,7 +346,7 @@
     "climate.touchline" = ps: with ps; [  ];
     "device_tracker.trackr" = ps: with ps; [  ];
     "tradfri" = ps: with ps; [  ];
-    "device_tracker.unifi" = ps: with ps; [  ];
+    "device_tracker.unifi" = ps: with ps; [ pyunifi ];
     "keyboard" = ps: with ps; [  ];
     "vera" = ps: with ps; [  ];
     "media_player.vizio" = ps: with ps; [  ];
