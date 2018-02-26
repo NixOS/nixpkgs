@@ -1,0 +1,37 @@
+diff -Naur a/io/copy_file_range.c b/io/copy_file_range.c
+--- a/io/copy_file_range.c	1969-12-31 19:00:01.000000000 -0500
++++ b/io/copy_file_range.c	2018-02-26 07:39:21.533535821 -0500
+@@ -42,24 +42,6 @@
+ "));
+ }
+ 
+-static loff_t
+-copy_file_range(int fd, loff_t *src, loff_t *dst, size_t len)
+-{
+-	loff_t ret;
+-
+-	do {
+-		ret = syscall(__NR_copy_file_range, fd, src, file->fd, dst, len, 0);
+-		if (ret == -1) {
+-			perror("copy_range");
+-			return errno;
+-		} else if (ret == 0)
+-			break;
+-		len -= ret;
+-	} while (len > 0);
+-
+-	return 0;
+-}
+-
+ static off64_t
+ copy_src_filesize(int fd)
+ {
+@@ -130,7 +112,7 @@
+ 		copy_dst_truncate();
+ 	}
+ 
+-	ret = copy_file_range(fd, &src, &dst, len);
++	ret = copy_file_range(fd, &src, file->fd, &dst, len, 0);
+ 	close(fd);
+ 	return ret;
+ }
