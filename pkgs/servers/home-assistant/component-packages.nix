@@ -184,7 +184,7 @@
     "binary_sensor.trend" = ps: with ps; [ numpy ];
     "image_processing.opencv" = ps: with ps; [ numpy ];
     "climate.oem" = ps: with ps; [  ];
-    "media_player.onkyo" = ps: with ps; [  ];
+    "media_player.onkyo" = ps: with ps; [ onkyo-eiscp ];
     "sensor.openevse" = ps: with ps; [  ];
     "media_player.openhome" = ps: with ps; [  ];
     "switch.orvibo" = ps: with ps; [  ];
