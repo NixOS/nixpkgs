@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cached-property";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6562f0be134957547421dda11640e8cadfa7c23238fc4e0821ab69efdb1095f3";
+    sha256 = "a2fa0f89dd422f7e5dd992a4a3e0ce209d5d1e47a4db28fd0a7b5273ec8da3f0";
   };
 
   checkInputs = [ freezegun ];
