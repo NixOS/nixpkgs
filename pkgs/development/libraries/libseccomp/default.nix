@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0mdiyfljrkfl50q1m3ws8yfcyfjwf1zgkvcva8ffcwncji18zhkz";
   };
 
-  outputs = [ "out" "lib" "dev" "man" ];
-
   buildInputs = [ getopt makeWrapper ];
 
   patchPhase = ''

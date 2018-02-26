@@ -1673,7 +1673,27 @@ in {
     };
   };
 
-  binaryornot = callPackage ../development/python-modules/binaryornot { };
+
+  binaryornot = buildPythonPackage rec {
+    name = "binaryornot-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url ="mirror://pypi/b/binaryornot/${name}.tar.gz";
+      sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
+    };
+
+    buildInputs = with self; [ hypothesis ];
+
+    propagatedBuildInputs = with self; [ chardet ];
+
+    meta = {
+      homepage = https://github.com/audreyr/binaryornot;
+      description = "Ultra-lightweight pure Python package to check if a file is binary or text";
+      license = licenses.bsd3;
+    };
+  };
+
 
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
@@ -9207,7 +9227,44 @@ in {
     };
   };
 
-  konfig = callPackage ../development/python-modules/konfig { };
+  konfig = buildPythonPackage rec {
+    name = "konfig-${version}";
+    version = "1.1";
+
+    # konfig unconditionaly depend on configparser, even if it is part of
+    # the standard library in python 3.2 or above.
+    disabled = isPy3k;
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/konfig.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1h780fbrv275dcik4cs3rincza805z6q726b48r4a0qmh5d8160c";
+    };
+
+    propagatedBuildInputs = with self; [ configparser six ];
+
+    patches = [ (pkgs.writeText "konfig.patch" ''
+      diff --git a/setup.py b/setup.py
+      index 96fd858..bb4db06 100644
+      --- a/setup.py
+      +++ b/setup.py
+      @@ -20,7 +20,7 @@ setup(name='konfig',
+             author_email="tarek@mozilla.com",
+             include_package_data=True,
+             install_requires = [
+      -        'configparser', 'argparse', 'six'
+      +        'configparser', 'six'
+             ],
+             zip_safe=False,
+             classifiers=classifiers,
+    '') ];
+
+    meta = {
+      description = "Yet Another Config Parser";
+      homepage    = "https://github.com/mozilla-services/konfig";
+      license     = licenses.mpl20;
+    };
+  };
 
   kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
@@ -10582,6 +10639,24 @@ in {
   };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+
+  mysql_connector_repackaged = buildPythonPackage rec {
+    name = "mysql-connector-repackaged-0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mysql-connector-repackaged/${name}.tar.gz";
+      sha256 = "170fbf11c54def1b5fcc919be0a890b760bb2eca81f56123a5dda0c69b5b099e";
+    };
+
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
+    meta = {
+      maintainers = with maintainers; [ garbas domenkozar ];
+      platforms = platforms.linux;
+    };
+  };
+
 
   namebench = buildPythonPackage (rec {
     name = "namebench-1.3.1";
@@ -14742,7 +14817,22 @@ in {
 
   redis = callPackage ../development/python-modules/redis { };
 
-  rednose = callPackage ../development/python-modules/rednose { };
+  rednose = buildPythonPackage rec {
+    name = "rednose-${version}";
+    version = "1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rednose/${name}.tar.gz";
+      sha256 = "0b0bsna217lr1nykyhl5fgjly15zhdvqd4prg4wy1zrgfv7al6m0";
+    };
+
+    meta = {
+      description = "A python nose plugin adding color to console results.";
+    };
+
+    buildInputs = with self; [ nose six ];
+    propagatedBuildInputs = with self; [ colorama termstyle ];
+  };
 
   reikna = callPackage ../development/python-modules/reikna { };
 
@@ -15686,8 +15776,6 @@ in {
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   stevedore = callPackage ../development/python-modules/stevedore {};
-
-  text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
   Theano = callPackage ../development/python-modules/Theano rec {
     cudaSupport = pkgs.config.cudaSupport or false;
@@ -17970,7 +18058,23 @@ EOF
 
   persistent = callPackage ../development/python-modules/persistent {};
 
-  xdot = callPackage ../development/python-modules/xdot { };
+  xdot = buildPythonPackage rec {
+    name = "xdot-0.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/x/xdot/${name}.tar.gz";
+      sha256 = "01v9vmgdxz1q2m2vq2b4aqx4ycw7grc0l4is673ygvyg9rk02dx3";
+    };
+
+    nativeBuildInputs = with pkgs; [ wrapGAppsHook ];
+    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pygobject3 pkgs.graphviz pkgs.gnome3.gtk ];
+
+    meta = {
+      description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
+      homepage = https://github.com/jrfonseca/xdot.py;
+      license = licenses.lgpl3Plus;
+    };
+  };
 
   zetup = callPackage ../development/python-modules/zetup { };
 
@@ -20578,9 +20682,39 @@ EOF
     };
   };
 
-  termstyle = callPackage ../development/python-modules/termstyle { };
+  termstyle = buildPythonPackage rec {
+    name = "python-termstyle-${version}";
+    version = "0.1.10";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-termstyle/${name}.tar.gz";
+      sha256 = "1qllzkx1alf14zcfapppf8w87si4cpa7lgjmdp3f5idzdyqnnapl";
+    };
 
-  green = callPackage ../development/python-modules/green { };
+    meta = {
+      description = "Console colouring for python";
+      homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
+      license = licenses.bsdOriginal;
+    };
+
+  };
+
+  green = buildPythonPackage rec {
+    name = "green-${version}";
+    version = "2.3.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/green/${name}.tar.gz";
+      sha256 = "1888khfl9yxb8yfxq9b48dxwplqlxx8s0l530z5j7c6bx74v08b4";
+    };
+
+    propagatedBuildInputs = with self; [ termstyle colorama ];
+    buildInputs = with self; [ mock ];
+
+    meta = {
+      description = "Python test runner";
+      homepage = "https://github.com/CleanCut/green";
+      license = licenses.mit;
+    };
+  };
 
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 

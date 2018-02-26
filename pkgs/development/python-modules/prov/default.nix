@@ -7,8 +7,6 @@
 , six
 , pydotplus
 , rdflib
-, pydot
-, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -20,10 +18,6 @@ buildPythonPackage rec {
     sha256 = "640dc158d931403bc6c1a0ad80702caae71f810bac21f90ec605865c8444b7bb";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py --replace "six==1.10.0" "six>=1.10.0"
-  '';
-
   propagatedBuildInputs = [
     lxml
     networkx
@@ -32,15 +26,7 @@ buildPythonPackage rec {
     pydotplus
     rdflib
   ];
-
-  checkInputs = [
-    pydot
-    glibcLocales
-  ];
-
-  preCheck = ''
-    export LC_ALL="en_US.utf-8"
-  '';
+  doCheck = false; # takes ~60 mins
 
   meta = with stdenv.lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";

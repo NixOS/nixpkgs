@@ -1,14 +1,18 @@
-{ fetchurl, stdenv, cmake, ninja }:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-data-0.4.8";
+  name = "poppler-data-0.4.7";
 
   src = fetchurl {
     url = "http://poppler.freedesktop.org/${name}.tar.gz";
-    sha256 = "0wi8yyynladny51r4q53z7ygh7y491ayp8nqqv6wqqzjc60s35hh";
+    sha256 = "1pm7wg6xqj4sppb5az4pa7psfdk4yxxkw52j85bm9fksibcb0lp7";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
+  postPatch = ''
+    sed -i 's,$(datadir)/pkgconfig,$(prefix)/lib/pkgconfig,g' Makefile
+  '';
+
+  installFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://poppler.freedesktop.org/;

@@ -25,11 +25,7 @@ mangleVarBool() {
     for infix in "${role_infixes[@]}"; do
         local inputVar="${var/+/${infix}}"
         if [ -v "$inputVar" ]; then
-            # "1" in the end makes `let` return success error code when
-            # expression itself evaluates to zero.
-            # We don't use `|| true` because that would silence actual
-            # syntax errors from bad variable values.
-            let "${outputVar} |= ${!inputVar:-0}" "1"
+            let "${outputVar} |= ${!inputVar}"
         fi
     done
 }

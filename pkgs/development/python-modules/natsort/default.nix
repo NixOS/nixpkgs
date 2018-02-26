@@ -1,9 +1,12 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, isPy35
+, isPy36
 , fetchPypi
 , hypothesis
 , pytestcache
+, pytestcov
 , pytestflakes
 , pytestpep8
 , pytest
@@ -16,9 +19,10 @@ buildPythonPackage rec {
   pname = "natsort";
   version = "5.2.0";
 
-  checkInputs = [
+  buildInputs = [
     hypothesis
     pytestcache
+    pytestcov
     pytestflakes
     pytestpep8
     pytest
@@ -37,7 +41,7 @@ buildPythonPackage rec {
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8
+    pytest --flakes --pep8 --cov natsort --cov-report term-missing
   '';
 
   meta = {
