@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytest
 , freezegun
 }:
 
@@ -8,12 +9,20 @@ buildPythonPackage rec {
   pname = "cached-property";
   version = "1.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a2fa0f89dd422f7e5dd992a4a3e0ce209d5d1e47a4db28fd0a7b5273ec8da3f0";
+  # conftest.py is missing in PyPI tarball
+  # https://github.com/pydanny/cached-property/pull/87
+  src = fetchFromGitHub {
+    owner = "pydanny";
+    repo = pname;
+    rev = version;
+    sha256 = "0w7709grs4yqhfbnn7lva2fgyphvh43xcfqhi95lhh8sjad3xwkw";
   };
 
-  checkInputs = [ freezegun ];
+  checkInputs = [ pytest freezegun ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "A decorator for caching properties in classes";
