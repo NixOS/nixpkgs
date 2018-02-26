@@ -2,7 +2,7 @@
   cmake, extra-cmake-modules, qtwebkit, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
-  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared_mime_info
+  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
 }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules kdoctools shared_mime_info
+    cmake extra-cmake-modules kdoctools shared-mime-info
   ];
 
   buildInputs = [

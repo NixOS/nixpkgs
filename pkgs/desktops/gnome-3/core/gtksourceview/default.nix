@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango
-, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared_mime_info }:
+, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
 
 let
   checkInputs = [ xvfb_run dbus ];
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     # Required by gtksourceview-3.0.pc
     gtk3
     # Used by gtk_source_language_manager_guess_language
-    shared_mime_info
+    shared-mime-info
   ];
 
   outputs = [ "out" "dev" ];

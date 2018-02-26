@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, unzip, libtool, pkgconfig, git, p11_kit,
+{ pkgs, stdenv, fetchFromGitHub, unzip, libtool, pkgconfig, git, p11-kit,
   libtasn1, db, openldap, libmemcached, cyrus_sasl, openssl, softhsm, bash,
   python, libkrb5, quickder, unbound, ldns, gnupg, gnutls-kdh,
   useSystemd ? true, systemd, swig
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qyq6da5bsgb8y9f3jhfrnhbvjns4k80lpkrydkvfx83bg494370";
   };
 
-  propagatedBuildInputs = [ python softhsm openldap p11_kit.dev p11_kit.out gnupg ];
+  propagatedBuildInputs = [ python softhsm openldap p11-kit.dev p11-kit.out gnupg ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ unbound unzip git libtasn1 db libmemcached cyrus_sasl openssl bash quickder
                   libkrb5 ldns libtool swig pkgs.pythonPackages.pip gnutls-kdh ]

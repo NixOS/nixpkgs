@@ -17,7 +17,7 @@ in buildPythonApplication rec {
 
   buildInputs = [
     intltool wrapGAppsHook itstool libxml2
-    gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo
+    gnome3.gtksourceview gnome3.gsettings-desktop-schemas pycairo cairo
     gnome3.defaultIconTheme gnome3.dconf file
   ];
   propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];

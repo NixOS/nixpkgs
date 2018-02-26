@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtmultimedia, qtsvg, qttools
-, libvncserver, libvirt, pcre, pixman, qtermwidget, spice_gtk, spice_protocol
+, libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
 }:
 
 mkDerivation rec {
@@ -21,7 +21,7 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase qtmultimedia qtsvg
-    libvirt libvncserver pcre pixman qtermwidget spice_gtk spice_protocol
+    libvirt libvncserver pcre pixman qtermwidget spice-gtk spice-protocol
   ];
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];

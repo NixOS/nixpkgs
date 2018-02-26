@@ -2,27 +2,27 @@
 , pkgconfig, gtk3, glib
 , wrapGAppsHook, itstool, gnupg, libsoup
 , gnome3, librsvg, gdk_pixbuf, gpgme
-, libsecret, avahi, p11_kit, openssh }:
+, libsecret, avahi, p11-kit, openssh }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib intltool itstool gnome3.gcr
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook gnupg
+                  gnome3.gsettings-desktop-schemas wrapGAppsHook gnupg
                   gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
-                  libsecret avahi libsoup p11_kit vala
+                  libsecret avahi libsoup p11-kit vala
                   openssh ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share"
     )
   '';
 

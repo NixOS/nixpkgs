@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch,  dejagnu, doCheck ? false
-, buildPlatform, hostPlatform
+, buildPlatform, hostPlatform, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/libffi/gnu-linux-define.patch?id=bb024fd8ec6f27a76d88396c9f7c5c4b5800d580";
       sha256 = "11pvy3xkhyvnjfyy293v51f1xjy3x0azrahv1nw9y9mw8bifa2j2";
     })
+    ++ stdenv.lib.optional hostPlatform.isRiscV (fetchpatch {
+      name = "riscv-support.patch";
+      url = https://github.com/sorear/libffi-riscv/commit/e46492e8bb1695a19bc1053ed869e6c2bab02ff2.patch;
+      sha256 = "1vl1vbvdkigs617kckxvj8j4m2cwg62kxm1clav1w5rnw9afxg0y";
+    })
     ++ stdenv.lib.optionals stdenv.isMips [
       (fetchpatch {
         name = "0001-mips-Use-compiler-internal-define-for-linux.patch";
@@ -36,6 +41,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "info" ];
 
   buildInputs = stdenv.lib.optional doCheck dejagnu;
+
+  nativeBuildInputs = stdenv.lib.optional hostPlatform.isRiscV autoreconfHook;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap
+, buildPackages
+}:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -19,9 +21,18 @@ stdenv.mkDerivation rec {
   # The build enables -O2 by default for everything else.
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
 
+  depsBuildBuild = stdenv.lib.optional stdenv.isCross buildPackages.stdenv.cc;
+
   buildInputs = [ libgpgerror ]
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
+
+  preConfigure = if stdenv.isCross then ''
+    # This is intentional: gpg-error-config is a shell script that will work during the build
+    mkdir -p "$NIX_BUILD_TOP"/bin
+    ln -s ${libgpgerror.dev}/bin/gpg-error-config "$NIX_BUILD_TOP/bin"
+    export PATH="$NIX_BUILD_TOP/bin:$PATH"
+  '' else null;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

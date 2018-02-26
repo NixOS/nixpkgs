@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk3 glib gnome3.gnome_desktop gnome3.defaultIconTheme ];
+  buildInputs = [ gtk3 glib gnome3.gnome-desktop gnome3.defaultIconTheme ];
 
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";

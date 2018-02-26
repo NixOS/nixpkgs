@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libwnck, xfconf, libglade, xfce4panel, thunar, exo, garcon, libnotify
-, hicolor_icon_theme }:
+, hicolor-icon-theme }:
 let
   p_name  = "xfdesktop";
   ver_maj = "4.12";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool gtk libxfce4util libxfce4ui libwnck xfconf
-    libglade xfce4panel thunar exo garcon libnotify hicolor_icon_theme
+    libglade xfce4panel thunar exo garcon libnotify hicolor-icon-theme
   ];
 
   patches = [(fetchpatch {

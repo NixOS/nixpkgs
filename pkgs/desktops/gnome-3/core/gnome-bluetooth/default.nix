@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
-, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra_gtk3, gobjectIntrospection }:
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   nativeBuildInputs = [ meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobjectIntrospection ];
-  buildInputs = [ glib gtk3 udev libnotify libcanberra_gtk3
-                  gnome3.defaultIconTheme gnome3.gsettings_desktop_schemas ];
+  buildInputs = [ glib gtk3 udev libnotify libcanberra-gtk3
+                  gnome3.defaultIconTheme gnome3.gsettings-desktop-schemas ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

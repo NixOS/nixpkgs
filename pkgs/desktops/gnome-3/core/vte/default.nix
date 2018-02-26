@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig
 , gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
-, fetchFromGitHub, autoconf, automake, libtool, gtk_doc, gperf, pcre2
+, fetchFromGitHub, autoconf, automake, libtool, gtk-doc, gperf, pcre2
 }:
 
 stdenv.mkDerivation rec {

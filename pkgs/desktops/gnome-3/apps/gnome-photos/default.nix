@@ -1,8 +1,8 @@
 { stdenv, intltool, fetchurl, exempi, libxml2
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , makeWrapper, itstool, gegl, babl, lcms2
-, desktop_file_utils, gmp, libmediaart, wrapGAppsHook
-, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib
+, desktop-file-utils, gmp, libmediaart, wrapGAppsHook
+, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode-glib
 , dleyna-renderer }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib intltool itstool gegl babl gnome3.libgdata
-                  gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart
+                  gnome3.gsettings-desktop-schemas makeWrapper gmp libmediaart
                   gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
-                  gnome3.gnome_online_accounts gnome3.gnome_desktop
-                  lcms2 libexif tracker tracker-miners libxml2 desktop_file_utils
-                  wrapGAppsHook gexiv2 geocode_glib dleyna-renderer ];
+                  gnome3.gnome-online-accounts gnome3.gnome-desktop
+                  lcms2 libexif tracker tracker-miners libxml2 desktop-file-utils
+                  wrapGAppsHook gexiv2 geocode-glib dleyna-renderer ];
 
   enableParallelBuilding = true;
 

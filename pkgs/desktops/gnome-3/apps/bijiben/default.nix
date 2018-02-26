@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig, glib
-, evolution_data_server, evolution, sqlite
-, wrapGAppsHook, itstool, desktop_file_utils
-, clutter_gtk, libuuid, webkitgtk, zeitgeist
+, evolution-data-server, evolution, sqlite
+, wrapGAppsHook, itstool, desktop-file-utils
+, clutter-gtk, libuuid, webkitgtk, zeitgeist
 , gnome3, librsvg, gdk_pixbuf, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 desktop_file_utils wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook
   ];
-  buildInputs = [ glib clutter_gtk libuuid webkitgtk gnome3.tracker
-                  gnome3.gnome_online_accounts zeitgeist
-                  gnome3.gsettings_desktop_schemas
+  buildInputs = [ glib clutter-gtk libuuid webkitgtk gnome3.tracker
+                  gnome3.gnome-online-accounts zeitgeist
+                  gnome3.gsettings-desktop-schemas
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  evolution_data_server evolution sqlite ];
+                  evolution-data-server evolution sqlite ];
 
   enableParallelBuilding = true;
 

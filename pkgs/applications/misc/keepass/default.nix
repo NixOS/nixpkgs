@@ -1,12 +1,6 @@
 { stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
   unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
 
-# KeePass looks for plugins in under directory in which KeePass.exe is
-# located. It follows symlinks where looking for that directory, so
-# buildEnv is not enough to bring KeePass and plugins together.
-#
-# This derivation patches KeePass to search for plugins in specified
-# plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
   version = "2.38";
@@ -28,6 +22,29 @@ with builtins; buildDotnetPackage rec {
       xdotool = "${xdotool}/bin/xdotool";
     })
   ];
+
+  # KeePass looks for plugins in under directory in which KeePass.exe is
+  # located. It follows symlinks where looking for that directory, so
+  # buildEnv is not enough to bring KeePass and plugins together.
+  #
+  # This derivation patches KeePass to search for plugins in specified
+  # plugin derivations in the Nix store and nowhere else.
+  pluginLoadPathsPatch =
+    let outputLc = toString (add 7 (length plugins));
+        patchTemplate = readFile ./keepass-plugins.patch;
+        loadTemplate  = readFile ./keepass-plugins-load.patch;
+        loads =
+          lib.concatStrings
+            (map
+              (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
+              plugins);
+    in replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
+
+  passAsFile = [ "pluginLoadPathsPatch" ];
+  postPatch = ''
+    sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
+    patch -p1 <$pluginLoadPathsPatchPath
+  '';
 
   preConfigure = ''
     rm -rvf Build/*

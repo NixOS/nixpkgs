@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, fuse, curl, glib_networking
+{ stdenv, fetchurl, pkgconfig, glib, fuse, curl, glib-networking
 , asciidoc, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook asciidoc ];
-  buildInputs = [ glib glib_networking fuse curl ];
+  buildInputs = [ glib glib-networking fuse curl ];
 
   meta = with stdenv.lib; {
     description = "Command line client for Mega.co.nz";

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libxml2, pkgconfig, txt2man, vala, wrapGAppsHook
-, gsettings_desktop_schemas, gtk3, keybinder3
+, gsettings-desktop-schemas, gtk3, keybinder3
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gettext pkgconfig libxml2.bin txt2man vala wrapGAppsHook ];
 
-  buildInputs = [ gsettings_desktop_schemas gtk3 keybinder3 ];
+  buildInputs = [ gsettings-desktop-schemas gtk3 keybinder3 ];
 
   enableParallelBuilding = true;
 

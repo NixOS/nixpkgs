@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, getopt, libcap }:
 
 stdenv.mkDerivation rec {
-  version = "1.20.2";
+  version = "1.22";
   name = "fakeroot-${version}";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.bz2";
-    sha256 = "0313xb2j6a4wihrw9gfd4rnyqw7zzv6wf3rfh2gglgnv356ic2kw";
+    sha256 = "1zn67sp066q63vx95r671v0ki878i40a2wa57pmh64k43r56m05x";
   };
 
   patches = stdenv.lib.optional stdenv.isLinux ./einval.patch

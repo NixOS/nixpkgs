@@ -11,7 +11,7 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus_glib
+, glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
@@ -25,7 +25,7 @@
 , enableHotwording ? false
 , enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
-, gnomeKeyringSupport ? false, libgnome_keyring3 ? null
+, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
@@ -125,10 +125,10 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus_glib
+      glib gtk2 gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-    ] ++ optional gnomeKeyringSupport libgnome_keyring3
+    ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;

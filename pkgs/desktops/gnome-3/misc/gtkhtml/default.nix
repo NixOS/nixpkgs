@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 intltool gnome3.adwaita-icon-theme
-                  gnome3.gsettings_desktop_schemas ];
+                  gnome3.gsettings-desktop-schemas ];
 
   propagatedBuildInputs = [ enchant isocodes ];
 
