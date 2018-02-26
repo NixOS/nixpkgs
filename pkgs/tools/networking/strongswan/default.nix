@@ -2,7 +2,7 @@
 , pkgconfig, autoreconfHook
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
-, systemd, pam
+, systemd, pam, bash
 
 , enableTNC            ? false, curl, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   dontPatchELF = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/swanctl/swanctl.h --replace "SWANCTLDIR" "\"/etc/swanctl\""
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
+    # The ipsec utility needs to use shell for the target
+    substituteInPlace src/ipsec/_ipsec.in --replace "@IPSEC_SHELL@" ${bash}/bin/bash
     '';
 
   preConfigure = ''
