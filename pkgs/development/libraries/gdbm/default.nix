@@ -1,11 +1,11 @@
 { stdenv, lib, buildPlatform, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.14";
+  name = "gdbm-1.14.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "02dakgrq93xwgln8qfv3vs5jyz5yvds5nyzkx6rhg9v585x478dd";
+    sha256 = "0pxwz3jlwvglq2mrbxvrjgr8pa0aj73p3v9sxmdlj570zw0gzknd";
   };
 
   doCheck = true; # not cross;
