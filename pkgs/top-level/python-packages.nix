@@ -2787,6 +2787,7 @@ in {
     };
   };
 
+  wakeonlan = callPackage ../development/python-modules/wakeonlan { };
 
   openant = buildPythonPackage rec {
     name = "openant-unstable-2017-02-11";
