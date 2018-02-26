@@ -26,6 +26,7 @@ stdenv.mkDerivation {
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
+      "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation {
   configurePhase = ''
     runHook preConfigure
     for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
+    sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
     runHook postConfigure
   '';
 
