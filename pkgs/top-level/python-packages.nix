@@ -18365,33 +18365,46 @@ EOF
   };
 
   screenkey = buildPythonPackage rec {
-    version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
+    rev = "c6d240a676d7a4df284e0010d0698e1f9c5fd44e";
+    version = "0.9-${rev}";
     name = "screenkey-${version}";
 
-    propagatedBuildInputs = with self; [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
+    disabled = !isPy27; # error: invalid command 'bdist_wheel'
 
-    preConfigure = ''
+    propagatedBuildInputs = with self; with pkgs; [
+      intltool tango-icon-theme (with xorg; [libX11 libXtst xmodmap]) # from pkgs
+      distutils_extra pygtk setuptools xlib # from self
+    ];
+
+    preConfigure = with pkgs; ''
       substituteInPlace setup.py --replace "/usr/share" "./share"
 
-      # disable the feature that binds a shortcut to turning on/off
-      # screenkey. This is because keybinder is not packages in Nix as
-      # of today.
-      substituteInPlace Screenkey/screenkey.py \
-        --replace "import keybinder" "" \
-        --replace "        keybinder.bind(self.options['hotkey'], self.hotkey_cb, show_item)" ""
+      substituteInPlace Screenkey/xlib.py \
+        --replace "libX11.so.6" "${xorg.libX11}/lib/libX11.so.6"
+      substituteInPlace Screenkey/xlib.py \
+        --replace "libXtst.so.6" "${xorg.libXtst}/lib/libXtst.so.6"
+    '';
+
+    iconPkg = pkgs.tango-icon-theme;
+
+    preFixup = ''
+      $(mkdir -p $out/share/icons/hicolor; cd ${iconPkg}/share/icons/Tango; cp -R . $out/share/icons/hicolor)
+      wrapProgram $out/bin/screenkey \
+        --unset XMODIFIERS \
+        --prefix XDG_DATA_DIRS : "$out/share"
     '';
 
     src = pkgs.fetchgit {
-        url = https://github.com/scs3jb/screenkey.git;
-        rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-        sha256 = "1535mpm5x6v85d4ghxhdiianhjrsz280dwvs61ss0yyjx4kivx3s";
+      inherit rev;
+      url = https://github.com/wavexx/screenkey.git;
+      sha256 = "14g7fiv9n7m03djwz1pp5034pffi87ssvss9bc1q8vq0ksn23vrw";
     };
 
     meta = {
-      homepage = https://github.com/scs3jb/screenkey;
-      description = "A screencast tool to show your keys";
+      homepage = https://github.com/wavexx/screenkey;
+      description = "A screencast tool to display your keys";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ vidbina ];
       platforms = platforms.linux;
     };
   };
