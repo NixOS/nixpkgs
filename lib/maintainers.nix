@@ -100,6 +100,7 @@
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   bradediger = "Brad Ediger <brad@bradediger.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
+  brandondyck = "Brandon Dyck <brandon@dyck.us>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
   bugworm = "Roman Gerasimenko <bugworm@zoho.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
