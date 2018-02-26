@@ -132,6 +132,7 @@ mapAliases (rec {
   m3d-linux = m33-linux; # added 2016-08-13
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
+  piwik = matomo; # added 2018-01-16
   midoriWrapper = midori; # added 2015-01
   minc_tools = minc-tools; # 2017-12
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19

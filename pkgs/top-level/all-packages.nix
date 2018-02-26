@@ -12672,7 +12672,7 @@ with pkgs;
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
-  piwik = callPackage ../servers/web-apps/piwik { };
+  matomo = callPackage ../servers/web-apps/matomo { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 

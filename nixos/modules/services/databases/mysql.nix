@@ -133,7 +133,7 @@ in
         '';
         example = [
           "nextcloud"
-          "piwik"
+          "matomo"
         ];
       };
 

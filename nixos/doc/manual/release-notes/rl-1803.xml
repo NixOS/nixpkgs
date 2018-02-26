@@ -244,6 +244,52 @@ following incompatible changes:</para>
       <link xlink:href="http://borgbackup.readthedocs.io/en/stable/usage/upgrade.html#attic-and-borg-0-xx-to-borg-1-x">here</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The Piwik analytics software was renamed to Matomo:
+      <itemizedlist>
+        <listitem>
+          <para>The package <literal>pkgs.piwik</literal> was renamed to <literal>pkgs.matomo</literal>.</para>
+        </listitem>
+        <listitem>
+          <para>The service <literal>services.piwik</literal> was renamed to <literal>services.matomo</literal>.</para>
+        </listitem>
+        <listitem>
+          <para>
+            The data directory <filename>/var/lib/piwik</filename> was renamed to <filename>/var/lib/matomo</filename>.
+            All files will be moved automatically on first startup, but you might need to adjust your backup scripts.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The default <option>serverName</option> for the nginx configuration changed from
+            <literal>piwik.${config.networking.hostName}</literal> to
+            <literal>matomo.${config.networking.hostName}.${config.networking.domain}</literal>
+            if <option>config.networking.domain</option> is set,
+            <literal>matomo.${config.networking.hostName}</literal> if it is not set.
+            If you change your <option>serverName</option>, remember you'll need to update the
+            <literal>trustedHosts[]</literal> array in <filename>/var/lib/matomo/config/config.ini.php</filename>
+            as well.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <literal>piwik</literal> user was renamed to <literal>matomo</literal>.
+            The service will adjust ownership automatically for files in the data directory.
+            If you use unix socket authentication, remember to give the new <literal>matomo</literal> user
+            access to the database and to change the <literal>username</literal> to <literal>matomo</literal>
+            in the <literal>[database]</literal> section of <filename>/var/lib/matomo/config/config.ini.php</filename>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If you named your database `piwik`, you might want to rename it to `matomo` to keep things clean,
+            but this is neither enforced nor required.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
