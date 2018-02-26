@@ -2764,6 +2764,8 @@ in {
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
 
+  jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
