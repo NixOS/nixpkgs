@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   name = "esptool-${version}";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "137p0kcscly95qpjzgx1yxm8k2wf5y9v3srvlhp2ajniirgv8ijv";
+    sha256 = "0jnni4mgj5b0cng4cgg7x8p1ss73d59dfdgimsn2jxfld4h534x8";
   };
 
   buildInputs = with python3.pkgs; [ flake8 flake8-future-import ];
