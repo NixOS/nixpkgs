@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "13h7lc8wl9khhvkr0i3bl5j9bapf8anhqis1lcnwxg1vc2v058b0";
   };
 
+  # For cross-compilation
+  configureFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
+  postPatch = ''
+    substituteInPlace Makefile.in --replace "AR = ar" ""
+  '';
+
   meta = {
     description = "A random number generator daemon";
 
