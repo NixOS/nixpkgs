@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-ltc-${version}";
-  version = "3.0.5.1";
+  version = "3.0.6.2";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "1acsgzmd83cz6ha5fw63mi7123fr6gbiq537p5lxxfs2i8zrl63r";
+    sha256 = "1bay4vfkanxsa8pj8n99sj55yc59s84nns97lbvagyp0p0lclia7";
   };
 
   propagatedBuildInputs = with python3Packages; [
