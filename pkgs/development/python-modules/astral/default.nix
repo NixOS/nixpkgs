@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
 
 buildPythonPackage rec {
   pname = "astral";
@@ -9,11 +9,13 @@ buildPythonPackage rec {
     sha256 = "874b397ddbf0a4c1d8d644b21c2481e8a96b61343f820ad52d8a322d61a15083";
   };
 
-  propagatedBuildInputs = [ pytz ];
+  propagatedBuildInputs = [ pytz requests ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    py.test -k "not test_GoogleLocator"
+    # https://github.com/sffjunkie/astral/pull/13
+    touch src/test/.api_key
+    py.test -m "not webtest"
   '';
 
   meta = with stdenv.lib; {
