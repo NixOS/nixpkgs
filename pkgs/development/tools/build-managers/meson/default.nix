@@ -1,5 +1,7 @@
-{ lib, python3Packages }:
-python3Packages.buildPythonApplication rec {
+{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, m4 }: let
+  targetPrefix = lib.optionalString stdenv.isCross
+                   (targetPlatform.config + "-");
+in python3Packages.buildPythonApplication rec {
   version = "0.44.0";
   pname = "meson";
   name = "${pname}-${version}";
@@ -32,6 +34,26 @@ python3Packages.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  crossFile = writeTextDir "cross-file.conf" ''
+    [binaries]
+    c = '${targetPrefix}cc'
+    cpp = '${targetPrefix}c++'
+    ar = '${targetPrefix}ar'
+    strip = '${targetPrefix}strip'
+    pkgconfig = 'pkg-config'
+
+    [properties]
+    needs_exe_wrapper = true
+
+    [host_machine]
+    system = '${targetPlatform.parsed.kernel.name}'
+    cpu_family = '${targetPlatform.parsed.cpu.family}'
+    cpu = '${targetPlatform.parsed.cpu.name}'
+    endian = ${if targetPlatform.isLittleEndian then "'little'" else "'big'"}
+  '';
+
+  inherit (stdenv) cc isCross;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;
