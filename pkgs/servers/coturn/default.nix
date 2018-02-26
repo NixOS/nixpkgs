@@ -4,13 +4,13 @@ let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "coturn-${version}";
-  version = "4.5.0.6";
+  version = "4.5.0.7";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "${version}";
-    sha256 = "084c3zgwmmz4s6211i5jbkzsn13703lsg7vhc2cpacazq4sgsrhb";
+    sha256 = "1781fx8lqgc54j973xzgq9d7k3g2j03va82jb4217gd3a93pa65l";
   };
 
   buildInputs = [ openssl libevent ];
