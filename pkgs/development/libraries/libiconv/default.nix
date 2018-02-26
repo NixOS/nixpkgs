@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     lib.optional stdenv.isFreeBSD "--with-pic";
 
-  crossAttrs = {
-    # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
-    dontStrip = true;
-    dontCrossStrip = true;
-  };
-
   meta = {
     description = "An iconv(3) implementation";
 
