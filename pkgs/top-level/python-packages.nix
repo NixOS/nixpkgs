@@ -2760,6 +2760,8 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
+  jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
