@@ -5,14 +5,14 @@
 }:
 buildPythonApplication rec {
   pname = "behave";
-  version = "1.2.5";
+  version = "1.2.6";
   name = "${pname}-${version}";
 
   disabled = pythonAtLeast "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81b731ac5187e31e4aad2594944fa914943683a9818320846d037c5ebd6d5d0b";
+    sha256 = "b9662327aa53294c1351b0a9c369093ccec1d21026f050c3bd9b3e5cccf81a86";
   };
 
   checkInputs = [ mock nose pyhamcrest ];
