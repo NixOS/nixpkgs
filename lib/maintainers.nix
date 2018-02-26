@@ -691,6 +691,7 @@
   TealG = "Teal Gaure <~@Teal.Gr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
+  teozkr = "Teo Klestrup Röijezon <teo@nullable.se>";
   teto = "Matthieu Coudron <mcoudron@hotmail.com>";
   tex = "Milan Svoboda <milan.svoboda@centrum.cz>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";
