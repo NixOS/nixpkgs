@@ -1920,6 +1920,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "xembed" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."xembed" or (x: {}))
+       (import ./quicklisp-to-nix-output/xembed.nix {
+         inherit fetchurl;
+           "clx" = quicklisp-to-nix-packages."clx";
+       }));
+
+
   "clx-truetype" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."clx-truetype" or (x: {}))
