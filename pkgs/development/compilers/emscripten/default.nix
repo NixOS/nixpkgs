@@ -3,7 +3,7 @@
 }:
 
 let
-  rev = "1.37.16";
+  rev = "1.37.34";
   appdir = "share/emscripten";
 in
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "1qyhjx5zza01vnwmj6qzxbkagxknn4kzb6gw12fqw5q8pa8fy4zy";
+    sha256 = "1v62jg0b65shh10lbkvjg79xwnwwms6lr6w5vn1gaq6cpc712y19";
     inherit rev;
   };
 
