@@ -9,22 +9,24 @@ let
   pkgs = import ./../../default.nix { };
 
   packagesWith = cond: return: set:
-    pkgs.lib.flatten
-      (pkgs.lib.mapAttrsToList
-        (name: pkg:
-          let
-            result = builtins.tryEval (
-              if pkgs.lib.isDerivation pkg && cond name pkg
-                then [(return name pkg)]
-              else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
-                then packagesWith cond return pkg
+    pkgs.lib.unique
+      (pkgs.lib.flatten
+        (pkgs.lib.mapAttrsToList
+          (name: pkg:
+            let
+              result = builtins.tryEval (
+                if pkgs.lib.isDerivation pkg && cond name pkg
+                  then [(return name pkg)]
+                else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
+                  then packagesWith cond return pkg
+                else []
+              );
+            in
+              if result.success then result.value
               else []
-            );
-          in
-            if result.success then result.value
-            else []
+          )
+          set
         )
-        set
       );
 
   packagesWithUpdateScriptAndMaintainer = maintainer':
