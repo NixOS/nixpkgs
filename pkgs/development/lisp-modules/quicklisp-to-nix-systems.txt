@@ -57,6 +57,7 @@ cl-vectors
 cl-who
 clx
 clx-truetype
+xembed
 command-line-arguments
 css-lite
 css-selectors

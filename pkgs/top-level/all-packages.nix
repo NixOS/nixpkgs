@@ -121,7 +121,8 @@ with pkgs;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
-  dockerTools = callPackage ../build-support/docker { };
+  # go 1.9 pin until https://github.com/moby/moby/pull/35739
+  dockerTools = callPackage ../build-support/docker { go = go_1_9; };
 
   docker_compose = pythonPackages.docker_compose;
 
@@ -6823,7 +6824,7 @@ with pkgs;
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
+  dhall = callPackage ../development/interpreters/dhall { };
 
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
@@ -14942,7 +14943,8 @@ with pkgs;
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  inherit (callPackage ../applications/virtualization/docker { })
+  # go 1.9 pin until https://github.com/moby/moby/pull/35739
+  inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
     docker_17_12
     docker_18_02;
 

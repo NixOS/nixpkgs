@@ -2760,6 +2760,16 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
+  jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
+
+  jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
+
+  jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
+
+  onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
+
+  pyunifi = callPackage ../development/python-modules/pyunifi { };
+
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
     version = "0.12.1";
@@ -2777,6 +2787,7 @@ in {
     };
   };
 
+  wakeonlan = callPackage ../development/python-modules/wakeonlan { };
 
   openant = buildPythonPackage rec {
     name = "openant-unstable-2017-02-11";
