@@ -37,11 +37,11 @@ in
         ninja meson
         coreutils # meson calls date, stat etc.
         glibcLocales
-        patchelf getent
+        patchelf getent m4
       ];
     buildInputs =
       [ linuxHeaders libcap kmod xz pam acl
-        /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror libidn2
+        /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
         libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
         iptables gnu-efi
         # This is actually native, but we already pull it from buildPackages
