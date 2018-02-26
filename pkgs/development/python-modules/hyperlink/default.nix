@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, pytest }:
+{ stdenv, buildPythonPackage, fetchurl, idna, pytest }:
 
 buildPythonPackage rec {
   pname = "hyperlink";
@@ -9,6 +9,8 @@ buildPythonPackage rec {
     url = "mirror://pypi/h/hyperlink/${name}.tar.gz";
     sha256 = "f01b4ff744f14bc5d0a22a6b9f1525ab7d6312cb0ff967f59414bbac52f0a306";
   };
+
+  propagatedBuildInputs = [ idna ];
 
   checkInputs = [ pytest ];
 
