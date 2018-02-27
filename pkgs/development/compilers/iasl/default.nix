@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "iasl-${version}";
-  version = "20170303";
+  version = "20180209";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "1dc933rr11gv1nlaf5j8ih1chdakbjbjkn34jgbm330zppmck4y0";
+    sha256 = "1rpdfwa4vwnvyxdp9ygqjckmabc3s8kyg3jyq4n4f0rhr1zl4zy5";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
