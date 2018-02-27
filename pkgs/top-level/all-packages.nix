@@ -16541,10 +16541,9 @@ with pkgs;
     };
 
   mpv = callPackage ../applications/video/mpv rec {
-    lua          = lua5_1;
-    lua5_sockets = lua5_1_sockets;
-    youtube-dl   = pythonPackages.youtube-dl;
-    libva        = libva-full;
+    inherit (luaPackages) luasocket;
+    youtube-dl = pythonPackages.youtube-dl;
+    libva      = libva-full;
     waylandSupport     = stdenv.isLinux;
     alsaSupport        = !stdenv.isDarwin;
     pulseSupport       = !stdenv.isDarwin;

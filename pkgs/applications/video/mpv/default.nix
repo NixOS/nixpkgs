@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
-, lua, lua5_sockets, libuchardet, libiconv ? null, darwin
+, lua, luasocket, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
     mesa       ? null,
@@ -169,7 +169,14 @@ in stdenv.mkDerivation rec {
     python3 ${waf} build
   '';
 
-  installPhase = ''
+  installPhase =
+  let
+    getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
+                      "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
+    luaPath  = getPath "lua";
+    luaCPath = getPath "so";
+  in
+  ''
     python3 ${waf} install
 
     # Use a standard font
@@ -178,6 +185,8 @@ in stdenv.mkDerivation rec {
     # Ensure youtube-dl is available in $PATH for MPV
     wrapProgram $out/bin/mpv \
       --add-flags "--scripts=${concatStringsSep "," scripts}" \
+      --prefix LUA_PATH : "${luaPath}" \
+      --prefix LUA_CPATH : "${luaCPath}" \
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
@@ -203,4 +212,3 @@ in stdenv.mkDerivation rec {
     '';
   };
 }
-# TODO: investigate lua5_sockets bug
