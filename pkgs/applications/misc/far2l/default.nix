@@ -3,15 +3,15 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  rev = "192dace49c2e5456ca235833ee9877e4b8b491cc";
-  build = "unstable-2017-10-08.git${builtins.substring 0 7 rev}";
+  rev = "819d131110a9fedfc14f3b3bea8f1f56e68b077a";
+  build = "unstable-2018-02-27.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "1l1sf5zlr99xrmjlpzfk3snxqw13xgvnqilw4n7051b8km0snrbl";
+    sha256 = "1xjy2ricd68pm9j758pb2axc2269ns2xh86443x5llfcaxrjja4b";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
