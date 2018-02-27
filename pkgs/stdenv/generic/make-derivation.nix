@@ -230,7 +230,8 @@ rec {
             let
               outs = outputs'; # the value passed to derivation primitive
               hasOutput = out: builtins.elem out outs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )]
+            ++ lib.optional (hasOutput "man") "man";
         }
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.
