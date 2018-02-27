@@ -1,0 +1,14 @@
+diff --git a/mycroft/tts/mimic_tts.py b/mycroft/tts/mimic_tts.py
+index d104578cc6..a2736fd2dc 100644
+--- a/mycroft/tts/mimic_tts.py
++++ b/mycroft/tts/mimic_tts.py
+@@ -30,8 +30,7 @@ from threading import Thread
+
+ config = Configuration.get().get("tts").get("mimic")
+
+-BIN = config.get("path",
+-                 os.path.join(MYCROFT_ROOT_PATH, 'mimic', 'bin', 'mimic'))
++BIN = '@mimic@/bin/mimic'
+
+ if not os.path.isfile(BIN):
+     # Search for mimic on the path

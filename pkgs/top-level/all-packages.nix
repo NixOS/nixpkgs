@@ -12281,6 +12281,8 @@ with pkgs;
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
+  mycroft = callPackage ../servers/mycroft { };
+
   myserver = callPackage ../servers/http/myserver { };
 
   nas = callPackage ../servers/nas { };
