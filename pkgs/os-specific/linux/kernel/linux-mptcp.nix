@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, stdenvNoCC, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 buildLinux (rec {
   mptcpVersion = "0.93";

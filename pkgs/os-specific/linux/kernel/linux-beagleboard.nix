@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ubootTools, dtc, ... } @ args:
+{ stdenv, stdenvNoCC, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ubootTools, dtc, ... } @ args:
 
 let
   modDirVersion = "4.14.12";
