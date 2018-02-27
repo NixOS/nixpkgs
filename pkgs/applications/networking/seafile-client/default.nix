@@ -5,12 +5,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.1.0";
+  version = "6.1.5";
   name = "seafile-client-${version}";
 
   src = fetchurl {
     url = "https://github.com/haiwen/seafile-client/archive/v${version}.tar.gz";
-    sha256 = "16rn6b9ayaccgwx8hs3yh1wb395pp8ffh8may8a8bpcc4gdry7bd";
+    sha256 = "09m1k99pb8vj37zfr8a0j5xyghyvxindmdpgxvvxh589q4ngfsx8";
   };
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
