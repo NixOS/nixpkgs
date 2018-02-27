@@ -18299,26 +18299,7 @@ EOF
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
-  tunigo = buildPythonPackage rec {
-    name = "tunigo-${version}";
-    version = "1.0.0";
-    propagatedBuildInputs = with self; [ requests ];
-
-    src = pkgs.fetchFromGitHub {
-      owner = "trygveaa";
-      repo = "python-tunigo";
-      rev = "v${version}";
-      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
-    };
-
-    buildInputs = with self; [ mock nose ];
-
-    meta = {
-      description = "Python API for the browse feature of Spotify";
-      homepage = https://github.com/trygveaa/python-tunigo;
-      license = licenses.asl20;
-    };
-  };
+  tunigo = callPackage ../development/python-modules/tunigo { };
 
   screenkey = buildPythonPackage rec {
     version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
