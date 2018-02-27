@@ -207,5 +207,20 @@ with lib;
       '';
       description = "Declarative location config";
     };
+
+    enablePagespeed = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to enable ngx_pagespeed for this vhost";
+    };
+
+    pagespeedFileCachePath = mkOption {
+      type = types.str;
+      default = "/var/cache/ngx_pagespeed";
+      description = ''
+        Directory to use for pagespeed FileCachePath.
+        Documentation suggests using tmpfs for best performance.
+      '';
+    };
   };
 }
