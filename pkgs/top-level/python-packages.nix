@@ -20358,23 +20358,7 @@ EOF
     };
   };
 
-  d2to1 = buildPythonPackage rec {
-    name = "d2to1-${version}";
-    version = "0.2.11";
-
-    buildInputs = with self; [ nose ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/d2to1/d2to1-${version}.tar.gz";
-      sha256 = "1a5z367b7dpd6dgi0w8pymb68aj2pblk8w04l2c8hibhj8dpl2b4";
-    };
-
-    meta = {
-      description = "Support for distutils2-like setup.cfg files as package metadata";
-      homepage = https://pypi.python.org/pypi/d2to1;
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  d2to1 = callPackage ../development/python-modules/d2to1 { };
 
   ovh = callPackage ../development/python-modules/ovh { };
 
