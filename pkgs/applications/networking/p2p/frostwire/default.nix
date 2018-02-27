@@ -82,6 +82,6 @@ in stdenv.mkDerivation {
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
   };
 }
