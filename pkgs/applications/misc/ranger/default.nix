@@ -7,13 +7,13 @@ assert imagePreviewSupport -> w3m != null;
 
 pythonPackages.buildPythonApplication rec {
   name = "ranger-${version}";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
     rev = "v${version}";
-    sha256= "0h3qz0sr21390xdshhlfisvscja33slv1plzcisg1wrdgwgyr5j6";
+    sha256= "1zhds37j1scxa9b183qbrjwxqldrdk581c5xiy81vg17sndb1kqj";
   };
 
   checkInputs = with pythonPackages; [ pytest ];
