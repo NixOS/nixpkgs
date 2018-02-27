@@ -1,10 +1,10 @@
 { fetchurl, stdenv, jre }:
 
 stdenv.mkDerivation rec {
-  name = "jmeter-3.3";
+  name = "jmeter-4.0";
   src = fetchurl {
     url = "http://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
-    sha256 = "190k6yrh5casadphkv4azp4nvf4wf2q85mrfysw67r9d96nb9kk5";
+    sha256 = "1dvngvi6j8qb6nmf5a3gpi5wxck4xisj41qkrj8sjwb1f8jq6nw4";
   };
 
   buildInputs = [ jre ];
