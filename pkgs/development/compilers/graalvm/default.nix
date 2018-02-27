@@ -78,7 +78,12 @@ in rec {
   # copy of pkgs.oraclejvm8 with JVMCI interface (TODO: it should work with pkgs.openjdk8 too)
   jvmci8 = stdenv.mkDerivation rec {
     version = "0.41";
-    name = "jvmci8-${version}";
+    name = let
+             n = "jvmci8u161-${version}";
+           in if (lib.stringLength n) == (lib.stringLength oraclejdk8.name) then
+                n
+              else
+                throw "length of string `${n}' must be equal to the length of `${oraclejdk8.name}'";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
@@ -109,12 +114,7 @@ in rec {
     '';
     installPhase = ''
       mv jdk1.8.0_*/linux-amd64/product $out
-
-      # overide references to unpatched JDK
-      find $out -type f -perm -0100 \
-        -exec bash -c 'patchelf --set-rpath "$(patchelf --print-rpath {} | sed -r "s#${oraclejdk8}#$out#g")" {}' \;
-      sed -i -r "s#${oraclejdk8}#$out#g" $out/bin/jmc
-      sed -i -r "s#${oraclejdk8}#$out#g" $out/nix-support/setup-hook
+      find $out -type f -exec sed -i "s#${oraclejdk8}#$out#g" {} \;
     '';
     dontStrip = true; # why? see in oraclejdk derivation
     inherit (oraclejdk8) meta;
@@ -122,7 +122,12 @@ in rec {
 
   graalvm8 = stdenv.mkDerivation rec {
     version = "0.31";
-    name = "graalvm8-${version}";
+    name = let
+             n = "graal-vm-8-${version}";
+           in if (lib.stringLength n) == (lib.stringLength jvmci8.name) then
+                n
+              else
+                throw "length of string `${n}' must be equal to the length of `${jvmci8.name}'";
     src = fetchFromGitHub {
       owner  = "oracle";
       repo   = "graal";
@@ -141,23 +146,20 @@ in rec {
       )
     '';
     buildPhase = ''
-      export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
-      export MX_CACHE_DIR=${makeMxCache graal-mxcache}
-      ( cd substratevm; mx build --no-daemon )
-    '';
-    installPhase = ''
       # make a copy of jvmci8
       cp -dpR ${jvmci8} $out
       chmod +w -R $out
-      find $out -type f -perm -0100 \
-        -exec bash -c 'patchelf --set-rpath "$(patchelf --print-rpath {} | sed -r "s#${jvmci8}#$out#g")" {}' \;
-      sed -i -r "s#${jvmci8}#$out#g" $out/bin/jmc
-      sed -i -r "s#${jvmci8}#$out#g" $out/nix-support/setup-hook
+      find $out -type f -exec sed -i "s#${jvmci8}#$out#g" {} \;
 
+      export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
+      export MX_CACHE_DIR=${makeMxCache graal-mxcache}
+      ( cd substratevm; mx --java-home $out build --no-daemon )
+    '';
+    installPhase = ''
       # add graal files
       mkdir -p $out/jre/tools/{profiler,chromeinspector}
       cp -pR  substratevm/svmbuild/native-image-root/linux-amd64/bin/*  $out/jre/bin/
-      cp -pLR substratevm/svmbuild/native-image-root/lib/*              $out/jre/lib/
+      cp -pLR substratevm/svmbuild/native-image-root/lib/*              $out/jre/lib/           || true # ignore "same file" error when dereferencing symlinks
       cp -pLR substratevm/svmbuild/native-image-root/tools/*            $out/jre/tools/
       cp -pR  $MX_ALT_OUTPUT_ROOT/truffle/dists/*                       $out/jre/lib/truffle/
       cp -pR  $MX_ALT_OUTPUT_ROOT/tools/dists/truffle-profiler*         $out/jre/tools/profiler/
