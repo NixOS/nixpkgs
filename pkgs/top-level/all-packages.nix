@@ -5140,6 +5140,8 @@ with pkgs;
 
   untex = callPackage ../tools/text/untex { };
 
+  untrunc = callPackage ../tools/video/untrunc { };
+
   upx = callPackage ../tools/compression/upx { };
 
   uqmi = callPackage ../tools/networking/uqmi { };
