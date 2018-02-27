@@ -103,7 +103,6 @@ mapAliases (rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
-  jquery_ui = jquery-ui;  # added 2014-09-07
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
