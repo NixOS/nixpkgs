@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     ./A03-automake.patch
   ];
 
+  CFLAGS = "-fPIC";
+
   meta = {
     description = "ATSC A/52 stream decoder";
     homepage = http://liba52.sourceforge.net/;
