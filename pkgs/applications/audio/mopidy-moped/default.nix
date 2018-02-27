@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-moped-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/martijnboland/moped/archive/v${version}.tar.gz";
-    sha256 = "0xff8y1kc7rwwsd7ppgbvywf6i8lchjwbxjisfl1kmilwsb166yr";
+    sha256 = "1w71ing33hw2mlp8pw41w2sncp9lc3rgzn7nq6k90y6qk5q08xw6";
   };
 
   LC_ALL = "en_US.UTF-8";
