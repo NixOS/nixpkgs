@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , zimg, libass, python3, libiconv
 , ApplicationServices, nasm
-, ocrSupport ?  false, tesseract
-, imwriSupport? true,  imagemagick7
+, ocrSupport ?  false, tesseract ? null
+, imwriSupport? true,  imagemagick7 ? null
 }:
 
 assert ocrSupport   -> tesseract != null;
@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R40";
+  version = "R43";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "1ycc3fdhhryp7hap80z3qmh89br31kcswzp8ai3wlc07zfvcrfck";
+    sha256 = "01yzxggjxr6fz3wj81z6vgp9m4jqddyk73i22kz2x620cpdgb9j9";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook nasm ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;
     license     = licenses.lgpl21;
-    platforms   = platforms.unix;
+    platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 
