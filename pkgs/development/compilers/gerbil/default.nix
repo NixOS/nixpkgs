@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.12-DEV-1404-g0a266db";
+  version = "0.12-RELEASE";
   src = fetchgit {
     url = "https://github.com/vyzo/gerbil.git";
-    rev = "0a266db5e2e241272711bc150cc2607204bf2b78";
-    sha256 = "1lvawqn8havfyxkkgfqffc213zq2pgm179l42yj49fy3fhpzia4m";
+    rev = "5618892d7939e1cb4ef5247912e0bc1ec99f6b52";
+    sha256 = "0b2valahf5k81r4sp6y12d44fb286p92s7k6dphij0kmvg0dp818";
   };
 
   # Use makeStaticLibraries to enable creation of statically linked binaries
