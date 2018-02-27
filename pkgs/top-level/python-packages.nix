@@ -20471,21 +20471,7 @@ EOF
 
   xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox {};
 
-  xstatic-bootstrap = buildPythonPackage rec {
-    name = "XStatic-Bootstrap-${version}";
-    version = "3.3.5.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Bootstrap/XStatic-Bootstrap-${version}.tar.gz";
-      sha256 = "0jzjq3d4vp2shd2n20f9y53jnnk1cvphkj1v0awgrf18qsy2bmin";
-    };
-
-    meta = {
-      homepage =  http://getbootstrap.com;
-      description = "bootstrap packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-bootstrap = callPackage ../development/python-modules/xstatic-bootstrap {};
 
   xstatic-jquery = buildPythonPackage rec {
     name = "XStatic-jQuery-${version}";
