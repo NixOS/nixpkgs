@@ -80,7 +80,7 @@ in
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = https://nodejs.org;
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
+      maintainers = with maintainers; [ goibhniu gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 
