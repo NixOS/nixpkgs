@@ -20692,6 +20692,8 @@ with pkgs;
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
+  xcpc = callPackage ../misc/emulators/xcpc { };
+
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
