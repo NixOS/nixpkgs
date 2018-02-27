@@ -12994,7 +12994,7 @@ with pkgs;
   iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = callPackage ../os-specific/linux/iputils {
-    inherit (perlPackages) SGMLSpm;
+    inherit (buildPackages.buildPackages.perlPackages) SGMLSpm;
   };
 
   iptables = callPackage ../os-specific/linux/iptables { };
