@@ -575,6 +575,13 @@ self: super: {
     jailbreak       = true;
   });
 
+  cabal2nix = super.cabal2nix.override {
+    ##     • No instance for (Semigroup (List a))
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
+    hpack = self.hpack;
+  };
+
   cabal-doctest = overrideCabal super.cabal-doctest (drv: {
     ## Setup: Encountered missing dependencies:
     ## Cabal >=1.10 && <2.1, base >=4.3 && <4.11
