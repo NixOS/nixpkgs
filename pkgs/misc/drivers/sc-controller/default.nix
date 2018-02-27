@@ -7,13 +7,13 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.0.1";
+  version = "0.4.0.2";
 
   src = fetchFromGitHub {
     owner = "kozec";
     repo = "sc-controller";
     rev = "v${version}";
-    sha256 = "0vhgiqg4r4bnn004ql80rvi23y05wlax80sj8qsr91pvqsxwv3yl";
+    sha256 = "0v1fgmnsi70z52l6c3fg49vki5rrdswr38mc82wbpmgi68vxwnyy";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
