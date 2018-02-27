@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "jquery-1.11.3";
+  name = "jquery-3.2.1";
 
   src = if compressed then
     fetchurl {
       url = "http://code.jquery.com/${name}.min.js";
-      sha256 = "1f4glgxxn3jnvry3dpzmazj3207baacnap5w20gr2xlk789idfgc";
+      sha256 = "1pl2imaca804jkq29flhbkfga5qqk39rj6j1n179h5b0rj13h247";
     }
     else
     fetchurl {
