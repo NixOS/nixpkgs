@@ -115,6 +115,8 @@ if [[ -z $noChannelCopy ]]; then
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
         nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
                 -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
+        install -m 0700 -d $mountPoint/root/.nix-defexpr
+        ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
     fi
 fi
 
