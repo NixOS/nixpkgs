@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     "--without-python"
     "--with-randomdev=/dev/random"
     "--with-ecdsa=yes"
+    "--with-eddsa=no"  # FIXME: "yes" fails to build, incompatible openssl version?
     "--with-gost=yes"
     "AR=${stdenv.cc.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ar"
   ] ++ lib.optional enableSeccomp "--enable-seccomp"
