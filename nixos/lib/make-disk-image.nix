@@ -181,7 +181,8 @@ let format' = format; in let
     nix-store --load-db < ${closureInfo}/registration
 
     echo "running nixos-install..."
-    nixos-install --root $root --no-bootloader --no-root-passwd --closure ${config.system.build.toplevel} --substituters ""
+    nixos-install --root $root --no-bootloader --no-root-passwd \
+      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
 
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /

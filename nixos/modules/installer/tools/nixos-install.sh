@@ -12,6 +12,7 @@ umask 0022
 extraBuildFlags=()
 
 mountPoint=/mnt
+channelPath=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -28,9 +29,11 @@ while [ "$#" -gt 0 ]; do
         --root)
             mountPoint="$1"; shift 1
             ;;
-        --closure)
-            # FIXME: --closure is a misnomer
+        --system|--closure)
             system="$1"; shift 1
+            ;;
+        --channel)
+            channelPath="$1"; shift 1
             ;;
         --no-channel-copy)
             noChannelCopy=1
@@ -104,7 +107,9 @@ nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
 if [[ -z $noChannelCopy ]]; then
-    channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
+    if [[ -z $channelPath ]]; then
+        channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
+    fi
     if [[ -n $channelPath ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
