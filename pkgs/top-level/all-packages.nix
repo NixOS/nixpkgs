@@ -16551,6 +16551,7 @@ with pkgs;
     dvdreadSupport     = !stdenv.isDarwin;
     dvdnavSupport      = !stdenv.isDarwin;
     drmSupport         = !stdenv.isDarwin;
+    x11Support         = !stdenv.isDarwin;
   };
 
   mpvScripts = {
