@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "lsyncd-${version}";
-  version = "2.1.6";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "axkibe";
     repo = "lsyncd";
     rev = "release-${version}";
-    sha256 = "1cab96h4qfyapk7lb682j1d8k0hpv7h9pl41vdgc0vr4bq4c3ij2";
+    sha256 = "1q2ixp52r96ckghgmxdbms6xrq8dbziimp8gmgzqfq4lk1v1w80y";
   };
 
   patchPhase = ''
