@@ -21,6 +21,8 @@ let
     "${targetPlatform.config}-";
 in
 
+assert stdenv.isDarwin;
+
 # Non-Darwin alternatives
 assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
