@@ -1,25 +1,26 @@
-{
-  stdenv,
-  autoreconfHook,
-  curl,
-  fetchFromGitHub,
-  gcc5,
-  git,
-  libevent,
-  libtool,
-  libqrencode,
-  libudev,
-  libusb,
-  makeWrapper,
-  pkgconfig,
-  qt59,
-  udevRule51 ? ''
-    SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
-  '',
-  udevRule52 ? ''
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
-  '',
-  writeText,
+{ stdenv
+, autoreconfHook
+, curl
+, fetchFromGitHub
+, git
+, libevent
+, libtool
+, libqrencode
+, libudev
+, libusb
+, makeWrapper
+, pkgconfig
+, qtbase
+, qttools
+, qtwebsockets
+, qtmultimedia
+, udevRule51 ? ''
+,   SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
+, ''
+, udevRule52 ? ''
+,   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
+, ''
+, writeText
 }:
 
 # Enabling the digitalbitbox program
@@ -43,8 +44,6 @@
 
 # See https://digitalbitbox.com/start_linux for more information.
 let
-  gcc = gcc5;
-  qt = qt59;
   copyUdevRuleToOutput = name: rule:
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in stdenv.mkDerivation rec {
@@ -61,10 +60,10 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = with stdenv.lib; [
     autoreconfHook
     curl
-    gcc
     git
     makeWrapper
     pkgconfig
+    qttools
   ];
 
   buildInputs = with stdenv.lib; [
@@ -73,15 +72,18 @@ in stdenv.mkDerivation rec {
     libudev
     libusb
     libqrencode
-    qt.full
+
+    qtbase
+    qtwebsockets
+    qtmultimedia
   ];
 
-  LUPDATE="${qt.qttools.dev}/bin/lupdate";
-  LRELEASE="${qt.qttools.dev}/bin/lrelease";
-  MOC="${qt.qtbase.dev}/bin/moc";
-  QTDIR="${qt.qtbase.dev}";
-  RCC="${qt.qtbase.dev}/bin/rcc";
-  UIC="${qt.qtbase.dev}/bin/uic";
+  LUPDATE="${qttools.dev}/bin/lupdate";
+  LRELEASE="${qttools.dev}/bin/lrelease";
+  MOC="${qtbase.dev}/bin/moc";
+  QTDIR="${qtbase.dev}";
+  RCC="${qtbase.dev}/bin/rcc";
+  UIC="${qtbase.dev}/bin/uic";
 
   configureFlags = [
     "--enable-libusb"

@@ -121,7 +121,7 @@ with pkgs;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = callPackage ../applications/misc/digitalbitbox { };
+  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   dockerTools = callPackage ../build-support/docker { go = go_1_9; };
