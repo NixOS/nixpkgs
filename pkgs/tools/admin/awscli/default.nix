@@ -26,12 +26,12 @@ let
 
 in buildPythonPackage rec {
   pname = "awscli";
-  version = "1.14.41";
+  version = "1.14.47";
   namePrefix = "";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cf2a52d56f26e22e2fbd7b72649ef1d3de8930df7a730d7f27418d129bb3a6a";
+    sha256 = "269483910c820ae5b4f60021375f07e4f1c23f86505e1b9e29243880a660c1d8";
   };
 
   # No tests included
