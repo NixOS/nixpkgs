@@ -2,14 +2,17 @@
 
 buildPythonPackage rec {
   pname = "PyVirtualDisplay";
-  version = "0.1.5";
+  version = "0.2.1";
 
   propagatedBuildInputs = [ EasyProcess ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa6aef08995e14c20cc670d933bfa6e70d736d0b555af309b2e989e2faa9ee53";
+    sha256 = "012883851a992f9c53f0dc6a512765a95cf241bdb734af79e6bdfef95c6e9982";
   };
+
+  # requires X server
+  doCheck = false;
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";
