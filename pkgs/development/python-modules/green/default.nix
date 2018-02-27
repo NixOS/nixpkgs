@@ -2,17 +2,12 @@
 
 buildPythonPackage rec {
   pname = "green";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cdd2934eff754c9664f373ee0d77cb1cb35dbbf3b719b8ae3b059718db875df";
+    sha256 = "4c0c163bd2ce2da1f201eb69fd92fc24aaeab884f9e5c5a8c23d507a53336fa8";
   };
-
-  prePatch = ''
-    # See https://github.com/CleanCut/green/pull/182
-    substituteInPlace setup.py --replace python-termstyle termstyle
-  '';
 
   propagatedBuildInputs = [
     colorama coverage termstyle unidecode
