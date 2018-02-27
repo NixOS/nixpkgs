@@ -2370,11 +2370,11 @@ rec {
   };
 
   ale = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "ale-2017-12-04";
+    name = "ale-2018-02-25";
     src = fetchgit {
       url = "https://github.com/w0rp/ale";
-      rev = "e2a8f759d870ed7a1f0ee4698a73b65e9f36e54d";
-      sha256 = "0fx9qr84li58jgz576gsyjjwd3f1c2jby8wl6d35vznjzw0x00cs";
+      rev = "7ec684206c1395a940d8ad2d26d59773a432115c";
+      sha256 = "1hvybsvs2i01q3s9wpydyxgsvg59r2valk61vl4jh2mrrh0bfi9i";
     };
     dependencies = [];
 
