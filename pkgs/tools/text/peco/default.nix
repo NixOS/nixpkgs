@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "peco-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   goPackagePath = "github.com/peco/peco";
   subPackages = [ "cmd/peco" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "peco";
     repo = "peco";
     rev = "v${version}";
-    sha256 = "0jnlpr3nxx8xmjb6w4jlwshzz0p9hlww9919qbkm66afv16k0vm8";
+    sha256 = "0cgfwbnz4jp2nvmqf2i03xf69by8g0xgd3k5k9aj46y9hps1ka92";
   };
 
   goDeps = ./deps.nix;
