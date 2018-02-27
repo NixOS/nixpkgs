@@ -17368,23 +17368,7 @@ in {
 
   virtkey = callPackage ../development/python-modules/virtkey { };
 
-  virtual-display = buildPythonPackage rec {
-    name = "PyVirtualDisplay-0.1.5";
-
-    propagatedBuildInputs = with self; [ EasyProcess ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyVirtualDisplay/${name}.tar.gz";
-      sha256 = "aa6aef08995e14c20cc670d933bfa6e70d736d0b555af309b2e989e2faa9ee53";
-    };
-
-    meta = {
-      description = "Python wrapper for Xvfb, Xephyr and Xvnc";
-      homepage = "https://github.com/ponty/pyvirtualdisplay";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
