@@ -2,13 +2,15 @@
 
 buildPythonPackage rec {
   pname = "tmdb3";
-  version = "0.6.17";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "64a6c3f1a60a9d8bf18f96a5403f3735b334040345ac3646064931c209720972";
+    sha256 = "9b6e043b8a65d159e7fc8f720badc7ffee5109296e38676c107454e03a895983";
   };
+
+  # no tests implemented
+  doCheck = false;
 
   meta = with lib; {
     description = "Python implementation of the v3 API for TheMovieDB.org, allowing access to movie and cast information";
