@@ -15,19 +15,19 @@ let
     };
 
   jvmci8-mxcache = [
-    rec { sha1 = "66215826a684eb6866d4c14a5a4f9c344f1d1eef"; name = "JACOCOCORE_${sha1}.jar";                            url = https://repo1.maven.org/maven2/org/jacoco/org.jacoco.core/0.7.9/org.jacoco.core-0.7.9.jar; }
-    rec { sha1 = "a365ee459836b2aa18028929923923d15f0c3af9"; name = "JACOCOCORE.sources_${sha1}.jar";                    url = https://repo1.maven.org/maven2/org/jacoco/org.jacoco.core/0.7.9/org.jacoco.core-0.7.9-sources.jar; }
-    rec { sha1 = "8a7f78fdf2a4e58762890d8e896a9298c2980c10"; name = "JACOCOREPORT_${sha1}.jar";                          url = https://repo1.maven.org/maven2/org/jacoco/org.jacoco.report/0.7.9/org.jacoco.report-0.7.9.jar; }
-    rec { sha1 = "e6703ef288523a8e63fa756d8adeaa70858d41b0"; name = "JACOCOREPORT.sources_${sha1}.jar";                  url = https://repo1.maven.org/maven2/org/jacoco/org.jacoco.report/0.7.9/org.jacoco.report-0.7.9-sources.jar; }
-    rec { sha1 = "306816fb57cf94f108a43c95731b08934dcae15c"; name = "JOPTSIMPLE_4_6_${sha1}.jar";                        url = https://repo1.maven.org/maven2/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar; }
-    rec { sha1 = "9cd14a61d7aa7d554f251ef285a6f2c65caf7b65"; name = "JOPTSIMPLE_4_6.sources_${sha1}.jar";                url = https://repo1.maven.org/maven2/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6-sources.jar; }
-    rec { sha1 = "b852fb028de645ad2852bbe998e084d253f450a5"; name = "JMH_GENERATOR_ANNPROCESS_1_18_${sha1}.jar";         url = https://repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18.jar; }
-    rec { sha1 = "d455b0dc6108b5e6f1fb4f6cf1c7b4cbedbecc97"; name = "JMH_GENERATOR_ANNPROCESS_1_18.sources_${sha1}.jar"; url = https://repo1.maven.org/maven2/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18-sources.jar; }
-    rec { sha1 = "702b8525fcf81454235e5e2fa2a35f15ffc0ec7e"; name = "ASM_DEBUG_ALL_${sha1}.jar";                         url = https://repo1.maven.org/maven2/org/ow2/asm/asm-debug-all/5.0.4/asm-debug-all-5.0.4.jar; }
-    rec { sha1 = "ec2544ab27e110d2d431bdad7d538ed509b21e62"; name = "COMMONS_MATH3_3_2_${sha1}.jar";                     url = https://repo1.maven.org/maven2/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar; }
-    rec { sha1 = "cd098e055bf192a60c81d81893893e6e31a6482f"; name = "COMMONS_MATH3_3_2.sources_${sha1}.jar";             url = https://repo1.maven.org/maven2/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar; }
-    rec { sha1 = "0174aa0077e9db596e53d7f9ec37556d9392d5a6"; name = "JMH_1_18_${sha1}.jar";                              url = https://repo1.maven.org/maven2/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18.jar; }
-    rec { sha1 = "7ff1e1aafea436b6aa8b29a8b8f1c2d66be26f5b"; name = "JMH_1_18.sources_${sha1}.jar";                      url = https://repo1.maven.org/maven2/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18-sources.jar; }
+    rec { sha1 = "66215826a684eb6866d4c14a5a4f9c344f1d1eef"; name = "JACOCOCORE_${sha1}.jar";                            url = mirror://maven/org/jacoco/org.jacoco.core/0.7.9/org.jacoco.core-0.7.9.jar; }
+    rec { sha1 = "a365ee459836b2aa18028929923923d15f0c3af9"; name = "JACOCOCORE.sources_${sha1}.jar";                    url = mirror://maven/org/jacoco/org.jacoco.core/0.7.9/org.jacoco.core-0.7.9-sources.jar; }
+    rec { sha1 = "8a7f78fdf2a4e58762890d8e896a9298c2980c10"; name = "JACOCOREPORT_${sha1}.jar";                          url = mirror://maven/org/jacoco/org.jacoco.report/0.7.9/org.jacoco.report-0.7.9.jar; }
+    rec { sha1 = "e6703ef288523a8e63fa756d8adeaa70858d41b0"; name = "JACOCOREPORT.sources_${sha1}.jar";                  url = mirror://maven/org/jacoco/org.jacoco.report/0.7.9/org.jacoco.report-0.7.9-sources.jar; }
+    rec { sha1 = "306816fb57cf94f108a43c95731b08934dcae15c"; name = "JOPTSIMPLE_4_6_${sha1}.jar";                        url = mirror://maven/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar; }
+    rec { sha1 = "9cd14a61d7aa7d554f251ef285a6f2c65caf7b65"; name = "JOPTSIMPLE_4_6.sources_${sha1}.jar";                url = mirror://maven/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6-sources.jar; }
+    rec { sha1 = "b852fb028de645ad2852bbe998e084d253f450a5"; name = "JMH_GENERATOR_ANNPROCESS_1_18_${sha1}.jar";         url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18.jar; }
+    rec { sha1 = "d455b0dc6108b5e6f1fb4f6cf1c7b4cbedbecc97"; name = "JMH_GENERATOR_ANNPROCESS_1_18.sources_${sha1}.jar"; url = mirror://maven/org/openjdk/jmh/jmh-generator-annprocess/1.18/jmh-generator-annprocess-1.18-sources.jar; }
+    rec { sha1 = "702b8525fcf81454235e5e2fa2a35f15ffc0ec7e"; name = "ASM_DEBUG_ALL_${sha1}.jar";                         url = mirror://maven/org/ow2/asm/asm-debug-all/5.0.4/asm-debug-all-5.0.4.jar; }
+    rec { sha1 = "ec2544ab27e110d2d431bdad7d538ed509b21e62"; name = "COMMONS_MATH3_3_2_${sha1}.jar";                     url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar; }
+    rec { sha1 = "cd098e055bf192a60c81d81893893e6e31a6482f"; name = "COMMONS_MATH3_3_2.sources_${sha1}.jar";             url = mirror://maven/org/apache/commons/commons-math3/3.2/commons-math3-3.2-sources.jar; }
+    rec { sha1 = "0174aa0077e9db596e53d7f9ec37556d9392d5a6"; name = "JMH_1_18_${sha1}.jar";                              url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18.jar; }
+    rec { sha1 = "7ff1e1aafea436b6aa8b29a8b8f1c2d66be26f5b"; name = "JMH_1_18.sources_${sha1}.jar";                      url = mirror://maven/org/openjdk/jmh/jmh-core/1.18/jmh-core-1.18-sources.jar; }
     rec { sha1 = "2973d150c0dc1fefe998f834810d68f278ea58ec"; name = "JUNIT_${sha1}.jar";                                 url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/junit-4.12.jar; }
     rec { sha1 = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"; name = "JUNIT.sources_${sha1}.jar";                         url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/junit-4.12-sources.jar; }
     rec { sha1 = "42a25dc3219429f0e5d060061f71acb49bf010a0"; name = "HAMCREST_${sha1}.jar";                              url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/hamcrest-core-1.3.jar; }
@@ -36,10 +36,10 @@ let
   ];
 
   graal-mxcache = jvmci8-mxcache ++ [
-    rec { sha1 = "f2cfb09cee12469ff64f0d698b13de19903bb4f7"; name = "NanoHTTPD-WebSocket_${sha1}.jar";                   url = https://repo1.maven.org/maven2/org/nanohttpd/nanohttpd-websocket/2.3.1/nanohttpd-websocket-2.3.1.jar; }
-    rec { sha1 = "a8d54d1ca554a77f377eff6bf9e16ca8383c8f6c"; name = "NanoHTTPD_${sha1}.jar";                             url = https://repo1.maven.org/maven2/org/nanohttpd/nanohttpd/2.3.1/nanohttpd-2.3.1.jar; }
-    rec { sha1 = "aca5eb39e2a12fddd6c472b240afe9ebea3a6733"; name = "org.json_${sha1}.jar";                              url = https://repo1.maven.org/maven2/org/json/json/20160810/json-20160810.jar; }
-    rec { sha1 = "fdedd5f2522122102f0b3db85fe7aa563a009926"; name = "JLINE_${sha1}.jar";                                 url = https://repo1.maven.org/maven2/jline/jline/2.14.5/jline-2.14.5.jar; }
+    rec { sha1 = "f2cfb09cee12469ff64f0d698b13de19903bb4f7"; name = "NanoHTTPD-WebSocket_${sha1}.jar";                   url = mirror://maven/org/nanohttpd/nanohttpd-websocket/2.3.1/nanohttpd-websocket-2.3.1.jar; }
+    rec { sha1 = "a8d54d1ca554a77f377eff6bf9e16ca8383c8f6c"; name = "NanoHTTPD_${sha1}.jar";                             url = mirror://maven/org/nanohttpd/nanohttpd/2.3.1/nanohttpd-2.3.1.jar; }
+    rec { sha1 = "aca5eb39e2a12fddd6c472b240afe9ebea3a6733"; name = "org.json_${sha1}.jar";                              url = mirror://maven/org/json/json/20160810/json-20160810.jar; }
+    rec { sha1 = "fdedd5f2522122102f0b3db85fe7aa563a009926"; name = "JLINE_${sha1}.jar";                                 url = mirror://maven/jline/jline/2.14.5/jline-2.14.5.jar; }
     rec { sha1 = "476d9a44cd19d6b55f81571077dfa972a4f8a083"; name = "JAVA_ALLOCATION_INSTRUMENTER_${sha1}.jar";          url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/java-allocation-instrumenter/java-allocation-instrumenter-8f0db117e64e.jar; }
     rec { sha1 = "0da08b8cce7bbf903602a25a3a163ae252435795"; name = "ASM5_${sha1}.jar";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/asm-5.0.4.jar; }
     rec { sha1 = "396ce0c07ba2b481f25a70195c7c94922f0d1b0b"; name = "ASM_TREE5_${sha1}.jar";                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/asm-tree-5.0.4.jar; }
