@@ -99,6 +99,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  clArtistic = spdx {
+    spdxId = "ClArtistic";
+    fullName = "Clarified Artistic License";
+  };
+
   cc0 = spdx {
     spdxId = "CC0-1.0";
     fullName = "Creative Commons Zero v1.0 Universal";

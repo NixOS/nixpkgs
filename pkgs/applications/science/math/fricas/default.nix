@@ -1,7 +1,7 @@
 { stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
 
 let
-  version = "1.3.1";
+  version = "1.3.2";
   name = "fricas-" + version;
 in
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url    = "http://sourceforge.net/projects/fricas/files/fricas/${version}/${name}-full.tar.bz2";
-    sha256 = "0c2wgj1c3mh5f8msx1ckxpnhm0dyq7dqf1wk6aiyysh8xn57cjkx";
+    sha256 = "17a3vfvsn2idydqslf5r6z3sk6a5bdgj6z1n3dmnwmpkc4z152vr";
   };
 
   buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];

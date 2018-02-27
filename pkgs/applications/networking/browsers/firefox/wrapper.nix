@@ -2,10 +2,10 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
+, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra-gtk2
 , jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
-, google_talk_plugin, fribid, gnome3/*.gnome_shell*/
+, google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
 , vlc_npapi
 , browserpass, chrome-gnome-shell
@@ -52,7 +52,7 @@ let
           ++ lib.optional icedtea icedtea_web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
-          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
+          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
           ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
@@ -73,7 +73,7 @@ let
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio;
       gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
-      gtk_modules = [ libcanberra_gtk2 ];
+      gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
       inherit name;

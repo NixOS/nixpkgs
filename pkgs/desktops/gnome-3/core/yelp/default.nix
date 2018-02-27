@@ -6,15 +6,15 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib webkitgtk intltool itstool sqlite
-                  libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
+                  libxml2 libxslt icu file makeWrapper gnome3.yelp-xsl
                   librsvg gdk_pixbuf gnome3.defaultIconTheme groff
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook
+                  gnome3.gsettings-desktop-schemas wrapGAppsHook
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
   meta = with stdenv.lib; {

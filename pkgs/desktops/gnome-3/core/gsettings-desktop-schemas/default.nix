@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
   # just for passthru
-, gnome3, gtk3, gsettings_desktop_schemas }:
+, gnome3, gtk3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;

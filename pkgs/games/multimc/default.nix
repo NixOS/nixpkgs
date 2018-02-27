@@ -1,46 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, quazip }:
+{ stdenv, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
 
 let
-  libnbt = fetchFromGitHub {
-    owner = "MultiMC";
-    repo = "libnbtplusplus";
-    rev = "4b305bb";
-    sha256 = "1zj7pxk0g5zl16hrngb4rss00hi019rylin7zgf18kaymc54nbcs";
-  };
-in
-stdenv.mkDerivation {
-  name = "multimc-0.5.1";
+  libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
+in stdenv.mkDerivation rec {
+  name = "multimc-${version}";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = "0.5.1";
-    sha256 = "0wmlnwcq3gxrbmc53j96aa64pp1kmnlxiifhzngcb5kfmbbc8a20";
+    rev = version;
+    sha256 = "0glsf4vfir8w24bpinf3cx2ninrcp7hpq9cl463wl78dvqfg47kx";
+    fetchSubmodules = true;
   };
-  buildInputs = [ cmake qtbase jdk zlib file makeWrapper ];
-
-  libpath = with xorg; [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
-  postUnpack = ''
-    rmdir $sourceRoot/libraries/libnbtplusplus
-    cp -r ${libnbt} $sourceRoot/libraries/libnbtplusplus
-    chmod 755 -R $sourceRoot/libraries/libnbtplusplus
-    mkdir -pv $sourceRoot/build/
-    cp -v ${quazip.src} $sourceRoot/build/quazip-0.7.1.tar.gz
-  '';
+  nativeBuildInputs = [ cmake file makeWrapper ];
+  buildInputs = [ qtbase jdk zlib ];
 
   enableParallelBuilding = true;
 
-  # the install rule tries to bundle ALL deps into the output for portability
-  installPhase = ''
-    RESULT=/run/opengl-driver/lib/
-    for x in $libpath; do
-      RESULT=$x/lib/:$RESULT
-    done
-
-    mkdir -pv $out/bin/jars $out/lib
-    cp -v MultiMC $out/bin/
-    cp -v jars/*.jar $out/bin/jars/ #*/
-    cp -v libMultiMC_rainbow.so libMultiMC_nbt++.so libMultiMC_logic.so libMultiMC_gui.so $out/lib
-    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk}/bin/
+  postInstall = ''
+    wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} --prefix PATH : ${jdk}/bin/
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, desktop_file_utils, file, python3Packages }:
+{ stdenv, fetchurl, desktop-file-utils, file, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   name = "mimeo-${version}";
@@ -9,14 +9,14 @@ python3Packages.buildPythonApplication rec {
     sha256 = "126g3frks6zn6yc1r005qpmxg1pvvvf06ivpyvd9xribn2mwki2z";
   };
 
-  buildInputs = [ file desktop_file_utils ];
+  buildInputs = [ file desktop-file-utils ];
 
   propagatedBuildInputs = [ python3Packages.pyxdg ];
 
   preConfigure = ''
     substituteInPlace Mimeo.py \
       --replace "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
-                "EXE_UPDATE_DESKTOP_DATABASE = '${desktop_file_utils}/bin/update-desktop-database'" \
+                "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
       --replace "EXE_FILE = 'file'" \
                 "EXE_FILE = '${file}/bin/file'"
   '';

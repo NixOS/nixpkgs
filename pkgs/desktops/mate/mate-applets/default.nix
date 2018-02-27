@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus_glib, polkit, upower, wirelesstools, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus-glib, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-applets-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     wirelesstools
     mate.libmateweather
     mate.mate-panel
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   configureFlags = [ "--enable-suid=no" ];

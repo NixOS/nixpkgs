@@ -7,14 +7,14 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   buildInputs = [ bash gtk3 glib intltool itstool
                   libxml2 gnome3.gtksourceview mpfr gmp
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas gnome3.dconf libsoup libmpc ];
+                  gnome3.gsettings-desktop-schemas gnome3.dconf libsoup libmpc ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Calculator;

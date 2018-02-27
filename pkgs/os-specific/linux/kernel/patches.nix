@@ -73,29 +73,4 @@ rec {
     };
   };
 
-  riscv_modules = {
-    name = "riscv-modules";
-    patch = ./riscv-modules.patch;
-  };
-
-  riscv_irq_busy = {
-    name = "riscv-irq-busy";
-    patch = ./riscv-irq-busy.patch;
-  };
-
-  riscv_install = {
-    name = "riscv-install";
-    patch = ./riscv-install.patch;
-  };
-
-  riscv_initrd = {
-    name = "riscv-initrd";
-    patch = ./riscv-initrd.patch;
-  };
-
-  riscv_initrd_free = {
-    name = "riscv-initrd-free";
-    patch = ./riscv-initrd-free.patch;
-  };
-
 }

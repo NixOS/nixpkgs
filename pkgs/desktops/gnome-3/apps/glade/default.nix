@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 glib libxml2 python3 python3.pkgs.pygobject3
-    gnome3.gsettings_desktop_schemas
+    gnome3.gsettings-desktop-schemas
     gdk_pixbuf gnome3.defaultIconTheme
   ];
 

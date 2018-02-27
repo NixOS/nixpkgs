@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "4.6.3";
-  name = "grafana-v${version}";
+  name = "grafana-${version}";
   goPackagePath = "github.com/grafana/grafana";
 
   src = fetchFromGitHub {

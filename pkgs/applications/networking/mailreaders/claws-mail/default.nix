@@ -1,8 +1,8 @@
 { fetchurl, stdenv, wrapGAppsHook
-, curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
-, libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk24x-gtk2
-, glib_networking, gsettings_desktop_schemas, libSM, libytnef
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor-icon-theme
+, libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
+, openldap , perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
+, glib-networking, gsettings-desktop-schemas, libSM, libytnef
 
 # Build options
 # TODO: A flag to build the manual.
@@ -45,19 +45,19 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/procmime.c \
-        --subst-var-by MIMEROOTDIR ${shared_mime_info}/share
+        --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   buildInputs =
-    [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl python glib_networking libSM libytnef
+    [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas hicolor-icon-theme
+      libetpan perl python glib-networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
     ++ optional enablePluginArchive libarchive
-    ++ optional enablePluginNotificationSounds libcanberra_gtk2
+    ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
     ++ optional enablePluginFancy libsoup
     ++ optional enablePluginRssyl libxml2
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   postInstall = ''

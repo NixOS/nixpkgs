@@ -833,7 +833,7 @@ self: super: {
       rev = "8b79823c32e234c161baec67fdf7907952ca62b8";
       sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
     };
-  }).override { language-c = self.language-c_0_7_0; };
+  });
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
@@ -1005,8 +1005,5 @@ self: super: {
 
   # Needs older hlint
   hpio = dontCheck super.hpio;
-
-  # https://github.com/ucsd-progsys/liquidhaskell/issues/1238
-  liquidhaskell = dontHaddock super.liquidhaskell;
 
 }

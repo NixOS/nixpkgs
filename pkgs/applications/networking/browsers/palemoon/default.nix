@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus_glib, file, fontconfig, freetype
+, dbus, dbus-glib, file, fontconfig, freetype
 , gstreamer, gst-plugins-base, gst_all_1
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
 , libstartup_notification, libvpx, makeWrapper, mesa
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus_glib file fontconfig freetype
+    alsaLib bzip2 cairo dbus dbus-glib file fontconfig freetype
     gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
     hunspell icu libevent libjpeg libnotify libstartup_notification
     libvpx makeWrapper mesa nspr nss pango perl pkgconfig python

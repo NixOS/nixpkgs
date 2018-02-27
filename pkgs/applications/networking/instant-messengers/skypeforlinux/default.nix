@@ -6,7 +6,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.13.0.2";
+  version = "8.16.0.4";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -27,7 +27,7 @@ let
     gnome2.gtk
     gnome2.pango
 
-    gnome2.gnome_keyring
+    gnome2.gnome-keyring
 
     libnotify
     libpulseaudio
@@ -57,7 +57,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "15p1v6y8fwx9qj3ag645bvrcw7c1j20v63iy75s4xwsv1siz8cf9";
+        sha256 = "1qc5qd07r768q9wkr2fq1q731hslh21i8rs41jb6pbn3ai65mxf5";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.system}";

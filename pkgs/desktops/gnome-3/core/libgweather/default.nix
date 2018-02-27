@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   configureFlags = [ "--with-zoneinfo-dir=${tzdata}/share/zoneinfo" "--enable-vala" ];
-  propagatedBuildInputs = [ libxml2 gtk libsoup gconf pango gdk_pixbuf atk gnome3.geocode_glib ];
+  propagatedBuildInputs = [ libxml2 gtk libsoup gconf pango gdk_pixbuf atk gnome3.geocode-glib ];
   nativeBuildInputs = [ pkgconfig intltool gnome3.vala ];
 
   # Prevent building vapi into ${vala} derivation directory

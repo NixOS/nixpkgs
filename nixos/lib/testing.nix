@@ -78,7 +78,19 @@ rec {
     } @ t:
 
     let
-      testDriverName = "nixos-test-driver-${name}";
+      # A standard store path to the vm monitor is built like this:
+      #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
+      # The max filename length of a unix domain socket is 108 bytes.
+      # This means $name can at most be 50 bytes long.
+      maxTestNameLen = 50;
+      testNameLen = builtins.stringLength name;
+
+      testDriverName = with builtins;
+        if testNameLen > maxTestNameLen then
+          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
+            "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
         t.nodes or (if t ? machine then { machine = t.machine; } else { }));

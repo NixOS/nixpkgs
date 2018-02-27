@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "supervise-${version}";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchzip {
     url = "https://github.com/catern/supervise/releases/download/v${version}/supervise-${version}.tar.gz";
-    sha256 = "1y3jaqzprlkba2165nlcr250jc3mpxawd5sfjryb3db1nw66al04";
+    sha256 = "0jk6q2f67pfs18ah040lmsbvbrnjap7w04jjddsfn1j5bcrvs13x";
   };
 
   meta = with stdenv.lib; {

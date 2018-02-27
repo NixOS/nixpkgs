@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, bison, intltool, flex, netpbm, imagemagick, dbus, xlibsWrapper, mesa, shared_mime_info, tcl, tk, gnome2, pangox_compat, gd, xorg }:
+{ stdenv, fetchurl, pkgconfig, gtk2, bison, intltool, flex, netpbm, imagemagick, dbus, xlibsWrapper, mesa, shared-mime-info, tcl, tk, gnome2, pangox_compat, gd, xorg }:
 
 stdenv.mkDerivation rec {
   name = "pcb-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper mesa tcl shared_mime_info tk gnome2.gtkglext pangox_compat gd xorg.libXmu ];
+  buildInputs = [ gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper mesa tcl shared-mime-info tk gnome2.gtkglext pangox_compat gd xorg.libXmu ];
 
   configureFlags = ["--disable-update-desktop-database"];
 

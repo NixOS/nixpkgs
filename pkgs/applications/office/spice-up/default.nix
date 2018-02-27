@@ -6,7 +6,7 @@
 , gtk3
 , granite
 , gnome3
-, json_glib
+, json-glib
 , cmake
 , ninja
 , libgudev
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   name = "spice-up-${version}";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "0cbyhi6d99blv33183j6nakzcqxz5hqy9ijykiasbmdycfd5q0fh";
+    sha256 = "087cdi7na93pgz7vf046h94v5ydvpiccpwhllq85ix8g4pa5rp85";
   };
   USER = "nix-build-user";
 
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     gtk3
     granite
     gnome3.libgee
-    json_glib
+    json-glib
     libgudev
     libevdev
-    gnome3.gnome_themes_standard
+    gnome3.gnome-themes-standard
   ];
 
   meta = with stdenv.lib; {

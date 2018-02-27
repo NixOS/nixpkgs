@@ -492,11 +492,8 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
-  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
-
   # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+  opencv-extra = addPkgconfigDepend super.opencv-extra pkgs.opencv3;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;

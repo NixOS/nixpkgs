@@ -6,14 +6,14 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   buildInputs = [ gtk3 glib intltool itstool enchant isocodes
                   gdk_pixbuf gnome3.defaultIconTheme librsvg libsoup
                   gnome3.libpeas gnome3.gtksourceview libxml2
-                  gnome3.gsettings_desktop_schemas gnome3.dconf file gspell ];
+                  gnome3.gsettings-desktop-schemas gnome3.dconf file gspell ];
 
   enableParallelBuilding = true;
 

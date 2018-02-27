@@ -1,7 +1,7 @@
 {
   stdenv, fetchurl, lib,
   libxslt, pandoc, pkgconfig,
-  dbus_glib, libcap_ng, libqb, libseccomp, polkit, protobuf, qtbase, qttools, qtsvg,
+  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, qtbase, qttools, qtsvg,
   libgcrypt ? null,
   libsodium ? null
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     libcap_ng
     libqb
     libseccomp

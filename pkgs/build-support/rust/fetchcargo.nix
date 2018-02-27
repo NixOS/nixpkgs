@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
 
+    ${cargoUpdateHook}
+
     cargo vendor
 
     cp -ar vendor $out

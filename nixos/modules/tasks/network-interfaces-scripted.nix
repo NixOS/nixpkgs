@@ -74,7 +74,7 @@ let
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
-                            || (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
+                            || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];

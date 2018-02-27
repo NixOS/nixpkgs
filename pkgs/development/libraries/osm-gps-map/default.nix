@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo glib gobjectIntrospection
   ] ++ (with gnome3; [
-    gnome_common gtk libsoup
+    gnome-common gtk libsoup
   ]);
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk_doc
+{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk-doc
 , libgcrypt, gobjectIntrospection, vala_0_38 }:
 let
   version = "0.18.5";

@@ -1,10 +1,12 @@
-{pkgs, pkgs_i686, includeSources ? true}:
+{ buildPackages, pkgs, pkgs_i686, targetPackages
+, includeSources ? true
+}:
 
 rec {
   platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip zlib;
+    inherit buildPackages pkgs;
   };
-  
+
   buildTools = import ./build-tools.nix {
     inherit (pkgs) stdenv fetchurl unzip zlib file;
     stdenv_32bit = pkgs_i686.stdenv;
@@ -12,11 +14,11 @@ rec {
     ncurses_32bit = pkgs_i686.ncurses5;
     ncurses = pkgs.ncurses5;
   };
-  
+
   support = import ./support.nix {
     inherit (pkgs) stdenv fetchurl unzip;
   };
-  
+
   supportRepository = import ./support-repository.nix {
     inherit (pkgs) stdenv fetchurl unzip;
   };
@@ -47,18 +49,18 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
     inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk mesa file alsaLib jdk coreutils libpulseaudio dbus;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
-    
+
     inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
-    
+
     stdenv_32bit = pkgs_i686.stdenv;
   };
-  
+
   androidsdk_2_1 = androidsdk {
     platformVersions = [ "7" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_2_2 = androidsdk {
     platformVersions = [ "8" ];
     abiVersions = [ "armeabi-v7a" ];
@@ -70,49 +72,49 @@ rec {
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_0 = androidsdk {
     platformVersions = [ "11" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_1 = androidsdk {
     platformVersions = [ "12" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_3_2 = androidsdk {
     platformVersions = [ "13" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_0 = androidsdk {
     platformVersions = [ "14" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_0_3 = androidsdk {
     platformVersions = [ "15" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_2 = androidsdk {
     platformVersions = [ "17" ];
     abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
-  
+
   androidsdk_4_3 = androidsdk {
     platformVersions = [ "18" ];
     abiVersions = [ "armeabi-v7a" "x86" ];
@@ -152,7 +154,7 @@ rec {
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
   };
-  
+
   androidsdk_6_0 = androidsdk {
     platformVersions = [ "23" ];
     abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
@@ -214,22 +216,28 @@ rec {
   };
 
   androidndk = import ./androidndk.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit (buildPackages)
+      p7zip makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
 
   androidndk_r8e = import ./androidndk_r8e.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses lib makeWrapper;
-    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit (buildPackages)
+      makeWrapper;
+    inherit (pkgs)
+      stdenv fetchurl zlib ncurses lib
+      coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
-  
+
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;
     inherit androidsdk androidndk;
   };
-  
+
   emulateApp = import ./emulate-app.nix {
     inherit (pkgs) stdenv;
     inherit androidsdk;

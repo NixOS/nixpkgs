@@ -12,10 +12,10 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "libinfinity-0.6.5";
+  name = "libinfinity-0.7.1";
   src = fetchurl {
     url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
-    sha256 = "1idsxb6rz4i55g3vi2sv7hmm57psbccpb57yc4jgphaq6ydgqsr6";
+    sha256 = "1jw2fhrcbpyz99bij07iyhy9ffyqdn87vl8cb1qz897y3f2f0vk2";
   };
 
   nativeBuildInputs = [ pkgconfig ];

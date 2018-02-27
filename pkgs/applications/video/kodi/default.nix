@@ -18,7 +18,7 @@
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
-, libplist, p11_kit, zlib
+, libplist, p11-kit, zlib
 , dbusSupport ? true, dbus_libs ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -78,7 +78,7 @@ let
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
     '';
-    buildInputs = [ gnutls libidn libtasn1 p11_kit zlib libva ]
+    buildInputs = [ gnutls libidn libtasn1 p11-kit zlib libva ]
       ++ lib.optional  vdpauSupport    libvdpau;
     nativeBuildInputs = [ cmake nasm pkgconfig ];
   };
@@ -118,7 +118,7 @@ in stdenv.mkDerivation rec {
     src = kodi_src;
 
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11_kit
+      gnutls libidn libtasn1 nasm p11-kit
       libxml2 yasm python2
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva

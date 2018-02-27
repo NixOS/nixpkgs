@@ -1,8 +1,8 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_38, enchant
-, wrapGAppsHook, gdk_pixbuf, cmake, desktop_file_utils
-, libnotify, libcanberra_gtk3, libsecret, gmime
+, wrapGAppsHook, gdk_pixbuf, cmake, desktop-file-utils
+, libnotify, libcanberra-gtk3, libsecret, gmime
 , libpthreadstubs, sqlite
-, gnome3, librsvg, gnome_doc_utils, webkitgtk }:
+, gnome3, librsvg, gnome-doc-utils, webkitgtk }:
 
 let
   majorVersion = "0.12";
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "12hbpd5j3rb122nrsqmgsg31x82xl0ksm0nmsl614v1dd7crqnh6";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
-  nativeBuildInputs = [ vala_0_38 intltool pkgconfig wrapGAppsHook cmake desktop_file_utils gnome_doc_utils ];
-  buildInputs = [ gtk3 enchant webkitgtk libnotify libcanberra_gtk3 gnome3.libgee libsecret gmime sqlite
-                  libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
+  nativeBuildInputs = [ vala_0_38 intltool pkgconfig wrapGAppsHook cmake desktop-file-utils gnome-doc-utils ];
+  buildInputs = [ gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
+                  libpthreadstubs gnome3.gsettings-desktop-schemas gnome3.gcr
                   gdk_pixbuf librsvg gnome3.defaultIconTheme ];
 
   preConfigure = ''

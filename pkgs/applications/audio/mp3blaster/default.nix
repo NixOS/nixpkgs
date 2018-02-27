@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ stdenv, fetchFromGitHub, ncurses, libvorbis }:
 stdenv.mkDerivation rec {
 
   version = "3.2.6";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "0pzwml3yhysn8vyffw9q9p9rs8gixqkmg4n715vm23ib6wxbliqs";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+    libvorbis
+  ];
 
   buildFlags = [ "CXXFLAGS=-Wno-narrowing" ];
 

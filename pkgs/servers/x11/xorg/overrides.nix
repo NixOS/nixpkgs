@@ -390,7 +390,7 @@ in
   };
 
   xf86videoqxl = attrs: attrs // {
-    buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+    buildInputs =  attrs.buildInputs ++ [ args.spice-protocol ];
   };
 
   xf86videosiliconmotion = attrs: attrs // {

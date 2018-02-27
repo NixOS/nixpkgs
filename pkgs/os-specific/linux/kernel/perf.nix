@@ -16,7 +16,14 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cd tools/perf
-    sed -i s,/usr/include/elfutils,$elfutils/include/elfutils, Makefile
+
+    substituteInPlace Makefile \
+      --replace /usr/include/elfutils $elfutils/include/elfutils
+
+    for x in util/build-id.c util/dso.c; do
+      substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
+    done
+
     [ -f bash_completion ] && sed -i 's,^have perf,_have perf,' bash_completion
     export makeFlags="DESTDIR=$out WERROR=0 $makeFlags"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DTIPDIR=\"$out/share/doc/perf-tip\""
@@ -42,6 +49,7 @@ stdenv.mkDerivation {
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
 
+  separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1";
 
   preFixup = ''

@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib intltool itstool gnome3.libmediaart
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                   python3Packages.pycairo python3Packages.dbus-python python3Packages.requests
                   python3Packages.pygobject3 gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad wrapGAppsHook
-                  gnome3.gsettings_desktop_schemas makeWrapper tracker tracker-miners ];
+                  gnome3.gsettings-desktop-schemas makeWrapper tracker tracker-miners ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

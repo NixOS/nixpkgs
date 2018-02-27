@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.20.1";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "1ic3prvydmw753lasrvzgndcw0k4329pnafpphfpxwvdfsmhbi26";
+    sha256 = "191pmd7vpp9qni5l13fb5s8g1axniah8a6hhi31gp0848c8n7hlh";
   };
 
   patches = [ ./crawl_purify.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
-  makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
+  makeFlags = [ "prefix=$(out)" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
               ] ++ lib.optional tileMode "TILES=y";
 

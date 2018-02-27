@@ -2,19 +2,23 @@
 , python3Packages
 , fetchFromGitHub
 , systemd
-, xrandr
-, makeWrapper }:
+, xrandr }:
 
 let
   python = python3Packages.python;
-  wrapPython = python3Packages.wrapPython;
   version = "1.4";
 in
   stdenv.mkDerivation {
     name = "autorandr-${version}";
 
     buildInputs = [ python ];
-    nativeBuildInputs = [ makeWrapper ];
+
+    # no wrapper, as autorandr --batch does os.environ.clear()
+    buildPhase = ''
+      substituteInPlace autorandr.py \
+        --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+        --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -38,11 +42,6 @@ in
       ''}
 
       runHook postInstall
-    '';
-
-    postFixup = ''
-      wrapProgram $out/bin/autorandr \
-        --prefix PATH : ${xrandr}/bin
     '';
 
     src = fetchFromGitHub {

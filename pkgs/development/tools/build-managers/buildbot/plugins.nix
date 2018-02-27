@@ -11,7 +11,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version format;
-      sha256 = "19cnzp5prima3jrk525xspw7vqc5pjln2nihj4kc3w90dhzllj8x";
+      sha256 = "0nmrq50c5ib185rpb8ai1mm7gjq2mjvxik1kqrjfa62i1ia9ikyj";
     };
 
     meta = with stdenv.lib; {
@@ -29,7 +29,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "1j6aw2j2sl7ix8rb67pbs6nfvv8v3smgkvqzsjsyh5sdfr2663cg";
+      sha256 = "1laz7l7cbbz0czb6skxw314bd2qk2f63qw3n2rs7m7v11gd9cdll";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -49,7 +49,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0k0wd4rq034bij2flfjv60h8czkfn836bnaa7hwsrl58gxds39m4";
+      sha256 = "0mmri8c4n1zwxc1dx2a11yllrmnwqqxjvvil9224lbs98mpchppi";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -69,7 +69,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "08ng56jmy50s3zyn6wxizji1zhgzhi65z7w3wljg02qrbd5688gj";
+      sha256 = "0nwlw2m3qfifia6gy3d4lrnycra50k98ax071p2zjqknanh563vr";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -89,7 +89,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "15fm72yymv873n3vsw9kprypcf6jzln18v4lb062n8lqw9pykwb1";
+      sha256 = "1zml9bd910zwcby4vr3lmzap2grinha2w5zgb2cmixmz7hfrqswp";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];

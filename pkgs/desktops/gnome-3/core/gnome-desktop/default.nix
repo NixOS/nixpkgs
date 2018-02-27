@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, intltool, gnome_doc_utils, xkeyboard_config, isocodes, itstool, wayland
+, intltool, gnome-doc-utils, xkeyboard_config, isocodes, itstool, wayland
 , libseccomp, bubblewrap, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig which itstool intltool libxslt gnome_doc_utils gobjectIntrospection
+    pkgconfig which itstool intltool libxslt gnome-doc-utils gobjectIntrospection
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland
     gtk3 glib libseccomp
   ];
 
-  propagatedBuildInputs = [ gnome3.gsettings_desktop_schemas ];
+  propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
 
   patches = [
     ./bubblewrap-paths.patch

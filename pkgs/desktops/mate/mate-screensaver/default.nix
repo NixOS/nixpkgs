@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus_glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus-glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-screensaver-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    dbus_glib
+    dbus-glib
     libXScrnSaver
     libnotify
     pam

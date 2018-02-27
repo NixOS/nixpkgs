@@ -1,5 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
-, glib, gtk3, gnome3, gsettings_desktop_schemas
+, glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
 , channel ? "stable"
@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     makeWrapper ed
 
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings_desktop_schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
     gnome3.defaultIconTheme

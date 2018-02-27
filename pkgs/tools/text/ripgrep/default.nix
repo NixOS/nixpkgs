@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "ripgrep-${version}";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = "${version}";
-    sha256 = "0ha46vhma2diqxfgasdc9gwlkcrlhc4l65nayvdy4m2ah5bm4qp6";
+    sha256 = "1h7k9ik723qzplwl0a5i0anzdr115wwklfgp0n11p4k2ckh7nygn";
   };
 
-  cargoSha256 = "0q44qa9myrzg42q0lvclpk5nypmf0q7v3xy5nnsb28j3imvcrs4p";
+  cargoSha256 = "1gld93dxfm4vyiz1b43smbdhxmyzdk2236ksp8vw1zb1yyzn83nf";
 
   nativeBuildInputs = [ asciidoc docbook_xsl libxslt ];
 

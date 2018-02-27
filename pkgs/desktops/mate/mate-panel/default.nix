@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, glib, dbus_glib, libwnck3, librsvg, libxml2, gnome3, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, glib, dbus-glib, libwnck3, librsvg, libxml2, gnome3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-panel-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    dbus_glib
+    dbus-glib
     libwnck3
     librsvg
     libxml2
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mate.libmateweather
     mate.mate-desktop
     mate.mate-menus
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

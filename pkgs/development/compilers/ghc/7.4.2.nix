@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc";
+    haskellCompilerName = "ghc-7.4.2";
   };
 
   meta = {

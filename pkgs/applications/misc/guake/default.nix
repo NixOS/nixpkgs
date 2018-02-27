@@ -17,7 +17,7 @@ with lib;
 
 let
   inherit (python2Packages) python;
-  inputs = [ dbus gtk2 gconf python libutempter vte keybinder gnome3.gnome_common ];
+  inputs = [ dbus gtk2 gconf python libutempter vte keybinder gnome3.gnome-common ];
   pyPath = makeSearchPathOutput "lib" python.sitePackages (attrVals [ "dbus-python" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
  in stdenv.mkDerivation rec {
   name = "guake-${version}";

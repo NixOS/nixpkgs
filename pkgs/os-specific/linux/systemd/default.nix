@@ -8,6 +8,7 @@
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
+, hostPlatform
 }:
 
 assert stdenv.isLinux;
@@ -71,10 +72,10 @@ in
       "-Dsystem-gid-max=499"
   #    "-Dtime-epoch=1"
 
-      (if stdenv.isArm then "-Dgnu-efi=false" else "-Dgnu-efi=true")
-      "-Defi-libdir=${gnu-efi}/lib"
-      "-Defi-includedir=${gnu-efi}/include/efi"
-      "-Defi-ldsdir=${gnu-efi}/lib"
+      (if stdenv.isArm || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+      "-Defi-libdir=${toString gnu-efi}/lib"
+      "-Defi-includedir=${toString gnu-efi}/include/efi"
+      "-Defi-ldsdir=${toString gnu-efi}/lib"
 
       "-Dsysvinit-path="
       "-Dsysvrcnd-path="

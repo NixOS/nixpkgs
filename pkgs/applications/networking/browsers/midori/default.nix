@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, pkgconfig, intltool, vala_0_34, wrapGAppsHook
 , gtk3, webkitgtk, librsvg, libnotify, sqlite
-, glib_networking, gsettings_desktop_schemas, libsoup, pcre, gnome3
-, libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at_spi2_core
+, glib-networking, gsettings-desktop-schemas, libsoup, pcre, gnome3
+, libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at-spi2-core
 , zeitgeistSupport ? false, zeitgeist ? null
 }:
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas pcre gnome3.gcr
-    libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at_spi2_core
+    gtk3 webkitgtk librsvg libnotify sqlite gsettings-desktop-schemas pcre gnome3.gcr
+    libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core
     (libsoup.override {gnomeSupport = true; valaSupport = true;})
   ] ++ stdenv.lib.optionals zeitgeistSupport [
     zeitgeist
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS="-lX11";
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules")
   '';
 }

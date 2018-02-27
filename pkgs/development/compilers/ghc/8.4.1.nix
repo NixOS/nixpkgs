@@ -24,7 +24,7 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.4.0.20180204"
+, version ? "8.4.0.20180224"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "111737cd218751f06ea58d3cf2c7c144265b5dfc";
-    sha256 = "0ksp0k3sp928aq2cv6whgbfmjnr7l2j10diha13nncksp4byf0s9";
+    rev = "a1e15c8f59092ef2d11be7966bd20688d8dc01e6";
+    sha256 = "1pimf5ryl76r3vwnc2n0qzk4yh7zckp2r2g5rlz8nbddsws2v893";
   };
 
   enableParallelBuilding = true;
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
     inherit llvmPackages;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc";
+    haskellCompilerName = "ghc-8.4.1";
   };
 
   meta = {

@@ -7,17 +7,17 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ bash gtk3 glib intltool itstool libxml2
                   gtkmm3 libgtop wrapGAppsHook
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas systemd ];
+                  gnome3.gsettings-desktop-schemas systemd ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share"
+      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome-themes-standard}/share"
     )
   '';
 

@@ -55,12 +55,7 @@ let
   };
 in {
 
-  linuxHeaders_4_4 = common {
-    version = "4.4.10";
-    sha256 = "1kpjvvd9q9wwr3314q5ymvxii4dv2d27295bzly225wlc552xhja";
-  };
-
-  linuxHeaders_4_15 = common {
+  linuxHeaders = common {
     version = "4.15";
     sha256 = "0sd7l9n9h7vf9c6gd6ciji28hawda60yj0llh17my06m0s4lf9js";
   };
