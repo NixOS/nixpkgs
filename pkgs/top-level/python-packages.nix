@@ -20477,22 +20477,7 @@ EOF
 
   xstatic-jquery-file-upload = callPackage ../development/python-modules/xstatic-jquery-file-upload {};
 
-  xstatic-jquery-ui = buildPythonPackage rec {
-    name = "XStatic-jquery-ui-${version}";
-    version = "1.12.0.1";
-    propagatedBuildInputs = with self; [ xstatic-jquery ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-jquery-ui/XStatic-jquery-ui-${version}.tar.gz";
-      sha256 = "0w7mabv6qflpd47g33j3ggp5rv17mqk0xz3bsdswcj97wqpga2l2";
-    };
-
-    meta = {
-      homepage = http://jqueryui.com/;
-      description = "jquery-ui packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-jquery-ui = callPackage ../development/python-modules/xstatic-jquery-ui {};
 
   xstatic-pygments = buildPythonPackage rec {
     name = "XStatic-Pygments-${version}";
