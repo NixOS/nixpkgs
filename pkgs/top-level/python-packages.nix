@@ -20479,21 +20479,7 @@ EOF
 
   xstatic-jquery-ui = callPackage ../development/python-modules/xstatic-jquery-ui {};
 
-  xstatic-pygments = buildPythonPackage rec {
-    name = "XStatic-Pygments-${version}";
-    version = "1.6.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Pygments/XStatic-Pygments-${version}.tar.gz";
-      sha256 = "0fjqgg433wfdnswn7fad1g6k2x6mf24wfnay2j82j0fwgkdxrr7m";
-    };
-
-    meta = {
-      homepage = http://pygments.org;
-      description = "pygments packaged static files for python";
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-pygments = callPackage ../development/python-modules/xstatic-pygments {};
 
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
