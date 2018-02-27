@@ -5,12 +5,12 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.28.1";
+  version = "1.0.4";
   pname = "conan";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zf564iqh0099yd779f9fgk21qyp87d7cmgfj34hmncf8y3qh32a";
+    sha256 = "6f5cea887ecd6285bd83ae2acc3f76ed06dd52a79c106fe686d210b3ead89060";
   };
 
   propagatedBuildInputs = [

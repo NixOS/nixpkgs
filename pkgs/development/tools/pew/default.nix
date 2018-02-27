@@ -2,11 +2,11 @@
 with python3Packages; buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "pew";
-    version = "1.1.0";
+    version = "1.1.2";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0b8z1vjsll1kgnh3mmdjps5rr9gayy091rapp2dra71jrwkx3yfh";
+      sha256 = "b8312728526c9010295c88215c95a1b1731fdbd1a568f728e069932bd0545611";
     };
 
     propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];

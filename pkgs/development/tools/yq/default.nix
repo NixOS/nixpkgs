@@ -1,25 +1,23 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, pyyaml, jq }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
 
 buildPythonApplication rec {
-
   pname = "yq";
-  version = "2.3.4";
+  version = "2.4.1";
 
-  propagatedBuildInputs = [ pyyaml jq ];
+  propagatedBuildInputs = [ pyyaml xmltodict jq ];
 
   # ValueError: underlying buffer has been detached
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04ckrlmin8m176iicyfhddp4r0yry5hx306vhfglf8mcp1jkga78";
+    sha256 = "4833d4055b0f1c1f1a2fd292421b3472da39c7dc2727d7819efd11065a5fd310";
   };
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents.";
-    homepage = https://pypi.python.org/pypi/yq;
+    homepage = https://github.com/kislyuk/yq;
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];
   };
-
 }

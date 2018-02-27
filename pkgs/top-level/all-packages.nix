@@ -553,7 +553,7 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
+  awscli = callPackage ../tools/admin/awscli { };
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
@@ -8217,7 +8217,7 @@ with pkgs;
   yodl = callPackage ../development/tools/misc/yodl { };
 
   yq = callPackage ../development/tools/yq {
-    inherit (python3Packages) buildPythonApplication fetchPypi pyyaml;
+    inherit (python3Packages) buildPythonApplication fetchPypi pyyaml xmltodict;
   };
 
   winpdb = callPackage ../development/tools/winpdb { };

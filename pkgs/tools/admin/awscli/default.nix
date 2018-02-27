@@ -1,48 +1,40 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, botocore
-, bcdoc
-, s3transfer
-, six
-, colorama
-, docutils
-, rsa
-, pyyaml
+{ lib
+, python
 , groff
 , less
 }:
 
 let
-  colorama_3_7 = colorama.overrideAttrs (old: rec {
-    name = "${pname}-${version}";
-    pname = "colorama";
-    version = "0.3.7";
-    src = old.src.override {
-      inherit version;
-      sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+  py = python.override {
+    packageOverrides = self: super: {
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.7";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+        };
+      });
     };
-  });
+  };
 
-in buildPythonPackage rec {
+in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.14.41";
-  namePrefix = "";
+  version = "1.14.47";
 
-  src = fetchPypi {
+  src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "8cf2a52d56f26e22e2fbd7b72649ef1d3de8930df7a730d7f27418d129bb3a6a";
+    sha256 = "269483910c820ae5b4f60021375f07e4f1c23f86505e1b9e29243880a660c1d8";
   };
 
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with py.pkgs; [
     botocore
     bcdoc
     s3transfer
     six
-    colorama_3_7
+    colorama
     docutils
     rsa
     pyyaml
@@ -58,10 +50,10 @@ in buildPythonPackage rec {
     rm $out/bin/aws.cmd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://aws.amazon.com/cli/;
     description = "Unified tool to manage your AWS services";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ muflax ];
   };
 }

@@ -9871,6 +9871,8 @@ in {
     };
   };
 
+  mozterm = callPackage ../development/python-modules/mozterm { };
+
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   multidict = callPackage ../development/python-modules/multidict { };
