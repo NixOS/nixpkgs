@@ -145,7 +145,6 @@ let
     url = "https://github.com/apple/swift-llbuild/commit/303a89bc6da606c115560921a452686aa0655f5e.diff";
     sha256 = "04sw7ym1grzggj1v3xrzr2ljxz8rf9rnn9n5fg1xjbwlrdagkc7m";
   };
-
 in
 stdenv.mkDerivation rec {
   name = "swift-${version_friendly}";
@@ -246,6 +245,9 @@ stdenv.mkDerivation rec {
 
     # https://bugs.swift.org/browse/SR-5779
     sed -i -e 's|"-latomic"|"-Wl,-rpath,${clang.cc.gcc.lib}/lib" "-L${clang.cc.gcc.lib}/lib" "-latomic"|' swift/cmake/modules/AddSwift.cmake
+
+    # https://bugs.swift.org/browse/SR-4838
+    sed -i -e '30i#include <functional>' lldb/include/lldb/Utility/TaskPool.h
 
     substituteInPlace clang/lib/Driver/ToolChains.cpp \
       --replace '  addPathIfExists(D, SysRoot + "/usr/lib", Paths);' \
