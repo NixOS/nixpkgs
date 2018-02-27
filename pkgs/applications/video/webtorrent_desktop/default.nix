@@ -79,7 +79,7 @@
     meta = with stdenv.lib; {
       description = "Streaming torrent app for Mac, Windows, and Linux.";
       homepage = https://webtorrent.io/desktop;
-      licenses = licenses.mit;
+      license = licenses.mit;
       maintainers = [ maintainers.flokli ];
       platforms = [
         "x86_64-linux"
