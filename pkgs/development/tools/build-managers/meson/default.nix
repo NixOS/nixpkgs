@@ -1,12 +1,12 @@
 { lib, python3Packages }:
 python3Packages.buildPythonApplication rec {
-  version = "0.44.0";
+  version = "0.44.1";
   pname = "meson";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1rpqp9iwbvr4xvfdh3iyfh1ha274hbb66jbgw3pa5a73x4d4ilqn";
+    sha256 = "0g61igahac0d1nrm190jik28h04pickvf2lybdkqjkg2bc8xhq5h";
   };
 
   postFixup = ''
