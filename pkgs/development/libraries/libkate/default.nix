@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libogg, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "libkate-0.3.8";
+  name = "libkate-0.4.1";
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libkate/${name}.tar.gz";
-    sha256 = "00d6561g31la9bb8q99b7l4rvi67yiwm50ky8dhlsjd88h7rks2n";
+    sha256 = "0s3vr2nxfxlf1k75iqpp4l78yf4gil3f0v778kvlngbchvaq23n4";
   };
 
   buildInputs = [ libogg libpng ];
