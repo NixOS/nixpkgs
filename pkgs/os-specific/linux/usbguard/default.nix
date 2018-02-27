@@ -1,7 +1,8 @@
 {
   stdenv, fetchurl, lib,
-  libxslt, pandoc, pkgconfig,
+  libxslt, pandoc, asciidoctor, pkgconfig,
   dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, qtbase, qttools, qtsvg,
+  audit,
   libgcrypt ? null,
   libsodium ? null
 }:
@@ -11,23 +12,19 @@ with stdenv.lib;
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.0";
+  version = "0.7.2";
   name = "usbguard-${version}";
 
-  repo = "https://github.com/dkopecek/usbguard";
+  repo = "https://github.com/USBGuard/usbguard";
 
   src = fetchurl {
     url = "${repo}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1e1485a2b47ba3bde9de2851b371d2552a807047a21e0b81553cf80d7f722709";
+    sha256 = "5bd3e5219c590c3ae27b21315bd10b60e823cef64e5deff3305ff5b4087fc2d6";
   };
-
-  patches = [
-    ./daemon_read_only_config.patch
-    ./documentation.patch
-  ];
 
   nativeBuildInputs = [
     libxslt
+    asciidoctor
     pandoc # for rendering documentation
     pkgconfig
   ];
@@ -39,6 +36,7 @@ stdenv.mkDerivation rec {
     libseccomp
     polkit
     protobuf
+    audit
 
     qtbase
     qtsvg
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The USBGuard software framework helps to protect your computer against BadUSB.";
-    homepage = "https://dkopecek.github.io/usbguard/";
+    homepage = "https://usbguard.github.io/";
     license = licenses.gpl2;
     maintainers = [ maintainers.tnias ];
   };
