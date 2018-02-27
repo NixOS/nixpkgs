@@ -20469,21 +20469,7 @@ EOF
 
   xstatic = callPackage ../development/python-modules/xstatic {};
 
-  xstatic-bootbox = buildPythonPackage rec {
-    name = "XStatic-Bootbox-${version}";
-    version = "4.3.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Bootbox/XStatic-Bootbox-${version}.tar.gz";
-      sha256 = "0wks1lsqngn3gvlhzrvaan1zj8w4wr58xi0pfqhrzckbghvvr0gj";
-    };
-
-    meta = {
-      homepage =  http://bootboxjs.com;
-      description = "bootboxjs packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox {};
 
   xstatic-bootstrap = buildPythonPackage rec {
     name = "XStatic-Bootstrap-${version}";
