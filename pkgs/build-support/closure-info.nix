@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   builder = builtins.toFile "builder"
     ''
-      if [ -e .attrs.sh ]; then . .attrs.sh; fi
+      . .attrs.sh
 
       out=''${outputs[out]}
 
