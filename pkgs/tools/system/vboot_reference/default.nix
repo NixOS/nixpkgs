@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "DESTDIR=$(out)"
+    "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
   postInstall = ''
