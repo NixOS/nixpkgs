@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
 
-  configureFlags = ''
+  configureFlags = stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) ''
     KRB5_CONFIG=${libkrb5}/bin/krb5-config
   '';
 
