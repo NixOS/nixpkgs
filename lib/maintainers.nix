@@ -257,7 +257,7 @@
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";
-  gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
+  gavinrogers = "Gavin Rogers <gavin@praxeology.co.uk>";
   gebner = "Gabriel Ebner <gebner@gebner.org>";
   geistesk = "Alvar Penning <post@0x21.biz>";
   genesis = "Ronan Bignaux <ronan@aimao.org>";

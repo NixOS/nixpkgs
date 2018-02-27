@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.frostwire.com/;
     description = "BitTorrent Client and Cloud File Downloader";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ gavin ];
+    maintainers = with maintainers; [ gavinrogers ];
     platforms = platforms.all;
   };
 }
