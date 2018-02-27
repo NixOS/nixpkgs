@@ -20473,21 +20473,7 @@ EOF
 
   xstatic-bootstrap = callPackage ../development/python-modules/xstatic-bootstrap {};
 
-  xstatic-jquery = buildPythonPackage rec {
-    name = "XStatic-jQuery-${version}";
-    version = "1.10.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-jQuery/XStatic-jQuery-${version}.tar.gz";
-      sha256 = "018kx4zijflcq8081xx6kmiqf748bsjdq7adij2k91bfp1mnlhc3";
-    };
-
-    meta = {
-      homepage =  http://jquery.org;
-      description = "jquery packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-jquery = callPackage ../development/python-modules/xstatic-jquery {};
 
   xstatic-jquery-file-upload = buildPythonPackage rec {
     name = "XStatic-jQuery-File-Upload-${version}";
