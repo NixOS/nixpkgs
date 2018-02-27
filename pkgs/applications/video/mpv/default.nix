@@ -13,25 +13,25 @@
     wayland      ? null,
     libxkbcommon ? null
 
-, rubberbandSupport  ? !stdenv.isDarwin, rubberband ? null
+, rubberbandSupport  ? true,  rubberband    ? null
 , xineramaSupport    ? true,  libXinerama   ? null
 , xvSupport          ? true,  libXv         ? null
 , sdl2Support        ? true,  SDL2          ? null
-, alsaSupport        ? !stdenv.isDarwin,  alsaLib       ? null
+, alsaSupport        ? true,  alsaLib       ? null
 , screenSaverSupport ? true,  libXScrnSaver ? null
 , vdpauSupport       ? true,  libvdpau      ? null
-, dvdreadSupport     ? !stdenv.isDarwin,  libdvdread    ? null
-, dvdnavSupport      ? dvdreadSupport,  libdvdnav     ? null
+, dvdreadSupport     ? true,  libdvdread    ? null
+, dvdnavSupport      ? true,  libdvdnav     ? null
 , bluraySupport      ? true,  libbluray     ? null
 , speexSupport       ? true,  speex         ? null
 , theoraSupport      ? true,  libtheora     ? null
-, pulseSupport       ? !stdenv.isDarwin,  libpulseaudio ? null
+, pulseSupport       ? true,  libpulseaudio ? null
 , bs2bSupport        ? true,  libbs2b       ? null
 , cacaSupport        ? true,  libcaca       ? null
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
-, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
+, drmSupport         ? true,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -127,14 +127,15 @@ in stdenv.mkDerivation rec {
     python3 ${waf} configure --prefix=$out $configureFlags
   '';
 
-  nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
+  nativeBuildInputs = [
+    docutils makeWrapper perl
+    pkgconfig python3 which
+  ];
 
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
-    lua lua5_sockets libuchardet
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       libiconv Cocoa CoreAudio ])
-    ++ optional alsaSupport        alsaLib
+    lua luasocket libuchardet
+  ] ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -157,7 +158,10 @@ in stdenv.mkDerivation rec {
     ++ optional archiveSupport     libarchive
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
-    ++ optionals waylandSupport    [ wayland libxkbcommon ];
+    ++ optionals waylandSupport    [ wayland libxkbcommon ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      libiconv Cocoa CoreAudio
+    ]);
 
   enableParallelBuilding = true;
 
@@ -199,5 +203,4 @@ in stdenv.mkDerivation rec {
     '';
   };
 }
-# TODO: investigate caca support
 # TODO: investigate lua5_sockets bug
