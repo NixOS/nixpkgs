@@ -134,6 +134,7 @@ with stdenv.lib;
   ''}
   NETFILTER y
   NETFILTER_ADVANCED y
+  CGROUP_BPF? y # Required by systemd per-cgroup firewalling
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
