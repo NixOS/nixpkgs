@@ -243,6 +243,11 @@ let
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
 
             nix.binaryCaches = mkForce [ ];
+            nix.extraOptions =
+              ''
+                hashed-mirrors =
+                connect-timeout = 1
+              '';
           };
 
       };
