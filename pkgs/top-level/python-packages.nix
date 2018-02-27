@@ -11822,18 +11822,7 @@ in {
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
-  wrapt = buildPythonPackage rec {
-    name = "wrapt-${version}";
-    version = "1.10.5";
-
-    # No tests in archive
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wrapt/${name}.tar.gz";
-      sha256 = "0cq8rlpzkxzk48b50yrfhzn1d1hrq4gjcdqlrgq4v5palgiv9jwr";
-    };
-  };
+  wrapt = callPackage ../development/python-modules/wrapt { };
 
   pagerduty = buildPythonPackage rec {
     name = "pagerduty-${version}";
