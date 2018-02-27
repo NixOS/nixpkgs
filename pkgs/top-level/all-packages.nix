@@ -2824,6 +2824,8 @@ with pkgs;
 
   hping = callPackage ../tools/networking/hping { };
 
+  htop-vim = callPackage ../misc/htop-vim { };
+
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
