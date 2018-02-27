@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1kzgwxzh83qi97rblcm9qj80cdvnv8kml2plz0q103j0hifj8vb5";
   };
 
-  configureFlags = [
-    "--with-pluginpath=$out/lib/libnfsidmap"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  preConfigure = ''
+    configureFlags="$configureFlags --with-pluginpath=$out/lib/libnfsidmap"
+  '';
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
