@@ -207,7 +207,6 @@ let
 
             virtualisation.diskSize = 8 * 1024;
             virtualisation.memorySize = 1024;
-            virtualisation.writableStore = true;
 
             # Use a small /dev/vdb as the root disk for the
             # installer. This ensures the target disk (/dev/vda) is
