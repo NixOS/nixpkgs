@@ -373,6 +373,7 @@
   lasandell = "Luke Sandell <lasandell@gmail.com>";
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";
+  lblasc = "Luka Blaskovic <lblasc@znode.net>";
   ldesgoui = "Lucas Desgouilles <ldesgoui@gmail.com>";
   league = "Christopher League <league@contrapunctus.net>";
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
@@ -690,6 +691,7 @@
   TealG = "Teal Gaure <~@Teal.Gr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
+  teozkr = "Teo Klestrup Röijezon <teo@nullable.se>";
   teto = "Matthieu Coudron <mcoudron@hotmail.com>";
   tex = "Milan Svoboda <milan.svoboda@centrum.cz>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";

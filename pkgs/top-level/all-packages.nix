@@ -726,6 +726,8 @@ with pkgs;
     qt4Support = config.avahi.qt4Support or false;
   };
 
+  avro-c = callPackage ../development/libraries/avro-c { };
+
   avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
 
   aws = callPackage ../tools/virtualization/aws { };
@@ -8885,9 +8887,7 @@ with pkgs;
     glibc32 = pkgsi686Linux.glibc;
   };
 
-  glm = callPackage ../development/libraries/glm
-    (lib.optionalAttrs stdenv.cc.isGNU { stdenv = overrideCC stdenv gcc6;/*maybe a hack*/ });
-
+  glm = callPackage ../development/libraries/glm { };
   glm_0954 = callPackage ../development/libraries/glm/0954.nix { };
 
   globalplatform = callPackage ../development/libraries/globalplatform { };
@@ -9926,6 +9926,8 @@ with pkgs;
   libinput = callPackage ../development/libraries/libinput {
     graphviz = graphviz-nox;
   };
+
+  libinput-gestures = callPackage ../tools/inputmethods/libinput-gestures {};
 
   libisofs = callPackage ../development/libraries/libisofs { };
 

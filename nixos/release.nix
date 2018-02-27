@@ -228,6 +228,7 @@ in rec {
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
+  tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
@@ -361,6 +362,7 @@ in rec {
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
+  tests.xrdp = callTest tests/xrdp.nix {};
   tests.yabar = callTest tests/yabar.nix {};
   tests.zookeeper = callTest tests/zookeeper.nix {};
 

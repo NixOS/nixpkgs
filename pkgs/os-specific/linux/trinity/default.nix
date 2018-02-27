@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "trinity-${version}";
-  version = "1.8";
+  version = "1.8-git-2017-02-13";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "v${version}";
-    sha256 = "1ss6ir3ki2hnj4c8068v5bz8bpa43xqg9zlmzhgagi94g9l05qlf";
+    rev = "2989c11ce77bc7bec23da62987e2c3a0dd8a83c9";
+    sha256 = "19asyrypjhx2cgjdmwfvmgc0hk3xg00zvgkl89vwxngdb40bkwfq";
   };
 
   postPatch = ''
