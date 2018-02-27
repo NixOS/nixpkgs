@@ -290,6 +290,12 @@ following incompatible changes:</para>
       </itemizedlist>
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>nodejs-4_x</literal> is end-of-life.
+      <literal>nodejs-4_x</literal>, <literal>nodejs-slim-4_x</literal> and <literal>nodePackages_4_x</literal> are removed.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

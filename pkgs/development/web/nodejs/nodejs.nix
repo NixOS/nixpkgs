@@ -26,6 +26,11 @@ let
      */
   ]) (builtins.attrNames sharedLibDeps);
 
+  copyLibHeaders =
+    map
+      (name: "${getDev sharedLibDeps.${name}}/include/*")
+      (builtins.attrNames sharedLibDeps);
+
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
 in
 
@@ -74,6 +79,9 @@ in
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
       ''}
+
+      # install the missing headers for node-gyp
+      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
     '';
 
     meta = {

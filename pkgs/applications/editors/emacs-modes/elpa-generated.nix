@@ -400,10 +400,10 @@
       }) {};
     company = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "company";
-        version = "0.9.5";
+        version = "0.9.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-0.9.5.tar";
-          sha256 = "1x9c5dw884rv0lvl24ggzdxp2k484w543azdiw55bw01635pg531";
+          url = "https://elpa.gnu.org/packages/company-0.9.6.tar";
+          sha256 = "0w1jqhs87g0sqhv2iw6a5i8f4yjkrc65fb3h6vyv11sb8kfnhda7";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ cl-print, elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.5.4";
+        version = "1.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.5.4.tar";
-          sha256 = "1k0makrk3p6hknpnr3kbiszqzw3rpw18gnx2m8scr9vv0wif4qmk";
+          url = "https://elpa.gnu.org/packages/el-search-1.6.tar";
+          sha256 = "18pv2l6rl8f9x0yjn4iyf6g94c0ly5mizqg0vxr3m420bkbyk95h";
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
@@ -861,10 +861,10 @@
       }) {};
     exwm = callPackage ({ elpaBuild, fetchurl, lib, xelb }: elpaBuild {
         pname = "exwm";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/exwm-0.16.tar";
-          sha256 = "0c4w5k9lzqj8yzhdqipdb4fs7ld2qklc6s137104jnfdvmrwcv2i";
+          url = "https://elpa.gnu.org/packages/exwm-0.17.tar";
+          sha256 = "03vgrrrc1d3xr9ydl1ydvmqnvpnzg858dzdky2nd65h9ssyp2f5f";
         };
         packageRequires = [ xelb ];
         meta = {
@@ -2400,10 +2400,10 @@
     xelb = callPackage ({ cl-generic, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "xelb";
-        version = "0.12";
+        version = "0.13";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xelb-0.12.tar";
-          sha256 = "0i9n0f3ibj4a5pwcsvwrah9m0fz32m0x6a9wsmjn3li20v8pcb81";
+          url = "https://elpa.gnu.org/packages/xelb-0.13.tar";
+          sha256 = "0sfygy6ihjwszhn6a81fz2yn70rr7vpygl7z49vz4rsd8s0fdgjc";
         };
         packageRequires = [ cl-generic emacs ];
         meta = {

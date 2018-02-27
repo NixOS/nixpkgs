@@ -2370,11 +2370,11 @@ rec {
   };
 
   ale = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "ale-2017-12-04";
+    name = "ale-2018-02-25";
     src = fetchgit {
       url = "https://github.com/w0rp/ale";
-      rev = "e2a8f759d870ed7a1f0ee4698a73b65e9f36e54d";
-      sha256 = "0fx9qr84li58jgz576gsyjjwd3f1c2jby8wl6d35vznjzw0x00cs";
+      rev = "7ec684206c1395a940d8ad2d26d59773a432115c";
+      sha256 = "1hvybsvs2i01q3s9wpydyxgsvg59r2valk61vl4jh2mrrh0bfi9i";
     };
     dependencies = [];
 
@@ -3040,11 +3040,11 @@ rec {
   };
 
   vim-gitgutter = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-gitgutter-2017-11-01";
+    name = "vim-gitgutter-2018-02-26";
     src = fetchgit {
       url = "git://github.com/airblade/vim-gitgutter";
-      rev = "1e60667322b7cd1bfcba98762fbba746a888d21a";
-      sha256 = "1g9giir7gmkp6n6w4z20qm2dyq00w2a8f573c0b8b27cj36ri0wq";
+      rev = "e512d3a6fc80900c24ef293b475715f49ec6ded8";
+      sha256 = "0wd6x3fb5jbqlvismp3f59ycid49gn3qvd16cj8x87v6l3anmp4s";
     };
     dependencies = [];
 

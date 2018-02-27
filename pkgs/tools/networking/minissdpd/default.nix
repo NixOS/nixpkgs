@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "minissdpd-${version}";
-  version = "1.5.20160301";
+  version = "1.5.20180203";
 
   src = fetchurl {
-    sha256 = "053icnb25jg2vvjxirkznks3ipbbdjxac278y19rk2w9cirgi9lv";
+    sha256 = "1yiri887s8wxh4zrjc5dw19gyypqg63962aimcgd19blvpbwnfcv";
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
     name = "${name}.tar.gz";
   };
