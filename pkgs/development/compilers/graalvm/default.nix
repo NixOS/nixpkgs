@@ -77,12 +77,13 @@ in rec {
 
   # copy of pkgs.oraclejvm8 with JVMCI interface (TODO: it should work with pkgs.openjdk8 too)
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.36";
+    version = "0.41";
     name = "jvmci8-${version}";
-    src = fetchhg {
-      url    = http://hg.openjdk.java.net/graal/graal-jvmci-8;
+    src = fetchFromGitHub {
+      owner  = "graalvm";
+      repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "143190adlzxvs5wfr54hmh5bpn6myz7jypi3jp0ag32lvr4nhskp";
+      sha256 = "0pajf114l8lzczfdzz968c3s1ardiy4q5ya8p2kmwxl06giy95qr";
     };
     buildInputs = [ mx mercurial ];
     postUnpack = ''
@@ -107,7 +108,7 @@ in rec {
       mx --java-home $(pwd)/writable-copy-of-jdk build
     '';
     installPhase = ''
-      mv jdk1.8.0_*/product $out
+      mv jdk1.8.0_*/linux-amd64/product $out
 
       # overide references to unpatched JDK
       find $out -type f -perm -0100 \
