@@ -148,4 +148,15 @@ in
     };
   };
 
+  source_26 = buildSource {
+    name = "android-source-26";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sources-26_r01.zip;
+      sha1 = "p7wxhbwk0qfhnm48j9081m936bp03xra";
+    };
+    meta = {
+      description = "Source code for Android API 26";
+    };
+  };
+
 }

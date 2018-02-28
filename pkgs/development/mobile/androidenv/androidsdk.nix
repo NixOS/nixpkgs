@@ -12,12 +12,12 @@ let inherit (stdenv.lib) makeLibraryPath; in
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "25.2.5";
+  version = "26.0.1";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
-      sha256 = "0gnk49pkwy4m0nqwm1xnf3w4mfpi9w0kk7841xlawpwbkj0icxap";
+      url = "https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip";
+      sha256 = "185yq7qwxflw24ccm5d6zziwlc9pxmsm3f54pm9p7xm0ik724kj4";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     unpackFile $src
     cd tools
 
-    for f in android traceview draw9patch hierarchyviewer monitor ddms screenshot2 uiautomatorviewer monkeyrunner jobb lint
+    for f in android monitor bin/screenshot2 bin/uiautomatorviewer bin/monkeyrunner bin/jobb bin/lint
     do
         sed -i -e "s|/bin/ls|${coreutils}/bin/ls|" "$f"
     done
@@ -46,24 +46,6 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib $i
       done
 
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-        for i in bin64/{mkfs.ext4,fsck.ext4,e2fsck,tune2fs,resize2fs}
-        do
-            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
-        done
-      ''}
-
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-        # We must also patch the 64-bit emulator instances, if needed
-
-        for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service emulator-check qemu/linux-x86_64/qemu-system-*
-        do
-            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
-        done
-      ''}
-
       # The following scripts used SWT and wants to dynamically load some GTK+ stuff.
       # Creating these wrappers ensure that they can be found:
 
@@ -71,22 +53,18 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ glib gtk2 libXtst ]}
 
-      wrapProgram `pwd`/uiautomatorviewer \
-        --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
-
-      wrapProgram `pwd`/hierarchyviewer \
+      wrapProgram `pwd`/bin/uiautomatorviewer \
         --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
 
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
-        for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service
+        for i in emulator emulator-check
         do
             wrapProgram `pwd`/$i \
               --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib64:`pwd`/lib64/qt/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio dbus.lib ]} \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext mesa alsaLib zlib libpulseaudio dbus.lib ]} \
               --suffix QT_XKB_CONFIG_ROOT : ${xkeyboardconfig}/share/X11/xkb
         done
       ''}
