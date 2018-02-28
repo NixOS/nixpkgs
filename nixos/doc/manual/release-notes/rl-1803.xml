@@ -430,6 +430,13 @@ following incompatible changes:</para>
       and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      Enabling bash completion on NixOS, <literal>programs.bash.enableCompletion</literal>, will now also enable
+      completion for the Nix command line tools by installing the
+      <link xlink:href="https://github.com/hedning/nix-bash-completions">nix-bash-completions</link> package.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
