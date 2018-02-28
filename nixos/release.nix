@@ -319,6 +319,7 @@ in rec {
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
   tests.nghttpx = callTest tests/nghttpx.nix { };
+  tests.nix-ssh-serve = callTest tests/nix-ssh-serve.nix { };
   tests.novacomd = callTestOnTheseSystems ["x86_64-linux"] tests/novacomd.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
