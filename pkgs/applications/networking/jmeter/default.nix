@@ -13,26 +13,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out
 
-    # Prefix some scripts with jmeter to avoid clobbering the namespace
-    for i in heapdump.sh mirror-server mirror-server.sh shutdown.sh stoptest.sh create-rmi-keystore.sh; do
-      mv bin/$i bin/jmeter-$i
-    done
-
-    rm bin/*.bat
-    rm bin/*.cmd
+    rm bin/*.bat bin/*.cmd
 
     cp -R * $out/
 
-    substituteInPlace $out/bin/jmeter-create-rmi-keystore.sh --replace \
+    substituteInPlace $out/bin/create-rmi-keystore.sh --replace \
       "keytool -genkey" \
       "${jre}/lib/openjdk/jre/bin/keytool -genkey"
 
+    # Prefix some scripts with jmeter to avoid clobbering the namespace
+    for i in heapdump.sh mirror-server mirror-server.sh shutdown.sh stoptest.sh create-rmi-keystore.sh; do
+      mv $out/bin/$i $out/bin/jmeter-$i
+      wrapProgram $out/bin/jmeter-$i \
+        --prefix PATH : "${jre}/bin"
+    done
+
     wrapProgram $out/bin/jmeter --set JAVA_HOME "${jre}"
     wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/jmeter-heapdump.sh --prefix PATH : "${jre}/bin"
-    wrapProgram $out/bin/jmeter-mirror-server.sh --prefix PATH : "${jre}/bin"
-    wrapProgram $out/bin/jmeter-shutdown.sh --prefix PATH : "${jre}/bin"
-    wrapProgram $out/bin/jmeter-stoptest.sh --prefix PATH : "${jre}/bin"
   '';
 
   doInstallCheck = true;
@@ -47,7 +44,7 @@ stdenv.mkDerivation rec {
     timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 100% pure Java desktop application designed to load test functional behavior and measure performance";
     longDescription = ''
       The Apache JMeter desktop application is open source software, a 100%
@@ -55,9 +52,9 @@ stdenv.mkDerivation rec {
       measure performance. It was originally designed for testing Web
       Applications but has since expanded to other test functions.
     '';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.garbas ];
     priority = 1;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
