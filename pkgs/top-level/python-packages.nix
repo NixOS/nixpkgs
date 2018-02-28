@@ -257,6 +257,8 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
   habanero = callPackage ../development/python-modules/habanero { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
