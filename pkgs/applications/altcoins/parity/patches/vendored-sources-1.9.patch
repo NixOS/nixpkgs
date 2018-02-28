@@ -3,7 +3,7 @@ new file mode 100644
 index 000000000..0efb69724
 --- /dev/null
 +++ b/.cargo/config
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,100 @@
 +
 +[source."https://github.com/alexcrichton/mio-named-pipes"]
 +git = "https://github.com/alexcrichton/mio-named-pipes"
@@ -87,6 +87,11 @@ index 000000000..0efb69724
 +
 +[source."https://github.com/paritytech/wasm-utils"]
 +git = "https://github.com/paritytech/wasm-utils"
++branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/pepyakin/wasmi"]
++git = "https://github.com/pepyakin/wasmi"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
