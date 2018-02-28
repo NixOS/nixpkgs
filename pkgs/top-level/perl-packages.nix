@@ -7646,6 +7646,13 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.90.tar.gz;
       sha256 = "127yppvr17qik9pkd1vy901hs4l13kg6rhp76jdgcyask35v7nsd";
     };
+    preConfigure = ''
+      cp lib/JSON/backportPP.pm{,orig}
+      echo "1;" > lib/JSON/backportPP.pm
+    '';
+    postConfigure = ''
+      cp lib/JSON/backportPP.pm{,orig}
+    '';
     buildInputs = [ TestPod ];
     meta = {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
