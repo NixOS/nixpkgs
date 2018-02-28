@@ -19,12 +19,12 @@
 import ./make-test.nix ({ pkgs, ...} :
 
 let
-  ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ip4).address;
-
   allowESP = "iptables --insert INPUT --protocol ESP --jump ACCEPT";
 
   # Shared VPN settings:
   vlan0         = "192.168.0.0/24";
+  carolIp       = "192.168.1.2";
+  moonIp        = "192.168.1.3";
   version       = 2;
   secret        = "0sFpZAZqEN6Ti9sqt4ZP5EWcqx";
   esp_proposals = [ "aes128gcm128-x25519" ];
@@ -38,15 +38,12 @@ in {
       virtualisation.vlans = [ 0 ];
       networking = {
         dhcpcd.enable = false;
-        defaultGateway = ifAddr nodes.moon "eth1";
+        defaultGateway = "192.168.0.3";
       };
     };
 
     moon = {pkgs, config, nodes, ...} :
-      let
-        carolIp = ifAddr nodes.carol "eth1";
-        moonIp  = ifAddr nodes.moon  "eth2";
-        strongswan = config.services.strongswan-swanctl.package;
+      let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 0 1 ];
         networking = {
@@ -98,10 +95,7 @@ in {
       };
 
     carol = {pkgs, config, nodes, ...} :
-      let
-        carolIp = ifAddr nodes.carol "eth1";
-        moonIp  = ifAddr nodes.moon  "eth2";
-        strongswan = config.services.strongswan-swanctl.package;
+      let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 1 ];
         networking = {
