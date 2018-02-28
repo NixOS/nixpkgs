@@ -4,6 +4,7 @@
 , fusePackages, utillinux, gettext
 , autoconf, automake, libtool
 , meson, ninja, pkgconfig
+, autoreconfHook
 }:
 
 let
@@ -18,6 +19,8 @@ in stdenv.mkDerivation rec {
     sha256 = sha256Hash;
   };
 
+  preAutoreconf = "touch config.rpath";
+
   patches =
     stdenv.lib.optional
       (!isFuse3 && stdenv.isAarch64)
@@ -30,8 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
-    else [ autoconf automake libtool ];
-  buildInputs = stdenv.lib.optional (!isFuse3) gettext;
+    else [ autoreconfHook gettext ];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
