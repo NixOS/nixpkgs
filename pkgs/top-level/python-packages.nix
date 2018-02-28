@@ -15841,27 +15841,7 @@ in {
       };
     in if isPy3k then py3 else py2;
 
-  pythondaemon = buildPythonPackage rec {
-    name = "python-daemon-${version}";
-    version = "2.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-daemon/${name}.tar.gz";
-      sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
-    };
-
-    # A test fail within chroot builds.
-    doCheck = false;
-
-    buildInputs = with self; [ mock testscenarios ];
-    propagatedBuildInputs = with self; [ docutils lockfile ];
-
-    meta = {
-      description = "Library to implement a well-behaved Unix daemon process";
-      homepage = https://alioth.debian.org/projects/python-daemon/;
-      license = [ licenses.gpl3Plus licenses.asl20 ];
-    };
-  };
+  pythondaemon = callPackage ../development/python-modules/python-daemon { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
@@ -16915,21 +16895,7 @@ in {
     };
   };
 
-  tmdb3 = buildPythonPackage rec {
-    name = "tmdb3-${version}";
-    version = "0.6.17";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tmdb3/${name}.zip";
-      sha256 = "64a6c3f1a60a9d8bf18f96a5403f3735b334040345ac3646064931c209720972";
-    };
-
-    meta = {
-      description = "Python implementation of the v3 API for TheMovieDB.org, allowing access to movie and cast information";
-      homepage = https://pypi.python.org/pypi/tmdb3;
-      license = licenses.bsd3;
-    };
-  };
+  tmdb3 = callPackage ../development/python-modules/tmdb3 { };
 
   toolz = callPackage ../development/python-modules/toolz { };
 
@@ -17458,23 +17424,7 @@ in {
 
   virtkey = callPackage ../development/python-modules/virtkey { };
 
-  virtual-display = buildPythonPackage rec {
-    name = "PyVirtualDisplay-0.1.5";
-
-    propagatedBuildInputs = with self; [ EasyProcess ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyVirtualDisplay/${name}.tar.gz";
-      sha256 = "aa6aef08995e14c20cc670d933bfa6e70d736d0b555af309b2e989e2faa9ee53";
-    };
-
-    meta = {
-      description = "Python wrapper for Xvfb, Xephyr and Xvnc";
-      homepage = "https://github.com/ponty/pyvirtualdisplay";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
@@ -18315,26 +18265,7 @@ EOF
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
-  tunigo = buildPythonPackage rec {
-    name = "tunigo-${version}";
-    version = "1.0.0";
-    propagatedBuildInputs = with self; [ requests ];
-
-    src = pkgs.fetchFromGitHub {
-      owner = "trygveaa";
-      repo = "python-tunigo";
-      rev = "v${version}";
-      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
-    };
-
-    buildInputs = with self; [ mock nose ];
-
-    meta = {
-      description = "Python API for the browse feature of Spotify";
-      homepage = https://github.com/trygveaa/python-tunigo;
-      license = licenses.asl20;
-    };
-  };
+  tunigo = callPackage ../development/python-modules/tunigo { };
 
   screenkey = buildPythonPackage rec {
     version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
@@ -18738,30 +18669,7 @@ EOF
 
   pyusb = callPackage ../development/python-modules/pyusb { libusb1 = pkgs.libusb1; };
 
-  BlinkStick = buildPythonPackage rec {
-    name = "BlinkStick-${version}";
-    version = "1.1.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/BlinkStick/${name}.tar.gz";
-      sha256 = "3edf4b83a3fa1a7bd953b452b76542d54285ff6f1145b6e19f9b5438120fa408";
-    };
-
-    # Requires pyusb 1.0.0b1.
-    # Likely current pyusb will work but we need to patch the hard requirement then.
-    broken = true;
-
-    patchPhase = "substituteInPlace setup.py --replace pyusb==1.0.0b1 pyusb==1.0.0";
-
-    propagatedBuildInputs = with self; [ pyusb ];
-
-    meta = {
-      description = "Python package to control BlinkStick USB devices";
-      homepage = https://pypi.python.org/pypi/BlinkStick/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  BlinkStick = callPackage ../development/python-modules/blinkstick { };
 
   usbtmc = callPackage ../development/python-modules/usbtmc {};
 
@@ -21254,18 +21162,6 @@ EOF
   vine = callPackage ../development/python-modules/vine { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
-
-  wp_export_parser = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "wp_export_parser";
-    version = "1.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "RealGeeks";
-      repo = "wp_export_parser";
-      rev = "479211f6c5a7d034fd77762dfed381c3315cd773";
-      sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
-    };
-  };
 
   XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
 
