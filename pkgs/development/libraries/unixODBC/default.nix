@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unixODBC-${version}";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchurl {
     url = "ftp://ftp.unixodbc.org/pub/unixODBC/${name}.tar.gz";
-    sha256 = "0f8y88rcc2akjvjv5y66yx7k0ms9h1s0vbcfy25j93didflhj59f";
+    sha256 = "0ns93daph4wmk92d7m2w48x0yki4m1yznxnn97p1ldn6bkh742bn";
   };
 
   configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
