@@ -247,7 +247,7 @@ let
             { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
             ''
               target=$out
-              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
