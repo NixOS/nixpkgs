@@ -1,5 +1,6 @@
 { fetchurl, stdenv, lib
 , buildPlatform, hostPlatform
+, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
 }:
 
 # assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';
 
-  configureFlags =
-    lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic"
+    ++ lib.optional enableStatic "--enable-static";
 
   meta = {
     description = "An iconv(3) implementation";

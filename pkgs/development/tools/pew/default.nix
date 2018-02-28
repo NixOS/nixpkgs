@@ -6,7 +6,7 @@ with python3Packages; buildPythonApplication rec {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "b8312728526c9010295c88215c95a1b1731fdbd1a568f728e069932bd0545611";
+      sha256 = "04anak82p4v9w0lgfs55s7diywxil6amq8c8bhli143ca8l2fcdq";
     };
 
     propagatedBuildInputs = [ virtualenv virtualenv-clone setuptools ];

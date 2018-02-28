@@ -121,6 +121,8 @@ with pkgs;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
+  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
+
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   dockerTools = callPackage ../build-support/docker { go = go_1_9; };
 
@@ -2032,6 +2034,10 @@ with pkgs;
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   uudeview = callPackage ../tools/misc/uudeview { };
+
+  uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
+    inherit (pythonPackages) sphinx;
+  };
 
   zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
@@ -3970,6 +3976,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  opensm = callPackage ../tools/networking/opensm { };
+
   openssh =
     callPackage ../tools/networking/openssh {
       hpnSupport = false;
@@ -4040,6 +4048,8 @@ with pkgs;
   packagekit-qt = libsForQt5.callPackage ../tools/package-management/packagekit/qt.nix { };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
+
+  pacman = callPackage ../tools/package-management/pacman { };
 
   padthv1 = callPackage ../applications/audio/padthv1 { };
 
@@ -4616,6 +4626,10 @@ with pkgs;
 
   screencloud = callPackage ../applications/graphics/screencloud {
     quazip = quazip_qt4;
+  };
+
+  screenkey = python2Packages.callPackage ../applications/video/screenkey {
+    inherit (gnome3) defaultIconTheme;
   };
 
   quazip_qt4 = libsForQt5.quazip.override {
@@ -5474,7 +5488,7 @@ with pkgs;
   xbursttools = assert stdenv ? glibc; callPackage ../tools/misc/xburst-tools rec {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    crossPrefix = "mips64el-unknown-linux-gnu";
+    crossPrefix = "mipsel-unknown-linux-gnu";
     gccCross =
       let
         pkgsCross = nixpkgsFun {
@@ -6337,6 +6351,8 @@ with pkgs;
   jdk = jdk8;
   jre = jre8;
   jre_headless = jre8_headless;
+
+  inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
@@ -8326,6 +8342,10 @@ with pkgs;
 
   libopcodes = callPackage ../development/libraries/libopcodes { };
 
+  # TODO(@Ericson2314): Build bionic libc from source
+  bionic = assert hostPlatform.useAndroidPrebuilt;
+    androidenv.androidndkPkgs.libraries;
+
   bobcat = callPackage ../development/libraries/bobcat { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
@@ -8862,6 +8882,7 @@ with pkgs;
     # libc is hackily often used from the previous stage. This `or`
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
+    else if name == "bionic" then targetPackages.bionic
     else if name == "uclibc" then uclibcCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
@@ -8880,7 +8901,6 @@ with pkgs;
   };
 
   glm = callPackage ../development/libraries/glm { };
-  glm_0954 = callPackage ../development/libraries/glm/0954.nix { };
 
   globalplatform = callPackage ../development/libraries/globalplatform { };
   gppcscconnectionplugin =
@@ -9223,22 +9243,22 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { };
 
-  icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) {
+  icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
   } //
     (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-    });
-  icu59 = callPackage ../development/libraries/icu/59.nix {
+    }));
+  icu59 = callPackage ../development/libraries/icu/59.nix ({
     nativeBuildRoot = buildPackages.icu59.override { buildRootOnly = true; };
   } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-    });
-  icu60 = callPackage ../development/libraries/icu/60.nix {
+    }));
+  icu60 = callPackage ../development/libraries/icu/60.nix ({
     nativeBuildRoot = buildPackages.icu60.override { buildRootOnly = true; };
   } // (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
       stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
-    });
+    }));
 
   icu = icu59;
 
@@ -9634,10 +9654,6 @@ with pkgs;
   libgap = callPackage ../development/libraries/libgap { };
 
   libgdata = gnome3.libgdata;
-
-  libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
-
-  libgee_0_8 = callPackage ../development/libraries/libgee/0.8.nix { };
 
   libgig = callPackage ../development/libraries/libgig { };
 
@@ -13118,22 +13134,6 @@ with pkgs;
       ];
   };
 
-  linux_4_13 = callPackage ../os-specific/linux/kernel/linux-4.13.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.p9_fixes
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -13365,7 +13365,6 @@ with pkgs;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
-  linuxPackages_4_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_13);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_15);
   # Don't forget to update linuxPackages_latest!
@@ -13790,7 +13789,7 @@ with pkgs;
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
-  udisks = udisks1;
+  udisks = udisks2;
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
@@ -15814,6 +15813,11 @@ with pkgs;
 
   gv = callPackage ../applications/misc/gv { };
 
+  gutenberg = callPackage ../applications/misc/gutenberg {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin) cf-private;
+  };
+
   guvcview = callPackage ../os-specific/linux/guvcview {
     pulseaudioSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
@@ -16244,7 +16248,6 @@ with pkgs;
     inherit (gnome2) GConf ORBit2 gnome_vfs;
     inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
-    #glm = glm_0954;
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -16286,6 +16289,8 @@ with pkgs;
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
   lighttable = callPackage ../applications/editors/lighttable {};
+
+  libdsk = callPackage ../misc/emulators/libdsk { };
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
@@ -16540,11 +16545,19 @@ with pkgs;
     };
 
   mpv = callPackage ../applications/video/mpv rec {
-    lua = lua5_1;
-    lua5_sockets = lua5_1_sockets;
+    inherit (luaPackages) luasocket;
     youtube-dl = pythonPackages.youtube-dl;
-    libva = libva-full;
-    waylandSupport = stdenv.isLinux;
+    libva      = libva-full;
+    waylandSupport     = stdenv.isLinux;
+    alsaSupport        = !stdenv.isDarwin;
+    pulseSupport       = !stdenv.isDarwin;
+    rubberbandSupport  = !stdenv.isDarwin;
+    dvdreadSupport     = !stdenv.isDarwin;
+    dvdnavSupport      = !stdenv.isDarwin;
+    drmSupport         = !stdenv.isDarwin;
+    x11Support         = !stdenv.isDarwin;
+    xineramaSupport    = !stdenv.isDarwin;
+    xvSupport          = !stdenv.isDarwin;
   };
 
   mpvScripts = {
@@ -18952,6 +18965,8 @@ with pkgs;
 
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
+  sil = callPackage ../games/sil { };
+
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
@@ -20688,6 +20703,8 @@ with pkgs;
   );
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+
+  xcpc = callPackage ../misc/emulators/xcpc { };
 
   zxcvbn-c = callPackage ../development/libraries/zxcvbn-c { };
 

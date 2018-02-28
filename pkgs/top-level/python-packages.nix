@@ -2032,58 +2032,7 @@ in {
 
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
-  cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.7.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cairocffi/${name}.tar.gz";
-      sha256 = "e42b4256d27bd960cbf3b91a6c55d602defcdbc2a73f7317849c80279feeb975";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    # checkPhase require at least one 'normal' font and one 'monospace',
-    # otherwise glyph tests fails
-    FONTCONFIG_FILE = pkgs.makeFontsConf {
-      fontDirectories = [ pkgs.freefont_ttf ];
-    };
-
-    buildInputs = with self; [ pytest pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
-
-    checkPhase = ''
-      py.test $out/${python.sitePackages}
-    '';
-
-    # FIXME: make gdk_pixbuf dependency optional (as wel as xcfffi)
-    # Happens with 0.7.1 and 0.7.2
-    # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
-
-    patches = [
-      # This patch from PR substituted upstream
-      (pkgs.fetchpatch {
-          url = "https://github.com/avnik/cairocffi/commit/2266882e263c5efc87350cf016d117b2ec6a1d59.patch";
-          sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
-      })
-
-      ../development/python-modules/cairocffi/dlopen-paths.patch
-      ../development/python-modules/cairocffi/fix_test_scaled_font.patch
-    ];
-
-    postPatch = ''
-      # Hardcode cairo library path
-      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo.out}
-      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib.out}
-      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf.out}
-    '';
-
-    meta = {
-      homepage = https://github.com/SimonSapin/cairocffi;
-      license = "bsd";
-      description = "cffi-based cairo bindings for Python";
-    };
-  };
-
+  cairocffi = callPackage ../development/python-modules/cairocffi {};
 
   cairosvg = buildPythonPackage rec {
     version = "1.0.18";
@@ -9211,6 +9160,8 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
+  kubernetes = callPackage ../development/python-modules/kubernetes/default.nix { };
+
   pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
   pylru = callPackage ../development/python-modules/pylru/default.nix { };
@@ -11489,29 +11440,7 @@ in {
    cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
    cachetools = callPackage ../development/python-modules/cachetools {};
 
-  cmd2 = buildPythonPackage rec {
-    name = "cmd2-${version}";
-    version = "0.7.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cmd2/${name}.tar.gz";
-      sha256 = "0widbir8ay1fd4zm8l0rjq78j1cvbammbz8xs32crbanqsgzpqml";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      pyperclip
-      six
-      pyparsing
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Enhancements for standard library's cmd module";
-      homepage = "http://packages.python.org/cmd2/";
-    };
-  };
+  cmd2 = callPackage ../development/python-modules/cmd2 {};
 
  warlock = buildPythonPackage rec {
    name = "warlock-${version}";
@@ -18267,38 +18196,6 @@ EOF
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 
-  screenkey = buildPythonPackage rec {
-    version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-    name = "screenkey-${version}";
-
-    propagatedBuildInputs = with self; [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace "/usr/share" "./share"
-
-      # disable the feature that binds a shortcut to turning on/off
-      # screenkey. This is because keybinder is not packages in Nix as
-      # of today.
-      substituteInPlace Screenkey/screenkey.py \
-        --replace "import keybinder" "" \
-        --replace "        keybinder.bind(self.options['hotkey'], self.hotkey_cb, show_item)" ""
-    '';
-
-    src = pkgs.fetchgit {
-        url = https://github.com/scs3jb/screenkey.git;
-        rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-        sha256 = "1535mpm5x6v85d4ghxhdiianhjrsz280dwvs61ss0yyjx4kivx3s";
-    };
-
-    meta = {
-      homepage = https://github.com/scs3jb/screenkey;
-      description = "A screencast tool to show your keys";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.linux;
-    };
-  };
-
   tarman = buildPythonPackage rec {
     version = "0.1.3";
     name = "tarman-${version}";
@@ -18501,22 +18398,7 @@ EOF
   };
 
 
-  websocket_client = buildPythonPackage rec {
-    name = "websocket_client-0.40.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/websocket-client/${name}.tar.gz";
-      sha256 = "1yz67wdjijrvwpx0a0f6wdfy8ajsvr9xbj5514ld452fqnh19b20";
-    };
-
-    propagatedBuildInputs = with self; [ six backports_ssl_match_hostname unittest2 argparse ];
-
-    meta = {
-      homepage = https://github.com/liris/websocket-client;
-      description = "Websocket client for python";
-      license = licenses.lgpl2;
-    };
-  };
+  websocket_client = callPackage ../development/python-modules/websockets_client { };
 
 
   webhelpers = buildPythonPackage rec {
@@ -20153,23 +20035,7 @@ EOF
     };
   };
 
-  d2to1 = buildPythonPackage rec {
-    name = "d2to1-${version}";
-    version = "0.2.11";
-
-    buildInputs = with self; [ nose ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/d2to1/d2to1-${version}.tar.gz";
-      sha256 = "1a5z367b7dpd6dgi0w8pymb68aj2pblk8w04l2c8hibhj8dpl2b4";
-    };
-
-    meta = {
-      description = "Support for distutils2-like setup.cfg files as package metadata";
-      homepage = https://pypi.python.org/pypi/d2to1;
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  d2to1 = callPackage ../development/python-modules/d2to1 { };
 
   ovh = callPackage ../development/python-modules/ovh { };
 
@@ -20261,21 +20127,6 @@ EOF
     };
   };
 
-  xstatic = buildPythonPackage rec {
-    name = "XStatic-${version}";
-    version = "1.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic/XStatic-${version}.tar.gz";
-      sha256 = "09npcsyf1ccygjs0qc8kdsv4qqy8gm1m6iv63g9y1fgbcry3vj8f";
-    };
-    meta = {
-      homepage = https://bitbucket.org/thomaswaldmann/xstatic;
-      description = "Base packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
-
   xlsx2csv = buildPythonPackage rec {
     name = "xlsx2csv-${version}";
     version = "0.7.2";
@@ -20293,103 +20144,19 @@ EOF
 
   xmpppy = callPackage ../development/python-modules/xmpppy {};
 
-  xstatic-bootbox = buildPythonPackage rec {
-    name = "XStatic-Bootbox-${version}";
-    version = "4.3.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Bootbox/XStatic-Bootbox-${version}.tar.gz";
-      sha256 = "0wks1lsqngn3gvlhzrvaan1zj8w4wr58xi0pfqhrzckbghvvr0gj";
-    };
+  xstatic = callPackage ../development/python-modules/xstatic {};
 
-    meta = {
-      homepage =  http://bootboxjs.com;
-      description = "bootboxjs packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox {};
 
-  xstatic-bootstrap = buildPythonPackage rec {
-    name = "XStatic-Bootstrap-${version}";
-    version = "3.3.5.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Bootstrap/XStatic-Bootstrap-${version}.tar.gz";
-      sha256 = "0jzjq3d4vp2shd2n20f9y53jnnk1cvphkj1v0awgrf18qsy2bmin";
-    };
+  xstatic-bootstrap = callPackage ../development/python-modules/xstatic-bootstrap {};
 
-    meta = {
-      homepage =  http://getbootstrap.com;
-      description = "bootstrap packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-jquery = callPackage ../development/python-modules/xstatic-jquery {};
 
-  xstatic-jquery = buildPythonPackage rec {
-    name = "XStatic-jQuery-${version}";
-    version = "1.10.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-jQuery/XStatic-jQuery-${version}.tar.gz";
-      sha256 = "018kx4zijflcq8081xx6kmiqf748bsjdq7adij2k91bfp1mnlhc3";
-    };
+  xstatic-jquery-file-upload = callPackage ../development/python-modules/xstatic-jquery-file-upload {};
 
-    meta = {
-      homepage =  http://jquery.org;
-      description = "jquery packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-jquery-ui = callPackage ../development/python-modules/xstatic-jquery-ui {};
 
-  xstatic-jquery-file-upload = buildPythonPackage rec {
-    name = "XStatic-jQuery-File-Upload-${version}";
-    version = "9.7.0.1";
-    propagatedBuildInputs = with self;[ xstatic-jquery ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-jQuery-File-Upload/XStatic-jQuery-File-Upload-${version}.tar.gz";
-      sha256 = "0d5za18lhzhb54baxq8z73wazq801n3qfj5vgcz7ri3ngx7nb0cg";
-    };
-
-    meta = {
-      homepage =  http://plugins.jquery.com/project/jQuery-File-Upload;
-      description = "jquery-file-upload packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
-
-  xstatic-jquery-ui = buildPythonPackage rec {
-    name = "XStatic-jquery-ui-${version}";
-    version = "1.12.0.1";
-    propagatedBuildInputs = with self; [ xstatic-jquery ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-jquery-ui/XStatic-jquery-ui-${version}.tar.gz";
-      sha256 = "0w7mabv6qflpd47g33j3ggp5rv17mqk0xz3bsdswcj97wqpga2l2";
-    };
-
-    meta = {
-      homepage = http://jqueryui.com/;
-      description = "jquery-ui packaged static files for python";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
-
-  xstatic-pygments = buildPythonPackage rec {
-    name = "XStatic-Pygments-${version}";
-    version = "1.6.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/X/XStatic-Pygments/XStatic-Pygments-${version}.tar.gz";
-      sha256 = "0fjqgg433wfdnswn7fad1g6k2x6mf24wfnay2j82j0fwgkdxrr7m";
-    };
-
-    meta = {
-      homepage = http://pygments.org;
-      description = "pygments packaged static files for python";
-      license = licenses.bsd2;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
+  xstatic-pygments = callPackage ../development/python-modules/xstatic-pygments {};
 
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;

@@ -112,10 +112,10 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0c2dl10pi6a30kcvx2s6p2v1wb4kbm48iv38kmz2ff600nirhpb8";
+      sha256 = "0zw6pbyvmj8wafdc7l5h7w20zkp1vbr2805ql5d941g2b20pk4zr";
       type = "gem";
     };
-    version = "1.9.21";
+    version = "1.9.23";
   };
   forwardable-extended = {
     source = {
@@ -163,10 +163,10 @@
     dependencies = ["addressable" "colorator" "em-websocket" "i18n" "jekyll-sass-converter" "jekyll-watch" "kramdown" "liquid" "mercenary" "pathutil" "rouge" "safe_yaml"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05f61rqwz1isci7by34zyz38ah2rv5b8i5h618cxcl97hwqps8n2";
+      sha256 = "1k8pz95yiwxj6h645sxwckl227lah97lshv9xxrddhldxwf0n0ff";
       type = "gem";
     };
-    version = "3.7.2";
+    version = "3.7.3";
   };
   jekyll-avatar = {
     dependencies = ["jekyll"];
@@ -185,15 +185,6 @@
       type = "gem";
     };
     version = "1.1.1";
-  };
-  jekyll-docs = {
-    dependencies = ["jekyll"];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0dw8pvxr0q02rivc0n0v4w6151zi6s212xwl27iam6pjc8skbg9b";
-      type = "gem";
-    };
-    version = "3.7.2";
   };
   jekyll-feed = {
     dependencies = ["jekyll"];

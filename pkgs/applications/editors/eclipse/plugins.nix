@@ -409,11 +409,11 @@ rec {
 
   jsonedit = buildEclipsePlugin rec {
     name = "jsonedit-${version}";
-    version = "1.0.1";
+    version = "1.0.2";
 
     srcFeature = fetchurl {
       url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
-      sha256 = "19221409wzcsrlm2fqf6mrxzb5ip1x6y5ba8anw788p7aaz1w30k";
+      sha256 = "0zh9ihvaji2v4d4980va8p1c38x5dn2mcw74qmqkwxlz4nglpsr0";
     };
 
     srcPlugins =
@@ -425,13 +425,13 @@ rec {
           };
       in
         map fetch [
-          { n = "core"; h = "05ipjbh9yz97zhqaqq6cja3zz44n0dn40ms13qnlgf4bxyaf0f6w"; }
-          { n = "editor"; h = "1i71rh2fd5hsx6gygnafz2gjz4hlb0ckazxn0maxmnlx4p5apjql"; }
-          { n = "folding"; h = "13p8vqdna23ln82w1jgchm59375f1ky0p2b1v7jih55yfhw1ymam"; }
-          { n = "model"; h = "0llswhsd58f0rjb9canjncavq4z7q8zidn26yl5gradbbz580p6w"; }
-          { n = "outline"; h = "1rs8g0iv2kklbl7j0p6nr26m6ii89yyr9bpi05mh21xva40pzkl5"; }
-          { n = "preferences"; h = "0vs074ahhiba7if43ryf9m8xd81sqj9grppy0pzcnkkdkbk870n0"; }
-          { n = "text"; h = "0nqpzjw8hhvh9jlpldpmcmg83a170wjdabgsvjq207j12jkvfiqq"; }
+          { n = "core"; h = "0zc1jpda6sviazsgvvig8zk2zmz0ac1mch5qs8lbcbdmrpq732ni"; }
+          { n = "editor"; h = "06k2mx7ka0bn0i8dfbv89jna9kmy8wnlwkg9yp1n1pgqmr01944s"; }
+          { n = "folding"; h = "1525blyhrl495vz5r98dyfws6kcgnhmyf9qgm5vkplhb27474yca"; }
+          { n = "model"; h = "0rnnkdl3hrp0sxchfzfad97ya5swsw56wfb5zvjwffbby4vln8fd"; }
+          { n = "outline"; h = "06bday90a7sdpv4idp69m2831z3r99q248n2avw2npc3gzkfy3kl"; }
+          { n = "preferences"; h = "1d9pcnq6j5p2smkfldb9dw8gdw5nqlmpcy9kh5n34jcyzf37cdac"; }
+          { n = "text"; h = "0r3g2qhnhl6misi0rrmw152gw0nb7zlcjy7019qvprn9mhwn1n84"; }
         ];
 
     propagatedBuildInputs = [ antlr-runtime_4_5 ];

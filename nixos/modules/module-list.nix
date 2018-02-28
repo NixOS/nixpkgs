@@ -31,6 +31,7 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
@@ -78,6 +79,7 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
   ./programs/dconf.nix
+  ./programs/digitalbitbox/default.nix
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix

@@ -8475,6 +8475,27 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MailSendmail = buildPerlPackage rec {
+    name = "Mail-Sendmail-0.80";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
+      sha256 = "1r38qbkj7jwj8cqy1rnqzkk81psxi08b1aiq392817f3bk5ri2jv";
+    };
+    propagatedBuildInputs = [ DigestMD5 MIMEBase64 Socket TimeLocal ];
+    # The test suite simply loads the module and attempts to send an email to
+    # the module's author, the latter of which is a) more of an integration
+    # test, b) impossible to verify, and c) won't work from a sandbox. Replace
+    # it in its entirety with the following simple smoke test.
+    checkPhase = ''
+      perl -I blib/lib -MMail::Sendmail -e 'print "1..1\nok 1\n"'
+    '';
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Simple platform independent mailer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MailSPF = buildPerlPackage rec {
     name = "Mail-SPF-v2.9.0";
     #src = /root/nixops/Mail-SPF-v2.9.0;
@@ -11354,6 +11375,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  POETestLoops = buildPerlPackage rec {
+    name = "POE-Test-Loops-1.360";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/${name}.tar.gz";
+      sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
+    };
+    buildInputs = [ ];
+    propagatedBuildInputs = [ ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Reusable tests for POE::Loop authors";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   PPI = buildPerlPackage rec {
     name = "PPI-1.236";
     src = fetchurl {
@@ -12288,6 +12324,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.020.tar.gz;
       sha256 = "9ad4174c45b4c31d5e0b8019ada1fc767093849e77f268f0d1831eeb891dfdd7";
     };
+    postPatch = ''
+      # requires network access
+      rm t/getnameinfo.t
+    '';
     meta = {
       description = "Networking constants and support functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -14134,6 +14174,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod-LinkCheck/;
       description = "Tests POD for invalid links";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestPodNo404s = buildPerlPackage rec {
+    name = "Test-Pod-No404s-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-No404s-0.02.tar.gz";
+      sha256 = "0ycfghsyl9f31kxdppjwx2g5iajrqh3fyywz0x7d8ayndw2hdihi";
+    };
+    propagatedBuildInputs = [ LWPUserAgent ModuleBuildTiny URIFind TestPod ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Test-Pod-No404s/;
+      description = "Checks POD for any http 404 links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
