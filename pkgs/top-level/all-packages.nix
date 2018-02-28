@@ -4043,6 +4043,8 @@ with pkgs;
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
+  pacman = callPackage ../tools/package-management/pacman { };
+
   padthv1 = callPackage ../applications/audio/padthv1 { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
