@@ -152,6 +152,8 @@ stdenv.mkDerivation rec {
   inherit version src;
 
   patches = [
+    ./pkg-config-lib-path.patch
+
     # Fix for: https://github.com/opencv/opencv/issues/10474
     (fetchpatch {
       url = "https://github.com/opencv/opencv/commit/ea5a3e557f93844fdb5e54e3e8acfc5f61c6fd9f.patch";
