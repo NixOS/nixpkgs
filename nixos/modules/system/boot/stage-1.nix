@@ -37,7 +37,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
-    { buildInputs = [pkgs.nukeReferences];
+    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -132,6 +132,7 @@ let
         fi
       done
 
+      if [ -z "${toString pkgs.stdenv.isCross}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -144,6 +145,7 @@ let
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
+      fi
     ''; # */
 
 
