@@ -21,7 +21,7 @@ buildPythonPackage rec {
     mkdir bin
     echo '#/bin/sh' > bin/pbpaste
     echo '#/bin/sh' > bin/pbcopy
-    chmod +x bin/{pbpaste,bpcopy}
+    chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';
 
