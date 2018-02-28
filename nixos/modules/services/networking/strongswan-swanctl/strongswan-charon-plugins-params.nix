@@ -423,6 +423,12 @@ lib : with (import ./param-constructors.nix lib); {
     nodes. Set to 0 to disable.
   '';
 
+  ha.buflen = mkIntParam 2048 ''
+    Buffer size for received HA messages. For IKEv1 the public DH factors are
+    also transmitted so depending on the DH group the HA messages can get quite
+    big (the default should be fine up to <literal>modp4096</literal>).
+  '';
+
   ha.fifo_interface = mkYesNoParam yes "";
 
   ha.heartbeat_delay = mkIntParam 1000 "";
@@ -461,7 +467,7 @@ lib : with (import ./param-constructors.nix lib); {
     If the maximum Netlink socket receive buffer in bytes set by
     receive_buffer_size exceeds the system-wide maximum from
     <literal>/proc/sys/net/core/rmem_max</literal>, this option can be used to
-    override the limit. Enabling this option requires special priviliges
+    override the limit. Enabling this option requires special privileges
     (CAP_NET_ADMIN).
   '';
 
@@ -480,6 +486,12 @@ lib : with (import ./param-constructors.nix lib); {
 
   kernel-netlink.mtu = mkIntParam 0 ''
     MTU to set on installed routes, 0 to disable.
+  '';
+
+  kernel-netlink.process_rules = mkYesNoParam no ''
+    Whether to process changes in routing rules to trigger roam events. This is
+    currently only useful if the kernel based route lookup is used (i.e. if
+    route installation is disabled or an inverted fwmark match is configured).
   '';
 
   kernel-netlink.receive_buffer_size = mkIntParam 0 ''
@@ -843,6 +855,25 @@ lib : with (import ./param-constructors.nix lib); {
 
   revocation.enable_ocsp = mkYesNoParam yes ''
     Whether OCSP validation should be enabled.
+  '';
+
+  save-keys.load = mkYesNoParam no ''
+    Whether to load the plugin.
+  '';
+
+  save-keys.esp = mkYesNoParam no ''
+    Whether to save ESP keys.
+  '';
+
+  save-keys.ike = mkYesNoParam no ''
+    Whether to save IKE keys.
+  '';
+
+  save-keys.wireshark_keys = mkOptionalStrParam ''
+    Directory where the keys are stored in the format supported by Wireshark.
+    IKEv1 keys are stored in the <literal>ikev1_decryption_table</literal> file.
+    IKEv2 keys are stored in the <literal>ikev2_decryption_table</literal> file.
+    Keys for ESP CHILD_SAs are stored in the <literal>esp_sa</literal> file.
   '';
 
   socket-default.fwmark = mkOptionalStrParam ''

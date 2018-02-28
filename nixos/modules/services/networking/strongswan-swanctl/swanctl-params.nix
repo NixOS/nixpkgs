@@ -583,9 +583,10 @@ in {
         <literal>rsa-2048-ecdsa-256</literal>). To limit the acceptable set of
         hashing algorithms for trustchain validation, append hash algorithms to
         pubkey or a key strength definition (for example
-        <literal>pubkey-sha1-sha256</literal> or
-        <literal>rsa-2048-ecdsa-256-sha256-sha384-sha512</literal>). Unless
-        disabled in <literal>strongswan.conf</literal>, or explicit IKEv2
+        <literal>pubkey-sha256-sha512</literal>,
+        <literal>rsa-2048-sha256-sha384-sha512</literal> or
+        <literal>rsa-2048-sha256-ecdsa-256-sha256-sha384</literal>).
+        Unless disabled in <literal>strongswan.conf</literal>, or explicit IKEv2
         signature constraints are configured (refer to the description of the
         <option>local</option> section's <option>auth</option> keyword for
         details), such key types and hash algorithms are also applied as

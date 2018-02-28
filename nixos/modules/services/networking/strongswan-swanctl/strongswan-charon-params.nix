@@ -19,7 +19,7 @@ in {
   '';
 
   cache_crls = mkYesNoParam no ''
-    Whether Certicate Revocation Lists (CRLs) fetched via HTTP or LDAP
+    Whether Certificate Revocation Lists (CRLs) fetched via HTTP or LDAP
     should be saved under a unique file name derived from the public
     key of the Certification Authority (CA) to
     <literal>/etc/ipsec.d/crls</literal> (stroke) or
