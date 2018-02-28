@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-daemon";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
+    sha256 = "261c859be5c12ae7d4286dc6951e87e9e1a70a882a8b41fd926efc1ec4214f73";
   };
 
   # A test fail within chroot builds.
