@@ -20338,8 +20338,6 @@ EOF
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
 
-  pyspark = callPackage ../development/python-modules/pyspark { };
-
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   textacy = callPackage ../development/python-modules/textacy { };
