@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, perl, gcc, zlib, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, runCommand, perl, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
-  version = "3.4";
+  version = "3.4.1";
 
   src = fetchurl {
-    sha256 = "0sfisvjs2iham29flxgmnfg7kzqz66bhk6q0qcwbdv1n569say5j";
+    sha256 = "1pppi4jbkkj641cdynmc35jaj40jjicw7gj75ran5qs5886jcblc";
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
-  nativeBuildInputs = [ perl gcc ];
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib ];
+
+  outputs = [ "out" "man" ];
 
   # non to be fail on filesystems with unconventional blocksizes (zfs on Hydra?)
   patches = [
