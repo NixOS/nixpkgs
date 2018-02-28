@@ -2801,6 +2801,7 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
+  pyalsaaudio = callPackage ../development/python-modules/pyalsaaudio {};
 
   idna = callPackage ../development/python-modules/idna { };
 
