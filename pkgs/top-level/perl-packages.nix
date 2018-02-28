@@ -12288,6 +12288,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.020.tar.gz;
       sha256 = "9ad4174c45b4c31d5e0b8019ada1fc767093849e77f268f0d1831eeb891dfdd7";
     };
+    postPatch = ''
+      # requires network access
+      rm t/getnameinfo.t
+    '';
     meta = {
       description = "Networking constants and support functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
