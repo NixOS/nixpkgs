@@ -16,6 +16,15 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  postPatch = stdenv.isDarwin ''
+    # Fake the impure dependencies pbpaste and pbcopy
+    mkdir bin
+    echo '#/bin/sh' > bin/pbpaste
+    echo '#/bin/sh' > bin/pbcopy
+    chmod +x bin/{pbpaste,bpcopy}
+    export PATH=$(realpath bin):$PATH
+  '';
+
   checkInputs= [ pytest mock which vim glibcLocales ];
   checkPhase = ''
     # test_path_completion_user_expansion might be fixed in the next release
