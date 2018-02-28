@@ -1,15 +1,27 @@
-Partially reverts <https://codereview.qt-project.org/#/c/140954/>.
-
-diff --git i/mkspecs/features/qt_module.prf w/mkspecs/features/qt_module.prf
-index bb28af97..36bb6483 100644
---- i/mkspecs/features/qt_module.prf
-+++ w/mkspecs/features/qt_module.prf
-@@ -245,7 +245,7 @@ load(qt_installs)
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index e6a0d97f1a..b50ce77d51 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -266,7 +266,7 @@ load(qt_installs)
  load(qt_targets)
-
+ 
  # this builds on top of qt_common
 -!internal_module:!lib_bundle:if(unix|mingw) {
 +!internal_module:if(unix|mingw) {
      CONFIG += create_pc
      QMAKE_PKGCONFIG_DESTDIR = pkgconfig
      host_build: \
+diff --git a/mkspecs/features/qt_module_headers.prf b/mkspecs/features/qt_module_headers.prf
+index 62b88c6fe2..f302f1e202 100644
+--- a/mkspecs/features/qt_module_headers.prf
++++ b/mkspecs/features/qt_module_headers.prf
+@@ -102,8 +102,7 @@ git_build: \
+ else: \
+     INC_PATH = $$MODULE_BASE_INDIR
+ include($$INC_PATH/include/$$MODULE_INCNAME/headers.pri, "", true)
+-!lib_bundle: \  # Headers are embedded into the bundle, so don't install them separately.
+-    CONFIG += qt_install_headers
++CONFIG += qt_install_headers
+ 
+ alien_syncqt: return()
+ 
