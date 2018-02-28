@@ -20472,6 +20472,8 @@ EOF
 
   thinc = callPackage ../development/python-modules/thinc { };
 
+  yahooweather = callPackage ../development/python-modules/yahooweather { };
+
   spacy = callPackage ../development/python-modules/spacy { };
 
   spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
