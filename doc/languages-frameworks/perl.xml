@@ -186,7 +186,8 @@ for a module may (indirectly) import a native module. In that case,
 you will need to make a stub for that module that will satisfy the
 Makefile.PL and install it into
 <filename>lib/perl5/site_perl/cross_perl/${perl.version}</filename>.
-</para>
+See the <varname>postInstall</varname> for <varname>DBI</varname> for
+an example.</para>
 
 </section>
 
