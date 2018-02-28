@@ -15841,27 +15841,7 @@ in {
       };
     in if isPy3k then py3 else py2;
 
-  pythondaemon = buildPythonPackage rec {
-    name = "python-daemon-${version}";
-    version = "2.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-daemon/${name}.tar.gz";
-      sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
-    };
-
-    # A test fail within chroot builds.
-    doCheck = false;
-
-    buildInputs = with self; [ mock testscenarios ];
-    propagatedBuildInputs = with self; [ docutils lockfile ];
-
-    meta = {
-      description = "Library to implement a well-behaved Unix daemon process";
-      homepage = https://alioth.debian.org/projects/python-daemon/;
-      license = [ licenses.gpl3Plus licenses.asl20 ];
-    };
-  };
+  pythondaemon = callPackage ../development/python-modules/python-daemon { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
