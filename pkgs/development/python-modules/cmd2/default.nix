@@ -21,6 +21,7 @@ buildPythonPackage rec {
     # test_path_completion_user_expansion might be fixed in the next release
     py.test -k 'not test_path_completion_user_expansion'
   '';
+  doCheck = !stdenv.isDarwin;
 
   propagatedBuildInputs = [
     pyperclip
