@@ -624,6 +624,7 @@ in {
     gui = false;
   };
 
+  deluge-client = callPackage ../development/python-modules/deluge-client { };
 
   arrow = callPackage ../development/python-modules/arrow { };
 
