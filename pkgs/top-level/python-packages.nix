@@ -430,6 +430,8 @@ in {
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
+  aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
+
   alabaster = callPackage ../development/python-modules/alabaster {};
 
   alembic = callPackage ../development/python-modules/alembic {};
