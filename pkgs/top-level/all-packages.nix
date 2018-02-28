@@ -6342,7 +6342,7 @@ with pkgs;
   jre = jre8;
   jre_headless = jre8_headless;
 
-  inherit (callPackage ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
+  inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
