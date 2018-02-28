@@ -1058,7 +1058,7 @@ in {
     '';
 
     private = mkPrefixedAttrsOfParams {
-      file = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+      file = mkOptionalStrParam ''
         File name in the private folder for which this passphrase should be used.
       '';
 
@@ -1071,7 +1071,7 @@ in {
     '';
 
     rsa = mkPrefixedAttrsOfParams {
-      file = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+      file = mkOptionalStrParam ''
         File name in the <literal>rsa</literal> folder for which this passphrase
         should be used.
       '';
@@ -1084,7 +1084,7 @@ in {
     '';
 
     ecdsa = mkPrefixedAttrsOfParams {
-      file = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+      file = mkOptionalStrParam ''
         File name in the <literal>ecdsa</literal> folder for which this
         passphrase should be used.
       '';
@@ -1097,7 +1097,7 @@ in {
     '';
 
     pkcs8 = mkPrefixedAttrsOfParams {
-      file = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+      file = mkOptionalStrParam ''
         File name in the <literal>pkcs8</literal> folder for which this
         passphrase should be used.
       '';
@@ -1110,7 +1110,7 @@ in {
     '';
 
     pkcs12 = mkPrefixedAttrsOfParams {
-      file = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
+      file = mkOptionalStrParam ''
         File name in the <literal>pkcs12</literal> folder for which this
         passphrase should be used.
       '';
