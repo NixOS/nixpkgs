@@ -9,7 +9,7 @@ let
   # TODO: auto-generate these files using:
   # https://github.com/strongswan/strongswan/tree/master/conf
   # IDEA: extend the format-options.py script to output these Nix files.
-  strongswanParams = import ./strongswan-params.nix lib;
+  #strongswanParams = import ./strongswan-params.nix lib;
   swanctlParams    = import ./swanctl-params.nix    lib;
 in  {
   options.services.strongswan-swanctl = {
@@ -24,7 +24,18 @@ in  {
       '';
     };
 
-    strongswan = paramsToOptions strongswanParams;
+    strongswan.extraConfig = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        Contents of the <literal>strongswan.conf</literal> file.
+      '';
+    };
+
+    # The structured strongswan configuration is commented out for
+    # now in favour of the literal config above. We should first
+    # discus if we want to add the 600+ options by default.
+    #strongswan = paramsToOptions strongswanParams;
     swanctl    = paramsToOptions swanctlParams;
   };
 
@@ -65,7 +76,8 @@ in  {
       path = with pkgs; [ kmod iproute iptables utillinux ];
       environment.STRONGSWAN_CONF = pkgs.writeTextFile {
         name = "strongswan.conf";
-        text = paramsToConf cfg.strongswan strongswanParams;
+        #text = paramsToConf cfg.strongswan strongswanParams;
+        text = cfg.strongswan.extraConfig;
       };
       restartTriggers = [ config.environment.etc."swanctl/swanctl.conf".source ];
       serviceConfig = {
