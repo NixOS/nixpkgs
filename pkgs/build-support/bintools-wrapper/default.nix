@@ -171,7 +171,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (targetPlatform.isx86 || targetPlatform.isArm) "-";
+    sep = optionalString (!targetPlatform.isMips) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isArm     then endianPrefix + "arm"
