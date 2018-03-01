@@ -42,10 +42,8 @@ stdenv.mkDerivation rec {
   pythonPath = [ pygobject3 pyxdg ];
 
   preConfigure = "./bootstrap";
-  postFixup = ''
-    wrapPythonPrograms
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '';
+
+  postFixup = "wrapPythonPrograms";
 
   enableParallelBuilding = true;
 
