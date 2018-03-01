@@ -708,6 +708,7 @@
   tilpner = "Till Höppner <till@hoeppner.ws>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
+  timor = "timor <timor.dd@googlemail.com>";
   tiramiseb = "Sébastien Maccagnoni <sebastien@maccagnoni.eu>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tnias = "Philipp Bartsch <phil@grmr.de>";
