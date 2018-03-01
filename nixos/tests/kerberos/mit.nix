@@ -21,7 +21,6 @@ import ../make-test.nix ({pkgs, ...}: {
       };
     };
     users.extraUsers.alice = { isNormalUser = true; };
-    environment.systemPackages = [ pkgs.krb5Full.dev ];
   };
 
   testScript = ''
