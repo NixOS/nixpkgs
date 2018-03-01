@@ -164,7 +164,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src;
 
   hardeningDisable = [ "format" ];
 
