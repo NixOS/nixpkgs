@@ -7,7 +7,17 @@
 # use packaged gnome3.adwaita-icon-theme
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gucharmap-${version}";
+  version = "10.0.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gucharmap/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "ac07d75924e2d8f436d9492e8f7d54cf109404d34de06886a3967563cd1726a4";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gucharmap"; };
+  };
 
   doCheck = true;
 

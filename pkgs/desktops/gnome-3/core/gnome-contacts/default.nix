@@ -6,7 +6,17 @@
 , libsoup, vala, dbus-glib, automake, autoconf }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-contacts-${version}";
+  version = "3.26";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "f819ac74b2ad581f9741614627f49ef519713324afd9e4fc0ea5ac261a5f68c1";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-contacts"; attrPath = "gnome3.gnome-contacts"; };
+  };
 
   doCheck = true;
 

@@ -3,7 +3,17 @@
 , itstool, gnome3, librsvg, gdk_pixbuf, mpfr, gmp, libsoup, libmpc }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-calculator-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-calculator/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "62215b37fcd73a6bbb106ebd0f25051c81ff0cf6ad84fd4a3ea176bceb5863c7";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-calculator"; attrPath = "gnome3.gnome-calculator"; };
+  };
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 

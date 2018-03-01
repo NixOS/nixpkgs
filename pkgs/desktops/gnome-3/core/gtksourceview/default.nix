@@ -4,7 +4,17 @@
 let
   checkInputs = [ xvfb_run dbus ];
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gtksourceview-${version}";
+  version = "3.24.6";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtksourceview/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gtksourceview"; attrPath = "gnome3.gtksourceview"; };
+  };
 
   propagatedBuildInputs = [
     # Required by gtksourceview-3.0.pc

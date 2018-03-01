@@ -6,7 +6,17 @@
 , gmp, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-documents-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "ba0d3084359d666b90733bb43206d24190fa85304bfe45f674ab6e6a27cb7fc9";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-documents"; attrPath = "gnome3.gnome-documents"; };
+  };
 
   doCheck = true;
 

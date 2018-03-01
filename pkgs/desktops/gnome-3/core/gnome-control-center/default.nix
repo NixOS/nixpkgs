@@ -8,7 +8,17 @@
 , fontconfig, sound-theme-freedesktop, grilo }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-control-center-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-control-center/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "07aed27d6317f2cad137daa6d94a37ad02c32b958dcd30c8f07d0319abfb04c5";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-control-center"; attrPath = "gnome3.gnome-control-center"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

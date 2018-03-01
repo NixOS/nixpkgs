@@ -3,7 +3,17 @@
 , wrapGAppsHook, gnome3 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-font-viewer-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-font-viewer/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "02768a62b4033de5ef9d00602e8c29e5de05255f879b0d9b4d731be9648fe9a0";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-font-viewer"; attrPath = "gnome3.gnome-font-viewer"; };
+  };
 
   doCheck = true;
 

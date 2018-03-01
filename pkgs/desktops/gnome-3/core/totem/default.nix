@@ -5,7 +5,17 @@
 , gdk_pixbuf, file, tracker, nautilus }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "totem-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/totem/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e32fb9a68097045e75c87ad1b8177f5c01aea2a13dcb3b2e71a0f9570fe9ee13";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "totem"; attrPath = "gnome3.totem"; };
+  };
 
   doCheck = true;
 

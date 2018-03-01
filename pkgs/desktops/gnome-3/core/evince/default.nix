@@ -8,7 +8,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evince-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evince/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "79567bdb743cf0c3ed7b638da32afc9b850298f9b4edd532455df4a7e2a4c9d8";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "evince"; };
+  };
 
   nativeBuildInputs = [
     pkgconfig gobjectIntrospection intltool itstool wrapGAppsHook yelp-tools autoreconfHook

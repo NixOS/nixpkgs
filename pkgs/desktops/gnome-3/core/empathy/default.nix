@@ -10,7 +10,17 @@
 , isocodes, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "empathy-${version}";
+  version = "3.12.14";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/empathy/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7d86942ce97edd10ade0e6ae6a210d35e4d627fe4d223377d71fd1840bc6e3a3";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "empathy"; };
+  };
 
   propagatedUserEnvPkgs = [
     gnome-online-accounts shared-mime-info

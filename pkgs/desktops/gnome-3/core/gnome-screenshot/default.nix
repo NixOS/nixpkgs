@@ -3,7 +3,17 @@
 , gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-screenshot-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-screenshot/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1bbc11595d3822f4b92319cdf9ba49dd00f5471b6046c590847dc424a874c8bb";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-screenshot"; attrPath = "gnome3.gnome-screenshot"; };
+  };
 
   doCheck = true;
 

@@ -3,7 +3,17 @@
 , itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-system-monitor-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-system-monitor/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "f848a8c2ca5e164cf09d3a205dd49e4e4bf4b60d43b0969c10443eb519d0e6b3";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-system-monitor"; attrPath = "gnome3.gnome-system-monitor"; };
+  };
 
   doCheck = true;
 

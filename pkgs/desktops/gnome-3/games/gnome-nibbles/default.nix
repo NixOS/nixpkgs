@@ -3,7 +3,17 @@
 , libxml2, libgee, libgames-support }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-nibbles-${version}";
+  version = "3.24.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-nibbles/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0ddc1fe03483958dd5513d04f5919ade991902d12da18a4c2d3307f818a5cb4f";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-nibbles"; attrPath = "gnome3.gnome-nibbles"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

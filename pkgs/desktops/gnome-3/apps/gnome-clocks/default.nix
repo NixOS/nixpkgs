@@ -4,7 +4,17 @@
 , gnome3, gdk_pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-clocks-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-clocks/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "2bd8d8df1d6aa0feddd4afc15d84b1308202fda59a3c3be42e3bce7e9ccd11f7";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-clocks"; attrPath = "gnome3.gnome-clocks"; };
+  };
 
   doCheck = true;
 

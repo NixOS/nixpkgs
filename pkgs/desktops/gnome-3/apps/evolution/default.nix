@@ -7,7 +7,17 @@
 let
   majVer = gnome3.version;
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evolution-${version}";
+  version = "3.26.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "091621f21827e2dfb8057f3b2c3a215c4e97a692c59d0a4ee33108af571de60e";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "evolution"; attrPath = "gnome3.evolution"; };
+  };
 
   doCheck = true;
 

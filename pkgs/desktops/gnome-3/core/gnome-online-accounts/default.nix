@@ -5,7 +5,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-online-accounts-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-online-accounts/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "49f8760d86fe33057eaeeb4f1667bc7f6163e428591e7aed9575563be10b17d1";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-online-accounts"; attrPath = "gnome3.gnome-online-accounts"; };
+  };
 
   NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 

@@ -3,7 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "libpeas-${version}";
+  version = "1.22.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libpeas/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0qm908kisyjzjxvygdl18hjqxvvgkq9w0phs2g55pck277sw0bsv";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "libpeas"; attrPath = "gnome3.libpeas"; };
+  };
 
   configureFlags = [ "--enable-python3" ];
 

@@ -4,7 +4,17 @@
 , docbook_xsl, docbook_xsl_ns, wrapGAppsHook, ibus, xkeyboard_config, tzdata }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-settings-daemon-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-settings-daemon/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "5a3d156b35e03fa3c28fddd0321f6726082a711973dee2af686370faae2e75e4";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-settings-daemon"; attrPath = "gnome3.gnome-settings-daemon"; };
+  };
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

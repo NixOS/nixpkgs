@@ -4,7 +4,17 @@
 , gnome3, librsvg, gdk_pixbuf, file, gspell }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gedit-${version}";
+  version = "3.22.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gedit/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "aa7bc3618fffa92fdb7daf2f57152e1eb7962e68561a9c92813d7bbb7fc9492b";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gedit"; attrPath = "gnome3.gedit"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

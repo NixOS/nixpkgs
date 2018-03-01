@@ -1,7 +1,17 @@
 { stdenv, fetchurl, which, gnome3, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-common-${version}";
+  version = "3.18.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-common/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-common"; attrPath = "gnome3.gnome-common"; };
+  };
 
   patches = [(fetchurl {
     name = "gnome-common-patch";

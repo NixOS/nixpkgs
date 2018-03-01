@@ -6,7 +6,17 @@
 , dleyna-renderer }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-photos-${version}";
+  version = "3.26.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-photos/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "028de4c8662b7d1dc3ca6c3fbe3ce7f6bb90dd097708e99f235a409756dbadab";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-photos"; attrPath = "gnome3.gnome-photos"; };
+  };
 
   # doCheck = true;
 
