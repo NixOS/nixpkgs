@@ -11400,7 +11400,8 @@ with pkgs;
 
   speechd = callPackage ../development/libraries/speechd { };
 
-  speech_tools = callPackage ../development/libraries/speech-tools {};
+  speech-tools = callPackage ../development/libraries/speech-tools {};
+  speech_tools = speech-tools;
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;

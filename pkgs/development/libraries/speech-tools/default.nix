@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "speech_tools-${version}";
-  version = "2.1";
+  version = "2.4";
 
   src = fetchurl {
     url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
-    sha256 = "1s9bkfgdgyas8v2cr7x3dg0ck1xf9mn1q6a73gwy524sjb6nfqgz";
+    sha256 = "043h4fxfiiqxgwvyyyasylypjkpfzajxd6g5s9wsl69r8hn4ihpv";
   };
 
   buildInputs = [ alsaLib ncurses ];
@@ -27,15 +27,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    broken = true;
     description = "Text-to-speech engine";
-    maintainers = with maintainers;
-    [
-      raskin
-    ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://www.festvox.org/packed/festival/";
