@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "dhcp-${version}";
-  version = "4.3.6";
+  version = "4.3.6-P1";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "06vgxhm6agzkp6r1jy10467vrfw2rzcp2mnkcph7ydziciisy7m4";
+    sha256 = "1hx3az6ckvgvybr1ag4k9kqr8zfcpzcww4vpw5gz0mi8y2z7gl9g";
   };
 
   patches =
