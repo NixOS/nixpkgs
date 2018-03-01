@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = http://parity.io;
     license = licenses.gpl3;
     maintainers = [ maintainers.akru ];
+    platforms = platforms.linux;
   };
 }
