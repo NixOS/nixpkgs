@@ -353,7 +353,7 @@ in {
   };
 
   php72 = generic {
-    version = "7.2.2";
-    sha256 = "1vjaixm4f7rz9vz1yrlzmn9rpp01vd7b74m83qjg4wblw5caqhgq";
+    version = "7.2.3";
+    sha256 = "14mzsp6ysjgc7f6vl0z0j996qf8n75yh0aga121dsr571fn5lwsa";
   };
 }
