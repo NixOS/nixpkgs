@@ -3265,6 +3265,8 @@ in {
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
+  pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
+
   pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
