@@ -1,10 +1,14 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
 , glib, dbus, gst_all_1, v4l_utils, alsaLib, ffmpeg, libjack2, libudev, libva, xlibs
-, sbc, SDL2
+, sbc, SDL2, makeFontsConf, freefont_ttf
 }:
 
 let
-  version = "0.1.8";
+  version = "0.1.9";
+
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
 in stdenv.mkDerivation rec {
   name = "pipewire-${version}";
 
@@ -12,7 +16,7 @@ in stdenv.mkDerivation rec {
     owner = "PipeWire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1nim8d1lsf6yxk97piwmsz686w84b09lk6cagbyjr9m3k2hwybqn";
+    sha256 = "0r9mgwbggnnijhdz49fnv0qdka364xn1h8yml2jakyqpfrm3i2nm";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -34,8 +38,9 @@ in stdenv.mkDerivation rec {
     "-Denable_gstreamer=true"
   ];
 
+  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+
   doCheck = true;
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";

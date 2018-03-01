@@ -154,7 +154,7 @@ in
           print-manager
 
           breeze-icons
-          pkgs.hicolor_icon_theme
+          pkgs.hicolor-icon-theme
 
           kde-gtk-config breeze-gtk
 

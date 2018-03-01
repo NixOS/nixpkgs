@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.13";
+  version = "0.4.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "128j9y30zih6cyjyjnxhghnvpjm8vw40a1q7pgmrp035yvkaqkk0";
+    sha256 = "f3765c0f582d2dfc72c15f3b5a82aecfae9498bd29ca840d72f37d7bd38bfcd5";
   };
 
   postPatch = ''

@@ -148,14 +148,13 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callCabal2nix = name: src: args:
       overrideCabal (self.callPackage (haskellSrc2nix {
         inherit name;
-        src = pkgs.lib.cleanSourceWith
-          { src = if pkgs.lib.canCleanSource src
-                    then src
-                    else pkgs.safeDiscardStringContext src;
-            filter = path: type:
-              pkgs.lib.hasSuffix "${name}.cabal" path ||
-              pkgs.lib.hasSuffix "package.yaml" path;
-          };
+        src =
+          let filter = path: type:
+                pkgs.lib.hasSuffix "${name}.cabal" path ||
+                baseNameOf path == "package.yaml";
+          in if pkgs.lib.canCleanSource src
+               then pkgs.lib.cleanSourceWith { inherit src filter; }
+             else src;
       }) args) (_: { inherit src; });
 
     # : { root : Path

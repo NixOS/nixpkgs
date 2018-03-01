@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus_glib, libxklavier, libcanberra_gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier, libcanberra-gtk3, libnotify, nss, polkit, gnome3, mate, wrapGAppsHook
 , pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio
 }:
 
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus_glib
+    dbus-glib
     libxklavier
-    libcanberra_gtk3
+    libcanberra-gtk3
     libnotify
     nss
     polkit

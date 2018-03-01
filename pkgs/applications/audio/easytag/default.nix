@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, flac, itstool, libxml2, gsettings_desktop_schemas
+, libvorbis, libogg, flac, itstool, libxml2, gsettings-desktop-schemas
 , makeWrapper, gnome3
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig intltool ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
-    itstool libxml2 gsettings_desktop_schemas gnome3.defaultIconTheme (stdenv.lib.getLib gnome3.dconf)
+    itstool libxml2 gsettings-desktop-schemas gnome3.defaultIconTheme (stdenv.lib.getLib gnome3.dconf)
   ];
 
   meta = with stdenv.lib; {

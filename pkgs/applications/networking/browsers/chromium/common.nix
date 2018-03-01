@@ -1,4 +1,4 @@
-{ stdenv, ninja, which, nodejs, fetchurl, gnutar
+{ stdenv, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -11,7 +11,7 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus_glib
+, glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
@@ -25,7 +25,7 @@
 , enableHotwording ? false
 , enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
-, gnomeKeyringSupport ? false, libgnome_keyring3 ? null
+, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
@@ -44,8 +44,12 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  gentooPatch = name: sha256: fetchurl {
+  gentooPatch = name: sha256: fetchpatch {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
+    inherit sha256;
+  };
+  githubPatch = commit: sha256: fetchpatch {
+    url = "https://github.com/chromium/chromium/commit/${commit}.patch";
     inherit sha256;
   };
 
@@ -125,10 +129,10 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus_glib
+      glib gtk2 gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-    ] ++ optional gnomeKeyringSupport libgnome_keyring3
+    ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
@@ -147,6 +151,8 @@ let
     ]  ++ optionals (versionRange "64" "65") [
       (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
       (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
+      # missing ninja dep https://github.com/NixOS/nixpkgs/issues/35296#issuecomment-368666833
+      (githubPatch "b1e3cfd4f9bfe43a1e08c5670b51c8c80d3e6372" "17vih86rpsy282r8ikrf2q5gfjdwqzvyn8859i75xzvl8agyhbaa")
     ]  ++ optionals (versionRange "65" "66") [
       #(gentooPatch "chromium-gcc-r0.patch" "127xdwabizn5gz8rf1qsw62i7m0b5bsfjqxv4kdbsnizmjanddf8")
       #(gentooPatch "chromium-memcpy-r0.patch" "1d3vra59wjg2lva7ddv55ff6l57mk9k50llsplr0b7vxk0lh0ps5")

@@ -75,7 +75,10 @@ rec {
     aarch64  = { bits = 64; significantByte = littleEndian; family = "aarch64"; };
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
-    mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
@@ -173,6 +176,7 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
+    android = {};
     cygnus = {};
     gnu = {};
     msvc = {};

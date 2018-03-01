@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, unzip, zlib, pcre, hdf5
-, caffe, glog, boost, google-gflags, protobuf
+, glog, boost, google-gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -12,12 +12,12 @@
 , enableJPEG2K    ? true, jasper
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
+, enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enableContrib   ? false
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
@@ -188,7 +188,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost google-gflags protobuf ]
-    ++ lib.optional (!stdenv.isDarwin) caffe
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -222,11 +221,16 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
+  # Configure can't find the library without this.
+  OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
+
   cmakeFlags = [
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_PERF_TESTS=OFF"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
@@ -238,15 +242,15 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
-  ]
-    ++ lib.optionals stdenv.isDarwin [
-      "-DWITH_OPENCL=OFF"
-      "-DWITH_LAPACK=OFF"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DWITH_OPENCL=OFF"
+    "-DWITH_LAPACK=OFF"
 
-      # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
-      "-DBUILD_opencv_dnn_modern=OFF"
-    ];
+    # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
+    "-DBUILD_opencv_dnn_modern=OFF"
+  ];
 
   enableParallelBuilding = true;
 

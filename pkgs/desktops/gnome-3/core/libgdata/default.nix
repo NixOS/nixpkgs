@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json_glib
-, gobjectIntrospection, liboauth, gnome3, p11_kit, openssl, uhttpmock }:
+{ stdenv, fetchurl, pkgconfig, intltool, libxml2, glib, json-glib
+, gobjectIntrospection, liboauth, gnome3, p11-kit, openssl, uhttpmock }:
 
 let
   majorVersion = "0.17";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig libsoup intltool libxml2 glib gobjectIntrospection
-      liboauth gcr gnome_online_accounts p11_kit openssl uhttpmock ];
+      liboauth gcr gnome-online-accounts p11-kit openssl uhttpmock ];
 
-  propagatedBuildInputs = [ json_glib ];
+  propagatedBuildInputs = [ json-glib ];
 
   meta = with stdenv.lib; {
     description = "GData API library";

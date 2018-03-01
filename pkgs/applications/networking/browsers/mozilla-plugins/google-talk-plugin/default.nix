@@ -1,6 +1,6 @@
 { stdenv, fetchurl, rpm, cpio, mesa_noglu, xorg, cairo
 , libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
-, dbus_glib, alsaLib, libpulseaudio, systemd, pango
+, dbus-glib, alsaLib, libpulseaudio, systemd, pango
 }:
 
 with stdenv.lib;
@@ -36,7 +36,7 @@ let
       stdenv.cc.cc
       alsaLib
       libpulseaudio
-      dbus_glib
+      dbus-glib
       systemd
       curl
       pango

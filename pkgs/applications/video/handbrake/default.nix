@@ -16,9 +16,9 @@
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
   lame, ffmpeg, libdvdread, libdvdnav, libbluray,
   mp4v2, mpeg2dec, x264, x265, libmkv,
-  fontconfig, freetype, hicolor_icon_theme,
+  fontconfig, freetype, hicolor-icon-theme,
   glib, gtk3, intltool, libnotify,
-  gst_all_1, dbus_glib, udev, libgudev, libvpx,
+  gst_all_1, dbus-glib, udev, libgudev, libvpx,
   useGtk ? true, wrapGAppsHook ? null, libappindicator-gtk3 ? null
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
   ] ++ (lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus_glib udev
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
     libgudev
   ]);
 

@@ -2,7 +2,17 @@
 , librsvg, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "five-or-more-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/five-or-more/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7c24f7f2603df99299d38b40b14c005aaad88820113ed71e4b3765ac3b027772";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "five-or-more"; attrPath = "gnome3.five-or-more"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

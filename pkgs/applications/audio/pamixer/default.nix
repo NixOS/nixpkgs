@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "pamixer-${version}";
-  version = "1.3";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/cdemoulins/pamixer/archive/${version}.tar.gz";
-    sha256 = "091676ww4jbf4jr728gjfk7fkd5nisy70mr6f3s1p7n05hjpmfjx";
+    sha256 = "1lsvb4xk1dq762w9c0jn7xvj3v1lzppql9mj1b55fhzdypbrkm6x";
   };
 
   buildInputs = [ boost libpulseaudio ];

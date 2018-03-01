@@ -3,11 +3,11 @@
   sbcl }:
 
 let hashes = {
-  "7.4" = "04jb789nks9llwysxz1zw9pq1dh0j39b5fcmivcc4bq9v9cga2l1";
+  "8.0" = "1x1giy2c1y6krg3kf8pf9wrmvk981shv0pxcwi483yjqm90xng4r";
 };
 in stdenv.mkDerivation rec {
   name = "acl2-${version}";
-  version = "7.4";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";

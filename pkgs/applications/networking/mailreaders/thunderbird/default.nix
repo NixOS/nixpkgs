@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
+, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip
 , hunspell, libevent, libstartup_notification
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   # from firefox, but without sound libraries
   buildInputs =
     [ gtk2 zip libIDL libjpeg zlib bzip2
-      dbus dbus_glib pango freetype fontconfig xorg.libXi
+      dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto

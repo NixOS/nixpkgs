@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./remove-tools-1.9.patch
       ./ssl-cert-file-1.9.patch
-      ./creds-test.patch
+      ./creds-test-1.9.patch
       ./remove-test-pie-1.9.patch
       ./go-1.9-skip-flaky-19608.patch
       ./go-1.9-skip-flaky-20072.patch

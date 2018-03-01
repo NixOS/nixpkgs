@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "webcolors";
-  version = "1.7";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e47e68644d41c0b1f1e4d939cfe4039bdf1ab31234df63c7a4f59d4766487206";
+    sha256 = "030562f624467a9901f0b455fef05486a88cfb5daa1e356bd4aacea043850b59";
   };
 
   checkPhase = ''

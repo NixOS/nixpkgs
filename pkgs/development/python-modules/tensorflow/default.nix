@@ -3,8 +3,9 @@
 , which, swig, binutils, glibcLocales
 , python, jemalloc, openmpi
 , numpy, six, protobuf, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
-, xlaSupport ? true
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null
+# XLA without CUDA is broken
+, xlaSupport ? cudaSupport
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
 , sse42Support ? false
@@ -145,9 +146,10 @@ in buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Computation using data flow graphs for scalable machine learning";
-    homepage = "http://tensorflow.org";
+    homepage = http://tensorflow.org;
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
     platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
+    broken = !(xlaSupport -> cudaSupport);
   };
 }

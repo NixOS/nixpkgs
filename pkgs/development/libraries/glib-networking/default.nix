@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy
-, gsettings_desktop_schemas }:
+, gsettings-desktop-schemas }:
 
 let
   ver_maj = "2.54";
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs = [ glib gnutls libproxy gsettings_desktop_schemas ];
+  propagatedBuildInputs = [ glib gnutls libproxy gsettings-desktop-schemas ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   doCheck = false; # tests need to access the certificates (among other things)
 

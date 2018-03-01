@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
-, clutter_gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
+, clutter-gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
   major = "0.12";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
+  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk sqlite libsoup ];
 
   meta = with stdenv.lib; {
     inherit version;

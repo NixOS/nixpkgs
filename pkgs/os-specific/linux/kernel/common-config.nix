@@ -134,6 +134,7 @@ with stdenv.lib;
   ''}
   NETFILTER y
   NETFILTER_ADVANCED y
+  CGROUP_BPF? y # Required by systemd per-cgroup firewalling
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -450,6 +451,7 @@ with stdenv.lib;
   RC_DEVICES? y # Enable IR devices
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
+  CFS_BANDWIDTH y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers

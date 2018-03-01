@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchgit, fetchpatch
-, pkgconfig, gyp, cmake, gcc7, makeWrapper
-, qtbase, qtimageformats, gtk3, libappindicator-gtk3
+, pkgconfig, gyp, cmake, makeWrapper
+, qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
 
@@ -31,7 +31,12 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake gcc7 makeWrapper ];
+  postPatch = ''
+    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp --replace '"appindicator"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
+    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
+  '';
+
+  nativeBuildInputs = [ pkgconfig gyp cmake makeWrapper ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
