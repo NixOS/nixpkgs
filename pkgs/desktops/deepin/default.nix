@@ -5,6 +5,8 @@ let
 
   self = rec {
 
+    deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
+
     deepin-terminal = callPackage ./deepin-terminal {
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;

@@ -19265,8 +19265,6 @@ with pkgs;
 
   orion = callPackage ../misc/themes/orion {};
 
-  deepin-gtk-theme = callPackage ../misc/themes/deepin { };
-
   elementary-gtk-theme = callPackage ../misc/themes/elementary { };
 
   albatross = callPackage ../misc/themes/albatross { };
