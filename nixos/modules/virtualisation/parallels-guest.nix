@@ -3,9 +3,7 @@
 with lib;
 
 let
-
-  prl-tools = config.boot.kernelPackages.prl-tools;
-
+  prl-tools = config.hardware.parallels.package;
 in
 
 {
@@ -30,6 +28,16 @@ in
           mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
           Recommended to enable for simple file sharing, but extended share use such as for code should
           disable this to manually mount shares.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = config.boot.kernelPackages.prl-tools;
+        defaultText = "config.boot.kernelPackages.prl-tools";
+        example = literalExample "config.boot.kernelPackages.prl-tools";
+        description = ''
+          Defines which package to use for prl-tools. Override to change the version.
         '';
       };
     };
