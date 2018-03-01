@@ -471,10 +471,6 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
-  # Fails to link against with newer gsl versions because a deprecrated function
-  # was removed
-  hmatrix-gsl = super.hmatrix-gsl.override { gsl = pkgs.gsl_1; };
-
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
