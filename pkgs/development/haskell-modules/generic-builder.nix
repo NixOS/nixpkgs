@@ -232,7 +232,10 @@ stdenv.mkDerivation ({
 
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
-
+  '' + (optionalString (isCross && setupHaskellDepends != []) ''
+      setupPackageConfDir="$TMPDIR/setup-package.conf.d"
+      mkdir -p $setupPackageConfDir
+  '') + ''
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
@@ -268,6 +271,28 @@ stdenv.mkDerivation ({
     for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
     done
+  '') + (optionalString (isCross && setupHaskellDepends != []) ''
+      # Note: We'll iterate only over pkgsHostTarget, as pkgsHostHost contain
+      #       packages that are not build-host specific.  I (@angerman) see
+      #       for example in pkgsHostHost: libiconv-x86_64-pc-mingw32 and libiconv-osx-10.11.6
+      #       at the same time.
+      #
+      # We build the Setup.hs on the *build* machine, and as such should only add
+      # dependencies for the build machine.
+      #
+      for p in "''${pkgsHostTarget[@]}"; do
+        if [ -d "$p/lib/${nativeGhc.name}/package.conf.d" ]; then
+          cp -f "$p/lib/${nativeGhc.name}/package.conf.d/"*.conf $setupPackageConfDir/
+          continue
+        fi
+        if [ -d "$p/include" ]; then
+          setupConfigureFlags+=" --extra-include-dirs=$p/include"
+        fi
+        if [ -d "$p/lib" ]; then
+          setupConfigureFlags+=" --extra-lib-dirs=$p/lib"
+        fi
+      done
+      ${nativeGhcCommand}-pkg --${packageDbFlag}="$setupPackageConfDir" recache
   '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
@@ -282,7 +307,11 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${optionalString (isCross && setupHaskellDepends != [])
+       ''
+       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
+       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
+    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
