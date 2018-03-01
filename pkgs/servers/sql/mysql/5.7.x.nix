@@ -49,6 +49,7 @@ self = stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  CXXFLAGS = "-fpermissive";
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
