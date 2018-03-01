@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
 }:
@@ -7,7 +7,17 @@ assert mysqlSupport -> mysql != null;
 assert postgresSupport -> postgresql != null;
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "libgda-${version}";
+  version = "5.2.4";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libgda/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "2cee38dd583ccbaa5bdf6c01ca5f88cc08758b9b144938a51a478eb2684b765e";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "libgda"; attrPath = "gnome3.libgda"; };
+  };
 
   patches = [
     (fetchurl {
@@ -34,6 +44,7 @@ stdenv.mkDerivation rec {
     description = "Database access library";
     homepage = http://www.gnome-db.org/;
     license = [ licenses.lgpl2 licenses.gpl2 ];
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

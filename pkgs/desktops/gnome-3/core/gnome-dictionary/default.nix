@@ -3,7 +3,17 @@
 , gnome3, gtk, glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-dictionary-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-dictionary/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "16b8bc248dcf68987826d5e39234b1bb7fd24a2607fcdbf4258fde88f012f300";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-dictionary"; attrPath = "gnome3.gnome-dictionary"; };
+  };
 
   doCheck = true;
 

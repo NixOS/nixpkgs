@@ -10,7 +10,17 @@
 , libiptcdata }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "tracker-miners-${version}";
+  version = "2.0.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/tracker-miners/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "12413a9f8dfa705a48a2697dcbb3eef12ee91bb98f392a23ba4bda7813e41d1b";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "tracker-miners"; attrPath = "gnome3.tracker-miners"; };
+  };
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 

@@ -4,7 +4,17 @@
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "yelp-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/yelp/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e4cb02ed2f44cfec3c352c957f8a461d9689cbc06eb3b503a58ffe92e1753f1b";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "yelp"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

@@ -12,7 +12,13 @@ let
   pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-shell-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e5a87f2f838d981db9823352b90b2ce2f40d24d31ed9f062dccfa41b820e0b1c";
+  };
 
   # Needed to find /etc/NetworkManager/VPN
   mesonFlags = [ "--sysconfdir=/etc" ];
@@ -70,6 +76,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
+    updateScript = gnome3.updateScript { packageName = "gnome-shell"; attrPath = "gnome3.gnome-shell"; };
   };
 
   meta = with stdenv.lib; {

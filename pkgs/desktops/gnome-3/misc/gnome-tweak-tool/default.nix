@@ -4,7 +4,17 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-tweak-tool-${version}";
+  version = "3.26.4";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-tweak-tool/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "fda08044d22c258bbd93dbad326d282d4d1184b98795ae8e3e5f07f8275005df";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-tweak-tool"; attrPath = "gnome3.gnome-tweak-tool"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

@@ -2,7 +2,17 @@
 , webkitgtk, intltool, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "devhelp-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/devhelp/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "10bd468ae2188abd98af9ba7b81aced337d2206e9d843eb44520be5b00d77d8e";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "devhelp"; attrPath = "gnome3.devhelp"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

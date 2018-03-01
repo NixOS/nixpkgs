@@ -2,7 +2,17 @@
 , librsvg, libcanberra-gtk3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-taquin-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-taquin/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "de352bb2dfcd759de37f6bccf1e4790760e020b4bb06a1bc8d5f03d89613b6fd";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-taquin"; attrPath = "gnome3.gnome-taquin"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

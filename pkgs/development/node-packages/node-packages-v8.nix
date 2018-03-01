@@ -283,6 +283,15 @@ let
         sha512 = "1kvjv5hs1c53b5g2vghpnncn4zj397sa0vpbx1pzpn8ngq52s3xq9923gnl2kzkh1mhyrl277jrh87a766yks89qvz8b4jczr44xr9p";
       };
     };
+    "bencode-2.0.0" = {
+      name = "bencode";
+      packageName = "bencode";
+      version = "2.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/bencode/-/bencode-2.0.0.tgz";
+        sha512 = "3rdjlprrhprwwygnw5aik9pgi1xyr09yvgq3rbr4g3pl1v70mcc1k903x3vh9z782jly6vmnvp44nrskl5rhcxgfdwz19fl1b1qggf2";
+      };
+    };
     "bitfield-rle-2.1.0" = {
       name = "bitfield-rle";
       packageName = "bitfield-rle";
@@ -1768,13 +1777,13 @@ let
         sha512 = "2nbjxg0x7jsa14zhvx68w1vri68hsxzbxz7b7ap76fdp0jkrgna2rq636yxnax04f3f8i2ambj2fpan6qli6vixmfryz78vrapdip8n";
       };
     };
-    "k-rpc-socket-1.7.2" = {
+    "k-rpc-socket-1.8.0" = {
       name = "k-rpc-socket";
       packageName = "k-rpc-socket";
-      version = "1.7.2";
+      version = "1.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/k-rpc-socket/-/k-rpc-socket-1.7.2.tgz";
-        sha512 = "02w1ih1lh86i5ap7c3dy2ml7g5a11r0w300iyxdf6v02qr0j1x3vf78hx5q9dgg3drifab018mgm851m457zzzi05i2z2r1s3zlflc3";
+        url = "https://registry.npmjs.org/k-rpc-socket/-/k-rpc-socket-1.8.0.tgz";
+        sha512 = "0pc9bjnmgfjcgh49lclvz5qnlkzypgirlx5ji2nx15vfn00gwczy5hvfahcxdzcdqsjlwh7q8jw4zj8abdk8qx2cwiqdw8fgg557zvz";
       };
     };
     "kind-of-3.2.2" = {
@@ -3514,8 +3523,12 @@ in
       sources."json-stringify-safe-5.0.1"
       sources."jsprim-1.4.1"
       sources."k-bucket-3.3.1"
-      sources."k-rpc-4.2.1"
-      sources."k-rpc-socket-1.7.2"
+      (sources."k-rpc-4.2.1" // {
+        dependencies = [
+          sources."bencode-2.0.0"
+        ];
+      })
+      sources."k-rpc-socket-1.8.0"
       sources."kind-of-3.2.2"
       sources."last-one-wins-1.0.4"
       sources."length-prefixed-message-3.0.3"
@@ -4123,6 +4136,23 @@ in
       description = "sloc is a simple tool to count SLOC (source lines of code)";
       homepage = "https://github.com/flosse/sloc#readme";
       license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+  };
+  npm = nodeEnv.buildNodePackage {
+    name = "npm";
+    packageName = "npm";
+    version = "5.6.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/npm/-/npm-5.6.0.tgz";
+      sha512 = "0nnr796ik5h8bsd3k9ygivivr3na2ksnf5iipf8dsnn20j10i9sgmhmsnzbimd2pqgjbrpp8gbpl2q7j5c7yjqjfirrh8xcc3v3gpws";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "a package manager for JavaScript";
+      homepage = https://docs.npmjs.com/;
+      license = "Artistic-2.0";
     };
     production = true;
     bypassCache = true;

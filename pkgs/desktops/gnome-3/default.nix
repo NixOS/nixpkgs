@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, lib }:
 
 let
 
@@ -12,6 +12,12 @@ let
     in newself;
 
   callPackage = pkgs.newScope self;
+
+  # Convert a version to branch (3.26.18 → 3.26)
+  # Used for finding packages on GNOME mirrors
+  versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+
+  updateScript = callPackage ./update.nix { };
 
   version = "3.26";
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
