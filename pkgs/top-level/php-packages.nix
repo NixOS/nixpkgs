@@ -470,11 +470,11 @@ let
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     name = "phpcbf-${version}";
-    version = "2.6.0";
+    version = "3.2.3";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "1ijf52cgd85ypvw431nnmzij6156ryhfvmajpkr7plfw0iccqc5j";
+      sha256 = "00p0l01shxx1h6g26j2dbfrp9j7im541das4xps4wrsvc4h4da9l";
     };
 
     phases = [ "installPhase" ];
@@ -491,7 +491,7 @@ let
       description = "PHP coding standard beautifier and fixer";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ cmcdragonkai ];
+      maintainers = with maintainers; [ cmcdragonkai etu ];
     };
   };
 }; in self
