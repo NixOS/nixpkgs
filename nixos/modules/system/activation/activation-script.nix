@@ -61,7 +61,7 @@ in
       apply = set: {
         script =
           ''
-            #! ${pkgs.stdenv.shell}
+            #! ${pkgs.runtimeShell}
 
             systemConfig=@out@
 

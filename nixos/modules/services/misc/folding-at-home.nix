@@ -57,7 +57,7 @@ in {
         chown ${fahUser} ${stateDir}
         cp -f ${pkgs.writeText "client.cfg" cfg.config} ${stateDir}/client.cfg
       '';
-      script = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/fah6'";
+      script = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/fah6'";
     };
 
     services.foldingAtHome.config = ''

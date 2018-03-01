@@ -8,7 +8,7 @@ let
   # in nixpkgs doesn't seem to work properly on NixOS, so let's just fake the two fields SSM
   # looks for. See https://github.com/aws/amazon-ssm-agent/issues/38 for upstream fix.
   fake-lsb-release = pkgs.writeScriptBin "lsb_release" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
 
     case "$1" in
       -i) echo "nixos";;

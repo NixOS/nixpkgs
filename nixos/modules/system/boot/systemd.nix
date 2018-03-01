@@ -241,37 +241,37 @@ let
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.preStart}
             '';
           })
         (mkIf (config.script != "")
           { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.script}
             '' + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
           { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.postStart}
             '';
           })
         (mkIf (config.reload != "")
           { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.reload}
             '';
           })
         (mkIf (config.preStop != "")
           { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.preStop}
             '';
           })
         (mkIf (config.postStop != "")
           { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.stdenv.shell} -e
+              #! ${pkgs.runtimeShell} -e
               ${config.postStop}
             '';
           })

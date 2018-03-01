@@ -14,7 +14,7 @@ let
   # ExecStart= command with '@' doesn't work because we start a shell (new
   # process) that creates a new argv[0].)
   geoip-updater = pkgs.writeScriptBin "geoip-updater" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
     skipExisting=0
     debug()
     {

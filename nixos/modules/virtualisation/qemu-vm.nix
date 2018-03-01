@@ -30,7 +30,7 @@ let
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${pkgs.stdenv.shell}
+      #! ${pkgs.runtimeShell}
 
       NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 

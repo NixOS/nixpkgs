@@ -346,7 +346,7 @@ let
   postgresql = serverInfo.fullConfig.services.postgresql.package;
 
   setupDb = pkgs.writeScript "setup-owncloud-db" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
     PATH="${postgresql}/bin"
     createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
     createdb "${config.dbName}" -O "${config.dbUser}" || true

@@ -43,7 +43,7 @@ let
 
   helpScript = pkgs.writeScriptBin "nixos-help"
     ''
-      #! ${pkgs.stdenv.shell} -e
+      #! ${pkgs.runtimeShell} -e
       browser="$BROWSER"
       if [ -z "$browser" ]; then
         browser="$(type -P xdg-open || true)"
