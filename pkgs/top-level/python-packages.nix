@@ -7577,6 +7577,8 @@ in {
 
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
+  flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
