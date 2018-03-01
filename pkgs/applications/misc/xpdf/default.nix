@@ -1,9 +1,9 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
 , stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
-, cmake, qtbase ? null, makeWrapper
+, cmake, qtbase ? null, qtsvg ? null, makeWrapper
 }:
 
-assert enableGUI -> qtbase != null && freetype != null;
+assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     wrapProgram $out/bin/xpdf \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms
+      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}
   '';
 
   meta = {
