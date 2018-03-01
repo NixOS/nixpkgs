@@ -118,4 +118,7 @@ self: super: {
   comonad = dontCheck super.comonad;
   semigroupoids = dontCheck super.semigroupoids;
 
+  # Newer versions have "base >=4.8 && <5".
+  hashtables = self.hashtables_1_2_1_1;
+
 }
