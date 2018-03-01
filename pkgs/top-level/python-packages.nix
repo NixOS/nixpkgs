@@ -3206,6 +3206,8 @@ in {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
+
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-fixture-config";
