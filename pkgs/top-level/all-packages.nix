@@ -1330,6 +1330,8 @@ with pkgs;
 
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix { };
 
+  rsbep = callPackage ../tools/backup/rsbep { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
     czmq = czmq3;
