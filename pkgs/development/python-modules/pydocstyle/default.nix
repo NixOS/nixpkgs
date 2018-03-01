@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pythonOlder
 , snowballstemmer, six, configparser
 , pytest, pytestpep8, mock, pathlib }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
 
-  checkInputs = [ pytest pytestpep8 mock pathlib ];
+  checkInputs = [ pytest pytestpep8 mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkPhase = ''
     # test_integration.py installs packages via pip
