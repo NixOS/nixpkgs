@@ -410,13 +410,13 @@ let
 
   php-parallel-lint = pkgs.stdenv.mkDerivation rec {
     name = "php-parallel-lint-${version}";
-    version = "0.9.2";
+    version = "1.0.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "JakubOnderka";
       repo = "PHP-Parallel-Lint";
       rev = "v${version}";
-      sha256 = "0dzyi6arwpwbjgr366vw3qxibc3naq863p75q433ahznbdygzzm1";
+      sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
     };
 
     buildInputs = [ pkgs.makeWrapper composer box ];
