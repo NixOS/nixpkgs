@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, enchant, isocodes, vala, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk3, enchant, isocodes, vala, gobjectIntrospection, gnome3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
