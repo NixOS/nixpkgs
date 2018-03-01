@@ -1,17 +1,27 @@
 { fetchurl, stdenv, pkgconfig, gnome3, python3, dconf
 , intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
-, vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json_glib }:
+, p11-kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
+, vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evolution-data-server-${version}";
+  version = "3.26.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "63b1ae5f76be818862f455bf841b5ebb1ec3e1f4df6d3a16dc2be348b7e0a1c5";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "evolution-data-server"; };
+  };
 
   nativeBuildInputs = [
     cmake pkgconfig intltool python3 gperf makeWrapper
   ] ++ stdenv.lib.optional valaSupport vala;
   buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome_online_accounts
-    gcr p11_kit libgweather libgdata libaccounts-glib json_glib
+    glib libsoup libxml2 gtk gnome-online-accounts
+    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
     icu sqlite kerberos openldap webkitgtk
   ];
 

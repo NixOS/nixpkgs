@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
 
   buildInputs = [ gnome3.gtkmm gmime3 webkitgtk24x-gtk3 libsass gnome3.libpeas
-                  notmuch boost gnome3.gsettings_desktop_schemas ];
+                  notmuch boost gnome3.gsettings-desktop-schemas ];
 
   buildPhase = "scons --propagate-environment --prefix=$out build";
   installPhase = "scons --propagate-environment --prefix=$out install";

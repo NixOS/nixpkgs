@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, spice_protocol, gettext, celt_0_5_1
+{ stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , gtk3, epoxy }:
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    spice_protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
+    spice-protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
   ];
 

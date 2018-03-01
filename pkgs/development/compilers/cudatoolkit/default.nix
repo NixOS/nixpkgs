@@ -11,11 +11,12 @@ let
     , name ? ""
     , developerProgram ? false
     , python ? python27
+    , runPatches ? []
     }:
 
     stdenv.mkDerivation rec {
       name = "cudatoolkit-${version}";
-      inherit (args) version;
+      inherit version runPatches;
 
       dontPatchELF = true;
       dontStrip = true;
@@ -48,35 +49,34 @@ let
 
       rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
+      phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+
       unpackPhase = ''
         sh $src --keep --noexec
+
         cd pkg/run_files
         sh cuda-linux*.run --keep --noexec
         sh cuda-samples*.run --keep --noexec
-        cd pkg
-      '';
+        mv pkg ../../$(basename $src)
+        cd ../..
+        rm -rf pkg
 
-      buildPhase = ''
-        chmod -R u+w .
-        while IFS= read -r -d ''$'\0' i; do
-          if ! isELF "$i"; then continue; fi
-          echo "patching $i..."
-          if [[ ! $i =~ \.so ]]; then
-            patchelf \
-              --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-          fi
-          if [[ $i =~ libcudart ]]; then
-            rpath2=
-          else
-            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
-          fi
-          patchelf --set-rpath $rpath2 --force-rpath $i
-        done < <(find . -type f -print0)
+        for patch in $runPatches; do
+          sh $patch --keep --noexec
+          mv pkg $(basename $patch)
+        done
       '';
 
       installPhase = ''
         mkdir $out
+        cd $(basename $src)
         perl ./install-linux.pl --prefix="$out"
+        cd ..
+        for patch in $runPatches; do
+          cd $(basename $patch)
+          perl ./install_patch.pl --silent --accept-eula --installdir="$out"
+          cd ..
+        done
 
         rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
@@ -115,6 +115,23 @@ let
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+      '';
+
+      preFixup = ''
+        while IFS= read -r -d ''$'\0' i; do
+          if ! isELF "$i"; then continue; fi
+          echo "patching $i..."
+          if [[ ! $i =~ \.so ]]; then
+            patchelf \
+              --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+          fi
+          if [[ $i =~ libcudart ]]; then
+            rpath2=
+          else
+            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+          fi
+          patchelf --set-rpath $rpath2 --force-rpath $i
+        done < <(find $out $lib $doc -type f -print0)
       '';
 
       passthru = {
@@ -163,16 +180,28 @@ in {
   };
 
   cudatoolkit8 = common {
-    version = "8.0.61";
+    version = "8.0.61.2";
     url = "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run";
     sha256 = "1i4xrsqbad283qffvysn88w2pmxzxbbby41lw0j1113z771akv4w";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/8.0/Prod2/patches/2/cuda_8.0.61.2_linux-run";
+        sha256 = "1iaz5rrsnsb1p99qiqvxn6j3ksc7ry8xlr397kqcjzxqbljbqn9d";
+      })
+    ];
     gcc = gcc5;
   };
 
   cudatoolkit9 = common {
-    version = "9.0.176";
-    url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
-    sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    version = "9.1.85.1";
+    url = "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_387.26_linux";
+    sha256 = "0lz9bwhck1ax4xf1fyb5nicb7l1kssslj518z64iirpy2qmwg5l4";
+    runPatches = [
+      (fetchurl {
+        url = "https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda_9.1.85.1_linux";
+        sha256 = "1f53ij5nb7g0vb5pcpaqvkaj1x4mfq3l0mhkfnqbk8sfrvby775g";
+      })
+    ];
     gcc = gcc6;
   };
 

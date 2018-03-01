@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = with gnome3; [
     glib gtk3 granite libnotify gettext vte_290 libgee
-    gsettings_desktop_schemas defaultIconTheme
+    gsettings-desktop-schemas defaultIconTheme
   ];
   meta = {
     description = "Elementary OS's terminal";

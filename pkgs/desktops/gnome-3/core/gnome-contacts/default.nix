@@ -1,16 +1,26 @@
-{ stdenv, intltool, fetchurl, evolution_data_server, db
+{ stdenv, intltool, fetchurl, evolution-data-server, db
 , pkgconfig, gtk3, glib, libsecret
-, libchamplain, clutter_gtk, geocode_glib
+, libchamplain, clutter-gtk, geocode-glib
 , bash, wrapGAppsHook, itstool, folks, libnotify, libxml2
-, gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
-, libsoup, vala, dbus_glib, automake, autoconf }:
+, gnome3, librsvg, gdk_pixbuf, file, telepathy-glib, nspr, nss
+, libsoup, vala, dbus-glib, automake, autoconf }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-contacts-${version}";
+  version = "3.26";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "f819ac74b2ad581f9741614627f49ef519713324afd9e4fc0ea5ac261a5f68c1";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-contacts"; attrPath = "gnome3.gnome-contacts"; };
+  };
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard evolution_data_server ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard evolution-data-server ];
 
   # force build from vala
   preBuild = ''
@@ -18,14 +28,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ vala automake autoconf pkgconfig intltool itstool wrapGAppsHook file ];
-  buildInputs = [ gtk3 glib evolution_data_server gnome3.gsettings_desktop_schemas libnotify
-                  folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
-                  libxml2 libsoup gnome3.gnome_online_accounts nspr nss
-                  gdk_pixbuf gnome3.defaultIconTheme libchamplain clutter_gtk geocode_glib db ];
+  buildInputs = [ gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas libnotify
+                  folks gnome3.gnome-desktop telepathy-glib libsecret dbus-glib
+                  libxml2 libsoup gnome3.gnome-online-accounts nspr nss
+                  gdk_pixbuf gnome3.defaultIconTheme libchamplain clutter-gtk geocode-glib db ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share"
     )
   '';
 

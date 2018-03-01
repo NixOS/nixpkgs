@@ -15,13 +15,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=\${out}"
-    "CC=gcc"
-    "AS=as"
-    "LD=ld"
-    "AR=ar"
-    "RANLIB=ranlib"
-    "OBJCOPY=objcopy"
-  ] ++ stdenv.lib.optional stdenv.isArm "ARCH=arm";
+    "CC=${stdenv.cc.targetPrefix}gcc"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ] ++ stdenv.lib.optional stdenv.isArm "ARCH=arm"
+    ++ stdenv.lib.optional stdenv.isAarch64 "ARCH=aarch64";
 
   meta = with stdenv.lib; {
     description = "GNU EFI development toolchain";

@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ]; # won't configure without it, no idea why
 
+  # probably OK after update: https://github.com/json-c/json-c/pull/365
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+
   # compatibility hack (for mypaint at least)
   postInstall = ''
     ln -s json-c.pc "$dev/lib/pkgconfig/json.pc"

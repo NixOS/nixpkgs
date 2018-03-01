@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "5.10.2";
+  version = "5.10.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${version}";
-    sha256 = "00qnd56v4qyzxg0b3ya3flf2jhbbfaibj1y53bd5ciaw3af6zxnd";
+    sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
   };
   
   nativeBuildInputs = [ which perl ];

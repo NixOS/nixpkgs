@@ -4,6 +4,7 @@
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
+, CoreFoundation
 }:
 
 let
@@ -47,9 +48,13 @@ stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.concatStringsSep " " [
+    (stdenv.lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
+    (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
+  ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''
     unset AR

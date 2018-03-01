@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, bzip2, yacc, flex }:
 
-let version = "1.6.15"; in
+let version = "1.6.16"; in
 
 stdenv.mkDerivation rec {
   name = "nfdump-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "phaag";
     repo = "nfdump";
     rev = "v${version}";
-    sha256 = "07grsfkfjy05yfqfcmgp5xpavpck9ps6q7x8x8j79fym5d8gwak5";
+    sha256 = "0dgrzf9m4rg5ygibjw21gjdm9am3570wys7wdh5k16nsnyai1gqm";
   };
 
   nativeBuildInputs = [yacc flex];

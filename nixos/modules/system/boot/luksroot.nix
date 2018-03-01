@@ -228,10 +228,6 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
 
-          # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
-          # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-          "ecb"
-
           (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
@@ -441,7 +437,10 @@ in
     # Some modules that may be needed for mounting anything ciphered
     # Also load input_leds to get caps lock light working (#12456)
     boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" "input_leds" ]
-      ++ luks.cryptoModules;
+      ++ luks.cryptoModules
+      # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+      # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''

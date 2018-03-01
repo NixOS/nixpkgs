@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libxslt, libatasmart, libnotify, dbus_glib, lm_sensors, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libxslt, libatasmart, libnotify, dbus-glib, lm_sensors, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-sensors-applet-${version}";
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     libxslt
     libatasmart
     libnotify
-    dbus_glib
+    dbus-glib
     lm_sensors
     mate.mate-panel
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

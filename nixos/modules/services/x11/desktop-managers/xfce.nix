@@ -61,12 +61,12 @@ in
       # utilities-terminal, accessories-text-editor
       gnome3.defaultIconTheme
 
-      hicolor_icon_theme
+      hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
 
-      desktop_file_utils
-      shared_mime_info
+      desktop-file-utils
+      shared-mime-info
 
       # Needed by Xfce's xinitrc script
       # TODO: replace with command -v

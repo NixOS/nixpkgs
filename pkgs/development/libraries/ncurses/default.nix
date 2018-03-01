@@ -3,6 +3,8 @@
 , abiVersion
 , mouseSupport ? false
 , unicode ? true
+, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
 
@@ -11,23 +13,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = if abiVersion == "5" then "5.9" else "6.0-20171125";
-  name = "ncurses-${version}";
+  version = "6.0-20171125";
+  name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  src = fetchurl (if abiVersion == "5" then {
-    url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
-  } else {
+  src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/ncurses/current/${name}.tgz"
-      "https://invisible-mirror.net/archives/ncurses/current/${name}.tgz"
+      # Remove this mirror on next upgrade, it's only needed because upstream took ncurses-6.0-20171125.tgz down!
+      "http://bld1.alpinelinux.org/distfiles/v3.5/ncurses-${version}.tgz"
+
+      "ftp://ftp.invisible-island.net/ncurses/current/ncurses-${version}.tgz"
+      "https://invisible-mirror.net/archives/ncurses/current/ncurses-${version}.tgz"
     ];
     sha256 = "11adzj0k82nlgpfrflabvqn2m7fmhp2y6pd7ivmapynxqb9vvb92";
-  });
+  };
 
-  # Unnecessarily complicated in order to avoid mass-rebuilds
-  patches = lib.optional (!stdenv.cc.isClang || abiVersion == "5") ./clang.patch
-    ++ lib.optional (stdenv.cc.isGNU && abiVersion == "5") ./gcc-5.patch;
+  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
-  ] ++ lib.optional unicode "--enable-widec";
+  ] ++ lib.optional unicode "--enable-widec"
+    ++ lib.optional enableStatic "--enable-static"
+    ++ lib.optional (!withCxx) "--without-cxx"
+    ++ lib.optional (abiVersion == "5") "--with-abi-version=5";
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";

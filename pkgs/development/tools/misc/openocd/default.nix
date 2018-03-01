@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-implicit-fallthrough"
+    "-Wno-format-truncation"
+    "-Wno-format-overflow"
+  ];
+
   postInstall = ''
     mkdir -p "$out/etc/udev/rules.d"
     rules="$out/share/openocd/contrib/60-openocd.rules"

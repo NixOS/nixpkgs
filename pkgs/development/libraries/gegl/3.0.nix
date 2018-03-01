@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json_glib, intltool, autoreconfHook, libraw
+, librsvg, pango, gtk, bzip2, json-glib, intltool, autoreconfHook, libraw
 , libwebp, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libraw libwebp gnome3.gexiv2
   ];
 
-  propagatedBuildInputs = [ glib json_glib babl ]; # for gegl-3.0.pc
+  propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-3.0.pc
 
   nativeBuildInputs = [ pkgconfig intltool which autoreconfHook ];
 

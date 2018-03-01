@@ -4848,10 +4848,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Encode = buildPerlPackage rec {
-    name = "Encode-2.96";
+    name = "Encode-2.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
-      sha256 = "5dcb19fa5e62c6ca9294f28e9f4676f36477b1025f7e0dca92479633334b3cb1";
+      sha256 = "044d2fc743bdf5ce4509a0e717a7adb31d488dafae63fde794f57a9f47b2ecb7";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -6331,10 +6331,12 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libglade pkgs.gtk2 ];
     meta = {
+      homepage = https://metacpan.org/pod/Gtk2::GladeXML;
       description = "Create user interfaces directly from Glade XML files";
+      license = stdenv.lib.licenses.lgpl2Plus;
     };
   };
-  
+
   Gtk2TrayIcon = buildPerlPackage rec {
     name = "Gtk2-TrayIcon-0.06";
     src = fetchurl {
@@ -7117,10 +7119,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Importer = buildPerlPackage rec {
-    name = "Importer-0.024";
+    name = "Importer-0.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "1d19760ceb366b664985ace9a7ee1b54a438b1e060a5bca6eff0c6a35b07a557";
+      sha256 = "0745138c487d74033d0cbeb36f06595036dc7e688f1a5dbec9cc2fa799e13946";
     };
     meta = {
       description = "Alternative but compatible interface to modules that export symbols";
@@ -7474,16 +7476,16 @@ let self = _self // overrides; _self = with self; {
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "10.60";
+    version = "10.80";
 
     src = fetchurl {
-      url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "1ymcnxf8miw0c1nadpxmvzabmaz837afrwp1k5khhv0s1vv8h2fz";
+      url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
+      sha256 = "14rwr5wk2snqv4yva6fax1gfsdv88941n237m0wyzn3n0xh9dy5w";
     };
 
     meta = with stdenv.lib; {
       description = "ExifTool, a tool to read, write and edit EXIF meta information";
-      homepage = http://www.sno.phy.queensu.ca/~phil/exiftool/;
+      homepage = https://www.sno.phy.queensu.ca/~phil/exiftool/;
 
       longDescription = ''
         ExifTool is a platform-independent Perl library plus a command-line
@@ -8470,6 +8472,27 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PD/PDWARREN/Mail-RFC822-Address-0.3.tar.gz;
       sha256 = "351ef4104ecb675ecae69008243fae8243d1a7e53c681eeb759e7b781684c8a7";
+    };
+  };
+
+  MailSendmail = buildPerlPackage rec {
+    name = "Mail-Sendmail-0.80";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
+      sha256 = "1r38qbkj7jwj8cqy1rnqzkk81psxi08b1aiq392817f3bk5ri2jv";
+    };
+    propagatedBuildInputs = [ DigestMD5 MIMEBase64 Socket TimeLocal ];
+    # The test suite simply loads the module and attempts to send an email to
+    # the module's author, the latter of which is a) more of an integration
+    # test, b) impossible to verify, and c) won't work from a sandbox. Replace
+    # it in its entirety with the following simple smoke test.
+    checkPhase = ''
+      perl -I blib/lib -MMail::Sendmail -e 'print "1..1\nok 1\n"'
+    '';
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Simple platform independent mailer";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11033,7 +11056,7 @@ let self = _self // overrides; _self = with self; {
     # tests fail; look unfinished
     doCheck = false;
     meta = {
-      homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-perl/";
+      homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-perl/;
       description = "Communicate with a smart card using PC/SC";
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with maintainers; [ abbradar ];
@@ -11349,6 +11372,21 @@ let self = _self // overrides; _self = with self; {
       homepage = https://po4a.alioth.debian.org/;
       description = "tools for helping translation of documentation";
       license = with stdenv.lib.licenses; [ gpl2 ];
+    };
+  };
+
+  POETestLoops = buildPerlPackage rec {
+    name = "POE-Test-Loops-1.360";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/${name}.tar.gz";
+      sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
+    };
+    buildInputs = [ ];
+    propagatedBuildInputs = [ ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "Reusable tests for POE::Loop authors";
+      license = stdenv.lib.licenses.artistic2;
     };
   };
 
@@ -12286,6 +12324,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.020.tar.gz;
       sha256 = "9ad4174c45b4c31d5e0b8019ada1fc767093849e77f268f0d1831eeb891dfdd7";
     };
+    postPatch = ''
+      # requires network access
+      rm t/getnameinfo.t
+    '';
     meta = {
       description = "Networking constants and support functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -14132,6 +14174,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod-LinkCheck/;
       description = "Tests POD for invalid links";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestPodNo404s = buildPerlPackage rec {
+    name = "Test-Pod-No404s-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-No404s-0.02.tar.gz";
+      sha256 = "0ycfghsyl9f31kxdppjwx2g5iajrqh3fyywz0x7d8ayndw2hdihi";
+    };
+    propagatedBuildInputs = [ LWPUserAgent ModuleBuildTiny URIFind TestPod ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Test-Pod-No404s/;
+      description = "Checks POD for any http 404 links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

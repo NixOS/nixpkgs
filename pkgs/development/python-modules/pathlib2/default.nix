@@ -22,6 +22,7 @@ if !(pythonOlder "3.4") then null else buildPythonPackage rec {
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
+    sed -i test_pathlib2.py -e "s@hasattr(pwd, 'getpwall')@False@"
   '';
 
   meta = {

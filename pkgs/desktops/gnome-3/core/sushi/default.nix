@@ -1,16 +1,26 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
-, clutter_gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
+, clutter-gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
 , webkitgtk, libmusicbrainz5, icu, makeWrapper, gst_all_1
 , gdk_pixbuf, librsvg, gtk3, harfbuzz }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "sushi-${version}";
+  version = "3.24.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/sushi/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "f90bb95172664486f8d529995007fd12f0df9d0c998e20658b6203f46ce70d48";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "sushi"; attrPath = "gnome3.sushi"; };
+  };
 
   propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ file intltool gobjectIntrospection glib gtk3
-                  clutter_gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
+                  clutter-gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
                   librsvg gnome3.defaultIconTheme libmusicbrainz5 webkitgtk
                   gnome3.evince icu makeWrapper harfbuzz ];
 

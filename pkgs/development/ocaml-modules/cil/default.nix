@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   preConfigure = ''
+    substituteInPlace Makefile.in --replace 'MACHDEPCC=gcc' 'MACHDEPCC=$(CC)'
     export FORCE_PERL_PREFIX=1
   '';
   prefixKey = "-prefix=";

@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gtk2, libpng, exiv2
-, lcms, intltool, gettext, fbida
+{ stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
+, gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 }:
 
 stdenv.mkDerivation rec {
   name = "geeqie-${version}";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
     url = "http://geeqie.org/${name}.tar.xz";
-    sha256 = "0gzc82sy66pbsmq7lnmq4y37zqad1zfwfls3ik3dmfm8s5nmcvsb";
+    sha256 = "0ciygvcxb78pqg59r6p061mkbpvkgv2rv3r79j3kgv3kalb3ln2w";
   };
+
+  # Do not build the changelog as this requires markdown.
+  patches = [ ./geeqie-no-changelog.patch ];
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = [ "--enable-gps" ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool ];
   buildInputs = [
-    autoconf automake gtk2 libpng exiv2 lcms intltool gettext
+    gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
   ];
 
   postInstall = ''
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/geeqie/geeqie-rotate \
         -e '1 a export PATH=${stdenv.lib.makeBinPath [ exiv2 fbida ]}:$PATH'
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK+ based image viewer";
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://geeqie.sourceforge.net;
 
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ jfrankenau pSub ];
     platforms = platforms.gnu;
   };
 }

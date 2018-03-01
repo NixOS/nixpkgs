@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "zuki-themes-${version}";
-  version = "3.24-3";
+  version = "3.26-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
     rev = "v${version}";
-    sha256 = "02zallh1kwxp3sarz6nxm6j7v1rf6wwz7gf8gn81xslqjg188dq6";
+    sha256 = "17p75h1i3hbpshhhliliq0mm88amvfnxq8659vabqd17ccgzwzns";
   };
 
   buildInputs = [ gdk_pixbuf gtk_engines ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Themes for GTK3, gnome-shell and more";
     homepage = https://github.com/lassekongo83/zuki-themes;
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }

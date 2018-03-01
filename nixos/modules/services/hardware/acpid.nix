@@ -53,6 +53,12 @@ in
         description = "Whether to enable the ACPI daemon.";
       };
 
+      logEvents = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Log all event activity.";
+      };
+
       handlers = mkOption {
         type = types.attrsOf (types.submodule {
           options = {
@@ -142,7 +148,7 @@ in
         ConditionPathExists = [ "/proc/acpi" ];
       };
 
-      script = "acpid --confdir ${acpiConfDir}";
+      script = "acpid ${optionalString config.services.acpid.logEvents "--logevents"} --confdir ${acpiConfDir}";
     };
 
   };

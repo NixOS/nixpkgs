@@ -4,7 +4,17 @@
 , gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "baobab-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/baobab/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7a59ab5945f5d90725231b10d85a1893403f56660b1627c111d2b4eeb1ef787e";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "baobab"; };
+  };
 
   doCheck = true;
 

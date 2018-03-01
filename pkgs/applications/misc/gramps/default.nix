@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool,
-  pango, gsettings_desktop_schemas,
+  pango, gsettings-desktop-schemas,
 # Optional packages:
  enableOSM ? true, osm-gps-map
  }:

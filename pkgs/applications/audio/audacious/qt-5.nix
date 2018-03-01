@@ -3,7 +3,7 @@
   gettext, pkgconfig,
   qtbase,
   alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk_pixbuf, lame, libbs2b,
-  libcddb, libcdio082, libcue, libjack2, libmad, libmms, libmodplug,
+  libcddb, libcdio, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
   wavpack
@@ -46,7 +46,7 @@ mkDerivation {
 
     # Plugin dependencies
     alsaLib curl faad2 ffmpeg flac fluidsynth gdk_pixbuf lame libbs2b libcddb
-    libcdio082 libcue libjack2 libmad libmms libmodplug libmowgli
+    libcdio libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
   ];

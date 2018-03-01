@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
               # but they are linked against GPL'd softwares
               # - so the resulting program will be GPL
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

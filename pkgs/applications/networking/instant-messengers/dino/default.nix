@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib_networking
+, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup
 , libgcrypt
 , epoxy
-, at_spi2_core
+, at-spi2-core
 , sqlite
 , dbus
 , gpgme
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobjectIntrospection
-    glib_networking
+    glib-networking
     glib
     gnome3.libgee
     gnome3.defaultIconTheme
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libxkbcommon
     epoxy
-    at_spi2_core
+    at-spi2-core
     dbus
     gettext
   ];

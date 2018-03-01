@@ -16,12 +16,6 @@ in {
         available on http://127.0.0.1:8384/.
       '';
 
-      useInotify = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Provide syncthing-inotify as a service.";
-      };
-
       systemService = mkOption {
         type = types.bool;
         default = true;
@@ -90,6 +84,12 @@ in {
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["services" "syncthing" "useInotify"] ''
+      This option was removed because syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the webinterface.
+    '')
+  ];
 
   ###### implementation
 
@@ -100,8 +100,7 @@ in {
       allowedUDPPorts = [ 21027 ];
     };
 
-    systemd.packages = [ pkgs.syncthing ]
-                       ++ lib.optional cfg.useInotify pkgs.syncthing-inotify;
+    systemd.packages = [ pkgs.syncthing ];
 
     users = mkIf (cfg.user == defaultUser) {
       extraUsers."${defaultUser}" =
@@ -125,7 +124,6 @@ in {
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
         } // config.networking.proxy.envVars;
-        wants = mkIf cfg.useInotify [ "syncthing-inotify.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -140,20 +138,6 @@ in {
 
       syncthing-resume = {
         wantedBy = [ "suspend.target" ];
-      };
-
-      syncthing-inotify = mkIf (cfg.systemService && cfg.useInotify) {
-        description = "Syncthing Inotify File Watcher service";
-        after = [ "network.target" "syncthing.service" ];
-        requires = [ "syncthing.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          SuccessExitStatus = "2";
-          RestartForceExitStatus = "3";
-          Restart = "on-failure";
-          User = cfg.user;
-          ExecStart = "${pkgs.syncthing-inotify.bin}/bin/syncthing-inotify -home=${cfg.dataDir} -logflags=0";
-        };
       };
     };
   };

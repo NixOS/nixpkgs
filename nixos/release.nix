@@ -228,6 +228,7 @@ in rec {
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
+  tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
@@ -258,7 +259,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
-  #tests.fwupd = callTest tests/fwupd.nix {}; # build during evaluation
+  tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gjs = callTest tests/gjs.nix {};
@@ -318,6 +319,7 @@ in rec {
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
   tests.nghttpx = callTest tests/nghttpx.nix { };
+  tests.nix-ssh-serve = callTest tests/nix-ssh-serve.nix { };
   tests.novacomd = callTestOnTheseSystems ["x86_64-linux"] tests/novacomd.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
@@ -339,6 +341,7 @@ in rec {
   tests.pumpio = callTest tests/pump.io.nix {};
   # tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
+  tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.radicale = callTest tests/radicale.nix {};
   tests.rspamd = callSubTests tests/rspamd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
@@ -360,6 +363,7 @@ in rec {
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
+  tests.xrdp = callTest tests/xrdp.nix {};
   tests.yabar = callTest tests/yabar.nix {};
   tests.zookeeper = callTest tests/zookeeper.nix {};
 

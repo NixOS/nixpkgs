@@ -21,7 +21,7 @@
 , bash
 , fetchurl
 , perl
-, gfortran
+, gfortran6
 , python
 , autoreconfHook
 , gettext
@@ -94,13 +94,13 @@ stdenv.mkDerivation rec {
     bash # needed for the build
     perl # needed for the build
     python # needed for the build
-    gfortran # needed to build giac, openblas
+    gfortran6 # needed to build giac, openblas
     autoreconfHook # needed to configure sage with prefix
     gettext # needed to build the singular spkg
-    hevea # needed to build the docs of the giac spkg
     which # needed in configure of mpir
-    # needed to build the docs of the giac spkg
     texinfo # needed to build maxima
+  ] ++ stdenv.lib.optionals(buildDocs) [
+    hevea # needed to build the docs of the giac spkg
     (texlive.combine { inherit (texlive)
       scheme-basic
       collection-pstricks # needed by giac
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gfortran perl which ];
+  nativeBuildInputs = [ gfortran6 perl which ];
 
   patches = [
     # fix usages of /bin/rm
@@ -153,13 +153,13 @@ stdenv.mkDerivation rec {
     cd ..
     mv "$dir" "$out/sage-root"
 
+    export SAGE_SPKG_INSTALL_DOCS='no'
     cd "$out/sage-root" # build in target dir, since `make` is also `make install`
   ''
   + stdenv.lib.optionalString (buildDocs) ''
     mkdir -p "$doc"
     export SAGE_DOC="$doc"
     export SAGE_DOCBUILD_OPTS="--no-pdf-links -k"
-    export SAGE_SPKG_INSTALL_DOCS='no'
   '';
 
   buildFlags = if (buildDocs) then "doc" else "build";
@@ -191,6 +191,13 @@ stdenv.mkDerivation rec {
     rm -f "$out/sage-root/config.status"
     rm -f "$out/sage-root/build/make/Makefile-auto"
     rm -f "$out/sage-home/.sage/gap/libgap-workspace-"*
+    # Make sure unnessessary packages don't end up in the build closure
+    find "$out" \
+        -iname 'config.log' \
+        -delete \
+        -or -iname 'Makefile' \
+        -delete
+    rm -f "$out/lib/R/etc/Renviron"
     # Make sure all shebangs are properly patched
     bash $patchSageShebangs $out
   '';

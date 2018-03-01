@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.6.7";
+  version = "0.7.0";
   name = "${pname}-${version}";
 
   meta = {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d576601116764050c4cf63b417f1c24700b76cf6686f0e51e6b0b77d450e7973";
+    sha256 = "a7ff4a78529257a5412e78cafd6b3025523364c0ab628d579f2771dd66b254bc";
   };
 
   checkInputs = [ pytest ];

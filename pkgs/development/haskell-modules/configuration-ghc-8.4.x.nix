@@ -42,88 +42,53 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Use more recent doctest version to fix build errors.
-  doctest = self.doctest_0_14_0;
-  doctest_0_14_0 = dontCheck super.doctest_0_14_0; # https://github.com/sol/doctest/issues/189
-  QuickCheck = self.QuickCheck_2_11_3;             # needed by doctest-0.14.0
-
-  # https://github.com/tmhedberg/here/pull/22
-  here = doJailbreak super.here;
-
-  # https://github.com/pcapriotti/optparse-applicative/issues/288
-  optparse-applicative = dontCheck super.optparse-applicative;
-
-  # https://github.com/haskell/test-framework/issues/35
-  test-framework-quickcheck2 = doJailbreak super.test-framework-quickcheck2;
-
-  # GHC 8.4.x needs newer versions than LTS-10.x offers by default.
-  ## haddock: panic! (the 'impossible' happened)
-  ##   (GHC version 8.4.20180122 for x86_64-unknown-linux):
-  ## 	extractDecl
-  ## Ambiguous decl for Arg in class:
-  ##     class Example e where
-  ##       type Arg e :: *
-  ##       {-# MINIMAL evaluateExample #-}
-  ##       evaluateExample ::
-  ##         e
-  ##         -> Params
-  ##            -> ActionWith Arg e -> IO () -> ProgressCallback -> IO Result
-  ## Matches:
-  ##     []
-  ## Call stack:
-  ##     CallStack (from HasCallStack):
-  ##       callStackDoc, called at compiler/utils/Outputable.hs:1150:37 in ghc:Outputable
-  ##       pprPanic, called at utils/haddock/haddock-api/src/Haddock/Interface/Create.hs:1013:16 in main:Haddock.Interface.Create
-  ## Please report this as a GHC bug:  http://www.haskell.org/ghc/reportabug
-  hspec = dontHaddock (dontCheck super.hspec_2_4_8);        # test suite causes an infinite loop
-
-  ## Setup: Encountered missing dependencies:
-  ## QuickCheck >=2.3 && <2.10
-  ## builder for ‘/nix/store/d60y5jwn5bpgk2p8ps23c129dcw7whg6-test-framework-0.8.2.0.drv’ failed with exit code 1
-  ## error: build of ‘/nix/store/d60y5jwn5bpgk2p8ps23c129dcw7whg6-test-framework-0.8.2.0.drv’ failed
-  test-framework = dontCheck self.test-framework_0_8_2_0;
-
-  # Undo the override in `configuration-common.nix`: GHC 8.4 bumps Cabal to 2.1:
-  # Distribution/Simple/CCompiler.hs:64:10: error:
-  #  • No instance for (Semigroup CDialect)
-  #      arising from the superclasses of an instance declaration
-  #  • In the instance declaration for ‘Monoid CDialect’
-  #     |
-  #  64 | instance Monoid CDialect where
-  #     |          ^^^^^^^^^^^^^^^
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal; }; #pkgs.haskell.packages.ghc822.jailbreak-cabal;
-
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##
   ##     • Could not deduce (Semigroup (Dict a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: a
   constraints = super.constraints_0_10;
 
   ## Needs bump to a versioned attribute
-  ##
+  ## Issue: https://github.com/sol/doctest/issues/189
+  doctest = overrideCabal super.doctest_0_14_1 (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## ghc >=7.0 && <8.4
+    ##
+    ##        uncaught exception: IOException of type NoSuchThing (cabal: rawSystem: runInteractiveProcess: exec: does not exist (No such file or directory))
+    doCheck         = false;
+  });
+
+  ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
   free = super.free_5;
 
-  funcmp = overrideCabal super.funcmp_1_9 (drv: {
-    ## Needs bump to a versioned attribute
-    ##
-    ## Needed for (<>) in prelude
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## base >=3 && <4.11
+  ## Needed for (<>) in prelude
+  funcmp = super.funcmp_1_9;
+
+  ## Needs bump to a versioned attribute
+  hspec = overrideCabal super.hspec_2_4_8 (drv: {
     ## Setup: Encountered missing dependencies:
-    ## base >=3 && <4.11
-    jailbreak       = true;
+    ## hspec-core ==2.4.4, hspec-discover ==2.4.4
+    ##
+    ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-2.4.8’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘stringbuilder-0.5.1’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## infinite recursion encountered, at undefined position
+    ## test suite causes an infinite loop
+    doCheck         = false;
   });
 
+  ## Needs bump to a versioned attribute
   hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
-    ## Needs bump to a versioned attribute
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck >=2.5.1 && <2.11
     ##
-    ##     • No instance for (Semigroup Summary)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Summary’
     ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-core-2.4.8’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
     ## while evaluating the attribute ‘buildInputs’ of the derivation ‘silently-1.2.5’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
     ## while evaluating the attribute ‘buildInputs’ of the derivation ‘temporary-1.2.1.1’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
@@ -134,43 +99,33 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  ##
-  ## breaks hspec:
   ## Setup: Encountered missing dependencies:
-  ## hspec-discover ==2.4.7
+  ## hspec-discover ==2.4.8
   hspec-discover = super.hspec-discover_2_4_8;
 
-  lens = overrideCabal super.lens_4_16 (drv: {
-    ## Needs bump to a versioned attribute
-    ##
-    ##     • Could not deduce (Apply f)
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## free ==4.*, template-haskell >=2.4 && <2.13
+  lens = super.lens_4_16;
+
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## doctest >=0.11.1 && <0.14
+  semigroupoids = super.semigroupoids_5_2_2;
+
+  ## Needs bump to a versioned attribute
+  ## Issue: https://github.com/haskell/test-framework/issues/35
+  test-framework = overrideCabal super.test-framework_0_8_2_0 (drv: {
+    ##     • No instance for (Semigroup (TestOptions' Maybe))
     ##         arising from the superclasses of an instance declaration
-    ##       from the context: (Contravariant f, Applicative f)
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
-  });
-
-  semigroupoids = overrideCabal super.semigroupoids_5_2_2 (drv: {
-    ## Needs bump to a versioned attribute
+    ##     • In the instance declaration for ‘Monoid (TestOptions' Maybe)’
     ##
-    ##     • Variable not in scope: mappend :: Seq a -> Seq a -> Seq a
     ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
+    ## QuickCheck >=2.3 && <2.10
     doCheck         = false;
   });
 
   ## Needs bump to a versioned attribute
-  ##
-  ##     • No instance for (Semigroup Builder)
-  ##         arising from the superclasses of an instance declaration
-  ##     • In the instance declaration for ‘Monoid Builder’
-  stringbuilder = super.stringbuilder_0_5_1;
-
-  ## Needs bump to a versioned attribute
-  ##
   ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
   ##    |
   ## 80 | import Data.Semigroup (Semigroup(..), Monoid(..))
@@ -179,9 +134,8 @@ self: super: {
 
   ## On Hackage:
 
+  ## On Hackage, awaiting for import
   tasty = overrideCabal super.tasty (drv: {
-    ## On Hackage, awaiting for import
-    ##
     ##     • No instance for (Semigroup OptionSet)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid OptionSet’
@@ -192,9 +146,23 @@ self: super: {
 
   ## Upstreamed
 
+  ## Upstreamed, awaiting a Hackage release
+  deriving-compat = overrideCabal super.deriving-compat (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## template-haskell >=2.5 && <2.13
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell-compat";
+      repo   = "deriving-compat";
+      rev    = "e592c6f8af53866dcf6f5700175a3b02bb4f77d3";
+      sha256 = "0h4qadk7fmz5v3lbdsxfbf3ha81f73xn7v0s6wia16ika5yvfggs";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## th-abstraction >=0.2.2 && <1
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ th-abstraction ]);
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*
     src = pkgs.fetchFromGitHub {
@@ -203,18 +171,13 @@ self: super: {
       rev    = "30d2e6415c5b57760f8754cd3003eb07483d60e6";
       sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
     };
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
   });
 
+  ## Upstreamed, awaiting a Hackage release
   haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.21.*
-    ## cannot build derivation ‘/nix/store/b3d6yr1rzk4hpzg87yk4n5i4321i824f-gi-cairo-1.0.14.drv’: 1 dependencies couldn't be built
+    ## cannot build derivation ‘/nix/store/qvnrni6j2sz8z26kmjz1hgxfxvggkvjl-gi-cairo-1.0.14.drv’: 1 dependencies couldn't be built
     src = pkgs.fetchFromGitHub {
       owner  = "haskell-gi";
       repo   = "haskell-gi";
@@ -224,9 +187,8 @@ self: super: {
     prePatch        = "cd base; ";
   });
 
+  ## Upstreamed, awaiting a Hackage release
   haskell-src-exts = overrideCabal super.haskell-src-exts (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ##     • Could not deduce (Semigroup (ParseResult m))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: Monoid m
@@ -238,9 +200,24 @@ self: super: {
     };
   });
 
+  ## Upstreamed, awaiting a Hackage release
+  http-api-data = overrideCabal super.http-api-data (drv: {
+    ##     • No instance for (Semigroup Form)
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
+    src = pkgs.fetchFromGitHub {
+      owner  = "fizruk";
+      repo   = "http-api-data";
+      rev    = "83aac9540f4a304927c601c5db12f4dc2bf93816";
+      sha256 = "14hy13szr09vsisxi25a4qfajqjwznvn222bqk55dcdlnrgf0zi9";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.7 && <4.11
+    jailbreak       = true;
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   lambdacube-compiler = overrideCabal super.lambdacube-compiler (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12,
     ## base >=4.7 && <4.10,
@@ -255,9 +232,8 @@ self: super: {
     };
   });
 
+  ## Upstreamed, awaiting a Hackage release
   lambdacube-ir = overrideCabal super.lambdacube-ir (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ## Setup: Encountered missing dependencies:
     ## aeson >=0.9 && <0.12, base >=4.8 && <4.10, vector ==0.11.*
     src = pkgs.fetchFromGitHub {
@@ -269,9 +245,8 @@ self: super: {
     prePatch        = "cd lambdacube-ir.haskell; ";
   });
 
+  ## Upstreamed, awaiting a Hackage release
   simple-reflect = overrideCabal super.simple-reflect (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ##     • No instance for (Semigroup Expr)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Expr’
@@ -283,9 +258,8 @@ self: super: {
     };
   });
 
+  ## Upstreamed, awaiting a Hackage release
   singletons = overrideCabal super.singletons (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ## Setup: Encountered missing dependencies:
     ## th-desugar ==1.7.*
     src = pkgs.fetchFromGitHub {
@@ -296,9 +270,21 @@ self: super: {
     };
   });
 
+  ## Upstreamed, awaiting a Hackage release
+  tar = overrideCabal super.tar (drv: {
+    ##     • No instance for (Semigroup (Entries e))
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid (Entries e)’
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell";
+      repo   = "tar";
+      rev    = "abf2ccb8f7da0514343a0b2624cabebe081bdfa8";
+      sha256 = "0s33lgrr574i1r7zc1jqahnwx3dv47ny30mbx5zfpdzjw0jdl5ny";
+    };
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   th-desugar = overrideCabal super.th-desugar (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ##     • Could not deduce (MonadIO (DsM q))
     ##         arising from the 'deriving' clause of a data type declaration
     ##       from the context: Quasi q
@@ -310,9 +296,8 @@ self: super: {
     };
   });
 
+  ## Upstreamed, awaiting a Hackage release
   websockets = overrideCabal super.websockets (drv: {
-    ## Upstreamed, awaiting a Hackage release
-    ##
     ##     • No instance for (Semigroup SizeLimit)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid SizeLimit’
@@ -327,9 +312,8 @@ self: super: {
 
   ## Unmerged
 
+  ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
   blaze-builder = overrideCabal super.blaze-builder (drv: {
-    ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
-    ##
     ##     • No instance for (Semigroup Poke)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Poke’
@@ -341,9 +325,8 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
   bytestring-trie = overrideCabal super.bytestring-trie (drv: {
-    ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
-    ##
     ##     • Could not deduce (Semigroup (Trie a))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: Monoid a
@@ -361,12 +344,11 @@ self: super: {
     doCheck         = false;
     ## Setup: Encountered missing dependencies:
     ## data-or ==1.0.*
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.data-or ];
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-or ]);
   });
 
+  ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
   gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
-    ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
-    ##
     ## Setup: Encountered missing dependencies:
     ## Cabal >=1.24.0.0 && <2.1
     src = pkgs.fetchFromGitHub {
@@ -378,9 +360,8 @@ self: super: {
     prePatch        = "cd tools; ";
   });
 
+  ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
   hashtables = overrideCabal super.hashtables (drv: {
-    ## Unmerged.  PR: https://github.com/gregorycollins/hashtables/pull/46
-    ##
     ##     • No instance for (Semigroup Slot)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Slot’
@@ -392,41 +373,25 @@ self: super: {
     };
   });
 
-  language-c = overrideCabal super.language-c (drv: {
-    ## Unmerged.  PR: https://github.com/visq/language-c/pull/45
-    ##
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘Prelude.<>’,
-    ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
+  ## Unmerged.  PR: https://github.com/sol/hpack/pull/277
+  ## Issue: https://github.com/sol/hpack/issues/276
+  hpack = overrideCabal super.hpack (drv: {
+    ##     • No instance for (Semigroup Dependencies)
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
     src = pkgs.fetchFromGitHub {
       owner  = "deepfire";
-      repo   = "language-c";
-      rev    = "03b120c64c12946d134017f4922b55c6ab4f52f8";
-      sha256 = "1mcv46fq37kkd20rhhdbn837han5knjdsgc7ckqp5r2r9m3vy89r";
+      repo   = "hpack";
+      rev    = "acce0cffcc1d165a0fd9f0b83878dfbd622ea0d6";
+      sha256 = "1wv0ya1gb1hwd9w8g4z5aig694q3arsqhxv0d4wcp270xnq9ja8y";
     };
-    ## /bin/sh: cabal: command not found
-    doCheck         = false;
+    ## Setup: Encountered missing dependencies:
+    ## http-client -any, http-client-tls -any, http-types -any
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ http-client http-client-tls http-types ]);
   });
 
-  language-c_0_7_0 = overrideCabal super.language-c_0_7_0 (drv: {
-    ## Unmerged.  PR: https://github.com/visq/language-c/pull/45
-    ##
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘Prelude.<>’,
-    ##                              imported from ‘Prelude’ at src/Language/C/Pretty.hs:15:8-24
-    src = pkgs.fetchFromGitHub {
-      owner  = "deepfire";
-      repo   = "language-c";
-      rev    = "03b120c64c12946d134017f4922b55c6ab4f52f8";
-      sha256 = "1mcv46fq37kkd20rhhdbn837han5knjdsgc7ckqp5r2r9m3vy89r";
-    };
-    ## /bin/sh: cabal: command not found
-    doCheck         = false;
-  });
-
+  ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
   monadplus = overrideCabal super.monadplus (drv: {
-    ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
-    ##
     ##     • No instance for (Semigroup (Partial a b))
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid (Partial a b)’
@@ -438,9 +403,8 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/reflex-frp/reflex/pull/158
   reflex = overrideCabal super.reflex (drv: {
-    ## Unmerged.  PR: https://github.com/reflex-frp/reflex/pull/158
-    ##
     ##     • Could not deduce (Semigroup (Event t a))
     ##         arising from the superclasses of an instance declaration
     ##       from the context: (Semigroup a, Reflex t)
@@ -463,12 +427,11 @@ self: super: {
     ## monad-control -any,
     ## prim-uniq -any,
     ## reflection -any,
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.data-default self.haskell-src-exts self.lens self.monad-control self.prim-uniq self.reflection self.split self.template-haskell self.unbounded-delays ];
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
   });
 
+  ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
   regex-tdfa = overrideCabal super.regex-tdfa (drv: {
-    ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
-    ##
     ##     • No instance for (Semigroup (CharMap a))
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid (CharMap a)’
@@ -480,9 +443,8 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
   securemem = overrideCabal super.securemem (drv: {
-    ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
-    ##
     ##     • No instance for (Semigroup SecureMem)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid SecureMem’
@@ -494,9 +456,8 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
   text-format = overrideCabal super.text-format (drv: {
-    ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
-    ##
     ##     • No instance for (Semigroup Format)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Format’
@@ -508,9 +469,34 @@ self: super: {
     };
   });
 
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-tls/pull/270
+  tls = overrideCabal super.tls (drv: {
+    ##     • No instance for (Semigroup Credentials)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid Credentials’
+    src = pkgs.fetchFromGitHub {
+      owner  = "ocheron";
+      repo   = "hs-tls";
+      rev    = "763656fbc6c2edabb43fc63d8717960f4b26e6e7";
+      sha256 = "0v7f9b78w6prkbscdx5ggjixll9z1zfqzm5x0ap4wvynnflkspqb";
+    };
+    prePatch        = "cd core; ";
+  });
+
+  ## Unmerged.  PR: https://github.com/Soostone/uri-bytestring/pull/0
+  uri-bytestring = overrideCabal super.uri-bytestring (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## template-haskell >=2.9 && <2.13
+    src = pkgs.fetchFromGitHub {
+      owner  = "koenigmaximilian";
+      repo   = "uri-bytestring";
+      rev    = "105d5855bbf9c78d1e48394677b42a058e242fc9";
+      sha256 = "144hr12k0d61zpgxv62vwlzy6bfs01fqh7qr4qsbv457sznmbb9d";
+    };
+  });
+
+  ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
   wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
-    ## Unmerged.  PR: https://github.com/ivan-m/wl-pprint-text/pull/17
-    ##
     ##     Ambiguous occurrence ‘<>’
     ##     It could refer to either ‘PP.<>’,
     ##                              imported from ‘Prelude.Compat’ at Text/PrettyPrint/Leijen/Text/Monadic.hs:73:1-36
@@ -520,6 +506,34 @@ self: super: {
       rev    = "615b83d1e5be52d1448aa1ab2517b431a617027b";
       sha256 = "1p67v9s878br0r152h4n37smqhkg78v8zxhf4qm6d035s4rzj76i";
     };
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509 = overrideCabal super.x509 (drv: {
+    ##     • No instance for (Semigroup DistinguishedName)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid DistinguishedName’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509; ";
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
+  x509-store = overrideCabal super.x509-store (drv: {
+    ##     • No instance for (Semigroup CertificateStore)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid CertificateStore’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "hs-certificate";
+      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
+      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
+    };
+    prePatch        = "cd x509-store; ";
   });
 
 
@@ -549,12 +563,12 @@ self: super: {
     jailbreak       = true;
   });
 
-  bytes = overrideCabal super.bytes (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
-  });
+  cabal2nix = super.cabal2nix.override {
+    ##     • No instance for (Semigroup (List a))
+    ##         arising from the 'deriving' clause of a data type declaration
+    ##       Possible fix:
+    hpack = self.hpack;
+  };
 
   cabal-doctest = overrideCabal super.cabal-doctest (drv: {
     ## Setup: Encountered missing dependencies:
@@ -564,27 +578,15 @@ self: super: {
 
   ChasingBottoms = overrideCabal super.ChasingBottoms (drv: {
     ## Setup: Encountered missing dependencies:
-    ## base >=4.2 && <4.11
+    ## QuickCheck >=2.3 && <2.11, base >=4.2 && <4.11
     jailbreak       = true;
-  });
-
-  comonad = overrideCabal super.comonad (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
   });
 
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.5 && <4.11
     ## https://github.com/haskell-hvr/deepseq-generics/pull/4
     jailbreak       = true;
-  });
-
-  distributive = overrideCabal super.distributive (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
   });
 
   exception-transformers = overrideCabal super.exception-transformers (drv: {
@@ -611,11 +613,32 @@ self: super: {
     jailbreak       = true;
   });
 
+  here = overrideCabal super.here (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.5 && <4.11
+    ## https://github.com/tmhedberg/here/pull/22
+    jailbreak       = true;
+  });
+
+  hnix = overrideCabal super.hnix (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## deriving-compat ==0.3.*
+    jailbreak       = true;
+  });
+
   integer-logarithms = overrideCabal super.integer-logarithms (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.3 && <4.11
     jailbreak       = true;
   });
+
+  jailbreak-cabal = super.jailbreak-cabal.override {
+    ##     • No instance for (Semigroup CDialect)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid CDialect’
+    ## Undo the override in `configuration-common.nix`: GHC 8.4 bumps Cabal to 2.1:
+    Cabal = self.Cabal;
+  };
 
   kan-extensions = overrideCabal super.kan-extensions (drv: {
     ## Setup: Encountered missing dependencies:
@@ -641,10 +664,9 @@ self: super: {
     jailbreak       = true;
   });
 
-  linear = overrideCabal super.linear (drv: {
+  megaparsec = overrideCabal super.megaparsec (drv: {
     ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
+    ## QuickCheck >=2.7 && <2.11
     doCheck         = false;
   });
 
@@ -666,6 +688,12 @@ self: super: {
     jailbreak       = true;
   });
 
+  scientific = overrideCabal super.scientific (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck >=2.5 && <2.11
+    doCheck         = false;
+  });
+
   tasty-expected-failure = overrideCabal super.tasty-expected-failure (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
@@ -674,22 +702,30 @@ self: super: {
 
   tasty-hedgehog = overrideCabal super.tasty-hedgehog (drv: {
     ## Setup: Encountered missing dependencies:
-    ## base >=4.8 && <4.11, tasty ==0.11.*
+    ## base >=4.8 && <4.11
     jailbreak       = true;
   });
 
+  ## Issue: https://github.com/haskell/test-framework/issues/35
+  test-framework-quickcheck2 = overrideCabal super.test-framework-quickcheck2 (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck >=2.4 && <2.11
+    jailbreak       = true;
+  });
+
+  ## Issue: https://github.com/ChrisPenner/rasa/issues/54
   text-lens = overrideCabal super.text-lens (drv: {
+    ## Failures:
+    ##   test/Spec.hs:136:
+    ##   1) TextLens.range gets "" if invalid range
+    ##        uncaught exception: ErrorCall (Data.Text.Array.new: size overflow
+    ##        CallStack (from HasCallStack):
+    ##          error, called at libraries/text/Data/Text/Array.hs:132:20 in text-1.2.3.0:Data.Text.Array)
+    ## Randomized with seed 2114194349
+    ## Finished in 0.0017 seconds
+    doCheck         = false;
     ## Setup: Encountered missing dependencies:
-    ## base >=4.9.0.0 && <4.10,
-    ## extra >=1.4.10 && <1.5,
-    ## hspec >=2.2.4 && <2.3,
-    ## lens ==4.14.*
-    jailbreak       = true;
-  });
-
-  th-abstraction = overrideCabal super.th-abstraction (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## template-haskell >=2.5 && <2.13
+    ## extra >=1.4.10 && <1.5, lens ==4.14.*
     jailbreak       = true;
   });
 
@@ -697,13 +733,6 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
     jailbreak       = true;
-  });
-
-  trifecta = overrideCabal super.trifecta (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## ghc >=7.0 && <8.4
-    ## /run/current-system/sw/bin/nix-shell: failed to build all dependencies
-    doCheck         = false;
   });
 
   unliftio-core = overrideCabal super.unliftio-core (drv: {
@@ -722,4 +751,5 @@ self: super: {
     ## base >=4.8 && <4.11
     jailbreak       = true;
   });
+
 }

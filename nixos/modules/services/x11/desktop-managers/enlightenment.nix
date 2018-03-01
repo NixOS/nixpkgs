@@ -33,7 +33,7 @@ in
       pkgs.xorg.xauth # used by kdesu
       pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
-      pkgs.shared_mime_info
+      pkgs.shared-mime-info
       pkgs.gnome2.gnomeicontheme
       pkgs.xorg.xcursorthemes
     ];

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -16,6 +17,7 @@ buildPythonPackage rec {
     sha256 = "1w502i5h8xaqf03g6h95h4vs1wqfv6kg925dn63phrwmg1hfz2xx";
   };
 
+  doCheck = !stdenv.isDarwin;
   checkPhase = "HOME=. py.test";
   checkInputs = [ pytest configparser ];
 

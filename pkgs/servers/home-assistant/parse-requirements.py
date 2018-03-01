@@ -14,6 +14,7 @@
 # Then, a Nix attribute set mapping component name to dependencies is created.
 
 from urllib.request import urlopen
+from collections import OrderedDict
 import subprocess
 import os
 import sys
@@ -73,7 +74,7 @@ version = get_version()
 print('Generating component-packages.nix for version {}'.format(version))
 requirements = fetch_reqs(version=version)
 build_inputs = {}
-for component, reqs in requirements.items():
+for component, reqs in OrderedDict(sorted(requirements.items())).items():
     attr_paths = []
     for req in reqs:
         try:

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libgnome_keyring, libX11
+, glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, spice_protocol, spice_gtk, epoxy, at_spi2_core
-, openssl, gsettings_desktop_schemas
+, libsecret, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas
 # The themes here are soft dependencies; only icons are missing without them.
-, hicolor_icon_theme, adwaita-icon-theme
+, hicolor-icon-theme, adwaita-icon-theme
 }:
 
 let
@@ -33,13 +33,13 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake wrapGAppsHook gsettings_desktop_schemas
-                  glib gtk3 gettext libxkbfile libgnome_keyring libX11
+  buildInputs = [ cmake wrapGAppsHook gsettings-desktop-schemas
+                  glib gtk3 gettext libxkbfile libgnome-keyring libX11
                   freerdp libssh libgcrypt gnutls
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
-                  libsecret spice_protocol spice_gtk epoxy at_spi2_core
-                  openssl hicolor_icon_theme adwaita-icon-theme ];
+                  libsecret spice-protocol spice-gtk epoxy at-spi2-core
+                  openssl hicolor-icon-theme adwaita-icon-theme ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
