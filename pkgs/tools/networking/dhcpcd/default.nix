@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev }:
+{ stdenv, fetchurl, pkgconfig, udev, runtimeShellPackage }:
 
 stdenv.mkDerivation rec {
   name = "dhcpcd-7.0.1";
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
 
   # Check that the udev plugin got built.
   postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
+
+  postFixup = ''
+    find $out -type f -print0 | xargs --null sed -i 's|${stdenv.shellPackage}|${runtimeShellPackage}|'
+  '';
 
   meta = {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
