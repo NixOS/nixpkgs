@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  patchPhase = ''
+    patchShebangs pgadmin/ui/embed-xrc
+  '';
+
   preConfigure = ''
     substituteInPlace pgadmin/ver_svn.sh --replace "bin/bash" "$shell"
   '';
