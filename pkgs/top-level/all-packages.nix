@@ -19201,6 +19201,8 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
   });
