@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
 , snowballstemmer, six, configparser
 , pytest, pytestpep8, mock, pathlib }:
 
@@ -6,14 +6,23 @@ buildPythonPackage rec {
   pname = "pydocstyle";
   version = "2.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "15ssv8l6cvrmzgwcdzw76rnl4np3qf0dbwr1wsx76y0hc7lwsnsd";
+  # no tests on PyPI
+  # https://github.com/PyCQA/pydocstyle/issues/302
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = version;
+    sha256 = "1h0k8lpx14svc8dini62j0kqiam10pck5sdzvxa4xhsx7y689g5l";
   };
 
   propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
 
   checkInputs = [ pytest pytestpep8 mock pathlib ];
+
+  checkPhase = ''
+    # test_integration.py installs packages via pip
+    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
+  '';
 
   meta = with lib; {
     description = "Python docstring style checker";
