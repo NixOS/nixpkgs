@@ -36,6 +36,7 @@ stdenv.mkDerivation rec{
     homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ roconnor AndersonTorres ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    # bitcoin needs hexdump to build, which doesn't seem to build on darwin at the moment.
+    platforms = platforms.linux;
   };
 }
