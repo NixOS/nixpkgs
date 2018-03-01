@@ -36,6 +36,7 @@ with lib;
       networkmanager-vpnc = pkgs.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-iodine = pkgs.networkmanager-iodine.override { withGnome = false; };
       pinentry = pkgs.pinentry_ncurses;
+      gobjectIntrospection = pkgs.gobjectIntrospection.override { x11Support = false; };
     };
   };
 }
