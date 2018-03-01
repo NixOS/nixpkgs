@@ -194,6 +194,22 @@ let
 
   nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
 
+  buildPkgDb = ghcName: ''
+    if [ -d "$p/lib/${ghcName}/package.conf.d" ]; then
+      cp -f "$p/lib/${ghcName}/package.conf.d/"*.conf $packageConfDir/
+      continue
+    fi
+    if [ -d "$p/include" ]; then
+      configureFlags+=" --extra-include-dirs=$p/include"
+    fi
+    if [ -d "$p/lib" ]; then
+      configureFlags+=" --extra-lib-dirs=$p/lib"
+    fi
+    if [[ -d "$p/Library/Frameworks" ]]; then
+      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+    fi
+  '';
+
 in
 
 assert allPkgconfigDepends != [] -> pkgconfig != null;
@@ -234,27 +250,31 @@ stdenv.mkDerivation ({
     echo "Build with ${ghc}."
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
+  '' + (optionalString (setupHaskellDepends != []) ''
+    setupPackageConfDir="$TMPDIR/setup-package.conf.d"
+    mkdir -p $setupPackageConfDir
+  '') + ''
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
+  ''
+  # We build the Setup.hs on the *build* machine, and as such should only add
+  # dependencies for the build machine.
+  #
+  # pkgs* arrays defined in stdenv/setup.hs
+  + (optionalString (setupHaskellDepends != []) ''
+    for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
+      ${buildPkgDb nativeGhc.name}
+    done
+    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
+  '')
 
-    # host.*Pkgs defined in stdenv/setup.hs
+    # For normal components
+  + ''
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
-        continue
-      fi
-      if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
-      fi
-      if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
-      fi
-      if [[ -d "$p/Library/Frameworks" ]]; then
-        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
-      fi
+      ${buildPkgDb ghc.name}
     done
   ''
   # only use the links hack if we're actually building dylibs. otherwise, the
@@ -289,7 +309,11 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${optionalString (setupHaskellDepends != [])
+       ''
+       echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
+       GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
+    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
