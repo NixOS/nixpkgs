@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0kzdq3xl6wyclngq307544yk57vpm10wyklkbgzx649z3pls3kyw";
   };
 
+  patchPhase = ''
+    patchShebangs src/configure
+  '';
+
   buildInputs = [ postgresql openssl ];
 
   meta = with stdenv.lib; {
