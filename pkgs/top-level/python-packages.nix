@@ -6024,6 +6024,8 @@ in {
 
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
+  pylama = callPackage ../development/python-modules/pylama { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
@@ -7574,6 +7576,8 @@ in {
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
+
+  flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";

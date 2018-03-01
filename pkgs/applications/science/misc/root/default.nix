@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.10.08";
+  version = "6.12.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "12mddl6pqwwc9nr4jqzp6h1jm4zycazd3v88dz306m1nmk97dlic";
+    sha256 = "1557b9sdragsx9i15qh6lq7fn056bgi87d31kxdl4vl0awigvp5f";
   };
 
   nativeBuildInputs = [ pkgconfig ];

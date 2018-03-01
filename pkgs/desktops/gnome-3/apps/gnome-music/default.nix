@@ -4,7 +4,17 @@
 , makeWrapper, itstool, gnome3, librsvg, gst_all_1 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-music-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-music/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7197dff12f441a52b4011512bfe8ec926f2ce4ca511f79b078e0e612d612f8c3";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-music"; attrPath = "gnome3.gnome-music"; };
+  };
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 

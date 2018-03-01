@@ -5,7 +5,17 @@
 , libsecret, avahi, p11-kit, openssh }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "seahorse-${version}";
+  version = "3.20.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/seahorse/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e2b07461ed54a8333e5628e9b8e517ec2b731068377bf376570aad998274c6df";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "seahorse"; attrPath = "gnome3.seahorse"; };
+  };
 
   doCheck = true;
 

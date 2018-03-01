@@ -1,5 +1,6 @@
 { package ? null
 , maintainer ? null
+, path ? null
 }:
 
 # TODO: add assert statements
@@ -9,22 +10,24 @@ let
   pkgs = import ./../../default.nix { };
 
   packagesWith = cond: return: set:
-    pkgs.lib.flatten
-      (pkgs.lib.mapAttrsToList
-        (name: pkg:
-          let
-            result = builtins.tryEval (
-              if pkgs.lib.isDerivation pkg && cond name pkg
-                then [(return name pkg)]
-              else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
-                then packagesWith cond return pkg
+    pkgs.lib.unique
+      (pkgs.lib.flatten
+        (pkgs.lib.mapAttrsToList
+          (name: pkg:
+            let
+              result = builtins.tryEval (
+                if pkgs.lib.isDerivation pkg && cond name pkg
+                  then [(return name pkg)]
+                else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
+                  then packagesWith cond return pkg
+                else []
+              );
+            in
+              if result.success then result.value
               else []
-            );
-          in
-            if result.success then result.value
-            else []
+          )
+          set
         )
-        set
       );
 
   packagesWithUpdateScriptAndMaintainer = maintainer':
@@ -47,6 +50,14 @@ let
                    (name: pkg: pkg)
                    pkgs;
 
+  packagesWithUpdateScript = path:
+    let
+      attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
+    in
+      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
+                     (name: pkg: pkg)
+                     attrSet;
+
   packageByName = name:
     let
         package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
@@ -63,6 +74,8 @@ let
       [ (packageByName package) ]
     else if maintainer != null then
       packagesWithUpdateScriptAndMaintainer maintainer
+    else if path != null then
+      packagesWithUpdateScript path
     else
       builtins.throw "No arguments provided.\n\n${helpText}";
 
@@ -76,7 +89,11 @@ let
 
         % nix-shell maintainers/scripts/update.nix --argstr package garbas
 
-    to run update script for specific package.
+    to run update script for specific package, or
+
+        % nix-shell maintainers/scripts/update.nix --argstr path gnome3
+
+    to run update script for all package under an attribute path.
   '';
 
   runUpdateScript = package: ''

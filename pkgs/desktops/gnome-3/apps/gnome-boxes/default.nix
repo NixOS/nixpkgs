@@ -9,7 +9,17 @@
 # TODO: ovirt (optional)
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-boxes-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "d00fc083182963dc1bbdee5e743ceb28ba03fbf5a9ea87c78d29dca5fb5b9210";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-boxes"; attrPath = "gnome3.gnome-boxes"; };
+  };
 
   enableParallelBuilding = true;
 

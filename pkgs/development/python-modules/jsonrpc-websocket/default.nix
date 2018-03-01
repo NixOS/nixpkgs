@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
   version = "0.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,17 @@
 , libxslt, intltool, makeWrapper, systemd, xorg, epoxy }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-session-${version}";
+  version = "3.26.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "d9414b368db982d3837ca106e64019f18e6cdd5b13965bea6c7d02ddf5103708";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-session"; attrPath = "gnome3.gnome-session"; };
+  };
 
   configureFlags = "--enable-systemd";
 

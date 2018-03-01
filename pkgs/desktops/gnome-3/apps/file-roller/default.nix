@@ -2,7 +2,17 @@
 , attr, bzip2, acl, wrapGAppsHook, librsvg, gdk_pixbuf, libnotify, nautilus }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "file-roller-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/file-roller/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "3e677b8e1c2f19aead69cf4fc419a19fc3373aaf5d7bf558b4f077f10bbba8a5";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "file-roller"; attrPath = "gnome3.file-roller"; };
+  };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 

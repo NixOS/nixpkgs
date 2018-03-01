@@ -5,7 +5,17 @@
 , gdk_pixbuf, gnome-common, gst_all_1, json-glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "epiphany-${version}";
+  version = "3.26.4";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/epiphany/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "390d50f975f8ab9228016eb60bf4b8ea9a39be0b31467e2d6c27ae75fa1e84ea";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "epiphany"; };
+  };
 
   # Tests need an X display
   mesonFlags = [ "-Dunit_tests=false" ];

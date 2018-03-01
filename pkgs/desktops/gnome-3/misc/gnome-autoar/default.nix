@@ -3,7 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-autoar-${version}";
+  version = "0.2.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-autoar/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e1fe2c06eed30305c38bf0939c72b0e51b4716658e2663a0cf4a4bf57874ca62";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-autoar"; attrPath = "gnome3.gnome-autoar"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 glib ];

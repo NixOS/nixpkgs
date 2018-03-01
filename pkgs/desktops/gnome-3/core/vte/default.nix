@@ -4,7 +4,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "vte-${version}";
+  version = "0.50.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/vte/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "79dd316bfaff48f2fb74d066baae0d830e1f44436796fe410a57297e5c5f09cf";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "vte"; attrPath = "gnome3.vte"; };
+  };
 
   nativeBuildInputs = [ gobjectIntrospection intltool pkgconfig vala gperf libxml2 ];
   buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];

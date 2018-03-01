@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  configureFlags = if stdenv.isDarwin then "--without-ca-certificates"
+    else "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+
+  LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   preBuild = ''
     sed -e "s@${glib.out}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)

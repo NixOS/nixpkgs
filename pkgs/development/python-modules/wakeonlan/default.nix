@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "wakeonlan";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,17 @@
 , vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evolution-data-server-${version}";
+  version = "3.26.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "63b1ae5f76be818862f455bf841b5ebb1ec3e1f4df6d3a16dc2be348b7e0a1c5";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "evolution-data-server"; };
+  };
 
   nativeBuildInputs = [
     cmake pkgconfig intltool python3 gperf makeWrapper

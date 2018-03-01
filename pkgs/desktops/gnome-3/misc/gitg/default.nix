@@ -4,7 +4,17 @@
 , libsoup }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gitg-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gitg/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "26730d437d6a30d6e341b9e8da99d2134dce4b96022c195609f45062f82b54d5";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gitg"; };
+  };
 
   preCheck = ''
     substituteInPlace tests/libgitg/test-commit.c --replace "/bin/bash" "${bash}/bin/bash"
