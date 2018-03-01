@@ -17644,11 +17644,6 @@ with pkgs;
     vte = gnome3.vte;
   };
 
-  deepin-terminal = callPackage ../applications/misc/deepin-terminal {
-    inherit (gnome3) libgee vte;
-    wnck = libwnck3;
-  };
-
   termite = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
