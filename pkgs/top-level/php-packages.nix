@@ -443,11 +443,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "2.6.0";
+    version = "3.2.3";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "02mlv44x508rnkzkwiyh7lg2ah7aqyxcq65q9ycj06czm0xdzs41";
+      sha256 = "193axz56j1kyq458q0y38m99bx31jjjldfg6bv71vgm6zh4rvvs1";
     };
 
     phases = [ "installPhase" ];
@@ -464,7 +464,7 @@ let
       description = "PHP coding standard tool";
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
-      maintainers = with maintainers; [ javaguirre ];
+      maintainers = with maintainers; [ javaguirre etu ];
     };
   };
 
