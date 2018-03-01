@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
+
+  # TODO: Fix Cocoa build. The problem was ARC, which might be related to too
+  #       old version of Apple SDK's.
+  configureFlags = optional stdenv.isDarwin "--disable-cocoa";
 
   patchPhase = ''
     sed -i 's/openjpeg-2.2/openjpeg-${openJpegVersion}/' ext/openjpeg/*
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
     openjpeg libopus librsvg
     fluidsynth libvdpau
     libwebp xvidcore gnutls mesa
-    mjpegtools libgme openssl x265 libxml2
+    libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
     ++ optional faacSupport faac
@@ -67,7 +71,9 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi;
+    ++ optional (!stdenv.isDarwin) wildmidi
+    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
+    ++ optional (!stdenv.isDarwin) mjpegtools;
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 
