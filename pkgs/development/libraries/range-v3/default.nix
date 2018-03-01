@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "range-v3-${version}";
@@ -11,11 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "00bwm7n3wyf49xpr7zjhm08dzwx3lwibgafi6isvfls3dhk1m4kp";
   };
 
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/include
-    mv include/ $out/
-  '';
+  nativeBuildInputs = [ cmake ];
+
+  doCheck = true;
+  checkTarget = "test";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Experimental range library for C++11/14/17";
