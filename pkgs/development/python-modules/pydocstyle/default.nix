@@ -1,5 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, snowballstemmer, configparser,
-  pytest, pytestpep8, mock, pathlib }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, snowballstemmer, six, configparser
+, pytest, pytestpep8, mock, pathlib }:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
@@ -10,11 +11,11 @@ buildPythonPackage rec {
     sha256 = "15ssv8l6cvrmzgwcdzw76rnl4np3qf0dbwr1wsx76y0hc7lwsnsd";
   };
 
-  propagatedBuildInputs = [ snowballstemmer configparser ];
+  propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
 
   checkInputs = [ pytest pytestpep8 mock pathlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python docstring style checker";
     homepage = https://github.com/PyCQA/pydocstyle/;
     license = licenses.mit;
