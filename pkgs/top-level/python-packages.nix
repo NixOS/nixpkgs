@@ -3151,9 +3151,11 @@ in {
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
-  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
-
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
+
+  pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
+
+  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
