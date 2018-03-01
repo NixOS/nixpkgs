@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "range-v3-${version}";
-  version = "2017-01-30";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "ericniebler";
     repo = "range-v3";
-    rev = "bab29767cce120e11872d79a2537bc6f0be76963";
-    sha256 = "0kncpxms3f0nmn6jppp484244xq15d9298g3h3nlm1wvq8ib1jhi";
+    rev = version;
+    sha256 = "00bwm7n3wyf49xpr7zjhm08dzwx3lwibgafi6isvfls3dhk1m4kp";
   };
 
   dontBuild = true;
