@@ -15,16 +15,26 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? targetPlatform != hostPlatform, gmp ? null
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.useAndroidPrebuilt
+  #
+  # We don't do this by default if target != host, or if we target windows.
+  enableShared ? (targetPlatform == hostPlatform && !targetPlatform.isWindows && !targetPlatform.useAndroidPrebuilt)
+
+, # Whetherto build terminfo.
+  enableTerminfo ? !targetPlatform.isWindows
 
 , version ? "8.5.20180118"
+, ghcRevision ? "e1d4140be4d2a1508015093b69e1ef53516e1eb6"
+, ghcSha256 ? "1gdcr10dd968d40qgljdwx9vfkva3yrvjm9a4nis7whaaac3ag58"
+, ghcFlavour ? ""
+, ghcCrossFlavour ? "perf-cross"
+, ghcDiffs ? []
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -38,11 +48,14 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${if targetPlatform != hostPlatform then ghcCrossFlavour else ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
@@ -54,8 +67,9 @@ let
     EXTRA_CC_OPTS += -std=gnu99
   '';
 
+
   # Splicer will pull out correct variations
-  libDeps = platform: [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc") libiconv;
 
@@ -75,8 +89,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "e1d4140be4d2a1508015093b69e1ef53516e1eb6";
-    sha256 = "1gdcr10dd968d40qgljdwx9vfkva3yrvjm9a4nis7whaaac3ag58";
+    rev = "${ghcRevision}";
+    sha256 = "${ghcSha256}";
   };
 
   enableParallelBuilding = true;
