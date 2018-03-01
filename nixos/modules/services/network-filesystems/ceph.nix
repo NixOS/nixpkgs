@@ -26,7 +26,7 @@ let
       LimitNOFILE = 1048576;
       LimitNPROC = 1048576;
       Environment = "CLUSTER=${clusterName}";
-      ExecReload = "/bin/kill -HUP $MAINPID";
+      ExecReload = "${pkgs.coreutil}/bin/kill -HUP $MAINPID";
       PrivateDevices = "yes";
       PrivateTmp = "true";
       ProtectHome = "true";
