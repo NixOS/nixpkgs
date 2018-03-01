@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
 
@@ -9,14 +9,15 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.33";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_33_RTM/src/${name}.tar.gz";
-    sha256 = "1r44qa4j7sri50mxxbnrpm6fxprwrhv76whi7bfq73j06syxmw4q";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_34_1_RTM/src/${name}.tar.gz";
+    sha256 = "186x33wsk4mzjz7dzbn8p0py9a0nzkgzpfkdv4rlyy5gghv5vhd3";
   };
 
-  buildInputs = [ perl zlib sqlite ];
+  buildInputs = [ perl zlib sqlite ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ nspr ];
 
@@ -32,6 +33,10 @@ in stdenv.mkDerivation rec {
     ];
 
   patchFlags = "-p0";
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+  '';
 
   outputs = [ "out" "dev" "tools" ];
 

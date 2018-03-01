@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "elvish-${version}";
-  version = "0.10";
+  version = "0.11";
 
   goPackagePath = "github.com/elves/elvish";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     repo = "elvish";
     owner = "elves";
     rev = version;
-    sha256 = "0v6byd81nz0fbd3sdlippi1jn1z3gbqc2shnr7akd1n6k9259vrj";
+    sha256 = "1rzgy1ql381nwsdjgiwv4mdr1xwivnpmzgkdzms8ipn2lbwhff87";
   };
 
   meta = with stdenv.lib; {

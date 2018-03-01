@@ -25,3 +25,15 @@ if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi
+
+mesonCheckPhase() {
+    runHook preCheck
+
+    meson test
+
+    runHook postCheck
+}
+
+if [ -z "$dontUseMesonCheck" -a -z "$checkPhase" ]; then
+    checkPhase=mesonCheckPhase
+fi

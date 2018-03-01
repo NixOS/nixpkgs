@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
@@ -6,18 +6,15 @@
 , enableCli ? true
 }:
 
-let
-  version = "2.92";
-in
-
 let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
+  version = "2.93";
 
   src = fetchurl {
-    url = "https://transmission.cachefly.net/transmission-${version}.tar.xz";
-    sha256 = "0pykmhi7pdmzq47glbj8i2im6iarp4wnj4l1pyvsrnba61f0939s";
+    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.93.tar.xz";
+    sha256 = "8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b";
   };
 
   nativeBuildInputs = [ pkgconfig ]

@@ -331,12 +331,19 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Dafny = buildDotnetPackage rec {
     baseName = "Dafny";
-    version = "1.9.8";
+    version = "2.1.0";
 
     src = fetchurl {
       url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
-      sha256 = "0n4pk4cv7d2zsn4xmyjlxvpfl9avq79r06c7kzmrng24p3k4qj6s";
+      sha256 = "1iyhy0zpi6wvqif7826anzgdipgsy5bk775ds9qqwfw27j7x6fy5";
     };
+
+    postPatch = ''
+      sed -i \
+        -e 's/ Visible="False"//' \
+        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
+        Source/*/*.csproj
+    '';
 
     preBuild = ''
       ln -s ${pkgs.z3} Binaries/z3
@@ -345,7 +352,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     buildInputs = [ Boogie ];
 
     xBuildFiles = [ "Source/Dafny.sln" ];
-    xBuildFlags = [ ];
+    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
 
     outputFiles = [ "Binaries/*" ];
 
@@ -715,7 +722,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = http://numerics.mathdotnet.com/;
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -872,7 +879,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

@@ -1,20 +1,18 @@
 { stdenv, fetchFromGitHub, rustPlatform, makeWrapper
 , fontconfig, harfbuzz-icu, openssl, pkgconfig }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "tectonic-${version}";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "v${version}";
-    sha256 = "0k5vkn112bjwh4wnxryzqz79dlja64k7s105mf3yaik136hqnmqv";
+    sha256 = "007l0l9xnyayiqiap22zlsp8l9afdw803064cj8inr3q7ckzfcpb";
   };
 
-  cargoSha256 = "03bqhgz8c4ipdkd3g448bcrr6d188h87vskcfcc3mqlcxg77b8q5";
+  cargoSha256 = "0kjy9zrjlrlkr2il62nz35hm1nndyym9dbnas43hzz7y8hdf859k";
 
   nativeBuildInputs = [ pkgconfig ];
 

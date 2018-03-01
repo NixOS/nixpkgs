@@ -16,7 +16,7 @@
 
 */
 
-{ stdenv, version, kernelPlatform, extraConfig, features }:
+{ stdenv, version, extraConfig, features }:
 
 with stdenv.lib;
 
@@ -51,7 +51,7 @@ with stdenv.lib;
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
-  ${optionalString (stdenv.system == "x86_64-linux" || stdenv.system == "aarch64-linux") ''
+  ${optionalString (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") ''
     NR_CPUS 384
   ''}
 
@@ -134,6 +134,7 @@ with stdenv.lib;
   ''}
   NETFILTER y
   NETFILTER_ADVANCED y
+  CGROUP_BPF? y # Required by systemd per-cgroup firewalling
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -232,18 +233,23 @@ with stdenv.lib;
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
-  USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
-  USB_SERIAL_KEYSPAN_USA28 y
-  USB_SERIAL_KEYSPAN_USA28X y
-  USB_SERIAL_KEYSPAN_USA28XA y
-  USB_SERIAL_KEYSPAN_USA28XB y
-  USB_SERIAL_KEYSPAN_USA19 y
-  USB_SERIAL_KEYSPAN_USA18X y
-  USB_SERIAL_KEYSPAN_USA19W y
-  USB_SERIAL_KEYSPAN_USA19QW y
-  USB_SERIAL_KEYSPAN_USA19QI y
-  USB_SERIAL_KEYSPAN_USA49W y
-  USB_SERIAL_KEYSPAN_USA49WLC y
+
+  # Include firmware for various USB serial devices.
+  # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
+  ${optionalString (versionOlder version "4.16") ''
+    USB_SERIAL_KEYSPAN_MPR y
+    USB_SERIAL_KEYSPAN_USA28 y
+    USB_SERIAL_KEYSPAN_USA28X y
+    USB_SERIAL_KEYSPAN_USA28XA y
+    USB_SERIAL_KEYSPAN_USA28XB y
+    USB_SERIAL_KEYSPAN_USA19 y
+    USB_SERIAL_KEYSPAN_USA18X y
+    USB_SERIAL_KEYSPAN_USA19W y
+    USB_SERIAL_KEYSPAN_USA19QW y
+    USB_SERIAL_KEYSPAN_USA19QI y
+    USB_SERIAL_KEYSPAN_USA49W y
+    USB_SERIAL_KEYSPAN_USA49WLC y
+  ''}
 
   # Device mapper (RAID, LVM, etc.)
   MD y
@@ -343,15 +349,16 @@ with stdenv.lib;
 
   # Security related features.
   RANDOMIZE_BASE? y
-  STRICT_DEVMEM y # Filter access to /dev/mem
+  STRICT_DEVMEM? y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-  '' else ''
-    CC_STACKPROTECTOR_REGULAR? y
-  ''}
+  ${optionalString (! stdenv.hostPlatform.isArm)
+    (if versionOlder version "3.14" then ''
+        CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
+      '' else ''
+        CC_STACKPROTECTOR_REGULAR? y
+      '')}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
@@ -368,6 +375,15 @@ with stdenv.lib;
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
+  ''}
+
+  ${optionalString (versionAtLeast version "4.10") ''
+    # Write Back Throttling
+    # https://lwn.net/Articles/682582/
+    # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
+    BLK_WBT y
+    BLK_WBT_SQ y
+    BLK_WBT_MQ y
   ''}
 
   # Misc. options.
@@ -435,6 +451,7 @@ with stdenv.lib;
   RC_DEVICES? y # Enable IR devices
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
+  CFS_BANDWIDTH y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
@@ -620,15 +637,17 @@ with stdenv.lib;
   FW_LOADER_USER_HELPER_FALLBACK? n
 
   # Disable various self-test modules that have no use in a production system
-  ${optionalString (versionOlder version "4.4") ''
-    ARM_KPROBES_TEST? n
-  ''}
-
+  # This menu disables all/most of them on >= 4.16
+  RUNTIME_TESTING_MENU? n
+  # For older kernels, painstakingly disable each symbol.
+  ARM_KPROBES_TEST? n
   ASYNC_RAID6_TEST? n
   ATOMIC64_SELFTEST? n
   BACKTRACE_SELF_TEST? n
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
+  DRM_DEBUG_MM_SELFTEST? n
+  EFI_TEST? n
   GLOB_SELFTEST? n
   INTERVAL_TREE_TEST? n
   LNET_SELFTEST? n
@@ -637,41 +656,50 @@ with stdenv.lib;
   NOTIFIER_ERROR_INJECTION? n
   PERCPU_TEST? n
   RBTREE_TEST? n
+  RCU_PERF_TEST? n
   RCU_TORTURE_TEST? n
+  TEST_ASYNC_DRIVER_PROBE? n
+  TEST_BITMAP? n
   TEST_BPF? n
   TEST_FIRMWARE? n
+  TEST_HASH? n
   TEST_HEXDUMP? n
+  TEST_KMOD? n
   TEST_KSTRTOX? n
   TEST_LIST_SORT? n
   TEST_LKM? n
+  TEST_PARMAN? n
   TEST_PRINTF? n
   TEST_RHASHTABLE? n
+  TEST_SORT? n
   TEST_STATIC_KEYS? n
   TEST_STRING_HELPERS? n
   TEST_UDELAY? n
   TEST_USER_COPY? n
+  TEST_UUID? n
+  WW_MUTEX_SELFTEST? n
   XZ_DEC_TEST? n
 
-  ${optionalString (versionAtLeast version "4.13") ''
-    TEST_KMOD n
+  ${optionalString (features.criu or false)  ''
+    EXPERT y
+    CHECKPOINT_RESTORE y
   ''}
 
-  ${optionalString (versionOlder version "4.4") ''
-    EFI_TEST? n
-    RCU_PERF_TEST? n
-    TEST_ASYNC_DRIVER_PROBE? n
-    TEST_BITMAP? n
-    TEST_HASH? n
-    TEST_UUID? n
+  ${optionalString ((features.criu or false) && (features.criu_revert_expert or true))
+    # Revert some changes, introduced by EXPERT, when necessary for criu
+  ''
+    RFKILL_INPUT? y
+    HID_PICOLCD_FB? y
+    HID_PICOLCD_BACKLIGHT? y
+    HID_PICOLCD_LCD? y
+    HID_PICOLCD_LEDS? y
+    HID_PICOLCD_CIR? y
+    DEBUG_MEMORY_INIT? y
   ''}
 
-  ${optionalString (versionAtLeast version "4.11") ''
-    DRM_DEBUG_MM_SELFTEST? n
-    TEST_PARMAN? n
-    TEST_SORT? n
-    WW_MUTEX_SELFTEST? n
+  ${optionalString (features.debug or false)  ''
+    DEBUG_INFO y
   ''}
 
-  ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''

@@ -21,11 +21,18 @@ stdenv.mkDerivation rec {
   src = [ arcanist libphutil ];
   buildInputs = [ php makeWrapper flex ];
 
-  unpackPhase = "true";
-  buildPhase = ''
+  unpackPhase = ''
     cp -R ${libphutil} libphutil
     cp -R ${arcanist} arcanist
     chmod +w -R libphutil arcanist
+  '';
+
+  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace libphutil/support/xhpast/Makefile \
+      --replace "-minline-all-stringops" ""
+  '';
+
+  buildPhase = ''
     (
       cd libphutil/support/xhpast
       make clean all install

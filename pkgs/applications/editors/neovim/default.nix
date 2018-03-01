@@ -1,16 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
 , libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, makeWrapper, vimUtils, xsel, gperf, callPackage
-
-, withPython ? true, pythonPackages, extraPythonPackages ? []
-, withPython3 ? true, python3Packages, extraPython3Packages ? []
+, unibilium, vimUtils, xsel, gperf, callPackage
 , withJemalloc ? true, jemalloc
-, withRuby ? true, bundlerEnv, ruby
-
-, withPyGUI ? false
-, vimAlias ? false
-, viAlias ? false
-, configure ? null
 }:
 
 with stdenv.lib;
@@ -41,59 +32,20 @@ let
       description = "VT220/xterm/ECMA-48 terminal emulator library";
       homepage = http://www.leonerd.org.uk/code/libvterm/;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx garbas ];
+      maintainers = with maintainers; [ garbas ];
       platforms = platforms.unix;
     };
   };
 
-  rubyEnv = bundlerEnv {
-    name = "neovim-ruby-env";
-    gemdir = ./ruby_provider;
-    postBuild = ''
-      ln -s ${ruby}/bin/* $out/bin
-    '';
-  };
-  rubyWrapper = ''--cmd \"let g:ruby_host_prog='$out/bin/nvim-ruby'\" '';
-
-  pluginPythonPackages = if configure == null then [] else builtins.concatLists
-    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
-         (vimUtils.requiredPlugins configure));
-  pythonEnv = pythonPackages.python.buildEnv.override {
-    extraLibs = (
-        if withPyGUI
-          then [ pythonPackages.neovim_gui ]
-          else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages ++ pluginPythonPackages;
-    ignoreCollisions = true;
-  };
-  pythonWrapper = ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '';
-
-  pluginPython3Packages = if configure == null then [] else builtins.concatLists
-    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
-         (vimUtils.requiredPlugins configure));
-  python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
-    ignoreCollisions = true;
-  };
-  python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';
-
-  additionalFlags =
-    optionalString (withPython || withPython3 || withRuby)
-      ''--add-flags "${(optionalString withPython pythonWrapper) +
-                       (optionalString withPython3 python3Wrapper) +
-                       (optionalString withRuby rubyWrapper)}" --unset PYTHONPATH '' +
-    optionalString (withRuby)
-      ''--suffix PATH : \"${rubyEnv}/bin\" --set GEM_HOME \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
-
   neovim = stdenv.mkDerivation rec {
-    name = "neovim-${version}";
-    version = "0.2.1";
+    name = "neovim-unwrapped-${version}";
+    version = "0.2.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "19ppj0i59kk70j09gap6azm0jm4y95fr5fx7n9gx377y3xjs8h03";
+      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
     };
 
     enableParallelBuilding = true;
@@ -113,7 +65,6 @@ let
     nativeBuildInputs = [
       cmake
       gettext
-      makeWrapper
       pkgconfig
     ];
 
@@ -140,17 +91,6 @@ let
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
-    '' + optionalString withPython ''
-      ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
-    '' + optionalString withPython3 ''
-      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
-    '' + optionalString withPython3 ''
-      ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-    '' + optionalString withPyGUI ''
-      makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
-        --prefix PATH : "$out/bin"
-    '' + optionalString (withPython || withPython3 || withRuby) ''
-      wrapProgram $out/bin/nvim ${additionalFlags}
     '';
 
     meta = {
@@ -175,24 +115,5 @@ let
     };
   };
 
-in if (vimAlias == false && viAlias == false && configure == null)
-      then neovim
-      else stdenv.mkDerivation {
-  name = "neovim-${neovim.version}-configured";
-  inherit (neovim) version meta;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildCommand = ''
-    mkdir -p $out/bin
-    for item in ${neovim}/bin/*; do
-      ln -s $item $out/bin/
-    done
-  '' + optionalString vimAlias ''
-    ln -s $out/bin/nvim $out/bin/vim
-  '' + optionalString viAlias ''
-    ln -s $out/bin/nvim $out/bin/vi
-  '' + optionalString (configure != null) ''
-    wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
-  '';
-}
+in
+  neovim

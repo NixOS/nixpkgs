@@ -1,5 +1,5 @@
 # You can specify some extra mirrors and a cache DB via options
-{stdenv, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}:
+{stdenvNoCC, monotone, defaultDBMirrors ? [], cacheDB ? "./mtn-checkout.db"}:
 # dbs is a list of strings
 # each is an url for sync
 
@@ -8,7 +8,7 @@
 {name ? "mtn-checkout", dbs ? [], sha256
 , selector ? "h:" + branch, branch}:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   builder = ./builder.sh;
   nativeBuildInputs = [monotone];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   dbs = defaultDBMirrors ++ dbs;
   inherit branch cacheDB name selector;
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
 
 }
 

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, unzip, zip, perl, aspell, dos2unix}:
+{stdenv, fetchFromGitHub, unzip, zip, perl, aspell, dos2unix, singleWordlist ? null}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "scowl";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$PWD/varcon"
   '';
 
-  postBuild = ''
+  postBuild = stdenv.lib.optionalString (singleWordlist == null) ''
     (
     cd scowl/speller
     make aspell
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  installPhase = ''
+  installPhase = if singleWordlist == null then ''
     eval "$preInstall"
 
     mkdir -p "$out/share/scowl" 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
         fi
 
         echo $region $regcode $regcode_sz
-        for s in 10 20 30 35 40 50 55 60 70 80 90; do
+        for s in 10 20 30 35 40 50 55 60 70 80 90 95; do
           ./mk-list $regcode $s > "$out/share/dict/w$region.$s"
           ./mk-list --variants=1 $regcode_var $s > "$out/share/dict/w$region.variants.$s"
           ./mk-list --variants=2 $regcode_var $s > "$out/share/dict/w$region.acceptable.$s"
@@ -88,6 +88,10 @@ stdenv.mkDerivation rec {
     )
 
     eval "$postInstall"
+  '' else ''
+    mkdir -p "$out/share/dict"
+    cd scowl
+    ./mk-list ${singleWordlist} > "$out/share/dict/words.txt"
   '';
 
   meta = {

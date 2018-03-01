@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     homepage    = http://cpp-netlib.org;
     license     = licenses.boost;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

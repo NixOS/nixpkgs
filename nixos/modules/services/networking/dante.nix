@@ -47,7 +47,7 @@ in
 
     systemd.services.dante = {
       description   = "Dante SOCKS v4 and v5 compatible proxy server";
-      after         = [ "network.target" ];
+      after         = [ "network-online.target" ];
       wantedBy      = [ "multi-user.target" ];
 
       serviceConfig = {

@@ -25,14 +25,8 @@
       pruviloj = [ self.prelude self.base ];
     };
 
-    files = builtins.filter (n: n != "default") (pkgs.lib.mapAttrsToList (name: type: let
-      m = builtins.match "(.*)\\.nix" name;
-    in if m == null then "default" else builtins.head m) (builtins.readDir ./.));
-  in (builtins.listToAttrs (map (name: {
-    inherit name;
-
-    value = callPackage (./. + "/${name}.nix") {};
-  }) files)) // {
+  in
+    {
     inherit idris-no-deps callPackage;
     # See #10450 about why we have to wrap the executable
     idris =
@@ -40,7 +34,28 @@
           idris-no-deps
           { path = [ pkgs.gcc ]; lib = [pkgs.gmp]; };
 
+
+    with-packages = callPackage ./with-packages.nix {} ;
+
+    build-builtin-package = callPackage ./build-builtin-package.nix {};
+
+    build-idris-package = callPackage ./build-idris-package.nix {};
+
+    # Libraries
+
     # A list of all of the libraries that come with idris
     builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;
+
+    httpclient = callPackage ./httpclient.nix {};
+
+    lightyear = callPackage ./lightyear.nix {};
+
+    optparse = callPackage ./optparse.nix {};
+
+    wl-pprint = callPackage ./wl-pprint.nix {};
+
+    specdris = callPackage ./specdris.nix {};
+
+
   } // builtins_;
 in fix' (extends overrides idrisPackages)

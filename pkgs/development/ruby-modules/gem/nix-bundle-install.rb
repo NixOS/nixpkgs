@@ -13,31 +13,46 @@ end
 
 # Options:
 #
+#   type        - installation type, either "git" or "path"
 #   name        - the gem name
+#   version     - gem version
+#   build-flags - build arguments
+#
+# Git-only options:
+#
 #   uri         - git repo uri
 #   repo        - path to local checkout
 #   ref         - the commit hash
-#   version     - gem version
-#   build-flags - build arguments
 
 ruby = File.join(ENV["ruby"], "bin", RbConfig::CONFIG['ruby_install_name'])
 out = ENV["out"]
 bin_dir = File.join(ENV["out"], "bin")
 
-name        = ARGV[0]
-uri         = ARGV[1]
-REPO        = ARGV[2]
-ref         = ARGV[3]
-version     = ARGV[4]
-build_flags = ARGV[5]
+type        = ARGV[0]
+name        = ARGV[1]
+version     = ARGV[2]
+build_flags = ARGV[3]
+if type == "git"
+  uri         = ARGV[4]
+  REPO        = ARGV[5]
+  ref         = ARGV[6]
+end
 
 # options to pass to bundler
 options = {
-  "name"    => name,
-  "uri"     => uri,
-  "ref"     => ref,
+  "name" => name,
   "version" => version,
 }
+if type == "path"
+  options.merge!({
+    "path" => Dir.pwd,
+  })
+elsif type == "git"
+  options.merge!({
+    "uri"  => uri,
+    "ref"  => ref,
+  })
+end
 
 # Monkey-patch Bundler to use our local checkout.
 # I wish we didn't have to do this, but bundler does not expose an API to do
@@ -63,26 +78,28 @@ Bundler.module_eval do
   end
 end
 
-Bundler::Source::Git.class_eval do
-  def allow_git_ops?
-    true
-  end
-end
-
-Bundler::Source::Git::GitProxy.class_eval do
-  def checkout
-    unless path.exist?
-      FileUtils.mkdir_p(path.dirname)
-      FileUtils.cp_r(File.join(REPO, ".git"), path)
-      system("chmod -R +w #{path}")
+if type == "git"
+  Bundler::Source::Git.class_eval do
+    def allow_git_ops?
+      true
     end
   end
 
-  def copy_to(destination, submodules=false)
-    unless File.exist?(destination.join(".git"))
-      FileUtils.mkdir_p(destination.dirname)
-      FileUtils.cp_r(REPO, destination)
-      system("chmod -R +w #{destination}")
+  Bundler::Source::Git::GitProxy.class_eval do
+    def checkout
+      unless path.exist?
+        FileUtils.mkdir_p(path.dirname)
+        FileUtils.cp_r(File.join(REPO, ".git"), path)
+        system("chmod -R +w #{path}")
+      end
+    end
+
+    def copy_to(destination, submodules=false)
+      unless File.exist?(destination.join(".git"))
+        FileUtils.mkdir_p(destination.dirname)
+        FileUtils.cp_r(REPO, destination)
+        system("chmod -R +w #{destination}")
+      end
     end
   end
 end
@@ -94,7 +111,11 @@ Bundler.ui = Bundler::UI::Shell.new({"no-color" => no_color})
 Bundler.ui.level = "debug" if verbose
 
 # Install
-source = Bundler::Source::Git.new(options)
+if type == "git"
+  source = Bundler::Source::Git.new(options)
+else
+  source = Bundler::Source::Path.new(options)
+end
 spec = source.specs.search_all(name).first
 Bundler.rubygems.with_build_args [build_flags] do
   source.install(spec)
@@ -139,8 +160,10 @@ FileUtils.ln_s(spec.loaded_from.to_s, "#{meta}/spec")
 File.open("#{meta}/name", "w") do |f|
   f.write spec.name
 end
-File.open("#{meta}/install-path", "w") do |f|
-  f.write source.install_path.to_s
+if type == "git"
+  File.open("#{meta}/install-path", "w") do |f|
+    f.write source.install_path.to_s
+  end
 end
 File.open("#{meta}/require-paths", "w") do |f|
   f.write spec.require_paths.join(" ")
@@ -150,8 +173,10 @@ File.open("#{meta}/executables", "w") do |f|
 end
 
 # make the lib available during bundler/git installs
-File.open("#{out}/nix-support/setup-hook", "a") do |f|
-  spec.require_paths.each do |dir|
-    f.puts("addToSearchPath RUBYLIB #{source.install_path}/#{dir}")
+if type == "git"
+  File.open("#{out}/nix-support/setup-hook", "a") do |f|
+    spec.require_paths.each do |dir|
+      f.puts("addToSearchPath RUBYLIB #{source.install_path}/#{dir}")
+    end
   end
 end

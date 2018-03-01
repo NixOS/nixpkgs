@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     license = licenses.gpl2Plus;
     homepage = http://eduke32.com;
-    maintainers = with maintainers; [ nckx sander ];
+    maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux;
   };
 }

@@ -2,35 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, attrs
 , chardet
 , multidict
 , async-timeout
 , yarl
+, idna-ssl
 , pytest
 , gunicorn
-, pytest-raisesregexp
+, pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "2.3.7";
-  name = "${pname}-${version}";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe294df38e9c67374263d783a7a29c79372030f5962bd5734fa51c6f4bbfee3b";
+    sha256 = "7aee5c0750584946fde40da70f0b28fe769f85182f1171acef18a35fd8ecd221";
   };
 
   disabled = pythonOlder "3.4";
 
-  doCheck = false; # Too many tests fail.
+  checkInputs = [ pytest gunicorn pytest-mock ];
 
-  checkInputs = [ pytest gunicorn pytest-raisesregexp ];
-  propagatedBuildInputs = [ async-timeout chardet multidict yarl ];
+  propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
+    ++ lib.optional (pythonOlder "3.7") idna-ssl;
 
-  meta = {
-    description = "Http client/server for asyncio";
-    license = with lib.licenses; [ asl20 ];
-    homepage = https://github.com/KeepSafe/aiohttp/;
+  meta = with lib; {
+    description = "Asynchronous HTTP Client/Server for Python and asyncio";
+    license = licenses.asl20;
+    homepage = https://github.com/aio-libs/aiohttp;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

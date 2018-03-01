@@ -34,7 +34,7 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "10";
+  minor = "15";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${version}";
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "0i170kfn68x683fsm5rba0zbpjfr1r7s6a8nvdbva2yl0aizfzhs";
+    sha256 = "0idlz9y7gn1yqk5x4igp060wvspzsf446b6ybhbb0swi035qpd2x";
   };
 
   patches = [ ./x86.patch ];

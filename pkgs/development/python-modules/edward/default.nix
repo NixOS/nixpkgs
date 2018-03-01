@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "edward";
-  version = "1.3.4";
+  version = "1.3.5";
   name  = "${pname}-${version}";
 
   disabled = !(isPy27 || pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10d6d7886235f4b9fa4ba401daef87c27937a04d2763f507643d730e51de37b6";
+    sha256 = "3818b39e77c26fc1a37767a74fdd5e7d02877d75ed901ead2f40bd03baaa109f";
   };
 
   # disabled for now due to Tensorflow trying to create files in $HOME:

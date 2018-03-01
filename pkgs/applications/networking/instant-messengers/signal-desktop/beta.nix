@@ -45,7 +45,7 @@ in
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop-beta_${version}_amd64.deb";
+          url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb";
           sha256 = "1kllym2iazp9i5afrh0vmsqqlh5b8i6f929p5yhl8bl4zd17zwpx";
         }
       else

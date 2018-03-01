@@ -4,11 +4,11 @@
 buildPythonPackage rec {
   pname = "daphne";
   name = "${pname}-${version}";
-  version = "1.3.0";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xmmjp21m1w88ljsgnkf6cbzw5nxamh9cfmfgzxffpn4cdmvn96i";
+    sha256 = "bb2075ce35ca00f2e5440cc034dfebd5c00d346de62ea45f099db089b868c31f";
   };
 
   buildInputs = [ hypothesis ];

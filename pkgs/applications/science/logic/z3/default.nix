@@ -1,8 +1,6 @@
-{ stdenv, fetchFromGitHub, python2, fixDarwinDylibNames }:
+{ stdenv, fetchFromGitHub, python, fixDarwinDylibNames }:
 
-let
-  python = python2;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "z3-${version}";
   version = "4.6.0";
 
@@ -14,6 +12,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python fixDarwinDylibNames ];
+  propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
   configurePhase = ''

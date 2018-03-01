@@ -1,6 +1,5 @@
-# Extend a derivation with checks for brokenness, license, etc.  Throw a
-# descriptive error when the check fails; return `derivationArg` otherwise.
-# Note: no dependencies are checked in this step.
+# Checks derivation meta and attrs for problems (like brokenness,
+# licenses, etc).
 
 { lib, config, system, meta, derivationArg, mkDerivationArg }:
 
@@ -97,8 +96,7 @@ let
     ''
 
       Known issues:
-
-    '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
         You can install it anyway by whitelisting this package, using the
         following methods:
@@ -154,15 +152,17 @@ let
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
+    name = str;
     version = str;
     tag = str;
     updateWalker = bool;
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
+    available = bool;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
-    schedulingPriority = str;
+    schedulingPriority = int;
     downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
@@ -196,13 +196,11 @@ let
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };
 
-  # Throw an error if trying to evaluate an non-valid derivation
-  validityCondition =
-         let v = checkValidity attrs;
-         in if !v.valid
-           then handleEvalIssue (removeAttrs v ["valid"])
-           else true;
+   validity = checkValidity attrs;
 
-in
-  assert validityCondition;
-  derivationArg
+in validity // {
+  # Throw an error if trying to evaluate an non-valid derivation
+  handled = if !validity.valid
+    then handleEvalIssue (removeAttrs validity ["valid"])
+    else true;
+}

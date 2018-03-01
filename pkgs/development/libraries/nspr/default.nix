@@ -16,6 +16,9 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cd nspr
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
+    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
   configureFlags = [

@@ -1,4 +1,4 @@
-{ stdenv, ninja, which, nodejs, fetchurl, gnutar
+{ stdenv, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -11,7 +11,7 @@
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
-, glib, gtk2, gtk3, dbus_glib
+, glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
@@ -25,7 +25,7 @@
 , enableHotwording ? false
 , enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
-, gnomeKeyringSupport ? false, libgnome_keyring3 ? null
+, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
 , pulseSupport ? false, libpulseaudio ? null
@@ -43,6 +43,15 @@ let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
+
+  gentooPatch = name: sha256: fetchpatch {
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
+    inherit sha256;
+  };
+  githubPatch = commit: sha256: fetchpatch {
+    url = "https://github.com/chromium/chromium/commit/${commit}.patch";
+    inherit sha256;
+  };
 
   mkGnFlags =
     let
@@ -120,10 +129,10 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 gtk3 dbus_glib
+      glib gtk2 gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-    ] ++ optional gnomeKeyringSupport libgnome_keyring3
+    ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
@@ -133,15 +142,25 @@ let
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
-    ] # As major versions are added, you can trawl the gentoo and arch repos at
+      # As major versions are added, you can trawl the gentoo and arch repos at
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
-      ++ optionals (versionRange "63" "64") [
-      ./patches/chromium-gcc5-r4.patch
-      ./patches/include-math-for-round.patch
-    ]
-      ++ optional enableWideVine ./patches/widevine.patch;
+
+    # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ]  ++ optionals (versionRange "64" "65") [
+      (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
+      (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
+      # missing ninja dep https://github.com/NixOS/nixpkgs/issues/35296#issuecomment-368666833
+      (githubPatch "b1e3cfd4f9bfe43a1e08c5670b51c8c80d3e6372" "17vih86rpsy282r8ikrf2q5gfjdwqzvyn8859i75xzvl8agyhbaa")
+    ]  ++ optionals (versionRange "65" "66") [
+      #(gentooPatch "chromium-gcc-r0.patch" "127xdwabizn5gz8rf1qsw62i7m0b5bsfjqxv4kdbsnizmjanddf8")
+      #(gentooPatch "chromium-memcpy-r0.patch" "1d3vra59wjg2lva7ddv55ff6l57mk9k50llsplr0b7vxk0lh0ps5")
+      (gentooPatch "chromium-webrtc-r0.patch" "0qj5b4w9kav51ylpdf38vm5w7p2gx4qp8p45vrfggp7miicg9cmw")
+      #(gentooPatch "chromium-vulkan-r0.patch" "1wphsbc6kyck5qanbc4bv14iw2s67fvp1c0kwz29a2avzkz19s84")
+      #(gentooPatch "chromium-ffmpeg-r0.patch" "0j58g24j6n6vpy6v9wwv34x0dd43m52wg0xcrfkzp72km9wiahff")
+      #(gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ]  ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -190,6 +209,9 @@ let
             \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
             -delete
       done
+    '' + optionalString stdenv.isAarch64 ''
+      substituteInPlace build/toolchain/linux/BUILD.gn \
+        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '';
 
     gnFlags = mkGnFlags ({
@@ -201,6 +223,7 @@ let
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
+      ## FIXME remove use_gconf after chromium 65 has become stable
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;

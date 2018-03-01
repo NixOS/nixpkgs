@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tomb-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner  = "dyne";
     repo   = "Tomb";
     rev    = "v${version}";
-    sha256 = "192jpgn02mvi4d4inbq2q11zl7xw6njymvali7al8wmygkkycrw4";
+    sha256 = "1wk1aanzfln88min29p5av2j8gd8vj5afbs2gvarv7lvx1vi7kh1";
   };
 
   nativeBuildInputs = [ makeWrapper ];

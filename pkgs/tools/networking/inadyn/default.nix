@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   name = "inadyn-${version}";
-  version = "2.2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "troglobit";

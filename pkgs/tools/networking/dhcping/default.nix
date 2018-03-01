@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.mavetju.org/unix/general.php;
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

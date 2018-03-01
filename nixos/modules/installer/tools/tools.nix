@@ -55,7 +55,7 @@ let
     src = ./nixos-generate-config.pl;
     path = [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    inherit (config.system) nixosRelease;
+    inherit (config.system.nixos) release;
   };
 
   nixos-option = makeProg {
@@ -66,7 +66,7 @@ let
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (config.system) nixosVersion nixosCodeName nixosRevision;
+    inherit (config.system.nixos) version codeName revision;
   };
 
 in

@@ -4,7 +4,8 @@
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at_spi2_atk
+, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk
+, kerberos
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -32,19 +33,18 @@
 # Only needed for getting information about upstream binaries
 , chromium
 
-, gsettings_desktop_schemas
+, gsettings-desktop-schemas
 , gnome2, gnome3
 }:
 
 with stdenv.lib;
-
-with chromium.upstream-info;
 
 let
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
   };
 
+  version = chromium.upstream-info.version;
   gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
   gnome = if (versionAtLeast version "59.0.0.0") then gnome3 else gnome2;
 
@@ -57,7 +57,8 @@ let
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at_spi2_atk
+    bzip2 libcap at-spi2-atk
+    kerberos
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -68,13 +69,13 @@ in stdenv.mkDerivation rec {
 
   name = "google-chrome${suffix}-${version}";
 
-  src = binary;
+  src = chromium.upstream-info.binary;
 
   buildInputs = [
     patchelf
 
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings_desktop_schemas glib gtk
+    gsettings-desktop-schemas glib gtk
 
     # needed for XDG_ICON_DIRS
     gnome.defaultIconTheme

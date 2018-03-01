@@ -174,6 +174,10 @@ in mkDerivation (rec {
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
     socket-io = pkgs.nodePackages."socket.io";
+    haskellCompilerName = "ghcjs";
+
+    # let us assume ghcjs is never actually cross compiled
+    targetPrefix = "";
 
     inherit stage1Packages;
     mkStage2 = stage2 {

@@ -15,6 +15,26 @@ let
 
 in rec {
 
+  backlog = zncDerivation rec {
+    name = "znc-backlog-${version}";
+    version = "git-2017-06-13";
+    module_name = "backlog";
+
+    src = fetchFromGitHub {
+      owner = "FruitieX";
+      repo = "znc-backlog";
+      rev = "42e8f439808882d2dae60f2a161eabead14e4b0d";
+      sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Request backlog for IRC channels.";
+      homepage = https://github.com/fruitiex/znc-backlog/;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ infinisil ];
+    };
+  };
+
   clientbuffer = zncDerivation rec {
     name = "znc-clientbuffer-${version}";
     version = "git-2015-08-27";

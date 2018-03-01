@@ -334,14 +334,10 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080
+hoogle server -p 8080 --local
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/). Note, however, that Firefox and
-possibly other browsers disallow navigation from `http:` to `file:` URIs for
-security reasons, which might be quite an inconvenience. See [this
-page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
-workarounds.
+[Hoogle](https://www.haskell.org/hoogle/).
 
 ### How to build a Haskell project using Stack
 

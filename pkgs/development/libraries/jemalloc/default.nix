@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "jemalloc-${version}";
@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
                    # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
                    ++ stdenv.lib.optional stdenv.isArm "--disable-thp";
   doCheck = true;
+
+  patches = stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/jemalloc/jemalloc/pull/1035.patch";
+    sha256 = "02y0q3dp253bipxv4r954nqipbjbj92p6ww9bx5bk3d8pa81wkqq";
+  });
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://jemalloc.net;

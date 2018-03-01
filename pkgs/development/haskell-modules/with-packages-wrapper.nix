@@ -1,7 +1,6 @@
 { lib, targetPlatform, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, ignoreCollisions ? false, withLLVM ? false
+, withLLVM ? false
 , postBuild ? ""
-, haskellPackages
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
 
@@ -45,7 +44,7 @@ let
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
   hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
-  # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/code-generators.html
+  # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm          = lib.makeBinPath
                   ([ llvmPackages.llvm ]
                    ++ lib.optional targetPlatform.isDarwin llvmPackages.clang);
@@ -57,8 +56,6 @@ symlinkJoin {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
-  extraOutputsToInstall = [ "out" "doc" ];
-  inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
@@ -106,7 +103,7 @@ symlinkJoin {
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
     for f in $packageConfDir/*.conf; do
@@ -132,6 +129,5 @@ symlinkJoin {
   passthru = {
     preferLocalBuild = true;
     inherit (ghc) version meta;
-    inherit haskellPackages;
   };
 }

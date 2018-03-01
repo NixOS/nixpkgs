@@ -258,7 +258,7 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_5; };
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -471,10 +471,6 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
-  # Fails to link against with newer gsl versions because a deprecrated function
-  # was removed
-  hmatrix-gsl = super.hmatrix-gsl.override { gsl = pkgs.gsl_1; };
-
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
@@ -492,11 +488,8 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
-  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
-
   # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+  opencv-extra = addPkgconfigDepend super.opencv-extra pkgs.opencv3;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;

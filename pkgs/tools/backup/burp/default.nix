@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , acl, librsync, ncurses, openssl, zlib, uthash }:
 
 stdenv.mkDerivation rec {
   name = "burp-${version}";
-  version = "2.0.54";
+  version = "2.1.28";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
     rev = version;
-    sha256 = "1z1w013hqxbfjgri0fan2570qwhgwvm4k4ghajbzqg8kly4fgk5x";
+    sha256 = "1i8j15pmnn9cn6cd4dnp28qbisq8cl9l4y3chsmil4xqljr9fi5x";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ librsync ncurses openssl zlib uthash ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 

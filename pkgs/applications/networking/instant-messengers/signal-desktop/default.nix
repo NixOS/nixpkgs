@@ -40,13 +40,13 @@ in
   stdenv.mkDerivation rec {
     name = "signal-desktop-${version}";
 
-    version = "1.1.0";
+    version = "1.3.0";
 
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "1v0ydfdgcnkh6rk7gmqbjrzpz56mw2gjmakz58gpn167ln7l1vkl";
+          sha256 = "047l3yyqvzyi5969r0n9cwdarsxfbssj415ysh57w7vkdp01axsr";
         }
       else
         throw "Signal for Desktop is not currently supported on ${stdenv.system}";

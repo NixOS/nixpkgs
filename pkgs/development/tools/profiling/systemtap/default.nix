@@ -1,5 +1,5 @@
 { fetchgit, pkgconfig, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, pythonPackages
+, elfutils, kernel, gnumake, python2, python2Packages
 }:
 
 let
@@ -17,7 +17,7 @@ let
     name = "systemtap-${version}";
     src = fetchgit { inherit url rev sha256; };
   nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ elfutils gettext python2 pythonPackages.setuptools ];
+    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
     # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
     postPatch = ''
       substituteInPlace buildrun.cxx --replace \
@@ -39,6 +39,8 @@ let
     done
   '';
 
+  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
+
 in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
   buildInputs = [ makeWrapper ];
@@ -54,8 +56,10 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   for bin in $stapBuild/bin/*; do # hello emacs */
     ln -s $bin $out/bin
   done
-  rm $out/bin/stap
+  rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
     --add-flags "-r $kernelBuildDir" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
+  makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
+    --prefix PYTHONPATH : ${pypkgs}
 ''

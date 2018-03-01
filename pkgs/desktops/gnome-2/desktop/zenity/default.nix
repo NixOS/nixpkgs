@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, glib, gtk, pango, atk
-, gnome_doc_utils, intltool, libglade, libX11, which }:
+, gnome-doc-utils, intltool, libglade, libX11, which }:
 
 stdenv.mkDerivation {
   name = "zenity-2.32.1";
@@ -12,5 +12,5 @@ stdenv.mkDerivation {
   configureFlags = "--disable-scrollkeeper";
   buildInputs = [ gtk libglade libxml2 libxslt libX11 ];
 
-  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which ];
+  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which ];
 }

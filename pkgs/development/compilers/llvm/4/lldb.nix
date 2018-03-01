@@ -43,6 +43,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp ../docs/lldb.1 $out/share/man/man1/
+  '';
+
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
     homepage    = http://llvm.org/;

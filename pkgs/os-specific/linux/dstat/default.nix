@@ -19,6 +19,6 @@ python2Packages.buildPythonApplication rec {
     description = "Versatile resource statistics tool";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds nckx ];
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

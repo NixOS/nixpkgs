@@ -28,9 +28,9 @@ let inherit (stdenv.lib) optional optionals hasPrefix; in
 let
   result = {
     # e.g. https://libav.org/releases/libav-11.11.tar.xz.sha1
-    libav_0_8 = libavFun "0.8.20" "0c7a2417c3a01eb74072691bb93ce802ae1be08f";
-    libav_11  = libavFun "11.11"  "d7444fa4f135bdd7347cc962ab4b5228796b0f23";
-    libav_12  = libavFun "12.2"   "3784b15f88076ca0ab8fb6b0377e975b83a5c9f5";
+    libav_0_8 = libavFun "0.8.21" "d858f65128dad0bac1a8c3a51e5cbb27a7c79b3f";
+    libav_11  = libavFun "11.12"  "61d5dcab5fde349834af193a572b12a5fd6a4d42";
+    libav_12  = libavFun "12.3"   "386c18c8b857f23dfcf456ce40370716130211d9";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -125,7 +125,6 @@ let
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;
-      maintainers = [ maintainers.vcunat ];
     };
   }; # libavFun
 

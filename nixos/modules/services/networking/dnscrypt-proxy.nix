@@ -10,7 +10,7 @@ let
   # This is somewhat more flexible than preloading the key as an
   # embedded string.
   upstreamResolverListPubKey = pkgs.fetchurl {
-    url = https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/minisign.pub;
+    url = https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master/minisign.pub;
     sha256 = "18lnp8qr6ghfc2sd46nn1rhcpr324fqlvgsp4zaigw396cd7vnnh";
   };
 
@@ -258,9 +258,9 @@ in
         domain=raw.githubusercontent.com
         get="curl -fSs --resolve $domain:443:$(hostip -r 8.8.8.8 $domain | head -1)"
         $get -o dnscrypt-resolvers.csv.tmp \
-          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
+          https://$domain/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv
         $get -o dnscrypt-resolvers.csv.minisig.tmp \
-          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
+          https://$domain/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
         if ! minisign -q -V -p ${upstreamResolverListPubKey} \
           -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig ; then

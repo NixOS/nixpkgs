@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Too red
-  configureFlags = [ "--disable-modern-top" ];
+  configureFlags = [ "--disable-modern-top" ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes" ];
 
   meta = {
     homepage = https://sourceforge.net/projects/procps-ng/;

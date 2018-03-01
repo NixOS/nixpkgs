@@ -9,7 +9,7 @@
 , withLibHVM ? true
 
 # qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice_protocol, usbredir
+, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
 , alsaLib
 , ... } @ args:
 
@@ -29,7 +29,7 @@ let
   });
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
+    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
   ];
 
@@ -247,5 +247,11 @@ callPackage (import ./generic.nix (rec {
       -i tools/blktap2/control/tap-ctl-allocate.c \
       -i tools/libxl/libxl_device.c
   '';
+
+  passthru = {
+    qemu-system-i386 = if withInternalQemu
+      then "lib/xen/bin/qemu-system-i386"
+      else throw "this xen has no qemu builtin";
+  };
 
 })) ({ ocamlPackages = ocamlPackages_4_02; } // args)

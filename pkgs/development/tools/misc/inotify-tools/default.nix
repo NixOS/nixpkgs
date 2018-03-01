@@ -1,13 +1,17 @@
-{ stdenv, fetchurl }:
+{ stdenv, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "inotify-tools-${version}";
-  version = "3.14";
+  version = "3.20.1";
 
-  src = fetchurl {
-    url = "http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-${version}.tar.gz";
-    sha256 = "0by9frv1k59f76cx08sn06sk6lmdxsfb6zr0rshzhyrxi6lcqar2";
+  src = fetchFromGitHub {
+    repo = "inotify-tools";
+    owner = "rvoicilas";
+    rev = version;
+    sha256 = "14dci1i4mhsd5sa33k8h3ayphk19kizynh5ql9ryibdpmcanfiyq";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/rvoicilas/inotify-tools/wiki;

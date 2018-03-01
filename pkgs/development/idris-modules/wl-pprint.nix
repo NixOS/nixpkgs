@@ -6,7 +6,8 @@
 , idris
 }:
 build-idris-package {
-  name = "wl-pprint-2016-09-28";
+  pkName = "wl-pprint";
+  version = "2016-09-28";
 
   src = fetchFromGitHub {
     owner = "shayan-najd";
@@ -19,7 +20,7 @@ build-idris-package {
   # updating this package again.
   doCheck = false;
 
-  propagatedBuildInputs = [ prelude base ];
+  idrisDeps = [ prelude base ];
 
   meta = {
     description = "Wadler-Leijen pretty-printing library";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, cairo, dbus, gtk, pango, atk, libXau, libXtst, inputproto
+{ stdenv, fetchurl, pkgconfig, dbus-glib, cairo, dbus, gtk, pango, atk, libXau, libXtst, inputproto
 , intltool, libglade, startup_notification, GConf, upower, libSM }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ dbus_glib gtk libXau libXtst inputproto libglade startup_notification
+    [ dbus-glib gtk libXau libXtst inputproto libglade startup_notification
       GConf upower libSM
     ];
   nativeBuildInputs = [ pkgconfig intltool ];

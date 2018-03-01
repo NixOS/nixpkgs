@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   # Works around bunch of "format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t {aka long long unsigned int}'" warnings
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.is64bit) "-Wno-error=format";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional (!stdenv.is64bit) "-Wno-error=format"
+    ++ [ "-Wno-error=format-truncation" ]; # newly detected with gcc-7
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb ];

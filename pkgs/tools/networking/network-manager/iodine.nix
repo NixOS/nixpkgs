@@ -13,10 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ iodine networkmanager libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring
                                         gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  # Fixes deprecation errors with networkmanager 1.10.2
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   configureFlags = [
     "${if withGnome then "--with-gnome" else "--without-gnome"}"

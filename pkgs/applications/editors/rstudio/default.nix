@@ -1,10 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, makeDesktopItem, cmake, boost, zlib, openssl
-, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts, unzip, ant, jdk
-, gnumake, makeWrapper, pandoc
+{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost
+, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts
+, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
-  version = "1.1.383";
+  verMajor = "1";
+  verMinor = "1";
+  verPatch = "423";
+  version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "1.5";
   gwtVer = "2.7.0";
 in
@@ -15,48 +18,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost zlib openssl R qtbase qtwebkit qtwebchannel libuuid ];
 
-  src = fetchurl {
-    url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
-    sha256 = "06680l9amq03b4jarmzfr605bijhb79fip9rk464zab6hgwqbp3f";
+  src = fetchFromGitHub {
+    owner = "rstudio";
+    repo = "rstudio";
+    rev = "v${version}";
+    sha256 = "02kpmzh0vr0gb5dhiwcm4gwjbc3biwz0km655mgzmx9j64cyd3nf";
   };
 
   # Hack RStudio to only use the input R.
-  patches = [ 
-    ./r-location.patch 
-    (fetchpatch {
-      url = https://aur.archlinux.org/cgit/aur.git/plain/socketproxy-openssl.patch?h=rstudio-desktop-git;
-      sha256 = "0ywq9rk14s5961l6hvd3cw70jsm73r16h0bsh4yp52vams7cwy9d";
-    })
-  ];
+  patches = [ ./r-location.patch ];
   postPatch = "substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}";
 
-  inherit ginVer;
   ginSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gin-${ginVer}.zip";
     sha256 = "155bjrgkf046b8ln6a55x06ryvm8agnnl7l8bkwwzqazbpmz8qgm";
   };
 
-  inherit gwtVer;
   gwtSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gwt-${gwtVer}.zip";
     sha256 = "1cs78z9a1jg698j2n35wsy07cy4fxcia9gi00x0r0qc3fcdhcrda";
   };
 
-  hunspellDictionaries = builtins.attrValues hunspellDicts;
+  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
-  };
-
-  rmarkdownSrc = fetchurl {
-    url = "https://github.com/rstudio/rmarkdown/archive/95b8b1fa64f78ca99f225a67fff9817103be56.zip";
-    sha256 = "12fa65qr04rwsprkmyl651mkaqcbn1znwsmcjg4qsk9n5nxg0fah";
-  };
-
-  rsconnectSrc = fetchurl {
-    url = "https://github.com/rstudio/rsconnect/archive/425f3767b3142bc6b81c9eb62c4722f1eedc9781.zip";
-    sha256 = "1sgf9dj9wfk4c6n5p1jc45386pf0nj2alg2j9qx09av3can1dy9p";
   };
 
   rstudiolibclang = fetchurl {
@@ -71,29 +58,31 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      export RSTUDIO_VERSION_MAJOR=${verMajor}
+      export RSTUDIO_VERSION_MINOR=${verMinor}
+      export RSTUDIO_VERSION_PATCH=${verPatch}
+
       GWT_LIB_DIR=src/gwt/lib
 
-      mkdir -p $GWT_LIB_DIR/gin/$ginVer
-      unzip $ginSrc -d $GWT_LIB_DIR/gin/$ginVer
+      mkdir -p $GWT_LIB_DIR/gin/${ginVer}
+      unzip ${ginSrc} -d $GWT_LIB_DIR/gin/${ginVer}
 
-      unzip $gwtSrc
+      unzip ${gwtSrc}
       mkdir -p $GWT_LIB_DIR/gwt
-      mv gwt-$gwtVer $GWT_LIB_DIR/gwt/$gwtVer
+      mv gwt-${gwtVer} $GWT_LIB_DIR/gwt/${gwtVer}
 
       mkdir dependencies/common/dictionaries
-      for dict in $hunspellDictionaries; do
-          for i in "$dict/share/hunspell/"*
-	  do ln -sv $i dependencies/common/dictionaries/
-	  done
+      for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
+        for i in "$dict/share/hunspell/"*; do
+          ln -sv $i dependencies/common/dictionaries/
+        done
       done
 
-      unzip $mathJaxSrc -d dependencies/common/mathjax-26
-      unzip $rmarkdownSrc -d dependencies/common/rmarkdown
-      unzip $rsconnectSrc -d dependencies/common/rsconnect
+      unzip ${mathJaxSrc} -d dependencies/common/mathjax-26
       mkdir -p dependencies/common/libclang/3.5
-      unzip $rstudiolibclang -d dependencies/common/libclang/3.5
+      unzip ${rstudiolibclang} -d dependencies/common/libclang/3.5
       mkdir -p dependencies/common/libclang/builtin-headers
-      unzip $rstudiolibclangheaders -d dependencies/common/libclang/builtin-headers
+      unzip ${rstudiolibclangheaders} -d dependencies/common/libclang/builtin-headers
 
       mkdir -p dependencies/common/pandoc
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/
@@ -124,7 +113,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Set of integrated tools for the R language";
-      homepage = http://www.rstudio.com/;
+      homepage = https://www.rstudio.com/;
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

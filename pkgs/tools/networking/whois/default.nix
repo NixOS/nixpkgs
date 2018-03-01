@@ -1,27 +1,31 @@
-{ stdenv, fetchFromGitHub, perl, gettext }:
+{ stdenv, fetchFromGitHub, perl, gettext, pkgconfig, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.18";
+  version = "5.3.0";
   name = "whois-${version}";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "0jzyq1rj6balc6a28swzgspv55xhkc75dw6wsn159in4ap61bzmi";
+    sha256 = "01pfl1ap62hc27574sx1a4yaaf7hr2zkksspn5z97sgacl6h1rnf";
   };
 
-  buildInputs = [ perl gettext ];
+  nativeBuildInputs = [ perl gettext pkgconfig ];
+  buildInputs = [ libidn2 libiconv ];
 
   preConfigure = ''
     for i in Makefile po/Makefile; do
       substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
     done
+
+    substituteInPlace Makefile --replace "DEFS += HAVE_ICONV" "DEFS += HAVE_ICONV\nwhois_LDADD += -liconv"
   '';
 
-  buildPhase = "make whois";
+  makeFlags = [ "HAVE_ICONV=1" ];
+  buildFlags = [ "whois" ];
 
-  installPhase = "make install-whois";
+  installTargets = [ "install-whois" ];
 
   meta = with stdenv.lib; {
     description = "Intelligent WHOIS client from Debian";

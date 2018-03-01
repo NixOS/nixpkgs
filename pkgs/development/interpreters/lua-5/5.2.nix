@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    inherit (hostPlatform) isDarwin isMingw;
+    inherit (hostPlatform) isDarwin isMinGW;
   in {
     configurePhase = ''
       makeFlagsArray=(
@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
         INSTALL_MAN=$out/share/man/man1
         V=${luaversion}
         R=${version}
-        ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
+        ${if isMinGW then "mingw" else stdenv.lib.optionalString isDarwin ''
         ''}
       )
-    '' + stdenv.lib.optionalString isMingw ''
+    '' + stdenv.lib.optionalString isMinGW ''
       installFlagsArray=(
         TO_BIN="lua.exe luac.exe"
         TO_LIB="liblua.a lua52.dll"

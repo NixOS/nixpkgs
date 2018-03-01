@@ -40,6 +40,10 @@ in
         kernel documentation</link>.  Otherwise, if
         <option>networking.useDHCP</option> is enabled, an IP address
         is acquired using DHCP.
+
+        You should add the module(s) required for your network card to
+        boot.initrd.availableKernelModules. lspci -v -s &lt;ethernet controller&gt;
+        will tell you which.
       '';
     };
 

@@ -256,7 +256,11 @@ stdenv.mkDerivation ({
     ;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags =
     # Basic dependencies
@@ -313,8 +317,8 @@ stdenv.mkDerivation ({
 
     # Platform-specific flags
     optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
-    # Trick that should be taken out once we have a mips64el-linux not loongson2f
-    optional (targetPlatform == hostPlatform && stdenv.system == "mips64el-linux") "--with-arch=loongson2f"
+    # Trick that should be taken out once we have a mipsel-linux not loongson2f
+    optional (targetPlatform == hostPlatform && stdenv.system == "mipsel-linux") "--with-arch=loongson2f"
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;

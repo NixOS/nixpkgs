@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig, libusb, readline, libewf, perl, zlib, openssl,
+{stdenv, fetchFromGitHub, fetchgit, fetchurl, fetchpatch, pkgconfig, libusb, readline, libewf, perl, zlib, openssl, git,
 gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
@@ -13,32 +13,33 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.2.0";
+  version = "2.3.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0rd1dfgwdpn3x1pzi67sw040vxywbg5h6yw0mj317p0p1cvlyihl";
+    sha256 = "0x5vcprqf0fnj876mdvryfvg7ymbrw1cxrr7a06v0swg7yql1lpw";
   };
 
   postPatch = let
-    cs_ver = "3.0.4"; # version from $sourceRoot/shlr/Makefile
-    capstone = fetchurl {
-      url = "https://github.com/aquynh/capstone/archive/${cs_ver}.tar.gz";
-      sha256 = "1whl5c8j6vqvz2j6ay2pyszx0jg8d3x8hq66cvgghmjchvsssvax";
+    cs_tip = "bdbc57de63725a98732ddc34b48de96f8ada66f2"; # version from $sourceRoot/shlr/Makefile
+    capstone = fetchgit {
+      url = "https://github.com/aquynh/capstone.git";
+      rev = cs_tip;
+      sha256 = "1sqxpjf2dlrg87dm9p39p5d1qzahrnfnrjijpv1xg1shax439jni";
+      leaveDotGit = true;
     };
   in ''
-    if ! grep -F "CS_VER=${cs_ver}" shlr/Makefile; then echo "CS_VER mismatch"; exit 1; fi
-    substituteInPlace shlr/Makefile --replace CS_RELEASE=0 CS_RELEASE=1
-    cp ${capstone} shlr/capstone-${cs_ver}.tar.gz
-
+    if ! grep -F "CS_TIP=${cs_tip}" shlr/Makefile; then echo "CS_TIP mismatch"; exit 1; fi
+    cp -r ${capstone} shlr/capstone
+    chmod -R u+rw shlr/capstone
   '';
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig git ];
   buildInputs = [ readline libusb libewf perl zlib openssl]
     ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]

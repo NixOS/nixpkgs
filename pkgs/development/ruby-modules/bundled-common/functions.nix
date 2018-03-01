@@ -67,8 +67,10 @@ rec {
         };
     in res;
 
-  composeGemAttrs = ruby: gems: name: attrs: ((removeAttrs attrs ["source" "platforms"]) // attrs.source // {
+  composeGemAttrs = ruby: gems: name: attrs: ((removeAttrs attrs ["platforms"]) // {
     inherit ruby;
+    inherit (attrs.source) type;
+    source = removeAttrs attrs.source ["type"];
     gemName = name;
     gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
   });

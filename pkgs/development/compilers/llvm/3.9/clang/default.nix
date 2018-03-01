@@ -31,7 +31,7 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
     '';
 
-    outputs = [ "out" "python" ];
+    outputs = [ "out" "lib" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -39,6 +39,11 @@ let
       ln -sv ${llvm}/lib/LLVMgold.so $out/lib
       ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
       ln -sv $out/bin/clang $out/bin/cpp
+
+      # Move libclang to 'lib' output
+      moveToOutput "lib/libclang.*" "$lib"
+      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
@@ -53,7 +58,6 @@ let
     enableParallelBuilding = true;
 
     passthru = {
-      lib = self; # compatibility with gcc, so that `stdenv.cc.cc.lib` works on both
       isClang = true;
       inherit llvm;
     } // stdenv.lib.optionalAttrs stdenv.isLinux {

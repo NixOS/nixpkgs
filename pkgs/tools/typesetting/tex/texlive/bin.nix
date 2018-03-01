@@ -168,6 +168,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
+  patches = [ ./luatex-gcc7.patch ];
+
   configureScript = ":";
 
   # we use static libtexlua, because it's only used by a single binary

@@ -8,7 +8,7 @@
 , withLibHVM ? true
 
 # qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice_protocol, usbredir
+, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
 , alsaLib
 , ... } @ args:
 
@@ -30,7 +30,7 @@ let
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
+    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
   ];
 in
@@ -49,15 +49,9 @@ callPackage (import ./generic.nix (rec {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         rev = "refs/tags/qemu-xen-${version}";
-        sha256 = "1v19pp86kcgwvsbkrdrn4rlaj02i4054avw8k70w1m0rnwgcsdbs";
+        sha256 = "1l4sygd8p0mc13bskr4r1m31qh1kr58h195qn1s52869s58jyhvm";
       };
       buildInputs = qemuDeps;
-      patches = [
-        (xsaPatch {
-          name = "216-qemuu";
-          sha256 = "06w2iw1r5gip2bpbg19cziws965h9in0f6np74cr31f76yy30yxn";
-        })
-      ];
       meta.description = "Xen's fork of upstream Qemu";
     };
   } // optionalAttrs withInternalTraditionalQemu {
@@ -175,5 +169,11 @@ callPackage (import ./generic.nix (rec {
       -i tools/blktap2/control/tap-ctl-allocate.c \
       -i tools/libxl/libxl_device.c
   '';
+
+  passthru = {
+    qemu-system-i386 = if withInternalQemu
+      then "lib/xen/bin/qemu-system-i386"
+      else throw "this xen has no qemu builtin";
+  };
 
 })) args

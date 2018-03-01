@@ -70,6 +70,15 @@
                 </para>
               </xsl:if>
 
+              <xsl:if test="attr[@name = 'relatedPackages']">
+                <para>
+                  <emphasis>Related packages:</emphasis>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of disable-output-escaping="yes"
+                                select="attr[@name = 'relatedPackages']/string/@value" />
+                </para>
+              </xsl:if>
+
               <xsl:if test="count(attr[@name = 'declarations']/list/*) != 0">
                 <para>
                   <emphasis>Declared by:</emphasis>

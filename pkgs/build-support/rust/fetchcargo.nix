@@ -1,8 +1,8 @@
-{ stdenv, cacert, git, rust, cargoVendor }:
+{ stdenv, cacert, git, rust, cargo-vendor }:
 { name ? "cargo-deps", src, srcs, sourceRoot, sha256, cargoUpdateHook ? "" }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
-  buildInputs = [ cacert cargoVendor git rust.cargo ];
+  nativeBuildInputs = [ cacert cargo-vendor git rust.cargo ];
   inherit src srcs sourceRoot;
 
   phases = "unpackPhase installPhase";
@@ -19,8 +19,9 @@ stdenv.mkDerivation {
         exit 1
     fi
 
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
+
+    ${cargoUpdateHook}
 
     cargo vendor
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, chromaprint, fetchpatch, fftw, flac, libid3tag, libmad
-, libopus, libshout, libsndfile, libusb1, libvorbis, pkgconfig
-, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
+{ stdenv, fetchurl, chromaprint, fetchpatch, fftw, flac, faad2, mp4v2
+, libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
+, pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
 , taglib, vampSDK
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
  ];
 
   buildInputs = [
-    chromaprint fftw flac libid3tag libmad libopus libshout libsndfile
+    chromaprint fftw flac faad2 mp4v2 libid3tag libmad libopus libshout libsndfile
     libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
     rubberband scons sqlite taglib vampSDK
   ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   sconsFlags = [
     "build=release"
     "qtdir=${qt4}"
+    "faad=1"
   ];
 
   buildPhase = ''

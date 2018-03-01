@@ -60,6 +60,8 @@ let
 
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
+    bitv = callPackage ../development/ocaml-modules/bitv { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -192,9 +194,7 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
-    curses = callPackage ../development/ocaml-modules/curses {
-      ncurses = pkgs.ncurses5;
-    };
+    curses = callPackage ../development/ocaml-modules/curses { };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
@@ -372,6 +372,10 @@ let
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
+      lwt = lwt3;
+    };
+
+    lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
       lwt = lwt3;
     };
 
@@ -667,8 +671,12 @@ let
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
-    uri = callPackage ../development/ocaml-modules/uri { };
-    uri_p4 = callPackage ../development/ocaml-modules/uri {
+    uri =
+      if lib.versionAtLeast ocaml.version "4.3"
+      then callPackage ../development/ocaml-modules/uri { }
+      else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+
+    uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
       legacyVersion = true;
     };
 

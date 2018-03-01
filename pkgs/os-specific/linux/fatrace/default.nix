@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
       Requires a Linux kernel with the FANOTIFY configuration option enabled.
       Enabling X86_MSR is also recommended for power-usage-report on x86.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

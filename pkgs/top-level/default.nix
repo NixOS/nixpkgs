@@ -49,7 +49,7 @@ in let
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
   config =
-    if builtins.isFunction configExpr
+    if lib.isFunction configExpr
     then configExpr { inherit pkgs; }
     else configExpr;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring3, sqlite, glib_networking, gobjectIntrospection
+, gnomeSupport ? true, libgnome-keyring3, sqlite, glib-networking, gobjectIntrospection
 , valaSupport ? true, vala_0_38
 , libintlOrEmpty
 , intltool, python }:
@@ -37,10 +37,10 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals valaSupport [ vala_0_38 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
-    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring3 ];
-  passthru.propagatedUserEnvPackages = [ glib_networking.out ];
+    ++ stdenv.lib.optionals gnomeSupport [ libgnome-keyring3 ];
+  passthru.propagatedUserEnvPackages = [ glib-networking.out ];
 
-  # glib_networking is a runtime dependency, not a compile-time dependency
+  # glib-networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check"
     + " --enable-vala=${if valaSupport then "yes" else "no"}"
     + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";

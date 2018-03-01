@@ -1,5 +1,5 @@
 diff --git a/configure.ac b/configure.ac
-index c909878..60c540e 100644
+index 88ccd91..0857782 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -59,7 +59,7 @@ AS_CASE([$host_os],
@@ -31,7 +31,7 @@ index c909878..60c540e 100644
 +		os_is_macosx=false
 +		nonLinuxOS=false
 +		;;
-+esac
++esac		
 +AM_CONDITIONAL([IS_DARWIN], [test x$os_is_macosx = xtrue])
 +AM_COND_IF([IS_DARWIN],
 +	[AC_DEFINE([IS_DARWIN], [1], [Get HostOS Type is Darwin])])
@@ -58,7 +58,7 @@ index 45b3b15..d0d4043 100644
  #include <sys/types.h>
  #include <stdint.h>
 diff --git a/include/bsd/stdio.h b/include/bsd/stdio.h
-index 4b69983..8e2ac75 100644
+index 4b69983..c75151b 100644
 --- a/include/bsd/stdio.h
 +++ b/include/bsd/stdio.h
 @@ -48,12 +48,16 @@
@@ -69,37 +69,60 @@ index 4b69983..8e2ac75 100644
  /* XXX: The function requires cooperation from the system libc to store the
   * line buffer in the FILE struct itself. */
  char *fgetln(FILE *fp, size_t *lenp)
- 	LIBBSD_DEPRECATED("This functions cannot be safely ported, "
- 	                  "use getline(3) instead, as it is supported "
- 	                  "by GNU and POSIX.1-2008.");
+-	LIBBSD_DEPRECATED("This functions cannot be safely ported, "
+-	                  "use getline(3) instead, as it is supported "
+-	                  "by GNU and POSIX.1-2008.");
++	__attribute__((deprecated("This functions cannot be safely ported, "
++	                          "use getline(3) instead, as it is supported "
++	                          "by GNU and POSIX.1-2008.")));
 +#else
 +char *fgetln(FILE *fp, size_t *lenp);
 +#endif
  
  /*
   * Note: We diverge from the FreeBSD, OpenBSD and DragonFlyBSD declarations,
+diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
+index ebc9638..6cd7943 100644
+--- a/include/bsd/stdlib.h
++++ b/include/bsd/stdlib.h
+@@ -67,9 +67,11 @@ int sradixsort(const unsigned char **base, int nmemb,
+                const unsigned char *table, unsigned endbyte);
+ 
+ void *reallocf(void *ptr, size_t size);
+-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 26)
++#if defined(_GNU_SOURCE) && defined(__GLIBC__) && defined(__GLIBC_PREREQ)
++#if !__GLIBC_PREREQ(2, 26)
+ void *reallocarray(void *ptr, size_t nmemb, size_t size);
+ #endif
++#endif
+ 
+ long long strtonum(const char *nptr, long long minval, long long maxval,
+                    const char **errstr);
 diff --git a/include/bsd/string.h b/include/bsd/string.h
-index ee2f953..a3ab077 100644
+index 6798bf6..6baaa14 100644
 --- a/include/bsd/string.h
 +++ b/include/bsd/string.h
-@@ -37,11 +37,14 @@
+@@ -37,6 +37,12 @@
  #include <sys/types.h>
  
  __BEGIN_DECLS
--size_t strlcpy(char *dst, const char *src, size_t siz);
--size_t strlcat(char *dst, const char *src, size_t siz);
- char *strnstr(const char *str, const char *find, size_t str_len);
 +#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
 +size_t bsd_strlcpy(char *dst, const char *src, size_t siz);
 +size_t bsd_strlcat(char *dst, const char *src, size_t siz);
++char *bsd_strnstr(const char *str, const char *find, size_t str_len);
 +void bsd_strmode(mode_t mode, char *str);
 +#else
- void strmode(mode_t mode, char *str);
--
-+#endif
+ size_t strlcpy(char *dst, const char *src, size_t siz);
+ size_t strlcat(char *dst, const char *src, size_t siz);
+ char *strnstr(const char *str, const char *find, size_t str_len);
+@@ -45,6 +51,7 @@ void strmode(mode_t mode, char *str);
+ #if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 25)
  void explicit_bzero(void *buf, size_t len);
+ #endif
++#endif
  __END_DECLS
  
+ #endif
 diff --git a/src/Makefile.am b/src/Makefile.am
 index ad83dbf..0f2a7ee 100644
 --- a/src/Makefile.am
@@ -519,18 +542,17 @@ index 462535a..e7eb46f 100644
 +}
  #endif
 diff --git a/src/funopen.c b/src/funopen.c
-index 1e05c7e..ed8ce85 100644
+index 1e05c7e..75e61ea 100644
 --- a/src/funopen.c
 +++ b/src/funopen.c
-@@ -137,7 +137,7 @@ funopen(const void *cookie,
- 
- 	return fopencookie(cookiewrap, mode, funcswrap);
- }
--#elif defined(__MUSL__)
-+#elif defined(__MUSL__) || defined(darwin) || defined(__APPLE__) || defined(MACOSX)
- /*
-  * This is unimplementable on musl based systems, and upstream has stated
+@@ -143,6 +143,7 @@ funopen(const void *cookie,
   * they will not add the needed support to implement it. Just ignore this
+  * interface there, as it has never been provided anyway.
+  */
++#elif defined(darwin) || defined(__APPLE__) || defined(MACOSX)
+ #else
+ #error "Function funopen() needs to be ported or disabled."
+ #endif
 diff --git a/src/getentropy.c b/src/getentropy.c
 index 3f11a1e..8a23a07 100644
 --- a/src/getentropy.c
@@ -563,13 +585,15 @@ index 4f368a1..ab22fc1 100644
  #define SHA512_DIGEST_LENGTH		64
  
 diff --git a/src/hash/sha512c.c b/src/hash/sha512c.c
-index b3c8d5e..4fade0f 100644
+index b3c8d5e..f69013d 100644
 --- a/src/hash/sha512c.c
 +++ b/src/hash/sha512c.c
-@@ -25,7 +25,11 @@
+@@ -25,7 +25,13 @@
   */
  
  #include <sys/cdefs.h>
++__FBSDID("$FreeBSD$");
++
 +#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
 +#include <machine/endian.h>
 +#else
@@ -579,24 +603,25 @@ index b3c8d5e..4fade0f 100644
  
  #include <string.h>
 diff --git a/src/nlist.c b/src/nlist.c
-index 0932f59..a3ba2be 100644
+index 0932f59..598a329 100644
 --- a/src/nlist.c
 +++ b/src/nlist.c
-@@ -27,6 +27,8 @@
+@@ -27,6 +27,10 @@
   * SUCH DAMAGE.
   */
  
 +#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
-+
++#if defined(LIBC_SCCS) && !defined(lint)
++static char sccsid[] = "@(#)nlist.c	8.1 (Berkeley) 6/4/93";
++#endif /* LIBC_SCCS and not lint */
  #include <sys/cdefs.h>
  
  #include <sys/param.h>
-@@ -265,3 +267,5 @@ nlist(const char *name, struct nlist *list)
+@@ -265,3 +269,4 @@ nlist(const char *name, struct nlist *list)
  	(void)close(fd);
  	return (n);
  }
-+
-+#endif
++#endif /* _NLIST_DO_ELF */
 diff --git a/src/setproctitle.c b/src/setproctitle.c
 index 038ac7d..d0ef01b 100644
 --- a/src/setproctitle.c

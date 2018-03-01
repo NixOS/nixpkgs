@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A package that implements a pre-document language and tools to process it";
     homepage = https://fbb-git.github.io/yodl/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ nckx pSub ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };
 }

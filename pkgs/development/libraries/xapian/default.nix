@@ -27,7 +27,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Search engine library";
-      homepage = http://xapian.org/;
+      homepage = https://xapian.org/;
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ chaoflow ];
       platforms = platforms.unix;

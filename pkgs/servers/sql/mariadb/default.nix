@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
-, openssl, pcre, boost, judy, bison, libxml2
+, libiconv, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 }:
@@ -15,18 +15,18 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.11";
+  version = "10.2.13";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1s53ravbrxcc8ixvkm56rwgs3cfifzngc56pidd1f1dr1n0mlmb3";
+    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    sha256 = "0ly7dxc7rk327liya4kalgsw8irlxl0pl8gq0agdl18a63cpwbi7";
     name   = "mariadb-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc
+    ncurses openssl zlib pcre jemalloc libiconv
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
@@ -34,7 +34,8 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = [ ./cmake-includedir.patch ];
+  patches = [ ./cmake-includedir.patch ]
+    ++ stdenv.lib.optional stdenv.cc.isClang ./clang-isfinite.patch;
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -61,6 +62,7 @@ common = rec { # attributes common to both builds
     "-DPLUGIN_AUTH_GSSAPI_CLIENT=NO"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ++ optional stdenv.hostPlatform.isMusl "-DWITHOUT_TOKUDB=1" # mariadb docs say disable this for musl
     ;
 
   preConfigure = ''
@@ -121,7 +123,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ] ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ];
+  ] ++ optional (stdenv.isLinux && !stdenv.isArm) numactl;
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -134,6 +136,8 @@ everything = stdenv.mkDerivation (common // {
     "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
     "-DINSTALL_DOCDIR=share/doc/mysql"
     "-DINSTALL_SHAREDIR=share/mysql"
+    "-DINSTALL_MYSQLTESTDIR=OFF"
+    "-DINSTALL_SQLBENCHDIR=OFF"
 
     "-DENABLED_LOCAL_INFILE=ON"
     "-DWITH_READLINE=ON"
@@ -152,12 +156,13 @@ everything = stdenv.mkDerivation (common // {
   ];
 
   postInstall = common.postInstall + ''
-    rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
+    rm -r "$out"/data # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
     rm "$out"/bin/rcmysql
   '';
 
-  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive"
+    + optionalString stdenv.isDarwin " -std=c++11";
 });
 
 connector-c = stdenv.mkDerivation rec {
@@ -176,8 +181,14 @@ connector-c = stdenv.mkDerivation rec {
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
   ];
 
+  # The cmake setup-hook uses $out/lib by default, this is not the case here.
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
+  '';
+
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
+  buildInputs = [ libiconv ];
 
   enableParallelBuilding = true;
 

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
+{ stdenv, fetchFromGitHub, fetchpatch, curl, dmd, libevent, rsync }:
 
 let
 
   dubBuild = stdenv.mkDerivation rec {
     name = "dubBuild-${version}";
-    version = "1.6.0";
+    version = "1.7.2";
 
     enableParallelBuilding = true;
 
@@ -12,15 +12,26 @@ let
       owner = "dlang";
       repo = "dub";
       rev = "v${version}";
-      sha256 = "1xjr5pp263lbcd4harxy1ybh7q0kzj9iyy63ji6pn66fizrgm7zk";
+      sha256 = "073ibvgm1gphcqs1yjrav9ryp677nh3b194nxmvicwgvdc0sb6w9";
     };
 
-    postPatch = ''
-      # Avoid that the version file is overwritten
-      substituteInPlace build.sh \
-        --replace source/dub/version_.d /dev/null
+    postUnpack = ''
+        patchShebangs .
+    '';
 
-      patchShebangs .
+    patches = [
+      # TODO Remove with next release which contains https://github.com/dlang/dub/pull/1354
+      (fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/dlang/dub/pull/1354.patch";
+        sha256 = "01alky8a91qwjmlnfjbrn8kiivwr69f3j4c84cjlxrzfp1ph20ah";
+      })
+    ];
+
+    # Can be removed with https://github.com/dlang/dub/pull/1368
+    dubvar = "\\$DUB";
+    postPatch = ''
+        substituteInPlace test/fetchzip.sh \
+            --replace "dub remove" "\"${dubvar}\" remove"
     '';
 
     nativeBuildInputs = [ dmd libevent rsync ];
@@ -59,7 +70,10 @@ let
     outputHash = builtins.hashString "sha256" inputString;
 
     src = dubBuild.src;
+    
+    patches = dubBuild.patches;
 
+    postUnpack = dubBuild.postUnpack;
     postPatch = dubBuild.postPatch;
 
     nativeBuildInputs = dubBuild.nativeBuildInputs;

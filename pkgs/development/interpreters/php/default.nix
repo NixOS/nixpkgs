@@ -338,22 +338,22 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.32";
-    sha256 = "0lfbmdkvijkm6xc4p9sykv66y8xwhws0vsmka8v5cax4bxx4xr1y";
+    version = "5.6.33";
+    sha256 = "1k1ip1slk89hkp57qiqp8k2m5yrg9lx5rja542g87k8xfslrdxh7";
   };
 
   php70 = generic {
-    version = "7.0.25";
-    sha256 = "09fc2lj447phprvilvq2sb6n0r1snj142f8faphrd896s6b4v8lm";
+    version = "7.0.28";
+    sha256 = "0zrw0saqlfv60f3nmff7288wqfhdsfiqns4ys3ii0drzc6s92m5f";
   };
 
   php71 = generic {
-    version = "7.1.11";
-    sha256 = "0ww5493w8w3jlks0xqlfm3v6mm53vpnv5vjy63inkj8zf3gdfikn";
+    version = "7.1.14";
+    sha256 = "1x41qmq66r0ff0573ln34d3qbzwg5z20nagsn1b6frfpkq9zvck3";
   };
 
   php72 = generic {
-    version = "7.2.0";
-    sha256 = "0jn642bm4ah6a5cjavpz8mzw3ddxa270fcwxkj3rg6vb4bjgmzib";
+    version = "7.2.2";
+    sha256 = "1vjaixm4f7rz9vz1yrlzmn9rpp01vd7b74m83qjg4wblw5caqhgq";
   };
 }

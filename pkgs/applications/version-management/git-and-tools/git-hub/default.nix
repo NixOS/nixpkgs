@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
       directly through the Git command line.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.all;
   };
 }

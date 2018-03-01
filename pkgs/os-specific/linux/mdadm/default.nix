@@ -6,16 +6,16 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "mdadm-3.3.4";
+  name = "mdadm-4.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
-    sha256 = "0s6a4bq7v7zxiqzv6wn06fv9f6g502dp047lj471jwxq0r9z9rca";
+    sha256 = "1ad3mma641946wn5lsllwf0lifw9lps34fv1nnkhyfpd9krffshx";
   };
 
   # This is to avoid self-references, which causes the initrd to explode
   # in size and in turn prevents mdraid systems from booting.
-  allowedReferences = [ stdenv.glibc.out ];
+  allowedReferences = [ stdenv.cc.libc.out ];
 
   patches = [ ./no-self-references.patch ];
 
@@ -28,9 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ groff ];
-
-  # Attempt removing if building with gcc5 when updating
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \

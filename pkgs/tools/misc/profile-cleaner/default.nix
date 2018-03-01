@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc }:
+{ stdenv, fetchFromGitHub, makeWrapper, parallel, sqlite, bc, file }:
 
 stdenv.mkDerivation rec {
   version = "2.36";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ parallel sqlite bc ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ parallel sqlite bc file ]}"
   '';
 
   meta = {

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A physics-based puzzle game";
-    maintainers = with maintainers; [ raskin nckx ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
     downloadPage = http://sourceforge.net/projects/soi/files/;

@@ -2,51 +2,51 @@
 
 stdenv.mkDerivation rec {
   name = "dtools-${version}";
-  version = "2.075.1";
+  version = "2.078.2";
 
-  src = fetchFromGitHub {
-    owner = "dlang";
-    repo = "tools";
-    rev = "v${version}";
-    sha256 = "0lxn400s9las9hq6h9vj4mis2jr662k2yw0zcrvqcm1yg9pd245d";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "dmd";
+      rev = "v${version}";
+      sha256 = "0x9q4aw4jl36dz7m5111y2sm8jdaj3zg36zhj6vqg1lqpdn3bhls";
+      name = "dmd";
+    })
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "tools";
+      rev = "v${version}";
+      sha256 = "1cydhn8g0h9i9mygzi80fb5fz3z1f6m8b9gypdvmyhkkzg63kf12";
+      name = "dtools";
+    })
+  ];
 
-  postPatch = ''
-      substituteInPlace posix.mak \
-          --replace "../dmd/generated/\$(OS)/release/\$(MODEL)/dmd" ${dmd.out}/bin/dmd
+  sourceRoot = ".";
 
-      substituteInPlace posix.mak \
-          --replace gcc $CC
-
-      # To fix rdmd test with newer phobos
-      substituteInPlace rdmd.d \
-          --replace " std.stdiobase," ""
+  postUnpack = ''
+      mv dmd dtools
+      cd dtools
   '';
 
   nativeBuildInputs = [ dmd ];
   buildInputs = [ curl ];
 
+  makeCmd = ''
+    make -f posix.mak DMD_DIR=dmd DMD=${dmd.out}/bin/dmd CC=${stdenv.cc}/bin/cc
+  '';
+
   buildPhase = ''
-    make -f posix.mak DMD=${dmd.out}/bin/dmd INSTALL_DIR=$out
+    $makeCmd
   '';
 
   doCheck = true;
 
   checkPhase = ''
-      export BITS=${builtins.toString stdenv.hostPlatform.parsed.cpu.bits}
-      export OSNAME=${if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name}
-      ./generated/$OSNAME/$BITS/rdmd -main -unittest rdmd.d
-      ${dmd.out}/bin/dmd rdmd_test.d
-      ./rdmd_test
+      $makeCmd test_rdmd
     '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    ${
-      let bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
-      osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name; in
-      "find $PWD/generated/${osname}/${bits} -perm /a+x -type f -exec cp {} $out/bin \\;"
-    }
+      $makeCmd INSTALL_DIR=$out install
 	'';
 
   meta = with stdenv.lib; {

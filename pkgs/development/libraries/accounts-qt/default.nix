@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "Qt library for accessing the online accounts database";
     homepage = https://gitlab.com/accounts-sso;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ nckx ];
     platforms = with platforms; linux;
   };
 }

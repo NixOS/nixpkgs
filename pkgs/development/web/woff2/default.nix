@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/google/woff2;
     license = licenses.mit;
     maintainers = [ maintainers.hrdinka ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

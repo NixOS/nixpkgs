@@ -256,6 +256,10 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    nonEmptyListOf = elemType: 
+      let list = addCheck (types.listOf elemType) (l: l != []);
+      in list // { description = "non-empty " + list.description; };
+
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
       description = "attribute set of ${elemType.description}s";

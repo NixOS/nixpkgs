@@ -31,8 +31,7 @@ let
   rainbow_rake = buildRubyGem {
     name = "rake";
     gemName = "rake";
-    remotes = ["https://rubygems.org"];
-    sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
+    source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";
     version = "12.0.0";
   };
@@ -88,6 +87,14 @@ in
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
     '';
   };
+  
+  ethon = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/ethon/curls/settings.rb \
+        --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
+  }; 
 
   eventmachine = attrs: {
     buildInputs = [ openssl ];
@@ -132,8 +139,9 @@ in
   };
 
   grpc = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
   hitimes = attrs: {

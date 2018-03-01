@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     [ ./glib-2.32.patch
       ./libressl.patch
       ./parallel-configure.patch
+      ./clang-5-darwin.patch
       ./qt-4.8.7-unixmake-darwin.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
@@ -106,7 +107,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
         sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
-      });
+      })
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+        ./qt-musl.patch
+        ./qt-musl-iconv-no-bom.patch
+        ./patch-qthread-stacksize.diff
+        ./qsettings-recursive-global-mutex.patch
+      ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
@@ -169,13 +176,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE =
-    optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
-    + optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
-    + optionalString stdenv.isDarwin " -I${libcxx}/include/c++/v1";
+    # with gcc7 the warnings blow the log over Hydra's limit
+    [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
+    ++ optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
+    ++ optionals (stdenv.isFreeBSD || stdenv.isDarwin)
+      [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
+    ++ optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-    "-lglib-2.0";
+  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
   preBuild = optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     description = "Python library for dealing with rpm packaging";
     homepage = https://pagure.io/fedpkg;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
   };
 
 }

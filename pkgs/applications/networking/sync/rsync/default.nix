@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   mainSrc = base.src;
 
-  patchesSrc = base.patches;
+  patchesSrc = base.upstreamPatchTarball;
 
   srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
   patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";

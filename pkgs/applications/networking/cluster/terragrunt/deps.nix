@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "d0cb8551ac28d362e77ea475e5b7b2ebaec06b6b";
-      sha256 = "1546kb49wb1qjx6pz7aj4iygmqsjps70npb5csm5q08wxk63vhls";
+      rev = "00cca3f093a8236a93fbbeeae7d28ad83811683c";
+      sha256 = "1x2frsin6d9drx9k65pv0r0l0asj16fzj815s2a9db2mxh8jycsp";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-getter";
-      rev = "994f50a6f071b07cfbea9eca9618c9674091ca51";
-      sha256 = "1v2whvi9rnrkz4ji3b3sinvv3ahr5s4iyzchz00wjw0q2kdvj1zj";
+      rev = "285374cdfad63de2c43d7562f49ced6dde5a7ba0";
+      sha256 = "0xmwxfb0vm20ga1j1r3lavxm15vwqdkisdkshw1nia7byhwmb4xm";
     };
   }
   {
@@ -68,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-zglob";
-      rev = "4b74c24375b3b1ee226867156e01996f4e19a8d6";
-      sha256 = "1qc502an4q3wgvrd9zw6zprgm28d90d2f98bdamdf4js03jj22xn";
+      rev = "4959821b481786922ac53e7ef25c61ae19fb7c36";
+      sha256 = "0rwkdw143kphpmingsrw1zp030zf3p08f64h347jpdm4lz8z5449";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/mapstructure";
-      rev = "06020f85339e21b2478f756a78e295255ffa4d6a";
-      sha256 = "12zb5jh7ri4vna3f24y9g10nzrnz9wbvwnk29wjk3vg0ljia64s9";
+      rev = "b4575eea38cca1123ec2dc90c26529b5c5acfcff";
+      sha256 = "1x80f3kcb1wd2mdxks3wcsp26q9g7ahr8b18z1anl5igg6zl61kf";
     };
   }
   {
@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "2aa2c176b9dab406a6970f6a55f513e8a8c8b18f";
-      sha256 = "1j92x4291flz3i4pk6bi3y59nnsi6lj34zmyfp7axf68fd8vm5ml";
+      rev = "12b6f73e6084dad08a7c6e575284b177ecafbc71";
+      sha256 = "01f80s0q64pw5drfgqwwk1wfwwkvd2lhbs56lhhkff4ni83k73fd";
     };
   }
   {
@@ -122,8 +122,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "39908eb08fee7c10d842622a114a5c133fb0a3c6";
-      sha256 = "1s0whq54xmcljdg94g6sghpf6mkhf6fdxxb18zg0yzzj6fz9yj8j";
+      rev = "75104e932ac2ddb944a6ea19d9f9f26316ff1145";
+      sha256 = "13iagavgqq3sn9m3sck0chydwy5rcbhj0ylvc1169vs8q2m13yh9";
     };
   }
 ]

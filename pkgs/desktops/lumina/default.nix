@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils,
+{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop-file-utils,
   numlockx, xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmake,
   qttools, poppler_qt5, wrapGAppsHook
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     poppler_qt5
     fluxbox
     xscreensaver
-    desktop_file_utils
+    desktop-file-utils
     numlockx
   ];
 

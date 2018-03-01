@@ -75,5 +75,6 @@ buildPythonApplication rec {
     description = "Multipurpose automation tool for content like torrents";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ domenkozar tari ];
+    broken = true; # as of 2018-02-09
   };
 }

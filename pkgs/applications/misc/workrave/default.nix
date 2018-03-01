@@ -2,7 +2,7 @@
 , autoconf, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
 , glib, glibmm, gtkmm2, atk, pango, pangomm, cairo, cairomm
-, dbus, dbus_glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
+, dbus, dbus-glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "workrave-${version}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
     glib glibmm gtkmm2 atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
+    dbus dbus-glib GConf gconfmm gdome2 gstreamer libsigcxx
   ];
 
   preConfigure = "./autogen.sh";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.workrave.org/;
     downloadPage = https://github.com/rcaelers/workrave/releases;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ nckx prikhi ];
+    maintainers = with maintainers; [ prikhi ];
     platforms = platforms.linux;
   };
 }

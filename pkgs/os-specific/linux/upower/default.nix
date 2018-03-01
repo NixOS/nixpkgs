@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus_glib
+{ stdenv, fetchurl, pkgconfig, glib, dbus-glib
 , intltool, libxslt, docbook_xsl, udev, libgudev, libusb1
 , useSystemd ? true, systemd, gobjectIntrospection
 }:
@@ -6,15 +6,15 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.99.4";
+  name = "upower-0.99.7";
 
   src = fetchurl {
-    url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1c1ph1j1fnrf3vipxb7ncmdfc36dpvcvpsv8n8lmal7grjk2b8ww";
+    url = "https://upower.freedesktop.org/releases/${name}.tar.xz";
+    sha256 = "00d4830yvg84brdhz4kn60lr3r8rn2y8gdbhmhxm78i5mgvc5g14";
   };
 
   buildInputs =
-    [ dbus_glib intltool libxslt docbook_xsl udev libgudev libusb1 gobjectIntrospection ]
+    [ dbus-glib intltool libxslt docbook_xsl udev libgudev libusb1 gobjectIntrospection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installFlags = "historydir=$(TMPDIR)/foo";
 
   meta = {
-    homepage = http://upower.freedesktop.org/;
+    homepage = https://upower.freedesktop.org/;
     description = "A D-Bus service for power management";
     platforms = stdenv.lib.platforms.linux;
   };

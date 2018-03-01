@@ -94,7 +94,7 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond"
+      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
     ])
     (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
@@ -104,6 +104,7 @@ let
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" boolValues)
     (assertValueOneOf "MulticastDNS" boolValues)
+    (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -649,7 +650,11 @@ let
   unitFiles = map (name: {
     target = "systemd/network/${name}";
     source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units);
+  }) (attrNames cfg.units) ++
+  (map (entry: {
+    target = "systemd/network/${entry}";
+    source = "${config.systemd.package}/lib/systemd/network/${entry}";
+  }) (attrNames (builtins.readDir "${config.systemd.package}/lib/systemd/network")));
 in
 
 {
@@ -700,7 +705,6 @@ in
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"
-      "org.freedesktop.network1.busname"
     ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links

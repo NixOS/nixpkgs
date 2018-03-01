@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "98e9df4f23212c3de827af9d770b391cf2dba8d21f4de597145512c1479302cd";
-  extpackRev = "119785";
-  main = "053xpf0kxrig4jq5djfz9drhkxy1x5a4p9qvgxc0b3hnk6yn1869";
-  version = "5.2.4";
+  extpack = "70584a70b666e9332ae2c6be0e64da4b8e3a27124801156577f205750bdde4f5";
+  extpackRev = "120293";
+  main = "1rx45ivwk89ghjc5zdd7c7j92w0w3930xj7l1zhwrvshxs454w7y";
+  version = "5.2.6";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -207,7 +207,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "PC emulator";
     license = licenses.gpl2;
-    homepage = http://www.virtualbox.org/;
+    homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

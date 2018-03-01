@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   baseName = "ortp";
-  version = "0.27.0";
+  version = "1.0.2";
   name = "${baseName}-${version}";
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
     repo = "${baseName}";
     rev = "${version}";
-    sha256 = "0gjaaph4pamay9gn1yn7ky5wyzhj93r53rwak7h8s48vf08fqyv7";
+    sha256 = "12cwv593bsdnxs0zfcp07vwyk7ghlz2wv7vdbs1ksv293w3vj2rv";
   };
 
   buildInputs = [ bctoolbox ];

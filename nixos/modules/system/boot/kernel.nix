@@ -5,7 +5,7 @@ with lib;
 let
 
   inherit (config.boot) kernelPatches;
-
+  inherit (config.boot.kernel) features;
   inherit (config.boot.kernelPackages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
@@ -21,11 +21,25 @@ in
 
   options = {
 
+    boot.kernel.features = mkOption {
+      default = {};
+      example = literalExample "{ debug = true; }";
+      internal = true;
+      description = ''
+        This option allows to enable or disable certain kernel features.
+        It's not API, because it's about kernel feature sets, that
+        make sense for specific use cases. Mostly along with programs,
+        which would have separate nixos options.
+        `grep features pkgs/os-specific/linux/kernel/common-config.nix`
+      '';
+    };
+
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
           kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          features = lib.recursiveUpdate super.kernel.features features;
         };
       });
       # We don't want to evaluate all of linuxPackages for the manual
@@ -170,7 +184,7 @@ in
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
       optionals config.boot.vesa [ "vga=0x317" ];
 
-    boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
+    boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
     boot.kernelModules = [ "loop" "atkbd" ];
 
@@ -197,7 +211,7 @@ in
         "mmc_block"
 
         # Support USB keyboards, in case the boot fails and we only have
-        # a USB keyboard.
+        # a USB keyboard, or for LUKS passphrase prompt.
         "uhci_hcd"
         "ehci_hcd"
         "ehci_pci"
@@ -207,11 +221,13 @@ in
         "xhci_pci"
         "usbhid"
         "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+        "hid_logitech_hidpp" "hid_logitech_dj"
 
-        # Misc. keyboard stuff.
+      ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+        # Misc. x86 keyboard stuff.
         "pcips2" "atkbd" "i8042"
 
-        # Needed by the stage 2 init script.
+        # x86 RTC needed by the stage 2 init script.
         "rtc_cmos"
       ];
 

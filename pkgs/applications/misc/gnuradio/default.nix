@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     addGRCBlocksPath() {
       addToSearchPath GRC_BLOCKS_PATH $1/share/gnuradio/grc/blocks
     }
-    envHooks+=(addGRCBlocksPath)
+    addEnvHooks "$targetOffset" addGRCBlocksPath
   '';
 
   setupHook = [ grcSetupHook ];

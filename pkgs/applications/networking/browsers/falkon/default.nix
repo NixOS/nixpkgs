@@ -2,16 +2,17 @@
 , libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
 
 stdenv.mkDerivation rec {
-  # Last qupvilla release is 2.1.2 so we add the .1 although it isn't actually a
-  # release but it is basically 2.1.2 with the falkon name
+  # KDE hasn't made a release of falkon yet so we just track git for now which is
+  # based on the most recent release of qupzilla
+  # This wip version is 2.1.99 so we add the .1
   name = "falkon-${version}.1";
-  version = "2.1.2";
+  version = "2.1.99";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
-    rev    = "eecaf2e9d6b572a7f7d2e6dc324e3d79b61c31db";
-    sha256 = "01r5aw10jd0qz7xvad0cqzjbnsj7vwblh54wbq4x1m6xbkp6xcgy";
+    rev    = "dd3c570c41b4b3d0ad17202b78bf14cf1ac56495";
+    sha256 = "07d40cpckaprj74mr06k3mfriwb471bdmq60smls34y62ss55q9d";
   };
 
   preConfigure = ''
@@ -21,8 +22,6 @@ stdenv.mkDerivation rec {
     export FALKON_PREFIX=$out
   '';
 
-  dontUseCmakeConfigure = true;
-
   buildInputs = [
     libpthreadstubs libxcb libXdmcp
     kwallet
@@ -31,8 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
 
-  # on 2.1.2: RCC: Error in 'autoscroll.qrc': Cannot find file 'locale/ar_SA.qm'
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "QtWebEngine based cross-platform web browser";
@@ -40,6 +38,5 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
-    broken      = true;
   };
 }

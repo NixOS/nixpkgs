@@ -17,7 +17,7 @@ let
 
     search_lan = entry.searchLAN;
     use_sync_trash = entry.useSyncTrash;
-    known_hosts = knownHosts;
+    known_hosts = entry.knownHosts;
   }) cfg.sharedFolders;
 
   configFile = pkgs.writeText "config.json" (builtins.toJSON ({

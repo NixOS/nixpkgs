@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, pythonPackages, pango, keybinder, vte, gettext, intltool, file
+{ stdenv, fetchurl, pythonPackages, keybinder, vte, gettext, intltool, file, gtk3, gobjectIntrospection, cairo
+, wrapGAppsHook, gnome3
 }:
 
 pythonPackages.buildPythonApplication rec {
   name = "terminator-${version}";
-  version = "1.0";
+  version = "1.91";
 
   src = fetchurl {
-    url = "https://launchpad.net/terminator/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1pfspcxsbax8a835kcld32fax6vcxsn1fmkny9zzvi4icplhkal8";
+    url = "https://launchpad.net/terminator/gtk3/${version}/+download/${name}.tar.gz";
+    sha256 = "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69";
   };
 
-  nativeBuildInputs = [ file intltool ];
+  nativeBuildInputs = [ file intltool wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.vte gobjectIntrospection cairo ];
 
   pythonPath = with pythonPackages; [
-    pygtk pygobject2 vte keybinder notify gettext pango psutil
+    pygobject3 vte keybinder notify gettext psutil
+    pycairo
   ];
 
   postPatch = ''
@@ -32,7 +35,7 @@ pythonPackages.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
-    homepage = http://gnometerminator.blogspot.no/p/introduction.html;
+    homepage = https://gnometerminator.blogspot.no/p/introduction.html;
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor globin ];
     platforms = platforms.linux;

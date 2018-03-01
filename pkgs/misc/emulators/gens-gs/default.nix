@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
 
   meta = {
-    homepage = http://segaretro.org/Gens/GS;
+    homepage = https://segaretro.org/Gens/GS;
     description = "A Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.eelco ];

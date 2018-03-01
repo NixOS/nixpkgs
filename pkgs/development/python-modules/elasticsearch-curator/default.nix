@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname   = "elasticsearch-curator";
   version = "5.4.1";
-  name    = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

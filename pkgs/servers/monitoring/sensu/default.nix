@@ -9,7 +9,7 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "A monitoring framework that aims to be simple, malleable, and scalable";
-    homepage    = http://sensuapp.org/;
+    homepage    = https://sensuapp.org/;
     license     = licenses.mit;
     maintainers = with maintainers; [ theuni peterhoeg ];
     platforms   = platforms.unix;

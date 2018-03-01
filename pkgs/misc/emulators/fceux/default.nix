@@ -1,11 +1,11 @@
 {stdenv, fetchurl, scons, zlib, SDL, lua5_1, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "fceux-2.2.2";
+  name = "fceux-2.2.3";
 
   src = fetchurl {
-    url = mirror://sourceforge/fceultra/Source%20Code/2.2.2%20src/fceux-2.2.2.src.tar.gz;
-    sha256 = "1qg5bygla8ka30b7wqvq6dv84xc7pq0jspffh2jz75d1njyi2kc0";
+    url = mirror://sourceforge/fceultra/Source%20Code/2.2.3%20src/fceux-2.2.3.src.tar.gz;
+    sha256 = "0gl2i3qdmcm7v9m5kpfz98w05d8m33990jiwka043ya7lflxvrjb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
