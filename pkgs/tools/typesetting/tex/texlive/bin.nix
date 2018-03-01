@@ -161,7 +161,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src;
 
   hardeningDisable = [ "format" ];
 
@@ -176,7 +176,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
-  patches = [ ./luatex-gcc7.patch ];
+  patches = common.patches ++ [ ./luatex-gcc7.patch ];
 
   configureScript = ":";
 
