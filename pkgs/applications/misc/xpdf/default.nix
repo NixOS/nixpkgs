@@ -1,6 +1,6 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
 , stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
-, cmake, qtbase ? null
+, cmake, qtbase ? null, makeWrapper
 }:
 
 assert enableGUI -> qtbase != null && freetype != null;
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
   patches = stdenv.lib.optional stdenv.isDarwin  ./cmake_version.patch;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON"];
 
@@ -35,6 +35,11 @@ stdenv.mkDerivation {
   CXXFLAGS = "-O2 -fpermissive";
 
   hardeningDisable = [ "format" ];
+
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/xpdf \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms
+  '';
 
   meta = {
     homepage = http://www.foolabs.com/xpdf/;
