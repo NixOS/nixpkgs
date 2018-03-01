@@ -757,6 +757,7 @@
   volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";
   volth = "Jaroslavas Pocepko <jaroslavas@volth.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
+  vquintin = "Virgile Quintin <virgile.quintin@gmail.com>";
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
   vyp = "vyp <elisp.vim@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
