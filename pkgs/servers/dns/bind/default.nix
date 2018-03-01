@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "10iwkghl5g50b7wc17bsb9wa0dh2gd57bjlk6ynixhywz6dhx1r9";
   };
 
-  preConfigure = "export AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar";
-
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
@@ -26,8 +24,6 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional enableSeccomp libseccomp;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
-
-  BUILD_CC = "cc";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
