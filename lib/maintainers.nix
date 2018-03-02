@@ -406,6 +406,7 @@
   lufia = "Kyohei Kadota <lufia@lufia.org>";
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukego = "Luke Gorrie <luke@snabb.co>";
+  lukeadams = "Luke Adams <luke.adams@belljar.io>";
   luz = "Luz <luz666@daum.net>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
   lyt = "Tim Liou <wheatdoge@gmail.com>";

@@ -480,6 +480,13 @@ with pkgs;
 
   analog = callPackage ../tools/admin/analog {};
 
+  anbox = callPackage ../applications/virtualization/anbox {
+    boost = boost15x;
+  };
+  # need to move to kmods section
+  anbox-binder = callPackage ../applications/virtualization/anbox/kmod-binder.nix { };
+  anbox-ashmem = callPackage ../applications/virtualization/anbox/kmod-ashmem.nix { };
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   apktool = callPackage ../development/tools/apktool {
@@ -8531,6 +8538,9 @@ with pkgs;
   db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
   dbus = callPackage ../development/libraries/dbus { };
+  dbus-cpp  = callPackage ../development/libraries/dbus-cpp {boost = boost15x; };
+  libproperties-cpp  = callPackage ../development/libraries/libproperties-cpp  { };
+  libprocess-cpp  = callPackage ../development/libraries/libprocess-cpp  {boost = boost15x; };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus-glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
@@ -13228,7 +13238,7 @@ with pkgs;
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
-
+    
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc { };
