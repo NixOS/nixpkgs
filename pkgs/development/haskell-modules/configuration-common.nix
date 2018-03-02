@@ -594,7 +594,8 @@ self: super: {
     '';
   });
 
-  # Fine-tune the build.
+  # Build the latest git version instead of the official release. This isn't
+  # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
@@ -615,9 +616,7 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
-  };
+  }));
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
