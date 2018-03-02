@@ -8681,7 +8681,7 @@ in {
     '';
 
     meta = {
-      homepage = "https://falcao.it/HTTPretty/";
+      homepage = "https://github.com/gabrielfalcao/httpretty";
       description = "HTTP client request mocking tool";
       license = licenses.mit;
     };
@@ -16639,7 +16639,7 @@ in {
 
     meta = {
       description = "Utility belt for automated testing";
-      homepage = "http://falcao.it/sure/";
+      homepage = "https://github.com/gabrielfalcao/sure";
       license = licenses.gpl3Plus;
     };
   };
