@@ -1,0 +1,29 @@
+diff -ruN a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
+--- a/cmake/OpenCVGenPkgconfig.cmake	2018-02-27 15:39:00.000000000 -0500
++++ b/cmake/OpenCVGenPkgconfig.cmake	2018-02-27 17:31:56.000000000 -0500
+@@ -124,14 +124,14 @@
+ ocv_list_unique(_3rdparty)
+ 
+ set(OPENCV_PC_LIBS
+-  "-L\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}"
++  "-L${OPENCV_LIB_INSTALL_PATH}"
+   "${_modules}"
+ )
+ if(BUILD_SHARED_LIBS)
+   set(OPENCV_PC_LIBS_PRIVATE "${_extra}")
+ else()
+   set(OPENCV_PC_LIBS_PRIVATE
+-    "-L\${exec_prefix}/${OPENCV_3P_LIB_INSTALL_PATH}"
++    "-L${OPENCV_3P_LIB_INSTALL_PATH}"
+     "${_3rdparty}"
+     "${_extra}"
+   )
+@@ -142,7 +142,7 @@
+ #generate the .pc file
+ set(prefix      "${CMAKE_INSTALL_PREFIX}")
+ set(exec_prefix "\${prefix}")
+-set(libdir      "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
++set(libdir      "${OPENCV_LIB_INSTALL_PATH}")
+ set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
+ 
+ configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/opencv-XXX.pc.in"
