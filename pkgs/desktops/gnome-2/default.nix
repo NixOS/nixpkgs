@@ -12,7 +12,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome_common = gnome-common;
   gnome_keyring = gnome-keyring;
   gnome_desktop = gnome-desktop;
-  gnome_session = gnome-session;
   gnome_settings_daemon = gnome-settings-daemon;
   gnome_control_center = gnome-control-center;
 
@@ -106,8 +105,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome-desktop = callPackage ./desktop/gnome-desktop { };
 
   gnome_panel = callPackage ./desktop/gnome-panel { };
-
-  gnome-session = callPackage ./desktop/gnome-session { };
 
   gnome-settings-daemon = callPackage ./desktop/gnome-settings-daemon { };
 
