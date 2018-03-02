@@ -7322,6 +7322,7 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
+  ansible_1_9 = callPackage ../tools/admin/ansible/1.9.nix {};
   ansible_2_1 = callPackage ../tools/admin/ansible/2.1.nix {};
   ansible_2_2 = callPackage ../tools/admin/ansible/2.2.nix {};
   ansible_2_3 = callPackage ../tools/admin/ansible/2.3.nix {};
