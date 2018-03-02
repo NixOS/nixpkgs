@@ -29,7 +29,7 @@ self: super: {
 
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
@@ -73,13 +73,13 @@ self: super: {
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = (overrideCabal (super.git-annex.overrideScope (self: super: {
-      optparse-applicative = self.optparse-applicative_0_14_0_0;
+      optparse-applicative = self.optparse-applicative_0_14_2_0;
     })) (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "15d29hmbl146axjgbm4qhxpz6ypcq1bjf2aj29yhwh5jmznh58i2";
+      sha256 = "0fdcv9nig896ckl9x51ximxsvja1ii8qysf6c9ickvc0511hvr9w";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -594,7 +594,8 @@ self: super: {
     '';
   });
 
-  # Fine-tune the build.
+  # Build the latest git version instead of the official release. This isn't
+  # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
@@ -615,9 +616,7 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
-  };
+  }));
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
@@ -630,7 +629,7 @@ self: super: {
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_1;
   };
 
   # https://github.com/bos/configurator/issues/22
@@ -697,7 +696,7 @@ self: super: {
   # test suite cannot find its own "idris" binary
   idris = doJailbreak (dontCheck super.idris);
 
-  idris_1_1_1 = overrideCabal (doJailbreak (dontCheck super.idris_1_1_1)) (drv: {
+  idris_1_2_0 = overrideCabal (doJailbreak (dontCheck super.idris_1_2_0)) (drv: {
     # The standard libraries are compiled separately
     configureFlags = (drv.configureFlags or []) ++ [ "-fexeconly" ];
   });
@@ -887,7 +886,7 @@ self: super: {
   html-entities = doJailbreak super.html-entities;
 
   # Needs a version that's newer than what we have in lts-9.
-  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
+  sbv = super.sbv.overrideScope (self: super: { doctest = self.doctest_0_14_1; });
 
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
@@ -914,11 +913,51 @@ self: super: {
   yi = markBroken super.yi;
 
   # https://github.com/jwiegley/hnix/issues/65
-  hnix = super.hnix.override { data-fix = self.data-fix_0_0_7; };
+  hnix = super.hnix.override { data-fix = self.data-fix_0_2_0; };
 
   # Build with gi overloading feature disabled.
   ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
 
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
+
+  # Can't deal with newer versions.
+  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+
+  # These builds need newer versions of their dependencies than those available in LTS-9.x.
+  aeson_1_2_4_0 = dontCheck super.aeson_1_2_4_0;
+  doctest_0_14_1 = dontCheck super.doctest_0_14_1;
+  dhall = (dontCheck super.dhall).overrideScope (self: super: { prettyprinter = self.prettyprinter_1_2_0_1; });
+  extra_1_6_4 = super.extra_1_6_4.override { QuickCheck = self.QuickCheck_2_11_3; };
+  haskell-src-exts-util_0_2_2 = super.haskell-src-exts-util_0_2_2.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+  hlint = super.hlint.override { haskell-src-exts = self.haskell-src-exts_1_20_1; haskell-src-exts-util = self.haskell-src-exts-util_0_2_2; };
+  hoogle = super.hoogle.override { http-conduit = self.http-conduit_2_3_0; };
+  hpack_0_27_0 = (dontCheck super.hpack_0_27_0).override { Glob = self.Glob_0_9_2; aeson = self.aeson_1_2_4_0; yaml = self.yaml_0_8_28; };
+  path-io_1_3_3 = super.path-io_1_3_3.override { path = self.path_0_6_1; };
+  path_0_6_1 = dontCheck super.path_0_6_1;
+  quickcheck-instances_0_3_16_1 = super.quickcheck-instances_0_3_16_1.override { QuickCheck = self.QuickCheck_2_11_3; };
+  unliftio_0_2_4_0 = super.unliftio_0_2_4_0.override { unliftio-core = self.unliftio-core_0_1_1_0; };
+  weeder = super.weeder.override { extra = self.extra_1_6_4; };
+  yaml_0_8_28 = (dontCheck super.yaml_0_8_28).override { aeson = self.aeson_1_2_4_0; };
+
+  stack = (super.stack.overrideScope (self: super: {
+    aeson = self.aeson_1_2_4_0;
+    extra = self.extra_1_6_4;
+    hpack = self.hpack_0_27_0;
+    path = self.path_0_6_1;
+    path-io = self.path-io_1_3_3;
+    unliftio = self.unliftio_0_2_4_0;
+  })).override {
+    # Avoiding the deep-override here saves us from dealing with an infinite
+    # recursion, because ansi-terminal is a dependency of the test suite of
+    # some dependencies of ansi-terminal.
+    ansi-terminal = self.ansi-terminal_0_7_1_1;
+  };
+
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    aeson = self.aeson_1_2_4_0;
+    hackage-db = self.hackage-db_2_0;
+    hpack = self.hpack_0_27_0;
+  });
+
 }

@@ -56,7 +56,8 @@ self: super: {
   # Newer versions require ghc>=8.2
   apply-refact = super.apply-refact_0_3_0_1;
 
-  # This builds needs the latest Cabal version.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  # These builds need the latest Cabal version.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
+  stack = super.stack.override { Cabal = self.Cabal_2_0_1_1; };
 
 }
