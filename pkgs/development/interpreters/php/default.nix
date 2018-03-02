@@ -338,8 +338,8 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.33";
-    sha256 = "1k1ip1slk89hkp57qiqp8k2m5yrg9lx5rja542g87k8xfslrdxh7";
+    version = "5.6.34";
+    sha256 = "1kgjgkabhrm8ksmh6j3m59vm85n401mcn7inh03hnjzfijflk7z1";
   };
 
   php70 = generic {
