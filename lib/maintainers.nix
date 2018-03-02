@@ -226,6 +226,7 @@
   erictapen = "Justin Humm <justin.humm@posteo.de>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
   ertes = "Ertugrul Söylemez <esz@posteo.de>";
+  erosennin = "Andrey Golovizin <ag@sologoc.com>";
   ethercrow = "Dmitry Ivanov <ethercrow@gmail.com>";
   etu = "Elis Hirwing <elis@hirwing.se>";
   exfalso = "Andras Slemmer <0slemi0@gmail.com>";
