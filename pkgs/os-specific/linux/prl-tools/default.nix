@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip undmg libelf ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
+  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
 
   inherit libsOnly;
 
