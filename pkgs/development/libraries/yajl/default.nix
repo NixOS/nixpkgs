@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "yajl-2.1.0";
 
   src = fetchurl {
-    url = http://github.com/lloyd/yajl/tarball/2.1.0;
+    url = https://github.com/lloyd/yajl/tarball/2.1.0;
     name = "${name}.tar.gz";
     sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
   };

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.4.0";
 
   src = fetchurl {
-    url = "http://github.com/downloads/matricks/bam/${name}.tar.bz2";
+    url = "https://github.com/downloads/matricks/bam/${name}.tar.bz2";
     sha256 = "0z90wvyd4nfl7mybdrv9dsd4caaikc6fxw801b72gqi1m9q0c0sn";
   };
 

@@ -7727,7 +7727,7 @@ let
         sha512 = "3ydmy134p48c4zswbvjllak53h545dmzsz77bwpfxjf7aw510yyg4w58pazc2yz9agm93rphfgglrlj9cfkfdygcg1rbv0vj4jhjixy";
       };
     };
-    "emitter-http://github.com/component/emitter/archive/1.0.1.tar.gz" = {
+    "emitter-https://github.com/component/emitter/archive/1.0.1.tar.gz" = {
       name = "emitter";
       packageName = "emitter";
       version = "1.0.1";
@@ -35978,7 +35978,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Web Inspector based nodeJS debugger";
-      homepage = http://github.com/node-inspector/node-inspector;
+      homepage = https://github.com/node-inspector/node-inspector;
     };
     production = true;
     bypassCache = false;
@@ -39917,7 +39917,7 @@ in
       sources."duplexer-0.1.1"
       sources."ecc-jsbn-0.1.1"
       sources."ee-first-1.1.1"
-      sources."emitter-http://github.com/component/emitter/archive/1.0.1.tar.gz"
+      sources."emitter-https://github.com/component/emitter/archive/1.0.1.tar.gz"
       sources."encodeurl-1.0.2"
       (sources."engine.io-1.3.1" // {
         dependencies = [
@@ -40024,7 +40024,7 @@ in
         dependencies = [
           sources."commander-0.6.1"
           sources."debug-0.7.4"
-          sources."emitter-http://github.com/component/emitter/archive/1.0.1.tar.gz"
+          sources."emitter-https://github.com/component/emitter/archive/1.0.1.tar.gz"
         ];
       })
       (sources."socket.io-adapter-0.2.0" // {

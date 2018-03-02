@@ -273,7 +273,7 @@ in
          # https://github.com/haskell/haskell-ide-engine/issues/425
          # The disabled tests do work in a local nix-shell with cabal available.
          patches = [ ./patches/hie-testsuite.patch ];
-         homepage = "http://github.com/githubuser/haskell-ide-engine#readme";
+         homepage = "https://github.com/githubuser/haskell-ide-engine#readme";
          description = "Provide a common engine to power any Haskell IDE";
          license = stdenv.lib.licenses.bsd3;
          hydraPlatforms = stdenv.lib.platforms.none;

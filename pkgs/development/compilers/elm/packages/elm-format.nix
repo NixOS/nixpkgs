@@ -8,7 +8,7 @@ mkDerivation {
   pname = "elm-format";
   version = "0.7.0";
   src = fetchgit {
-    url = "http://github.com/avh4/elm-format";
+    url = "https://github.com/avh4/elm-format";
     sha256 = "1snl2lrrzdwgzi68agi3sdw84aslj04pzzxpm1mam9ic6dzhn3jf";
     rev = "da4b415c6a2b7e77b7d9f00beca3e45230e603fb";
   };

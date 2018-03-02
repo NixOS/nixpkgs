@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-functoria-${version}";
 	version = "2.0.2";
 	src = fetchurl {
-		url = "http://github.com/mirage/functoria/releases/download/${version}/functoria-${version}.tbz";
+		url = "https://github.com/mirage/functoria/releases/download/${version}/functoria-${version}.tbz";
 		sha256 = "019rl4rir4lwgjyqj2wq3ylw4daih1kxxgbc6ld6kzcq66mwr747";
 	};
 

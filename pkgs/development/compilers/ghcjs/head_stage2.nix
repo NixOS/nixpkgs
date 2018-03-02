@@ -185,7 +185,7 @@
           base bytestring criterion ghc-prim integer-gmp siphash text
         ];
         jailbreak = true;
-        homepage = "http://github.com/tibbe/hashable";
+        homepage = "https://github.com/tibbe/hashable";
         description = "A class for types that can be converted to a hash value";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -218,7 +218,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base transformers ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/mtl";
+        homepage = "https://github.com/ekmett/mtl";
         description = "Monad classes, using functional dependencies";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -229,7 +229,7 @@
         version = "1.1.1";
         src = "${ghcjsBoot}/boot/nats";
         jailbreak = true;
-        homepage = "http://github.com/ekmett/nats/";
+        homepage = "https://github.com/ekmett/nats/";
         description = "Natural numbers";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -304,7 +304,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/semigroups/";
+        homepage = "https://github.com/ekmett/semigroups/";
         description = "Anything that associates";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -347,7 +347,7 @@
           base deepseq template-haskell transformers transformers-compat
         ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/tagged";
+        homepage = "https://github.com/ekmett/tagged";
         description = "Haskell 98 phantom types to avoid unsafely passing dummy arguments";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -415,7 +415,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base ghc-prim transformers ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/transformers-compat/";
+        homepage = "https://github.com/ekmett/transformers-compat/";
         description = "A small compatibility shim exposing the new types from transformers 0.3 and 0.4 to older Haskell platforms.";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -513,7 +513,7 @@
           test-framework-hunit test-framework-quickcheck2 text
         ];
         jailbreak = true;
-        homepage = "http://github.com/ghcjs/ghcjs-base";
+        homepage = "https://github.com/ghcjs/ghcjs-base";
         description = "base library for GHCJS";
         license = stdenv.lib.licenses.mit;
       }) {};

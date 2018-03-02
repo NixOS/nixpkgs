@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-cpuid-0.1.0";
 
   src = fetchurl {
-    url = http://github.com/pqwy/cpuid/releases/download/v0.1.0/cpuid-0.1.0.tbz;
+    url = https://github.com/pqwy/cpuid/releases/download/v0.1.0/cpuid-0.1.0.tbz;
     sha256 = "08k2558a3dnxn8msgpz8c93sfn0y027ganfdi2yvql0fp1ixv97p";
   };
 

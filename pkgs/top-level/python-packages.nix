@@ -3053,7 +3053,7 @@ in {
     doCheck = false;
     meta = {
       description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
-      homepage    = "http://github.com/syrusakbary/pyjade";
+      homepage    = "https://github.com/syrusakbary/pyjade";
       license     = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
       platforms   = platforms.all;
@@ -3678,7 +3678,7 @@ in {
 
     meta = {
       description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
-      homepage = "http://github.com/dask/s3fs/";
+      homepage = "https://github.com/dask/s3fs/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ teh ];
     };
@@ -5680,7 +5680,7 @@ in {
     disabled = isPy3k;
 
     src = pkgs.fetchgit {
-      url = "http://github.com/Eelviny/nxt-python";
+      url = "https://github.com/Eelviny/nxt-python";
       rev = "479e20b7491b28567035f4cee294c4a2af629297";
       sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
       branchName= "pyusb";
@@ -11536,7 +11536,7 @@ in {
    ];
 
    meta = with stdenv.lib; {
-     homepage = "http://github.com/bcwaldon/warlock";
+     homepage = "https://github.com/bcwaldon/warlock";
    };
  };
 
@@ -14276,7 +14276,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/mongodb/mongo-python-driver";
+      homepage = "https://github.com/mongodb/mongo-python-driver";
       license = licenses.asl20;
       description = "Python driver for MongoDB ";
     };
@@ -14841,7 +14841,7 @@ in {
     ];
 
     meta = with stdenv.lib; {
-      homepage = "http://github.com/toastdriven/pysolr/";
+      homepage = "https://github.com/toastdriven/pysolr/";
     };
   };
 
@@ -15604,7 +15604,7 @@ in {
 
     meta = {
       description = "sqlite-backed dictionary";
-      homepage = "http://github.com/Yelp/sqlite3dbm";
+      homepage = "https://github.com/Yelp/sqlite3dbm";
       license = licenses.asl20;
     };
   };
@@ -16719,7 +16719,7 @@ in {
     propagatedBuildInputs = with self; [ six dateutil pytz ];
 
     meta = {
-      homepage =  http://github.com/ralphbean/taskw;
+      homepage =  https://github.com/ralphbean/taskw;
       description = "Python bindings for your taskwarrior database";
       license = licenses.gpl3Plus;
       platforms = platforms.all;

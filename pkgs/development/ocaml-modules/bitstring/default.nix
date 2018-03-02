@@ -4,7 +4,7 @@ buildOcaml rec {
   name = "bitstring";
   version = "2.1.0";
   src = fetchurl {
-    url = http://github.com/xguerin/bitstring/archive/v2.1.0.tar.gz;
+    url = https://github.com/xguerin/bitstring/archive/v2.1.0.tar.gz;
     sha256 = "0miw4banfpmx4kxrckpqr57b1fcmsqdmspyjx6gqjd4kghm4l7xj";
   };
 

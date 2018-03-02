@@ -130,6 +130,6 @@ Sample output2:
 - [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
   from VAM plugin manager meant to be used by others as well used by
 
-- [vim2nix](http://github.com/MarcWeber/vim-addon-vim2nix) which generates the
+- [vim2nix](https://github.com/MarcWeber/vim-addon-vim2nix) which generates the
   .nix code
 

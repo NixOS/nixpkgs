@@ -87,7 +87,7 @@ let
       self."itsdangerous"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/pallets/flask/";
+        homepage = "https://github.com/pallets/flask/";
         license = licenses.bsdOriginal;
         description = "A microframework based on Werkzeug, Jinja2 and good intentions";
       };
@@ -122,7 +122,7 @@ let
       self."python-socketio"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/Flask-SocketIO/";
+        homepage = "https://github.com/miguelgrinberg/Flask-SocketIO/";
         license = licenses.mit;
         description = "Socket.IO integration for Flask applications";
       };
@@ -154,7 +154,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/pallets/markupsafe";
+        homepage = "https://github.com/pallets/markupsafe";
         license = licenses.bsdOriginal;
         description = "Implements a XML/HTML/XHTML Markup safe string for Python";
       };
@@ -199,7 +199,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/mitsuhiko/click";
+        homepage = "https://github.com/mitsuhiko/click";
         license = licenses.bsdOriginal;
         description = "A simple wrapper around optparse for powerful command line utilities.";
       };
@@ -246,7 +246,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/mitsuhiko/itsdangerous";
+        homepage = "https://github.com/mitsuhiko/itsdangerous";
         license = licenses.bsdOriginal;
         description = "Various helpers to pass trusted data to untrusted environments and back.";
       };
@@ -278,7 +278,7 @@ let
       self."six"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/python-engineio/";
+        homepage = "https://github.com/miguelgrinberg/python-engineio/";
         license = licenses.mit;
         description = "Engine.IO server";
       };
@@ -296,7 +296,7 @@ let
       self."six"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/python-socketio/";
+        homepage = "https://github.com/miguelgrinberg/python-socketio/";
         license = licenses.mit;
         description = "Socket.IO server";
       };
