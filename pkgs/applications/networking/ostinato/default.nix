@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   ostinatoIcon = fetchurl {
-    url = "http://ostinato.org/images/site-logo.png";
+    url = "https://ostinato.org/images/site-logo.png";
     sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
   };
 

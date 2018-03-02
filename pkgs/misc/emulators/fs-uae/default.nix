@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2.8.3";
 
   src = fetchurl {
-    url = "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz";
+    url = "https://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz";
     sha256 = "14k2p324sdr662f49299mv0bw5jmpj1i2iqn0xs5pgf80x6l3mg2";
   };
 

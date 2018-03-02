@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   meta = with lib; {
-    homepage = http://github.com/smurfix/flask-script;
+    homepage = https://github.com/smurfix/flask-script;
     description = "Scripting support for Flask";
     license = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "newsbeuter-2.9";
 
   src = fetchurl {
-    url = "http://www.newsbeuter.org/downloads/${name}.tar.gz";
+    url = "https://www.newsbeuter.org/downloads/${name}.tar.gz";
     sha256 = "1j1x0hgwxz11dckk81ncalgylj5y5fgw5bcmp9qb5hq9kc0vza3l";
 
   };
