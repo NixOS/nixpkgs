@@ -16347,6 +16347,8 @@ with pkgs;
 
   lumail = callPackage ../applications/networking/mailreaders/lumail { };
 
+  lutris = callPackage ../applications/misc/lutris {};
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
