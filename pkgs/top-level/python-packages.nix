@@ -7066,6 +7066,8 @@ in {
     };
   };
 
+  dj-database-url = callPackage ../development/python-modules/dj-database-url { };
+
   djmail = callPackage ../development/python-modules/djmail { };
 
   pillowfight = buildPythonPackage rec {
