@@ -774,6 +774,7 @@
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   xaverdh = "Dominik Xaver Hörl <hoe.dom@gmx.de>";
   xeji = "xeji <xeji@cat3.de>";
+  xnaveira = "Xavier Naveira <xnaveira@gmail.com>";
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
   xurei = "Olivier Bourdoux <olivier.bourdoux@gmail.com>";
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";

@@ -452,6 +452,8 @@ in {
 
   python-sybase = callPackage ../development/python-modules/sybase {};
 
+  scp = callPackage ../development/python-modules/scp {};
+
   alot = buildPythonPackage rec {
     rev = "0.5.1";
     name = "alot-${rev}";
