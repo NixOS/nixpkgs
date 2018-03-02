@@ -4461,24 +4461,7 @@ in {
     };
   };
 
-  ftputil = buildPythonPackage rec {
-    version = "3.3";
-    name = "ftputil-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/ftputil/${name}.tar.gz";
-      sha256 = "1714w0v6icw2xjx5m54yv2qgkq49qwxwllq4gdb7wkz25iiapr8b";
-    };
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "High-level FTP client library (virtual file system and more)";
-      homepage    = https://pypi.python.org/pypi/ftputil;
-      platforms   = platforms.linux;
-      license     = licenses.bsd2; # "Modified BSD license, says pypi"
-    };
-  };
+  ftputil = callPackage ../development/python-modules/ftputil { };
 
   fudge = buildPythonPackage rec {
     name = "fudge-1.1.0";
@@ -7092,6 +7075,8 @@ in {
       homepage = https://github.com/djblets/djblets;
     };
   };
+
+  dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
   djmail = callPackage ../development/python-modules/djmail { };
 
@@ -11612,23 +11597,7 @@ in {
     };
   };
 
-  ldappool = buildPythonPackage rec {
-    name = "ldappool-${version}";
-    version = "1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ldappool/${name}.tar.gz";
-      sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
-    };
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/mozilla-services/ldappool";
-    };
-  };
-
+  ldappool = callPackage ../development/python-modules/ldappool { };
 
   lz4 = buildPythonPackage rec {
     name = "lz4-0.8.2";
@@ -13029,27 +12998,7 @@ in {
     };
   });
 
-  pycups = buildPythonPackage rec {
-    name = "pycups-${version}";
-    version = "1.9.73";
-
-    src = pkgs.fetchurl {
-      url = "http://cyberelk.net/tim/data/pycups/pycups-${version}.tar.bz2";
-      sha256 = "c381be011889ca6f728598578c89c8ac9f7ab1e95b614474df9f2fa831ae5335";
-    };
-
-    buildInputs = [ pkgs.cups ];
-
-    # Wants to connect to CUPS
-    doCheck = false;
-
-    meta = {
-      description = "Python bindings for libcups";
-      homepage = http://cyberelk.net/tim/software/pycups/;
-      license = with licenses; [ gpl2Plus ];
-    };
-
-  };
+  pycups = callPackage ../development/python-modules/pycups { };
 
   pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.5.1";
