@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, pbr, ldap, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {
   name = "ldappool-${version}";
-  version = "1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     pname = "ldappool";
@@ -10,10 +11,15 @@ buildPythonPackage rec {
     sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
   };
 
-  # Judging from SyntaxError
-  disabled = isPy3k;
+  nativeBuildInputs = [ pbr ];
+
+  propagatedBuildInputs = [ ldap ];
+
+  checkInputs = [ fixtures testresources testtools ];
 
   meta = with lib; {
-    homepage = "https://github.com/mozilla-services/ldappool";
+    description = "A simple connector pool for python-ldap";
+    homepage = https://git.openstack.org/cgit/openstack/ldappool;
+    license = licenses.mpl20;
   };
 }
