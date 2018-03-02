@@ -12281,6 +12281,8 @@ with pkgs;
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
+  mimic = callPackage ../servers/mycroft/mimic.nix { };
+
   mycroft = callPackage ../servers/mycroft { };
 
   myserver = callPackage ../servers/http/myserver { };
