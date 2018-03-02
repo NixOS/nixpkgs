@@ -11678,23 +11678,7 @@ in {
     };
   };
 
-  ldappool = buildPythonPackage rec {
-    name = "ldappool-${version}";
-    version = "1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ldappool/${name}.tar.gz";
-      sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
-    };
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/mozilla-services/ldappool";
-    };
-  };
-
+  ldappool = callPackage ../development/python-modules/ldappool { };
 
   lz4 = buildPythonPackage rec {
     name = "lz4-0.8.2";
