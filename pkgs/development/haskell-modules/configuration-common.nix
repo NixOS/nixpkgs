@@ -927,16 +927,18 @@ self: super: {
 
   # These builds need newer versions of their dependencies than those available in LTS-9.x.
   aeson_1_2_4_0 = dontCheck super.aeson_1_2_4_0;
-  extra_1_6_4 = super.extra_1_6_4.override { QuickCheck = self.QuickCheck_2_11_3; };
   doctest_0_14_1 = dontCheck super.doctest_0_14_1;
-  hpack_0_27_0 = (dontCheck super.hpack_0_27_0).override { Glob = self.Glob_0_9_2; aeson = self.aeson_1_2_4_0; yaml = self.yaml_0_8_28; };
-  path_0_6_1 = dontCheck super.path_0_6_1;
-  path-io_1_3_3 = super.path-io_1_3_3.override { path = self.path_0_6_1; };
-  hlint = super.hlint.override { haskell-src-exts = self.haskell-src-exts_1_20_1; haskell-src-exts-util = self.haskell-src-exts-util_0_2_2; };
+  extra_1_6_4 = super.extra_1_6_4.override { QuickCheck = self.QuickCheck_2_11_3; };
   haskell-src-exts-util_0_2_2 = super.haskell-src-exts-util_0_2_2.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+  hlint = super.hlint.override { haskell-src-exts = self.haskell-src-exts_1_20_1; haskell-src-exts-util = self.haskell-src-exts-util_0_2_2; };
+  hoogle = super.hoogle.override { http-conduit = self.http-conduit_2_3_0; };
+  hpack_0_27_0 = (dontCheck super.hpack_0_27_0).override { Glob = self.Glob_0_9_2; aeson = self.aeson_1_2_4_0; yaml = self.yaml_0_8_28; };
+  path-io_1_3_3 = super.path-io_1_3_3.override { path = self.path_0_6_1; };
+  path_0_6_1 = dontCheck super.path_0_6_1;
   quickcheck-instances_0_3_16_1 = super.quickcheck-instances_0_3_16_1.override { QuickCheck = self.QuickCheck_2_11_3; };
   unliftio_0_2_4_0 = super.unliftio_0_2_4_0.override { unliftio-core = self.unliftio-core_0_1_1_0; };
   yaml_0_8_28 = (dontCheck super.yaml_0_8_28).override { aeson = self.aeson_1_2_4_0; };
+
   stack = (super.stack.overrideScope (self: super: {
     aeson = self.aeson_1_2_4_0;
     extra = self.extra_1_6_4;
@@ -950,6 +952,7 @@ self: super: {
     # some dependencies of ansi-terminal.
     ansi-terminal = self.ansi-terminal_0_7_1_1;
   };
+
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     aeson = self.aeson_1_2_4_0;
     hackage-db = self.hackage-db_2_0;
