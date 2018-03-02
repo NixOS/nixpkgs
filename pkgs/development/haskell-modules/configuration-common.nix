@@ -928,6 +928,7 @@ self: super: {
   # These builds need newer versions of their dependencies than those available in LTS-9.x.
   aeson_1_2_4_0 = dontCheck super.aeson_1_2_4_0;
   doctest_0_14_1 = dontCheck super.doctest_0_14_1;
+  dhall = (dontCheck super.dhall).overrideScope (self: super: { prettyprinter = self.prettyprinter_1_2_0_1; });
   extra_1_6_4 = super.extra_1_6_4.override { QuickCheck = self.QuickCheck_2_11_3; };
   haskell-src-exts-util_0_2_2 = super.haskell-src-exts-util_0_2_2.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
   hlint = super.hlint.override { haskell-src-exts = self.haskell-src-exts_1_20_1; haskell-src-exts-util = self.haskell-src-exts-util_0_2_2; };
