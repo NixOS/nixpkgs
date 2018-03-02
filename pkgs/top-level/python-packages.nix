@@ -12420,13 +12420,13 @@ in {
   pymetar = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pymetar";
-    version = "0.20";
+    version = "0.21";
 
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1rxyg9465cp6nc47pqxqf092wmbvv2zhffzvaf2w74laal43pgxw";
+      sha256 = "1sh3nm5ilnsgpnzbb2wv4xndnizjayw859qp72798jadqpcph69k";
     };
 
     meta = {
