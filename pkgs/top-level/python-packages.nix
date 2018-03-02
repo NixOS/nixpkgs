@@ -184,7 +184,7 @@ in {
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   bap = callPackage ../development/python-modules/bap {
-    bap = pkgs.ocamlPackages_4_02.bap;
+    bap = pkgs.ocamlPackages.bap;
   };
 
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
@@ -12417,24 +12417,7 @@ in {
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
 
-  pymetar = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pymetar";
-    version = "0.20";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1rxyg9465cp6nc47pqxqf092wmbvv2zhffzvaf2w74laal43pgxw";
-    };
-
-    meta = {
-      description = "A command-line tool to show the weather report by a given station ID";
-      homepage = http://www.schwarzvogel.de/software/pymetar.html;
-      license = licenses.gpl2;
-    };
-  };
+  pymetar = callPackage ../development/python-modules/pymetar { };
 
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";

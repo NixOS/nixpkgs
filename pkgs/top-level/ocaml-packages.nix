@@ -54,7 +54,7 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap { cmdliner = cmdliner_0_9; };
+    bap = callPackage ../development/ocaml-modules/bap { };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 

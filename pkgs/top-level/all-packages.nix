@@ -2922,6 +2922,8 @@ with pkgs;
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  infiniband-diags = callPackage ../tools/networking/infiniband-diags { };
+
   inform7 = callPackage ../development/compilers/inform7 { };
 
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
@@ -3300,6 +3302,8 @@ with pkgs;
   kea = callPackage ../tools/networking/kea {
     boost = boost165;
   };
+
+  ispell = callPackage ../tools/text/ispell {};
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
@@ -9458,7 +9462,7 @@ with pkgs;
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocamlPackages_4_02) bap ocaml findlib ctypes;
+    inherit (ocamlPackages) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -13958,6 +13962,8 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
+  deepin-icon-theme = callPackage ../data/icons/deepin-icon-theme { };
+
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   });
@@ -16237,7 +16243,10 @@ with pkgs;
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
+        carlito dejavu_fonts
         freefont_ttf xorg.fontmiscmisc
+        liberation_ttf_v1_binary
+        liberation_ttf_v2_binary
       ];
     };
     clucene_core = clucene_core_2;
@@ -16819,6 +16828,8 @@ with pkgs;
   openjump = callPackage ../applications/misc/openjump { };
 
   openscad = callPackage ../applications/graphics/openscad {};
+
+  opentx = callPackage ../applications/misc/opentx { };
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
@@ -20475,8 +20486,6 @@ with pkgs;
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
-
-  tex4ht = callPackage ../tools/typesetting/tex/tex4ht { tetex = ""; };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
