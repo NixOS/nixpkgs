@@ -42,6 +42,7 @@ mapAliases (rec {
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bundler_HEAD = bundler; # added 2015-11-15
+  cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
   cifs_utils = cifs-utils; # added 2016-08
   clangAnalyzer = clang-analyzer;  # added 2015-02-20

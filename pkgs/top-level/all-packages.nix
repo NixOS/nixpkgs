@@ -13940,7 +13940,7 @@ with pkgs;
 
   caladea = callPackage ../data/fonts/caladea {};
 
-  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
+  cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
   carlito = callPackage ../data/fonts/carlito {};
 
