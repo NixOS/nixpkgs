@@ -34,20 +34,20 @@
 }:
 
 let
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "1nc14kvsjwaisv7d1r6f0hn7na9zr2cm2zh3hd3r9qwm3g78xnac";
+    sha256 = "08yahgf427d2qbs2mw02xww6bv5yjkfc1hihihh7fhqgfz0jnj1h";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1cxw7nra3f1hng057c6hi1ynsyqdazd69irjdgn8xjg6q9h76br0";
+    sha256 = "00x1x53qv2pnc7i56244b5nf44wm2mp77hj486i5697r6hikk8n3";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -151,14 +151,6 @@ stdenv.mkDerivation rec {
   name = "opencv-${version}";
   inherit version src;
 
-  patches = [
-    # Fix for: https://github.com/opencv/opencv/issues/10474
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/ea5a3e557f93844fdb5e54e3e8acfc5f61c6fd9f.patch";
-      sha256 = "1w7jmqlrx73ydh9jjsnnic5xz8r04kxbjpzkcfyb91v3az9132r1";
-    })
-  ];
-
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
@@ -231,6 +223,7 @@ stdenv.mkDerivation rec {
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
+    "-DBUILD_DOCS=${printEnabled enableDocs}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
