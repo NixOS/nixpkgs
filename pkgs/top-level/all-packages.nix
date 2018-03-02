@@ -20195,6 +20195,8 @@ with pkgs;
     icu = icu58;
   };
 
+  mame = libsForQt5.callPackage ../misc/emulators/mame { };
+
   martyr = callPackage ../development/libraries/martyr { };
 
   # previously known as flat-plat
