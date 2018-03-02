@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     description = "Set of programs to inspect and build Windows Installer (.MSI) files";
     homepage = https://wiki.gnome.org/msitools;
     license = [licenses.gpl2 licenses.lgpl21];
-    maintainers = [maintainers.vcunat];
     platforms = platforms.unix;
   };
 }
