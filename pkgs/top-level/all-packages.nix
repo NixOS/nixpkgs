@@ -13960,6 +13960,8 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
+  deepin-icon-theme = callPackage ../data/icons/deepin-icon-theme { };
+
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
   });
