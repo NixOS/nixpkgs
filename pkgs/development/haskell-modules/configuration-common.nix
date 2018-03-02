@@ -887,7 +887,7 @@ self: super: {
   html-entities = doJailbreak super.html-entities;
 
   # Needs a version that's newer than what we have in lts-9.
-  sbv = super.sbv.override { doctest = self.doctest_0_14_1; };
+  sbv = super.sbv.overrideScope (self: super: { doctest = self.doctest_0_14_1; });
 
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
@@ -922,12 +922,18 @@ self: super: {
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
 
+  # Can't deal with newer versions.
+  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+
   # These builds need newer versions of their dependencies than those available in LTS-9.x.
   aeson_1_2_4_0 = dontCheck super.aeson_1_2_4_0;
   extra_1_6_4 = super.extra_1_6_4.override { QuickCheck = self.QuickCheck_2_11_3; };
+  doctest_0_14_1 = dontCheck super.doctest_0_14_1;
   hpack_0_27_0 = (dontCheck super.hpack_0_27_0).override { Glob = self.Glob_0_9_2; aeson = self.aeson_1_2_4_0; yaml = self.yaml_0_8_28; };
   path_0_6_1 = dontCheck super.path_0_6_1;
   path-io_1_3_3 = super.path-io_1_3_3.override { path = self.path_0_6_1; };
+  hlint = super.hlint.override { haskell-src-exts = self.haskell-src-exts_1_20_1; haskell-src-exts-util = self.haskell-src-exts-util_0_2_2; };
+  haskell-src-exts-util_0_2_2 = super.haskell-src-exts-util_0_2_2.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
   quickcheck-instances_0_3_16_1 = super.quickcheck-instances_0_3_16_1.override { QuickCheck = self.QuickCheck_2_11_3; };
   unliftio_0_2_4_0 = super.unliftio_0_2_4_0.override { unliftio-core = self.unliftio-core_0_1_1_0; };
   yaml_0_8_28 = (dontCheck super.yaml_0_8_28).override { aeson = self.aeson_1_2_4_0; };
