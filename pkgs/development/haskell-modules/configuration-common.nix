@@ -939,9 +939,15 @@ self: super: {
     path-io = self.path-io_1_3_3;
     unliftio = self.unliftio_0_2_4_0;
   })).override {
+    # Avoiding the deep-override here saves us from dealing with an infinite
+    # recursion, because ansi-terminal is a dependency of the test suite of
+    # some dependencies of ansi-terminal.
     ansi-terminal = self.ansi-terminal_0_7_1_1;
   };
-
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hackage-db = self.hackage-db_2_0; hpack = self.hpack_0_27_0; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    aeson = self.aeson_1_2_4_0;
+    hackage-db = self.hackage-db_2_0;
+    hpack = self.hpack_0_27_0;
+  });
 
 }
