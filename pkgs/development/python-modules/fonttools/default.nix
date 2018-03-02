@@ -3,6 +3,7 @@
 , numpy
 , pytest
 , pytestrunner
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     pytestrunner
     glibcLocales
   ];
+
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
 
   meta = {
     homepage = https://github.com/fonttools/fonttools;
