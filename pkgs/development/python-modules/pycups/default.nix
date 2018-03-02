@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchurl, cups, libiconv }:
+{ lib, buildPythonPackage, fetchurl, cups }:
 
 buildPythonPackage rec {
   pname = "pycups";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "c381be011889ca6f728598578c89c8ac9f7ab1e95b614474df9f2fa831ae5335";
   };
 
-  buildInputs = [ cups ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ cups ];
 
   # Wants to connect to CUPS
   doCheck = false;

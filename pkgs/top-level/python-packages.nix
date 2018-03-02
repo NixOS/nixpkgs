@@ -12534,6 +12534,15 @@ in {
 
   pycups = callPackage ../development/python-modules/pycups { };
 
+  pycurl = buildPythonPackage (rec {
+    name = "pycurl-7.19.5.1";
+    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
+
+    src = pkgs.fetchurl {
+      url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
+      sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
+    };
+
   pycurl = callPackage ../development/python-modules/pycurl { };
 
   pycurl2 = buildPythonPackage (rec {
