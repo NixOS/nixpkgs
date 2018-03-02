@@ -454,6 +454,8 @@ in {
 
   scp = callPackage ../development/python-modules/scp {};
 
+  ncclient = callPackage ../development/python-modules/ncclient {};
+
   alot = buildPythonPackage rec {
     rev = "0.5.1";
     name = "alot-${rev}";
