@@ -1,9 +1,8 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonPackages
-, setuptools
 , paramiko
+, python
 }:
 
 buildPythonPackage rec {
@@ -15,14 +14,20 @@ buildPythonPackage rec {
     sha256 = "18f59e48df67fac0b069591609a0f4d50d781a101ddb8ec705f0c2e3501a8386";
   };
 
-
-  buildInputs = [
+  propagatedBuildInputs = [
     paramiko
   ];
 
+  checkPhase = ''
+    SCPPY_PORT=10022 ${python.interpreter} test.py
+  '';
+
+  #The Pypi package doesn't include the test
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/jbardin/scp.py;
-    description = "scp module for paramiko";
+    description = "SCP module for paramiko";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ xnaveira ];
   };

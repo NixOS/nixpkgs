@@ -1,12 +1,13 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonPackages
-, setuptools
 , paramiko
 , lxml
 , libxml2
 , libxslt
+, pytest
+, nose
+, rednose
 }:
 
 buildPythonPackage rec {
@@ -18,10 +19,18 @@ buildPythonPackage rec {
     sha256 = "fe6b9c16ed5f1b21f5591da74bfdd91a9bdf69eb4e918f1c06b3c8db307bd32b";
   };
 
+  checkInputs = [ nose rednose ];
 
-  buildInputs = [
-    setuptools paramiko lxml libxml2 libxslt
+  propagatedBuildInputs = [
+    paramiko lxml libxml2 libxslt
   ];
+
+  checkPhase = ''
+    nosetests test --rednose --verbosity=3 --with-coverage --cover-package ncclient
+  '';
+
+  #Unfortunately the test hangs at te end
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://ncclient.org/;
