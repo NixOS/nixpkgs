@@ -937,6 +937,7 @@ self: super: {
   path_0_6_1 = dontCheck super.path_0_6_1;
   quickcheck-instances_0_3_16_1 = super.quickcheck-instances_0_3_16_1.override { QuickCheck = self.QuickCheck_2_11_3; };
   unliftio_0_2_4_0 = super.unliftio_0_2_4_0.override { unliftio-core = self.unliftio-core_0_1_1_0; };
+  weeder = super.weeder.override { extra = self.extra_1_6_4; };
   yaml_0_8_28 = (dontCheck super.yaml_0_8_28).override { aeson = self.aeson_1_2_4_0; };
 
   stack = (super.stack.overrideScope (self: super: {
