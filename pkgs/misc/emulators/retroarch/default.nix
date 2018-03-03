@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
 , ffmpeg, mesa, freetype, libxml2, python34
+, libobjc, AppKit, Foundation
 , alsaLib ? null
 , libpulseaudio ? null
 , libv4l ? null
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ffmpeg freetype libxml2 mesa python34 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan [ vulkan-loader ]
+                ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
                 ++ optionals stdenv.isLinux [ alsaLib libpulseaudio libv4l libX11
                                               libXdmcp libXext libXxf86vm udev ];
 
