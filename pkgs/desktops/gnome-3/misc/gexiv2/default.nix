@@ -1,14 +1,14 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, exiv2, glib, gnome3, gobjectIntrospection, vala }:
 
 let
-  majorVersion = "0.10";
+  pname = "gexiv2";
+  version = "0.10.7";
 in
 stdenv.mkDerivation rec {
-  name = "gexiv2-${version}";
-  version = "${majorVersion}.7";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gexiv2/${majorVersion}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1f7312zygw77ml37i5qilhfvmjm59dn753ax71rcb2jm1p76vgcb";
   };
 
@@ -33,9 +33,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
   propagatedBuildInputs = [ exiv2 ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/gexiv2;
     description = "GObject wrapper around the Exiv2 photo metadata library";
+    license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = gnome3.maintainers;
   };
