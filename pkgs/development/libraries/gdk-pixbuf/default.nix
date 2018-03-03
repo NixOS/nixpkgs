@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, gnome3
 , jasper, libintlOrEmpty, gobjectIntrospection, doCheck ? false }:
 
 let
-  ver_maj = "2.36";
-  ver_min = "7";
+  pname = "gdk-pixbuf";
+  version = "2.36.7";
   # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
   # which apparently requires access to shared-mime-info files during runtime.
 in
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1b6e5eef09d98f05f383014ecd3503e25dfb03d7e5b5f5904e5a65b049a6a4d8";
   };
 
@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit (doCheck);
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gdk_pixbuf";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
