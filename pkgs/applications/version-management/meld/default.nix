@@ -4,14 +4,14 @@
 
 
 let
-  minor = "3.18";
-  version = "${minor}.0";
+  pname = "meld";
+  version = "3.18.0";
   inherit (python3Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
-  name = "meld-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0gi2jzgsrd5q2icyp6wphbn532ddg82nxhfxlffkniy7wnqmi0c4";
   };
 
@@ -42,6 +42,12 @@ in buildPythonApplication rec {
   pythonPath = [ gtk3 ];
 
   doCheck = false;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
