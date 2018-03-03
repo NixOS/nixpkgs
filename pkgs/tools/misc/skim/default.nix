@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     install -D -m 444 plugin/skim.vim -t $vim/plugin
 
     cat <<SCRIPT > $out/bin/sk-share
-    #!/bin/sh
+    #! ${stdenv.shell}
     # Run this script to find the skim shared folder where all the shell
     # integration scripts are living.
     echo $out/share/skim
