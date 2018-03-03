@@ -1,11 +1,11 @@
-{ callPackage, boost155, boost164, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
+{ callPackage, boost155, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
 
 rec {
 
   aeon = callPackage ./aeon { };
 
-  bitcoin  = libsForQt5.callPackage ./bitcoin.nix { boost = boost164; miniupnpc = miniupnpc_2; withGui = true; };
-  bitcoind = callPackage ./bitcoin.nix { boost = boost164; miniupnpc = miniupnpc_2; withGui = false; };
+  bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
+  bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
 
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };

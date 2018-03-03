@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     chipmunk sqlite curl zlib bzip2 libjpeg libpng
-    freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf 
+    freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
     lua5 ode libxdg_basedir libxml2
   ];
+
+  CXXFLAGS = [ "-fpermissive" ];
 
   meta = with stdenv.lib; {
     description = "Obstacled race game";
