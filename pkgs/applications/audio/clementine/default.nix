@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
+{ stdenv, fetchurl, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
 , qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
@@ -24,6 +24,11 @@ let
     # Required so as to avoid adding libspotify as a build dependency (as it is 
     # unfree and thus would prevent us from having a free package).
     ./clementine-spotify-blob-remove-from-build.patch
+    (fetchpatch {
+      # Fix w/gcc7
+      url = "https://github.com/clementine-player/Clementine/pull/5630.patch";
+      sha256 = "0px7xp1m4nvrncx8sga1qlxppk562wrk2qqk19iiry84nxg20mk4";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
