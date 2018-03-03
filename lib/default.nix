@@ -88,7 +88,7 @@ let
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith extendDerivation addPassthru
+      callPackageWith callPackagesWith extendDerivation
       hydraJob makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
