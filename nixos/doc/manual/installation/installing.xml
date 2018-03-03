@@ -401,5 +401,6 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 <xi:include href="installing-usb.xml" />
 <xi:include href="installing-pxe.xml" />
 <xi:include href="installing-virtualbox-guest.xml" />
+<xi:include href="installing-from-other-distro.xml" />
 
 </chapter>
