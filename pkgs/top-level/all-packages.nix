@@ -20344,6 +20344,8 @@ with pkgs;
 
   pt = callPackage ../applications/misc/pt { };
 
+  protocol = python3Packages.callPackage ../applications/networking/protocol { };
+
   pykms = callPackage ../tools/networking/pykms { };
 
   pyload = callPackage ../applications/networking/pyload {};

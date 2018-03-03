@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub }:
+{ stdenv, buildPythonApplication, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "protocol";
   version = "20171226";
 
