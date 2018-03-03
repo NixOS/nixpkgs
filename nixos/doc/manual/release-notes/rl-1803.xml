@@ -20,6 +20,18 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      Linux kernel defaults to the 4.14 branch (it was 4.9).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      GCC defaults to 7.x (it was 6.x).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
       have been made to the infrastructure involved:
       <itemizedlist>
