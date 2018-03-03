@@ -1,12 +1,28 @@
-{ ...}:
-/* List of NixOS maintainers. The format is:
+{ lib }:
+
+with lib;
+
+/* List of NixOS maintainers. Two formats are possible. The first is:
 
     handle = "Real Name <address@example.org>";
 
-  where <handle> is preferred to be your GitHub username (so it's easy
+  where <handle> is assumed to be your GitHub username (so it's easy
   to ping a package @<handle>), and <Real Name> is your real name, not
-  a pseudonym. Please keep the list alphabetically sorted. */
-{
+  a pseudonym.
+
+  The second format is:
+
+    handle = {
+      name = "Real name";
+      email = "address@example.org";
+      github = "handle";
+    };
+
+  Please keep the list alphabetically sorted. */
+
+let
+  maintainers = {
+
   a1russell = "Adam Russell <adamlr6+pub@gmail.com>";
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
@@ -804,4 +820,22 @@
   zraexy = "David Mell <zraexy@gmail.com>";
   zx2c4 = "Jason A. Donenfeld <Jason@zx2c4.com>";
   zzamboni = "Diego Zamboni <diego@zzamboni.org>";
-}
+};
+
+  createMaintainer = key: value:
+    let
+      struct = {
+        name = null;
+        email = null;
+        github = null;
+      };
+    in if isAttrs value then
+      (struct // value)
+    else
+      let
+        values = [ key ] ++ (splitString " <" (removeSuffix ">" value));
+        keys = [ "github" "name" "email" ];
+        attrs = listToAttrs (zipListsWith nameValuePair keys values);
+      in (struct // attrs);
+
+in mapAttrs createMaintainer maintainers
