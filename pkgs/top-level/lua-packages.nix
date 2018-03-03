@@ -9,7 +9,7 @@
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , mysql, postgresql, cyrus_sasl
-, fetchFromGitHub, libmpack, which, fetchpatch
+, fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
 
 let
@@ -35,7 +35,9 @@ let
   getLuaCPath   = lib : getPath lib "so";
 
   #define build lua package function
-  buildLuaPackage = callPackage ../development/lua-modules/generic lua;
+  buildLuaPackage = callPackage ../development/lua-modules/generic {
+    inherit lua writeText;
+  };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;

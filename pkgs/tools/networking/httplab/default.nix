@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "httplab-${version}";
-  version = "0.1.0";
+  version = "0.3.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/gchaincl/httplab";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "gchaincl";
     repo = "httplab";
     inherit rev;
-    sha256 = "19d0aasaxayvw25m9n2gahyq590dwym7k0fng8pqvrgc2mpl0ncw";
+    sha256 = "1q9rp43z59nryfm79gci5a1gmqw552rqd4cki81rymbj3f6xvrf9";
   };
 
   meta = with stdenv.lib; {

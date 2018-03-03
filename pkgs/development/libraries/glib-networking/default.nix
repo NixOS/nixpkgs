@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy
-, gsettings_desktop_schemas }:
+, gsettings-desktop-schemas }:
 
 let
   ver_maj = "2.54";
@@ -15,14 +15,19 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  configureFlags = if stdenv.isDarwin then "--without-ca-certificates"
+    else "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+
+  LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   preBuild = ''
     sed -e "s@${glib.out}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
   '';
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs = [ glib gnutls libproxy gsettings_desktop_schemas ];
+  propagatedBuildInputs = [ glib gnutls libproxy gsettings-desktop-schemas ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   doCheck = false; # tests need to access the certificates (among other things)
 

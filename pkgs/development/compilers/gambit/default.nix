@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
-  version = "4.8.8-435-gd1991ba7";
+  version = "4.8.9";
   bootstrap = import ./bootstrap.nix ( pkgs );
 
   src = fetchgit {
     url = "https://github.com/feeley/gambit.git";
-    rev = "d1991ba7e90ed0149964320f7cafa1a8289e61f0";
-    sha256 = "02harwcsqxxcxgn2yc1y9kyxdp32mampyvnbxrzg2jzfmnp5g6cm";
+    rev = "dd54a71dfc0bd09813592f1645d755867a02195d";
+    sha256 = "120kg73k39gshrwas8a3xcrxgnq1c7ww92wgy4d3mmrwy3j9nzzc";
   };
 
   # Use makeStaticLibraries to enable creation of statically linked binaries

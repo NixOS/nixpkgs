@@ -1,6 +1,6 @@
 { fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
-, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json_glib
-, gettext, desktop_file_utils, gdk_pixbuf, librsvg, wrapGAppsHook
+, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
+, gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
 , itstool, libgdata }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig itstool gettext desktop_file_utils wrapGAppsHook
+    meson ninja pkgconfig itstool gettext desktop-file-utils wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
-    libgudev gnome3.gexiv2 gnome3.gsettings_desktop_schemas
-    libraw json_glib glib gdk_pixbuf librsvg gnome3.rest
+    libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
+    libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
     gnome3.gcr gnome3.defaultIconTheme libgdata
   ];
 

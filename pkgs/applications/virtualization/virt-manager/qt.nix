@@ -1,17 +1,17 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtmultimedia, qtsvg
-, libvncserver, libvirt, pcre, pixman, qtermwidget, spice_gtk, spice_protocol
+, qtbase, qtmultimedia, qtsvg, qttools
+, libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
 }:
 
 mkDerivation rec {
   name = "virt-manager-qt-${version}";
-  version = "0.48.79";
+  version = "0.52.80";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
     rev    = "${version}";
-    sha256 = "1mzncca9blc742vb77gyfza0sd1rby3qy5yl4x19nkllid92jn6k";
+    sha256 = "131rs6c90vdf1j40qj7k6s939y8la9ma0q3labxb7ac3r8hvhn6a";
   };
 
   cmakeFlags = [
@@ -21,10 +21,10 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase qtmultimedia qtsvg
-    libvirt libvncserver pcre pixman qtermwidget spice_gtk spice_protocol
+    libvirt libvncserver pcre pixman qtermwidget spice-gtk spice-protocol
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   enableParallelBuilding = true;
 

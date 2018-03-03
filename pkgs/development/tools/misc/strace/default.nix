@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.21";
 
   src = fetchurl {
-    url = "mirror://sourceforge/strace/${name}.tar.xz";
-    sha256 = "1dvrwi6v9j6b9j6852zzlc61hxgiciadi1xsl89wzbzqlkxnahbd";
+    url = "https://strace.io/files/${version}/${name}.tar.xz";
+    sha256 = "0dsw6xcfrmygidp1dj2ch8cl8icrar7789snkb2r8gh78kdqhxjw";
   };
 
   nativeBuildInputs = [ perl ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 "--enable-mpers=check";
 
   meta = with stdenv.lib; {
-    homepage = http://strace.sourceforge.net/;
+    homepage = http://strace.io/;
     description = "A system call tracer for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

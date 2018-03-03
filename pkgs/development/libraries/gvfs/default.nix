@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       samba libmtp libcap polkit
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      libsoup libgnome_keyring gconf gcr
+      libsoup libgnome-keyring gconf gcr
       # ToDo: not working and probably useless until gnome3 from x-updates
     ]);
 

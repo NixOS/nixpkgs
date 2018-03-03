@@ -16,7 +16,7 @@ index 568cb34..98a5992 100644
  #include <KLocale>
  
 -const QString MobileProviders::ProvidersFile = "/usr/share/mobile-broadband-provider-info/serviceproviders.xml";
-+const QString MobileProviders::ProvidersFile = "@mobile_broadband_provider_info@/share/mobile-broadband-provider-info/serviceproviders.xml";
++const QString MobileProviders::ProvidersFile = "@mobile-broadband-provider-info@/share/mobile-broadband-provider-info/serviceproviders.xml";
  
  bool localeAwareCompare(const QString & one, const QString & two) {
      return one.localeAwareCompare(two) < 0;

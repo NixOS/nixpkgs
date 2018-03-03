@@ -311,7 +311,7 @@ let
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
-                ("auth optional ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so")}
+                ("auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so")}
               ${optionalString cfg.googleAuthenticator.enable
                   "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
             '') + ''
@@ -384,7 +384,7 @@ let
               ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
           ${optionalString (cfg.enableGnomeKeyring)
-              "session optional ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+              "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
                "session optional ${pkgs.lxcfs}/lib/security/pam_cgfs.so -c freezer,memory,name=systemd,unified,cpuset"}
         '');

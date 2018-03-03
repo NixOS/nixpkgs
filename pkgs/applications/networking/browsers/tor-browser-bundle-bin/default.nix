@@ -9,7 +9,7 @@
 , atk
 , cairo
 , dbus
-, dbus_glib
+, dbus-glib
 , fontconfig
 , freetype
 , gdk_pixbuf
@@ -42,8 +42,8 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, hicolor_icon_theme
-, shared_mime_info
+, hicolor-icon-theme
+, shared-mime-info
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -62,7 +62,7 @@ let
     atk
     cairo
     dbus
-    dbus_glib
+    dbus-glib
     fontconfig
     freetype
     gdk_pixbuf
@@ -261,8 +261,8 @@ stdenv.mkDerivation rec {
     EOF
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      hicolor_icon_theme
-      shared_mime_info
+      hicolor-icon-theme
+      shared-mime-info
     ]}
 
     # Generate wrapper

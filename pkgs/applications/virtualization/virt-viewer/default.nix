@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, shared_mime_info, libvirt, yajl, xen
-, gsettings_desktop_schemas, makeWrapper, libvirt-glib, libcap_ng, numactl
+, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
+, gsettings-desktop-schemas, makeWrapper, libvirt-glib, libcap_ng, numactl
 , libapparmor
 , spiceSupport ? true
-, spice_gtk ? null, spice_protocol ? null, libcap ? null, gdbm ? null
+, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
 }:
 
 assert spiceSupport ->
-  spice_gtk != null && spice_protocol != null && libcap != null && gdbm != null;
+  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
 
 with stdenv.lib;
 
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
-    glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl shared_mime_info
-    libvirt yajl gsettings_desktop_schemas makeWrapper libvirt-glib
+    glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
+    libvirt yajl gsettings-desktop-schemas makeWrapper libvirt-glib
     libcap_ng numactl libapparmor
   ] ++ optionals stdenv.isx86_64 [
     xen
   ] ++ optionals spiceSupport [
-    spice_gtk spice_protocol libcap gdbm
+    spice-gtk spice-protocol libcap gdbm
   ];
 
   postInstall = ''

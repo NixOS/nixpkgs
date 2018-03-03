@@ -4,14 +4,14 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
-  version = "0.16.3";
+  version = "0.17.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
     rev = version;
-    sha256 = "0gssa5gbd1y2v3azdhf2zh7ayx4ncfag4r2a6fi96jbic64r3qrs";
+    sha256 = "0hpjs9qj0nr57a249yv8xvl61d3d2rrdfqxp1fm28z77l2xjj772";
   };
 
   checkInputs = [

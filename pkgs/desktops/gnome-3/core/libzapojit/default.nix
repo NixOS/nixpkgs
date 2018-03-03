@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, json_glib, rest, libsoup, gtk, gnome_online_accounts }:
+{ stdenv, fetchurl, pkgconfig, glib, intltool, json-glib, rest, libsoup, gtk, gnome-online-accounts }:
 
 stdenv.mkDerivation rec {
   name = "libzapojit-0.0.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib intltool json_glib rest libsoup gtk gnome_online_accounts ];
+  buildInputs = [ glib intltool json-glib rest libsoup gtk gnome-online-accounts ];
 
   meta = with stdenv.lib; {
     description = "GObject wrapper for the SkyDrive and Hotmail REST APIs";

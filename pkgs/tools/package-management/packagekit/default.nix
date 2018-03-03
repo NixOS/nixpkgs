@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite, systemd
-, gobjectIntrospection, vala_0_38, gtk_doc, autoreconfHook, autoconf-archive
+, gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];
+  nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
 
   preAutoreconf = ''
     gtkdocize

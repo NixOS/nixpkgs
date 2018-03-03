@@ -1,11 +1,11 @@
 { stdenv, fetchurl, dysnomia, disnix, socat, pkgconfig, getopt }:
 
 stdenv.mkDerivation {
-  name = "disnixos-0.6.1";
+  name = "disnixos-0.7";
   
   src = fetchurl {
-    url = https://github.com/svanderburg/disnixos/releases/download/disnixos-0.6.1/disnixos-0.6.1.tar.gz;
-    sha256 = "0pqv8n9942vjwmb32m1af29fi0vjlsbwkj2c7h1xs28z6wahr7wa";
+    url = https://github.com/svanderburg/disnixos/files/1756702/disnixos-0.7.tar.gz;
+    sha256 = "1qf9h3q1r27vg1ry55lj01knq6i0c213f6vlg7wj958mml7fk37b";
   };
   
   nativeBuildInputs = [ pkgconfig ];

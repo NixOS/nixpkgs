@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
       "-DNO_EXAMPLES=1"
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
-    ] ++ lib.optional cudaSupport "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30";
+    ] ++ lib.optionals cudaSupport [
+      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30"
+      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    ];
 
   enableParallelBuilding = true;
 

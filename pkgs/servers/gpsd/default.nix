@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, scons, pkgconfig, dbus, dbus_glib
+{ fetchurl, stdenv, scons, pkgconfig, dbus, dbus-glib
 , ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python2Packages.python dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    python2Packages.python dbus dbus-glib ncurses libX11 libXt libXpm libXaw libXext
     libxslt libusb1
   ];
 

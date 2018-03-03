@@ -211,6 +211,9 @@ in
       "/share/bash-completion"
     ];
 
+    environment.systemPackages = optional cfg.enableCompletion
+      pkgs.nix-bash-completions;
+
     environment.shells =
       [ "/run/current-system/sw/bin/bash"
         "/var/run/current-system/sw/bin/bash"

@@ -1,5 +1,6 @@
 { stdenv, fetchurl
-, openssl, readline, ncurses, zlib }:
+, openssl, readline, ncurses, zlib
+, dataDir ? "/var/lib/softether" }:
 
 let
   os = if stdenv.isLinux then "1"
@@ -17,7 +18,6 @@ stdenv.mkDerivation rec {
   version = "4.25";
   build = "9656";
   compiledDate = "2018.01.15";
-  dataDir = "/var/lib/softether";
 
   src = fetchurl {
     url = "http://www.softether-download.com/files/softether/v${version}-${build}-rtm-${compiledDate}-tree/Source_Code/softether-src-v${version}-${build}-rtm.tar.gz";
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.softether.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.rick68 ];
-    platforms = platforms.linux;
+    platforms = filter (p: p != "aarch64-linux") platforms.linux;
   };
 }

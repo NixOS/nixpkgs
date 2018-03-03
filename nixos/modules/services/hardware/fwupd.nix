@@ -8,12 +8,8 @@ let
   cfg = config.services.fwupd;
   originalEtc =
     let
-      isRegular = v: v == "regular";
-      listFiles = d: builtins.attrNames (filterAttrs (const isRegular) (builtins.readDir d));
-      copiedDirs = [ "fwupd/remotes.d" "pki/fwupd" "pki/fwupd-metadata" ];
-      originalFiles = concatMap (d: map (f: "${d}/${f}") (listFiles "${pkgs.fwupd}/etc/${d}")) copiedDirs;
       mkEtcFile = n: nameValuePair n { source = "${pkgs.fwupd}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile originalFiles);
+    in listToAttrs (map mkEtcFile pkgs.fwupd.filesInstalledToEtc);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf (toString p)}";

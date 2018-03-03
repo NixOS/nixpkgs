@@ -7,7 +7,7 @@
 , libsoup
 , gnome3
 , tdb
-, json_glib
+, json-glib
 , itstool
 , wrapGAppsHook
 , gst_all_1
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     intltool
     libsoup
     tdb
-    json_glib
+    json-glib
     itstool
 
     gtk3

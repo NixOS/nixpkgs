@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.18";
+  version = "1.1.19";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
-    sha256 = "0651lnj5spckqjf83nz116s8qhhydgqdy3rkl4icbh5f05fyw5yh";
+    sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
   };
 
   enableParallelBuilding = true;
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  patches = [ ./few-more-uapi-fixes.patch ];
 
   dontDisableStatic = true;
   dontStrip = true;

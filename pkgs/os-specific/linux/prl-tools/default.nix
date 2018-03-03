@@ -1,5 +1,5 @@
 { stdenv, lib, requireFile, makeWrapper, substituteAll, p7zip
-, gawk, utillinux, xorg, glib, dbus_glib, zlib
+, gawk, utillinux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   libPath = with xorg;
             stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
-            ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
+            ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
 
 
   installPhase = ''

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libsoup, graphicsmagick, json_glib, wrapGAppsHook
-, cairo, cmake, ninja, curl, perl, llvm, desktop_file_utils, exiv2, glib
+{ stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
+, cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "014pq80i5k1kdvvrl7xrgaaq3i4fzv09h7a3pwzlp2ahkczwcm32";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop_file_utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libX11 libexif
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
-    libsoup graphicsmagick json_glib openjpeg lua pugixml
+    libsoup graphicsmagick json-glib openjpeg lua pugixml
     colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
     osm-gps-map
   ];

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "ts-0.7.6";
+  name = "ts-1.0";
 
   installPhase=''make install "PREFIX=$out"'';
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://viric.name/~viric/soft/ts/${name}.tar.gz";
-    sha256 = "07b61sx3hqpdxlg5a1xrz9sxww9yqdix3bmr0sm917r3rzk87lwk";
+    sha256 = "15dkzczx10fhl0zs9bmcgkxfbwq2znc7bpscljm4rchbzx7y6lsg";
   };
 
   meta = with stdenv.lib; {

@@ -3,13 +3,13 @@
 , go-md2man }:
 
 let
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "projectatomic";
     repo = "buildah";
-    sha256 = "0rq3dw6p9rcqc99jk93j0qwg1p8fh4pwqvzylcqlcyqhv46426zf";
+    sha256 = "0xyq7rv0lj6bxwh2rnf44w9gjcqbdkfcdff88023b9vlsc8h4k0m";
   };
   goPackagePath = "github.com/projectatomic/buildah";
 

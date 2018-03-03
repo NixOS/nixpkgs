@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, glib, dbus_glib, libxml2, popt
+{ stdenv, fetchurl, flex, bison, pkgconfig, glib, dbus-glib, libxml2, popt
 , intltool, ORBit2, procps }:
 
 stdenv.mkDerivation rec {

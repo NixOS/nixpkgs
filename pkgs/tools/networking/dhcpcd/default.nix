@@ -1,6 +1,8 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 stdenv.mkDerivation rec {
+  # when updating this to >=7, check, see previous reverts:
+  # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
   name = "dhcpcd-6.11.5";
 
   src = fetchurl {

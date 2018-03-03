@@ -11,4 +11,5 @@
 , "pnpm"
 , "semver"
 , "sloc"
+, "npm"
 ]

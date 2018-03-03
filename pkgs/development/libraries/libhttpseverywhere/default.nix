@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, meson, ninja, valadoc
-, gnome3, glib, json_glib, libarchive, libsoup, gobjectIntrospection }:
+, gnome3, glib, json-glib, libarchive, libsoup, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   major = "0.6";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig valadoc ];
-  buildInputs = [ glib gnome3.libgee json_glib libsoup libarchive ];
+  buildInputs = [ glib gnome3.libgee json-glib libsoup libarchive ];
 
   mesonFlags = "-Denable_valadoc=true";
 

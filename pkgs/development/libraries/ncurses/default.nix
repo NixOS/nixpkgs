@@ -3,6 +3,8 @@
 , abiVersion
 , mouseSupport ? false
 , unicode ? true
+, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
 , gpm
 
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     "--enable-pc-files"
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec"
+    ++ lib.optional enableStatic "--enable-static"
+    ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5";
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:

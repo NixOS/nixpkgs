@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "DESTDIR=$(out)"
+    "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
   postInstall = ''
@@ -32,9 +33,10 @@ stdenv.mkDerivation rec {
     cp -r tests/devkeys* $out/share/vboot/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Chrome OS partitioning and kernel signing tools";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

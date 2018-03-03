@@ -4,7 +4,7 @@
 , utillinuxMinimal ? null
 
 # this is just for tests (not in closure of any regular package)
-, coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
+, coreutils, dbus_daemon, libxml2, tzdata, desktop-file-utils, shared-mime-info, doCheck ? false
 }:
 
 with stdenv.lib;
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libelf setupHook pcre ]
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
-    ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
+    ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
-    export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
+    export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
     export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"

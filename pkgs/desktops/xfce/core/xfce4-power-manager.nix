@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pkgconfig, intltool, glib, gtk, dbus_glib, upower, xfconf
-, libxfce4ui, libxfce4util, libnotify, xfce4panel, hicolor_icon_theme
+{ stdenv, lib, fetchurl, pkgconfig, intltool, glib, gtk, dbus-glib, upower, xfconf
+, libxfce4ui, libxfce4util, libnotify, xfce4panel, hicolor-icon-theme
 , withGtk3 ? false, gtk3, libxfce4ui_gtk3, xfce4panel_gtk3 }:
 let
   p_name  = "xfce4-power-manager";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig intltool glib dbus_glib upower xfconf libxfce4util
-      libnotify hicolor_icon_theme
+    [ pkgconfig intltool glib dbus-glib upower xfconf libxfce4util
+      libnotify hicolor-icon-theme
     ] ++
     (if withGtk3
     then [ gtk3 libxfce4ui_gtk3 xfce4panel_gtk3 ]

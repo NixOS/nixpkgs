@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra_gtk3, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra-gtk3, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-media-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libcanberra_gtk3
+    libcanberra-gtk3
     gnome3.gtk
     mate.libmatemixer
     mate.mate-desktop

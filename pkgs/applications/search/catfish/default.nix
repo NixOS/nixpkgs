@@ -1,5 +1,5 @@
 { stdenv, fetchurl, file, which, intltool, gobjectIntrospection,
-  findutils, xdg_utils, gnome3, pythonPackages, hicolor_icon_theme,
+  findutils, xdg_utils, gnome3, pythonPackages, hicolor-icon-theme,
   wrapGAppsHook
 }:
 
@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.pyxdg
     pythonPackages.ptyprocess
     pythonPackages.pycairo
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
