@@ -1,5 +1,5 @@
 { stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
-, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
+, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
@@ -42,15 +42,14 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.54";
-  ver_min = "3";
+  version = "2.54.3";
 in
 
 stdenv.mkDerivation rec {
-  name = "glib-${ver_maj}.${ver_min}";
+  name = "glib-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/glib/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "963fdc6685dc3da8e5381dfb9f15ca4b5709b28be84d9d05a9bb8e446abac0a8";
   };
 
@@ -143,8 +142,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-     gioModuleDir = "lib/gio/modules";
-     inherit flattenInclude;
+    gioModuleDir = "lib/gio/modules";
+    inherit flattenInclude;
+    updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
   meta = with stdenv.lib; {
