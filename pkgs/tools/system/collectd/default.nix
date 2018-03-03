@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   # Should be included in the next release of this package
   patches = fetchpatch {
     name = "collectd_kafka_fix";
-    url = "https://patch-diff.githubusercontent.com/raw/collectd/collectd/pull/2683.patch";
+    url = "https://github.com/collectd/collectd/commit/6c2eb3ad28f08f7e774b6eaea5ae01b0857cf884.patch";
     sha256 = "14wsyj5xghij9lz7c61bzdyh45zg8pv5xn490cvbqiaci948zzv6";
   };
   configureFlags = [ "--localstatedir=/var" ];
