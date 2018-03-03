@@ -23,8 +23,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "1e8830dfa77a7dc6976509f4a6edb7e012c50792";
-    sha256 = "1cw1k0i68azmzpqzi3r8jm6mbi2wqlql78fhcg0vvnv1ly8bf7vq";
+    rev = "98067cc806ae0d2759cdd2334f230cd8548e5317";
+    sha256 = "077svfs2xy3g30s62q69wcv5pb9vfhzh8i7lhfri73vvhwbpzd5q";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -85,7 +85,6 @@ in stdenv.mkDerivation rec {
     mesonFlagsArray+=(-Ddbussessionservicedir=$out/share/dbus-1/services)
     mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
     mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
-    mesonFlagsArray+=(-Dsysconfdir=$out/etc)
     mesonFlagsArray+=(-Drootprefix=$out)
     mesonFlagsArray+=(-Dlibdir=$lib/lib)
     mesonFlagsArray+=(-Drootlibdir=$lib/lib)
