@@ -670,6 +670,10 @@ with pkgs;
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
+  qes = callPackage ../os-specific/darwin/qes {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv {
