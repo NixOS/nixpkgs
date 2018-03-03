@@ -8,7 +8,8 @@ let
   openldap = pkgs.openldap;
 
   configFile = pkgs.writeText "slapd.conf" cfg.extraConfig;
-
+  configOpts = if cfg.configDir == null then "-f ${configFile}"
+               else "-F ${cfg.configDir}";
 in
 
 {
@@ -88,7 +89,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.openldap.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ openldap ];
 
@@ -98,11 +99,15 @@ in
       after = [ "network.target" ];
       preStart = ''
         mkdir -p /var/run/slapd
-        chown -R ${cfg.user}:${cfg.group} /var/run/slapd
-        mkdir -p ${cfg.dataDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
+        chown -R "${cfg.user}:${cfg.group}" /var/run/slapd
+        mkdir -p "${cfg.dataDir}"
+        chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
       '';
-      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" ${if cfg.configDir == null then "-f "+configFile else "-F "+cfg.configDir}";
+      serviceConfig.ExecStart =
+        "${openldap.out}/libexec/slapd -d 0 " +
+          "-u '${cfg.user}' -g '${cfg.group}' " +
+          "-h '${concatStringsSep " " cfg.urlList}' " +
+          "${configOpts}";
     };
 
     users.extraUsers.openldap =
