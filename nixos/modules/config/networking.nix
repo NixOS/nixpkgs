@@ -43,6 +43,14 @@ in
       '';
     };
 
+    networking.hostnameInHosts = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether or not to include this machine's hostname in <filename>/etc/hosts</filename>.
+      '';
+    };
+
     networking.hostConf = lib.mkOption {
       type = types.lines;
       default = "multi on";
@@ -213,9 +221,11 @@ in
               otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
           in
           ''
-            127.0.0.1 ${cfg.hostName}
-            ${optionalString cfg.enableIPv6 ''
-              ::1 ${userLocalHosts6} ${cfg.hostName}
+            ${optionalString cfg.hostnameInHosts ''
+              127.0.0.1 ${cfg.hostName}
+              ${optionalString cfg.enableIPv6 ''
+                ::1 ${userLocalHosts6} ${cfg.hostName}
+              ''}
             ''}
             127.0.0.1 ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
