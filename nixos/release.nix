@@ -325,6 +325,7 @@ in rec {
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
+  tests.openldap = callTest tests/openldap.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
   #tests.panamax = callTestOnTheseSystems ["x86_64-linux"] tests/panamax.nix {};
