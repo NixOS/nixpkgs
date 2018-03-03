@@ -1955,7 +1955,8 @@ with pkgs;
     inherit (darwin) cf-private;
     wxGTK = wxGTK31;
   };
-  doomseeker = callPackage ../applications/misc/doomseeker { };
+
+  doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
