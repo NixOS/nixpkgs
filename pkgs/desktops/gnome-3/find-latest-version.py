@@ -12,8 +12,10 @@ def odd_unstable(version_str, selected):
         return True
 
     even = version[1] % 2 == 0
+    prerelease = version[1] >= 90
+    stable = even and not prerelease
     if selected == 'stable':
-        return even
+        return stable
     else:
         return True
 
