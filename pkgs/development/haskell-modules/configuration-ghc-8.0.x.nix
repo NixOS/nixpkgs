@@ -58,6 +58,6 @@ self: super: {
 
   # These builds need the latest Cabal version.
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
-  stack = super.stack.override { Cabal = self.Cabal_2_0_1_1; };
+  stack = super.stack.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
 
 }
