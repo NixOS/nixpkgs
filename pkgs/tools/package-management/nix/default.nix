@@ -116,13 +116,21 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = (common rec {
+  nix1 = (common rec {
     name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
   }) // { perl-bindings = nixStable; };
+
+  nixStable = (common rec {
+    name = "nix-2.0";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+    };
+  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";

@@ -20,6 +20,13 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      Nix now defaults to 2.0; see its
+      <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.0">release notes</link>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       Linux kernel defaults to the 4.14 branch (it was 4.9).
     </para>
   </listitem>
