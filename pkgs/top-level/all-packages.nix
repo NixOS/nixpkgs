@@ -17662,11 +17662,6 @@ with pkgs;
     vte = gnome3.vte;
   };
 
-  deepin-terminal = callPackage ../applications/misc/deepin-terminal {
-    inherit (gnome3) libgee vte;
-    wnck = libwnck3;
-  };
-
   termite = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
@@ -19219,6 +19214,8 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
   });
@@ -19285,8 +19282,6 @@ with pkgs;
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   orion = callPackage ../misc/themes/orion {};
-
-  deepin-gtk-theme = callPackage ../misc/themes/deepin { };
 
   elementary-gtk-theme = callPackage ../misc/themes/elementary { };
 
