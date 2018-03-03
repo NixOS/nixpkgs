@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, unzip, firefox, makeWrapper }:
+{ stdenv, fetchgit, unzip, firefox-esr, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pkgname = "conkeror";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/conkeror
     cp -r * $out/libexec/conkeror
 
-    makeWrapper ${firefox}/bin/firefox $out/bin/conkeror \
+    makeWrapper ${firefox-esr}/bin/firefox $out/bin/conkeror \
       --add-flags "-app $out/libexec/conkeror/application.ini"
   '';
 
