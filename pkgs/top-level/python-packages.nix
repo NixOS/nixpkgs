@@ -5639,6 +5639,8 @@ in {
     };
   };
 
+  ncclient = callPackage ../development/python-modules/ncclient {};
+
   logfury = callPackage ../development/python-modules/logfury { };
 
   ndg-httpsclient = buildPythonPackage rec {
@@ -6270,6 +6272,8 @@ in {
       platforms = platforms.linux;
     };
   };
+
+  junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
 
@@ -15305,6 +15309,8 @@ in {
   scikitlearn = callPackage ../development/python-modules/scikitlearn {
     inherit (pkgs) gfortran glibcLocales;
   };
+
+  scp = callPackage ../development/python-modules/scp {};
 
   scripttest = buildPythonPackage rec {
     version = "1.3";
