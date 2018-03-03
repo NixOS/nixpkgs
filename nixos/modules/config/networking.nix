@@ -213,6 +213,10 @@ in
               otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
           in
           ''
+            127.0.0.1 ${cfg.hostName}
+            ${optionalString cfg.enableIPv6 ''
+              ::1 ${userLocalHosts6} ${cfg.hostName}
+            ''}
             127.0.0.1 ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
               ::1 ${userLocalHosts6} localhost
