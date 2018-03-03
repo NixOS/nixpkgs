@@ -98,6 +98,9 @@ let
   # providing Python modules.
   makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
+  removePythonPrefix = name:
+    removePrefix namePrefix name;
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -109,14 +112,27 @@ let
       };
     });
 
+  # Convert a Python library to an application.
+  toPythonApplication = drv:
+    drv.overrideAttrs( oldAttrs: {
+      passthru = (oldAttrs.passthru or {}) // {
+        # Remove Python prefix from name so we have a "normal" name.
+        # While the prefix shows up in the store path, it won't be
+        # used by `nix-env`.
+        name = removePythonPrefix oldAttrs.name;
+        pythonModule = false;
+      };
+    });
+
   disabledIf = x: drv:
-    if x then throw "${removePrefix namePrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
+    if x then throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
 
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
+  inherit toPythonModule toPythonApplication;
 
   # helpers
 
