@@ -15,7 +15,7 @@ def odd_unstable(version_str, selected):
     if selected == 'stable':
         return even
     else:
-        return not even
+        return True
 
 def no_policy(version, selected):
     return True
