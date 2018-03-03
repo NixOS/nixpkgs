@@ -215,6 +215,20 @@ in with stdenv.lib.licenses;
     license = "Non-commercial";
   };
 
+  higan-sfc = (mkLibRetroCore rec {
+		core = "higan-sfc";
+		src = fetchgit {
+			url = "https://gitlab.com/higan/higan.git";
+			rev = "d3f592013a27cb78f17d84f90a6be6cf6f6af1d1";
+			sha256 = "19d4cbwg8d085xq5lmql4v5l4ckgwqzc59ha5yfgv3w4qfp4dmij";
+		};
+    description = "Accurate SNES / Super Famicom emulator";
+    license = gpl3;
+	}).override {
+		makefile = "GNUmakefile";
+		buildPhase = "cd higan && make compiler=g++ target=libretro binary=library && cd out";
+	};
+
   mame = (mkLibRetroCore {
     core = "mame";
     src = fetchRetro {
