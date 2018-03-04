@@ -250,6 +250,11 @@ stdenv.mkDerivation rec {
             ln -sf $i $out/bin/$(basename $i)
         fi
     done
+
+    mkdir -p $out/libexec/licenses
+    echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$out/libexec/licenses/android-sdk-license"
+    echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$out/libexec/licenses/android-sdk-preview-license"
+    echo -e "\nd975f751698a77b662f1254ddbeed3901e976f5a" > "$out/libexec/licenses/intel-android-extra-license"
   '';
 
   buildInputs = [ unzip makeWrapper ];
