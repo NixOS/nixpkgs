@@ -25,6 +25,7 @@
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
+, enableTbb       ? false, tbb
 , enableOvis      ? false, ogre
 , enableGPhoto2   ? false, libgphoto2
 , enableDC1394    ? false, libdc1394
@@ -203,6 +204,7 @@ stdenv.mkDerivation rec {
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
+    ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
@@ -233,6 +235,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
+    (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
