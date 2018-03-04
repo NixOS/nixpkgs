@@ -1,26 +1,31 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python
-, mesa, libX11
+, mesa_noglu, libX11
 }:
 
 stdenv.mkDerivation rec {
   name = "epoxy-${version}";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = "libepoxy";
-    rev = "v${version}";
-    sha256 = "0dfkd4xbp7v5gwsf6qwaraz54yzizf3lj5ymyc0msjn0adq3j5yl";
+    rev = "${version}";
+    sha256 = "1ixpqb10pmdy3n9nxd5inflig9dal5502ggadcns5b58j6jr0yv0";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
-  buildInputs = [ mesa libX11 ];
+  buildInputs = [ mesa_noglu libX11 ];
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     substituteInPlace configure --replace build_glx=no build_glx=yes
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
+  '';
+
+  # add mesa_nonglu to rpath because libepoxy dlopen()s libEGL
+  postFixup = ''
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ mesa_noglu ]}:$(patchelf --print-rpath $out/lib/libepoxy.so.0.0.0)" $out/lib/libepoxy.so.0.0.0
   '';
 
   meta = with stdenv.lib; {
