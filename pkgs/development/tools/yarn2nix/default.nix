@@ -1,21 +1,11 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, linkFarm, runCommand, nodejs, yarn }:
+{ stdenv, lib, fetchurl, linkFarm, runCommand, nodejs, yarn }:
 
 let
   unlessNull = item: alt:
     if item == null then alt else item;
 
-  src = fetchFromGitHub {
-    owner = "moretea";
-    repo =  "yarn2nix";
-    rev = "v1.0.0";
-    sha256 = "02bzr9j83i1064r1r34cn74z7ccb84qb5iaivwdplaykyyydl1k8";
-  };
-
   yarn2nix = mkYarnPackage {
-    inherit src;
-
-    # yarn2nix is the only package that requires the yarnNix option.
-    # All the other projects can auto-generate that file.
+    src = ./.;
     yarnNix = ./yarn.nix;
 
     passthru = {
@@ -194,7 +184,7 @@ let
         rm -rf $out/node_modules/${pname}/node_modules
 
         mkdir $out/bin
-        node ${"${src}/nix/fixup_bin.js"} $out ${lib.concatStringsSep " " publishBinsFor_}
+        node ${./fixup_bin.js} $out ${lib.concatStringsSep " " publishBinsFor_}
 
         runHook postInstall
       '';
