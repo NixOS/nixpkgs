@@ -17320,6 +17320,8 @@ with pkgs;
 
   scantailor = callPackage ../applications/graphics/scantailor { };
 
+  scantailor-advanced = qt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
+
   sc-im = callPackage ../applications/misc/sc-im { };
 
   scite = callPackage ../applications/editors/scite { };
