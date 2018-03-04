@@ -144,7 +144,7 @@ let
     homepage = either (listOf str) str;
     downloadPage = str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    maintainers = listOf str;
+    maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;
     hydraPlatforms = listOf str;
