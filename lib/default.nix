@@ -24,7 +24,7 @@ let
     maintainers = import ./maintainers-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
-
+    versions = callLibs ./versions.nix;
 
     # module system
     modules = callLibs ./modules.nix;
