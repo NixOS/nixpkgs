@@ -274,6 +274,7 @@ in rec {
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
+  tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
   tests.installer = callSubTests tests/installer.nix {};
