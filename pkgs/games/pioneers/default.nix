@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, pkgconfig, intltool } :
+{stdenv, fetchurl, gtk3, pkgconfig, intltool } :
 
 stdenv.mkDerivation rec {
   name = "pioneers-15.4";
@@ -7,10 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1p1d18hrfmqcnghip3shkzcs5qkz6j99jvkdkqfi7pqdvjc323cs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 intltool ];
-
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ gtk3 ];
 
   meta = {
     homepage = http://pio.sourceforge.net/;
