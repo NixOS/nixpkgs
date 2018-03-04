@@ -13034,12 +13034,12 @@ in {
 
 
   pycdio = buildPythonPackage rec {
-    name = "pycdio-0.21";
+    name = "pycdio-2.0.0";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pycdio/${name}.tar.gz";
-      sha256 = "1bkcmg838l2yffsw5lln93ap5f8ks3vmqwg02mygmdmay647rc3v";
+      sha256 = "1a1h0lmfl56a2a9xqhacnjclv81nv3906vdylalybxrk4bhrm3hj";
     };
 
     prePatch = ''
@@ -13067,7 +13067,6 @@ in {
       maintainers = with maintainers; [ rycee ];
       license = licenses.gpl3Plus;
     };
-
   };
 
   pycosat = callPackage ../development/python-modules/pycosat { };
