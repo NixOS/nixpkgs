@@ -14,7 +14,6 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   src = fetchurl {
       url    = "https://github.com/mamedev/mame/archive/${mamename}.tar.gz";
-      #sha256 = "07bn7q919hrmqblzi0awmy3f0867pvhgcwscl4r14rqd5nvzmbqz"; # 0194
       sha256 = "0mwaq8afs0a1wcfk0acxmmg60g0bhly22w377b21icpnxhihx3di"; # 0195
     };
 
@@ -30,6 +29,8 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   #see scripts/target/mame/mess.lua
   sources="src/mame/drivers/amstrad.cpp";
+           /*src/devices/imagedev/bitbngr.cpp,
+           src/devices/bus/rs232/null_modem.cpp"; */
   subtarget = "amstrad";
 
   makeFlags = [
@@ -46,6 +47,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
         "USE_SYSTEM_LIB_LUA=1" # need 5.3.4
       	"USE_SYSTEM_LIB_PORTAUDIO=1"
       	"USE_SYSTEM_LIB_SQLITE3=1"
+        "USE_BUNDLED_LIB_SDL2=0" # error while loading shared libraries: libSDL2-2.0.so.0:
         "USE_SYSTEM_LIB_UTF8PROC=1"
         "USE_SYSTEM_LIB_GLM=1"
         #"USE_SYSTEM_LIB_RAPIDJSON=1" #broken on nixos
@@ -67,20 +69,29 @@ with stdenv.lib; stdenv.mkDerivation rec {
       BINARIES = "castool chdman floptool imgtool jedutil ldresample ldverify nltool nlwav romcmp unidasm";
 
       installPhase = ''
-        mkdir -p $out/{bin,share/$name,share/man/man6}
-        cp $MAINBIN $out/bin
+        mkdir -p $out/{bin,/usr/share/mame,share/man/man6}
+        cp $MAINBIN $out/usr/share/mame
+        substitute ${./mame.sh} $out/bin/$MAINBIN \
+            --subst-var MAINBIN \
+            --subst-var out
         cp docs/man/*.6 $out/share/man/man6
-        cp -a artwork ctrlr keymaps hash language roms $out/share/$name
+        # docs ? remove *.po
+        cp -a  uismall.bdf artwork bgfx ctrlr keymaps hash ini language nl_examples \
+            plugins roms samples $out/usr/share/mame
         '' + optionalString tools ''
         mkdir -p $out/share/man/man1
         for f in $BINARIES ; do
           if [ -f $f ]
             then
               cp $f $out/bin
-              cp docs/man/$f.1 $out/share/man/man1
+              #cp docs/man/$f.1 $out/share/man/man1
           fi
         done
         '';
+
+      /* postInstall = ''
+        $out/mame/$MAINBIN -noreadconfig -showconfig > $out/share/$name/$MAINBIN.ini
+      ''; */
 
       meta = {
         homepage    = http://mamedev.org/;
