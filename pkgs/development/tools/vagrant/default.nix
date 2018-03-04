@@ -28,7 +28,7 @@ in buildRubyGem rec {
   gemName = "vagrant";
   inherit version;
 
-  doCheck = true;
+  doInstallCheck = true;
   dontBuild = false;
   src = fetchurl { inherit url sha256; };
 
@@ -42,6 +42,15 @@ in buildRubyGem rec {
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
       --prefix PATH ':' "${lib.getBin libarchive}/bin"
+  '';
+
+  installCheckPhase = ''
+    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
+      echo 'Vagrant smoke check passed'
+    else
+      echo 'Vagrant smoke check failed'
+      return 1
+    fi
   '';
 
   passthru = {

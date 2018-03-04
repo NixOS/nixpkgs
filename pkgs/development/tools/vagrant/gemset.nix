@@ -104,10 +104,10 @@
   hashicorp-checkpoint = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "15shgckjnxqpz1n9z6y4ax1dcnn5vdqcva29gdg2l7ny0g1w7c7m";
+      sha256 = "1z6mwzvd7p2wqhmk07dwrhvm0ncgqm7pxn0pr2k025rwsspp9bsd";
       type = "gem";
     };
-    version = "0.1.4";
+    version = "0.1.5";
   };
   http-cookie = {
     dependencies = ["domain_name"];
@@ -188,10 +188,10 @@
   multi_json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1raim9ddjh672m32psaa9niw67ywzjbxbdb8iijx3wv9k5b0pk2x";
+      sha256 = "1rl0qy4inf1mp8mybfk56dfga0mvx97zwpmq5xmiwl5r770171nv";
       type = "gem";
     };
-    version = "1.12.2";
+    version = "1.13.1";
   };
   net-scp = {
     dependencies = ["net-ssh"];
@@ -214,10 +214,10 @@
   net-ssh = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "013p5jb4wy0cq7x7036piw2a3s1i9p752ki1srx2m289mpz4ml3q";
+      sha256 = "07c4v97zl1daabmri9zlbzs6yvkl56z1q14bw74d53jdj0c17nhx";
       type = "gem";
     };
-    version = "4.1.0";
+    version = "4.2.0";
   };
   netrc = {
     source = {
@@ -254,10 +254,10 @@
   rb-fsevent = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fbpmjypwxkb8r7y1kmhmyp6gawa4byw0yb3jc3dn9ly4ld9lizf";
+      sha256 = "1lm1k7wpz69jx7jrc92w3ggczkjyjbfziq5mg62vjnxmzs383xx8";
       type = "gem";
     };
-    version = "0.10.2";
+    version = "0.10.3";
   };
   rb-inotify = {
     dependencies = ["ffi"];
@@ -391,10 +391,10 @@
   unf_ext = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14hr2dzqh33kqc0xchs8l05pf3kjcayvad4z1ip5rdjxrkfk8glb";
+      sha256 = "06p1i6qhy34bpb8q8ms88y6f2kz86azwm098yvcc0nyqk9y729j1";
       type = "gem";
     };
-    version = "0.0.7.4";
+    version = "0.0.7.5";
   };
   vagrant = {
     dependencies = ["childprocess" "erubis" "hashicorp-checkpoint" "i18n" "listen" "log4r" "net-scp" "net-sftp" "net-ssh" "rb-kqueue" "rest-client" "ruby_dep" "wdm" "winrm" "winrm-elevated" "winrm-fs"];
@@ -404,7 +404,7 @@
     source = {
       fetchSubmodules = false;
       rev = "7ac8b4191de578e345b29acaf62ecc72c8e73be1";
-      sha256 = "03bpxlliyiny062p8a8vxyb1hymxpgfwliky4vlqn7lbm6z7n6kr";
+      sha256 = "0qybgxdnndx7xfmhyjcj46b2mv78d98yk30d68ppmfnmm3jx590h";
       type = "git";
       url = "https://github.com/mitchellh/vagrant-spec.git";
     };
@@ -449,9 +449,9 @@
     dependencies = ["erubis" "logging" "rubyzip" "winrm"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vax34qbr3n6jifxyzr4nngaz8vrmzw6ydw21cnnrhidfkqgh7ja";
+      sha256 = "1i3w2j2rmhjqj8lynca2m1dm1m5fv1x35xwhk3vyr15dn260z56g";
       type = "gem";
     };
-    version = "1.1.1";
+    version = "1.2.0";
   };
 }
