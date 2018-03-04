@@ -15,8 +15,8 @@ else
 fi
 
 mountPoint=/mnt
-command=("bash" "--login")
 system=/nix/var/nix/profiles/system
+command=($system/sw/bin/bash "--login")
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -32,7 +32,7 @@ while [ "$#" -gt 0 ]; do
             exit 1
             ;;
         --command|-c)
-            command=("bash" "-c" "$1")
+            command=($system/sw/bin/bash "-c" "$1")
             shift 1
             ;;
         --)
