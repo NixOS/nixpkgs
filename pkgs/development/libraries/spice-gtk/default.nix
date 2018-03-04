@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
+, polkit, acl, usbutils, vala
 , gtk3, epoxy }:
 
 with stdenv.lib;
@@ -18,21 +19,32 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     spice-protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
+    polkit acl usbutils
   ];
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
+  # put polkit action in the $out/share/polkit-1/actions
   preAutoreconf = ''
-    substituteInPlace src/Makefile.am \
-          --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
+    substituteInPlace configure.ac \
+      --replace 'POLICYDIR=`''${PKG_CONFIG} polkit-gobject-1 --variable=policydir`' "POLICYDIR=$out/share/polkit-1/actions"
   '';
 
   configureFlags = [
-    "--disable-maintainer-mode"
     "--with-gtk3"
   ];
+
+  # usb redirection needs spice-client-glib-usb-acl-helper to run setuid root
+  # the helper then uses polkit to check access
+  # in nixos, enable this with
+  # security.wrappers.spice-client-glib-usb-acl-helper.source =
+  #   "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper.real";
+  postFixup = ''
+    mv $out/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper.real
+    ln -sf /run/wrappers/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper
+  '';
 
   dontDisableStatic = true; # Needed by the coroutine test
 
@@ -49,7 +61,7 @@ in stdenv.mkDerivation rec {
 
     homepage = http://www.spice-space.org/;
     license = licenses.lgpl21;
-
+    maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;
   };
 }
