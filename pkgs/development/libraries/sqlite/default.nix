@@ -31,6 +31,8 @@ stdenv.mkDerivation {
     "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
     "-DSQLITE_SOUNDEX"
     "-DSQLITE_SECURE_DELETE"
+    "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
+    "-DSQLITE_MAX_EXPR_DEPTH=10000"
   ];
 
   # Test for features which may not be available at compile time
