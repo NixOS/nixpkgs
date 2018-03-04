@@ -9,9 +9,9 @@ stdenv.mkDerivation {
   JAVA_HOME=jdk;
   PREFIX=''''${out}'';
   buildInputs = [ jdk ];
-  maintainers = [ stdenv.lib.maintainers.sander ];
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }
