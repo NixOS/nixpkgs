@@ -30,6 +30,7 @@
 , texinfo
 , hevea
 , buildDocs ? false
+, optimize ? false # optimize sage to the current system (obviously impure)
 }:
 
 stdenv.mkDerivation rec {
@@ -139,7 +140,6 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optionals(buildDocs) [ "--docdir=$(doc)" ];
   preConfigure = ''
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
-    export SAGE_ATLAS_ARCH=fast
 
     export HOME=/tmp/sage-home
     export SAGE_ROOT="$PWD"
@@ -160,6 +160,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$doc"
     export SAGE_DOC="$doc"
     export SAGE_DOCBUILD_OPTS="--no-pdf-links -k"
+  ''
+  + stdenv.lib.optionalString (!optimize) ''
+    export SAGE_FAT_BINARY=yes
   '';
 
   buildFlags = if (buildDocs) then "doc" else "build";
