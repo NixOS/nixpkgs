@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
-, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+, ncurses ? null, perl ? null, pam, systemd, minimal ? false
+, scowl, makeWrapper }:
 
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
@@ -54,13 +55,15 @@ in stdenv.mkDerivation rec {
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)
+    wrapProgram $bin/bin/look \
+      --set "WORDLIST" "${scowl}/share/dict/words.txt"
   '' + lib.optionalString minimal ''
     rm -rf $out/share/{locale,doc,bash-completion}
   '';
