@@ -315,6 +315,13 @@ following incompatible changes:</para>
       <literal>nodejs-4_x</literal>, <literal>nodejs-slim-4_x</literal> and <literal>nodePackages_4_x</literal> are removed.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>pump.io</literal> NixOS module was removed.
+      It is now maintained as an
+      <link xlink:href="https://github.com/rvl/pump.io-nixos">external module</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

@@ -340,7 +340,6 @@ in rec {
   tests.printing = callTest tests/printing.nix {};
   tests.prometheus = callTest tests/prometheus.nix {};
   tests.proxy = callTest tests/proxy.nix {};
-  tests.pumpio = callTest tests/pump.io.nix {};
   # tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.rabbitmq = callTest tests/rabbitmq.nix {};
