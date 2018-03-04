@@ -9528,6 +9528,7 @@ with pkgs;
 
   libcdio = callPackage ../development/libraries/libcdio { };
   libcdio082 = callPackage ../development/libraries/libcdio/0.82.nix { };
+  libcdio-paranoia = callPackage ../development/libraries/libcdio-paranoia { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
