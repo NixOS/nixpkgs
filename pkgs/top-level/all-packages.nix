@@ -19609,6 +19609,8 @@ with pkgs;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
+  caprice32 = callPackage ../misc/emulators/caprice32 { };
+
   cubicle = callPackage ../applications/science/logic/cubicle { };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
