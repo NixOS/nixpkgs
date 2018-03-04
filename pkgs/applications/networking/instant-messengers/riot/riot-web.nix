@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch, writeText, conf ? null }:
 
+let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
   version = "0.13.5";
@@ -12,6 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/
     cp -R . $out/
+    ${lib.optionalString (conf != null) "ln -s ${configFile} $out/config.json"}
   '';
 
   meta = {
