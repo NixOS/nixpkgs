@@ -1,8 +1,6 @@
 { stdenv, fetchurl, fetchgit, openssl, zlib, pcre, postgresql, libxml2, libxslt,
 gd, geoip, perl }:
 
-assert stdenv.isLinux;
-
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
@@ -58,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "A fast web application server built on Nginx";
     homepage    = http://openresty.org;
     license     = licenses.bsd2;
-    platforms   = platforms.linux;
+    platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice lblasc ];
   };
 }
