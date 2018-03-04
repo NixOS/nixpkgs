@@ -14829,7 +14829,6 @@ with pkgs;
   cmus = callPackage ../applications/audio/cmus {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
-    libcdio = libcdio082;
     ffmpeg = ffmpeg_2;
 
     pulseaudioSupport = config.pulseaudio or false;
