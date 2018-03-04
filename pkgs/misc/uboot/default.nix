@@ -32,6 +32,10 @@ let
         url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-03.patch;
         sha256 = "1rhhlhrwhv7ic1n5i720jfh2cxwrkssrkvinllyjy3j9k9bpzcqd";
       })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
+        sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
+      })
     ];
 
     postPatch = ''
