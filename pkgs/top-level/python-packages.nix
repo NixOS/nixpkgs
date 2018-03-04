@@ -2791,6 +2791,8 @@ in {
     };
   };
 
+  miniupnpc = callPackage ../development/python-modules/miniupnpc {};
+
   mixpanel = buildPythonPackage rec {
     version = "4.0.2";
     name = "mixpanel-${version}";
