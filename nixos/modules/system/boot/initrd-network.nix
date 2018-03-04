@@ -50,7 +50,7 @@ in
     };
 
     boot.initrd.network.udhcpc.extraArgs = mkOption {
-      default = "";
+      default = [];
       type = types.listOf types.str;
       description = ''
         Additional command-line arguments passed verbatim to udhcpc if
