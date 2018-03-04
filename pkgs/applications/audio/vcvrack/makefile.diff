@@ -1,0 +1,103 @@
+From a6bf9231a27628209ede1c13bef7815d5224fb25 Mon Sep 17 00:00:00 2001
+From: Sven Keidel <svenkeidel@gmail.com>
+Date: Mon, 26 Feb 2018 21:52:57 +0100
+Subject: [PATCH 1/2] fix makefile for nixos
+
+---
+ Makefile   | 13 ++++++-------
+ compile.mk |  3 ++-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1d429d3..0378ac0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,9 @@
+ VERSION = 0.6.0dev
+
+ FLAGS += \
+-	-Iinclude \
+-	-Idep/include -Idep/lib/libzip/include
++       -Iinclude \
++       -Idep/include
++LIBS += gtk+-2.0 libcurl libzip glew glfw3 jansson openssl rtaudio rtmidi speexdsp
+
+ ifdef RELEASE
+	FLAGS += -DRELEASE=$(RELEASE)
+@@ -16,11 +17,9 @@ include arch.mk
+
+ ifeq ($(ARCH), lin)
+	SOURCES += dep/osdialog/osdialog_gtk2.c
+-	CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
+-	LDFLAGS += -rdynamic \
+-		-lpthread -lGL -ldl \
+-		$(shell pkg-config --libs gtk+-2.0) \
+-		-Ldep/lib -lGLEW -lglfw -ljansson -lspeexdsp -lcurl -lzip -lrtaudio -lrtmidi -lcrypto -lssl
++	CFLAGS += $(shell pkg-config --cflags $(LIBS))
++	LDFLAGS += -rdynamic -ldl \
++		$(shell pkg-config --libs $(LIBS))
+	TARGET = Rack
+ endif
+
+diff --git a/compile.mk b/compile.mk
+index 307c6fe..d56ee0d 100644
+--- a/compile.mk
++++ b/compile.mk
+@@ -15,7 +15,8 @@ CXXFLAGS += -std=c++11
+
+
+ ifeq ($(ARCH), lin)
+-	FLAGS += -DARCH_LIN
++	FLAGS += -DARCH_LIN \
++          $(shell pkg-config --cflags $(LIBS))
+ endif
+
+ ifeq ($(ARCH), mac)
+--
+2.16.2
+
+
+From 3d5840f3c58cd39a82c23c9850760c5ddf56f7a9 Mon Sep 17 00:00:00 2001
+From: Sven Keidel <svenkeidel@gmail.com>
+Date: Sat, 3 Mar 2018 23:02:36 +0100
+Subject: [PATCH 2/2] xmonad bug
+
+---
+ Makefile         | 1 -
+ src/settings.cpp | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 0378ac0..b963f4b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,7 +3,6 @@ VERSION = 0.6.0dev
+ FLAGS += \
+        -Iinclude \
+        -Idep/include
+-LIBS += gtk+-2.0 libcurl libzip glew glfw3 jansson openssl rtaudio rtmidi speexdsp
+
+ ifdef RELEASE
+	FLAGS += -DRELEASE=$(RELEASE)
+diff --git a/src/settings.cpp b/src/settings.cpp
+index 78737b0..cbf7e10 100644
+--- a/src/settings.cpp
++++ b/src/settings.cpp
+@@ -20,6 +20,7 @@ static json_t *settingsToJson() {
+	json_t *tokenJ = json_string(gToken.c_str());
+	json_object_set_new(rootJ, "token", tokenJ);
+
++        /*
+	if (!windowIsMaximized()) {
+		// windowSize
+		Vec windowSize = windowGetWindowSize();
+@@ -31,6 +32,7 @@ static json_t *settingsToJson() {
+		json_t *windowPosJ = json_pack("[f, f]", windowPos.x, windowPos.y);
+		json_object_set_new(rootJ, "windowPos", windowPosJ);
+	}
++        */
+
+	// opacity
+	float opacity = gToolbar->wireOpacitySlider->value;
+--
+2.16.2

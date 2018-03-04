@@ -8866,6 +8866,7 @@ with pkgs;
   glfw = glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
+  glfw_3_3_prerelease = callPackage ../development/libraries/glfw/3.3-prerelease.nix { };
 
   glibc_2_26 = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
@@ -17821,6 +17822,11 @@ with pkgs;
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
+
+  vcvrackWithPlugins = callPackage ../applications/audio/vcvrack {
+    glfw = glfw_3_3_prerelease;
+  };
+  vcvrack = pkgs.vcvrackWithPlugins (import ../applications/audio/vcvrack/plugins.nix { inherit fetchFromGitHub; });
 
   vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
 

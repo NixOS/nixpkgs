@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.1";
+  version = "3.0.0";
   name = "rtmidi-${version}";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
-    rev = "${version}";
+    rev = "v${version}";
     sha256 = "11pl45lp8sq5xkpipwk622w508nw0qcxr03ibicqn1lsws0hva96";
   };
 
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./autogen.sh --no-configure
-    ./configure
   '';
+
+  configureFlags = [ "--with-alsa" "--with-jack" ];
 
   meta = {
     description = "A set of C++ classes that provide a cross platform API for realtime MIDI input/output";
