@@ -12905,6 +12905,8 @@ with pkgs;
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
+  fwts = callPackage ../os-specific/linux/fwts { };
+
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
