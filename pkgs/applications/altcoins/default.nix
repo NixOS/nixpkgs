@@ -59,9 +59,6 @@ rec {
 
   hevm = (haskellPackages.callPackage ./hevm.nix {});
 
-  primecoin  = callPackage ./primecoin.nix { withGui = true; };
-  primecoind = callPackage ./primecoin.nix { withGui = false; };
-
   stellar-core = callPackage ./stellar-core.nix { };
 
   sumokoin = callPackage ./sumokoin.nix { };
