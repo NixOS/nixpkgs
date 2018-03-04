@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zch1qbqgphhp2p2kvjlah8s337162m69yf4y00kcnfb3539ii5f";
   };
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-old-style-cast";
+
   patches = [ ./darwin.patch ];
 
   cmakeFlags = [
