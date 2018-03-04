@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "0sv93nw1j597mdpnibmgaa3nnghdk0z6k27vavm8w2c1z9n6w96i";
   };
 
-  nativeBuildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];
-  buildInputs = [ perl ];
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];
+  nativeBuildInputs = [ perl ];
+
+  NIX_CFLAGS_COMPILE = ["-I${libxml2.dev}/include/libxml2"];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2.dev}/include/libxml2 $additionalFlags"
-    export PATH="$PATH:${stdenv.cc.libc.bin}/bin"
     patchShebangs .
   '';
 
