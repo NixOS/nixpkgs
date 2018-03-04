@@ -41,8 +41,8 @@ let
 
     # !!! hacky
     fixupPhase = ''
-      ln -s asm $out/include/asm-$platform
-      if test "$platform" = "i386" -o "$platform" = "x86_64"; then
+      ln -s asm $out/include/asm-$ARCH
+      if test "$ARCH" = "i386" -o "$ARCH" = "x86_64"; then
         ln -s asm $out/include/asm-x86
       fi
     '';
