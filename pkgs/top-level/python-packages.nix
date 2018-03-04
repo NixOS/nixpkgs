@@ -648,20 +648,6 @@ in {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
-  async = buildPythonPackage rec {
-    name = "async-0.6.1";
-    disabled = isPy3k;
-    meta.maintainers = with maintainers; [ ];
-
-    buildInputs = with self; [ pkgs.zlib ];
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/async/${name}.tar.gz";
-      sha256 = "1lfmjm8apy9qpnpbq8g641fd01qxh9jlya5g2d6z60vf8p04rla1";
-    };
-  };
-
   asynctest = callPackage ../development/python-modules/asynctest { };
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
