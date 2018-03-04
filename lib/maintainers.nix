@@ -459,11 +459,6 @@
     github = "aycanirican";
     name = "Aycan iRiCAN";
   };
-  babariviere = {
-    email = "babariviere@protonmail.com";
-    github = "babariviere";
-    name = "babariviere";
-  };
   bachp = {
     email = "pascal.bach@nextrem.ch";
     github = "bachp";
@@ -1059,11 +1054,6 @@
     github = "earldouglas";
     name = "James Earl Douglas";
   };
-  earvstedt = {
-    email = "erik.arvstedt@gmail.com";
-    github = "erikarvstedt";
-    name = "Erik Arvstedt";
-  };
   ebzzry = {
     email = "ebzzry@ebzzry.io";
     github = "ebzzry";
@@ -1166,11 +1156,6 @@
     email = "eric@afiniate.com";
     github = "ericbmerritt";
     name = "Eric Merritt";
-  };
-  erosennin = {
-    email = "ag@sologoc.com";
-    github = "erosennin";
-    name = "Andrey Golovizin";
   };
   ericsagnes = {
     email = "eric.sagnes@gmail.com";
@@ -1913,11 +1898,6 @@
     github = "layus";
     name = "Guillaume Maudoux";
   };
-  lblasc = {
-    email = "lblasc@znode.net";
-    github = "lblasc";
-    name = "Luka Blaskovic";
-  };
   ldesgoui = {
     email = "ldesgoui@gmail.com";
     github = "ldesgoui";
@@ -1952,11 +1932,6 @@
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";
     name = "Leonardo Cecchi";
-  };
-  lejonet = {
-    email = "daniel@kuehn.se";
-    github = "lejonet";
-    name = "Daniel Kuehn";
   };
   lethalman = {
     email = "lucabru@src.gnome.org";
@@ -3428,11 +3403,6 @@
     github = "telotortium";
     name = "Robert Irelan";
   };
-  teozkr = {
-    email = "teo@nullable.se";
-    github = "teozkr";
-    name = "Teo Klestrup Röijezon";
-  };
   teto = {
     email = "mcoudron@hotmail.com";
     github = "teto";
@@ -3492,11 +3462,6 @@
     email = "timokau@zoho.com";
     github = "timokau";
     name = "Timo Kaufmann";
-  };
-  timor = {
-    email = "timor.dd@googlemail.com";
-    github = "timor";
-    name = "timor";
   };
   tiramiseb = {
     email = "sebastien@maccagnoni.eu";
@@ -3812,11 +3777,6 @@
     email = "xeji@cat3.de";
     github = "xeji";
     name = "xeji";
-  };
-  xnaveira = {
-    email = "xnaveira@gmail.com";
-    github = "xnaveira";
-    name = "Xavier Naveira";
   };
   xnwdd = {
     email = "nwdd+nixos@no.team";
