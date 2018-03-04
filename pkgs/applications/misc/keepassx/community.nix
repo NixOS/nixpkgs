@@ -16,9 +16,9 @@
 , qtx11extras
 
 , withKeePassBrowser ? true
+, withKeePassSSHAgent ? true
 , withKeePassHTTP ? false
 , withKeePassNetworking ? false
-, withKeePassSSHAgent ? false
 }:
 
 with stdenv.lib;
