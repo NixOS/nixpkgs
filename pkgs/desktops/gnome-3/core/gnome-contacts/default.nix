@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
-  version = "3.26";
+  version = "3.26.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "f819ac74b2ad581f9741614627f49ef519713324afd9e4fc0ea5ac261a5f68c1";
+    sha256 = "1jszv4b8rc5q8r460wb7qppvm1ssj4733b4z2vyavc95g00ik286";
   };
 
   passthru = {

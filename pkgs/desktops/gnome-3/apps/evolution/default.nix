@@ -8,11 +8,11 @@ let
   majVer = gnome3.version;
 in stdenv.mkDerivation rec {
   name = "evolution-${version}";
-  version = "3.26.3";
+  version = "3.26.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "091621f21827e2dfb8057f3b2c3a215c4e97a692c59d0a4ee33108af571de60e";
+    sha256 = "1j748f3407zavrh3bqw0mpf8f1i6b788kfjvwkk5bg7mm3c65n2g";
   };
 
   passthru = {
