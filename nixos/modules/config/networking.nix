@@ -222,7 +222,7 @@ in
           in
           ''
             ${optionalString cfg.hostnameInHosts ''
-              127.0.0.1 ${cfg.hostName}
+              127.0.1.1 ${cfg.hostName}
               ${optionalString cfg.enableIPv6 ''
                 ::1 ${userLocalHosts6} ${cfg.hostName}
               ''}
