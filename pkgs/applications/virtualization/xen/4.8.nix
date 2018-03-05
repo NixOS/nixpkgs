@@ -170,12 +170,6 @@ callPackage (import ./generic.nix (rec {
     XSA_249
     XSA_250
     XSA_251_48
-    XSA_252_49
-    # 253: 4.8 not affected
-    # 254: no patch supplied by xen project (Meltdown/Spectre)
-    XSA_255_49_1
-    XSA_255_49_2
-    XSA_256_48
     xenlockprofpatch
     xenpmdpatch
   ];
