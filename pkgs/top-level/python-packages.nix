@@ -5531,6 +5531,25 @@ in {
     };
   };
 
+  mt-940 = buildPythonPackage rec {
+    version = "4.10.0";
+    name = "mt-940-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mt-940/mt-940-${version}.tar.gz";
+      sha256 = "1gyqf1k2r2ml45x08bk69ws865yrpcph514mn4xvjz779mlgh67j";
+    };
+
+    buildInputs = with self; [ pytestrunner pyyaml pytest ];
+    doCheck = false; # Can't find data files
+
+    meta = {
+      description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
+      homepage = "http://pythonhosted.org/mt-940/";
+      license = licenses.bsd3;
+    };
+  };
+
   mwlib = let
     pyparsing = buildPythonPackage rec {
       name = "pyparsing-1.5.7";
