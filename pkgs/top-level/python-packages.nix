@@ -20286,7 +20286,7 @@ EOF
     inherit (pkgs.xgboost) version src meta;
 
     propagatedBuildInputs = with self; [ scipy ];
-    buildInputs = with self; [ nose ];
+    checkInputs = with self; [ nose ];
 
     postPatch = ''
       cd python-package
