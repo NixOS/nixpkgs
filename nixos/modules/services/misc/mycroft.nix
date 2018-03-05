@@ -17,6 +17,14 @@ in {
         Run mycroft as a system-wide service. You probably only want to do this on purpose-built hardware like a Raspberry Pi or similar.
       '';
     };
+
+    voice = lib.mkOption {
+      type = lib.enum [ "ap" "slt" "kal" "awb" "kal16" "rms" "awb_time" ];
+      default = "ap";
+      description = ''
+        The voice used by Mycroft.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
