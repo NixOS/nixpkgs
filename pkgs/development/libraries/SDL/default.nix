@@ -17,17 +17,10 @@ assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGL
 
 let
 
-  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
-  # we must arrange to add it to its RPATH; however, `patchelf' seems
-  # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlagsFun = attrs: [
     "--disable-oss"
     "--disable-video-x11-xme"
-    "--disable-x11-shared"
-    "--disable-alsa-shared"
     "--enable-rpath"
-    "--disable-pulseaudio-shared"
-    "--disable-osmesa-shared"
   ] ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
 
@@ -50,7 +43,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = [ ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
     ++ optional stdenv.isLinux libcap
@@ -115,6 +107,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput share/aclocal "$dev"
+  '';
+
+  # See the same place in the expression for SDL2
+  postFixup = ''
+    for lib in $out/lib/*.so* ; do
+      if [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+      fi
+    done
   '';
 
   setupHook = ./setup-hook.sh;

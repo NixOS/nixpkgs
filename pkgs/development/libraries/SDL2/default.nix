@@ -21,14 +21,10 @@ assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
 let
 
-  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
-  # we must arrange to add it to its RPATH; however, `patchelf' seems
-  # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlagsFun = attrs: [
-      "--disable-oss" "--disable-x11-shared" "--disable-wayland-shared"
-      "--disable-pulseaudio-shared" "--disable-alsa-shared"
-    ] ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
-      ++ optional (!x11Support) "--without-x";
+    "--disable-oss"
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
 
 in
 
@@ -48,18 +44,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = [ libiconv ]
+    ++ optional  dbusSupport dbus
+    ++ optional  udevSupport udev
     ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ optional  alsaSupport alsaLib
     ++ optional  pulseaudioSupport libpulseaudio;
 
   buildInputs = [ audiofile ]
-    ++ optional openglSupport libGL
-    ++ optional alsaSupport alsaLib
-    ++ optional dbusSupport dbus
-    ++ optional udevSupport udev
-    ++ optional ibusSupport ibus
+    ++ optional  openglSupport libGL
+    ++ optional  ibusSupport ibus
     ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
@@ -79,6 +74,28 @@ stdenv.mkDerivation rec {
     moveToOutput lib/libSDL2main.a "$dev"
     rm $out/lib/*.a
     moveToOutput bin/sdl2-config "$dev"
+  '';
+
+  # SDL is weird in that instead of just dynamically linking with
+  # libraries when you `--enable-*` (or when `configure` finds) them
+  # it `dlopen`s them at runtime. In principle, this means it can
+  # ignore any missing optional dependencies like alsa, pulseaudio,
+  # some x11 libs, wayland, etc if they are missing on the system
+  # and/or work with wide array of versions of said libraries. In
+  # nixpkgs, however, we don't need any of that. Moreover, since we
+  # don't have a global ld-cache we have to stuff all the propagated
+  # libraries into rpath by hand or else some applications that use
+  # SDL API that requires said libraries will fail to start.
+  #
+  # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
+  # confirm that they actually use most of the `propagatedBuildInputs`
+  # from above in this way. This is pretty weird.
+  postFixup = ''
+    for lib in $out/lib/*.so* ; do
+      if [[ -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+      fi
+    done
   '';
 
   setupHook = ./setup-hook.sh;
