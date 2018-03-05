@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
-, hostPlatform, buildPackages
+{ stdenv, buildPackages
+, buildPlatform, hostPlatform
+, fetchurl, makeWrapper, gawk, pkgconfig
+, libffi, libtool, readline, gmp, boehmgc, libunistring
+, coverageAnalysis ? null, gnu ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -20,9 +22,10 @@
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ] ++
-    stdenv.lib.optional stdenv.isCross buildPackages.buildPackages.guile;
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+                           buildPackages.buildPackages.guile;
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [ gmp boehmgc ]
