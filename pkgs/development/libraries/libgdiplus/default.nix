@@ -1,31 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
+{ stdenv, fetchFromGitHub, pkgconfig, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libjpeg, libpng
-, libXrender, libexif }:
+, libXrender, libexif, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libgdiplus-2.10.9";
+  name = "libgdiplus-5.6";
 
-  src = fetchurl {
-    url = "https://download.mono-project.com/sources/libgdiplus/${name}.tar.bz2";
-    sha256 = "0klnbly2q0yx5p0l5z8da9lhqsjj9xqj06kdw2v7rnms4z1vdpkd";
+  src = fetchFromGitHub {
+    owner = "mono";
+    repo = "libgdiplus";
+    rev = "5.6";
+    sha256 = "11xr84kng74j3pd8sx74q80a71k6dw0a502qgibcxlyqh666lfb7";
   };
 
   NIX_LDFLAGS = "-lgif";
 
-  patches =
-    [ (fetchurl {
-        url = "https://raw.github.com/MagicGroup/MagicSpecLib/master/libgdiplus/libgdiplus-2.10.1-libpng15.patch";
-        sha256 = "130r0jm065pjvbz5dkx96w37vj1wqc8fakmi2znribs14g0bl65f";
-      })
-      ./giflib.patch
-    ];
+  patches = [ ];
 
   patchFlags = "-p0";
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
   buildInputs =
-    [ pkgconfig glib cairo fontconfig libtiff giflib
+    [ glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif
     ]
     ++ stdenv.lib.optional stdenv.isDarwin Carbon;
