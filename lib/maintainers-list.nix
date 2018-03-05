@@ -470,7 +470,7 @@
     name = "Pascal Bach";
   };
   backuitist = {
-    email = null;
+    email = "biethb@gmail.com";
     github = "backuitist";
     name = "Bruno Bieth";
   };
@@ -2691,9 +2691,9 @@
     name = "Pierre Carrier";
   };
   periklis = {
-    email = null;
+    email = "theopompos@gmail.com";
     github = "periklis";
-    name = "theopompos@gmail.com";
+    name = "Periklis Tsirakidis";
   };
   pesterhazy = {
     email = "pesterhazy@gmail.com";
