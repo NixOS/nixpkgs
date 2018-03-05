@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy
-, autoconf, automake, coreutils, fetchgit, perl, python3
+, autoconf, automake, coreutils, fetchgit, perl, python3, m4
 
 , libffi, libiconv ? null, ncurses
 
