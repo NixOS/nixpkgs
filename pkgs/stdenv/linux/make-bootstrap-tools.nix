@@ -88,7 +88,7 @@ in with pkgs; rec {
     '' else throw "unsupported libc for bootstrap tools")
     + ''
         # Copy coreutils, bash, etc.
-        cp ${coreutilsMinimal.out}/bin/* $out/bin
+        cp -d ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash.out}/bin/bash $out/bin
