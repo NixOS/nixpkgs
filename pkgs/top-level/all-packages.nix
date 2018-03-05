@@ -8986,6 +8986,8 @@ with pkgs;
 
   grpc = callPackage ../development/libraries/grpc { };
 
+  gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
+
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
   });
