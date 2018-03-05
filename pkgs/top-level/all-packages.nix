@@ -10400,8 +10400,8 @@ with pkgs;
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 {
-  };
+  libxml2 = callPackage ../development/libraries/libxml2 { };
+
   libxml2Python = pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${self.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
