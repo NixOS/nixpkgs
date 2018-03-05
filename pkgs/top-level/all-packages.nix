@@ -10890,7 +10890,6 @@ with pkgs;
   };
 
   postgis = callPackage ../development/libraries/postgis { };
-  postgis_2_3 = callPackage ../development/libraries/postgis/2.3.nix { };
 
   protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
