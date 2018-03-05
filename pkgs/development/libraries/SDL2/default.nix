@@ -11,19 +11,27 @@
 , libiconv
 }:
 
-# OSS is no longer supported, for it's much crappier than ALSA and
-# PulseAudio.
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
+# NOTE: When editing this expression see if the same change applies to
+# SDL expression too
 
-assert openglSupport -> (stdenv.isDarwin || libGL != null && x11Support);
+with lib;
+
+assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
+assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
 let
+
+  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
+  # we must arrange to add it to its RPATH; however, `patchelf' seems
+  # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlagsFun = attrs: [
       "--disable-oss" "--disable-x11-shared" "--disable-wayland-shared"
       "--disable-pulseaudio-shared" "--disable-alsa-shared"
-    ] ++ lib.optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
-      ++ lib.optional (!x11Support) "--without-x";
+    ] ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
+      ++ optional (!x11Support) "--without-x";
+
 in
+
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
   version = "2.0.8";
@@ -34,24 +42,25 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+  outputBin = "dev"; # sdl-config
 
   patches = [ ./find-headers.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
-  propagatedBuildInputs = lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ] ++
-    lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ] ++
-    lib.optional pulseaudioSupport libpulseaudio
-    ++ [ libiconv ];
+  propagatedBuildInputs = [ libiconv ]
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
+    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ optional  pulseaudioSupport libpulseaudio;
 
-  buildInputs = [ audiofile ] ++
-    lib.optional openglSupport libGL ++
-    lib.optional alsaSupport alsaLib ++
-    lib.optional dbusSupport dbus ++
-    lib.optional udevSupport udev ++
-    lib.optional ibusSupport ibus ++
-    lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+  buildInputs = [ audiofile ]
+    ++ optional openglSupport libGL
+    ++ optional alsaSupport alsaLib
+    ++ optional dbusSupport dbus
+    ++ optional udevSupport udev
+    ++ optional ibusSupport ibus
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;
@@ -60,9 +69,6 @@ stdenv.mkDerivation rec {
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
   enableParallelBuilding = false;
 
-  # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
-  # we must arrange to add it to its RPATH; however, `patchelf' seems
-  # to fail at doing this, hence `--disable-pulseaudio-shared'.
   configureFlags = configureFlagsFun { inherit alsaLib; };
 
   crossAttrs = {
