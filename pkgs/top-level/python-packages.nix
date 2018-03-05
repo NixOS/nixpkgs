@@ -14403,6 +14403,8 @@ in {
     };
   };
 
+  python-ptrace = callPackage ../development/python-modules/python-ptrace { };
+
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
     version = "0.6.0";
