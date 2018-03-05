@@ -1,5 +1,5 @@
 {stdenv, fetchurl, pkgconfig, xorg, libpng, xineLib, readline, ncurses, curl
-, lirc, shared_mime_info, libjpeg }:
+, lirc, shared-mime-info, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "xine-ui-0.99.9";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "18liwmkbj75xs9bipw3vr67a7cwmdfcp04v5lph7nsjlkwhq1lcd";
   };
   
-  nativeBuildInputs = [ pkgconfig shared_mime_info ];
+  nativeBuildInputs = [ pkgconfig shared-mime-info ];
 
   buildInputs =
     [ xineLib libpng readline ncurses curl lirc libjpeg

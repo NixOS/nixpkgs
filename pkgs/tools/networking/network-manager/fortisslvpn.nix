@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openfortivpn networkmanager ppp libtool libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring gnome3.gconf gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring gnome3.gconf gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ automake autoconf intltool pkgconfig ];
 

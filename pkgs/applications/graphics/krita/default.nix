@@ -29,7 +29,7 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 
   meta = with lib; {
-    description = "A free an open source painting application";
+    description = "A free and open source painting application";
     homepage = https://krita.org/;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

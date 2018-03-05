@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-mopify-${version}";
+  pname = "Mopidy-Mopify";
+  version = "1.6.1";
 
-  version = "1.5.17";
-
-  src = fetchurl {
-    url = "https://github.com/dirkgroenen/mopidy-mopify/archive/${version}.tar.gz";
-    sha256 = "1qi7f5i87ygn486gxc84njl22y84xrwabpz58y5a1hw7z1lp7l8s";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "93ad2b3d38b1450c8f2698bb908b0b077a96b3f64cdd6486519e518132e23a5c";
   };
 
   propagatedBuildInputs = with pythonPackages; [ mopidy configobj ];
 
+  # no tests implemented
   doCheck = false;
 
   meta = with stdenv.lib; {

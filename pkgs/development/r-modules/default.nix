@@ -369,7 +369,7 @@ let
     VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
-    xml2 = [ pkgs.libxml2.dev ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     bamsignals = [ pkgs.zlib.dev ];
@@ -411,6 +411,7 @@ let
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
+    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.binutils.bintools ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -757,6 +758,17 @@ let
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
         export JAVA_HOME=${pkgs.jdk}
+      '';
+    });
+
+    JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
+      postPatch = ''
+        for file in {R,src}/*.R; do
+            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.binutils.bintools}/bin/\1"#g' $file
+        done
+      '';
+      preConfigure = ''
+        patchShebangs configure
       '';
     });
 

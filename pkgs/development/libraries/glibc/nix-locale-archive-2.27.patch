@@ -9,8 +9,8 @@ diff -Naur glibc-2.27-orig/locale/loadarchive.c glibc-2.27/locale/loadarchive.c
 +open_locale_archive (void)
 +{
 +  int fd = -1;
-+  char *versioned_path = getenv ("LOCAL_ARCHIVE_2_27");
-+  char *path = getenv ("LOCAL_ARCHIVE");
++  char *versioned_path = getenv ("LOCALE_ARCHIVE_2_27");
++  char *path = getenv ("LOCALE_ARCHIVE");
 +  if (versioned_path)
 +    fd = __open_nocancel (versioned_path, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
 +  if (path && fd < 0)
@@ -54,8 +54,8 @@ diff -Naur glibc-2.27-orig/locale/programs/locale.c glibc-2.27/locale/programs/l
 +open_locale_archive (void)
 +{
 +  int fd = -1;
-+  char *versioned_path = getenv ("LOCAL_ARCHIVE_2_27");
-+  char *path = getenv ("LOCAL_ARCHIVE");
++  char *versioned_path = getenv ("LOCALE_ARCHIVE_2_27");
++  char *path = getenv ("LOCALE_ARCHIVE");
 +  if (versioned_path)
 +    fd = open64 (versioned_path, O_RDONLY);
 +  if (path && fd < 0)
@@ -92,8 +92,8 @@ diff -Naur glibc-2.27-orig/locale/programs/locarchive.c glibc-2.27/locale/progra
 +open_locale_archive (const char * archivefname, int flags)
 +{
 +  int fd = -1;
-+  char *versioned_path = getenv ("LOCAL_ARCHIVE_2_27");
-+  char *path = getenv ("LOCAL_ARCHIVE");
++  char *versioned_path = getenv ("LOCALE_ARCHIVE_2_27");
++  char *path = getenv ("LOCALE_ARCHIVE");
 +  if (versioned_path)
 +    fd = open64 (versioned_path, flags);
 +  if (path && fd < 0)

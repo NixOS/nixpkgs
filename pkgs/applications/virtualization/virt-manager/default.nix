@@ -1,8 +1,8 @@
 { stdenv, fetchurl, python2Packages, intltool, file
 , wrapGAppsHook, gtkvnc, vte, avahi, dconf
 , gobjectIntrospection, libvirt-glib, system-libvirt
-, gsettings_desktop_schemas, glib, libosinfo, gnome3, gtk3
-, spiceSupport ? true, spice_gtk ? null
+, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, spiceSupport ? true, spice-gtk ? null
 }:
 
 with stdenv.lib;
@@ -24,8 +24,8 @@ python2Packages.buildPythonApplication rec {
 
   buildInputs =
     [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
-      gsettings_desktop_schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice_gtk;
+      gsettings-desktop-schemas libosinfo gtk3
+    ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python2Packages;
     [

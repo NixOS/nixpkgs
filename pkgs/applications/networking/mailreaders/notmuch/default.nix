@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
+  # friends
+  setOutputFlags = false;
+  enableParallelBuilding = true;
   makeFlags = "V=1";
 
   preFixup = optionalString stdenv.isDarwin ''

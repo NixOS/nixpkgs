@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
-, glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json_glib, gst_all_1
-, libnotify, gtk3, gsettings_desktop_schemas, libpeas, dconf, librsvg
-, gobjectIntrospection, glib_networking
+, glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
+, libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
+, gobjectIntrospection, glib-networking
 }:
 
 let
@@ -18,9 +18,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];
 
   buildInputs = [
-    glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings_desktop_schemas
-    libpeas gsettings_desktop_schemas json_glib dconf gobjectIntrospection
-    librsvg glib_networking libnotify
+    glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
+    libpeas gsettings-desktop-schemas json-glib dconf gobjectIntrospection
+    librsvg glib-networking libnotify
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
   ]);

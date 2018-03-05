@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "kompose-${version}";
-  version = "1.5.0";
+  version = "1.9.0";
 
   goPackagePath = "github.com/kubernetes/kompose";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "kubernetes";
     repo = "kompose";
-    sha256 = "1r5f8jbr2c1xxb5fpfgy23w4m30zahhmrw23jlk1hpx2w1pi1iyh";
+    sha256 = "00yvih5gn67sw9v30a0rpaj1zag7k02i4biw1p37agxih0aphc86";
   };
 
   meta = with stdenv.lib; {

@@ -8,7 +8,7 @@
 , withLibHVM ? true
 
 # qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice_protocol, usbredir
+, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
 , alsaLib
 , ... } @ args:
 
@@ -30,7 +30,7 @@ let
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
+    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
   ];
 in

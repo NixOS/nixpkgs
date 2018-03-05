@@ -1,10 +1,10 @@
 { stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
-, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
+, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
 # this is just for tests (not in closure of any regular package)
-, coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
+, coreutils, dbus_daemon, libxml2, tzdata, desktop-file-utils, shared-mime-info, doCheck ? false
 }:
 
 with stdenv.lib;
@@ -42,15 +42,14 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.54";
-  ver_min = "3";
+  version = "2.54.3";
 in
 
 stdenv.mkDerivation rec {
-  name = "glib-${ver_maj}.${ver_min}";
+  name = "glib-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/glib/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "963fdc6685dc3da8e5381dfb9f15ca4b5709b28be84d9d05a9bb8e446abac0a8";
   };
 
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libelf setupHook pcre ]
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
-    ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
+    ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
@@ -124,7 +123,7 @@ stdenv.mkDerivation rec {
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
-    export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
+    export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
     export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
@@ -143,8 +142,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-     gioModuleDir = "lib/gio/modules";
-     inherit flattenInclude;
+    gioModuleDir = "lib/gio/modules";
+    inherit flattenInclude;
+    updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
   meta = with stdenv.lib; {

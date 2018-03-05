@@ -20,6 +20,25 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      Nix now defaults to 2.0; see its
+      <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.0">release notes</link>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Linux kernel defaults to the 4.14 branch (it was 4.9).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      GCC defaults to 7.x (it was 6.x).
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       MariaDB 10.2, updated from 10.1, is now the default MySQL implementation. While upgrading a few changes
       have been made to the infrastructure involved:
       <itemizedlist>
@@ -181,7 +200,7 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      <literal>lib.addPassthru drv passthru</literal> is removed.  Use <literal>lib.extendDerivation true passthru drv</literal> instead.  <emphasis role="strong">TODO: actually remove it before branching 18.03 off.</emphasis>
+      <literal>lib.addPassthru drv passthru</literal> is removed.  Use <literal>lib.extendDerivation true passthru drv</literal> instead.
     </para>
   </listitem>
   <listitem>
@@ -242,6 +261,65 @@ following incompatible changes:</para>
       <link xlink:href="https://www.borgbackup.org/">Borg</link> should be used instead.
       Migration instructions can be found
       <link xlink:href="http://borgbackup.readthedocs.io/en/stable/usage/upgrade.html#attic-and-borg-0-xx-to-borg-1-x">here</link>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The Piwik analytics software was renamed to Matomo:
+      <itemizedlist>
+        <listitem>
+          <para>The package <literal>pkgs.piwik</literal> was renamed to <literal>pkgs.matomo</literal>.</para>
+        </listitem>
+        <listitem>
+          <para>The service <literal>services.piwik</literal> was renamed to <literal>services.matomo</literal>.</para>
+        </listitem>
+        <listitem>
+          <para>
+            The data directory <filename>/var/lib/piwik</filename> was renamed to <filename>/var/lib/matomo</filename>.
+            All files will be moved automatically on first startup, but you might need to adjust your backup scripts.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The default <option>serverName</option> for the nginx configuration changed from
+            <literal>piwik.${config.networking.hostName}</literal> to
+            <literal>matomo.${config.networking.hostName}.${config.networking.domain}</literal>
+            if <option>config.networking.domain</option> is set,
+            <literal>matomo.${config.networking.hostName}</literal> if it is not set.
+            If you change your <option>serverName</option>, remember you'll need to update the
+            <literal>trustedHosts[]</literal> array in <filename>/var/lib/matomo/config/config.ini.php</filename>
+            as well.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <literal>piwik</literal> user was renamed to <literal>matomo</literal>.
+            The service will adjust ownership automatically for files in the data directory.
+            If you use unix socket authentication, remember to give the new <literal>matomo</literal> user
+            access to the database and to change the <literal>username</literal> to <literal>matomo</literal>
+            in the <literal>[database]</literal> section of <filename>/var/lib/matomo/config/config.ini.php</filename>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If you named your database `piwik`, you might want to rename it to `matomo` to keep things clean,
+            but this is neither enforced nor required.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>nodejs-4_x</literal> is end-of-life.
+      <literal>nodejs-4_x</literal>, <literal>nodejs-slim-4_x</literal> and <literal>nodePackages_4_x</literal> are removed.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>pump.io</literal> NixOS module was removed.
+      It is now maintained as an
+      <link xlink:href="https://github.com/rvl/pump.io-nixos">external module</link>.
     </para>
   </listitem>
 </itemizedlist>
@@ -376,6 +454,13 @@ following incompatible changes:</para>
       The NixOS test driver supports user services declared by <literal>systemd.user.services</literal>.
       The methods <literal>waitForUnit</literal>, <literal>getUnitInfo</literal>, <literal>startJob</literal>
       and <literal>stopJob</literal> provide an optional <literal>$user</literal> argument for that purpose.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Enabling bash completion on NixOS, <literal>programs.bash.enableCompletion</literal>, will now also enable
+      completion for the Nix command line tools by installing the
+      <link xlink:href="https://github.com/hedning/nix-bash-completions">nix-bash-completions</link> package.
     </para>
   </listitem>
 </itemizedlist>

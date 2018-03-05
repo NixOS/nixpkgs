@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3, libGLU
-, makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils, gsettings_desktop_schemas
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3
+, makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils, gsettings-desktop-schemas
 , epoxy, gdk_pixbuf, gnome3, wrapGAppsHook
 }:
 
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     epoxy
     gtk3
     gdk_pixbuf
-    libGLU
     libGLU_combined
     libarchive
     libao

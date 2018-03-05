@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  name = "${pname}-${version}";
   version = "2.10.2";
 
   src = fetchPypi {

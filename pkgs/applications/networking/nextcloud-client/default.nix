@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome_keyring }:
+, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       $out/share/applications/nextcloud.desktop
   '' + stdenv.lib.optionalString (withGnomeKeyring) ''
     wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome_keyring ]}
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome-keyring ]}
   '';
 
   meta = with stdenv.lib; {

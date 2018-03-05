@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, gtk_doc
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, gtk-doc
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib systemd libgudev ];
-  nativeBuildInputs = [ automake autoconf libtool gtk_doc pkgconfig vala ];
+  nativeBuildInputs = [ automake autoconf libtool gtk-doc pkgconfig vala ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 

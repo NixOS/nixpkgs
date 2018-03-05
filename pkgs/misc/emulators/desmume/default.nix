@@ -3,7 +3,7 @@
 , libXmu
 , lua
 , agg, alsaLib, soundtouch, openal
-, desktop_file_utils
+, desktop-file-utils
 , gtk2, gtkglext, libglade, pangox_compat
 , libGLU, libpcap, SDL, zziplib }:
 
@@ -26,9 +26,11 @@ stdenv.mkDerivation rec {
      })
   ];
 
+  CXXFLAGS = "-fpermissive";
+
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop_file_utils gtk2 gtkglext libglade pangox_compat
+    openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
     libGLU libpcap SDL zziplib ];
 
   configureFlags = [

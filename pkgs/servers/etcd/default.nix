@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   name = "etcd-${version}";
-  version = "3.1.6"; # After updating check that nixos tests pass
+  version = "3.3.1"; # After updating check that nixos tests pass
   rev = "v${version}";
 
   goPackagePath = "github.com/coreos/etcd";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "coreos";
     repo = "etcd";
-    sha256 = "1qgi6zxnijzr644w2da2gbn3gw2qwk6a3z3qmdln0r2rjnm70sx0";
+    sha256 = "11gzmi05y4kpnzgqc737l0wk5svxai4z17nl92jazqga6zhyavyl";
   };
 
   subPackages = [

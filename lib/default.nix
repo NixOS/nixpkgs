@@ -21,10 +21,10 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = callLibs ./maintainers.nix;
+    maintainers = import ./maintainers-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
-
+    versions = callLibs ./versions.nix;
 
     # module system
     modules = callLibs ./modules.nix;
@@ -88,7 +88,7 @@ let
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith extendDerivation addPassthru
+      callPackageWith callPackagesWith extendDerivation
       hydraJob makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio

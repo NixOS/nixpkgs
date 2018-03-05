@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "seth-${version}";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "dapphub";
     repo = "seth";
     rev = "v${version}";
-    sha256 = "1lbr7i3rznfp3h03y7pc094r0m992lbzr926rnr0xxbyp755wvm4";
+    sha256 = "0la2nfqsscpbq6zwa6hsd73nimdnrhilrmgyy77yr3jca2wjhsjk";
   };
 
   nativeBuildInputs = [makeWrapper];

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, libcdio, libxml2, popt }:
+{ stdenv, lib, fetchurl, pkgconfig, libcdio, libxml2, popt }:
 
-stdenv.mkDerivation {
-  name = "vcdimager-0.7.24";
+stdenv.mkDerivation rec {
+  name = "vcdimager-2.0.1";
 
   src = fetchurl {
-    url = mirror://gnu/vcdimager/vcdimager-0.7.24.tar.gz;
-    sha256 = "1526jxynslg07i50v3c3afhc8swbd4si8y6s8m3h1wrz6mkplp87";
+    url = "mirror://gnu/vcdimager/${name}.tar.gz";
+    sha256 = "0ypnb1vp49nmzp5571ynlz6n1gh90f23w3z4x95hb7c2p7pmylb7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -14,9 +14,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ libcdio ];
 
-  meta = {
+  meta = with lib; {
     homepage = http://www.gnu.org/software/vcdimager/;
     description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
-    platforms = stdenv.lib.platforms.gnu; # random choice
+    platforms = platforms.gnu; # random choice
+    license = licenses.gpl2;
   };
 }

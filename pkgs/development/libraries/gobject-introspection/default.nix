@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, cctools, cairo
+, libintlOrEmpty, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
@@ -7,15 +7,15 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.54";
-  ver_min = "1";
+  pname = "gobject-introspection";
+  version = "1.54.1";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "gobject-introspection-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0zl7pfkzkm07733391b4f3cwjbnvb1nwvpmajf5bajh6bxgfv3dq";
   };
 
@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
       cairoLib = "${getLib cairo}/lib";
     })
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gobjectIntrospection";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

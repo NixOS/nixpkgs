@@ -1,22 +1,32 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
-, glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
+, glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libsecret, wrapGAppsHook
-, librsvg, gobjectIntrospection, yelp_tools
+, librsvg, gobjectIntrospection, yelp-tools
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
 , autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evince-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evince/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "79567bdb743cf0c3ed7b638da32afc9b850298f9b4edd532455df4a7e2a4c9d8";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "evince"; };
+  };
 
   nativeBuildInputs = [
-    pkgconfig gobjectIntrospection intltool itstool wrapGAppsHook yelp_tools autoreconfHook
+    pkgconfig gobjectIntrospection intltool itstool wrapGAppsHook yelp-tools autoreconfHook
   ];
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
+    gnome3.libgnome-keyring gnome3.gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre
     libsecret librsvg gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
@@ -35,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
   enableParallelBuilding = true;

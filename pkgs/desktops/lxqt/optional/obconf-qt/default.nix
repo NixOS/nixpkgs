@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5, xorg, lxqt, openbox, hicolor_icon_theme }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, qt5, xorg, lxqt, openbox, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     xorg.libXdmcp
     xorg.libSM
     openbox
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "pioneer-${version}";
-  version = "20171001";
+  version = "20180203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "0yxw1zdvidrwc28vxfi3qpx2nq2dix2d6ylwgzq9ph8kgwv9fl5n";
+    sha256 = "0hp2mf36kj2v93hka8m8lxw2qhmnjc62wjlpw7c7ix0r8xa01i6h";
   };
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];

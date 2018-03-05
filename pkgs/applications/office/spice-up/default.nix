@@ -6,7 +6,7 @@
 , gtk3
 , granite
 , gnome3
-, json_glib
+, json-glib
 , cmake
 , ninja
 , libgudev
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     gtk3
     granite
     gnome3.libgee
-    json_glib
+    json-glib
     libgudev
     libevdev
-    gnome3.gnome_themes_standard
+    gnome3.gnome-themes-standard
   ];
 
   meta = with stdenv.lib; {
