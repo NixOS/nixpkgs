@@ -12,7 +12,7 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, closureInfo, cpio, contents, compressor, prepend, ubootTools
+{ stdenv, perl, cpio, contents, compressor, prepend, ubootTools
 , hostPlatform
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeUInitrd = hostPlatform.platform.kernelTarget == "uImage";
 
-  nativeBuildInputs = [ cpio ]
+  nativeBuildInputs = [ perl cpio ]
     ++ stdenv.lib.optional makeUInitrd ubootTools;
 
   # !!! should use XML.
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
   symlinks = map (x: x.symlink) contents;
   suffices = map (x: if x ? suffix then x.suffix else "none") contents;
 
-  closure = closureInfo { rootPaths = (map (x: x.object) contents); };
+  # For obtaining the closure of `contents'.
+  exportReferencesGraph =
+    map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
+  pathsFromGraph = ./paths-from-graph.pl;
 
   inherit compressor prepend;
 }

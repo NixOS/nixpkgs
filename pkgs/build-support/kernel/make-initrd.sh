@@ -25,9 +25,13 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
 done
 
 
+# Get the paths in the closure of `object'.
+storePaths=$(perl $pathsFromGraph closure-*)
+
+
 # Paths in cpio archives *must* be relative, otherwise the kernel
 # won't unpack 'em.
-(cd root && cp -prd --parents $(cat $closure/store-paths) .)
+(cd root && cp -prd --parents $storePaths .)
 
 
 # Put the closure in a gzipped cpio archive.
