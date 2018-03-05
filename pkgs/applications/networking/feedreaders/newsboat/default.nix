@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+
   postInstall = ''
     cp -r contrib $out
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
