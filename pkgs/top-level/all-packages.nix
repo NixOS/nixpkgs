@@ -9353,7 +9353,6 @@ with pkgs;
 
   json-glib = callPackage ../development/libraries/json-glib { };
 
-  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { }; # vulnerable
   json_c = callPackage ../development/libraries/json-c { };
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
