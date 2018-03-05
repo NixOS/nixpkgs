@@ -21269,6 +21269,8 @@ EOF
 
   us = callPackage ../development/python-modules/us { };
 
+  wsproto = callPackage ../development/python-modules/wsproto { };
+
   h11 = callPackage ../development/python-modules/h11 { };
 });
 
