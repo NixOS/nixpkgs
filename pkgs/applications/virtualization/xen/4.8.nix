@@ -150,13 +150,26 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
   patches = with xsa; flatten [
-    # XSA_231 to XSA-251 are fixed in 4.8.3 (verified with git log)
-    XSA_252_49
-    # 253: 4.8 not affected
-    # 254: no patch supplied by xen project (Meltdown/Spectre)
-    XSA_255_49_1
-    XSA_255_49_2
-    XSA_256_48
+    XSA_231
+    XSA_232
+    XSA_233
+    XSA_234_48
+    XSA_236
+    XSA_237_48
+    XSA_238
+    XSA_239
+    XSA_240_48
+    XSA_241
+    XSA_242
+    XSA_243_48
+    XSA_244
+    XSA_245
+    XSA_246
+    XSA_247_48
+    XSA_248_48
+    XSA_249
+    XSA_250
+    XSA_251_48
     xenlockprofpatch
     xenpmdpatch
   ];
