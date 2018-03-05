@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, python2, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, doxygen, xmlto, python2, gnused }:
 
 stdenv.mkDerivation rec {
   name = "libpqxx-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnused python2 ];
-  buildInputs = [ postgresql ];
+  buildInputs = [ postgresql doxygen xmlto ];
 
   preConfigure = ''
     patchShebangs .
