@@ -3153,6 +3153,8 @@ with pkgs;
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
 
+  libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
