@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, cmake, pkgconfig, lndir
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
-, makeWrapper, libXext, mesa_glu, qttools, qtbase
+, makeWrapper, libXext, libGLU, qttools, qtbase
 , alsaLib
 , withX265 ? true, x265
 , withX264 ? true, x264
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ yasm cmake pkgconfig ];
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext mesa_glu makeWrapper
+    freetype alsaLib libXext libGLU makeWrapper
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
