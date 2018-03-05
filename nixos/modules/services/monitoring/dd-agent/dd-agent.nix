@@ -56,6 +56,8 @@ let
 
     instances:
       - use_mount: no
+    excluded_filesystems:
+      - tracefs
   '';
   
   networkConfig = pkgs.writeText "network.yaml" ''
