@@ -14242,6 +14242,8 @@ with pkgs;
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
+  powerline-go = callPackage ../tools/misc/powerline-go { };
+
   profont = callPackage ../data/fonts/profont { };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
