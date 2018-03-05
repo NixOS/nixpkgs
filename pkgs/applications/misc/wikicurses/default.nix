@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   name = "wikicurses-${version}";
 
   src = fetchurl {
-    url = "http://github.com/ids1024/wikicurses/archive/v${version}.tar.gz";
+    url = "https://github.com/ids1024/wikicurses/archive/v${version}.tar.gz";
     sha256 = "1yxgafk1sczg1xi2p6nhrvr3hchp7ydw98n48lp3qzwnryn1kxv8";
   };
 

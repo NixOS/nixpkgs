@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "4.14.1";
 
   src = fetchurl {
-    url = "http://i3wm.org/downloads/${name}.tar.bz2";
+    url = "https://i3wm.org/downloads/${name}.tar.bz2";
     sha256 = "1cazmfbbx6n8c81h6x6pdayq3mxs2ml3adz165z8vapkc72kl1nh";
   };
 

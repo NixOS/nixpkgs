@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "http://github.com/pytoolz/cytoolz/";
+    homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = "licenses.bsd3";
     maintainers = with lib.maintainers; [ fridh ];

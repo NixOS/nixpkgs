@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ngircd-24";
 
   src = fetchurl {
-    url = "http://ngircd.barton.de/pub/ngircd/${name}.tar.xz";
+    url = "https://ngircd.barton.de/pub/ngircd/${name}.tar.xz";
     sha256 = "020h9d1awyxqr0l42x1fhs47q7cmm17fdxzjish8p2kq23ma0gqp";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "profile-sync-daemon-${version}";
 
   src = fetchurl {
-    url = "http://github.com/graysky2/profile-sync-daemon/archive/${version}.tar.gz";
+    url = "https://github.com/graysky2/profile-sync-daemon/archive/${version}.tar.gz";
     sha256 = "0m7h9l7dndqgb5k3grpc00f6dpg73p6h4q5sgkf8bvyzvcbdafwx";
   };
 

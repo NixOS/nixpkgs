@@ -7,7 +7,7 @@ in
     name = "autojump-${version}";
 
     src = fetchurl {
-      url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
+      url = "https://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
       name = "autojump-${version}.tar.gz";
       sha256 = "17z9j9936x0nizwrzf664bngh60x5qbvrrf1s5qdzd0f2gdanpvn";
     };

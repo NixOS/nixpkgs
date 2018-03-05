@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libxkbcommon-0.7.2";
 
   src = fetchurl {
-    url = "http://xkbcommon.org/download/${name}.tar.xz";
+    url = "https://xkbcommon.org/download/${name}.tar.xz";
     sha256 = "1n5rv5n210kjnkyrvbh04gfwaa7zrmzy1393p8nyqfw66lkxr918";
   };
 

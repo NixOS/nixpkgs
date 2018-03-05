@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "19.0";
 
   src = fetchurl {
-    url = "http://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
+    url = "https://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
     sha256 = "08kgi4zmh4h1pvxh8x4c3ydf9xl2s6ncm579f0wdm2zknvpf0j16";
   };
 

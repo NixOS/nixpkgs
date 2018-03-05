@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "http://github.com/kjd/idna/";
+    homepage = "https://github.com/kjd/idna/";
     description = "Internationalized Domain Names in Applications (IDNA)";
     license = lib.licenses.bsd3;
   };
