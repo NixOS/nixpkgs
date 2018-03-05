@@ -9,6 +9,7 @@
 <para>This section lists the release notes for each stable version of NixOS
 and current unstable revision.</para>
 
+<xi:include href="rl-1809.xml" />
 <xi:include href="rl-1803.xml" />
 <xi:include href="rl-1709.xml" />
 <xi:include href="rl-1703.xml" />
