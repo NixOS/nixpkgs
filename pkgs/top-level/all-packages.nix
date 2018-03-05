@@ -2325,6 +2325,8 @@ with pkgs;
 
   franz = callPackage ../applications/networking/instant-messengers/franz { };
 
+  freedroidrpg = callPackage ../games/freedroidrpg { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
