@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
+  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 m4 ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -175,7 +175,11 @@ stdenv.mkDerivation rec {
   # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
   # treat that as a unary `{x,y,z,..}` repetition.
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    for f in $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}; do
+      if [ -f $f ]; then
+        paxmark m $f
+      fi
+    done
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
