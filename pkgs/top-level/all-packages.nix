@@ -3810,8 +3810,6 @@ with pkgs;
 
   networkmanager_dmenu = callPackage ../tools/networking/networkmanager_dmenu  { };
 
-  newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
-
   newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
 
   nextcloud = callPackage ../servers/nextcloud { };
