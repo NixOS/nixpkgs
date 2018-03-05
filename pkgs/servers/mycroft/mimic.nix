@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, alsaLib, icu }:
+, alsaLib, icu, libpulseaudio, pcre, portaudio }:
 
 stdenv.mkDerivation rec {
   name = "mycroft-mimic-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wkpbwk88lsahzkc7pzbznmyy0lc02vsp0vkj8f1ags1gh0lc52j";
   };
 
-  buildInputs = [ alsaLib icu ];
+  buildInputs = [ alsaLib icu pcre portaudio ] ++ stdenv.lib.optional stdenv.isLinux libpulseaudio;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
