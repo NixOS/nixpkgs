@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
-  version = "4.3.2";
+  version = "4.3.3";
 
   srcs =
     [ (fetchurl {
-         url = "http://cdn.fs1.urbanterror.info/urt/43/releases/zips/UrbanTerror432_full.zip";
-         sha256 = "192jwdyfy18cg413ysaklqc8yzmdnshljqc6dnr0xkd6dxbf3pkl";
+         url = "http://cdn.fs1.urbanterror.info/urt/43/releases/zips/UrbanTerror433_full.zip";
+         sha256 = "0rrh08ypnw805gd2wrs6af34nvp02x7vggfp0ymcmbr44wcjfn63";
        })
       (fetchurl {
          url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-${version}.zip";
-         sha256 = "0m376hdkk8vjnbdy8zakjazyag6jiw4n8zy4lxhv2ndn9mii8lcx";
+         sha256 = "1624zsnr02nhdksmwnwmvw129lw3afd8h0hvv2j8qmcyxa7jw68b";
        })
     ];
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.urbanterror.net;
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl fpletz ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };
