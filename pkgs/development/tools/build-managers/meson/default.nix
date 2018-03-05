@@ -21,6 +21,12 @@ in python3Packages.buildPythonApplication rec {
   '';
 
   patches = [
+    # Upstream insists on not allowing bindir and other dir options
+    # outside of prefix for some reason:
+    # https://github.com/mesonbuild/meson/issues/2561
+    # We remove the check so multiple outputs can work sanely.
+    ./allow-dirs-outside-of-prefix.patch
+
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
     # breaking the GIR when path other than ${!outputLib}/lib is used.
