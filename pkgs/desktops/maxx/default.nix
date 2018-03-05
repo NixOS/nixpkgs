@@ -2,7 +2,7 @@
 
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
 , libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
-, gdk_pixbuf, mesa_noglu, ncurses
+, gdk_pixbuf, libGL, ncurses
 
 , xclock, xsettingsd }:
 
@@ -12,7 +12,7 @@ let
   deps = [
     stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
     libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
-    gdk_pixbuf mesa_noglu ncurses
+    gdk_pixbuf libGL ncurses
   ];
   runtime_deps = [
     xclock xsettingsd

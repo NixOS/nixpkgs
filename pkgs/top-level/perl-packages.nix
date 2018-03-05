@@ -10735,7 +10735,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1q3lz168q081iwl9jg21fbzhp9la79gav9mv6nmh2jab83s2l3mj";
     };
 
-    buildInputs = with pkgs; [ mesa mesa_glu freeglut xorg.libX11 xorg.libXi xorg.libXmu xorg.libXext xdummy ];
+    # FIXME: try with libGL + libGLU instead of libGLU_combined
+    buildInputs = with pkgs; [ libGLU_combined libGLU freeglut xorg.libX11 xorg.libXi xorg.libXmu xorg.libXext xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -15999,7 +16000,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MB/MBARBON/${name}.tar.gz";
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ Wx OpenGL pkgs.mesa_glu ];
+    propagatedBuildInputs = [ Wx OpenGL pkgs.libGLU ];
     doCheck = false;
   };
 

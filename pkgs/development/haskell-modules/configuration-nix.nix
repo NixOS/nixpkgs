@@ -221,7 +221,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.mesa);
+  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -350,7 +350,7 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/deech/fltkhs/issues/16
   fltkhs = overrideCabal super.fltkhs (drv: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
-    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.mesa_noglu pkgs.libjpeg];
+    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.libGL pkgs.libjpeg];
   });
 
   # https://github.com/skogsbaer/hscurses/pull/26

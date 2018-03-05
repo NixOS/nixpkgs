@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, mesa_noglu
+, openglSupport ? false, libGL
 , alsaSupport ? true, alsaLib
 , x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
 , waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
@@ -15,7 +15,7 @@
 # PulseAudio.
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (stdenv.isDarwin || mesa_noglu != null && x11Support);
+assert openglSupport -> (stdenv.isDarwin || libGL != null && x11Support);
 
 let
   configureFlagsFun = attrs: [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ [ libiconv ];
 
   buildInputs = [ audiofile ] ++
-    lib.optional openglSupport mesa_noglu ++
+    lib.optional openglSupport libGL ++
     lib.optional alsaSupport alsaLib ++
     lib.optional dbusSupport dbus ++
     lib.optional udevSupport udev ++

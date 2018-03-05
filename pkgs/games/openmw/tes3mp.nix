@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg, boost, cmake, SDL2, unshield, openal
-, libXt, writeScriptBin, makeWrapper, symlinkJoin, ncurses, mesa_noglu, terra }:
+, libXt, writeScriptBin, makeWrapper, symlinkJoin, ncurses, libGL, terra }:
 
 let
   mygui_ = mygui.override {
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper fakegit ];
   buildInputs = [ boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
-    ncurses mesa_noglu ];
+    ncurses libGL ];
 
   buildPhase = ''
     mkdir dependencies keepers

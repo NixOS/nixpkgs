@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, openglSupport ? false, mesa_noglu, mesa_glu
+, openglSupport ? false, libGL, libGLU
 , alsaSupport ? true, alsaLib
 , x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     optionals x11Support [ libXext libICE libXrandr ] ++
     optional alsaSupport alsaLib ++
     optional stdenv.isLinux libcap ++
-    optionals openglSupport [ mesa_noglu mesa_glu ] ++
+    optionals openglSupport [ libGL libGLU ] ++
     optional pulseaudioSupport libpulseaudio ++
     optional stdenv.isDarwin Cocoa;
 

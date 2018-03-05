@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elfutils, mesa_noglu
+{ stdenv, fetchurl, elfutils, libGL
 , xorg, patchelf, openssl, libdrm, libudev
 , libxcb, libxshmfence, epoxy, perl, zlib
 , fetchFromGitHub, ncurses
@@ -13,7 +13,7 @@ let
 
   kernelDir = if libsOnly then null else kernel.dev;
 
-  inherit (mesa_noglu) driverLink;
+  inherit (libGL) driverLink;
 
   bitness = if stdenv.is64bit then "64" else "32";
 

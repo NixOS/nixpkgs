@@ -632,7 +632,7 @@ self: super: {
   phash = markBroken super.phash;
 
   # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the mesa libraries
+  # linking fails because the build doesn't pull in the libGLU_combined libraries
   fltkhs = markBroken super.fltkhs;
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 

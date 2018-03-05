@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, pkgconfig
-, SDL, SDL_mixer, mesa, physfs
+, SDL, SDL_mixer, libGLU_combined, physfs
 }:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig scons ];
 
-  buildInputs = [ mesa physfs SDL SDL_mixer ];
+  buildInputs = [ libGLU_combined physfs SDL SDL_mixer ];
 
   enableParallelBuilding = true;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
-, ffmpeg, mesa, freetype, libxml2, python34
+, ffmpeg, libGLU_combined, freetype, libxml2, python34
 , libobjc, AppKit, Foundation
 , alsaLib ? null
 , libpulseaudio ? null
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ]
                       ++ optional withVulkan [ makeWrapper ];
 
-  buildInputs = [ ffmpeg freetype libxml2 mesa python34 SDL2 which ]
+  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python34 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan [ vulkan-loader ]
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]

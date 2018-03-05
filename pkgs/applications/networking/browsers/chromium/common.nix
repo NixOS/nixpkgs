@@ -12,7 +12,7 @@
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk2, gtk3, dbus-glib
-, libXScrnSaver, libXcursor, libXtst, mesa
+, libXScrnSaver, libXcursor, libXtst, libGLU_combined 
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
 
@@ -130,7 +130,7 @@ let
       utillinux alsaLib
       bison gperf kerberos
       glib gtk2 gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst mesa
+      libXScrnSaver libXcursor libXtst libGLU_combined
       pciutils protobuf speechd libXdamage
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]

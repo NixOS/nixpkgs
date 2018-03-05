@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gcc
-, mesa_glu, libX11, libXext, libXcursor, libpulseaudio
+, libGLU, libX11, libXext, libXcursor, libpulseaudio
 }:
 stdenv.mkDerivation {
   name = "scrolls-2015-10-13";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   libPath = stdenv.lib.makeLibraryPath [
     gcc
-    mesa_glu
+    libGLU
     libX11
     libXext
     libXcursor

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, mesa, zlib, libjpeg, libogg, libvorbis
+{ stdenv, fetchFromGitHub, cmake, SDL2, libGLU_combined, zlib, libjpeg, libogg, libvorbis
 , openal, curl }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s64xr1ir4d2z01fhldy577b0x80nd1k6my7y1hxp57lggr8dy5y";
   };
 
-  # Add mesa linking
+  # Add libGLU_combined linking
   patchPhase = ''
     sed -i 's/\<idlib\()\?\)$/idlib GL\1/' neo/CMakeLists.txt
   '';
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 mesa zlib libjpeg libogg libvorbis openal curl ];
+  buildInputs = [ SDL2 libGLU_combined zlib libjpeg libogg libvorbis openal curl ];
 
   enableParallelBuilding = true;
 

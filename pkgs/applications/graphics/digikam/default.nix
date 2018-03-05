@@ -34,7 +34,7 @@
 , libqtav
 , libusb1
 , marble
-, mesa
+, libGLU_combined
 , mysql
 , opencv3
 , pcre
@@ -76,7 +76,7 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    mesa
+    libGLU_combined
     opencv3
     pcre
 

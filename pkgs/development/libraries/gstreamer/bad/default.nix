@@ -6,7 +6,7 @@
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
-, mesa, libintlOrEmpty, libgme
+, libGLU_combined, libintlOrEmpty, libgme
 , openssl, x265, libxml2
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libmodplug mpeg2dec mpg123
     openjpeg libopus librsvg
     fluidsynth libvdpau
-    libwebp xvidcore gnutls mesa
+    libwebp xvidcore gnutls libGLU_combined
     libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
