@@ -234,7 +234,7 @@
     "notify.message_bird" = ps: with ps; [  ];
     "notify.pushbullet" = ps: with ps; [ pushbullet ];
     "notify.pushetta" = ps: with ps; [  ];
-    "notify.pushover" = ps: with ps; [  ];
+    "notify.pushover" = ps: with ps; [ python-pushover ];
     "notify.rocketchat" = ps: with ps; [  ];
     "notify.sendgrid" = ps: with ps; [  ];
     "notify.simplepush" = ps: with ps; [  ];
