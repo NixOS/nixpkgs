@@ -13787,7 +13787,8 @@ with pkgs;
     ubootOdroidXU3
     ubootOrangePiPc
     ubootPcduino3Nano
-    ubootQemuArm
+    ubootQemuArm_32bit
+    ubootQemuArm_64bit
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
@@ -13795,6 +13796,8 @@ with pkgs;
     ubootUtilite
     ubootWandboard
     ;
+
+  ubootQemuArm = ubootQemuArm_32bit;
 
   # Non-upstream U-Boots:
   ubootSheevaplug = callPackage ../misc/uboot/sheevaplug.nix { };
