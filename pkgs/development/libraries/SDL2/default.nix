@@ -57,9 +57,6 @@ stdenv.mkDerivation rec {
     ++ optional  ibusSupport ibus
     ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
-  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
-  dontDisableStatic = true;
-
   # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
   enableParallelBuilding = false;
