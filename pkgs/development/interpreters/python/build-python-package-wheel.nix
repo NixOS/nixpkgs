@@ -8,7 +8,8 @@
 attrs // {
   unpackPhase = ''
     mkdir dist
-    cp $src dist/"''${src#*-}"
+    wheel_filename="$(basename $src)"
+    cp $src dist/"''${wheel_filename#*-}"
   '';
 
   # Wheels are pre-compiled
