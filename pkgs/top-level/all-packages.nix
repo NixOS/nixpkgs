@@ -17834,6 +17834,8 @@ with pkgs;
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
+  valentina = libsForQt5.callPackage ../applications/misc/valentina { };
+
   vanubi = callPackage ../applications/editors/vanubi { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
