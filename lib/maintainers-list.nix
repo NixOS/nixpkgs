@@ -3363,6 +3363,11 @@
     github = "symphorien";
     name = "Guillaume Girol";
   };
+  synthetica = {
+    email = "nix@hilhorst.be";
+    github = "Synthetica9";
+    name = "Patrick Hilhorst";
+  };
   szczyp = {
     email = "qb@szczyp.com";
     github = "szczyp";

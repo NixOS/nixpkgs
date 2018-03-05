@@ -10433,7 +10433,7 @@ with pkgs;
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`, 
+  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`,
   # or other runtime dispatcher
   libGL = mesa_noglu;
 
@@ -15967,6 +15967,8 @@ with pkgs;
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
   i3status-rust = callPackage ../applications/window-managers/i3/status-rust.nix { };
+
+  i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
