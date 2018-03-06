@@ -21,7 +21,14 @@ let
     "--disable-oss"
     "--disable-video-x11-xme"
     "--enable-rpath"
-  ] ++ optional (!x11Support) "--without-x"
+  # Building without this fails on Darwin with
+  #
+  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
+  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
+  #
+  # Please try revert the change that introduced this comment when updating SDL.
+  ] ++ optional stdenv.isDarwin "--disable-x11-shared"
+    ++ optional (!x11Support) "--without-x"
     ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
 
 in
@@ -44,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
+    ++ optionals (x11Support && !stdenv.isDarwin) [ libXext libICE libXrandr ]
     ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
     ++ optional alsaSupport alsaLib
@@ -52,6 +59,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ libiconv ]
+    ++ optionals (x11Support && stdenv.isDarwin) [ libXext libICE libXrandr ]
     ++ optional (!hostPlatform.isMinGW) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
