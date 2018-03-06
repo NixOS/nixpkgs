@@ -1,6 +1,18 @@
 { lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts);
+
+  nixpkgsPatches = [
+    ./env_var_for_system_dir.patch
+
+    # this one is actually an omnipresent bug
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+    ./fix-pa-context-connect-retval.patch
+  ];
+
+in
 
 rec {
 
@@ -12,9 +24,8 @@ rec {
       sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
     };
 
-    patches = [
+    patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-      ./env_var_for_system_dir.patch
     ];
 
     meta = {
@@ -36,9 +47,7 @@ rec {
       sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
     };
 
-    patches = [
-      ./env_var_for_system_dir.patch
-    ]
+    patches = nixpkgsPatches
     # The following patch is only required on ARM platforms and should be
     # included for the next ESR release >= 52.7.3esr
     ++ lib.optional stdenv.isAarch32
@@ -121,8 +130,7 @@ in rec {
       sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser-7-5 = common (rec {
@@ -139,8 +147,7 @@ in rec {
       sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser = tor-browser-7-5;
