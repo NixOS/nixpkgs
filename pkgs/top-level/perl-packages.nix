@@ -12320,16 +12320,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Socket = buildPerlPackage {
-    name = "Socket-2.020";
+    name = "Socket-2.027";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.020.tar.gz;
-      sha256 = "9ad4174c45b4c31d5e0b8019ada1fc767093849e77f268f0d1831eeb891dfdd7";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Socket-2.027.tar.gz;
+      sha256 = "1a725fbqx6bjzjf63bgs5wvzd20kffz1f94pbmv1670p9m4i270l";
     };
     postPatch = ''
       # requires network access
-      rm t/getnameinfo.t
+      rm t/getnameinfo.t t/getaddrinfo.t
     '';
     meta = {
+      homepage = https://metacpan.org/pod/Socket;
       description = "Networking constants and support functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
