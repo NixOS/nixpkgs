@@ -10,13 +10,13 @@
 with lib;
 stdenv.mkDerivation rec {
   name = "kicad-unstable-${version}";
-  version = "2017-12-11";
+  version = "2018-03-10";
 
   src = fetchFromGitHub {
     owner = "KICad";
     repo = "kicad-source-mirror";
-    rev = "1955f252265c38a313f6c595d6c4c637f38fd316";
-    sha256 = "15cc81h7nh5dk6gj6mc4ylcgdznfriilhb43n1g3xwyq3s8iaibz";
+    rev = "17c0917dac12ea0be50ff95cee374a0cd8b7f862";
+    sha256 = "1yn5hj5hjnpb5fkzzlyawg62a96fbfvha49395s22dcp95riqvf0";
   };
 
   postPatch = ''
