@@ -1,10 +1,18 @@
 { stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
-, qtbase ? null }:
+, file, which
+, autoreconfHook
+# git can apparently be removed when setting some envvar
+, git
+, texinfo5
+, qtbase ? null
+, withPython ? false, swig2 ? null, python ? null
+}:
 
 let inherit (stdenv) lib system; in
 
 stdenv.mkDerivation rec {
-  name = "gpgme-1.10.0";
+  name = "gpgme-${version}";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
@@ -18,11 +26,17 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ pkgconfig gnupg ];
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
+  ++ lib.optionals withPython [ python swig2 which ];
+
+  postPatch =''
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  '';
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
-  ];
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+  ] ++ lib.optional withPython "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE =
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -45,3 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fuuzetsu primeos ];
   };
 }
+
