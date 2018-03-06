@@ -699,7 +699,7 @@ passthru = {
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-passthru-updateScript">
     <term>
      <varname>passthru.updateScript</varname>
     </term>
@@ -2629,13 +2629,11 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
-      GStreamer
+      GNOME platform
      </term>
      <listitem>
       <para>
-       Adds the GStreamer plugins subdirectory of each build input to the
-       <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> or
-       <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.
+       Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in <xref linkend="sec-language-gnome" />.
       </para>
      </listitem>
     </varlistentry>
