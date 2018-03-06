@@ -555,7 +555,6 @@
   };
   bjg = {
     email = "bjg@gnu.org";
-    github = "civodul";
     name = "Brian Gough";
   };
   bjornfor = {
