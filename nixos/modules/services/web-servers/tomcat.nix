@@ -52,7 +52,7 @@ in
       extraEnvironment = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "ENIVRONMENT=production" "ZONE=us-north-0" ];
+        example = [ "ENVIRONMENT=production" ];
         description = "Environment Variables to pass to the tomcat service";
       };
 
@@ -362,7 +362,7 @@ in
           "CATALINA_OPTS=${cfg.catalinaOpts}"
           "ERRFILE=SYSLOG"
           "OUTFILE=SYSLOG"
-        ] ++ extraEnvironment;
+        ] ++ cfg.extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";
         ExecStop = "${tomcat}/bin/shutdown.sh";
       };
