@@ -2,6 +2,7 @@
 
 let
   name = "qpid-cpp-${version}";
+
   version = "1.37.0";
 
   src = fetchurl {
