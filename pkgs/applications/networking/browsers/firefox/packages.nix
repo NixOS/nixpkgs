@@ -1,6 +1,18 @@
 { lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts);
+
+  nixpkgsPatches = [
+    ./env_var_for_system_dir.patch
+
+    # this one is actually an omnipresent bug
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+    ./fix-pa-context-connect-retval.patch
+  ];
+
+in
 
 rec {
 
@@ -12,10 +24,22 @@ rec {
       sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
     };
 
-    patches = [
+    patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-      ./env_var_for_system_dir.patch
-    ];
+
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1430274
+      # Scheduled for firefox 59
+      (fetchpatch {
+        url = "https://bug1430274.bmoattachments.org/attachment.cgi?id=8943426";
+        sha256 = "12yfss3k61yilrb337dh2rffy5hh83d2f16gqrf5i56r9c33f7hf";
+      })
+
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1388981
+      # Should have been fixed in firefox 57
+    ] ++ lib.optional stdenv.isi686 (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
+      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
+    });
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -36,18 +60,7 @@ rec {
       sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
     };
 
-    patches = [
-      ./env_var_for_system_dir.patch
-    ]
-    # The following patch is only required on ARM platforms and should be
-    # included for the next ESR release >= 52.7.3esr
-    ++ lib.optional stdenv.isArm
-      (fetchpatch {
-        name = "CVE-2018-5147-tremor.patch";
-        url = https://hg.mozilla.org/releases/mozilla-esr52/rev/5cd5586a2f48;
-        sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
-      })
-    ;
+    patches = nixpkgsPatches;
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -124,8 +137,7 @@ in rec {
       sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser-7-5 = common (rec {
@@ -142,8 +154,7 @@ in rec {
       sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser = tor-browser-7-5;
