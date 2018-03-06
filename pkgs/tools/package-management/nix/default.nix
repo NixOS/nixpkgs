@@ -29,7 +29,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli ] # Since 1.12
+      ++ lib.optionals is20 [ brotli ] # Since 1.12
       ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
