@@ -86,12 +86,11 @@ in rec {
   ubootTools = buildUBoot rec {
     defconfig = "allnoconfig";
     installDir = "$out/bin";
-    buildFlags = "tools NO_SDL=1";
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = stdenv.lib.platforms.linux;
     # build tools/kwboot
-    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" ];
+    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
     postConfigure = ''
       sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
     '';
