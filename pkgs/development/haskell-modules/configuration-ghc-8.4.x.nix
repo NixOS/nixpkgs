@@ -131,6 +131,11 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## doctest >=0.7 && <0.14
+  turtle = super.turtle_1_5_4;
+
+  ## Needs bump to a versioned attribute
   ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
   ##    |
   ## 80 | import Data.Semigroup (Semigroup(..), Monoid(..))
