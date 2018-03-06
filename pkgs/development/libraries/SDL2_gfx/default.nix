@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/;
     license = licenses.zlib;
-
     maintainers = with maintainers; [ cpages ];
     platforms = platforms.unix;
   };
