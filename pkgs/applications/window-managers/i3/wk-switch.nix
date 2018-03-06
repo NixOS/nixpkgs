@@ -1,16 +1,13 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
-let
-  pkgName = "i3-wk-switch";
-in
 python2Packages.buildPythonApplication rec {
-  name = "${pkgName}-${version}";
+  pname = "i3-wk-switch";
   version = "2017-08-21";
 
   # https://github.com/tmfink/i3-wk-switch/commit/484f840bc4c28ddc60fa3be81e2098f7689e78fb
   src = fetchFromGitHub {
     owner = "tmfink";
-    repo = pkgName;
+    repo = pname;
     rev = "484f840";
     sha256 = "0nrc13ld5bx07wrgnpzgpbaixb4rpi93xiapvyb8srd49fj9pcmb";
   };
