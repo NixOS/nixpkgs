@@ -36,9 +36,8 @@ stdenv.mkDerivation rec {
       code. Its is written in plain C and can be used in C++ code.
     '';
 
-    homepage = https://sourceforge.net/projects/sdlgfx/;
+    homepage = http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/;
     license = licenses.zlib;
-
     maintainers = with maintainers; [ cpages ];
     platforms = platforms.unix;
   };
