@@ -3155,6 +3155,11 @@
     github = "sellout";
     name = "Greg Pfeil";
   };
+  sengaya = {
+    email = "tlo@sengaya.de";
+    github = "sengaya";
+    name = "Thilo Uttendorfer";
+  };
   sepi = {
     email = "raffael@mancini.lu";
     github = "sepi";
