@@ -33,6 +33,8 @@ in with pkgs; rec {
     '';
   };
 
+  bootGCC = gcc.cc.override { enableLTO = false; };
+
   build =
 
     stdenv.mkDerivation {
@@ -109,12 +111,12 @@ in with pkgs; rec {
         cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc.cc.out}/bin/gcc $out/bin
-        cp -d ${gcc.cc.out}/bin/cpp $out/bin
-        cp -d ${gcc.cc.out}/bin/g++ $out/bin
-        cp -d ${gcc.cc.lib}/lib/libgcc_s.so* $out/lib
-        cp -d ${gcc.cc.lib}/lib/libstdc++.so* $out/lib
-        cp -rd ${gcc.cc.out}/lib/gcc $out/lib
+        cp -d ${bootGCC.out}/bin/gcc $out/bin
+        cp -d ${bootGCC.out}/bin/cpp $out/bin
+        cp -d ${bootGCC.out}/bin/g++ $out/bin
+        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
+        cp -rd ${bootGCC.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -122,11 +124,11 @@ in with pkgs; rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.cc.out}/libexec/* $out/libexec
+        cp -rd ${bootGCC.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir -p $out/include
-        cp -rd ${gcc.cc.out}/include/c++ $out/include
+        cp -rd ${bootGCC.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
