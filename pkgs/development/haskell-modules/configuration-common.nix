@@ -999,13 +999,4 @@ self: super: {
   # Needs turtle >=1.5.0, which we use by default in lts-10.x.
   changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
 
-  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
-  SHA = appendPatch super.SHA (pkgs.fetchpatch {
-    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
-    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
-  });
-
-  # https://github.com/strake/lenz-template.hs/issues/1
-  lenz-template = doJailbreak super.lenz-template;
-
 }
