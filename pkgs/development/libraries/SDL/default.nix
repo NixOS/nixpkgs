@@ -78,6 +78,11 @@ stdenv.mkDerivation rec {
       url = "http://hg.libsdl.org/SDL/raw-rev/95abff7adcc2";
       sha256 = "0i8x0kx0pw12ld5bfxhyzs466y3c0n9dscw1ijhq1b96r72xyhqq";
     })
+    # https://bugzilla.libsdl.org/show_bug.cgi?id=1769
+    (fetchpatch {
+      url = "http://hg.libsdl.org/SDL/raw-rev/91ad7b43317a";
+      sha256 = "15g537vbl2my4mfrjxfkcx9ri6bk2gjvaqj650rjdxwk2nkdkn4b";
+    })
     # Workaround X11 bug to allow changing gamma
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
