@@ -11935,10 +11935,6 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
-  jquery = callPackage ../development/libraries/javascript/jquery { };
-
-  jquery-ui = callPackage ../development/libraries/javascript/jquery-ui { };
-
   yuicompressor = callPackage ../development/tools/yuicompressor { };
 
   ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
