@@ -120,9 +120,6 @@ in {
         ReadWritePaths = "${cfg.configDir}";
         PrivateTmp = true;
       };
-      restartTriggers = [
-        configFile
-      ];
       path = [
         "/run/wrappers" # needed for ping
       ];
