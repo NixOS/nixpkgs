@@ -61,7 +61,7 @@ callPackage (import ./generic.nix (rec {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         rev = "refs/tags/qemu-xen-${version}";
-        sha256 = "090ibcgs3xwmavk9yg2vaqr3xp9hirnfd3r40ccvrl49c5x58w3g";
+        sha256 = "0lb7zd5nvr6znx47z93nbq4gj8xfb3622s8r2cvmpqmwnmlc3nd4";
       };
       buildInputs = qemuDeps;
       meta.description = "Xen's fork of upstream Qemu";
