@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "screen-message-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
   # screen-message installs its binary in $(prefix)/games per default
   makeFlags = [ "execgamesdir=$(out)/bin" ];
