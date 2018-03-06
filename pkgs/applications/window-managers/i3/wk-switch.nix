@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication rec {
     description = "XMonad-like workspace switching for i3";
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     homepage = https://travisf.net/i3-wk-switcher;
   };
 }
