@@ -365,7 +365,7 @@ in
         ] ++ extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";
         ExecStop = "${tomcat}/bin/shutdown.sh";
-      } // (optionalAttrs (cfg.environment != null) cfg.environment);
+      };
     };
   };
 }
