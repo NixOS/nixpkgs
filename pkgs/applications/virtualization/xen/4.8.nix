@@ -48,11 +48,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.8.2";
+  version = "4.8.3";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "1ydgwbn8ab0s16jrbi3wzaa6j0y3zk0j8pay458qcgayk3qc476b";
+    sha256 = "0vhkpyy5x7kc36hnav95fn194ngsmc3m2xcc78vccs00gdf6m8q9";
   };
 
   # Sources needed to build tools and firmwares.
@@ -61,7 +61,7 @@ callPackage (import ./generic.nix (rec {
       src = fetchgit {
         url = https://xenbits.xen.org/git-http/qemu-xen.git;
         rev = "refs/tags/qemu-xen-${version}";
-        sha256 = "1l4sygd8p0mc13bskr4r1m31qh1kr58h195qn1s52869s58jyhvm";
+        sha256 = "090ibcgs3xwmavk9yg2vaqr3xp9hirnfd3r40ccvrl49c5x58w3g";
       };
       buildInputs = qemuDeps;
       meta.description = "Xen's fork of upstream Qemu";
@@ -150,26 +150,7 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
   patches = with xsa; flatten [
-    XSA_231
-    XSA_232
-    XSA_233
-    XSA_234_48
-    XSA_236
-    XSA_237_48
-    XSA_238
-    XSA_239
-    XSA_240_48
-    XSA_241
-    XSA_242
-    XSA_243_48
-    XSA_244
-    XSA_245
-    XSA_246
-    XSA_247_48
-    XSA_248_48
-    XSA_249
-    XSA_250
-    XSA_251_48
+    # XSA_231 to XSA-251 are fixed in 4.8.3 (verified with git log)
     XSA_252_49
     # 253: 4.8 not affected
     # 254: no patch supplied by xen project (Meltdown/Spectre)
