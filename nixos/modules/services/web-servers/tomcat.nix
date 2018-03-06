@@ -49,10 +49,11 @@ in
         description = "Extra configuration files to pull into the tomcat conf directory";
       };
 
-      environment = mkOption {
-        default = null;
-        example = "/etc/nixos/tomcat-environment";
-        description = "File to be sourced before executing tomcat. Can be used to set environment variables";
+      extraEnvironment = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "ENIVRONMENT=production" "ZONE=us-north-0" ];
+        description = "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = mkOption {
@@ -96,7 +97,7 @@ in
         default = "";
         description = "
           Verbatim server.xml configuration.
-          This is mutualyl exclusive with the virtualHosts options.
+          This is mutually exclusive with the virtualHosts options.
         ";
       };
 
@@ -211,8 +212,7 @@ in
           ${tomcat}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
 
         ${if cfg.serverXml != "" then ''
-          cat <<'EOF' > ${cfg.baseDir}/conf/server.xml
-          ${cfg.serverXml}EOF
+          cp -f ${pkgs.writeTextDir "server.xml" cfg.serverXml}/* ${cfg.baseDir}/conf/
           '' else ''
           # Create a modified server.xml which also includes all virtual hosts
           sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
@@ -362,7 +362,7 @@ in
           "CATALINA_OPTS=${cfg.catalinaOpts}"
           "ERRFILE=SYSLOG"
           "OUTFILE=SYSLOG"
-        ];
+        ] ++ extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";
         ExecStop = "${tomcat}/bin/shutdown.sh";
       } // (optionalAttrs (cfg.environment != null) cfg.environment);
