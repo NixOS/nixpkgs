@@ -29,6 +29,18 @@ let
 
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 
+  xenlockprofpatch = (fetchpatch {
+    name = "xenlockprof-gcc7.patch";
+    url = "https://xenbits.xen.org/gitweb/?p=xen.git;a=patch;h=f49fa658b53580cf2ad354d2bf1796766cc11222";
+    sha256 = "1lvzfvkqirknivm8q4cg5byfqz49s16zjk65fkwl3kwb03chky70";
+  });
+
+  xenpmdpatch = (fetchpatch {
+    name = "xenpmd-gcc7.patch";
+    url = "https://xenbits.xen.org/gitweb/?p=xen.git;a=patch;h=2d78f78a14528752266982473c07118f1bc336e3";
+    sha256 = "1ki295pymbcfc64sjb9wqfwpv19p8vwgmnxankada3vm4fxg2rhq";
+  });
+
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
@@ -158,6 +170,14 @@ callPackage (import ./generic.nix (rec {
     XSA_249
     XSA_250
     XSA_251_48
+    XSA_252_49
+    # 253: 4.8 not affected
+    # 254: no patch supplied by xen project (Meltdown/Spectre)
+    XSA_255_49_1
+    XSA_255_49_2
+    XSA_256_48
+    xenlockprofpatch
+    xenpmdpatch
   ];
 
   # Fix build on Glibc 2.24.
