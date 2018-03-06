@@ -10,6 +10,7 @@ var_templates_list=(
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
     NIX+GNATFLAGS_COMPILE
+    NIX+HARDENING_ENABLE
 )
 var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
@@ -31,10 +32,10 @@ fi
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
 for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" "${role_infixes[@]}"
+    mangleVarList "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 for var in "${var_templates_bool[@]}"; do
-    mangleVarBool "$var" "${role_infixes[@]}"
+    mangleVarBool "$var" ${role_infixes[@]+"${role_infixes[@]}"}
 done
 
 # `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
