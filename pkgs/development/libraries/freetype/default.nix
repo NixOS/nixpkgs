@@ -11,10 +11,10 @@
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
-  version = "2.7.1"; name = "freetype-" + version;
 
-in stdenv.mkDerivation {
-  inherit name;
+in stdenv.mkDerivation rec {
+  name = "freetype-${version}";
+  version = "2.9";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "121gm15ayfg3rglby8ifh8384mcjb9dhmx9j40zl7yszw72b4frs";
+    sha256 = "12jcdz1in20yaa55izxalg3hm1pf7nydfrzps5bzb4zgihybmzz6";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
@@ -43,14 +43,7 @@ in stdenv.mkDerivation {
     ++ optional (!stdenv.isLinux) gnumake;
 
   patches =
-    [
-      ./pcf-introduce-driver.patch
-      ./pcf-config-long-family-names.patch
-      ./disable-pcf-long-family-names.patch
-      ./enable-table-validation.patch
-      # remove the two CVE patches after updating to >= 2.8
-      ./cve-2017-8105.patch
-      ./cve-2017-8287.patch
+    [ ./enable-table-validation.patch
     ] ++
     optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
