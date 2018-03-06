@@ -54,7 +54,9 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap { };
+    bap = callPackage ../development/ocaml-modules/bap {
+      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
+    };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -712,9 +714,17 @@ let
     # Jane Street
 
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
-
+    
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
+      inherit (pkgs) stdenv openssl;
+    };
+    
+    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
+      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
+      inherit lib ocaml ocamlbuild ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
       inherit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
