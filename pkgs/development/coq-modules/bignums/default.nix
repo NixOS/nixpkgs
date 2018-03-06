@@ -1,20 +1,17 @@
 { stdenv, fetchFromGitHub, coq }:
 
-let rev_and_sha = {
-  "8.6" = {
-    rev = "v8.6.0";
-    sha256 = "0553pcsy21cyhmns6k9qggzb67az8kl31d0lwlnz08bsqswigzrj";
-  };
-  "8.7" = {
-    rev = "V8.7.0";
-    sha256 = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
-  };
-};
-in
-
-if ! (rev_and_sha ? "${coq.coq-version}") then
-  throw "bignums is not available for Coq ${coq.coq-version}"
-else with rev_and_sha."${coq.coq-version}";
+let param =
+  {
+    "8.6" = {
+      rev = "v8.6.0";
+      sha256 = "0553pcsy21cyhmns6k9qggzb67az8kl31d0lwlnz08bsqswigzrj";
+    };
+    "8.7" = {
+      rev = "V8.7.0";
+      sha256 = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
+    };
+  }."${coq.coq-version}"
+; in
 
 stdenv.mkDerivation rec {
 
@@ -23,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "coq";
     repo = "bignums";
-    inherit rev sha256;
+    inherit (param) rev sha256;
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 coq.findlib coq ];
@@ -35,4 +32,7 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" ];
+  };
 }
