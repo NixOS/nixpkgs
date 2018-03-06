@@ -1006,4 +1006,7 @@ self: super: {
   # Needs older hlint
   hpio = dontCheck super.hpio;
 
+  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
+
 }
