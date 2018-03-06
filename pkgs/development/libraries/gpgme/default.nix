@@ -1,7 +1,6 @@
 { stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which
 , autoreconfHook
-# git can apparently be removed when setting some envvar
 , git
 , texinfo5
 , qtbase ? null
@@ -59,4 +58,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fuuzetsu primeos ];
   };
 }
-

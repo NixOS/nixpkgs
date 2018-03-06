@@ -8173,6 +8173,8 @@ in {
 
   google_gax = callPackage ../development/python-modules/google_gax { };
 
+  gpg = toPythonModule (pkgs.gpgme.override { withPython=true; });
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
