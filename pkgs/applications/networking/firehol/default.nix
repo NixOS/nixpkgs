@@ -2,8 +2,8 @@
 , autoconf, automake, curl, iprange, iproute, ipset, iptables, iputils
 , kmod, nettools, procps, tcpdump, traceroute, utillinux, whois
 
-# Just install FireQOS without FireHOL
-, onlyQOS ? true
+# If true, just install FireQOS without FireHOL
+, onlyQOS ? false
 }:
 
 stdenv.mkDerivation rec {
