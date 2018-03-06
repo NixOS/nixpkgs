@@ -1,21 +1,25 @@
 allHardeningFlags=(fortify stackprotector pie pic strictoverflow format relro bindnow)
 hardeningCFlags=()
 
-declare -A hardeningDisableMap=()
 declare -A hardeningEnableMap=()
-
-# Create table of unsupported flags for this toolchain.
-for flag in @hardening_unsupported_flags@; do
-  hardeningDisableMap[$flag]=1
-done
 
 # Intentionally word-split in case 'NIX_HARDENING_ENABLE' is defined in Nix. The
 # array expansion also prevents undefined variables from causing trouble with
 # `set -u`.
 for flag in ${NIX_HARDENING_ENABLE-}; do
-  if [[ -z "${hardeningDisableMap[$flag]-}" ]]; then
-    hardeningEnableMap[$flag]=1
+  hardeningEnableMap[$flag]=1
+done
+
+# Remove unsupported flags.
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
+    declare -A hardeningDisableMap=()
+fi
+for flag in @hardening_unsupported_flags@; do
+  [[ -n ${hardeningEnableMap[$flag]} ]] || continue
+  if (( "${NIX_DEBUG:-0}" >= 1 )); then
+    hardeningDisableMap[$flag]=1
   fi
+  unset hardeningEnableMap[$flag]
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
