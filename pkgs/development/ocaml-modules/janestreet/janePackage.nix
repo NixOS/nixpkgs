@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib }:
+{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib, defaultVersion ? "0.10.0" }:
 
-{ name, version ? "0.10.0", buildInputs ? [], hash, meta, ...}@args:
+{ name, version ? defaultVersion, buildInputs ? [], hash, meta, ...}@args:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.04"
 then throw "${name}-${version} is not available for OCaml ${ocaml.version}" else
