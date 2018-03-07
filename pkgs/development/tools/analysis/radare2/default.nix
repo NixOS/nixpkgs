@@ -13,22 +13,22 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.3.0";
+  version = "2.4.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0x5vcprqf0fnj876mdvryfvg7ymbrw1cxrr7a06v0swg7yql1lpw";
+    sha256 = "08zvxgsvc6rqpjaapcxz1wm9vzlrbsqgplfkx0lch2s67v6slr7z";
   };
 
   postPatch = let
-    cs_tip = "bdbc57de63725a98732ddc34b48de96f8ada66f2"; # version from $sourceRoot/shlr/Makefile
+    cs_tip = "4a1b580d069c82d60070d0869a87000db7cdabe2"; # version from $sourceRoot/shlr/Makefile
     capstone = fetchgit {
       url = "https://github.com/aquynh/capstone.git";
       rev = cs_tip;
-      sha256 = "1sqxpjf2dlrg87dm9p39p5d1qzahrnfnrjijpv1xg1shax439jni";
+      sha256 = "1b126npshdbwh5y7rafmb9w4dzlvxsf4ca6bx4zs2y7kbk48jyn8";
       leaveDotGit = true;
     };
   in ''
