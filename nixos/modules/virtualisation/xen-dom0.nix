@@ -241,6 +241,12 @@ in
           '';
           target = "default/xendomains";
         }
+      ]
+      ++ lib.optionals (builtins.compareVersions cfg.package.version "4.10" >= 0) [
+        # in V 4.10 oxenstored requires /etc/xen/oxenstored.conf to start
+        { source = "${cfg.package}/etc/xen/oxenstored.conf";
+          target = "xen/oxenstored.conf";
+        }
       ];
 
     # Xen provides udev rules.
