@@ -9,12 +9,8 @@
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
-, # If you want the resulting program to call itself "Thunderbird" instead
-  # of "Earlybird" or whatever, enable this option.  However, those
-  # binaries may not be distributed without permission from the
-  # Mozilla Foundation, see
-  # http://www.mozilla.org/foundation/trademarks/.
-  enableOfficialBranding ? false
+, # see comment in ../../browsers/firefox/common.nix
+  enableOfficialBranding ? true
 , makeDesktopItem
 }:
 
@@ -177,10 +173,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
     homepage = http://www.mozilla.org/thunderbird/;
-    license =
-      # Official branding implies thunderbird name and logo cannot be reuse,
-      # see http://www.mozilla.org/foundation/licensing.html
-      if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
+    license = licenses.mpl11;
     maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
   };
