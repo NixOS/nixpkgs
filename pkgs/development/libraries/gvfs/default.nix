@@ -6,14 +6,14 @@
 
 let
   pname = "gvfs";
-  version = "1.34.2";
+  version = "1.34.2.1";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0scn7bmfi27dnn764m090cj999dhda05pd9hnd9pcsfwygmcglv0";
+    sha256 = "1smmzix8wqrmj10pqy3xhrlv7xza6rpmg2v052gwk9ysxdric9fm";
   };
 
   nativeBuildInputs = [

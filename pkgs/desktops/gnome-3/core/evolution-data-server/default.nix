@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.26.5";
+  version = "3.26.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0m0y4l5wrdxpb6bs929ml7ayicwygfvngrzxf88hn0vkw0crfa9z";
+    sha256 = "1v0hwlrlm23bz5dmamdavm771f4gs64fyq82argrc0nwgn2a2fp4";
   };
 
   passthru = {
