@@ -14527,13 +14527,15 @@ in {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   isodate = buildPythonPackage rec {
-    name = "isodate-${version}";
-    version = "0.5.4";
+    pname = "isodate";
+    version = "0.6.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/isodate/${name}.tar.gz";
-      sha256 = "42105c41d037246dc1987e36d96f3752ffd5c0c24834dd12e4fdbe1e79544e31";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1n7jkz68kk5pwni540pr5zdh99bf6ywydk1p5pdrqisrawylldif";
     };
+
+    propagatedBuildInputs = with self; [ six ];
 
     # Judging from SyntaxError
     doCheck = !(isPy3k);
@@ -14543,8 +14545,10 @@ in {
     '';
 
     meta = {
-      description = "ISO 8601 date/time parser";
-      homepage = http://cheeseshop.python.org/pypi/isodate;
+      description = "An ISO 8601 date/time/duration parser and formatter";
+      homepage = https://github.com/gweis/isodate/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
