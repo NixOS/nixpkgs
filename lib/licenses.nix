@@ -179,6 +179,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cpal10 = spdx {
+    spdxId = "CPAL-1.0";
+    fullName = "Common Public Attribution License 1.0";
+  };
+
   cpl10 = spdx {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
