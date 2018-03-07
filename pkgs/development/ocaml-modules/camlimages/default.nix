@@ -9,4 +9,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ findlib jbuilder ocaml configurator cppo lablgtk ];
   buildPhase = "jbuilder build -p camlimages";
   inherit (jbuilder) installPhase;
+  
+  meta = with stdenv.lib; {
+    branch = "5.0";
+    homepage = https://bitbucket.org/camlspotter/camlimages;
+    description = "OCaml image processing library";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.vbgl maintainers maintainers.mt-caret ];
+  };
 }
