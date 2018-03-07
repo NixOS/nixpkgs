@@ -9994,14 +9994,11 @@ in {
 
   pkgconfig = buildPythonPackage rec {
     name = "pkgconfig-${version}";
-    version = "1.1.0";
-
-    # pypy: SyntaxError: __future__ statements must appear at beginning of file
-    disabled = isPyPy;
+    version = "1.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pkgconfig/${name}.tar.gz";
-      sha256 = "709daaf077aa2b33bedac12706373412c3683576a43013bbaa529fc2769d80df";
+      sha256 = "107x2wmchlch8saixb488cgjz9n6inl38wi7nxkb942rbaapxiqb";
     };
 
     buildInputs = with self; [ nose ];
@@ -10015,8 +10012,6 @@ in {
     };
 
     # nosetests needs to be run explicitly.
-    # Note that the distributed archive does not actually contain any tests.
-    # https://github.com/matze/pkgconfig/issues/9
     checkPhase = ''
       nosetests
     '';
