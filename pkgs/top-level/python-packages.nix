@@ -561,6 +561,8 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
+  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
+
   apipkg = callPackage ../development/python-modules/apipkg {};
 
   appdirs = callPackage ../development/python-modules/appdirs { };
