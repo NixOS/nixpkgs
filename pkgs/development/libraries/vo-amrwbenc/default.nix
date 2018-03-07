@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     homepage = "http://sourceforge.net/projects/opencore-amr/";
     description = "VisualOn Adaptive Multi Rate Wideband (AMR-WB) encoder";
     license = "stdenv.lib.licenses.apache";
-    maintainers = [ stdenv.lib.maintainers.esteth ];
+    maintainers = [ stdenv.lib.maintainers.Esteth ];
   };
 }
