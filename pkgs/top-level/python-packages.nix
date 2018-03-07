@@ -13362,6 +13362,8 @@ in {
 
   pyrr = callPackage ../development/python-modules/pyrr { };
 
+  pysha3 = callPackage ../development/python-modules/pysha3 { };
+
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { };
