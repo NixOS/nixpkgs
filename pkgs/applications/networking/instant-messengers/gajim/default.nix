@@ -16,13 +16,39 @@ with lib;
 
 buildPythonApplication rec {
   name = "gajim-${version}";
-  majorVersion = "1.0";
-  version = "${majorVersion}.1";
+  majorVersion = "0.16";
+  version = "${majorVersion}.9";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
     sha256 = "16ynws10vhx6rhjjjmzw6iyb3hc19823xhx4gsb14hrc7l8vzd1c";
   };
+
+  # Needed for Plugin Installer
+  release = fetchurl {
+    url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
+    sha256 = "0v08zdvpqaig0wxpxn1l8rsj3wr3fqvnagn8cnvch17vfqv9gcr1";
+  };
+
+  postUnpack = ''
+    tar -xaf $release
+    cp -r ${name}/plugins/plugin_installer gajim-${name}-*/plugins
+    rm -rf ${name}
+  '';
+
+  patches = let
+    # An attribute set of revisions to apply from the upstream repository.
+    cherries = {
+      #example-fix = {
+      #  rev = "<replace-with-git-revsion>";
+      #  sha256 = "<replace-with-sha256>";
+      #};
+    };
+  in (mapAttrsToList (name: { rev, sha256 }: fetchurl {
+    name = "gajim-${name}.patch";
+    url = "https://dev.gajim.org/gajim/gajim/commit/${rev}.diff";
+    inherit sha256;
+  }) cherries);
 
   postPatch = ''
     # This test requires network access
