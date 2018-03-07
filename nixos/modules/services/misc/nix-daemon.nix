@@ -52,8 +52,8 @@ let
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
         ${if isNix20 then ''
           require-sigs = ${if cfg.requireSignedBinaryCaches then "true" else "false"}
-        '' else ''
-          signed-binary-caches = ${if cfg.requireSignedBinaryCaches then "*" else ""}
+        '' else optionalString cfg.requireSignedBinaryCaches ''
+          signed-binary-caches = *
         ''}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
