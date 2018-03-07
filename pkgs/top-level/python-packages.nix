@@ -5968,6 +5968,8 @@ in {
     };
   };
 
+  pybtex = callPackage ../development/python-modules/pybtex {};
+
   pycallgraph = buildPythonPackage rec {
     name = "pycallgraph-${version}";
     version = "1.0.1";
