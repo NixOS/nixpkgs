@@ -1,33 +1,45 @@
-hardeningFlags=(relro bindnow)
-# Intentionally word-split in case 'hardeningEnable' is defined in
-# Nix. Also, our bootstrap tools version of bash is old enough that
-# undefined arrays trip `set -u`.
-if [[ -v hardeningEnable[@] ]]; then
-  hardeningFlags+=(${hardeningEnable[@]})
+allHardeningFlags=(pie relro bindnow)
+hardeningFlags=()
+
+declare -A hardeningEnableMap=()
+
+# Intentionally word-split in case 'NIX_HARDENING_ENABLE' is defined in Nix. The
+# array expansion also prevents undefined variables from causing trouble with
+# `set -u`.
+for flag in ${NIX_@infixSalt@_HARDENING_ENABLE-}; do
+  hardeningEnableMap[$flag]=1
+done
+
+# Remove unsupported flags.
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
+  declare -A hardeningDisableMap=()
 fi
-hardeningLDFlags=()
-
-declare -A hardeningDisableMap
-
-# Intentionally word-split in case 'hardeningDisable' is defined in Nix.
-for flag in ${hardeningDisable[@]:-IGNORED_KEY} @hardening_unsupported_flags@
-do
-  hardeningDisableMap[$flag]=1
+for flag in @hardening_unsupported_flags@; do
+  [[ -n ${hardeningEnableMap[$flag]} ]] || continue
+  if (( "${NIX_DEBUG:-0}" >= 1 )); then
+    hardeningDisableMap[$flag]=1
+  fi
+  unset hardeningEnableMap[$flag]
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
+  # Determine which flags were effectively disabled so we can report below.
+  for flag in ${allHardeningFlags[@]}; do
+    if [[ -z "${hardeningEnableMap[$flag]-}" ]]; then
+      hardeningDisableMap[$flag]=1
+    fi
+  done
+
   printf 'HARDENING: disabled flags:' >&2
   (( "${#hardeningDisableMap[@]}" )) && printf ' %q' "${!hardeningDisableMap[@]}" >&2
   echo >&2
 fi
 
-if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
+if (( "${#hardeningEnableMap[@]}" )); then
   if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo 'HARDENING: Is active (not completely disabled with "all" flag)' >&2;
   fi
-  for flag in "${hardeningFlags[@]}"
-  do
-    if [[ -z "${hardeningDisableMap[$flag]:-}" ]]; then
+  for flag in "${!hardeningEnableMap[@]}"; do
       case $flag in
         pie)
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
@@ -48,6 +60,5 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           # tool supports each flag.
           ;;
       esac
-    fi
   done
 fi

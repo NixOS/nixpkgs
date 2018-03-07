@@ -147,6 +147,10 @@ export ${role_pre}CXX=@named_cxx@
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
+# If unset, assume the default hardening flags.
+: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
+export NIX_HARDENING_ENABLE
+
 # No local scope in sourced file
 unset -v role_pre role_post
 set +u

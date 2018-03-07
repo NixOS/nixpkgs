@@ -74,6 +74,11 @@ rec {
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
+      enabledHardeningOptions =
+        if builtins.elem "all" hardeningDisable
+        then []
+        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
@@ -114,19 +119,6 @@ rec {
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
         ]
       ];
-
-      defaultHardeningFlags = [
-        "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow"
-      ];
-
-      hardeningDisable = lib.toList (attrs.hardeningDisable or [ ]);
-
-      hardeningEnable = lib.toList (attrs.hardeningEnable or [ ]);
-
-      enabledHardeningOptions =
-        if builtins.elem "all" hardeningDisable
-        then []
-        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
 
       outputs' =
         outputs ++

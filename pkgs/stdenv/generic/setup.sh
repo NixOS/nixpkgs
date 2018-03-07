@@ -7,10 +7,6 @@ fi
 
 : ${outputs:=out}
 
-# If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
-export NIX_HARDENING_ENABLE
-
 ######################################################################
 # Hook handling.
 

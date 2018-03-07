@@ -1,4 +1,4 @@
-allHardeningFlags=(fortify stackprotector pie pic strictoverflow format relro bindnow)
+allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
 hardeningCFlags=()
 
 declare -A hardeningEnableMap=()
@@ -12,7 +12,7 @@ done
 
 # Remove unsupported flags.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    declare -A hardeningDisableMap=()
+  declare -A hardeningDisableMap=()
 fi
 for flag in @hardening_unsupported_flags@; do
   [[ -n ${hardeningEnableMap[$flag]} ]] || continue
