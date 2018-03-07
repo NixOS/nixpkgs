@@ -16271,6 +16271,8 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
+
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "sphinxcontrib-blockdiag";
