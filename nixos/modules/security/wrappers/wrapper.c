@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -162,34 +161,22 @@ static int make_caps_ambient(const char *selfPath)
 
 int main(int argc, char * * argv)
 {
-    // O_PATH | O_NOFOLLOW gives us a fd pointing to the symlink
-    int selfExe = open("/proc/self/exe", O_PATH | O_CLOEXEC | O_NOFOLLOW);
-    assert(selfExe != -1);
-    struct stat st;
-    assert(fstat(selfExe, &st) != -1);
-    size_t selfPathCap = st.st_size + 1;
-    char *selfPath = malloc(selfPathCap);
-    assert(selfPath);
-    int selfPathSize = readlinkat(selfExe, "", selfPath, selfPathCap);
+    // I *think* it's safe to assume that a path from a symbolic link
+    // should safely fit within the PATH_MAX system limit. Though I'm
+    // not positive it's safe...
+    char selfPath[PATH_MAX];
+    int selfPathSize = readlink("/proc/self/exe", selfPath, sizeof(selfPath));
 
     assert(selfPathSize > 0);
 
     // Assert we have room for the zero byte, this ensures the path
     // isn't being truncated because it's too big for the buffer.
     //
-    // selfPathSize is the number of bytes readlinkat put into the
-    // buffer, which does *not* append a null byte. selfPathCap is the
-    // capacity of the buffer, which was set to the number of bytes in
-    // the link contents (again, without the null byte) plus one for
-    // the null byte.
-    //
-    // I don't think it's possible for the link contents to change
-    // between opening a symlink fd and readlinkat on it, so this is
-    // probably not necessary. Doubly so since this is /proc/self/exe,
-    // not a normal symlink. But it's trivial to check.
-    assert(selfPathSize < selfPathCap);
-
-    assert(close(selfExe));
+    // A better way to handle this might be to use something like the
+    // whereami library (https://github.com/gpakosz/whereami) or a
+    // loop that resizes the buffer and re-reads the link if the
+    // contents are being truncated.
+    assert(selfPathSize < sizeof(selfPath));
 
     // Set the zero byte since readlink doesn't do that for us.
     selfPath[selfPathSize] = '\0';
@@ -210,6 +197,7 @@ int main(int argc, char * * argv)
     // `selfPath', and not, say, as some other setuid program. That
     // is, our effective uid/gid should match the uid/gid of
     // `selfPath'.
+    struct stat st;
     assert(lstat(selfPath, &st) != -1);
 
     assert(!(st.st_mode & S_ISUID) || (st.st_uid == geteuid()));
@@ -239,8 +227,6 @@ int main(int argc, char * * argv)
     // the Ambient set so the program we're wrapping receives the
     // capabilities too!
     make_caps_ambient(selfPath);
-
-    free(selfPath);
 
     execve(sourceProg, argv, environ);
     
