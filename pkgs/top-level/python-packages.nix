@@ -5876,6 +5876,27 @@ in {
     inherit (pkgs.stdenv) mkDerivation;
   };
 
+  pydocumentdb = buildPythonPackage rec {
+    pname = "pydocumentdb";
+    version = "2.3.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1x1xkq9a8ib4pwf9h92zdn6s2gpl9v4gp8b32had72jf2p8i9hn1";
+    };
+    propagatedBuildInputs = with self; [
+      mock
+      msrest
+    ];
+    doCheck = false;
+    meta = {
+      description = "Azure DocumentDB Python SDK";
+      homepage =  https://github.com/Azure/azure-documentdb-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+
   pydotplus = callPackage ../development/python-modules/pydotplus { };
 
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
