@@ -26,7 +26,7 @@ in {
       wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig.ExecStart = "${pkgs.iwd}/bin/iwd";
+      serviceConfig.ExecStart = "${pkgs.iwd}/libexec/iwd";
     };
   };
 
