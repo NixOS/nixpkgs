@@ -5116,6 +5116,32 @@ in {
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
+  knack = buildPythonPackage rec {
+    pname = "knack";
+    version = "0.3.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0znlf9h14v7szadn04irwjr5zf5djgg4nmqxci4nl50yqmv1dszw";
+    };
+    propagatedBuildInputs = with self; [
+      enum34
+      tabulate_0_7_7
+      six
+      pyyaml
+      pygments
+      jmespath
+      colorama
+      argcomplete
+    ];
+    doCheck = false;
+    meta = {
+      description = "A Command-Line Interface framework";
+      homepage =  https://github.com/microsoft/knack;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
   libsexy = callPackage ../development/python-modules/libsexy {
     libsexy = pkgs.libsexy;
   };
