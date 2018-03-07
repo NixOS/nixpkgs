@@ -5725,6 +5725,7 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  oset = callPackage ../development/python-modules/oset { };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
