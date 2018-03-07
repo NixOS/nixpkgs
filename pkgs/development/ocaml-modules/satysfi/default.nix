@@ -13,7 +13,7 @@ let
   };
 in
   stdenv.mkDerivation rec {
-    name = "satysfi";
+    name = "satysfi-${version}";
     version = "2018-03-07";
     src = fetchFromGitHub {
       owner = "gfngfn";
