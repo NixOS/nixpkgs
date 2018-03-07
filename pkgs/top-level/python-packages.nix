@@ -4749,6 +4749,23 @@ in {
 
   hglib = callPackage ../development/python-modules/hglib {};
 
+  humanfriendly = buildPythonPackage rec {
+    pname = "humanfriendly";
+    version = "4.8";
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "073b52s6kz1q3qn2n9wmv3ikh6q5xbn0shlcpcy8xv2bh371cysq";
+    };
+    propagatedBuildInputs = with self; [ monotonic ];
+    meta = {
+      description = "Human friendly output for text interfaces using Python";
+      homepage =  https://humanfriendly.readthedocs.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
   humanize = buildPythonPackage rec {
     version = "0.5.1";
     name = "humanize-${version}";
