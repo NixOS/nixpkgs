@@ -75,13 +75,13 @@ in
       };
 
       javaOpts = mkOption {
-        type = types.str;
+        type = types.either (types.listOf types.str) types.str;
         default = "";
         description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
 
       catalinaOpts = mkOption {
-        type = types.str;
+        type = types.either (types.listOf types.str) types.str;
         default = "";
         description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
       };
@@ -358,10 +358,9 @@ in
         Environment=[
           "CATALINA_BASE=${cfg.baseDir}"
           "CATALINA_PID=/run/tomcat/tomcat.pid"
-          "JAVA_HOME=${cfg.jdk}"
-          "CATALINA_OPTS=${cfg.catalinaOpts}"
-          "ERRFILE=SYSLOG"
-          "OUTFILE=SYSLOG"
+          "JAVA_HOME='${cfg.jdk}'"
+          "JAVA_OPTS='${builtins.toString cfg.javaOpts}'"
+          "CATALINA_OPTS='${builtins.toString cfg.catalinaOpts}'"
         ] ++ cfg.extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";
         ExecStop = "${tomcat}/bin/shutdown.sh";
