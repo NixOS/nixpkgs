@@ -6367,6 +6367,25 @@ in {
 
   schema = callPackage ../development/python-modules/schema {};
 
+  sshtunnel = buildPythonPackage rec {
+    pname = "sshtunnel";
+    version = "0.1.3";
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "0mprg3fbl3pn861vxm1206jsyplh17lr3j1bcxmin8vhiggpyg4f";
+    };
+    propagatedBuildInputs = with self; [
+      paramiko
+    ];
+    meta = {
+      description = "Pure python SSH tunnels";
+      homepage =  https://github.com/pahaz/sshtunnel/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
   stem = buildPythonPackage rec {
     name = "stem-${version}";
     version = "1.6.0";
