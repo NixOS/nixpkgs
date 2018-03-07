@@ -61,7 +61,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./no-etc-install.patch ./statfs-flags.patch ]
+  patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
+    name = "glibc-2.27-memfd.patch";
+    url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
+    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
+  }) ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch;
 
