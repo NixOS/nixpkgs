@@ -91,6 +91,14 @@ in
         '';
         description = "MongoDB extra configuration in YAML format";
       };
+
+      initialScript = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          A file containing MongoDB statements to execute on first startup.
+        '';
+      };
     };
 
   };
@@ -129,6 +137,8 @@ in
           rm ${cfg.dbpath}/mongod.lock || true
           if ! test -e ${cfg.dbpath}; then
               install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
+              # See postStart!
+              touch ${cfg.dbpath}/.first_startup
           fi
           if ! test -e ${cfg.pidFile}; then
               install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
@@ -156,6 +166,14 @@ in
             touch "${cfg.dbpath}/.auth_setup_complete"
             systemctl stop mongodb-for-setup
           fi
+        '';
+        postStart = ''
+            if test -e "${cfg.dbpath}/.first_startup"; then
+              ${optionalString (cfg.initialScript != null) ''
+                ${mongodb}/bin/mongo -u root -p root admin "${cfg.initialScript}"
+              ''}
+              rm -f "${cfg.dbpath}/.first_startup"
+            fi
         '';
       };
 
