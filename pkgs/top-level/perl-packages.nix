@@ -16284,6 +16284,8 @@ let self = _self // overrides; _self = with self; {
     postInstall = ''
       perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
       '';
+    # https://hydra.nixos.org/build/70726762, seems to be a quoting bug in the Makefile.PL when FULLPERL is passed
+    doCheck = false;
   };
 
   XMLSAXBase = buildPerlPackage {
