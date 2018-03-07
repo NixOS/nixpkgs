@@ -1,0 +1,13 @@
+diff --git a/system-monitor@paradoxxx.zero.gmail.com/extension.js b/system-monitor@paradoxxx.zero.gmail.com/extension.js
+index b4b7f15..d645654 100644
+--- a/system-monitor@paradoxxx.zero.gmail.com/extension.js
++++ b/system-monitor@paradoxxx.zero.gmail.com/extension.js
+@@ -386,7 +386,7 @@ const smMountsMonitor = new Lang.Class({
+     connected: false,
+     _init: function () {
+         this._volumeMonitor = Gio.VolumeMonitor.get();
+-        let sys_mounts = ['/home', '/tmp', '/boot', '/usr', '/usr/local'];
++        let sys_mounts = ['/home', '/tmp', '/boot'];
+         this.base_mounts = ['/'];
+         sys_mounts.forEach(Lang.bind(this, function (sMount) {
+             if (this.is_sys_mount(sMount + '/')) {
