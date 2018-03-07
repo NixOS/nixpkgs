@@ -8,12 +8,13 @@ let
 
   mongodb = cfg.package;
 
-  mongoCnf = pkgs.writeText "mongodb.conf"
+  mongoCnf = cfg: pkgs.writeText "mongodb.conf"
   ''
     net.bindIp: ${cfg.bind_ip}
     ${optionalString cfg.quiet "systemLog.quiet: true"}
     systemLog.destination: syslog
     storage.dbPath: ${cfg.dbpath}
+    ${optionalString cfg.enableAuth "security.authorization: enabled"}
     ${optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
     ${cfg.extraConfig}
   '';
@@ -57,6 +58,12 @@ in
       quiet = mkOption {
         default = false;
         description = "quieter output";
+      };
+
+      enableAuth = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable client authentication. Creates a default superuser with username root/password root!";
       };
 
       dbpath = mkOption {
@@ -108,7 +115,7 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf} --fork --pidfilepath ${cfg.pidFile}";
+          ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf cfg} --fork --pidfilepath ${cfg.pidFile}";
           User = cfg.user;
           PIDFile = cfg.pidFile;
           Type = "forking";
@@ -116,13 +123,38 @@ in
           PermissionsStartOnly = true;
         };
 
-        preStart = ''
+        preStart = let
+          cfg_ = cfg // { enableAuth = false; };
+        in ''
           rm ${cfg.dbpath}/mongod.lock || true
           if ! test -e ${cfg.dbpath}; then
               install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
           fi
           if ! test -e ${cfg.pidFile}; then
               install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
+          fi '' + lib.optionalString cfg.enableAuth ''
+
+          if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
+            systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
+            # wait for mongodb
+            while ! ${mongodb}/bin/mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
+
+          ${mongodb}/bin/mongo <<EOF
+            use admin
+            db.createUser(
+              {
+                user: "root",
+                pwd: "root",
+                roles: [
+                  { role: "userAdminAnyDatabase", db: "admin" },
+                  { role: "dbAdminAnyDatabase", db: "admin" },
+                  { role: "readWriteAnyDatabase", db: "admin" }
+                ]
+              }
+            )
+          EOF
+            touch "${cfg.dbpath}/.auth_setup_complete"
+            systemctl stop mongodb-for-setup
           fi
         '';
       };
