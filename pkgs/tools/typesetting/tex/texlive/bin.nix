@@ -171,7 +171,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
-  patches = common.patches ++ [ ./luatex-gcc7.patch ];
+  patches = (common.patches or []) ++ [ ./luatex-gcc7.patch ];
 
   configureScript = ":";
 
