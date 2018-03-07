@@ -3065,6 +3065,11 @@
     github = "rtreffer";
     name = "Rene Treffer";
   };
+  rubbish = {
+    email = "luke.amdor@gmail.com";
+    github = "rubbish";
+    name = "Luke Amdor";
+  };
   rushmorem = {
     email = "rushmore@webenchanter.com";
     github = "rushmorem";

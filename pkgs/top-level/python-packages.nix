@@ -16189,6 +16189,10 @@ in {
   };
 
   tabulate = callPackage ../development/python-modules/tabulate { };
+  tabulate_0_7_7 = self.tabulate.override {
+    version = "0.7.7";
+    sha256 = "1inqhspd4frxnp08c32yndr0lc4px1xfkqah184i5w09gkhvi843";
+  };
 
   taskw = buildPythonPackage rec {
     version = "1.0.3";
