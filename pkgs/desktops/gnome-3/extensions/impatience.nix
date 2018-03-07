@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-impatience-${version}";
-  version = "version-0.4.5";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    rev = version;
+    rev = "version-${version}";
     sha256 = "0kvdhlz41fjyqdgcfw6mrr9nali6wg2qwji3dvykzfi0aypljzpx";
   };
 
