@@ -5765,6 +5765,8 @@ in {
 
   pybtex = callPackage ../development/python-modules/pybtex {};
 
+  pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils {};
+
   pycallgraph = buildPythonPackage rec {
     name = "pycallgraph-${version}";
     version = "1.0.1";
