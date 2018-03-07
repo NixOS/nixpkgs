@@ -2446,6 +2446,8 @@ with pkgs;
 
   git-series = callPackage ../development/tools/git-series { };
 
+  git-sizer = callPackage ../applications/version-management/git-sizer { };
+
   git-up = callPackage ../applications/version-management/git-up { };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
@@ -10440,7 +10442,7 @@ with pkgs;
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`, 
+  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`,
   # or other runtime dispatcher
   libGL = mesa_noglu;
 
