@@ -6,13 +6,13 @@
 
 let
   pname   = "network-manager-applet";
-  version = "1.8.6";
+  version = "1.8.10";
 in stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0c4wxwxpa7wlskvnqaqfa7mmc0c6a2pj7jcvymcchjnq4wn9wx01";
+    sha256 = "1hy9ni2rwpy68h7jhn5lm2s1zm1vjchfy8lwj8fpm7xlx3x4pp0a";
   };
 
   configureFlags = [
