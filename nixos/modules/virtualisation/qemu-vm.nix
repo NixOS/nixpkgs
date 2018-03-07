@@ -434,9 +434,11 @@ in
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
-    # FIXME: Figure out how to make this work on non-x86
-    virtualisation.qemu.options =
-      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ];
+    # FIXME: Consolidate this one day.
+    virtualisation.qemu.options = mkMerge [
+      (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ])
+      (mkIf (pkgs.stdenv.isArm || pkgs.stdenv.isAarch64) [ "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ])
+    ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to
