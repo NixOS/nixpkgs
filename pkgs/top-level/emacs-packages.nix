@@ -383,11 +383,21 @@ let
   };
 
 in
-  lib.makeScope newScope (self:
+
+  # melpaStable and melpa have the same packages
+  # so give each its own scope to make sure
+  # they don't interfere with each other
+
+  (lib.makeScope newScope (self:
     {}
     // melpaPackages self
     // elpaPackages self
-    // melpaStablePackages self
     // orgPackages self
     // packagesFun self
-  )
+  )) // (lib.makeScope newScope (self:
+    {}
+    // melpaStablePackages self
+    // elpaPackages self
+    // orgPackages self
+    // packagesFun self
+  ))
