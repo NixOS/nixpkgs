@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-system-monitor-${version}";
-  version = "v33";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = version;
+    rev = "v${version}";
     sha256 = "0abqaanl5r26x8f0mm0jgrjsr86hcx7mk75dx5c3zz7csw4nclkk";
   };
 
