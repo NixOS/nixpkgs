@@ -4354,6 +4354,8 @@ with pkgs;
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
+  projectlibre = callPackage ../applications/misc/projectlibre { };
+
   projectm = callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
