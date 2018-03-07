@@ -28,8 +28,8 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    $machine->succeed('systemctl status openldap.service');
     $machine->waitForUnit('openldap.service');
+    $machine->succeed('systemctl status openldap.service');
     $machine->succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"');
   '';
 }
