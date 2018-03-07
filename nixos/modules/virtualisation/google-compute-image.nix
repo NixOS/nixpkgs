@@ -211,32 +211,50 @@ in
           # Don't download the SSH key if it has already been downloaded
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
-          AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS --header="Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
-          if [ -s $AUTH_KEYS ]; then
+          AUTH_KEYS_PROJECT=$(${mktemp})
+          AUTH_KEYS_INSTANCE=$(${mktemp})
 
-            # Read in key one by one, split in case Google decided
-            # to append metadata (it does sometimes) and add to
-            # authorized_keys if not already present.
-            touch /root/.ssh/authorized_keys
-            NEW_KEYS=$(${mktemp})
-            # Yes this is a nix escape of two single quotes.
-            while IFS=''' read -r line || [[ -n "$line" ]]; do
-              keyLine=$(echo -n "$line" | cut -d ':' -f2)
-              IFS=' ' read -r -a array <<< "$keyLine"
-              if [ ''${#array[@]} -ge 3 ]; then
-                echo ''${array[@]:0:3} >> $NEW_KEYS
-                echo "Added ''${array[@]:2} to authorized_keys"
-              fi
-            done < $AUTH_KEYS
-            mv $NEW_KEYS /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-            rm -f $KEY_PUB
+          get_keys() {
+            local url="http://metadata.google.internal/computeMetadata/v1/$2/attributes/ssh-keys"
+            ${wget} -O "$1" --header="Metadata-Flavor: Google" "$url"
+            if [ ! -s "$1" ]; then
+              echo "Downloading $url failed."
+              # Always create file
+              touch "$1"
+              return 1
+            fi
+          }
+          
+          if ! get_keys "$AUTH_KEYS_PROJECT" project; then
+            if ! get_keys "$AUTH_KEYS_INSTANCE" instance; then
+              echo "Couldn't fetch both project and instance keys."
+              false
+            fi
           else
-            echo "Downloading http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys failed."
-            false
+            # Ignore return status since we already have at least project keys
+            get_keys "$AUTH_KEYS_INSTANCE" instance || :
           fi
-          rm -f $AUTH_KEYS
+          
+          # Read in key one by one, split in case Google decided
+          # to append metadata (it does sometimes) and add to
+          # authorized_keys if not already present.
+          touch /root/.ssh/authorized_keys
+          NEW_KEYS=$(mktemp --tmpdir=/run)
+          
+          # Join project and instance keys with a newline to separate last project key from first instance key
+          cat "$AUTH_KEYS_PROJECT" <(echo) "$AUTH_KEYS_INSTANCE" | \
+          # Yes this is a nix escape of two single quotes.
+          while IFS=''' read -r line || [[ -n "$line" ]]; do
+            keyLine=$(echo -n "$line" | cut -d ':' -f2)
+            IFS=' ' read -r -a array <<< "$keyLine"
+            if [ ''${#array[@]} -ge 3 ]; then
+              echo ''${array[@]:0:3} >> $NEW_KEYS
+              echo "Added ''${array[@]:2} to authorized_keys"
+            fi
+          done
+          mv $NEW_KEYS /root/.ssh/authorized_keys
+          chmod 600 /root/.ssh/authorized_keys
+          rm -f "$AUTH_KEYS_PROJECT" "$AUTH_KEYS_INSTANCE"
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
