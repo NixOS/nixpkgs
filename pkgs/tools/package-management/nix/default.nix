@@ -170,6 +170,8 @@ in rec {
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable2; }; };
 
+  nixUnstable = nixStable2;
+/*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
     suffix = "pre5889_c287d731";
@@ -181,5 +183,6 @@ in rec {
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+*/
 
 }
