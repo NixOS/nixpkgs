@@ -21,7 +21,7 @@ pkgs.stdenv.mkDerivation {
     nix-store --init
 
     cd ${pkgs.path}/lib/tests
-    ./modules.sh
+    bash ./modules.sh
 
     [[ "$(nix-instantiate --eval --strict misc.nix)" == "[ ]" ]]
 
