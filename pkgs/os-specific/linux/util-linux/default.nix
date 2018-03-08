@@ -2,16 +2,13 @@
 , ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
 let
-  version = lib.concatStringsSep "." ([ majorVersion ]
-    ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.31";
-  patchVersion = "1";
+  version = "2.31.1";
 
 in stdenv.mkDerivation rec {
   name = "util-linux-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${stdenv.lib.versions.major version}/${name}.tar.xz";
     sha256 = "04fzrnrr3pvqskvjn9f81y0knh0jvvqx4lmbz5pd4lfdm5pv2l8s";
   };
 

@@ -4,18 +4,17 @@
 with stdenv.lib;
 
 let
-  majorVersion = "2.2";
-  minorVersion = ".0";
+  version = "2.2";
 
   binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net_snmp ];
 
 in stdenv.mkDerivation rec {
-  name = "monitoring-plugins-${majorVersion}${minorVersion}";
+  name = "monitoring-plugins-${version}";
 
   src = fetchFromGitHub {
     owner  = "monitoring-plugins";
     repo   = "monitoring-plugins";
-    rev    = "v${majorVersion}";
+    rev    = "v${version}";
     sha256 = "1pw7i6d2cnb5nxi2lbkwps2qzz04j9zd86fzpv9ka896b4aqrwv1";
   };
 

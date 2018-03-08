@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "gupnp-tools-${version}";
-  majorVersion = "0.8";
-  version = "${majorVersion}.13";
+  version = "0.8.13";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-tools/${majorVersion}/gupnp-tools-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp-tools/${stdenv.lib.versions.major version}/gupnp-tools-${version}.tar.xz";
     sha256 = "1vbr4iqi7nl7kq982agd3liw10gx67s95idd0pjy5h1jsnwyqgda";
   };
 
