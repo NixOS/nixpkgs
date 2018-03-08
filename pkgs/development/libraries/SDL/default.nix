@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ ]
-    ++ optionals (x11Support && !stdenv.isDarwin) [ libXext libICE libXrandr ]
+    ++ optionals x11Support [ libXext libICE libXrandr ]
     ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
     ++ optional alsaSupport alsaLib
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ libiconv ]
-    ++ optionals (x11Support && stdenv.isDarwin) [ libXext libICE libXrandr ]
     ++ optional (!hostPlatform.isMinGW) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
