@@ -90,15 +90,18 @@ rec {
         It will use your default Firefox profile if you're not careful
         even! Be careful!
 
-        It will clash with firefox binary if you install both. But its
-        not a problem since you should run browsers in separate
-        users/VMs anyway.
+        It will clash with firefox binary if you install both. But it
+        should not be a problem because you should run browsers in
+        separate users/VMs anyway.
 
         Create new profile by starting it as
 
         $ firefox -ProfileManager
 
         and then configure it to use your tor instance.
+
+        Or just use `tor-browser-bundle` package that packs this
+        `tor-browser` back into a sanely-built bundle.
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
