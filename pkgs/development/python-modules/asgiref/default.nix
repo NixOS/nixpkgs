@@ -1,23 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
+{ stdenv, buildPythonPackage, fetchurl, six, async-timeout }:
 buildPythonPackage rec {
   version = "2.2.0";
   pname = "asgiref";
 
-  # PyPI tarball doesn't include tests directory
-  src = fetchFromGitHub {
-    owner = "django";
-    repo = pname;
-    rev = version;
-    sha256 = "0jsdkgwzswm1jbfm6d100yfvfzpic8v6ysydcnn798bbpwclj8ip";
+  src = fetchurl {
+    url = "mirror://pypi/a/asgiref/${name}.tar.gz";
+    sha256 = "1fmrd749hqxwicnivvgrcw812gbj2zm49zcnkghh9yxbkjfcvxcv";
   };
 
-  propagatedBuildInputs = [ async-timeout ];
-
-  checkInputs = [ pytest pytest-asyncio ];
-
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [ six async-timeout ];
 
   meta = with stdenv.lib; {
     description = "Reference ASGI adapters and channel layers";
