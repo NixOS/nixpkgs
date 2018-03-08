@@ -13,8 +13,8 @@ rec {
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { withGui = true; };
-  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
+  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
+  bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
 
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
