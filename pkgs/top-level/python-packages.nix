@@ -16324,16 +16324,7 @@ in {
     };
   });
 
-  sphinxcontrib-navtree = buildPythonPackage rec {
-    version = "0.3.0";
-    name = "sphinxcontrib-navtree-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sphinx-navtree-0.3.0.tar.gz";
-      sha256 = "1nqcsbqwr8ihk1fv534i0naag1qw04f7ibcgl2j8csvkh8q90b4p";
-    };
-
-    propagatedBuildInputs = with self; [sphinx];
-  };
+  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
 
   sphinxcontrib_newsfeed = buildPythonPackage (rec {
     name = "sphinxcontrib-newsfeed-${version}";
