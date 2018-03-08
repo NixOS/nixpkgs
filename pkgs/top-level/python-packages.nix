@@ -456,8 +456,6 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
-  asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
-
   asgi_redis = callPackage ../development/python-modules/asgi_redis { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
