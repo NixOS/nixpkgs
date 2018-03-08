@@ -296,7 +296,11 @@ let
     ocsp-updater.after = [ "boulder-publisher" ];
     ocsp-responder.args = "--config ${cfgDir}/ocsp-responder.json";
     ct-test-srv = {};
-    mail-test-srv.args = "--closeFirst 5";
+    mail-test-srv.args = let
+      key = "${boulderSource}/test/mail-test-srv/minica-key.pem";
+      crt = "${boulderSource}/test/mail-test-srv/minica.pem";
+     in
+      "--closeFirst 5 --cert ${crt} --key ${key}";
   };
 
   commonPath = [ softhsm pkgs.mariadb goose boulder ];
