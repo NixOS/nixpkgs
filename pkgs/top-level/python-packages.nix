@@ -15730,6 +15730,8 @@ in {
     };
   });
 
+  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
+
   sphinxcontrib_newsfeed = buildPythonPackage (rec {
     name = "sphinxcontrib-newsfeed-${version}";
     version = "0.1.4";
