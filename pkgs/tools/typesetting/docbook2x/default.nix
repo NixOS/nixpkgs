@@ -1,5 +1,5 @@
 { fetchurl, stdenv, texinfo, perl
-, XMLSAX, XMLParser, XMLNamespaceSupport
+, XMLSAX, XMLSAXBase, XMLParser, XMLNamespaceSupport
 , groff, libxml2, libxslt, gnused, libiconv, opensp
 , docbook_xml_dtd_43
 , makeWrapper }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       # XXX: We work around the fact that `wrapProgram' doesn't support
       # spaces below by inserting escaped backslashes.
       wrapProgram $out/bin/$i --prefix PERL5LIB :			\
-        "${XMLSAX}/lib/perl5/site_perl:${XMLParser}/lib/perl5/site_perl" \
+        "${XMLSAX}/lib/perl5/site_perl:${XMLSAXBase}/lib/perl5/site_perl:${XMLParser}/lib/perl5/site_perl" \
 	--prefix PERL5LIB :						\
 	"${XMLNamespaceSupport}/lib/perl5/site_perl"			\
 	--prefix XML_CATALOG_FILES "\ "					\
