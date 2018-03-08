@@ -599,11 +599,11 @@ rec {
   };
 
   LanguageClient-neovim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "LanguageClient-neovim-2017-12-05";
+    name = "LanguageClient-neovim-2018-03-06";
     src = fetchgit {
       url = "https://github.com/autozimu/LanguageClient-neovim";
-      rev = "eac16849eb5cb5592cf043fa222282a7082f257b";
-      sha256 = "07j7zm8xbvsanr9ghwxaw88m0kfr0ih262g299n5rr972s93wpg6";
+      rev = "fbc46862af7fa254f74f1108149fd0669c46f1ad";
+      sha256 = "1wrrmikriyw8an8hn7240igcaca9a0ykh1j0dfy45kslxkmqkk3r";
     };
     dependencies = [];
 
