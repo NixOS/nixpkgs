@@ -33,6 +33,12 @@
                        hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 , hostPlatform
+
+# easy overrides to hostPlatform.platform members
+, autoModules ? hostPlatform.platform.kernelAutoModules
+, preferBuiltin ? hostPlatform.platform.kernelPreferBuiltin or false
+, kernelArch ? hostPlatform.platform.kernelArch
+
 , ...
 } @ args:
 
@@ -65,7 +71,7 @@ let
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
     name = "linux-config-${version}";
 
     generateConfig = ./generate-config.pl;
@@ -81,9 +87,6 @@ let
     kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
     # e.g. "bzImage"
     kernelTarget = hostPlatform.platform.kernelTarget;
-    autoModules = hostPlatform.platform.kernelAutoModules;
-    preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
-    arch = hostPlatform.platform.kernelArch;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -97,12 +100,12 @@ let
       export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$arch
+      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$kernelArch
 
       # Create the config file.
       echo "generating kernel configuration..."
       echo "$kernelConfig" > "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';
 
