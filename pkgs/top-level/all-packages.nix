@@ -20007,7 +20007,9 @@ with pkgs;
 
   pcalc = callPackage ../applications/science/math/pcalc { };
 
-  bcal = callPackage ../applications/science/math/bcal { };
+  bcal = callPackage ../applications/science/math/bcal {
+    stdenv = gccStdenv;
+  };
 
   pspp = callPackage ../applications/science/math/pspp {
     inherit (gnome3) gtksourceview;
