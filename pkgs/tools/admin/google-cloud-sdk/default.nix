@@ -29,13 +29,13 @@ let
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1ynvllxzjr3y4qflw06njj7qqcf7539mbp06rs03i8hargsgbamx";
+      sha256 = "0rblb0akwdzr5i8al0dcz482xmx1xdnjnzgqywjvwd8fzdyzq7bp";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "184.0.0";
+  version = "190.0.1";
 
   src = fetchurl (sources name stdenv.system);
 
