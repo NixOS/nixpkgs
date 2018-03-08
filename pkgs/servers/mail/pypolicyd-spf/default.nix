@@ -2,11 +2,10 @@
 
 buildPythonApplication rec {
   name = "pypolicyd-spf-${version}";
-  majorVersion = "2.0";
-  version = "${majorVersion}.2";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/pypolicyd-spf/${lib.versions.major version}/${version}/+download/${name}.tar.gz";
     sha256 = "1nm8y1jjgx6mxrbcxrbdnmkf8vglwp0wiw6jipzh641wb24gi76z";
   };
 
