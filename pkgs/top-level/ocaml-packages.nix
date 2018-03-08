@@ -120,7 +120,7 @@ let
       giflib = pkgs.giflib_4_1;
     };
     camlimages =
-          if lib.versionOlder "4.05" ocaml.version
+          if lib.versionOlder "4.06" ocaml.version
           then callPackage ../development/ocaml-modules/camlimages { }
           else camlimages_4_1;
 
