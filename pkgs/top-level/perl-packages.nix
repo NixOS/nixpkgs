@@ -2482,9 +2482,11 @@ let self = _self // overrides; _self = with self; {
   constant = buildPerlPackage rec {
     name = "constant-1.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/constant-1.33.tar.gz;
       sha256 = "015my616h5l2fswh52x4dp3n007gk5lax83ww9q6cmzb610mv5kr";
     };
+    propagatedBuildInputs = [ TestSimple13 ];
+    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   constantboolean = buildPerlPackage {
@@ -5287,13 +5289,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage {
-    name = "ExtUtils-MakeMaker-6.98";
+    name = "ExtUtils-MakeMaker-7.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-6.98.tar.gz;
-      sha256 = "2eb023189e5fa6b9dcc66858b1fde953d1f1b86f971ec5ab42dd36c172da63ef";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.32.tar.gz;
+      sha256 = "9a269f52ab59b125eb80b968271d9f49da0975d43e51363dbfd1695000ed69de";
     };
-    propagatedBuildInputs =
-      [ ParseCPANMeta JSONPP JSONPPCompat5006 CPANMetaYAML FileCopyRecursive ];
     meta = {
       homepage = https://metacpan.org/release/ExtUtils-MakeMaker;
       description = "Create a module Makefile";
@@ -14442,16 +14442,17 @@ let self = _self // overrides; _self = with self; {
   TestSimple = null;
 
   TestSimple13 = buildPerlPackage rec {
-    name = "Test-Simple-1.302120";
+    name = "Test-Simple-1.302125";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "c82360092d4dacd6e3248b613fa00053072fe9cf55d022f1e0f427f51d04346c";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302125.tar.gz;
+      sha256 = "8a3785a4fa60c4c5ae0c5cac2f3312242f2b36ca20e368d8a9ec22b4061aa317";
     };
     meta = {
       description = "Basic utilities for writing tests";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   TestSpec = buildPerlPackage rec {
@@ -16205,11 +16206,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLNamespaceSupport = buildPerlPackage {
-    name = "XML-NamespaceSupport-1.11";
+    name = "XML-NamespaceSupport-1.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-1.11.tar.gz;
-      sha256 = "1sklgcldl3w6gn706vx1cgz6pm4y5lfgsjxnfqyk20pilgq530bd";
+      url = mirror://cpan/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-1.12.tar.gz;
+      sha256 = "1vz5pbi4lm5fhq2slrs2hlp6bnk29863abgjlcx43l4dky2rbsa7";
     };
+    propagatedBuildInputs = [ constant ];
+    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   XMLParser = buildPerlPackage {
@@ -16275,30 +16278,30 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLSAX = buildPerlPackage {
-    name = "XML-SAX-0.96";
+    name = "XML-SAX-1.00";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-0.96.tar.gz;
-      sha256 = "024fbjgg6s87j0y3yik55plzf7d6qpn7slwd03glcb54mw9zdglv";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-1.00.tar.gz;
+      sha256 = "1qra9k3wszjxvsgbragl55z3qba4nri0ipmjaxfib4l6xxj6bsj5";
     };
-    propagatedBuildInputs = [XMLNamespaceSupport];
+    propagatedBuildInputs = [ XMLNamespaceSupport XMLSAXBase ];
     postInstall = ''
       perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
       '';
-    # https://hydra.nixos.org/build/70726762, seems to be a quoting bug in the Makefile.PL when FULLPERL is passed
-    doCheck = false;
+    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   XMLSAXBase = buildPerlPackage {
-    name = "XML-SAX-Base-1.08";
+    name = "XML-SAX-Base-1.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-Base-1.08.tar.gz;
-      sha256 = "666270318b15f88b8427e585198abbc19bc2e6ccb36dc4c0a4f2d9807330219e";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-Base-1.09.tar.gz;
+      sha256 = "66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0";
     };
     meta = {
       description = "Base class for SAX Drivers and Filters";
       homepage = https://github.com/grantm/XML-SAX-Base;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ ExtUtilsMakeMaker TestSimple13 ];
   };
 
   XMLSAXWriter = buildPerlPackage {
