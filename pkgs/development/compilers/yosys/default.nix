@@ -6,14 +6,14 @@ with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.02.14";
+  version = "2018.03.07";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "c1abd3b02cab235334342f3520e2535eb74c5792";
-      sha256 = "0pzrplv4p0qzy115rg19lxv4w274iby337zfd7hhlinnpx3gzqvw";
+      rev    = "8b604004dae31f7f3120685dd05d16a4bace904a";
+      sha256 = "18i4l5rka3l9lg8cdpigprw80im293j3bmv0zab1gxf3rhbjpcb7";
       name   = "yosys";
     })
 
