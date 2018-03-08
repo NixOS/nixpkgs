@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4 ];
 
+  # needed for configure phase to succeed
+  CPPFLAGS = "-DNCURSES_INTERNALS";
+
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
