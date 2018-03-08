@@ -8,7 +8,7 @@
 { name ? ""
 , stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, zlib ? null, extraPackages ? [], extraBuildCommands ? ""
+, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 }:
@@ -20,9 +20,6 @@ assert !nativeTools ->
   cc != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
-
-# For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
-assert cc.langVhdl or false -> zlib != null;
 
 let
   stdenv = stdenvNoCC;
@@ -189,17 +186,6 @@ stdenv.mkDerivation {
 
     + optionalString cc.langGo or false ''
       wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
-    ''
-
-    + optionalString cc.langAda or false ''
-      wrap ${targetPrefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gnatgcc
-      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
-      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
-      wrap ${targetPrefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${targetPrefix}gnatlink
-    ''
-
-    + optionalString cc.langVhdl or false ''
-      ln -s $ccPath/${targetPrefix}ghdl $out/bin/${targetPrefix}ghdl
     '';
 
   propagatedBuildInputs = [ bintools ];
@@ -261,18 +247,6 @@ stdenv.mkDerivation {
       fi
       ccLDFlags+=" -L${cc_solib}/lib"
       ccCFlags+=" -B${cc_solib}/lib"
-
-      ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib.out}/lib"
-      ''}
-
-      # Find the gcc libraries path (may work only without multilib).
-      ${optionalString cc.langAda or false ''
-        basePath=`echo ${cc_solib}/lib/*/*/*`
-        ccCFlags+=" -B$basePath -I$basePath/adainclude"
-        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
-        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
-      ''}
 
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags

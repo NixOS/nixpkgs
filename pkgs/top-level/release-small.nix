@@ -48,7 +48,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   gcj = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
