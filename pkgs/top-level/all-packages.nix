@@ -1581,9 +1581,8 @@ with pkgs;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
-  # Use Citrix Receiver 13.4.0 below if you get "A network error occured (SSL error 4)"
-  # See https://discussions.citrix.com/topic/385459-ssl-error-with-135-works-with-134/?p=1977735
-  citrix_receiver        = hiPrio citrix_receiver_13_8_0;
+  citrix_receiver        = hiPrio citrix_receiver_13_9_0;
+  citrix_receiver_13_9_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.9.0"; };
   citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.8.0"; };
   citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.7.0"; };
   citrix_receiver_13_6_0 = callPackage ../applications/networking/remote/citrix-receiver { version = "13.6.0"; };
