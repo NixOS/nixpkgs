@@ -567,7 +567,7 @@ with pkgs;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
-  azure-cli = nodePackages.azure-cli;
+  azure-cli = python3Packages.callPackage ../tools/admin/azure-cli { };
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
