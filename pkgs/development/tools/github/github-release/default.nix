@@ -7,7 +7,7 @@ let
   metadata = assert linuxPredicate || bsdPredicate || darwinPredicate;
     if linuxPredicate then
       { arch = "linux-amd64";
-        sha256 = "0b3h0d0qsrjx99kcd2cf71xijh44wm5rpm2sr54snh3f7macj2p1";
+        sha256 = "0p0qj911nmmdj0r7wx3363gid8g4bm3my6mj3d6s4mwgh9lfisiz";
         archiveBinaryPath = "linux/amd64"; }
     else if bsdPredicate then
       { arch = "freebsd-amd64";
@@ -20,7 +20,7 @@ let
 in stdenv.mkDerivation rec {
   shortname = "github-release";
   name = "${shortname}-${version}";
-  version = "0.6.2";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "https://github.com/aktau/github-release/releases/download/v${version}/${metadata.arch}-${shortname}.tar.bz2";
