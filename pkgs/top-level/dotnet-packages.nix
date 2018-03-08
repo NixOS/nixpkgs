@@ -903,7 +903,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     outputFiles = [ "*" ];
     dllFiles = [ "NuGet*.dll" ];
-    exeFiles = [ "NuGet.exe" ];
+    exeFiles = [ "nuget.exe" ];
   };
 
   Paket = buildDotnetPackage rec {
