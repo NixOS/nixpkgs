@@ -520,6 +520,21 @@ in {
 
   };
 
+  applicationinsights  = buildPythonPackage rec {
+    pname = "applicationinsights";
+    version = "0.11.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0ia96m8szhswibrz4q7gc6g2fk345lxjkwz5dsvd676scr57k055";
+    };
+    meta = {
+      description = "This project extends the Application Insights API surface to support Python";
+      homepage =  https://github.com/Microsoft/AppInsights-Python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
   appnope = buildPythonPackage rec {
     version = "0.1.0";
     name = "appnope-${version}";
@@ -759,232 +774,1040 @@ in {
     };
   };
 
-  azure = buildPythonPackage rec {
-    version = "0.11.0";
-    name = "azure-${version}";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/azure/${name}.zip";
-      sha256 = "89c20b2efaaed3c6f56345d55c32a8d4e7d2a16c032d0acb92f8f490c508fe24";
+  azure-common = buildPythonPackage rec {
+    pname = "azure_common";
+    version = "1.1.8";
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "1znrjhc8vl2c6620q11b5486bv6z8ngcpxyxf4p8q1v8xvr5syh3";
     };
-
-    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
-
+    propagatedBuildInputs = with self; [
+      msrest
+      azure-nspkg
+    ];
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Client Library for Python (Common)";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
   azure-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-nspkg/azure-nspkg-1.0.0.zip;
-      sha256 = "1xqvc8by1lbd7j9dxyly03jz3rgbmnsiqnqgydhkf4pa2mn2hgr9";
+    pname = "azure-nspkg";
+    version = "2.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_nspkg";
+      sha256 = "1s9lg4ggwmmdrav64hvy0mg1j5naraz68g2gvf4c2z7m97k5imsb";
     };
+    # TODO(rubbish): is there something better than rm'ing this so subpackages work?
+    postFixup = ''
+      rm $out/lib/python3.6/site-packages/azure/__init__.py
+    '';
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Namespace Package [Internal]";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
-  azure-common = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-common-${version}";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-common/azure-common-1.0.0.zip;
-      sha256 = "074rwwy8zzs7zw3nww5q2wg5lxgdc4rmypp2gfc9mwsz0gb70491";
+  azure-keyvault = buildPythonPackage rec {
+    pname = "azure-keyvault";
+    version = "0.3.7";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_keyvault";
+      sha256 = "1bx7i5infknjbjvq12x1xwgp6rc3nc4rwnbpg9ggvla5mjkp6wdk";
     };
-    propagatedBuildInputs = with self; [ azure-nspkg ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    '';
+    propagatedBuildInputs = with self; [
+      msrestazure
+      azure-nspkg
+      azure-common
+    ];
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Key Vault Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
-  azure-mgmt-common = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-common-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-common/azure-mgmt-common-0.20.0.zip;
-      sha256 = "1rmzpz3733wv31rsnqpdy4bbafvk5dhbqx7q0xf62dlz7p0i4f66";
+  azure-multiapi-storage = buildPythonPackage rec {
+    pname = "azure-multiapi-storage";
+    version = "0.2.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_multiapi_storage";
+      sha256 = "1drsik4y34b8n7p85a7i5kzd0jv87lla2rylhzmjsb1vz7908lap";
     };
-    propagatedBuildInputs = with self; [ azure-common azure-mgmt-nspkg requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
+    propagatedBuildInputs = with self; [
+      azure-nspkg
+      azure-common
+      requests
+      python-dateutil
+      cryptography
+    ] ++ optionals (!isPy3k) [ futures ];
+    postFixup = ''
+      rm $out/lib/python3.6/site-packages/azure/__init__.py
     '';
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-compute = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-compute-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-compute/azure-mgmt-compute-0.20.0.zip;
-      sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-network = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-mgmt-network-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-network/azure-mgmt-network-0.20.1.zip;
-      sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-mgmt-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-nspkg/azure-mgmt-nspkg-1.0.0.zip;
-      sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
-    };
-    propagatedBuildInputs = with self; [ azure-nspkg ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-resource = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-mgmt-resource-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-resource/azure-mgmt-resource-0.20.1.zip;
-      sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/resource/resourcemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-storage = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-storage-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-storage/azure-mgmt-storage-0.20.0.zip;
-      sha256 = "16iw7hqhq97vlzfwixarfnirc60l5mz951p57brpcwyylphl3yim";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/storage/storagemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Storage Client Library for Python with multi API version support";
+      homepage =  https://github.com/Azure/azure-multiapi-storage-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
   azure-storage = buildPythonPackage rec {
-    version = "0.20.3";
-    name = "azure-storage-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-storage/azure-storage-0.20.3.zip;
-      sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
+    pname = "azure-storage";
+    version = "0.34.3";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_storage";
+      sha256 = "1c6lz441kjqqj13fn12rs4h5i3d33kkl2l813nmb8injkw59252y";
     };
-    propagatedBuildInputs = with self; [ azure-common futures dateutil requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    '';
+    propagatedBuildInputs = with self; [
+      azure-nspkg
+      azure-common
+      requests
+      cryptography
+      python-dateutil
+    ] ++ optionals (!isPy3k) [ futures ];
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Storage Client Library for Python";
+      homepage =  https://github.com/Azure/azure-storage-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
-  azure-servicemanagement-legacy = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-servicemanagement-legacy-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-servicemanagement-legacy/azure-servicemanagement-legacy-0.20.1.zip;
-      sha256 = "17dwrp99sx5x9cm4vldkaxhki9gbd6dlafa0lpr2n92xhh2838zs";
+  azure-batch = buildPythonPackage rec {
+    pname = "azure-batch";
+    version = "4.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_batch";
+      sha256 = "0addaqa23pgsyv8hisjqi7k66paw1vd7md6hm2ddqac5vzyr54z4";
     };
-    propagatedBuildInputs = with self; [ azure-common requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+    propagatedBuildInputs = with self; [
+      azure-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Batch Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-batch-extensions = buildPythonPackage rec {
+    pname = "azure-batch-extensions";
+    version = "1.0.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1k4qv12b9k5anfx93666cgwc5396p8pg7gs111dm5r0qxyi18m73";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-batch
+      azure-mgmt-storage
+      azure-storage
+      azure-batch
+    ];
+    meta = {
+      description = "Microsoft Azure Batch Extended Features";
+      homepage =  https://github.com/Azure/azure-batch-cli-extensions;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-datalake-store = buildPythonPackage rec {
+    pname = "azure-datalake-store";
+    version = "0.0.17";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_datalake_store";
+      sha256 = "1s62k4zz5l9pa0nz68ihfp16gvjdwaxm1ma2385jk0i9kxw97fpv";
+    };
+    propagatedBuildInputs = with self; [
+      msrest
+      pathlib2
+      adal
+      cffi
+    ] ++ optionals (!isPy3k) [ futures ];
+    meta = {
+      description = "Microsoft Azure Data Lake Store Filesystem Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-graphrbac = buildPythonPackage rec {
+    pname = "azure-graphrbac";
+    version = "0.31.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_graphrbac";
+      sha256 = "11yz3a15bczvk92yrw2lfrm8rrcfnfick7gwglircv3crn6rdy2v";
+    };
+    propagatedBuildInputs = with self; [
+      azure-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Graph RBAC Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-nspkg = buildPythonPackage rec {
+    pname = "azure-mgmt-nspkg";
+    version = "2.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_nspkg";
+      sha256 = "083j6hxr6m7c1fjf8qzr29zbcks7sqh5jcrydhj8g4sjx6l3km0b";
+    };
+    propagatedBuildInputs = with self; [azure-nspkg];
+    postFixup = ''
+      rm $out/lib/python3.6/site-packages/azure/mgmt/__init__.py
     '';
     meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
+      description = "Microsoft Azure Resource Management Namespace Package [Internal]";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-iothubprovisioningservices = buildPythonPackage rec {
+    pname = "azure-mgmt-iothubprovisioningservices";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_iothubprovisioningservices";
+      sha256 = "17lp6448dlkd4n251mk8v7png9jfvq8pi791jjyf292bmlqam9fk";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure IoTHub Provisioning Services Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-iothub = buildPythonPackage rec {
+    pname = "azure-mgmt-iothub";
+    version = "0.4.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_iothub";
+      sha256 = "1y2kzmg2rjphz7i2vgx45cymq5a48qfdfyaj1h42g8cqj2j2v7nx";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure IoTHub Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-keyvault = buildPythonPackage rec {
+    pname = "azure-mgmt-keyvault";
+    version = "0.40.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_keyvault";
+      sha256 = "1vnw97h5y54bgvgflvvxwxrl23j50r35vzwj15pd0bz5gjczyzxx";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Key Vault Apps Resource Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-storage = buildPythonPackage rec {
+    pname = "azure-mgmt-storage";
+    version = "1.5.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_storage";
+      sha256 = "1nwi0rpbpxami93ra6n3fch4irhj247lx09797kp17ylfl30z9np";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Storage Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-redis = buildPythonPackage rec {
+    pname = "azure-mgmt-redis";
+    version = "4.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_redis";
+      sha256 = "0mhl57c27kzk8k2m56hc9hrn2m7w0is3nmxm844d9rjdwvgy7mh0";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Redis Cache Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-cdn = buildPythonPackage rec {
+    pname = "azure-mgmt-cdn";
+    version = "1.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_cdn";
+      sha256 = "0spmm4v5vk85c2nk3ya5gwlz57ad09f3fjf4w1nrmn8sv2z0qx3l";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure CDN Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-batch = buildPythonPackage rec {
+    pname = "azure-mgmt-batch";
+    version = "4.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_batch";
+      sha256 = "04l1sr17v6y4i8b3dh36ir4564ym095ghblirafnffcsvldd22rd";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Batch Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-datalake-nspkg = buildPythonPackage rec {
+    pname = "azure-mgmt-datalake-nspkg";
+    version = "2.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_datalake_nspkg";
+      sha256 = "07iy9nhf6gi54wj9gd5rg4vqrf5j61bpnclhlybsdnps0dab5av7";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+    ];
+    postFixup = ''
+      rm $out/lib/python3.6/site-packages/azure/mgmt/datalake/__init__.py
+    '';
+    meta = {
+      description = "Microsoft Azure Data Lake Management Namespace Package [Internal]";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-datalake-store = buildPythonPackage rec {
+    pname = "azure-mgmt-datalake-store";
+    version = "0.2.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_datalake_store";
+      sha256 = "0j5b2gl613658k5awrl7b8hn2p51ibkd923w4m9fv9b4h4gxz079";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-datalake-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Data Lake Store Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-datalake-analytics = buildPythonPackage rec {
+    pname = "azure-mgmt-datalake-analytics";
+    version = "0.2.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_datalake_analytics";
+      sha256 = "09bq2ig5hy8ylc86z97d4g6j3l9v2xnaj4pbc90ylwmwi9931nm8";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-datalake-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Data Lake Analytics Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-advisor = buildPythonPackage rec {
+    pname = "azure-mgmt-advisor";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_advisor";
+      sha256 = "1r2gh06qz18pn7igjjaw1nvc1a65i0gny99xlkp1b98k4cbmgcsy";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Advisor Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-resource = buildPythonPackage rec {
+    pname = "azure-mgmt-resource";
+    version = "1.2.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_resource";
+      sha256 = "0h7v1hg8ana9afm4fpni0wff1a6b8g0w6i9wx405pqilns39hlf0";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Resource Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-authorization = buildPythonPackage rec {
+    pname = "azure-mgmt-authorization";
+    version = "0.30.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_authorization";
+      sha256 = "125m5ggy44hixdrnqdnwbdrnx6ksa3a1yr4a57n4syvsg3q7d5ab";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Authorization Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-network = buildPythonPackage rec {
+    pname = "azure-mgmt-network";
+    version = "1.7.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_network";
+      sha256 = "1gnp7n3fqzswdwkvf2d0qf80zqvc1kfay74dnl3mrhn74qyiyw0v";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Network Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-trafficmanager = buildPythonPackage rec {
+    pname = "azure-mgmt-trafficmanager";
+    version = "0.40.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_trafficmanager";
+      sha256 = "0jw8cx7556821ppxva5d7xnkz916gc7bm1bgkax5y27m1qsc9z4y";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Traffic Manager Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-dns = buildPythonPackage rec {
+    pname = "azure-mgmt-dns";
+    version = "1.2.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_dns";
+      sha256 = "0557839gdm5li39p1b45lbbx674f3ag9kliflxlq8bgpss0ya6xk";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure DNS Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-sql = buildPythonPackage rec {
+    pname = "azure-mgmt-sql";
+    version = "0.8.5";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_sql";
+      sha256 = "0y1gk28qpvz0bhrmf1dc9inw6vy10pr37qvchscdkmqs9ks0gxid";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure SQL Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-batchai = buildPythonPackage rec {
+    pname = "azure-mgmt-batchai";
+    version = "0.2.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_batchai";
+      sha256 = "17yjzswi3zvxw9b8fkfr9r179y0z6hv461z3zgdfnkpv8hpg60wi";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Batch AI Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-monitor = buildPythonPackage rec {
+    pname = "azure-mgmt-monitor";
+    version = "0.4.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_monitor";
+      sha256 = "064wbrj5b5qig5b58qbq6dlbvkk269ykrxkmbhhr5qa5xl2lph70";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Monitor Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-containerinstance = buildPythonPackage rec {
+    pname = "azure-mgmt-containerinstance";
+    version = "0.3.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_containerinstance";
+      sha256 = "038fh1jf5gd2mj43s7sxrshxzwh6z3qwr912d1k1906l5vcxyzv1";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Container Instance Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-servicefabric = buildPythonPackage rec {
+    pname = "azure-mgmt-servicefabric";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_servicefabric";
+      sha256 = "12yhd2g79xsv8wkdgchx99p7phslpzmqxbw2ipglw65xb87y6n6x";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Service Fabric Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-web = buildPythonPackage rec {
+    pname = "azure-mgmt-web";
+    version = "0.34.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_web";
+      sha256 = "0s9mwmipvdna83yjsygsjndyzc72mdpv3g49kywgb2nk1qzfsvgj";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Web Apps Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-containerregistry = buildPythonPackage rec {
+    pname = "azure-mgmt-containerregistry";
+    version = "1.0.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_containerregistry";
+      sha256 = "01fra3v403qlhillfdbzm6laq4l6r4rygf7lh5fm5llr7bm0fqhi";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Container Registry Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-eventgrid = buildPythonPackage rec {
+    pname = "azure-mgmt-eventgrid";
+    version = "0.4.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_eventgrid";
+      sha256 = "007xahzcfzzizmnsba8xrp3nyymvp0d4jddphd2dgdhrg78j4rk4";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure EventGrid Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-recoveryservices = buildPythonPackage rec {
+    pname = "azure-mgmt-recoveryservices";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_recoveryservices";
+      sha256 = "1ll7wq4m65jacdgjs75v7lky57wn9cp3zi4yv3d98xap40gkxf6a";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Recovery Services Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-recoveryservicesbackup = buildPythonPackage rec {
+    pname = "azure-mgmt-recoveryservicesbackup";
+    version = "0.1.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_recoveryservicesbackup";
+      sha256 = "17vb1zpgg4hd0iynrjysi6c1nz5lh29aml2x0sqsnrnlpjj6jj5a";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Recovery Services Backup Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-cosmosdb = buildPythonPackage rec {
+    pname = "azure-mgmt-cosmosdb";
+    version = "0.3.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_cosmosdb";
+      sha256 = "09cpxal6d619yy036ybzxy0mdh5igvnjclz64yq1iwli7jd3j34g";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Cosmos DB Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-compute = buildPythonPackage rec {
+    pname = "azure-mgmt-compute";
+    version = "3.1.0rc3";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_compute";
+      sha256 = "12ymlj1i9b8vcjnb531v0gi33gwahcjpjxvn1d3sw5mrajl6sbmr";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Compute Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-containerservice = buildPythonPackage rec {
+    pname = "azure-mgmt-containerservice";
+    version = "3.0.1";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_containerservice";
+      sha256 = "0mi33a6shr0mwhizy2pkxjn28j9rmyw330vwyrfbf1434891a8l4";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Container Service Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-rdbms = buildPythonPackage rec {
+    pname = "azure-mgmt-rdbms";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_rdbms";
+      sha256 = "1yhb20x4dsvyzmbwz664s998y1ivv7jxbjckbvj5d7xvniprr74m";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure RDBMS Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-consumption = buildPythonPackage rec {
+    pname = "azure-mgmt-consumption";
+    version = "1.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_consumption";
+      sha256 = "1ga8f7w176jnpi0hha5lw4npbapa6w6iynh6aw4jilhqamlzs2nz";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Consumption Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-reservations = buildPythonPackage rec {
+    pname = "azure-mgmt-reservations";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_reservations";
+      sha256 = "18kqn7c5hd4lphcnzrxfiscr4xpnh46bsg2m1srdasj1bimj25m5";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Reservations Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-billing = buildPythonPackage rec {
+    pname = "azure-mgmt-billing";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_billing";
+      sha256 = "11g5qckfb3n0f3cpq66ppc8xxgbk0nby8s02aj099nn5i83vz43b";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Billing Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-devtestlabs = buildPythonPackage rec {
+    pname = "azure-mgmt-devtestlabs";
+    version = "2.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_devtestlabs";
+      sha256 = "0326pqmgchnzgr1aj1wq8mc2dx8qky04km1k4m788mpz8gyhyp3a";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure DevTestLabs Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-cognitiveservices = buildPythonPackage rec {
+    pname = "azure-mgmt-cognitiveservices";
+    version = "1.0.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_cognitiveservices";
+      sha256 = "1x5brhmcwyizm59q7l201w5vbxyiwdy0fmrvlsxddzl3lvjxr4s9";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Cognitive Services Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-msi = buildPythonPackage rec {
+    pname = "azure-mgmt-msi";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_msi";
+      sha256 = "0lgpf8896hx3n526ahz15fhyh4m2iawfzinri2h776a0j4x1ib87";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure MSI Management Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  azure-mgmt-marketplaceordering = buildPythonPackage rec {
+    pname = "azure-mgmt-marketplaceordering";
+    version = "0.1.0";
+    format = "wheel";
+    src = fetchPypi {
+      inherit version format;
+      pname = "azure_mgmt_marketplaceordering";
+      sha256 = "17ync7d1l90zq5x5djbl2c8r6yd18zq181k0mqmx7f54lks22ypv";
+    };
+    propagatedBuildInputs = with self; [
+      azure-mgmt-nspkg
+      azure-common
+      msrestazure
+    ];
+    meta = {
+      description = "Microsoft Azure Market Place Ordering Client Library for Python";
+      homepage =  https://github.com/Azure/azure-sdk-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
     };
   };
 
@@ -10081,6 +10904,51 @@ in {
     '';
   };
 
+  msrest = buildPythonPackage rec {
+    pname = "msrest";
+    version = "0.4.26";
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "16wbwl8hvvg59zshdzxja9iwxljh0h2dawyhs6kyw5rjc8wi56ka";
+    };
+    propagatedBuildInputs = with self; [
+      enum34
+      certifi
+      isodate
+      requests_oauthlib
+      requests
+    ];
+    meta = {
+      description = "AutoRest swagger generator Python client runtime";
+      homepage =  https://github.com/Azure/msrest-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
+  msrestazure = buildPythonPackage rec {
+    pname = "msrestazure";
+    version = "0.4.21";
+    format = "wheel";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "14gp7rq13nasypw3c09mbrw6jg96vcg6rga22w2bgnr44nw2zn04";
+    };
+    propagatedBuildInputs = with self; [
+      adal
+      keyring
+      msrest
+      azure-common
+    ];
+    meta = {
+      description = "AutoRest swagger generator Python client runtime. Azure-specific module";
+      homepage =  https://github.com/Azure/msrestazure-for-python;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
+  };
+
   msrplib = buildPythonPackage rec {
     pname = "python-msrplib";
     name = "${pname}-${version}";
@@ -17171,6 +18039,25 @@ EOF
       homepage = https://vmprof.readthedocs.org/;
     };
 
+  };
+
+  vsts-cd-manager = buildPythonPackage rec {
+    pname = "vsts-cd-manager";
+    version = "1.0.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "178c5g5micn0zznnal57vqc2y56ksvbd8riv5891h7a4d93mmq57";
+    };
+    propagatedBuildInputs = with self; [
+      mock
+      msrest
+    ];
+    meta = {
+      description = "Python wrapper around some of the VSTS APIs";
+      homepage =  https://github.com/microsoft/vsts-cd-manager;
+      license = licenses.mit;
+      maintainers = with maintainers; [ rubbish ];
+    };
   };
 
   vultr = buildPythonPackage rec {
