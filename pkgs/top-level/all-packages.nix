@@ -11595,11 +11595,14 @@ with pkgs;
     inherit (python2Packages) python;
   };
 
-  v8 = callPackage ../development/libraries/v8 {
+  v8 = callPackage ../development/libraries/v8 ({
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
     icu = icu58; # v8-5.4.232 fails against icu4c-59.1
-  };
+  } // lib.optionalAttrs stdenv.isLinux {
+    # doesn't build with gcc7
+    stdenv = overrideCC stdenv gcc6;
+  });
 
   v8_static = lowPrio (self.v8.override { static = true; });
 
