@@ -1662,7 +1662,7 @@
     name = "Johannes Frankenau";
   };
   jgeerds = {
-    email = "jascha@jgeerds.name";
+    email = "jascha@geerds.org";
     github = "jgeerds";
     name = "Jascha Geerds";
   };
