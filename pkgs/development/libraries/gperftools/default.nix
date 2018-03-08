@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.6.1";
+  name = "gperftools-2.6.3";
 
   src = fetchurl {
     url = "https://github.com/gperftools/gperftools/releases/download/${name}/${name}.tar.gz";
-    sha256 = "10cxd6s5pkm2d934gh47hrn9xcrw4qlc9yr7s99z4a508bmngd1q";
+    sha256 = "17zfivp6n00rlqbrx6q6h71y2f815nvlzysff1ihgk4mxpv2yjri";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
