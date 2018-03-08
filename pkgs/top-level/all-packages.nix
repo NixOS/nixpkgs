@@ -12273,7 +12273,9 @@ with pkgs;
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     # TODO: vimNox after it gets fixed on Darwin or something lighter
-    hexdump = if stdenv.isLinux then utillinux.bin else vim/*xxd*/;
+    hexdump = if stdenv.isLinux then utillinux.bin
+              else if stdenv.isDarwin then darwin.shell_cmds
+              else vim/*xxd*/;
   };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
@@ -19884,7 +19886,9 @@ with pkgs;
 
   pcalc = callPackage ../applications/science/math/pcalc { };
 
-  bcal = callPackage ../applications/science/math/bcal { };
+  bcal = callPackage ../applications/science/math/bcal {
+    stdenv = gccStdenv;
+  };
 
   pspp = callPackage ../applications/science/math/pspp {
     inherit (gnome3) gtksourceview;
