@@ -1,12 +1,10 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages
 , ncurses
-, libelf
-, utillinux
-, writeTextFile, ubootTools
 , callPackage
-}:
-
-{ stdenv, buildPackages, perl, buildLinux
+, perl
+, bison ? null
+, flex ? null
+, stdenv
 
 , # The kernel source tarball.
   src

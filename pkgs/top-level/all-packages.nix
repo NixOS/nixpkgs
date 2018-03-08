@@ -13549,7 +13549,7 @@ with pkgs;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
-  buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/generic.nix {});
+  buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
