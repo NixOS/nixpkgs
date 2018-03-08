@@ -9359,6 +9359,8 @@ with pkgs;
 
   jshon = callPackage ../development/tools/parsing/jshon { };
 
+  json2hcl = callPackage ../development/tools/json2hcl { };
+
   json-glib = callPackage ../development/libraries/json-glib { };
 
   json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { }; # vulnerable
