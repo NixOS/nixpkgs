@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--enable-weston-launch"
     "--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
   ] ++ stdenv.lib.optional (freerdp != null) "--enable-rdp-compositor"
-    ++ stdenv.lib.optional (vaapi != null) "--enabe-vaapi-recorder"
+    ++ stdenv.lib.optional (vaapi != null) "--enable-vaapi-recorder"
     ++ stdenv.lib.optionals (xwayland != null) [
         "--enable-xwayland"
         "--with-xserver-path=${xwayland.out}/bin/Xwayland"
