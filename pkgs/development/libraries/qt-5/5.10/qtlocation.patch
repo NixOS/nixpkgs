@@ -1,0 +1,13 @@
+diff --git a/src/3rdparty/mapbox-gl-native/deps/boost/1.62.0/include/boost/config.hpp b/src/3rdparty/mapbox-gl-native/deps/boost/1.62.0/include/boost/config.hpp
+index d49bb27..b61b29a 100644
+--- a/src/3rdparty/mapbox-gl-native/deps/boost/1.62.0/include/boost/config.hpp
++++ b/src/3rdparty/mapbox-gl-native/deps/boost/1.62.0/include/boost/config.hpp
+@@ -17,6 +17,8 @@
+ #ifndef BOOST_CONFIG_HPP
+ #define BOOST_CONFIG_HPP
+ 
++#define BOOST_NO_AUTO_PTR
++
+ // if we don't have a user config, then use the default location:
+ #if !defined(BOOST_USER_CONFIG) && !defined(BOOST_NO_USER_CONFIG)
+ #  define BOOST_USER_CONFIG <boost/config/user.hpp>
