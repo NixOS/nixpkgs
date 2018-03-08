@@ -17,14 +17,9 @@ let
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
-    i686-linux = {
-      url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "0fq8zw1a5c0mnmw6f7j9j80y6kq0f0v2wn1d7b8mfq8ih5x53a85";
-    };
-
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1h4m70fk3hri4lgm9lh2pm0v196nc2r3hpf42h3xx5k7sqklsns2";
+      sha256 = "0c4jj580f7z6phiw4zhd32dlf4inkrxy3cig6ng66fi4zi6vnpc9";
     };
 
     x86_64-linux = {
@@ -64,7 +59,7 @@ in stdenv.mkDerivation rec {
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
-    
+
     # disable component updater and update check
     substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
       --replace "\"disable_updater\": false" "\"disable_updater\": true"
@@ -88,6 +83,6 @@ in stdenv.mkDerivation rec {
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     maintainers = with maintainers; [ stephenmw zimbatm ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
