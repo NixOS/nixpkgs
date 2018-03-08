@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "mailcore2-${version}";
 
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner  = "MailCore";
     repo   = "mailcore2";
     rev    = version;
-    sha256 = "1k0l59cdk8np4pff1my07dp7ivf3nchlhcpvm9xizp0my9rqgbxb";
+    sha256 = "1d0wmnkk9vnjqc28i79z3fwaaycdbprfspagik4mzdkgval5r5pm";
   };
 
   nativeBuildInputs = [ pkgconfig ];
