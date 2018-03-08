@@ -888,13 +888,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "2.8.5";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "da1f2102f8172df6f7a1370a4998e3f88b91c047";
-      sha256 = "1hbnckc4gvqkknf8gh1k7iwqb4vdzifdjd19i60fnczly5v8m1c3";
+      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
+      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
     };
 
     buildInputs = [ unzip ];
