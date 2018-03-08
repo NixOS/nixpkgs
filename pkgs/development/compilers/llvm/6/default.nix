@@ -7,15 +7,15 @@ let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
   release_version = "6.0.0";
-  version = "6.0.0rc3"; # differentiating these is important for rc's
+  version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    url = "http://prereleases.llvm.org/${release_version}/rc3/${name}-${version}.src.tar.xz";
+    url = "http://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "1lv5xawwn0spisa7jknq247pdndh4mlj22z1s0d7a5gqy9y0rlwv";
-  clang-tools-extra_src = fetch "clang-tools-extra" "0qv7rl8cpsj0l2xl5iym6ymxi3906mb2yx95mcf5ihlwjcms5klf";
+  compiler-rt_src = fetch "compiler-rt" "16m7rvh3w6vq10iwkjrr1nn293djld3xm62l5zasisaprx117k6h";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1ll9v6r29xfdiywbn9iss49ad39ah3fk91wiv0sr6k6k9i544fq5";
 
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
