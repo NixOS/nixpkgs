@@ -5582,7 +5582,9 @@ with pkgs;
 
   xsv = callPackage ../tools/text/xsv { };
 
-  xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
+  xtreemfs = callPackage ../tools/filesystems/xtreemfs {
+    boost = boost165;
+  };
 
   xurls = callPackage ../tools/text/xurls {};
 
