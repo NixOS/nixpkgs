@@ -7,8 +7,8 @@ rec {
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
 
-  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
-  bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };
+  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
+  bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
