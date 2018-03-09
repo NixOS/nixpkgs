@@ -5297,6 +5297,8 @@ in {
     };
   };
 
+  latexcodec = callPackage ../development/python-modules/latexcodec {};
+
   libsexy = callPackage ../development/python-modules/libsexy {
     libsexy = pkgs.libsexy;
   };
@@ -5723,6 +5725,7 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  oset = callPackage ../development/python-modules/oset { };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
@@ -5965,6 +5968,10 @@ in {
       platforms = platforms.all;
     };
   };
+
+  pybtex = callPackage ../development/python-modules/pybtex {};
+
+  pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils {};
 
   pycallgraph = buildPythonPackage rec {
     name = "pycallgraph-${version}";
@@ -16263,6 +16270,8 @@ in {
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
+
+  sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
 
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
     name = "${pname}-${version}";
