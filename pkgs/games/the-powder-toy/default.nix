@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A free 2D physics sandbox game";
     homepage = http://powdertoy.co.uk/;
-    platforms = platforms.unix;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
   };
