@@ -24,6 +24,7 @@ Presentation
     id: presentation
 
     Timer {
+        id: advanceTimer
         interval: 5000
         running: false
         repeat: true
@@ -171,4 +172,6 @@ Presentation
             }
         }
     }
+
+    Component.onCompleted: advanceTimer.running = true
 }
