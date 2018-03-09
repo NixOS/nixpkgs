@@ -9,13 +9,13 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "0.2.8";
+  version = "0.2.8.2";
 
   name = "pipelight-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
-    sha256 = "1i440rf22fmd2w86dlm1mpi3nb7410rfczc0yldnhgsvp5p3sm5f";
+    sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
   buildInputs = [ wine_custom libX11 libGLU_combined curl ];
