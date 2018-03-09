@@ -16632,6 +16632,7 @@ with pkgs;
     dvdreadSupport     = !stdenv.isDarwin;
     dvdnavSupport      = !stdenv.isDarwin;
     drmSupport         = !stdenv.isDarwin;
+    vaapiSupport       = !stdenv.isDarwin;
     x11Support         = !stdenv.isDarwin;
     xineramaSupport    = !stdenv.isDarwin;
     xvSupport          = !stdenv.isDarwin;
