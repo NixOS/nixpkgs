@@ -2,7 +2,7 @@
 
 callPackage ./generic-cmake.nix (rec {
   inherit Foundation libobjc;
-  version = "5.8.0.108";
-  sha256 = "177khb06dfll0pcncr84vvibni7f8m5fgb30ndgsdjk25xfcbmzc";
+  version = "5.10.0.160";
+  sha256 = "1n7qr33rs8gsv4iigpl1yhdl5s7hgf9pb3vh12zzvd5z0hakwz8n";
   enableParallelBuilding = false;
 })
