@@ -134,45 +134,7 @@
 
     lightyear = callPackage ./lightyear.nix {};
 
-    logic = callPackage ./logic.nix {};
-
-    mapping = callPackage ./mapping.nix {};
-
-    mhd = callPackage ./mhd.nix {};
-
-    pacman = callPackage ./pacman.nix {};
-
-    patricia = callPackage ./patricia.nix {};
-
-    permutations = callPackage ./permutations.nix {};
-
-    pfds = callPackage ./pfds.nix {};
-
-    pipes = callPackage ./pipes.nix {};
-
-    posix = callPackage ./posix.nix {};
-
-    protobuf = callPackage ./protobuf.nix {};
-
-    rationals = callPackage ./rationals.nix {};
-
-    recursion_schemes = callPackage ./recursion_schemes.nix {};
-
-    refined = callPackage ./refined.nix {};
-
-    sdl = callPackage ./sdl.nix {};
-
-    sdl2 = callPackage ./sdl2.nix {};
-
-    semidirect = callPackage ./semidirect.nix {};
-
-    setoids = callPackage ./setoids.nix {};
-
-    smproc = callPackage ./smproc.nix {};
-
-    snippets = callPackage ./snippets.nix {};
-
-    software_foundations = callPackage ./software_foundations.nix {};
+    wl-pprint = callPackage ./wl-pprint.nix {};
 
     specdris = callPackage ./specdris.nix {};
 
