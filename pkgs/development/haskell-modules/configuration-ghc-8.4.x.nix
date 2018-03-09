@@ -768,4 +768,7 @@ self: super: {
   # https://github.com/hslua/hslua-module-text/issues/1
   hslua-module-text = doJailbreak super.hslua-module-text;
 
+  # https://github.com/phadej/tree-diff/issues/15
+  tree-diff = doJailbreak super.tree-diff;
+
 }
