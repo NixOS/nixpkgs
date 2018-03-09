@@ -6180,6 +6180,10 @@ in {
 
   gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
 
+  gphoto2 = callPackage ../development/python-modules/gphoto2 {
+    inherit (pkgs) pkgconfig;
+  };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = callPackage ../development/python-modules/greenlet { };
