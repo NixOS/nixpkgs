@@ -17349,6 +17349,29 @@ in {
     };
   };
 
+  unittest-xml-reporting = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "unittest-xml-reporting";
+    version = "2.1.1";
+
+    propagatedBuildInputs = with self; [six];
+
+    # The tarball from Pypi doesn't actually contain the unit tests
+    doCheck = false;
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1jwkqx5gfphkymp3xwqvlb94ng22gpbqh36vbbnsrpk1a0mammm6";
+    };
+    meta = with stdenv.lib; {
+      homepage = https://github.com/xmlrunner/unittest-xml-reporting/tree/master/;
+      description = "A unittest runner that can save test results to XML files";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ rprospero ];
+    };
+  };
+
+
   uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
     version = "0.3.0";
