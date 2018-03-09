@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   name = "singularity-${version}";
-  version = "2.4";
+  version = "2.4.2";
 
   enableParallelBuilding = true;
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "singularityware";
     repo = "singularity";
     rev = version;
-    sha256 = "1hi1ag1lb2x4djbz4x34wix83ymx0g9mzn2md6yrpiflc1d85rjz";
+    sha256 = "0cpa2yp82g9j64mgr90p75ddk85kbj1qi1r6hy0sz17grqdlaxl4";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
