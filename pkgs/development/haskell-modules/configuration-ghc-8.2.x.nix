@@ -96,5 +96,9 @@ self: super: {
     Cabal = self.Cabal_2_2_0_0;
     text = self.text_1_2_3_0;
   });
+  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
 
 }
