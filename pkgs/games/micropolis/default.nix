@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11, libXpm, libXext, xextproto, byacc }:
 
 stdenv.mkDerivation {
-  name = "micropolis-2010-12-18"; # version from the patch timestamp
+  name = "micropolis-20100418"; # version from the patch timestamp
 
   src = fetchurl {
     url = http://www.donhopkins.com/home/micropolis/micropolis-activity-source.tgz;
-    sha256 = "1b3c72dc3680a34b5fc5a740a6fb5cfc0b8775514da8ab7bb3b2965b20d4f8bc";
+    sha256 = "1g7qshh5p5mjndxspa2da5sqf2zwbkxsch57qmglp8w06vf74g0v";
   };
 
   patches =
