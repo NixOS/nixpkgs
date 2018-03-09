@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensubdiv-${version}";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "0wpjwfik4q9s4r30hndhzmfyzv968mmg5lgng0123l07mn47d2yl";
+    sha256 = "1s96038yvf8wch5gv537iigqflxx7rh9wwn3wlrk8f9yfdwv1mk1";
   };
 
   outputs = [ "out" "dev" ];
