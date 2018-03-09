@@ -498,10 +498,6 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  apulse = callPackage ../misc/apulse { };
-
-  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
-
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
@@ -10348,8 +10344,8 @@ with pkgs;
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 {
-  };
+  libxml2 = callPackage ../development/libraries/libxml2 { };
+
   libxml2Python = pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${self.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
@@ -12417,10 +12413,7 @@ with pkgs;
 
   pshs = callPackage ../servers/http/pshs { };
 
-  libpulseaudio = callPackage ../servers/pulseaudio {
-    libOnly = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
+  # PulseAudio daemons
 
   # Name is changed to prevent use in packages;
   # please use libpulseaudio instead.
@@ -12439,6 +12432,25 @@ with pkgs;
     zeroconfSupport = true;
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
+
+  # libpulse implementations
+
+  libpulseaudio-vanilla = callPackage ../servers/pulseaudio {
+    libOnly = true;
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
+
+  apulse = callPackage ../misc/apulse { };
+
+  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix {
+    libpulseaudio = libpulseaudio-vanilla; # headers only
+  };
+
+  libcardiacarrest = callPackage ../misc/libcardiacarrest {
+    libpulseaudio = libpulseaudio-vanilla; # meta only
+  };
+
+  libpulseaudio = libpulseaudio-vanilla;
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 

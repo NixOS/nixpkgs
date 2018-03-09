@@ -1,6 +1,18 @@
 { lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts);
+
+  nixpkgsPatches = [
+    ./env_var_for_system_dir.patch
+
+    # this one is actually an omnipresent bug
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+    ./fix-pa-context-connect-retval.patch
+  ];
+
+in
 
 rec {
 
@@ -12,9 +24,8 @@ rec {
       sha512 = "ff748780492fc66b3e44c7e7641f16206e4c09514224c62d37efac2c59877bdf428a3670bfb50407166d7b505d4e2ea020626fd776b87f6abb6bc5d2e54c773f";
     };
 
-    patches = [
+    patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-      ./env_var_for_system_dir.patch
 
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1430274
       # Scheduled for firefox 59
@@ -49,8 +60,7 @@ rec {
       sha512 = "cf583df34272b7ff8841c3b093ca0819118f9c36d23c6f9b3135db298e84ca022934bcd189add6473922b199b47330c0ecf14c303ab4177c03dbf26e64476fa4";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -93,15 +103,18 @@ rec {
         It will use your default Firefox profile if you're not careful
         even! Be careful!
 
-        It will clash with firefox binary if you install both. But its
-        not a problem since you should run browsers in separate
-        users/VMs anyway.
+        It will clash with firefox binary if you install both. But it
+        should not be a problem because you should run browsers in
+        separate users/VMs anyway.
 
         Create new profile by starting it as
 
         $ firefox -ProfileManager
 
         and then configure it to use your tor instance.
+
+        Or just use `tor-browser-bundle` package that packs this
+        `tor-browser` back into a sanely-built bundle.
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
@@ -124,8 +137,7 @@ in rec {
       sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser-7-5 = common (rec {
@@ -142,8 +154,7 @@ in rec {
       sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
   tor-browser = tor-browser-7-5;
