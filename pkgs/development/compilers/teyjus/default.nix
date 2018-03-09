@@ -1,11 +1,11 @@
 { stdenv, fetchurl, omake, ocaml, flex, bison }:
 
 stdenv.mkDerivation {
-  name = "teyjus-2.0b2";
+  name = "teyjus-2.1";
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/teyjus/teyjus-source-2.0-b2.tar.gz";
-    sha256 = "f589fb460d7095a6e674b7a6413772c41b98654c38602c3e8c477a976da99052";
+    sha256 = "0llhm5nrfyj7ihz2qq1q9ijrh6y4f8vl39mpfkkad5bh1m3gp2gm";
   };
 
   patches = [ ./fix-lex-to-flex.patch ];
