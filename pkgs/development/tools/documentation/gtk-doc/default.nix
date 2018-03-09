@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
-  version = "1.25";
+  version = "1.27";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "0hpxcij9xx9ny3gs9p0iz4r8zslw8wqymbyababiyl7603a6x90y";
+    sha256 = "0vwsdl61nvnmqswlz5j9m4hg7qirhazwcikcnqf9nx0c13vx6sz2";
   };
 
   patches = [
