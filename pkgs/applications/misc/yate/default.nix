@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       sed -i 's@,/dev/null@@' configure
+      patchShebangs configure
     '';
 
   # --unresolved-symbols=ignore-in-shared-libs makes ld no longer find --library=yate? Why?
