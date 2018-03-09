@@ -224,7 +224,15 @@ stdenv.mkDerivation rec {
       Mission: Creating a viable free open source alternative to Magma, Maple, Mathematica and Matlab.
     '';
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
+    # Sage *should* run on all platforms. However this package probably doesn't
+    # build on most of them. For example the aarch64 hydra build failed. I
+    # suspect thats because the x86_64 build uses some pre-generated make
+    # artefacts that have to be rebuilt on other platforms (but fail to do so).
+    # I don't currently have a non-x86_64 system with nix to test on. If you
+    # want to fix the build for another system and need help, feel free to
+    # contact me (timokau).
+    broken = stdenv.system != "x86_64-linux";
     maintainers = with stdenv.lib.maintainers; [ timokau ];
   };
 }
