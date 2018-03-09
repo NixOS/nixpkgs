@@ -771,4 +771,10 @@ self: super: {
   # https://github.com/phadej/tree-diff/issues/15
   tree-diff = doJailbreak super.tree-diff;
 
+  # https://github.com/jgm/doctemplates/issues/2
+  doctemplates = markBrokenVersion "0.2.1" super.doctemplates;
+
+  # https://github.com/bitemyapp/esqueleto/issues/77
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
+
 }
