@@ -55,7 +55,7 @@ let
     };
 
     buildPhase = ''
-      cc -shared -I${lua}/include -Ic-api lbitlib.c -o bit32.so
+      cc -shared -Ic-api lbitlib.c -o bit32.so
     '';
 
     installPhase = ''
