@@ -126,7 +126,7 @@ mkDerivation rec {
   meta = {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ abbradar garbas primeos ];
   };
