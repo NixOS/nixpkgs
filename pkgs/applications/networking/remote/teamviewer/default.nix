@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "teamviewer-${version}";
-  version = "12.0.85001";
+  version = "12.0.90041";
 
   src = fetchurl {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
     url = "https://dl.tvcdn.de/download/version_12x/teamviewer_${version}_i386.deb";
-    sha256 = "01vzky22gisjxa4ihaygkb7jwhl4z9ldd9lli8fc863nxxbrawks";
+    sha256 = "19gf68xadayncrbpkk3v05xm698zavv8mz8ia6jhadrh5s6i0bwg";
   };
 
   unpackPhase = ''
