@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "3.12.0.1317";
+  version = "3.13.3.1365";
   name = "libdigidocpp-${version}";
 
   src = fetchurl {
-    url = "https://installer.id.ee/media/ubuntu/pool/main/libd/libdigidocpp/libdigidocpp_3.12.0.1317.orig.tar.xz";
-    sha256 = "8059e1dbab99f062d070b9da0b1334b7226f1ab9badcd7fddea3100519d1f9a9";
+    url = "https://installer.id.ee/media/ubuntu/pool/main/libd/libdigidocpp/libdigidocpp_3.13.3.1365.orig.tar.xz";
+    sha256 = "1xmvjh5xzspm6ja8hz6bzblwly7yn2jni2m6kx8ny9g65zjrj2iw";
   };
 
   unpackPhase = ''
