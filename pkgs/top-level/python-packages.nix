@@ -3957,6 +3957,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
