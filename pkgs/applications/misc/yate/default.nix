@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # OpenH323 and PWlib (licensed under MPL).
     license = ["GPL" "MPL"];
     maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
 }
