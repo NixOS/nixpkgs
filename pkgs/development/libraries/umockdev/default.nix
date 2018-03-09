@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
     maintainers = [ maintainers.ndowens ];
+    platforms = with platforms; linux;
   };
 }
