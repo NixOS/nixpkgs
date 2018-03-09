@@ -91,23 +91,4 @@ self: super: {
     text = self.text_1_2_3_0;
   });
 
-  # These packages need Cabal 2.2.x, which is not the default.
-  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_0;
-    text = self.text_1_2_3_0;
-  });
-  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_0;
-    text = self.text_1_2_3_0;
-  });
-  cabal2nix = super.cabal2nix.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_0;
-    text = self.text_1_2_3_0;
-  });
-  stylish-cabal = dontHaddock (dontCheck (super.stylish-cabal.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_0;
-    text = self.text_1_2_3_0;
-    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
-  })));
-
 }
