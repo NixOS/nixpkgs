@@ -1,0 +1,32 @@
+---
+componentName:  fancy
+
+welcomeStyleCalamares:   false
+
+strings:
+    productName:         Fancy GNU/Linux
+    shortProductName:    Fancy
+    version:             2018.3 LTS
+    shortVersion:        2018.3
+    versionedName:       Fancy GNU/Linux 2018.3 LTS "Terrible Tubas"
+    shortVersionedName:  Fancy 2018.3
+    bootloaderEntryName: Fancy
+    productUrl:          https://calamares.io/
+    supportUrl:          https://github.com/calamares/calamares/issues
+    knownIssuesUrl:      https://calamares.io/about/
+    releaseNotesUrl:     https://calamares.io/about/
+
+welcomeExpandingLogo:   true
+
+images:
+    productLogo:         "squid.png"
+    productIcon:         "squid.png"
+    productWelcome:      "languages.png"
+
+slideshow:               "show.qml"
+
+style:
+   sidebarBackground:    "#392F34"
+   sidebarText:          "#eFFFFF"
+   sidebarTextSelect:    "#392F34"
+   sidebarTextHighlight: "#c35400"
