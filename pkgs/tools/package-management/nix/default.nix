@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox-sandbox-shell
+, libseccomp, bash-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -10,7 +10,7 @@
 
 let
 
-  sh = busybox-sandbox-shell;
+  sh = bash-sandbox-shell;
 
   common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;

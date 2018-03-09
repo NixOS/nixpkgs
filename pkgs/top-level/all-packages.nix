@@ -5678,6 +5678,10 @@ with pkgs;
     texinfo = null;
     interactive = stdenv.isCygwin; # patch for cygwin requires readline support
   });
+  bash-sandbox-shell = callPackage ../shells/bash/sandbox-shell.nix { };
+
+  # TODO: release.nix in Nix still refers to it via this name
+  busybox-sandbox-shell = bash-sandbox-shell;
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.4.nix {
@@ -12876,7 +12880,6 @@ with pkgs;
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
   cachefilesd = callPackage ../os-specific/linux/cachefilesd { };
 
