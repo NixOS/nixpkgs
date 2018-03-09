@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite
+, openssl ? null, xz, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , libseccomp, busybox-sandbox-shell
 , hostPlatform, buildPlatform
@@ -91,28 +91,7 @@ let
     passthru = { inherit fromGit; };
   };
 
-  perl-bindings = { nix }: stdenv.mkDerivation {
-    name = "nix-perl-" + nix.version;
-
-    inherit (nix) src;
-
-    postUnpack = "sourceRoot=$sourceRoot/perl";
-
-    nativeBuildInputs =
-      [ perl pkgconfig curl nix libsodium ]
-      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
-
-    configureFlags =
-      [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-      ];
-
-    preConfigure = "export NIX_STATE_DIR=$TMPDIR";
-
-    preBuild = "unset NIX_INDENT_MAKE";
-  };
-
-in rec {
+  perl-bindings = callPackage ./perl-bindings.nix { nix = nixStable; };
 
   nix = nixStable;
 
@@ -122,7 +101,7 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
-  }) // { perl-bindings = nixStable; };
+  }) // { inherit perl-bindings; };
 
   nixStable = (common rec {
     name = "nix-2.0";
@@ -130,9 +109,13 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
     };
-  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+  }) // { inherit perl-bindings; };
 
   nixUnstable = nix;
+
+in {
+
+  inherit nix nix1 nixStable nixUnstable;
 /*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
