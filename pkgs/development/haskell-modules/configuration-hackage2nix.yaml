@@ -1337,7 +1337,6 @@ default-package-overrides:
   - ixset-typed ==0.3.1.1
   - ix-shapable ==0.1.0
   - jack ==0.7.1.3
-  - jailbreak-cabal ==1.3.2
   - javascript-extras ==0.3.2.0
   - jmacro ==0.6.14
   - jmacro-rpc ==0.3.2
