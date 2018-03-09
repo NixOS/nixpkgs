@@ -1,0 +1,36 @@
+# Doxyfile 1.8.11
+
+# This file describes the settings to be used by the documentation system
+# doxygen (www.doxygen.org) for a project.
+#
+# All text after a double hash (##) is considered a comment and is placed in
+# front of the TAG it is preceding.
+#
+# All text after a single hash (#) is considered a comment and will be ignored.
+# The format is:
+# TAG = value [value, ...]
+# For lists, items can also be appended using:
+# TAG += value [value, ...]
+# Values that contain spaces should be placed between quotes (\" \").
+
+PROJECT_NAME           = "nixpkgs builtins"
+FILE_PATTERNS          = *.nix
+EXTENSION_MAPPING      = nix=c++
+INPUT                  = lib
+RECURSIVE              = YES
+TAB_SIZE               = 2
+
+HTML_HEADER            = doxygen/header.html
+HTML_FOOTER            = doxygen/footer.html
+
+HTML_EXTRA_STYLESHEET  = doxygen/customdoxygen.css
+#HTML_EXTRA_FILES       = doxygen/doxy-boot.js
+DISABLE_INDEX = YES
+# Maybe include
+# https://github.com/NixOS/nix/blob/e3c19ff9bcbcaf2ec8e7c3d7f964e8d8aefaea43/doc/manual/expressions/builtins.xml
+#    Nix builtins???
+# would show up in search under nix-builtins/replaceStrings
+# which would be referenced by stdenv.lib.replaceStrings
+
+# Sorts members alphabetically. Disable when debugging why Doxygen won't pick up a function.
+SORT_BRIEF_DOCS   = YES
