@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "A tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];
     license     = licenses.gpl3;
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }
