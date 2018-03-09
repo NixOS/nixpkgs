@@ -64,7 +64,7 @@ self: super: {
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
-  free = super.free_5;
+  free = super.free_5_0_1;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
