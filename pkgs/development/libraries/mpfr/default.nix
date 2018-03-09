@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.1.6";
+  name = "mpfr-4.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/mpfr/${name}.tar.xz";
-    sha256 = "0l598h9klpgkz2bp0rxiqb90mkqh9f2f81n5rpy191j00hdaqqks";
+    sha256 = "0vp1lrc08gcmwdaqck6bpzllkrykvp06vz5gnqpyw0v3h9h4m1v7";
   };
 
   outputs = [ "out" "dev" "doc" "info" ];
