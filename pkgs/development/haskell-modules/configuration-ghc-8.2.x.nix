@@ -100,5 +100,9 @@ self: super: {
     Cabal = self.Cabal_2_2_0_0;
     text = self.text_1_2_3_0;
   });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
 
 }
