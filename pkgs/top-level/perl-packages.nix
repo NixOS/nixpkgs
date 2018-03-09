@@ -3877,7 +3877,7 @@ let self = _self // overrides; _self = with self; {
       \$(BASEEXT)\$(OBJ_EXT): \$(BASEEXT).xsi
 
       \$(BASEEXT).xsi: \$(DBI_DRIVER_XST) $autodir/Driver_xst.h
-      	\$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
+        \$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
 
       # ---
       ';
@@ -6245,7 +6245,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/${name}.tar.gz";
       sha256 = "247a9f5a88bb6745281c00d0f7d5d94e8599a92396849fd9571356dda047fd35";
     };
-    buildInputs = with pkgs; [ which gnupg1compat ];
+    buildInputs = [ pkgs.which pkgs.gnupg1compat ];
     propagatedBuildInputs = [ Moo MooXHandlesVia MooXlate ];
     doCheck = false;
     meta = {
@@ -10769,7 +10769,7 @@ let self = _self // overrides; _self = with self; {
     };
 
     # FIXME: try with libGL + libGLU instead of libGLU_combined
-    buildInputs = with pkgs; [ libGLU_combined libGLU freeglut xorg.libX11 xorg.libXi xorg.libXmu xorg.libXext xdummy ];
+    buildInputs = with pkgs; [ pkgs.libGLU_combined pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -15548,7 +15548,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "84756e9b07a2555c8eecf88e63d5cbbba9b1aa97b1e71a3d4aa524a7995a88ad";
     };
     makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
-    buildInputs = with pkgs; [ xorg.libX11 libpng ];
+    buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
     meta = {
       homepage = https://metacpan.org/pod/distribution/Tk/Tk.pod;
