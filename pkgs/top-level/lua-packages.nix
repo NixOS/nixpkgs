@@ -55,7 +55,7 @@ let
     };
 
     buildPhase = ''
-      cc -shared -Ic-api lbitlib.c -o bit32.so
+      cc ${if stdenv.isDarwin then "-bundle -undefined dynamic_lookup -all_load" else "-shared"} -Ic-api lbitlib.c -o bit32.so
     '';
 
     installPhase = ''
