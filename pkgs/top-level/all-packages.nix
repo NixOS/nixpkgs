@@ -4633,6 +4633,8 @@ with pkgs;
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
+  sasview = callPackage ../applications/science/misc/sasview {};
+
   scanbd = callPackage ../tools/graphics/scanbd { };
 
   screen = callPackage ../tools/misc/screen {
