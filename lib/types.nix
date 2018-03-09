@@ -420,7 +420,7 @@ rec {
       mkOptionType rec {
         name = "coercedTo";
         description = "${finalType.description} or ${coercedType.description}";
-        check = x: finalType.check x || coercedType.check x;
+        check = x: finalType.check x || (coercedType.check x && finalType.check (coerceFunc x));
         merge = loc: defs:
           let
             coerceVal = val:
