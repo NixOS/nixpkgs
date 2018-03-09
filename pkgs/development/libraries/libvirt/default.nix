@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
 
-    PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd numad dnsmasq ]}:$PATH
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ])}:$PATH
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
