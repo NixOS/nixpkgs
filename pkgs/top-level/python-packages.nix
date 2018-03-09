@@ -1321,6 +1321,8 @@ in {
     enablePython = true;
   });
 
+  bumps = callPackage ../development/python-modules/bumps {};
+
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
 
@@ -12283,6 +12285,26 @@ in {
     };
   };
 
+  periodictable = buildPythonPackage rec{
+    name = "${pname}-${version}";
+    pname = "periodictable";
+    version = "1.5.0";
+
+    propagatedBuildInputs = with self; [numpy pyparsing];
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1cjk6aqcz41nxm4fpriz01vqdafd6g57cjk0wh1iklk5cx6c085h";
+    };
+
+    meta = {
+      homepage = http://www.reflectometry.org/danse/software.html;
+      description = "an extensible periodic table of the elements prepopulated with data important to neutron and x-ray scattering experiments";
+      license = licenses.publicDomain;
+      maintainers = with maintainers; [ rprospero ];
+    };
+  };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
@@ -15306,6 +15328,10 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
+  sasmodels = callPackage ../development/python-modules/sasmodels {
+    inherit licenses;
+  };
+
   scapy = callPackage ../development/python-modules/scapy { };
 
   scipy = callPackage ../development/python-modules/scipy { };
@@ -17337,6 +17363,29 @@ in {
       homepage = https://pypi.python.org/pypi/unittest2;
     };
   };
+
+  unittest-xml-reporting = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "unittest-xml-reporting";
+    version = "2.1.1";
+
+    propagatedBuildInputs = with self; [six];
+
+    # The tarball from Pypi doesn't actually contain the unit tests
+    doCheck = false;
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1jwkqx5gfphkymp3xwqvlb94ng22gpbqh36vbbnsrpk1a0mammm6";
+    };
+    meta = with stdenv.lib; {
+      homepage = https://github.com/xmlrunner/unittest-xml-reporting/tree/master/;
+      description = "A unittest runner that can save test results to XML files";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ rprospero ];
+    };
+  };
+
 
   uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";

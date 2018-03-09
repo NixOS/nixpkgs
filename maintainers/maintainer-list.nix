@@ -3020,6 +3020,11 @@
     github = "rongcuid";
     name = "Rongcui Dong";
   };
+  rprospero = {
+    email = "rprospero+nix@gmail.com";
+    github = "rprospero";
+    name = "Adam Washington";
+  };
   rszibele = {
     email = "richard@szibele.com";
     github = "rszibele";
