@@ -12,7 +12,7 @@
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk2, gtk3, dbus-glib
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined 
+, libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
 
@@ -140,27 +140,27 @@ let
     patches = [
       ./patches/nix_plugin_paths_52.patch
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
-      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
-      ./patches/fix_network_api_crash.patch
+      ## Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ## TODO investigate build error
+      #./patches/fix_network_api_crash.patch
+
       # As major versions are added, you can trawl the gentoo and arch repos at
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
 
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ]  ++ optionals (versionRange "64" "65") [
-      (gentooPatch "chromium-cups-r0.patch" "0hyjlfh062c8h54j4b27y4dq5yzd4w6mxzywk3s02yf6cj3cbkrl")
-      (gentooPatch "chromium-angle-r0.patch" "0izdrqwsyr48117dhvwdsk8c6dkrnq2njida1q4mb1lagvwbz7gc")
-      # missing ninja dep https://github.com/NixOS/nixpkgs/issues/35296#issuecomment-368666833
-      (githubPatch "b1e3cfd4f9bfe43a1e08c5670b51c8c80d3e6372" "17vih86rpsy282r8ikrf2q5gfjdwqzvyn8859i75xzvl8agyhbaa")
     ]  ++ optionals (versionRange "65" "66") [
-      #(gentooPatch "chromium-gcc-r0.patch" "127xdwabizn5gz8rf1qsw62i7m0b5bsfjqxv4kdbsnizmjanddf8")
-      #(gentooPatch "chromium-memcpy-r0.patch" "1d3vra59wjg2lva7ddv55ff6l57mk9k50llsplr0b7vxk0lh0ps5")
-      (gentooPatch "chromium-webrtc-r0.patch" "0qj5b4w9kav51ylpdf38vm5w7p2gx4qp8p45vrfggp7miicg9cmw")
-      #(gentooPatch "chromium-vulkan-r0.patch" "1wphsbc6kyck5qanbc4bv14iw2s67fvp1c0kwz29a2avzkz19s84")
-      #(gentooPatch "chromium-ffmpeg-r0.patch" "0j58g24j6n6vpy6v9wwv34x0dd43m52wg0xcrfkzp72km9wiahff")
+      (gentooPatch "chromium-stdint.patch" "037gjnc8h087g6dpxz53nqvzbpa9mq0z47h25vix9p62s9nhz2a8")
+      (gentooPatch "chromium-webrtc-r0.patch" "0wp4zivbv2wpgiwmiznbq1aw4w98mvwjvdy36cpfmnvr8yw430pd")
+      (gentooPatch "chromium-math.h-r0.patch" "0dlzbdj0lvp9qklgifsvgbn6p1ppxbl3hkwqqqfsw1d9jka9wy8x")
       #(gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ]  ++ optional enableWideVine ./patches/widevine.patch;
+    ] ++ optionals (versionRange "66" "67") [
+      (gentooPatch "chromium-stdint.patch" "037gjnc8h087g6dpxz53nqvzbpa9mq0z47h25vix9p62s9nhz2a8")
+      (gentooPatch "chromium-webrtc-r0.patch" "0wp4zivbv2wpgiwmiznbq1aw4w98mvwjvdy36cpfmnvr8yw430pd")
+      (gentooPatch "chromium-math.h-r0.patch" "0dlzbdj0lvp9qklgifsvgbn6p1ppxbl3hkwqqqfsw1d9jka9wy8x")
+      (gentooPatch "chromium-ffmpeg-r1.patch" "1k8agaqsvg0w0s6s5wh346ih02cc86vr0vwyshw2q9vafa0jvmq4")
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
