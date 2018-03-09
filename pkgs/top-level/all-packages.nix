@@ -5093,6 +5093,8 @@ with pkgs;
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+  vcvrack = callPackage ../applications/audio/vcvrack { };
+
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
