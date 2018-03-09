@@ -8829,6 +8829,22 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ProcWaitStat ];
   };
 
+  MIMELite = buildPerlPackage rec {
+    name = "MIME-Lite-3.030";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
+    };
+    propagatedBuildInputs = [ EmailDateFormat MailTools MIMETypes ];
+    meta = {
+      description = "Low-calorie MIME generator (DEPRECATED)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  MIMEtools = MIMETools;
+
   MIMETools = buildPerlPackage rec {
     name = "MIME-tools-5.509";
     src = fetchurl {
@@ -8848,34 +8864,6 @@ let self = _self // overrides; _self = with self; {
     ];
     meta = {
       description = "class for parsed-and-decoded MIME message";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
-  MIMELite = buildPerlPackage rec {
-    name = "MIME-Lite-3.030";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
-    };
-    propagatedBuildInputs = [ EmailDateFormat MailTools MIMETypes ];
-    meta = {
-      description = "Low-calorie MIME generator (DEPRECATED)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  MIMEtools = buildPerlPackage {
-    name = "MIME-tools-5.507";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/D/DS/DSKOLL/MIME-tools-5.507.tar.gz;
-      sha256 = "2f43683e1d5bed21179207d81c0caf1d5b5d480d018ac812f4ab950879fe7793";
-    };
-    buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ MailTools ];
-    meta = {
-      description = "Tools to manipulate MIME messages";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
