@@ -777,4 +777,7 @@ self: super: {
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
+  # Older versions don't compile.
+  hackage-db = super.hackage-db_2_0_1;
+
 }
