@@ -333,6 +333,7 @@ self: super: {
       rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
       sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
     };
+    jailbreak = true;   # https://github.com/lpsmith/blaze-builder/issues/12
   });
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
