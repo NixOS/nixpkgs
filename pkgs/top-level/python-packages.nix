@@ -4280,6 +4280,8 @@ in {
 
   raven = callPackage ../development/python-modules/raven { };
 
+  rawkit = callPackage ../development/python-modules/rawkit { };
+
   rethinkdb = buildPythonPackage rec {
     name = "rethinkdb-${version}";
     version = "2.3.0.post6";
