@@ -12276,6 +12276,26 @@ in {
     };
   };
 
+  periodictable = buildPythonPackage rec{
+    name = "${pname}-${version}";
+    pname = "periodictable";
+    version = "1.5.0";
+
+    propagatedBuildInputs = with self; [numpy pyparsing];
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1cjk6aqcz41nxm4fpriz01vqdafd6g57cjk0wh1iklk5cx6c085h";
+    };
+
+    meta = {
+      homepage = http://www.reflectometry.org/danse/software.html;
+      description = "an extensible periodic table of the elements prepopulated with data important to neutron and x-ray scattering experiments";
+      license = licenses.publicDomain;
+      maintainers = with maintainers; [ rprospero ];
+    };
+  };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
