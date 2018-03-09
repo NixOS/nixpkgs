@@ -451,6 +451,7 @@ self: super: {
       rev    = "34f4593a520176a917b74b8c7fcbbfbd72fb8178";
       sha256 = "1aiklvf08w1hx2jn9n3sm61mfvdx4fkabszkjliapih2yjpmi3hq";
     };
+    jailbreak = true;   # base >=4 && <4.11
   });
 
   ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
