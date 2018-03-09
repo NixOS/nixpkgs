@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
   pname = "mypy";
-  version = "0.560";
+  version = "0.570";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jja0xlwqajxzab8sabiycax8060zikg89dnl9a7lkqcrwprl35x";
+    sha256 = "09cz0h4d6xcdqlchw080nkjlwki3mgjrlvfnj5hxxwi3cgv9imw3";
   };
 
   propagatedBuildInputs = [ lxml typed-ast psutil ];
