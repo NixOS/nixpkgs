@@ -11,11 +11,11 @@ ntfs3g ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.73";
+  version = "1.76";
   name = "os-prober-${version}";
   src = fetchurl {
     url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
-    sha256 = "1prssbwdgj5c33zhl3ldgaxk7lab9qvs4zhyrhag88wiivirb0sq";
+    sha256 = "1vb45i76bqivlghrq7m3n07qfmmq4wxrkplqx8gywj011rhq19fk";
   };
 
   buildInputs = [ makeWrapper ];
