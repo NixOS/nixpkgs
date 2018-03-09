@@ -1,0 +1,19 @@
+{
+  "name": "yarn2nix",
+  "version": "1.0.0",
+  "description": "Convert packages.json and yarn.lock into a Nix expression that downloads all the dependencies",
+  "main": "index.js",
+  "repository": ".",
+  "author": "Maarten Hoogendoorn <maarten@moretea.nl>",
+  "license": "MIT",
+  "scripts": {
+    "yarn2nix": "bin/yarn2nix.js"
+  },
+  "bin": {
+    "yarn2nix": "bin/yarn2nix.js"
+  },
+  "dependencies": {
+    "@yarnpkg/lockfile": "^1.0.0",
+    "docopt": "^0.6.2"
+  }
+}
