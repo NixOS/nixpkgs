@@ -30,7 +30,6 @@ assert withGtk3 -> dconf != null;
 assert withGtk3 -> gtk3 != null;
 
 let
-  system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
   compareVersion = v: builtins.compareVersions version v;
 in
 
@@ -258,7 +257,7 @@ stdenv.mkDerivation {
       "-no-warnings-are-errors"
     ]
     ++ (
-      if (!system-x86_64)
+      if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
       else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
     )
