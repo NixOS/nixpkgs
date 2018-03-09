@@ -86,4 +86,9 @@ self: super: {
   # https://github.com/purescript/purescript/issues/3189
   purescript = doJailbreak (super.purescript);
 
+  # Needs text >=1.2.3.0 && <1.3, which is not the default yet.
+  Cabal_2_2_0_0 = super.Cabal_2_2_0_0.overrideScope (self: super: {
+    text = self.text_1_2_3_0;
+  });
+
 }
