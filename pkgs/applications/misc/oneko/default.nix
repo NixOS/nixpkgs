@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.sakura.5";
-  vname = "1.2.5";
+  vname = "2.0b";
   name = "oneko-${vname}";
   src = fetchurl {
     url = "http://www.daidouji.com/oneko/distfiles/oneko-${version}.tar.gz";
-    sha256 = "2c2e05f1241e9b76f54475b5577cd4fb6670de058218d04a741a04ebd4a2b22f";
+    sha256 = "0bxjlbafn10sfi5d06420pg70rpvsiy5gdbm8kspd6qy4kqhabic";
   };
   buildInputs = [ xorg.imake xorg.gccmakedep x11 ];
   
