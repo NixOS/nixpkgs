@@ -417,6 +417,7 @@ stdenv.mkDerivation ({
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).
     platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) [ "i686-darwin" ];
+    broken = langAda;
   };
 }
 
