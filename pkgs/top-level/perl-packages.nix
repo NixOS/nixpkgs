@@ -8319,18 +8319,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LWPUserAgent = buildPerlPackage {
-    name = "LWP-UserAgent-6.05";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-6.05.tar.gz;
-      sha256 = "08wgwyz7748pv5cyngxia0xl6nragfnhrp4p9s78xhgfyygpj9bv";
-    };
-    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPNegotiate HTTPMessage LWPMediaTypes NetHTTP URI WWWRobotRules ];
-    meta = {
-      description = "The World-Wide Web library for Perl";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  LWPUserAgent = LWP;
 
   LWPUserAgentDetermined = buildPerlPackage {
     name = "LWP-UserAgent-Determined-1.06";
