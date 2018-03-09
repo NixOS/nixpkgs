@@ -313,11 +313,7 @@ let
     buildPhase = ''
       ${lua}/bin/lua build-aux/luke \
         package="luaposix" \
-        version="${version}" \
-        LUA="${lua}/bin/lua" \
-        LUA_INCDIR="-I${lua}/include" \
-        INST_LIBDIR="$out/lib/lua/${lua.luaversion}" \
-        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        version="${version}"
     '';
 
     installPhase = ''
