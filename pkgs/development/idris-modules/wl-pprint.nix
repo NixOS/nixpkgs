@@ -7,7 +7,7 @@
 }:
 build-idris-package {
   name = "wl-pprint";
-  version = "2016-09-28";
+  version = "2017-03-13";
 
   src = fetchFromGitHub {
     owner = "shayan-najd";
