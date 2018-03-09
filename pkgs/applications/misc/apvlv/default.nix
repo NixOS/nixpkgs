@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.ardumont ];
   };
 
