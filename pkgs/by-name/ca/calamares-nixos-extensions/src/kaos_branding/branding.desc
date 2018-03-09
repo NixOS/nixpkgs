@@ -1,0 +1,31 @@
+---
+componentName:  kaos_branding
+
+# Should the welcome image (productWelcome, below) be scaled
+# up beyond its natural size?
+welcomeExpandingLogo:   true
+
+strings:
+    productName:         KaOS
+    shortProductName:    KaOS
+    version:             2018.03
+    shortVersion:        KaOS
+    versionedName:       KaOS 2018.03
+    shortVersionedName:  KaOS 2018.03
+    bootloaderEntryName: KaOS
+    productUrl:          https://kaosx.us/
+    supportUrl:          https://kaosx.us/docs/
+    knownIssuesUrl:      https://kaosx.us/pages/download/#known-issues-a-idknownissuesa
+    releaseNotesUrl:     https://kaosx.us/pages/release_notes
+
+images:
+    productLogo:         "kaos.png"
+    productIcon:         "kaos.png"
+    productWelcome:      "languages.png"
+
+slideshow:               "show.qml"
+
+style:
+   sidebarBackground:    "#bdc3c7"
+   sidebarText:          "#1F1F1F"
+   sidebarTextSelect:    "#3498DB"
