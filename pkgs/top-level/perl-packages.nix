@@ -7770,11 +7770,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  libnet = buildPerlPackage rec {
-    name = "libnet-3.08";
+  libnet = buildPerlPackage {
+    name = "libnet-3.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
-      sha256 = "21ebae642b53336576c370989d238cbe74378944079aca6f97665158c9f1750b";
+      url = mirror://cpan/authors/id/S/SH/SHAY/libnet-3.11.tar.gz;
+      sha256 = "1lsj3a2vbryh85mbb6yddyb2zjv5vs88fdj5x3v7fp2ndr6ixarg";
     };
     meta = {
       description = "Collection of network protocol modules";
@@ -10511,15 +10511,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetSMTP = buildPerlPackage {
-    name = "Net-SMTP-1.25";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHAY/libnet-1.25.tar.gz;
-      sha256 = "01f3l4aj3ynl8syyrl122k4bmfds77yw5q36aafrgaq22fnb3b2a";
-    };
-    patchPhase = "chmod a-x Configure";
-    doCheck = false; # The test suite fails, because it requires network access.
-  };
+  NetSMTP = libnet;
 
   NetSMTPSSL = buildPerlPackage {
     name = "Net-SMTP-SSL-1.03";
