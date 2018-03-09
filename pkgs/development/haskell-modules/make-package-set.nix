@@ -106,7 +106,7 @@ let
     inherit packages;
   };
 
-  haskellSrc2nix = { name, src, sha256 ? null }:
+  haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.stdenv.mkDerivation {
@@ -119,7 +119,7 @@ let
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
+        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
       '';
   };
 
