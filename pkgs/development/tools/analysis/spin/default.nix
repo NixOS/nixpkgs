@@ -7,12 +7,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "spin-${version}";
-  version = "6.4.7";
+  version = "6.4.8";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
     url = "http://spinroot.com/spin/Src/spin${url-version}.tar.gz";
-    sha256 = "17m2xaag0jns8hsa4466zxq35ylg9fnzynzvjjmx4ympbiil6mqv";
+    sha256 = "1rvamdsf0igzpndlr4ck7004jw9x1bg4xyf78zh5k9sp848vnd80";
   };
 
   nativeBuildInputs = [ makeWrapper ];
