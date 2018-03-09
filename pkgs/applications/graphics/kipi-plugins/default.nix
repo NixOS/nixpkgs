@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name    = "kipi-plugins-${version}";
-  version = "5.2.0";
+  version = "5.8.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/digikam/digikam-${version}.tar.xz";
-    sha256 = "0q4j7iv20cxgfsr14qwzx05wbp2zkgc7cg2pi7ibcnwba70ky96g";
+    sha256 = "0vhw15bjpp18vn8h8pm8d50ddlc3shw7m9pvmh0xaad27k648jhr";
   };
 
   prePatch = ''
