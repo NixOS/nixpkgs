@@ -4023,6 +4023,8 @@ in {
     };
   };
 
+  pyprind = callPackage ../development/python-modules/pyprind { };
+
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
