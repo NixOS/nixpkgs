@@ -110,6 +110,8 @@ let
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-color-manager = callPackage ./core/gnome-color-manager { };
+
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
