@@ -2215,6 +2215,8 @@ in {
 
   easydict = callPackage ../development/python-modules/easydict { };
 
+  easygui = callPackage ../development/python-modules/easygui { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
