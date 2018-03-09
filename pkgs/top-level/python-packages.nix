@@ -1321,6 +1321,8 @@ in {
     enablePython = true;
   });
 
+  bumps = callPackage ../development/python-modules/bumps {};
+
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
 
