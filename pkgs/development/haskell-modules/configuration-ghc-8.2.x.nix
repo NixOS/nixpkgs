@@ -91,4 +91,10 @@ self: super: {
     text = self.text_1_2_3_0;
   });
 
+  # Needs Cabal 2.2.x, which is not the default.
+  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
+
 }
