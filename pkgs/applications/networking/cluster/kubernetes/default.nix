@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/kubernetes/kubernetes/commit/a990b04dc8a7d8408a71eee40db93621cf2b6d1b.patch";
       sha256 = "0piqilc5c9frikl74hamkffawwg1mvdwfxqvjnmk6wdma43dbb7w";
     })
+    (fetchpatch {
+      # https://github.com/kubernetes/kubernetes/pull/60978
+      # Fixes critical kube-proxy failure on iptables-restore >= 1.6.2 and
+      # non-critical failures on prior versions.
+      url = "https://github.com/kubernetes/kubernetes/commit/34ce573e9992ecdbc06dff1b4e3d0e9baa8353dd.patch";
+      sha256 = "189jajilys5zd0x4asbp6by8y3jl5hfaifqqjiq1h2bv00v1qdym";
+    })
   ];
 
   postPatch = ''
