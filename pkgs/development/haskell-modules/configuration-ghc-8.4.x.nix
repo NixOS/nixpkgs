@@ -773,7 +773,10 @@ self: super: {
   tree-diff = doJailbreak super.tree-diff;
 
   # https://github.com/jgm/doctemplates/issues/2
-  doctemplates = markBrokenVersion "0.2.1" super.doctemplates;
+  doctemplates = appendPatch super.doctemplates (pkgs.fetchpatch
+    { url = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
+      sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
+    });
 
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
