@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "polib";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16klwlswfbgmkzrra80fgzhic9447pk3mnr75r2fkz72bkvpcclb";
+    sha256 = "0aikb8gcarhifn3sadrbbs5czagih9hjv250gsrgy9v1d49pvn7s";
   };
 
   # error: invalid command 'test'
