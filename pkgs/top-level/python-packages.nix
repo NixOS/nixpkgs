@@ -3718,6 +3718,8 @@ in {
     };
   });
 
+  decorating = callPackage ../development/python-modules/decorating { };
+
   decorator = callPackage ../development/python-modules/decorator { };
 
   deform = buildPythonPackage rec {
