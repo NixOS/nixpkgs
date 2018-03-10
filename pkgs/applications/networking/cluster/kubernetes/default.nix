@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       # Fixes critical kube-proxy failure on iptables-restore >= 1.6.2 and
       # non-critical failures on prior versions.
       url = "https://github.com/kubernetes/kubernetes/commit/34ce573e9992ecdbc06dff1b4e3d0e9baa8353dd.patch";
-      sha256 = "189jajilys5zd0x4asbp6by8y3jl5hfaifqqjiq1h2bv00v1qdym";
+      sha256 = "1sd9qgc28zr6fkk0441f89bw8kq2kadys0qs7bgivy9cmcpw5x5p";
     })
   ];
 
