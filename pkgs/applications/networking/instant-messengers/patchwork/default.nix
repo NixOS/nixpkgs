@@ -1,5 +1,5 @@
 { stdenv, writeScriptBin, path, fetchurl, fetchFromGitHub
-, nodejs-8_x, yarn, python, electron }:
+, nodejs-8_x, yarn, mkYarnPackage, python, electron }:
 
 with builtins;
 
@@ -7,17 +7,6 @@ let
   version = "3.8.10";
 
   nodejs = nodejs-8_x;
-
-  yarn2nix = (import (fetchFromGitHub {
-    owner = "moretea";
-    repo = "yarn2nix";
-    rev = "d6e05a521bd92b2647bb7e853363d234f21b2cfd";
-    sha256 = "1nvpii9p41vrb6zvr8rqcvmycrl6lnzzaif85qj1aavizncgb4wy";
-  }) {
-    inherit nodejs;
-    pkgs = import path {};
-    yarn = yarn.override { inherit nodejs; };
-  });
 
   nodeHeaders = fetchurl {
     url = "https://nodejs.org/download/release/v${nodejs.version}/node-v${nodejs.version}-headers.tar.gz";
@@ -31,7 +20,7 @@ let
     sha256 = "16h9ylmlhbszixya5bxm3n6fpdc9gv9zxp0jdr4jd32lr9n3gjbr";
   };
 
-  patchwork = yarn2nix.mkYarnPackage {
+  patchwork = mkYarnPackage {
     name = "patchwork-${version}";
     src = patchworkSource;
     packageJson = "${patchworkSource}/package.json";
