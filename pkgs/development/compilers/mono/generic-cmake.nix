@@ -20,9 +20,6 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
-
   # In fact I think this line does not help at all to what I
   # wanted to achieve: have mono to find libgdiplus automatically
   configureFlags = [
