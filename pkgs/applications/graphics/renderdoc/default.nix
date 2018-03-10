@@ -3,23 +3,33 @@
 , vulkan-loader, xorg
 , python36, bison, pcre, automake, autoconf
 }:
-
+let
+  custom_swig = stdenv.mkDerivation {
+    name = "patched-custom-swig";
+    src = fetchFromGitHub {
+      owner = "baldurk";
+      repo = "swig";
+      rev = "renderdoc-modified-5";
+      sha256 = "0ihrxbx56p5wn589fbbsns93fp91sypqdzfxdy7l7v9sf69a41mw";
+    };
+    phases = ["unpackPhase" "patchAndMove"];
+    patchAndMove = ''
+      patchShebangs autogen.sh
+      root=$(pwd)
+      cd ..
+      mv "$root" $out
+    '';
+  };
+in
 stdenv.mkDerivation rec {
-  version = "1.0rc1";
+  version = "1.0";
   name = "renderdoc-${version}";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
-    rev = "2300a94252384c63c93f58a264235b3cff59146b";
-    sha256 = "1406w2cxk96jj05lvcrr75n1msn7abrcfvz7sgz9byp209vv3p1m";
-  };
-
-  custom_swig = fetchFromGitHub {
-    owner = "baldurk";
-    repo = "swig";
-    rev = "renderdoc-modified-4";
-    sha256 = "02hhhkvlqzpx5qfjzpq5wjzpxi9k999jczxm92y2nxf0m05dbyl4";
+    rev = "v1.0";
+    sha256 = "0l7pjxfrly4llryjnwk42dzx65n78wc98h56qm4yh04ja8fdbx2y";
   };
 
   buildInputs = [
@@ -34,22 +44,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
     "-DBUILD_VERSION_DIST_STABLE=ON"
+    "-DRENDERDOC_SWIG_PACKAGE=${custom_swig}"
     # TODO: add once pyside2 is in nixpkgs
     #"-DPYSIDE2_PACKAGE_DIR=${python36Packages.pyside2}"
-    # TODO: use this instead of preConfigure once placeholders land
-    #"-DVULKAN_LAYER_FOLDER=${placeholder out}/share/vulkan/implicit_layer.d/"
+    "-DVULKAN_LAYER_FOLDER=${placeholder "out"}/share/vulkan/implicit_layer.d/"
   ];
-
-  postUnpack = ''
-    cp -r ${custom_swig} custom_swig
-    chmod -R +w custom_swig
-    patchShebangs custom_swig/autogen.sh
-  '';
-
-  preConfigure = ''
-    cmakeFlags+=" -DRENDERDOC_SWIG_PACKAGE=$PWD/../custom_swig"
-    cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
-  '';
 
   preFixup = ''
     wrapProgram $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
