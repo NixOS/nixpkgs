@@ -37,7 +37,7 @@ self: super: {
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
+  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
 
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
