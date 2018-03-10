@@ -39,6 +39,10 @@ in
 callPackage (import ./generic.nix (rec {
   version = "4.5.5";
 
+  meta = {
+    knownVulnerabilities = [ "Security support ended in January 2018" ];
+  };
+
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
     sha256 = "1y74ms4yc3znf8jc3fgyq94va2y0pf7jh8m9pfqnpgklywqnw8g2";
