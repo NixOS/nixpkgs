@@ -781,6 +781,9 @@ self: super: {
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
+  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
+  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
+
   # Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
 
