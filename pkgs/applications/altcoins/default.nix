@@ -19,8 +19,8 @@ rec {
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
 
-  btc1 = callPackage ./btc1.nix { withGui = true; };
-  btc1d = callPackage ./btc1.nix { withGui = false; };
+  btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
+  btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
 
   cryptop = python3.pkgs.callPackage ./cryptop { };
 
