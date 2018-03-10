@@ -1636,8 +1636,6 @@ in {
 
   proboscis = callPackage ../development/python-modules/proboscis {};
 
-  py4j = callPackage ../development/python-modules/py4j { };
-
   pyechonest = self.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
 
