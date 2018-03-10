@@ -20466,6 +20466,8 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
+  satysfi = ocaml-ng.ocamlPackages_4_06.callPackage ../tools/typesetting/satysfi { };
+
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
     librsvg = librsvg.override { enableIntrospection = true; };

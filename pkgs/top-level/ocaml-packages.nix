@@ -644,11 +644,6 @@ let
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
-    satysfi =
-      if lib.versionOlder "4.06" ocaml.version
-      then callPackage ../development/ocaml-modules/satysfi { }
-      else null;
-
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
