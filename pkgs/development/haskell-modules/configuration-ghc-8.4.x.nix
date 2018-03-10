@@ -803,4 +803,7 @@ self: super: {
       sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
     });
 
+  # https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
+  setlocale = doJailbreak super.setlocale;
+
 }
