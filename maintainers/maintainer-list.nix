@@ -636,11 +636,6 @@
     github = "calbrecht";
     name = "Christian Albrecht";
   };
-  calrama = {
-    email = "moritz@ucworks.org";
-    github = "MoritzMaxeiner";
-    name = "Moritz Maxeiner";
-  };
   calvertvl = {
     email = "calvertvl@gmail.com";
     github = "calvertvl";
