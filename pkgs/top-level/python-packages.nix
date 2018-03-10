@@ -1621,23 +1621,7 @@ in {
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
-  proboscis = buildPythonPackage rec {
-    name = "proboscis-1.2.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/proboscis/proboscis-1.2.6.0.tar.gz";
-      sha256 = "b822b243a7c82030fce0de97bdc432345941306d2c24ef227ca561dd019cd238";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-    doCheck = false;
-
-    meta = {
-      description = "A Python test framework that extends Python's built-in unittest module and Nose with features from TestNG";
-      homepage = https://github.com/rackspace/python-proboscis;
-      license = licenses.asl20;
-    };
-  };
+  proboscis = callPackage ../development/python-modules/proboscis {};
 
   pyechonest = self.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
