@@ -17373,8 +17373,11 @@ with pkgs;
     xvSupport          = !stdenv.isDarwin;
   };
 
+  mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
+
   mpvScripts = {
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+    mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
