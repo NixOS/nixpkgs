@@ -23,8 +23,8 @@ let
   # Do not forget to update the hash in ./guest-additions/default.nix!
   extpack = "70584a70b666e9332ae2c6be0e64da4b8e3a27124801156577f205750bdde4f5";
   extpackRev = "120293";
-  main = "1rx45ivwk89ghjc5zdd7c7j92w0w3930xj7l1zhwrvshxs454w7y";
-  version = "5.2.6";
+  main = "1s44h0d2khclkgkfgcwpq09dpckzr22r8737icdwhjhbgga5j9zf";
+  version = "5.2.8";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
