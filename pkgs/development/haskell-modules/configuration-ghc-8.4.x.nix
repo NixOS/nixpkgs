@@ -61,6 +61,11 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## free >=4.9 && <5
+  either = super.either_5;
+
+  ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
