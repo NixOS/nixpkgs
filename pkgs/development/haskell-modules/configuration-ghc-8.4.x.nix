@@ -766,9 +766,6 @@ self: super: {
   haddock-library = self.haddock-library_1_5_0_1;
   haddock-library_1_5_0_1 = dontHaddock (dontCheck super.haddock-library_1_5_0_1);
 
-  # https://github.com/hslua/hslua-module-text/issues/1
-  hslua-module-text = doJailbreak super.hslua-module-text;
-
   # https://github.com/phadej/tree-diff/issues/15
   tree-diff = doJailbreak super.tree-diff;
 
