@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION_DIST_NAME=NixOS"
     "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
-    "-DBUILD_VERSION_DIST_STABLE=ON"
+    "-DBUILD_VERSION_STABLE=ON"
     "-DRENDERDOC_SWIG_PACKAGE=${custom_swig}"
     # TODO: add once pyside2 is in nixpkgs
     #"-DPYSIDE2_PACKAGE_DIR=${python36Packages.pyside2}"
