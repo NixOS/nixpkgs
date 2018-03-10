@@ -797,4 +797,7 @@ self: super: {
   # https://github.com/haskell/hackage-security/issues/211
   hackage-security = doJailbreak super.hackage-security;
 
+  # https://github.com/pikajude/stylish-cabal/issues/6
+  stylish-cabal = dontHaddock super.stylish-cabal;
+
 }
