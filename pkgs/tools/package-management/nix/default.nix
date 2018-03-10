@@ -29,7 +29,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli ] # Since 1.12
+      ++ lib.optionals is20 [ brotli ] # Since 1.12
       ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
@@ -132,6 +132,8 @@ in rec {
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
+  nixUnstable = nix;
+/*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
     suffix = "pre5968_a6c0b773";
@@ -143,5 +145,6 @@ in rec {
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+*/
 
 }

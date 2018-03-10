@@ -102,7 +102,7 @@
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, mesa ? null # OpenGL rendering
+, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg_1 ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
@@ -225,7 +225,7 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> mesa != null;
+assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
@@ -406,7 +406,7 @@ stdenv.mkDerivation rec {
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
-  ] ++ optional openglExtlib mesa
+  ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]

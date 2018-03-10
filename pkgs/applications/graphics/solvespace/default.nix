@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, mesa_glu, xlibs, pcre
+, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xlibs, pcre
 , wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew mesa_glu
+    json_c fontconfig gtkmm3 pangomm glew libGLU
     xlibs.libpthreadstubs xlibs.libXdmcp pcre
   ];
   enableParallelBuilding = true;

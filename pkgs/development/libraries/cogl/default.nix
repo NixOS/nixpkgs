@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mesa_noglu, glib, gdk_pixbuf, xorg, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintlOrEmpty
 , pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
 , gstreamerSupport ? true, gst_all_1 }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with xorg; [
       glib gdk_pixbuf gobjectIntrospection wayland
-      mesa_noglu libXrandr libXfixes libXcomposite libXdamage
+      libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer

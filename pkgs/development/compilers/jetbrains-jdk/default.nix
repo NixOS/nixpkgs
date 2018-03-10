@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
-, mesa_noglu , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
+, libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
 , gdk_pixbuf, atk }:
 
 # TODO: Investigate building from source instead of patching binaries.
@@ -51,7 +51,7 @@ let drv = stdenv.mkDerivation rec {
   '';
 
   rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm

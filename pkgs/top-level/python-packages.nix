@@ -539,6 +539,8 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
+  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
+
   apipkg = callPackage ../development/python-modules/apipkg {};
 
   appdirs = callPackage ../development/python-modules/appdirs { };
@@ -5295,6 +5297,8 @@ in {
     };
   };
 
+  latexcodec = callPackage ../development/python-modules/latexcodec {};
+
   libsexy = callPackage ../development/python-modules/libsexy {
     libsexy = pkgs.libsexy;
   };
@@ -5721,6 +5725,7 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  oset = callPackage ../development/python-modules/oset { };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
@@ -5963,6 +5968,10 @@ in {
       platforms = platforms.all;
     };
   };
+
+  pybtex = callPackage ../development/python-modules/pybtex {};
+
+  pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils {};
 
   pycallgraph = buildPythonPackage rec {
     name = "pycallgraph-${version}";
@@ -13061,9 +13070,7 @@ in {
       sha256 = "1a1h0lmfl56a2a9xqhacnjclv81nv3906vdylalybxrk4bhrm3hj";
     };
 
-    prePatch = ''
-      sed -i -e "s|if type(driver_id)==int|if type(driver_id) in (int, long)|g" cdio.py
-    '';
+    prePatch = "sed -i -e '/DRIVER_BSDI/d' pycdio.py";
 
     preConfigure = ''
       patchShebangs .
@@ -14174,11 +14181,11 @@ in {
       url = "mirror://pypi/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
       sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
-    propagatedBuildInputs = [ pkgs.mesa pkgs.freeglut self.pillow ];
+    propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut self.pillow ];
     patchPhase = ''
       sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
       sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-      sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+      sed -i "s|'GLU',|'${pkgs.libGLU_combined}/lib/libGLU.so',|" OpenGL/platform/glx.py
       sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
     '';
     meta = {
@@ -16264,6 +16271,8 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
+
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "sphinxcontrib-blockdiag";
@@ -16325,6 +16334,8 @@ in {
       license = "BSD";
     };
   });
+
+  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
 
   sphinxcontrib_newsfeed = buildPythonPackage (rec {
     name = "sphinxcontrib-newsfeed-${version}";
@@ -21067,7 +21078,7 @@ EOF
       sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
     };
     disabled = isPy3k; # Judging from SyntaxError
-    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
+    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.libGLU_combined pkgs.xorg.libXi ];
   };
 
   smugpy = callPackage ../development/python-modules/smugpy { };
@@ -21268,6 +21279,10 @@ EOF
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   us = callPackage ../development/python-modules/us { };
+
+  wsproto = callPackage ../development/python-modules/wsproto { };
+
+  h11 = callPackage ../development/python-modules/h11 { };
 });
 
 in fix' (extends overrides packages)

@@ -2,7 +2,7 @@
   flex, libtiff, libjpeg, libpng, libexif, zlib, perl, libX11,
   perlXMLParser, pythonPackages, gettext, intltool, babl, gegl,
   glib, makedepend, xf86vidmodeproto, xineramaproto, libXmu, openexr,
-  mesa, libXext, libXpm, libXau, libXxf86vm, pixman, libpthreadstubs, fltk } :
+  libGLU_combined, libXext, libXpm, libXau, libXxf86vm, pixman, libpthreadstubs, fltk } :
 
 let
   inherit (pythonPackages) python pygtk;
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libpng gtk2 freetype fontconfig lcms flex libtiff libjpeg
     libexif zlib perl libX11 perlXMLParser python pygtk gettext intltool babl
-    gegl glib makedepend xf86vidmodeproto xineramaproto libXmu openexr mesa
+    gegl glib makedepend xf86vidmodeproto xineramaproto libXmu openexr libGLU_combined
     libXext libXpm libXau libXxf86vm pixman libpthreadstubs fltk
   ];
 

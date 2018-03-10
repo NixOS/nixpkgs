@@ -1,9 +1,9 @@
-{ stdenv, buildEnv, lib, fetchurl, mesa_noglu, ioquake3, makeWrapper }:
+{ stdenv, buildEnv, lib, fetchurl, libGL, ioquake3, makeWrapper }:
 
 { paks, name ? (stdenv.lib.head paks).name, description ? "" }:
 
 let
-  libPath = lib.makeLibraryPath [ mesa_noglu stdenv.cc.cc ];
+  libPath = lib.makeLibraryPath [ libGL stdenv.cc.cc ];
   env = buildEnv {
     name = "quake3-env";
     paths = [ ioquake3 ] ++ paks;

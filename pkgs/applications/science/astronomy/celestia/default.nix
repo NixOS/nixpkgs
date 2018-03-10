@@ -1,5 +1,5 @@
 { stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, mesa, pkgconfig, perl, autoreconfHook, glib, cairo
+, lua, libGLU_combined, pkgconfig, perl, autoreconfHook, glib, cairo
 , pango, gdk_pixbuf, atk
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu mesa lua
+  buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu libGLU_combined lua
     perl autoreconfHook ];
 
   patchPhase = ''

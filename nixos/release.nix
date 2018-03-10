@@ -1,4 +1,4 @@
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 }:
@@ -16,7 +16,11 @@ let
     inherit system;
   } // args);
 
-  callTestOnTheseSystems = systems: fn: args: forTheseSystems systems (system: hydraJob (importTest fn args system));
+  # Note: only supportedSystems are considered.
+  callTestOnTheseSystems = systems: fn: args:
+    forTheseSystems
+      (intersectLists supportedSystems systems)
+      (system: hydraJob (importTest fn args system));
   callTest = callTestOnTheseSystems supportedSystems;
 
   callSubTests = callSubTestsOnTheseSystems supportedSystems;
@@ -231,7 +235,7 @@ in rec {
   tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.ceph = callTestOnTheseSystems ["x86_64-linux"] tests/ceph.nix {};
-  tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
+  tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -252,8 +256,8 @@ in rec {
   tests.dnscrypt-proxy = callTestOnTheseSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
-  tests.ec2-nixops = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops;
-  tests.ec2-config = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config;
+  tests.ec2-nixops = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
+  tests.ec2-config = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
   tests.elk = callSubTestsOnTheseSystems ["x86_64-linux"] tests/elk.nix {};
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
@@ -296,6 +300,7 @@ in rec {
   ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #tests.kubernetes.e2e = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};
   tests.kubernetes.rbac = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/rbac.nix {};
+  tests.kubernetes = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};

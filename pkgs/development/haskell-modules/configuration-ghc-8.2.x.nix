@@ -86,4 +86,23 @@ self: super: {
   # https://github.com/purescript/purescript/issues/3189
   purescript = doJailbreak (super.purescript);
 
+  # Needs text >=1.2.3.0 && <1.3, which is not the default yet.
+  Cabal_2_2_0_0 = super.Cabal_2_2_0_0.overrideScope (self: super: {
+    text = self.text_1_2_3_0;
+  });
+
+  # Needs Cabal 2.2.x, which is not the default.
+  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
+  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    text = self.text_1_2_3_0;
+  });
+
 }

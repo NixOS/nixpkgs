@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, freeglut, mesa, zlib, swig, python, doxygen, xorg }:
+{ stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU_combined, zlib, swig, python, doxygen, xorg }:
 
 stdenv.mkDerivation rec
 {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec
   outputs = [ "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut mesa zlib swig python xorg.libXi xorg.libXmu ];
+  buildInputs = [ freeglut libGLU_combined zlib swig python xorg.libXi xorg.libXmu ];
 
   enableParallelBuilding = true;
 

@@ -50,8 +50,6 @@
 
     lightyear = callPackage ./lightyear.nix {};
 
-    optparse = callPackage ./optparse.nix {};
-
     wl-pprint = callPackage ./wl-pprint.nix {};
 
     specdris = callPackage ./specdris.nix {};

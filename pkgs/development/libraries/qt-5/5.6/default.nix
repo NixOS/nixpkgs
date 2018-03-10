@@ -27,7 +27,7 @@ existing packages here and modify it as necessary.
 {
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 
   # options
@@ -74,7 +74,7 @@ let
       inherit mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit developerBuild decryptSslTraffic;

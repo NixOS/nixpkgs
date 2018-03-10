@@ -1,11 +1,11 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, mesa_glu, alsaLib, dbus, xkeyboardconfig, bc }:
+{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, alsaLib, dbus, xkeyboardconfig, bc }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
     "/run/opengl-driver/lib"
     (stdenv.lib.makeLibraryPath [
-      mesa_glu
+      libGLU
       xorg.libXmu
       xorg.libXi
       xorg.libXext

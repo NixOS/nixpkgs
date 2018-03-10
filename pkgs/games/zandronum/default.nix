@@ -1,5 +1,5 @@
 { stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper, callPackage
-, soundfont-fluid, SDL, mesa, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3
+, soundfont-fluid, SDL, libGLU_combined, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3
 , serverOnly ? false
 }:
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
   buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite ]
-             ++ lib.optionals (!serverOnly) [ mesa glew fmod fluidsynth gtk2 ];
+             ++ lib.optionals (!serverOnly) [ libGLU_combined glew fmod fluidsynth gtk2 ];
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper python3 ];
 

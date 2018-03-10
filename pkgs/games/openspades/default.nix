@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, cmake, unzip, zip, file
-, curl, glew , mesa_noglu, SDL2, SDL2_image, zlib, freetype, imagemagick
+, curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake imagemagick unzip zip file ];
 
   buildInputs = [
-    freetype SDL2 SDL2_image mesa_noglu zlib curl glew opusfile openal libogg
+    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
   ];
 
   cmakeFlags = [

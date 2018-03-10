@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, retroarch
-, alsaLib, fluidsynth, curl, hidapi, mesa, gettext, glib, gtk2, portaudio, SDL
+, alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
 
@@ -147,7 +147,7 @@ in with stdenv.lib.licenses;
     license = gpl2Plus;
 
     extraBuildInputs = [
-      cmake curl mesa pcre pkgconfig sfml miniupnpc
+      cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
       libevdev libudev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
@@ -240,7 +240,7 @@ in with stdenv.lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib mesa portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsaLib libGLU_combined portaudio python27 xorg.libX11 ];
   }).override {
     postPatch = ''
       # Prevent the failure during the parallel building of:
@@ -270,7 +270,7 @@ in with stdenv.lib.licenses;
     description = "Libretro port of Mupen64 Plus, GL only";
     license = gpl2;
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -298,7 +298,7 @@ in with stdenv.lib.licenses;
     description = "Parallel Mupen64plus rewrite for libretro.";
     license = gpl2;
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -328,7 +328,7 @@ in with stdenv.lib.licenses;
     };
     description = "ppsspp libretro port";
     license = gpl2;
-    extraBuildInputs = [ mesa ffmpeg ];
+    extraBuildInputs = [ libGLU_combined ffmpeg ];
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -368,7 +368,7 @@ in with stdenv.lib.licenses;
     };
     description = "Reicast libretro port";
     license = gpl2;
-    extraBuildInputs = [ mesa ];
+    extraBuildInputs = [ libGLU_combined ];
   }).override {
     buildPhase = "make";
   };
@@ -382,7 +382,7 @@ in with stdenv.lib.licenses;
     };
     description = "Libretro port of ScummVM";
     license = gpl2;
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis mesa SDL ];
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU_combined SDL ];
   }).override {
     buildPhase = "cd backends/platform/libretro/build && make";
   };

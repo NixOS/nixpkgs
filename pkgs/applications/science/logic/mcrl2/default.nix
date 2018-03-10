@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibs, cmake, subversion, mesa, qt5, boost,
+{stdenv, fetchurl, xlibs, cmake, subversion, libGLU_combined, qt5, boost,
  python27, python27Packages}:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  buildInputs = [ cmake mesa qt5.qtbase boost ];
+  buildInputs = [ cmake libGLU_combined qt5.qtbase boost ];
 
   enableParallelBuilding = true;
 

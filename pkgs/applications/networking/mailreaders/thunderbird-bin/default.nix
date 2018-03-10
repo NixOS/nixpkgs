@@ -31,7 +31,7 @@
 , libgnome
 , libgnomeui
 , defaultIconTheme
-, mesa
+, libGLU_combined
 , nspr
 , nss
 , pango
@@ -111,7 +111,7 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libGLU_combined
       nspr
       nss
       pango
