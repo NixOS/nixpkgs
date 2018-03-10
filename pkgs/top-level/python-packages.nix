@@ -474,50 +474,7 @@ in {
 
   python-sybase = callPackage ../development/python-modules/sybase {};
 
-  alot = buildPythonPackage rec {
-    rev = "0.5.1";
-    name = "alot-${rev}";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "pazz";
-      repo = "alot";
-      inherit rev;
-      sha256 = "0ipkhc5wllfq78lg47aiq4qih0yjq8ad9xkrbgc88xk8pk9166i8";
-    };
-
-    postPatch = ''
-      substituteInPlace alot/defaults/alot.rc.spec \
-        --replace "themes_dir = string(default=None)" \
-                  "themes_dir = string(default='$out/share/themes')"
-    '';
-
-    propagatedBuildInputs =
-      [ self.notmuch
-        self.urwid
-        self.urwidtrees
-        self.twisted
-        self.python_magic
-        self.configobj
-        self.pygpgme
-        self.mock
-      ];
-
-    postInstall = ''
-      mkdir -p $out/share
-      cp -r extra/themes $out/share
-      wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : '${pkgs.lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
-    '';
-
-    meta = {
-      homepage = https://github.com/pazz/alot;
-      description = "Terminal MUA using notmuch mail";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  alot = callPackage ../development/python-modules/alot {};
 
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.3";
