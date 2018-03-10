@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   # added to fix build w/gcc7
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-compare" ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isLinux [ "-Wno-error=pointer-compare" ];
 
   enableParallelBuilding = true;
 
