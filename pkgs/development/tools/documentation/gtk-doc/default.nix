@@ -1,10 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
 , docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool }:
 
-let
-  pythonEnv = python.withPackages (ps: with ps; [ six ]);
-in
-
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
   version = "1.27";
@@ -22,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-   [ pkgconfig perl pythonEnv libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
+   [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
      gnome-doc-utils dblatex gettext which itstool
    ];
 
