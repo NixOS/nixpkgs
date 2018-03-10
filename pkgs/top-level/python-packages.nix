@@ -12531,25 +12531,7 @@ in {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
-
-  polib = buildPythonPackage rec {
-    name = "polib-${version}";
-    version = "1.0.4";
-
-    src = pkgs.fetchurl {
-      url = "http://bitbucket.org/izi/polib/downloads/${name}.tar.gz";
-      sha256 = "16klwlswfbgmkzrra80fgzhic9447pk3mnr75r2fkz72bkvpcclb";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "A library to manipulate gettext files (po and mo files)";
-      homepage = "http://bitbucket.org/izi/polib/";
-      license = licenses.mit;
-    };
-  };
+  polib = callPackage ../development/python-modules/polib {};
 
   posix_ipc = buildPythonPackage rec {
     name = "posix_ipc-${version}";
