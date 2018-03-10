@@ -46,8 +46,6 @@ rec {
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
-  masari = callPackage ./masari.nix { };
-
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
 
