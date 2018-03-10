@@ -6578,7 +6578,7 @@ with pkgs;
 
   mono = mono4;
 
-  mono4 = mono40;
+  mono4 = mono48;
 
   mono40 = callPackage ../development/compilers/mono/4.0.nix {
     inherit (darwin) libobjc;
