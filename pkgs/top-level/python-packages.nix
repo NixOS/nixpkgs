@@ -5424,6 +5424,8 @@ in {
     };
   };
 
+  mal = callPackage ../development/python-modules/mal { };
+
   python-mapnik = buildPythonPackage rec {
     name = "python-mapnik-${version}";
     version = "3.0.13";
