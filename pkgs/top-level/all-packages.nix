@@ -6576,18 +6576,16 @@ with pkgs;
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = mono40;
+  mono = mono4;
+
+  mono4 = mono40;
 
   mono40 = callPackage ../development/compilers/mono/4.0.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  mono44 = lowPrio (callPackage ../development/compilers/mono/4.4.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
+  # eventsource require 4.6.1 explicitly, tomboy fails with any newer
   mono46 = lowPrio (callPackage ../development/compilers/mono/4.6.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -6598,15 +6596,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
+  mono5 = mono510;
+
   mono50 = lowPrio (callPackage ../development/compilers/mono/5.0.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
-  mono54 = lowPrio (callPackage ../development/compilers/mono/5.4.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
 
   mono510 = lowPrio (callPackage ../development/compilers/mono/5.10.nix {
     inherit (darwin) libobjc;
@@ -15354,7 +15350,7 @@ with pkgs;
   evolution-data-server = gnome3.evolution-data-server;
 
   keepass = callPackage ../applications/misc/keepass {
-    buildDotnetPackage = buildDotnetPackage.override { mono = mono54; };
+    buildDotnetPackage = buildDotnetPackage.override { mono = mono510; };
   };
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
