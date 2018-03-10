@@ -7478,7 +7478,9 @@ with pkgs;
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
   bison = bison3;
 
-  blackmagic = callPackage ../development/tools/misc/blackmagic { };
+  blackmagic = callPackage ../development/tools/misc/blackmagic {
+    stdenv = overrideCC stdenv gcc6;
+  };
 
   bloaty = callPackage ../development/tools/bloaty { };
 
