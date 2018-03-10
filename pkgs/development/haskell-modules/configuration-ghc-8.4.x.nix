@@ -61,6 +61,11 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## free >=4.9 && <5
+  either = super.either_5;
+
+  ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
@@ -124,6 +129,11 @@ self: super: {
     ## QuickCheck >=2.3 && <2.10
     doCheck         = false;
   });
+
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## doctest >=0.7 && <0.14
+  turtle = super.turtle_1_5_4;
 
   ## Needs bump to a versioned attribute
   ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
