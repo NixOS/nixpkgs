@@ -784,4 +784,11 @@ self: super: {
   # Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
 
+  # https://github.com/RazvanRanca/GenericPretty/issues/2
+  GenericPretty = appendPatch super.GenericPretty (pkgs.fetchpatch
+    { url = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
+      sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
+    }
+  );
+
 }
