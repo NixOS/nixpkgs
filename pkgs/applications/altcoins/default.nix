@@ -31,8 +31,8 @@ rec {
 
   dero = callPackage ./dero.nix { };
 
-  dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
-  dogecoind = callPackage ./dogecoin.nix { withGui = false; };
+  dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
   ethsign = callPackage ./ethsign { };
 
