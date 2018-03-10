@@ -936,8 +936,9 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Use latest version to support newer QuickCheck and base libraries.
-  ChasingBottoms = self.ChasingBottoms_1_3_1_4;
+  # Disable test suite because it sporadically OOMs even with 16G.
+  # Jailbreak for QuickCheck >=2.3 && <2.11, base >=4.2 && <4.11.
+  ChasingBottoms = doJailbreak (dontCheck super.ChasingBottoms);
 
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
