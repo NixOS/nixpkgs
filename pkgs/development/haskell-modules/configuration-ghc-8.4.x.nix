@@ -588,12 +588,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  ChasingBottoms = overrideCabal super.ChasingBottoms (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.3 && <2.11, base >=4.2 && <4.11
-    jailbreak       = true;
-  });
-
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
