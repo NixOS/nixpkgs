@@ -149,8 +149,8 @@ rec {
     };
   };
 
-  xen-vanilla = xen_4_5-vanilla;
-  xen-slim = xen_4_5-slim;
-  xen-light = xen_4_5-light;
+  xen-vanilla = xen_4_8-vanilla;
+  xen-slim = xen_4_8-slim;
+  xen-light = xen_4_8-light;
 
 }
