@@ -759,7 +759,8 @@ self: super: {
   });
 
   # https://github.com/haskell/HTTP/pull/114
-  HTTP = doJailbreak super.HTTP;
+  HTTP = self.HTTP_4000_3_10;
+  HTTP_4000_3_10 = dontCheck super.HTTP_4000_3_10;
 
   # Older versions don't compile.
   haddock-library = self.haddock-library_1_5_0_1;
