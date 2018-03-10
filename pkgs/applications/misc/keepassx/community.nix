@@ -14,6 +14,7 @@
 , yubikey-personalization
 , libXi
 , qtx11extras
+, qtmacextras
 
 , withKeePassBrowser ? true
 , withKeePassSSHAgent ? true
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     qtx11extras
     yubikey-personalization
     zlib
-  ];
+  ] ++ optionals (stdenv.isDarwin) [ qtmacextras ];
 
   postInstall = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
