@@ -794,4 +794,7 @@ self: super: {
     }
   );
 
+  # https://github.com/haskell/hackage-security/issues/211
+  hackage-security = doJailbreak super.hackage-security;
+
 }
