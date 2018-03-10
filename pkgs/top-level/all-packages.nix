@@ -12779,6 +12779,8 @@ in
 
   sbc = callPackage ../development/libraries/sbc { };
 
+  scriptcommunicator = libsForQt5.callPackage ../tools/misc/scriptcommunicator { };
+
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
   SDL = callPackage ../development/libraries/SDL ({
