@@ -14,7 +14,7 @@
 }:
 
 /** Packaging design:
-  - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
+  - The basic mesa ($out) contains headers and libraries (GLU is in libGLU now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI drivers are compiled into $drivers output, which is much bigger and

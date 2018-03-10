@@ -190,5 +190,6 @@ in mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio ];
+  hydraPlatforms = if broken then [] else ghc.meta.platforms;
   inherit broken;
 })

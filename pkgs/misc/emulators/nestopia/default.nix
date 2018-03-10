@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3, mesa_glu
-, makeWrapper, mesa, libarchive, libao, unzip, xdg_utils, gsettings-desktop-schemas
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3
+, makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils, gsettings-desktop-schemas
 , epoxy, gdk_pixbuf, gnome3, wrapGAppsHook
 }:
 
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
     epoxy
     gtk3
     gdk_pixbuf
-    mesa_glu
-    mesa
+    libGLU_combined
     libarchive
     libao
     unzip

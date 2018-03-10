@@ -48,7 +48,7 @@ let
     # Verified games requirements
     xlibs.libXmu
     xlibs.libxcb
-    mesa_glu
+    libGLU
     libuuid
     libogg
     libvorbis

@@ -1,4 +1,4 @@
-{ stdenv, requireFile, makeWrapper, which, zlib, mesa_noglu, glib, xorg, libxkbcommon
+{ stdenv, requireFile, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
 , xdg_utils
 # For glewinfo
 , libXmu, libXi, libXext }:
@@ -7,7 +7,7 @@ let
   packages = [
     stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext
   ];
-  libPath = "${stdenv.lib.makeLibraryPath packages}:${mesa_noglu.driverLink}/lib";
+  libPath = "${stdenv.lib.makeLibraryPath packages}:${libGL.driverLink}/lib";
 in
 stdenv.mkDerivation rec {
   name = "genymotion-${version}";

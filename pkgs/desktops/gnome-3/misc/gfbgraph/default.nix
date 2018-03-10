@@ -1,11 +1,14 @@
 { stdenv, intltool, fetchurl, pkgconfig, glib
 , gnome3, libsoup, json-glib }:
 
-stdenv.mkDerivation rec {
-  name = "gfbgraph-0.2.3";
+let
+  pname = "gfbgraph";
+  version = "0.2.3";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gfbgraph/0.2/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1dp0v8ia35fxs9yhnqpxj3ir5lh018jlbiwifjfn8ayy7h47j4fs";
   };
 
@@ -14,6 +17,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libsoup json-glib gnome3.rest ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "GLib/GObject wrapper for the Facebook Graph API";

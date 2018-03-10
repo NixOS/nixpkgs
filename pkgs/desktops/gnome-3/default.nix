@@ -23,7 +23,7 @@ let
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
-    pkgs.desktop-file-utils pkgs.ibus
+    pkgs.desktop-file-utils
     pkgs.shared-mime-info # for update-mime-database
     glib # for gsettings
     gtk3.out # for gtk-update-icon-cache
@@ -52,8 +52,11 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
+  inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf
+    easytag meld orca rhythmbox shotwell
     clutter clutter-gst clutter-gtk cogl gtkvnc;
+
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };

@@ -4,7 +4,7 @@
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  version = "2.0.3";
+  version = "2.1.0";
 
   disabled = !isPy3k;
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "1rdnzpgyk5cnx4xc3c7k11v2x9xpihgjpq14fib80jfpcqggw687";
+    sha256 = "1lbpn0l796ar77amqy8dap30zxmsn6as8y2lbmp4lk8m9awscwi8";
   };
 
   nativeBuildInputs = [ pytestrunner ];

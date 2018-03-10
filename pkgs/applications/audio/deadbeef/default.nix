@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "Ultimate Music Player for GNU/Linux";
     homepage = http://deadbeef.sourceforge.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];
     repositories.git = "https://github.com/Alexey-Yakovenko/deadbeef";
   };

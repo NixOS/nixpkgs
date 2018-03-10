@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ruby, opencl-headers, mesa_noglu }:
+{stdenv, fetchurl, ruby, opencl-headers, libGL }:
 
 stdenv.mkDerivation rec {
   name = "ocl-icd-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ opencl-headers ];
 
   postPatch = ''
-    sed -i 's,"/etc/OpenCL/vendors","${mesa_noglu.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
+    sed -i 's,"/etc/OpenCL/vendors","${libGL.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
   '';
 
   meta = with stdenv.lib; {

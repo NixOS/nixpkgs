@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     description = ''Common Lisp launcher script'';
     license = stdenv.lib.licenses.llgpl21 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

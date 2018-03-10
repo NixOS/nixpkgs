@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
-, openal, libpng, libvorbis, mesa_glu, SDL2, SDL2_image, SDL2_ttf }:
+, openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
 let
   pname = "tome4";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   # tome4 vendors quite a few libraries so someone might want to look into avoiding that...
   buildInputs = [
-    mesa_glu openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
+    libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
 
   enableParallelBuilding = true;

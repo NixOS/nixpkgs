@@ -61,10 +61,15 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## free >=4.9 && <5
+  either = super.either_5;
+
+  ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (IterT m a))
   ##         arising from the superclasses of an instance declaration
   ##       from the context: (Monad m, Monoid a)
-  free = super.free_5;
+  free = super.free_5_0_1;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
@@ -124,6 +129,11 @@ self: super: {
     ## QuickCheck >=2.3 && <2.10
     doCheck         = false;
   });
+
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## doctest >=0.7 && <0.14
+  turtle = super.turtle_1_5_4;
 
   ## Needs bump to a versioned attribute
   ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
@@ -323,6 +333,7 @@ self: super: {
       rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
       sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
     };
+    jailbreak = true;   # https://github.com/lpsmith/blaze-builder/issues/12
   });
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
@@ -441,6 +452,7 @@ self: super: {
       rev    = "34f4593a520176a917b74b8c7fcbbfbd72fb8178";
       sha256 = "1aiklvf08w1hx2jn9n3sm61mfvdx4fkabszkjliapih2yjpmi3hq";
     };
+    jailbreak = true;   # base >=4 && <4.11
   });
 
   ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
@@ -751,5 +763,27 @@ self: super: {
     ## base >=4.8 && <4.11
     jailbreak       = true;
   });
+
+  # https://github.com/haskell/HTTP/pull/114
+  HTTP = doJailbreak super.HTTP;
+
+  # Older versions don't compile.
+  haddock-library = self.haddock-library_1_5_0_1;
+  haddock-library_1_5_0_1 = dontHaddock (dontCheck super.haddock-library_1_5_0_1);
+
+  # https://github.com/hslua/hslua-module-text/issues/1
+  hslua-module-text = doJailbreak super.hslua-module-text;
+
+  # https://github.com/phadej/tree-diff/issues/15
+  tree-diff = doJailbreak super.tree-diff;
+
+  # https://github.com/jgm/doctemplates/issues/2
+  doctemplates = markBrokenVersion "0.2.1" super.doctemplates;
+
+  # https://github.com/bitemyapp/esqueleto/issues/77
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
+
+  # Older versions don't compile.
+  hackage-db = super.hackage-db_2_0_1;
 
 }

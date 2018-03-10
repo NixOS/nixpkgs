@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, unzip, ftgl, glew, asciidoc
-, cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, cmake, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-     cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     cmake libGLU_combined zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
      gettext intltool perl unzip ftgl glew asciidoc
      gtkmm2 glibmm gtkglext pangox_compat libXmu

@@ -29,7 +29,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli ] # Since 1.12
+      ++ lib.optionals is20 [ brotli ] # Since 1.12
       ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
@@ -116,7 +116,7 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = (common rec {
+  nix1 = (common rec {
     name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
@@ -124,6 +124,16 @@ in rec {
     };
   }) // { perl-bindings = nixStable; };
 
+  nixStable = (common rec {
+    name = "nix-2.0";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+    };
+  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+
+  nixUnstable = nix;
+/*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
     suffix = "pre5968_a6c0b773";
@@ -135,5 +145,6 @@ in rec {
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+*/
 
 }

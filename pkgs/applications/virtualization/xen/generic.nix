@@ -154,12 +154,12 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/xenstat/Makefile \
       --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
-    ${optionalString (config.version >= "4.8") ''
+    ${optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
       substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
         --replace /bin/mkdir mkdir
     ''}
 
-    ${optionalString (config.version < "4.6") ''
+    ${optionalString (builtins.compareVersions config.version "4.6" < 0) ''
       # TODO: use this as a template and support our own if-up scripts instead?
       substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
         --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts

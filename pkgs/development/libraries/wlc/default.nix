@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
-, wayland, pixman, libxkbcommon, libinput, xcbutilwm, xcbutilimage, mesa_noglu
+, wayland, pixman, libxkbcommon, libinput, xcbutilwm, xcbutilimage, libGL
 , libX11, dbus_libs, wayland-protocols
 , libpthreadstubs, libXdmcp, libXext
 , withOptionalPackages ? true, zlib, valgrind, doxygen
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    wayland pixman libxkbcommon libinput xcbutilwm xcbutilimage mesa_noglu
+    wayland pixman libxkbcommon libinput xcbutilwm xcbutilimage libGL
     libX11 dbus_libs wayland-protocols
     libpthreadstubs libXdmcp libXext ]
     ++ stdenv.lib.optionals withOptionalPackages [ zlib valgrind doxygen ];
