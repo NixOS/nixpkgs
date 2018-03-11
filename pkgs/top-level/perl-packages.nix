@@ -1832,18 +1832,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ClassAccessor];
   };
 
-  ClassAccessorFast = buildPerlPackage {
-    name = "Class-Accessor-Fast-0.34";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.34.tar.gz;
-      sha256 = "1z6fqg0yz8gay15r1iasslv8f1n1mzjkrhs47fvbj3rqz36y1cfd";
-    };
-    meta = {
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
-  };
+  ClassAccessorFast = ClassAccessor;
 
   ClassAccessorGrouped = buildPerlPackage {
     name = "Class-Accessor-Grouped-0.10012";
