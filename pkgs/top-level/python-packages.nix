@@ -4759,8 +4759,7 @@ in {
       description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.linux; # can only test on linux
+      maintainers = with maintainers; [ matthiasbeyer ];
     };
 
   };
