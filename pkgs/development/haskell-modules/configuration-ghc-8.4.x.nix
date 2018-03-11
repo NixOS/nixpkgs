@@ -42,6 +42,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # https://github.com/bitemyapp/esqueleto/issues/77
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
+
+  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
+  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
@@ -56,7 +61,8 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## ghc >=7.0 && <8.4
     ##
-    ##        uncaught exception: IOException of type NoSuchThing (cabal: rawSystem: runInteractiveProcess: exec: does not exist (No such file or directory))
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck >=2.11.3
     doCheck         = false;
   });
 
@@ -78,12 +84,24 @@ self: super: {
   funcmp = super.funcmp_1_9;
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## Cabal <2.2
+  ## Older versions don't compile.
+  hackage-db = super.hackage-db_2_0_1;
+
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## base >=4.5 && <4.11
+  ## Older versions don't compile
+  haddock-library = super.haddock-library_1_5_0_1;
+
+  ## Needs bump to a versioned attribute
   hspec = overrideCabal super.hspec_2_4_8 (drv: {
     ## Setup: Encountered missing dependencies:
     ## hspec-core ==2.4.4, hspec-discover ==2.4.4
     ##
-    ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-2.4.8’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
-    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘stringbuilder-0.5.1’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-2.4.8’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘stringbuilder-0.5.1’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
     ## infinite recursion encountered, at undefined position
     ## test suite causes an infinite loop
     doCheck         = false;
@@ -91,14 +109,15 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.5.1 && <2.11
+    ##     • No instance for (Semigroup Summary)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid Summary’
     ##
-    ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-core-2.4.8’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
-    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘silently-1.2.5’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
-    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘temporary-1.2.1.1’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
-    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘base-compat-0.9.3’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
-    ## while evaluating the attribute ‘propagatedBuildInputs’ of the derivation ‘hspec-2.4.8’ at /home/deepfire/src/nixpkgs/pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## error: while evaluating the attribute ‘buildInputs’ of the derivation ‘hspec-core-2.4.8’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘silently-1.2.5’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘temporary-1.2.1.1’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘buildInputs’ of the derivation ‘base-compat-0.9.3’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
+    ## while evaluating the attribute ‘propagatedBuildInputs’ of the derivation ‘hspec-2.4.8’ at nixpkgs://pkgs/stdenv/generic/make-derivation.nix:148:11:
     ## infinite recursion encountered, at undefined position
     doCheck         = false;
   });
@@ -107,6 +126,13 @@ self: super: {
   ## Setup: Encountered missing dependencies:
   ## hspec-discover ==2.4.8
   hspec-discover = super.hspec-discover_2_4_8;
+
+  ## Needs bump to a versioned attribute
+  HTTP = overrideCabal super.HTTP_4000_3_10 (drv: {
+    ##
+    ## https://github.com/haskell/HTTP/pull/114
+    doCheck         = false;
+  });
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
@@ -136,9 +162,8 @@ self: super: {
   turtle = super.turtle_1_5_4;
 
   ## Needs bump to a versioned attribute
-  ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
-  ##    |
-  ## 80 | import Data.Semigroup (Semigroup(..), Monoid(..))
+  ## Setup: Encountered missing dependencies:
+  ## base >=4 && <4.11
   unordered-containers = super.unordered-containers_0_2_9_0;
 
 
@@ -168,7 +193,7 @@ self: super: {
     };
     ## Setup: Encountered missing dependencies:
     ## th-abstraction >=0.2.2 && <1
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ th-abstraction ]);
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ th-abstraction ]);
   });
 
   ## Upstreamed, awaiting a Hackage release
@@ -187,7 +212,6 @@ self: super: {
   haskell-gi-base = overrideCabal super.haskell-gi-base (drv: {
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.21.*
-    ## cannot build derivation ‘/nix/store/qvnrni6j2sz8z26kmjz1hgxfxvggkvjl-gi-cairo-1.0.14.drv’: 1 dependencies couldn't be built
     src = pkgs.fetchFromGitHub {
       owner  = "haskell-gi";
       repo   = "haskell-gi";
@@ -323,6 +347,7 @@ self: super: {
   ## Unmerged
 
   ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
+  ## Issue: https://github.com/lpsmith/blaze-builder/issues/12
   blaze-builder = overrideCabal super.blaze-builder (drv: {
     ##     • No instance for (Semigroup Poke)
     ##         arising from the superclasses of an instance declaration
@@ -333,7 +358,9 @@ self: super: {
       rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
       sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
     };
-    jailbreak = true;   # https://github.com/lpsmith/blaze-builder/issues/12
+    ## Setup: Encountered missing dependencies:
+    ## base >=4 && <4.11
+    jailbreak       = true;
   });
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
@@ -355,7 +382,7 @@ self: super: {
     doCheck         = false;
     ## Setup: Encountered missing dependencies:
     ## data-or ==1.0.*
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-or ]);
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-or ]);
   });
 
   ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
@@ -398,7 +425,7 @@ self: super: {
     };
     ## Setup: Encountered missing dependencies:
     ## http-client -any, http-client-tls -any, http-types -any
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ http-client http-client-tls http-types ]);
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ http-client http-client-tls http-types ]);
   });
 
   ## Unmerged.  PR: https://github.com/hanshoglund/monadplus/pull/3
@@ -427,7 +454,7 @@ self: super: {
     };
     ## haddock: internal error: internal: extractDecl (ClsInstD)
     ## CallStack (from HasCallStack):
-    ##   error, called at utils/haddock/haddock-api/src/Haddock/Interface/Create.hs:1058:16 in main:Haddock.Interface.Create
+    ##   error, called at utils/haddock/haddock-api/src/Haddock/Interface/Create.hs:1067:16 in main:Haddock.Interface.Create
     doHaddock       = false;
     ## Setup: Encountered missing dependencies:
     ## base >=4.7 && <4.11, bifunctors >=5.2 && <5.5
@@ -438,7 +465,7 @@ self: super: {
     ## monad-control -any,
     ## prim-uniq -any,
     ## reflection -any,
-    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
   });
 
   ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
@@ -452,7 +479,7 @@ self: super: {
       rev    = "34f4593a520176a917b74b8c7fcbbfbd72fb8178";
       sha256 = "1aiklvf08w1hx2jn9n3sm61mfvdx4fkabszkjliapih2yjpmi3hq";
     };
-    jailbreak = true;   # base >=4 && <4.11
+    jailbreak       = true;
   });
 
   ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
@@ -575,6 +602,16 @@ self: super: {
     jailbreak       = true;
   });
 
+  boxes = overrideCabal super.boxes (drv: {
+    ## https://github.com/treeowl/boxes/issues/29
+    patches = (drv.patches or []) ++ [
+      (pkgs.fetchpatch
+       { url    = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
+         sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
+       })
+    ];
+  });
+
   cabal2nix = super.cabal2nix.override {
     ##     • No instance for (Semigroup (List a))
     ##         arising from the 'deriving' clause of a data type declaration
@@ -595,10 +632,42 @@ self: super: {
     jailbreak       = true;
   });
 
+  ## Issue: https://github.com/jgm/doctemplates/issues/2
+  doctemplates = overrideCabal super.doctemplates (drv: {
+    patches = (drv.patches or []) ++ [
+      (pkgs.fetchpatch
+       { url    = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
+         sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
+       })
+    ];
+  });
+
   exception-transformers = overrideCabal super.exception-transformers (drv: {
     ## Setup: Encountered missing dependencies:
     ## HUnit >=1.2 && <1.6
     jailbreak       = true;
+  });
+
+  GenericPretty = overrideCabal super.GenericPretty (drv: {
+    ## https://github.com/RazvanRanca/GenericPretty/issues/2
+    patches = (drv.patches or []) ++ [
+      (pkgs.fetchpatch
+       { url    = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
+         sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
+       })
+    ];
+  });
+
+  hackage-security = overrideCabal super.hackage-security (drv: {
+    ## https://github.com/haskell/hackage-security/issues/211
+    jailbreak       = true;
+  });
+
+  haddock-library_1_5_0_1 = overrideCabal super.haddock-library_1_5_0_1 (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck ==2.11.*
+    doCheck         = false;
+    doHaddock       = false;
   });
 
   hashable = overrideCabal super.hashable (drv: {
@@ -700,6 +769,16 @@ self: super: {
     doCheck         = false;
   });
 
+  setlocale = overrideCabal super.setlocale (drv: {
+    ## https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
+    jailbreak       = true;
+  });
+
+  stylish-cabal = overrideCabal super.stylish-cabal (drv: {
+    ## https://github.com/pikajude/stylish-cabal/issues/6
+    doHaddock       = false;
+  });
+
   tasty-expected-failure = overrideCabal super.tasty-expected-failure (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
@@ -727,17 +806,18 @@ self: super: {
     ##        uncaught exception: ErrorCall (Data.Text.Array.new: size overflow
     ##        CallStack (from HasCallStack):
     ##          error, called at libraries/text/Data/Text/Array.hs:132:20 in text-1.2.3.0:Data.Text.Array)
-    ## Randomized with seed 2114194349
-    ## Finished in 0.0017 seconds
+    ## Randomized with seed 1899912238
+    ## Finished in 0.0027 seconds
     doCheck         = false;
     ## Setup: Encountered missing dependencies:
     ## extra >=1.4.10 && <1.5, lens ==4.14.*
     jailbreak       = true;
   });
 
-  these = overrideCabal super.these (drv: {
+  ## Issue: https://github.com/phadej/tree-diff/issues/15
+  tree-diff = overrideCabal super.tree-diff (drv: {
     ## Setup: Encountered missing dependencies:
-    ## base >=4.5 && <4.11
+    ## base >=4.7 && <4.11
     jailbreak       = true;
   });
 
@@ -757,53 +837,5 @@ self: super: {
     ## base >=4.8 && <4.11
     jailbreak       = true;
   });
-
-  # https://github.com/haskell/HTTP/pull/114
-  HTTP = self.HTTP_4000_3_10;
-  HTTP_4000_3_10 = dontCheck super.HTTP_4000_3_10;
-
-  # Older versions don't compile.
-  haddock-library = self.haddock-library_1_5_0_1;
-  haddock-library_1_5_0_1 = dontHaddock (dontCheck super.haddock-library_1_5_0_1);
-
-  # https://github.com/phadej/tree-diff/issues/15
-  tree-diff = doJailbreak super.tree-diff;
-
-  # https://github.com/jgm/doctemplates/issues/2
-  doctemplates = appendPatch super.doctemplates (pkgs.fetchpatch
-    { url = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
-      sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
-    });
-
-  # https://github.com/bitemyapp/esqueleto/issues/77
-  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
-
-  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
-  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
-
-  # Older versions don't compile.
-  hackage-db = super.hackage-db_2_0_1;
-
-  # https://github.com/RazvanRanca/GenericPretty/issues/2
-  GenericPretty = appendPatch super.GenericPretty (pkgs.fetchpatch
-    { url = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
-      sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
-    }
-  );
-
-  # https://github.com/haskell/hackage-security/issues/211
-  hackage-security = doJailbreak super.hackage-security;
-
-  # https://github.com/pikajude/stylish-cabal/issues/6
-  stylish-cabal = dontHaddock super.stylish-cabal;
-
-  # https://github.com/treeowl/boxes/issues/29
-  boxes = appendPatch super.boxes (pkgs.fetchpatch
-    { url = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
-      sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
-    });
-
-  # https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
-  setlocale = doJailbreak super.setlocale;
 
 }
