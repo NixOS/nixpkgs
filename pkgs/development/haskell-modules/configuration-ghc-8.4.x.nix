@@ -182,21 +182,6 @@ self: super: {
   ## Upstreamed
 
   ## Upstreamed, awaiting a Hackage release
-  deriving-compat = overrideCabal super.deriving-compat (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## template-haskell >=2.5 && <2.13
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-compat";
-      repo   = "deriving-compat";
-      rev    = "e592c6f8af53866dcf6f5700175a3b02bb4f77d3";
-      sha256 = "0h4qadk7fmz5v3lbdsxfbf3ha81f73xn7v0s6wia16ika5yvfggs";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## th-abstraction >=0.2.2 && <1
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ th-abstraction ]);
-  });
-
-  ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*
