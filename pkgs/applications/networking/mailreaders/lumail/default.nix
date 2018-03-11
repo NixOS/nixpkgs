@@ -1,11 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
-, perl, perlPackages, makeWrapper
+{ stdenv, fetchurl, pkgconfig, lua5_2, file, ncurses, gmime, pcre-cpp
+, perl, perlPackages
 , debugBuild ? false
 , alternativeGlobalConfigFilePath ? null
 }:
 
 let
-  version = "3.1";
+  version    = "3.1";
+  binaryName = if debugBuild then "lumail2-debug" else "lumail2";
+  alternativeConfig = builtins.toFile "lumail2.lua"
+    (builtins.readFile alternativeGlobalConfigFilePath);
+
+  globalConfig = if isNull alternativeGlobalConfigFilePath then ''
+    mkdir -p $out/etc/lumail2
+    cp global.config.lua $out/etc/lumail2.lua
+    for n in ./lib/*.lua; do
+      cp "$n" $out/etc/lumail2/
+    done
+  '' else ''
+    ln -s ${alternativeConfig} $out/etc/lumail2.lua
+  '';
+
+  getPath  = type : "${lua}/lib/?.${type};";
+  luaPath  = getPath "lua";
+  luaCPath = getPath "so";
 in
 stdenv.mkDerivation {
   name = "lumail-${version}";
