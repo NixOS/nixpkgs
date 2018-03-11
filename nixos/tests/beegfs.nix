@@ -28,6 +28,7 @@ let
       text = "ThisIsALousySecret";
       mode = "0600";
     };
+    nixpkgs.config.allowUnfree = true;
   };
 
 
@@ -62,6 +63,7 @@ let
         storeDir = "/data";
       };
     };
+    nixpkgs.config.allowUnfree = true;
   };
 
 in
