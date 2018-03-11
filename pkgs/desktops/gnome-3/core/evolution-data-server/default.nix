@@ -1,15 +1,15 @@
 { fetchurl, stdenv, pkgconfig, gnome3, python3, dconf
 , intltool, libsoup, libxml2, libsecret, icu, sqlite
 , p11-kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
-, vala, cmake, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
+, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.26.3";
+  version = "3.26.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "63b1ae5f76be818862f455bf841b5ebb1ec3e1f4df6d3a16dc2be348b7e0a1c5";
+    sha256 = "1v0hwlrlm23bz5dmamdavm771f4gs64fyq82argrc0nwgn2a2fp4";
   };
 
   passthru = {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig intltool python3 gperf makeWrapper
+    cmake ninja pkgconfig intltool python3 gperf makeWrapper
   ] ++ stdenv.lib.optional valaSupport vala;
   buildInputs = with gnome3; [
     glib libsoup libxml2 gtk gnome-online-accounts

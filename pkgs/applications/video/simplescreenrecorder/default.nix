@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, ffmpeg, libjack2, libX11, libXext
-, libXfixes, mesa, pkgconfig, libpulseaudio, qt4, cmake, ninja
+, libXfixes, libGLU_combined, pkgconfig, libpulseaudio, qt4, cmake, ninja
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ninja ];
   buildInputs = [
-    alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa
+    alsaLib ffmpeg libjack2 libX11 libXext libXfixes libGLU_combined
     libpulseaudio qt4
   ];
 

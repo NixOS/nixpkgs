@@ -5,23 +5,23 @@
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
-stdenv.mkDerivation rec {
-  version = "${major}.${minor}";
-  major = "0.27";
-  minor = "2";
-  name = "shotwell-${version}";
+let
+  pname = "shotwell";
+  version = "0.27.4";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/shotwell/${major}/${name}.tar.xz";
-    sha256 = "0bxc15gk2306fvxg6bg1s6c706yd89i66ldng0z102mcfi98warb";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0g2vphhpxrljpy9sryfsgaayix807i1i9plj9bay72dk0zphqab2";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig itstool gettext desktop-file-utils wrapGAppsHook
+    meson ninja vala pkgconfig itstool gettext desktop-file-utils wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkitgtk
+    gtk3 libexif libgphoto2 libsoup libxml2 sqlite webkitgtk
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
     libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
     libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";

@@ -139,8 +139,9 @@ in
   };
 
   grpc = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
   };
 
   hitimes = attrs: {
@@ -258,8 +259,9 @@ in
     ];
   };
   rugged = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
+    dontUseCmakeConfigure = true;
   };
 
   scrypt = attrs:

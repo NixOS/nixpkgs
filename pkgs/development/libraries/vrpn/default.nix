@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, mesa }:
+{ stdenv, fetchFromGitHub, unzip, cmake, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${date}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "032q295d68w34rk5q8nfqdd29s55n00bfik84y7xzkjrpspaprlh";
   };
 
-  buildInputs = [ unzip cmake mesa ];
+  buildInputs = [ unzip cmake libGLU_combined ];
 
   doCheck = false; # FIXME: test failure
   checkTarget = "test";

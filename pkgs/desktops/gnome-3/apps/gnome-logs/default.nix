@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-logs-${version}";
-  version = "3.26.2";
+  version = "3.26.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "e17ca011e7bea756bd841e027e56cfe8c214bed4817cb35732ace4aa73ff8f5c";
+    sha256 = "0cbzl38haz1m6y7gcbvvab0jcrva781izhp8xv2dzmma4xlzdw0k";
   };
 
   passthru = {

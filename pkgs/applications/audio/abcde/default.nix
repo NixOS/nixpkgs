@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
+{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, eject, mkcue, glyr
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
@@ -42,7 +42,7 @@ in
     postFixup = ''
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
         wrapProgram "$out/bin/$cmd" --prefix PATH ":" \
-          ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
+          ${stdenv.lib.makeBinPath [ "$out" which libcdio-paranoia cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
       done
     '';
 

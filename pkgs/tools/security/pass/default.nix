@@ -4,6 +4,7 @@
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
+, tombPluginSupport ? false, tomb
 }:
 
 with lib;
@@ -17,10 +18,19 @@ let
     owner  = "roddhjav";
     repo   = "pass-${p.name}";
     inherit (p) rev sha256;
-  })) [
-    { name = "import"; rev = "491935bd275f29ceac2b876b3a288011d1ce31e7"; sha256 = "02mbh05ab8h7kc30hz718d1d1vkjz43b96c7p0xnd92610d2q66q"; }
-    { name = "update"; rev = "cf576c9036fd18efb9ed29e0e9f811207b556fde"; sha256 = "1hhbrg6a2walrvla6q4cd3pgrqbcrf9brzjkb748735shxfn52hd"; }
-  ];
+  }))
+  ([
+    { name = "import";
+      rev = "491935bd275f29ceac2b876b3a288011d1ce31e7";
+      sha256 = "02mbh05ab8h7kc30hz718d1d1vkjz43b96c7p0xnd92610d2q66q"; }
+    { name = "update";
+      rev = "cf576c9036fd18efb9ed29e0e9f811207b556fde";
+      sha256 = "1hhbrg6a2walrvla6q4cd3pgrqbcrf9brzjkb748735shxfn52hd"; }
+    ] ++ stdenv.lib.optional tombPluginSupport {
+      name = "tomb";
+      rev = "3368134898a42c1b758fabac625ec240e125c6be";
+      sha256 = "0qqmxfg4w3r088qhlkhs44036mya82vjflsjjhw2hk8y0wd2i6ds"; }
+  );
 
 in stdenv.mkDerivation rec {
   version = "1.7.1";
@@ -64,7 +74,8 @@ in stdenv.mkDerivation rec {
     tree
     which
     qrencode
-  ] ++ stdenv.lib.optional stdenv.isLinux procps
+  ] ++ optional tombPluginSupport tomb
+    ++ optional stdenv.isLinux procps
     ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''

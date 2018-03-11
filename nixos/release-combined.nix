@@ -52,17 +52,17 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        nixos.iso_minimal.x86_64-linux
-        nixos.iso_minimal.i686-linux
-        nixos.iso_graphical.x86_64-linux
-        nixos.ova.x86_64-linux
+        nixos.iso_minimal.x86_64-linux or []
+        nixos.iso_minimal.i686-linux or []
+        nixos.iso_graphical.x86_64-linux or []
+        nixos.ova.x86_64-linux or []
 
         #(all nixos.tests.containers)
-        nixos.tests.chromium.x86_64-linux
+        nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
-        nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
+        nixos.tests.installer.zfsroot.x86_64-linux or [] # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
@@ -81,7 +81,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.hibernate)
-        nixos.tests.docker.x86_64-linux
+        nixos.tests.docker.x86_64-linux or []
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)

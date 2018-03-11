@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "opencpn-${version}";
-  version = "4.2.0";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "v${version}";
-    sha256 = "1m6fp9lf9ki9444h0dq6bj0vr7d0pcxkbjv3j2v76p0ksk2l8kw3";
+    sha256 = "0r6a279xhhf4jrmjb2xi5arxb4xd5wvqbs4hyyildlgpr1x7bd09";
   };
 
   nativeBuildInputs = [ pkgconfig ];

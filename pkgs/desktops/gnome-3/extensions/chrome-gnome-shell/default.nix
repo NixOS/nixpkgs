@@ -1,7 +1,7 @@
 {stdenv, fetchurl, cmake, ninja, jq, python3, gnome3, wrapGAppsHook}:
 
 let
-  version = "9";
+  version = "10";
 
   inherit (python3.pkgs) python pygobject3 requests;
 in stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${name}.tar.xz";
-    sha256 = "0j6lzlp3jvkpnkk8s99y3m14xiq94rjwjzy2pbfqgv084ahzmz8i";
+    sha256 = "1wp6qvcp758yfj8xlj15sk1d3jsb1p8136y8xxwpi9wfdjpzjs8j";
   };
 
   nativeBuildInputs = [ cmake ninja jq wrapGAppsHook ];
@@ -24,8 +24,15 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_EXTENSION=OFF" ];
   wrapPrefixVariables = [ "PYTHONPATH" ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "chrome-gnome-shell";
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "GNOME Shell integration for Chrome";
+    homepage = https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome;
     longDescription = ''
       To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome/Installation">browser extension</link>, and then set <option>services.gnome3.chrome-gnome-shell.enable</option> to <literal>true</literal>. For Firefox based browsers, you will also need to build the wrappers with <option>nixpkgs.config.firefox.enableGnomeExtensions</option> set to <literal>true</literal>.
     '';

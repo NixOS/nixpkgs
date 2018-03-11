@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
-  version = "13367";
+  version = "13478";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "1yf7cx8159njxid9qa0id7zfkr7dn83rrkgxp9kzkjn25aqji4cf";
+    sha256 = "1mc1zdcnlm14ky820cj61sid6aiq9k11kj6vzlqskvgqazc60xj4";
   };
 
   buildInputs = [ jre8 makeWrapper ];

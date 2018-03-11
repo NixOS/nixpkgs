@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, intltool, gst_all_1
 , gtk, dbus-glib, libxfce4ui, libxfce4util, xfconf
-, taglib, libnotify
+, taglib, libnotify, hicolor-icon-theme
 , withGstPlugins ? true
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   buildInputs = [
-    makeWrapper 
+    makeWrapper hicolor-icon-theme
     gtk dbus-glib libxfce4ui libxfce4util xfconf
     taglib libnotify
   ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav]);

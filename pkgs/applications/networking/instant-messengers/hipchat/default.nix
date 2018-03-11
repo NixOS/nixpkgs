@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, mesa_noglu, xcbutilkeysyms, xdg_utils, libtool }:
+, libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
 
@@ -37,7 +37,7 @@ let
     expat
     xcbutilkeysyms
     systemd
-    mesa_noglu
+    libGL
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =

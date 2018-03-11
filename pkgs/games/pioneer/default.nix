@@ -1,21 +1,21 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig
-, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, mesa
+, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
 }:
 
 stdenv.mkDerivation rec {
   name = "pioneer-${version}";
-  version = "20171001";
+  version = "20180203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "0yxw1zdvidrwc28vxfi3qpx2nq2dix2d6ylwgzq9ph8kgwv9fl5n";
+    sha256 = "0hp2mf36kj2v93hka8m8lxw2qhmnjc62wjlpw7c7ix0r8xa01i6h";
   };
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
 
-  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp mesa ];
+  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp libGLU_combined ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2}/include/SDL2"

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, perl , openssh}:
 
 stdenv.mkDerivation rec {
-  version = "3.7.5";
+  version = "3.7.7";
   name = "taktuk-${version}";
 
   buildInputs = [ perl ];
 
   src = fetchurl {
     url = "https://gforge.inria.fr/frs/download.php/33412/${name}.tar.gz";
-    sha256 = "d96ef6c63d77f32339066f143ef7e0bc00041e10724254bf15787746ad1f1070";
+    sha256 = "0w0h3ynlcxvq2nzm8hkj20g0805ww3vkw53g0qwj7wvp7p3gcvnr";
   };
 
   preBuild = ''

@@ -124,7 +124,7 @@ in {
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";

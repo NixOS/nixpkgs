@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
-, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff, libjpeg, mesa, glew, libxslt }:
+, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff, libjpeg, libGLU_combined, glew, libxslt }:
 
 stdenv.mkDerivation rec {
   version = "0.4.7.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m05l3a6ilqd7p2g3aqjpq89grb571cg8n9bpgz0y3sxskcym6sp";
   };
 
-  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew ];
+  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU_combined glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
 

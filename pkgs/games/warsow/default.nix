@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libpng, libvorbis
-, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal, freetype
+, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, libGLU_combined, openal, freetype
 , makeWrapper
 }:
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ unzip zlib curl libjpeg libpng libvorbis libtheora
-                  libXxf86dga libXxf86vm libXinerama SDL mesa openal makeWrapper
+                  libXxf86dga libXxf86vm libXinerama SDL libGLU_combined openal makeWrapper
                 ];
   installPhase = ''
     dest=$out/opt/warsow
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     p=$out/opt/warsow/warsow.*
     cur_rpath=$(patchelf --print-rpath $p)
-    patchelf --set-rpath $cur_rpath:${mesa}/lib $p
+    patchelf --set-rpath $cur_rpath:${libGLU_combined}/lib $p
   '';
   meta = with stdenv.lib; {
     description = "Multiplayer FPS game designed for competitive gaming";

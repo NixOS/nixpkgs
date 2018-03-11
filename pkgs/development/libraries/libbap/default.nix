@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libbap-${version}";
-  version = "master-2017-02-08";
+  version = "master-2018-03-01";
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-bindings";
-    rev = "b3da5bd5cdb3d646015ccdeb886b5ea8fd85a108";
-    sha256 = "0cwfyfpxbi9bm4kkpamyd7mgsm5b6j1rh217fqb5gi05wg45rkbb";
+    rev = "bd125c379a784d4265c2ddcf1f6e34bde2e568d4";
+    sha256 = "0dp90djyjc262v1b1cw5irp424a8394y86fyprdk8z741wg56m3v";
   };
 
   nativeBuildInputs = [ autoreconfHook which ];

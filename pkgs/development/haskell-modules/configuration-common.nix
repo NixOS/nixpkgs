@@ -80,7 +80,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0vvh1k7i6y4bqy6fn8z5i6ndqv6x94hvk2zh5gw99na8kfri7sxq";
+      sha256 = "0fdcv9nig896ckl9x51ximxsvja1ii8qysf6c9ickvc0511hvr9w";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -603,12 +603,12 @@ self: super: {
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_27_0; };
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_27_0; hackage-db = self.hackage-db_2_0_1; });
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_2; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -632,7 +632,7 @@ self: super: {
   phash = markBroken super.phash;
 
   # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the mesa libraries
+  # linking fails because the build doesn't pull in the libGLU_combined libraries
   fltkhs = markBroken super.fltkhs;
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
@@ -847,14 +847,14 @@ self: super: {
   # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
   # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
     http-conduit = self.http-conduit_2_3_0;
   };
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
     haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
   };
   haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # These packages depend on each other, forming an infinite loop.
@@ -1005,5 +1005,8 @@ self: super: {
 
   # Needs older hlint
   hpio = dontCheck super.hpio;
+
+  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
 
 }

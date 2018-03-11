@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "jbuilder-${version}";
-  version = "1.0+beta18";
+  version = "1.0+beta17";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "dune";
     rev = "${version}";
-    sha256 = "1xw4i5qd2ndnddzb8b14fb52qxnjpr3lr9wx3mprv4f294kdg0l6";
+    sha256 = "04pyry459hp2r2s9m5xkcq1glzp20ddz5wb1w8nzp3zgygy0431x";
   };
 
   buildInputs = [ ocaml ];

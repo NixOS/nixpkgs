@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL2_image, glew
-, mesa, boost, glm, freetype }:
+, libGLU_combined, boost, glm, freetype }:
 
 stdenv.mkDerivation rec {
   name = "logstalgia-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glew SDL2 ftgl libpng libjpeg pcre SDL2_image mesa boost
+  buildInputs = [ glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU_combined boost
                   glm freetype ];
 
   meta = with stdenv.lib; {

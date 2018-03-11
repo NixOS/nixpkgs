@@ -330,10 +330,10 @@ stdenv.mkDerivation ({
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
       if [ -d "$packageConfFile" ]; then
-        mv "$packageConfFile"/* "$packageConfDir"
+        mv "$packageConfFile/"* "$packageConfDir"
         rmdir "$packageConfFile"
       fi
-      for packageConfFile in "$packageConfDir"/*; do
+      for packageConfFile in "$packageConfDir/"*; do
         local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
@@ -354,7 +354,7 @@ stdenv.mkDerivation ({
     ''}
 
     ${optionalString enableSeparateDocOutput ''
-    for x in ${docdir "$doc"}/html/src/*.html; do
+    for x in ${docdir "$doc"}"/html/src/"*.html; do
       remove-references-to -t $out $x
     done
     mkdir -p $doc

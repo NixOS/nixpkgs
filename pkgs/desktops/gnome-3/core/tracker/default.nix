@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "tracker-${version}";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tracker/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "ece71a56c29151a76fc1b6e43c15dd1b657b37162dc948fa2487faf5ddb47fda";
+    sha256 = "1005w90vhk1cl8g6kxpy2vdzbskw2jskfjcl42lngv18q5sb4bss";
   };
 
   passthru = {

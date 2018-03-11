@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fltk, openexr, mesa, openexr_ctl }:
+{ stdenv, fetchurl, pkgconfig, fltk, openexr, libGLU_combined, openexr_ctl }:
 
 assert fltk.glSupport;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openexr fltk mesa openexr_ctl ];
+  buildInputs = [ openexr fltk libGLU_combined openexr_ctl ];
 
   meta = { 
     description = "Application for viewing OpenEXR images on a display at various exposure settings";

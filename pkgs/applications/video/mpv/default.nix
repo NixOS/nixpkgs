@@ -4,7 +4,7 @@
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
-    mesa       ? null,
+    libGLU_combined       ? null,
     libX11     ? null,
     libXext    ? null,
     libXxf86vm ? null
@@ -45,7 +45,7 @@ with stdenv.lib;
 let
   available = x: x != null;
 in
-assert x11Support         -> all available [mesa libX11 libXext libXxf86vm];
+assert x11Support         -> all available [libGLU_combined libX11 libXext libXxf86vm];
 assert waylandSupport     -> all available [wayland libxkbcommon];
 assert rubberbandSupport  -> available rubberband;
 assert xineramaSupport    -> x11Support && available libXinerama;
@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
     ++ optional vapoursynthSupport vapoursynth
     ++ optional archiveSupport     libarchive
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
-    ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
+    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm ]
     ++ optionals waylandSupport    [ wayland libxkbcommon ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       libiconv Cocoa CoreAudio

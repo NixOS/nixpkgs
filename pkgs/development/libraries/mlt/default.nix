@@ -6,27 +6,14 @@
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "6.4.1";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0k9vj21n6qxdjd0vvj22cwi35igajjzh5fbjza766izdbijv2i2w";
+    sha256 = "0b2fq0819r7n141l6hhr66hpayqqcmjr2yxw9azxkapg1h0div6q";
   };
-
-  patches = [
-    # fix for glibc-2.26
-    (fetchurl {
-      url = "https://github.com/mltframework/mlt/commit/2125e3955a0d0be61571cf43b674f74b4b93c6f8.patch";
-      sha256 = "1bgs5a3dblsmdmb7hwval9nmq1as4r4f48b3amsc23v69nsl2g0a";
-    })
-    # fix for glibc-2.26
-    (fetchurl {
-      url = "https://github.com/mltframework/mlt/commit/fbf6a5187776f2f392cf258935ff49e4c0e87024.patch";
-      sha256 = "045vchpcznzsz47j67kxwdbg133kar66ssna3parnzrxdfqi72pv";
-    })
-  ];
 
   buildInputs = [
     SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
