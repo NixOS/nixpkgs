@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Window switcher, run dialog and dmenu replacement";
-    homepage = https://davedavenport.github.io/rofi;
+    homepage = https://github.com/DaveDavenport/rofi/;
     license = licenses.mit;
     maintainers = with maintainers; [ mbakke garbas ];
     platforms = with platforms; unix;
