@@ -38,7 +38,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 10.8
+  # LTS Haskell 10.9
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -49,7 +49,7 @@ default-package-overrides:
   - accelerate-examples ==1.1.0.0
   - accelerate-fft ==1.1.0.0
   - accelerate-fftw ==1.0
-  - accelerate-fourier ==1.0.0.3
+  - accelerate-fourier ==1.0.0.4
   - accelerate-io ==1.0.0.1
   - accelerate-llvm ==1.1.0.0
   - accelerate-llvm-native ==1.1.0.1
@@ -72,6 +72,7 @@ default-package-overrides:
   - aeson-extra ==0.4.1.0
   - aeson-generic-compat ==0.0.1.1
   - aeson-injector ==1.1.0.0
+  - aeson-picker ==0.1.0.3
   - aeson-pretty ==0.8.5
   - aeson-qq ==0.8.2
   - aeson-typescript ==0.1.0.3
@@ -213,7 +214,7 @@ default-package-overrides:
   - async-timer ==0.1.4.1
   - atom-basic ==0.2.5
   - atom-conduit ==0.5.0.1
-  - atomic-primops ==0.8.1.1
+  - atomic-primops ==0.8.2
   - atomic-write ==0.2.0.5
   - attoparsec ==0.13.2.2
   - attoparsec-binary ==0.2
@@ -252,7 +253,7 @@ default-package-overrides:
   - basic-prelude ==0.7.0
   - bbdb ==0.8
   - bcrypt ==0.0.11
-  - bench ==1.0.8
+  - bench ==1.0.9
   - benchpress ==0.2.2.10
   - bencode ==0.6.0.0
   - bento ==0.1.0
@@ -368,7 +369,7 @@ default-package-overrides:
   - cassava-conduit ==0.4.0.1
   - cassette ==0.1.0
   - cast ==0.1.0.2
-  - cayley-client ==0.4.3
+  - cayley-client ==0.4.4
   - cereal ==0.5.5.0
   - cereal-conduit ==0.7.3
   - cereal-text ==0.1.0.2
@@ -382,8 +383,8 @@ default-package-overrides:
   - Chart-diagrams ==1.8.3
   - chart-unit ==0.5.5.0
   - chaselev-deque ==0.5.0.5
-  - ChasingBottoms ==1.3.1.3
-  - chatwork ==0.1.3.0
+  - ChasingBottoms ==1.3.1.4
+  - chatwork ==0.1.3.1
   - cheapskate ==0.1.1
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
@@ -399,7 +400,7 @@ default-package-overrides:
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
   - cisco-spark-api ==0.1.0.0
-  - clang-compilation-database ==0.1.0.0
+  - clang-compilation-database ==0.1.0.1
   - classy-prelude ==1.3.1
   - classy-prelude-conduit ==1.3.1
   - classy-prelude-yesod ==1.3.1
@@ -413,7 +414,7 @@ default-package-overrides:
   - clr-inline ==0.2.0.1
   - clr-marshal ==0.2.0.0
   - clumpiness ==0.17.0.0
-  - ClustalParser ==1.2.1
+  - ClustalParser ==1.2.2
   - cmark ==0.5.6
   - cmark-gfm ==0.1.3
   - cmark-highlight ==0.2.0.0
@@ -462,7 +463,7 @@ default-package-overrides:
   - configurator ==0.3.0.0
   - configurator-export ==0.1.0.1
   - connection ==0.2.8
-  - connection-pool ==0.2.1
+  - connection-pool ==0.2.2
   - console-style ==0.0.2.1
   - constraints ==0.9.1
   - consul-haskell ==0.4.2
@@ -517,7 +518,7 @@ default-package-overrides:
   - cubicbezier ==0.6.0.5
   - cubicspline ==0.1.2
   - cublas ==0.4.0.0
-  - cuda ==0.9.0.1
+  - cuda ==0.9.0.2
   - cue-sheet ==1.0.1
   - cufft ==0.8.0.0
   - curl ==1.3.8
@@ -557,7 +558,7 @@ default-package-overrides:
   - data-ordlist ==0.4.7.0
   - data-ref ==0.0.1.1
   - data-reify ==0.6.1
-  - data-serializer ==0.3.2
+  - data-serializer ==0.3.4
   - datasets ==0.2.5
   - data-textual ==0.3.0.2
   - data-tree-print ==0.1.0.0
@@ -622,14 +623,14 @@ default-package-overrides:
   - dlist ==0.8.0.4
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
-  - dns ==3.0.1
+  - dns ==3.0.2
   - docker ==0.4.1.1
   - docker-build-cacher ==1.8.2
   - dockerfile ==0.1.0.1
   - docopt ==0.7.0.5
   - doctemplates ==0.2.1
   - doctest ==0.13.0
-  - doctest-discover ==0.1.0.8
+  - doctest-discover ==0.1.0.9
   - doctest-driver-gen ==0.1.0.1
   - do-list ==1.0.1
   - dom-parser ==3.0.0
@@ -674,7 +675,7 @@ default-package-overrides:
   - elm-export ==0.6.0.1
   - elm-export-persistent ==0.1.2
   - emailaddress ==0.2.0.0
-  - email-validate ==2.3.2.2
+  - email-validate ==2.3.2.3
   - enclosed-exceptions ==1.0.2
   - EntrezHTTP ==1.0.4
   - entropy ==0.3.8
@@ -722,7 +723,7 @@ default-package-overrides:
   - expiring-cache-map ==0.0.6.1
   - explicit-exception ==0.1.9.2
   - exp-pairs ==0.1.5.2
-  - extensible ==0.4.7.1
+  - extensible ==0.4.8
   - extensible-effects ==2.1.0.0
   - extensible-exceptions ==0.1.1.4
   - extra ==1.6.4
@@ -1003,14 +1004,14 @@ default-package-overrides:
   - gravatar ==0.8.0
   - graylog ==0.1.0.1
   - groom ==0.1.2.1
-  - groundhog ==0.8
+  - groundhog ==0.8.0.1
   - groundhog-inspector ==0.8.0.2
-  - groundhog-mysql ==0.8
-  - groundhog-postgresql ==0.8.0.1
-  - groundhog-sqlite ==0.8
+  - groundhog-mysql ==0.8.0.1
+  - groundhog-postgresql ==0.8.0.3
+  - groundhog-sqlite ==0.8.0.1
   - groundhog-th ==0.8.0.2
   - group-by-date ==0.1.0.2
-  - grouped-list ==0.2.1.4
+  - grouped-list ==0.2.1.5
   - groupoids ==4.0
   - groups ==0.4.1.0
   - gtk2hs-buildtools ==0.13.3.1
@@ -1029,7 +1030,7 @@ default-package-overrides:
   - hamlet ==1.2.0
   - HandsomeSoup ==0.4.2
   - handwriting ==0.1.0.3
-  - hapistrano ==0.3.5.2
+  - hapistrano ==0.3.5.3
   - happstack-hsp ==7.3.7.3
   - happstack-jmacro ==7.0.12
   - happstack-server ==7.5.0.1
@@ -1037,7 +1038,7 @@ default-package-overrides:
   - happy ==1.19.9
   - harp ==0.4.3
   - hasbolt ==0.1.3.0
-  - hashable ==1.2.6.1
+  - hashable ==1.2.7.0
   - hashable-time ==0.2.0.1
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
@@ -1155,7 +1156,7 @@ default-package-overrides:
   - hpio ==0.9.0.5
   - hpp ==0.5.1
   - hpqtypes ==1.5.1.1
-  - hprotoc ==2.4.7
+  - hprotoc ==2.4.8
   - hquantlib ==0.0.4.0
   - hreader ==1.1.0
   - hreader-lens ==0.1.3.0
@@ -1168,8 +1169,8 @@ default-package-overrides:
   - hsebaysdk ==0.4.0.0
   - hse-cpp ==0.2
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.5
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
@@ -1180,7 +1181,7 @@ default-package-overrides:
   - hslua-module-text ==0.1.2.1
   - hsndfile ==0.8.0
   - hsndfile-vector ==0.5.2
-  - HsOpenSSL ==0.11.4.12
+  - HsOpenSSL ==0.11.4.13
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
   - hspec ==2.4.4
@@ -1208,7 +1209,7 @@ default-package-overrides:
   - hsx2hs ==0.14.1.2
   - hsx-jmacro ==7.3.8
   - hsyslog ==5.0.1
-  - hsyslog-udp ==0.2.0
+  - hsyslog-udp ==0.2.1
   - htaglib ==1.1.1
   - HTF ==0.13.2.2
   - html ==1.0.1.2
@@ -1216,7 +1217,7 @@ default-package-overrides:
   - html-email-validate ==0.2.0.0
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
-  - HTTP ==4000.3.9
+  - HTTP ==4000.3.10
   - http2 ==1.6.3
   - http-api-data ==0.3.7.2
   - http-client ==0.5.10
@@ -1297,7 +1298,7 @@ default-package-overrides:
   - insert-ordered-containers ==0.2.1.0
   - inspection-testing ==0.1.2
   - instance-control ==0.1.2.0
-  - integer-logarithms ==1.0.2
+  - integer-logarithms ==1.0.2.1
   - integration ==0.2.1
   - intern ==0.9.2
   - interpolate ==0.1.1
@@ -1365,7 +1366,7 @@ default-package-overrides:
   - kanji ==3.0.2
   - kansas-comet ==0.4
   - katip ==0.5.3.0
-  - katip-elasticsearch ==0.4.0.4
+  - katip-elasticsearch ==0.4.1.0
   - katydid ==0.1.1.0
   - kawhi ==0.3.0
   - kdt ==0.2.4
@@ -1385,7 +1386,7 @@ default-package-overrides:
   - language-fortran ==0.5.1
   - language-glsl ==0.2.1
   - language-haskell-extract ==0.2.4
-  - language-java ==0.2.8
+  - language-java ==0.2.9
   - language-javascript ==0.6.0.10
   - language-puppet ==1.3.16
   - lapack-carray ==0.0
@@ -1452,7 +1453,7 @@ default-package-overrides:
   - logging-effect ==1.2.4
   - logging-effect-extra ==1.2.2
   - logging-effect-extra-file ==1.1.2
-  - logging-effect-extra-handler ==1.1.2
+  - logging-effect-extra-handler ==1.1.3
   - logging-facade ==0.3.0
   - logging-facade-syslog ==1
   - logict ==0.6.0.2
@@ -1586,7 +1587,7 @@ default-package-overrides:
   - monoid-transformer ==0.0.4
   - mono-traversable ==1.0.8.1
   - mono-traversable-instances ==0.1.0.0
-  - morte ==1.6.15
+  - morte ==1.6.16
   - mountpoints ==1.0.2
   - mstate ==0.2.7
   - mtl ==2.2.2
@@ -1625,7 +1626,7 @@ default-package-overrides:
   - netpbm ==1.0.2
   - nettle ==0.2.0
   - netwire ==5.0.2
-  - netwire-input ==0.0.6
+  - netwire-input ==0.0.7
   - netwire-input-glfw ==0.0.8
   - network ==2.6.3.4
   - network-anonymous-i2p ==0.10.0
@@ -1761,7 +1762,7 @@ default-package-overrides:
   - persistent-postgresql ==2.6.3
   - persistent-refs ==0.4
   - persistent-sqlite ==2.6.4
-  - persistent-template ==2.5.3.1
+  - persistent-template ==2.5.4
   - pgp-wordlist ==0.1.0.2
   - pg-transact ==0.1.0.1
   - phantom-state ==0.2.1.2
@@ -1858,8 +1859,8 @@ default-package-overrides:
   - prompt ==0.1.1.2
   - protobuf ==0.2.1.1
   - protobuf-simple ==0.1.0.5
-  - protocol-buffers ==2.4.7
-  - protocol-buffers-descriptor ==2.4.7
+  - protocol-buffers ==2.4.8
+  - protocol-buffers-descriptor ==2.4.8
   - proto-lens ==0.2.2.0
   - proto-lens-arbitrary ==0.1.1.1
   - proto-lens-combinators ==0.1.0.8
@@ -1888,7 +1889,7 @@ default-package-overrides:
   - quickcheck-assertions ==0.3.0
   - quickcheck-classes ==0.3.3
   - quickcheck-combinators ==0.0.2
-  - quickcheck-instances ==0.3.16.1
+  - quickcheck-instances ==0.3.18
   - quickcheck-io ==0.2.0
   - quickcheck-properties ==0.1
   - quickcheck-simple ==0.1.0.2
@@ -1900,7 +1901,7 @@ default-package-overrides:
   - raaz ==0.2.0
   - rainbow ==0.28.0.4
   - rainbox ==0.18.0.10
-  - rakuten ==0.1.0.5
+  - rakuten ==0.1.1.0
   - ramus ==0.1.2
   - random ==1.1
   - random-fu ==0.2.7.0
@@ -2007,10 +2008,10 @@ default-package-overrides:
   - sandi ==0.4.1
   - sandman ==0.2.0.1
   - say ==0.1.0.0
-  - sbp ==2.3.6
+  - sbp ==2.3.9
   - sbv ==7.4
-  - scalendar ==1.2.0
   - SCalendar ==1.1.0
+  - scalendar ==1.2.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -2052,7 +2053,7 @@ default-package-overrides:
   - servant-generic ==0.1.0.1
   - servant-js ==0.9.3.2
   - servant-JuicyPixels ==0.3.0.3
-  - servant-kotlin ==0.1.0.3
+  - servant-kotlin ==0.1.1.0
   - servant-lucid ==0.7.1
   - servant-mock ==0.8.3
   - servant-pandoc ==0.4.1.4
@@ -2084,7 +2085,7 @@ default-package-overrides:
   - shakespeare ==2.0.15
   - shell-conduit ==4.6.1
   - shell-escape ==0.2.0
-  - shelly ==1.7.0.1
+  - shelly ==1.7.1
   - shikensu ==0.3.8
   - shortcut-links ==0.4.2.0
   - should-not-typecheck ==2.1.0
@@ -2108,7 +2109,7 @@ default-package-overrides:
   - slave-thread ==1.0.2
   - slug ==0.1.7
   - smallcheck ==1.1.3.1
-  - smoothie ==0.4.2.7
+  - smoothie ==0.4.2.8
   - smtp-mail ==0.1.4.6
   - snap-blaze ==0.2.1.5
   - snap-core ==1.0.3.1
@@ -2179,7 +2180,7 @@ default-package-overrides:
   - Strafunski-StrategyLib ==5.0.0.10
   - stratosphere ==0.14.0
   - Stream ==0.4.7.2
-  - streaming ==0.2.0.0
+  - streaming ==0.2.1.0
   - streaming-bytestring ==0.1.5
   - streaming-commons ==0.1.19
   - streamly ==0.1.0
@@ -2197,7 +2198,7 @@ default-package-overrides:
   - string-conversions ==0.4.0.1
   - string-qq ==0.0.2
   - stringsearch ==0.3.6.6
-  - string-transform ==0.1.0
+  - string-transform ==0.1.1
   - stripe-core ==2.2.3
   - stripe-haskell ==2.2.3
   - stripe-http-streams ==2.2.3
@@ -2214,7 +2215,7 @@ default-package-overrides:
   - swagger ==0.3.0
   - swagger2 ==2.2
   - swagger-petstore ==0.0.1.8
-  - swish ==0.9.1.10
+  - swish ==0.9.2.0
   - syb ==0.7
   - syb-with-class ==0.6.1.8
   - symbol ==0.2.4
@@ -2231,7 +2232,7 @@ default-package-overrides:
   - tagged-identity ==0.1.2
   - tagsoup ==0.14.6
   - tagstream-conduit ==0.5.5.3
-  - tar ==0.5.0.3
+  - tar ==0.5.1.0
   - tar-conduit ==0.1.1
   - tardis ==0.4.1.0
   - tasty ==0.11.3
@@ -2239,7 +2240,7 @@ default-package-overrides:
   - tasty-auto ==0.2.0.0
   - tasty-dejafu ==0.7.1.1
   - tasty-discover ==4.1.5
-  - tasty-expected-failure ==0.11.0.4
+  - tasty-expected-failure ==0.11.1
   - tasty-fail-fast ==0.0.3
   - tasty-golden ==2.3.1.2
   - tasty-hedgehog ==0.1.0.2
@@ -2283,7 +2284,7 @@ default-package-overrides:
   - text-format ==0.3.1.1
   - text-generic-pretty ==1.2.1
   - text-icu ==0.7.0.1
-  - text-latin1 ==0.3
+  - text-latin1 ==0.3.1
   - text-ldap ==0.1.1.11
   - textlocal ==0.1.0.5
   - text-manipulate ==0.2.0.1
@@ -2291,8 +2292,8 @@ default-package-overrides:
   - text-postgresql ==0.0.2.3
   - text-printer ==0.5
   - text-region ==0.3.0.0
-  - text-short ==0.1.1
-  - text-show ==3.7.1
+  - text-short ==0.1.2
+  - text-show ==3.7.2
   - text-show-instances ==3.6.2
   - text-zipper ==0.10.1
   - tfp ==1.0.0.2
@@ -2370,7 +2371,7 @@ default-package-overrides:
   - tuple ==0.3.0.2
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.4.5
+  - turtle ==1.4.6
   - turtle-options ==0.1.0.4
   - twitter-conduit ==0.2.3
   - twitter-types ==0.7.2.2
@@ -2397,7 +2398,7 @@ default-package-overrides:
   - uglymemo ==0.1.0.1
   - unagi-chan ==0.4.1.0
   - unbounded-delays ==0.1.1.0
-  - unbound-generics ==0.3.1
+  - unbound-generics ==0.3.2
   - unboxed-ref ==0.4.0.0
   - uncertain ==0.3.1.0
   - unexceptionalio ==0.3.0
@@ -2411,8 +2412,8 @@ default-package-overrides:
   - union-find ==0.2
   - uniplate ==1.6.12
   - uniq-deep ==1.1.0.0
-  - Unique ==0.4.7.2
   - unique ==0
+  - Unique ==0.4.7.2
   - unit-constraint ==0.0.0
   - units-parser ==0.1.1.2
   - universe ==1.0
@@ -2432,11 +2433,11 @@ default-package-overrides:
   - unordered-intmap ==0.1.0.0
   - unsafe ==0.0
   - uri-bytestring ==0.3.1.1
-  - uri-bytestring-aeson ==0.1.0.4
+  - uri-bytestring-aeson ==0.1.0.5
   - uri-encode ==1.5.0.5
   - uri-templater ==0.3.1.0
   - url ==2.1.3
-  - urlpath ==7.0.1
+  - urlpath ==7.0.2
   - userid ==0.1.3.1
   - users ==0.5.0.0
   - users-persistent ==0.5.0.2
@@ -2482,7 +2483,7 @@ default-package-overrides:
   - versions ==3.3.1
   - vhd ==0.2.2
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.13
+  - viewprof ==0.0.0.14
   - vinyl ==0.7.0
   - vivid ==0.3.0.2
   - vivid-osc ==0.3.0.0
@@ -2517,7 +2518,7 @@ default-package-overrides:
   - wai-slack-middleware ==0.2.0
   - wai-transformers ==0.0.7
   - wai-websockets ==3.0.1.1
-  - warp ==3.2.13
+  - warp ==3.2.18
   - warp-tls ==3.2.4
   - wave ==0.1.5
   - wavefront ==0.7.1.1
@@ -2663,7 +2664,7 @@ default-package-overrides:
   - zippers ==0.2.5
   - ziptastic-client ==0.3.0.3
   - ziptastic-core ==0.2.0.3
-  - zlib ==0.6.1.2
+  - zlib ==0.6.2
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
   - zm ==0.3.2
