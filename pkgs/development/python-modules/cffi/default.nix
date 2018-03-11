@@ -32,6 +32,7 @@ if isPyPy then null else buildPythonPackage rec {
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
   NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isClang [ "-Wno-unused-command-line-argument" "-Wno-unreachable-code" ];
 
+  doCheck = !stdenv.hostPlatform.isMusl; # TODO: Investigate
   checkPhase = ''
     py.test
   '';

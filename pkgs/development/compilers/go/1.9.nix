@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
     ++ optionals stdenv.isLinux [ procps ];
   buildInputs = [ cacert pcre ]
-    ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
+    ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
@@ -117,7 +118,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./remove-tools-1.9.patch
       ./ssl-cert-file-1.9.patch
-      ./creds-test.patch
+      ./creds-test-1.9.patch
       ./remove-test-pie-1.9.patch
       ./go-1.9-skip-flaky-19608.patch
       ./go-1.9-skip-flaky-20072.patch

@@ -1,11 +1,14 @@
 { stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
+# Updater dependencies
+, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
+, gnupg
 , darwin ? null
 }:
 
 with stdenv.lib;
 
-{ enableNpm ? true, version, sha256, patches }:
+{ enableNpm ? true, version, sha256, patches } @args:
 
 let
 
@@ -25,6 +28,11 @@ let
      *  Including pkgconfig in build inputs would also have the same effect!
      */
   ]) (builtins.attrNames sharedLibDeps);
+
+  copyLibHeaders =
+    map
+      (name: "${getDev sharedLibDeps.${name}}/include/*")
+      (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
 in
@@ -54,6 +62,8 @@ in
 
     setupHook = ./setup-hook.sh;
 
+    pos = builtins.unsafeGetAttrPos "version" args;
+
     inherit patches;
 
     preBuild = optionalString stdenv.isDarwin ''
@@ -74,13 +84,22 @@ in
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
       ''}
+
+      # install the missing headers for node-gyp
+      cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
     '';
+
+    passthru.updateScript = import ./update.nix {
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix;
+      inherit (stdenv) lib;
+      majorVersion = with stdenv.lib; elemAt (splitString "." version) 0;
+    };
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = https://nodejs.org;
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
+      maintainers = with maintainers; [ goibhniu gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 

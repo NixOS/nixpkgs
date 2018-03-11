@@ -3,7 +3,7 @@
 , faad2, rtl-sdr, libusb, fftwSinglePrec }:
 let
 
-  version = "1.0-rc1";
+  version = "1.0-rc2";
 
 in stdenv.mkDerivation {
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "V${version}";
-    sha256 = "1xi59rmk3rdqqxxxrm2pbllrlsql46vxs95l1pkfx7bp8f7n7rsv";
+    sha256 = "01x4ldq6lvmdrmxi857594nj9xpn2h7848vvf3f54sh1zrawn4k4";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

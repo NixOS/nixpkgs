@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
 let
-  version = "2.6.6";
+  version = "2.6.9";
   goPackagePath = "github.com/buildkite/agent";
 in
 buildGoPackage {
@@ -12,10 +12,14 @@ buildGoPackage {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "0rpi63mfzlm39517l4xjcka3m4dnfjzwvpi0i1rpf1z2288cnkyx";
+    sha256 = "0rlinj7dcr8vzl1pb15nfny8jkvvj50i8czf4ahv26avnfycm4pz";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  # on Linux, the TMPDIR is /build which is the same prefix as this package
+  # remove once #35068 is merged
+  noAuditTmpdir = stdenv.isLinux;
 
   postInstall = ''
     # Install bootstrap.sh
@@ -44,6 +48,6 @@ buildGoPackage {
     homepage = https://buildkite.com/docs/agent;
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

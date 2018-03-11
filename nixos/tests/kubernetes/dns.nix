@@ -3,7 +3,7 @@ with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
 
-  certs = import ./certs.nix { externalDomain = domain; };
+  certs = import ./certs.nix { externalDomain = domain; kubelets = [ "machine1" "machine2" ]; };
 
   redisPod = pkgs.writeText "redis-pod.json" (builtins.toJSON {
     kind = "Pod";

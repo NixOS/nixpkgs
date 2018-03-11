@@ -1,30 +1,25 @@
-{ stdenv, fetchFromGitHub, python2Packages, makeWrapper }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
+, pytestrunner, pytest, six, pyparsing, asn1ate }:
 
-stdenv.mkDerivation rec {
+buildPythonApplication rec {
   pname = "asn2quickder";
-  name = "${pname}-${version}";
-  version = "0.7-RC1";
+  version = "1.2-6";
 
   src = fetchFromGitHub {
-    sha256 = "0ynajhbml28m4ipbj5mscjcv6g1a7frvxfimxh813rhgl0w3sgq8";
+    sha256 = "00wifjydgmqw2i5vmr049visc3shjqccgzqynkmmhkjhs86ghzr6";
     rev = "version-${version}";
     owner = "vanrein";
-    repo = "${pname}";
+    repo = "quick-der";
   };
 
-  propagatedBuildInputs = with python2Packages; [ pyparsing makeWrapper ];
+  patchPhase = ''
+    patchShebangs ./python/scripts/*
+  '';
 
-  patchPhase = with python2Packages; ''
-    substituteInPlace Makefile \
-      --replace '..' '..:$(DESTDIR)/${python.sitePackages}:${python2Packages.pyparsing}/${python.sitePackages}' \
-    '';
+  buildInputs = [ makeWrapper cmake ];
+  checkInputs = [ pytestrunner pytest ];
 
-  installPhase = ''
-    mkdir -p $out/${python2Packages.python.sitePackages}/
-    mkdir -p $out/bin $out/lib $out/sbin $out/man
-    make DESTDIR=$out PREFIX=/ all
-    make DESTDIR=$out PREFIX=/ install
-    '';
+  propagatedBuildInputs = [ pyparsing asn1ate six ];
 
   meta = with stdenv.lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";

@@ -11,17 +11,16 @@ buildPythonPackage rec {
     sha256 = "0z9i1z4hjzmp23igyhvg131gikbrr947506lwfb3fayf0agwfv8f";
   };
 
-  #remove deadline from tests, see https://github.com/pyca/pynacl/issues/370
-  preCheck = ''
-    sed -i 's/deadline=1500, //' tests/test_pwhash.py
-    sed -i 's/deadline=1500, //' tests/test_aead.py
-  '';
+  # set timeout to unlimited, remove deadline from tests, see https://github.com/pyca/pynacl/issues/370
+  patches = [ ./pynacl-no-timeout-and-deadline.patch ];
 
-  checkInputs = [ pytest coverage hypothesis ];
+  checkInputs = [ pytest hypothesis ];
   propagatedBuildInputs = [ libsodium cffi six ];
 
+  SODIUM_INSTALL = "system";
+
   checkPhase = ''
-    coverage run --source nacl --branch -m pytest
+    py.test
   '';
   
   meta = with stdenv.lib; {

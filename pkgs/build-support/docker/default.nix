@@ -476,8 +476,6 @@ rec {
         cp ${layer}/* temp/
         chmod ug+w temp/*
 
-        echo "$(dirname ${storeDir})" >> layerFiles
-        echo '${storeDir}' >> layerFiles
         for dep in $(cat $layerClosure); do
           find $dep >> layerFiles
         done

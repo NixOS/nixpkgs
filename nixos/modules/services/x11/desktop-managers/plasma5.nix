@@ -66,6 +66,10 @@ in
       security.wrappers = {
         kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
         "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
+        kwin_wayland = {
+          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          capabilities = "cap_sys_nice+ep";
+        };
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -150,7 +154,7 @@ in
           print-manager
 
           breeze-icons
-          pkgs.hicolor_icon_theme
+          pkgs.hicolor-icon-theme
 
           kde-gtk-config breeze-gtk
 

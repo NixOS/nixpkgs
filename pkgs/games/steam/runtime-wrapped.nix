@@ -38,7 +38,7 @@ let
     libcap
     SDL2
     libusb1
-    dbus_glib
+    dbus-glib
     libav
     atk
     # Only libraries are needed from those two
@@ -48,7 +48,7 @@ let
     # Verified games requirements
     xlibs.libXmu
     xlibs.libxcb
-    mesa_glu
+    libGLU
     libuuid
     libogg
     libvorbis

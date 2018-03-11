@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, texinfo, libXext, xextproto, libX11, xproto
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, mesa, kbproto, libjpeg, flac
+, xf86vidmodeproto, libXxf86vm, openal, libGLU_combined, kbproto, libjpeg, flac
 , inputproto, libXi, fixesproto, libXfixes, freetype, libopus, libtheora
 , physfs, enet, pkgconfig, gtk2, pcre, libpulseaudio, libpthreadstubs
 , libXdmcp
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
+    xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal libGLU_combined
     kbproto libjpeg flac
     inputproto libXi fixesproto libXfixes
     enet libtheora freetype physfs libopus pkgconfig gtk2 pcre libXdmcp

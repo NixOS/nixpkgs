@@ -1,14 +1,14 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome_keyring }:
+, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome-keyring }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchgit {
     url = "git://github.com/nextcloud/client_theming.git";
-    rev = "1ee750d1aeaaefc899629e85c311594603e9ac1b";
-    sha256 = "0dxyng8a7cg78z8yngiqypsb44lf5c6vkabvkfch0cl0cqmarc1a";
+    rev = "ab40efe1e1475efddd636c09251d8917627261da";
+    sha256 = "19a1kqydgx47sa1a917j46zlbc5g9nynsanasyad9c8sqi0qvyip";
     fetchSubmodules = true;
   };
 
@@ -36,9 +36,12 @@ stdenv.mkDerivation rec {
     "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
   ];
 
-  postInstall = stdenv.lib.optionalString (withGnomeKeyring) ''
+  postInstall = ''
+    sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
+      $out/share/applications/nextcloud.desktop
+  '' + stdenv.lib.optionalString (withGnomeKeyring) ''
     wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome_keyring ]}
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome-keyring ]}
   '';
 
   meta = with stdenv.lib; {

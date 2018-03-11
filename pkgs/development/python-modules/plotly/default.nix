@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "2.3.0";
+  version = "2.4.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95e72273699108f215886ab961dbf0890904d39583be39eabcd0788bc7ccf695";
+    sha256 = "8e7ee039231fec52b0b38d45e7470f70b117f6527b08cc922d74992f4d082858";
   };
 
   propagatedBuildInputs = [

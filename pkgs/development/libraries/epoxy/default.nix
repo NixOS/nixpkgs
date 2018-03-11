@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, utilmacros, python
-, mesa, libX11
+, libGLU_combined, libX11
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
-  buildInputs = [ mesa libX11 ];
+  buildInputs = [ libGLU_combined libX11 ];
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     substituteInPlace configure --replace build_glx=no build_glx=yes

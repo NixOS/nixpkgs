@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib ];
 
+  prePatch = ''
+    sed -i -e 's/u_int32_t/uint32_t/g' -e '1i#include <stdint.h>' src/hash.c
+  '';
+
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-zlib=${zlib.dev}"

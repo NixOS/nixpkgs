@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "wxmaxima-${version}";
-  version = "17.10.1";
+  version = "18.02.0";
 
   src = fetchFromGitHub {
     owner = "andrejv";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "088h8dlc9chkppwl4ck9i0fgf2d1dcpi5kq8qbpr5w75vhwsb6qm";
+    sha256 = "0s7bdykc77slqix28cyaa6x8wvxrn8461mkdgxflvi2apwsl56aa";
   };
 
   buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];

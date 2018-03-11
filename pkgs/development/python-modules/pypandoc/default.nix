@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,5 +27,7 @@ buildPythonPackage rec {
     homepage = https://github.com/bebraw/pypandoc;
     license = licenses.mit;
     maintainers = with maintainers; [ bennofs ];
+
+    broken = true; # incompatible with pandoc v2
   };
 }

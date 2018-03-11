@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar }:
+{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.0.6";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "01dnqiazjl2avrmdiq68absjvcfv24446y759z2s9dwk8ywzjkrg";
+    sha256 = "1hc0ylkq89459wy3av42hp73p34pmh7grsa3qm8fb1k0qg17zy78";
   };
 
   propagatedBuildInputs = with python3Packages; [

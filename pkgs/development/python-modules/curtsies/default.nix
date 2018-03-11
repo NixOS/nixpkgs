@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.2.11";
+  version = "0.3.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vljmw3sy6lrqahhpyg4gk13mzcx3mwhvg8s41698ms3cpgkjipc";
+    sha256 = "89c802ec051d01dec6fc983e9856a3706e4ea8265d2940b1f6d504a9e26ed3a9";
   };
 
   propagatedBuildInputs = [ blessings wcwidth pyte ];

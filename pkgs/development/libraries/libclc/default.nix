@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2, llvmPackages }:
+{ stdenv, fetchFromGitHub, python, llvmPackages }:
 
 let
   llvm = llvmPackages.llvm;
@@ -15,7 +15,8 @@ stdenv.mkDerivation {
     sha256 = "10fqrlnqlknh58x7pfsbg9r07fblfg2mgq2m4fr1jbb836ncn3wh";
   };
 
-  buildInputs = [ python2 llvm clang ];
+  nativeBuildInputs = [ python ];
+  buildInputs = [ llvm clang ];
 
   postPatch = ''
     sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    ${python2.interpreter} ./configure.py --prefix=$out
+    ${python.interpreter} ./configure.py --prefix=$out
   '';
 
   meta = with stdenv.lib; {

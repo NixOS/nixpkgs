@@ -1,24 +1,24 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, cmake, unzip, zip, file
-, curl, glew , mesa_noglu, SDL2, SDL2_image, zlib, freetype, imagemagick
+, curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
 }:
 
 stdenv.mkDerivation rec {
   name = "openspades-${version}";
-  version = "0.1.1b";
+  version = "0.1.2";
   devPakVersion = "33";
 
   src = fetchFromGitHub {
     owner = "yvt";
     repo = "openspades";
     rev = "v${version}";
-    sha256 = "1xk3il5ykxg68hvwb42kpspcxppdib7y3ysaxb8anmmcsk1m3drn";
+    sha256 = "1mfj46c3pnn1f6awy3b6faxs26i93a5jsrvkdlr12ndsykvi6ng6";
   };
 
   nativeBuildInputs = [ cmake imagemagick unzip zip file ];
 
   buildInputs = [
-    freetype SDL2 SDL2_image mesa_noglu zlib curl glew opusfile openal libogg
+    freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
   ];
 
   cmakeFlags = [

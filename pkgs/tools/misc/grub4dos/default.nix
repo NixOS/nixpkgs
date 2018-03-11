@@ -6,13 +6,13 @@ let arch =
   else throw "Unknown architecture";
 in stdenv.mkDerivation rec {
   name = "grub4dos-${version}";
-  version = "0.4.6a-2016-12-24";
+  version = "0.4.6a-2018-02-20";
 
   src = fetchFromGitHub {
     owner = "chenall";
     repo = "grub4dos";
-    rev = "ca0371bb1e2365bfe4e44031a3b8b59e8c58ce0d";
-    sha256 = "0a9m7n5la3dmbfx6n5iqlfbm607r1mww0wkimn29mlsc30d8aamr";
+    rev = "74f6c862c73a4d21e61832174f4ab2f1d7f8b12a";
+    sha256 = "0p85y5adnlcs4cdi9dg6f5fzzc1y12bmfhx13qs0576izx2rma3q";
   };
 
   nativeBuildInputs = [ nasm ];

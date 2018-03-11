@@ -400,10 +400,10 @@
       }) {};
     company = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "company";
-        version = "0.9.4";
+        version = "0.9.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-0.9.4.tar";
-          sha256 = "1wm2nzjfn9cmjb6f5yvawrss7pg1r0swwwqqx602wg8hjrsiabay";
+          url = "https://elpa.gnu.org/packages/company-0.9.6.tar";
+          sha256 = "0w1jqhs87g0sqhv2iw6a5i8f4yjkrc65fb3h6vyv11sb8kfnhda7";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -713,10 +713,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.4.2";
+        version = "0.4.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.4.2.tar";
-          sha256 = "1j9hgxa6csj3iz5vrl22xvhl9lxhig0n1cixgzhs1sb3z3nn2li6";
+          url = "https://elpa.gnu.org/packages/ebdb-0.4.3.tar";
+          sha256 = "1xq0nhhgzgzrvxbb0lgpz71rfd0dcjakh87wg8wi3cpiw9w7zx41";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -768,10 +768,10 @@
     el-search = callPackage ({ cl-print, elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.5.4";
+        version = "1.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.5.4.tar";
-          sha256 = "1k0makrk3p6hknpnr3kbiszqzw3rpw18gnx2m8scr9vv0wif4qmk";
+          url = "https://elpa.gnu.org/packages/el-search-1.6.tar";
+          sha256 = "18pv2l6rl8f9x0yjn4iyf6g94c0ly5mizqg0vxr3m420bkbyk95h";
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
@@ -861,10 +861,10 @@
       }) {};
     exwm = callPackage ({ elpaBuild, fetchurl, lib, xelb }: elpaBuild {
         pname = "exwm";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/exwm-0.16.tar";
-          sha256 = "0c4w5k9lzqj8yzhdqipdb4fs7ld2qklc6s137104jnfdvmrwcv2i";
+          url = "https://elpa.gnu.org/packages/exwm-0.17.tar";
+          sha256 = "03vgrrrc1d3xr9ydl1ydvmqnvpnzg858dzdky2nd65h9ssyp2f5f";
         };
         packageRequires = [ xelb ];
         meta = {
@@ -1637,10 +1637,10 @@
       }) {};
     paced = callPackage ({ async, elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "paced";
-        version = "1.1.2";
+        version = "1.1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/paced-1.1.2.tar";
-          sha256 = "1hxbzlzmlndj2gs9n741whi7rj6vbcnxdn89lg2l0997pqmsx58y";
+          url = "https://elpa.gnu.org/packages/paced-1.1.3.tar";
+          sha256 = "1gaszf68h0nnv6p6yzv48m24csw6v479nsq0f02y6slixxaflnwl";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -1704,10 +1704,10 @@
     python = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "python";
-        version = "0.25.2";
+        version = "0.26";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/python-0.25.2.el";
-          sha256 = "1ac2ipyg49sb0lz3n0ykj2s6592abd38l5d1cpbmv73j13l8zq5i";
+          url = "https://elpa.gnu.org/packages/python-0.26.el";
+          sha256 = "197sq42xd4ryqq2zy1802pns6wf6n4vzx90yxgn1zzqpwffpv317";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -2400,10 +2400,10 @@
     xelb = callPackage ({ cl-generic, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "xelb";
-        version = "0.12";
+        version = "0.13";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xelb-0.12.tar";
-          sha256 = "0i9n0f3ibj4a5pwcsvwrah9m0fz32m0x6a9wsmjn3li20v8pcb81";
+          url = "https://elpa.gnu.org/packages/xelb-0.13.tar";
+          sha256 = "0sfygy6ihjwszhn6a81fz2yn70rr7vpygl7z49vz4rsd8s0fdgjc";
         };
         packageRequires = [ cl-generic emacs ];
         meta = {

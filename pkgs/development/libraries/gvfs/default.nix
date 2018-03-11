@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool
+{ stdenv, fetchurl, pkgconfig, intltool, libtool, gnome3
 , glib, dbus, udev, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio, file, bzip2, lzma
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper }:
 
 let
-  ver_maj = "1.34";
-  version = "${ver_maj}.1";
+  pname = "gvfs";
+  version = "1.34.2.1";
 in
 stdenv.mkDerivation rec {
-  name = "gvfs-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
-    sha256 = "1d3j6f252mk316hrspwy63inrhxk6l78l4bmlmql401lqapb5yby";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1smmzix8wqrmj10pqy3xhrlv7xza6rpmg2v052gwk9ysxdric9fm";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       samba libmtp libcap polkit
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      libsoup libgnome_keyring gconf gcr
+      libsoup libgnome-keyring gconf gcr
       # ToDo: not working and probably useless until gnome3 from x-updates
     ]);
 
@@ -43,9 +43,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
   };
 }

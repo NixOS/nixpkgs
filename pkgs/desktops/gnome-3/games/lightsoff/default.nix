@@ -1,12 +1,22 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, intltool, itstool, clutter, clutter_gtk, libxml2, dconf }:
+, intltool, itstool, clutter, clutter-gtk, libxml2, dconf }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "lightsoff-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/lightsoff/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "d12572bc7b70481320ec90c6130ad794b559a9990d08bef158a1d826aaa35976";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "lightsoff"; attrPath = "gnome3.lightsoff"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg dconf
-                  libxml2 clutter clutter_gtk wrapGAppsHook itstool intltool ];
+                  libxml2 clutter clutter-gtk wrapGAppsHook itstool intltool ];
 
   enableParallelBuilding = true;
 

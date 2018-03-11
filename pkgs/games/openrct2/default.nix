@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub,
   SDL2, cmake, curl, fontconfig, freetype, jansson, libiconv, libpng,
-  libpthreadstubs, libzip, mesa_glu, openssl, pkgconfig, speexdsp, zlib
+  libpthreadstubs, libzip, libGLU, openssl, pkgconfig, speexdsp, zlib
 }:
 
 let
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libpng
     libpthreadstubs
     libzip
-    mesa_glu
+    libGLU
     openssl
     pkgconfig
     speexdsp

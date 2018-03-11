@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "162630v7f98l27h11msk9416lqwm2mpgxh4s636594nlbfs9by3a";
+    sha256 = "a69dd7e262cdb265ac7d5e929d55f2f3d07baaadd158c8f19caebf8dde08dfe8";
   };
 
   checkInputs = [ pytest pytestrunner ];

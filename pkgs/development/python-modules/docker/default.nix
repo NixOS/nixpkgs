@@ -1,15 +1,14 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , six, requests, websocket_client
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
-  version = "3.0.0";
+  version = "2.7.0";
   pname = "docker";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/docker/${name}.tar.gz";
-    sha256 = "4a1083656c6ac7615c19094d9b5e052f36e38d0b07e63d7e506c9b5b32c3abe2";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "144248308e8ea31c4863c6d74e1b55daf97cc190b61d0fe7b7313ab920d6a76c";
   };
 
   propagatedBuildInputs = [

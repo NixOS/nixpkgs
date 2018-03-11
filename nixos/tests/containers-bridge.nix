@@ -26,8 +26,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
       networking.interfaces = {
         br0 = {
-          ip4 = [{ address = hostIp; prefixLength = 24; }];
-          ip6 = [{ address = hostIp6; prefixLength = 7; }];
+          ipv4.addresses = [{ address = hostIp; prefixLength = 24; }];
+          ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
         };
       };
 

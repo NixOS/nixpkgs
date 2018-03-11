@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, mesa, freeglut, darwin }:
+{ stdenv, fetchFromGitHub, cmake, libGLU_combined, freeglut, darwin }:
 
 stdenv.mkDerivation rec {
   name = "bullet-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ] ++
     (if stdenv.isDarwin
      then with darwin.apple_sdk.frameworks; [ Cocoa OpenGL ]
-     else [mesa freeglut]);
+     else [libGLU_combined freeglut]);
 
   patches = [ ./gwen-narrowing.patch ];
 

@@ -37,7 +37,7 @@ self: super: {
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
+  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
 
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
@@ -80,7 +80,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0vvh1k7i6y4bqy6fn8z5i6ndqv6x94hvk2zh5gw99na8kfri7sxq";
+      sha256 = "0fdcv9nig896ckl9x51ximxsvja1ii8qysf6c9ickvc0511hvr9w";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -603,12 +603,12 @@ self: super: {
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_25_0; };
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_27_0; hackage-db = self.hackage-db_2_0_1; });
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_2; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -632,7 +632,7 @@ self: super: {
   phash = markBroken super.phash;
 
   # https://github.com/deech/fltkhs/issues/16
-  # linking fails because the build doesn't pull in the mesa libraries
+  # linking fails because the build doesn't pull in the libGLU_combined libraries
   fltkhs = markBroken super.fltkhs;
   fltkhs-fluid-examples = dontDistribute super.fltkhs-fluid-examples;
 
@@ -833,7 +833,7 @@ self: super: {
       rev = "8b79823c32e234c161baec67fdf7907952ca62b8";
       sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
     };
-  }).override { language-c = self.language-c_0_7_0; };
+  });
 
   # Needs pginit to function and pgrep to verify.
   tmp-postgres = overrideCabal super.tmp-postgres (drv: {
@@ -847,14 +847,14 @@ self: super: {
   # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
   # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
     http-conduit = self.http-conduit_2_3_0;
   };
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
     haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
   };
   haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # These packages depend on each other, forming an infinite loop.
@@ -946,8 +946,8 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Sporadically OOMs even with 16G
-  ChasingBottoms = dontCheck super.ChasingBottoms;
+  # Use latest version to support newer QuickCheck and base libraries.
+  ChasingBottoms = self.ChasingBottoms_1_3_1_4;
 
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
@@ -1000,21 +1000,13 @@ self: super: {
     '';
   });
 
-  # Add a flag to enable building against GHC with D4388 applied (the
-  # deterministic profiling symbols patch). The flag is disabled by
-  # default, so we can apply this patch globally.
-  #
-  # https://github.com/ucsd-progsys/liquidhaskell/pull/1233
-  liquidhaskell =
-    let patch = pkgs.fetchpatch
-          { url = https://github.com/ucsd-progsys/liquidhaskell/commit/1aeef1871760b2be46cc1cabd51311997d1d0bc0.patch;
-            sha256 = "0i55n6p3x9as648as0lvxy2alqb1n7c10xv9gp15cvq7zx6c8ydg";
-          };
-    in appendPatch super.liquidhaskell patch;
-
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
 
   # Needs older hlint
   hpio = dontCheck super.hpio;
+
+  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
+
 }

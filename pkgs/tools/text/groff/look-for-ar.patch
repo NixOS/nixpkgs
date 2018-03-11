@@ -1,0 +1,39 @@
+commit 988a001f969262089579958827652da00fda096f
+Author: Ben Gamari <ben@smart-cactus.org>
+Date:   Tue Oct 17 16:15:20 2017 -0400
+
+    Look for AR
+
+diff --git a/Makefile.in b/Makefile.in
+index bc156ce..cc02126 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -464,7 +464,7 @@ INSTALL_SCRIPT=@INSTALL_SCRIPT@
+ INSTALL_DATA=@INSTALL_DATA@
+ INSTALL_INFO=@INSTALL_INFO@
+ LN_S=@LN_S@
+-AR=ar
++AR=@AR@
+ ETAGS=etags
+ ETAGSFLAGS=
+ # Flag that tells etags to assume C++.
+diff --git a/configure.ac b/configure.ac
+index c779165..6d53f5e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -45,6 +45,7 @@ AC_PREREQ([2.62])
+ 
+ AC_CONFIG_HEADERS([src/include/config.h:src/include/config.hin])
+ AC_CONFIG_SRCDIR([src/roff/groff/groff.cpp])
++AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_USE_SYSTEM_EXTENSIONS
+ 
+@@ -73,6 +74,7 @@ GROFF_PROG_YACC
+ GROFF_DOC_CHECK
+ GROFF_MAKEINFO
+ AC_PROG_RANLIB
++AC_CHECK_TOOL([AR], [ar], [ar])
+ GROFF_INSTALL_SH
+ GROFF_INSTALL_INFO
+ AC_PROG_INSTALL

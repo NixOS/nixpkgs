@@ -20,14 +20,8 @@ let
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
   interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+    i.ipv4.addresses
+    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
   destroyBond = i: ''
     while true; do
@@ -80,7 +74,7 @@ let
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
-                            || (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
+                            || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];
@@ -185,33 +179,58 @@ let
             path = [ pkgs.iproute ];
             script =
               ''
-                # FIXME: shouldn't this be done in network-link?
-                echo "bringing up interface..."
-                ip link set "${i.name}" up
-
                 state="/run/nixos/network/addresses/${i.name}"
-
                 mkdir -p $(dirname "$state")
 
-              '' + flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo "${address}" >> $state
-                  if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                    echo "added ip ${address}"
-                  elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                    echo "failed to add ${address}"
-                    exit 1
-                  fi
-                '');
+                ${flip concatMapStrings ips (ip:
+                  let
+                    cidr = "${ip.address}/${toString ip.prefixLength}";
+                  in
+                  ''
+                    echo "${cidr}" >> $state
+                    echo -n "adding address ${cidr}... "
+                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                      echo "done"
+                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                      echo "failed"
+                      exit 1
+                    fi
+                  ''
+                )}
+
+                state="/run/nixos/network/routes/${i.name}"
+                mkdir -p $(dirname "$state")
+
+                ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
+                  let
+                    cidr = "${route.address}/${toString route.prefixLength}";
+                    via = optionalString (route.via != null) ''via "${route.via}"'';
+                    options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                  in
+                  ''
+                     echo "${cidr}" >> $state
+                     echo -n "adding route ${cidr}... "
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
+                       echo "done"
+                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                       echo "failed"
+                       exit 1
+                     fi
+                  ''
+                )}
+              '';
             preStop = ''
+              state="/run/nixos/network/routes/${i.name}"
+              while read cidr; do
+                echo -n "deleting route $cidr... "
+                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+              done < "$state"
+              rm -f "$state"
+
               state="/run/nixos/network/addresses/${i.name}"
-              while read address; do
-                echo -n "deleting $address..."
-                ip addr del "$address" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                echo ""
+              while read cidr; do
+                echo -n "deleting address $cidr... "
+                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
               done < "$state"
               rm -f "$state"
             '';
@@ -268,6 +287,17 @@ let
               echo "${flip concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
+
+              ${optionalString config.virtualisation.libvirtd.enable ''
+                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  for uri in qemu:///system lxc:///; do
+                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                      ${pkgs.bash}/bin/bash
+                    done
+                  done
+                ''}
 
               # Enable stp on the interface
               ${optionalString v.rstp ''

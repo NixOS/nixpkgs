@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, gfortran, mesa_glu, xorg } :
+{ stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
   version = "5.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ gfortran mesa_glu xorg.libX11 xorg.libXmu ];
+  buildInputs = [ gfortran libGLU xorg.libX11 xorg.libXmu ];
 
   postPatch = ''
      substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \

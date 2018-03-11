@@ -1,4 +1,4 @@
-{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
 , ncurses ? null
 , libelf
 , utillinux
@@ -41,10 +41,10 @@ in {
 
 let
   inherit (stdenv.lib)
-    hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
+    hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = stdenv.lib.optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -79,7 +79,8 @@ let
       isModular = config.isYes "MODULES";
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
-        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
+        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
+        (stdenv.lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
@@ -155,14 +156,13 @@ let
                           if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
                           "install") ];
 
-      postInstall = ''
-        mkdir -p $dev
-        cp vmlinux $dev/
-      '' + (optionalString installsFirmware ''
+      postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
         make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
       '' else "") + (if isModular then ''
+        mkdir -p $dev
+        cp vmlinux $dev/
         if [ -z "$dontStrip" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
@@ -262,6 +262,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];

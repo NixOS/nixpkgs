@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, libXrandr,
-  libXext, wayland, mesa_noglu, makeWrapper }:
+  libXext, wayland, libGL, makeWrapper }:
 
 let
   version = "1.0.61.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_WSI_MIR_SUPPORT=OFF"
-    "-DFALLBACK_DATA_DIRS=${mesa_noglu.driverLink}/share:/usr/local/share:/usr/share"
+    "-DFALLBACK_DATA_DIRS=${libGL.driverLink}/share:/usr/local/share:/usr/share"
   ];
 
   outputs = [ "out" "dev" "demos" ];

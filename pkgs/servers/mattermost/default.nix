@@ -1,27 +1,32 @@
 { stdenv, fetchurl, fetchFromGitHub, buildGoPackage }:
 
+let
+  version = "4.7.2";
+  goPackagePath = "github.com/mattermost/mattermost-server";
+  buildFlags = "-ldflags \"-X '${goPackagePath}/model.BuildNumber=nixpkgs-${version}'\"";
+in
+
 buildGoPackage rec {
   name = "mattermost-${version}";
-  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "158sfbg19sp165iavjwwfxx9s4y116yc5h3plsmvlxpdv674k7v3";
+    sha256 = "129rvmwf9c19jbdpiclysb870svs2fbhdybcal0jbmzgx2zr8qma";
   };
 
   webApp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "1rbpl6zfmhfgzz2i1q2ym51ll6j54gk5p6ca99v9kjlm4ipcq9mv";
+    sha256 = "14gr7zzx77q862qccjcdwrzd6n8g2z8yngw8aa4g3q6hypsqi4v3";
   };
 
-  goPackagePath = "github.com/mattermost/mattermost-server";
+  inherit goPackagePath;
 
   buildPhase = ''
     runHook preBuild
     cd go/src/${goPackagePath}/cmd/platform
-    go install
+    go install ${buildFlags}
     runHook postBuild
   '';
 
@@ -35,7 +40,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Open-Source, self-hosted Slack-alternative";
+    description = "Open-source, self-hosted Slack-alternative";
     homepage = https://www.mattermost.org;
     license = with licenses; [ agpl3 asl20 ];
     maintainers = with maintainers; [ fpletz ryantm ];

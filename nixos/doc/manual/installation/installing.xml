@@ -275,11 +275,20 @@ Enter new UNIX password: ***
 Retype new UNIX password: ***
 </screen>
 
+    <note>
+      <para>
+        To prevent the password prompt, set <code>users.mutableUsers = false;</code> in
+        <filename>configuration.nix</filename>, which allows unattended installation
+        necessary in automation.
+      </para>
+    </note>
+
     </para>
 
   </listitem>
 
-  <listitem><para>If everything went well:
+  <listitem>
+    <para>If everything went well:
 
 <screen>
 # reboot</screen>
@@ -392,5 +401,6 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 <xi:include href="installing-usb.xml" />
 <xi:include href="installing-pxe.xml" />
 <xi:include href="installing-virtualbox-guest.xml" />
+<xi:include href="installing-from-other-distro.xml" />
 
 </chapter>

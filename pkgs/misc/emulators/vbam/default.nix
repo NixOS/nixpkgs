@@ -9,7 +9,7 @@
 , libpthreadstubs
 , libXdmcp
 , libxshmfence
-, mesa
+, libGLU_combined
 , openal
 , pkgconfig
 , SDL2
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     gettext
     gtk2-x11
-    mesa
+    libGLU_combined
     openal
     pkgconfig
     SDL2

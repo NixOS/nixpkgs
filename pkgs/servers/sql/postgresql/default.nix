@@ -69,7 +69,7 @@ let
         fi
       '';
 
-    postFixup = lib.optionalString (!stdenv.isDarwin)
+    postFixup = lib.optionalString (!stdenv.isDarwin && stdenv.hostPlatform.libc == "glibc")
       ''
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin

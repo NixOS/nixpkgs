@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  prePatch = ''
+    sed -i '1i#include <fcntl.h>\n' save.c
+  '';
+
   enableParallelBuilding = true;
 
   preInstall = ''

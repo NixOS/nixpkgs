@@ -2,7 +2,7 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.7.1";
+  version = "0.8.0";
   name = "kitty-${version}";
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0c02xy5psb7v7xfncz4bflrbinifpcm1yn8hvh0zaf7p4vr837p7";
+    sha256 = "12pj4js704r4f6idam3ljg7yllij9v158ayq6ym24zq18bv1nmbz";
   };
 
   buildInputs = [ fontconfig glfw ncurses libunistring harfbuzz libX11 libXrandr libXinerama libXcursor libxkbcommon libXi libXext ];

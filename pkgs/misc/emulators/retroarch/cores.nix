@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, cmake, pkgconfig, makeWrapper, python27, retroarch
-, alsaLib, fluidsynth, curl, hidapi, mesa, gettext, glib, gtk2, portaudio, SDL
+{ stdenv, fetchgit, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, retroarch
+, alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
 
@@ -7,7 +7,7 @@ let
 
   d2u = stdenv.lib.replaceChars ["-"] ["_"];
 
-  mkLibRetroCore = ({ core, src, description, ... }@a:
+  mkLibRetroCore = ({ core, src, description, license, ... }@a:
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
 
     name = "libretro-${core}-${version}";
@@ -37,7 +37,7 @@ let
     meta = with stdenv.lib; {
       inherit description;
       homepage = https://www.libretro.com/;
-      license = licenses.gpl3Plus;
+      inherit license;
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.linux;
     };
@@ -50,7 +50,7 @@ let
     fetchSubmodules = true;
   };
 
-in
+in with stdenv.lib.licenses;
 
 {
 
@@ -62,6 +62,7 @@ in
       sha256 = "1n42f70vni2zavppayaq8xmsyx5cn40qi4zk4pgq1w3hh2q8mj72";
     };
     description = "Port of 4DO/libfreedo to libretro";
+    license = "Non-commercial";
   }).override {
     buildPhase = "make";
   };
@@ -74,6 +75,7 @@ in
       sha256 = "0p0k7kqfd6xg1qh6vgzgwp122miprb2bpzljgxd9kvigxihsl6f7";
     };
     description = "Port of Mednafen's PC Engine core to libretro";
+    license = gpl2;
   }).override {
     buildPhase = "make";
     name = "beetle-pce-fast";
@@ -87,6 +89,7 @@ in
       sha256 = "1k4b7g50ajzchjrm6d3v68hvri4k3hzvacn2l99i5yq3hxp7vs7x";
     };
     description = "Port of Mednafen's PSX Engine core to libretro";
+    license = gpl2;
   }).override {
     buildPhase = "make";
     name = "beetle-psx";
@@ -100,6 +103,7 @@ in
       sha256 = "1d1brysynwr6inlwfgv7gwkl3i9mf4lsaxd9wm2szw86g4diyn4c";
     };
     description = "Port of Mednafen's Saturn core to libretro";
+    license = gpl2;
   }).override {
     buildPhase = "make";
     name = "beetle-saturn";
@@ -114,6 +118,7 @@ in
       sha256 = "0vkn1f38vwazpp3kbvvv8c467ghak6yfx00s48wkxwvhmak74a3s";
     };
     description = "Fork of bsnes with HLE DSP emulation restored";
+    license = gpl3;
   }).override {
     buildPhase = "make && cd out";
   };
@@ -126,6 +131,7 @@ in
       sha256 = "064gzfbr7yizmvi91ry5y6bzikj633kdqhvzycb9f1g6kspf8yyl";
     };
     description = "libretro wrapper for desmume NDS emulator";
+    license = gpl2;
   }).override {
     configurePhase = "cd desmume";
   };
@@ -138,9 +144,10 @@ in
       sha256 = "1cshlfmhph8dl3vgvn37imvp2b7xs2cx1r1ifp5js5psvhycrbz3";
     };
     description = "Port of Dolphin to libretro";
+    license = gpl2Plus;
 
     extraBuildInputs = [
-      cmake curl mesa pcre pkgconfig sfml miniupnpc
+      cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
       libevdev libudev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
@@ -166,6 +173,7 @@ in
       sha256 = "159dww8mxi95xz4ypw38vsn1g4k6z8sv415qqf0qriydwhw6mh2m";
     };
     description = "Port of Final Burn Alpha to libretro";
+    license = "Non-commercial";
   }).override {
     buildPhase = ''
       cd svn-current/trunk \
@@ -182,6 +190,7 @@ in
       sha256 = "0jnwh1338q710x47bzrx319g5xbq9ipv35kyjlbkrzhqjq1blz0b";
     };
     description = "FCEUmm libretro port";
+    license = gpl2;
   };
 
   gambatte = mkLibRetroCore rec {
@@ -192,6 +201,7 @@ in
       sha256 = "0h7hyj630nk1s32wx02y4q9x2lp6wbnh6nkc9ihf4pygcsignmwr";
     };
     description = "Gambatte libretro port";
+    license = gpl2;
   };
 
   genesis-plus-gx = mkLibRetroCore rec {
@@ -202,6 +212,22 @@ in
       sha256 = "0s11ddpnb44q4xjkl7dylldhi9y5zqywqavpk0bbwyj84r1cbz3c";
     };
     description = "Enhanced Genesis Plus libretro port";
+    license = "Non-commercial";
+  };
+
+  higan-sfc = (mkLibRetroCore rec {
+    core = "higan-sfc";
+    src = fetchFromGitLab {
+      owner = "higan";
+      repo = "higan";
+      rev = "d3f592013a27cb78f17d84f90a6be6cf6f6af1d1";
+      sha256 = "19d4cbwg8d085xq5lmql4v5l4ckgwqzc59ha5yfgv3w4qfp4dmij";
+    };
+    description = "Accurate SNES / Super Famicom emulator";
+    license = gpl3;
+  }).override {
+    makefile = "GNUmakefile";
+    buildPhase = "cd higan && make compiler=g++ target=libretro binary=library && cd out";
   };
 
   mame = (mkLibRetroCore {
@@ -212,8 +238,9 @@ in
       sha256 = "0blfvq28hgv9kkpijd8c9d9sa5g2qr448clwi7wrj8kqfdnrr8m1";
     };
     description = "Port of MAME to libretro";
+    license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib mesa portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ alsaLib libGLU_combined portaudio python27 xorg.libX11 ];
   }).override {
     postPatch = ''
       # Prevent the failure during the parallel building of:
@@ -230,6 +257,7 @@ in
       sha256 = "1b30sa861r4bhbqkx6vkklh4iy625bpzki2ks4ivvjns1ijczvc7";
     };
     description = "Port of mGBA to libretro";
+    license = mpl20;
   };
 
   mupen64plus = (mkLibRetroCore rec {
@@ -240,8 +268,9 @@ in
       sha256 = "0q5kvjz7rpk7mp75cdywqjgmy10c0h7ky26hh1x90d39y94idcd8";
     };
     description = "Libretro port of Mupen64 Plus, GL only";
+    license = gpl2;
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -254,6 +283,7 @@ in
       sha256 = "17ac7dhasch6f4lpill8c5scsvaix0jvbf1cp797qbll4hk84f2q";
     };
     description = "nestopia undead libretro port";
+    license = gpl2;
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -266,8 +296,9 @@ in
       sha256 = "19396v50azrb52ifjk298zgcbxn8dvfvp6zwrnzsk6mp8ff7qcqw";
     };
     description = "Parallel Mupen64plus rewrite for libretro.";
+    license = gpl2;
 
-    extraBuildInputs = [ mesa libpng ];
+    extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
     buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
@@ -280,6 +311,7 @@ in
       sha256 = "0fl9r6jj2x9231md5zc4scra79j5hfn1n2z67scff1375xg1k64h";
     };
     description = "Fast MegaDrive/MegaCD/32X emulator";
+    license = "MAME";
 
     extraBuildInputs = [ libpng SDL ];
   }).override {
@@ -295,7 +327,8 @@ in
       sha256 = "06k1gzmypz61dslynrw4b5i161rhj43y6wnr2nhbzvwcv5bw8w8r";
     };
     description = "ppsspp libretro port";
-    extraBuildInputs = [ mesa ffmpeg ];
+    license = gpl2;
+    extraBuildInputs = [ libGLU_combined ffmpeg ];
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -308,6 +341,7 @@ in
       sha256 = "02vkl3y5dmyzifsviphspqv03a2rdyf36zpjpgfg7x0s226f56ja";
     };
     description = "Prboom libretro port";
+    license = gpl2;
   }).override {
     buildPhase = "make";
   };
@@ -320,6 +354,7 @@ in
       sha256 = "18lizdb9zjlfhh8ibvmcscldlf3mw4aj8nds3pah68cd2lw170w1";
     };
     description = "QuickNES libretro port";
+    license = lgpl21Plus;
   }).override {
     buildPhase = "make";
   };
@@ -332,7 +367,8 @@ in
       sha256 = "0d8wzpv7pcyh437gmvi439vim26wyrjmi5hj97wvyvggywjwrx8m";
     };
     description = "Reicast libretro port";
-    extraBuildInputs = [ mesa ];
+    license = gpl2;
+    extraBuildInputs = [ libGLU_combined ];
   }).override {
     buildPhase = "make";
   };
@@ -345,7 +381,8 @@ in
       sha256 = "097i2dq3hw14hicsplrs36j1qa3r45vhzny5v4aw6qw4aj34hksy";
     };
     description = "Libretro port of ScummVM";
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis mesa SDL ];
+    license = gpl2;
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU_combined SDL ];
   }).override {
     buildPhase = "cd backends/platform/libretro/build && make";
   };
@@ -358,6 +395,7 @@ in
       sha256 = "02f04ss45km32lp68diyfkix1gryx89qy8cc80189ipwnx80pgip";
     };
     description = "Port of SNES9x git to libretro";
+    license = "Non-commercial";
   }).override {
     buildPhase = "cd libretro && make";
   };
@@ -370,6 +408,7 @@ in
       sha256 = "1vhgsrg9l562nincfvpj2h2dqkkblg1qmh0v47jqlqgmgl2b1zij";
     };
     description = "Optimized port/rewrite of SNES9x 1.52+ to Libretro";
+    license = "Non-commercial";
   }).override {
     buildPhase = ''
       make -f Makefile.libretro
@@ -385,6 +424,7 @@ in
       sha256 = "18r1yyfzvjq2hq04d94y37kzsq6aywh1aim69a3imk8kh46gwrh0";
     };
     description = "Port of Stella to libretro";
+    license = gpl2;
   }).override {
     buildPhase = "make";
   };
@@ -397,6 +437,7 @@ in
       sha256 = "03s4rh7dbbhbfc4pfdvr9jcbxrp4ijg8yp49s1xhr7sxsblj2vpv";
     };
     description = "VBA-M libretro port with modifications for speed";
+    license = gpl2;
   };
 
   vba-m = (mkLibRetroCore rec {
@@ -407,6 +448,7 @@ in
       sha256 = "043djmqvh2grc25hwjw4b5kfx57b89ryp6fcl8v632sm35l3dd6z";
     };
     description = "vanilla VBA-M libretro port";
+    license = gpl2;
   }).override {
     buildPhase = "cd src/libretro && make";
   };

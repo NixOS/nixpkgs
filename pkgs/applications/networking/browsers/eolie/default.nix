@@ -1,5 +1,5 @@
 { stdenv, fetchgit, intltool, itstool, meson, ninja, pkgconfig, wrapGAppsHook
-, git, glib, glib_networking, gsettings_desktop_schemas, gst_all_1, gtk3
+, git, glib, glib-networking, gsettings-desktop-schemas, gst_all_1, gtk3
 , gtkspell3, libsecret, python36, python36Packages, webkitgtk }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     git # required to download ad blocking DB
-    glib_networking
-    gsettings_desktop_schemas
+    glib-networking
+    gsettings-desktop-schemas
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

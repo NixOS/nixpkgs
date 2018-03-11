@@ -13,7 +13,6 @@ rec {
     config = "armv5tel-unknown-linux-gnueabi";
     arch = "armv5tel";
     float = "soft";
-    libc = "glibc";
     platform = platforms.sheevaplug;
   };
 
@@ -22,7 +21,6 @@ rec {
     arch = "armv6l";
     float = "hard";
     fpu = "vfp";
-    libc = "glibc";
     platform = platforms.raspberrypi;
   };
 
@@ -31,15 +29,20 @@ rec {
     arch = "armv7-a";
     float = "hard";
     fpu = "vfpv3-d16";
-    libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
   };
 
   aarch64-multiplatform = rec {
     config = "aarch64-unknown-linux-gnu";
     arch = "aarch64";
-    libc = "glibc";
     platform = platforms.aarch64-multiplatform;
+  };
+
+  aarch64-android-prebuilt = rec {
+    config = "aarch64-unknown-linux-android";
+    arch = "aarch64";
+    platform = platforms.aarch64-multiplatform;
+    useAndroidPrebuilt = true;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // rec {
@@ -51,17 +54,34 @@ rec {
     arch = "armv5tel";
     config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
-    libc = "glibc";
     platform = platforms.pogoplug4;
   };
 
   fuloongminipc = rec {
-    config = "mips64el-unknown-linux-gnu";
+    config = "mipsel-unknown-linux-gnu";
     arch = "mips";
     float = "hard";
-    libc = "glibc";
     platform = platforms.fuloong2f_n32;
   };
+
+  muslpi = raspberryPi // {
+    config = "armv6l-unknown-linux-musleabihf";
+  };
+
+  aarch64-multiplatform-musl = aarch64-multiplatform // {
+    config = "aarch64-unknown-linux-musl";
+  };
+
+  musl64 = { config = "x86_64-unknown-linux-musl"; };
+  musl32  = { config = "i686-unknown-linux-musl"; };
+
+  riscv = bits: {
+    config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform bits;
+  };
+  riscv64 = riscv "64";
+  riscv32 = riscv "32";
+
 
   #
   # Darwin

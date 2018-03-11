@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool }:
+{ stdenv, fetchurl, autoconf, automake, libtool, hostPlatform }:
 
 stdenv.mkDerivation rec {
   name = "libatomic_ops-${version}";
@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     ];
     sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
   };
+
+  # https://github.com/ivmai/libatomic_ops/pull/32
+  patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 

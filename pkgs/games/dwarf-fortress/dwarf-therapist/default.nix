@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
-  version = "39.2.0";
+  version = "39.2.1";
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "1ddy9b9ly1231pnjs43gj7pvc77wjvs4j2rlympal81vyabaphmy";
+    sha256 = "1dgcn1a4sz649kj94ldqy4ms7zhwpaj3q4r86b0yfh6dda8jzlgp";
   };
 
   outputs = [ "out" "layouts" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
     maintainers = with maintainers; [ the-kenny abbradar bendlas ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://github.com/Dwarf-Therapist/Dwarf-Therapist;
   };
 }

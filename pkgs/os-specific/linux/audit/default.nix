@@ -1,5 +1,5 @@
 {
-  stdenv, buildPackages, fetchurl,
+  stdenv, buildPackages, fetchurl, fetchpatch,
   enablePython ? false, python ? null,
 }:
 
@@ -27,6 +27,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/audit/0002-auparse-remove-use-of-rawmemchr.patch?id=3e57180fdf3f90c30a25aea44f57846efc93a696";
+      name = "0002-auparse-remove-use-of-rawmemchr.patch";
+      sha256 = "1caaqbfgb2rq3ria5bz4n8x30ihgihln6w9w9a46k62ba0wh9rkz";
+    })
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/audit/0003-all-get-rid-of-strndupa.patch?id=3e57180fdf3f90c30a25aea44f57846efc93a696";
+      name = "0003-all-get-rid-of-strndupa.patch";
+      sha256 = "1ddrm6a0ijrf7caw1wpw2kkbjp2lkxkmc16v51j5j7dvdalc6591";
+    })
+  ];
+
+  prePatch = ''
+    sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
+  '';
   meta = {
     description = "Audit Library";
     homepage = http://people.redhat.com/sgrubb/audit/;

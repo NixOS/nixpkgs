@@ -1,12 +1,9 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, isPy35
-, isPy36
 , fetchPypi
 , hypothesis
 , pytestcache
-, pytestcov
 , pytestflakes
 , pytestpep8
 , pytest
@@ -16,14 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "natsort";
-  version = "5.1.1";
+  version = "5.2.0";
 
-  buildInputs = [
+  checkInputs = [
     hypothesis
     pytestcache
-    pytestcov
     pytestflakes
     pytestpep8
     pytest
@@ -36,15 +31,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ffbfb74bf3fc3905be1b9b052ed865675651e38fcd972ed1ed5c64a02f93cbd";
+    sha256 = "c960082d2145b04723041c4b85092546560538e29664dd197a1344d5b090bc91";
   };
-
-  patches = lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
 
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8 --cov natsort --cov-report term-missing
+    pytest --flakes --pep8
   '';
 
   meta = {

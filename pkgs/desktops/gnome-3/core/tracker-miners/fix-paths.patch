@@ -1,0 +1,11 @@
+--- a/src/libtracker-miners-common/tracker-domain-ontology.c
++++ b/src/libtracker-miners-common/tracker-domain-ontology.c
+@@ -372,7 +372,7 @@
+ 	if (!priv->ontology_location) {
+ 		gchar *ontology_path;
+ 
+-		ontology_path = g_build_filename (SHAREDIR, "tracker", "ontologies",
++		ontology_path = g_build_filename ("@tracker@", "share", "tracker", "ontologies",
+ 		                                  priv->ontology_name, NULL);
+ 
+ 		if (!g_file_test (ontology_path, G_FILE_TEST_IS_DIR)) {

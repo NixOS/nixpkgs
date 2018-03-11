@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, mesa_noglu, glib, gdk_pixbuf, xorg, libintlOrEmpty
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland
+{ stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintlOrEmpty
+, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
-  ver_maj = "1.22";
-  ver_min = "2";
-in
-stdenv.mkDerivation rec {
-  name = "cogl-${ver_maj}.${ver_min}";
+  pname = "cogl";
+  version = "1.22.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cogl/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
   };
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with xorg; [
       glib gdk_pixbuf gobjectIntrospection wayland
-      mesa_noglu libXrandr libXfixes libXcomposite libXdamage
+      libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
@@ -41,6 +40,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   #doCheck = true; # all tests fail (no idea why)
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A small open source library for using 3D graphics hardware for rendering";

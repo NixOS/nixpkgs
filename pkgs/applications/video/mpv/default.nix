@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
-, lua, lua5_sockets, libuchardet, libiconv ? null, darwin
+, lua, luasocket, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
-    mesa       ? null,
+    libGLU_combined       ? null,
     libX11     ? null,
     libXext    ? null,
     libXxf86vm ? null
@@ -13,25 +13,25 @@
     wayland      ? null,
     libxkbcommon ? null
 
-, rubberbandSupport  ? !stdenv.isDarwin, rubberband ? null
+, rubberbandSupport  ? true,  rubberband    ? null
 , xineramaSupport    ? true,  libXinerama   ? null
 , xvSupport          ? true,  libXv         ? null
 , sdl2Support        ? true,  SDL2          ? null
-, alsaSupport        ? !stdenv.isDarwin,  alsaLib       ? null
+, alsaSupport        ? true,  alsaLib       ? null
 , screenSaverSupport ? true,  libXScrnSaver ? null
 , vdpauSupport       ? true,  libvdpau      ? null
-, dvdreadSupport     ? !stdenv.isDarwin,  libdvdread    ? null
-, dvdnavSupport      ? dvdreadSupport,  libdvdnav     ? null
+, dvdreadSupport     ? true,  libdvdread    ? null
+, dvdnavSupport      ? true,  libdvdnav     ? null
 , bluraySupport      ? true,  libbluray     ? null
 , speexSupport       ? true,  speex         ? null
 , theoraSupport      ? true,  libtheora     ? null
-, pulseSupport       ? !stdenv.isDarwin,  libpulseaudio ? null
+, pulseSupport       ? true,  libpulseaudio ? null
 , bs2bSupport        ? true,  libbs2b       ? null
 , cacaSupport        ? true,  libcaca       ? null
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
-, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
+, drmSupport         ? true,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -45,7 +45,7 @@ with stdenv.lib;
 let
   available = x: x != null;
 in
-assert x11Support         -> all available [mesa libX11 libXext libXxf86vm];
+assert x11Support         -> all available [libGLU_combined libX11 libXext libXxf86vm];
 assert waylandSupport     -> all available [wayland libxkbcommon];
 assert rubberbandSupport  -> available rubberband;
 assert xineramaSupport    -> x11Support && available libXinerama;
@@ -127,14 +127,15 @@ in stdenv.mkDerivation rec {
     python3 ${waf} configure --prefix=$out $configureFlags
   '';
 
-  nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
+  nativeBuildInputs = [
+    docutils makeWrapper perl
+    pkgconfig python3 which
+  ];
 
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
-    lua lua5_sockets libuchardet
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       libiconv Cocoa CoreAudio ])
-    ++ optional alsaSupport        alsaLib
+    lua luasocket libuchardet
+  ] ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -156,8 +157,11 @@ in stdenv.mkDerivation rec {
     ++ optional vapoursynthSupport vapoursynth
     ++ optional archiveSupport     libarchive
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
-    ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
-    ++ optionals waylandSupport    [ wayland libxkbcommon ];
+    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm ]
+    ++ optionals waylandSupport    [ wayland libxkbcommon ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      libiconv Cocoa CoreAudio
+    ]);
 
   enableParallelBuilding = true;
 
@@ -165,7 +169,14 @@ in stdenv.mkDerivation rec {
     python3 ${waf} build
   '';
 
-  installPhase = ''
+  installPhase =
+  let
+    getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
+                      "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
+    luaPath  = getPath "lua";
+    luaCPath = getPath "so";
+  in
+  ''
     python3 ${waf} install
 
     # Use a standard font
@@ -174,6 +185,8 @@ in stdenv.mkDerivation rec {
     # Ensure youtube-dl is available in $PATH for MPV
     wrapProgram $out/bin/mpv \
       --add-flags "--scripts=${concatStringsSep "," scripts}" \
+      --prefix LUA_PATH : "${luaPath}" \
+      --prefix LUA_CPATH : "${luaCPath}" \
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
@@ -199,5 +212,3 @@ in stdenv.mkDerivation rec {
     '';
   };
 }
-# TODO: investigate caca support
-# TODO: investigate lua5_sockets bug

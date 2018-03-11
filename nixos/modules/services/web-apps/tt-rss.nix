@@ -505,7 +505,7 @@ let
                     ${cfg.database.name}''
 
               else if cfg.database.type == "mysql" then ''
-                  echo '${e}' | ${pkgs.mysql}/bin/mysql \
+                  echo '${e}' | ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.mysql.package}/bin/mysql \
                     -u ${cfg.database.user} \
                     ${optionalString (cfg.database.password != null) "-p${cfg.database.password}"} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} -P ${toString dbPort}"} \

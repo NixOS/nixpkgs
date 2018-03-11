@@ -1,13 +1,13 @@
 { stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
 , lua, fpc, pcre, portaudio, freetype, libpng
 , SDL2, SDL2_image, SDL2_gfx, SDL2_mixer, SDL2_net, SDL2_ttf
-, ffmpeg, sqlite, zlib, libX11, mesa }:
+, ffmpeg, sqlite, zlib, libX11, libGLU_combined }:
 
 let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 mesa ffmpeg
+    sqlite lua zlib libX11 libGLU_combined ffmpeg
   ];
 
 in stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
@@ -41,6 +41,23 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   #patches = [ ./purity.patch ];
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      name = "fix-stdio-usage.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
+    })
+    (fetchpatch {
+      name = "mallinfo.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
+    })
+    (fetchpatch {
+      name = "mlockall-default-config.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/lvm2/mlockall-default-config.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
+      sha256 = "1ivbj3sphgf8n1ykfiv5rbw7s8dgnj5jcr9jl2v8cwf28lkacw5l";
+    })
+  ];
 
   # To prevent make install from failing.
   preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";

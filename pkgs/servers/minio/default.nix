@@ -3,13 +3,13 @@
 buildGoPackage rec {
   name = "minio-${version}";
 
-  version = "2018-01-18T20-33-21Z";
+  version = "2018-02-09T22-40-05Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "102rilh1kjf9y6g6y83ikk42w7g1sbld11md3wm54hynyh956xrs";
+    sha256 = "0qxrzmkm5hza5xbx9dkrgadwjg3hykwf79hix3s0laqyksmpj9mk";
   };
 
   goPackagePath = "github.com/minio/minio";
@@ -22,7 +22,7 @@ buildGoPackage rec {
     homepage = https://www.minio.io/;
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];
-    platforms = platforms.x86_64 ++ ["aarch64-linux"];
+    platforms = platforms.unix;
     license = licenses.asl20;
   };
 }

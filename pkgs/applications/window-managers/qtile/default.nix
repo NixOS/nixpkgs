@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python27Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python27Packages.cairocffi.override {
-    pythonPath = [ python27Packages.xcffib ];
+    withXcffib = true;
   };
 in
 

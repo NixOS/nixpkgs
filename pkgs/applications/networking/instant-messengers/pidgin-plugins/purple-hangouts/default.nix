@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, pidgin, glib, json_glib, protobuf, protobufc }:
+{ stdenv, fetchhg, pidgin, glib, json-glib, protobuf, protobufc }:
 
 stdenv.mkDerivation rec {
   name = "purple-hangouts-hg-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cs7dcd44lkc2anradyddjvmfvnl46ixw4idaf1m9fd7j35mg7b1";
   };
 
-  buildInputs = [ pidgin glib json_glib protobuf protobufc ];
+  buildInputs = [ pidgin glib json-glib protobuf protobufc ];
 
   installPhase = ''
     install -Dm755 -t $out/lib/pidgin/ libhangouts.so

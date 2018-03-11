@@ -1,17 +1,10 @@
-{ buildPackages, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, openssl
+{ buildPackages
 , ncurses
-, libelf
-, utillinux
-, writeTextFile, ubootTools
 , callPackage
-, overrideCC, gcc7
-}:
-
-{ stdenv, buildPackages, perl, buildLinux
-
-, # Allow really overriding even our gcc7 default.
-  # We want gcc >= 7.3 to enable the "retpoline" mitigation of security problems.
-  stdenvNoOverride ? overrideCC stdenv gcc7
+, perl
+, bison ? null
+, flex ? null
+, stdenv
 
 , # The kernel source tarball.
   src
@@ -37,13 +30,17 @@
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
 , ignoreConfigErrors ? hostPlatform.platform.name != "pc" ||
-                       hostPlatform != stdenvNoOverride.buildPlatform
+                       hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 , hostPlatform
+
+# easy overrides to hostPlatform.platform members
+, autoModules ? hostPlatform.platform.kernelAutoModules
+, preferBuiltin ? hostPlatform.platform.kernelPreferBuiltin or false
+, kernelArch ? hostPlatform.platform.kernelArch
+
 , ...
 } @ args:
-
-let stdenv = stdenvNoOverride; in # finish the rename
 
 assert stdenv.isLinux;
 
@@ -74,7 +71,7 @@ let
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
-    inherit ignoreConfigErrors;
+    inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
     name = "linux-config-${version}";
 
     generateConfig = ./generate-config.pl;
@@ -82,16 +79,14 @@ let
     kernelConfig = kernelConfigFun config;
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = hostPlatform.platform.name;
     # e.g. "defconfig"
     kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
     # e.g. "bzImage"
     kernelTarget = hostPlatform.platform.kernelTarget;
-    autoModules = hostPlatform.platform.kernelAutoModules;
-    preferBuiltin = hostPlatform.platform.kernelPreferBuiltin or false;
-    arch = hostPlatform.platform.kernelArch;
 
     prePatch = kernel.prePatch + ''
       # Patch kconfig to print "###" after every question so that
@@ -105,12 +100,12 @@ let
       export buildRoot="''${buildRoot:-build}"
 
       # Get a basic config file for later refinement with $generateConfig.
-      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$arch
+      make HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc -C . O="$buildRoot" $kernelBaseConfig ARCH=$kernelArch
 
       # Create the config file.
       echo "generating kernel configuration..."
       echo "$kernelConfig" > "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';
 

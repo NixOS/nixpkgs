@@ -8,7 +8,7 @@
 , libXScrnSaver
 , libXxf86misc
 , gtk3
-, dbus_glib
+, dbus-glib
 , systemd
 , wrapGAppsHook
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ which xfce.xfce4_dev_tools glib systemd
-                  libX11 libXScrnSaver libXxf86misc gtk3 dbus_glib wrapGAppsHook ];
+                  libX11 libXScrnSaver libXxf86misc gtk3 dbus-glib wrapGAppsHook ];
 
   preConfigure = ''
     ./autogen.sh

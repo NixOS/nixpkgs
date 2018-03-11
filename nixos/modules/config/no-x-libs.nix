@@ -28,13 +28,13 @@ with lib;
 
     nixpkgs.config.packageOverrides = pkgs: {
       dbus = pkgs.dbus.override { x11Support = false; };
-      networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override { withGnome = false; };
-      networkmanager_l2tp = pkgs.networkmanager_l2tp.override { withGnome = false; };
-      networkmanager_openconnect = pkgs.networkmanager_openconnect.override { withGnome = false; };
-      networkmanager_openvpn = pkgs.networkmanager_openvpn.override { withGnome = false; };
-      networkmanager_pptp = pkgs.networkmanager_pptp.override { withGnome = false; };
-      networkmanager_vpnc = pkgs.networkmanager_vpnc.override { withGnome = false; };
-      networkmanager_iodine = pkgs.networkmanager_iodine.override { withGnome = false; };
+      networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override { withGnome = false; };
+      networkmanager-l2tp = pkgs.networkmanager-l2tp.override { withGnome = false; };
+      networkmanager-openconnect = pkgs.networkmanager-openconnect.override { withGnome = false; };
+      networkmanager-openvpn = pkgs.networkmanager-openvpn.override { withGnome = false; };
+      networkmanager-pptp = pkgs.networkmanager-pptp.override { withGnome = false; };
+      networkmanager-vpnc = pkgs.networkmanager-vpnc.override { withGnome = false; };
+      networkmanager-iodine = pkgs.networkmanager-iodine.override { withGnome = false; };
       pinentry = pkgs.pinentry_ncurses;
     };
   };

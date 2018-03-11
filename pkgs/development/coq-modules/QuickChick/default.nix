@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, coq, ssreflect }:
+{ stdenv, fetchFromGitHub, coq, ssreflect }:
 
 let param =
   {
@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
 
   name = "coq${coq.coq-version}-QuickChick-${param.version}";
 
-  src = fetchgit {
-    url = git://github.com/QuickChick/QuickChick.git;
+  src = fetchFromGitHub {
+    owner = "QuickChick";
+    repo = "QuickChick";
     inherit (param) rev sha256;
   };
 

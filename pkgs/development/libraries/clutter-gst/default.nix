@@ -1,12 +1,13 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl }:
+{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3 }:
 
-stdenv.mkDerivation rec {
-  major = "3.0";
-  minor = "24";
-  name = "clutter-gst-${major}.${minor}";
+let
+  pname = "clutter-gst";
+  version = "3.0.24";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/clutter-gst/${major}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0v6cg0syh4vx7y7ni47jsvr2r57q0j3h1f1gjlp0ciscixywiwg9";
   };
 
@@ -14,6 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "GStreamer bindings for clutter";

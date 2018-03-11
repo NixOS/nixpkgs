@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex which perl ]
    ++ stdenv.lib.optional sensord rrdtool;
 
+  patches = [ ./musl-fix-includes.patch ];
+
   preBuild = ''
     makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc
     ${stdenv.lib.optionalString sensord "PROG_EXTRA=sensord"})

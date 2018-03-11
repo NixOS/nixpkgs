@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "dtools-${version}";
-  version = "2.078.1";
+  version = "2.079.0";
 
   srcs = [
     (fetchFromGitHub {
       owner = "dlang";
       repo = "dmd";
       rev = "v${version}";
-      sha256 = "0b9lphh4g3r9cyzv4wcfppv9j3w952vvwv615za23acgwav3mqg2";
+      sha256 = "1k6cky71pqnss6h6391p1ich2mjs598f5fda018aygnxg87qgh4y";
       name = "dmd";
     })
     (fetchFromGitHub {
       owner = "dlang";
       repo = "tools";
       rev = "v${version}";
-      sha256 = "1cydhn8g0h9i9mygzi80fb5fz3z1f6m8b9gypdvmyhkkzg63kf12";
+      sha256 = "0fvpfwh3bh3fymrmis3n39x9hkfklmv81lrlqcyl8fmmk694yvad";
       name = "dtools";
     })
   ];
@@ -28,23 +28,11 @@ stdenv.mkDerivation rec {
       cd dtools
   '';
 
-  postPatch = ''
-      substituteInPlace posix.mak \
-          --replace "../dmd/generated/\$(OS)/release/\$(MODEL)/dmd" ${dmd.out}/bin/dmd
-
-      substituteInPlace posix.mak \
-          --replace gcc $CC
-
-      # To fix rdmd test with newer phobos
-      substituteInPlace rdmd.d \
-          --replace " std.stdiobase," ""
-  '';
-
   nativeBuildInputs = [ dmd ];
   buildInputs = [ curl ];
 
   makeCmd = ''
-    make -f posix.mak DMD=${dmd.out}/bin/dmd DMD_DIR=dmd
+    make -f posix.mak DMD_DIR=dmd DMD=${dmd.out}/bin/dmd CC=${stdenv.cc}/bin/cc
   '';
 
   buildPhase = ''

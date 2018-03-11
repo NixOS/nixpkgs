@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "packaging";
   version = "16.8";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +12,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing six ];
 
-  buildInputs = [ pytest pretend ];
+  checkInputs = [ pytest pretend ];
+
+  checkPhase = ''
+    py.test tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Core utilities for Python packages";

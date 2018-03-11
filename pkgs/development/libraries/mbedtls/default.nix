@@ -1,30 +1,32 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-2.6.1";
+  name = "mbedtls-2.7.1";
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = name;
-    sha256 = "0d421w9bz4p1nw6kza3licv2w97y1364mcpb4fxvpgdqz48rc1vg";
+    sha256 = "0dkmhvs38sqgnfxgzrs81ghajyyzp9bb7wy9kn96q7zy4lly0gg6";
   };
 
   nativeBuildInputs = [ perl ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_dylib.patch ];
+
+  postPatch = ''
+    patchShebangs .
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace library/Makefile --replace "-soname" "-install_name"
     substituteInPlace tests/scripts/run-test-suites.pl --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
     # Necessary for install_name_tool below
     echo "LOCAL_LDFLAGS += -headerpad_max_install_names" >> programs/Makefile
   '';
 
-  postPatch = ''
-    patchShebangs .
-  '';
-
   makeFlags = [
     "SHARED=1"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "DLEXT=dylib"
   ];
 
   installFlags = [
@@ -32,14 +34,14 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $out/lib/libmbedtls.so.10
-      install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $out/lib/libmbedx509.so.0
-      install_name_tool -change libmbedx509.so.0 $out/lib/libmbedx509.so.0 $out/lib/libmbedtls.so.10
+      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedtls.dylib
+      install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $out/lib/libmbedx509.dylib
+      install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $out/lib/libmbedtls.dylib
 
       for exe in $out/bin/*; do
-          install_name_tool -change libmbedtls.so.10 $out/lib/libmbedtls.so.10 $exe
-          install_name_tool -change libmbedx509.so.0 $out/lib/libmbedx509.so.0 $exe
-          install_name_tool -change libmbedcrypto.so.0 $out/lib/libmbedcrypto.so.0 $exe
+          install_name_tool -change libmbedtls.dylib $out/lib/libmbedtls.dylib $exe
+          install_name_tool -change libmbedx509.dylib $out/lib/libmbedx509.dylib $exe
+          install_name_tool -change libmbedcrypto.dylib $out/lib/libmbedcrypto.dylib $exe
       done
   '';
 

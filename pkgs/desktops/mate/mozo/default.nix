@@ -1,17 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate-menus, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, intltool, mate, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "mozo-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "04yn9bw64q5a5kvpmkb7rb3mlp11pmnvkbphficsgb0368fj895b";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1108avdappfjadd46ld7clhh5m9f4b5khl5y33l377m8ky9dy87g";
   };
   
-  pythonPath = [ mate-menus pythonPackages.pygobject3 ];
+  pythonPath = [ mate.mate-menus pythonPackages.pygobject3 ];
 
   nativeBuildInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
   xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, mesa_glu,
+  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU,
   xkeyboard_config, pcre
 }:
 

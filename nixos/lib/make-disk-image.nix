@@ -51,7 +51,7 @@ with lib;
 
 let format' = format; in let
 
-  format = if (format' == "qcow2-compressed") then "qcow2" else format';
+  format = if format' == "qcow2-compressed" then "qcow2" else format';
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
 
@@ -84,7 +84,8 @@ let format' = format; in let
 
   nixpkgs = cleanSource pkgs.path;
 
-  channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
+  # FIXME: merge with channel.nix / make-channel.nix.
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
     mkdir -p $out
     cp -prd ${nixpkgs} $out/nixos
     chmod -R u+w $out/nixos
@@ -92,16 +93,19 @@ let format' = format; in let
       ln -s . $out/nixos/nixpkgs
     fi
     rm -rf $out/nixos/.git
-    echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
+    echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
-  metaClosure = pkgs.writeText "meta" ''
-    ${config.system.build.toplevel}
-    ${config.nix.package.out}
-    ${channelSources}
-  '';
-
-  prepareImageInputs = with pkgs; [ rsync utillinux parted e2fsprogs lkl fakeroot config.system.build.nixos-prepare-root ] ++ stdenv.initialPath;
+  binPath = with pkgs; makeBinPath (
+    [ rsync
+      utillinux
+      parted
+      e2fsprogs
+      lkl
+      config.system.build.nixos-install
+      config.system.build.nixos-enter
+      nix
+    ] ++ stdenv.initialPath);
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -109,8 +113,10 @@ let format' = format; in let
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
 
+  closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
+
   prepareImage = ''
-    export PATH=${makeBinPath prepareImageInputs}
+    export PATH=${binPath}
 
     # Yes, mkfs.ext4 takes different units in different contexts. Fun.
     sectorsToKilobytes() {
@@ -168,11 +174,15 @@ let format' = format; in let
       fi
     done
 
-    # TODO: Nix really likes to chown things it creates to its current user...
-    fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
+    export HOME=$TMPDIR
 
-    # fakeroot seems to always give the owner write permissions, which we do not want
-    find $root/nix/store -mindepth 1 -maxdepth 1 -type f -o -type d | xargs chmod -R a-w
+    # Provide a Nix database so that nixos-install can copy closures.
+    export NIX_STATE_DIR=$TMPDIR/state
+    nix-store --load-db < ${closureInfo}/registration
+
+    echo "running nixos-install..."
+    nixos-install --root $root --no-bootloader --no-root-passwd \
+      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
 
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
@@ -181,7 +191,6 @@ in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
       buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
-      exportReferencesGraph = [ "closure" metaClosure ];
       postVM = ''
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
@@ -194,6 +203,8 @@ in pkgs.vmTools.runInLinuxVM (
       memSize = 1024;
     }
     ''
+      export PATH=${binPath}:$PATH
+
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
 
       # Some tools assume these exist
@@ -218,15 +229,8 @@ in pkgs.vmTools.runInLinuxVM (
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
-      mount --rbind /dev  $mountPoint/dev
-      mount --rbind /proc $mountPoint/proc
-      mount --rbind /sys  $mountPoint/sys
-
       # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 chroot $mountPoint /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-
-      # TODO: figure out if I should activate, but for now I won't
-      # chroot $mountPoint /nix/var/nix/profiles/system/activate
+      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
       # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
       rm -f $mountPoint/etc/machine-id

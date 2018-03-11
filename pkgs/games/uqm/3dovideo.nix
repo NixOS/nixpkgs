@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
       The reason for this is because the 3DO uses its own proprietary disk
       format.
 
-      Save the file as videos.tar and use "nix-prefetch-url file://${name}" to
+      Save the file as videos.tar and use "nix-prefetch-url file://\$PWD/${name}" to
       add it to the Nix store.
 
       [*] ${helper}/bin/uqm3donix CDIMAGE ${name}

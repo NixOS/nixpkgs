@@ -51,13 +51,14 @@ let
   # shell glob that ought to match it.
   dynamicLinker =
     /**/ if libc == null then null
+    else if targetPlatform.libc == "musl"             then "${libc_lib}/lib/ld-musl-*"
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
     else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
-    else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
+    else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
@@ -170,13 +171,20 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
+    sep = optionalString (!targetPlatform.isMips) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isArm     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
       else if targetPlatform.isi686    then "i386"
+      else if targetPlatform.isMips    then {
+          "mips"     = "btsmipn32"; # n32 variant
+          "mipsel"   = "ltsmipn32"; # n32 variant
+          "mips64"   = "btsmip";
+          "mips64el" = "ltsmip";
+        }.${targetPlatform.parsed.cpu.name}
       else throw "unknown emulation for platform: " + targetPlatform.config;
-    in targetPlatform.platform.bfdEmulation or (fmt + "-" + arch);
+    in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
   depsTargetTargetPropagated = extraPackages;
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, python, libxml2Python, libxslt, which, libX11, gtk
-, intltool, GConf, gnome_doc_utils}:
+, intltool, GConf, gnome-doc-utils}:
 
 stdenv.mkDerivation {
   name = "gnome-desktop-2.32.1";
@@ -12,5 +12,5 @@ stdenv.mkDerivation {
   configureFlags = "--disable-scrollkeeper";
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python libxml2Python libxslt which libX11 gtk
-                  intltool GConf gnome_doc_utils ];
+                  intltool GConf gnome-doc-utils ];
 }

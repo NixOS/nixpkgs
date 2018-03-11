@@ -47,7 +47,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Detection).
       sub waitForAddress {
           my ($machine, $iface, $scope) = @_;
-          $machine->waitUntilSucceeds("[ `ip -o -6 addr show dev $iface scope $scope | grep -v tentative | wc -l` -eq 1 ]");
+          $machine->waitUntilSucceeds("[ `ip -o -6 addr show dev $iface scope $scope | grep -v tentative | wc -l` -ge 1 ]");
           my $ip = (split /[ \/]+/, $machine->succeed("ip -o -6 addr show dev $iface scope $scope"))[3];
           $machine->log("$scope address on $iface is $ip");
           return $ip;

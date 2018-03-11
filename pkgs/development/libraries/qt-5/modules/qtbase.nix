@@ -18,8 +18,8 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  mesaSupported ? (!stdenv.isDarwin),
-  mesa,
+  libGLSupported ? (!stdenv.isDarwin),
+  libGL,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
           libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
           xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
         ]
-        ++ lib.optional mesaSupported mesa
+        ++ lib.optional libGLSupported libGL
     );
 
   buildInputs =
@@ -142,11 +142,11 @@ stdenv.mkDerivation {
         # Note on the above: \x27 is a way if including a single-quote
         # character in the sed string arguments.
       else
-        lib.optionalString mesaSupported
+        lib.optionalString libGLSupported
           ''
             sed -i mkspecs/common/linux.conf \
-                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
-                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
           ''
     );
 
@@ -208,7 +208,7 @@ stdenv.mkDerivation {
           # 10.10
         ]
       else
-        lib.optional mesaSupported ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+        lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
         ++ lib.optionals withGtk3
           [
             ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''

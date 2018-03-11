@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, mesa_glu }:
+  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
+  glew, eigen }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -26,7 +27,7 @@ let
       url = "mirror://cpan/authors/id/M/MB/MBARBON/${name}.tar.gz";
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ Wx perlPackages.OpenGL mesa_glu ];
+    propagatedBuildInputs = [ Wx perlPackages.OpenGL libGLU ];
     doCheck = false;
   };
 in
@@ -34,10 +35,14 @@ stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
   version = "1.38.7";
 
+  enableParallelBuilding = true;
+
   buildInputs = [
     cmake
     perl
     makeWrapper
+    eigen
+    glew
     tbb
     which
     Wx

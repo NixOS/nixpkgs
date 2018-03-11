@@ -22,9 +22,16 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
+  prePatch = ''
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/minisat
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/bvminisat
+  '';
+
   preConfigure = ''
     patchShebangs ./src/
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";

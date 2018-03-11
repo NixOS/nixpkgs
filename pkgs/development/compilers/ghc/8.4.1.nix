@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? false, gmp ? null, m4
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
@@ -24,7 +24,7 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.4.0.20180204"
+, version ? "8.4.1"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "111737cd218751f06ea58d3cf2c7c144265b5dfc";
-    sha256 = "0ksp0k3sp928aq2cv6whgbfmjnr7l2j10diha13nncksp4byf0s9";
+    rev = "0a3e2f324dbd525d626ebd3d97e8ffa1cf2f0ffb";
+    sha256 = "1m51khnmf8gw203d8kh6y4ivh0acb2wiqqnb950yfbg2a2k7bcfi";
   };
 
   enableParallelBuilding = true;
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
+  nativeBuildInputs = [ ghc perl autoconf automake m4 happy alex python3 ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
     inherit llvmPackages;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc";
+    haskellCompilerName = "ghc-8.4.1";
   };
 
   meta = {

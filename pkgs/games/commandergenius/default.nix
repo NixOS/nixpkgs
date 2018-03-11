@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
-, libvorbis, mesa_noglu, boost, cmake }:
+, libvorbis, libGL, boost, cmake }:
 
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "07vxg8p1dnnkajzs5nifxpwn4mdd1hxsw05jl25gvaimpl9p2qc8";
   };
 
-  buildInputs = [ SDL2 SDL2_image mesa_noglu boost libvorbis ];
+  buildInputs = [ SDL2 SDL2_image libGL boost libvorbis ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

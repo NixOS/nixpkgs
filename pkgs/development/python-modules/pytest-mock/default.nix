@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "1.6.3";
+  version = "1.7.1";
  
   src = fetchPypi {
     inherit pname version;
-    sha256 = "920d1167af5c2c2ad3fa0717d0c6c52e97e97810160c15721ac895cac53abb1c";
+    sha256 = "0jgr1h1f0m9dl3alxiiw55as28pj2lpihz12gird9z1i3vvdyydq";
   };
 
   propagatedBuildInputs = [ pytest ] ++ lib.optional (!isPy3k) mock;

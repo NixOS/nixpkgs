@@ -53,7 +53,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.mesa pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.libGL.osmesa pkgs.libdrm ]
   ++ (with pkgs.xorg; [
     libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])));

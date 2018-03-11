@@ -1,6 +1,21 @@
-{ stdenv, buildPackages, fetchurl, gettext }:
+{ stdenv, buildPackages, fetchurl, gettext
+, hostPlatform, genPosixLockObjOnly ? false
+}: let
+  genPosixLockObjOnlyAttrs = stdenv.lib.optionalAttrs genPosixLockObjOnly {
+    buildPhase = ''
+      cd src
+      make gen-posix-lock-obj
+    '';
 
-stdenv.mkDerivation rec {
+    installPhase = ''
+      mkdir -p $out/bin
+      install -m755 gen-posix-lock-obj $out/bin
+    '';
+
+    outputs = [ "out" ];
+    outputBin = "out";
+  };
+in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
   version = "1.27";
 
@@ -9,7 +24,13 @@ stdenv.mkDerivation rec {
     sha256 = "1li95ni122fzinzlmxbln63nmgij63irxfvi52ws4zfbzv3am4sg";
   };
 
-  postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
+  patches = if hostPlatform.isRiscV then ./riscv.patch else null;
+
+  postPatch = ''
+    sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
+  '';
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
@@ -45,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.fuuzetsu maintainers.vrthra ];
   };
-}
+} // genPosixLockObjOnlyAttrs)

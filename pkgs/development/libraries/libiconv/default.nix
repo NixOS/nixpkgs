@@ -1,8 +1,9 @@
 { fetchurl, stdenv, lib
 , buildPlatform, hostPlatform
+, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
 }:
 
-assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
+# assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   name = "libiconv-${version}";
@@ -19,14 +20,8 @@ stdenv.mkDerivation rec {
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';
 
-  configureFlags =
-    lib.optional stdenv.isFreeBSD "--with-pic";
-
-  crossAttrs = {
-    # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
-    dontStrip = true;
-    dontCrossStrip = true;
-  };
+  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic"
+    ++ lib.optional enableStatic "--enable-static";
 
   meta = {
     description = "An iconv(3) implementation";

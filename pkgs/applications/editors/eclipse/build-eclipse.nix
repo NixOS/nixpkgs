@@ -1,5 +1,5 @@
 { stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, gtk2, libXtst, gsettings_desktop_schemas, webkitgtk24x-gtk2
+, zlib, jdk, glib, gtk2, libXtst, gsettings-desktop-schemas, webkitgtk24x-gtk2
 , makeWrapper, ... }:
 
 { name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    fontconfig freetype glib gsettings_desktop_schemas gtk2 jdk libX11
+    fontconfig freetype glib gsettings-desktop-schemas gtk2 jdk libX11
     libXrender libXtst makeWrapper zlib
   ] ++ stdenv.lib.optional (webkitgtk24x-gtk2 != null) webkitgtk24x-gtk2;
 

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
-, mesa_noglu
+, libGL
 , minimal ? true, libva
 }:
 
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
+    "--with-drivers-path=${libGL.driverLink}/lib/dri"
   ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [

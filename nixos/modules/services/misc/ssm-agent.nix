@@ -12,7 +12,7 @@ let
 
     case "$1" in
       -i) echo "nixos";;
-      -r) echo "${config.system.nixosVersion}";;
+      -r) echo "${config.system.nixos.version}";;
     esac
   '';
 in {

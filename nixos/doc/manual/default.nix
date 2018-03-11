@@ -36,7 +36,7 @@ let
           package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
         in "<listitem>"
         + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
-        + lib.optionalString (!package.meta.evaluates) " <emphasis>[UNAVAILABLE]</emphasis>"
+        + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
         + ": ${package.meta.description or "???"}.</para>"
         + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
         # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>

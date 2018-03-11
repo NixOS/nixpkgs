@@ -1,5 +1,6 @@
 { fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext, Cocoa, libicns }:
+SDL2_mixer, freetype, gettext, Cocoa, libicns,
+tiles ? true }:
 
 stdenv.mkDerivation rec {
   version = "0.C";
@@ -13,36 +14,44 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libicns ];
+    ++ stdenv.lib.optionals (tiles && stdenv.isDarwin) [ libicns ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = with stdenv.lib; [ ncurses lua gettext ]
+    ++ optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ optionals (tiles && stdenv.isDarwin) [ Cocoa ];
 
   patches = [ ./patches/fix_locale_dir.patch ];
 
   postPatch = ''
     patchShebangs .
-    sed -i Makefile \
-      -e 's,-Werror,,g'
-
-    sed '1i#include <cmath>' \
-      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
   '';
 
-  makeFlags = [
-    "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1"
+  makeFlags = with stdenv.lib; [
+    "PREFIX=$(out)"
+    "LUA=1"
+    "RELEASE=1"
+    "USE_HOME_DIR=1"
     # "LANGUAGES=all"  # vanilla C:DDA installs all translations even without this flag!
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    "NATIVE=osx CLANG=1"
+  ] ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ] ++ optionals stdenv.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
     "OSX_MIN=10.6"  # SDL for macOS only supports deploying on 10.6 and above
+  ] ++ optionals stdenv.cc.isGNU [
+    "WARNINGS+=-Wno-deprecated-declarations"
+    "WARNINGS+=-Wno-ignored-attributes"
+  ] ++ optionals stdenv.cc.isClang [
+    "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
-  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  postBuild = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     # iconutil on macOS is not available in nixpkgs
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     app=$out/Applications/Cataclysm.app
     install -D -m 444 data/osx/Info.plist -t $app/Contents
     install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
@@ -83,7 +92,7 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
-    homepage = http://en.cataclysmdda.com/;
+    homepage = http://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
     maintainers = [ maintainers.skeidel ];
     platforms = platforms.unix;

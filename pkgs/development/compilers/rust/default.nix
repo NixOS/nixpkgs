@@ -6,20 +6,19 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.22.1";
-in
-rec {
+  version = "1.24.0";
+  cargoVersion = "0.24.0";
+  src = fetchurl {
+    url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
+    sha256 = "17v3jpyky8vkkgai5yd2zr8zl87qpgj6dx99gx27x1sf0kv7d0mv";
+  };
+in rec {
   rustc = callPackage ./rustc.nix {
-    inherit llvm targets targetPatches targetToolchains rustPlatform version;
+    inherit stdenv llvm targets targetPatches targetToolchains rustPlatform version src;
 
     forceBundledLLVM = true;
 
     configureFlags = [ "--release-channel=stable" ];
-
-    src = fetchurl {
-      url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-      sha256 = "1lrzzp0nh7s61wgfs2h6ilaqi6iq89f1pd1yaf65l87bssyl4ylb";
-    };
 
     patches = [
       ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
@@ -30,10 +29,9 @@ rec {
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.23.0";
-    srcSha = "14b2n1msxma19ydchj54hd7f2zdsr524fg133dkmdn7j65f1x6aj";
-    cargoSha256 = "1sj59z0w172qvjwg1ma5fr5am9dgw27086xwdnrvlrk4hffcr7y7";
-
+    version = cargoVersion;
+    inherit src;
+    inherit stdenv;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };

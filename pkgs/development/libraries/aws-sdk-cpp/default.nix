@@ -3,6 +3,7 @@
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true
+, darwin
 }:
 
 let
@@ -29,10 +30,15 @@ in stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   nativeBuildInputs = [ cmake curl ];
-  buildInputs = [ zlib curl openssl ];
+  buildInputs = [ zlib curl openssl ]
+    ++ lib.optionals (stdenv.isDarwin &&
+                        ((builtins.elem "text-to-speech" apis) ||
+                         (builtins.elem "*" apis)))
+         (with darwin.apple_sdk.frameworks; [ CoreAudio AudioToolbox ]);
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DENABLE_TESTING=OFF"
     ++ lib.optional (apis != ["*"])
       "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
@@ -51,6 +57,8 @@ in stdenv.mkDerivation rec {
     ''
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=noexcept-type" ];
 
   meta = {
     description = "A C++ interface for Amazon Web Services";
