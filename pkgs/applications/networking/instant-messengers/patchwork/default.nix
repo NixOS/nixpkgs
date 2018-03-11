@@ -23,6 +23,7 @@ let
   patchwork = mkYarnPackage {
     name = "patchwork-${version}";
     src = patchworkSource;
+    packageJSON = ./package.json;
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
     pkgConfig = {
