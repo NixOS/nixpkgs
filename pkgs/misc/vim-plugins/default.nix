@@ -1,6 +1,6 @@
 # TODO check that no license information gets lost
 { fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
-, which, fetchgit, llvmPackages
+, which, fetchgit, llvmPackages, rustPlatform
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu
 , ycmd, makeWrapper, rake
@@ -146,6 +146,31 @@ rec {
     name = _skim.name;
     src = _skim.vim;
     dependencies = [];
+  };
+
+  LanguageClient-neovim = let
+    LanguageClient-neovim-src = fetchgit {
+      url = "https://github.com/autozimu/LanguageClient-neovim";
+      rev = "fbc46862af7fa254f74f1108149fd0669c46f1ad";
+      sha256 = "1wrrmikriyw8an8hn7240igcaca9a0ykh1j0dfy45kslxkmqkk3r";
+    };
+    LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
+      name = "LanguageClient-neovim-bin";
+      src = LanguageClient-neovim-src;
+
+      cargoSha256 = "0c2sklpvab63a1f1mhcq9abq5m2srkj52ypq7dq44g8ngn2a05ka";
+    };
+  in buildVimPluginFrom2Nix {
+    name = "LanguageClient-neovim-2018-03-06";
+    src = LanguageClient-neovim-src;
+
+    dependencies = [];
+    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/plugin/LanguageClient.vim \
+        --replace "let l:command = [s:root . '/bin/languageclient']" "let l:command = ['${LanguageClient-neovim-bin}/bin/languageclient']"
+    '';
   };
 
   # --- generated packages bellow this line ---
@@ -593,17 +618,6 @@ rec {
       url = "https://github.com/ap/vim-css-color";
       rev = "fcf5829daa7817994fb856dbaa905e6fd8beb50c";
       sha256 = "1a617ji11395zimqjgpcq2qciyjzq5ixm85vc8rkj8jda0qgm91c";
-    };
-    dependencies = [];
-
-  };
-
-  LanguageClient-neovim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "LanguageClient-neovim-2017-12-05";
-    src = fetchgit {
-      url = "https://github.com/autozimu/LanguageClient-neovim";
-      rev = "eac16849eb5cb5592cf043fa222282a7082f257b";
-      sha256 = "07j7zm8xbvsanr9ghwxaw88m0kfr0ih262g299n5rr972s93wpg6";
     };
     dependencies = [];
 
