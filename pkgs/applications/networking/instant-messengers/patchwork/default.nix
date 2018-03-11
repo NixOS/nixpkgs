@@ -23,8 +23,8 @@ let
   patchwork = mkYarnPackage {
     name = "patchwork-${version}";
     src = patchworkSource;
-    packageJson = "${patchworkSource}/package.json";
     yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
     pkgConfig = {
       leveldown = {
         buildInputs = [ python ];
