@@ -482,19 +482,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
-  securemem = overrideCabal super.securemem (drv: {
-    ##     • No instance for (Semigroup SecureMem)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid SecureMem’
-    src = pkgs.fetchFromGitHub {
-      owner  = "shlevy";
-      repo   = "hs-securemem";
-      rev    = "6168d90b00bfc6a559d3b9160732343644ef60fb";
-      sha256 = "06dhx1z44j5gshpdlsb4aryr3g4was3x4c2sgv1px8j57zrvlypx";
-    };
-  });
-
   ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
   text-format = overrideCabal super.text-format (drv: {
     ##     • No instance for (Semigroup Format)
@@ -505,32 +492,6 @@ self: super: {
       repo   = "text-format";
       rev    = "a1cda87c222d422816f956c7272e752ea12dbe19";
       sha256 = "0lyrx4l57v15rvazrmw0nfka9iyxs4wyaasjj9y1525va9s1z4fr";
-    };
-  });
-
-  ## Unmerged.  PR: https://github.com/vincenthz/hs-tls/pull/270
-  tls = overrideCabal super.tls (drv: {
-    ##     • No instance for (Semigroup Credentials)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Credentials’
-    src = pkgs.fetchFromGitHub {
-      owner  = "ocheron";
-      repo   = "hs-tls";
-      rev    = "763656fbc6c2edabb43fc63d8717960f4b26e6e7";
-      sha256 = "0v7f9b78w6prkbscdx5ggjixll9z1zfqzm5x0ap4wvynnflkspqb";
-    };
-    prePatch        = "cd core; ";
-  });
-
-  ## Unmerged.  PR: https://github.com/Soostone/uri-bytestring/pull/0
-  uri-bytestring = overrideCabal super.uri-bytestring (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## template-haskell >=2.9 && <2.13
-    src = pkgs.fetchFromGitHub {
-      owner  = "koenigmaximilian";
-      repo   = "uri-bytestring";
-      rev    = "105d5855bbf9c78d1e48394677b42a058e242fc9";
-      sha256 = "144hr12k0d61zpgxv62vwlzy6bfs01fqh7qr4qsbv457sznmbb9d";
     };
   });
 
@@ -547,34 +508,6 @@ self: super: {
     };
   });
 
-  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
-  x509 = overrideCabal super.x509 (drv: {
-    ##     • No instance for (Semigroup DistinguishedName)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid DistinguishedName’
-    src = pkgs.fetchFromGitHub {
-      owner  = "bgamari";
-      repo   = "hs-certificate";
-      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
-      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
-    };
-    prePatch        = "cd x509; ";
-  });
-
-  ## Unmerged.  PR: https://github.com/vincenthz/hs-certificate/pull/89
-  x509-store = overrideCabal super.x509-store (drv: {
-    ##     • No instance for (Semigroup CertificateStore)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid CertificateStore’
-    src = pkgs.fetchFromGitHub {
-      owner  = "bgamari";
-      repo   = "hs-certificate";
-      rev    = "2c5f54ba69c8a0531d10f9b37542bf958ede54c9";
-      sha256 = "1fakr9gqz8k62rnjdsslfavbqrhn92jq9mahyc91f9zhisxp5kdf";
-    };
-    prePatch        = "cd x509-store; ";
-  });
-
 
   ## Non-code, configuration-only change
 
@@ -587,12 +520,6 @@ self: super: {
   async = overrideCabal super.async (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.3 && <4.11
-    jailbreak       = true;
-  });
-
-  bifunctors = overrideCabal super.bifunctors (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## template-haskell >=2.4 && <2.13
     jailbreak       = true;
   });
 
@@ -618,12 +545,6 @@ self: super: {
     ##       Possible fix:
     hpack = self.hpack;
   };
-
-  cabal-doctest = overrideCabal super.cabal-doctest (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.10 && <2.1, base >=4.3 && <4.11
-    jailbreak       = true;
-  });
 
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## Setup: Encountered missing dependencies:
@@ -688,13 +609,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  here = overrideCabal super.here (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## base >=4.5 && <4.11
-    ## https://github.com/tmhedberg/here/pull/22
-    jailbreak       = true;
-  });
-
   hnix = overrideCabal super.hnix (drv: {
     ## Setup: Encountered missing dependencies:
     ## deriving-compat ==0.3.*
@@ -739,12 +653,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  megaparsec = overrideCabal super.megaparsec (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.7 && <2.11
-    doCheck         = false;
-  });
-
   newtype-generics = overrideCabal super.newtype-generics (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.6 && <4.11
@@ -761,12 +669,6 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.8 && <4.11
     jailbreak       = true;
-  });
-
-  scientific = overrideCabal super.scientific (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.5 && <2.11
-    doCheck         = false;
   });
 
   setlocale = overrideCabal super.setlocale (drv: {
@@ -791,13 +693,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  ## Issue: https://github.com/haskell/test-framework/issues/35
-  test-framework-quickcheck2 = overrideCabal super.test-framework-quickcheck2 (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.4 && <2.11
-    jailbreak       = true;
-  });
-
   ## Issue: https://github.com/ChrisPenner/rasa/issues/54
   text-lens = overrideCabal super.text-lens (drv: {
     ## Failures:
@@ -818,12 +713,6 @@ self: super: {
   tree-diff = overrideCabal super.tree-diff (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.7 && <4.11
-    jailbreak       = true;
-  });
-
-  unliftio-core = overrideCabal super.unliftio-core (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## base >=4.5 && <4.11
     jailbreak       = true;
   });
 
