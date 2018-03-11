@@ -1,25 +1,27 @@
-{ stdenv, fetchurl, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
+{ stdenv, fetchFromGitHub, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
 
 stdenv.mkDerivation rec {
   name = "wxHexEditor-${version}";
-  version = "v0.22";
+  version = "v0.24";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/wxhexeditor/${name}-src.tar.bz2";
-    sha256 = "15ir038g4lyw1q5bsay974hvj0nkg2yd9kccwxz808cd45fp411w";
+  src = fetchFromGitHub {
+    repo = "wxHexEditor";
+    owner = "EUA";
+    rev = version;
+    sha256 = "08xnhaif8syv1fa0k6lc3jm7yg2k50b02lyds8w0jyzh4xi5crqj";
   };
 
   buildInputs = [ wxGTK autoconf automake libtool python gettext ];
 
-  patchPhase = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+  preConfigure = "patchShebangs .";
+
+  prePatch = ''
+    substituteInPlace Makefile --replace "/usr" "$out"
     substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
-    substituteInPlace udis86/autogen.sh --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
   buildPhase = ''
     make OPTFLAGS="-fopenmp"
-
   '';
 
   meta = {
