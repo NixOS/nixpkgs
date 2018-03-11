@@ -1,0 +1,18 @@
+diff --git a/script/rofi-theme-selector b/script/rofi-theme-selector
+index 0646e4bc..a19ec706 100755
+--- a/script/rofi-theme-selector
++++ b/script/rofi-theme-selector
+@@ -164,7 +164,12 @@ Current theme: <b>${CUR}</b>"""
+ ###
+ function set_theme()
+ {
+-    CDIR="${HOME}/.config/rofi/"
++    if [ -d "${XDG_CONFIG_HOME}" ]; then
++      CDIR="${XDG_CONFIG_HOME}/rofi/"
++    else
++      CDIR="${HOME}/.config/rofi/"
++    fi
++
+     if [ ! -d "${CDIR}" ]
+     then
+         mkdir -p ${CDIR}
