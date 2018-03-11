@@ -4,7 +4,7 @@
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
-, fetchurl, fetchpatch
+, fetchurl, fetchpatch ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 }:
