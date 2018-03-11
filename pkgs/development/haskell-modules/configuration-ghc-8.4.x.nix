@@ -648,6 +648,12 @@ self: super: {
     ];
   });
 
+  github = overrideCabal super.github (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.7 && <4.11
+    jailbreak       = true;
+  });
+
   haddock-library_1_5_0_1 = overrideCabal super.haddock-library_1_5_0_1 (drv: {
     ## Setup: Encountered missing dependencies:
     ## QuickCheck ==2.11.*
