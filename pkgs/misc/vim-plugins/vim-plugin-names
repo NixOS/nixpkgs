@@ -37,7 +37,6 @@
 "github:andsild/peskcolor.vim.git"
 "github:andviro/flake8-vim"
 "github:ap/vim-css-color"
-"github:autozimu/LanguageClient-neovim"
 "github:bazelbuild/vim-bazel"
 "github:bbchung/clighter8"
 "github:benekastah/neomake"
