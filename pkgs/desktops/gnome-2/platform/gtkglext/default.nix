@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk, mesa, pango, pangox_compat, xorg }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk, libGLU_combined, pango, pangox_compat, xorg }:
 
 stdenv.mkDerivation rec {
   name = "gtkglext-1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg;
-    [ pkgconfig glib gtk mesa pango libX11 libXmu ];
+    [ pkgconfig glib gtk libGLU_combined pango libX11 libXmu ];
   propagatedBuildInputs = [ pangox_compat ];
 
   # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and

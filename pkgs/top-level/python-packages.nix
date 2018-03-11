@@ -98,6 +98,9 @@ let
   # providing Python modules.
   makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
+  removePythonPrefix = name:
+    removePrefix namePrefix name;
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -109,14 +112,27 @@ let
       };
     });
 
+  # Convert a Python library to an application.
+  toPythonApplication = drv:
+    drv.overrideAttrs( oldAttrs: {
+      passthru = (oldAttrs.passthru or {}) // {
+        # Remove Python prefix from name so we have a "normal" name.
+        # While the prefix shows up in the store path, it won't be
+        # used by `nix-env`.
+        name = removePythonPrefix oldAttrs.name;
+        pythonModule = false;
+      };
+    });
+
   disabledIf = x: drv:
-    if x then throw "${removePrefix namePrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
+    if x then throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
 
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
+  inherit toPythonModule toPythonApplication;
 
   # helpers
 
@@ -444,10 +460,6 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
-  asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
-
-  asgi_redis = callPackage ../development/python-modules/asgi_redis { };
-
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg {};
@@ -542,6 +554,8 @@ in {
 
 
   amqplib = callPackage ../development/python-modules/amqplib {};
+
+  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {};
 
   apipkg = callPackage ../development/python-modules/apipkg {};
 
@@ -1612,23 +1626,7 @@ in {
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
-  proboscis = buildPythonPackage rec {
-    name = "proboscis-1.2.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/proboscis/proboscis-1.2.6.0.tar.gz";
-      sha256 = "b822b243a7c82030fce0de97bdc432345941306d2c24ef227ca561dd019cd238";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-    doCheck = false;
-
-    meta = {
-      description = "A Python test framework that extends Python's built-in unittest module and Nose with features from TestNG";
-      homepage = https://github.com/rackspace/python-proboscis;
-      license = licenses.asl20;
-    };
-  };
+  proboscis = callPackage ../development/python-modules/proboscis {};
 
   pyechonest = self.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
@@ -3006,32 +3004,7 @@ in {
 
   pydub = callPackage ../development/python-modules/pydub {};
 
-  pyjade = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pyjade";
-    version = "4.0.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
-    };
-    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
-    propagatedBuildInputs = with self; [ six ];
-    patchPhase = ''
-      sed -i 's/1.4.99/1.99/' setup.py
-    '';
-    checkPhase = ''
-      nosetests pyjade
-    '';
-    # No tests distributed. https://github.com/syrusakbary/pyjade/issues/262
-    doCheck = false;
-    meta = {
-      description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
-      homepage    = "http://github.com/syrusakbary/pyjade";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  pyjade = callPackage ../development/python-modules/pyjade {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
 
@@ -5251,6 +5224,8 @@ in {
     };
   };
 
+  latexcodec = callPackage ../development/python-modules/latexcodec {};
+
   libsexy = callPackage ../development/python-modules/libsexy {
     libsexy = pkgs.libsexy;
   };
@@ -5487,6 +5462,25 @@ in {
     };
   };
 
+  mt-940 = buildPythonPackage rec {
+    version = "4.10.0";
+    name = "mt-940-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mt-940/mt-940-${version}.tar.gz";
+      sha256 = "1gyqf1k2r2ml45x08bk69ws865yrpcph514mn4xvjz779mlgh67j";
+    };
+
+    buildInputs = with self; [ pytestrunner pyyaml pytest ];
+    doCheck = false; # Can't find data files
+
+    meta = {
+      description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
+      homepage = "http://pythonhosted.org/mt-940/";
+      license = licenses.bsd3;
+    };
+  };
+
   mwlib = let
     pyparsing = buildPythonPackage rec {
       name = "pyparsing-1.5.7";
@@ -5595,6 +5589,8 @@ in {
     };
   };
 
+  ncclient = callPackage ../development/python-modules/ncclient {};
+
   logfury = callPackage ../development/python-modules/logfury { };
 
   ndg-httpsclient = buildPythonPackage rec {
@@ -5656,6 +5652,7 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  oset = callPackage ../development/python-modules/oset { };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
@@ -5898,6 +5895,10 @@ in {
       platforms = platforms.all;
     };
   };
+
+  pybtex = callPackage ../development/python-modules/pybtex {};
+
+  pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils {};
 
   pycallgraph = buildPythonPackage rec {
     name = "pycallgraph-${version}";
@@ -6226,6 +6227,8 @@ in {
       platforms = platforms.linux;
     };
   };
+
+  junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
 
@@ -12403,25 +12406,7 @@ in {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
-
-  polib = buildPythonPackage rec {
-    name = "polib-${version}";
-    version = "1.0.4";
-
-    src = pkgs.fetchurl {
-      url = "http://bitbucket.org/izi/polib/downloads/${name}.tar.gz";
-      sha256 = "16klwlswfbgmkzrra80fgzhic9447pk3mnr75r2fkz72bkvpcclb";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "A library to manipulate gettext files (po and mo files)";
-      homepage = "http://bitbucket.org/izi/polib/";
-      license = licenses.mit;
-    };
-  };
+  polib = callPackage ../development/python-modules/polib {};
 
   posix_ipc = buildPythonPackage rec {
     name = "posix_ipc-${version}";
@@ -12565,31 +12550,7 @@ in {
 
   ptpython = callPackage ../development/python-modules/ptpython {};
 
-  publicsuffix = buildPythonPackage rec {
-    name = "publicsuffix-${version}";
-    version = "1.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/publicsuffix/${name}.tar.gz";
-      sha256 = "1adx520249z2cy7ykwjr1k190mn2888wqn9jf8qm27ly4qymjxxf";
-    };
-
-    # fix the ASCII-mode LICENSE file read
-    # disable test_fetch and the doctests (which also invoke fetch)
-    patchPhase = optionalString isPy3k ''
-      sed -i "s/)\.read(/,encoding='utf-8'\0/" setup.py
-    '' + ''
-      sed -i -e "/def test_fetch/i\\
-      \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
-    '';
-
-    meta = {
-      description = "Allows to get the public suffix of a domain name";
-      homepage = "http://pypi.python.org/pypi/publicsuffix/";
-      license = licenses.mit;
-    };
-  };
-
+  publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
   py = callPackage ../development/python-modules/py { };
 
@@ -12909,17 +12870,15 @@ in {
 
 
   pycdio = buildPythonPackage rec {
-    name = "pycdio-0.21";
+    name = "pycdio-2.0.0";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pycdio/${name}.tar.gz";
-      sha256 = "1bkcmg838l2yffsw5lln93ap5f8ks3vmqwg02mygmdmay647rc3v";
+      sha256 = "1a1h0lmfl56a2a9xqhacnjclv81nv3906vdylalybxrk4bhrm3hj";
     };
 
-    prePatch = ''
-      sed -i -e "s|if type(driver_id)==int|if type(driver_id) in (int, long)|g" cdio.py
-    '';
+    prePatch = "sed -i -e '/DRIVER_BSDI/d' pycdio.py";
 
     preConfigure = ''
       patchShebangs .
@@ -12942,7 +12901,6 @@ in {
       maintainers = with maintainers; [ rycee ];
       license = licenses.gpl3Plus;
     };
-
   };
 
   pycosat = callPackage ../development/python-modules/pycosat { };
@@ -13814,24 +13772,7 @@ in {
     };
   };
 
-  progressbar = buildPythonPackage (rec {
-    name = "progressbar-2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/progressbar/${name}.tar.gz";
-      sha256 = "dfee5201237ca0e942baa4d451fee8bf8a54065a337fabe7378b8585aeda56a3";
-    };
-
-    # invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/python-progressbar/;
-      description = "Text progressbar library for python";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
+  progressbar = callPackage ../development/python-modules/progressbar {};
 
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
 
@@ -14011,11 +13952,11 @@ in {
       url = "mirror://pypi/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
       sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
     };
-    propagatedBuildInputs = [ pkgs.mesa pkgs.freeglut self.pillow ];
+    propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut self.pillow ];
     patchPhase = ''
       sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
       sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
-      sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+      sed -i "s|'GLU',|'${pkgs.libGLU_combined}/lib/libGLU.so',|" OpenGL/platform/glx.py
       sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
     '';
     meta = {
@@ -14258,6 +14199,8 @@ in {
       homepage = "http://pysvn.tigris.org/";
     };
   };
+
+  python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
@@ -15149,6 +15092,8 @@ in {
   scikitlearn = callPackage ../development/python-modules/scikitlearn {
     inherit (pkgs) gfortran glibcLocales;
   };
+
+  scp = callPackage ../development/python-modules/scp {};
 
   scripttest = buildPythonPackage rec {
     version = "1.3";
@@ -16064,6 +16009,8 @@ in {
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
+  sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
+
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
     name = "${pname}-${version}";
     pname = "sphinxcontrib-blockdiag";
@@ -16125,6 +16072,8 @@ in {
       license = "BSD";
     };
   });
+
+  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
 
   sphinxcontrib_newsfeed = buildPythonPackage (rec {
     name = "sphinxcontrib-newsfeed-${version}";
@@ -19372,21 +19321,7 @@ EOF
     };
   };
 
-  pychart = buildPythonPackage rec {
-    name = "pychart-1.39";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "http://download.gna.org/pychart/PyChart-1.39.tar.gz";
-      sha256 = "882650928776a7ca72e67054a9e0ac98f78645f279c0cfb5910db28f03f07c2e";
-    };
-
-    meta = {
-      description = "Library for creating high quality encapsulated Postscript, PDF, PNG, or SVG charts";
-      homepage = http://home.gna.org/pychart/;
-      license = licenses.gpl2;
-    };
-  };
+  pychart = callPackage ../development/python-modules/pychart {};
 
   parsimonious = buildPythonPackage rec {
     version = "0.7.0";
@@ -20019,7 +19954,7 @@ EOF
     inherit (pkgs.xgboost) version src meta;
 
     propagatedBuildInputs = with self; [ scipy ];
-    buildInputs = with self; [ nose ];
+    checkInputs = with self; [ nose ];
 
     postPatch = ''
       cd python-package
@@ -20111,8 +20046,6 @@ EOF
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
   trezor = callPackage ../development/python-modules/trezor { };
-
-  protocol = callPackage ../development/python-modules/protocol { };
 
   trezor_agent = buildPythonPackage rec{
     name = "${pname}-${version}";
@@ -20751,7 +20684,7 @@ EOF
       sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
     };
     disabled = isPy3k; # Judging from SyntaxError
-    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
+    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.libGLU_combined pkgs.xorg.libXi ];
   };
 
   smugpy = callPackage ../development/python-modules/smugpy { };
@@ -20944,6 +20877,10 @@ EOF
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   us = callPackage ../development/python-modules/us { };
+
+  wsproto = callPackage ../development/python-modules/wsproto { };
+
+  h11 = callPackage ../development/python-modules/h11 { };
 });
 
 in fix' (extends overrides packages)

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   suffices = map (x: if x ? suffix then x.suffix else "none") contents;
 
   # For obtaining the closure of `contents'.
+  # Note: we don't use closureInfo yet, as that won't build with nix-1.x.
+  # See #36268.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
   pathsFromGraph = ./paths-from-graph.pl;

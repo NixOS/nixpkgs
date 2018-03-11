@@ -1,35 +1,37 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, flac, itstool, libxml2, gsettings-desktop-schemas
-, makeWrapper, gnome3
+, gnome3, wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
-  name = "easytag-${version}";
-  majorVersion = "2.4";
-  version = "${majorVersion}.3";
+let
+  pname = "easytag";
+  version = "2.4.3";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/easytag/${majorVersion}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
   };
 
-  preFixup = ''
-    wrapProgram $out/bin/easytag \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
-  '';
-
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ makeWrapper pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
-    itstool libxml2 gsettings-desktop-schemas gnome3.defaultIconTheme (stdenv.lib.getLib gnome3.dconf)
+    gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "View and edit tags for various audio files";
-    homepage = http://projects.gnome.org/easytag/;
+    homepage = https://wiki.gnome.org/Apps/EasyTAG;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fuuzetsu ];
     platforms = platforms.linux;

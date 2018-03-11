@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config, wrapGAppsHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
@@ -31,7 +31,7 @@
 , libgnome
 , libgnomeui
 , defaultIconTheme
-, mesa
+, libGLU_combined
 , nspr
 , nss
 , pango
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      alsaLib.dev
+      (lib.getDev alsaLib)
       atk
       cairo
       curl
@@ -118,13 +118,13 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libGLU_combined
       nspr
       nss
       pango
       libheimdal
       libpulseaudio
-      libpulseaudio.dev
+      (lib.getDev libpulseaudio)
       systemd
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc

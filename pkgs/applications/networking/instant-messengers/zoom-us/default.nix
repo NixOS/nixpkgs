@@ -1,6 +1,6 @@
 { stdenv, fetchurl, system, makeWrapper,
   alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
-  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
+  libxslt, libGLU_combined, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
 
 let
 

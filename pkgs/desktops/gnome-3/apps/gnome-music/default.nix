@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-music-${version}";
-  version = "3.26.1";
+  version = "3.26.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7197dff12f441a52b4011512bfe8ec926f2ce4ca511f79b078e0e612d612f8c3";
+    sha256 = "0mam7d0lzl7ljd9lym9gkvqwvddic122sdmcgpjir58pmmg9bx8b";
   };
 
   passthru = {

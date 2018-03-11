@@ -82,7 +82,6 @@ ln -s /proc/mounts /etc/mtab
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var/{log,lib,db} /nix/var /etc/nixos/ \
     /run/lock /home /bin # for the /bin/sh symlink
-install -m 0700 -d /root
 
 
 # Miscellaneous boot time cleanup.

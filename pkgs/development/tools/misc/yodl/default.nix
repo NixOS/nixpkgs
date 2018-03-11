@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "yodl-${version}";
-  version = "4.01.00";
+  version = "4.02.00";
 
   nativeBuildInputs = [ icmake ];
 
   buildInputs = [ perl ];
 
   src = fetchFromGitHub {
-    sha256 = "1aahwmj4gmf59lrij2373lkgfj77i3ghdas9c7iqrjwaizb0430p";
+    sha256 = "08i3q3h581kxr5v7wi114bng66pwwsjs5qj3ywnnrr7ra1h5rzwa";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
     substituteInPlace scripts/yodl2whatever.in --replace getopt ${utillinux}/bin/getopt
   '';
+
+  # Set TERM because icmbuild calls tput.
+  TERM = "xterm";
 
   buildPhase = ''
     ./build programs

@@ -50,38 +50,7 @@ let
     machine.i18n.consoleKeyMap = mkOverride 900 layout;
     machine.services.xserver.layout = mkOverride 900 layout;
     machine.imports = [ ./common/x11.nix extraConfig ];
-    machine.services.xserver.displayManager.slim = {
-      enable = true;
-
-      # Use a custom theme in order to get best OCR results
-      theme = pkgs.runCommand "slim-theme-ocr" {
-        nativeBuildInputs = [ pkgs.imagemagick ];
-      } ''
-        mkdir "$out"
-        convert -size 1x1 xc:white "$out/background.jpg"
-        convert -size 200x100 xc:white "$out/panel.jpg"
-        cat > "$out/slim.theme" <<EOF
-        background_color #ffffff
-        background_style tile
-
-        input_fgcolor #000000
-        msg_color #000000
-
-        session_color #000000
-        session_font Verdana:size=16:bold
-
-        username_msg Username:
-        username_font Verdana:size=16:bold
-        username_color #000000
-        username_x 50%
-        username_y 40%
-
-        password_msg Password:
-        password_x 50%
-        password_y 40%
-        EOF
-      '';
-    };
+    machine.services.xserver.displayManager.slim.enable = true;
 
     testScript = ''
       sub waitCatAndDelete ($) {

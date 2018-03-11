@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , stdenv
 , perl
 , libxml2
@@ -43,8 +44,8 @@
 
 
 let
-  version = "2.4.0";
-  sha256 = "02baa90f04da41e04b6c18eedfda53110c45ae943d4e65050f6d202f7de07d29";
+  version = "2.4.3";
+  sha256 = "1fg4pmla5m903m76ndjd8q5dkcykf67v1p4dcajmnr3bvg2p8lza";
 in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 
@@ -53,8 +54,23 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://trac.osgeo.org/postgis/changeset/16417?format=diff&new=16417";
+      name = "json-c-0.13.patch";
+      sha256 = "1hk2fh4nsvq76ksi7z4shlgj7fik6ac3sjsb0khsypsjfhz7ic8z";
+      stripLen = 3;
+      extraPrefix = "";
+      excludes = [ "NEWS" ];
+    })
+  ];
+
   # don't pass these vars to the builder
   removeAttrs = ["sql_comments" "sql_srcs"];
+
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
   # create aliases for all commands adding version information
   postInstall = ''

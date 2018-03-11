@@ -1,5 +1,5 @@
 { stdenv, composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
+, freeglut, libGLU_combined, libjpeg, zlib, libXinerama, libXft, libpng
 , cfg ? {}
 , darwin, libtiff, freetype
 }:
@@ -29,7 +29,7 @@ composableDerivation.composableDerivation {} {
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
     edf { name = "cygwin"; }  #         use the CygWin libraries default=no
     // edf { name = "debug"; }  #          turn on debugging default=no
-    // edf { name = "gl"; enable = { buildInputs = [ mesa ]; }; }  #             turn on OpenGL support default=yes
+    // edf { name = "gl"; enable = { buildInputs = [ libGLU_combined ]; }; }  #             turn on OpenGL support default=yes
     // edf { name = "shared"; }  #         turn on shared libraries default=no
     // edf { name = "threads"; }  #        enable multi-threading support
     // edf { name = "quartz"; enable = { buildInputs = "quartz"; }; }  # don't konw yet what quartz is #         use Quartz instead of Quickdraw (default=no)

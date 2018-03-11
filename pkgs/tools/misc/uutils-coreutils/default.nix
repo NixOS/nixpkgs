@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage {
     homepage = https://github.com/uutils/coreutils;
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

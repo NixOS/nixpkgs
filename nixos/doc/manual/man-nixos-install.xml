@@ -26,8 +26,8 @@
       <replaceable>root</replaceable>
     </arg>
     <arg>
-      <arg choice='plain'><option>--closure</option></arg>
-      <replaceable>closure</replaceable>
+      <arg choice='plain'><option>--system</option></arg>
+      <replaceable>path</replaceable>
     </arg>
     <arg>
       <arg choice='plain'><option>--no-channel-copy</option></arg>
@@ -118,7 +118,7 @@ it.</para>
   </varlistentry>
 
   <varlistentry>
-    <term><option>--closure</option></term>
+    <term><option>--system</option></term>
     <listitem>
       <para>If this option is provided, <command>nixos-install</command> will install the specified closure
       rather than attempt to build one from <filename>/mnt/etc/nixos/configuration.nix</filename>.</para>

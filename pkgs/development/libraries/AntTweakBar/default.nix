@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, unzip, xlibs, mesa }:
+{ stdenv, fetchurl, unzip, xlibs, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "AntTweakBar-1.16";
 
-  buildInputs = [ unzip xlibs.libX11 mesa ];
+  buildInputs = [ unzip xlibs.libX11 libGLU_combined ];
 
   src = fetchurl {
     url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_116.zip";

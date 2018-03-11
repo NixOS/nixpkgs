@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "bb873da531401416acb7045a8f0bdf6555e9c6866989cd977166fae3cbbb954b";
   };
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.5";
 
   checkInputs = [ pytest gunicorn pytest-mock ];
 
