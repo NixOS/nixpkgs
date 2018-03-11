@@ -1043,11 +1043,6 @@
     github = "dtzWill";
     name = "Will Dietz";
   };
-  dupgit = {
-    email = "olivier.delhomme@free.fr";
-    github = "dupgit";
-    name = "Olivier Delhomme";
-  };
   dywedir = {
     email = "dywedir@protonmail.ch";
     github = "dywedir";
