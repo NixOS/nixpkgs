@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = https://computation.llnl.gov/casc/sundials/main.html;
     platforms   = platforms.all;
-    maintainers = [ idontgetoutmuch ];
-    licencse    = { url = https://computation.llnl.gov/projects/sundials/license; };
+    maintainers = [ maintainers.idontgetoutmuch ];
+    license     = licenses.bsd3;
   };
 
 }
