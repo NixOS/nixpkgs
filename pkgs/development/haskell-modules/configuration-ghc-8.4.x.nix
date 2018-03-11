@@ -370,6 +370,28 @@ self: super: {
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-or ]);
   });
 
+  ## Unmerged.  PR: https://github.com/dhall-lang/dhall-haskell/pull/321
+  dhall = overrideCabal super.dhall (drv: {
+    ##     • No instance for (Semigroup (Parser Builder))
+    ##         arising from a use of ‘<>’
+    ##       There are instances for similar types:
+    src = pkgs.fetchFromGitHub {
+      owner  = "deepfire";
+      repo   = "dhall-haskell";
+      rev    = "38f3d8c861e137da6d8ac8eab88aec1c359efcac";
+      sha256 = "1pya7lhdjsygk622k1g3whj0a7jqwyym26ikxbn1anxypnb0n2wy";
+    };
+    ## Setup: Encountered missing dependencies:
+    ## prettyprinter >=1.2.0.1 && <1.3
+    jailbreak       = true;
+    ## Setup: Encountered missing dependencies:
+    ## insert-ordered-containers -any,
+    ## lens-family-core -any,
+    ## prettyprinter-ansi-terminal -any,
+    ## repline -any
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ insert-ordered-containers lens-family-core prettyprinter prettyprinter-ansi-terminal repline ]);
+  });
+
   ## Unmerged.  PR: https://github.com/gtk2hs/gtk2hs/pull/233
   gtk2hs-buildtools = overrideCabal super.gtk2hs-buildtools (drv: {
     ## Setup: Encountered missing dependencies:
