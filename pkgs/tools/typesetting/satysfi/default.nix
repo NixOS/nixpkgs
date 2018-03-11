@@ -20,6 +20,13 @@ in
       sha256 = "12bhl7s2kc02amr8rm71pihj203f2j15y5j0kz3swgsw0gqh81gv";
       fetchSubmodules = true;
     };
+
+    preConfigure = ''
+      substituteInPlace src/frontend/main.ml --replace \
+      '/usr/local/share/satysfi"; "/usr/share/satysfi' \
+      $out/share/satysfi
+    '';
+
     buildInputs = with ocamlPackages; [ ocaml ocamlbuild findlib menhir
       ppx_deriving uutf result core_kernel bitv batteries yojson camlimages ];
     installPhase = ''
