@@ -4,7 +4,7 @@
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
-, fetchurl
+, fetchurl, fetchpatch
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison
@@ -78,7 +78,13 @@ stdenv.mkDerivation ({
        */
       ./allow-kernel-2.6.32.patch
     ]
-    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch;
+    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
+    ++ lib.optional stdenv.hostPlatform.isMusl
+      (fetchpatch {
+        name = "fix-with-musl.patch";
+        url = "https://sourceware.org/bugzilla/attachment.cgi?id=10151&action=diff&collapsed=&headers=1&format=raw";
+        sha256 = "18kk534k6da5bkbsy1ivbi77iin76lsna168mfcbwv4ik5vpziq2";
+      });
 
   postPatch =
     ''
