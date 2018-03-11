@@ -56,6 +56,11 @@ self: super: {
   constraints = super.constraints_0_10;
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## template-haskell >=2.5 && <2.13
+  deriving-compat = super.deriving-compat_0_4_1;
+
+  ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
   doctest = overrideCabal super.doctest_0_14_1 (drv: {
     ## Setup: Encountered missing dependencies:
