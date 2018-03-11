@@ -5021,6 +5021,8 @@ with pkgs;
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
+  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
+
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
   toilet = callPackage ../tools/misc/toilet { };
