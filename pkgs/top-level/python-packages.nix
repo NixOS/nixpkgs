@@ -4878,7 +4878,7 @@ in {
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
       maintainers = with maintainers; [ matthiasbeyer ];
-      platforms = platforms.linux; # can only test on linux
+      platforms = with platforms; linux ++ darwin; # can only test on linux
     };
 
   };
