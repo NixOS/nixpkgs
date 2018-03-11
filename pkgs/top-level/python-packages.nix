@@ -9519,6 +9519,8 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
+  macfsevents = callPackage ../development/python-modules/macfsevents { };
+
   magic = buildPythonPackage rec {
     name = "${pkgs.file.name}";
 
