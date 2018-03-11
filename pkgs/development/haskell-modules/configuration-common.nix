@@ -37,7 +37,7 @@ self: super: {
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
+  jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
 
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
@@ -603,12 +603,12 @@ self: super: {
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_27_0; };
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_27_0; hackage-db = self.hackage-db_2_0_1; });
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_2; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -847,14 +847,14 @@ self: super: {
   # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
   # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
     http-conduit = self.http-conduit_2_3_0;
   };
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
     haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
   };
   haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_1;
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # These packages depend on each other, forming an infinite loop.
@@ -946,8 +946,8 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Sporadically OOMs even with 16G
-  ChasingBottoms = dontCheck super.ChasingBottoms;
+  # Use latest version to support newer QuickCheck and base libraries.
+  ChasingBottoms = self.ChasingBottoms_1_3_1_4;
 
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
@@ -1005,5 +1005,8 @@ self: super: {
 
   # Needs older hlint
   hpio = dontCheck super.hpio;
+
+  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
 
 }
