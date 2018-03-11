@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, lua5_2, file, ncurses, gmime, pcre-cpp
-, perl, perlPackages
+{ stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
+, perl, perlPackages, makeWrapper
 , debugBuild ? false
 , alternativeGlobalConfigFilePath ? null
 }:
