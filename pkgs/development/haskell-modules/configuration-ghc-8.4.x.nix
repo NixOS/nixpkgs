@@ -258,6 +258,26 @@ self: super: {
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ network resolv ]);
   });
 
+  ## Upstreamed, awaiting a Hackage release
+  hackage-security = overrideCabal super.hackage-security (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## Cabal >=1.14 && <1.26,
+    ## directory >=1.1.0.2 && <1.3,
+    ## time >=1.2 && <1.7
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell";
+      repo   = "hackage-security";
+      rev    = "21519f4f572b9547485285ebe44c152e1230fd76";
+      sha256 = "1ijwmps4pzyhsxfhc8mrnc3ldjvpisnmr457vvhgymwhdrr95k0z";
+    };
+    prePatch        = "cd hackage-security; ";
+    ## https://github.com/haskell/hackage-security/issues/211
+    jailbreak       = true;
+    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:217:22:
+    editedCabalFile = null;
+  });
+
+  ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*
@@ -626,11 +646,6 @@ self: super: {
          sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
        })
     ];
-  });
-
-  hackage-security = overrideCabal super.hackage-security (drv: {
-    ## https://github.com/haskell/hackage-security/issues/211
-    jailbreak       = true;
   });
 
   haddock-library_1_5_0_1 = overrideCabal super.haddock-library_1_5_0_1 (drv: {
