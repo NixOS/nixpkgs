@@ -662,6 +662,12 @@ self: super: {
     jailbreak       = true;
   });
 
+  resolv = overrideCabal super.resolv (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## tasty >=0.11.2 && <0.12
+    doCheck         = false;
+  });
+
   setlocale = overrideCabal super.setlocale (drv: {
     ## https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
     jailbreak       = true;
