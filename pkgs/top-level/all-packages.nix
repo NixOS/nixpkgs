@@ -2298,6 +2298,10 @@ with pkgs;
   flameGraph = flamegraph;
 
   flvtool2 = callPackage ../tools/video/flvtool2 { };
+  
+  fmbt = callPackage ../development/tools/fmbt {
+    python = python2;
+  };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
