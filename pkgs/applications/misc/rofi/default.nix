@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   # config.patch may be removed in the future - https://github.com/DaveDavenport/rofi/pull/781
-  patches = [ ./config.patch ];
+  patches = [ ./nix.patch ./config.patch ];
 
   preConfigure = ''
     patchShebangs "script"

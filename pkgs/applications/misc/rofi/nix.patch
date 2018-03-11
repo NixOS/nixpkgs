@@ -36,6 +36,6 @@ index 0646e4bc..f82e5ad9 100755
 -    DIRS+=":${HOME}/.config/"
 +
 +    DIRS+=":%ROFIOUT%/"
-     for p in ${DIRS}; do 
-     	p=${p%/}
+     for p in ${DIRS}; do
+	p=${p%/}
          TD=${p}/rofi/themes
