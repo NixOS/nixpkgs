@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     patchShebangs "script"
     # root not present in build /etc/passwd
     sed -i 's/~root/~nobody/g' test/helper-expand.c
+
+    export HOME="$(mktemp -d)"
   '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
