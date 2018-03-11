@@ -212,6 +212,22 @@ self: super: {
     hpack = self.hpack;
   };
 
+  ## Upstreamed, awaiting a Hackage release
+  cabal-install = overrideCabal super.cabal-install (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## Cabal >=2.0.1.0 && <2.1, base >=4.5 && <4.11
+    src = pkgs.fetchFromGitHub {
+      owner  = "haskell";
+      repo   = "cabal";
+      rev    = "728ad1a1e066da453ae13ee479629c00d8c2f32d";
+      sha256 = "0943xpva0fjlx8fanqvb6bg7myim2pki7q8hz3q0ijnf73bgzf7p";
+    };
+    prePatch        = "cd cabal-install; ";
+    ## Setup: Encountered missing dependencies:
+    ## network >=2.4 && <2.6, resolv >=0.1.1 && <0.2
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ network resolv ]);
+  });
+
   haskell-gi = overrideCabal super.haskell-gi (drv: {
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*
