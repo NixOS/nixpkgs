@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby
+{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, llvmPackages, rustPlatform
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu, ncurses
@@ -189,6 +189,23 @@ rec {
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
+
+      cargoSha256 = "0c2sklpvab63a1f1mhcq9abq5m2srkj52ypq7dq44g8ngn2a05ka";
+    };
+  in buildVimPluginFrom2Nix {
+    name = "LanguageClient-neovim-2018-03-06";
+    src = LanguageClient-neovim-src;
+
+    dependencies = [];
+    propogatedBuildInputs = [ LanguageClient-neovim-bin ];
+
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/plugin/LanguageClient.vim \
+        --replace "let l:command = [s:root . '/bin/languageclient']" "let l:command = ['${LanguageClient-neovim-bin}/bin/languageclient']"
+    '';
+  };
+
+  # --- generated packages bellow this line ---
 
       cargoSha256 = "0c2sklpvab63a1f1mhcq9abq5m2srkj52ypq7dq44g8ngn2a05ka";
     };
@@ -664,8 +681,8 @@ rec {
     name = "vim-css-color-2018-03-06";
     src = fetchgit {
       url = "https://github.com/ap/vim-css-color";
-      rev = "afaacf50e65b7d30b170e70ee13c1518dce1e032";
-      sha256 = "1ck8qv3wfmc7rdddzd7zh2dsnb0rx69grmc0laz7n1358xg0i4vx";
+      rev = "fcf5829daa7817994fb856dbaa905e6fd8beb50c";
+      sha256 = "1a617ji11395zimqjgpcq2qciyjzq5ixm85vc8rkj8jda0qgm91c";
     };
     dependencies = [];
 
