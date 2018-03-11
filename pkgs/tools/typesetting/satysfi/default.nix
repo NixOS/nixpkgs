@@ -1,5 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, ocaml, ocamlbuild, findlib, menhir,
-  ppx_deriving, uutf, result, core_kernel, bitv, batteries, yojson, camlimages }:
+{ stdenv, fetchzip, fetchFromGitHub, ocamlPackages }:
 let
   lm = fetchzip {
     url = "http://www.gust.org.pl/projects/e-foundry/latin-modern/download/lm2.004otf.zip";
@@ -9,7 +8,6 @@ let
   lm-math = fetchzip {
     url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
     sha256 = "15l3lxjciyjmbh0q6jjvzz16ibk4ij79in9fs47qhrfr2wrddpvs";
-    stripRoot = false;
   };
 in
   stdenv.mkDerivation rec {
@@ -22,9 +20,8 @@ in
       sha256 = "12bhl7s2kc02amr8rm71pihj203f2j15y5j0kz3swgsw0gqh81gv";
       fetchSubmodules = true;
     };
-    buildInputs = [ findlib menhir ppx_deriving uutf result core_kernel bitv
-      batteries yojson camlimages ];
-    nativeBuildInputs = [ ocaml ocamlbuild ];
+    buildInputs = with ocamlPackages; [ ocaml ocamlbuild findlib menhir
+      ppx_deriving uutf result core_kernel bitv batteries yojson camlimages ];
     installPhase = ''
       cp -r ${lm}/* lib-satysfi/dist/fonts/
       cp -r ${lm-math}/otf/latinmodern-math.otf lib-satysfi/dist/fonts/
@@ -36,5 +33,6 @@ in
       description = "A statically-typed, functional typesetting system";
       license = licenses.lgpl3;
       maintainers = [ maintainers.mt-caret ];
+      platforms = platforms.all;
     };
   }
