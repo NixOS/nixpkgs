@@ -1,6 +1,4 @@
-# This package needs the following configuration in configuration.nix:
-# services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.libgtop pkgs.glib_networking ];
-{ config, stdenv, fetchFromGitHub, glib, glib_networking, libgtop, pkgs }:
+{ config, stdenv, substituteAll, fetchFromGitHub, glib, glib_networking, libgtop, pkgs }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-system-monitor-${version}";
@@ -19,7 +17,13 @@ stdenv.mkDerivation rec {
     libgtop
   ];
 
-  patches = [ ./remove_nonexisting_mounts.patch ];
+  patches = [
+    (substituteAll {
+      src = ./paths_and_nonexisting_dirs.patch;
+      gtop_path = "${libgtop}/lib/girepository-1.0";
+      glib_net_path = "${glib_networking}/lib/girepository-1.0";
+    })
+  ];
 
   buildPhase = ''
     ${glib.dev}/bin/glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
