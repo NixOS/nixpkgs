@@ -644,6 +644,12 @@ self: super: {
     jailbreak       = true;
   });
 
+  protolude = overrideCabal super.protolude (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.6 && <4.11
+    jailbreak       = true;
+  });
+
   quickcheck-instances = overrideCabal super.quickcheck-instances (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.5 && <4.11
