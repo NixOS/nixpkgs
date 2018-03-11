@@ -90,10 +90,19 @@ self: super: {
   hackage-db = super.hackage-db_2_0_1;
 
   ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=4.5 && <4.11
-  ## Older versions don't compile
-  haddock-library = super.haddock-library_1_5_0_1;
+  haddock-library = overrideCabal super.haddock-library_1_5_0_1 (drv: {
+    ## Setup: Encountered missing dependencies:
+    ## base >=4.5 && <4.11
+    ## Older versions don't compile
+    ##
+    ## Setup: Encountered missing dependencies:
+    ## QuickCheck ==2.11.*
+    doCheck         = false;
+    ## Running Haddock on library for haddock-library-1.5.0.1..
+    ## Setup: internal error when calculating transitive package dependencies.
+    ## Debug info: []
+    doHaddock       = false;
+  });
 
   ## Needs bump to a versioned attribute
   ##     • Could not deduce (Semigroup (ParseResult m))
