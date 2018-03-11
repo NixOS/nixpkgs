@@ -22,6 +22,7 @@ in
 , description ? ""
 , doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
 , doBenchmark ? false
+, doVerbose ? false
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? true
@@ -339,7 +340,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${optionalString doVerbose " -v3"}
     runHook postBuild
   '';
 
