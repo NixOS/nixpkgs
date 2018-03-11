@@ -146,6 +146,16 @@ self: super: {
   lens = super.lens_4_16;
 
   ## Needs bump to a versioned attribute
+  regex-tdfa = overrideCabal super.regex-tdfa_1_2_3 (drv: {
+    ##     • No instance for (Semigroup (CharMap a))
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid (CharMap a)’
+    ##
+    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:188:16:
+    editedCabalFile = null;
+  });
+
+  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## doctest >=0.11.1 && <0.14
   semigroupoids = super.semigroupoids_5_2_2;
@@ -512,20 +522,6 @@ self: super: {
     ## prim-uniq -any,
     ## reflection -any,
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
-  });
-
-  ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
-  regex-tdfa = overrideCabal super.regex-tdfa (drv: {
-    ##     • No instance for (Semigroup (CharMap a))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (CharMap a)’
-    src = pkgs.fetchFromGitHub {
-      owner  = "bgamari";
-      repo   = "regex-tdfa";
-      rev    = "34f4593a520176a917b74b8c7fcbbfbd72fb8178";
-      sha256 = "1aiklvf08w1hx2jn9n3sm61mfvdx4fkabszkjliapih2yjpmi3hq";
-    };
-    jailbreak       = true;
   });
 
   ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
