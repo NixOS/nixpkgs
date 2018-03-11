@@ -96,6 +96,12 @@ self: super: {
   haddock-library = super.haddock-library_1_5_0_1;
 
   ## Needs bump to a versioned attribute
+  ##     • Could not deduce (Semigroup (ParseResult m))
+  ##         arising from the superclasses of an instance declaration
+  ##       from the context: Monoid m
+  haskell-src-exts = super.haskell-src-exts_1_20_2;
+
+  ## Needs bump to a versioned attribute
   hspec = overrideCabal super.hspec_2_4_8 (drv: {
     ## Setup: Encountered missing dependencies:
     ## hspec-core ==2.4.4, hspec-discover ==2.4.4
@@ -250,19 +256,6 @@ self: super: {
       sha256 = "1l3qm97gcjih695hhj80rbpnd72prnc81lg5y373yj8jk9f6ypbr";
     };
     prePatch        = "cd base; ";
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  haskell-src-exts = overrideCabal super.haskell-src-exts (drv: {
-    ##     • Could not deduce (Semigroup (ParseResult m))
-    ##         arising from the superclasses of an instance declaration
-    ##       from the context: Monoid m
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell-suite";
-      repo   = "haskell-src-exts";
-      rev    = "935f6f0915e89c314b686bdbdc6980c72335ba3c";
-      sha256 = "1v3c1bd5q07qncqfbikvs8h3r4dr500blm5xv3b4jqqv69f0iam9";
-    };
   });
 
   ## Upstreamed, awaiting a Hackage release
