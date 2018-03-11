@@ -31,7 +31,7 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? true
+, enableStaticLibraries ? !hostPlatform.isWindows
 , enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
@@ -67,6 +67,10 @@ in
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
+
+# --enable-static does not work on windows. This is a bug in GHC.
+# --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
+assert hostPlatform.isWindows -> enableStaticLibraries == false;
 
 let
 
