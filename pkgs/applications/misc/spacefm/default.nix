@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     ln -s /etc/spacefm/spacefm.conf $out/etc/spacefm/spacefm.conf
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gtk3 udev desktop-file-utils shared-mime-info intltool
