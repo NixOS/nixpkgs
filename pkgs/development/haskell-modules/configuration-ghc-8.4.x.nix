@@ -65,6 +65,17 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
+  ## free >=4.9 && <5
+  either = super.either_5;
+
+  ## Needs bump to a versioned attribute
+  ##     • Could not deduce (Semigroup (IterT m a))
+  ##         arising from the superclasses of an instance declaration
+  ##       from the context: (Monad m, Monoid a)
+  free = super.free_5_0_1;
+
+  ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
   ## Cabal <2.2
   ## Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
@@ -113,8 +124,15 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## hspec-discover ==2.4.8
-  hspec-discover = super.hspec-discover_2_5_0;
+  ## doctest >=0.7 && <0.14
+  turtle = super.turtle_1_5_4;
+
+  ## Needs bump to a versioned attribute
+  ##     Module ‘Data.Semigroup’ does not export ‘Monoid(..)’
+  ##    |
+  ## 80 | import Data.Semigroup (Semigroup(..), Monoid(..))
+  unordered-containers = super.unordered-containers_0_2_9_0;
+
 
   ## On Hackage:
 
@@ -233,6 +251,20 @@ self: super: {
 
 
   ## Unmerged
+
+  ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
+  blaze-builder = overrideCabal super.blaze-builder (drv: {
+    ##     • No instance for (Semigroup Poke)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid Poke’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "blaze-builder";
+      rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
+      sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
+    };
+    jailbreak = true;   # https://github.com/lpsmith/blaze-builder/issues/12
+  });
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
   bytestring-trie = overrideCabal super.bytestring-trie (drv: {
@@ -358,7 +390,34 @@ self: super: {
     ## monad-control -any,
     ## prim-uniq -any,
     ## reflection -any,
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ (with self; [ data-default haskell-src-exts lens monad-control prim-uniq reflection split template-haskell unbounded-delays ]);
+  });
+
+  ## Unmerged.  PR: https://github.com/ChrisKuklewicz/regex-tdfa/pull/13
+  regex-tdfa = overrideCabal super.regex-tdfa (drv: {
+    ##     • No instance for (Semigroup (CharMap a))
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid (CharMap a)’
+    src = pkgs.fetchFromGitHub {
+      owner  = "bgamari";
+      repo   = "regex-tdfa";
+      rev    = "34f4593a520176a917b74b8c7fcbbfbd72fb8178";
+      sha256 = "1aiklvf08w1hx2jn9n3sm61mfvdx4fkabszkjliapih2yjpmi3hq";
+    };
+    jailbreak = true;   # base >=4 && <4.11
+  });
+
+  ## Unmerged.  PR: https://github.com/vincenthz/hs-securemem/pull/12
+  securemem = overrideCabal super.securemem (drv: {
+    ##     • No instance for (Semigroup SecureMem)
+    ##         arising from the superclasses of an instance declaration
+    ##     • In the instance declaration for ‘Monoid SecureMem’
+    src = pkgs.fetchFromGitHub {
+      owner  = "shlevy";
+      repo   = "hs-securemem";
+      rev    = "6168d90b00bfc6a559d3b9160732343644ef60fb";
+      sha256 = "06dhx1z44j5gshpdlsb4aryr3g4was3x4c2sgv1px8j57zrvlypx";
+    };
   });
 
   ## Unmerged.  PR: https://github.com/bos/text-format/pull/21
@@ -415,13 +474,7 @@ self: super: {
     jailbreak       = true;
   });
 
-  exception-transformers = overrideCabal super.exception-transformers (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## HUnit >=1.2 && <1.6
-    jailbreak       = true;
-  });
-
-  github = overrideCabal super.github (drv: {
+  deepseq-generics = overrideCabal super.deepseq-generics (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.7 && <4.11
     jailbreak       = true;
@@ -582,32 +635,52 @@ self: super: {
     jailbreak       = true;
   });
 
+  # https://github.com/haskell/HTTP/pull/114
+  HTTP = self.HTTP_4000_3_10;
+  HTTP_4000_3_10 = dontCheck super.HTTP_4000_3_10;
+
   # Older versions don't compile.
-  brick = self.brick_0_36;
-  HaTeX = self.HaTeX_3_19_0_0;
-  matrix = self.matrix_0_3_6_1;
-  pandoc = self.pandoc_2_1_3;
-  pandoc-types = self.pandoc-types_1_17_4_2;
+  haddock-library = self.haddock-library_1_5_0_1;
+  haddock-library_1_5_0_1 = dontHaddock (dontCheck super.haddock-library_1_5_0_1);
 
-  # https://github.com/xmonad/xmonad/issues/155
-  xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
-    { url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
-      sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
-    })) self.semigroups;
+  # https://github.com/phadej/tree-diff/issues/15
+  tree-diff = doJailbreak super.tree-diff;
 
-  # https://github.com/xmonad/xmonad-contrib/issues/235
-  xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
+  # https://github.com/jgm/doctemplates/issues/2
+  doctemplates = appendPatch super.doctemplates (pkgs.fetchpatch
+    { url = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
+      sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
+    });
 
-  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
-  arrows = appendPatch super.arrows (pkgs.fetchpatch {
-    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/arrows-0.4.4.1.patch;
-    sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
-  });
+  # https://github.com/bitemyapp/esqueleto/issues/77
+  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
-  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
-  flexible-defaults = appendPatch super.flexible-defaults (pkgs.fetchpatch {
-    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/flexible-defaults-0.0.1.2.patch;
-    sha256 = "1bpsqq80h6nxm04wddgcgyzn0fjfsmhccmqb211jqswv5209znx8";
-  });
+  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
+  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
+
+  # Older versions don't compile.
+  hackage-db = super.hackage-db_2_0_1;
+
+  # https://github.com/RazvanRanca/GenericPretty/issues/2
+  GenericPretty = appendPatch super.GenericPretty (pkgs.fetchpatch
+    { url = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
+      sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
+    }
+  );
+
+  # https://github.com/haskell/hackage-security/issues/211
+  hackage-security = doJailbreak super.hackage-security;
+
+  # https://github.com/pikajude/stylish-cabal/issues/6
+  stylish-cabal = dontHaddock super.stylish-cabal;
+
+  # https://github.com/treeowl/boxes/issues/29
+  boxes = appendPatch super.boxes (pkgs.fetchpatch
+    { url = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
+      sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
+    });
+
+  # https://bitbucket.org/IchUndNichtDu/haskell-setlocale/issues/1/please-allow-base-412-from-ghc-841
+  setlocale = doJailbreak super.setlocale;
 
 }
