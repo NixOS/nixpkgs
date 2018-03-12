@@ -1,4 +1,4 @@
-{ runCommand, lib
+{ runCommand
 , maxima
 }:
 runCommand "test-maxima" { 
