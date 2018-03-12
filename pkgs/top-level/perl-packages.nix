@@ -12232,7 +12232,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Readonly ];
   };
 
-  Redis = buildPerlPackage rec {
+  Redis = buildPerlModule rec {
     name = "Redis-1.991";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAMS/${name}.tar.gz";
