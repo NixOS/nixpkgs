@@ -88,12 +88,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  aliased = buildPerlPackage rec {
+  aliased = buildPerlModule rec {
     name = "aliased-0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "1syyqzy462501kn5ma9gl6xbmcahqcn4qpafhsmpz0nd0x2m4l63";
     };
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   AlienTidyp = buildPerlModule rec {
