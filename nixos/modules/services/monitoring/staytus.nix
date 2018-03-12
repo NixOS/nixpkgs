@@ -253,6 +253,16 @@ in {
       }];
     };
 
+    system.activationScripts = {
+      staytus = {
+        text = ''
+          mkdir -p ${cfg.stateDir}
+          mkdir -p ${runDir}
+        '';
+        deps = [];
+      };
+    };
+
     systemd.services.staytusjobs = {
       after = [ "network.target" "mysql.service" ];
       wantedBy = [ "multi-user.target" ];
@@ -262,10 +272,7 @@ in {
         config.services.mysql.package
       ];
       preStart = ''
-        chown -R staytus:staytus ${cfg.stateDir}
-        chmod -R 755 ${cfg.stateDir}
-
-        rm -rf ${runDir}
+        rm -rf ${runDir}/*
         mkdir -p ${runDir}/pids
 
         cp -Rv ${package}/share/staytus/* ${runDir}
@@ -273,6 +280,9 @@ in {
         mkdir -p ${cfg.stateDir}/log
         rm -rf ${runDir}/log
         ln -sf ${cfg.stateDir}/log ${runDir}/log
+
+        chown -R ${cfg.username}:${cfg.group} ${cfg.stateDir}
+        chmod -R 755 ${cfg.stateDir}
 
         echo "Symlinking generated configs"
         echo "ln -sf ${pkgs.writeText "database.yml" databaseYml} ${runDir}/database.yml"
@@ -291,25 +301,23 @@ in {
           fi
         fi
 
-        if test -e "${cfg.stateDir}/db-drop"; then
-          echo "Reseting database"
-          ${staytus-rake}/bin/staytus-rake db:environment:set db:reset DISABLE_DATABASE_ENVIRONMENT_CHECK=1
-          rm -f "${cfg.stateDir}/db-drop"
-        fi
-
-        echo "Migrating database"
-        ${staytus-rake}/bin/staytus-rake db:migrate
-
-        chown -R staytus:staytus ${runDir}
-        chmod -R 755 ${runDir}
-
         echo "Copying themes"
         for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
           ln -fs $theme/* ${runDir}/content/themes/
         done
 
-        echo "Compiling assets"
-        ${staytus-rake}/bin/staytus-rake assets:precompile
+        chown -R ${cfg.username}:${cfg.group} ${runDir}
+        chmod -R 755 ${runDir}
+
+        echo "Preparing database and files"
+        if ! test -e "${cfg.stateDir}/staytus-installed"; then
+          ${staytus-rake}/bin/staytus-rake staytus:build staytus:install
+          touch "${cfg.stateDir}/staytus-installed"
+          chown ${cfg.username}:${cfg.group} "${cfg.stateDir}/staytus-installed"
+        else
+          ${staytus-rake}/bin/staytus-rake staytus:build staytus:upgrade
+        fi
+
       '';
 
       serviceConfig = {
