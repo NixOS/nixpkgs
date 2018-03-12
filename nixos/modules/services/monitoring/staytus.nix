@@ -16,7 +16,7 @@ let
       database: ${cfg.databaseName}
       host: ${cfg.databaseHost}
       password: ${cfg.databasePassword}
-      username: ${cfg.databaseUsername}
+      username: ${cfg.username}
       encoding: utf8
   '';
 
@@ -168,10 +168,16 @@ in {
         description = "Database name";
       };
 
-      databaseUsername = mkOption {
+      username = mkOption {
         type = types.str;
         default = "staytus";
-        description = "Database user";
+        description = "user the service will run as, and database user";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "staytus";
+        description = "group the service will run as";
       };
 
       smtpHost = mkOption {
@@ -230,14 +236,22 @@ in {
     ];
 
     users.extraUsers = [
-      { name = "staytus";
-        group = "staytus";
+      { name = cfg.username;
+        group = cfg.group;
         home = cfg.stateDir;
       } ];
 
     users.extraGroups = [
-      { name = "staytus";
+      { name = cfg.group;
       } ];
+
+    services.mysql = mkIf (cfg.databaseHost == "127.0.0.1") {
+      ensureDatabases = [ cfg.databaseName ];
+      ensureUsers = [{
+        name = cfg.username;
+        ensurePermissions = { "${cfg.databaseName}.*" = "ALL PRIVILEGES"; };
+      }];
+    };
 
     systemd.services.staytusjobs = {
       after = [ "network.target" "mysql.service" ];
@@ -267,12 +281,13 @@ in {
         ln -sf ${pkgs.writeText "Procfile.local" procfileOptions} ${runDir}/Procfile.options
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
-          if ! test -e "${cfg.stateDir}/db-created"; then
+          if ! test -e "${cfg.stateDir}/user-granted"; then
 
-            ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${cfg.databaseName};'
-            ${pkgs.mysql}/bin/mysql -e "GRANT ALL ON ${cfg.databaseName}.* TO ${cfg.databaseUsername}@localhost IDENTIFIED BY \"${cfg.databasePassword}\";"
+            echo "Adding user to database"
+            ${pkgs.mysql}/bin/mysql -e "GRANT ALL ON ${cfg.databaseName}.* TO ${cfg.username}@localhost IDENTIFIED BY \"${cfg.databasePassword}\";"
 
-            touch "${cfg.stateDir}/db-created"
+            touch "${cfg.stateDir}/user-granted"
+            chown ${cfg.username}:${cfg.group} "${cfg.stateDir}/user-granted"
           fi
         fi
 
