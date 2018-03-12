@@ -11290,6 +11290,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PkgConfig = buildPerlPackage rec {
+    name = "PkgConfig-0.19026";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "5cb6e934d29dd93e04c2fa779f4b7e51361edaf56957b47a232017a4bb7e922c";
+    };
+    meta = {
+      homepage = https://metacpan.org/pod/PkgConfig;
+      description = "Pure-Perl Core-Only replacement for pkg-config";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   Plack = buildPerlPackage rec {
     name = "Plack-1.0039";
     src = fetchurl {
