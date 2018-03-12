@@ -3730,7 +3730,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DebugShowStuff = buildPerlPackage {
+  DebugShowStuff = buildPerlModule {
     name = "Debug-ShowStuff-1.16";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MI/MIKO/Debug-ShowStuff-1.16.tar.gz;
