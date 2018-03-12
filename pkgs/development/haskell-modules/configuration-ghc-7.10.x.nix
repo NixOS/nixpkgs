@@ -41,7 +41,8 @@ self: super: {
 
   gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_2_0; };
 
-  megaparsec = addBuildDepend super.megaparsec self.fail;
+  # https://github.com/mrkkrp/megaparsec/issues/282
+  megaparsec = addBuildDepend (dontCheck super.megaparsec) self.fail;
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
