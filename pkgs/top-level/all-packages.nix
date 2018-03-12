@@ -17148,8 +17148,12 @@ with pkgs;
 
   qiv = callPackage ../applications/graphics/qiv { };
 
-  processing = callPackage ../applications/graphics/processing {
+  processing = processing2;
+  processing2 = callPackage ../applications/graphics/processing {
     jdk = jdk7;
+  };
+  processing3 = callPackage ../applications/graphics/processing3 {
+    jdk = oraclejdk8;
   };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
