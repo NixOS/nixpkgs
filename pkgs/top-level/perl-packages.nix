@@ -2222,15 +2222,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   CompressBzip2 = buildPerlPackage {
-    name = "Compress-Bzip2-2.22";
+    name = "Compress-Bzip2-2.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Compress-Bzip2-2.22.tar.gz;
-      sha256 = "1603e284e07953415b8eaa132698db8b03f46383f883c0902926f36eecb7e895";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Compress-Bzip2-2.26.tar.gz;
+      sha256 = "5132f0c5f377a54d77ee36d332aa0ece585c22a40f2c31f2619e40262f5c4f0c";
     };
     meta = {
       description = "Interface to Bzip2 compression library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    doCheck = false;
   };
 
   CompressRawBzip2 = buildPerlPackage rec {
