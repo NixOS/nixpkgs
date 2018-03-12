@@ -13694,6 +13694,8 @@ with pkgs;
     config = config.pcmciaUtils.config or null;
   };
 
+  pcstat = callPackage ../tools/system/pcstat { };
+
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
