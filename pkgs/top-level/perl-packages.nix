@@ -1965,13 +1965,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassFactoryUtil = buildPerlPackage rec {
+  ClassFactoryUtil = buildPerlModule rec {
     name = "Class-Factory-Util-1.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
       sha256 = "09ifd6v0c94vr20n9yr1dxgcp7hyscqq851szdip7y24bd26nlbc";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Provide utility methods for factory classes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
