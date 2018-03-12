@@ -15593,20 +15593,15 @@ in {
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.9";
+    name = "sphinx_rtd_theme-0.2.5b2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx_rtd_theme/${name}.tar.gz";
-      sha256 = "18d0r63w7jpdrk4q5qy26n08vdlmnj9sar93akwjphyambw4cf17";
+      sha256 = "0grf16fi4g0p3dfh11b1624ic34iqkjhf5i1g6hvsh4nlm0ll00q";
     };
 
-    postPatch = ''
-      rm requirements.txt
-      touch requirements.txt
-    '';
-
     meta = {
-      description = "ReadTheDocs.org theme for Sphinx, 2013 version";
+      description = "ReadTheDocs.org theme for Sphinx";
       homepage = https://github.com/snide/sphinx_rtd_theme/;
       license = licenses.bsd3;
       platforms = platforms.unix;
