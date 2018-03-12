@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, future, pyparsing
 }:
 
 buildPythonPackage rec {
@@ -12,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "cc41cdd8332c2bf44b97daf1f135f4f267c3b744c33976655cd270b66f964c0a";
   };
+
+  propagatedBuildInputs = [ future pyparsing ];
 
   # No tests in archive
   doCheck = false;
