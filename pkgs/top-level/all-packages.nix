@@ -19221,6 +19221,8 @@ with pkgs;
 
   warmux = callPackage ../games/warmux { };
 
+  warsow-engine = callPackage ../games/warsow/engine.nix { };
+
   warsow = callPackage ../games/warsow { };
 
   warzone2100 = libsForQt5.callPackage ../games/warzone2100 { };
