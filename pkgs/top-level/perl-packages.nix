@@ -2295,10 +2295,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigGeneral = buildPerlPackage rec {
-    name = "Config-General-2.60";
+    name = "Config-General-2.63";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TL/TLINDEN/${name}.tar.gz";
-      sha256 = "1biqzrvxr9cc8m5jaldnqzmj44q07y4pv6izgb7irsij0rn18m2i";
+      sha256 = "1bbg3wp0xcpj04cmm86j1x0j5968jqi5s2c87qs7dgmap1vzk6qa";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
