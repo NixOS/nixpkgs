@@ -3588,16 +3588,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeFormatFlexible = buildPerlPackage {
-    name = "DateTime-Format-Flexible-0.26";
+    name = "DateTime-Format-Flexible-0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.26.tar.gz;
-      sha256 = "436efbc5e87cc385112e1c44336427fea32df670caf2b7d6dbb7a113ac6e693d";
+      url = mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.29.tar.gz;
+      sha256 = "dd8228a55e3a2c85347fa5e03b5b48e4b3932423d7cd9249497a885a61edcb2e";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder DateTimeTimeZone ListMoreUtils ModulePluggable TestMockTime ];
+    propagatedBuildInputs = [ DateTimeFormatBuilder ListMoreUtils ModulePluggable ];
     meta = {
       description = "Flexibly parse strings and turn them into DateTime objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMockTime ];
   };
 
   DateTimeFormatHTTP = buildPerlModule rec {
