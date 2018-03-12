@@ -5551,6 +5551,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileFnMatch = buildPerlPackage rec {
+    name = "File-FnMatch-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MJ/MJP/File-FnMatch-0.02.tar.gz";
+      sha256 = "05p9m7kpmjv8bmmbs5chb5fqyshcgmskbbzq5c9qpskbx2w5894n";
+    };
+    buildInputs = [ ];
+    meta = {
+      maintainers = [ maintainers.limeytexan ];
+      description = "simple filename and pathname matching";
+      license = stdenv.lib.licenses.free; # Same as Perl
+    };
+  };
+
   FileHandleUnget = buildPerlPackage rec {
     name = "FileHandle-Unget-0.1628";
     src = fetchurl {
