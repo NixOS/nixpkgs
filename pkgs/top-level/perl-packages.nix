@@ -506,14 +506,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AuthenDecHpwd = buildPerlPackage rec {
-    name = "Authen-DecHpwd-2.006";
+  AuthenDecHpwd = buildPerlModule rec {
+    name = "Authen-DecHpwd-2.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "67f45fef6a23b7548f387b675cbf7881bf9da62d7d007cbf90d3a4b851b99eb7";
+      sha256 = "f43a93bb02b41f7327d92f9e963b69505f67350a52e8f50796f98afc4fb3f177";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ ScalarString DataInteger DigestCRC ];
+    propagatedBuildInputs = [ DataInteger DigestCRC ScalarString ];
     meta = {
       description = "DEC VMS password hashing";
       license = stdenv.lib.licenses.gpl1Plus;
