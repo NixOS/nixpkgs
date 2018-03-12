@@ -4729,6 +4729,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EmailAddressXS = buildPerlPackage rec {
+     version = "1.02";
+     name = "Email-Address-XS-1.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.02.tar.gz;
+       sha256 = "121n00rsfrwcx1dsz7agq8xwynkr5llsxaa8cqgn5qvaw0b9z1jq";
+     };
+     meta = {
+       description = "Parse and format RFC 2822 email addresses and groups";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   EmailDateFormat = buildPerlPackage rec {
     name = "Email-Date-Format-1.005";
     src = fetchurl {
@@ -4772,12 +4785,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailMIME = buildPerlPackage rec {
-    name = "Email-MIME-1.936";
+    name = "Email-MIME-1.946";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "4c0934284da84b8e9ed48ff1060c9719273fac18e776f4c8e888a47c863ee661";
+      sha256 = "68ee79023165d77bec99a2e12ef89ad4e12501e6c321f6822053dc4f411c337c";
     };
-    propagatedBuildInputs = [ EmailAddress EmailMIMEContentType EmailMIMEEncodings EmailMessageID EmailSimple MIMETypes ];
+    propagatedBuildInputs = [ EmailAddressXS EmailMIMEContentType EmailMIMEEncodings EmailMessageID EmailSimple MIMETypes ModuleRuntime ];
     meta = {
       homepage = https://github.com/rjbs/Email-MIME;
       description = "Easy MIME message handling";
