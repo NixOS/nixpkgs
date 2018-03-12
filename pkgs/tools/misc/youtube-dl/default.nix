@@ -21,6 +21,7 @@ buildPythonApplication rec {
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
     sha256 = "1ibmz91anli1vzkgw2i3h4wf1i8arzd74730ylwcwyg3375xryjb";
+
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig
-, curl, SDL2, mesa, glew, ncurses, c-ares }:
+, curl, SDL2, libGLU_combined, glew, ncurses, c-ares }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ curl SDL2 mesa glew ncurses c-ares ];
+  buildInputs = [ curl SDL2 libGLU_combined glew ncurses c-ares ];
 
   meta = with lib; {
     description = "Multiplayer 3D Tank game";

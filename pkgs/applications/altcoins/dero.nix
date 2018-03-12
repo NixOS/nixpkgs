@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "dero-${version}";
-  version = "0.11.3";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "deroproject";
     repo = "dero";
     rev = "v${version}";
-    sha256 = "0cv4yg2lkmkdhlc3753gnbg1nzldk2kxwdyizwhvanq3ycqban4b";
+    sha256 = "0jc5rh2ra4wra04dwv9sydid5ij5930s38mhzq3qkdjyza1ahmsr";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

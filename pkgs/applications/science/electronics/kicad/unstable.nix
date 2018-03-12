@@ -1,4 +1,4 @@
-{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, mesa, zlib
+{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake doxygen  pkgconfig ];
   buildInputs = [
-    mesa zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
+    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade_oce
     ++ optional (ngspiceSupport) ngspice

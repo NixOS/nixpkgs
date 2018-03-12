@@ -509,16 +509,16 @@ rec {
 
   spotbugs = buildEclipsePlugin rec {
     name = "spotbugs-${version}";
-    version = "3.1.1.r201712011030-903b7a0";
+    version = "3.1.2.r201802250230-59118d9";
 
     srcFeature = fetchurl {
       url = "https://spotbugs.github.io/eclipse/features/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "12z5dbs10h5k567wbmwz1w4pnidmqsls52qcfdb3zlgr0rqvz072";
+      sha256 = "1p0pz7znpfi5h1wr60sl8clkpd7rzkh7krmc0nxc6w43gkgkg9h4";
     };
 
     srcPlugin = fetchurl {
       url = "https://spotbugs.github.io/eclipse/plugins/com.github.spotbugs.plugin.eclipse_${version}.jar";
-      sha256 = "0dnkp2alymvyyql7g8w79i27b3c64inhdvpxx1v014ng9liv54xb";
+      sha256 = "1z3jjbcjif4qip1gx2dhfcm9fyhps96ms7z3ngbdcakgw7wai9v4";
     };
 
     meta = with stdenv.lib; {

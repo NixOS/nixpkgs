@@ -1,4 +1,4 @@
-{ stdenv, cmake, mesa_noglu, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
+{ stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "eternity-engine-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ mesa_noglu SDL SDL_mixer SDL_net ];
+  buildInputs = [ libGL SDL SDL_mixer SDL_net ];
 
   enableParallelBuilding = true;
 

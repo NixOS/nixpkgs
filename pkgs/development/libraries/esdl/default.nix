@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, mesa, rebar, erlang}:
+{stdenv, fetchurl, SDL, libGLU_combined, rebar, erlang}:
 
 stdenv.mkDerivation rec {
   name = "esdl-1.3.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ erlang rebar ];
-  propagatedBuildInputs = [ SDL mesa ];
+  propagatedBuildInputs = [ SDL libGLU_combined ];
 
   buildPhase = ''
     rebar compile

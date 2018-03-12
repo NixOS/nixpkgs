@@ -319,7 +319,7 @@ let
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
         license = licenses.php301;
-        maintainers = with maintainers; [ globin ];
+        maintainers = with maintainers; [ globin etu ];
         platforms = platforms.all;
         outputsToInstall = [ "out" "dev" ];
       };
@@ -338,8 +338,8 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.33";
-    sha256 = "1k1ip1slk89hkp57qiqp8k2m5yrg9lx5rja542g87k8xfslrdxh7";
+    version = "5.6.34";
+    sha256 = "1kgjgkabhrm8ksmh6j3m59vm85n401mcn7inh03hnjzfijflk7z1";
   };
 
   php70 = generic {
@@ -348,8 +348,8 @@ in {
   };
 
   php71 = generic {
-    version = "7.1.14";
-    sha256 = "1x41qmq66r0ff0573ln34d3qbzwg5z20nagsn1b6frfpkq9zvck3";
+    version = "7.1.15";
+    sha256 = "1gfw3ab9pvv034l9xk7ry23xsdz9vcwksrvmzkjmsj79713sa5z1";
   };
 
   php72 = generic {

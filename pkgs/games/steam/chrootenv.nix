@@ -9,16 +9,7 @@
 
 let
   commonTargetPkgs = pkgs: with pkgs;
-    let
-      tzdir = "${pkgs.tzdata}/share/zoneinfo";
-      # I'm not sure if this is the best way to add things like this
-      # to an FHSUserEnv
-      etc-zoneinfo = pkgs.runCommand "zoneinfo" {} ''
-        mkdir -p $out/etc
-        ln -s ${tzdir} $out/etc/zoneinfo
-        ln -s ${tzdir}/UTC $out/etc/localtime
-      '';
-    in [
+    [
       steamPackages.steam-fonts
       # Errors in output without those
       pciutils
@@ -30,8 +21,6 @@ let
       perl
       # Open URLs
       xdg_utils
-      # Zoneinfo
-      etc-zoneinfo
       iana-etc
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
@@ -103,7 +92,6 @@ in buildFHSUserEnv rec {
 
   profile = ''
     export STEAM_RUNTIME=/steamrt
-    export TZDIR=/etc/zoneinfo
   '';
 
   runScript = writeScript "steam-wrapper.sh" ''

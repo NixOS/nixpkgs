@@ -2,12 +2,12 @@
 , libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
+, glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
 
-assert glSupport -> mesa_noglu != null;
+assert glSupport -> libGL != null;
 
 let inherit (stdenv.lib) optional optionals; in
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     with xorg; [ libXext fontconfig expat freetype pixman zlib libpng libXrender ]
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
-    ++ optional glSupport mesa_noglu
+    ++ optional glSupport libGL
     ; # TODO: maybe liblzo but what would it be for here?
 
   configureFlags = if stdenv.isDarwin then [

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-autoar-${version}";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-autoar/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "e1fe2c06eed30305c38bf0939c72b0e51b4716658e2663a0cf4a4bf57874ca62";
+    sha256 = "02i4zgqqqj56h7bcys6dz7n78m4nj2x4dv1ggjmnrk98n06xpsax";
   };
 
   passthru = {

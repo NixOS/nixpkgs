@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.26.4";
+  version = "3.26.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "390d50f975f8ab9228016eb60bf4b8ea9a39be0b31467e2d6c27ae75fa1e84ea";
+    sha256 = "1a1hyv326w4in4pl26gi2n3p9b38ih6zjdiigpqy0aiibnjnmc81";
   };
 
   passthru = {

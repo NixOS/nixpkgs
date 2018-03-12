@@ -259,8 +259,9 @@ in
     ];
   };
   rugged = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake openssl libssh2 zlib ];
+    dontUseCmakeConfigure = true;
   };
 
   scrypt = attrs:

@@ -3,9 +3,9 @@
 with stdenv.lib;
 
 let
-  version = "4.15.7";
+  version = "4.15.9";
   revision = "a";
-  sha256 = "19kgy1fa4flnqm3a50hilgjczqkscay10183cvkzy3vxrnf8fl0f";
+  sha256 = "0nnim0ziibrg6ihipnkgmy0ssmwgjy5lyzfj78snvw5fmp5a9k74";
 
   # modVersion needs to be x.y.z, will automatically add .0 if needed
   modVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));

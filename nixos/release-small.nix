@@ -50,6 +50,10 @@ in rec {
           separateBoot
           simple;
       };
+      boot = {
+        inherit (nixos'.tests.boot)
+          biosCdrom;
+      };
     };
   };
 

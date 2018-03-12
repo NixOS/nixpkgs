@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls
 , gtk3, wayland, libwebp, enchant, xlibs, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
-, libidn, libedit, readline, mesa, libintlOrEmpty
+, libidn, libedit, readline, libGLU_combined, libintlOrEmpty
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
     ++ (with xlibs; [ libXdmcp libXt libXtst ])
-    ++ optionals stdenv.isDarwin [ libedit readline mesa ]
+    ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
     ++ optional stdenv.isLinux wayland;
 
   propagatedBuildInputs = [

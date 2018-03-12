@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, mesa, freeglut, libX11, xproto, inputproto
+{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xproto, inputproto
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    unzip cmake mesa freeglut libX11 xproto inputproto libXi
+    unzip cmake libGLU_combined freeglut libX11 xproto inputproto libXi
   ];
 
   cmakeFlags = [ "-DBOX2D_INSTALL=ON" "-DBOX2D_BUILD_SHARED=ON" ];

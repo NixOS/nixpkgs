@@ -33,9 +33,9 @@ let
       sh = pkgs.stdenv.shell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; inherit binshDeps; } ''
+      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } ''
         ${optionalString (!isNix20) ''
-          extraPaths=$(for i in $(cat binshDeps); do if test -d $i; then echo $i; fi; done)
+          extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         ''}
         cat > $out <<END
         # WARNING: this file is generated from the nix.* options in

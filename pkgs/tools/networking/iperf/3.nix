@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.4";
+  name = "iperf-3.5";
 
   src = fetchurl {
     url = "http://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "04ciywjhklzfrnp40675ssnkqxv90ad4v56i8vh8bpsiswr86lki";
+    sha256 = "1m9cyycv70s8nlbgr1lqwr155ixk17np0nzqgwaw3f51vkndk6sk";
   };
 
   buildInputs = [ openssl ];

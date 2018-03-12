@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig
-, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, mesa
+, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
 
-  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp mesa ];
+  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp libGLU_combined ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2}/include/SDL2"

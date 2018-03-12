@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva, wayland
-, libdrm, udev, xorg, mesa, yasm, gstreamer, gst-plugins-bad, nasm
+, libdrm, udev, xorg, libGLU_combined, yasm, gstreamer, gst-plugins-bad, nasm
 , libvpx, python
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
     xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM
-    xorg.libICE mesa nasm libvpx python
+    xorg.libICE libGLU_combined nasm libvpx python
   ];
 
   preConfigure = "

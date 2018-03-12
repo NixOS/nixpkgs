@@ -7,7 +7,7 @@
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "4.2.6";
+  version = "4.2.8";
   name = "gramps-${version}";
 
   buildInputs = [ intltool gtk3 ] 
@@ -22,7 +22,7 @@ in buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "0k0bx6msc2kvkg0nwa9v2mp3qy7lmnxjd97n6a1zdzlq8yzw29f1";
+    sha256 = "17y6rjvvcz7lwjck4f5nmhnn07i9k5vzk5dp1jk7j3ldxjagscsd";
   };
 
   pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ] ++ [ pango ];
