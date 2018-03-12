@@ -1735,6 +1735,11 @@
     github = "johnazoidberg";
     name = "Daniel Schäfer";
   };
+  johnchildren = {
+    email = "john.a.children@gmail.com";
+    github = "johnchildren";
+    name = "John Children";
+  };
   johnmh = {
     email = "johnmh@openblox.org";
     github = "johnmh";
