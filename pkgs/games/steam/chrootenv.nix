@@ -15,7 +15,7 @@ let
       pciutils
       python2
       # Games' dependencies
-      xlibs.xrandr
+      xorg.xrandr
       which
       # Needed by gdialog, including in the steam-runtime
       perl
@@ -51,12 +51,12 @@ in buildFHSUserEnv rec {
 
   multiPkgs = pkgs: with pkgs; [
     # These are required by steam with proper errors
-    xlibs.libXcomposite
-    xlibs.libXtst
-    xlibs.libXrandr
-    xlibs.libXext
-    xlibs.libX11
-    xlibs.libXfixes
+    xorg.libXcomposite
+    xorg.libXtst
+    xorg.libXrandr
+    xorg.libXext
+    xorg.libX11
+    xorg.libXfixes
 
     # Needed to properly check for libGL.so.1 in steam-wrapper.sh
     pkgsi686Linux.glxinfo
@@ -67,7 +67,7 @@ in buildFHSUserEnv rec {
     libdrm
     mono
     xorg.xkeyboardconfig
-    xlibs.libpciaccess
+    xorg.libpciaccess
 
     (steamPackages.steam-runtime-wrapped.override {
       inherit nativeOnly runtimeOnly;

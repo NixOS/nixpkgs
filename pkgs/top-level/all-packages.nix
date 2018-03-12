@@ -9533,7 +9533,7 @@ with pkgs;
   libburn = callPackage ../development/libraries/libburn { };
 
   libcaca = callPackage ../development/libraries/libcaca {
-    inherit (xlibs) libX11 libXext;
+    inherit (xorg) libX11 libXext;
   };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xlibs, cmake, subversion, libGLU_combined, qt5, boost,
+{stdenv, fetchurl, cmake, subversion, libGLU_combined, qt5, boost,
  python27, python27Packages}:
 
 stdenv.mkDerivation rec {

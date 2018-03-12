@@ -15,15 +15,15 @@ let
     gdk_pixbuf
 
     # Without these it silently fails
-    xlibs.libXinerama
-    xlibs.libXdamage
-    xlibs.libXcursor
-    xlibs.libXrender
-    xlibs.libXScrnSaver
-    xlibs.libXxf86vm
-    xlibs.libXi
-    xlibs.libSM
-    xlibs.libICE
+    xorg.libXinerama
+    xorg.libXdamage
+    xorg.libXcursor
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXxf86vm
+    xorg.libXi
+    xorg.libSM
+    xorg.libICE
     gnome2.GConf
     freetype
     (curl.override { gnutlsSupport = true; sslSupport = false; })
@@ -46,8 +46,8 @@ let
     networkmanager098
 
     # Verified games requirements
-    xlibs.libXmu
-    xlibs.libxcb
+    xorg.libXmu
+    xorg.libxcb
     libGLU
     libuuid
     libogg
@@ -60,7 +60,7 @@ let
     tbb
 
     # Other things from runtime
-    xlibs.libXinerama
+    xorg.libXinerama
     flac
     freeglut
     libjpeg
