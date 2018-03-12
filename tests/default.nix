@@ -7,4 +7,8 @@ rec {
   maxima = callTest ./maxima.nix {};
   libreoffice = callTest ./libreoffice.nix {};
   pdf = callTest ./latex-zathura.nix {};
+
+  coreutils-versions = test-lib.checkAllExecutables pkgs.coreutils {
+    skipRegex = "(false|test)";
+  };
 }

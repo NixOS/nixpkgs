@@ -46,4 +46,17 @@ rec {
     "${lib.getBin pkgs.fmbt}/bin/fmbt-python" \
       -c ${lib.escapeShellArg fmbtHeader}${lib.escapeShellArg code}
   '';
+
+  checkAllExecutables = package: {
+    flags ? "--version", regexp ? ".", skipRegex ? "^$"
+  }: 
+  runCommand "${package.name}-executable-check" {} ''
+    mkdir "$out"
+    for i in "${package}"/bin/*; do
+      if echo "$i" | grep -Ev ${lib.escapeShellArg skipRegex}; then
+        "$i" ${flags} | grep -E ${lib.escapeShellArg regexp} |
+          tee "$out/$(basename "$i")"
+      fi
+    done
+  '';
 }
