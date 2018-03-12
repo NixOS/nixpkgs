@@ -184,6 +184,8 @@ let
     };
   };
 
+  baseDir = "/var/lib/mycroft";
+
   components = [
     { name = "audio";           bin = false; path = "audio/main.py"; }
     { name = "bus";             bin = false; path = "messagebus/service/main.py"; }
@@ -215,7 +217,7 @@ in py.pkgs.buildPythonApplication rec {
     for f in msm/msm mycroft/configuration/mycroft.conf mycroft/configuration/config.py mycroft/util/log.py ; do
       substituteInPlace $f \
         --replace /etc/mycroft $out/etc/mycroft \
-        --replace /opt/mycroft /var/lib/mycroft
+        --replace /opt/mycroft ${baseDir}
     done
 
     sed -i mycroft/__init__.py \
@@ -250,7 +252,6 @@ in py.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with py.pkgs; [
     adapt-parser
-    # websocket-client
 
     dateutil
     future
@@ -287,6 +288,7 @@ in py.pkgs.buildPythonApplication rec {
 
   dontConfigure = true;
   dontBuild = true;
+  # 2 out of 162 checks are failing
   doCheck = false;
 
   installPhase = let
@@ -309,7 +311,7 @@ in py.pkgs.buildPythonApplication rec {
       cat >> $f << _EOF
       #!${stdenv.shell} -e
 
-      export HOME=/var/lib/mycroft
+      export HOME=$${HOME:-${baseDir}}
       export PATH=$PATH:${lib.makeBinPath [ flac mimic mpg123 ]}
       export PYTHONPATH=$dir:${py.pkgs.makePythonPath propagatedBuildInputs}
 
