@@ -138,8 +138,8 @@ let
   boulder = let
     owner = "letsencrypt";
     repo = "boulder";
-    rev = "9866abab8962a591f06db457a4b84c518cc88243";
-    version = "20170510";
+    rev = "9c6a1f2adc4c26d925588f5ae366cfd4efb7813a";
+    version = "20180129";
 
   in pkgs.buildGoPackage rec {
     name = "${repo}-${version}";
@@ -147,7 +147,7 @@ let
     src = pkgs.fetchFromGitHub {
       name = "${name}-src";
       inherit rev owner repo;
-      sha256 = "170m5cjngbrm36wi7wschqw8jzs7kxpcyzmshq3pcrmcpigrhna1";
+      sha256 = "09kszswrifm9rc6idfaq0p1mz5w21as2qbc8gd5pphrq9cf9pn55";
     };
 
     postPatch = ''
@@ -167,6 +167,18 @@ let
       cat "${snakeOilCa}/ca.key" > test/test-ca.key
       cat "${snakeOilCa}/ca.pem" > test/test-ca.pem
     '';
+
+    # Until vendored pkcs11 is go 1.9 compatible
+    preBuild = ''
+      rm -r go/src/github.com/letsencrypt/boulder/vendor/github.com/miekg/pkcs11
+    '';
+
+    extraSrcs = map mkGoDep [
+      { goPackagePath = "github.com/miekg/pkcs11";
+        rev           = "6dbd569b952ec150d1425722dbbe80f2c6193f83";
+        sha256        = "1m8g6fx7df6hf6q6zsbyw1icjmm52dmsx28rgb0h930wagvngfwb";
+      }
+    ];
 
     goPackagePath = "github.com/${owner}/${repo}";
     buildInputs = [ pkgs.libtool ];
@@ -284,7 +296,11 @@ let
     ocsp-updater.after = [ "boulder-publisher" ];
     ocsp-responder.args = "--config ${cfgDir}/ocsp-responder.json";
     ct-test-srv = {};
-    mail-test-srv.args = "--closeFirst 5";
+    mail-test-srv.args = let
+      key = "${boulderSource}/test/mail-test-srv/minica-key.pem";
+      crt = "${boulderSource}/test/mail-test-srv/minica.pem";
+     in
+      "--closeFirst 5 --cert ${crt} --key ${key}";
   };
 
   commonPath = [ softhsm pkgs.mariadb goose boulder ];
