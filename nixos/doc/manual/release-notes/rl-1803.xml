@@ -353,7 +353,12 @@ following incompatible changes:</para>
       Use <literal>withOnlyInstalledCommunityModules</literal> for modules that should not be enabled directly, e.g <literal>lib_ldap</literal>.
     </para>
   </listitem>
-
+  <listitem>
+    <para>
+      All prometheus exporter modules are now defined as submodules.
+      The exporters are configured using <literal>services.prometheus.exporters</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
