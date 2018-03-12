@@ -1,8 +1,8 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "pcstat-${suffix}";
-  suffix = "91a7346";
+  name = "pcstat-${version}";
+  version = "2017-05-28";
 
   goPackagePath = "github.com/tobert/pcstat";
 
