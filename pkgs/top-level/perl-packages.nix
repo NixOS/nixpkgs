@@ -51,7 +51,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz;
       sha256 = "1y92k4nqkscfwpriv8q7c90rjfj85lvwq1k96niv2glk8d37dcf9";
     };
-    propagatedBuildInputs = [AlgorithmDiff];
+    propagatedBuildInputs = [ AlgorithmDiff ];
   };
 
   AlgorithmC3 = buildPerlPackage rec {
