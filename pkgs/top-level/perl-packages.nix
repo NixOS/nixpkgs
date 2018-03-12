@@ -2218,6 +2218,33 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CloneChoose = buildPerlPackage rec {
+     version = "0.008";
+     name = "Clone-Choose-0.008";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/H/HE/HERMES/Clone-Choose-0.008.tar.gz;
+       sha256 = "0grf0bg1ldzqakaq7aaigjngwd07zybrlmwjcnb0q986q0jcfank";
+     };
+     buildInputs = [ Clone ClonePP ];
+     meta = {
+       description = "Choose appropriate clone utility";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/release/Clone-Choose";
+     };
+  };
+
+  ClonePP = buildPerlPackage rec {
+     version = "1.07";
+     name = "Clone-PP-1.07";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/Clone-PP-1.07.tar.gz;
+       sha256 = "15dkhqvih6rx9dnngfwwljcm9s8afb0nbyl2vdvhd8frnw4y31dz";
+     };
+     meta = {
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   # For backwards compatibility.
   CommonSense = self.commonsense;
 
@@ -6438,15 +6465,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   HashMerge = buildPerlPackage rec {
-    name = "Hash-Merge-0.200";
+    name = "Hash-Merge-0.299";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
-      sha256 = "0r1a2axz85wn6573zrl9rk8mkfl2cvf1gp9vwya5qndp60rz1ya7";
+      url = mirror://cpan/authors/id/H/HE/HERMES/Hash-Merge-0.299.tar.gz;
+      sha256 = "1rrqpz9118w4xrcw2q5wm2v2yk2xvasc75n69gjj8hfrfs99hhd6";
     };
-    propagatedBuildInputs = [ Clone ];
+    propagatedBuildInputs = [ CloneChoose ];
     meta = {
       description = "Merges arbitrarily deep hashes into a single hash";
     };
+    buildInputs = [ Clone ClonePP ];
   };
 
   HashMergeSimple = buildPerlPackage {
