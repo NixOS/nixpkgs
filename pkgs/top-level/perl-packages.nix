@@ -2152,12 +2152,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassUnload = buildPerlPackage rec {
-    name = "Class-Unload-0.09";
+    name = "Class-Unload-0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "1q50hw217kll1vaxp7vz4x84f478ymd4lgz7mhmz8p94l8lxgi5g";
+      sha256 = "0pqa98z3ij6a3v9wkmvc8b410kv30y0xxqf0i6if3lp4lx3rgqjj";
     };
     propagatedBuildInputs = [ ClassInspector ];
+    buildInputs = [ TestRequires ];
   };
 
   ClassVirtual = buildPerlPackage rec {
