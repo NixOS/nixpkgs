@@ -870,7 +870,7 @@ let self = _self // overrides; _self = with self; {
   CacheCache = buildPerlPackage rec {
     name = "Cache-Cache-1.08";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Cache/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Cache-Cache-1.08.tar.gz;
       sha256 = "1s6i670dc3yb6ngvdk48y6szdk5n1f4icdcjv2vi1l2xp9fzviyj";
     };
     propagatedBuildInputs = [ DigestSHA1 Error IPCShareLite ];
