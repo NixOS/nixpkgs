@@ -314,6 +314,11 @@
     github = "amiloradovsky";
     name = "Andrew Miloradovsky";
   };
+  aminechikhaoui = {
+    email = "amine.chikhaoui91@gmail.com";
+    github = "AmineChikhaoui";
+    name = "Amine Chikhaoui";
+  };
   amorsillo = {
     email = "andrew.morsillo@gmail.com";
     github = "AndrewMorsillo";
