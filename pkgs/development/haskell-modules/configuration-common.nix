@@ -996,4 +996,7 @@ self: super: {
   # Needs turtle >=1.5.0, which we don't have by default in lts-10.x.
   changelogged = super.changelogged.override { turtle = self.turtle_1_5_5; };
 
+  # https://github.com/fpco/inline-c/issues/72
+  inline-c = dontCheck super.inline-c;
+
 }
