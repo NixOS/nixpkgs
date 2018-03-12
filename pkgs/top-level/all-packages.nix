@@ -2290,7 +2290,7 @@ with pkgs;
   flameGraph = flamegraph;
 
   flvtool2 = callPackage ../tools/video/flvtool2 { };
-  
+
   fmbt = callPackage ../development/tools/fmbt {
     python = python2;
   };
@@ -4997,7 +4997,7 @@ with pkgs;
     extraFonts = true;
   };
 
-  texmaker = callPackage ../applications/editors/texmaker { };
+  texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
 
   texstudio = callPackage ../applications/editors/texstudio { };
 
