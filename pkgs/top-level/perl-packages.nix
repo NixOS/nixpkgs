@@ -16665,6 +16665,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  XMLSAXExpat = buildPerlPackage rec {
+     version = "0.51";
+     name = "XML-SAX-Expat-0.51";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BJ/BJOERN/XML-SAX-Expat-0.51.tar.gz;
+       sha256 = "0gy8h2bvvvlxychwsb99ikdh5cqpk6sqc073jk2b4zffs09n40ac";
+     };
+     propagatedBuildInputs = [ XMLParser XMLSAX ];
+     meta = {
+       description = "SAX Driver for Expat";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   XMLSAXWriter = buildPerlPackage {
     name = "XML-SAX-Writer-0.57";
     src = fetchurl {
@@ -16693,12 +16707,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLSimple = buildPerlPackage {
-    name = "XML-Simple-2.20";
+    name = "XML-Simple-2.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.20.tar.gz;
-      sha256 = "0jj3jiray1l4pi9wkjcpxjc3v431whdwx5aqnhgdm4i7h3817zsw";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.24.tar.gz;
+      sha256 = "0ks2q9fj0n8n5q7qgzya1jmnqddbrr309v6w1awznxbws6gq254s";
     };
-    propagatedBuildInputs = [XMLParser];
+    propagatedBuildInputs = [ XMLSAXExpat ];
   };
 
   XMLTokeParser = buildPerlPackage rec {
