@@ -14753,6 +14753,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
       sha256 = "0hxrfs7p9hqkhvv5nhk2hd3kh32smwng4nz47b8xf4iw2q1n2dr7";
     };
+    buildInputs = [ TestBase ];
   };
 
   TextAbbrev = buildPerlPackage {
