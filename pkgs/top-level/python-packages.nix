@@ -303,6 +303,8 @@ in {
 
   pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
+  pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
+
   pycairo = callPackage ../development/python-modules/pycairo { };
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
@@ -4718,33 +4720,8 @@ in {
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
-  gplaycli = buildPythonPackage rec {
-    version = "0.1.2";
-    name = "gplaycli-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "matlink";
-      repo = "gplaycli";
-      rev = "${version}";
-      sha256 = "0yc09inzs3aggj0gw4irlhlzw5q562fsp0sks352y6z0vx31hcp3";
-    };
-
-   disabled = ! isPy27;
-
-   propagatedBuildInputs = with self; [ pkgs.libffi pyasn1 clint ndg-httpsclient protobuf requests args ];
-
-   preBuild = ''
-     substituteInPlace setup.py --replace "/etc" "$out/etc"
-     substituteInPlace gplaycli/gplaycli.py --replace "/etc" "$out/etc"
-   '';
-
-    meta = {
-      homepage = https://github.com/matlink/gplaycli;
-      description = "Google Play Downloader via Command line";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  gpapi = callPackage ../development/python-modules/gpapi { };
+  gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gpsoauth = buildPythonPackage rec {
     version = "0.2.0";
