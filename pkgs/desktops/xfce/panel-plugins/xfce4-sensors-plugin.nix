@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome2, libxfce4ui,
-  libxfce4util, xfce4panel, libnotify, lm_sensors, hddtemp, netcat-gnu
+  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     gnome2.gtk
     libxfce4ui
     libxfce4util
-    xfce4panel
+    xfce4-panel
     libnotify
     lm_sensors
     hddtemp
