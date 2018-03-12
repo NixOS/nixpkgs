@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "GSL-unstable";
-  version = "2018-03-06";
+  version = "2017-02-15";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
