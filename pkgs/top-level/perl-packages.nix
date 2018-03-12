@@ -441,7 +441,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DB/DBURKE/${name}.tar.gz";
       sha256 = "8082b7ca456d02c7c862ba409cbd62a9cafdb8c5832f5d7fb1d37ba8698ee5b1";
     };
-    buildInputs = [ TestSpec ];
+    buildInputs = [ TestDeep TestSpec TestTrap ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
       homepage = https://github.com/dwburke/perl-Array-FIFO;
