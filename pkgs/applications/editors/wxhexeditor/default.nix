@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
+{ stdenv, fetchFromGitHub, fetchpatch,
+wxGTK, autoconf, automake, libtool, python, gettext, bash }:
 
 stdenv.mkDerivation rec {
   name = "wxHexEditor-${version}";
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr" "$out"
     substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
   '';
+
+  patches = [
+    # https://github.com/EUA/wxHexEditor/issues/90
+    (fetchpatch {
+      url = https://github.com/EUA/wxHexEditor/commit/d0fa3ddc3e9dc9b05f90b650991ef134f74eed01.patch;
+      sha256 = "1wcb70hrnhq72frj89prcqylpqs74xrfz3kdfdkq84p5qfz9svyj";
+    })
+  ];
 
   buildPhase = ''
     make OPTFLAGS="-fopenmp"
