@@ -11715,13 +11715,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PPIxRegexp = buildPerlPackage rec {
-    name = "PPIx-Regexp-0.050";
+  PPIxRegexp = buildPerlModule rec {
+    name = "PPIx-Regexp-0.055";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/${name}.tar.gz";
-      sha256 = "fd095fb90826efa3f9b28bf018a099dc51f1d7c7d34ed2f193a28f1087635125";
+      sha256 = "53cb67f56a3699de9d7b24423d080f11602f0e4e2b8107def60be020e33f3919";
     };
-    propagatedBuildInputs = [ ListMoreUtils PPI TaskWeaken ];
+    propagatedBuildInputs = [ PPI ];
     meta = {
       description = "Parse regular expressions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
