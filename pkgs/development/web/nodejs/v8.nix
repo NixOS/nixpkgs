@@ -17,5 +17,5 @@ in
       sha256 = "0vy8rlg58kg75j4sw3xadmbrwxfa56iaykmjl18g9a8wkjfdxp3c";
     };
 
-    patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode-v7.patch ];
+    patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode-v7.patch ./no-xcodebuild.patch ];
   })

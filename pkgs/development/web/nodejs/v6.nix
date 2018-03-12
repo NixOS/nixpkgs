@@ -16,4 +16,5 @@ in
       url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz";
       sha256 = "1p6w7ngp95lc3ksyklp1mwyq1f02vz62r1h60g1ri00pl8pnfn0s";
     };
+    patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./no-xcodebuild.patch ];
   })
