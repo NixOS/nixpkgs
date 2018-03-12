@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
       --replace -fno-asynchronous-unwind-tables ""
   '';
 
+  patches = [
+    # Minor touchup to build system making dynamic linker symlink relative
+    (fetchurl {
+      url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
+      sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+  ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
@@ -80,7 +87,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     # Create 'ldd' symlink, builtin
-    ln -s $out/lib/libc.so $out/bin/ldd
+    ln -rs $out/lib/libc.so $out/bin/ldd
 
     # (impure) cc wrapper around musl for interactive usuage
     for i in musl-gcc musl-clang ld.musl-clang; do
