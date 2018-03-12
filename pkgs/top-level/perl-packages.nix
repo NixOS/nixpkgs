@@ -741,12 +741,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   BitVector = buildPerlPackage {
-    name = "Bit-Vector-7.3";
+    name = "Bit-Vector-7.4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-7.3.tar.gz;
-      sha256 = "0gcg1173i1bsx2qvyw77kw90xbf03b861jc42hvq744vzc5k6xjs";
+      url = mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-7.4.tar.gz;
+      sha256 = "09m96p8c0ipgz42li2ywdgy0vxb57mb5nf59j9gw7yzc3xkslv9w";
     };
-    propagatedBuildInputs = [CarpClan];
+    propagatedBuildInputs = [ CarpClan ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
