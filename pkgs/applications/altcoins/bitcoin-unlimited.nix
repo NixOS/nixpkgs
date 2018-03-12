@@ -21,8 +21,13 @@ stdenv.mkDerivation rec {
                   miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
+  patches = [
+    ./bitcoin-unlimited-const-comparators.patch
+  ];
+
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
+  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Unlimited client)";
