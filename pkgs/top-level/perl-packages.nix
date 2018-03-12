@@ -1708,17 +1708,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIExpand = buildPerlPackage {
-    name = "CGI-Expand-2.04";
+    name = "CGI-Expand-2.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.04.tar.gz;
-      sha256 = "0jk2vvk4mlz7phq3h3wpryix46adi7fkkzvkv0ssn5xkqy3pqlny";
+      url = mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.05.tar.gz;
+      sha256 = "1ad48nd067j5irjampxpw3zvzpg8wpnpan6szkdc5h64wccd30kf";
     };
-    propagatedBuildInputs = [ TestException ];
     meta = {
       description = "Convert flat hash to nested data using TT2's dot convention";
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestException ];
   };
 
   CGIFast = buildPerlPackage {
