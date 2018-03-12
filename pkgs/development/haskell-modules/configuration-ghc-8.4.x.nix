@@ -795,4 +795,7 @@ self: super: {
       stripLen = 1;
     });
 
+  # Old versions don't compile.
+  vty = self.vty_5_20;
+
 }
