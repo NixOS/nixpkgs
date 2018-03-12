@@ -16308,6 +16308,8 @@ with pkgs;
 
   keepnote = callPackage ../applications/office/keepnote { };
 
+  kega-fusion = callPackage_i686 ../misc/emulators/kega-fusion { };
+
   kermit = callPackage ../tools/misc/kermit { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
