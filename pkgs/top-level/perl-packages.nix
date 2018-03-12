@@ -11889,10 +11889,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodCoverageTrustPod = buildPerlPackage {
-    name = "Pod-Coverage-TrustPod-0.100003";
+    name = "Pod-Coverage-TrustPod-0.100004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Coverage-TrustPod-0.100003.tar.gz;
-      sha256 = "19lyc5a5hg3pqhw0k5fnd0q4l2mrdq0ck4kw1smjvwkccp24431z";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Coverage-TrustPod-0.100004.tar.gz;
+      sha256 = "1sslca9fih9f7r2jsd79738iy8s90frq7cb9ly1v1mc36nd544yf";
     };
     propagatedBuildInputs = [ PodCoverage PodEventual ];
     meta = {
