@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
+{ stdenv, fetchurl, fetchpatch, systemd, fcgi, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "fcgiwrap-${version}";
@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ systemd fcgi ];
+
+  patches = [
+    (fetchpatch {
+      url = https://sources.debian.org/data/main/f/fcgiwrap/1.1.0-10/debian/patches/declare_cgi_error_noreturn.patch;
+      sha256 = "07mc9jb0f2kzb4pvaxk0pxlb8fjmg42n9j3im548arqzbay2cfr8";
+    })
+  ];
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
   postPatch = ''
