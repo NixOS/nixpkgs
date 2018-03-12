@@ -319,8 +319,8 @@ in
       networkingOptions =
         mkOption {
           default = [
-            "-net nic,vlan=0,model=virtio"
-            "-net user,vlan=0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+            "-net nic,netdev=user.0,model=virtio"
+            "-netdev user,id=user.0,\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
           ];
           type = types.listOf types.str;
           description = ''
@@ -436,7 +436,7 @@ in
 
     # FIXME: Figure out how to make this work on non-x86
     virtualisation.qemu.options =
-      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usbdevice tablet" ];
+      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to
