@@ -11,16 +11,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.17.10";
+  version = "3.17.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0v27hg856b5z2rilczcbfgz8ksxn0n810g1glac3mxkj8qbl8wqg";
+    sha256 = "0xda7x7xxjvzn1l0adlvbwcw21crq1r3r79bkf94q3m5i6abx49g";
   };
 
   plugin = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "07am3dnl0ipgfswz5wndprryljh9rqbfhq7mm4d4yyj3bdnnzlig";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
+    sha256 = "0vqhwqc33vxncdhbzdchbgrcrxvkwnp7rc2hkswwn9da112s0c9w";
   };
 
   hplipState = substituteAll {
@@ -57,6 +57,7 @@ pythonPackages.buildPythonApplication {
     dbus
     net_snmp
     openssl
+    zlib
   ];
 
   nativeBuildInputs = [
@@ -97,7 +98,7 @@ pythonPackages.buildPythonApplication {
       --with-mimedir=$out/etc/cups
       --enable-policykit
       --disable-qt4
-      ${stdenv.lib.optionals withQt5 "--enable-qt5"}
+      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -182,7 +183,7 @@ pythonPackages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
+    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
