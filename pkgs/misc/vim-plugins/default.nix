@@ -627,8 +627,8 @@ rec {
     name = "vim-css-color-2018-03-06";
     src = fetchgit {
       url = "https://github.com/ap/vim-css-color";
-      rev = "fcf5829daa7817994fb856dbaa905e6fd8beb50c";
-      sha256 = "1a617ji11395zimqjgpcq2qciyjzq5ixm85vc8rkj8jda0qgm91c";
+      rev = "afaacf50e65b7d30b170e70ee13c1518dce1e032";
+      sha256 = "1ck8qv3wfmc7rdddzd7zh2dsnb0rx69grmc0laz7n1358xg0i4vx";
     };
     dependencies = [];
 
