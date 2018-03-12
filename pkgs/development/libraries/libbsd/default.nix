@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libbsd-${version}";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchurl {
     url = "http://libbsd.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "11wnkzims5grprvhb1ssmq9pc2lcgh2r2rk8gwgz36ply6fvyzs6";
+    sha256 = "0c9bl49zs0xdddcwj5dh0lay9sxi2m1yi74848g8p87mb87g2j7m";
   };
 
   # darwin changes configure.ac which means we need to regenerate

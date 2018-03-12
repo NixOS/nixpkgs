@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  preConfigure = "unset CONFIG_SHELL";
+  preConfigure = "CONFIG_SHELL=/bin/sh";
 
   postInstall = "rm -rf $out/share/doc";
 

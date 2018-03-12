@@ -1,5 +1,5 @@
 { stdenv, config, requireFile, fetchurl
-, libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, mesa
+, libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, libGLU_combined
 , demo ? false }:
 
 # TODO: add i686 support
@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
   goBuyItNow = '' 
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://WorldOfGooSetup.1.41.tar.gz" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/WorldOfGooSetup.1.41.tar.gz" in the
     directory where you saved it.
 
     Or you can install the demo version: 'nix-env -i -A pkgs.worldofgoo_demo'. 
   ''; 
 
   getTheDemo = ''
-    We cannot download the demo version automatically, please go to
+    We cannot download the demo version automatically. Please go to
     http://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
-    You can do this by using "nix-prefetch-url file://WorldOfGooDemo.1.41.tar.gz" in the
+    You can do this by using "nix-prefetch-url file://\$PWD/WorldOfGooDemo.1.41.tar.gz" in the
     directory where you saved it.
   '';
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ] 
-    + ":" + stdenv.lib.makeLibraryPath [libX11 libXext libXau libxcb libXdmcp SDL SDL_mixer libvorbis mesa ]
+    + ":" + stdenv.lib.makeLibraryPath [libX11 libXext libXau libxcb libXdmcp SDL SDL_mixer libvorbis libGLU_combined ]
     + ":" + stdenv.cc.cc + "/lib64";
 
   installPhase = ''

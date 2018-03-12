@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt }:
+{ stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   version = "0.5.4.12";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 intltool libxslt ];
+  buildInputs = [ gtk3 intltool libxslt hicolor-icon-theme ];
 
   meta = {
     description = "GTK+ frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";

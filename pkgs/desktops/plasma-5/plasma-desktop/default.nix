@@ -12,7 +12,7 @@
   kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
   kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
   kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace,
+  plasma-workspace, xf86inputlibinput
 }:
 
 mkDerivation rec {
@@ -34,13 +34,14 @@ mkDerivation rec {
   postPatch = ''
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';
-  NIX_CFLAGS_COMPILE = [
+  CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"
-    ''-DNIXPKGS_HWCLOCK="${lib.getBin utillinux}/sbin/hwclock"''
+    ''-DNIXPKGS_HWCLOCK=\"${lib.getBin utillinux}/sbin/hwclock\"''
   ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${lib.getDev xf86inputevdev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${lib.getDev xf86inputsynaptics}/include/xorg"
+    "-DXORGLIBINPUT_INCLUDE_DIRS=${lib.getDev xf86inputlibinput}/include/xorg"
   ];
   postInstall = ''
     # Display ~/Desktop contents on the desktop by default.

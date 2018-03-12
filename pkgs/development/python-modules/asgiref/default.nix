@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl, six }:
+{ stdenv, buildPythonPackage, fetchurl, six, async-timeout }:
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.2.0";
   pname = "asgiref";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgiref/${name}.tar.gz";
-    sha256 = "c3d70c473a2b7e525e18e68504630943e107f5b32f440c00c8543f94f565c855";
+    sha256 = "1fmrd749hqxwicnivvgrcw812gbj2zm49zcnkghh9yxbkjfcvxcv";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six async-timeout ];
 
   meta = with stdenv.lib; {
     description = "Reference ASGI adapters and channel layers";

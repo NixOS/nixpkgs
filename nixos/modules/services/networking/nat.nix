@@ -53,12 +53,36 @@ let
         -i ${cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
+
+      ${concatMapStrings (loopbackip:
+        let
+          m                = builtins.match "([0-9.]+):([0-9-]+)" fwd.destination;
+          destinationIP    = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
+          destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 1;
+        in ''
+          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
+          iptables -w -t nat -A OUTPUT \
+            -d ${loopbackip} -p ${fwd.proto} \
+            --dport ${builtins.toString fwd.sourcePort} \
+            -j DNAT --to-destination ${fwd.destination}
+
+          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
+          iptables -w -t nat -A nixos-nat-pre \
+            -d ${loopbackip} -p ${fwd.proto} \
+            --dport ${builtins.toString fwd.sourcePort} \
+            -j DNAT --to-destination ${fwd.destination}
+
+          iptables -w -t nat -A nixos-nat-post \
+            -d ${destinationIP} -p ${fwd.proto} \
+            --dport ${destinationPorts} \
+            -j SNAT --to-source ${loopbackip}
+        '') fwd.loopbackIPs}
     '') cfg.forwardPorts}
 
     ${optionalString (cfg.dmzHost != null) ''
       iptables -w -t nat -A nixos-nat-pre \
         -i ${cfg.externalInterface} -j DNAT \
-	--to-destination ${cfg.dmzHost}
+        --to-destination ${cfg.dmzHost}
     ''}
 
     ${cfg.extraCommands}
@@ -151,6 +175,13 @@ in
             default = "tcp";
             example = "udp";
             description = "Protocol of forwarded connection";
+          };
+
+          loopbackIPs = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            example = literalExample ''[ "55.1.2.3" ]'';
+            description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
           };
         };
       });

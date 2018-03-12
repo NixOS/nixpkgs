@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
     perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar
   ];
+  propagatedUserEnvPkgs = [ gconf ];
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx --enable-aqbanking";
 

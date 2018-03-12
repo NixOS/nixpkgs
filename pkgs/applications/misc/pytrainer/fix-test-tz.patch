@@ -1,7 +1,7 @@
-diff -Nurp pytrainer-v1.11.0-a/pytrainer/test/core/test_activity.py pytrainer-v1.11.0-b/pytrainer/test/core/test_activity.py
---- pytrainer-v1.11.0-a/pytrainer/test/core/test_activity.py	1980-01-02 00:00:00.000000000 +0100
-+++ pytrainer-v1.11.0-b/pytrainer/test/core/test_activity.py	2017-09-30 18:56:43.127016847 +0200
-@@ -69,7 +69,7 @@ class ActivityTest(unittest.TestCase):
+diff -Nurp source.orig/pytrainer/test/core/test_activity.py source/pytrainer/test/core/test_activity.py
+--- source.orig/pytrainer/test/core/test_activity.py	2018-02-27 22:15:32.078243354 +0100
++++ source/pytrainer/test/core/test_activity.py	2018-02-27 22:16:33.936867052 +0100
+@@ -92,7 +92,7 @@ class ActivityTest(unittest.TestCase):
          self.assertEquals(self.activity.time, self.activity.duration)
  
      def test_activity_starttime(self):
@@ -10,10 +10,10 @@ diff -Nurp pytrainer-v1.11.0-a/pytrainer/test/core/test_activity.py pytrainer-v1
  
      def test_activity_time_tuple(self):
          self.assertEquals(self.activity.time_tuple, (2, 3, 46))
-diff -Nurp pytrainer-v1.11.0-a/pytrainer/test/imports/test_garmintcxv2.py pytrainer-v1.11.0-b/pytrainer/test/imports/test_garmintcxv2.py
---- pytrainer-v1.11.0-a/pytrainer/test/imports/test_garmintcxv2.py	1980-01-02 00:00:00.000000000 +0100
-+++ pytrainer-v1.11.0-b/pytrainer/test/imports/test_garmintcxv2.py	2017-09-30 18:55:45.078128980 +0200
-@@ -23,7 +23,7 @@ class GarminTCXv2Test(unittest.TestCase)
+diff -Nurp source.orig/pytrainer/test/imports/test_garmintcxv2.py source/pytrainer/test/imports/test_garmintcxv2.py
+--- source.orig/pytrainer/test/imports/test_garmintcxv2.py	2018-02-27 22:15:32.079243364 +0100
++++ source/pytrainer/test/imports/test_garmintcxv2.py	2018-02-27 22:17:10.778333751 +0100
+@@ -39,7 +39,7 @@ class GarminTCXv2Test(unittest.TestCase)
              self.fail()
  
      def test_workout_summary(self):
@@ -22,9 +22,18 @@ diff -Nurp pytrainer-v1.11.0-a/pytrainer/test/imports/test_garmintcxv2.py pytrai
          try:
              current_path = os.path.dirname(os.path.abspath(__file__))
              data_path = os.path.dirname(os.path.dirname(os.path.dirname(current_path))) + "/"
-diff -Nurp pytrainer-v1.11.0-a/pytrainer/test/lib/test_date.py pytrainer-v1.11.0-b/pytrainer/test/lib/test_date.py
---- pytrainer-v1.11.0-a/pytrainer/test/lib/test_date.py	1980-01-02 00:00:00.000000000 +0100
-+++ pytrainer-v1.11.0-b/pytrainer/test/lib/test_date.py	2017-09-30 18:56:23.448720166 +0200
+@@ -52,7 +52,7 @@ class GarminTCXv2Test(unittest.TestCase)
+             self.fail()
+ 
+     def test_summary_in_database(self):
+-        summary = [(0, True, '2012-10-14T12:02:42', '10.12', '00:39:51', 'Running')]
++        summary = [(0, True, '2012-10-14T10:02:42', '10.12', '00:39:51', 'Running')]
+         activity = Activity(date_time_utc='2012-10-14T10:02:42Z', sport_id='1')
+         self.ddbb.session.add(activity)
+         self.ddbb.session.commit()
+diff -Nurp source.orig/pytrainer/test/lib/test_date.py source/pytrainer/test/lib/test_date.py
+--- source.orig/pytrainer/test/lib/test_date.py	2018-02-27 22:15:32.079243364 +0100
++++ source/pytrainer/test/lib/test_date.py	2018-02-27 22:16:33.936867052 +0100
 @@ -45,4 +45,4 @@ class DateFunctionTest(unittest.TestCase
      def test_getDateTime(self):
          utctime, localtime = getDateTime('Tue Nov 24 17:29:05 UTC 2015')

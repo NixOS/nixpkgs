@@ -1,9 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, python, intltool, pkgconfig, libX11
 , ldns, pythonPackages
 
-# Test requirements
-, xvfb_run
-
 , enableJingle ? true, farstream ? null, gst-plugins-bad ? null
 ,                      libnice ? null
 , enableE2E ? true
@@ -25,14 +22,27 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.8";
+  majorVersion = "0.16";
+  version = "${majorVersion}.9";
 
   src = fetchurl {
     name = "${name}.tar.bz2";
     url = "https://dev.gajim.org/gajim/gajim/repository/archive.tar.bz2?"
         + "ref=${name}";
-    sha256 = "009cpzqh4zy7hc9pq3r5m4lgagwawhjab13rjzavb0n9ggijcscb";
+    sha256 = "121dh906zya9n7npyk7b5xama0z3ycy9jl7l5jm39pc86h1winh3";
   };
+
+  # Needed for Plugin Installer
+  release = fetchurl {
+    url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
+    sha256 = "0v08zdvpqaig0wxpxn1l8rsj3wr3fqvnagn8cnvch17vfqv9gcr1";
+  };
+
+  postUnpack = ''
+    tar -xaf $release
+    cp -r ${name}/plugins/plugin_installer gajim-${name}-*/plugins
+    rm -rf ${name}
+  '';
 
   patches = let
     # An attribute set of revisions to apply from the upstream repository.
@@ -46,8 +56,7 @@ stdenv.mkDerivation rec {
     name = "gajim-${name}.patch";
     url = "https://dev.gajim.org/gajim/gajim/commit/${rev}.diff";
     inherit sha256;
-  }) cherries)
-    ++ [./fix-tests.patch]; # https://dev.gajim.org/gajim/gajim/issues/8660
+  }) cherries);
 
   postPatch = ''
     sed -i -e '0,/^[^#]/ {
@@ -74,8 +83,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook pythonPackages.wrapPython intltool pkgconfig
-    # Test dependencies
-    xvfb_run
   ];
 
   autoreconfPhase = ''
@@ -114,9 +121,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    XDG_DATA_DIRS="$out/share/gajim''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS" \
     PYTHONPATH="test:$out/share/gajim/src:''${PYTHONPATH:+:}$PYTHONPATH" \
-      xvfb-run make test
+      make test_nogui
   '';
 
   enableParallelBuilding = true;

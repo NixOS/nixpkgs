@@ -1,7 +1,9 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''named-readtables'';
-  version = ''20170124-git'';
+  version = ''20180131-git'';
+
+  parasites = [ "named-readtables/test" ];
 
   description = ''Library that creates a namespace for named readtable
   akin to the namespace of packages.'';
@@ -9,8 +11,8 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/named-readtables/2017-01-24/named-readtables-20170124-git.tgz'';
-    sha256 = ''1j0drddahdjab40dd9v9qy92xbvzwgbk6y3hv990sdp9f8ac1q45'';
+    url = ''http://beta.quicklisp.org/archive/named-readtables/2018-01-31/named-readtables-20180131-git.tgz'';
+    sha256 = ''1fhygm2q75m6my6appxmx097l7zlr3qxbgzbpa2mf9pr1qzwrgg5'';
   };
 
   packageName = "named-readtables";
@@ -21,8 +23,8 @@ rec {
 /* (SYSTEM named-readtables DESCRIPTION
     Library that creates a namespace for named readtable
   akin to the namespace of packages.
-    SHA256 1j0drddahdjab40dd9v9qy92xbvzwgbk6y3hv990sdp9f8ac1q45 URL
-    http://beta.quicklisp.org/archive/named-readtables/2017-01-24/named-readtables-20170124-git.tgz
-    MD5 1237a07f90e29939e48b595eaad2bd82 NAME named-readtables FILENAME
-    named-readtables DEPS NIL DEPENDENCIES NIL VERSION 20170124-git SIBLINGS
-    NIL PARASITES NIL) */
+    SHA256 1fhygm2q75m6my6appxmx097l7zlr3qxbgzbpa2mf9pr1qzwrgg5 URL
+    http://beta.quicklisp.org/archive/named-readtables/2018-01-31/named-readtables-20180131-git.tgz
+    MD5 46db18ba947dc0aba14c76471604448d NAME named-readtables FILENAME
+    named-readtables DEPS NIL DEPENDENCIES NIL VERSION 20180131-git SIBLINGS
+    NIL PARASITES (named-readtables/test)) */

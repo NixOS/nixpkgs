@@ -15,11 +15,11 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.12";
+  version = "10.2.13";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "1v21sc1y5qndwdbr921da1s009bkn6pshwcgw47w7aygp9zjvcia";
+    sha256 = "0ly7dxc7rk327liya4kalgsw8irlxl0pl8gq0agdl18a63cpwbi7";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -62,6 +62,7 @@ common = rec { # attributes common to both builds
     "-DPLUGIN_AUTH_GSSAPI_CLIENT=NO"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ++ optional stdenv.hostPlatform.isMusl "-DWITHOUT_TOKUDB=1" # mariadb docs say disable this for musl
     ;
 
   preConfigure = ''
@@ -179,6 +180,11 @@ connector-c = stdenv.mkDerivation rec {
     "-DWITH_EXTERNAL_ZLIB=ON"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
   ];
+
+  # The cmake setup-hook uses $out/lib by default, this is not the case here.
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
+  '';
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];

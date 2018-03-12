@@ -1,17 +1,18 @@
 { lib, fetchFromGitHub, python }:
 
 python.pkgs.buildPythonApplication rec {
-  name = "gixy-${version}";
-  version = "0.1.8";
+  pname = "gixy";
+  version = "0.1.9";
 
   # package is only compatible with python 2.7 and 3.5+
   disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
 
+  # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "gixy";
     rev = "v${version}";
-    sha256 = "0dg8j8pqlzdvmyfkphrizfqzggr64npb9mnm1dcwm6c3z6k2b0ii";
+    sha256 = "11aps8a8xg1nlw36jgrmnaf38imfz2rj67wnlalrrsqb616xipcv";
   };
 
   postPatch = ''

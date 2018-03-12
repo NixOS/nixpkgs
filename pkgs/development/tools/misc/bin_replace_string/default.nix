@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     downloadPage = ftp://ohnopub.net/mirror/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

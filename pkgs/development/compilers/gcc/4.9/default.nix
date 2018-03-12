@@ -160,7 +160,7 @@ let version = "4.9.4";
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
-          optionals (targetPlatform.libc == "uclibc") [
+          optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
             # libsanitizer requires netrom/netrom.h which is not
             # available in uclibc.
             "--disable-libsanitizer"
@@ -307,7 +307,11 @@ stdenv.mkDerivation ({
   dontDisableStatic = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags =
     # Basic dependencies

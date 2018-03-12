@@ -20,8 +20,9 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
+  # Disable doctests on OSX: https://github.com/scikit-learn/scikit-learn/issues/10213
   checkPhase = ''
-    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests $out/${python.sitePackages}/sklearn/
+    HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests ${stdenv.lib.optionalString stdenv.isDarwin "--doctest-options=+SKIP"} $out/${python.sitePackages}/sklearn/
   '';
 
   meta = with stdenv.lib; {

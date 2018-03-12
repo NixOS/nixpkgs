@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildFHSUserEnv, makeDesktopItem, runCommand, bash, wrapGAppsHook, gsettings_desktop_schemas, gtk3, gnome3 }:
+{ stdenv, fetchurl, buildFHSUserEnv, makeDesktopItem, runCommand, bash, wrapGAppsHook, gsettings-desktop-schemas, gtk3, gnome3 }:
 
 let
 version = "5.0.25";
@@ -18,7 +18,7 @@ zoteroSrc = stdenv.mkDerivation rec {
     sha256 = "1y3q5582xp4inpz137x0r9iscs1g0cjlqcfjpzl3klsq3yas688k";
   };
 
-  buildInputs= [ wrapGAppsHook gsettings_desktop_schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
+  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
   phases = [ "unpackPhase" "installPhase" "fixupPhase"];
 
   installPhase = ''
@@ -32,7 +32,7 @@ zoteroSrc = stdenv.mkDerivation rec {
 fhsEnv = buildFHSUserEnv {
   name = "zotero-fhs-env";
   targetPkgs = pkgs: with pkgs; with xlibs; [
-    gtk3 dbus_glib
+    gtk3 dbus-glib
     libXt nss
   ];
 };

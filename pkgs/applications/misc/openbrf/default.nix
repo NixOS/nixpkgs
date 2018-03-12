@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, mesa }:
+{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU_combined }:
 
 
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
 
     patchelf  \
-      --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc mesa ]}" \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU_combined ]}" \
       $out/share/openBrf/openBrf
 
     mkdir -p "$out/bin"

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest requests glibcLocales hypothesis ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test
+    LC_ALL="en_US.UTF-8" py.test ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
   '';
 
   meta = with stdenv.lib; {

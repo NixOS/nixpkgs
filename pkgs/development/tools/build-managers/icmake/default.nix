@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, gcc }:
+{ stdenv, fetchFromGitHub, makeWrapper, gcc, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
-  version = "9.02.04";
+  version = "9.02.06";
 
   src = fetchFromGitHub {
-    sha256 = "0dkqdm7nc3l9kgwkkf545hfbxj7ibkxl7n49wz9m1rcq9pvpmrw3";
+    sha256 = "1hs7fhqpkhlrjvjhfarf5bmxl8dw3r0immzdib27gwh3sfzgpx0b";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */icmake)
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gcc ];
 
   preConfigure = ''
@@ -30,13 +31,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ./icm_install all /
+
+    wrapProgram $out/bin/icmbuild \
+     --prefix PATH : ${ncurses}/bin
   '';
 
   meta = with stdenv.lib; {
     description = "A program maintenance (make) utility using a C-like grammar";
     homepage = https://fbb-git.github.io/icmake/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ nckx pSub ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };
 }

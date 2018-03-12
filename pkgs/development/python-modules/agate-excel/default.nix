@@ -3,11 +3,11 @@
 buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "agate-excel";
-    version = "0.2.1";
+    version = "0.2.2";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1d28s01a0a8n8rdrd78w88cqgl3lawzy38h9afwm0iks618i0qn7";
+      sha256 = "8923f71ee2b5b7b21e52fb314a769b28fb902f647534f5cbbb41991d8710f4c7";
     };
 
     propagatedBuildInputs = [ agate openpyxl xlrd ];

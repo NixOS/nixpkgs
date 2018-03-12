@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A featureful ncurses based MPD client inspired by ncmpc";
     homepage    = https://ncmpcpp.rybczak.net/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jfrankenau koral lovek323 mornfall ];
+    maintainers = with maintainers; [ jfrankenau koral lovek323 ];
     platforms   = platforms.all;
   };
 }

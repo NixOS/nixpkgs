@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip }:
+{ stdenv, fetchurl, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
 
 
 let
@@ -164,6 +164,42 @@ let
         longDescription = longDescription;
         license = licenses.gpl2;
         maintainers = with maintainers; [ zalakain ];
+        platforms = platforms.all;
+      };
+    };
+
+  mkDictFromJ3e =
+    { shortName, shortDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-j3e-${version}";
+      version = "20161207";
+
+      src = fetchurl {
+        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
+        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
+      };
+
+      buildInputs = [ ispell perl hunspell ];
+
+      phases = ["unpackPhase" "installPhase"];
+      installPhase = ''
+        patchShebangs bin
+        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = https://www.j3e.de/ispell/igerman98/index_en.html;
+        description = shortDescription;
+        license = with licenses; [ gpl2 gpl3 ];
+        maintainers = with maintainers; [ timor ];
         platforms = platforms.all;
       };
     };
@@ -426,5 +462,25 @@ in {
         sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
       })
     ];
+  };
+
+  /* GERMAN */
+
+  de-de = mkDictFromJ3e {
+    shortName = "de-de";
+    shortDescription = "German (Germany)";
+    dictFileName = "de_DE";
+  };
+
+  de-at = mkDictFromJ3e {
+    shortName = "de-at";
+    shortDescription = "German (Austria)";
+    dictFileName = "de_AT";
+  };
+
+  de-ch = mkDictFromJ3e {
+    shortName = "de-ch";
+    shortDescription = "German (Switzerland)";
+    dictFileName = "de_CH";
   };
 }

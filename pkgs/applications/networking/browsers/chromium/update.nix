@@ -145,7 +145,7 @@ in rec {
         outputHashMode = "flat";
         outputHashAlgo = "md5";
 
-        buildInputs = [ curl ];
+        nativeBuildInputs = [ curl ];
         preferLocalBuild = true;
 
         buildCommand = ''
@@ -178,7 +178,7 @@ in rec {
 
     getHash = path: import (runCommand "gethash.nix" {
       inherit path;
-      buildInputs = [ nix ];
+      nativeBuildInputs = [ nix ];
     } ''
       sha256="$(nix-hash --flat --base32 --type sha256 "$path")"
       echo "\"$sha256\"" > "$out"

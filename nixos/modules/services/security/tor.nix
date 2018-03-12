@@ -88,6 +88,9 @@ let
     ${flip concatMapStrings v.map (p: ''
       HiddenServicePort ${toString p.port} ${p.destination}
     '')}
+    ${optionalString (v.authorizeClient != null) ''
+      HiddenServiceAuthorizeClient ${v.authorizeClient.authType} ${concatStringsSep "," v.authorizeClient.clientNames}
+    ''}
   ''))
   + cfg.extraConfig;
 
@@ -619,6 +622,33 @@ in
                }));
              };
 
+             authorizeClient = mkOption {
+               default = null;
+               description = "If configured, the hidden service is accessible for authorized clients only.";
+               type = types.nullOr (types.submodule ({config, ...}: {
+
+                 options = {
+
+                   authType = mkOption {
+                     type = types.enum [ "basic" "stealth" ];
+                     description = ''
+                       Either <literal>"basic"</literal> for a general-purpose authorization protocol
+                       or <literal>"stealth"</literal> for a less scalable protocol
+                       that also hides service activity from unauthorized clients.
+                     '';
+                   };
+
+                   clientNames = mkOption {
+                     type = types.nonEmptyListOf (types.strMatching "[A-Za-z0-9+-_]+");
+                     description = ''
+                       Only clients that are listed here are authorized to access the hidden service.
+                       Generated authorization data can be found in <filename>${torDirectory}/onion/$name/hostname</filename>.
+                       Clients need to put this authorization data in their configuration file using <literal>HidServAuth</literal>.
+                     '';
+                   };
+                 };
+               }));
+             };
           };
 
           config = {

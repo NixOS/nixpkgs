@@ -186,6 +186,7 @@ self: super: {
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   bytes = addBuildDepend super.bytes self.doctest;
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  contravariant = addBuildDepend super.contravariant self.semigroups;
   dependent-map = addBuildDepend super.dependent-map self.semigroups;
   distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
@@ -196,7 +197,9 @@ self: super: {
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
+  parsec = addBuildDepends super.parsec [self.fail self.semigroups];
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
+  reflection = addBuildDepend super.reflection self.semigroups;
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });

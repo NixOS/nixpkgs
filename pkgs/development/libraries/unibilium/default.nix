@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, libtool, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
   name = "unibilium-${version}";
 
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "mauke";
     repo = "unibilium";
     rev = "v${version}";
-    sha256 = "11mbfijdrvbmdlmxs8j4vij78ki0vna89yg3r9n9g1i6j45hiq2r";
+    sha256 = "1wa9a32wzqnxqh1jh554afj13dzjr6mw2wzqzw8d08nza9pg2ra2";
   };
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig perl ];
   buildInputs = [ libtool ];
 
   meta = with lib; {

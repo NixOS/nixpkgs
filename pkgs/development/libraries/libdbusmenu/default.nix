@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, intltool
-, glib, dbus_glib, json_glib
-, gobjectIntrospection, vala_0_38, gnome_doc_utils
+, glib, dbus-glib, json-glib
+, gobjectIntrospection, vala_0_38, gnome-doc-utils
 , gtkVersion ? null, gtk2 ? null, gtk3 ? null }:
 
 with lib;
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   buildInputs = [
-    glib dbus_glib json_glib
-    gobjectIntrospection vala_0_38 gnome_doc_utils
+    glib dbus-glib json-glib
+    gobjectIntrospection vala_0_38 gnome-doc-utils
   ] ++ optional (gtkVersion != null) (if gtkVersion == "2" then gtk2 else gtk3);
 
   postPatch = ''

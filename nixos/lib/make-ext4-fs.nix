@@ -10,7 +10,7 @@
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
-  buildInputs = with pkgs; [e2fsprogs libfaketime perl];
+  nativeBuildInputs = with pkgs; [e2fsprogs libfaketime perl];
 
   # For obtaining the closure of `storePaths'.
   exportReferencesGraph =

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "mynewt-newt-${version}";
-  version = "1.0.0";
+  version = "1.3.0";
 
   goPackagePath = "mynewt.apache.org/newt";
   goDeps = ./deps.nix;
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "apache";
     repo = "incubator-mynewt-newt";
     rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
-    sha256 = "1ixqxqizd957prd4j2nijgnkv84rffj8cx5f7aqyjq9nkawjksf6";
+    sha256 = "0ia6q1wf3ki2yw8ngw5gnbdrb7268qwi078j05f8gs1sppb3g563";
   };
 
   meta = with stdenv.lib; {

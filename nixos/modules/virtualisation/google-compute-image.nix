@@ -14,7 +14,7 @@ in
       PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
       pushd $out
       mv $diskImage disk.raw
-      tar -Szcf nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';
@@ -212,7 +212,7 @@ in
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
           AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys
+          ${wget} -O $AUTH_KEYS --header="Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
           if [ -s $AUTH_KEYS ]; then
 
             # Read in key one by one, split in case Google decided

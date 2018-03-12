@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, mesa, xorg,
+{ stdenv, fetchurl, makeWrapper, perl, libGLU_combined, xorg,
   version? "2.8", # What version
   samples? false # Should samples be installed
 }:
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
   patchFlags = "-p0";
-  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
+  buildInputs = [ makeWrapper perl libGLU_combined xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;

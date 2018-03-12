@@ -390,7 +390,7 @@ in
   };
 
   xf86videoqxl = attrs: attrs // {
-    buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+    buildInputs =  attrs.buildInputs ++ [ args.spice-protocol ];
   };
 
   xf86videosiliconmotion = attrs: attrs // {
@@ -493,6 +493,9 @@ in
           args.udev
         ];
         patches = commonPatches;
+        prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+          export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
+        '';
         configureFlags = [
           "--enable-kdrive"             # not built by default
           "--enable-xephyr"
@@ -546,7 +549,7 @@ in
           "--with-sha1=CommonCrypto"
         ];
         preConfigure = ''
-          ensureDir $out/Applications
+          mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
           substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';

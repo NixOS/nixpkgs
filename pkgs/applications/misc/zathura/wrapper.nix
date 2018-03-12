@@ -11,8 +11,7 @@ in symlinkJoin {
   buildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/zathura \
-      --add-flags --plugins-dir=${pluginsPath}
+    wrapProgram $out/bin/zathura --add-flags --plugins-dir=${pluginsPath}
   '';
 
   meta = with lib; {
@@ -25,7 +24,7 @@ in symlinkJoin {
       as well as an easy usage that mainly focuses on keyboard interaction.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers;[ garbas smironov ];
   };
 }

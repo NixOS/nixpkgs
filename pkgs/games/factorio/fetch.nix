@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation {
-  buildInputs = [ curl xidel ];
+  nativeBuildInputs = [ curl xidel ];
 
   inherit name url loginUrl username password cacert;
 

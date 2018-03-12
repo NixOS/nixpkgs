@@ -24,8 +24,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = [
-    "--enable-jit"
+  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]

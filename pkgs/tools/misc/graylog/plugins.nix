@@ -139,19 +139,6 @@ in {
       description = "Graylog input plugin that reads MongoDB profiler data";
     };
   };
-  netflow = glPlugin rec {
-    name = "graylog-netflow-${version}";
-    pluginName = "graylog-plugin-netflow";
-    version = "0.1.1";
-    src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1pdv12f9dca1rxf62ds51n79cjhkkyj0gjny8kj1cq64vlayc9x9";
-    };
-    meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-netflow;
-      description = "Graylog NetFlow plugin";
-    };
-  };
   pagerduty = glPlugin rec {
     name = "graylog-pagerduty-${version}";
     pluginName = "graylog-plugin-pagerduty";
@@ -202,19 +189,6 @@ in {
     meta = {
       homepage = https://github.com/graylog-labs/graylog-plugin-spaceweather;
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
-    };
-  };
-  threatintel = glPlugin rec {
-    name = "graylog-threatintel-${version}";
-    pluginName = "graylog-plugin-threatintel";
-    version = "0.10.0";
-    src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0clg0vy8aipw122rfqww1lnjriazlnnh77pqiy5vnmv6ycjw0y4i";
-    };
-    meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-threatintel;
-      description = "Graylog Processing Pipeline functions to enrich log messages with IoC information from threat intelligence databases";
     };
   };
   twiliosms = glPlugin rec {

@@ -17,10 +17,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    # pytest will try to run tests for nix_run_setup.py / files in build/lib which fails
-    mv nix_run_setup.py run_setup
     rm build -rf
-    ${python.interpreter} run_setup test
+    ${python.interpreter} nix_run_setup test
     runHook postCheck
   '';
 

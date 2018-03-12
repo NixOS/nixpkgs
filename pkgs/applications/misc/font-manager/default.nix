@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool,
-  pkgconfig, file, intltool, libxml2, json_glib , sqlite, itstool,
+  pkgconfig, file, intltool, libxml2, json-glib , sqlite, itstool,
   librsvg, vala_0_34, gnome3, wrapGAppsHook, gobjectIntrospection
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     file
     intltool
     vala_0_34
-    gnome3.yelp_tools
+    gnome3.yelp-tools
     wrapGAppsHook
     # For setup hook
     gobjectIntrospection
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    json_glib
+    json-glib
     sqlite
     itstool
     librsvg

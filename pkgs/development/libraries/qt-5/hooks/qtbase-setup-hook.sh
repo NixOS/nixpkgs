@@ -4,7 +4,6 @@ qtDocPrefix=@qtDocPrefix@
 
 . @fix_qt_builtin_paths@
 . @fix_qt_module_paths@
-. @fix_qt_static_libs@
 
 providesQtRuntime() {
     [ -d "$1/$qtPluginPrefix" ] || [ -d "$1/$qtQmlPrefix" ]
@@ -62,13 +61,4 @@ postPatchMkspecs() {
 }
 if [ -z "$dontPatchMkspecs" ]; then
     postPhases="${postPhases}${postPhases:+ }postPatchMkspecs"
-fi
-
-postMoveQtStaticLibs() {
-    if [ "z${!outputLib}" != "z${!outputDev}" ]; then
-        fixQtStaticLibs "${!outputLib}" "${!outputDev}"
-    fi
-}
-if [ -z "$dontMoveQtStaticLibs" ]; then
-    postPhases="${postPhases}${postPhases:+ }postMoveQtStaticLibs"
 fi

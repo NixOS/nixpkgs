@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, findXMLCatalogs, writeScriptBin, ruby, bash }:
+{ lib, stdenv, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
 
 let
 
-  common = { pname, sha256 }: let self = stdenv.mkDerivation rec {
+  common = { pname, sha256, patches ? [] }: let self = stdenv.mkDerivation rec {
     name = "${pname}-1.79.1";
 
     src = fetchurl {
       url = "mirror://sourceforge/docbook/${name}.tar.bz2";
       inherit sha256;
     };
+
+    inherit patches;
 
     propagatedBuildInputs = [ findXMLCatalogs ];
 
@@ -44,6 +46,15 @@ in {
   docbook_xsl = common {
     pname = "docbook-xsl";
     sha256 = "0s59lihif2fr7rznckxr2kfyrvkirv76r1zvidp9b5mj28p4apvj";
+
+    patches = [(fetchpatch {
+      name = "potential-infinite-template-recursion.patch";
+      url = "https://src.fedoraproject.org/cgit/rpms/docbook-style-xsl.git/"
+          + "plain/docbook-style-xsl-non-recursive-string-subst.patch?id=bf9e5d16fd";
+      sha256 = "1pfb468bsj3j879ip0950waih0r1s6rzfbm2p70glbz0g3903p7h";
+      stripLen = "1";
+    })];
+
   };
 
   docbook_xsl_ns = common {

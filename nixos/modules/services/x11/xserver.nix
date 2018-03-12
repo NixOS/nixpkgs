@@ -548,7 +548,7 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
-    nixpkgs.config.xorg = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { abiCompat = "1.18"; };
+    nixpkgs.config = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { xorg.abiCompat = "1.18"; };
 
     assertions = [
       { assertion = config.security.polkit.enable;

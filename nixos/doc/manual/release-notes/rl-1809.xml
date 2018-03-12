@@ -1,0 +1,82 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.09">
+
+<title>Release 18.09 (“??”, 2018/09/??)</title>
+
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.09-highlights">
+
+<title>Highlights</title>
+
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights: </para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      TODO
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.09-new-services">
+
+<title>New Services</title>
+
+<para>The following new services were added since the last release:</para>
+
+<itemizedlist>
+  <listitem>
+    <para></para>
+  </listitem>
+</itemizedlist>
+
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.09-incompatibilities">
+
+<title>Backward Incompatibilities</title>
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+    </para>
+  </listitem>
+</itemizedlist>
+
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.09-notable-changes">
+
+<title>Other Notable Changes</title>
+
+<itemizedlist>
+  <listitem>
+    <para>
+    </para>
+  </listitem>
+</itemizedlist>
+
+</section>
+</section>

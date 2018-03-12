@@ -18,8 +18,8 @@
   withGtk3 ? false, dconf ? null, gtk3 ? null,
 
   # options
-  mesaSupported ? (!stdenv.isDarwin),
-  mesa,
+  libGLSupported ? (!stdenv.isDarwin),
+  libGL,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
           libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
           xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
         ]
-        ++ lib.optional mesaSupported mesa
+        ++ lib.optional libGLSupported libGL
     );
 
   buildInputs =
@@ -93,11 +93,9 @@ stdenv.mkDerivation {
 
   inherit patches;
 
-  fix_qt_static_libs = ../hooks/fix-qt-static-libs.sh;
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
   fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_static_libs"
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
     . ${../hooks/move-qt-dev-tools.sh}
@@ -144,11 +142,11 @@ stdenv.mkDerivation {
         # Note on the above: \x27 is a way if including a single-quote
         # character in the sed string arguments.
       else
-        lib.optionalString mesaSupported
+        lib.optionalString libGLSupported
           ''
             sed -i mkspecs/common/linux.conf \
-                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
-                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
           ''
     );
 
@@ -210,7 +208,7 @@ stdenv.mkDerivation {
           # 10.10
         ]
       else
-        lib.optional mesaSupported ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+        lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
         ++ lib.optionals withGtk3
           [
             ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
@@ -361,11 +359,6 @@ stdenv.mkDerivation {
     + ''
       fixQtModulePaths "''${!outputDev}/mkspecs/modules"
       fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-    ''
-
-    # Move static libraries and QMake library definitions into $dev.
-    + ''
-      fixQtStaticLibs "''${!outputLib}" "''${!outputDev}"
     ''
 
     # Move development tools to $dev

@@ -11,7 +11,8 @@ let
   date = "2017-11-11";
 in
 build-idris-package {
-  name = "specdris-${date}";
+  name = "specdris";
+  version = date;
 
   src = fetchgit {
     url = "https://github.com/pheymann/specdris";
@@ -19,21 +20,10 @@ build-idris-package {
     sha256 = "4813c4be1d4c3dd1dad35964b085f83cf9fb44b16824257c72b468d4bafd0e4f";
   };
 
-  propagatedBuildInputs = [ prelude base effects ];
+  idrisDeps = [ prelude base effects idris ];
 
-  buildPhase = ''
-    ${idris}/bin/idris --build specdris.ipkg
-  '';
-
-  checkPhase = ''
-      cd test/
-      ${idris}/bin/idris --testpkg test.ipkg
-      cd ../
-    '';
-
-  installPhase = ''
-    ${idris}/bin/idris --install specdris.ipkg --ibcsubdir $IBCSUBDIR
-  '';
+  # The tests attribute is very strange as the tests are a different ipkg
+  doCheck = false;
 
   meta = {
     description = "A testing library for Idris";

@@ -48,9 +48,9 @@ let
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
     installPhase = ''
-      mkdir -p $out $(dirname ${pluginsSubdir})
-      mkdir -p ${pluginsSubdir}
-      mv *.so ${pluginsSubdir}
+      mkdir -p $out $(dirname ${pluginsSubdir}/geoservices)
+      mkdir -p ${pluginsSubdir}/geoservices
+      mv *.so ${pluginsSubdir}/geoservices
       mv lib $out/
     '';
 

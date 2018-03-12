@@ -152,8 +152,8 @@
       moduleSrc = fetchFromGitHub {
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
-        rev    = "v${version}-beta";
-        sha256 = "03dvzf1lgsjxcs1jjxq95n2rhgq0wy0f9ahvgascy0fak7qx4xj9";
+        rev    = "v${version}-stable";
+        sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
 
       ngx_pagespeed = pkgs.runCommand
@@ -172,6 +172,7 @@
         '';
     in {
       src = ngx_pagespeed;
+      inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
     };
 
     shibboleth = {

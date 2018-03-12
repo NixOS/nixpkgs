@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "cadvisor-${version}";
-  version = "0.26.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "0rv245acz2r12c6ga2ln01961sh36w15ay0nfpfcg8inz679dnvg";
+    sha256 = "1rdw09cbhs4il63lv1f92dw8pav9rjnkbrqx37lqij8x6xmv01gy";
   };
 
-  buildInputs = [ go ];
+  nativeBuildInputs = [ go ];
 
   buildPhase = ''
     mkdir -p Godeps/_workspace/src/github.com/google/

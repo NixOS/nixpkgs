@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, ninja
-, gettext, pkgconfig, desktop_file_utils, wrapGAppsHook
+, gettext, pkgconfig, desktop-file-utils, wrapGAppsHook
 , appstream-glib, epoxy, glib, gtk3, mpv
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cjhw3kz163iwj2japhnv354i1lr112xyyfkxw82cwy2554cfim4";
   };
 
-  nativeBuildInputs = [ meson ninja appstream-glib gettext pkgconfig desktop_file_utils wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja appstream-glib gettext pkgconfig desktop-file-utils wrapGAppsHook ];
   buildInputs = [ epoxy glib gtk3 mpv ];
 
   enableParallelBuilding = true;
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Simple GTK+ frontend for the mpv video player";
@@ -38,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/gnome-mpv/gnome-mpv;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

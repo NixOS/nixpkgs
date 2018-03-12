@@ -1,7 +1,7 @@
 { stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
 
 let
-  version = "1.7.9";
+  version = "1.8.2";
   name = "electron-${version}";
 
   throwSystem = throw "Unsupported system: ${stdenv.system}";
@@ -10,8 +10,8 @@ let
     description = "Cross platform desktop application shell";
     homepage = https://github.com/electron/electron;
     license = licenses.mit;
-    maintainers = [ maintainers.travisbhartwell ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" ];
+    maintainers = with maintainers; [ travisbhartwell manveru ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
   };
 
   linux = {
@@ -20,15 +20,19 @@ let
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "0m87n7hqimg93z3m8pa1ggs69f3h5mjrsrrl7x80hxmp3w142krc";
+        sha256 = "12q5h6gh9zzhndg6yfka821rblq3l80d2qzqrq4nbq6rlsshjp9d";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "17ii0x6326mwjd0x5dj2693r67y0jra88hkqcpddcq08vf1knr2f";
+        sha256 = "07ggq9wgfz3z5z0lwzzgs6im0qs83pz0pcfwr0r42zgmwg7j78b8";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "17jkma50d6az8dbyrym8z2lsw2n0r6jhdlm8pb5c928bzgshryqm";
+        sha256 = "1b0p5x9zigyd6d8gz2hxc4scllrpnbx1dzzwlsvw6ilqbj1ypc7i";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
+        sha256 = "0k4np2d4y15x1qfay8y9m8v9y223vdpbq5fdxa3ywbbyf8j361zd";
       };
     }.${stdenv.system} or throwSystem;
 
@@ -56,7 +60,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "1s8kslp101xyaffb3rf8p5cw3p6zij2mn19fa68ykx4naykkwaly";
+      sha256 = "0pq587vr1i87jdwcpbf6n136i9dp6i39dp5s95kihnm9qglxr42b";
     };
 
     buildInputs = [ unzip ];

@@ -36,7 +36,6 @@ lib.makeOverridable (
     rubyName = builtins.parseDrvName ruby.name;
   in "${rubyName.name}${rubyName.version}-")
 , buildInputs ? []
-, doCheck ? false
 , meta ? {}
 , patches ? []
 , gemPath ? []
@@ -65,6 +64,8 @@ let
         inherit (attrs.source) url rev sha256 fetchSubmodules;
         leaveDotGit = true;
       }
+    else if type == "url" then
+      fetchurl attrs.source
     else
       throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
@@ -77,14 +78,14 @@ in
 
 stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
-  inherit doCheck;
   inherit dontBuild;
   inherit dontStrip;
   inherit type;
 
   buildInputs = [
     ruby makeWrapper
-  ] ++ lib.optionals (type == "git") [ git bundler ]
+  ] ++ lib.optionals (type == "git") [ git ]
+    ++ lib.optionals (type != "gem") [ bundler ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
@@ -92,8 +93,6 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
-
-  phases = attrs.phases or [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack
@@ -159,14 +158,22 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
     echo "buildFlags: $buildFlags"
 
+    ${lib.optionalString (type ==  "url") ''
+    ruby ${./nix-bundle-install.rb} \
+      "path" \
+      '${gemName}' \
+      '${version}' \
+      '${lib.escapeShellArgs buildFlags}'
+    ''}
     ${lib.optionalString (type == "git") ''
     ruby ${./nix-bundle-install.rb} \
-      ${gemName} \
-      ${attrs.source.url} \
-      ${src} \
-      ${attrs.source.rev} \
-      ${version} \
-      ${lib.escapeShellArgs buildFlags}
+      "git" \
+      '${gemName}' \
+      '${version}' \
+      '${lib.escapeShellArgs buildFlags}' \
+      '${attrs.source.url}' \
+      '${src}' \
+      '${attrs.source.rev}'
     ''}
 
     ${lib.optionalString (type == "gem") ''

@@ -44,6 +44,8 @@ in
   };
 
   libobjc = apple-source-releases.objc4;
+  
+  lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
@@ -56,6 +58,8 @@ in
   stubs = callPackages ../os-specific/darwin/stubs { };
 
   swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { };
+
+  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 

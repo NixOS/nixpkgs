@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnused
 , expat, acl, systemd, glib, libatasmart, polkit
 , libxslt, docbook_xsl, utillinux, mdadm, libgudev
+, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "dev" ];
 
   patches = [ ./force-path.patch ];
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
         --replace " sed " " ${gnused}/bin/sed "
     '';
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
 
   buildInputs = [ libxslt docbook_xsl libgudev expat acl systemd glib libatasmart polkit ];
 
@@ -36,6 +37,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
+  ];
+
+  makeFlags = [
+    "INTROSPECTION_GIRDIR=$(dev)/share/gir-1.0"
+    "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
   meta = {

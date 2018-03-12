@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "btfs-${version}";
-  version = "2.17";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner  = "johang";
     repo   = "btfs";
     rev    = "v${version}";
-    sha256 = "0v0mypwnx832f7vg52wmiw0lyz7rrkhqsgi7zc261ak1gfaw4nwd";
+    sha256 = "1cn21bxx43iqvac6scmwhkw0bql092sl48r6qfidbmhbw30xl5yf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A bittorrent filesystem based on FUSE";
-    homepage    = "https://github.com/johang/btfs";
+    homepage    = https://github.com/johang/btfs;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

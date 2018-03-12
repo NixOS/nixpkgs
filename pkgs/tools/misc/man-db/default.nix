@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "man-db-2.7.5";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ libpipeline db groff ];
+  nativeBuildInputs = [ pkgconfig makeWrapper groff ]
+    ++ stdenv.lib.optionals doCheck checkInputs;
+  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
+  checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
   postPatch = ''
     substituteInPlace src/man_db.conf.in \
@@ -38,6 +40,18 @@ stdenv.mkDerivation rec {
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
       wrapProgram "$file" --prefix PATH : "${groff}/bin"
+    done
+  '';
+
+  postFixup = stdenv.lib.optionalString (buildPackages.groff != groff) ''
+    # Check to make sure none of the outputs depend on build-time-only groff:
+    for outName in $outputs; do
+      out=''${!outName}
+      echo "Checking $outName(=$out) for references to build-time groff..."
+      if grep -r '${buildPackages.groff}' $out; then
+        echo "Found an erroneous dependency on groff ^^^" >&2
+        exit 1
+      fi
     done
   '';
 

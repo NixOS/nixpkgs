@@ -863,5 +863,74 @@ in rec {
       sha256 = "079wi0j6iydid2zj7k584w2c393kgh588w7sjz2nn4039qn8k9mq";
     })
   ];
+  # 4.8
+  XSA_252_49 = [
+   (xsaPatch {
+      name = "252-4.9";
+      sha256 = "03sbn90nlkk5ba1n168rxjkc7x3mqj7rfqvspbwblmwikfbnms2n";
+    })
+  ];
+  # 4.8
+  XSA_255_49_1= [
+   (xsaPatch {
+      name = "255-4.9-1";
+      sha256 = "0gbin7yxbkq40lvm3gvj1vffavvbng3zpd2m8l1kqyz0rv4vm9zc";
+    })
+  ];
+  # 4.8
+  XSA_255_49_2= [
+   (xsaPatch {
+      name = "255-4.9-2";
+      sha256 = "0fyg5nnyfpfr80qq83pr64zjp5w1nx94bdblzsjap8gaqcahyr12";
+    })
+  ];
+  # 4.8
+  XSA_256_48= [
+   (xsaPatch {
+      name = "256-4.8";
+      sha256 = "1w84f717kxwx0h3rw18r4f8pl0l1h5xlj5fy80sr0ws4xkp1qdn4";
+    })
+  ];
+
+
+  # 4.10
+  XSA_252 = [
+   (xsaPatch {
+      name = "252";
+      sha256 = "0v4sg20dnvnwrjh3x69gk81v2kmcql7g2s044vg3wcxhzvij1rrn";
+    })
+  ];
+
+  # 4.10
+  XSA_253 = [
+   (xsaPatch {
+      name = "253";
+      sha256 = "0445vzlzy3gd499xraqh5r4qjar6qr0y3813h22jy1n84nhxz27i";
+    })
+  ];
+
+  # 4.10
+  XSA_255_1 = [
+   (xsaPatch {
+      name = "255-1";
+      sha256 = "05g2f3ji1rrjlw3yw4nrns50pnmsib8ybrf64scr1817mj0q9myr";
+    })
+  ];
+
+  # 4.10
+  XSA_255_2 = [
+   (xsaPatch {
+      name = "255-2";
+      sha256 = "08wbngw5z0f9g8di59hww3hhi7j9z49bpc4xlwn5akfcwbgf0961";
+    })
+  ];
+
+  # 4.10
+  XSA_256 = [
+   (xsaPatch {
+      name = "256";
+      sha256 = "1hicwhbwj6k25px55f4ncx1c5xiihi8pfvsb3kv57k7kaicb7pza";
+    })
+  ];
 
 }

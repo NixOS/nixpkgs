@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "matterbridge-${version}";
-  version = "1.4.1";
+  version = "1.7.1";
 
   goPackagePath = "github.com/42wim/matterbridge";
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "0m0phv8rngrp9gfn71gd2z184n60rng1fmvmv5nkmzsclr2y7x8b";
+    sha256 = "0ajc7xswmwhc2xn937sv3b76s8hblfn9x9rj5825hi3d3s8zqq88";
   };
 
   meta = with stdenv.lib; {

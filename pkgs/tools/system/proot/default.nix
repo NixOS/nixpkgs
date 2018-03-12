@@ -40,7 +40,7 @@
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ianwookim nckx makefu ];
+    maintainers = with maintainers; [ ianwookim makefu ];
   };
 })
 (if stdenv.isAarch64 then rec {

@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libwnck3, libfakekey, libXtst, mate-panel, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-netbook-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0xy5mhkg0xfgyr7gnnjrfzqhmdnhyqscrl2h496p06cflknm17vb";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1w92kny1fnlwbq4b8y50n5s1vsvvl4xrvspsp9lqfxyz3jxiwbrz";
   };
 
   nativeBuildInputs = [
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
     libwnck3
     libfakekey
     libXtst
-    mate-panel
+    mate.mate-panel
   ];
 
   meta = with stdenv.lib; {

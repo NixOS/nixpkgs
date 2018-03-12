@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
       Belgian electronic identity cards. Independent of the eid-mw package,
       which is required to actually use your eID for authentication or signing.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

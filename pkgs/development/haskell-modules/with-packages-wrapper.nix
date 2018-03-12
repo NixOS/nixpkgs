@@ -56,7 +56,6 @@ symlinkJoin {
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
-  extraOutputsToInstall = [ "out" "doc" ];
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
@@ -104,7 +103,7 @@ symlinkJoin {
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
     for f in $packageConfDir/*.conf; do

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "AA-lib demo";
     license     = licenses.gpl2;
     maintainers = [ maintainers.rnhmjoj ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }

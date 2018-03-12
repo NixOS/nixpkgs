@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
       target network (though it does require Python 2 at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    maintainers = with maintainers; [ domenkozar nckx ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 }

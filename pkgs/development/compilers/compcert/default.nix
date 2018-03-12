@@ -7,11 +7,11 @@ assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "0irfwlw2chalp0g2gw0makc699hn3z37sha1a239p9d90mzx03cx";
+    sha256 = "11q4121s0rxva63njjwya7syfx9w0p4hzr6avh8s57vfbrcakc93";
   };
 
   buildInputs = [ coq ]
@@ -19,8 +19,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    sed -i -e 's/8\.6\.1|8\.7\.0|8\.7\.1)/8.6.1|8.7.0|8.7.1|8.7.2)/' configure
+  '';
+
   configurePhase = ''
-    substituteInPlace VERSION --replace '3.0.1' '3.1'
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
     ./configure -clightgen -prefix $out -toolprefix ${tools}/bin/ '' +
     (if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux");

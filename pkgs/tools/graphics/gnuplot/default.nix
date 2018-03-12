@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
-    substituteInPlace configure --replace '$'{QT5LOC}/lrelease lrelease
+    sed -i configure -e 's|''${QT5LOC}/lrelease|lrelease|'
   '';
 
   configureFlags = [

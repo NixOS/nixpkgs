@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cachefilesd-${version}";
-  version = "0.10.9";
+  version = "0.10.10";
 
   src = fetchurl {
     url = "https://people.redhat.com/dhowells/fscache/${name}.tar.bz2";
-    sha256 = "1jkb3qd8rcmli3g2qgcpp1f9kklil4qgy86w7pg2cpv10ikyr5y8";
+    sha256 = "00hsw4cdlm13wijlygp8f0aq6gxdp0skbxs9r2vh5ggs3s2hj0qd";
   };
 
   installFlags = [

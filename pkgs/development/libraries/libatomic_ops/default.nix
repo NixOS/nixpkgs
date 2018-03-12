@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, autoconf, automake, libtool }:
+{ stdenv, fetchurl, autoconf, automake, libtool, hostPlatform }:
 
 stdenv.mkDerivation rec {
   name = "libatomic_ops-${version}";
-  version = "7.6.0";
+  version = "7.6.2";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 ="03ylfr29g9zc0r6b6axz3i68alj5qmxgzknxwam3jlx0sz8hcb4f";
+    sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
   };
+
+  # https://github.com/ivmai/libatomic_ops/pull/32
+  patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 

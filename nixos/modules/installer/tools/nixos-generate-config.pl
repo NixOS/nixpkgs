@@ -603,6 +603,10 @@ $bootLoaderConfig
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+  # Enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
   # services.xserver.layout = "us";
@@ -625,7 +629,7 @@ $bootLoaderConfig
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "${\(qw(@nixosRelease@))}"; # Did you read the comment?
+  system.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
 
 }
 EOF

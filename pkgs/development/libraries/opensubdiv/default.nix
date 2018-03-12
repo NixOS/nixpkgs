@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
-, mesa_noglu, glew, ocl-icd, python3
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
+, libGL, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
   name = "opensubdiv-${version}";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "0wpjwfik4q9s4r30hndhzmfyzv968mmg5lgng0123l07mn47d2yl";
+    sha256 = "1s96038yvf8wch5gv537iigqflxx7rh9wwn3wlrk8f9yfdwv1mk1";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs =
-    [ cmake pkgconfig mesa_glu mesa_noglu ocl-icd python3
+    [ cmake pkgconfig libGLU libGL ocl-icd python3
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
       xorg.libXinerama xorg.libXi
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
       "-DNO_EXAMPLES=1"
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
-    ] ++ lib.optional cudaSupport "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30";
+    ] ++ lib.optionals cudaSupport [
+      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30"
+      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    ];
 
   enableParallelBuilding = true;
 

@@ -23,7 +23,11 @@ stdenv.mkDerivation {
     cd mobilesdk/*
     mv * 6.3.1.GA
     cd *
-    
+    ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+      # Fixes a bad archive copying error when generating an IPA file
+      sed -i -e "s|cp -rf|/bin/cp -rf|" iphone/cli/commands/_build.js
+    ''}
+
     # Patch some executables
     
     ${if stdenv.system == "i686-linux" then

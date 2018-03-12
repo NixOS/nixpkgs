@@ -5,8 +5,6 @@ with lib.lists;
 
 rec {
   patterns = rec {
-    "32bit"      = { cpu = { bits = 32; }; };
-    "64bit"      = { cpu = { bits = 64; }; };
     i686         = { cpu = cpuTypes.i686; };
     x86_64       = { cpu = cpuTypes.x86_64; };
     PowerPC      = { cpu = cpuTypes.powerpc; };
@@ -14,6 +12,11 @@ rec {
     Arm          = { cpu = { family = "arm"; }; };
     Aarch64      = { cpu = { family = "aarch64"; }; };
     Mips         = { cpu = { family = "mips"; }; };
+    RiscV        = { cpu = { family = "riscv"; }; };
+    Wasm         = { cpu = { family = "wasm"; }; };
+
+    "32bit"      = { cpu = { bits = 32; }; };
+    "64bit"      = { cpu = { bits = 64; }; };
     BigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     LittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
@@ -30,6 +33,16 @@ rec {
     Windows      = { kernel = kernels.windows; };
     Cygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     MinGW        = { kernel = kernels.windows; abi = abis.gnu; };
+
+    Android      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
+    Musl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
+
+    Kexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })
+                     [ "x86" "arm" "aarch64" "mips" ];
+    Efi          = map (family: { cpu.family = family; })
+                     [ "x86" "arm" "aarch64" ];
+    Seccomputable = map (family: { kernel = kernels.linux; cpu.family = family; })
+                      [ "x86" "arm" "aarch64" "mips" ];
   };
 
   matchAnyAttrs = patterns:

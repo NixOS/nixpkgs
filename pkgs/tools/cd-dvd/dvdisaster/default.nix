@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds nckx ];
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

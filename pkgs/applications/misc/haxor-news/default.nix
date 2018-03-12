@@ -20,6 +20,8 @@ buildPythonApplication rec {
     six
   ];
 
+  doCheck = false;
+
   checkInputs = [ mock ];
 
   checkPhase = ''

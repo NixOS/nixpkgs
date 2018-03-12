@@ -37,10 +37,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "1.0.33-20171003193427.d9ceb86ac";
+  version = "1.0.44-20180223200436.9a9ccec79";
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "0sqani2fy5jzqmz35md1bdw2vwpx91l87b6s3x9z53halzq7vfy6";
+    sha256 = "0dmi0fw39924kpahlsk853hbmpy8a6nj78lrh1wharayjpvj6jv3";
   };
   phases = ["unpackPhase" "installPhase" "fixupPhase"];
   unpackPhase = ''
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     tar xf data.tar.xz
   '';
   installPhase = ''
-    mkdir -p $out/{bin,share}
+    mkdir -p $out/bin
+    mv usr/share $out/share
     mv opt/keybase $out/share/
 
     cat > $out/bin/keybase-gui <<EOF
@@ -78,6 +79,9 @@ stdenv.mkDerivation rec {
     exec $out/share/keybase/Keybase "\$@"
     EOF
     chmod +x $out/bin/keybase-gui
+
+    substituteInPlace $out/share/applications/keybase.desktop \
+      --replace run_keybase $out/bin/keybase-gui
   '';
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, asciidoc-full, gettext
-, gobjectIntrospection, gtk3, hicolor_icon_theme, libnotify, librsvg
+, gobjectIntrospection, gtk3, hicolor-icon-theme, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , buildPythonApplication
 , docopt
@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     asciidoc-full        # For building man page.
-    hicolor_icon_theme
+    hicolor-icon-theme
     wrapGAppsHook
     librsvg              # required for loading svg icons (udiskie uses svg icons)
   ];

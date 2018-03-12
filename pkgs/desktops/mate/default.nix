@@ -5,6 +5,9 @@ let
 
   self = rec {
 
+    getRelease = version:
+      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitString "." version));
+  
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
@@ -82,7 +85,7 @@ let
       mate-system-monitor
       mate-terminal
       mate-user-guide
-      #mate-user-share
+      # mate-user-share
       mate-utils
       mozo
       pluma

@@ -1,6 +1,6 @@
 { stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkgconfig
-, intltool, gtk3, json_glib, curl, glib, autoconf-archive, appstream-glib
-, hicolor_icon_theme }:
+, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib
+, hicolor-icon-theme }:
 
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     pkgconfig intltool autoconf-archive
     appstream-glib
   ];
-  buildInputs = [ gtk3 json_glib curl glib hicolor_icon_theme ];
+  buildInputs = [ gtk3 json-glib curl glib hicolor-icon-theme ];
 
   meta = with stdenv.lib;
     { description = "GTK remote control for the Transmission BitTorrent client";

@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra_gtk3, mate-panel, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, libgtop, libcanberra-gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-utils-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "3";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1nw8rcq3x67v73cmy44zz6r2ikz46wsx834qzkbq4i2ac96kdkfz";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "10a6k8gi7cajlkbj1jbvk3s633hw58lan3rc85v8jlrkwm7wmhpl";
   };
 
   nativeBuildInputs = [
@@ -21,10 +19,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgtop
-    libcanberra_gtk3
+    libcanberra-gtk3
     libxml2
-    mate-panel
-    hicolor_icon_theme
+    mate.mate-panel
+    hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

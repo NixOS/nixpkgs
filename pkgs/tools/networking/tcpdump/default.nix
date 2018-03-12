@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Network sniffer";
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ mornfall jgeerds ];
+    maintainers = with stdenv.lib.maintainers; [ jgeerds ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

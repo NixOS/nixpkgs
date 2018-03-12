@@ -28,8 +28,8 @@ in stdenv.mkDerivation {
     autoconf
     libtool
 
-    gnome_common
-    gtk_doc
+    gnome-common
+    gtk-doc
 
     GConf
     gtk

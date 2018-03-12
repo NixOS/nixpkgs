@@ -1,9 +1,7 @@
-{ stdenv, fetchzip, fetchgit, boost, cmake, z3 }:
+{ stdenv, fetchzip, fetchurl, boost, cmake, z3 }:
 
 let
-  version = "0.4.17";
-  rev = "bdeb9e52a2211510644fb53df93fb98258b40a65";
-  sha256 = "1x6q2rlq6gxggidgsy6li7m4phwr1hcfi65pq9yimz64ddqfiira";
+  version = "0.4.20";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -15,14 +13,12 @@ stdenv.mkDerivation {
   name = "solc-${version}";
 
   # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchgit {
-    url = "https://github.com/ethereum/solidity";
-    inherit rev sha256;
+  src = fetchurl {
+    url = "https://github.com/ethereum/solidity/releases/download/v${version}/solidity_${version}.tar.gz";
+    sha256 = "0jyqnykj537ksfsf2m6ww9vganmpa6yd5fmlfpa5qm1076kq7zd6";
   };
 
   patchPhase = ''
-    echo >commit_hash.txt '${rev}'
-    echo >prerelease.txt
     substituteInPlace cmake/jsoncpp.cmake \
       --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \

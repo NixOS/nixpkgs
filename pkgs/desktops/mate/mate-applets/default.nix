@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus_glib, polkit, upower, wirelesstools, libmateweather, mate-panel, pythonPackages, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, libwnck3, libgtop, libxml2, libnotify, dbus-glib, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-applets-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "2";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "045cl62nnfsl14vnfydwqjssdakgdrahh5h0xiz5afmdcbq6cqgw";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1jmhswfcbawp9ax5p5h2dj8pyajadjdyxa0ac7ldvh7viv8qy52s";
   };
 
   nativeBuildInputs = [
@@ -26,15 +24,12 @@ stdenv.mkDerivation rec {
     libgtop
     libxml2
     libnotify
-    dbus_glib
     polkit
     upower
     wirelesstools
-    libmateweather
-    mate-panel
-    pythonPackages.python
-    pythonPackages.pygobject3
-    hicolor_icon_theme
+    mate.libmateweather
+    mate.mate-panel
+    hicolor-icon-theme
   ];
 
   configureFlags = [ "--enable-suid=no" ];

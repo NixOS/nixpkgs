@@ -1,4 +1,4 @@
-{ fetchFromGitHub, ack , tree, stdenv, ... }:
+{ fetchFromGitHub, ag, tree, stdenv, ... }:
 
 stdenv.mkDerivation rec {
 
@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions}
+    substituteInPlace memo \
+      --replace "ack "  "${ag}/bin/ag " \
+      --replace "tree " "${tree}/bin/tree "
     mv memo $out/bin/
     mv doc/memo.1 $out/share/man/man1/memo.1
     mv completion/memo.bash $out/share/bash-completion/completions/memo.sh

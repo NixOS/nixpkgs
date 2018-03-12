@@ -25,7 +25,7 @@ buildPythonApplication rec {
 
   # ignore flake8 tests for the nix wrapped setup.py
   checkPhase = ''
-    PATH=$PATH:$out/bin:${mercurial}/bin pytest --ignore=nix_run_setup.py .
+    PATH=$PATH:$out/bin:${mercurial}/bin pytest .
   '';
 
   meta = {

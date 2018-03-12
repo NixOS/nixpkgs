@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://netfilter.org/projects/libnetfilter_log/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej nckx ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

@@ -233,7 +233,7 @@
       calibre-server = 213;
       heapster = 214;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -301,6 +301,10 @@
       pykms = 282;
       kodi = 283;
       restya-board = 284;
+      mighttpd2 = 285;
+      hass = 286;
+      monero = 287;
+      ceph = 288;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -510,7 +514,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -570,6 +574,10 @@
       pykms = 282;
       kodi = 283;
       restya-board = 284;
+      mighttpd2 = 285;
+      hass = 286;
+      monero = 287;
+      ceph = 288;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

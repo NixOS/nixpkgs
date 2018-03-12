@@ -19,12 +19,19 @@ stdenv.mkDerivation rec {
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
-  preConfigure = optionalString (stdenv.system == "mips64el-linux")
-    ''cp -v ${automake}/share/automake*/config.{sub,guess} .'';
+  preConfigure = ""; # TODO(@Ericson2314): Remove next mass rebuild
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
-    ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ];
+    ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
+       # Can't run these tests while cross-compiling
+    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       [ "glib_cv_stack_grows=no"
+         "glib_cv_uscore=no"
+         "ac_cv_func_posix_getpwuid_r=yes"
+         "ac_cv_func_posix_getgrgid_r=yes"
+       ];
+
 
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 

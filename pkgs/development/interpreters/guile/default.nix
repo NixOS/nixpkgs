@@ -10,11 +10,11 @@
 
 (rec {
   name = "guile-${version}";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "05dmvhd1y135x7w5qfw4my42cfp6l8bbhjfxvchcc1cbdvzri0f1";
+    sha256 = "11j01agvnci2cx32wwpqs9078856yxmvs15gcsz7ganpkj2ahlw3";
   };
 
   outputs = [ "out" "dev" "info" ];

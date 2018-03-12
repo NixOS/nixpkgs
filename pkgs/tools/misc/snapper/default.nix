@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://snapper.io;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx tstrobel ];
+    maintainers = with maintainers; [ tstrobel ];
   };
 }

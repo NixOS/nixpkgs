@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

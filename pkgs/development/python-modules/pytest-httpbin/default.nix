@@ -11,22 +11,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  name = "${pname}-${version}";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "pytest-httpbin";
     rev = "v${version}";
-    sha256 = "0j3n12jjy8cm0va8859wqra6abfyajrgh2qj8bhcngf3a72zl9ks";
+    sha256 = "0p86ljx775gxxicscs1dydmmx92r1g9bs00vdvxrsl3qdll1ksfm";
   };
 
-  checkPhase = ''
-    py.test -k "not test_chunked_encoding"
-  '';
+  checkInputs = [ pytest ];
 
-  buildInputs = [ pytest ];
   propagatedBuildInputs = [ flask decorator httpbin six requests ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";

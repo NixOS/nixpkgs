@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     homepage = https://flavio.tordini.org/minitube;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

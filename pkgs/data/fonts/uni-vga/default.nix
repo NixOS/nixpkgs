@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
   };
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   installPhase = ''
     mkdir -p $out/share/fonts

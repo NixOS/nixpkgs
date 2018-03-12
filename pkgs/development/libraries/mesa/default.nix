@@ -14,7 +14,7 @@
 }:
 
 /** Packaging design:
-  - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
+  - The basic mesa ($out) contains headers and libraries (GLU is in libGLU now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI drivers are compiled into $drivers output, which is much bigger and
@@ -66,7 +66,7 @@ let
 in
 
 let
-  version = "17.2.8";
+  version = "17.3.3";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0pq9kmmyllgd63d936f3x1zsg7sqaswx47khbn0gvbgari2h753f";
+    sha256 = "16rpm4rwmzd4kdgipa1gw262jqg3346gih0y3bsc3bgn1vgcbfj1";
   };
 
   prePatch = "patchShebangs .";
@@ -92,13 +92,13 @@ stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
-    "--sysconfdir=/etc"
+    "--sysconfdir=${driverLink}/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
     "--enable-shared-glapi"
     "--enable-sysfs"
     "--enable-llvm-shared-libs"
-    "--enable-omx"
+    "--enable-omx-bellagio"
     "--enable-va"
     "--disable-opencl"
   ];
@@ -197,7 +197,6 @@ stdenv.mkDerivation {
   '';
 
   # TODO:
-  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = ''

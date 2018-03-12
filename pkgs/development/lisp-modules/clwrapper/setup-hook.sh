@@ -15,6 +15,8 @@ setLisp () {
               sbcl) NIX_LISP_COMMAND="$j" ;;
               ecl) NIX_LISP_COMMAND="$j" ;;
               clisp) NIX_LISP_COMMAND="$j" ;;
+              lx86cl) NIX_LISP_COMMAND="$j" ;;
+              lx86cl64) NIX_LISP_COMMAND="$j" ;;
           esac
       done
     fi

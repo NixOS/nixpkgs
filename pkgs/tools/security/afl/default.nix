@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # Note: libcgroup isn't needed for building, just for the afl-cgroup
   # script.
-  buildInputs  = [ makeWrapper clang llvm which ];
+  buildInputs  = [ makeWrapper llvm which ];
 
   buildPhase   = ''
     make PREFIX=$out
@@ -53,8 +53,7 @@ stdenv.mkDerivation rec {
     for x in $out/bin/afl-clang-fast $out/bin/afl-clang-fast++; do
       wrapProgram $x \
         --prefix AFL_PATH : "$out/lib/afl" \
-        --prefix AFL_CC   : "${clang}/bin/clang" \
-        --prefix AFL_CXX  : "${clang}/bin/clang++"
+        --run 'export AFL_CC=''${AFL_CC:-${clang}/bin/clang} AFL_CXX=''${AFL_CXX:-${clang}/bin/clang++}'
     done
   '';
 
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "http://lcamtuf.coredump.cx/afl/";
     license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = ["x86_64-linux" "i686-linux"];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

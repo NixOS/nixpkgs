@@ -2,9 +2,8 @@
 
 buildPythonApplication rec {
 
-  name = "${pname}-${version}";
   pname = "yq";
-  version = "2.3.3";
+  version = "2.3.4";
 
   propagatedBuildInputs = [ pyyaml jq ];
 
@@ -13,7 +12,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14ywdi464z68qclsqzb8r50rzmypknaz74zmpppkahjigfcfppm3";
+    sha256 = "04ckrlmin8m176iicyfhddp4r0yry5hx306vhfglf8mcp1jkga78";
   };
 
   meta = with lib; {

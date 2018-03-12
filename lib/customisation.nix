@@ -1,7 +1,7 @@
 { lib }:
 let
 
-  inherit (builtins) attrNames isFunction;
+  inherit (builtins) attrNames;
 
 in
 
@@ -36,7 +36,7 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in addPassthru newDrv (
+    in lib.flip (extendDerivation true) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
@@ -72,7 +72,7 @@ rec {
   makeOverridable = f: origArgs:
     let
       ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
+      overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff // {
         override = newArgs: makeOverridable f (overrideWith newArgs);
@@ -81,7 +81,7 @@ rec {
         ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
           makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
       })
-      else if builtins.isFunction ff then {
+      else if lib.isFunction ff then {
         override = newArgs: makeOverridable f (overrideWith newArgs);
         __functor = self: ff;
         overrideDerivation = throw "overrideDerivation not yet supported for functors";
@@ -112,8 +112,8 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let
-      f = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+      f = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
     in makeOverridable f (auto // args);
 
 
@@ -122,8 +122,8 @@ rec {
      individual attributes. */
   callPackagesWith = autoArgs: fn: args:
     let
-      f = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+      f = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
       mkAttrOverridable = name: pkg: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
@@ -131,8 +131,8 @@ rec {
 
 
   /* Add attributes to each output of a derivation without changing
-     the derivation itself. */
-  addPassthru = drv: passthru:
+     the derivation itself and check a given condition when evaluating. */
+  extendDerivation = condition: passthru: drv:
     let
       outputs = drv.outputs or [ "out" ];
 
@@ -142,13 +142,18 @@ rec {
       outputToAttrListElement = outputName:
         { name = outputName;
           value = commonAttrs // {
-            inherit (drv.${outputName}) outPath drvPath type outputName;
+            inherit (drv.${outputName}) type outputName;
+            drvPath = assert condition; drv.${outputName}.drvPath;
+            outPath = assert condition; drv.${outputName}.outPath;
           };
         };
 
       outputsList = map outputToAttrListElement outputs;
-  in commonAttrs // { outputUnspecified = true; };
-
+    in commonAttrs // {
+      outputUnspecified = true;
+      drvPath = assert condition; drv.drvPath;
+      outPath = assert condition; drv.outPath;
+    };
 
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the

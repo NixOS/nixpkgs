@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "enchive-${version}";
-  version = "3.3";
+  version = "3.4";
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "enchive";
     rev = version;
-    sha256 = "0i3b0v5dqz56m5ppzm3332yxkw17dxs2zpvf48769ljgjy74irfl";
+    sha256 = "0ssxbnsjx4mvaqimp5nzfixpxinhmi12z8lxdd8cj2361wbb54yk";
   };
 
   makeFlags = ["PREFIX=$(out)"];

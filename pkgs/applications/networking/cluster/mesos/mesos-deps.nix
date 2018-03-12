@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "10h0qs7svw0cqjkyxs8z6s3qraa8ga920zfrr59rdlanbwg4klly";
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 }

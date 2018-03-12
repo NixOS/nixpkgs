@@ -30,9 +30,9 @@ with lib;
 
   config = mkMerge [
     (mkIf config.services.gnome3.at-spi2-core.enable {
-      environment.systemPackages = [ pkgs.at_spi2_core ];
-      services.dbus.packages = [ pkgs.at_spi2_core ];
-      systemd.packages = [ pkgs.at_spi2_core ];
+      environment.systemPackages = [ pkgs.at-spi2-core ];
+      services.dbus.packages = [ pkgs.at-spi2-core ];
+      systemd.packages = [ pkgs.at-spi2-core ];
     })
 
     (mkIf (!config.services.gnome3.at-spi2-core.enable) {

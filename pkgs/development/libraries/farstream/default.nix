@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libnice, pkgconfig, pythonPackages, gstreamer, gst-plugins-base
-, gst-python, gupnp_igd
+, gst-python, gupnp-igd
 , gst-plugins-good, gst-plugins-bad, gst-libav
 }:
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0249ncd20x5mf884fd8bw75c3118b9fdml837v4fib349xmrqfrb";
   };
 
-  buildInputs = [ libnice python pygobject2 gupnp_igd libnice ];
+  buildInputs = [ libnice python pygobject2 gupnp-igd libnice ];
 
   nativeBuildInputs = [ pkgconfig ];
 

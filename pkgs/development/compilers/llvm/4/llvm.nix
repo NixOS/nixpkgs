@@ -1,8 +1,6 @@
 { stdenv
 , fetch
 , fetchpatch
-, perl
-, groff
 , cmake
 , python
 , libffi
@@ -27,7 +25,7 @@ let
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
   unpackPhase = ''
@@ -39,10 +37,9 @@ in stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" ]
-    ++ stdenv.lib.optional enableSharedLibraries "lib"
-    ++ stdenv.lib.optional enableManpages "man";
+    ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ perl groff cmake python ]
+  nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
@@ -68,7 +65,7 @@ in stdenv.mkDerivation rec {
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -83,6 +80,9 @@ in stdenv.mkDerivation rec {
     )
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    patch -p1 -i ${../TLI-musl.patch}
+    patch -p1 -i ${./dynamiclibrary-musl.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -113,6 +113,14 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ]
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
   ];
 
   postBuild = ''
@@ -129,10 +137,7 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
-  postInstall = stdenv.lib.optionalString enableManpages ''
-    moveToOutput "share/man" "$man"
-  ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  postInstall = stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
@@ -160,4 +165,22 @@ in stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
-}
+} // stdenv.lib.optionalAttrs enableManpages {
+  name = "llvm-manpages-${version}";
+
+  buildPhase = ''
+    make docs-llvm-man
+  '';
+
+  propagatedBuildInputs = [ ];
+
+  installPhase = ''
+    make -C docs install
+  '';
+
+  outputs = [ "out" ];
+
+  doCheck = false;
+
+  meta.description = "man pages for LLVM ${version}";
+})

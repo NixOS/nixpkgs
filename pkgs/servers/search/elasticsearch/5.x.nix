@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
-    sha256 = "0pvi6akicg0i3bz3lbc6k9rznxw7d25flg9wbs2dyxv8i2rrqvq0";
+    sha256 = "0wjjvzjbdgdv9qznk1b8dx63zgs7s6jnrrbrnd5dn27lhymxiwpl";
   };
 
   patches = [ ./es-home-5.x.patch ./es-classpath-5.x.patch ];

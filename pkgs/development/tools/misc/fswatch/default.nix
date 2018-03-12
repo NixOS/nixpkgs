@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   name = "fswatch-${version}";
-  version = "1.9.3";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "1g329aapdvbzhr39wyh295shpfq5f0nlzsqkjnr8l6zzak7f4yrg";
+    sha256 = "05vgpd1fx9fy3vnnmq5gz236avgva82axix127xy98gaxrac52vq";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

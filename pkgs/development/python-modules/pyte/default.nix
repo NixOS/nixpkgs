@@ -3,8 +3,6 @@
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.7.0";
-  name  = "${pname}-${version}";
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "1an54hvyjm8gncx8cgabz9mkpgjkdb0bkyjlkh7g7f94nr3wnfl7";

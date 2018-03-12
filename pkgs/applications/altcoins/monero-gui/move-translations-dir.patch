@@ -1,0 +1,14 @@
+diff --git a/TranslationManager.cpp b/TranslationManager.cpp
+index fa39d35..5a410f7 100644
+--- a/TranslationManager.cpp
++++ b/TranslationManager.cpp
+@@ -29,7 +29,7 @@ bool TranslationManager::setLanguage(const QString &language)
+ #ifdef Q_OS_MACX
+     QString dir = qApp->applicationDirPath() + "/../Resources/translations";
+ #else
+-    QString dir = qApp->applicationDirPath() + "/translations";
++    QString dir = qApp->applicationDirPath() + "/../share/translations";
+ #endif
+ 
+     QString filename = "monero-core_" + language;
+

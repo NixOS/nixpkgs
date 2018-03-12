@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "stfl-0.22";
+  name = "stfl-0.24";
 
   src = fetchurl {
     url = "http://www.clifford.at/stfl/${name}.tar.gz";
-    sha256 = "062lqlf3qhp8bcapbpc0k3wym7x6ngncql8jmx5x06p6679szp9d";
+    sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
   };
 
   buildInputs = [ ncurses libiconv ];
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc != "glibc") ''
     sed -i 's/LDLIBS += -lncursesw/LDLIBS += -lncursesw -liconv/' Makefile
+  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
   '' ) + ''
     make
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     DESTDIR=$out prefix=\"\" make install
 
     # some programs rely on libstfl.so.0 to be present, so link it
-    ln -s $out/lib/libstfl.so.0.22 $out/lib/libstfl.so.0
+    ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
   '';
 
   meta = {

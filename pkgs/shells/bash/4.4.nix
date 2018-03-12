@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, readline70 ? null, texinfo ? null, binutils ? null, bison
+, fetchurl, readline70 ? null, texinfo ? null, binutils ? null, bison, autoconf
 , buildPlatform, hostPlatform
 , interactive ? false
 }:
@@ -51,7 +51,12 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches = upstreamPatches;
+  patches = upstreamPatches
+    # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
+    ++ optional (hostPlatform.libc == "musl") (fetchurl {
+      url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
+      sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
+  });
 
   postPatch = optionalString hostPlatform.isCygwin "patch -p2 < ${./cygwin-bash-4.4.11-2.src.patch}";
 
@@ -65,13 +70,17 @@ stdenv.mkDerivation rec {
     "bash_cv_dev_stdin=present"
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
+  ] ++ optionals (hostPlatform.libc == "musl") [
+    "--without-bash-malloc"
+    "--disable-nls"
   ];
 
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [bison]
     ++ optional (texinfo != null) texinfo
-    ++ optional hostPlatform.isDarwin binutils;
+    ++ optional hostPlatform.isDarwin binutils
+    ++ optional (hostPlatform.libc == "musl") autoconf;
 
   buildInputs = optional interactive readline70;
 
@@ -86,7 +95,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -s bash "$out/bin/sh"
-    rm $out/lib/bash/Makefile.inc
+    rm -f $out/lib/bash/Makefile.inc
   '';
 
   postFixup = if interactive
@@ -96,7 +105,7 @@ stdenv.mkDerivation rec {
     ''
     # most space is taken by locale data
     else ''
-      rm -r "$out/share" "$out/bin/bashbug"
+      rm -rf "$out/share" "$out/bin/bashbug"
     '';
 
   meta = with stdenv.lib; {

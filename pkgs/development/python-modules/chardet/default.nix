@@ -2,7 +2,6 @@
 , pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "chardet";
   version = "3.0.4";
 
@@ -11,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
   };
 
-  buildInputs = [ pytest pytestrunner hypothesis ];
+  checkInputs = [ pytest pytestrunner hypothesis ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/chardet/chardet;

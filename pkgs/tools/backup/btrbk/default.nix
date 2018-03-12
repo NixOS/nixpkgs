@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
       --replace '$btrbk' 'btrbk'
   '';
 
-  fixupPhase = ''
-    patchShebangs $out/
-
+  preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"

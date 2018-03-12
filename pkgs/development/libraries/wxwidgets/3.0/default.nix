@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
 , gtk2, gtk3, libXinerama, libSM, libXxf86vm
 , xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, mesa_glu ? null, mesa_noglu ? null
+, withMesa ? true, libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
 , withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk218x ? null
@@ -9,7 +9,7 @@
 }:
 
 
-assert withMesa -> mesa_glu != null && mesa_noglu != null;
+assert withMesa -> libGLU != null && libGL != null;
 assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk218x) != null;
 
 with stdenv.lib;
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
-    ++ optional withMesa mesa_glu
+    ++ optional withMesa libGLU
     ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk218x)
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     ++ optionals withWebKit
       ["--enable-webview" "--enable-webview-webkit"];
 
-  SEARCH_LIB = "${mesa_glu.out}/lib ${mesa_noglu.out}/lib ";
+  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='

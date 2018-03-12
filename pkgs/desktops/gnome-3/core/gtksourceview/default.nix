@@ -1,16 +1,26 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango
-, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared_mime_info }:
+, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
 
 let
   checkInputs = [ xvfb_run dbus ];
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gtksourceview-${version}";
+  version = "3.24.6";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtksourceview/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gtksourceview"; attrPath = "gnome3.gtksourceview"; };
+  };
 
   propagatedBuildInputs = [
     # Required by gtksourceview-3.0.pc
     gtk3
     # Used by gtk_source_language_manager_guess_language
-    shared_mime_info
+    shared-mime-info
   ];
 
   outputs = [ "out" "dev" ];
@@ -26,6 +36,8 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./nix_share_path.patch ];
 
+  enableParallelBuilding = true;
+
   doCheck = stdenv.isLinux;
   checkPhase = ''
     export NO_AT_BRIDGE=1
@@ -35,7 +47,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    homepage = https://wiki.gnome.org/Projects/GtkSourceView;
     platforms = with platforms; linux ++ darwin;
+    license = licenses.lgpl21;
     maintainers = gnome3.maintainers;
   };
 }
