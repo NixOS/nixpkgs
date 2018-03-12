@@ -954,14 +954,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
   };
 
-  cam_pdf = buildPerlPackage rec {
+  cam_pdf = buildPerlModule rec {
     name = "CAM-PDF-1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CD/CDOLAN/${name}.tar.gz";
       sha256 = "12dv5ssf3y7yjz9mrrqnfzx8nf4ydk1qijf5fx59495671zzqsp7";
     };
     propagatedBuildInputs = [ CryptRC4 TextPDF ];
-    buildInputs = [ TestMore ];
   };
 
   CanaryStability = buildPerlPackage rec {
