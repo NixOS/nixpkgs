@@ -491,13 +491,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   AudioScan = buildPerlPackage rec {
-    name = "Audio-Scan-0.93";
+    name = "Audio-Scan-0.99";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "03nwcm234y76jb1p20rlcky6vzv68i46s9mjfr7kzp65w3yg94js";
+      sha256 = "00092cjj89sp019b35fm3qiz4iczqznwa3yhx5jdkazlwjhlmmma";
     };
-    buildInputs = [ pkgs.zlib ModuleBuild ModuleBuildPluggablePPPort ];
-    propagatedBuildInputs = [ TestWarn ];
+    buildInputs = [ pkgs.zlib TestWarn ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
