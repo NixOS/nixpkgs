@@ -3,13 +3,13 @@
 } :
 
 let
-  version = "6.17";
+  version = "6.18";
 in stdenv.mkDerivation {
   name = "beegfs-module-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "https://git.beegfs.com/pub/v6/repository/archive.tar.bz2?ref=${version}";
-    sha256 = "10xs7gzdmlg23k6zn1b7jij3lljn7rr1j6h476hq4lbg981qk3n3";
+    sha256 = "1g874qyxh4v53ah3lzchrqi0jci7wngr54q3f4d9q0kzvvifripn";
   };
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
@@ -41,6 +41,5 @@ in stdenv.mkDerivation {
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ markuskowa ];
-    broken = versionAtLeast kernel.version "4.14";
   };
 }
