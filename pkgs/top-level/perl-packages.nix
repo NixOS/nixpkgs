@@ -2733,7 +2733,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CryptPasswdMD5 = buildPerlPackage {
+  CryptPasswdMD5 = buildPerlModule {
     name = "Crypt-PasswdMD5-1.40";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.40.tgz;
