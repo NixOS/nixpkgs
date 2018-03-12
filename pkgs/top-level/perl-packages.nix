@@ -394,14 +394,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ArrayCompare = buildPerlPackage rec {
-    name = "Array-Compare-2.11";
+  ArrayCompare = buildPerlModule rec {
+    name = "Array-Compare-v3.0.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVECROSS/${name}.tar.gz";
-      sha256 = "0f1mg2lpr5jzxy1hciww7vlp4r602vfwpzsqmhkgv1i107pmiwcs";
+      sha256 = "1j1lrpgwh78vs6wqnzlvvfvqc4x6nwi5yvv86i5bfd79h9j4vk9j";
     };
 
-    buildInputs = [ TestNoWarnings Moo TypeTiny ];
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ Moo TypeTiny ];
   };
 
   ArrayFIFO = buildPerlPackage rec {
