@@ -807,12 +807,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   BusinessISBN = buildPerlPackage rec {
-    name = "Business-ISBN-2.09";
+    name = "Business-ISBN-3.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "0fhjzgwjxypai16vv0bws6pnxgcglcbgza81avkck6w6d3jkki4r";
+      sha256 = "07l3zfv8hagv37i3clvj5a1zc2jarr5phg80c93ks35zaz6llx9i";
     };
-    propagatedBuildInputs = [ BusinessISBNData URI ];
+    propagatedBuildInputs = [ BusinessISBNData ];
     meta = {
       description = "Parse and validate ISBNs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
