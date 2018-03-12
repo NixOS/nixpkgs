@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "processing-${version}";
-  version = "2.2.1";
+  rev = "0263";
+  version = "3.3.6";
 
   src = fetchurl {
-    url = "https://github.com/processing/processing/archive/processing-0227-${version}.tar.gz";
-    sha256 = "1r8q5y0h4gpqap5jwkspc0li6566hzx5chr7hwrdn8mxlzsm50xk";
+    url = "https://github.com/processing/processing/archive/processing-${rev}-${version}.tar.gz";
+    sha256 = "0y5ib4yp429dx9ira3knhv4209a74sjncciwrngdblk9j7in30wl";
   };
 
   # Stop it trying to download its own version of java
