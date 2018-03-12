@@ -5366,6 +5366,8 @@ with pkgs;
 
   structure-synth = callPackage ../tools/graphics/structure-synth { };
 
+  staytus = callPackage ../servers/monitoring/staytus { };
+
   su-exec = callPackage ../tools/security/su-exec {};
 
   subberthehut = callPackage ../tools/misc/subberthehut { };
