@@ -12549,7 +12549,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.007.tar.gz;
       sha256 = "1bbkj2wqpbfdw1cbm99vg9d94rvzba19m18xhnylaym0l78lc4sn";
     };
-    buildInputs = [ Moose ];
     propagatedBuildInputs = [ Moose ];
     meta = {
       description = "A thing with a list of tags";
