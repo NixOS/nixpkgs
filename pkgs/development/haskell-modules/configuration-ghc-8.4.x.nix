@@ -50,6 +50,11 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
+  ## Setup: Encountered missing dependencies:
+  ## base >=3 && <4.11
+  boxes = super.boxes_0_1_5;
+
+  ## Needs bump to a versioned attribute
   ##     • No instance for (GHC.Base.Semigroup BV)
   ##         arising from the superclasses of an instance declaration
   ##     • In the instance declaration for ‘Monoid BV’
@@ -594,16 +599,6 @@ self: super: {
     ## Setup: Encountered missing dependencies:
     ## template-haskell >=2.10 && <2.13
     jailbreak       = true;
-  });
-
-  boxes = overrideCabal super.boxes (drv: {
-    ## https://github.com/treeowl/boxes/issues/29
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/asr/boxes/commit/f03e16cb8677a9d85687c641fe27a87e6fd94d54.patch;
-         sha256 = "179vkn6jimiy64dwyam04x8v981l3pfrq3ig97600vnkns3v8i6a";
-       })
-    ];
   });
 
   deepseq-generics = overrideCabal super.deepseq-generics (drv: {
