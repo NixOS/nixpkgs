@@ -199,6 +199,7 @@ self: super: {
   natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
   parsec = addBuildDepends super.parsec [self.fail self.semigroups];
+  parser-combinators = addBuildDepend super.parser-combinators self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   reflection = addBuildDepend super.reflection self.semigroups;
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
