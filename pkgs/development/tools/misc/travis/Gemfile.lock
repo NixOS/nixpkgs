@@ -45,7 +45,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  travis
+  travis (= 1.8.8)
 
 BUNDLED WITH
-   1.14.4
+   1.14.6
