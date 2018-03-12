@@ -6,7 +6,6 @@ let
   cfg = config.services.staytus;
 
   bundler = pkgs.bundler;
-  procodile = pkgs.procodile;
   package = pkgs.staytus;
   ruby = package.ruby;
 
@@ -27,14 +26,23 @@ let
       ${cfg.extraConfig}
   '';
 
-  procfileLocal = ''
-log_path: /run/staytus/log/procodile.log
-log_root: /run/staytus/log
-pid_root: /run/staytus/pids
-web: ${staytus-rake}/bin/staytus-puma
-worker: ${staytus-rake}/bin/staytus-jobs
+  procfileOptions = ''
+app_name: staytus
+processes:
+  web:
+    restart_mode: usr2
+  worker:
+    restart_mode: start-term
+log_path: ${runDir}/log/staytus.log
+log_root: ${runDir}/log
+pid_root: ${runDir}/pids
 env:
 ${concatStrings (mapAttrsToList (name: value: "  ${name}: ${value}\n") staytusEnv)}
+'';
+
+ procfile = ''
+web: ${staytus-rake}/bin/staytus-puma
+worker: ${staytus-rake}/bin/staytus-jobs
   '';
 
   unpackTheme = unpack "theme";
@@ -53,11 +61,8 @@ ${concatStrings (mapAttrsToList (name: value: "  ${name}: ${value}\n") staytusEn
     RAILS_ENV = "production";
     RACK_ENV = "production";
     SECRET_KEY_BASE = cfg.secretKeyBase;
-    RAILS_ETC = "${cfg.stateDir}/config";
-    RAILS_LOG = "${cfg.stateDir}/log";
-    RAILS_PUBLIC = "${cfg.stateDir}/public";
-    RAILS_TMP = "${cfg.stateDir}/tmp";
-    HOME = "${package}";
+    RAILS_LOG = "${runDir}/log";
+    HOME = "${runDir}";
     STAYTUS_LANG = "en";
     STAYTUS_THEME = "${cfg.theme}";
     STAYTUS_DEMO = "0";
@@ -66,7 +71,12 @@ ${concatStrings (mapAttrsToList (name: value: "  ${name}: ${value}\n") staytusEn
     STAYTUS_SMTP_USERNAME = "${cfg.smtpUsername}";
     STAYTUS_SMTP_PASSWORD = "${cfg.smtpPassword}";
     GEM_HOME = "${package}/${ruby.gemPath}";
+    PUMA_DEBUG = if cfg.pumaDebug then "1" else "0";
+    RAILS_LOG_TO_STDOUT = "1";
+    APP_ROOT = "${runDir}";
   };
+
+  runDir = "/var/run/staytus";
 
   staytus-rake = pkgs.stdenv.mkDerivation rec {
     name = "staytus-rake";
@@ -77,24 +87,20 @@ ${concatStrings (mapAttrsToList (name: value: "  ${name}: ${value}\n") staytusEn
       makeWrapper ${package.env}/bin/bundle $out/bin/staytus-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") staytusEnv)} \
           --set PATH '${lib.makeBinPath (with pkgs; [ nodejs ])}:$PATH' \
-          --set RAKEOPT '-f ${package}/share/staytus/Rakefile' \
-          --run 'cd ${cfg.stateDir}'
+          --set RAKEOPT '-f ${runDir}/Rakefile' \
+          --run 'cd ${runDir}'
       makeWrapper $out/bin/staytus-bundle $out/bin/staytus-rake \
           --add-flags "exec rake"
       makeWrapper $out/bin/staytus-rake $out/bin/staytus-jobs \
           --add-flags "jobs:work"
-      makeWrapper $out/bin/staytus-bundle $out/bin/staytus-rails \
-          --add-flags "exec rails"
       makeWrapper $out/bin/staytus-bundle $out/bin/staytus-puma \
           --add-flags "exec puma" \
-          --add-flags "-C ${package}/share/staytus/config/puma.rb"
-      makeWrapper ${procodile}/bin/procodile $out/bin/staytus-procodile-start \
-          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") staytusEnv)} \
-          --add-flags "start" \
-          --add-flags "--clean" \
-          --add-flags "--root ${package}/share/staytus/" \
-          --add-flags "--procfile /run/staytus/Procfile" \
-          --run 'cd ${cfg.stateDir}'
+          --add-flags "--environment production" \
+          --add-flags "-C ${runDir}/config/puma.rb" \
+          --add-flags "--redirect-stdout ${cfg.stateDir}/log/puma.log" \
+          --add-flags "--redirect-stderr ${cfg.stateDir}/log/puma.error.log" \
+          --add-flags "--redirect-append" \
+          --add-flags "--pidfile ${runDir}/pids/puma.pid"
      '';
   };
 
@@ -112,8 +118,8 @@ in {
 
       stateDir = mkOption {
         type = types.str;
-        default = "/var/staytus";
-        description = "The state directory, logs and plugins are stored here";
+        default = "/var/lib/staytus";
+        description = "The state directory, logs are stored here";
       };
 
       extraConfig = mkOption {
@@ -125,7 +131,17 @@ in {
       themes = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Set of themes";
+        description = ''
+          Set of themes
+
+          For example, to add and set a custom theme named "awesomecompany":
+          services.staytus = {
+            themes = {
+              awesomecompany = ./path/to/private/theme.zip;
+            };
+            theme = "awesomecompany";
+          };
+        '';
       };
 
       theme = mkOption {
@@ -133,12 +149,6 @@ in {
         default = "default";
         description = "The theme to activate";
       };
-
-      #databaseType = mkOption {
-      #  type = types.str;
-      #  default = "postgresql";
-      #  description = "Type of database";
-      #};
 
       databaseHost = mkOption {
         type = types.str;
@@ -202,6 +212,12 @@ in {
           A list of virtual hosts. They must be given as exact names if acme is enabled.
         '';
       };
+
+      pumaDebug = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Activate puma debug mode";
+      };
     };
   };
 
@@ -223,7 +239,7 @@ in {
       { name = "staytus";
       } ];
 
-    systemd.services.staytus = {
+    systemd.services.staytusjobs = {
       after = [ "network.target" "mysql.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = staytusEnv;
@@ -232,37 +248,29 @@ in {
         config.services.mysql.package
       ];
       preStart = ''
-        export HOME=$TMP
         chown -R staytus:staytus ${cfg.stateDir}
         chmod -R 755 ${cfg.stateDir}
 
-        mkdir /run/staytus/{log,pids} -p
+        rm -rf ${runDir}
+        mkdir -p ${runDir}/pids
 
-#        for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
-#          ln -fs $theme/* ${package}/content/themes/
-#        done
+        cp -Rv ${package}/share/staytus/* ${runDir}
+
+        mkdir -p ${cfg.stateDir}/log
+        rm -rf ${runDir}/log
+        ln -sf ${cfg.stateDir}/log ${runDir}/log
 
         echo "Symlinking generated configs"
-        echo "ln -sf ${pkgs.writeText "database.yml" databaseYml} /run/staytus/database.yml"
-        ln -sf ${pkgs.writeText "database.yml" databaseYml} /run/staytus/database.yml
-        echo "ln -sf ${pkgs.writeText "configuration.yml" configurationYml}  /run/staytus/configuration.yml"
-        ln -sf ${pkgs.writeText "configuration.yml" configurationYml} /run/staytus/configuration.yml
-        ln -sf ${package}/share/staytus/Procfile /run/staytus/Procfile
-        ln -sf ${package}/share/staytus/Procfile.options /run/staytus/Procfile.options
-        ln -sf ${pkgs.writeText "Procfile.local" procfileLocal} /run/staytus/Procfile.local
-
-        ln -sf ${cfg.stateDir}/system /run/staytus/system
+        echo "ln -sf ${pkgs.writeText "database.yml" databaseYml} ${runDir}/database.yml"
+        ln -sf ${pkgs.writeText "database.yml" databaseYml} ${runDir}/config/database.yml
+        ln -sf ${pkgs.writeText "Procfile" procfile} ${runDir}/Procfile
+        ln -sf ${pkgs.writeText "Procfile.local" procfileOptions} ${runDir}/Procfile.options
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.stateDir}/db-created"; then
-            # echo "Need to create the database '${cfg.databaseName}' and grant permissions to user named '${cfg.databaseUsername}'."
-            # Wait until MySQL is up
-            #   sleep 1
-            # done
 
             ${pkgs.mysql}/bin/mysql -e 'CREATE DATABASE ${cfg.databaseName};'
             ${pkgs.mysql}/bin/mysql -e "GRANT ALL ON ${cfg.databaseName}.* TO ${cfg.databaseUsername}@localhost IDENTIFIED BY \"${cfg.databasePassword}\";"
-
 
             touch "${cfg.stateDir}/db-created"
           fi
@@ -274,10 +282,19 @@ in {
           rm -f "${cfg.stateDir}/db-drop"
         fi
 
+        echo "Migrating database"
         ${staytus-rake}/bin/staytus-rake db:migrate
 
-        chown -R staytus:staytus /run/staytus
+        chown -R staytus:staytus ${runDir}
+        chmod -R 755 ${runDir}
 
+        echo "Copying themes"
+        for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
+          ln -fs $theme/* ${runDir}/content/themes/
+        done
+
+        echo "Compiling assets"
+        ${staytus-rake}/bin/staytus-rake assets:precompile
       '';
 
       serviceConfig = {
@@ -286,22 +303,42 @@ in {
         User = "staytus";
         Group = "staytus";
         TimeoutSec = "300";
-        WorkingDirectory = "${package}/share/staytus";
-        ExecStart="${staytus-rake}/bin/staytus-procodile-start";
+        WorkingDirectory = "${runDir}";
+        ExecStart="${staytus-rake}/bin/staytus-jobs";
       };
-
     };
+
+    systemd.services.staytus = {
+      after = [ "staytusjobs.service" ];
+      wantedBy = [ "multi-user.target" ];
+      environment = staytusEnv;
+
+      path = with pkgs; [
+        config.services.mysql.package
+      ];
+
+      serviceConfig = {
+        Type = "simple";
+        User = "staytus";
+        Group = "staytus";
+        TimeoutSec = "300";
+        WorkingDirectory = "${runDir}";
+        ExecStart="${staytus-rake}/bin/staytus-puma";
+      };
+    };
+
 
     services.nginx = {
       virtualHosts = {
         "${builtins.head cfg.vhosts}" = {
           forceSSL = true;
           enableACME = true;
-          root = cfg.stateDir;
+          root = "${runDir}";
           serverAliases = builtins.tail cfg.vhosts;
 
           extraConfig = ''
             location /assets {
+              root ${runDir}/public/;
               add_header Cache-Control max-age=3600;
             }
 
