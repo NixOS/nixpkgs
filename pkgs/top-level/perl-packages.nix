@@ -1851,7 +1851,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Class-Accessor-Grouped-0.10012.tar.gz;
       sha256 = "c4613ee3307939f47a9afd40e8b173f3a22f501c3b139799aa030f01b627e7fe";
     };
-    buildInputs = [ ClassXSAccessor DevelHide PackageStash SubName TestException ];
+    buildInputs = [ TestException ];
     propagatedBuildInputs = [ ModuleRuntime ];
     meta = {
       description = "Lets you build groups of accessors";
