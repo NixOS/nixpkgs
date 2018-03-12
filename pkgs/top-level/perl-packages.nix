@@ -10537,10 +10537,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetSSLeay = buildPerlPackage rec {
-    name = "Net-SSLeay-1.77";
+    name = "Net-SSLeay-1.84";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/${name}.tar.gz";
-      sha256 = "06h6wbr923jxmazmv5shdg1767s7r60bvzcza52dk31yckks6l31";
+      sha256 = "0xzizxhy6yyvk88dxzmp2lrcx4q662ln5wsnkrm9sc18nk5w6gl2";
     };
     buildInputs = [ pkgs.openssl ];
     doCheck = false; # Test performs network access.
