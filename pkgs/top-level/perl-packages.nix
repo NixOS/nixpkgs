@@ -2282,10 +2282,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigAny = buildPerlPackage rec {
-    name = "Config-Any-0.26";
+    name = "Config-Any-0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRICAS/${name}.tar.gz";
-      sha256 = "155521bxiim3dv8d8f69fqd9zxm615fd4pfmv5fki17hq7ai5bpr";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Config-Any-0.32.tar.gz;
+      sha256 = "0l31sg7dwh4dwwnql42hp7arkhcm15bhsgfg4i6xvbjzy9f2mnk8";
     };
     propagatedBuildInputs = [ ModulePluggable ];
     meta = {
