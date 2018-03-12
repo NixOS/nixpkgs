@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch,
-wxGTK, autoconf, automake, libtool, python, gettext, bash }:
+{ stdenv, fetchFromGitHub, fetchpatch, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
 
 stdenv.mkDerivation rec {
   name = "wxHexEditor-${version}";
