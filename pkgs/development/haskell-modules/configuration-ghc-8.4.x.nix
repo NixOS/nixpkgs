@@ -50,9 +50,12 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ##     • Could not deduce (Semigroup (Dict a))
+  ##     • No instance for (GHC.Base.Semigroup BV)
   ##         arising from the superclasses of an instance declaration
-  ##       from the context: a
+  ##     • In the instance declaration for ‘Monoid BV’
+  bv = super.bv_0_5;
+
+  ## Needs bump to a versioned attribute
   constraints = super.constraints_0_10;
 
   ## Needs bump to a versioned attribute
@@ -209,20 +212,8 @@ self: super: {
   });
 
 
-  ## Upstreamed
 
-  ## Upstreamed, awaiting a Hackage release
-  bv = overrideCabal super.bv (drv: {
-    ##     • No instance for (GHC.Base.Semigroup BV)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid BV’
-    src = pkgs.fetchFromGitHub {
-      owner  = "iagoabal";
-      repo   = "haskell-bv";
-      rev    = "92932a75719020d6a8ac55c455e5c03a4304043f";
-      sha256 = "0fi4v9mpw5y9q1pm7lqhm2zazfyy921wpaa28125misix0frasfw";
-    };
-  });
+  ## Upstreamed
 
   ## Upstreamed, awaiting a Hackage release
   cabal2nix = (overrideCabal super.cabal2nix (drv: {
