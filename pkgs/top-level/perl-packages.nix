@@ -1050,16 +1050,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   CarpClan = buildPerlPackage {
-    name = "Carp-Clan-6.04";
+    name = "Carp-Clan-6.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STBEY/Carp-Clan-6.04.tar.gz;
-      sha256 = "1v71k8s1pi16l5y579gnrg372c6pdvy6qqm6iddm8h1dx7n16bjl";
+      url = mirror://cpan/authors/id/K/KE/KENTNL/Carp-Clan-6.06.tar.gz;
+      sha256 = "1m6902n6s627nsvyn2vyrk29q7lh6808hsdk7ka5cirm27vchjpa";
     };
-    propagatedBuildInputs = [ TestException ];
     meta = {
       description = "Report errors from perspective of caller of a \"clan\" of modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestException ];
   };
 
   CatalystActionRenderView = buildPerlPackage rec {
