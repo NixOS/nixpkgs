@@ -104,6 +104,7 @@ rec {
   repeat              = vim-repeat;
   rhubarb             = vim-rhubarb;
   signature           = vim-signature;
+  solidity            = vim-solidity;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
   supertab            = Supertab;
@@ -2097,6 +2098,17 @@ rec {
       url = "https://github.com/tomasr/molokai";
       rev = "c67bdfcdb31415aa0ade7f8c003261700a885476";
       sha256 = "1piszjr5kyw43ac1f0jh9z88g824xknshrkchbys9qxlz7pd831s";
+    };
+    dependencies = [];
+
+  };
+
+  vim-solidity = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-solidity-2018-02-11";
+    src = fetchgit {
+      url = "https://github.com/tomlion/vim-solidity";
+      rev = "46b87988e196abe646516932427253a838f7fff8";
+      sha256 = "0djqqxlh314n6yhn5m2min3nl435n4qcjgsyca7qbz4wvgmbwnlk";
     };
     dependencies = [];
 

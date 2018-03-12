@@ -168,6 +168,7 @@
 "github:thinca/vim-quickrun"
 "github:thinca/vim-themis"
 "github:tomasr/molokai"
+"github:tomlion/vim-solidity"
 "github:tpope/vim-dispatch"
 "github:tpope/vim-eunuch"
 "github:tpope/vim-repeat"
