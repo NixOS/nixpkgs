@@ -10190,6 +10190,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+    doCheck = false;
   };
 
   NetAmazonAWSSign = buildPerlPackage {
