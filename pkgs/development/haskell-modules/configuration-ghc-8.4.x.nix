@@ -156,13 +156,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_4_8;
 
   ## Needs bump to a versioned attribute
-  HTTP = overrideCabal super.HTTP_4000_3_10 (drv: {
-    ##
-    ## https://github.com/haskell/HTTP/pull/114
-    doCheck         = false;
-  });
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## free ==4.*, template-haskell >=2.4 && <2.13
   lens = super.lens_4_16;
