@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, valadoc
+{ stdenv, fetchurl, pkgconfig, meson, ninja, makeFontsConf
 , gnome3, glib, json-glib, libarchive, libsoup, gobjectIntrospection }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0vcnimlfcscyvjbh845xbnjb9qc8x0mliaqz2gczxxpakxrbl3gh";
   };
 
-  nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig valadoc ];
+  nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig ];
   buildInputs = [ glib gnome3.libgee json-glib libsoup libarchive ];
 
   mesonFlags = [ "-Denable_valadoc=true" ];
@@ -20,6 +20,8 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = "(cd test && ./httpseverywhere_test)";
+
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   outputs = [ "out" "devdoc" ];
 
