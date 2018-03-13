@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2,
-  libgtop, libxfce4ui, libxfce4util, xfce4panel, lm_sensors
+  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libgtop
     libxfce4ui
     libxfce4util
-    xfce4panel
+    xfce4-panel
     lm_sensors
    ];
 
