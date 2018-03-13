@@ -6,11 +6,22 @@
 # TODO: add assert statements
 
 let
+  /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
+   */
+  nubOn = f: list:
+    if list == [] then
+      []
+    else
+      let
+        x = pkgs.lib.head list;
+        xs = pkgs.lib.filter (p: f x != f p) (pkgs.lib.drop 1 list);
+      in
+        [x] ++ nubOn f xs;
 
   pkgs = import ./../../default.nix { };
 
   packagesWith = cond: return: set:
-    pkgs.lib.unique
+    nubOn (pkg: pkg.updateScript)
       (pkgs.lib.flatten
         (pkgs.lib.mapAttrsToList
           (name: pkg:
