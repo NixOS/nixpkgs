@@ -305,6 +305,8 @@ in {
 
   pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
+  pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
+
   pycairo = callPackage ../development/python-modules/pycairo { };
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
@@ -468,69 +470,9 @@ in {
 
   python-sybase = callPackage ../development/python-modules/sybase {};
 
-  alot = buildPythonPackage rec {
-    rev = "0.5.1";
-    name = "alot-${rev}";
+  alot = callPackage ../development/python-modules/alot {};
 
-    disabled = isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "pazz";
-      repo = "alot";
-      inherit rev;
-      sha256 = "0ipkhc5wllfq78lg47aiq4qih0yjq8ad9xkrbgc88xk8pk9166i8";
-    };
-
-    postPatch = ''
-      substituteInPlace alot/defaults/alot.rc.spec \
-        --replace "themes_dir = string(default=None)" \
-                  "themes_dir = string(default='$out/share/themes')"
-    '';
-
-    propagatedBuildInputs =
-      [ self.notmuch
-        self.urwid
-        self.urwidtrees
-        self.twisted
-        self.python_magic
-        self.configobj
-        self.pygpgme
-        self.mock
-      ];
-
-    postInstall = ''
-      mkdir -p $out/share
-      cp -r extra/themes $out/share
-      wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : '${pkgs.lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
-    '';
-
-    meta = {
-      homepage = https://github.com/pazz/alot;
-      description = "Terminal MUA using notmuch mail";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  anyjson = buildPythonPackage rec {
-    name = "anyjson-0.3.3";
-
-    # The tests are written in a python2 syntax but anyjson is python3 valid
-    doCheck = !isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/anyjson/${name}.tar.gz";
-      sha256 = "37812d863c9ad3e35c0734c42e0bf0320ce8c3bed82cd20ad54cb34d158157ba";
-    };
-
-    buildInputs = with self; [ self.nose ];
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/anyjson/;
-      description = "Wrapper that selects the best available JSON implementation";
-    };
-  };
+  anyjson = callPackage ../development/python-modules/anyjson {};
 
   amqp = buildPythonPackage rec {
     name = "amqp-${version}";
@@ -4734,33 +4676,8 @@ in {
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
-  gplaycli = buildPythonPackage rec {
-    version = "0.1.2";
-    name = "gplaycli-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "matlink";
-      repo = "gplaycli";
-      rev = "${version}";
-      sha256 = "0yc09inzs3aggj0gw4irlhlzw5q562fsp0sks352y6z0vx31hcp3";
-    };
-
-   disabled = ! isPy27;
-
-   propagatedBuildInputs = with self; [ pkgs.libffi pyasn1 clint ndg-httpsclient protobuf requests args ];
-
-   preBuild = ''
-     substituteInPlace setup.py --replace "/etc" "$out/etc"
-     substituteInPlace gplaycli/gplaycli.py --replace "/etc" "$out/etc"
-   '';
-
-    meta = {
-      homepage = https://github.com/matlink/gplaycli;
-      description = "Google Play Downloader via Command line";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  gpapi = callPackage ../development/python-modules/gpapi { };
+  gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gpsoauth = buildPythonPackage rec {
     version = "0.2.0";
@@ -5462,24 +5379,7 @@ in {
     };
   };
 
-  mt-940 = buildPythonPackage rec {
-    version = "4.10.0";
-    name = "mt-940-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mt-940/mt-940-${version}.tar.gz";
-      sha256 = "1gyqf1k2r2ml45x08bk69ws865yrpcph514mn4xvjz779mlgh67j";
-    };
-
-    buildInputs = with self; [ pytestrunner pyyaml pytest ];
-    doCheck = false; # Can't find data files
-
-    meta = {
-      description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
-      homepage = "http://pythonhosted.org/mt-940/";
-      license = licenses.bsd3;
-    };
-  };
+  mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mwlib = let
     pyparsing = buildPythonPackage rec {
@@ -9474,6 +9374,10 @@ in {
   moztest = callPackage ../development/python-modules/marionette-harness/moztest.nix {};
   mozversion = callPackage ../development/python-modules/marionette-harness/mozversion.nix {};
   marionette-harness = callPackage ../development/python-modules/marionette-harness {};
+
+  marisa = callPackage ../development/python-modules/marisa {
+    marisa = pkgs.marisa;
+  };
 
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
@@ -15985,20 +15889,15 @@ in {
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.9";
+    name = "sphinx_rtd_theme-0.2.5b2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx_rtd_theme/${name}.tar.gz";
-      sha256 = "18d0r63w7jpdrk4q5qy26n08vdlmnj9sar93akwjphyambw4cf17";
+      sha256 = "0grf16fi4g0p3dfh11b1624ic34iqkjhf5i1g6hvsh4nlm0ll00q";
     };
 
-    postPatch = ''
-      rm requirements.txt
-      touch requirements.txt
-    '';
-
     meta = {
-      description = "ReadTheDocs.org theme for Sphinx, 2013 version";
+      description = "ReadTheDocs.org theme for Sphinx";
       homepage = https://github.com/snide/sphinx_rtd_theme/;
       license = licenses.bsd3;
       platforms = platforms.unix;
@@ -20153,30 +20052,7 @@ EOF
     };
   };
 
-  htmltreediff = buildPythonPackage rec{
-    version = "0.1.2";
-    pname = "htmltreediff";
-    name = pname + "-${version}";
-
-    # Does not work with Py >= 3
-    disabled = !isPy27;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "christian-oudard";
-      repo = pname;
-      rev = "v" + version;
-      sha256 = "16mqp2jyznrw1mgd3qzybq28h2k5wz7vmmz1m6xpgscazyjhvvd1";
-    };
-
-    propagatedBuildInputs = with self; [ lxml html5lib ];
-
-    meta = {
-      description = " Structure-aware diff for html and xml documents";
-      homepage = https://github.com/christian-oudard/htmltreediff;
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [];
-    };
-  };
+  htmltreediff = callPackage ../development/python-modules/htmltreediff { };
 
   repeated_test = buildPythonPackage rec {
     name = "repeated_test-${version}";
@@ -20826,7 +20702,11 @@ EOF
 
   node-semver = callPackage ../development/python-modules/node-semver { };
 
+  node-semver2 = callPackage ../development/python-modules/node-semver/2.nix { };
+
   distro = callPackage ../development/python-modules/distro { };
+
+  distro11 = callPackage ../development/python-modules/distro/11.nix { };
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
 

@@ -19,8 +19,8 @@ rec {
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
 
-  btc1 = callPackage ./btc1.nix { withGui = true; };
-  btc1d = callPackage ./btc1.nix { withGui = false; };
+  btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
+  btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
 
   cryptop = python3.pkgs.callPackage ./cryptop { };
 
@@ -31,8 +31,8 @@ rec {
 
   dero = callPackage ./dero.nix { };
 
-  dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
-  dogecoind = callPackage ./dogecoin.nix { withGui = false; };
+  dogecoin  = callPackage ./dogecoin.nix { boost = boost165; withGui = true; };
+  dogecoind = callPackage ./dogecoin.nix { boost = boost165; withGui = false; };
 
   ethsign = callPackage ./ethsign { };
 
@@ -46,8 +46,8 @@ rec {
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
-  memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
-  memorycoind = callPackage ./memorycoin.nix { withGui = false; };
+  memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
+  memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
 
   namecoin  = callPackage ./namecoin.nix  { withGui = true; };
   namecoind = callPackage ./namecoin.nix { withGui = false; };

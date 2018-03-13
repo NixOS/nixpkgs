@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     "--with-mail_ssl_module"
   ]
     ++ optional (gd != null) "--with-http_image_filter_module"
-    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
+    ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
   NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";

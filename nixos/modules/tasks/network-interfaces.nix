@@ -142,7 +142,7 @@ let
         default = { };
         example = { mtu = "1492"; window = "524288"; };
         description = ''
-          Other route options. See the symbol <literal>OPTION</literal>
+          Other route options. See the symbol <literal>OPTIONS</literal>
           in the <literal>ip-route(8)</literal> manual page for the details.
         '';
       };
@@ -191,7 +191,7 @@ let
       preferTempAddress = mkOption {
         type = types.bool;
         default = cfg.enableIPv6;
-        defaultText = literalExample "config.networking.enableIpv6";
+        defaultText = literalExample "config.networking.enableIPv6";
         description = ''
           When using SLAAC prefer a temporary (IPv6) address over the EUI-64
           address for originating connections. This is used to reduce tracking.

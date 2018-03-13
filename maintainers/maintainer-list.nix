@@ -319,6 +319,11 @@
     github = "amiloradovsky";
     name = "Andrew Miloradovsky";
   };
+  aminechikhaoui = {
+    email = "amine.chikhaoui91@gmail.com";
+    github = "AmineChikhaoui";
+    name = "Amine Chikhaoui";
+  };
   amorsillo = {
     email = "andrew.morsillo@gmail.com";
     github = "AndrewMorsillo";
@@ -635,11 +640,6 @@
     email = "christian.albrecht@mayflower.de";
     github = "calbrecht";
     name = "Christian Albrecht";
-  };
-  calrama = {
-    email = "moritz@ucworks.org";
-    github = "MoritzMaxeiner";
-    name = "Moritz Maxeiner";
   };
   calvertvl = {
     email = "calvertvl@gmail.com";
@@ -1037,11 +1037,6 @@
     email = "nix@wdtz.org";
     github = "dtzWill";
     name = "Will Dietz";
-  };
-  dupgit = {
-    email = "olivier.delhomme@free.fr";
-    github = "dupgit";
-    name = "Olivier Delhomme";
   };
   dywedir = {
     email = "dywedir@protonmail.ch";
@@ -1553,6 +1548,11 @@
     github = "iblech";
     name = "Ingo Blechschmidt";
   };
+  idontgetoutmuch = {
+    email = "dominic@steinitz.org";
+    github = "idontgetoutmuch";
+    name = "Dominic Steinitz";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
@@ -1729,6 +1729,11 @@
     email = "git@danielschaefer.me";
     github = "johnazoidberg";
     name = "Daniel Schäfer";
+  };
+  johnchildren = {
+    email = "john.a.children@gmail.com";
+    github = "johnchildren";
+    name = "John Children";
   };
   johnmh = {
     email = "johnmh@openblox.org";

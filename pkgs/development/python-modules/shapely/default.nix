@@ -30,10 +30,9 @@ buildPythonPackage rec {
     sed -i "s|free = load_dll('c').free|free = load_dll('c', fallbacks=['${stdenv.cc.libc}/lib/${libc}']).free|" shapely/geos.py
   '';
 
-  # tests/test_voctorized fails because the vectorized extension is not
-  # available in when running tests
+  # Disable the tests that improperly try to use the built extensions
   checkPhase = ''
-    py.test --ignore tests/test_vectorized.py
+    py.test -k 'not test_vectorized and not test_fallbacks' tests
   '';
 
   meta = with stdenv.lib; {

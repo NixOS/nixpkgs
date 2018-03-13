@@ -35,9 +35,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
-
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";

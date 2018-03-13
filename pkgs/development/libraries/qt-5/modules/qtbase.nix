@@ -10,7 +10,7 @@
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
   zlib,
 
   # optional dependencies
@@ -30,7 +30,6 @@ assert withGtk3 -> dconf != null;
 assert withGtk3 -> gtk3 != null;
 
 let
-  system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
   compareVersion = v: builtins.compareVersions version v;
 in
 
@@ -258,7 +257,7 @@ stdenv.mkDerivation {
       "-no-warnings-are-errors"
     ]
     ++ (
-      if (!system-x86_64)
+      if (!stdenv.hostPlatform.isx86_64)
       then [ "-no-sse2" ]
       else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
     )

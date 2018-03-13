@@ -7,13 +7,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-unlimited-" + version;
-  version = "1.0.2.0";
+  version = "1.0.3.0";
 
   src = fetchFromGitHub {
     owner = "bitcoinunlimited";
     repo = "bitcoinunlimited";
     rev = "v${version}";
-    sha256 = "17cmyns1908s2rqs0zwr05f3541nqm2pg08n2xn97g2k3yimdg5q";
+    sha256 = "0l02a7h502msrp4c02wgm7f3159ap8l61k4890vas99gq7ywxkcx";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -21,8 +21,13 @@ stdenv.mkDerivation rec {
                   miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
+  patches = [
+    ./bitcoin-unlimited-const-comparators.patch
+  ];
+
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
+  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system (Unlimited client)";
