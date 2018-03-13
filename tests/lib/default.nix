@@ -48,14 +48,24 @@ rec {
   '';
 
   checkAllExecutables = package: {
-    flags ? "--version", regexp ? ".", skipRegex ? "^$"
+    flags ? "--version", outputRegexp ? "."
+    , skipRegexp ? "^$", includeRegexp ? ".*"
+    , checkExitCode ? "test $exitCode -lt 126 || test $exitCode -gt 160"
   }: 
   runCommand "${package.name}-executable-check" {} ''
     mkdir "$out"
     for i in "${package}"/bin/*; do
-      if echo "$i" | grep -Ev ${lib.escapeShellArg skipRegex}; then
-        "$i" ${flags} | grep -E ${lib.escapeShellArg regexp} |
-          tee "$out/$(basename "$i")"
+      if echo "$i" | grep -E ${lib.escapeShellArg includeRegexp} |
+            grep -Ev ${lib.escapeShellArg skipRegexp}; then
+        ${ if outputRegexp != null then ''
+          "$i" ${flags} | grep -E ${lib.escapeShellArg outputRegexp} |
+            tee "$out/$(basename "$i")"
+        '' else ""}
+        ${ if checkExitCode != null then ''
+          exitCode="$(( "$i" ${flags} &> /dev/null && echo 0; ) || echo $?; )"
+          echo exit code: $exitCode
+          ${checkExitCode}
+        '' else ""}
       fi
     done
   '';

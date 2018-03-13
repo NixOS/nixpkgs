@@ -9,6 +9,9 @@ rec {
   pdf = callTest ./latex-zathura.nix {};
 
   coreutils-versions = test-lib.checkAllExecutables pkgs.coreutils {
-    skipRegex = "(false|test)";
+    skipRegexp = "(false|test)";
+  };
+  coreutils-exit-codes = test-lib.checkAllExecutables pkgs.coreutils {
+    outputRegexp = null;
   };
 }
