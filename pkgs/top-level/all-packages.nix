@@ -14547,7 +14547,7 @@ with pkgs;
 
   androidStudioPackages = callPackage ../applications/editors/android-studio { };
   android-studio = androidStudioPackages.stable;
-  android-studio-preview = androidStudioPackages.preview;
+  android-studio-preview = androidStudioPackages.beta;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
