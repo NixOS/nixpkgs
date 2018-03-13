@@ -585,6 +585,7 @@ self: super: {
     preCheck = "export HOME=$TMPDIR";
     testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
+    jailbreak = true;           # work around hlint >=2.0.8 && <2.1 constraint
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
       local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
