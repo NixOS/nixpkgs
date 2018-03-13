@@ -36,7 +36,6 @@ in rec {
   # linux-beta-bundle
   beta = mkStudio {
     pname = "android-studio-preview";
-    #pname = "android-studio-beta"; # TODO: Rename
     version = "3.1.0.14"; # "Android Studio 3.1 RC 2"
     build = "173.4640767";
     sha256Hash = "00v8qbis4jm31v1g9989f9y15av6p3ywj8mmfxcsc3hjlpzdgid8";
