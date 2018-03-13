@@ -5,11 +5,13 @@
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
 , libstartup_notification, libvpx, makeWrapper, libGLU_combined
 , nspr, nss, pango, perl, python, libpulseaudio, sqlite
-, unzip, xorg, which, yasm, zip, zlib
+, unzip, xorg, which, yasm, zip, zlib, enableOfficialBranding ? false
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "palemoon-${version}";
+  name = "newmoon-${version}";
   version = "27.8.0";
 
   src = fetchFromGitHub {
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
     ac_add_options --prefix=$out
     ac_add_options --with-pthreads
     ac_add_options --enable-application=browser
-    ac_add_options --enable-official-branding
+    ${optionalString enableOfficialBranding "ac_add_options --enable-official-branding"}
     ac_add_options --enable-optimize="-O2"
     ac_add_options --enable-release
     ac_add_options --enable-devtools
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
     $src/mach install
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A web browser";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on

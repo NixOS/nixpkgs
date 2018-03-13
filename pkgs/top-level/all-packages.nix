@@ -16970,7 +16970,7 @@ with pkgs;
 
   osquery = callPackage ../tools/system/osquery { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon {
+  newmoon = callPackage ../applications/networking/browsers/newmoon {
     # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
     stdenv = overrideCC stdenv gcc49;
   };
