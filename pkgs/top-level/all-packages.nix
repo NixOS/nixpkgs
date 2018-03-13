@@ -4988,6 +4988,8 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
+  teleconsole = callPackage ../tools/misc/teleconsole { };
+
   teleport = callPackage ../servers/teleport {};
 
   telepresence = callPackage ../tools/networking/telepresence { };
