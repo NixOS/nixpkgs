@@ -382,6 +382,6 @@ fi
 if [ "$action" = build-vm ]; then
     cat >&2 <<EOF
 
-Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm).
+Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
 EOF
 fi
