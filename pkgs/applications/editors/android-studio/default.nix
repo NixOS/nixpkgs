@@ -1,16 +1,10 @@
 { stdenv, callPackage, fetchurl, makeFontsConf, gnome2 }:
-
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
-  };
-  latestVersion = {
-    version = "3.2.0.8"; # "Android Studio 3.2 Canary 9"
-    build = "173.4688006";
-    sha256Hash = "13kln5s45qzdi54gca0bvdiwl2mi6lg8zgp7f36a24zbmvdmnslv";
   };
 in rec {
   # Old alias
