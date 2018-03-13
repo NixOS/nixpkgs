@@ -5901,6 +5901,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileTail = buildPerlPackage rec {
+    name = "File-Tail-1.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGRABNAR/${name}.tar.gz";
+      sha256 = "1ixg6kn4h330xfw3xgvqcbzfc3v2wlzjim9803jflhvfhf0rzl16";
+    };
+    meta = {
+      description = "Perl extension for reading from continously updated files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   FileTemp = null;
 
   FileTouch = buildPerlPackage rec {
