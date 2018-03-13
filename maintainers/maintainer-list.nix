@@ -1548,6 +1548,11 @@
     github = "iblech";
     name = "Ingo Blechschmidt";
   };
+  idontgetoutmuch = {
+    email = "dominic@steinitz.org";
+    github = "idontgetoutmuch";
+    name = "Dominic Steinitz";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
