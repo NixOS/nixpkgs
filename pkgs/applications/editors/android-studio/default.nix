@@ -6,6 +6,11 @@ let
     };
   };
 in rec {
+  # Old alias
+  preview = beta;
+
+  # Attributes are named by the channels
+
   # linux-bundle
   stable = mkStudio {
     pname = "android-studio";
@@ -27,11 +32,11 @@ in rec {
   };
 
   # linux-beta-bundle
-  preview = mkStudio {
+  beta = mkStudio {
     pname = "android-studio-preview";
-    version = "3.1.0.12"; # "Android Studio 3.1 Beta 4"
-    build = "173.4615496";
-    sha256Hash = "0rp0vg5hwv7kdrirydvnwznpfwibwwm2dxsbhbxfkyahph10ly72";
+    version = "3.1.0.14"; # "Android Studio 3.1 RC 2"
+    build = "173.4640767";
+    sha256Hash = "00v8qbis4jm31v1g9989f9y15av6p3ywj8mmfxcsc3hjlpzdgid8";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";
