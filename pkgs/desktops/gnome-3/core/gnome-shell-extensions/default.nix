@@ -1,5 +1,4 @@
-{ stdenv, intltool, fetchurl, libgtop, pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool, gnome3, file }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_52, glib, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-${version}";
@@ -11,16 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-shell-extensions"; attrPath = "gnome3.gnome-shell-extensions"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-shell-extensions";
+      attrPath = "gnome3.gnome-shell-extensions";
+    };
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib libgtop intltool itstool
-                  makeWrapper file ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
+  buildInputs = [ spidermonkey_52 ];
 
-  configureFlags = [ "--enable-extensions=all" ];
+  mesonFlags = [ "-Dextension_set=all" ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeShell/Extensions;
