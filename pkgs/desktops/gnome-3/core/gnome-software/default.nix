@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-software-${version}";
-  version = "3.26.7";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00lfzvlicqd8gk5ijnjdi36ikmhdzvfjj993rpf7mm04ncw4k0za";
+    sha256 = "0zwbgxzl805c4l8kwy5bn3p91s2qxlcn4syzzg4vd4kilc6nnjwk";
   };
 
   patches = [

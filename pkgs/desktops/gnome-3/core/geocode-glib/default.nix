@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "geocode-glib-${version}";
-  version = "3.24.0";
+  version = "3.25.4.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/geocode-glib/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "19c1fef4fd89eb4bfe6decca45ac45a2eca9bb7933be560ce6c172194840c35e";
+    sha256 = "0y6p5l2jrr78p7l4hijjhclzbap005y6h06g3aiglg9i5hk6j0gi";
   };
 
   passthru = {

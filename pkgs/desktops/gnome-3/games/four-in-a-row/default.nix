@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "four-in-a-row-${version}";
-  version = "3.22.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/four-in-a-row/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "bc4194e8ab6d1d2a6a63a2e91945cd5465f49ebf0dae2eecacc66e69db56a420";
+    sha256 = "1iszaay2r92swb0q67lmip6r1w3hw2dwmlgnz9v2h6blgdyncs4k";
   };
 
   passthru = {

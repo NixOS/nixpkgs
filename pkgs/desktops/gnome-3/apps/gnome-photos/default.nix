@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-photos-${version}";
-  version = "3.26.3";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-photos/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "028de4c8662b7d1dc3ca6c3fbe3ce7f6bb90dd097708e99f235a409756dbadab";
+    sha256 = "1n280j7crgwlzyf09j66f1zkrnnhfrr8pshn824njs1xyk3g0q11";
   };
 
   passthru = {

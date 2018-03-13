@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "dconf-editor-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/dconf-editor/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "28b453fe49c49d7dfaf07c85c01d7495913f93ab64a0b223c117eb17d1cb8ad1";
+    sha256 = "0nhcpwqrkmpxbhaf0cafvy6dlp6s7vhm5vknl4lgs3l24zc56ns5";
   };
 
   passthru = {

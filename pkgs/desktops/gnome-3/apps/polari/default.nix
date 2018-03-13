@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "polari-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/polari/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "2f36361dacf5d924d134f231fdb36ec4539f7495fce325d9b2f2728bd17cc190";
+    sha256 = "08zgdqrnxl752nv0gac1k7wvjd4j7h5n4c0flrq7q337p40k3dd5";
   };
 
   passthru = {

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-calculator-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "62215b37fcd73a6bbb106ebd0f25051c81ff0cf6ad84fd4a3ea176bceb5863c7";
+    sha256 = "1qnfvmf615v52c8h1f6zxbvpywi3512hnzyf9azvxb8a6q0rx1vn";
   };
 
   passthru = {

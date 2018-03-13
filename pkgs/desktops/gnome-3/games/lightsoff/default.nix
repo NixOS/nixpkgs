@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "lightsoff-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d12572bc7b70481320ec90c6130ad794b559a9990d08bef158a1d826aaa35976";
+    sha256 = "0rwh9kz6aphglp79cyrfjab6vy02vclq68f646zjgb9xgg6ar73g";
   };
 
   passthru = {

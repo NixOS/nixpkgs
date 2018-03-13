@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "libgweather-${version}";
-  version = "3.26.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgweather/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "fca78470b345bce948e0333cab0a7c52c32562fc4a75de37061248a64e8fc4b8";
+    sha256 = "13z12ra5fhn7xhsrskd7q8dnc2qnd1kylhndg6zlhk0brj6yfjsr";
   };
 
   passthru = {

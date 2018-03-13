@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "baobab-${version}";
-  version = "3.26.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/baobab/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7a59ab5945f5d90725231b10d85a1893403f56660b1627c111d2b4eeb1ef787e";
+    sha256 = "0qsx7vx5c3n4yxlxbr11sppw7qwcv9z3g45b5xb9y7wxw5lv42sk";
   };
 
   passthru = {

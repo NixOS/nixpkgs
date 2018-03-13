@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "eog-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/eog/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "b53e3d4dfa7d0085b829a5fb95f148a099803c00ef276be7685efd5ec38807ad";
+    sha256 = "0d8fi5ydsh8n7d85dps8svl1bhid1p8jbnlwiqywj2gd2wpxpyjv";
   };
 
   passthru = {

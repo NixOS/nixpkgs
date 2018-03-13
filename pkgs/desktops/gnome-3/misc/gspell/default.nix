@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gspell-${version}";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gspell/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "f4d329348775374eec18158f8dcbbacf76f85be5ce002a92d93054ece70ec4de";
+    sha256 = "0ickabxngl567lv1jax4fasr5brq29hg04ymaay47pjfp32w4zqv";
   };
 
   passthru = {

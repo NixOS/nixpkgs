@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "file-roller-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "3e677b8e1c2f19aead69cf4fc419a19fc3373aaf5d7bf558b4f077f10bbba8a5";
+    sha256 = "15pn2m80x45bzibig4zrqybnbr0n1f9wpqx7f2p6difldns3jwf1";
   };
 
   passthru = {

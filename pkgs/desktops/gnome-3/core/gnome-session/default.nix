@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
-  version = "3.26.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d9414b368db982d3837ca106e64019f18e6cdd5b13965bea6c7d02ddf5103708";
+    sha256 = "1ldcalj9i7qharvw8k8gf7pkcvwb1qwiag2ckffx9x8ic2d3v00b";
   };
 
   passthru = {

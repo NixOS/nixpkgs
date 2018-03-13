@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-boxes-${version}";
-  version = "3.26.2";
+  version = "3.27.92";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d00fc083182963dc1bbdee5e743ceb28ba03fbf5a9ea87c78d29dca5fb5b9210";
+    sha256 = "1v1br4zh2w3w70np5imi31md6lnqamabiin521f806rdrxsnyggq";
   };
 
   passthru = {

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   name = "empathy-${version}";
-  version = "3.12.14";
+  version = "3.25.90";
 
   src = fetchurl {
     url = "mirror://gnome/sources/empathy/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7d86942ce97edd10ade0e6ae6a210d35e4d627fe4d223377d71fd1840bc6e3a3";
+    sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 
   passthru = {

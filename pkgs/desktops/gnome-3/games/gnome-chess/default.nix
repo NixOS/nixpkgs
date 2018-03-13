@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-chess-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "a0f6f862ab7067626a3a86cdc9c14dde595e38e6719e0198cb967e11facf1f12";
+    sha256 = "1vxgb36njv4v3bgdpwxd89rvr6s6pkbh9d3xislxqry2yp4f03w0";
   };
 
   passthru = {

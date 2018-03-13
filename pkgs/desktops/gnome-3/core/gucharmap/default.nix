@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "gucharmap-${version}";
-  version = "10.0.3";
+  version = "10.0.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gucharmap/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "ac07d75924e2d8f436d9492e8f7d54cf109404d34de06886a3967563cd1726a4";
+    sha256 = "00gh3lll6wykd2qg1lrj05a4wvscsypmrx7rpb6jsbvb4scnh9mv";
   };
 
   passthru = {

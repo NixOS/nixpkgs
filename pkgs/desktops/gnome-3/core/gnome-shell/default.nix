@@ -13,11 +13,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "gnome-shell-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "e5a87f2f838d981db9823352b90b2ce2f40d24d31ed9f062dccfa41b820e0b1c";
+    sha256 = "0kmsh305cfr3fg40rhwykqbl466lwcq9djda25kf29ib7h6w1pn7";
   };
 
   # Needed to find /etc/NetworkManager/VPN

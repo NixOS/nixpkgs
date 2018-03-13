@@ -8,13 +8,13 @@
 , fontconfig, sound-theme-freedesktop, grilo }:
 
 let
-  version = "3.26.2";
+  version = "3.28.0";
 in stdenv.mkDerivation rec {
   name = "gnome-control-center-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "07aed27d6317f2cad137daa6d94a37ad02c32b958dcd30c8f07d0319abfb04c5";
+    sha256 = "0nyx5nl2rky0249rdcy0hsccnxf3angpya0q859rrbrwaixqnxh3";
   };
 
   nativeBuildInputs = [
