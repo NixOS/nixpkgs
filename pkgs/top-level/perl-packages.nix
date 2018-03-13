@@ -5702,6 +5702,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FilePid = buildPerlPackage rec {
+    name = "File-Pid-1.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CW/CWEST/${name}.tar.gz";
+      sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
+    };
+    propagatedBuildInputs = [ ClassAccessor ];
+    meta = {
+      license = stdenv.lib.licenses.free; # Same as Perl
+      description = "Pid File Manipulation";
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   Filepushd = buildPerlPackage {
     name = "File-pushd-1.005";
     src = fetchurl {
