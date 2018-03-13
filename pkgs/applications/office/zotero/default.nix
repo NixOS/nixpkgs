@@ -31,7 +31,7 @@ zoteroSrc = stdenv.mkDerivation rec {
 
 fhsEnv = buildFHSUserEnv {
   name = "zotero-fhs-env";
-  targetPkgs = pkgs: with pkgs; with xlibs; [
+  targetPkgs = pkgs: with pkgs; with xorg; [
     gtk3 dbus-glib
     libXt nss
   ];

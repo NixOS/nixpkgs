@@ -15,7 +15,7 @@
 , cairo
 , pango
 , gnome3
-, xlibs
+, xorg
 , libpng12
 , freetype
 , fontconfig
@@ -143,11 +143,11 @@ let
         cairo
         pango
         gnome3.dconf
-        xlibs.libX11
-        xlibs.libXext
-        xlibs.libXrender
-        xlibs.libXinerama
-        xlibs.libXfixes
+        xorg.libX11
+        xorg.libXext
+        xorg.libXrender
+        xorg.libXinerama
+        xorg.libXfixes
         libpng12
         libidn
         zlib

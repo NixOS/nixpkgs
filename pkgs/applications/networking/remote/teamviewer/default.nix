@@ -9,7 +9,7 @@ let
 
   mkLdPath = ps: lib.makeLibraryPath (with ps; [ qt4 dbus alsaLib ]);
 
-  deps = ps: (with ps; [ dbus zlib alsaLib fontconfig freetype libpng12 libjpeg ]) ++ (with ps.xlibs; [ libX11 libXext libXdamage libXrandr libXrender libXfixes libSM libXtst libXinerama]);
+  deps = ps: (with ps; [ dbus zlib alsaLib fontconfig freetype libpng12 libjpeg ]) ++ (with ps.xorg; [ libX11 libXext libXdamage libXrandr libXrender libXfixes libSM libXtst libXinerama]);
   tvldpath32 = lib.makeLibraryPath (with pkgsi686Linux; [ qt4 "$out/share/teamviewer/tv_bin/wine" ] ++ deps pkgsi686Linux);
   tvldpath64 = lib.makeLibraryPath (deps pkgs);
 in

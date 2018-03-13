@@ -3,7 +3,7 @@
 
 , bison, coreutils, flex, git, gperf, ninja, pkgconfig, python2, which
 
-, xlibs, libXcursor, libXScrnSaver, libXrandr, libXtst
+, xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
@@ -103,8 +103,8 @@ qtModule {
     pciutils
 
     # X11 libs
-    xlibs.xrandr libXScrnSaver libXcursor libXrandr xlibs.libpciaccess libXtst
-    xlibs.libXcomposite
+    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
+    xorg.libXcomposite
   ];
 
   dontUseNinjaBuild = true;
