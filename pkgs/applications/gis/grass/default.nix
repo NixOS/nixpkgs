@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, lib
 }:
 
 stdenv.mkDerivation {
@@ -14,6 +14,10 @@ stdenv.mkDerivation {
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+
+  # On Darwin the installer tries to symlink the help files into a system
+  # directory
+  patches = [] ++ lib.optional stdenv.isDarwin [ ./no_symbolic_links.patch ];
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
