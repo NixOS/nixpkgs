@@ -4045,6 +4045,8 @@ with pkgs;
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  overmind = callPackage ../applications/misc/overmind { };
+
   owncloud = owncloud70;
 
   inherit (callPackages ../servers/owncloud { })
