@@ -5,20 +5,6 @@ systemConfig=@systemConfig@
 export HOME=/root PATH="@path@"
 
 
-# Process the kernel command line.
-for o in $(</proc/cmdline); do
-    case $o in
-        boot.debugtrace)
-            # Show each command.
-            set -x
-            ;;
-        resume=*)
-            set -- $(IFS==; echo $o)
-            resumeDevice=$2
-            ;;
-    esac
-done
-
 
 # Print a greeting.
 echo
@@ -48,6 +34,34 @@ if [ ! -e /proc/1 ]; then
     }
     source @earlyMountScript@
 fi
+
+# Process the kernel command line.
+for o in $(</proc/cmdline); do
+    case $o in
+        boot.debugtrace)
+            # Show each command.
+            set -x
+            ;;
+        resume=*)
+            set -- $(IFS==; echo $o)
+            resumeDevice=$2
+            ;;
+        root=*)
+            # If a root device is specified on the kernel command
+            # line, make it available through the symlink /dev/root.
+            # Recognise LABEL= and UUID= to support UNetbootin.
+            set -- $(IFS==; echo $o)
+            if [ $2 = "LABEL" ]; then
+                root="/dev/disk/by-label/$3"
+            elif [ $2 = "UUID" ]; then
+                root="/dev/disk/by-uuid/$3"
+            else
+                root=$2
+            fi
+            ln -s "$root" /dev/root
+            ;;
+    esac
+done
 
 
 echo "booting system configuration $systemConfig" > /dev/kmsg
