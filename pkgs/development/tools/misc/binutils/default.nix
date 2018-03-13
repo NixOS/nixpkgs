@@ -8,7 +8,7 @@ let
   # Note to whoever is upgrading this: 2.29 is broken.
   # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
   # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
-  version = "2.28.1";
+  version = "2.29.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
+    sha256 = "1k2mziqn0pbxpxnkwxrl824xnmivcqdkb0insap71yv92gsdy28m";
   };
 
   patches = [
