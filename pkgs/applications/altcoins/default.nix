@@ -10,8 +10,8 @@ rec {
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
-  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { boost = boost165; withGui = true; };
-  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { boost = boost165; withGui = false; };
+  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
+  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
   bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
