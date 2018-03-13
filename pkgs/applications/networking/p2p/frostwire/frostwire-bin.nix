@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dl.frostwire.com/frostwire/${version}/frostwire-${version}.noarch.tar.gz";
-    sha256 = "0di1kfvdjglav5pm23gcggfn9qznk5viah55jggv4cb6h16vxc3p";
+    sha256 = "0n1g0am3d2fxw4a4zzzyif1fal1x3xch9q7743jhkkm3mldl2grw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
