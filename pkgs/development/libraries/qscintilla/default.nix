@@ -3,6 +3,11 @@
 , withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
 }:
 
+# Fix Xcode 8 compilation problem
+let xcodePatch =
+  fetchurl { url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch";
+             sha256 = "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9"; };
+in
 stdenv.mkDerivation rec {
   pname = "qscintilla";
   version = "2.9.4";
@@ -18,6 +23,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
   nativeBuildInputs = [ unzip ]
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
+
+
+  patches = [] ++ lib.optional withQt5 [ xcodePatch ];
 
   enableParallelBuilding = true;
 
