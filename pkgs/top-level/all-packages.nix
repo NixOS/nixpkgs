@@ -9234,6 +9234,8 @@ with pkgs;
 
   gtksourceview3 = callPackage ../development/libraries/gtksourceview/3.x.nix { };
 
+  gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };

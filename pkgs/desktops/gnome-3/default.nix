@@ -53,7 +53,7 @@ let
   ];
 
   inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
-    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell
     clutter clutter-gst clutter-gtk cogl gtkvnc;
 
