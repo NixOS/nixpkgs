@@ -86,7 +86,7 @@ in
       versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: code names must only increase in alphabetical order.
-      codeName = "Impala";
+      codeName = "Jackrabbit";
     };
 
     # Generate /etc/os-release.  See
