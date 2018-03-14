@@ -13,7 +13,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libsepol libselinux ustr bzip2 libaudit ];
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
+  NIX_CFLAGS_COMPILE = [
+    "-fstack-protector-all"
+    "-std=gnu89"
+    # these were added to fix build with gcc7. review on update
+    "-Wno-error=format-truncation"
+    "-Wno-error=implicit-fallthrough"
+  ];
 
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
