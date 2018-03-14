@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libelf }:
 
 let
-  version = "20170709";
+  version = "20180129";
   src = fetchurl {
     url = "http://www.prevanders.net/libdwarf-${version}.tar.gz";
     sha512 = "afff6716ef1af5d8aae2b887f36b9a6547fb576770bc6f630b82725ed1e59cbd"
