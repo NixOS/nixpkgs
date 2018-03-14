@@ -38,6 +38,18 @@ with pkgs;
 
   stdenvNoCC = stdenv.override { cc = null; };
 
+  stdenvBashGlibc = stdenv.override {
+    allowedRequisites = null;
+    cc = wrapCCWith {
+      cc = stdenv.cc.cc;
+      libc = glibc_bash;
+      bintools = wrapBintoolsWith {
+        bintools = binutils-unwrapped;
+        libc = glibc_bash;
+      };
+    };
+  };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -11032,6 +11044,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.10) {
       inherit newScope;
       inherit stdenv fetchurl makeSetupHook makeWrapper;
+      qtbaseStdenv = if stdenv.cc.libc == glibc then stdenvBashGlibc else stdenv;
       bison = bison2; # error: too few arguments to function 'int yylex(...
       inherit cups;
       harfbuzz = harfbuzz-icu;
