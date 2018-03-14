@@ -25,6 +25,7 @@ let
     minio    = import ./exporters/minio.nix    { inherit config lib pkgs; };
     nginx    = import ./exporters/nginx.nix    { inherit config lib pkgs; };
     node     = import ./exporters/node.nix     { inherit config lib pkgs; };
+    postfix  = import ./exporters/postfix.nix  { inherit config lib pkgs; };
     snmp     = import ./exporters/snmp.nix     { inherit config lib pkgs; };
     unifi    = import ./exporters/unifi.nix    { inherit config lib pkgs; };
     varnish  = import ./exporters/varnish.nix  { inherit config lib pkgs; };
@@ -166,4 +167,6 @@ in
       conf = cfg.${name};
     }) exporterOpts)
   );
+
+  meta.doc = ./exporters.xml;
 }
