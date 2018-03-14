@@ -38,13 +38,7 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
       ln -sv "$file" .
     done
 
-    ${if stdenv.isAarch64 then ''
-      ln -sv ${src}/ArmPkg .
-      ln -sv ${src}/ArmPlatformPkg .
-      ln -sv ${src}/ArmVirtPkg .
-      ln -sv ${src}/EmbeddedPkg .
-      ln -sv ${src}/OvmfPkg .
-    '' else if seabios != null then ''
+    ${if seabios != null then ''
         cp -r ${src}/OvmfPkg .
         chmod +w OvmfPkg/Csm/Csm16
         cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
@@ -58,12 +52,10 @@ stdenv.mkDerivation (edk2.setup projectDscPath {
     ''}
   '';
 
-  buildPhase = if stdenv.isAarch64 then ''
-      build -n $NIX_BUILD_CORES
-    '' else if seabios == null then ''
-      build -n $NIX_BUILD_CORES ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
+  buildPhase = if seabios == null then ''
+      build ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
     '' else ''
-      build -n $NIX_BUILD_CORES -D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
+      build -D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
     '';
 
   postFixup = if stdenv.isAarch64 then ''
