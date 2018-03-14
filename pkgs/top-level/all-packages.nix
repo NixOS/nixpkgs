@@ -20899,6 +20899,8 @@ with pkgs;
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
+  limesuite = callPackage ../applications/misc/limesuite { };
+
   mg = callPackage ../applications/editors/mg { };
 
   mpvc = callPackage ../applications/misc/mpvc { };
