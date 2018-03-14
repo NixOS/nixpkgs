@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = https://nextcloud.com;
     license = licenses.gpl2;
     maintainers = with maintainers; [ caugner ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
