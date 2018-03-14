@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
@@ -25,9 +25,8 @@ stdenv.mkDerivation {
     ( "--with-icu=" +       (if withIcu       then "yes" else "no") )
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib freetype cairo ] # recommended by upstream
-    ++ libintlOrEmpty;
+  nativeBuildInputs = [ pkgconfig libintl ];
+  buildInputs = [ glib freetype cairo ]; # recommended by upstream
   propagatedBuildInputs = []
     ++ optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ]

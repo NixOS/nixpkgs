@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     ++ optional cupsSupport cups;
   #TODO: colord?
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
-
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 

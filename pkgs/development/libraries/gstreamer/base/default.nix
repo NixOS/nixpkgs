@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, python, gstreamer, gobjectIntrospection
 , orc, alsaLib, libXv, pango, libtheora
-, cdparanoia, libvisual, libintlOrEmpty
+, cdparanoia, libvisual, libintl
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    orc libXv pango libtheora cdparanoia
+    orc libXv pango libtheora cdparanoia libintl
   ]
-  ++ libintlOrEmpty
   ++ stdenv.lib.optional stdenv.isLinux alsaLib
   ++ stdenv.lib.optional (!stdenv.isDarwin) libvisual;
 
@@ -39,8 +38,6 @@ stdenv.mkDerivation rec {
     # Undefined symbols _cdda_identify and _cdda_identify_scsi in cdparanoia
     "--disable-cdparanoia"
   ] else null;
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   enableParallelBuilding = true;
 }

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json-glib, libsoup, geoip
+{ fetchurl, stdenv, intltool, pkgconfig, glib, json-glib, libsoup, geoip
 , dbus, dbus-glib, modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
 }:
 
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
     pkgconfig intltool wrapGAppsHook gobjectIntrospection
   ];
 
-  buildInputs = libintlOrEmpty ++
-   [ glib json-glib libsoup geoip
+  buildInputs = [ glib json-glib libsoup geoip
      dbus dbus-glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
@@ -36,8 +35,6 @@ stdenv.mkDerivation rec {
                        "--disable-cdma-source"
                        "--disable-modem-gps-source"
                        "--disable-nmea-source" ];
-
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
 
   postInstall = ''
     sed -i $dev/lib/pkgconfig/libgeoclue-2.0.pc -e "s|includedir=.*|includedir=$dev/include|"
