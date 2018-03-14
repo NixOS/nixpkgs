@@ -384,7 +384,7 @@ let
 
   gspell = callPackage ./misc/gspell { };
 
-  libgames-support = callPackage ./misc/libgames-support { };
+  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
 
   libgda = callPackage ./misc/libgda { };
 
@@ -428,6 +428,7 @@ let
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   libcanberra_gtk2 = libcanberra-gtk2; # added 2018-02-25
+  libgames-support = libgnome-games-support; # added 2018-03-14
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
   networkmanager_iodine = networkmanager-iodine; # added 2018-02-25

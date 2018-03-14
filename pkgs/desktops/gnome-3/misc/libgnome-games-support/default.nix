@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.libgames-support";
+      attrPath = "gnome3.${pname}";
     };
   };
 
