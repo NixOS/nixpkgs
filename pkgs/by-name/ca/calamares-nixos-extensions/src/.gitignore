@@ -1,2 +1,4 @@
+.kdev4/
 build/
+*.kdev4
 *.qmlc

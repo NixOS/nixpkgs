@@ -35,14 +35,14 @@ include( "${CALAMARES_USE_FILE}" )
 # Typically you would use only one branding, since that's
 # the (single) branding for your distro.
 #
-calamares_add_branding_subdirectory( branding/default )
-calamares_add_branding_subdirectory( branding/fancy )
+calamares_add_branding_subdirectory( branding/default NAME default )
+calamares_add_branding_subdirectory( branding/fancy NAME fancy )
 
 # This one has files in subdirectories
-calamares_add_branding_subdirectory( branding/samegame SUBDIRECTORIES img )
+calamares_add_branding_subdirectory( branding/samegame NAME samegame SUBDIRECTORIES img )
 
 # KaOS branding, with translations
-calamares_add_branding_subdirectory( branding/kaos_branding )
+calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 
 ### MODULES
 #
