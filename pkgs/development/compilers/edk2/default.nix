@@ -7,6 +7,8 @@ targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch64 then
+  "AARCH64"
 else
   throw "Unsupported architecture";
 
@@ -48,7 +50,7 @@ edk2 = stdenv.mkDerivation {
     homepage = https://sourceforge.net/projects/edk2/;
     license = stdenv.lib.licenses.bsd2;
     branch = "UDK2017";
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
   };
 
   passthru = {
