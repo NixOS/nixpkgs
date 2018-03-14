@@ -16607,7 +16607,9 @@ in {
       patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
     '';
 
-    inherit (py) meta;
+    meta = py.meta // {
+      platforms = platforms.linux;
+    };
   };
 
   tlslite = buildPythonPackage rec {
