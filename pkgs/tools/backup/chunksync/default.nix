@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  version = "0.3";
+  version = "0.4";
   name = "chunksync-${version}";
 
   src = fetchurl {
     url = "http://chunksync.florz.de/chunksync_${version}.tar.gz";
-    sha256 = "e0c27f925c5cf811798466312a56772864b633728c433fb2fcce23c8712b52fc";
+    sha256 = "1gwqp1kjwhcmwhynilakhzpzgc0c6kk8c9vkpi30gwwrwpz3cf00";
   };
 
   buildInputs = [openssl perl];
