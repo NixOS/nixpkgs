@@ -118,12 +118,6 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  ##     • Could not deduce (Semigroup (ParseResult m))
-  ##         arising from the superclasses of an instance declaration
-  ##       from the context: Monoid m
-  haskell-src-exts = super.haskell-src-exts_1_20_2;
-
-  ## Needs bump to a versioned attribute
   hspec = overrideCabal super.hspec_2_4_8 (drv: {
     ## Setup: Encountered missing dependencies:
     ## hspec-core ==2.4.4, hspec-discover ==2.4.4

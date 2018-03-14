@@ -603,13 +603,10 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_20_2;
-  };
+  }));
 
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_0; hackage-db = self.hackage-db_2_0_1; });
-  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_2; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -847,14 +844,8 @@ self: super: {
 
   # Hoogle needs newer versions than lts-11 provides. lambdabot-haskell-plugins
   # depends on Hoogle and therefore needs to use the same version.
-  hoogle = super.hoogle.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_2;
-  };
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
     haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
-  };
-  haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
-    haskell-src-exts = self.haskell-src-exts_1_20_2;
   };
 
   # These packages depend on each other, forming an infinite loop.
