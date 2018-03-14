@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; allBut [ "aarch64-linux" ];
+    platforms = stdenv.lib.platforms.x86;
     maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };
