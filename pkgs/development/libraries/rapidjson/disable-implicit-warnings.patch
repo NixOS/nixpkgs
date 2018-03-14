@@ -1,0 +1,22 @@
+commit e3c3cd3bd5b8feae804ae15d97744774ef301cbb
+Author: Tom Hunger <tehunger@gmail.com>
+Date:   Sun Feb 25 22:26:38 2018 +0000
+
+    bla
+
+diff --git a/include/rapidjson/internal/regex.h b/include/rapidjson/internal/regex.h
+index 422a5240..d24d513c 100644
+--- a/include/rapidjson/internal/regex.h
++++ b/include/rapidjson/internal/regex.h
+@@ -40,6 +40,11 @@ RAPIDJSON_DIAG_OFF(4512) // assignment operator could not be generated
+ #define RAPIDJSON_REGEX_VERBOSE 0
+ #endif
+ 
++#if __GNUC__ >= 7
++RAPIDJSON_DIAG_PUSH
++RAPIDJSON_DIAG_OFF(implicit-fallthrough)
++#endif
++
+ RAPIDJSON_NAMESPACE_BEGIN
+ namespace internal {
+ 

@@ -581,6 +581,8 @@ in {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
+  pyarrow = callPackage ../development/python-modules/pyarrow { };
+
   async = buildPythonPackage rec {
     name = "async-0.6.1";
     disabled = isPy3k;

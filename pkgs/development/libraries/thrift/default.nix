@@ -1,5 +1,5 @@
 { stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
-, flex, twisted
+, flex, twisted, cmake, withStatic ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -17,16 +17,22 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
+  cmakeFlags = [
+    "-DBUILD_TESTING=OFF"
+    "-DBUILD_EXAMPLES=OFF"
+    "-DBUILD_TUTORIALS=OFF"
+    "-DWITH_SHARED_LIB=ON"
+  ] ++ stdenv.lib.optional withStatic [ "-DWITH_STATIC_LIB=ON" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost zlib libevent openssl python bison flex twisted
+    boost zlib libevent openssl python bison flex twisted cmake
   ];
 
   preConfigure = "export PY_PREFIX=$out";
 
   # TODO: package boost-test, so we can run the test suite. (Currently it fails
   # to find libboost_unit_test_framework.a.)
-  configureFlags = "--enable-tests=no";
   doCheck = false;
 
   meta = with stdenv.lib; {
