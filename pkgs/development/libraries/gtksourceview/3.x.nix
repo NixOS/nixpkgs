@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango
+{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
 , libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
 
 let
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gettext perl gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig intltool gettext perl gobjectIntrospection vala_0_40 ]
     ++ stdenv.lib.optionals doCheck checkInputs;
 
   buildInputs = [ atk cairo glib pango libxml2 ];
