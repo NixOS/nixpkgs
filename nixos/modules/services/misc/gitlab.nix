@@ -143,6 +143,7 @@ let
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
     GITLAB_STATE_PATH = "${cfg.statePath}";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
+    SCHEMA = "${cfg.statePath}/db/schema.rb";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
     GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
     GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
@@ -566,6 +567,7 @@ in {
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
         mkdir -p ${cfg.statePath}/shell
+        mkdir -p ${cfg.statePath}/db
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
@@ -588,6 +590,7 @@ in {
         touch ${gitlabEnv.HOME}/.ssh/authorized_keys
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
 
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
