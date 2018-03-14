@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
-  buildInputs = [ libuuid ] ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
+  buildInputs = [ libuuid gettext ];
 
   configureFlags =
     if stdenv.isLinux then [
