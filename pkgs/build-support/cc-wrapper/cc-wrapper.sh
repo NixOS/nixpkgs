@@ -137,6 +137,15 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE "${hardeningCFlags[@]}")
 extraBefore=()
 
+# Don't error on warning
+# Provides better compatibility because "Clang" and "GCC"
+# differ greatly in what they consider a warning.
+# This is the default but we need to override it here
+# because some packages set "-Werror" (even in releases!)
+# See https://groups.google.com/forum/#!topic/nix-devel/xueZrmpSDoo
+# for discussion
+extraAfter+=("-Wno-error")
+
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
