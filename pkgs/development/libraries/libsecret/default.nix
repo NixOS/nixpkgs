@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk-doc
-, libgcrypt, gobjectIntrospection, vala_0_38, gnome3 }:
+, libgcrypt, gobjectIntrospection, vala_0_38, gnome3, libintl }:
 let
   pname = "libsecret";
   version = "0.18.5";
