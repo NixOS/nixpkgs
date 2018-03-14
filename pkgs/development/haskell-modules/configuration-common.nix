@@ -849,7 +849,6 @@ self: super: {
   # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
     haskell-src-exts = self.haskell-src-exts_1_20_2;
-    http-conduit = self.http-conduit_2_3_0;
   };
   lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
     haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
