@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, itstool, librsvg, libxml2 }:
+{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, wrapGAppsHook, gobjectIntrospection
+, gettext, itstool, libxml2, gnome3, glib, gtk3, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "gnome-chess-${version}";
@@ -10,15 +10,20 @@ stdenv.mkDerivation rec {
     sha256 = "1vxgb36njv4v3bgdpwxd89rvr6s6pkbh9d3xislxqry2yp4f03w0";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-chess"; attrPath = "gnome3.gnome-chess"; };
-  };
+  nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 wrapGAppsHook gobjectIntrospection ];
+  buildInputs = [ glib gtk3 librsvg gnome3.defaultIconTheme ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool librsvg libxml2
-    gnome3.defaultIconTheme
-  ];
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-chess";
+      attrPath = "gnome3.gnome-chess";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Chess;
