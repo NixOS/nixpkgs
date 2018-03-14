@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
 let
-  version = "2.6.9";
+  version = "2.6.10";
   goPackagePath = "github.com/buildkite/agent";
 in
 buildGoPackage {
@@ -12,7 +12,7 @@ buildGoPackage {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "0rlinj7dcr8vzl1pb15nfny8jkvvj50i8czf4ahv26avnfycm4pz";
+    sha256 = "07065hhhb418w5qlqnyiap45r59paysysbwz1l7dmaw3j4q8m8rg";
   };
 
   nativeBuildInputs = [ makeWrapper ];
