@@ -51,6 +51,10 @@ cmakeConfigurePhase() {
     # we never want to use the global macOS SDK
     cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
 
+    # disable OSX deployment target
+    # we don't want our binaries to have a "minimum" OSX version
+    cmakeFlags="-DCMAKE_OSX_DEPLOYMENT_TARGET= $cmakeFlags"
+
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
     # basename as the install name, which means that, on Darwin, they
