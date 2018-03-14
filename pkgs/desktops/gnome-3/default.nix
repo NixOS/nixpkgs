@@ -29,7 +29,7 @@ let
     gtk3.out # for gtk-update-icon-cache
     glib-networking gvfs dconf gnome-backgrounds gnome-control-center
     gnome-menus gnome-settings-daemon gnome-shell
-    gnome-themes-standard defaultIconTheme gnome-shell-extensions
+    gnome-themes-extra defaultIconTheme gnome-shell-extensions
     pkgs.hicolor-icon-theme
   ];
 
@@ -160,7 +160,7 @@ let
 
   gnome-terminal = callPackage ./core/gnome-terminal { };
 
-  gnome-themes-standard = callPackage ./core/gnome-themes-standard { };
+  gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
   gnome-user-docs = callPackage ./core/gnome-user-docs { };
 
@@ -424,6 +424,7 @@ let
   gnome_settings_daemon = gnome-settings-daemon; # added 2018-02-25
   gnome_shell = gnome-shell; # added 2018-02-25
   gnome_terminal = gnome-terminal; # added 2018-02-25
+  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   libcanberra_gtk2 = libcanberra-gtk2; # added 2018-02-25
