@@ -3,11 +3,11 @@
 , procps, autoreconfHook, utilmacros, gnome2 }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.21";
+  name = "intel-gpu-tools-1.22";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.xz";
-    sha256 = "0gvh317dg5c7kvjxxkh8g70hh3r3dc73mc4dzyvfa8nb4ix6xbyr";
+    sha256 = "0p4swf9577p6hzglw1lh2sz63wjkk37b7691saj2qw8ha7fc2rix";
   };
 
   nativeBuildInputs = [ pkgconfig utilmacros ];
