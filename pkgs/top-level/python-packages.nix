@@ -13013,8 +13013,10 @@ in {
 
     buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
-    # error: invalid command 'test'
-    doCheck = false;
+    checkInputs = with self; [ bottle pytest nose ];
+    checkPhase = ''
+      py.test -k "not test_ssl_in_static_libs" tests
+    '';
 
     preConfigure = ''
       substituteInPlace setup.py --replace '--static-libs' '--libs'
@@ -13024,7 +13026,6 @@ in {
     meta = {
       homepage = http://pycurl.sourceforge.net/;
       description = "Python wrapper for libcurl";
-      platforms = platforms.linux;
     };
   });
 
