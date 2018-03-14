@@ -5,3 +5,11 @@ gettextDataDirsHook() {
 }
 
 addEnvHooks "$hostOffset" gettextDataDirsHook
+
+# libintl must be listed in load flags on non-Glibc
+# it doesn't hurt to have it in Glibc either though
+gettextLdflags() {
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lintl"
+}
+
+addEnvHooks "$hostOffset" gettextLdflags
