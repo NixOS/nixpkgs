@@ -1,50 +1,47 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gettext, itstool, libvirt-glib
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, libvirt-glib
 , glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor
+, libcap_ng, numactl, xen, libapparmor, json-glib, webkitgtk
 }:
 
 # TODO: ovirt (optional)
 
-stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
+let
   version = "3.27.92";
+in stdenv.mkDerivation rec {
+  name = "gnome-boxes-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1v1br4zh2w3w70np5imi31md6lnqamabiin521f806rdrxsnyggq";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-boxes"; attrPath = "gnome3.gnome-boxes"; };
-  };
-
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   nativeBuildInputs = [
-    makeWrapper pkgconfig gettext
+    meson ninja vala pkgconfig gettext wrapGAppsHook gobjectIntrospection desktop-file-utils
   ];
 
   buildInputs = [
-    itstool libvirt-glib glib gobjectIntrospection libxml2 gtk3 gtkvnc
-    libvirt spice-gtk spice-protocol libsoup libosinfo systemd
-    tracker tracker-miners vala libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg desktop-file-utils acl libgudev libsecret
+    libvirt-glib glib gtk3 gtkvnc libxml2
+    libvirt spice-gtk spice-protocol libsoup json-glib webkitgtk libosinfo systemd
+    tracker tracker-miners libcap yajl gmp gdbm cyrus_sasl libusb libarchive
+    gnome3.defaultIconTheme librsvg acl libgudev libsecret
     libcap_ng numactl xen libapparmor
   ];
 
   preFixup = ''
-    for prog in "$out/bin/"*; do
-        wrapProgram "$prog" \
-            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-            --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}"
-    done
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-boxes";
+      attrPath = "gnome3.gnome-boxes";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
