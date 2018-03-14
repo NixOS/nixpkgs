@@ -1,4 +1,4 @@
-{ stdenv, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
+{ stdenv, lib, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
 
 let
 
@@ -36,25 +36,24 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
       ln -sv "$file" .
     done
 
-    ${if (seabios == false) then ''
-        ln -sv ${src}/OvmfPkg .
-      '' else ''
+    ${if seabios != null then ''
         cp -r ${src}/OvmfPkg .
         chmod +w OvmfPkg/Csm/Csm16
         cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
-      ''}
-
-    ${if (secureBoot == true) then ''
-        ln -sv ${src}/SecurityPkg .
-        ln -sv ${src}/CryptoPkg .
-      '' else ''
-      ''}
-    '';
-
-  buildPhase = if (seabios == false) then ''
-      build ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
     '' else ''
-      build -D CSM_ENABLE -D FD_SIZE_2MB ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
+        ln -sv ${src}/OvmfPkg .
+    ''}
+
+    ${lib.optionalString secureBoot ''
+      ln -sv ${src}/SecurityPkg .
+      ln -sv ${src}/CryptoPkg .
+    ''}
+  '';
+
+  buildPhase = if seabios == null then ''
+      build ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
+    '' else ''
+      build -D CSM_ENABLE -D FD_SIZE_2MB ${lib.optionalString secureBoot "-DSECURE_BOOT_ENABLE=TRUE"}
     '';
 
   postFixup = ''
