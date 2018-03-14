@@ -6,12 +6,20 @@ rec {
 
   maxima = callTest ./maxima.nix {};
   libreoffice = callTest ./libreoffice.nix {};
-  pdf = callTest ./latex-zathura.nix {};
 
-  coreutils-versions = test-lib.checkAllExecutables pkgs.coreutils {
-    skipRegexp = "(false|test)";
+  coreutils = callTest ./coreutils.nix {};
+  coreutils-versions = coreutils.versions;
+  coreutils-exit-codes = coreutils.exit-codes;
+
+  pdflatex = callTest ./texlive/pdflatex.nix {};
+  xelatex = callTest ./texlive/xelatex.nix {};
+
+  imagemagick-pdf = callTest ./imagemagick/pdf.nix {};
+
+  zathura = callTest ./zathura.nix {
+    pdfTest = imagemagick-pdf;
   };
-  coreutils-exit-codes = test-lib.checkAllExecutables pkgs.coreutils {
-    outputRegexp = null;
+  evince = callTest ./evince.nix {
+    pdfTest = imagemagick-pdf;
   };
 }
