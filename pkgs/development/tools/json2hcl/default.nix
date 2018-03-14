@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "json2hcl";
@@ -16,9 +16,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/${owner}/${pname}";
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert JSON to HCL, and vice versa";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.matthewbauer ];
+    platforms = platforms.unix;
   };
 }
