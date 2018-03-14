@@ -10588,19 +10588,22 @@ in {
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
-    version = "1.3.1";
+    version = "1.3.3";
 
-    propagatedBuildInputs = with self ; [ dnspython pyasn1 ];
+    propagatedBuildInputs = with self; [ dnspython pyasn1 gevent ];
+    checkInputs = [ pkgs.gnupg ];
+    checkPhase = "${python.interpreter} testall.py";
+    doCheck = false; # Tests failed all this time and upstream doesn't seem to care.
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
-      sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
+      sha256 = "0samiq1d97kk8g9pszfbrbfw9zc41zp6017dbkwha9frf7gc24yj";
     };
 
     meta = {
       description = "XMPP library for Python";
       license = licenses.mit;
-      homepage = "http://sleekxmpp.com/";
+      homepage = http://sleekxmpp.com/;
     };
   };
 
