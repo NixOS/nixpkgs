@@ -6,6 +6,7 @@ rec {
 
   maxima = callTest ./maxima.nix {};
   libreoffice = callTest ./libreoffice.nix {};
+  libreoffice-executables = test-lib.checkAllExecutables pkgs.libreoffice {};
 
   coreutils = callTest ./coreutils.nix {};
   coreutils-versions = coreutils.versions;
