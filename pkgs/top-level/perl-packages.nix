@@ -2349,6 +2349,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigIniFiles = buildPerlPackage rec {
+    name = "Config-IniFiles-2.94";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "d6d38a416da79de874c5f1825221f22e972ad500b6527d190cc6e9ebc45194b4";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ IOstringy ];
+    meta = {
+      description = "A module for reading .ini-style configuration files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   ConfigMerge = buildPerlPackage {
     name = "Config-Merge-1.04";
     src = fetchurl {
