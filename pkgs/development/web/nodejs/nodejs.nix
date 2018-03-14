@@ -8,13 +8,16 @@
 
 with stdenv.lib;
 
-{ enableNpm ? true, version, sha256, patches } @args:
+{ enableNpm ? true, version, sha256, headersSha256, patches } @args:
 
 let
 
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-
+  headers = fetchurl {
+    url = "https://nodejs.org/download/release/v${version}/node-v${version}-headers.tar.gz";
+    sha256 = headersSha256;
+  };
 
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
@@ -54,6 +57,10 @@ in
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 
+    outputs = [ "out" "headers" ];
+    setOutputFlags = false;
+    moveToDev = false;
+
     dontDisableStatic = true;
 
     enableParallelBuilding = true;
@@ -87,6 +94,8 @@ in
 
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+
+      cp ${headers} $headers
     '';
 
     passthru.updateScript = import ./update.nix {
