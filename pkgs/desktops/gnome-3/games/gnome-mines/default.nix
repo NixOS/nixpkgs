@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, intltool, itstool, libxml2, libgames-support, libgee }:
+{ stdenv, fetchurl, meson, ninja, vala, gobjectIntrospection, pkgconfig, gnome3, gtk3, wrapGAppsHook
+, librsvg, gettext, itstool, libxml2, libgames-support, libgee }:
 
 stdenv.mkDerivation rec {
   name = "gnome-mines-${version}";
@@ -10,15 +10,21 @@ stdenv.mkDerivation rec {
     sha256 = "16w55hqaxipcv870n9gpn6qiywbqbyg7bjshaa02r75ias8dfxvf";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-mines"; attrPath = "gnome3.gnome-mines"; };
-  };
+  # gobjectIntrospection for finding vapi files
+  nativeBuildInputs = [ meson ninja vala gobjectIntrospection pkgconfig gettext itstool libxml2 wrapGAppsHook ];
+  buildInputs = [ gtk3 librsvg gnome3.defaultIconTheme libgames-support libgee ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook librsvg intltool itstool libxml2
-    gnome3.defaultIconTheme libgames-support libgee
-  ];
+  postPatch = ''
+    chmod +x data/meson_compile_gschema.py # patchShebangs requires executable file
+    patchShebangs data/meson_compile_gschema.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-mines";
+      attrPath = "gnome3.gnome-mines";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Mines;
