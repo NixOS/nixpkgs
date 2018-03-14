@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =
     [ coreutils openssh ] ++
     stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
