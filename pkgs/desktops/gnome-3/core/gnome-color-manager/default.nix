@@ -14,14 +14,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool desktop-file-utils ];
   buildInputs = [ glib gtk3 libexif libtiff colord colord-gtk libcanberra-gtk3 lcms2 vte exiv2 ];
 
-  patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=791158
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=364865;
-      sha256 = "1zh1aql6rwzfhy2xbdw0jqgzrl9l6wf0jcbdkjd67ykbmynh2cmv";
-    })
-  ];
-
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
