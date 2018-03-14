@@ -12,8 +12,10 @@ can be used for testing. The examples here show what can be done
 with QML in the context of Calamares branding, and provide examples
 and documentation for the framework that Calamares ships with.
 
- - `default/` is a copy of the default branding that is included with Calamares
- - `fancy/` has navigation buttons and a slide counter
+ - `default/` is a copy of the default branding included with Calamares.
+ - `fancy/` has navigation buttons and a slide counter.
+ - `kaos_branding/` is a copy of the KaOS branding component, which
+   has translations and a bunch of fancy graphics.
  - `samegame/` is a copy of the Qt Company "Same Game" QML demo. It
    shows that **any** QML can be used for branding purposes.
 
@@ -49,5 +51,3 @@ support files already installed, in a 600x400 pixel window. By doing
 so, the slideshow can be developed much more quickly (and with more
 fancy effects) than by going through the Calamares install process
 every time.
-
-
