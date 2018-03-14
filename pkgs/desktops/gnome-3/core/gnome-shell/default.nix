@@ -28,8 +28,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales ];
   buildInputs = with gnome3;
     [ gsettings-desktop-schemas gnome-keyring gnome-menus glib gcr json-glib accountsservice
-      libcroco libsecret pkgconfig libsoup polkit gdk_pixbuf
-      (librsvg.override { enableIntrospection = true; })
+      libcroco libsecret pkgconfig libsoup polkit gdk_pixbuf librsvg
       clutter networkmanager libstartup_notification telepathy-glib
       libXtst p11-kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution-data-server
       libical nss gtk gstreamer gdm
