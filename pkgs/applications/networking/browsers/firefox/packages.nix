@@ -18,28 +18,15 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "58.0.2";
+    version = "59.0";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "ff748780492fc66b3e44c7e7641f16206e4c09514224c62d37efac2c59877bdf428a3670bfb50407166d7b505d4e2ea020626fd776b87f6abb6bc5d2e54c773f";
+      url = "https://hg.mozilla.org/releases/mozilla-release/archive/c61f5f5ead48c78a80c80db5c489bdc7cfaf8175.tar.bz2";
+      sha512 = "03yybi1yp9g29jzdfgrq32r7a0gl2jz64w6ai8219cvhx8y95ahxfznj3vm29frrp6c18dk2nlpv2s89iczwm00lnn42r7dn6s6ppl9";
     };
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
-
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1430274
-      # Scheduled for firefox 59
-      (fetchpatch {
-        url = "https://bug1430274.bmoattachments.org/attachment.cgi?id=8943426";
-        sha256 = "12yfss3k61yilrb337dh2rffy5hh83d2f16gqrf5i56r9c33f7hf";
-      })
-
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1388981
-      # Should have been fixed in firefox 57
-    ] ++ lib.optional stdenv.isi686 (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-    });
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
