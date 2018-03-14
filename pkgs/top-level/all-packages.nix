@@ -5777,7 +5777,9 @@ with pkgs;
     chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
   };
 
-  ccl = callPackage ../development/compilers/ccl { };
+  ccl = callPackage ../development/compilers/ccl {
+    inherit (darwin) bootstrap_cmds;
+  };
 
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
