@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.63.3";
+  version = "0.65.5";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -21,6 +21,7 @@
     "arduino" = ps: with ps; [  ];
     "arlo" = ps: with ps; [  ];
     "asterisk_mbox" = ps: with ps; [  ];
+    "august" = ps: with ps; [  ];
     "axis" = ps: with ps; [  ];
     "bbb_gpio" = ps: with ps; [  ];
     "binary_sensor.concord232" = ps: with ps; [  ];
@@ -32,10 +33,12 @@
     "binary_sensor.trend" = ps: with ps; [ numpy ];
     "binary_sensor.workday" = ps: with ps; [  ];
     "blink" = ps: with ps; [  ];
+    "bmw_connected_drive" = ps: with ps; [  ];
     "calendar.caldav" = ps: with ps; [  ];
     "calendar.todoist" = ps: with ps; [ todoist ];
     "camera.foscam" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [  ];
+    "camera.proxy" = ps: with ps; [ pillow ];
     "camera.synology" = ps: with ps; [  ];
     "camera.uvc" = ps: with ps; [  ];
     "camera.xeoma" = ps: with ps; [  ];
@@ -56,7 +59,7 @@
     "cloud" = ps: with ps; [  ];
     "coinbase" = ps: with ps; [  ];
     "comfoconnect" = ps: with ps; [  ];
-    "conversation" = ps: with ps; [  ];
+    "config.config_entries" = ps: with ps; [  ];
     "cover.myq" = ps: with ps; [  ];
     "daikin" = ps: with ps; [  ];
     "datadog" = ps: with ps; [ datadog ];
@@ -89,6 +92,7 @@
     "dweet" = ps: with ps; [  ];
     "dyson" = ps: with ps; [  ];
     "ecobee" = ps: with ps; [  ];
+    "egardia" = ps: with ps; [  ];
     "eight_sleep" = ps: with ps; [  ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors ];
     "enocean" = ps: with ps; [  ];
@@ -96,12 +100,13 @@
     "fan.xiaomi_miio" = ps: with ps; [  ];
     "feedreader" = ps: with ps; [ feedparser ];
     "ffmpeg" = ps: with ps; [  ];
-    "frontend" = ps: with ps; [ user-agents ];
+    "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
     "google" = ps: with ps; [ google_api_python_client oauth2client ];
     "hdmi_cec" = ps: with ps; [  ];
     "hive" = ps: with ps; [  ];
+    "homekit" = ps: with ps; [  ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "hue" = ps: with ps; [  ];
@@ -159,6 +164,7 @@
     "media_player.bluesound" = ps: with ps; [ xmltodict ];
     "media_player.braviatv" = ps: with ps; [  ];
     "media_player.cast" = ps: with ps; [ PyChromecast ];
+    "media_player.channels" = ps: with ps; [  ];
     "media_player.clementine" = ps: with ps; [  ];
     "media_player.cmus" = ps: with ps; [  ];
     "media_player.denonavr" = ps: with ps; [  ];
@@ -187,12 +193,14 @@
     "media_player.russound_rnet" = ps: with ps; [  ];
     "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
     "media_player.snapcast" = ps: with ps; [  ];
+    "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [  ];
     "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
     "media_player.spotify" = ps: with ps; [  ];
     "media_player.vizio" = ps: with ps; [  ];
     "media_player.vlc" = ps: with ps; [  ];
     "media_player.webostv" = ps: with ps; [ websockets ];
+    "media_player.xiaomi_tv" = ps: with ps; [  ];
     "media_player.yamaha" = ps: with ps; [  ];
     "media_player.yamaha_musiccast" = ps: with ps; [  ];
     "media_player.ziggo_mediabox_xl" = ps: with ps; [  ];
@@ -334,6 +342,7 @@
     "sensor.sabnzbd" = ps: with ps; [  ];
     "sensor.scrape" = ps: with ps; [ beautifulsoup4 ];
     "sensor.season" = ps: with ps; [ ephem ];
+    "sensor.sense" = ps: with ps; [  ];
     "sensor.sensehat" = ps: with ps; [  ];
     "sensor.serial" = ps: with ps; [  ];
     "sensor.serial_pm" = ps: with ps; [  ];
@@ -342,7 +351,9 @@
     "sensor.snmp" = ps: with ps; [ pysnmp ];
     "sensor.sochain" = ps: with ps; [  ];
     "sensor.speedtest" = ps: with ps; [  ];
+    "sensor.spotcrime" = ps: with ps; [  ];
     "sensor.sql" = ps: with ps; [ sqlalchemy ];
+    "sensor.startca" = ps: with ps; [ xmltodict ];
     "sensor.steam_online" = ps: with ps; [  ];
     "sensor.swiss_hydrological_data" = ps: with ps; [ xmltodict ];
     "sensor.swiss_public_transport" = ps: with ps; [  ];
@@ -366,9 +377,11 @@
     "sensor.yahoo_finance" = ps: with ps; [  ];
     "sensor.yr" = ps: with ps; [ xmltodict ];
     "sensor.yweather" = ps: with ps; [  ];
+    "sensor.zestimate" = ps: with ps; [ xmltodict ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "skybell" = ps: with ps; [  ];
     "sleepiq" = ps: with ps; [  ];
+    "smappee" = ps: with ps; [  ];
     "spc" = ps: with ps; [ websockets ];
     "statsd" = ps: with ps; [ statsd ];
     "switch.acer_projector" = ps: with ps; [ pyserial ];
@@ -408,6 +421,7 @@
     "tts.google" = ps: with ps; [  ];
     "tts.microsoft" = ps: with ps; [  ];
     "twilio" = ps: with ps; [ twilio ];
+    "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [  ];
     "usps" = ps: with ps; [  ];
