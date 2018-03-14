@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib, libintlOrEmpty, gobjectIntrospection, gnome3 }:
 
 let
   pname = "atk";
@@ -12,18 +12,26 @@ stdenv.mkDerivation rec {
     sha256 = "1z7laf6qwv5zsqcnj222dm5f43c6f3liil0cgx4s4s62xjk1wfnd";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # darwin linker arguments https://bugzilla.gnome.org/show_bug.cgi?id=794326
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=369680;
+      sha256 = "11v8fhpsbapa04ifb2268cga398vfk1nq8i628441632zjz1diwg";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
   buildInputs = libintlOrEmpty;
 
-  nativeBuildInputs = [ pkgconfig perl gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
   ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   doCheck = true;
 
