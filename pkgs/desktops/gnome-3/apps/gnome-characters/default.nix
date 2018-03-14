@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, gtk3, wrapGAppsHook
+, gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "gnome-characters-${version}";
@@ -11,10 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-characters"; attrPath = "gnome3.gnome-characters"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-characters";
+      attrPath = "gnome3.gnome-characters";
+    };
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
   buildInputs = [
     gtk3 gjs gdk_pixbuf gobjectIntrospection
     librsvg gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
