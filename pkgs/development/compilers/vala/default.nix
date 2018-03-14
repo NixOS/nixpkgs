@@ -77,6 +77,7 @@ in rec {
     major   = "0.40";
     minor   = "0";
     sha256  = "0wcfljl55a9qvslfcc4sf76wdpwgn83n96b7fgb7r49ib35qz20m";
+    extraNativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ expat ];
     extraBuildInputs = [ graphviz ];
   };
 
