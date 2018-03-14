@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake
-, pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls
+, pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls, libgcrypt
 , gtk3, wayland, libwebp, enchant, xorg, libxkbcommon, epoxy, at-spi2-core
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
 , libidn, libedit, readline, libGLU_combined, libintlOrEmpty
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = libintlOrEmpty ++ [
-    libwebp enchant libnotify gnutls pcre nettle libidn
+    libwebp enchant libnotify gnutls pcre nettle libidn libgcrypt
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
