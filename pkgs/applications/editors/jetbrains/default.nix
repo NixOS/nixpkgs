@@ -312,12 +312,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2017.3.3"; /* updated by script */
+    version = "2017.3.4"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1j9pp8lfy62d9l3953d5mpij60s6sqyv3bcjimgy85hsrw570x3r"; /* updated by script */
+      sha256 = "027w73qrrj7aml2kdj3sx890q7jyj2jfnsg0pivi7i4kh8i11204"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm_Release";
