@@ -12,10 +12,6 @@ in stdenv.mkDerivation rec {
     sha256 = "7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gtksourceview"; attrPath = "gnome3.gtksourceview"; };
-  };
-
   propagatedBuildInputs = [
     # Required by gtksourceview-3.0.pc
     gtk3
@@ -34,7 +30,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
   '';
 
-  patches = [ ./nix_share_path.patch ];
+  patches = [ ./3.x-nix_share_path.patch ];
 
   enableParallelBuilding = true;
 
@@ -45,6 +41,13 @@ in stdenv.mkDerivation rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gtksourceview";
+      attrPath = "gnome3.gtksourceview";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GtkSourceView;

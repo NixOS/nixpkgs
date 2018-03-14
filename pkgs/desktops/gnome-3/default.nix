@@ -53,7 +53,7 @@ let
   ];
 
   inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
-    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview
     easytag meld orca rhythmbox shotwell
     clutter clutter-gst clutter-gtk cogl gtkvnc;
 
@@ -173,8 +173,6 @@ let
   gsettings-desktop-schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gsound = callPackage ./core/gsound { };
-
-  gtksourceview = callPackage ./core/gtksourceview { };
 
   gtksourceviewmm = callPackage ./core/gtksourceviewmm { };
 
