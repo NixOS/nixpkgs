@@ -17496,6 +17496,8 @@ with pkgs;
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
+  soapysdr = callPackage ../applications/misc/soapysdr { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   squishyball = callPackage ../applications/audio/squishyball {
