@@ -1110,6 +1110,8 @@ with pkgs;
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  doitlive = callPackage ../tools/misc/doitlive { };
+
   dosage = pythonPackages.dosage;
 
   dpic = callPackage ../tools/graphics/dpic { };
