@@ -2,8 +2,6 @@
   pythonPackages, readline, udev, libical,
   systemd, enableWiimote ? false }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "bluez-5.48";
 

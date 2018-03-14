@@ -3,8 +3,6 @@
 , platformTools
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "android-ndk-r8e";
 
@@ -77,4 +75,8 @@ stdenv.mkDerivation rec {
         ln -sf ${pkg_path}/$i ${bin_path}/$i
     done
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -11,8 +11,6 @@
 , libpciaccess
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation {
   name = "xf86-input-multitouch-20110312";
 
@@ -53,5 +51,6 @@ stdenv.mkDerivation {
     description = "Brings multitouch gestures to the Linux desktop";
 
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

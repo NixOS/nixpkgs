@@ -3,8 +3,6 @@
 , androidsdk, jdk, cmake, libxml2, zlib, python3, ncurses
 }:
 
-assert stdenv.isLinux;
-
 with stdenv.lib;
 
 let

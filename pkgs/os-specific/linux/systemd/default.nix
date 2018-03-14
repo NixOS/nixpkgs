@@ -11,8 +11,6 @@
 , hostPlatform
 }:
 
-assert stdenv.isLinux;
-
 let
   pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 

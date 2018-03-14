@@ -1,7 +1,5 @@
 { stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
-assert stdenv.isLinux;
-
 let
   p = if stdenv.is64bit then {
       arch = "x86_64";
@@ -13,7 +11,7 @@ let
       gcclib = "${stdenv.cc.cc.lib}/lib";
       sha256 = "09h71i3k9d24ki81jdwhnav63fqbc44glbx228s9g3cr4ap41jcx";
     };
-in 
+in
 stdenv.mkDerivation rec {
 
   name = "yandex-disk-${version}";
@@ -64,4 +62,3 @@ stdenv.mkDerivation rec {
     '';
   };
 }
-

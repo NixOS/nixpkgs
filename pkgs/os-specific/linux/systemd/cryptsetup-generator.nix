@@ -1,7 +1,5 @@
 { stdenv, systemd, cryptsetup }:
 
-assert stdenv.isLinux;
-
 stdenv.lib.overrideDerivation systemd (p: {
   version = p.version;
   name = "systemd-cryptsetup-generator";
@@ -21,4 +19,8 @@ stdenv.lib.overrideDerivation systemd (p: {
     mkdir -p $out/lib/systemd/system-generators/
     cp systemd-cryptsetup-generator $out/lib/systemd/system-generators/systemd-cryptsetup-generator
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 })

@@ -1,7 +1,5 @@
 {stdenv, fetchurl, libusb, makeWrapper}:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";
   src = fetchurl {
@@ -24,5 +22,6 @@ stdenv.mkDerivation {
     homepage = http://www.microchip.com/pickit2;
     license = stdenv.lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

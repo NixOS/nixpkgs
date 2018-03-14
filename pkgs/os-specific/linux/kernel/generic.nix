@@ -42,8 +42,6 @@
 , ...
 } @ args:
 
-assert stdenv.isLinux;
-
 let
 
   lib = stdenv.lib;
