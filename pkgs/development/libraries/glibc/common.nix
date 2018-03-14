@@ -4,12 +4,14 @@
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
+, substituteAll
 , fetchurl, fetchpatch ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 }:
 
 { name
+, shPackage ? null
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , installLocales ? false
@@ -94,6 +96,11 @@ stdenv.mkDerivation ({
         name = "fix-with-musl.patch";
         url = "https://sourceware.org/bugzilla/attachment.cgi?id=10151&action=diff&collapsed=&headers=1&format=raw";
         sha256 = "18kk534k6da5bkbsy1ivbi77iin76lsna168mfcbwv4ik5vpziq2";
+      })
+    ++ lib.optional (shPackage != null)
+      (substituteAll {
+        src = ./custom-shell.patch;
+        shell = "${shPackage}/bin/sh";
       });
 
   postPatch =

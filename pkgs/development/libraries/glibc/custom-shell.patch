@@ -1,0 +1,55 @@
+--- a/sysdeps/generic/paths.h
++++ b/sysdeps/generic/paths.h
+@@ -38,7 +38,7 @@
+ #define	_PATH_STDPATH \
+ 	"/usr/bin:/bin:/usr/sbin:/sbin"
+ 
+-#define	_PATH_BSHELL	"/bin/sh"
++#define	_PATH_BSHELL	"@shell@"
+ #define	_PATH_CONSOLE	"/dev/console"
+ #define	_PATH_CSHELL	"/bin/csh"
+ #define	_PATH_DEVDB	"/var/run/dev.db"
+--- a/sysdeps/posix/system.c
++++ b/sysdeps/posix/system.c
+@@ -26,7 +26,7 @@
+ #include <sysdep-cancel.h>
+ 
+ 
+-#define	SHELL_PATH	"/bin/sh"	/* Path of the shell.  */
++#define	SHELL_PATH	"@shell@"	/* Path of the shell.  */
+ #define	SHELL_NAME	"sh"		/* Name to give it.  */
+ 
+ 
+--- a/sysdeps/unix/sysv/linux/paths.h
++++ b/sysdeps/unix/sysv/linux/paths.h
+@@ -38,7 +38,7 @@
+ #define	_PATH_STDPATH \
+ 	"/usr/bin:/bin:/usr/sbin:/sbin"
+ 
+-#define	_PATH_BSHELL	"/bin/sh"
++#define	_PATH_BSHELL	"@shell@"
+ #define	_PATH_CONSOLE	"/dev/console"
+ #define	_PATH_CSHELL	"/bin/csh"
+ #define	_PATH_DEVDB	"/var/run/dev.db"
+--- a/libio/oldiopopen.c
++++ b/libio/oldiopopen.c
+@@ -162,7 +162,7 @@
+       for (p = old_proc_file_chain; p; p = p->next)
+ 	_IO_close (_IO_fileno ((_IO_FILE *) p));
+ 
+-      _IO_execl ("/bin/sh", "sh", "-c", command, (char *) 0);
++      _IO_execl ("@shell@", "sh", "-c", command, (char *) 0);
+       _IO__exit (127);
+     }
+   _IO_close (child_end);
+--- a/libio/iopopen.c
++++ b/libio/iopopen.c
+@@ -191,7 +191,7 @@
+ 	    _IO_close (fd);
+ 	}
+ 
+-      _IO_execl ("/bin/sh", "sh", "-c", command, (char *) 0);
++      _IO_execl ("@shell@", "sh", "-c", command, (char *) 0);
+       _IO__exit (127);
+     }
+   _IO_close (child_end);
