@@ -44,6 +44,10 @@ cmakeConfigurePhase() {
         cmakeFlags="-DCMAKE_STRIP=$(command -v $crossConfig-strip) $cmakeFlags"
     fi
 
+    # on macOS we want to prefer Unix-style headers to Frameworks
+    # because we usually do not package the framework
+    cmakeFlags="-DCMAKE_FIND_FRAMEWORK=last $cmakeFlags"
+
     # This installs shared libraries with a fully-specified install
     # name. By default, cmake installs shared libraries with just the
     # basename as the install name, which means that, on Darwin, they
