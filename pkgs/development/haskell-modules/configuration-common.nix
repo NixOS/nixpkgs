@@ -845,7 +845,7 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
+  # Hoogle needs newer versions than lts-11 provides. lambdabot-haskell-plugins
   # depends on Hoogle and therefore needs to use the same version.
   hoogle = super.hoogle.override {
     haskell-src-exts = self.haskell-src-exts_1_20_2;
@@ -1004,7 +1004,7 @@ self: super: {
   # Needs older hlint
   hpio = dontCheck super.hpio;
 
-  # Needs turtle >=1.5.0, which we don't have by default in lts-10.x.
+  # Needs turtle >=1.5.0, which we don't have by default in lts-11.x.
   changelogged = super.changelogged.override { turtle = self.turtle_1_5_5; };
 
   # https://github.com/fpco/inline-c/issues/72
