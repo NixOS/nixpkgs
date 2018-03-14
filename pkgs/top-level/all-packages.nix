@@ -9986,9 +9986,6 @@ with pkgs;
   # On non-GNU systems we need GNU Gettext for libintl.
   libintl = if hostPlatform.libc != "glibc" then gettext else null;
 
-  # deprecated: provided for compatability
-  libintlOrEmpty = [ libintl ];
-
   libid3tag = callPackage ../development/libraries/libid3tag {
     gperf = gperf_3_0;
   };
