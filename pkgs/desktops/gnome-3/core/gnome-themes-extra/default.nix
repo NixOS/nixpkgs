@@ -3,13 +3,13 @@
 
 let
   pname = "gnome-themes-extra";
-  version = "3.27.90";
+  version = "3.27.92";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1p1ibm0f2py0lrxrw8wv1jvs630mmz9q97f404jyzr4a8nswrizz";
+    sha256 = "04jwsg9f29vzhcmf146d3rr27c8ldra378m465ahsal9vaaiywcm";
   };
 
   passthru = {
