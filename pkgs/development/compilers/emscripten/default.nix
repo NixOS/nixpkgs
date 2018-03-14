@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     sed -i -e "s,EM_CONFIG = '~/.emscripten',EM_CONFIG = '$out/${appdir}/config'," $out/${appdir}/tools/shared.py
     sed -i -e 's,^.*did not see a source tree above the LLVM.*$,      return True,' $out/${appdir}/tools/shared.py
     sed -i -e 's,def check_sanity(force=False):,def check_sanity(force=False):\n  return,' $out/${appdir}/tools/shared.py
+    substituteInPlace $out/${appdir}/tools/python_selector.py --replace "'python2'" "'${python}/bin/python'"
+    substituteInPlace $out/${appdir}/tools/shared.py --replace 'python %s' '${python}/bin/python %s'
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" $out/${appdir}/emcc.py
     mkdir $out/bin
