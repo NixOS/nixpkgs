@@ -69,11 +69,17 @@ let
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+
+      # FIXME don't duplicate the -enable-kvm etc. flags here yet again!
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
+        (optionalString (system == "x86_64-linux") "-cpu kvm64 ") +
+        (optionalString (system == "aarch64-linux") "-enable-kvm -machine virt,gic-version=host -cpu host ");
+
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString isEfi ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
+        + optionalString isEfi (if pkgs.stdenv.isAarch64
+            then ''bios => "${pkgs.OVMF.fd}/FV/QEMU_EFI.fd", ''
+            else ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '');
     in
     ''
       $machine->start;
