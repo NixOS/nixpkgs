@@ -1010,4 +1010,10 @@ self: super: {
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
 
+  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
+  SHA = appendPatch super.SHA (pkgs.fetchpatch {
+    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
+    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
+  });
+
 }
