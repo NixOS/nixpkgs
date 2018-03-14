@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   # fetch newer version of platform.h which correctly supports gcc 7.3
   gcc7PlatformPatch = fetchurl {
-    url = "https://raw.githubusercontent.com/g-truc/glm/dd48b56e44d699a022c69155c8672caacafd9e8a/glm/simd/platform.h";
-    sha256 = "0y91hlbgn5va7ijg5mz823gqkq9hqxl00lwmdwnf8q2g086rplzw";
+    url = "https://raw.githubusercontent.com/g-truc/glm/384dab02e45a8ad3c1a3fa0906e0d5682c5b27b9/glm/simd/platform.h";
+    sha256 = "0ym0sgwznxhfyi014xs55x3ql7r65fjs34sqb5jiaffkdhkqgzia";
   };
 
   postPatch = ''
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       --replace '"''${CMAKE_CURRENT_BINARY_DIR}/''${GLM_INSTALL_CONFIGDIR}' '"''${GLM_INSTALL_CONFIGDIR}'
     cp ${gcc7PlatformPatch} glm/simd/platform.h
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isDarwin [
+    "-DGLM_COMPILER=0"
+  ];
 
   postInstall = ''
     mkdir -p $doc/share/doc/glm
