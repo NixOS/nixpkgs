@@ -29,15 +29,6 @@ stdenv.mkDerivation rec {
     "--with-xwayland-path=${xwayland}/bin/Xwayland"
   ];
 
-  patches = [
-    # Pipewire 0.1.8 compatibility
-    (fetchurl {
-      name = "mutter-pipewire-0.1.8-compat.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=367356;
-      sha256 = "10bx5zf11wwhhy686w11ggikk56pbxydpbk9fbd947ir385x92cz";
-    })
-  ];
-
   propagatedBuildInputs = [
     # required for pkgconfig to detect mutter-clutter
     libXtst
