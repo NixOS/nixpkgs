@@ -1222,6 +1222,8 @@ with pkgs;
 
   gixy = callPackage ../tools/admin/gixy { };
 
+  gllvm = callPackage ../development/tools/gllvm { };
+
   glide = callPackage ../development/tools/glide { };
 
   glock = callPackage ../development/tools/glock { };
