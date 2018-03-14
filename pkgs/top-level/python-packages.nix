@@ -10138,6 +10138,8 @@ in {
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
+  msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
+
   msgpack-python = self.msgpack.overridePythonAttrs {
     pname = "msgpack-python";
     postPatch = ''

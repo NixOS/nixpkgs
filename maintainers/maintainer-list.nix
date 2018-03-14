@@ -176,6 +176,11 @@
     github = "abigailbuccaneer";
     name = "Abigail Bunyan";
   };
+  aborsu = {
+    email = "a.borsu@gmail.com";
+    github = "aborsu";
+    name = "Augustin Borsu";
+  };
   aboseley = {
     email = "adam.boseley@gmail.com";
     github = "aboseley";
