@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib
+{ stdenv, fetchurl, jdk, gmp, readline, openssl, libjpeg, unixODBC, zlib
 , libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
 , fontconfig, makeWrapper ? stdenv.isDarwin
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "12yzy3w2l1p9fv77lv20xbqq47d0zjw5rkz96mx1xg1lldyja5vz";
   };
 
-  buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
+  buildInputs = [ jdk gmp readline openssl libjpeg unixODBC libXinerama
     libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ]
   ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
