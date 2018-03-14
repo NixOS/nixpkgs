@@ -54,10 +54,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.6.0esr";
+    version = "52.7.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "cf583df34272b7ff8841c3b093ca0819118f9c36d23c6f9b3135db298e84ca022934bcd189add6473922b199b47330c0ecf14c303ab4177c03dbf26e64476fa4";
+      sha512 = "69ab3f03c3e690b3794714b0e8cafac90130ae32ebef37c8bc3d36e973153e531cbf20e650e216b76fcc09130800c9040ccbbd7468e7c1efd73be225dd17fc0b";
     };
 
     patches = nixpkgsPatches;
