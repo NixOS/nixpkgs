@@ -99,7 +99,7 @@
     "envisalink" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [  ];
     "feedreader" = ps: with ps; [ feedparser ];
-    "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
+    "ffmpeg" = ps: with ps; [  ];
     "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
@@ -376,7 +376,7 @@
     "sensor.xbox_live" = ps: with ps; [  ];
     "sensor.yahoo_finance" = ps: with ps; [  ];
     "sensor.yr" = ps: with ps; [ xmltodict ];
-    "sensor.yweather" = ps: with ps; [ yahooweather ];
+    "sensor.yweather" = ps: with ps; [  ];
     "sensor.zestimate" = ps: with ps; [ xmltodict ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "skybell" = ps: with ps; [  ];
