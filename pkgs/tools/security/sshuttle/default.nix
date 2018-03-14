@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =
     [ coreutils openssh ] ++
     stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
@@ -28,6 +28,10 @@ python3Packages.buildPythonApplication rec {
   # Tests only run with Python 3. Server-side Python 2 still works if client
   # uses Python 3, so it should be fine.
   doCheck = true;
+
+  checkPhase = ''
+    py.test -k "${stdenv.lib.optionalString stdenv.isDarwin "not test_parse_subnetport_ip6"}"
+  '';
 
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
