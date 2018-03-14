@@ -8807,7 +8807,9 @@ with pkgs;
 
   freeglut = callPackage ../development/libraries/freeglut { };
 
-  freenect = callPackage ../development/libraries/freenect { };
+  freenect = callPackage ../development/libraries/freenect {
+    inherit (darwin.apple_sdk.frameworks) Cocoa GLUT;
+  };
 
   freetype = callPackage ../development/libraries/freetype { };
 
