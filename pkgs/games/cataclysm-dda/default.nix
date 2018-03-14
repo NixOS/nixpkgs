@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     "WARNINGS+=-Wno-inconsistent-missing-override"
   ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-user-defined-warnings";
+
   postBuild = stdenv.lib.optionalString (tiles && stdenv.isDarwin) ''
     # iconutil on macOS is not available in nixpkgs
     png2icns data/osx/AppIcon.icns data/osx/AppIcon.iconset/*
