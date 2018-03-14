@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, gtk3, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3, glib, gtk3, pango, wrapGAppsHook
 , gobjectIntrospection, gjs, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
-  buildInputs = [
-    gtk3 gjs gdk_pixbuf gobjectIntrospection
-    librsvg gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook gobjectIntrospection ];
+  buildInputs = [ glib gtk3 gjs pango gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme ];
+
+  mesonFlags = [
+    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   ];
 
   meta = with stdenv.lib; {
