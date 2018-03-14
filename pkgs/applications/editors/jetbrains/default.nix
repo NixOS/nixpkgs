@@ -260,12 +260,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2017.3.2"; /* updated by script */
+    version = "2017.3.3"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0bhvj1xqlpy58yq2s5nrhhaw53i913zpr135b1f6r5s22nvkigvm"; /* updated by script */
+      sha256 = "073wwhg58hkd8w4jazvwngl78gbhnmilm63jhpirr98jk7i7a4mq"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "goland_release";
