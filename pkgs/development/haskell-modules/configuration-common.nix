@@ -94,7 +94,7 @@ self: super: {
 
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
-    doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
+    doCheck = !pkgs.stdenv.isDarwin;
   }));
 
   # https://github.com/froozen/kademlia/issues/2
