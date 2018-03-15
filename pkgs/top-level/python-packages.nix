@@ -20484,12 +20484,15 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = callPackage ../development/python-modules/tensorflow rec {
-    cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.linuxPackages) nvidia_x11;
-    cudatoolkit = pkgs.cudatoolkit9;
-    cudnn = pkgs.cudnn_cudatoolkit9;
-  };
+  tensorflow =
+    if stdenv.isDarwin
+    then callPackage ../development/python-modules/tensorflow/bin.nix { }
+    else callPackage ../development/python-modules/tensorflow rec {
+      cudaSupport = pkgs.config.cudaSupport or false;
+      inherit (pkgs.linuxPackages) nvidia_x11;
+      cudatoolkit = pkgs.cudatoolkit9;
+      cudnn = pkgs.cudnn_cudatoolkit9;
+    };
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;
