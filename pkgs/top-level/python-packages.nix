@@ -20076,7 +20076,9 @@ EOF
     };
   };
 
-  xgboost = callPackage ../development/python-modules/xgboost { };
+  xgboost = callPackage ../development/python-modules/xgboost {
+    xgboost = pkgs.xgboost;
+  };
 
   xkcdpass = buildPythonPackage rec {
     name = "xkcdpass-${version}";

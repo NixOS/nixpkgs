@@ -4,13 +4,13 @@
 , buildPythonPackage
 , nose
 , scipy
-, nativeXgboost ? pkgs.xgboost
+, xgboost
 }:
 
 buildPythonPackage rec {
   name = "xgboost-${version}";
 
-  inherit (nativeXgboost) version src meta;
+  inherit (xgboost) version src meta;
 
   propagatedBuildInputs = [ scipy ];
   checkInputs = [ nose ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sed "/^LIB_PATH.*/a LIB_PATH = [os.path.relpath(LIB_PATH[0], CURRENT_DIR)]" -i setup.py
     cat <<EOF >xgboost/libpath.py
     def find_lib_path():
-      return ["${nativeXgboost}/lib/${libname}"]
+      return ["${xgboost}/lib/${libname}"]
     EOF
   '';
 
