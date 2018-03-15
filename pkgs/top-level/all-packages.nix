@@ -11357,6 +11357,8 @@ with pkgs;
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
+  selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};
