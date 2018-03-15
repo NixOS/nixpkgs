@@ -77,6 +77,7 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+    patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -112,9 +113,6 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-
-    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-    "-DCOMPILER_RT_BUILD_XRAY=OFF"
   ];
 
   postBuild = ''
