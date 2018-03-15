@@ -5,7 +5,7 @@
 , libidn, libedit, readline, libGLU_combined, libintlOrEmpty
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
-, gst-plugins-base, gst-plugins-bad
+, gst-plugins-base, gst-plugins-bad, woff2
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.18.6";
+  version = "2.20.0";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -45,17 +45,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0g5cpdijjv5hlrbi4i4dh97yrh5apnyvm90wpr9f84hgyk12r4ck";
+    sha256 = "0g0an3pc2yz13gzpaysfgch2yp510gw1qcpk0xr8m6mx43vl1xjp";
   };
 
   # see if we can clean this up....
 
-  patches = [ ./finding-harfbuzz-icu.patch ]
-     ++ optionals stdenv.isDarwin [
-    ./PR-152650-2.patch
-    ./PR-153138.patch
-    ./PR-157554.patch
-    ./PR-157574.patch
+  patches = optionals stdenv.isDarwin [
+    ## TODO add necessary patches for Darwin
   ];
 
   cmakeFlags = [
@@ -87,7 +83,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = libintlOrEmpty ++ [
-    libwebp enchant libnotify gnutls pcre nettle libidn
+    libwebp enchant libnotify gnutls pcre nettle libidn woff2
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
