@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2
+{ stdenv, fetchFromGitHub, fetchpatch, bc, dtc, openssl, python2
 , hostPlatform
 }:
 
@@ -13,11 +13,13 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2017.11";
+    version = "v2018.03-rc3";
 
-    src = fetchurl {
-      url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "01bcsah5imy6m3fbjwhqywxg0pfk5fl8ks9ylb7kv3zmrb9qy0ba";
+    src = fetchFromGitHub {
+      owner = "u-boot";
+      repo = "u-boot";
+      rev = version;
+      sha256 = "056md2nx31p4mfnw01cps3kwpla3nm5q4khjfi3c98mf10csj8lc";
     };
 
     patches = [
@@ -34,8 +36,8 @@ let
         sha256 = "0bbw0q027xvzvdxxvpzjajg4rm30a8mb7z74b6ma9q0l7y7bi0c4";
       })
       (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2017-11.patch;
-        sha256 = "162b2lglp307pzxsf9m7nnmzwxqd7xkwp5j85bm6bg1a38ngpl9v";
+        url = https://github.com/bendlas/u-boot/compare/f0f6917188ad660cf002c10095f46ecf748b8f58...d35c38015ea73db01466586ba7746f4a1fbf3890.patch;
+        sha256 = "1q0mxk1az11kqggylammdz4f2rwhv2vwcwx8ql19k1w9ys5w9x0a";
       })
     ];
 
@@ -150,9 +152,15 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
-  ubootQemuArm = buildUBoot rec {
+  ubootQemuArm_32bit = buildUBoot rec {
     defconfig = "qemu_arm_defconfig";
     targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuArm_64bit = buildUBoot rec {
+    defconfig = "qemu_arm64_defconfig";
+    targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
