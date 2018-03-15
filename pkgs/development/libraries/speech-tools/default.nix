@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gawk, alsaLib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "speech_tools-${version}";
-  version = "2.4";
+  name = "speech_tools-${version}.0";
+  version = "2.5";
 
   src = fetchurl {
     url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
-    sha256 = "043h4fxfiiqxgwvyyyasylypjkpfzajxd6g5s9wsl69r8hn4ihpv";
+    sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
   buildInputs = [ alsaLib ncurses ];
