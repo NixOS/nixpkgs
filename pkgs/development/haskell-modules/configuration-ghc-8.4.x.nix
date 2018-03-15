@@ -118,7 +118,7 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  hspec = overrideCabal super.hspec_2_4_8 (drv: {
+  hspec = overrideCabal super.hspec_2_5_0 (drv: {
     ## Setup: Encountered missing dependencies:
     ## hspec-core ==2.4.4, hspec-discover ==2.4.4
     ##
@@ -130,7 +130,7 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
+  hspec-core = overrideCabal super.hspec-core_2_5_0 (drv: {
     ##     • No instance for (Semigroup Summary)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Summary’
@@ -147,7 +147,7 @@ self: super: {
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## hspec-discover ==2.4.8
-  hspec-discover = super.hspec-discover_2_4_8;
+  hspec-discover = super.hspec-discover_2_5_0;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
