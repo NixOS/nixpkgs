@@ -157,6 +157,23 @@ in rec {
     patches = nixpkgsPatches;
   } // commonAttrs) {};
 
+  tor-browser-8-0 = common (rec {
+    pname = "tor-browser";
+    version = "8.0.1";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-52.7.0esr-8.0-1-slnos";
+      rev   = "58314ccb043882e830ee9a21c37a92d6e0d34e94";
+      sha256 = "09gb7chw2kly53b599xwpi75azj00957rnxly9fqv8zi3n5k2pdb";
+    };
+
+    patches = nixpkgsPatches;
+  } // commonAttrs) {};
+
   tor-browser = tor-browser-7-5;
 
 })
