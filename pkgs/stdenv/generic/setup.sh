@@ -968,7 +968,7 @@ buildPhase() {
     # set to empty if unset
     : ${makeFlags=}
 
-    if [[ -z "$makeFlags" && ! ( -n "${makefile:-}" || -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
         # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
