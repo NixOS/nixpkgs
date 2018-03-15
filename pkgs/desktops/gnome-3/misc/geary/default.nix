@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_38, enchant
-, wrapGAppsHook, gdk_pixbuf, cmake, desktop-file-utils
-, libnotify, libcanberra-gtk3, libsecret, gmime
-, libpthreadstubs, sqlite
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_40, enchant
+, wrapGAppsHook, gdk_pixbuf, cmake, ninja, desktop-file-utils
+, libnotify, libcanberra-gtk3, libsecret, gmime, isocodes
+, gobjectIntrospection, libpthreadstubs, sqlite
 , gnome3, librsvg, gnome-doc-utils, webkitgtk }:
 
 let
@@ -17,10 +17,16 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
-  nativeBuildInputs = [ vala_0_38 intltool pkgconfig wrapGAppsHook cmake desktop-file-utils gnome-doc-utils ];
-  buildInputs = [ gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
-                  libpthreadstubs gnome3.gsettings-desktop-schemas gnome3.gcr
-                  gdk_pixbuf librsvg gnome3.defaultIconTheme ];
+  nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];
+  buildInputs = [
+    gtk3 enchant webkitgtk libnotify libcanberra-gtk3 gnome3.libgee libsecret gmime sqlite
+    libpthreadstubs gnome3.gsettings-desktop-schemas gnome3.gcr isocodes
+    gdk_pixbuf librsvg gnome3.defaultIconTheme
+  ];
+
+  cmakeFlags = [
+    "-DISOCODES_DIRECTORY=${isocodes}/share/xml/iso-codes"
+  ];
 
   preConfigure = ''
     substituteInPlace src/CMakeLists.txt --replace '`''${PKG_CONFIG_EXECUTABLE} --variable=girdir gobject-introspection-1.0`' '${webkitgtk.dev}/share/gir-1.0'
@@ -30,8 +36,6 @@ stdenv.mkDerivation rec {
     # Add geary to path for geary-attach
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Geary;
