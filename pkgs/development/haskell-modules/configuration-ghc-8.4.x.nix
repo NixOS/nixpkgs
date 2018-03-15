@@ -170,18 +170,6 @@ self: super: {
   semigroupoids = super.semigroupoids_5_2_2;
 
   ## Needs bump to a versioned attribute
-  ## Issue: https://github.com/haskell/test-framework/issues/35
-  test-framework = overrideCabal super.test-framework_0_8_2_0 (drv: {
-    ##     • No instance for (Semigroup (TestOptions' Maybe))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (TestOptions' Maybe)’
-    ##
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.3 && <2.10
-    doCheck         = false;
-  });
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## doctest >=0.7 && <0.14
   turtle = super.turtle_1_5_4;

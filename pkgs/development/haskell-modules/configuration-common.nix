@@ -418,6 +418,9 @@ self: super: {
   HaVSA = super.HaVSA.override { QuickCheck = self.QuickCheck_1_2_0_1; };
   test-framework-quickcheck = super.test-framework-quickcheck.override { QuickCheck = self.QuickCheck_1_2_0_1; };
 
+  # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
+  test-framework = dontCheck super.test-framework;
+
   # Depends on broken test-framework-quickcheck.
   apiary = dontCheck super.apiary;
   apiary-authenticate = dontCheck super.apiary-authenticate;
