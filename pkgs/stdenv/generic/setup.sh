@@ -1018,14 +1018,12 @@ installPhase() {
         mkdir -p "$prefix"
     fi
 
-    installTargets="${installTargets:-install}"
-
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $installTargets
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        ${installTargets:-install}
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
