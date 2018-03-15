@@ -2001,6 +2001,11 @@
     github = "leenaars";
     name = "Michiel Leenaars";
   };
+  leo60228 = {
+    email = "iakornfeld@gmail.com";
+    github = "leo60228";
+    name = "leo60228";
+  };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";
