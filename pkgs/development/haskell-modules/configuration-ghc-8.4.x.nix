@@ -62,9 +62,6 @@ self: super: {
   bv = super.bv_0_5;
 
   ## Needs bump to a versioned attribute
-  constraints = super.constraints_0_10;
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## template-haskell >=2.5 && <2.13
   deriving-compat = super.deriving-compat_0_4_1;
