@@ -768,4 +768,7 @@ self: super: {
   # Old versions don't compile.
   vty = self.vty_5_20;
 
+  # https://github.com/jgm/pandoc-types/issues/37
+  pandoc-types = self.pandoc-types_1_17_4;
+
 }
