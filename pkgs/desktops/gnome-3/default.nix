@@ -42,7 +42,7 @@ let
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager
+    gnome-power-manager gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -54,7 +54,7 @@ let
 
   inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
-    easytag meld orca rhythmbox shotwell
+    easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc;
 
   inherit (pkgs.gnome2) ORBit2;
