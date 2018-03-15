@@ -366,7 +366,6 @@ let
     udunits2 = [ pkgs.udunits pkgs.expat ];
     V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
-    VBmix = [ pkgs.gsl_1 pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
@@ -404,7 +403,6 @@ let
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
-    VBmix = [ pkgs.pkgconfig ];
     XML = [ pkgs.pkgconfig ];
     cairoDevice = [ pkgs.pkgconfig ];
     chebpol = [ pkgs.pkgconfig ];
@@ -493,7 +491,6 @@ let
     "EasyqpcR"
     "EcoVirtual"
     "ENiRG"
-    "EnQuireR"
     "eVenn"
     "exactLoglinTest"
     "fat2Lpoly"
