@@ -9,5 +9,6 @@ with import ./composer.nix { inherit pkgs; };
     imagemagick-pdf
     zathura
     evince
+    youtube-dl
     ;
 }

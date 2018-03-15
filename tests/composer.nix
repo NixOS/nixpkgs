@@ -26,4 +26,6 @@ rec {
   evince = callPackage ./evince.nix {
     pdfTest = imagemagick-pdf;
   };
+
+  youtube-dl = callPackage ./youtube-dl/default.nix {};
 }
