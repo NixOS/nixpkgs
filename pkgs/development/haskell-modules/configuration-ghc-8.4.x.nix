@@ -163,11 +163,6 @@ self: super: {
   ## doctest >=0.11.1 && <0.14
   semigroupoids = super.semigroupoids_5_2_2;
 
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## doctest >=0.7 && <0.14
-  turtle = super.turtle_1_5_4;
-
   ## On Hackage:
 
   ## On Hackage, awaiting for import
