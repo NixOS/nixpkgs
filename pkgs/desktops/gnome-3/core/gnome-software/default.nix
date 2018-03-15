@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
-, glib, appstream-glib, libsoup, polkit, isocodes, gtkspell3, libxslt
+, glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobjectIntrospection
 , json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, gtk-doc, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -20,18 +20,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xml_dtd_42
-    valgrind-light docbook_xsl gtk-doc desktop-file-utils
+    valgrind-light docbook_xsl gtk-doc desktop-file-utils gobjectIntrospection
   ];
 
   buildInputs = [
     gnome3.gtk glib packagekit appstream-glib libsoup
     gnome3.gsettings-desktop-schemas gnome3.gnome-desktop
-    gtkspell3 json-glib libsecret ostree
+    gspell json-glib libsecret ostree
     polkit
   ];
-
-  # https://gitlab.gnome.org/GNOME/gnome-software/issues/320
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   mesonFlags = [
     "-Denable-flatpak=false"
