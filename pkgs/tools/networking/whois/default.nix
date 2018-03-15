@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     for i in Makefile po/Makefile; do
       substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString (stdenv.isDarwin || stdenv.hostPlatform.isMusl) ''
     echo "whois_LDADD += -liconv" >> Makefile
   '';
 
