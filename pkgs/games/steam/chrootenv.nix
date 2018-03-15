@@ -51,12 +51,12 @@ in buildFHSUserEnv rec {
 
   multiPkgs = pkgs: with pkgs; [
     # These are required by steam with proper errors
-    xorg.libXcomposite
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXext
-    xorg.libX11
-    xorg.libXfixes
+    xlibs.libXcomposite
+    xlibs.libXtst
+    xlibs.libXrandr
+    xlibs.libXext
+    xlibs.libX11
+    xlibs.libXfixes
 
     # Not formally in runtime but needed by some games
     gst_all_1.gstreamer
@@ -109,7 +109,6 @@ in buildFHSUserEnv rec {
     networkmanager098
 
     # Verified games requirements
-    xorg.libXt
     xorg.libXmu
     xorg.libxcb
     libGLU
@@ -122,9 +121,6 @@ in buildFHSUserEnv rec {
     openssl
     libidn
     tbb
-    wayland
-    mesa_noglu
-    libxkbcommon
 
     # Other things from runtime
     flac
@@ -177,7 +173,7 @@ in buildFHSUserEnv rec {
   '';
 
   profile = ''
-    export STEAM_RUNTIME=/steamrt
+    export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
   '';
 
   runScript = writeScript "steam-wrapper.sh" ''
