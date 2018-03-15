@@ -60,6 +60,8 @@ let
 
       ./properly-detect-curses.patch
 
+    ] ++ optionals (x11Support && stdenv.isDarwin) [
+      ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
