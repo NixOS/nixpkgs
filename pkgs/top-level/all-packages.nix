@@ -10304,6 +10304,9 @@ with pkgs;
   libva-full = libva.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva-utils { };
 
+  libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
+  libva1-full = libva1.override { minimal = false; };
+
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl {
