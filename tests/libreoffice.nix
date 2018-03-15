@@ -1,4 +1,4 @@
-{ runCommand, withDBus, withRatpoison, withHome, fmbtRun, libreoffice }:
+{ runCommand, libreoffice }:
 let
   fmbtScripts = {
     startSpreadsheet = ''
@@ -13,16 +13,19 @@ let
     '';
   };
 in
+with import ./temporary-helpers/fmbt.nix {};
 runCommand "test-libreoffice" {
-  buildInputs = [ withDBus (withRatpoison {}) withHome libreoffice ];
+  buildInputs = [
+          (import ./temporary-helpers/with-dbus.nix {})
+          (import ./temporary-helpers/with-ratpoison.nix {})
+          (import ./temporary-helpers/with-home.nix {})
+          libreoffice ];
 } ''
   soffice &
-  while ! ratpoison -c "windows %c" | grep -i libreoffice; do sleep 1; done
+  waitWindow libreoffice "%c"
 
   ${fmbtRun fmbtScripts.startSpreadsheet}
   ratpoison -c windows | grep "Calc"
 
-  mkdir -p "$out"/share/
-  cp -r screenshots "$out/share"
-  exit 0
+  ${copyScreenshots}
 ''

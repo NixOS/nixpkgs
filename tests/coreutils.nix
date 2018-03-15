@@ -1,10 +1,12 @@
-{ checkAllExecutables, coreutils }:
+{ coreutils }:
 {
-  versions = checkAllExecutables coreutils {
+  versions = import ./temporary-helpers/check-executables.nix {
+    package = coreutils;
     skipRegexp = "(false|test)";
     outputRegexp = "(GNU coreutils|Free Software Foundation)";
   };
-  exit-codes = checkAllExecutables coreutils {
+  exit-codes = import ./temporary-helpers/check-executables.nix {
+    package = coreutils;
     outputRegexp = null;
   };
 }

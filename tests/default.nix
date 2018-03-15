@@ -1,26 +1,13 @@
-{ pkgs ? import ../. {} }:
-rec {
-  test-lib = import ./lib { inherit pkgs; };
-
-  callTest = pkgs.newScope test-lib;
-
-  maxima = callTest ./maxima.nix {};
-  libreoffice = callTest ./libreoffice.nix {};
-  libreoffice-executables = test-lib.checkAllExecutables pkgs.libreoffice {};
-
-  coreutils = callTest ./coreutils.nix {};
-  coreutils-versions = coreutils.versions;
-  coreutils-exit-codes = coreutils.exit-codes;
-
-  pdflatex = callTest ./texlive/pdflatex.nix {};
-  xelatex = callTest ./texlive/xelatex.nix {};
-
-  imagemagick-pdf = callTest ./imagemagick/pdf.nix {};
-
-  zathura = callTest ./zathura.nix {
-    pdfTest = imagemagick-pdf;
-  };
-  evince = callTest ./evince.nix {
-    pdfTest = imagemagick-pdf;
-  };
+{ pkgs ? import ../default.nix {} }:
+with import ./composer.nix { inherit pkgs; };
+{
+  inherit
+    maxima 
+    libreoffice libreoffice-executables
+    coreutils-versions coreutils-exit-codes
+    pdflatex xelatex
+    imagemagick-pdf
+    zathura
+    evince
+    ;
 }

@@ -1,6 +1,8 @@
-{ imagemagick, runCommand, text ? "Just a test string", makeFontsConf, lib, tesseract, ghostscript, withFonts }:
+{ imagemagick, runCommand, text ? "Just a test string", lib, tesseract, ghostscript }:
 runCommand "imagemagick-pdf-test" {
-  buildInputs = [ imagemagick tesseract (withFonts []) ghostscript];
+  buildInputs = [ imagemagick tesseract ghostscript
+    (import ../temporary-helpers/with-fonts.nix {})
+    ];
   passthru = {
     inherit text;
   };
