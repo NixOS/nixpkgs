@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, libvirt-glib
+{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
 , glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext wrapGAppsHook gobjectIntrospection desktop-file-utils
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
   ];
 
   buildInputs = [
@@ -34,6 +34,15 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}")
+  '';
+
+  mesonFlags = [
+    "-Dovirt=false"
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/post_install.py
   '';
 
   passthru = {
