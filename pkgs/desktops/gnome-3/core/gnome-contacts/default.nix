@@ -32,6 +32,12 @@ in stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
+  # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:
+  # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
+  #  #include <clutter-gtk/clutter-gtk.h>
+  #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  NIX_CFLAGS_COMPILE = "-I${clutter-gtk}/include/clutter-gtk-1.0";
+
   doCheck = true;
 
   passthru = {
