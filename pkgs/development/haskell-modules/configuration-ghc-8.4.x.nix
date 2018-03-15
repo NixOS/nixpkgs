@@ -45,8 +45,9 @@ self: super: {
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
-  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
-  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
+  # Need newer version.
+  haskell-src = super.haskell-src_1_0_3_0;
+
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
