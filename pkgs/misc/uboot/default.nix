@@ -158,6 +158,12 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootQemuAarch64 = buildUBoot rec {
+    defconfig = "qemu_arm64_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootQemuArm = buildUBoot rec {
     defconfig = "qemu_arm_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
