@@ -4,13 +4,13 @@
 
 let
 
-  version = "1.8.1";
+  version = "654c36cdb69572837cc242840e71361c156fd08d";
 
   src = fetchFromGitHub {
     owner = "garbas";
     repo = "pypi2nix";
-    rev = "v${version}";
-    sha256 = "039a2ys7ijzi2sa2haa6a8lbhncvd1wfsi6gcy9vm02gi31ghzyb";
+    rev = "${version}";
+    sha256 = "1ryivm71k3vbic57f7nqxwiw7zd00hd16hnrdqvz5gw869vnkd1d";
   };
 
   click = fetchurl {
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     requests
   ];
   buildInputs = [
-    pythonPackages.python pythonPackages.flake8
+    pythonPackages.python pythonPackages.flake8 pythonPackages.jinja2
     zip makeWrapper nix.out nix-prefetch-git nix-prefetch-hg
   ];
 
