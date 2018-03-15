@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     ## TODO add necessary patches for Darwin
   ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   cmakeFlags = [
   "-DPORT=GTK"
   "-DUSE_LIBHYPHEN=0"
