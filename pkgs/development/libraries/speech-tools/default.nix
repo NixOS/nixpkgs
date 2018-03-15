@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doCheck = true;
+
+  checkTarget = "test";
+
   meta = with stdenv.lib; {
     description = "Text-to-speech engine";
     maintainers = with maintainers; [ raskin ];
