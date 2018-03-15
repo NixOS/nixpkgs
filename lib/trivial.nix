@@ -160,4 +160,6 @@ rec {
 
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  optCall = f: x: if isFunction f then f x else f;
 }

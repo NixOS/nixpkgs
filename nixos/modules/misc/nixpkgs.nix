@@ -8,11 +8,6 @@ let
   isConfig = x:
     builtins.isAttrs x || lib.isFunction x;
 
-  optCall = f: x:
-    if lib.isFunction f
-    then f x
-    else f;
-
   mergeConfig = lhs_: rhs_:
     let
       lhs = optCall lhs_ { inherit pkgs; };
