@@ -92,12 +92,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## base >=3 && <4.11
-  ## Needed for (<>) in prelude
-  funcmp = super.funcmp_1_9;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
   ## Cabal <2.2
   ## Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
