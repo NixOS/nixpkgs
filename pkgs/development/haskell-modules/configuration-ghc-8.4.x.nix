@@ -138,11 +138,6 @@ self: super: {
   ## hspec-discover ==2.4.8
   hspec-discover = super.hspec-discover_2_5_0;
 
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## doctest >=0.11.1 && <0.14
-  semigroupoids = super.semigroupoids_5_2_2;
-
   ## On Hackage:
 
   ## On Hackage, awaiting for import
