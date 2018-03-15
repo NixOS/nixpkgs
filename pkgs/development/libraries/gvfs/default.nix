@@ -4,6 +4,7 @@
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
+, libsecret, libgdata
 }:
 
 let
@@ -37,8 +38,7 @@ stdenv.mkDerivation rec {
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
       libsoup gcr
-      gnome-online-accounts
-      # ToDo: not working and probably useless until gnome3 from x-updates
+      gnome-online-accounts libsecret libgdata
     ]);
 
   mesonFlags = [
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (!gnomeSupport) [
     "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
     "-Dgoogle=false"
+  ] ++ stdenv.lib.optionals (samba == null) [
+    # Xfce don't want samba
+    "-Dsmb=false"
   ];
 
   enableParallelBuilding = true;
