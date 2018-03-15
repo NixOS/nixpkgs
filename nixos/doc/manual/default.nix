@@ -87,7 +87,7 @@ let
       echo "for hints about the offending path)."
       exit 1
     fi
-    ${libxslt.bin}/bin/xsltproc \
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} $optionsXML
   '';
@@ -139,7 +139,7 @@ let
 
   manual-combined = runCommand "nixos-manual-combined"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
@@ -194,7 +194,7 @@ let
 
   olinkDB = runCommand "manual-olinkdb"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
     }
     ''
       xsltproc \
@@ -244,7 +244,7 @@ in rec {
   # Generate the NixOS manual.
   manual = runCommand "nixos-manual"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -302,7 +302,7 @@ in rec {
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
       allowedReferences = ["out"];
     }
     ''

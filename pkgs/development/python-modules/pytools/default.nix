@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2017.6";
+  version = "2018.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80f1bba4469d473c1b3969bc8e188c03bcc94d35807a889ceebbfc78e3208115";
+    sha256 = "0063b87285cb1172e3602a996bfd7342bf407361cf67b562cb6d806f70422e71";
   };
 
   checkInputs = [ pytest ];

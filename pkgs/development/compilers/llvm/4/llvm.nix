@@ -78,6 +78,9 @@ in stdenv.mkDerivation (rec {
       substituteInPlace lib/esan/esan_sideline_linux.cpp \
         --replace 'struct sigaltstack' 'stack_t'
     )
+  '' + # Fix extra space printed in commandline help sometimes, "- help"
+  ''
+    patch -p1 -i ${./cmdline-help.patch}
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''

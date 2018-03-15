@@ -1,11 +1,11 @@
 { callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "1vdsir53ddxyapnxh5fpnfyij3scx3818iri4hl07g4lk4n0vc90";
+    sha256 = "07wdffklwmxpa9i50sh5nwrc5ajb47skrldm6rzjc0jf4dxxpmdw";
   };
 
   # Skip two tests introduced in 3.5.11.  Probable reasons of failure:

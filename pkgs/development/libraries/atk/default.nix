@@ -2,14 +2,14 @@
 
 let
   pname = "atk";
-  version = "2.26.1";
+  version = "2.28.1";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jwpx8az0iifw176dc2hl4mmg6gvxzxdkd1qvg4ds7c5hdmzy07g";
+    sha256 = "1z7laf6qwv5zsqcnj222dm5f43c6f3liil0cgx4s4s62xjk1wfnd";
   };
 
   enableParallelBuilding = true;

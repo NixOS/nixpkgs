@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
     '';
 
-  buildInputs = [ coreutils pam groff ];
+  nativeBuildInputs = [ groff ];
+  buildInputs = [ pam ];
 
   enableParallelBuilding = true;
 

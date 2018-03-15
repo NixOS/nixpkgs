@@ -99,8 +99,8 @@
     "envisalink" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [  ];
     "feedreader" = ps: with ps; [ feedparser ];
-    "ffmpeg" = ps: with ps; [  ];
-    "frontend" = ps: with ps; [  ];
+    "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
+    "frontend" = ps: with ps; [ user-agents ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
     "google" = ps: with ps; [ google_api_python_client oauth2client ];
@@ -280,7 +280,7 @@
     "sensor.crimereports" = ps: with ps; [  ];
     "sensor.cups" = ps: with ps; [  ];
     "sensor.darksky" = ps: with ps; [  ];
-    "sensor.deluge" = ps: with ps; [  ];
+    "sensor.deluge" = ps: with ps; [ deluge-client ];
     "sensor.deutsche_bahn" = ps: with ps; [  ];
     "sensor.dht" = ps: with ps; [  ];
     "sensor.discogs" = ps: with ps; [ discogs_client ];
@@ -376,7 +376,7 @@
     "sensor.xbox_live" = ps: with ps; [  ];
     "sensor.yahoo_finance" = ps: with ps; [  ];
     "sensor.yr" = ps: with ps; [ xmltodict ];
-    "sensor.yweather" = ps: with ps; [  ];
+    "sensor.yweather" = ps: with ps; [ yahooweather ];
     "sensor.zestimate" = ps: with ps; [ xmltodict ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "skybell" = ps: with ps; [  ];
@@ -387,7 +387,7 @@
     "switch.acer_projector" = ps: with ps; [ pyserial ];
     "switch.anel_pwrctrl" = ps: with ps; [  ];
     "switch.broadlink" = ps: with ps; [  ];
-    "switch.deluge" = ps: with ps; [  ];
+    "switch.deluge" = ps: with ps; [ deluge-client ];
     "switch.digitalloggers" = ps: with ps; [  ];
     "switch.dlink" = ps: with ps; [  ];
     "switch.edimax" = ps: with ps; [  ];
@@ -423,7 +423,7 @@
     "twilio" = ps: with ps; [ twilio ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [  ];
+    "upnp" = ps: with ps; [ miniupnpc ];
     "usps" = ps: with ps; [  ];
     "vacuum.roomba" = ps: with ps; [  ];
     "vacuum.xiaomi_miio" = ps: with ps; [  ];
@@ -439,7 +439,7 @@
     "weather.darksky" = ps: with ps; [  ];
     "weather.metoffice" = ps: with ps; [  ];
     "weather.openweathermap" = ps: with ps; [  ];
-    "weather.yweather" = ps: with ps; [  ];
+    "weather.yweather" = ps: with ps; [ yahooweather ];
     "wemo" = ps: with ps; [  ];
     "wink" = ps: with ps; [  ];
     "xiaomi_aqara" = ps: with ps; [  ];

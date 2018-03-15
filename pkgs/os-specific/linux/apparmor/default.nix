@@ -8,6 +8,7 @@
 , swig
 , ncurses
 , pam
+, buildPackages
 }:
 
 let
@@ -29,8 +30,8 @@ let
   };
 
   prePatchCommon = ''
-    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
-    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
+    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
+    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html"
     substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
     substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
@@ -70,9 +71,10 @@ let
       swig
       ncurses
       which
+      perl
     ];
 
-    buildInputs = [
+    buildInputs = stdenv.lib.optionals (!stdenv.isCross) [
       perl
       python
     ];
@@ -87,11 +89,12 @@ let
     inherit patches;
 
     postPatch = "cd ./libraries/libapparmor";
-    configureFlags = "--with-python --with-perl";
+    # https://gitlab.com/apparmor/apparmor/issues/1
+    configureFlags = stdenv.lib.optionalString (!stdenv.isCross) "--with-python --with-perl";
 
-    outputs = [ "out" "python" ];
+    outputs = if stdenv.isCross then [ "out" ] else [ "out" "python" ];
 
-    postInstall = ''
+    postInstall = stdenv.lib.optionalString (!stdenv.isCross) ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';

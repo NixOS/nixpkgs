@@ -28,6 +28,13 @@ let
           sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
         };
       });
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
+        };
+      });
       hass-frontend = super.callPackage ./frontend.nix { };
     };
   };

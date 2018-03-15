@@ -40,7 +40,7 @@ let
     { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
-      shell = "${pkgs.stdenv.shell}";
+      shell = "${pkgs.runtimeShell}";
       fullName = (builtins.parseDrvName realGrub.name).name;
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
@@ -536,7 +536,7 @@ in
             btrfsprogs = pkgs.btrfs-progs;
           };
         in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         set -e
         export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
