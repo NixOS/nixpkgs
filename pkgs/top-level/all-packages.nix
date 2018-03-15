@@ -13694,7 +13694,10 @@ with pkgs;
 
   pmtools = callPackage ../os-specific/linux/pmtools { };
 
-  policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
+  policycoreutils = callPackage ../os-specific/linux/policycoreutils {
+    # v2.4 doesn't build with gcc7. remove this for v2.7
+    stdenv = overrideCC stdenv gcc6;
+  };
 
   powerdns = callPackage ../servers/dns/powerdns { };
 
