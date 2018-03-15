@@ -835,12 +835,6 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
-  # Hoogle needs newer versions than lts-11 provides. lambdabot-haskell-plugins
-  # depends on Hoogle and therefore needs to use the same version.
-  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
-    haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
-  };
-
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
