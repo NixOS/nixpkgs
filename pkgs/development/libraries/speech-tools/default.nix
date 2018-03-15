@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )
     sed -re 's@/bin/(rm|printf|uname)@\1@g' -i $( grep -rl '/bin/' . )
+
+    # c99 makes isnan valid for float and double
+    substituteInPlace include/EST_math.h \
+      --replace '__isnanf(X)' 'isnan(X)'
   '';
 
   installPhase = ''
