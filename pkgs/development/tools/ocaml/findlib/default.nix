@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib"; then
             export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
         fi
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"; then
+            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"
+        fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "$createFindlibDestdir"; then
           mkdir -p $OCAMLFIND_DESTDIR
