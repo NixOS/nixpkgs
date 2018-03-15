@@ -149,9 +149,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.6.2esr-7.5-2-slnos";
-      rev   = "cf1a504aaa26af962ae909a3811c0038db2d2eec";
-      sha256 = "0llbk7skh1n7yj137gv7rnxfasxsnvfjp4ss7h1fbdnw19yba115";
+      # branch "tor-browser-52.7.0esr-7.5-1-slnos";
+      rev   = "211b2be3fea45a450915b0addcd7783aa939e24a";
+      sha256 = "18gv4r8cjf89mamjh93a856a5yfp7dm3jrk8g05w89vxb3lrl74v";
     };
 
     patches = nixpkgsPatches;
