@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchurl, intltool, pkgconfig, gobjectIntrospection
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt
 , gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
-stdenv.mkDerivation rec {
-  name = "tracker-${version}";
+let
+  pname = "tracker";
   version = "2.0.3";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1005w90vhk1cl8g6kxpy2vdzbskw2jskfjcl42lngv18q5sb4bss";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "tracker"; attrPath = "gnome3.tracker"; };
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ vala pkgconfig intltool libxslt wrapGAppsHook ];
+  nativeBuildInputs = [ vala pkgconfig intltool libxslt wrapGAppsHook gobjectIntrospection ];
   # TODO: add libstemmer
   buildInputs = [
     glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib
@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;
