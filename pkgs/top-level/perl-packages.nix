@@ -8753,6 +8753,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MathVecStat = buildPerlPackage rec {
+    name = "Math-VecStat-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
+    };
+  };
+
   Memoize = buildPerlPackage {
     name = "Memoize-1.03.tgz";
     src = fetchurl {
