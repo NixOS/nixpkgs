@@ -20953,11 +20953,7 @@ EOF
 
   node-semver = callPackage ../development/python-modules/node-semver { };
 
-  node-semver2 = callPackage ../development/python-modules/node-semver/2.nix { };
-
   distro = callPackage ../development/python-modules/distro { };
-
-  distro11 = callPackage ../development/python-modules/distro/11.nix { };
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
 
