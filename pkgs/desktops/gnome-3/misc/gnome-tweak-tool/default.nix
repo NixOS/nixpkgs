@@ -3,27 +3,23 @@
 , bash, itstool, libxml2, python3Packages
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-tweak-tool-${version}";
+let
+  pname = "gnome-tweak-tool";
   version = "3.27.3";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tweak-tool/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1z8l1ym6qmhqirsny4hcqv989ilv5mm764y8q7920zprdcjprds3";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-tweak-tool"; attrPath = "gnome3.gnome-tweak-tool"; };
-  };
-
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 file wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas
-    gdk_pixbuf gnome3.defaultIconTheme librsvg
+    gdk_pixbuf gnome3.defaultIconTheme
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
@@ -55,6 +51,13 @@ stdenv.mkDerivation rec {
       sha256 = "1n9vwsfz4sx72qsi1gd1y7460zmagwirvmi9qrfhc3ahanpyn4fr";
     })
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/GnomeTweakTool;
