@@ -12,4 +12,6 @@ gettextLdflags() {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lintl"
 }
 
-addEnvHooks "$hostOffset" gettextLdflags
+if [ ! -z "@gettextNeedsLdflags@" ]; then
+    addEnvHooks "$hostOffset" gettextLdflags
+fi
