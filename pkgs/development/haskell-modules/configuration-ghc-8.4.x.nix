@@ -168,12 +168,6 @@ self: super: {
   ## doctest >=0.7 && <0.14
   turtle = super.turtle_1_5_4;
 
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=4 && <4.11
-  unordered-containers = super.unordered-containers_0_2_9_0;
-
-
   ## On Hackage:
 
   ## On Hackage, awaiting for import
