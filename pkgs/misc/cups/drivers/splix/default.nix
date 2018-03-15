@@ -1,7 +1,9 @@
-{ stdenv, fetchsvn, fetchurl, cups, zlib }:
+{ stdenv, fetchsvn, cups, zlib, jbigkit }:
+
 let rev = "315"; in
 stdenv.mkDerivation rec {
   name = "splix-svn-${rev}";
+
   src = fetchsvn {
     # We build this from svn, because splix hasn't been in released in several years
     # although the community has been adding some new printer models.
@@ -11,12 +13,17 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    makeFlags="V=1 DISABLE_JBIG=1 CUPSFILTER=$out/lib/cups/filter CUPSPPD=$out/share/cups/model"
+    makeFlags="$makeFlags CUPSFILTER=$out/lib/cups/filter CUPSDRV=$out/share/cups/drv"
   '';
 
-  buildInputs = [cups zlib];
+  buildFlags = [ "drv" "all" ];
+
+  makeFlags = [ "DRV_ONLY=1" ];
+
+  buildInputs = [ cups zlib jbigkit ];
 
   meta = {
+    description = "CUPS drivers for SPL (Samsung Printer Language) printers";
     homepage = http://splix.sourceforge.net;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
