@@ -75,7 +75,6 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   buildInputs = [ wrapPython ]
     ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
-    ++ lib.optionals doCheck checkInputs
     ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
     ++ buildInputs
     ++ pythonPath;
@@ -86,6 +85,7 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
   doInstallCheck = doCheck;
+  installCheckInputs = checkInputs;
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms

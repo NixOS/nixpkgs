@@ -36,6 +36,9 @@ rec {
     , depsTargetTarget            ? [] #  1 ->  1
     , depsTargetTargetPropagated  ? [] #  1 ->  1
 
+    , checkInputs                 ? []
+    , installCheckInputs          ? []
+
     # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
@@ -101,7 +104,9 @@ rec {
         ]
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-          (map (drv: drv.crossDrv or drv) buildInputs)
+          (map (drv: drv.crossDrv or drv) (buildInputs
+             ++ lib.optionals doCheck' checkInputs
+             ++ lib.optionals doInstallCheck' installCheckInputs))
         ]
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
@@ -155,6 +160,7 @@ rec {
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "doCheck" "doInstallCheck"
+           "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // {
