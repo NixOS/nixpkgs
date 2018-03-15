@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
-, intltool, itstool, clutter, clutter-gtk, libxml2, dconf }:
+{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
+, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib }:
 
 stdenv.mkDerivation rec {
   name = "lightsoff-${version}";
@@ -10,15 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0rwh9kz6aphglp79cyrfjab6vy02vclq68f646zjgb9xgg6ar73g";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "lightsoff"; attrPath = "gnome3.lightsoff"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg dconf
-                  libxml2 clutter clutter-gtk wrapGAppsHook itstool intltool ];
+  nativeBuildInputs = [ vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2];
+  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg clutter clutter-gtk ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "lightsoff";
+      attrPath = "gnome3.lightsoff";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Lightsoff;
