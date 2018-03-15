@@ -145,11 +145,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## free ==4.*, template-haskell >=2.4 && <2.13
-  lens = super.lens_4_16;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
   ## doctest >=0.11.1 && <0.14
   semigroupoids = super.semigroupoids_5_2_2;
 
