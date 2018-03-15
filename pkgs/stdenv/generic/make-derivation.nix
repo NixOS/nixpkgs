@@ -46,11 +46,13 @@ rec {
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
-    , doCheck ? false
+    , doCheck ? config.doCheckByDefault or false
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
-    , doInstallCheck ? false
+    , doInstallCheck ? config.doCheckByDefault or false
 
     , crossConfig ? null
     , meta ? {}
@@ -120,6 +122,11 @@ rec {
         ]
       ];
 
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+
       outputs' =
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
@@ -127,6 +134,7 @@ rec {
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
+           "doCheck" "doInstallCheck"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
@@ -202,12 +210,10 @@ rec {
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         } // lib.optionalAttrs (outputs' != [ "out" ]) {
           outputs = outputs';
-        } // lib.optionalAttrs (attrs ? doCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        } // lib.optionalAttrs (attrs ? doInstallCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
+        } // lib.optionalAttrs doCheck' {
+          doCheck = true;
+        } // lib.optionalAttrs doInstallCheck' {
+          doInstallCheck = true;
         });
 
       validity = import ./check-meta.nix {
