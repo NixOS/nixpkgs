@@ -1,11 +1,11 @@
 { stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.43.9";
+  name = "e2fsprogs-1.44.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "15rqvkzylqqckshfy7vmk15k7wds2rh3k1pwrkrs684p3g0gzq2v";
+    sha256 = "1l8z17zfzhi00f56xl6c4f2g3fi9m4ixlmwpmaihm9y9qz1giaq4";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
