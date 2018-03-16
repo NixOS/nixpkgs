@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dmq2g138h7fsswmq4l47b44gsl9anmm3ywqyi7y48f1rkvc11mk";
   };
 
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
   buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
