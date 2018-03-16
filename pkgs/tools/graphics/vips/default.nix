@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.6.2";
+  version = "8.6.3";
 
   src = fetchurl {
     url = "https://github.com/jcupitt/libvips/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "18hjwk000w49yjjb41qrk4s39mr1xccisrvwy2x063vyjbdbr1ll";
+    sha256 = "14h9w61gaimldmqaym0zhf9fkxjj1pkd5lhglhs6pxphynwxnnpq";
   };
 
   buildInputs =
