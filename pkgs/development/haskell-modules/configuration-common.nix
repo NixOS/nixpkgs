@@ -618,7 +618,7 @@ self: super: {
   }));
 
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_1; hackage-db = self.hackage-db_2_0_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
