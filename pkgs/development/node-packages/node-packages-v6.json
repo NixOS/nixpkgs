@@ -33,6 +33,7 @@
 , "hipache"
 , "htmlhint"
 , "html-minifier"
+, "imapnotify"
 , "ionic"
 , "ios-deploy"
 , "istanbul"
