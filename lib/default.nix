@@ -57,7 +57,7 @@ let
     inherit (trivial) id const concat or and boolToString mergeAttrs
       flip mapNullable inNixShell min max importJSON warn info
       nixpkgsVersion mod compare splitByAndCompare
-      functionArgs setFunctionArgs isFunction;
+      functionArgs setFunctionArgs isFunction optCall;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
