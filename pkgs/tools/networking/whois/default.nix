@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
     done
 
-    substituteInPlace Makefile --replace "DEFS += HAVE_ICONV" "DEFS += HAVE_ICONV\nwhois_LDADD += -liconv"
+    substituteInPlace Makefile --replace "DEFS += -DHAVE_ICONV" \
+      "$(printf "%s\n%s" "DEFS += -DHAVE_ICONV" "whois_LDADD += -liconv")"
   '';
 
   makeFlags = [ "HAVE_ICONV=1" ];
