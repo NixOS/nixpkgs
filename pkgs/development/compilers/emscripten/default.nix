@@ -3,7 +3,7 @@
 }:
 
 let
-  rev = "1.37.36";
+  rev = "1.37.28";
   appdir = "share/emscripten";
 in
 
@@ -13,9 +13,11 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "02p0cp86vd1mydlpq544xbydggpnrq9dhbxx7h08j235frjm5cdc";
+    sha256 = "0hix1m7lgw63dgsxcgdp2fj0r2va0afdz9srm9m4lv28g459a5mw";
     inherit rev;
   };
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ nodejs cmake python ];
 
@@ -40,20 +42,22 @@ stdenv.mkDerivation {
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+    # to make the tests work
+    echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
     echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
-
+  ''
+  +
+  ''
     echo "--------------- running test -----------------"
     HOME=$TMPDIR
     cp $out/${appdir}/config $HOME/.emscripten
-    echo "SPIDERMONKEY_ENGINE = []" >> $HOME/.emscripten
-    cat $HOME/.emscripten
     export PATH=$PATH:$out/bin
 
     #export EMCC_DEBUG=2  
     ${python}/bin/python $src/tests/runner.py test_hello_world
-    echo "--------------- running test -----------------"
+    echo "--------------- /running test -----------------"
   '';
 
   meta = with stdenv.lib; {
