@@ -131,6 +131,7 @@ in with self; {
   IlluminaHumanMethylationEPICanno_ilm10b3_hg19 = derive2 { name="IlluminaHumanMethylationEPICanno.ilm10b3.hg19"; version="0.6.0"; sha256="1rdkvbpbz8a8bd9ipycfmgn8a3x519abhwywka21ii9ziv3s6ah6"; depends=[minfi]; };
   IlluminaHumanMethylationEPICanno_ilm10b4_hg19 = derive2 { name="IlluminaHumanMethylationEPICanno.ilm10b4.hg19"; version="0.6.0"; sha256="0687b4k8hwfc18qgdd9ypv1skp37jd204fszba0gmrv3dc92i09c"; depends=[minfi]; };
   IlluminaHumanMethylationEPICmanifest = derive2 { name="IlluminaHumanMethylationEPICmanifest"; version="0.3.0"; sha256="0alhjda5g186z8b1nsmnpfswrlj7prdz8mkwx60wkkl6hkcnk6p3"; depends=[minfi]; };
+  JASPAR2018 = derive2 { name="JASPAR2018"; version="1.0.0"; sha256="1j82wsayzn6zn7irihpc8jivvwfsdrckik0ypajsv3pgrb5b3naa"; depends=[]; };
   JazaeriMetaData_db = derive2 { name="JazaeriMetaData.db"; version="3.2.3"; sha256="04lvcmm4ybxkfwgbiwcnpyj6kpbd0gd7jz6ijlbbvv6zdgdmvykb"; depends=[AnnotationDbi org_Hs_eg_db]; };
   KEGG_db = derive2 { name="KEGG.db"; version="3.2.3"; sha256="0qv9in1nmnqcbjxh0y45x33xyw9zdp4jf5hmlvcsh1pclcq4dsh2"; depends=[AnnotationDbi]; };
   LAPOINTE_db = derive2 { name="LAPOINTE.db"; version="3.2.3"; sha256="0960gy5p4ybs5zs6251cgc3nk5a9gsh1nh23gkbkr3gc8jddinfm"; depends=[AnnotationDbi org_Hs_eg_db]; };
