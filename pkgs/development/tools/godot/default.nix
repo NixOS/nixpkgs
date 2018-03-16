@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = [ "i646-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.twey ];
   };
 }
