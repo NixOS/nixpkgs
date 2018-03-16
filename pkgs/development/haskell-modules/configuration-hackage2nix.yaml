@@ -2433,9 +2433,10 @@ extra-packages:
 
 package-maintainers:
   peti:
-    - cabal-install
     - cabal2nix
     - cabal2spec
+    - cabal-install
+    - distribution-nixpkgs
     - funcmp
     - git-annex
     - hackage-db
@@ -2448,11 +2449,14 @@ package-maintainers:
     - hsemail
     - hsyslog
     - jailbreak-cabal
+    - json-autotype
     - lambdabot-core
     - lambdabot-irc-plugins
     - language-nix
     - logging-facade-syslog
+    - nix-paths
     - pandoc
+    - postmaster
     - stack
     - streamproc
     - structured-haskell-mode
