@@ -48,7 +48,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
-  ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ])
+  ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ])
+  ++ lib.optionals gstreamerUglySupport  (with pkgs.gst_all_1; [ gst-plugins-ugly ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
@@ -83,7 +84,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Add capability to ignore known failing tests
   # and enable doCheck
   doCheck = false;
-  
+
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
   in ''
@@ -100,7 +101,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
       fi
     done
   '';
-  
+
   enableParallelBuilding = true;
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
