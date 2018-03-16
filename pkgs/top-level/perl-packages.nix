@@ -7654,7 +7654,7 @@ let self = _self // overrides; _self = with self; {
       echo "1;" > lib/JSON/backportPP.pm
     '';
     postConfigure = ''
-      cp lib/JSON/backportPP.pm{,orig}
+      cp lib/JSON/backportPP.pm{orig,}
     '';
     buildInputs = [ TestPod ];
     meta = {
