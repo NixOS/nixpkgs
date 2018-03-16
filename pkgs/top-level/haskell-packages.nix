@@ -6,16 +6,11 @@
 let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
-    "ghc704Binary"
-    "ghc742Binary"
-    "ghc784Binary"
     "ghc7103Binary"
     "ghc821Binary"
-    "ghc704"
-    "ghc763"
+    "ghcCross"
     "ghcjs"
     "ghcjsHEAD"
-    "ghcCross"
     "integer-simple"
   ];
 
@@ -31,24 +26,9 @@ in rec {
 
   compiler = {
 
-    ghc704Binary = callPackage ../development/compilers/ghc/7.0.4-binary.nix { gmp = pkgs.gmp4; };
-    ghc742Binary = callPackage ../development/compilers/ghc/7.4.2-binary.nix { gmp = pkgs.gmp4; };
-    ghc784Binary = callPackage ../development/compilers/ghc/7.8.4-binary.nix { };
     ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
     ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
-    ghc704 = callPackage ../development/compilers/ghc/7.0.4.nix {
-      ghc = compiler.ghc704Binary;
-    };
-    ghc742 = callPackage ../development/compilers/ghc/7.4.2.nix {
-      ghc = compiler.ghc704Binary;
-    };
-    ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix {
-      ghc = compiler.ghc704Binary;
-    };
-    ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
-      ghc = compiler.ghc742Binary;
-    };
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
       bootPkgs = packages.ghc7103Binary;
       inherit (bootPkgs) hscolour;
