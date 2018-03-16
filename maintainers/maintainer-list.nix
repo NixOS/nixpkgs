@@ -1256,6 +1256,11 @@
     github = "fare";
     name = "Francois-Rene Rideau";
   };
+  fdns = {
+    email = "fdns02@gmail.com";
+    github = "fdns";
+    name = "Felipe Espinoza";
+  };
   fgaz = {
     email = "francygazz@gmail.com";
     github = "fgaz";
