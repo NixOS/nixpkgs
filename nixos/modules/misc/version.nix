@@ -85,8 +85,8 @@ in
       revision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
       versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
-      # Note: code names must only increase in alphabetical order.
-      codeName = "Jackrabbit";
+      # Note: the first letter is bumped on every release.  It's an animal.
+      codeName = "Jellyfish";
     };
 
     # Generate /etc/os-release.  See
