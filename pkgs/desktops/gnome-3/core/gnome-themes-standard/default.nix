@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-themes-standard-${version}";
-  version = "3.22.3";
+  version = "3.27.90";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-themes-standard/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "61dc87c52261cfd5b94d65e8ffd923ddeb5d3944562f84942eeeb197ab8ab56a";
+    sha256 = "1p1ibm0f2py0lrxrw8wv1jvs630mmz9q97f404jyzr4a8nswrizz";
   };
 
   passthru = {
