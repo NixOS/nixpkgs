@@ -6,11 +6,15 @@ mesonConfigurePhase() {
     fi
 
     # Build release by default.
-    mesonFlags="--buildtype=${mesonBuildType:-release} $mesonFlags"
+    if [ -n "@isCross@" ]; then
+      crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
+    fi
+
+    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-release} $mesonFlags"
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
-    meson build $mesonFlags "${mesonFlagsArray[@]}"
+    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then
@@ -29,7 +33,7 @@ fi
 mesonCheckPhase() {
     runHook preCheck
 
-    meson test
+    meson test --print-errorlogs
 
     runHook postCheck
 }

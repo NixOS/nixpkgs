@@ -39,14 +39,6 @@ let
       echo "${version}-default" > $out/include/config/kernel.release
     '';
 
-    # !!! hacky
-    fixupPhase = ''
-      ln -s asm $out/include/asm-$platform
-      if test "$platform" = "i386" -o "$platform" = "x86_64"; then
-        ln -s asm $out/include/asm-x86
-      fi
-    '';
-
     meta = with lib; {
       description = "Header files and scripts for Linux kernel";
       license = licenses.gpl2;

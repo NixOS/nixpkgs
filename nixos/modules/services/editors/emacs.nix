@@ -7,7 +7,7 @@ let
   cfg = config.services.emacs;
 
   editorScript = pkgs.writeScriptBin "emacseditor" ''
-    #!${pkgs.stdenv.shell}
+    #!${pkgs.runtimeShell}
     if [ -z "$1" ]; then
       exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
     else

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dmq2g138h7fsswmq4l47b44gsl9anmm3ywqyi7y48f1rkvc11mk";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
   '';
 
   meta = {

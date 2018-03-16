@@ -111,6 +111,11 @@
     github = "Profpatsch";
     name = "Profpatsch";
   };
+  roosemberth = {
+    email = "roosembert.palacios+nixpkgs@gmail.com";
+    github = "roosemberth";
+    name = "Roosembert (Roosemberth) Palacios";
+  };
   SShrike = {
     email = "severen@shrike.me";
     github = "severen";

@@ -30,7 +30,7 @@ let
       # /bin/sh in the sandbox as a bind-mount to bash. This means we
       # also need to include the entire closure of bash. Nix >= 2.0
       # provides a /bin/sh by default.
-      sh = pkgs.stdenv.shell;
+      sh = pkgs.runtimeShell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
       pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } ''

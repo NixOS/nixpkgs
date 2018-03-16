@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   # https://github.com/ivmai/libatomic_ops/pull/32
   patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 

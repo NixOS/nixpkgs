@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, enableSeccomp ? false, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null, buildPackages
+}:
 
 assert enableSeccomp -> libseccomp != null;
 
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
@@ -39,6 +42,11 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
+    "--with-randomdev=/dev/random"
+    "--with-ecdsa"
+    "--with-gost"
+    "--without-eddsa"
+    "--with-aes"
   ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''

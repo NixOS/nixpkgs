@@ -7,18 +7,11 @@ let
 
   py = python3.override {
     packageOverrides = self: super: {
-      yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "162630v7f98l27h11msk9416lqwm2mpgxh4s636594nlbfs9by3a";
-        };
-      });
       aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
+        version = "3.0.6";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
+          sha256 = "5b588d21b454aaeaf2debf3c4a37f0752fb91a5c15b621deca7e8c49316154fe";
         };
       });
       pytest = super.pytest.overridePythonAttrs (oldAttrs: rec {
@@ -29,10 +22,17 @@ let
         };
       });
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.10.5";
+        version = "0.11.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "15i3gaap8ilhpbah1ffc6q415wkvliqxilc6s69a4rinvkw6cx3s";
+          sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
+        };
+      });
+      astral = super.astral.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
         };
       });
       hass-frontend = super.callPackage ./frontend.nix { };
@@ -51,11 +51,13 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.63.3";
+  hassVersion = "0.65.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
+
+  disabled = pythonOlder "3.5";
 
   inherit availableComponents;
 
@@ -64,14 +66,14 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1lrdrn0x8i81vbqxziv5fgcc8ldz7x5r62kfz3nyg4g43rk3dqq8";
+    sha256 = "1jd44y3f31926g08h2zykp9hnigh6yms38mqn3i5gcl01n1n368k";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    requests pyyaml pytz pip jinja2 voluptuous typing aiohttp yarl async-timeout chardet astral certifi attrs
+    requests pyyaml pytz pip jinja2 voluptuous typing aiohttp async-timeout astral certifi attrs
     # From http, frontend and recorder components
-    sqlalchemy aiohttp-cors hass-frontend user-agents
+    sqlalchemy aiohttp-cors hass-frontend
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [

@@ -215,7 +215,7 @@ in
           { src = pkgs.writeText "sudoers-in" cfg.configFile; }
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
-          "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
         target = "sudoers";
         mode = "0440";
       };

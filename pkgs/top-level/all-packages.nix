@@ -557,7 +557,7 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
+  awscli = callPackage ../tools/admin/awscli { };
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
@@ -1955,7 +1955,7 @@ with pkgs;
   doas = callPackage ../tools/security/doas { };
 
   docbook2x = callPackage ../tools/typesetting/docbook2x {
-    inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
+    inherit (perlPackages) XMLSAX XMLSAXBase XMLParser XMLNamespaceSupport;
   };
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
@@ -5700,6 +5700,9 @@ with pkgs;
 
   ### SHELLS
 
+  runtimeShell = "${runtimeShellPackage}/bin/bash";
+  runtimeShellPackage = bash;
+
   bash = lowPrio (callPackage ../shells/bash/4.4.nix {
     texinfo = null;
     interactive = stdenv.isCygwin; # patch for cygwin requires readline support
@@ -6003,20 +6006,6 @@ with pkgs;
     inherit binutils;
   };
 
-  gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
-    inherit noSysDirs;
-    texinfo = texinfo4;
-
-    ppl = null;
-    cloogppl = null;
-
-    # bootstrapping a profiled compiler does not work in the sheevaplug:
-    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = !stdenv.isArm;
-
-    libcCross = if targetPlatform != buildPlatform then libcCross else null;
-  }));
-
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
@@ -6141,23 +6130,6 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   });
 
-  gnat = gnat45; # failed to make 4.6 or 4.8 build
-
-  gnat45 = wrapCC (gcc45.cc.override {
-    name = "gnat";
-    langCC = false;
-    langC = true;
-    langAda = true;
-    profiledCompiler = false;
-    inherit gnatboot;
-    # We can't use the ppl stuff, because we would have
-    # libstdc++ problems.
-    cloogppl = null;
-    ppl = null;
-  });
-
-  gnatboot = wrapGCC-old (callPackage ../development/compilers/gnatboot {});
-
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk {
     emacsSupport = config.emacsSupport or false;
   };
@@ -6170,14 +6142,6 @@ with pkgs;
     langGo = true;
     profiledCompiler = false;
   });
-
-  ghdl_mcode = callPackage_i686 ../development/compilers/ghdl {
-    flavour = "mcode";
-  };
-
-  ghdl_llvm = callPackage ../development/compilers/ghdl {
-    flavour = "llvm";
-  };
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
@@ -6845,14 +6809,6 @@ with pkgs;
     bintools = if targetPlatform.isDarwin then darwin.binutils else binutils;
     libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
   };
-  # legacy version, used for gnat bootstrapping
-  wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
-    nativeTools = stdenv.cc.nativeTools or false;
-    nativeLibc = stdenv.cc.nativeLibc or false;
-    nativePrefix = stdenv.cc.nativePrefix or "";
-    gcc = baseGCC;
-    libc = glibc;
-  };
 
   wrapBintoolsWith = { bintools, libc }: bintoolsWrapperFun {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
@@ -7432,11 +7388,11 @@ with pkgs;
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
-  automake = automake115x;
+  automake = automake116x;
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-  automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
+  automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
@@ -7589,7 +7545,7 @@ with pkgs;
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
-  conan = pythonPackages.callPackage ../development/tools/build-managers/conan { };
+  conan = callPackage ../development/tools/build-managers/conan { };
 
   cookiecutter = pythonPackages.cookiecutter;
 
@@ -7765,6 +7721,8 @@ with pkgs;
   framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
+
+  fsatrace = callPackage ../development/tools/misc/fsatrace { };
 
   fswatch = callPackage ../development/tools/misc/fswatch { };
 
@@ -8296,7 +8254,7 @@ with pkgs;
   yodl = callPackage ../development/tools/misc/yodl { };
 
   yq = callPackage ../development/tools/yq {
-    inherit (python3Packages) buildPythonApplication fetchPypi pyyaml;
+    inherit (python3Packages) buildPythonApplication fetchPypi pyyaml xmltodict;
   };
 
   winpdb = callPackage ../development/tools/winpdb { };
@@ -10324,6 +10282,9 @@ with pkgs;
   libva-full = libva.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva-utils { };
 
+  libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
+  libva1-full = libva1.override { minimal = false; };
+
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
   libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl {
@@ -10906,10 +10867,7 @@ with pkgs;
     suffix = "min";
   };
 
-  poppler_qt4 = poppler.override {
-    qt4Support = true;
-    suffix = "qt4";
-  };
+  poppler_qt4 = callPackage ../development/libraries/poppler/qt4.nix { };
 
   poppler_utils = poppler.override { suffix = "utils"; utils = true; };
 
@@ -10939,8 +10897,10 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
+  protobuf = protobuf3_4;
 
+  protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
+  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
@@ -12146,6 +12106,8 @@ with pkgs;
   apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
   apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
 
+  appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
+
   archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
 
   atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
@@ -13101,6 +13063,8 @@ with pkgs;
 
   i7z = callPackage ../os-specific/linux/i7z { };
 
+  pcm = callPackage ../os-specific/linux/pcm { };
+
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
@@ -13114,7 +13078,7 @@ with pkgs;
   iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = callPackage ../os-specific/linux/iputils {
-    inherit (perlPackages) SGMLSpm;
+    inherit (buildPackages.buildPackages.perlPackages) SGMLSpm;
   };
 
   iptables = callPackage ../os-specific/linux/iptables { };
