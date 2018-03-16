@@ -9,7 +9,11 @@ with pkgs; rec {
   }).overrideDerivation
     (old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ autoreconfHook pkgconfig ];
-      buildInputs = old.buildInputs ++ [ zlib nodejs automake autoconf ];
+      buildInputs = old.buildInputs ++ [ zlib nodejs automake autoconf python ];
+      configurePhase = ''
+        HOME=$TMPDIR
+        emconfigure ./configure --prefix=$out 
+      '';
     });
   
   
@@ -19,9 +23,14 @@ with pkgs; rec {
   }).overrideDerivation
     (old: { 
       nativeBuildInputs = old.nativeBuildInputs ++ [ autoreconfHook pkgconfig ];
-      buildInputs = old.buildInputs ++ [ zlib nodejs ];
+      buildInputs = old.buildInputs ++ [ zlib nodejs python ];
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used..."; 
+
+      configurePhase = ''
+        HOME=$TMPDIR
+        emconfigure ./configure --prefix=$out 
+      '';
       checkPhase = ''
         echo "================= testing xmllint using node ================="
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
@@ -94,7 +103,7 @@ with pkgs; rec {
         HOME=$TMPDIR
         runHook preConfigure
 
-        emconfigure ./configure --prefix=$out 
+        ./configure --prefix=$out 
 
         runHook postConfigure
       '';
