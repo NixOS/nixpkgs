@@ -10062,6 +10062,8 @@ in {
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
+  msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
+
   msgpack-python = self.msgpack.overridePythonAttrs {
     pname = "msgpack-python";
     postPatch = ''
@@ -10494,19 +10496,22 @@ in {
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
-    version = "1.3.1";
+    version = "1.3.3";
 
-    propagatedBuildInputs = with self ; [ dnspython pyasn1 ];
+    propagatedBuildInputs = with self; [ dnspython pyasn1 gevent ];
+    checkInputs = [ pkgs.gnupg ];
+    checkPhase = "${python.interpreter} testall.py";
+    doCheck = false; # Tests failed all this time and upstream doesn't seem to care.
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
-      sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
+      sha256 = "0samiq1d97kk8g9pszfbrbfw9zc41zp6017dbkwha9frf7gc24yj";
     };
 
     meta = {
       description = "XMPP library for Python";
       license = licenses.mit;
-      homepage = "http://sleekxmpp.com/";
+      homepage = http://sleekxmpp.com/;
     };
   };
 
@@ -12797,31 +12802,7 @@ in {
 
   pycups = callPackage ../development/python-modules/pycups { };
 
-  pycurl = buildPythonPackage (rec {
-    name = "pycurl-7.19.5.1";
-    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
-
-    src = pkgs.fetchurl {
-      url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
-      sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
-    };
-
-    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace '--static-libs' '--libs'
-      export PYCURL_SSL_LIBRARY=openssl
-    '';
-
-    meta = {
-      homepage = http://pycurl.sourceforge.net/;
-      description = "Python wrapper for libcurl";
-      platforms = platforms.linux;
-    };
-  });
+  pycurl = callPackage ../development/python-modules/pycurl { };
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";
@@ -13175,7 +13156,7 @@ in {
       homepage = https://pypi.python.org/pypi/PyICU/;
       description = "Python extension wrapping the ICU C++ API";
       license = licenses.mit;
-      platforms = with platforms; allBut darwin;
+      platforms = platforms.linux; # Maybe other non-darwin Unix
       maintainers = [ maintainers.rycee ];
     };
   };
@@ -16523,7 +16504,9 @@ in {
       patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
     '';
 
-    inherit (py) meta;
+    meta = py.meta // {
+      platforms = platforms.linux;
+    };
   };
 
   tlslite = buildPythonPackage rec {
@@ -19806,28 +19789,8 @@ EOF
     };
   };
 
-  xgboost = buildPythonPackage rec {
-    name = "xgboost-${version}";
-
-    inherit (pkgs.xgboost) version src meta;
-
-    propagatedBuildInputs = with self; [ scipy ];
-    checkInputs = with self; [ nose ];
-
-    postPatch = ''
-      cd python-package
-
-      sed "s/CURRENT_DIR = os.path.dirname(__file__)/CURRENT_DIR = os.path.abspath(os.path.dirname(__file__))/g" -i setup.py
-      sed "/^LIB_PATH.*/a LIB_PATH = [os.path.relpath(LIB_PATH[0], CURRENT_DIR)]" -i setup.py
-      cat <<EOF >xgboost/libpath.py
-      def find_lib_path():
-        return ["${pkgs.xgboost}/lib/libxgboost.so"]
-      EOF
-    '';
-
-    postInstall = ''
-      rm -rf $out/xgboost
-    '';
+  xgboost = callPackage ../development/python-modules/xgboost {
+    xgboost = pkgs.xgboost;
   };
 
   xkcdpass = buildPythonPackage rec {
@@ -20661,11 +20624,7 @@ EOF
 
   node-semver = callPackage ../development/python-modules/node-semver { };
 
-  node-semver2 = callPackage ../development/python-modules/node-semver/2.nix { };
-
   distro = callPackage ../development/python-modules/distro { };
-
-  distro11 = callPackage ../development/python-modules/distro/11.nix { };
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
 

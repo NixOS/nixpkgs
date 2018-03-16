@@ -111,6 +111,11 @@
     github = "Profpatsch";
     name = "Profpatsch";
   };
+  roosemberth = {
+    email = "roosembert.palacios+nixpkgs@gmail.com";
+    github = "roosemberth";
+    name = "Roosembert (Roosemberth) Palacios";
+  };
   SShrike = {
     email = "severen@shrike.me";
     github = "severen";
@@ -175,6 +180,11 @@
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
     name = "Abigail Bunyan";
+  };
+  aborsu = {
+    email = "a.borsu@gmail.com";
+    github = "aborsu";
+    name = "Augustin Borsu";
   };
   aboseley = {
     email = "adam.boseley@gmail.com";

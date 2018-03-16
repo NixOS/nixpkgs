@@ -24,10 +24,11 @@ let
 in rec {
   inherit all;
 
-  allBut = platforms: lists.filter (x: !(builtins.elem x platforms)) all;
   none = [];
 
   arm     = filterDoubles predicates.isArm;
+  aarch64 = filterDoubles predicates.isAarch64;
+  x86     = filterDoubles predicates.isx86;
   i686    = filterDoubles predicates.isi686;
   mips    = filterDoubles predicates.isMips;
   x86_64  = filterDoubles predicates.isx86_64;

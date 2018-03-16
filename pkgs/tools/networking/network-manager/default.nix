@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, intltool, pkgconfig, dbus-glib
+{ stdenv, fetchurl, intltool, pkgconfig, dbus-glib, gnome3
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
 , python3Packages, docbook_xsl, fetchpatch, openconnect, curl, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name    = "network-manager-${version}";
+let
   pname   = "NetworkManager";
-  major   = "1.10";
-  version = "${major}.2";
+  version = "1.10.4";
+in stdenv.mkDerivation rec {
+  name    = "network-manager-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
-    sha256 = "0nv2jm2lsidlrzn4dkbc5rpj8ma4cpzjqz8z8dmwkqvh0zsk970n";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1zimmpmpd84dscdky7zad5zr1gk1bnsk0insjm0s9415gjvsgq3x";
   };
 
   outputs = [ "out" "dev" ];
@@ -104,8 +104,15 @@ stdenv.mkDerivation rec {
     ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage    = http://projects.gnome.org/NetworkManager/;
+    homepage    = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];

@@ -45,8 +45,9 @@ self: super: {
   # https://github.com/bitemyapp/esqueleto/issues/77
   esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
 
-  # https://github.com/haskell-pkg-janitors/haskell-src/issues/5
-  haskell-src = markBrokenVersion "1.0.2.0" super.haskell-src;
+  # Need newer version.
+  haskell-src = super.haskell-src_1_0_3_0;
+
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
@@ -61,16 +62,13 @@ self: super: {
   bv = super.bv_0_5;
 
   ## Needs bump to a versioned attribute
-  constraints = super.constraints_0_10;
-
-  ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## template-haskell >=2.5 && <2.13
   deriving-compat = super.deriving-compat_0_4_1;
 
   ## Needs bump to a versioned attribute
   ## Issue: https://github.com/sol/doctest/issues/189
-  doctest = overrideCabal super.doctest_0_14_1 (drv: {
+  doctest = overrideCabal super.doctest_0_15_0 (drv: {
     ## Setup: Encountered missing dependencies:
     ## ghc >=7.0 && <8.4
     ##
@@ -83,18 +81,6 @@ self: super: {
   ## Setup: Encountered missing dependencies:
   ## free >=4.9 && <5
   either = super.either_5;
-
-  ## Needs bump to a versioned attribute
-  ##     • Could not deduce (Semigroup (IterT m a))
-  ##         arising from the superclasses of an instance declaration
-  ##       from the context: (Monad m, Monoid a)
-  free = super.free_5_0_1;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=3 && <4.11
-  ## Needed for (<>) in prelude
-  funcmp = super.funcmp_1_9;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
@@ -118,13 +104,7 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  ##     • Could not deduce (Semigroup (ParseResult m))
-  ##         arising from the superclasses of an instance declaration
-  ##       from the context: Monoid m
-  haskell-src-exts = super.haskell-src-exts_1_20_2;
-
-  ## Needs bump to a versioned attribute
-  hspec = overrideCabal super.hspec_2_4_8 (drv: {
+  hspec = overrideCabal super.hspec_2_5_0 (drv: {
     ## Setup: Encountered missing dependencies:
     ## hspec-core ==2.4.4, hspec-discover ==2.4.4
     ##
@@ -136,7 +116,7 @@ self: super: {
   });
 
   ## Needs bump to a versioned attribute
-  hspec-core = overrideCabal super.hspec-core_2_4_8 (drv: {
+  hspec-core = overrideCabal super.hspec-core_2_5_0 (drv: {
     ##     • No instance for (Semigroup Summary)
     ##         arising from the superclasses of an instance declaration
     ##     • In the instance declaration for ‘Monoid Summary’
@@ -153,50 +133,7 @@ self: super: {
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
   ## hspec-discover ==2.4.8
-  hspec-discover = super.hspec-discover_2_4_8;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## free ==4.*, template-haskell >=2.4 && <2.13
-  lens = super.lens_4_16;
-
-  ## Needs bump to a versioned attribute
-  regex-tdfa = overrideCabal super.regex-tdfa_1_2_3 (drv: {
-    ##     • No instance for (Semigroup (CharMap a))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (CharMap a)’
-    ##
-    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:188:16:
-    editedCabalFile = null;
-  });
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## doctest >=0.11.1 && <0.14
-  semigroupoids = super.semigroupoids_5_2_2;
-
-  ## Needs bump to a versioned attribute
-  ## Issue: https://github.com/haskell/test-framework/issues/35
-  test-framework = overrideCabal super.test-framework_0_8_2_0 (drv: {
-    ##     • No instance for (Semigroup (TestOptions' Maybe))
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid (TestOptions' Maybe)’
-    ##
-    ## Setup: Encountered missing dependencies:
-    ## QuickCheck >=2.3 && <2.10
-    doCheck         = false;
-  });
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## doctest >=0.7 && <0.14
-  turtle = super.turtle_1_5_4;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=4 && <4.11
-  unordered-containers = super.unordered-containers_0_2_9_0;
-
+  hspec-discover = super.hspec-discover_2_5_0;
 
   ## On Hackage:
 
@@ -795,7 +732,7 @@ self: super: {
       stripLen = 1;
     });
 
-  # Old versions don't compile.
-  vty = self.vty_5_20;
+  # https://github.com/jgm/pandoc-types/issues/37
+  pandoc-types = self.pandoc-types_1_17_4;
 
 }

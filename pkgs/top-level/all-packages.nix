@@ -1110,6 +1110,8 @@ with pkgs;
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  doitlive = callPackage ../tools/misc/doitlive { };
+
   dosage = pythonPackages.dosage;
 
   dpic = callPackage ../tools/graphics/dpic { };
@@ -1219,6 +1221,8 @@ with pkgs;
   gist = callPackage ../tools/text/gist { };
 
   gixy = callPackage ../tools/admin/gixy { };
+
+  gllvm = callPackage ../development/tools/gllvm { };
 
   glide = callPackage ../development/tools/glide { };
 
@@ -2617,9 +2621,9 @@ with pkgs;
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
    */
-  graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix {
+  graphviz_2_32 = lib.overrideDerivation (callPackage ../tools/graphics/graphviz/2.32.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
+  }) (x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
 
   grin = callPackage ../tools/text/grin { };
   ripgrep = callPackage ../tools/text/ripgrep { };
@@ -5770,7 +5774,8 @@ with pkgs;
   avra = callPackage ../development/compilers/avra { };
 
   avian = callPackage ../development/compilers/avian {
-    stdenv = overrideCC stdenv gcc49;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
+    stdenv = if stdenv.cc.isGNU then overrideCC stdenv gcc49 else stdenv;
   };
 
   bigloo = callPackage ../development/compilers/bigloo { };
@@ -5795,7 +5800,9 @@ with pkgs;
     chickenEggs = callPackage ../development/tools/egg2nix/chicken-eggs.nix { };
   };
 
-  ccl = callPackage ../development/compilers/ccl { };
+  ccl = callPackage ../development/compilers/ccl {
+    inherit (darwin) bootstrap_cmds;
+  };
 
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
@@ -7538,7 +7545,7 @@ with pkgs;
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
-  conan = pythonPackages.callPackage ../development/tools/build-managers/conan { };
+  conan = callPackage ../development/tools/build-managers/conan { };
 
   cookiecutter = pythonPackages.cookiecutter;
 
@@ -8411,7 +8418,9 @@ with pkgs;
 
   cdk = callPackage ../development/libraries/cdk {};
 
-  cdo = callPackage ../development/libraries/cdo {};
+  cdo = callPackage ../development/libraries/cdo {
+    stdenv = gccStdenv;
+  };
 
   cimg = callPackage  ../development/libraries/cimg { };
 
@@ -9348,6 +9357,8 @@ with pkgs;
 
   jshon = callPackage ../development/tools/parsing/jshon { };
 
+  json2hcl = callPackage ../development/tools/json2hcl { };
+
   json-glib = callPackage ../development/libraries/json-glib { };
 
   json_c = callPackage ../development/libraries/json-c { };
@@ -10268,6 +10279,9 @@ with pkgs;
   libva = callPackage ../development/libraries/libva { };
   libva-full = libva.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva-utils { };
+
+  libva1 = callPackage ../development/libraries/libva/1.0.0.nix { };
+  libva1-full = libva1.override { minimal = false; };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
@@ -13046,6 +13060,8 @@ with pkgs;
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
   i7z = callPackage ../os-specific/linux/i7z { };
+
+  pcm = callPackage ../os-specific/linux/pcm { };
 
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
 
@@ -16382,7 +16398,7 @@ with pkgs;
 
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
-  llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
+  llpp = ocaml-ng.ocamlPackages_4_04.callPackage ../applications/misc/llpp { };
 
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
@@ -20513,6 +20529,10 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
+  satysfi = callPackage ../tools/typesetting/satysfi {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
+  };
+
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
     librsvg = librsvg.override { enableIntrospection = true; };
@@ -20641,9 +20661,7 @@ with pkgs;
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
-  vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
-    webkit = webkitgtk218x;
-  };
+  vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
   vips = callPackage ../tools/graphics/vips { };

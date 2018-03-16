@@ -1,14 +1,14 @@
 { stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig
 , libsecret, withGnome ? true, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+let
   pname   = "NetworkManager-pptp";
-  major   = "1.2";
-  version = "${major}.4";
+  version = "1.2.4";
+in stdenv.mkDerivation rec {
+  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "bd97ce768c34cce6d5b5d43681149a8300bec754397a3f46a0d8d0aea7030c5e";
   };
 
@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome";
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager-pptp";
+    };
+  };
 
   meta = {
     description = "PPtP plugin for NetworkManager";
