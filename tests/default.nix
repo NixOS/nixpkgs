@@ -10,5 +10,6 @@ with import ./composer.nix { inherit pkgs; };
     zathura
     evince
     youtube-dl
+    view-pdf
     ;
 }

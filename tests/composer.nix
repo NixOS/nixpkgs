@@ -2,7 +2,7 @@
 let
   callPackage = pkgs.callPackage;
 in
-rec {
+pkgs.lib.makeExtensible (self: with self; {
   maxima = callPackage ./maxima.nix {};
   libreoffice = callPackage ./libreoffice.nix {
     
@@ -27,5 +27,9 @@ rec {
     pdfTest = imagemagick-pdf;
   };
 
+  view-pdf = pkgs.lib.genAttrs ["pdflatex" "xelatex" "imagemagick-pdf"]
+    (generator: pkgs.lib.genAttrs ["zathura" "evince"]
+       (viewer: self.${viewer}.override { pdfTest = self.${generator}; }));
+
   youtube-dl = callPackage ./youtube-dl/default.nix {};
-}
+})
