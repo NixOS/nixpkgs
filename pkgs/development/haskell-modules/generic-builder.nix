@@ -30,7 +30,6 @@ in
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
-, enableSplitObjs ? null # OBSOLETE, use enableDeadCodeElimination
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip  for darwin
 , enableStaticLibraries ? true
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
@@ -67,8 +66,6 @@ in
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
-# OBSOLETE, use enableDeadCodeElimination
-assert enableSplitObjs == null;
 
 let
 
