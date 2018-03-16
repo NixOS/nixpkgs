@@ -8379,6 +8379,8 @@ with pkgs;
 
   armadillo = callPackage ../development/libraries/armadillo {};
 
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp {};
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio = callPackage ../development/libraries/asio { };
