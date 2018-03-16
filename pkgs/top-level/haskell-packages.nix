@@ -21,6 +21,17 @@ let
 
   callPackage = newScope { inherit haskellLib; };
 
+  bootstrapPackageSet = self: super: {
+    mkDerivation = drv: super.mkDerivation (drv // {
+      doCheck = false;
+      doHaddock = false;
+      enableExecutableProfiling = false;
+      enableLibraryProfiling = false;
+      enableSharedExecutables = false;
+      enableSharedLibraries = false;
+    });
+  };
+
 in rec {
   lib = haskellLib;
 
@@ -94,6 +105,7 @@ in rec {
       buildHaskellPackages = bh.packages.ghc7103Binary;
       ghc = bh.compiler.ghc7103Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
     };
     ghc802 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc802;
@@ -104,6 +116,7 @@ in rec {
       buildHaskellPackages = bh.packages.ghc821Binary;
       ghc = bh.compiler.ghc821Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
     };
     ghc822 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc822;
