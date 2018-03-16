@@ -147,6 +147,11 @@ in rec {
     defconfig = "jetson-tk1_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
+    # tegra-uboot-flasher expects this exact directory layout, sigh...
+    postInstall = ''
+      mkdir -p $out/spl
+      cp spl/u-boot-spl $out/spl/
+    '';
   };
 
   ubootOdroidXU3 = buildUBoot rec {
