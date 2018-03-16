@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true
+{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
+, jre, binaryen, enableWasm ? true ,  python2Packages, cmake
 }:
 
 let
-  rev = "1.37.16";
+  rev = "1.37.36";
   appdir = "share/emscripten";
 in
 
@@ -13,9 +13,11 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "1qyhjx5zza01vnwmj6qzxbkagxknn4kzb6gw12fqw5q8pa8fy4zy";
+    sha256 = "02p0cp86vd1mydlpq544xbydggpnrq9dhbxx7h08j235frjm5cdc";
     inherit rev;
   };
+
+  buildInputs = [ nodejs cmake python ];
 
   buildCommand = ''
     mkdir -p $out/${appdir}
@@ -41,6 +43,17 @@ stdenv.mkDerivation {
   ''
   + stdenv.lib.optionalString enableWasm ''
     echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
+
+    echo "--------------- running test -----------------"
+    HOME=$TMPDIR
+    cp $out/${appdir}/config $HOME/.emscripten
+    echo "SPIDERMONKEY_ENGINE = []" >> $HOME/.emscripten
+    cat $HOME/.emscripten
+    export PATH=$PATH:$out/bin
+
+    #export EMCC_DEBUG=2  
+    ${python}/bin/python $src/tests/runner.py test_hello_world
+    echo "--------------- running test -----------------"
   '';
 
   meta = with stdenv.lib; {

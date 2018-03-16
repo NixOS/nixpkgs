@@ -4,9 +4,14 @@
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 with pkgs; rec {
-  json_c = pkgs.json_c.override {
+  json_c = (pkgs.json_c.override {
     stdenv = emscriptenStdenv;
-  };
+  }).overrideDerivation
+    (old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ autoreconfHook pkgconfig ];
+      buildInputs = old.buildInputs ++ [ zlib nodejs automake autoconf ];
+    });
+  
   
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
@@ -39,7 +44,7 @@ with pkgs; rec {
   xmlmirror = buildEmscriptenPackage rec {
     name = "xmlmirror";
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ autoconf automake libtool gnumake libxml2 nodejs 
        python openjdk json_c zlib ];
 
@@ -89,7 +94,7 @@ with pkgs; rec {
         HOME=$TMPDIR
         runHook preConfigure
 
-        emconfigure ./configure --prefix=$out
+        emconfigure ./configure --prefix=$out 
 
         runHook postConfigure
       '';
