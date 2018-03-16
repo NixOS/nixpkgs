@@ -214,7 +214,12 @@ stdenv.mkDerivation ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
   '';
 
-  postPatch =
+  postPatch = ''
+    configureScripts=$(find . -name configure)
+    for configureScript in $configureScripts; do
+      patchShebangs $configureScript
+    done
+  '' + (
     if (hostPlatform.isHurd
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
@@ -273,7 +278,7 @@ stdenv.mkDerivation ({
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
-    else null;
+    else "");
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
   crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
