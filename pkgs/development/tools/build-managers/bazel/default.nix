@@ -1,4 +1,6 @@
 { stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python
+, CoreServices
+
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 
   name = "bazel-${version}";
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     jdk
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   nativeBuildInputs = [
     zip
@@ -60,8 +62,21 @@ stdenv.mkDerivation rec {
   # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
   # Change this to $(mktemp -d) as soon as we figure out why.
 
-  buildPhase = ''
+  # Darwin-only hacks to work around Bazel calling CC without NIX_* env vars, which provide framework paths
+  buildPhase = (lib.optionalString stdenv.isDarwin ''
+    echo "#!${customBash}/bin/bash" >> cc.sh
+    chmod +x cc.sh
+    export CC=$(pwd)/cc.sh
+    export CXX=$(pwd)/cxx.sh
+    declare -px >> cc.sh
+    cp cc.sh cxx.sh
+
+    echo "clang \"\$@\" || clang++ \"\$@\" " >> cc.sh
+    echo "export isCpp=1; export cppInclude=1" >> cxx.sh
+    echo "clang++ \"\$@\"" >> cxx.sh
+  '') + ''
     export TMPDIR=/tmp
+
     ./compile.sh
     ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
       --spawn_strategy=standalone \
@@ -70,8 +85,8 @@ stdenv.mkDerivation rec {
   '';
 
   # Build the CPP and Java examples to verify that Bazel works.
-
-  doCheck = true;
+  # This is disabled on Darwin due to Bazel mangling calls to CC/LD
+  doCheck = (!stdenv.isDarwin);
   checkPhase = ''
     export TEST_TMPDIR=$(pwd)
     ./output/bazel test --test_output=errors \
