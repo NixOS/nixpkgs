@@ -1,10 +1,13 @@
 { substituteAll, texlive, poppler_utils, runCommand, lib
-, text ? "Just a test string", texCommand }:
+, text ? "Just a test string", texCommand, meta ? {} }:
 runCommand "test-${texCommand}" {
   buildInputs = [
     (texlive.combine {inherit (texlive) scheme-small; }) poppler_utils
     (import ../temporary-helpers/with-fonts.nix {})
   ];
+  meta = lib.recursiveUpdate {
+    description = "Check that TeXLive can generate PDFs with text via ${texCommand}";
+  } meta;
   inherit text;
   passthru = {
     inherit text;

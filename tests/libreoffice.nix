@@ -1,4 +1,4 @@
-{ runCommand, libreoffice }:
+{ runCommand, libreoffice, meta ? {}, lib }:
 let
   fmbtScripts = {
     startSpreadsheet = ''
@@ -20,6 +20,9 @@ runCommand "test-libreoffice" {
           (import ./temporary-helpers/with-ratpoison.nix {})
           (import ./temporary-helpers/with-home.nix {})
           libreoffice ];
+  meta = lib.recursiveUpdate {
+    description = "Check that ${libreoffice.name} can start and create a spreadsheet via menu";
+  } meta;
 } ''
   soffice &
   waitWindow libreoffice "%c"

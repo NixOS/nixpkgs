@@ -10,9 +10,15 @@
 , flags ? "--version", outputRegexp ? "."
 , skipRegexp ? "^$", includeRegexp ? ".*"
 , checkExitCode ? "test $exitCode -lt 126 || test $exitCode -gt 160"
+, meta ? {}
 }:
 let _package = pkgs.lib.optCall package pkgs; in
-pkgs.runCommand "${_package.name}-executable-check" {} ''
+pkgs.runCommand "${_package.name}-executable-check" {
+  meta = pkgs.lib.recursiveUpdate {
+    description = "Try running executables in the ${_package.name} output";
+    inherit (_package.meta) platforms;
+  } meta;
+} ''
   mkdir "$out"
   for i in "${_package}"/bin/*; do
     if echo "$i" | grep -E ${pkgs.lib.escapeShellArg includeRegexp} |

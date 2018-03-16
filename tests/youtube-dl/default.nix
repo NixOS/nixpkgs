@@ -1,9 +1,12 @@
-{ runCommand, substituteAll, lighttpd, youtube-dl, curl, port ? 9987 }:
+{ runCommand, substituteAll, lighttpd, youtube-dl, curl, port ? 9987, meta ? {}, lib }:
 let _port = builtins.toString port; in
 runCommand "test-youtube-dl" {
   buildInputs = [
           lighttpd youtube-dl curl
           ];
+  meta = lib.recursiveUpdate {
+    description = "Check that ${youtube-dl.name} can handle a trivial generic page";
+  } meta;
   port=_port;
   documentRoot = ./.;
 } ''
