@@ -83,7 +83,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --prefix PATH : "${lib.makeBinPath [ stdenv.cc jdk ]}"
+    wrapProgram "$out/bin/bazel" \
+      --prefix PATH : "${lib.makeBinPath [ stdenv.cc jdk ]}" \
+      --set JAVA_HOME "${jdk}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
