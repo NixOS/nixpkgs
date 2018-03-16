@@ -300,6 +300,7 @@ in rec {
   ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #tests.kubernetes.e2e = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};
   tests.kubernetes.rbac = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/rbac.nix {};
+  tests.kubernetes = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
