@@ -13,6 +13,7 @@
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , openGLSupport ? true, mesa_noglu, epoxy, libdrm
+, virglSupport ? true, virglrenderer
 , hostCpuOnly ? false
 , nixosTestRunner ? false
 }:
@@ -59,7 +60,8 @@ stdenv.mkDerivation rec {
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
-    ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ];
+    ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ]
+    ++ optionals virglSupport [ virglrenderer ];
 
   enableParallelBuilding = true;
 
@@ -87,7 +89,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional xenSupport "--enable-xen"
-    ++ optional openGLSupport "--enable-opengl";
+    ++ optional openGLSupport "--enable-opengl"
+    ++ optional virglSupport "--enable-virglrenderer";
 
   postFixup =
     ''
