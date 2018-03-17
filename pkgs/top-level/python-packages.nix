@@ -18810,17 +18810,7 @@ EOF
     };
   };
 
-  pushbullet = buildPythonPackage rec {
-    name = "pushbullet.py-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pushbullet.py/pushbullet.py-0.10.0.tar.gz";
-      sha256 = "537d3132e1dbc91e31ade4cccf4c7def6f9d48e904a67f341d35b8a54a9be74d";
-    };
-
-    propagatedBuildInputs = with self; [requests websocket_client python_magic ];
-  };
+  pushbullet = callPackage ../development/python-modules/pushbullet { };
 
   power = buildPythonPackage rec {
     name = "power-1.4";
