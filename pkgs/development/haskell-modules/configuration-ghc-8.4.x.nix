@@ -690,6 +690,12 @@ self: super: {
     };
   };
 
+  # Fix missing semigroup instance.
+  json = appendPatch super.json (pkgs.fetchpatch
+    { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
+      sha256 = "1xw2gab0wzhszgcbjhg98kkzgnbfn9n3bx1qlk6g7ir6hhwppm9z";
+    });
+
   # Older versions don't compile.
   brick = self.brick_0_35;
   timezone-olson = self.timezone-olson_0_1_9;
