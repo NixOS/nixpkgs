@@ -20993,4 +20993,6 @@ with pkgs;
   diceware = callPackage ../tools/security/diceware { };
 
   xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
+
+  mmark = callPackage ../tools/typesetting/mmark { };
 }
