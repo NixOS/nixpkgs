@@ -60,7 +60,13 @@ pythonPackages.buildPythonApplication rec {
       are unavailable, malfunctioning, or malicious.
     '';
     homepage = http://tahoe-lafs.org/;
-    license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
+    license = [
+      lib.licenses.gpl2Plus /* or */
+      { shortName = "TGPPLv1+";
+        fullName = "Transitive Grace Period Public Licence v. 1.0 or later";
+        url = "https://github.com/zooko/tgppl/blob/master/COPYING.TGPPL-v1.rst";
+        free = false; }
+    ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
     platforms = lib.platforms.gnu;  # arbitrary choice
   };

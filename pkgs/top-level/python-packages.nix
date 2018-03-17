@@ -10381,10 +10381,10 @@ in {
       license = with licenses; [
         asl20
         # third-party program licenses (embedded in the sources)
-        "LGPL" # Crystal_Clear
+        lgpl2Plus # Crystal_Clear
         free # dns
         asl20 # graphy
-        "BSD" # jinja2
+        bsd3 # jinja2
       ];
       longDescription = ''
         It hunts down the fastest DNS servers available for your computer to

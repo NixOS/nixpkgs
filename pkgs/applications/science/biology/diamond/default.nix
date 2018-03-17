@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/bbuchfink/diamond;
     license = {
       fullName = "University of Tuebingen, Benjamin Buchfink";
+      shortName = "uni-tuebingen-buchfink";
       url = https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING;
+      free = false;
     };
     maintainers = [ maintainers.metabar ];
   };

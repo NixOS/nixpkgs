@@ -97,7 +97,7 @@
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = with maintainers; [ akazakov ];
+      maintainers = with maintainers; [ ];
       license = licenses.gpl2;
     };
   };

@@ -149,7 +149,20 @@ let
         longDescription = string;
         branch = string;
         downloadPage = string;
-        license = union [ (list string) (attrs string) (list (attrs string)) string ];
+        license =
+          let
+            licenseT = productOpt {
+              req = {
+                shortName = string;
+                fullName = string;
+                free = bool;
+              };
+              opt = {
+                spdxId = string;
+                url = string;
+              };
+            };
+          in union [ licenseT (list licenseT) string ];
         maintainers = list (productOpt {
           req = {
             name = string;

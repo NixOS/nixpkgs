@@ -83,6 +83,7 @@ in stdenv.mkDerivation {
     description = "A replica of IRIX Interactive Desktop";
     homepage = http://www.maxxinteractive.com;
     license = {
+      shortName = "maxx-interactive-desktop-linux-agreement";
       fullName = "The MaXX Interactive Desktop for Linux License Agreement";
       url = http://www.maxxinteractive.com/site/?page_id=97;
       free = false; # redistribution is only allowed to *some* hardware, etc.

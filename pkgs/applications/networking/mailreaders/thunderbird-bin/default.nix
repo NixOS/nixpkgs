@@ -171,6 +171,8 @@ stdenv.mkDerivation {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = http://www.mozilla.org/thunderbird/;
     license = {
+      shortName = "thunderbird-binary-license";
+      fullName = "Thunderbird Binary License Unfree";
       free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };

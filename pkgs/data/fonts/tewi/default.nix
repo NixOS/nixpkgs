@@ -42,8 +42,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/lucy/tewi-font;
     license = {
+      shortName = "gpl3-with-font-exception";
       fullName = "GNU General Public License with a font exception";
       url = "https://www.gnu.org/licenses/gpl-faq.html#FontException";
+      free = true;
     };
     maintainers = [ maintainers.fro_ozen ];
     platforms = platforms.unix;

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
      description = "Display and manipulate molecular structures";
      homepage = http://www.cmbi.ru.nl/molden/;
      license = {
+       shortName = "molden-unfree";
        fullName = "Free for academic/non-profit use";
        url = http://www.cmbi.ru.nl/molden/CopyRight.html;
        free = false;

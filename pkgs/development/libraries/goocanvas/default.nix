@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 cairo glib ];
 
-  meta = { 
+  meta = {
     description = "Canvas widget for GTK+ based on the the Cairo 2D library";
     homepage = http://goocanvas.sourceforge.net/;
-    license = ["GPL" "LGPL"];
+    license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

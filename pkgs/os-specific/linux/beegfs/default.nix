@@ -145,6 +145,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.beegfs.io";
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = {
+      shortName = "beegfs-eula";
       fullName = "BeeGFS_EULA";
       url = "https://www.beegfs.io/docs/BeeGFS_EULA.txt";
       free = false;

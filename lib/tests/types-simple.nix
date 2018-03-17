@@ -149,6 +149,8 @@ in lib.runTests {
   testUnionWrongType = test (union [ int string ]) true
     (err (union [ int string ]) true);
   testUnionOne = test (union [ int ]) 23 ok;
+  testUnionSimilar = test (union [ (list string) (attrs string) ])
+    { foo = "string"; } ok;
 
 
   testDefaultsUnit = testDef unit {};

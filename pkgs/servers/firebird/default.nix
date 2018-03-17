@@ -83,7 +83,20 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SQL relational database management system";
     homepage = http://www.firebirdnews.org;
-    license = ["IDPL" "Interbase-1.0"];
+    license = [
+      {
+        shortName = "IDPL";
+        fullName = "Initial Developer Public License";
+        url = "https://firebirdsql.org/en/initial-developer-s-public-license-version-1-0/";
+        free = false;
+      }
+      {
+        shortName = "Interbase-1.0";
+        fullName = "InterBase Public License";
+        url = "https://firebirdsql.org/en/interbase-public-license/";
+        free = false;
+      }
+    ];
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
   };
