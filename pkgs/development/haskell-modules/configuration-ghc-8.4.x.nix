@@ -701,4 +701,7 @@ self: super: {
   timezone-olson = self.timezone-olson_0_1_9;
   matrix = self.matrix_0_3_6_0;
 
+  # https://github.com/pikajude/th-printf/issues/8
+  th-printf = doJailbreak super.th-printf;
+
 }
