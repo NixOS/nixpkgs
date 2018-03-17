@@ -134,26 +134,6 @@ self: super: {
 
   ## On Hackage:
 
-  ## Upstreamed
-
-  ## Upstreamed, awaiting a Hackage release
-  cabal2nix = (overrideCabal super.cabal2nix (drv: {
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘Prelude.<>’,
-    ##                              imported from ‘Prelude’ at src/Distribution/Nixpkgs/Haskell/Derivation.hs:6:8-46
-    src = pkgs.fetchFromGitHub {
-      owner  = "nixos";
-      repo   = "cabal2nix";
-      rev    = "32974fcc3d9b485bd35167d9ae90941a5b3d06df";
-      sha256 = "1racp49z5922rvrc62clslzdkxh4axj2i0k83w5y6w5chl83abyd";
-    };
-  })).override {
-    ##     • No instance for (Semigroup (List a))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       Possible fix:
-    hpack = self.hpack;
-  };
-
   ## Upstreamed, awaiting a Hackage release
   cabal-install = overrideCabal super.cabal-install (drv: {
     ## Setup: Encountered missing dependencies:
