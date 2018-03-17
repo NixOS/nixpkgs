@@ -524,16 +524,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  ## Issue: https://github.com/jgm/doctemplates/issues/2
-  doctemplates = overrideCabal super.doctemplates (drv: {
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
-         sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
-       })
-    ];
-  });
-
   exception-transformers = overrideCabal super.exception-transformers (drv: {
     ## Setup: Encountered missing dependencies:
     ## HUnit >=1.2 && <1.6
