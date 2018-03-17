@@ -733,6 +733,6 @@ self: super: {
     });
 
   # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4;
+  pandoc-types = self.pandoc-types_1_17_4_1;
 
 }
