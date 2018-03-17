@@ -1,16 +1,15 @@
-{ buildPythonPackage, fetchPypi
-, requests, six, pyopenssl }:
+{ buildPythonPackage, fetchPypi, httplib2 }:
 
 buildPythonPackage rec {
   pname = "paypalrestsdk";
-  version = "1.13.1";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "238713208031e8981bf70b3350b3d7f85ed64d34e0f21e4c1184444a546fee7f";
+    sha256 = "117kfipzfahf9ysv414bh1mmm5cc9ck5zb6rhpslx1f8gk3frvd6";
   };
 
-  propagatedBuildInputs = [ requests six pyopenssl ];
+  propagatedBuildInputs = [ httplib2 ];
 
   meta = {
     homepage = https://developer.paypal.com/;
