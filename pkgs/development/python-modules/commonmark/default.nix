@@ -1,19 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, flake8, glibcLocales, future }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, future }:
 
 buildPythonPackage rec {
   pname = "CommonMark";
-  version = "0.6.3";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee5a88f23678794592efe3fc11033f17fc77b3296a85f5e1d5b715f8e110a773";
+    sha256 = "4dfbbd1dbc669a9b71a015032b2bbe5c4b019ca8b6ca410d89cf7020de46d2c0";
   };
 
-  LC_ALL="en_US.UTF-8";
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
 
-  doCheck = false;
+  # UnicodeEncodeError on Python 2
+  doCheck = isPy3k;
 
-  buildInputs = [ flake8 glibcLocales ];
+  checkInputs = [  glibcLocales ];
   propagatedBuildInputs = [ future ];
 
   meta = with lib; {
