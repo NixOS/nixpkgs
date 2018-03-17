@@ -134,17 +134,6 @@ self: super: {
 
   ## On Hackage:
 
-  ## On Hackage, awaiting for import
-  tasty = overrideCabal super.tasty (drv: {
-    ##     • No instance for (Semigroup OptionSet)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid OptionSet’
-    version         = "1.0.0.1";
-    sha256          = "0ggqffw9kbb6nlq1pplk131qzxndqqzqyf4s2p7576nljx11a7qf";
-  });
-
-
-
   ## Upstreamed
 
   ## Upstreamed, awaiting a Hackage release
