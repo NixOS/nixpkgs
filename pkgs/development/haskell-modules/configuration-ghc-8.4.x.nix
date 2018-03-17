@@ -673,6 +673,12 @@ self: super: {
       stripLen = 1;
     });
 
+  # Fix missing semigroup instance.
+  data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
+    { url = https://github.com/luqui/data-inttrie/pull/5.patch;
+      sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
+    });
+
   # 1.3.0.0 does not compile.
   conduit = self.conduit_1_3_0_1;
 
