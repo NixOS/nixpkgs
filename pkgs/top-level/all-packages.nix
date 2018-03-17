@@ -8677,7 +8677,9 @@ with pkgs;
     inherit (pkgs.gnome2) gtkglext;
   };
 
-  far2l = callPackage ../applications/misc/far2l { };
+  far2l = callPackage ../applications/misc/far2l {
+    stdenv = if stdenv.cc.isClang then llvmPackages_4.stdenv else stdenv;
+  };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
