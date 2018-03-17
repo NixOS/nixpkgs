@@ -1196,10 +1196,10 @@ let
   }) // {inherit libfontenc ;};
 
   makedepend = (mkDerivation "makedepend" {
-    name = "makedepend-1.0.5";
+    name = "makedepend-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/makedepend-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/util/makedepend-1.0.6.tar.bz2;
       sha256 = "09alw99r6y2bbd1dc786n3jfgv4j520apblyn7cw6jkjydshba7p";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1244,10 +1244,10 @@ let
   }) // {inherit ;};
 
   printproto = (mkDerivation "printproto" {
-    name = "printproto-1.0.5";
+    name = "printproto-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/printproto-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/proto/printproto-1.0.6.tar.bz2;
       sha256 = "06liap8n4s25sgp27d371cc7yg9a08dxcr3pmdjp761vyin3360j";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1568,10 +1568,10 @@ let
   }) // {inherit ;};
 
   xcmsdb = (mkDerivation "xcmsdb" {
-    name = "xcmsdb-1.0.5";
+    name = "xcmsdb-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xcmsdb-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/app/xcmsdb-1.0.6.tar.bz2;
       sha256 = "1ik7gzlp2igz183x70883000ygp99r20x3aah6xhaslbpdhm6n75";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1640,10 +1640,10 @@ let
   }) // {inherit libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
 
   xdriinfo = (mkDerivation "xdriinfo" {
-    name = "xdriinfo-1.0.5";
+    name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdriinfo-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2;
       sha256 = "0681d0y8liqakkpz7mmsf689jcxrvs5291r20qi78mc9xxk3gfjc";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2360,10 +2360,10 @@ let
   }) // {inherit libX11 xproto libXxf86vm ;};
 
   xgc = (mkDerivation "xgc" {
-    name = "xgc-1.0.5";
+    name = "xgc-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xgc-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/app/xgc-1.0.6.tar.bz2;
       sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2516,11 +2516,11 @@ let
   }) // {inherit libxcb ;};
 
   xlsfonts = (mkDerivation "xlsfonts" {
-    name = "xlsfonts-1.0.5";
+    name = "xlsfonts-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsfonts-1.0.5.tar.bz2;
-      sha256 = "1yi774g6r1kafsbnxbkrwyndd3i60362ck1fps9ywz076pn5naa0";
+      url = mirror://xorg/individual/app/xlsfonts-1.0.6.tar.bz2;
+      sha256 = "0s6kxgv78chkwsqmhw929f4pf91gq63f4yvixxnan1h00cx0pf49";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
@@ -2672,10 +2672,10 @@ let
   }) // {inherit libX11 libXmu xproto ;};
 
   xrefresh = (mkDerivation "xrefresh" {
-    name = "xrefresh-1.0.5";
+    name = "xrefresh-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrefresh-1.0.5.tar.bz2;
+      url = mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2;
       sha256 = "1mlinwgvql6s1rbf46yckbfr9j22d3c3z7jx3n6ix7ca18dnf4rj";
     };
     nativeBuildInputs = [ pkgconfig ];
