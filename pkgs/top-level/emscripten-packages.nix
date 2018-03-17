@@ -10,7 +10,8 @@ rec {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
     (old: {
-      nativeBuildInputs = [ autoreconfHook pkgconfig zlib ];
+      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      propagatedBuildInputs = [ zlib ];
       buildInputs = old.buildInputs ++ [ automake autoconf ];
       configurePhase = ''
         HOME=$TMPDIR
@@ -26,7 +27,6 @@ rec {
           `pkg-config zlib --libs` \
           -I . \
           .libs/libjson-c.so \
-          -ljson-c \
           -o ./test1.js
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
@@ -83,8 +83,7 @@ rec {
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     name = "xmlmirror";
 
-    nativeBuildInputs = [ pkgconfig pkgs.emscriptenPackages.zlib ];
-    buildInputs = [ autoconf automake libtool gnumake libxml2 nodejs openjdk json_c zlib ];
+    buildInputs = [ pkgconfig autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -134,8 +133,9 @@ rec {
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
-    (old: { 
+    (old: rec { 
       buildInputs = old.buildInputs ++ [ pkgconfig ];
+      # we need to reset this setting!
       NIX_CFLAGS_COMPILE="";
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
@@ -156,8 +156,26 @@ rec {
         emmake make install
       '';
       checkPhase = ''
-        # FIXME write a test
+        echo "================= testing zlib using node ================="
+
+        echo "Compiling a custom test"
+        set -x
+        emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
+        libz.so.${old.version} -I . -o example.js
+
+        echo "Using node to execute the test"
+        ${pkgs.nodejs}/bin/node ./example.js 
+
+        set +x
+        if [ $? -ne 0 ]; then
+          echo "test failed for some reason"
+          exit 1;
+        else
+          echo "it seems to work! very good."
+        fi
+        echo "================= /testing zlib using node ================="
       '';
+
       postPatch = pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
           --replace '/usr/bin/libtool' 'ar' \
