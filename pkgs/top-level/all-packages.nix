@@ -18189,6 +18189,7 @@ with pkgs;
 
   workrave = callPackage ../applications/misc/workrave {
     inherit (python27Packages) cheetah;
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
   };
 
   worldengine-cli = python3Packages.worldengine;
