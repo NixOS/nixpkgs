@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;
     description = "Library for interacting with smart card devices";
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
