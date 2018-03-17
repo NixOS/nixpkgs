@@ -3,7 +3,11 @@
 # if the resulting list is empty, all tests passed
 with import ../default.nix;
 
-runTests {
+# types-simple tests
+import ./types-simple.nix
+
+# misc tests
+++ (runTests {
 
 
 # TRIVIAL
@@ -360,4 +364,4 @@ runTests {
     expected = true;
   };
 
-}
+})

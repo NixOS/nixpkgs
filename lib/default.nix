@@ -31,6 +31,9 @@ let
     options = callLibs ./options.nix;
     types = callLibs ./types.nix;
 
+    # type checking plain nix values
+    types-simple = callLibs ./types-simple.nix;
+
     # constants
     licenses = callLibs ./licenses.nix;
     systems = callLibs ./systems;
