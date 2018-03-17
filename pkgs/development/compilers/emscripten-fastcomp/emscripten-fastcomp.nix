@@ -1,7 +1,7 @@
-{ stdenv, llvm, fetchFromGitHub, cmake, python, gtest, ... }:
+{ emscriptenVersion, stdenv, llvm, fetchFromGitHub, cmake, python, gtest, ... }:
 
 let
-  rev = "1.37.28";
+  rev = emscriptenVersion;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 stdenv.mkDerivation rec {

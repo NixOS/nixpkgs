@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
+{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
 , jre, binaryen, enableWasm ? true ,  python2Packages, cmake
 }:
 
 let
-  rev = "1.37.28";
+  rev = emscriptenVersion;
   appdir = "share/emscripten";
 in
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
-    # to make the tests work
+    # to make the test(s) below work
     echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   +
   ''
     echo "--------------- running test -----------------"
+    # quick hack to get the test working
     HOME=$TMPDIR
     cp $out/${appdir}/config $HOME/.emscripten
     export PATH=$PATH:$out/bin
