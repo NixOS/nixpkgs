@@ -3447,6 +3447,11 @@
     github = "tavyc";
     name = "Octavian Cerna";
   };
+  tazjin = {
+    email = "mail@tazj.in";
+    github = "tazjin";
+    name = "Vincent Ambo";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
