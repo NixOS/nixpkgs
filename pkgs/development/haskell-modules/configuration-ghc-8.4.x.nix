@@ -704,4 +704,8 @@ self: super: {
       sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
     };
   };
+
+  # Older versions don't compile.
+  brick = self.brick_0_35;
+
 }
