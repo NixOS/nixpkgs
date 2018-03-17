@@ -48,11 +48,6 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=3 && <4.11
-  boxes = super.boxes_0_1_5;
-
-  ## Needs bump to a versioned attribute
   ##     • No instance for (GHC.Base.Semigroup BV)
   ##         arising from the superclasses of an instance declaration
   ##     • In the instance declaration for ‘Monoid BV’
