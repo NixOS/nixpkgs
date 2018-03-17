@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.dlib.net;
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
 
