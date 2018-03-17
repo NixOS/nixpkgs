@@ -721,4 +721,7 @@ self: super: {
   # https://github.com/jgm/pandoc-types/issues/37
   pandoc-types = self.pandoc-types_1_17_4_1;
 
+  # 1.3.0.0 does not compile.
+  conduit = self.conduit_1_3_0_1;
+
 }
