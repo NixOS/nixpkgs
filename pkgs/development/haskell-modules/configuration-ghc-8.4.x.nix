@@ -688,10 +688,20 @@ self: super: {
       stripLen = 1;
     });
 
-  # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4_1;
-
   # 1.3.0.0 does not compile.
   conduit = self.conduit_1_3_0_1;
 
+  # https://github.com/jgm/pandoc-types/issues/37
+  pandoc-types = self.pandoc-types_1_17_4_2;
+
+  ## Need latest git version to support current haddock-library versions.
+  pandoc = overrideSrc super.pandoc {
+    version = "2.1.2-git";
+    src = pkgs.fetchFromGitHub {
+      owner  = "jgm";
+      repo   = "pandoc";
+      rev    = "fad8d0d67ff4736e1af554d2bfcf1688aa28c8ec";
+      sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
+    };
+  };
 }
