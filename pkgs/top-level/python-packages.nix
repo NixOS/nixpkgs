@@ -2414,36 +2414,15 @@ in {
 
   colorlover = callPackage ../development/python-modules/colorlover { };
 
-  CommonMark = buildPythonPackage rec {
-    name = "CommonMark-${version}";
-    version = "0.6.3";
+  CommonMark = callPackage ../development/python-modules/commonmark { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
-      sha256 = "ee5a88f23678794592efe3fc11033f17fc77b3296a85f5e1d5b715f8e110a773";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    doCheck = false;
-
-    buildInputs = with self; [ flake8 pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ future ];
-
-    meta = {
-      description = "Python parser for the CommonMark Markdown spec";
-      homepage = https://github.com/rolandshoemaker/CommonMark-py;
-      license = licenses.bsd3;
-    };
-  };
-
-  CommonMark_54 = self.CommonMark.override rec {
-    name = "CommonMark-0.5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
+  CommonMark_54 = self.CommonMark.overridePythonAttrs (oldAttrs: rec {
+    version = "0.5.4";
+    src = oldAttrs.src.override {
+      inherit version;
       sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
     };
-  };
+  });
 
 
   coilmq = buildPythonPackage (rec {
