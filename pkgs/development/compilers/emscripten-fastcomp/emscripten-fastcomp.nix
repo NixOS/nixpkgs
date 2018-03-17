@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten-fastcomp";
-    sha256 = "0cdn1c9ybjf8qnq05as01n2d8hv6m9qz2gw3414czxk3faqkkj1y";
+    sha256 = "04j698gmp686b5lricjakm5hyh2z2kh28m1ffkghmkyz4zkzmx98";
     inherit rev;
   };
 
   srcFL = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten-fastcomp-clang";
-    sha256 = "1l4pym8ak7ighkdi555zggs1c4km39myw2wpq1cj7r990hk9gcdg";
+    sha256 = "1ici51mmpgg80xk3y8f376nbbfak6rz27qdy98l8lxkrymklp5g5";
     inherit rev;
   };
 
