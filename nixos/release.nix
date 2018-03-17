@@ -296,7 +296,7 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
+  tests.kubernetes = hydraJob (import tests/kubernetes/default.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
