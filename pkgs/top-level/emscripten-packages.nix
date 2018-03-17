@@ -70,7 +70,11 @@ rec {
     configurePhase = ''
       rm -f fastXmlLint.js*
       # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
+      # https://gitlab.com/odfplugfest/xmlmirror/issues/8
       sed -e "s/TOTAL_MEMORY=234217728/TOTAL_MEMORY=268435456/g" -i Makefile.emEnv
+      # https://github.com/kripken/emscripten/issues/6344
+      # https://gitlab.com/odfplugfest/xmlmirror/issues/9
+      sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
     '';
     
     buildPhase = ''
