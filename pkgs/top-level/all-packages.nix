@@ -18188,7 +18188,6 @@ with pkgs;
   worker = callPackage ../applications/misc/worker { };
 
   workrave = callPackage ../applications/misc/workrave {
-    inherit (gnome2) GConf gconfmm;
     inherit (python27Packages) cheetah;
   };
 
