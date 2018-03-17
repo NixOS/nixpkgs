@@ -44,7 +44,7 @@ rec {
     });
   
   libxml2 = (pkgs.libxml2.override {
-    stdenv = pkgs.emscriptenStdenv;
+    stdenv = emscriptenStdenv;
     pythonSupport = false;
   }).overrideDerivation
     (old: { 
@@ -58,7 +58,7 @@ rec {
         emconfigure ./configure --prefix=$out --without-python
       '';
       checkPhase = ''
-        echo "================= testing xmllint using node ================="
+        echo "================= testing libxml2 using node ================="
 
         echo "Compiling a custom test"
         set -x
@@ -76,7 +76,7 @@ rec {
         else
           echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
         fi
-        echo "================= /testing xmllint using node ================="
+        echo "================= /testing libxml2 using node ================="
       '';
     });            
   
@@ -84,6 +84,7 @@ rec {
     name = "xmlmirror";
 
     buildInputs = [ pkgconfig autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
+    nativeBuildInputs = [ pkgconfig zlib ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -99,6 +100,8 @@ rec {
       # https://github.com/kripken/emscripten/issues/6344
       # https://gitlab.com/odfplugfest/xmlmirror/issues/9
       sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
+      # https://gitlab.com/odfplugfest/xmlmirror/issues/11
+      sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
     '';
     
     buildPhase = ''
@@ -124,9 +127,7 @@ rec {
       cp README.md $doc/share/${name}
     '';
     checkPhase = ''
-      # FIXME write a test
-    '';
-    postInstall = ''
+      
     '';
   };  
 
