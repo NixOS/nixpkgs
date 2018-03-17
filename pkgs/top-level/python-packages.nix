@@ -2652,22 +2652,7 @@ in {
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
-  tablib = buildPythonPackage rec {
-    name = "tablib-${version}";
-    version = "0.12.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tablib/tablib-${version}.tar.gz";
-      sha256 = "11wxchj0qz77dn79yiq30k4b4gsm429f4bizk4lm4rb63nk51kxq";
-    };
-
-    buildInputs = with self; [ pytest unicodecsv pandas ];
-    propagatedBuildInputs = with self; [ xlwt openpyxl pyyaml xlrd odfpy ];
-    meta = with stdenv.lib; {
-      description = "Tablib: format-agnostic tabular dataset library";
-      homepage = "http://python-tablib.org";
-    };
-  };
+  tablib = callPackage ../development/python-modules/tablib { };
 
   wakeonlan = callPackage ../development/python-modules/wakeonlan { };
 
