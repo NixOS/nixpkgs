@@ -133,45 +133,61 @@ let
         else throw;
     in handler msg;
 
+  metaType = with lib.types-simple;
+    let
+      # TODO: use the types from lib/systems/parse.nix
+      # any should be lib.systems.parsed.types.system
+      system = any;
+      platform = union [ string any ];
 
-  metaTypes = with lib.types; rec {
-    # These keys are documented
-    description = str;
-    longDescription = str;
-    branch = str;
-    homepage = either (listOf str) str;
-    downloadPage = str;
-    license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    maintainers = listOf (attrsOf str);
-    priority = int;
-    platforms = listOf (either str lib.systems.parsed.types.system);
-    hydraPlatforms = listOf str;
-    broken = bool;
+    in productOpt {
+      req = {};
+      opt = {
+        # These keys are documented
+        description = string;
+        homepage = union [ (list string) string ];
+        longDescription = string;
+        branch = string;
+        downloadPage = string;
+        license = union [ (list string) (attrs string) (list (attrs string)) string ];
+        maintainers = list (productOpt {
+          req = {
+            name = string;
+            email = string;
+          };
+          opt = {
+            github = string;
+          };
+        });
+        priority = int;
+        platforms = list platform;
+        hydraPlatforms = list platform;
+        broken = bool;
 
-    # Weirder stuff that doesn't appear in the documentation?
-    knownVulnerabilities = listOf str;
-    name = str;
-    version = str;
-    tag = str;
-    updateWalker = bool;
-    executables = listOf str;
-    outputsToInstall = listOf str;
-    position = str;
-    available = bool;
-    repositories = attrsOf str;
-    isBuildPythonPackage = platforms;
-    schedulingPriority = int;
-    downloadURLRegexp = str;
-    isFcitxEngine = bool;
-    isIbusEngine = bool;
-    isGutenprint = bool;
-  };
+        # Weirder stuff that doesn't appear in the documentation?
+        knownVulnerabilities = list string;
+        name = string;
+        version = string;
+        tag = string;
+        updateWalker = bool;
+        executables = list string;
+        outputsToInstall = list string;
+        position = string;
+        available = bool;
+        repositories = attrs string;
+        isBuildPythonPackage = list platform;
+        schedulingPriority = int;
+        downloadURLRegexp = string;
+        isFcitxEngine = bool;
+        isIbusEngine = bool;
+        isGutenprint = bool;
+      };
+    };
 
-  checkMetaAttr = k: v:
-    if metaTypes?${k} then
-      if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
-    else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+  checkMeta = meta:
+    if shouldCheckMeta
+    then lib.types-simple.checkType metaType meta
+    else {};
 
   checkPlatform = attrs: let
       raw = attrs.meta.platforms;
@@ -195,8 +211,11 @@ let
       { valid = false; reason = "broken"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
-    else let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    else let res = checkMeta (attrs.meta or {}); in if res != {} then
+      { valid = false; reason = "unknown-meta"; errormsg = ''
+          has an invalid meta attrset:
+          ${lib.types-simple.prettyPrintErrors res}
+        ''; }
     else { valid = true; };
 
   assertValidity = attrs: let
