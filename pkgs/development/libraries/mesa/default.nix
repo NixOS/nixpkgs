@@ -71,7 +71,7 @@ let
   branch  = head (splitString "." version);
 in
 
-stdenv.mkDerivation {
+let self = stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
 
   src =  fetchurl {
@@ -227,6 +227,37 @@ stdenv.mkDerivation {
   passthru = {
     inherit libdrm version;
     inherit (libglvnd) driverLink;
+
+    stubs = stdenv.mkDerivation {
+      name = "libGL-${libglvnd.version}";
+      outputs = [ "out" "dev" ];
+
+      # Use stub libraries from libglvnd and headers from Mesa.
+      buildCommand = ''
+        ln -s ${libglvnd.out} $out
+        mkdir -p $dev/{,lib/pkgconfig,nix-support}
+        echo "$out" > $dev/nix-support/propagated-build-inputs
+        ln -s ${self.dev}/include $dev/include
+
+        genPkgConfig() {
+          local name="$1"
+          local lib="$2"
+
+          cat <<EOF >$dev/lib/pkgconfig/$name.pc
+        Name: $name
+        Description: $lib library
+        Version: ${self.version}
+        Libs: -L${libglvnd.out}/lib -l$lib
+        Cflags: -I${self.dev}/include
+        EOF
+        }
+
+        genPkgConfig gl GL
+        genPkgConfig egl EGL
+        genPkgConfig glesv1_cm GLESv1_CM
+        genPkgConfig glesv2 GLESv2
+      '';
+    };
   };
 
   meta = with stdenv.lib; {
@@ -236,4 +267,5 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ eduarrrd vcunat ];
   };
-}
+};
+in self

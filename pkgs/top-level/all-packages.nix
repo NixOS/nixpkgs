@@ -10451,60 +10451,47 @@ with pkgs;
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  # Default implementation is `mesa`, but can be eventually replaced with `libglvnd`,
-  # or other runtime dispatcher
-  libGL = mesa_noglu;
+  libGL = libGLDarwinOr mesa_noglu.stubs;
 
   # Default libGLU
-  libGLU = mesa_glu;
+  libGLU = libGLDarwinOr mesa_glu;
 
   # Combined derivation, contains both libGL and libGLU
   # Please, avoid using this attribute.  It was meant as transitional hack
   # for packages that assume that libGLU and libGL live in the same prefix.
   # libGLU_combined propagates both libGL and libGLU
-  libGLU_combined = mesa;
+  libGLU_combined = libGLDarwinOr (buildEnv {
+    name = "libGLU-combined";
+    paths = [ libGL libGLU ];
+    extraOutputsToInstall = [ "dev" ];
+  });
 
   # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
-  libGL_driver = mesa_drivers;
+  libGL_driver = libGLDarwinOr mesa_drivers;
 
   libGLSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  libGLDarwinOr = alternative: if stdenv.isDarwin
-    then callPackage ../development/libraries/mesa-darwin {
-      inherit (darwin.apple_sdk.frameworks) OpenGL;
-      inherit (darwin.apple_sdk.libs) Xplugin;
-      inherit (darwin) apple_sdk;
-    }
-    else alternative;
+  libGLDarwin = callPackage ../development/libraries/mesa-darwin {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    inherit (darwin.apple_sdk.libs) Xplugin;
+    inherit (darwin) apple_sdk;
+  };
 
-  # FIXME: should be `libGL = libGLDarwinOr mesa_nonglu` but this change cause mass rebuild,
-  # until all packages will refer to libGL/GLU/GLU combined
-  mesa_noglu = libGLDarwinOr (callPackage ../development/libraries/mesa {
+  libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
+
+  mesa_noglu = callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     # grsecEnabled = true; # no more support in nixpkgs ATM
-  });
+  };
 
-  mesa_glu =  libGLDarwinOr (callPackage ../development/libraries/mesa-glu { });
-  mesa_drivers = libGLDarwinOr (
+  mesa_glu =  callPackage ../development/libraries/mesa-glu { };
+  mesa_drivers =
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
       enableTextureFloats = true;
     };
-    in mo.drivers
-  );
-
-  # Please, avoid using this attribute.  It was meant as transitional hack
-  # for packages that assume that libGLU and libGL live in the same prefix.
-  # Otherwise it's better to use mesa_glu or mesa_noglu, depending on whether
-  # you need libGLU or not (_glu propagates _noglu).
-  mesa = libGLDarwinOr (buildEnv {
-    name = "mesa-${mesa_noglu.version}";
-    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
-    meta = {
-      platforms = lib.platforms.unix;
-    };
-  });
+    in mo.drivers;
 
   ## End libGL/libGLU/Mesa stuff
 

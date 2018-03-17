@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elfutils, libGL
+{ stdenv, fetchurl, elfutils
 , xorg, patchelf, openssl, libdrm, libudev
 , libxcb, libxshmfence, epoxy, perl, zlib
 , fetchFromGitHub, ncurses
@@ -12,8 +12,6 @@ with stdenv.lib;
 let
 
   kernelDir = if libsOnly then null else kernel.dev;
-
-  inherit (libGL) driverLink;
 
   bitness = if stdenv.is64bit then "64" else "32";
 
