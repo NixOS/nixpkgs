@@ -1,15 +1,16 @@
-{stdenv, fetchFromGitHub, autoreconfHook, python2, pkgconfig, libGL_driver, libX11, libXext, glproto }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, python2, pkgconfig, libX11, libXext, glproto }:
 
-# Git version is needed for EGL and GLES handling.
-
-stdenv.mkDerivation rec {
-  name = "libglvnd-2016-12-22";
+let
+  driverLink = "/run/opengl-driver" + lib.optionalString stdenv.isi686 "-32";
+in stdenv.mkDerivation rec {
+  name = "libglvnd-${version}";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libglvnd";
-    rev = "dc16f8c337703ad141f83583a4004fcf42e07766";
-    sha256 = "1dbwf1216np77xf1kx3ci3y7hfa1p4vgrrzg71gw36hqxf36vg5f";
+    rev = "v${version}";
+    sha256 = "1a126lzhd2f04zr3rvdl6814lfl0j077spi5dsf2alghgykn5iif";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 ];
@@ -17,10 +18,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
-    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${libGL_driver.driverLink}/share/glvnd/egl_vendor.d\""
+    # FHS paths are added so that non-NixOS applications can find vendor files.
+    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
   ];
 
   outputs = [ "out" "dev" ];
+
+  passthru = { inherit driverLink; };
 
   meta = with stdenv.lib; {
     description = "The GL Vendor-Neutral Dispatch library";
