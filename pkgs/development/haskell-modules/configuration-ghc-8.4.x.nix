@@ -42,9 +42,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # https://github.com/bitemyapp/esqueleto/issues/77
-  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
-
   # Need newer version.
   haskell-src = super.haskell-src_1_0_3_0;
 
