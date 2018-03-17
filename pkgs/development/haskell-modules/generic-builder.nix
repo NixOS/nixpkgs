@@ -19,6 +19,7 @@ in
 , buildTarget ? ""
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
 , configureFlags ? []
+, buildFlags ? []
 , description ? ""
 , doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
 , doBenchmark ? false
@@ -126,6 +127,8 @@ let
 
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
+
+  buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
@@ -340,7 +343,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${optionalString doVerbose " -v3"}
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}${optionalString doVerbose " -v3"}
     runHook postBuild
   '';
 
