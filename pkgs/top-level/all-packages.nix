@@ -1312,6 +1312,8 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  noteshrink = callPackage ../tools/misc/noteshrink { };
+
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   onboard = callPackage ../applications/misc/onboard { };
