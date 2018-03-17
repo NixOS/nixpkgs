@@ -7,11 +7,11 @@ assert stdenv.isLinux;
 let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
-  name = "bluez-5.28";
+  name = "bluez-5.49";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1a8qzh38wpq5c0rydpx9isf0jc6g14g2qs18j1rmi8a79f7v9fl5";
+    sha256 = "15ffsaz7l3fgdg03l7g1xx9jw7xgs6pc548zxqsxawsca5x1sc1k";
   };
 
   pythonPath = with pythonPackages;
