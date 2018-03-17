@@ -420,15 +420,6 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      The option <option>services.xserver.desktopManager.default</option> is now
-      <literal>none</literal> by default. An assertion failure is thrown if WM's
-      and DM's default are <literal>none</literal>.
-      To explicitly run a plain X session without and DM or WM, the newly
-      introduced option <option>services.xserver.plainX</option> must be set to true.
-    </para>
-  </listitem>
-  <listitem>
-    <para>
       The option <option>services.logstash.listenAddress</option> is now <literal>127.0.0.1</literal> by default.
       Previously the default behaviour was to listen on all interfaces.
     </para>
