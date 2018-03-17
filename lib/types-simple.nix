@@ -75,7 +75,8 @@ let
     else if t.variant == variants.sum       then
       t // { alts   = lib.mapAttrs (lib.const f) t.alts; }
     else if t.variant == variants.product   then
-      t // { fields = lib.mapAttrs (lib.const f) t.fields; }
+      t // { opt = lib.mapAttrs (lib.const f) t.opt;
+             req = lib.mapAttrs (lib.const f) t.req; }
     else if t.variant == variants.union     then
       t // { altList = map f t.altList; }
     else unreachable;
@@ -118,7 +119,8 @@ let
           let alt = builtins.head (builtins.attrNames v);
           in t.alts.${alt} v.${alt}
         else if t.variant == variants.product   then
-          mapAndFilter (n: f: f v.${n}) t.fields
+          mapAndFilter (n: f: if v ? ${n} then f v.${n} else {})
+                       (t.req // t.opt)
         else if t.variant == variants.union     then
           # unions are awkward, the type checker can’t do much here
           if lib.all (res: res != {}) (map (f: f v) t.altList)
@@ -131,7 +133,9 @@ let
   ## -- TYPE SETUP STUFF --
 
   mkBaseType = {
-    # the type description
+    # unique name (for matching on the type)
+    name,
+    # the (displayable) type description
     description,
     # a function to check the outermost type, given a value (Val -> Bool)
     # TODO: this is value-specific, maybe this should be inside the type checker
@@ -141,15 +145,15 @@ let
     variant,
     # extra fields belonging to the variant
     extraFields
-  }: { inherit description check variant; } // extraFields;
+  }: { inherit name description check variant; } // extraFields;
 
-  mkScalar = { description, check }: mkBaseType {
-    inherit description check;
+  mkScalar = { name, description, check }: mkBaseType {
+    inherit name description check;
     variant = variants.scalar;
     extraFields = {};
   };
 
-  mkRecursive = { description, check,
+  mkRecursive = { name, description, check,
     # return all children for a value of this type T t,
     # give each child (of type t) a displayable name.
     # (T -> Map Name t)
@@ -157,7 +161,7 @@ let
     # The nested value t of the type functor
     nested
   }: mkBaseType {
-    inherit description check;
+    inherit name description check;
     variant = variants.recursive;
     extraFields = { inherit each nested; };
   };
@@ -167,6 +171,7 @@ let
 
   # the type with no inhabitants (kind of useless …)
   void = mkScalar {
+    name = "void";
     description = "void";
     # there are no values of type void
     check = lib.const false;
@@ -175,12 +180,14 @@ let
   # the any type, every value is an inhabitant
   # tt basically turns of the type system, use with care
   any = mkScalar {
+    name = "any";
     description = "any type";
     check = lib.const true;
   };
 
   # the type with exactly one inhabitant
   unit = mkScalar {
+    name = "unit";
     description = "unit";
     # there is exactly one unit value, we represent it with {};
     check = v: v == {};
@@ -188,24 +195,28 @@ let
 
   # the type with two inhabitants
   bool = mkScalar {
+    name = "bool";
     description = "boolean";
     check = builtins.isBool;
   };
 
   # a nix string
   string = mkScalar {
+    name = "string";
     description = "string";
     check = builtins.isString;
   };
 
   # a signed nix integer
   int = mkScalar {
+    name = "int";
     description = "integer";
     check = builtins.isInt;
   };
 
   # a nix floating point number
   float = mkScalar {
+    name = "float";
     description = "float";
     check = builtins.isFloat;
   };
@@ -221,6 +232,7 @@ let
   #   [ { a = {}; } { b = {}; } ]
   #   []
   list = t: mkRecursive {
+    name = "list";
     description = "list of ${describe t}";
     check = builtins.isList;
     # each child gets named by its index
@@ -235,11 +247,14 @@ let
   #  { foo.bar = "hello"; baz.quux = "x"; }
   #  { x = { y = "wow"; }; }
   attrs = t: mkRecursive {
+    name = "attrs";
     description = "attrset of ${describe t}";
     check = builtins.isAttrs;
     each = lib.id;
     nested = t;
   };
+
+  # TODO: nonempty list and attrs
 
   # product type with fields of the specified types
   # product { x = int; y = unit; }:
@@ -249,17 +264,40 @@ let
   #   { }
   # product { foo = void; }:
   #   just kidding. :)
-  product = fields: mkBaseType {
+  product = fields: productOpt { req = fields; opt = {}; };
+
+  # product type with the possibility of optional fields
+  # actually the more generic type of product, BUT:
+  # code with a fixed number of fields is less brittle.
+  # choose wisely.
+  # productOpt { req = {}; opt = { a = unit; b = int; }:
+  #   { }
+  #   { a = {}; }
+  #   { a = {}; b = 23; }
+  productOpt = { req, opt }: mkBaseType {
+    name = "product";
     description = "{ " +
       lib.concatStringsSep ", "
-        (lib.mapAttrsToList (n: t: "${n}: ${describe t}") fields)
+        (  lib.mapAttrsToList (n: t: "${n}: ${describe t}") req
+        ++ lib.mapAttrsToList (n: t: "[${n}: ${describe t}]") opt)
       + " }";
-    check = v: builtins.isAttrs v
-      # all fields have to be given by the value
-      && builtins.attrNames fields == builtins.attrNames v;
+    check = v:
+      let reqfs = builtins.attrNames req;
+          optfs = builtins.attrNames opt;
+          vfs   = builtins.attrNames v;
+      in builtins.isAttrs v &&
+      # all fields have to exist in the value
+      # reqfs - vfs
+      (if opt == {}
+      # if there’s only required fields, this is an optimization
+      then reqfs == vfs
+      else lib.subtractLists vfs reqfs == []
+        # whithout req, only opt fields must be in the value
+        # (vfs - reqfs) - otfs
+        && lib.subtractLists optfs (lib.subtractLists reqfs vfs) == []);
     variant = variants.product;
     extraFields = {
-      inherit fields;
+      inherit opt req;
     };
   };
 
@@ -274,6 +312,7 @@ let
   #   { X = { name = "peter shaw"; age = 22; }; }
   #   { Y = [ {} {} {} {} {} {} {} {} ]; }
   sum = alts: assert alts != {}; mkBaseType {
+    name = "sum";
     description = "< " +
       lib.concatStringsSep " | "
         (lib.mapAttrsToList (n: t: "${n}: ${describe t}") alts)
@@ -300,6 +339,7 @@ let
   #   [ "foo" 34 "bar" ]
   # please don’t use this.
   union = altList: assert altList != []; mkBaseType {
+    name = "union";
     description = "one of [ "
       + lib.concatMapStringsSep ", " describe altList
       + " ]";
@@ -319,13 +359,67 @@ let
   #   extraFields = {
 
 
+  ## -- FUNCTIONS --
+
+  # match =
+
+  # Default values for some types, chosen pretty arbitrarily.
+  # Can be used to populate products which might have less fields
+  # than originally specified:
+  # let t = product { foo : string, bar = product { baz = int; }; }
+  #     def = defaults t; # { foo = ""; bar.baz = 0; };
+  #     val = { foo = "hello"; };
+  # in checkType t (defaults t // val)
+  # or even recursiveUpdate if you want to be naughty.
+  defaults = t:
+    let
+      defs = {
+        # void = haha, right
+        # any = better not
+        unit = {};
+        bool = false;
+        string = "";
+        int = 0;
+        float = 0.0;
+        list = [];
+        attrs = {};
+        product = lib.mapAttrs (lib.const defaults) t.req;
+        # sum and union those are *really* arbitrary
+        sum =
+          let first = builtins.head (builtins.attrNames t.alts);
+          in { ${first} = defaults t.alts.${first}; };
+        union =
+          let first = builtins.head t.altList;
+          in defaults first;
+      };
+    in if defs ? ${t.name}
+       then defs.${t.name}
+       else abort "types-simple: no default value for type ${describe t} defined";
+
+  prettyPrintErrors =
+    let
+      join = lib.foldl lib.concat [];
+      isLeaf = v: {} == checkType (product { should = string; val = any; }) v;
+      recurse = path: errs:
+        if isLeaf errs
+        then [{ inherit path; inherit (errs) should val; }]
+        else join (lib.mapAttrsToList
+          (p: errs': recurse (path ++ [p]) errs') errs);
+      pretty = { path, should, val }:
+        "${lib.concatStringsSep "." path} should be: ${
+          should}\nbut is: ${lib.generators.toPretty {} val}";
+    in errs: lib.concatMapStringsSep "\n" pretty (recurse [] errs);
+
 in {
   # The type of nix types, as non-recursive functor.
   # fmap and cata are specialized to Type.
   Type = { inherit variants fmap cata; };
   # Constructor functions for types.
   # Their internal structure/fields are an *implementation detail*.
-  inherit void any unit bool string int float list attrs product sum union;
+  inherit void any unit bool string int float
+          list attrs product productOpt sum union;
   # Type checking.
   inherit checkType;
+  # Functions.
+  inherit defaults prettyPrintErrors;
 }

@@ -23,6 +23,11 @@ let
     expected = result;
   };
 
+  testDef = type: result: {
+    expr = defaults type;
+    expected = result;
+  };
+
   # TODO test the return type of checkType to be
   # nested attrs (product { should = string; val = any; })
 
@@ -106,6 +111,24 @@ in lib.runTests {
   testProductEmptyFoo = test (product {}) { name = "hans"; }
     (err (product {}) { name = "hans"; });
 
+  testProductOptOk = test
+    (productOpt { req = { a = unit; }; opt = { b = unit; }; })
+    { a = {}; b = {}; } ok;
+  testProductOptNoOptOk = test
+    (productOpt { req = { a = unit; }; opt = { b = unit; }; })
+    { a = {}; } ok;
+  testProductOnlyOptNoReq = test
+    (productOpt { req = { a = unit; }; opt = { b = unit; }; })
+    { b = {}; }
+    (err (productOpt { req = { a = unit; }; opt = { b = unit; }; }) { b = {}; }) ;
+  testProductOnlyOptOk = test
+    (productOpt { req = {}; opt = { x = unit; y = unit; }; })
+    { y = {}; } ok;
+  testProductInProductOpt = test
+    (productOpt { req = {}; opt = { p = product { x = int; y = bool; }; }; })
+    { p = { x = 23; }; } # missing the required p.y
+    { p = (err (product { x = int; y = bool; }) { x = 23; }); };
+
   testSumLeftOk = test (sum { left = string; right = unit; })
     { left = "errör!"; } ok;
   testSumRightOk = test (sum { left = string; right = unit; })
@@ -126,5 +149,24 @@ in lib.runTests {
   testUnionWrongType = test (union [ int string ]) true
     (err (union [ int string ]) true);
   testUnionOne = test (union [ int ]) 23 ok;
+
+
+  testDefaultsUnit = testDef unit {};
+  testDefaultsBool = testDef bool false;
+  testDefaultsString = testDef string "";
+  testDefaultsInt = testDef int 0;
+  testDefaultsFloat = testDef float 0.0;
+  testDefaultsList1 = testDef (list void) [];
+  testDefaultsList2 = testDef (list (list void)) [];
+  testDefaultsAttrs1 = testDef (attrs void) {};
+  testDefaultsAttrs2 = testDef (attrs (attrs void)) {};
+  testDefaultsProductEmpty = testDef (product {}) {};
+  testDefaultsProduct = testDef
+    (product { a = int; b = bool; })
+    { a = 0; b = false; };
+  testDefaultsSum = testDef
+    (sum { a = int; b = bool; })
+    { a = 0; }; # depends on sorting of attrNames
+  testDefaultsUnion = testDef (union [ int bool ]) 0;
 
 }
