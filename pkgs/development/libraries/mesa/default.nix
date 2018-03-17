@@ -55,7 +55,7 @@ let
     (if gallium_ == null
           then defaultGalliumDrivers
           else gallium_)
-    ++ ["swrast"];
+    ++ ["swrast" "virgl"];
   driDrivers =
     (if dri_ == null
       then defaultDriDrivers
