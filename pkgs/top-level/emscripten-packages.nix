@@ -17,36 +17,30 @@ rec {
         emconfigure ./configure --prefix=$out 
       '';
       checkPhase = ''
-        # FIXME write a test
+        echo "================= testing json_c using node ================="
+
+        echo "Compiling a custom test"
+        set -x
+        emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 tests/test1.c \
+          `pkg-config zlib --cflags` \
+          `pkg-config zlib --libs` \
+          -I . \
+          .libs/libjson-c.so \
+          -ljson-c \
+          -o ./test1.js
+
+        echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
+        ${pkgs.nodejs}/bin/node ./test1.js 
+
+        set +x
+        if [ $? -ne 0 ]; then
+          echo "test1.js execution failed -> unit test failed, please fix"
+          exit 1;
+        else
+          echo "test1.js execution seems to work! very good."
+        fi
+        echo "================= /testing json_c using node ================="
       '';
-      #checkPhase = ''
-      #  echo "================= testing json_c using node ================="
-
-      #  echo "Compiling a custom test"
-      #  set -x
-      #  ls -lathr 
-      #  emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 tests/test1.c \
-      #    `pkg-config zlib --cflags` \
-      #    `pkg-config zlib --libs` \
-      #    -I .
-      #    -L .libs/
-      #    -ljson_c
-      #    -o ./test1.js
-
-      #  echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
-      #  ${pkgs.nodejs}/bin/node ./test1.js 
-
-      #  exit 1
-
-      #  set +x
-      #  if [ $? -ne 0 ]; then
-      #    echo "xmllint unit test failed, please fix this package"
-      #    exit 1;
-      #  else
-      #    echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
-      #  fi
-      #  echo "================= /testing xmllint using node ================="
-      #'';
     });
   
   libxml2 = (pkgs.libxml2.override {
