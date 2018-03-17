@@ -11,11 +11,42 @@ rec {
   }).overrideDerivation
     (old: {
       nativeBuildInputs = [ autoreconfHook pkgconfig zlib ];
-      buildInputs = old.buildInputs ++ [ nodejs automake autoconf python ];
+      buildInputs = old.buildInputs ++ [ automake autoconf ];
       configurePhase = ''
         HOME=$TMPDIR
         emconfigure ./configure --prefix=$out 
       '';
+      checkPhase = ''
+        # FIXME write a test
+      '';
+      #checkPhase = ''
+      #  echo "================= testing json_c using node ================="
+
+      #  echo "Compiling a custom test"
+      #  set -x
+      #  ls -lathr 
+      #  emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 tests/test1.c \
+      #    `pkg-config zlib --cflags` \
+      #    `pkg-config zlib --libs` \
+      #    -I .
+      #    -L .libs/
+      #    -ljson_c
+      #    -o ./test1.js
+
+      #  echo "Using node to execute the test which basically outputs an error on stderr which we grep for" 
+      #  ${pkgs.nodejs}/bin/node ./test1.js 
+
+      #  exit 1
+
+      #  set +x
+      #  if [ $? -ne 0 ]; then
+      #    echo "xmllint unit test failed, please fix this package"
+      #    exit 1;
+      #  else
+      #    echo "since there is no stupid text containing 'foo xml:id' it seems to work! very good."
+      #  fi
+      #  echo "================= /testing xmllint using node ================="
+      #'';
     });
   
   libxml2 = (pkgs.libxml2.override {
@@ -24,7 +55,7 @@ rec {
   }).overrideDerivation
     (old: { 
       propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ pkgs.python pkgs.pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkgconfig ];
 
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used..."; 
@@ -59,7 +90,7 @@ rec {
     name = "xmlmirror";
 
     nativeBuildInputs = [ pkgconfig pkgs.emscriptenPackages.zlib ];
-    buildInputs = [ autoconf automake libtool gnumake libxml2 nodejs python openjdk json_c zlib ];
+    buildInputs = [ autoconf automake libtool gnumake libxml2 nodejs openjdk json_c zlib ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -99,7 +130,9 @@ rec {
       cp *.rng $out/share
       cp README.md $doc/share/${name}
     '';
-    
+    checkPhase = ''
+      # FIXME write a test
+    '';
     postInstall = ''
     '';
   };  
@@ -108,7 +141,7 @@ rec {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
     (old: { 
-      buildInputs = old.buildInputs ++ [ python pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkgconfig ];
       NIX_CFLAGS_COMPILE="";
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
@@ -127,6 +160,9 @@ rec {
       '';
       installPhase = ''
         emmake make install
+      '';
+      checkPhase = ''
+        # FIXME write a test
       '';
       postPatch = pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
