@@ -505,16 +505,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  GenericPretty = overrideCabal super.GenericPretty (drv: {
-    ## https://github.com/RazvanRanca/GenericPretty/issues/2
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
-         sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
-       })
-    ];
-  });
-
   github = overrideCabal super.github (drv: {
     ## Setup: Encountered missing dependencies:
     ## base >=4.7 && <4.11
