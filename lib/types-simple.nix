@@ -68,6 +68,7 @@ let
 
   # Functor instance of Type
   # fmap :: (a -> b) -> (Type a) -> (Type b)
+  # it just applies a function over the “holes” in Type variants
   fmap = f: t:
          if t.variant == variants.scalar    then t
     else if t.variant == variants.recursive then
@@ -99,34 +100,50 @@ let
   #
   # checkType :: Fix Type -> Value -> (Nested Attrs) Errors
   #
-  # where { } means no error
-  # or { should : String, val : Value } for a type mismatch.
+  # where { } means no error (the given value is of the given type)
+  # and { should : String, val : Value } denotes a type mismatch.
   checkType =
     let
+      # the type check suceeded
+      ok = {};
       # filters out non-error messages
       mapAndFilter = f: vals:
         lib.filterAttrs (_: v: v != {}) (lib.mapAttrs f vals);
       # alg :: Type (Value -> Errors) -> (Value -> Errors)
       alg = t: v:
+            # the main type check on each “level”
+            # the cases further down handle the differences
+            # between the variants (poor man’s pattern matching)
             # TODO: some errors should throw some more context.
-            # e.g. putting more than one field in a sum value.
+            # e.g. putting more than one field in a sum value
             if !(t.check v) then { should = t.description; val = v; }
-        else if t.variant == variants.scalar    then {}
+        # scalars have just one level (already checked above)
+        else if t.variant == variants.scalar    then ok
+        # grab all child values and type check them one by one
         else if t.variant == variants.recursive then
           mapAndFilter (_: el: t.nested el) (t.each v)
+        # there’s exactly one tagged value, so check that
         else if t.variant == variants.sum       then
               # we already tested length == 1 in .check
           let alt = builtins.head (builtins.attrNames v);
           in t.alts.${alt} v.${alt}
+        # check each field according to its type
+        # optional missing fields of course always pass the check
         else if t.variant == variants.product   then
-          mapAndFilter (n: f: if v ? ${n} then f v.${n} else {})
+          mapAndFilter (n: f: if v ? ${n} then f v.${n} else ok)
                        (t.req // t.opt)
+        # if the value fails the check for each type it can have,
+        # we throw an error; if one check succeeds the union is satisfied
         else if t.variant == variants.union     then
           # unions are awkward, the type checker can’t do much here
-          if lib.all (res: res != {}) (map (f: f v) t.altList)
+          if lib.all (res: res != ok) (map (f: f v) t.altList)
           then { should = t.description; val = v; }
-          else {}
+          else ok
         else unreachable;
+    # cata only has “two arguments”, giving it a Value as third
+    # argument “morphs” the `a` in alg to (Value -> Errors);
+    # of course we could curry t and v away,
+    # but just `cata alg` would be very confusing ;)
     in t: v: cata alg t v;
 
 
@@ -156,7 +173,7 @@ let
   mkRecursive = { name, description, check,
     # return all children for a value of this type T t,
     # give each child (of type t) a displayable name.
-    # (T -> Map Name t)
+    # (T t -> Map Name t)
     each,
     # The nested value t of the type functor
     nested
@@ -178,7 +195,7 @@ let
   };
 
   # the any type, every value is an inhabitant
-  # tt basically turns of the type system, use with care
+  # it basically turns off the type system, use with care
   any = mkScalar {
     name = "any";
     description = "any type";
@@ -189,7 +206,12 @@ let
   unit = mkScalar {
     name = "unit";
     description = "unit";
-    # there is exactly one unit value, we represent it with {};
+    # there is exactly one unit value, we represent it with {}
+    # Q: why not `null`?
+    # A: `null` has strong connotations as the “always existing”
+    # alternative value; of course in a unityped language like
+    # nix this is moot, but here we take the chance to throw out
+    # this harmful idea (the “million dollar mistake”).
     check = v: v == {};
   };
 
@@ -227,7 +249,8 @@ let
   describe = t: t.description or "<non-type>";
 
   # list with children of type t
-  # list bool: [ true false false ]
+  # list bool:
+  #   [ true false false ]
   # list (attrs unit):
   #   [ { a = {}; } { b = {}; } ]
   #   []
@@ -235,7 +258,7 @@ let
     name = "list";
     description = "list of ${describe t}";
     check = builtins.isList;
-    # each child gets named by its index
+    # each child gets named by its index, starting from 0
     each = l: builtins.listToAttrs
       (lib.imap0 (i: v: lib.nameValuePair (toString i) v) l);
     nested = t;
@@ -286,11 +309,11 @@ let
           optfs = builtins.attrNames opt;
           vfs   = builtins.attrNames v;
       in builtins.isAttrs v &&
-      # all fields have to exist in the value
-      # reqfs - vfs
       (if opt == {}
       # if there’s only required fields, this is an optimization
       then reqfs == vfs
+        # all fields have to exist in the value
+        # reqfs - vfs
       else lib.subtractLists vfs reqfs == []
         # whithout req, only opt fields must be in the value
         # (vfs - reqfs) - otfs
@@ -322,6 +345,7 @@ let
       in builtins.isAttrs v
       # exactly one of the alts has to be used by the value
       && builtins.length alt == 1
+      # the alt tag of the value should of course be a possibility
       && alts ? ${lib.head alt};
     variant = variants.sum;
     extraFields = {
@@ -343,6 +367,7 @@ let
     description = "one of [ "
       + lib.concatMapStringsSep ", " describe altList
       + " ]";
+    # any type that checks out is fine
     check = v: lib.any (t: t.check v) altList;
     variant = variants.union;
     extraFields = {
@@ -361,6 +386,7 @@ let
 
   ## -- FUNCTIONS --
 
+  # TODO: pattern match function
   # match =
 
   # Default values for some types, chosen pretty arbitrarily.
@@ -371,6 +397,8 @@ let
   #     val = { foo = "hello"; };
   # in checkType t (defaults t // val)
   # or even recursiveUpdate if you want to be naughty.
+  # Hint: It’s probably better to use `productOpt` instead,
+  #       but more power to the people.
   defaults = t:
     let
       defs = {
@@ -383,8 +411,10 @@ let
         float = 0.0;
         list = [];
         attrs = {};
+        # product generates the default for each of its required fields
         product = lib.mapAttrs (lib.const defaults) t.req;
-        # sum and union those are *really* arbitrary
+        # sum and union those are *really* arbitrary,
+        # they just generate the default of their first alt
         sum =
           let first = builtins.head (builtins.attrNames t.alts);
           in { ${first} = defaults t.alts.${first}; };
@@ -396,6 +426,8 @@ let
        then defs.${t.name}
        else abort "types-simple: no default value for type ${describe t} defined";
 
+  # Feed it the output of checkType (after testing for success (== {})
+  # and it returns a more or less pretty string of errors.
   prettyPrintErrors =
     let
       join = lib.foldl lib.concat [];
