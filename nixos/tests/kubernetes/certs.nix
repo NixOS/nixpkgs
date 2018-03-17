@@ -7,11 +7,26 @@
 }:
 let
   runWithCFSSL = name: cmd:
-    builtins.fromJSON (builtins.readFile (
-      pkgs.runCommand "${name}-cfss.json" {
-        buildInputs = [ pkgs.cfssl ];
-      } "cfssl ${cmd} > $out"
-    ));
+    let secrets = pkgs.runCommand "${name}-cfss.json" {
+        buildInputs = [ pkgs.cfssl pkgs.jq ];
+        outputs = [ "out" "cert" "key" "csr" ];
+      }
+      ''
+        (
+          echo "${cmd}"
+          cfssl ${cmd} > tmp
+          cat tmp | jq -r .key > $key
+          cat tmp | jq -r .cert > $cert
+          cat tmp | jq -r .csr > $csr
+
+          touch $out
+        ) 2>&1 | fold -w 80 -s
+      '';
+    in {
+      key = secrets.key;
+      cert = secrets.cert;
+      csr = secrets.csr;
+    };
 
   writeCFSSL = content:
     pkgs.runCommand content.name {
@@ -25,10 +40,10 @@ let
   noCSR = content: pkgs.lib.filterAttrs (n: v: n != "csr") content;
   noKey = content: pkgs.lib.filterAttrs (n: v: n != "key") content;
 
-  writeFile = content: pkgs.writeText "content" (
-    if pkgs.lib.isAttrs content then builtins.toJSON content
-    else toString content
-  );
+  writeFile = content:
+    if pkgs.lib.isDerivation content
+    then content
+    else pkgs.writeText "content" (builtins.toJSON content);
 
   createServingCertKey = { ca, cn, hosts? [], size ? 2048, name ? cn }:
     noCSR (
