@@ -40,15 +40,6 @@ stdenv.mkDerivation rec {
   );
   enableParallelBuilding = true;
 
-#  postBuild = ''
-#    echo "1--------------- in src -----------------"
-#    du -a
-#    echo "2--------------- in dst -----------------"
-#    du -a
-#    echo "3--------------- running test -----------------"
-#    ${python}/bin/python $out/tests/runner.py
-#  '';
-
   passthru = {
     isClang = true;
     inherit gcc;

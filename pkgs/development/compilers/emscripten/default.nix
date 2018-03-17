@@ -17,8 +17,6 @@ stdenv.mkDerivation {
     inherit rev;
   };
 
-  hardeningDisable = [ "format" ];
-
   buildInputs = [ nodejs cmake python ];
 
   buildCommand = ''
