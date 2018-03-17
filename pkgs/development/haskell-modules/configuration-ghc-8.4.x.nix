@@ -42,9 +42,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # https://github.com/bitemyapp/esqueleto/issues/77
-  esqueleto = markBrokenVersion "2.5.3" super.esqueleto;
-
   # Need newer version.
   haskell-src = super.haskell-src_1_0_3_0;
 
@@ -733,6 +730,6 @@ self: super: {
     });
 
   # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4;
+  pandoc-types = self.pandoc-types_1_17_4_1;
 
 }
