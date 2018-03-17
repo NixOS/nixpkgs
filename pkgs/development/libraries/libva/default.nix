@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL
+, libGL, libGL_driver
 , minimal ? true, libva
 }:
 
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-drivers-path=${libGL.driverLink}/lib/dri"
+    # Add FHS paths for non-NixOS applications.
+    "--with-drivers-path=${libGL_driver.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [
