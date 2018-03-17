@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     (mkFlag qt5Support "QT5")
   ];
 
+  # Not sure when and how to pass it.  It seems an upstream bug anyway.
+  CXXFLAGS = if stdenv.cc.isClang then [ "-std=c++11" ] else null;
+
   meta = with lib; {
     homepage = https://poppler.freedesktop.org/;
     description = "A PDF rendering library";
