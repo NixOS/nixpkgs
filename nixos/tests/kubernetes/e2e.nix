@@ -2,7 +2,7 @@
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
-  certs = import ./certs.nix { externalDomain = domain; };
+  certs = import ./certs.nix { externalDomain = domain; kubelets = ["machine1" "machine2"]; };
   kubeconfig = pkgs.writeText "kubeconfig.json" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";

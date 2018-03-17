@@ -13,17 +13,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ go ];
 
-  outputs = ["out" "plugins"];
-
   buildPhase = ''
     patchShebangs build.sh
     ./build.sh
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $plugins
+    mkdir -p $out/bin
     mv bin/cnitool $out/bin
-    mv bin/* $plugins/
   '';
 
   meta = with stdenv.lib; {

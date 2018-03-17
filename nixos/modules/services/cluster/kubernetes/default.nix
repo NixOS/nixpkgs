@@ -766,7 +766,7 @@ in {
           rm /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
-            ln -fs ${package.plugins}/* /opt/cni/bin
+            ln -fs ${package}/bin/* /opt/cni/bin
           '') cfg.kubelet.cni.packages}
         '';
         serviceConfig = {
@@ -828,7 +828,7 @@ in {
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni];
+      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
 
       boot.kernelModules = ["br_netfilter"];
 
