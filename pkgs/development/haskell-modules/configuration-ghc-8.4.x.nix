@@ -692,5 +692,6 @@ self: super: {
 
   # Older versions don't compile.
   brick = self.brick_0_35;
+  timezone-olson = self.timezone-olson_0_1_9;
 
 }
