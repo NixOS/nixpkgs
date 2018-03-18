@@ -13862,23 +13862,6 @@ in {
     };
   };
 
-  pysphere = buildPythonPackage rec {
-    name = "pysphere-0.1.8";
-
-    src = pkgs.fetchurl {
-      url = "http://pysphere.googlecode.com/files/${name}.zip";
-      sha256 = "b3f9ba1f67afb17ac41725b01737cd42e8a39d9e745282dd9b692ae631af0add";
-    };
-
-    disabled = isPy3k;
-
-    meta = {
-      homepage    = "https://code.google.com/p/pysphere/";
-      license     = "BSD";
-      description = "Python API for interaction with the VMWare vSphere";
-    };
-  };
-
   pysqlite = buildPythonPackage rec {
     name = "pysqlite-2.8.3";
 
