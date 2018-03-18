@@ -2384,21 +2384,7 @@ in {
   });
 
 
-  colander = buildPythonPackage rec {
-    name = "colander-1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colander/${name}.tar.gz";
-      sha256 = "7389413266b9e680c9529c16d56284edf87e0d5de557948e75f41d65683c23b3";
-    };
-
-    propagatedBuildInputs = with self; [ self.translationstring self.iso8601 ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  colander = callPackage ../development/python-modules/colander { };
 
   # Backported version of the ConfigParser library of Python 3.3
   configparser = if isPy3k then null else buildPythonPackage rec {
