@@ -1,0 +1,32 @@
+diff -u -r gildas-src-feb17d.orig/kernel/lib/gcore/gcomm.c gildas-src-feb17d/kernel/lib/gcore/gcomm.c
+--- gildas-src-feb17d.orig/kernel/lib/gcore/gcomm.c	2017-05-18 00:23:07.482284541 +0200
++++ gildas-src-feb17d/kernel/lib/gcore/gcomm.c	2017-05-18 00:24:03.043396641 +0200
+@@ -973,12 +973,12 @@
+     i = 0;
+     sprintf( exec_argv[i++], "xterm");
+     sprintf( exec_argv[i++], "-T");
+-    sprintf( exec_argv[i++], app_name);
++    sprintf( exec_argv[i++], "%s", app_name);
+     sprintf( exec_argv[i++], "-e");
+     sprintf( exec_argv[i++], "gdb");
+     sprintf( exec_argv[i++], "-x");
+-    sprintf( exec_argv[i++], gdb_cmd_file);
+-    sprintf( exec_argv[i++], app_name);
++    sprintf( exec_argv[i++], "%s", gdb_cmd_file);
++    sprintf( exec_argv[i++], "%s", app_name);
+     exec_argv[i++] = NULL;
+     if (i >= MAX_ARGC) {
+         gcore_c_message(seve_e, "SIC", "Too much arguments, exiting");
+diff -u -r gildas-src-feb17d.orig/kernel/lib/ggtk/gtk-menu.c gildas-src-feb17d/kernel/lib/ggtk/gtk-menu.c
+--- gildas-src-feb17d.orig/kernel/lib/ggtk/gtk-menu.c	2017-05-18 00:21:47.656686708 +0200
++++ gildas-src-feb17d/kernel/lib/ggtk/gtk-menu.c	2017-05-18 00:20:36.227256914 +0200
+@@ -219,7 +219,7 @@
+     i = 0;
+     sprintf( argv[i++], "undefined");
+     sprintf( argv[i++], "0");
+-    sprintf( argv[i++], file);
++    sprintf( argv[i++], "%s", file);
+     argv[i] = NULL;
+ 
+     //run_gtk_menu_args( i, argv);
+Only in gildas-src-feb17d/kernel/lib/ggtk: gtk-menu.c.orig
