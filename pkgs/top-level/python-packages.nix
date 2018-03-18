@@ -6107,6 +6107,8 @@ in {
     };
   };
 
+  python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
+
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
