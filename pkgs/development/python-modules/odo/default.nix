@@ -37,5 +37,8 @@ buildPythonPackage rec {
     description = "Data migration utilities";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ fridh ];
+    # incomaptible with Networkx 2
+    # see https://github.com/blaze/odo/pull/601
+    broken = true;
   };
 }

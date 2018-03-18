@@ -456,6 +456,8 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic {};
 
+  allpairspy = callPackage ../development/python-modules/allpairspy { };
+
   ansicolors = callPackage ../development/python-modules/ansicolors {};
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 {};
@@ -1461,6 +1463,8 @@ in {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
 
     buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+
+    checkInputs = with self; [ pytest ];
   };
 
   datadog = buildPythonPackage rec {
@@ -2349,36 +2353,15 @@ in {
 
   colorlover = callPackage ../development/python-modules/colorlover { };
 
-  CommonMark = buildPythonPackage rec {
-    name = "CommonMark-${version}";
-    version = "0.6.3";
+  CommonMark = callPackage ../development/python-modules/commonmark { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
-      sha256 = "ee5a88f23678794592efe3fc11033f17fc77b3296a85f5e1d5b715f8e110a773";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    doCheck = false;
-
-    buildInputs = with self; [ flake8 pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ future ];
-
-    meta = {
-      description = "Python parser for the CommonMark Markdown spec";
-      homepage = https://github.com/rolandshoemaker/CommonMark-py;
-      license = licenses.bsd3;
-    };
-  };
-
-  CommonMark_54 = self.CommonMark.override rec {
-    name = "CommonMark-0.5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
+  CommonMark_54 = self.CommonMark.overridePythonAttrs (oldAttrs: rec {
+    version = "0.5.4";
+    src = oldAttrs.src.override {
+      inherit version;
       sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
     };
-  };
+  });
 
 
   coilmq = buildPythonPackage (rec {
@@ -2405,21 +2388,7 @@ in {
   });
 
 
-  colander = buildPythonPackage rec {
-    name = "colander-1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colander/${name}.tar.gz";
-      sha256 = "7389413266b9e680c9529c16d56284edf87e0d5de557948e75f41d65683c23b3";
-    };
-
-    propagatedBuildInputs = with self; [ self.translationstring self.iso8601 ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  colander = callPackage ../development/python-modules/colander { };
 
   # Backported version of the ConfigParser library of Python 3.3
   configparser = if isPy3k then null else buildPythonPackage rec {
@@ -6115,6 +6084,8 @@ in {
     };
   };
 
+  python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
+
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
@@ -8397,17 +8368,7 @@ in {
     };
   };
 
-  hvac = buildPythonPackage rec {
-    name    = "hvac-${version}";
-    version = "0.2.15";
-
-    src = pkgs.fetchurl {
-      url    = "https://pypi.python.org/packages/11/ba/6101780891b9d55f6174fa78b47d462c8c1f0cde34072b45fc39f7f8a77c/hvac-0.2.15.tar.gz";
-      sha256 = "0qxa4g1ij1bj27mbp8l54lcr7d5krkb2rayisc6shkpf2b51ip4c";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-  };
+  hvac = callPackage ../development/python-modules/hvac { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
@@ -8959,27 +8920,6 @@ in {
   keyring = callPackage ../development/python-modules/keyring { };
 
   keyutils = callPackage ../development/python-modules/keyutils { };
-
-  klaus = buildPythonPackage rec {
-    version = "0.9.1";
-    name = "klaus-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0k3v3p56hq8alm083grrp98znxkz1zqx0pczm2lah8qddbyrdkgm";
-    };
-
-    propagatedBuildInputs = with self;
-      [ humanize httpauth dulwich pygments flask six ];
-
-    meta = {
-      description = "The first Git web viewer that Just Works";
-      homepage    = "https://github.com/jonashaag/klaus";
-      #license     = licenses.mit; # I'm not sure about the license
-      maintainers = with maintainers; [ matthiasbeyer ];
-      platforms   = platforms.linux; # Can only test linux
-    };
-  };
 
   klein = buildPythonPackage rec {
     name = "klein-15.3.1";
@@ -11886,22 +11826,7 @@ in {
 
   pathpy = callPackage ../development/python-modules/path.py { };
 
-  paypalrestsdk = buildPythonPackage rec {
-    name = "paypalrestsdk-0.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/paypalrestsdk/${name}.tar.gz";
-      sha256 = "117kfipzfahf9ysv414bh1mmm5cc9ck5zb6rhpslx1f8gk3frvd6";
-    };
-
-    propagatedBuildInputs = with self; [ httplib2 ];
-
-    meta = {
-      homepage = https://developer.paypal.com/;
-      description = "Python APIs to create, process and manage payment";
-      license = "PayPal SDK License";
-    };
-  };
+  paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbr = callPackage ../development/python-modules/pbr { };
 
@@ -13912,23 +13837,6 @@ in {
       homepage = "https://github.com/asweigart/pyperclip";
       license = licenses.bsdOriginal;
       description = "Cross-platform clipboard module";
-    };
-  };
-
-  pysphere = buildPythonPackage rec {
-    name = "pysphere-0.1.8";
-
-    src = pkgs.fetchurl {
-      url = "http://pysphere.googlecode.com/files/${name}.zip";
-      sha256 = "b3f9ba1f67afb17ac41725b01737cd42e8a39d9e745282dd9b692ae631af0add";
-    };
-
-    disabled = isPy3k;
-
-    meta = {
-      homepage    = "https://code.google.com/p/pysphere/";
-      license     = "BSD";
-      description = "Python API for interaction with the VMWare vSphere";
     };
   };
 
@@ -18727,17 +18635,7 @@ EOF
     };
   };
 
-  pushbullet = buildPythonPackage rec {
-    name = "pushbullet.py-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pushbullet.py/pushbullet.py-0.10.0.tar.gz";
-      sha256 = "537d3132e1dbc91e31ade4cccf4c7def6f9d48e904a67f341d35b8a54a9be74d";
-    };
-
-    propagatedBuildInputs = with self; [requests websocket_client python_magic ];
-  };
+  pushbullet = callPackage ../development/python-modules/pushbullet { };
 
   power = buildPythonPackage rec {
     name = "power-1.4";
