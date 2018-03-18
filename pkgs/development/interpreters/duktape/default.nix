@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install -m755 duk $out/bin/
     install -d $out/lib
-    install -m755 libduktape* $out/lib/
+    install -d $out/include
+    make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
   '';
   enableParallelBuilding = true;
 
