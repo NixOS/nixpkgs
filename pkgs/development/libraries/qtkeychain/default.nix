@@ -9,13 +9,13 @@ assert stdenv.isDarwin -> darwin != null;
 
 stdenv.mkDerivation rec {
   name = "qtkeychain-${if withQt5 then "qt5" else "qt4"}-${version}";
-  version = "0.8.0";
+  version = "0.8.0";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = "v${version}";
-    sha256 = "04v6ymkw7qd1pf9lwijgqrl89w2hhsnqgz7dm4cdrh8i8dffpn52";
+    sha256 = "1r6qp9l2lp5jpc6ciklbg1swvvzcpc37rg9py46hk0wxy6klnm0b"; # v0.8.0
   };
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ]
