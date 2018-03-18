@@ -1,7 +1,7 @@
 {stdenv, fetchurl, autoreconfHook}:
 
 let
-  version = "5.6";
+  version = "5.7.1";
 in
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";
-    sha256 = "05d6l2a5m9jf32a8kahwg2p2ph4x9rjf1nsl83331q3gwn5bkmr0";
+    sha256 = "1s45jzj2y2kx4fz7qdzmq8v7vk0fk5rz9rk279fqsb1yckq0g9xw";
   };
 
   meta = {
