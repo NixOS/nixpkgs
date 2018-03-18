@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
+  # make: *** No rule to make target 'build/*.lo', needed by 'build/libSDL.la'.  Stop.
+  postPatch = "patchShebangs ./configure";
+
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
