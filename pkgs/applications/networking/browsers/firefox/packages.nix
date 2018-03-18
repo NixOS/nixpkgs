@@ -36,8 +36,18 @@ rec {
       sha512 = "e275fd10fd32a0dc237135af3395e3a1ae501844632c973ff3b9bca1456702ee36dbee99fc57300598403c924c0db63bd62a199845c8f4a2e29db5d1e5973395";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = [
+      ./env_var_for_system_dir.patch
+    ]
+    # The following patch is only required on ARM platforms and should be
+    # included for the next ESR release >= 52.7.3esr
+    ++ lib.optional stdenv.isArm
+      (fetchpatch {
+        name = "CVE-2018-5147-tremor.patch";
+        url = https://hg.mozilla.org/releases/mozilla-esr52/rev/5cd5586a2f48;
+        sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      })
+    ;
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
