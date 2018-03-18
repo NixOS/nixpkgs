@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GodotNativeTools/godot_headers/";
     description = "Headers for the Godot API supplied by the GDNative module";
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.twey ];
   };
 }
