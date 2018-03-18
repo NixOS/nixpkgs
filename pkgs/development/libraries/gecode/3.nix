@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gecode-${version}";
-  version = "3.7.3";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "http://www.gecode.org/download/${name}.tar.gz";
-    sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
+    sha256 = "0dp7bm6k790jx669y4jr0ffi5cdfpwsqm1ykj2c0zh56jsgs6hfs";
   };
 
   nativeBuildInputs = [ bash perl ];
