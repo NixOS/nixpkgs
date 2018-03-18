@@ -40,6 +40,10 @@ let
     SECRET_KEY = #secretkey#
     INSTALL_LOCK = true
 
+    [log]
+    ROOT_PATH = ${cfg.log.rootPath}
+    LEVEL = ${cfg.log.level}
+
     ${cfg.extraConfig}
   '';
 in
@@ -63,6 +67,19 @@ in
         default = "/var/lib/gitea";
         type = types.str;
         description = "gitea data directory.";
+      };
+
+      log = {
+        rootPath = mkOption {
+          default = "${cfg.stateDir}/log";
+          type = types.str;
+          description = "Root path for log files.";
+        };
+        level = mkOption {
+          default = "Trace";
+          type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
+          description = "General log level.";
+        };
       };
 
       user = mkOption {
@@ -287,6 +304,7 @@ in
         description = "Gitea Service";
         home = cfg.stateDir;
         createHome = true;
+        useDefaultShell = true;
       };
     };
 
