@@ -6,7 +6,7 @@
 with lib;
 
 let
-  v = "4.9.1";
+  v = "4.10.0";
 
   soname = if withQt5 then "phonon4qt5" else "phonon";
   buildsystemdir = "share/cmake/${soname}";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
-    sha256 = "177647r2jqfm32hqcz2nqfqv6v48hn5ab2vc31svba2wz23fkgk7";
+    sha256 = "0gyhlnwamzfw31kw4qh0v6rj0m47k9wfygd6h07klg9ggp60xhg2";
   };
 
   buildInputs =
