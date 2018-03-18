@@ -2920,6 +2920,11 @@
     github = "rbasso";
     name = "Rafael Basso";
   };
+  rdnetto = {
+    email = "rdnetto@gmail.com";
+    github = "rdnetto";
+    name = "Reuben D'Netto";
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";

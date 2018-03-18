@@ -765,6 +765,8 @@ with pkgs;
 
   backup = callPackage ../tools/backup/backup { };
 
+  bar = callPackage ../tools/system/bar {};
+
   base16-builder = callPackage ../misc/base16-builder { };
 
   basex = callPackage ../tools/text/xml/basex { };
