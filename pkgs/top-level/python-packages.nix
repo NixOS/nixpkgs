@@ -19175,24 +19175,7 @@ EOF
 
   ofxclient = callPackage ../development/python-modules/ofxclient {};
 
-  ofxhome = buildPythonPackage rec {
-    name = "ofxhome-0.3.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/ofxhome/${name}.tar.gz";
-      sha256 = "0000db437fd1a8c7c65cea5d88ce9d3b54642a1f4844dde04f860e29330ac68d";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    # ImportError: No module named tests
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/captin411/ofxhome";
-      description = "ofxhome.com financial institution lookup REST client";
-      license = licenses.mit;
-    };
-  };
+  ofxhome = callPackage ../development/python-modules/ofxhome { };
 
   ofxparse = buildPythonPackage rec {
     name = "ofxparse-0.14";
