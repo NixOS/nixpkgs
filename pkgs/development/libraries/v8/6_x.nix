@@ -96,7 +96,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "6.2.414.27";
+  version = "6.6.335";
 
   inherit doCheck;
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     owner = "v8";
     repo = "v8";
     rev = version;
-    sha256 = "15zrb9bcpnhljhrilqnjaak3a4xnhj8li6ra12g3gkrw3fzir9a2";
+    sha256 = "0rsdim4iccw2qzdjxl8239dv623bh6jdmgspzc79h6f9m10whgn2";
   };
 
   postUnpack = ''
