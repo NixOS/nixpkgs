@@ -20112,6 +20112,8 @@ with pkgs;
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
+  calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
