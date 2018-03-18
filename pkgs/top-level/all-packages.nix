@@ -8468,6 +8468,8 @@ with pkgs;
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
+  clipper = callPackage ../development/libraries/clipper { };
+
   cln = callPackage ../development/libraries/cln { };
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
