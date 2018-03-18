@@ -15140,6 +15140,8 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
+  easystroke = callPackage ../applications/misc/easystroke { };
+
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { webkitgtk24x-gtk2 = null; });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
