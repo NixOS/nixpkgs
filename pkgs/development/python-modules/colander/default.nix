@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "colander";
-  version = "1.0";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7389413266b9e680c9529c16d56284edf87e0d5de557948e75f41d65683c23b3";
+    sha256 = "e20e9acf190e5711cf96aa65a5405dac04b6e841028fc361d953a9923dbc4e72";
   };
 
   propagatedBuildInputs = [ translationstring iso8601 ];
