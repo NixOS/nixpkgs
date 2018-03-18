@@ -145,6 +145,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # server references the dejavu fonts
+    environment.systemPackages = [
+      pkgs.dejavu_fonts
+    ];
+
     users.extraGroups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
