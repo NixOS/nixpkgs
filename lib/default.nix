@@ -95,7 +95,8 @@ let
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
-      commitIdFromGitRepo cleanSourceWith pathHasContext canCleanSource;
+      commitIdFromGitRepo cleanSourceWith pathHasContext canCleanSource
+      composablePath;
     inherit (modules) evalModules closeModules unifyModuleSyntax
       applyIfFunction unpackSubmodule packSubmodule mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
