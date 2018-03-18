@@ -705,7 +705,7 @@ self: super: {
   # Older versions don't compile.
   brick = self.brick_0_35;
   timezone-olson = self.timezone-olson_0_1_9;
-  matrix = self.matrix_0_3_6_0;
+  matrix = self.matrix_0_3_6_1;
 
   # https://github.com/pikajude/th-printf/issues/8
   th-printf = doJailbreak super.th-printf;
