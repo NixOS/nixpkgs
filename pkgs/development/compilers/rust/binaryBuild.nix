@@ -37,6 +37,7 @@ rec {
     phases = ["unpackPhase" "installPhase"];
 
     installPhase = ''
+      patchShebangs .
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
@@ -82,6 +83,7 @@ rec {
     phases = ["unpackPhase" "installPhase"];
 
     installPhase = ''
+      patchShebangs .
       ./install.sh --prefix=$out \
         --components=cargo
 
