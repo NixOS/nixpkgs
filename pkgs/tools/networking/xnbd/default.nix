@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, glib, jansson, asciidoc, libxml2, libxslt, docbook_xml_dtd_45 }:
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, glib, jansson }:
 
 stdenv.mkDerivation rec {
   name = "xnbd-0.4.0";
@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ glib jansson asciidoc libxml2 libxslt docbook_xml_dtd_45 ];
+  buildInputs = [ glib jansson ];
+
+  # do not build docs, it is slow and it fails on Hydra
+  prePatch = ''
+    rm -rf doc
+    substituteInPlace configure.ac --replace "doc/Makefile" ""
+    substituteInPlace Makefile.am --replace "lib doc ." "lib ."
+  '';
 
   meta = {
     homepage = https://bitbucket.org/hirofuchi/xnbd;
