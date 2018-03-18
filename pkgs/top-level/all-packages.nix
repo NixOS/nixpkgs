@@ -20980,4 +20980,6 @@ with pkgs;
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
   diceware = callPackage ../tools/security/diceware { };
+
+  xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
 }
