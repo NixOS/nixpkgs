@@ -301,23 +301,6 @@ self: super: {
 
   ## Unmerged
 
-  ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
-  ## Issue: https://github.com/lpsmith/blaze-builder/issues/12
-  blaze-builder = overrideCabal super.blaze-builder (drv: {
-    ##     • No instance for (Semigroup Poke)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Poke’
-    src = pkgs.fetchFromGitHub {
-      owner  = "bgamari";
-      repo   = "blaze-builder";
-      rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
-      sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## base >=4 && <4.11
-    jailbreak       = true;
-  });
-
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
   bytestring-trie = overrideCabal super.bytestring-trie (drv: {
     ##     • Could not deduce (Semigroup (Trie a))
