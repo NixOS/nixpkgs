@@ -2079,6 +2079,8 @@ with pkgs;
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
+  emscriptenVersion = "1.37.36";
+
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcompPackages = callPackage ../development/compilers/emscripten-fastcomp { };
