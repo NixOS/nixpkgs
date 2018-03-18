@@ -456,6 +456,8 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic {};
 
+  allpairspy = callPackage ../development/python-modules/allpairspy { };
+
   ansicolors = callPackage ../development/python-modules/ansicolors {};
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 {};
