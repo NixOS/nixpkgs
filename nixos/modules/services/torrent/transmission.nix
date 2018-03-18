@@ -21,6 +21,16 @@ let
 
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
+
+  preStart = pkgs.writeScript "transmission-pre-start" ''
+    #!${pkgs.runtimeShell}
+    set -ex
+    for DIR in ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir}; do
+      mkdir -p "$DIR"
+      chmod 770 "$DIR"
+    done
+    cp -f ${settingsFile} ${settingsDir}/settings.json
+  '';
 in
 {
   options = {
@@ -89,9 +99,7 @@ in
 
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
-      serviceConfig.ExecStartPre = ''
-          ${pkgs.runtimeShell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
-      '';
+      serviceConfig.ExecStartPre = preStart;
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = "transmission";
