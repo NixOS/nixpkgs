@@ -205,10 +205,12 @@ in {
           ${replacePlugins}
         '';
 
+      # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
         ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
+                                                  -Djava.awt.headless=true \
                                                   ${concatStringsSep " " cfg.extraOptions}
       '';
 
