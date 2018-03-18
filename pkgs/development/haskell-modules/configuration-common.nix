@@ -1006,4 +1006,7 @@ self: super: {
     sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
   });
 
+  # https://github.com/Daniel-Diaz/matrix/issues/55
+  matrix_0_3_6_0 = dontCheck super.matrix_0_3_6_0;
+
 }

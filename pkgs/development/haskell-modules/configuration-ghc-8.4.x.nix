@@ -48,11 +48,6 @@ self: super: {
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## base >=3 && <4.11
-  boxes = super.boxes_0_1_5;
-
-  ## Needs bump to a versioned attribute
   ##     • No instance for (GHC.Base.Semigroup BV)
   ##         arising from the superclasses of an instance declaration
   ##     • In the instance declaration for ‘Monoid BV’
@@ -133,37 +128,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_5_0;
 
   ## On Hackage:
-
-  ## On Hackage, awaiting for import
-  tasty = overrideCabal super.tasty (drv: {
-    ##     • No instance for (Semigroup OptionSet)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid OptionSet’
-    version         = "1.0.0.1";
-    sha256          = "0ggqffw9kbb6nlq1pplk131qzxndqqzqyf4s2p7576nljx11a7qf";
-  });
-
-
-
-  ## Upstreamed
-
-  ## Upstreamed, awaiting a Hackage release
-  cabal2nix = (overrideCabal super.cabal2nix (drv: {
-    ##     Ambiguous occurrence ‘<>’
-    ##     It could refer to either ‘Prelude.<>’,
-    ##                              imported from ‘Prelude’ at src/Distribution/Nixpkgs/Haskell/Derivation.hs:6:8-46
-    src = pkgs.fetchFromGitHub {
-      owner  = "nixos";
-      repo   = "cabal2nix";
-      rev    = "32974fcc3d9b485bd35167d9ae90941a5b3d06df";
-      sha256 = "1racp49z5922rvrc62clslzdkxh4axj2i0k83w5y6w5chl83abyd";
-    };
-  })).override {
-    ##     • No instance for (Semigroup (List a))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       Possible fix:
-    hpack = self.hpack;
-  };
 
   ## Upstreamed, awaiting a Hackage release
   cabal-install = overrideCabal super.cabal-install (drv: {
@@ -535,30 +499,10 @@ self: super: {
     jailbreak       = true;
   });
 
-  ## Issue: https://github.com/jgm/doctemplates/issues/2
-  doctemplates = overrideCabal super.doctemplates (drv: {
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/jgm/doctemplates/commit/3f8bb8feb19ed86b881bc09d963026db9d98df21.patch;
-         sha256 = "0xmjljh8c90qlzp6wn39iy23pj2j0d4m4r1hxs22zps6qdwk5s6d";
-       })
-    ];
-  });
-
   exception-transformers = overrideCabal super.exception-transformers (drv: {
     ## Setup: Encountered missing dependencies:
     ## HUnit >=1.2 && <1.6
     jailbreak       = true;
-  });
-
-  GenericPretty = overrideCabal super.GenericPretty (drv: {
-    ## https://github.com/RazvanRanca/GenericPretty/issues/2
-    patches = (drv.patches or []) ++ [
-      (pkgs.fetchpatch
-       { url    = https://github.com/RazvanRanca/GenericPretty/pull/3.patch;
-         sha256 = "1dpdqsjmy9j9b6md5r9jyhbxnxjd51nmfb5in01j10iqzhj9j51k";
-       })
-    ];
   });
 
   github = overrideCabal super.github (drv: {
@@ -729,7 +673,47 @@ self: super: {
       stripLen = 1;
     });
 
+  # Fix missing semigroup instance.
+  data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
+    { url = https://github.com/luqui/data-inttrie/pull/5.patch;
+      sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
+    });
+
+  # 1.3.0.0 does not compile.
+  conduit = self.conduit_1_3_0_1;
+
   # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4_1;
+  pandoc-types = self.pandoc-types_1_17_4_2;
+
+  ## Need latest git version to support current haddock-library versions.
+  pandoc = overrideSrc super.pandoc {
+    version = "2.1.2-git";
+    src = pkgs.fetchFromGitHub {
+      owner  = "jgm";
+      repo   = "pandoc";
+      rev    = "fad8d0d67ff4736e1af554d2bfcf1688aa28c8ec";
+      sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
+    };
+  };
+
+  # Fix missing semigroup instance.
+  json = appendPatch super.json (pkgs.fetchpatch
+    { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
+      sha256 = "1xw2gab0wzhszgcbjhg98kkzgnbfn9n3bx1qlk6g7ir6hhwppm9z";
+    });
+
+  # Older versions don't compile.
+  brick = self.brick_0_35;
+  timezone-olson = self.timezone-olson_0_1_9;
+  matrix = self.matrix_0_3_6_0;
+
+  # https://github.com/pikajude/th-printf/issues/8
+  th-printf = doJailbreak super.th-printf;
+
+  # https://github.com/xmonad/xmonad/issues/155
+  xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
+    { url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
+      sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
+    })) self.semigroups;
 
 }

@@ -5,28 +5,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.17.0";
+  version = "3.19.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1w6hw1s0d4daa4q2ykzhxdndiq61l8z7ls7rxh7k7p62ia0i5sxp";
+    sha256 = "0sann0aw6ngvmqp7049zg6hyqjrb5myq5ivr4r9x732c1cnjhhw9";
   };
 
   patches = [
     # Patches from Debian that:
     # - disable plugin installation (very insecure)
+    ./disable_plugins.patch
     # - switches the version update from enabled to disabled by default
-    (fetchpatch {
-      name = "disable_plugins.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
-      sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
-    })
-    (fetchpatch {
-      name = "no_updates_dialog.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/no_updates_dialog.pa-20081231120426-rzzufl0zo66t3mtc-16/no_updates_dialog.patch";
-      sha256 = "16xwa2fa47jvs954fjrwr8rhh89aljgi1d1wrfxa40sknlmfwxif";
-    })
+    ./no_updates_dialog.patch
     # the unrar patch is not from debian
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 

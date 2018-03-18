@@ -1312,6 +1312,8 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  noteshrink = callPackage ../tools/misc/noteshrink { };
+
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   onboard = callPackage ../applications/misc/onboard { };
@@ -3391,6 +3393,8 @@ with pkgs;
   libtelnet = callPackage ../development/libraries/libtelnet { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
+
+  libtins = callPackage ../development/libraries/libtins { };
 
   libshout = callPackage ../development/libraries/libshout { };
 
@@ -8649,7 +8653,9 @@ with pkgs;
     inherit (pkgs.gnome2) gtkglext;
   };
 
-  far2l = callPackage ../applications/misc/far2l { };
+  far2l = callPackage ../applications/misc/far2l {
+    stdenv = if stdenv.cc.isClang then llvmPackages_4.stdenv else stdenv;
+  };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
