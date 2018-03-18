@@ -12786,7 +12786,13 @@ in {
 
     checkInputs = with self; [ bottle pytest nose ];
     checkPhase = ''
-      py.test -k "not test_ssl_in_static_libs" tests
+      py.test -k "not ssh_key_cb_test \
+                  and not test_libcurl_ssl_gnutls \
+                  and not test_libcurl_ssl_nss \
+                  and not test_libcurl_ssl_openssl \
+                  and not test_libcurl_ssl_unrecognized \
+                  and not test_request_with_verifypeer \
+                  and not test_ssl_in_static_libs" tests
     '';
 
     preConfigure = ''
