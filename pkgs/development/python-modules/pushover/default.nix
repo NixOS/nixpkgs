@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  # checks crash
+  # there are no tests
   doCheck = false;
 
   meta = with stdenv.lib; {
