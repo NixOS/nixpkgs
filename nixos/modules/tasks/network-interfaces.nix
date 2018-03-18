@@ -489,7 +489,7 @@ in
     networking.interfaces = mkOption {
       default = {};
       example =
-        { eth0.ipv4 = [ {
+        { eth0.ipv4.addresses = [ {
             address = "131.211.84.78";
             prefixLength = 25;
           } ];
