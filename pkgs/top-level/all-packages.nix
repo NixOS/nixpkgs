@@ -16630,6 +16630,8 @@ in
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
+  easystroke = callPackage ../applications/misc/easystroke { };
+
   echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
