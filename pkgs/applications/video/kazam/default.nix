@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
 
 
   meta = with stdenv.lib; {
-    description = "Cross-platform, Friend-2-Friend and secure decentralised communication platform";
+    description = "A screencasting program created with design in mind";
     homepage = https://code.launchpad.net/kazam;
-    #license = licenses.bsd2;
+    license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
   };
