@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   src = fetchurl {
-    urls =
+    urls = ["https://fossies.org/linux/misc/lsof_4.90.tar.bz2"] ++ # Mirrors seem to be down...
       ["ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_${version}.tar.bz2"]
       ++ map (
         # the tarball is moved after new version is released
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.cc.libc.dev}/include";
+  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
