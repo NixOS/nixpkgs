@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
+{ stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
   name = "edbrowse-${version}";
@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "-C src prefix=$(out)";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/CMB/edbrowse/archive/v${version}.tar.gz";
-    sha256 = "1g9cwk4wszahk2m8k34i3rx44yhqfnv67zls0lk5g7jhrhpbf433";
+  src = fetchFromGitHub {
+    owner = "CMB";
+    repo = "edbrowse";
+    rev = "v${version}";
+    sha256 = "00wi0m91zf8p8wk4ixlz99dndgv4xqy93m2vsiwdr3khw3jwipp2";
   };
   meta = with stdenv.lib; {
     description = "Command Line Editor Browser";
