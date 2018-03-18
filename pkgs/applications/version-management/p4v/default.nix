@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/p4v
     cp -r lib/p4v/P4VResources $out/lib/p4v
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/p4merge.bin
-
     for f in $out/bin/*.bin ; do
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
+
       wrapProgram $f \
         --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
         --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb \
