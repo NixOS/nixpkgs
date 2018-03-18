@@ -707,9 +707,6 @@ self: super: {
   timezone-olson = self.timezone-olson_0_1_9;
   matrix = self.matrix_0_3_6_1;
 
-  # https://github.com/pikajude/th-printf/issues/8
-  th-printf = doJailbreak super.th-printf;
-
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
     { url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
