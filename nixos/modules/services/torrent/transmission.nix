@@ -22,10 +22,13 @@ let
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
+  # Directories transmission expects to exist and be ug+rwx.
+  directoriesToManage = [ homeDir settingsDir fullSettings.download-dir fullSettings.incomplete-dir ];
+
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
     set -ex
-    for DIR in ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir}; do
+    for DIR in ${escapeShellArgs directoriesToManage}; do
       mkdir -p "$DIR"
       chmod 770 "$DIR"
     done
