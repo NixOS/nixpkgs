@@ -18909,51 +18909,7 @@ EOF
   };
 
 
-  thumbor = buildPythonPackage rec {
-    name = "thumbor-${version}";
-    version = "6.3.2";
-
-    disabled = ! isPy27;
-
-    buildInputs = with self; [ statsd nose ];
-
-    propagatedBuildInputs = with self; [
-      tornado
-      pycrypto
-      pycurl
-      pytz
-      pillow
-      derpconf
-      python_magic
-      # thumborPexif
-      pexif
-      libthumbor
-      opencv
-    ] ++ optionals (!isPy3k) [ futures ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/thumbor/${name}.tar.gz";
-      sha256 = "0787245x4yci34cdfc9xaxhds0lv60476qgp132pwa78hrpc9m31";
-    };
-
-    patches = [
-      (pkgs.fetchurl {
-          url = "https://github.com/thumbor/thumbor/commit/376f688a8a0b82e50388c885d9d733572f2eb3e6.patch";
-          sha256 = "1j2434yqb6pz61d65dsy8w6lvyzvh5ksizadi5hgjzfw6s46v6yn";
-      })
-    ];
-
-    prePatch = ''
-      substituteInPlace setup.py \
-        --replace '"argparse",' ""
-    '';
-
-    meta = {
-      description = "A smart imaging service";
-      homepage = https://github.com/globocom/thumbor/wiki;
-      license = licenses.mit;
-    };
-  };
+  thumbor = callPackage ../development/python-modules/thumbor { };
 
   thumborPexif = self.buildPythonPackage rec {
     name = "thumbor-pexif-0.14";
