@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://code.orgmode.org/bzg/org-mode.git";
-    rev = "e445894c0d35e670faf1566a3af365e719746172";
-    sha256 = "1pdxn73pdb9fhch7nsr97n8vwbbw5xd47zjxlkxyqcrrc5plx978";
+    rev = "a23be068f64879310fae3d34ebf4cc6b8aaaa4d7";
+    sha256 = "1nn3zqaj43lx5xr2s1dw6ah1sdjy6mz2zsx993p4j58qnb13lvdr";
   };
 
   buildInputs = [ libXScrnSaver libX11 ];
