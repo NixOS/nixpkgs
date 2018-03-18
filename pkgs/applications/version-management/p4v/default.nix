@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2017.3.1601999";
 
   src = fetchurl {
-    url = "http://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
+    url = "https://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
     sha256 = "f317607f1bc8877db01ff020b8b0857c2d0f8600474d152749264aea0be66b21";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Perforce Visual Client";
-    homepage = http://www.perforce.com;
+    homepage = https://www.perforce.com;
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.nioncode ];
