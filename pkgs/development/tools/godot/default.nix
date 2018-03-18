@@ -41,14 +41,14 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r bin/godot.x11.tools.64 $out/bin/godot
+    cp bin/godot.x11.tools.* $out/bin/godot
   '';
 
   meta = {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license     = stdenv.lib.licenses.mit;
-    platforms   = [ "i646-linux" "x86_64-linux" ];
+    platforms   = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.twey ];
   };
 }
