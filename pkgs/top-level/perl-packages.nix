@@ -890,9 +890,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   CacheMemcachedFast = buildPerlPackage {
-    name = "Cache-Memcached-Fast-0.21";
+    name = "Cache-Memcached-Fast-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KR/KROKI/Cache-Memcached-Fast-0.21.tar.gz;
+      url = mirror://cpan/authors/id/K/KR/KROKI/Cache-Memcached-Fast-0.23.tar.gz;
       sha256 = "0lvwkkyazbb7i6c5ga5ms3gsvy721njpcbc2icxcsvc8bz32nz5i";
     };
     meta = {
@@ -1683,9 +1683,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIEmulatePSGI = buildPerlPackage {
-    name = "CGI-Emulate-PSGI-0.21";
+    name = "CGI-Emulate-PSGI-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/CGI-Emulate-PSGI-0.21.tar.gz;
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/CGI-Emulate-PSGI-0.23.tar.gz;
       sha256 = "06b8f1864101de69b2264ad3c3a2b15333e428cf9f5d17a777cfc61f8c64093f";
     };
     buildInputs = [ TestRequires ];
@@ -4348,9 +4348,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginBundleTestingMania = buildPerlPackage {
-    name = "Dist-Zilla-PluginBundle-TestingMania-0.21";
+    name = "Dist-Zilla-PluginBundle-TestingMania-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-PluginBundle-TestingMania-0.21.tar.gz;
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-PluginBundle-TestingMania-0.23.tar.gz;
       sha256 = "1cbq7v799bf93iqp19v1ln6bcf6gvmc0qw3gf4bq445wsm7w62wy";
     };
     buildInputs = [ CaptureTiny DistZilla MooseAutobox perl ];
@@ -8114,9 +8114,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   LocaleMaketextSimple = buildPerlPackage {
-    name = "Locale-Maketext-Simple-0.21";
+    name = "Locale-Maketext-Simple-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/Locale-Maketext-Simple-0.21.tar.gz;
+      url = mirror://cpan/authors/id/J/JE/JESSE/Locale-Maketext-Simple-0.23.tar.gz;
       sha256 = "1ad9vh45j8c32nzkbjipinawyg1pnjckwlhsjqcqs47vyi8zy2dh";
     };
   };
@@ -9652,7 +9652,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXDaemonize = buildPerlPackage rec {
-    name = "MooseX-Daemonize-0.21";
+    name = "MooseX-Daemonize-0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "111f391221d00f8b09cdcc6c806ab114324cf7f529d12f627fb97d054da42225";
@@ -10381,7 +10381,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetCIDRLite = buildPerlPackage rec {
-    name = "Net-CIDR-Lite-0.21";
+    name = "Net-CIDR-Lite-0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOUGW/${name}.tar.gz";
       sha256 = "cfa125e8a2aef9259bc3a44e07cbdfb7894b64d22e7c0cee92aee2f5c7915093";
@@ -12094,9 +12094,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   RegexpParser = buildPerlPackage {
-    name = "Regexp-Parser-0.21";
+    name = "Regexp-Parser-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.21.tar.gz;
+      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.23.tar.gz;
       sha256 = "d70cb66821f1f67a9b1ff53f0fa33c06aec8693791e0a5943be6760c25d2768d";
     };
     meta = {
@@ -13206,9 +13206,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysSigAction = buildPerlPackage {
-    name = "Sys-SigAction-0.21";
+    name = "Sys-SigAction-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.21.tar.gz;
+      url = mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz;
       sha256 = "e144207a6fd261eb9f98554c76bea66d95870ee1f62d2d346a1ea95fdccf80db";
     };
     meta = {
@@ -13942,10 +13942,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestFileContents = buildPerlModule {
-    name = "Test-File-Contents-0.21";
+    name = "Test-File-Contents-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.21.tar.gz;
-      sha256 = "1b5a13f86f5df625ffd30361f628d34b0ceda80b9f39ca74bf0a4c1105828317";
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.23.tar.gz;
+      sha256 = "0g8zgfyw84181snw7ghahnl9r4lrmlfj7zwi76sv8d0bj7xssvyd";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
