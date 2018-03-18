@@ -8985,27 +8985,6 @@ in {
 
   keyutils = callPackage ../development/python-modules/keyutils { };
 
-  klaus = buildPythonPackage rec {
-    version = "0.9.1";
-    name = "klaus-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0k3v3p56hq8alm083grrp98znxkz1zqx0pczm2lah8qddbyrdkgm";
-    };
-
-    propagatedBuildInputs = with self;
-      [ humanize httpauth dulwich pygments flask six ];
-
-    meta = {
-      description = "The first Git web viewer that Just Works";
-      homepage    = "https://github.com/jonashaag/klaus";
-      #license     = licenses.mit; # I'm not sure about the license
-      maintainers = with maintainers; [ matthiasbeyer ];
-      platforms   = platforms.linux; # Can only test linux
-    };
-  };
-
   klein = buildPythonPackage rec {
     name = "klein-15.3.1";
     src = pkgs.fetchurl {
