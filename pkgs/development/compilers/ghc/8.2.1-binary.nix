@@ -4,7 +4,7 @@
 }:
 
 # Prebuilt only does native
-# assert stdenv.targetPlatform == stdenv.hostPlatform;
+assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
   libPath = stdenv.lib.makeLibraryPath ([
