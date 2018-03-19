@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
   postPatch = ''
+    patchShebangs configure
+
     find test/ -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
