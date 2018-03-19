@@ -368,6 +368,8 @@ in {
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
+  pyschedule = callPackage ../development/python-modules/pyschedule { };
+
   pyside = callPackage ../development/python-modules/pyside { };
 
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
