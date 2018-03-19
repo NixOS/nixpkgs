@@ -102,7 +102,6 @@
 , "typings"
 , "uglify-js"
 , "ungit"
-, "vue-cli"
 , "webdrvr"
 , "webpack"
 , "web-ext"
