@@ -100,6 +100,7 @@
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
+  ./programs/sedutil.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
