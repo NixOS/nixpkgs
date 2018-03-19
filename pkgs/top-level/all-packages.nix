@@ -18986,6 +18986,8 @@ with pkgs;
 
   gcs = callPackage ../games/gcs { };
 
+  gcompris = libsForQt59.callPackage ../games/gcompris { };
+
   gemrb = callPackage ../games/gemrb { };
 
   gl117 = callPackage ../games/gl-117 {};
