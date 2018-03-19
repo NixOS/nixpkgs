@@ -364,12 +364,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2017.3.4"; /* updated by script */
+    version = "2017.3.5"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0d5whqa6c76l6g5yj0yq8a3k1x6d9kxwnac1dwsiy5dbr5jk0cyj"; /* updated by script */
+      sha256 = "123v4m8p7acndj8p8frn1bjvycijlx904pa84ka9pv18c90qiym9"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WS_Release";
