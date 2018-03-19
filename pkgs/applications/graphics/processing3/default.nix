@@ -37,8 +37,10 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/${name}/java
 
     makeWrapper $out/${name}/processing      $out/bin/processing \
+        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
     makeWrapper $out/${name}/processing-java $out/bin/processing-java \
+        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
   '';
 
