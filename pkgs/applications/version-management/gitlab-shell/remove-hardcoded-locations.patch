@@ -34,7 +34,7 @@ index c57b4de..88cfc95 100644
  	cfg.RootDir = dir
  
 -	configBytes, err := ioutil.ReadFile(path.Join(cfg.RootDir, configFile))
-+	configBytes, err := ioutil.ReadFile(os.Getenv("GITLAB_SHELL_CONFIG_PATH"))
++	configBytes, err := ioutil.ReadFile("/run/gitlab/shell-config.yml")
  	if err != nil {
  		return nil, err
  	}
