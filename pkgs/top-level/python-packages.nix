@@ -19253,6 +19253,8 @@ EOF
     };
   };
 
+  vxi11 = callPackage ../development/python-modules/vxi11 { };
+
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";
     disabled = ! isPy27;
