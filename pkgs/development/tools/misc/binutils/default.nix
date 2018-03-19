@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+    ./gold-symbol-visibility.patch
   ];
 
   outputs = [ "out" "info" "man" ];
