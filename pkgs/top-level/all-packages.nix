@@ -7963,11 +7963,6 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
   };
 
-  # only kept for zed, see https://github.com/NixOS/nixpkgs/issues/37361
-  nwjs_0_9 = callPackage ../development/tools/node-webkit/nw9.nix {
-    gconf = pkgs.gnome2.GConf;
-  };
-
   # only kept for nixui, see https://github.com/matejc/nixui/issues/27
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
     gconf = pkgs.gnome2.GConf;
@@ -18587,10 +18582,6 @@ with pkgs;
 
   zathura = callPackage ../applications/misc/zathura {
     useMupdf = config.zathura.useMupdf or true;
-  };
-
-  zed = callPackage ../applications/editors/zed {
-    node_webkit = nwjs_0_9;
   };
 
   zeroc_ice = callPackage ../development/libraries/zeroc-ice {
