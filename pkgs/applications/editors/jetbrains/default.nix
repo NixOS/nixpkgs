@@ -273,12 +273,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.3.4"; /* updated by script */
+    version = "2017.3.5"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "15qsfirzmmjhwzkhx36zr4n0z5lhs021n2n3wim01g309ymr4gl9"; /* updated by script */
+      sha256 = "124rzc46f4bqyhllwyb26lkavh7zwbj62axrwhif34rayl2rcmpm"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IDEA_Release";
@@ -286,12 +286,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.3.4"; /* updated by script */
+    version = "2017.3.5"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "0f937s6zc1sv0gdlxf9kkc8l8rg78a5mxsfr2laab0g37rfy8c99"; /* updated by script */
+      sha256 = "10r3z37mhr8daxi14k011bhx3pxpx3lsj7jvikwll4wjlv1znhiw"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IDEA_Release";
