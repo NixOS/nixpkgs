@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, rapidjson, snappy, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, pythonPackages, rapidjson, snappy, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "apache-arrow-${version}/cpp";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost ];
+  buildInputs = [ boost pythonPackages.python pythonPackages.numpy ];
 
   preConfigure = ''
     substituteInPlace cmake_modules/FindBrotli.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
   SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };
   ZLIB_HOME = symlinkJoin { name="zlib-wrap"; paths = [ zlib.dev zlib.static ]; };
   ZSTD_HOME = zstd;
+
+  cmakeFlags = [
+    "-DARROW_PYTHON=ON"
+  ];
 
   meta = {
     description = "A  cross-language development platform for in-memory data";
