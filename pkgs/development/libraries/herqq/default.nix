@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1w674rbwbhpirq70gp9rk6p068j36rwn112fx3nz613wgw63x84m";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://herqq.org;
     description = "A software library for building UPnP devices and control points";
-    inherit (qt5.qtbase.meta) platforms;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }
