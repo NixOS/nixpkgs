@@ -6348,22 +6348,7 @@ in {
 
   };
 
-  svg-path = buildPythonPackage rec {
-    name = "svg.path-${version}";
-    version = "2.0b1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/svg.path/${name}.zip";
-      sha256 = "038x4wqkbvcs71x6n6kzr4kn99csyv8v4gqzssr8pqylqpxi56bm";
-    };
-
-    meta = {
-      description = "SVG path objects and parser";
-      homepage = https://github.com/regebro/svg.path;
-      license = licenses.cc0;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  svg-path = callPackage ../development/python-modules/svg-path { };
 
   regex = callPackage ../development/python-modules/regex { };
 
