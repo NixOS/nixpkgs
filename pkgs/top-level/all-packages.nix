@@ -11634,6 +11634,8 @@ with pkgs;
     libva = libva-full; # needs libva-{x11,glx}
   };
 
+  vale = callPackage ../tools/text/vale { };
+
   vamp = callPackage ../development/libraries/audio/vamp { };
 
   vc = callPackage ../development/libraries/vc { };

@@ -2174,6 +2174,11 @@
     github = "markuskowa";
     name = "Markus Kowalewski";
   };
+  marsam = {
+    email = "marsam@users.noreply.github.com";
+    github = "marsam";
+    name = "Mario Rodas";
+  };
   martijnvermaat = {
     email = "martijn@vermaat.name";
     github = "martijnvermaat";
