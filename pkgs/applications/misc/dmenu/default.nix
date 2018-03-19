@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dmenu-4.7";
+  name = "dmenu-4.8";
 
   src = fetchurl {
     url = "http://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "1fgph549i0yw62x02jhfc8qmqk2rnzcnm46bxq6jig1cvkw3amm7";
+    sha256 = "0qfvfrj10xlwd9hkvb57wshryan65bl6423h0qhiw1h76rf5lqgy";
   };
 
   buildInputs = [ libX11 libXinerama zlib libXft ];

@@ -5,7 +5,8 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+{ name ? ""
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , bintools ? null, libc ? null
 , coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , extraPackages ? [], extraBuildCommands ? ""
@@ -15,7 +16,7 @@
 
 with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
+assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
@@ -83,7 +84,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
@@ -111,7 +112,7 @@ stdenv.mkDerivation {
     ''
       set -u
 
-      mkdir -p $out/bin {$out,$info,$man}/nix-support
+      mkdir -p $out/bin $out/nix-support
 
       wrap() {
         local dst="$1"
@@ -244,28 +245,27 @@ stdenv.mkDerivation {
     '')
 
     + optionalString (!nativeTools) ''
-
       ##
       ## User env support
       ##
 
       # Propagate the underling unwrapped bintools so that if you
-      # install the wrapper, you get tools like objdump, the manpages,
-      # etc. as well (same for any binaries of libc).
+      # install the wrapper, you get tools like objdump (same for any
+      # binaries of libc).
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+    ''
 
+    + optionalString propagateDoc ''
       ##
       ## Man page and info support
       ##
 
-      printWords ${bintools.info or ""} \
-        >> $info/nix-support/propagated-build-inputs
-      printWords ${bintools.man or ""} \
-        >> $man/nix-support/propagated-build-inputs
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
+      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
     ''
 
     + ''
-
       ##
       ## Hardening support
       ##
@@ -293,8 +293,8 @@ stdenv.mkDerivation {
       ##
       ## Extra custom steps
       ##
-
     ''
+
     + extraBuildCommands;
 
   inherit dynamicLinker expand-response-params;

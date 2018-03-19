@@ -37,8 +37,7 @@ with stdenv.lib;
 let
 
   shouldUsePkg = pkg_: let pkg = (builtins.tryEval pkg_).value;
-    in if lib.any (x: x == system) (pkg.meta.platforms or [])
-      then pkg else null;
+    in if pkg.meta.available or false then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optFcgi = shouldUsePkg fcgi;

@@ -3,12 +3,12 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "cachetools";
-  version = "1.1.3";
+  version = "2.0.1";
   disabled = isPyPy;  # a test fails
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
+    sha256 = "ede01f2d3cbd6ddc9e35e16c2b0ce011d8bb70ce0dbaf282f5b4df24b213bc5d";
   };
 
   meta = with stdenv.lib; {

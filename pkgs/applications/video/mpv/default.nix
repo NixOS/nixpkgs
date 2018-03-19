@@ -73,32 +73,27 @@ assert drmSupport         -> available libdrm;
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
-  wafVersion = "1.9.8";
+  wafVersion = "1.9.15";
   waf = fetchurl {
     urls = [ "http://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
-    sha256 = "1gsd3zza1wixv2vhvq3inp4vb71i41a1kbwqnwixhnvdmcmw8z8n";
+    sha256 = "0qrnlv91cb0v221w8a0fi4wxm99q2hpz10rkyyk4akcsvww6xrw5";
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.27.0";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
+    sha256 = "1ivyyqajkxq5c1zxp0dm7pljvianhgvwl3dbghgpzyrch59k5wnr";
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f.patch";
       sha256 = "1sr0770rvhsgz8d7ysr9qqp4g9gwdhgj8g3rgnz90wl49lgrykhb";
-    })
-    (fetchpatch {
-      name = "CVE-2018-6360.patch";
-      url = https://salsa.debian.org/multimedia-team/mpv/raw/ddface85a1adfdfe02ffb25b5ac7fac715213b97/debian/patches/09_ytdl-hook-whitelist-protocols.patch;
-      sha256 = "1gb1lkjbr8rv4v9ji6w5z97kbxbi16dbwk2255ajbvngjrc7vivv";
     })
   ];
 

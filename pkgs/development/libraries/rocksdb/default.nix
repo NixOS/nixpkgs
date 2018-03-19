@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
   version = "5.10.3";
 
+  outputs = [ "dev" "out" "static" ];
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
@@ -65,6 +67,8 @@ stdenv.mkDerivation rec {
     # Might eventually remove this when we are confident in the build process
     echo "BUILD CONFIGURATION FOR SANITY CHECKING"
     cat make_config.mk
+    mkdir -pv $static/lib/
+    mv -vi $out/lib/librocksdb.a $static/lib/
   '';
 
   enableParallelBuilding = true;
@@ -73,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = http://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
-    platforms = platforms.allBut [ "i686-linux" ];
+    platforms = platforms.x86_64 ++ platforms.aarch64;
     maintainers = with maintainers; [ adev wkennington ];
   };
 }

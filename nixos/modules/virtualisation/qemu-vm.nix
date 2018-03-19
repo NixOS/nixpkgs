@@ -30,7 +30,7 @@ let
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${pkgs.stdenv.shell}
+      #! ${pkgs.runtimeShell}
 
       NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 
@@ -319,8 +319,8 @@ in
       networkingOptions =
         mkOption {
           default = [
-            "-net nic,vlan=0,model=virtio"
-            "-net user,vlan=0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+            "-net nic,netdev=user.0,model=virtio"
+            "-netdev user,id=user.0\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
           ];
           type = types.listOf types.str;
           description = ''
@@ -434,9 +434,11 @@ in
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
-    # FIXME: Figure out how to make this work on non-x86
-    virtualisation.qemu.options =
-      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usbdevice tablet" ];
+    # FIXME: Consolidate this one day.
+    virtualisation.qemu.options = mkMerge [
+      (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usb" "-device usb-tablet,bus=usb-bus.0" ])
+      (mkIf (pkgs.stdenv.isArm || pkgs.stdenv.isAarch64) [ "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet" ])
+    ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to

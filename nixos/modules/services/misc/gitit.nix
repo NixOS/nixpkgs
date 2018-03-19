@@ -17,7 +17,7 @@ let
   gititSh = hsPkgs: extras: with pkgs; let
     env = gititWithPkgs hsPkgs extras;
   in writeScript "gitit" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $HOME
     export NIX_GHC="${env}/bin/ghc"
     export NIX_GHCPKG="${env}/bin/ghc-pkg"

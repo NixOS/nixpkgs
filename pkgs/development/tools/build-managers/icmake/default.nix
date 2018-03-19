@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, gcc }:
+{ stdenv, fetchFromGitHub, makeWrapper, gcc, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
-  version = "9.02.06";
+  version = "9.02.07";
 
   src = fetchFromGitHub {
-    sha256 = "1hs7fhqpkhlrjvjhfarf5bmxl8dw3r0immzdib27gwh3sfzgpx0b";
+    sha256 = "1q3rwri5s1sqm4h75bahkjnlym4bk2ygg4fb75yrniwnj8rhdp12";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */icmake)
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gcc ];
 
   preConfigure = ''
@@ -30,6 +31,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ./icm_install all /
+
+    wrapProgram $out/bin/icmbuild \
+     --prefix PATH : ${ncurses}/bin
   '';
 
   meta = with stdenv.lib; {

@@ -3,8 +3,6 @@
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
-, langAda ? false
-, langVhdl ? false
 , langGo ? false
 , profiledCompiler ? false
 , staticCompiler ? false
@@ -21,13 +19,11 @@
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , x11Support ? langJava
-, gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? false
-, gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
@@ -39,8 +35,6 @@
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
-assert langAda      -> gnatboot != null;
-assert langVhdl     -> gnat != null;
 
 # We enable the isl cloog backend.
 assert cloog != null -> isl != null;
@@ -69,9 +63,6 @@ let version = "4.9.4";
       ++ optionals enableParallelBuilding [ ../parallel-bconfig.patch ./parallel-strsignal.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
-      # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
-      # target libraries and tools.
-      ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ [ ../struct-ucontext.patch ../struct-sigaltstack-4.9.patch ] # glibc-2.26
       ;
@@ -284,8 +275,6 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-    ++ (optionals langAda [gnatboot])
-    ++ (optionals langVhdl [gnat])
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
@@ -338,8 +327,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langAda      "ada"
-          ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
           ++ optional langObjC     "objc"
           ++ optional langObjCpp   "obj-c++"
@@ -376,9 +363,6 @@ stdenv.mkDerivation ({
     ] ++
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
-
-    # Ada
-    optional langAda "--enable-libada" ++
 
     platformFlags ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
@@ -472,7 +456,7 @@ stdenv.mkDerivation ({
     ]);
 
   passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
 
   inherit enableParallelBuilding enableMultilib;
 
@@ -495,13 +479,11 @@ stdenv.mkDerivation ({
 
     maintainers = with stdenv.lib.maintainers; [ viric peti ];
 
-    # gnatboot is not available out of linux platforms, so we disable the darwin build
-    # for the gnat (ada compiler).
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       stdenv.lib.platforms.illumos ++
-      optionals (langAda == false) stdenv.lib.platforms.darwin;
+      stdenv.lib.platforms.darwin;
   };
 }
 

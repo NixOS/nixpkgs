@@ -52,8 +52,11 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
+  inherit (pkgs) atk glib gobjectIntrospection gtk2 webkitgtk gtk3 gtkmm3 libcanberra-gtk2
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf
+    easytag meld orca rhythmbox shotwell
     clutter clutter-gst clutter-gtk cogl gtkvnc;
+
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -106,6 +109,8 @@ let
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
+
+  gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
 

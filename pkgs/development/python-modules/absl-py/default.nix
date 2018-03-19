@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "0.1.9";
-  name = "${pname}-${version}";
+  version = "0.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c787e3bc7ef8fea7a8a79cf36b0c550b4bd66e13c05d1352fbc5786488befb0";
+    sha256 = "908eba9a96a37c10f10074aba57d685070b814906b02a1ea2cf54bb10a6b8c74";
   };
 
   propagatedBuildInputs = [ six ];

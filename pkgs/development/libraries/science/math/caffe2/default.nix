@@ -1,4 +1,4 @@
-{ stdenv, lib, config, fetchFromGitHub
+{ stdenv, lib, config, fetchFromGitHub, fetchpatch
 , cmake
 , glog, google-gflags, gtest
 , protobuf, snappy
@@ -56,6 +56,8 @@ let
     };
     dst = "pybind11";
   };
+
+  ccVersion = (builtins.parseDrvName stdenv.cc.name).version;
 in
 
 stdenv.mkDerivation rec {
@@ -84,7 +86,9 @@ stdenv.mkDerivation rec {
   ;
   propagatedBuildInputs = [ numpy future six python-protobuf pydot ];
 
-  patches = lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
+  patches = lib.optional (stdenv.cc.isGNU && lib.versionAtLeast ccVersion "7.0.0") [
+    ./fix_compilation_on_gcc7.patch
+  ] ++ lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
 
   cmakeFlags = [ ''-DBUILD_TEST=OFF''
                  ''-DBUILD_PYTHON=ON''

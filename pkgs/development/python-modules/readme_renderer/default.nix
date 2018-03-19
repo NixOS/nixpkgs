@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, CommonMark
 , bleach
 , docutils
 , pygments
@@ -10,18 +11,17 @@
 
 buildPythonPackage rec {
   pname = "readme_renderer";
-  version = "17.2";
-  name = "${pname}-${version}";
+  version = "17.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9deab442963a63a71ab494bf581b1c844473995a2357f4b3228a1df1c8cba8da";
+    sha256 = "82d68175feec897af2a38fe8590778f14c3be5324cc62e3ce5752a9b1e4b60ab";
   };
 
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    bleach docutils pygments six
+    CommonMark bleach docutils pygments six
   ];
 
   checkPhase = ''

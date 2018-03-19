@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cdrtools-${version}";
-  version = "3.02a06";
+  version = "3.01";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdrtools/${name}.tar.bz2";
-    sha256 = "1cayhfbhj5g2vgmkmq5scr23k0ka5fsn0dhn0n9yllj386csnygd";
+    sha256 = "03w6ypsmwwy4d7vh6zgwpc60v541vc5ywp8bdb758hbc4yv2wa7d";
   };
 
   patches = [ ./fix-paths.patch ];

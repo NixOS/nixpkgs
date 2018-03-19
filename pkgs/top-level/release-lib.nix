@@ -98,7 +98,18 @@ rec {
   packagePlatforms = mapAttrs (name: value:
     let res = builtins.tryEval (
       if isDerivation value then
-        value.meta.hydraPlatforms or (value.meta.platforms or [ "x86_64-linux" ])
+        # TODO(@Ericson2314) deduplicate with `checkPlatform` in
+        # `pkgs/stdenv/generic/check-meta.nix`.
+        value.meta.hydraPlatforms or (let
+            raw = value.meta.platforms or [ "x86_64-linux" ];
+            toPattern = x: if builtins.isString x
+                           then { system = x; }
+                           else { parsed = x; };
+            uniform = map toPattern raw;
+            pred = hostPlatform:
+              lib.any (pat: lib.matchAttrs pat hostPlatform) uniform;
+            pred' = system: pred (lib.systems.elaborate { inherit system; });
+         in lib.filter pred' supportedSystems)
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
@@ -108,7 +119,7 @@ rec {
 
 
   /* Common platform groups on which to test packages. */
-  inherit (platforms) unix linux darwin cygwin allBut all mesaPlatforms;
+  inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
 
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;

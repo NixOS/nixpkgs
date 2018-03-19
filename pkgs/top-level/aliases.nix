@@ -36,7 +36,6 @@ mapAliases (rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
-  bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20

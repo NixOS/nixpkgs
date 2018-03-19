@@ -893,4 +893,44 @@ in rec {
   ];
 
 
+  # 4.10
+  XSA_252 = [
+   (xsaPatch {
+      name = "252";
+      sha256 = "0v4sg20dnvnwrjh3x69gk81v2kmcql7g2s044vg3wcxhzvij1rrn";
+    })
+  ];
+
+  # 4.10
+  XSA_253 = [
+   (xsaPatch {
+      name = "253";
+      sha256 = "0445vzlzy3gd499xraqh5r4qjar6qr0y3813h22jy1n84nhxz27i";
+    })
+  ];
+
+  # 4.10
+  XSA_255_1 = [
+   (xsaPatch {
+      name = "255-1";
+      sha256 = "05g2f3ji1rrjlw3yw4nrns50pnmsib8ybrf64scr1817mj0q9myr";
+    })
+  ];
+
+  # 4.10
+  XSA_255_2 = [
+   (xsaPatch {
+      name = "255-2";
+      sha256 = "08wbngw5z0f9g8di59hww3hhi7j9z49bpc4xlwn5akfcwbgf0961";
+    })
+  ];
+
+  # 4.10
+  XSA_256 = [
+   (xsaPatch {
+      name = "256";
+      sha256 = "1hicwhbwj6k25px55f4ncx1c5xiihi8pfvsb3kv57k7kaicb7pza";
+    })
+  ];
+
 }

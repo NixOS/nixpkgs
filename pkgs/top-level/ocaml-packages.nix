@@ -54,7 +54,9 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
-    bap = callPackage ../development/ocaml-modules/bap { };
+    bap = callPackage ../development/ocaml-modules/bap {
+      inherit (janeStreet_0_9_0) core_kernel ppx_jane parsexp;
+    };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
@@ -117,7 +119,10 @@ let
     camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {
       giflib = pkgs.giflib_4_1;
     };
-    camlimages = camlimages_4_1;
+    camlimages =
+          if lib.versionOlder "4.06" ocaml.version
+          then callPackage ../development/ocaml-modules/camlimages { }
+          else camlimages_4_1;
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
@@ -712,10 +717,19 @@ let
     # Jane Street
 
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
-
+    
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime num;
-      inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
+      inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
+      inherit (pkgs) stdenv openssl;
+    };
+    
+    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
+      janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
+      inherit lib ocaml ocamlbuild ctypes cryptokit;
+      inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
+      inherit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
     };
 
@@ -955,10 +969,6 @@ let
 
     # Apps / from all-packages
 
-    wyrd = callPackage ../tools/misc/wyrd {
-      ncurses = pkgs.ncurses5;
-    };
-
     haxe = callPackage ../development/compilers/haxe { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
@@ -1026,5 +1036,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_06;
 
-  ocamlPackages = ocamlPackages_4_04;
+  ocamlPackages = ocamlPackages_4_05;
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan philandstuff ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 
   name = "bazel-${version}";
