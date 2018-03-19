@@ -13009,6 +13009,8 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
+  pyutilib = callPackage ../development/python-modules/pyutilib { };
+
   pyx = buildPythonPackage rec {
     name = "pyx-${version}";
     version = "0.14.1";
