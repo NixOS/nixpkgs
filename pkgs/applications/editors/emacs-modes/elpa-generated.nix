@@ -54,10 +54,10 @@
       }) {};
     adaptive-wrap = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "adaptive-wrap";
-        version = "0.5.1";
+        version = "0.5.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/adaptive-wrap-0.5.1.el";
-          sha256 = "0qi7gjprcpywk2daivnlavwsx53hl5wcqvpxbwinvigg42vxh3ll";
+          url = "https://elpa.gnu.org/packages/adaptive-wrap-0.5.2.el";
+          sha256 = "1qcf1cabn4wb34cdmlyk3rv5dl1dcrxrbaw38kly1prs6y4l22aw";
         };
         packageRequires = [];
         meta = {
@@ -1438,10 +1438,10 @@
       }) {};
     muse = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "muse";
-        version = "3.20";
+        version = "3.20.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/muse-3.20.tar";
-          sha256 = "0i5gfhgxdm1ripw7j3ixqlfkinx3fxjj2gk5md99h70iigrhcnm9";
+          url = "https://elpa.gnu.org/packages/muse-3.20.1.tar";
+          sha256 = "0h8lxm08r519psz93m1i43prkcpsm2dgkcvdlpvg7sm0ky7i5cay";
         };
         packageRequires = [];
         meta = {
@@ -1685,6 +1685,19 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/poker.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    posframe = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "posframe";
+        version = "0.3.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/posframe-0.3.0.el";
+          sha256 = "0q74lwklr29c50qgaqly48nj7f49kgxiv70lsvhdy8cg2v082v8k";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/posframe.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -2400,10 +2413,10 @@
     xelb = callPackage ({ cl-generic, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "xelb";
-        version = "0.13";
+        version = "0.14";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xelb-0.13.tar";
-          sha256 = "0sfygy6ihjwszhn6a81fz2yn70rr7vpygl7z49vz4rsd8s0fdgjc";
+          url = "https://elpa.gnu.org/packages/xelb-0.14.tar";
+          sha256 = "09flnbjy9ck784kprz036rwg9qk45hpv0w5hz3pz3zhwyk57fv74";
         };
         packageRequires = [ cl-generic emacs ];
         meta = {
