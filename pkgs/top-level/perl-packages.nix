@@ -13231,10 +13231,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysVirt = buildPerlPackage rec {
-    name = "Sys-Virt-1.2.19";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
-      sha256 = "18v8x0514in0zpvq1rv78hmvhpij1xjh5xn0wa6wmg2swky54sp4";
+    version = "4.1.0";
+    name = "Sys-Virt-${version}";
+    src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
+      url = git://libvirt.org/libvirt-perl.git;
+      rev = "v${version}";
+      sha256 = "0m0snv6gqh97nh1c31qvbm4sdzp49vixn7w3r69h6a5r71sn78x4";
     };
     propagatedBuildInputs = [XMLXPath];
     nativeBuildInputs = [ pkgs.pkgconfig ];
