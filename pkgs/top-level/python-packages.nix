@@ -11081,6 +11081,8 @@ in {
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
+  opentimestamps = callPackage ../development/python-modules/opentimestamps { };
+
   ordereddict = buildPythonPackage rec {
     name = "ordereddict-${version}";
     version = "1.1";
@@ -12915,6 +12917,8 @@ in {
   };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
+
+  pysha3 = callPackage ../development/python-modules/pysha3 { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
