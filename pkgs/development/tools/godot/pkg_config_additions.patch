@@ -1,15 +1,17 @@
 +++ build/platform/x11/detect.py
-@@ -142,3 +142,10 @@
+@@ -142,8 +142,13 @@
      env.ParseConfig('pkg-config xcursor --cflags --libs')
      env.ParseConfig('pkg-config xinerama --cflags --libs')
      env.ParseConfig('pkg-config xrandr --cflags --libs')
+-
+-    if (env['touch']):
 +    env.ParseConfig('pkg-config xrender --cflags --libs')
-+    env.ParseConfig('pkg-config xi --cflags --libs')
 +    env.ParseConfig('pkg-config xext --cflags --libs')
 +    env.ParseConfig('pkg-config xfixes --cflags --libs')
-+    env.ParseConfig('pkg-config oslibGLU_combined --cflags')
 +    env.ParseConfig('pkg-config glu --cflags --libs')
 +    env.ParseConfig('pkg-config zlib --cflags --libs')
-
-     if (env['builtin_openssl'] == 'no'):
-         # Currently not compatible with OpenSSL 1.1.0+
++
++    if (env['touch']):
+         x11_error = os.system("pkg-config xi --modversion > /dev/null ")
+         if (x11_error):
+             print("xi not found.. cannot build with touch. Aborting.")
