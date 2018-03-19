@@ -452,6 +452,8 @@ in {
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
+  ajpy = callPackage ../development/python-modules/ajpy { };
+
   alabaster = callPackage ../development/python-modules/alabaster {};
 
   alembic = callPackage ../development/python-modules/alembic {};
@@ -1432,6 +1434,8 @@ in {
   };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
+
+  cx_oracle = callPackage ../development/python-modules/cx_oracle {};
 
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -8639,24 +8643,7 @@ in {
     };
   };
 
-
-  ipy = buildPythonPackage rec {
-    version = "0.74";
-    name = "ipy-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/I/IPy/IPy-${version}.tar.gz";
-      sha256 = "5d6abb870c25f946c45c35cf50e66155598660f2765b35cb12e36ed5223c2b89";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "Class and tools for handling of IPv4 and IPv6 addresses and networks";
-      homepage = https://pypi.python.org/pypi/IPy;
-    };
-  };
+  ipy = callPackage ../development/python-modules/IPy { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
@@ -10137,6 +10124,8 @@ in {
   });
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
+
+  mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
@@ -11804,6 +11793,8 @@ in {
       platforms = platforms.all;
     };
   };
+
+  patator = callPackage ../development/python-modules/patator { };
 
   pathlib = buildPythonPackage rec {
     name = "pathlib-${version}";
