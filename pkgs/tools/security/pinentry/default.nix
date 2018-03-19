@@ -1,5 +1,6 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt ? null
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null,  gtk2 ? null, gcr ? null, qt ? null
+, enableEmacs ? false
 }:
 
 let
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     (mkEnable (libsecret != null) "libsecret")
     (mkEnable (ncurses != null)   "pinentry-curses")
     (mkEnable true                "pinentry-tty")
+    (mkEnable enableEmacs         "pinentry-emacs")
     (mkEnable (gtk2 != null)      "pinentry-gtk2")
     (mkEnable (gcr != null)       "pinentry-gnome3")
     (mkEnable (qt != null)        "pinentry-qt")
