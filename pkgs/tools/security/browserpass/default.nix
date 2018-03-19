@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "browserpass-${version}";
-  version = "2.0.18";
+  version = "2.0.13";
 
   goPackagePath = "github.com/dannyvankooten/browserpass";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     repo = "browserpass";
     owner = "dannyvankooten";
     rev = version;
-    sha256 = "0wszjpxfa0krr2zdx7a33vl1r86k74dpy5c940r6ww1zbgqzcibg";
+    sha256 = "0pch0jddphgaaw208ddqjhnkiy5916n0kjxfza1cpc78fa8zw82l";
   };
 
   postInstall = ''
