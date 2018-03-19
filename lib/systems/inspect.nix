@@ -21,9 +21,11 @@ rec {
     LittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
     BSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
+    Darwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };
     Unix         = [ BSD Darwin Linux SunOS Hurd Cygwin ];
 
-    Darwin       = { kernel = kernels.darwin; };
+    MacOS        = { kernel = kernels.macos; };
+    iOS          = { kernel = kernels.ios; };
     Linux        = { kernel = kernels.linux; };
     SunOS        = { kernel = kernels.solaris; };
     FreeBSD      = { kernel = kernels.freebsd; };
