@@ -57,7 +57,6 @@ let
     recursive = 1;
     sum = 2;
     product = 3;
-    # TODO: it feels like union (or sum or product) is not axiomatic
     union = 4;
   };
 
@@ -154,8 +153,6 @@ let
     # the (displayable) type description
     description,
     # a function to check the outermost type, given a value (Val -> Bool)
-    # TODO: this is value-specific, maybe this should be inside the type checker
-    # logic instead of the type definiton? There’s some repetition.
     check,
     # the variant of this type
     variant,
@@ -370,8 +367,36 @@ let
     check = v: lib.any (t: t.check v) altList;
     variant = variants.union;
     extraFields = {
-      inherit altList;
-    };
+    inherit altList;
+  };
+  };
+
+  # restrict applies a further check to values of type
+  # the idea is simple, but some crazy things are possible, like
+  # * even integers
+  # * integers between 23 and 42
+  # * enumerations
+  # * lists with exactly three elements where the second is the string "bla"
+  # type errors from the base type checks are retained.
+  #
+  # restrict { type = int; check = isEven; … }:
+  #   2
+  #   42
+  # see tests for further examples
+  restrict = {
+    # type that should be restricted
+    type,
+    # takes a value of type
+    # return true for values of type that are valid
+    check,
+    # the (displayable) restricted type description
+    description
+  }: type // {
+    inherit description;
+    # first the general type is checked,
+    # then the restriction check is tried
+    # this way the restriction check can assume the correct type
+    check = v: type.check v && check v;
   };
 
   # TODO: should scalars be allowed as nest types?
@@ -410,7 +435,8 @@ in {
   # Constructor functions for types.
   # Their internal structure/fields are an *implementation detail*.
   inherit void any unit bool string int float
-          list attrs product productOpt sum union;
+          list attrs product productOpt sum union
+          restrict;
   # Type checking.
   inherit checkType;
   # Functions.

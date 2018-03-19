@@ -31,7 +31,10 @@ let
   # TODO test the return type of checkType to be
   # nested attrs (product { should = string; val = any; })
 
-in lib.runTests {
+in lib.runTests ({
+
+
+  # -- Scalars --
 
   testVoid = test void 23 (err void 23);
 
@@ -55,6 +58,9 @@ in lib.runTests {
   testFloatOkStrange = test float 23. ok;
   testFloatNotInt = test float 23 (err float 23);
   testFloatFoo = test float [ "nope" ] (err float [ "nope" ]);
+
+
+  # -- Recursives --
 
   testListEmpty = test (list void) [] ok;
   testListIntOk = test (list int) [ 1 2 3 ] ok;
@@ -93,6 +99,9 @@ in lib.runTests {
       "2".x = err unit [];
     };
 
+
+  # -- Products --
+
   testProductOk = test (product { name = string; age = int; })
     { name = "hans"; age = 42; } ok;
   testProductWrongTypes = test (product { name = string; age = int; })
@@ -129,6 +138,9 @@ in lib.runTests {
     { p = { x = 23; }; } # missing the required p.y
     { p = (err (product { x = int; y = bool; }) { x = 23; }); };
 
+
+  # -- Sums --
+
   testSumLeftOk = test (sum { left = string; right = unit; })
     { left = "errör!"; } ok;
   testSumRightOk = test (sum { left = string; right = unit; })
@@ -143,6 +155,9 @@ in lib.runTests {
     { a = 21; b = {}; }
     (err (sum { a = int; b = unit; }) { a = 21; b = {}; });
 
+
+  # -- Unions --
+
   testUnionOk1 = test (union [ int string (list unit) ]) 23 ok;
   testUnionOk2 = test (union [ int string (list unit) ]) "foo" ok;
   testUnionOk3 = test (union [ int string (list unit) ]) [{}{}] ok;
@@ -152,4 +167,77 @@ in lib.runTests {
   testUnionSimilar = test (union [ (list string) (attrs string) ])
     { foo = "string"; } ok;
 
-}
+} //
+
+
+  # -- Restrictions --
+
+(let
+  even = restrict {
+    type = int;
+    check = v: lib.mod v 2 == 0;
+    description = "even integer";
+  };
+
+  intBetween = min: max: restrict {
+    type = int;
+    check = v: v >= min && v <= max;
+    description = "int between ${toString min} ${toString max}";
+  };
+
+  thirdElementIsListOf23 = restrict {
+    type = list (list int);
+    check = v: builtins.length v >= 3 && builtins.elemAt v 2 == [23];
+    description = "third element is [23]";
+  };
+
+  enum = t: xs: restrict {
+    type = t;
+    check = v: lib.any (x: x == v) xs;
+    description = "one of values [ " +
+      lib.concatMapStringsSep ", " (lib.generators.toPretty {}) xs
+    + " ]";
+  };
+
+in {
+  testRestrictEvenOk = test (list even)
+    [ 2 4 128 42 ] ok;
+  testRestrictEvenFoo = test (list even)
+    [ 42 23 ]
+    { "1" = err even 23; };
+
+  testRestrictTypeCheckFirst =
+    let t = restrict {
+          type = void;
+          # will crash if "23" is checked here
+          # before the check for its type
+          check = v: (v + 19) == 42;
+          description = "is worthy";
+        };
+    # we actually want it to always give the type description
+    # of the restricted type when the general type check fails
+    # e.g. 23 should return "even integer" instead of "integer"
+    # when checking for the int restricted to even integers
+    in test t "23" (err t "23");
+
+  testDeepRestriction = test thirdElementIsListOf23
+    [ [1] ["foo"] [23] ]
+    { "1"."0" = err int "foo"; };
+  testDeepRestrictionFoo = test thirdElementIsListOf23
+    [ [] [] [24] [] [] ]
+    (err thirdElementIsListOf23 [ [] [] [24] [] [] ]);
+
+  testRestrictIntBetweenOk = test (list (intBetween (-2) 3))
+    [ (-2) (-1) 0 1 2 3 ] ok;
+  testRestrictIntBetweenFoo = test (list (intBetween 0 0))
+    [ (-23) 42 ]
+    { "0" = err (intBetween 0 0) (-23);
+      "1" = err (intBetween 0 0) 42; };
+
+  testRestrictEnumOk = test (list (enum string [ "a" "b" "c" ]))
+    [ "b" "c" "a" ] ok;
+  testRestrictEnumFoo = test (list (enum string [ "a" "b" "c" ]))
+    [ "b" "d" "a" ]
+    { "1" = err (enum string [ "a" "b" "c" ]) "d"; };
+
+}))
