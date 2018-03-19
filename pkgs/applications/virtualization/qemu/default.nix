@@ -10,6 +10,8 @@
 , sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
+, virglrendererSupport ? false, virglrenderer ? null
+, openglSupport ? virglrendererSupport, mesa_noglu, libdrm, epoxy
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , hostCpuOnly ? false
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice-protocol spice ]
+    ++ optionals virglrendererSupport [ virglrenderer ]
+    ++ optionals openglSupport [ mesa_noglu libdrm epoxy ]
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ];
@@ -80,6 +84,8 @@ stdenv.mkDerivation rec {
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
+    ++ optional virglrendererSupport "--enable-virglrenderer"
+    ++ optional openglSupport "--enable-opengl"
     ++ optional usbredirSupport "--enable-usb-redir"
     ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
