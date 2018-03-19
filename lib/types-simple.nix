@@ -63,7 +63,6 @@ let
 
   ## -- HELPERS --
 
-  unimplemented = abort "unimplemented";
   unreachable = abort "should not be reached";
 
   # Functor instance of Type
@@ -389,53 +388,15 @@ let
   # TODO: pattern match function
   # match =
 
-  # Default values for some types, chosen pretty arbitrarily.
-  # Can be used to populate products which might have less fields
-  # than originally specified:
-  # let t = product { foo : string, bar = product { baz = int; }; }
-  #     def = defaults t; # { foo = ""; bar.baz = 0; };
-  #     val = { foo = "hello"; };
-  # in checkType t (defaults t // val)
-  # or even recursiveUpdate if you want to be naughty.
-  # Hint: It’s probably better to use `productOpt` instead,
-  #       but more power to the people.
-  defaults = t:
-    let
-      defs = {
-        # void = haha, right
-        # any = better not
-        unit = {};
-        bool = false;
-        string = "";
-        int = 0;
-        float = 0.0;
-        list = [];
-        attrs = {};
-        # product generates the default for each of its required fields
-        product = lib.mapAttrs (lib.const defaults) t.req;
-        # sum and union those are *really* arbitrary,
-        # they just generate the default of their first alt
-        sum =
-          let first = builtins.head (builtins.attrNames t.alts);
-          in { ${first} = defaults t.alts.${first}; };
-        union =
-          let first = builtins.head t.altList;
-          in defaults first;
-      };
-    in if defs ? ${t.name}
-       then defs.${t.name}
-       else abort "types-simple: no default value for type ${describe t} defined";
-
   # Feed it the output of checkType (after testing for success (== {})
   # and it returns a more or less pretty string of errors.
   prettyPrintErrors =
     let
-      join = lib.foldl lib.concat [];
       isLeaf = v: {} == checkType (product { should = string; val = any; }) v;
       recurse = path: errs:
         if isLeaf errs
         then [{ inherit path; inherit (errs) should val; }]
-        else join (lib.mapAttrsToList
+        else builtins.concatLists (lib.mapAttrsToList
           (p: errs': recurse (path ++ [p]) errs') errs);
       pretty = { path, should, val }:
         "${lib.concatStringsSep "." path} should be: ${
@@ -453,5 +414,5 @@ in {
   # Type checking.
   inherit checkType;
   # Functions.
-  inherit defaults prettyPrintErrors;
+  inherit prettyPrintErrors;
 }

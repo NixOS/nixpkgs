@@ -152,23 +152,4 @@ in lib.runTests {
   testUnionSimilar = test (union [ (list string) (attrs string) ])
     { foo = "string"; } ok;
 
-
-  testDefaultsUnit = testDef unit {};
-  testDefaultsBool = testDef bool false;
-  testDefaultsString = testDef string "";
-  testDefaultsInt = testDef int 0;
-  testDefaultsFloat = testDef float 0.0;
-  testDefaultsList1 = testDef (list void) [];
-  testDefaultsList2 = testDef (list (list void)) [];
-  testDefaultsAttrs1 = testDef (attrs void) {};
-  testDefaultsAttrs2 = testDef (attrs (attrs void)) {};
-  testDefaultsProductEmpty = testDef (product {}) {};
-  testDefaultsProduct = testDef
-    (product { a = int; b = bool; })
-    { a = 0; b = false; };
-  testDefaultsSum = testDef
-    (sum { a = int; b = bool; })
-    { a = 0; }; # depends on sorting of attrNames
-  testDefaultsUnion = testDef (union [ int bool ]) 0;
-
 }
