@@ -662,9 +662,6 @@ self: super: {
       sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
     });
 
-  # 1.3.0.0 does not compile.
-  conduit = self.conduit_1_3_0_1;
-
   # https://github.com/jgm/pandoc-types/issues/37
   pandoc-types = self.pandoc-types_1_17_4_2;
 
