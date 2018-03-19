@@ -42,9 +42,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Need newer version.
-  haskell-src = super.haskell-src_1_0_3_0;
-
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
