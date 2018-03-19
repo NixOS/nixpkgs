@@ -1,5 +1,9 @@
-{ stdenv, fetchgit, makeWrapper, ant, jdk, git, xorg, udev }:
+{ stdenv, fetchgit, makeWrapper, ant, jdk, openjdk8, zulu8, git, xorg, udev }:
 
+let
+  # workaround https://github.com/NixOS/nixpkgs/issues/37364
+  jdk-without-symlinks = if jdk == openjdk8 then zulu8 else jdk;
+in
 {
   jogl_2_3_2 =
     let
@@ -21,7 +25,7 @@
         fetchSubmodules = true;
       };
 
-      buildInputs = [ jdk ant git udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
+      buildInputs = [ jdk-without-symlinks ant git udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
 
       buildPhase = ''
         cp -r ${gluegen-src} $NIX_BUILD_TOP/gluegen
