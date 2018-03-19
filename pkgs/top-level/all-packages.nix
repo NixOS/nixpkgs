@@ -625,6 +625,8 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
+  sedutil = callPackage ../tools/security/sedutil { };
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
