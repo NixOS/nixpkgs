@@ -7,6 +7,8 @@ buildPythonPackage rec {
   pname = "thumbor";
   version = "6.4.2";
 
+  disabled = isPy3k; # see https://github.com/thumbor/thumbor/issues/1004
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "0y9mf78j80vjh4y0xvgnybc1wqfcwm5s19xhsfgkn12hh8pmh14d";
