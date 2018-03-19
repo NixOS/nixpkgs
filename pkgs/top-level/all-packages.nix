@@ -1316,6 +1316,8 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
+  mq-cli = callPackage ../tools/system/mq-cli { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
