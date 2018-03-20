@@ -51,7 +51,8 @@ let
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = YES
+    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
@@ -131,6 +132,7 @@ stdenv.mkDerivation rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform) [
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
