@@ -31,7 +31,7 @@ let
 
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
-    '' + stdenv.lib.optionalString stdenv.isArm ''
+    '' + stdenv.lib.optionalString stdenv.isAarch32 ''
       # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';

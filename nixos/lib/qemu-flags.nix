@@ -9,7 +9,7 @@
     ];
 
   qemuSerialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
-        else if pkgs.stdenv.isArm || pkgs.stdenv.isAarch64 then "ttyAMA0"
+        else if pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64 then "ttyAMA0"
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.system}'";
 
   qemuBinary = qemuPkg: {
