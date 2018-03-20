@@ -1552,6 +1552,11 @@
     github = "hrdinka";
     name = "Christoph Hrdinka";
   };
+  hschaeidt = {
+    email = "he.schaeidt@gmail.com";
+    github = "hschaeidt";
+    name = "Hendrik Schaeidt";
+  };
   htr = {
     email = "hugo@linux.com";
     github = "htr";
