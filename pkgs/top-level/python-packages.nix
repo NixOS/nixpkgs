@@ -11165,34 +11165,7 @@ in {
     };
   };
 
-  WSME = buildPythonPackage rec {
-    name = "WSME-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/WSME/${name}.tar.gz";
-      sha256 = "1nw827iz5g9jlfnfbdi8kva565v0kdjzba2lccziimj09r71w900";
-    };
-
-    checkPhase = ''
-      # remove turbogears tests as we don't have it packaged
-      rm tests/test_tg*
-      # remove flask since we don't have flask-restful
-      rm tests/test_flask*
-      # https://bugs.launchpad.net/wsme/+bug/1510823
-      ${if isPy3k then "rm tests/test_cornice.py" else ""}
-
-      nosetests tests/
-    '';
-
-    propagatedBuildInputs = with self; [
-      pbr six simplegeneric netaddr pytz webob
-    ];
-    buildInputs = with self; [
-      cornice nose webtest pecan transaction cherrypy sphinx
-    ];
-  };
-
+  WSME = callPackage ../development/python-modules/WSME { };
 
   zake = buildPythonPackage rec {
     name = "zake-${version}";
