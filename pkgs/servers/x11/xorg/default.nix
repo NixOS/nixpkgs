@@ -632,11 +632,11 @@ let
   }) // {inherit ;};
 
   iceauth = (mkDerivation "iceauth" {
-    name = "iceauth-1.0.7";
+    name = "iceauth-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/iceauth-1.0.7.tar.bz2;
-      sha256 = "02izdyzhwpgiyjd8brzilwvwnfr72ncjb6mzz3y1icwrxqnsy5hj";
+      url = mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2;
+      sha256 = "1ik0mdidmyvy48hn8p2hwvf3535rf3m96hhf0mvcqrbj44x23vp6";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE xproto ];
@@ -644,10 +644,10 @@ let
   }) // {inherit libICE xproto ;};
 
   imake = (mkDerivation "imake" {
-    name = "imake-1.0.7";
+    name = "imake-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/imake-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/util/imake-1.0.8.tar.bz2;
       sha256 = "0zpk8p044jh14bis838shbf4100bjg7mccd7bq54glpsq552q339";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -668,10 +668,10 @@ let
   }) // {inherit ;};
 
   kbproto = (mkDerivation "kbproto" {
-    name = "kbproto-1.0.7";
+    name = "kbproto-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/kbproto-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/proto/kbproto-1.0.8.tar.bz2;
       sha256 = "0mxqj1pzhjpz9495vrjnpi10kv2n1s4vs7di0sh3yvipfq5j30pq";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -692,10 +692,10 @@ let
   }) // {inherit applewmproto libX11 libXext xextproto ;};
 
   libFS = (mkDerivation "libFS" {
-    name = "libFS-1.0.7";
+    name = "libFS-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libFS-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/lib/libFS-1.0.8.tar.bz2;
       sha256 = "1wy4km3qwwajbyl8y9pka0zwizn7d9pfiyjgzba02x3a083lr79f";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1208,10 +1208,10 @@ let
   }) // {inherit xproto ;};
 
   mkfontdir = (mkDerivation "mkfontdir" {
-    name = "mkfontdir-1.0.7";
+    name = "mkfontdir-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.8.tar.bz2;
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1544,10 +1544,10 @@ let
   }) // {inherit gperf m4 libxcb xproto ;};
 
   xclock = (mkDerivation "xclock" {
-    name = "xclock-1.0.7";
+    name = "xclock-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xclock-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/app/xclock-1.0.8.tar.bz2;
       sha256 = "1l3xv4bsca6bwxx73jyjz0blav86i7vwffkhdb1ac81y9slyrki3";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2372,10 +2372,10 @@ let
   }) // {inherit libXaw libXt ;};
 
   xhost = (mkDerivation "xhost" {
-    name = "xhost-1.0.7";
+    name = "xhost-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xhost-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/app/xhost-1.0.8.tar.bz2;
       sha256 = "16n26xw6l01zq31d4qvsaz50misvizhn7iihzdn5f7s72pp1krlk";
     };
     nativeBuildInputs = [ pkgconfig ];
