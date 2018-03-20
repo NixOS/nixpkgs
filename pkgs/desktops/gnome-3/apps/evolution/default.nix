@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base p11-kit
     nss nspr libnotify procps highlight gnome3.libgweather
     gnome3.gsettings-desktop-schemas
-    gnome3.libgnome-keyring gnome3.glib-networking openldap
+    gnome3.glib-networking openldap
   ];
 
   nativeBuildInputs = [ cmake ninja intltool itstool libxml2 pkgconfig wrapGAppsHook ];
