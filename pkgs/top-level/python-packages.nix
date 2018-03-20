@@ -424,6 +424,8 @@ in {
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
+  toml = callPackage ../development/python-modules/toml { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
