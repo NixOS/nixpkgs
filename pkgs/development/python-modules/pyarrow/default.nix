@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, parquet-cpp, pkgconfig, setuptools_scm, six }:
 
 buildPythonPackage rec {
   pname = "pyarrow";
@@ -16,10 +16,14 @@ buildPythonPackage rec {
   checkInputs = [ pandas pytest ];
 
   PYARROW_BUILD_TYPE = "release";
-  PYARROW_BUNDLE_ARROW_CPP = 1; # sets RPATH on darwin
+  PYARROW_CMAKE_OPTIONS = "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib;${PARQUET_HOME}/lib";
 
   preBuild = ''
-    substituteInPlace CMakeLists.txt --replace "''${ARROW_SO_VERSION}" '"0"'
+    substituteInPlace CMakeLists.txt --replace "\''${ARROW_ABI_VERSION}" '"0.0.0"'
+    substituteInPlace CMakeLists.txt --replace "\''${ARROW_SO_VERSION}" '"0"'
+
+    # fix the hardcoded value
+    substituteInPlace cmake_modules/FindParquet.cmake --replace 'set(PARQUET_ABI_VERSION "1.0.0")' 'set(PARQUET_ABI_VERSION "${parquet-cpp.version}")'
   '';
 
   preCheck = ''
@@ -36,6 +40,9 @@ buildPythonPackage rec {
   '';
 
   ARROW_HOME = arrow-cpp;
+  PARQUET_HOME = parquet-cpp;
+
+  setupPyBuildFlags = ["--with-parquet" ];
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
