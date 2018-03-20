@@ -6797,35 +6797,6 @@ in {
 
   django_pipeline = callPackage ../development/python-modules/django-pipeline { };
 
-  django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
-    name = "django-pipeline-1.3.27";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
-      sha256 = "0iva3cmnh5jw54c7w83nx9nqv523hjvkbjchzd2pb6vzilxf557k";
-    };
-  });
-
-
-  djblets = if (versionOlder self.django.version "1.6.11") ||
-               (versionAtLeast self.django.version "1.9")
-            then throw "djblets only suported for Django<1.8.999,>=1.6.11"
-            else buildPythonPackage rec {
-    name = "Djblets-0.9";
-
-    src = pkgs.fetchurl {
-      url = "http://downloads.reviewboard.org/releases/Djblets/0.9/${name}.tar.gz";
-      sha256 = "1rr5vjwiiw3kih4k9nawislf701l838dbk5xgizadvwp6lpbpdpl";
-    };
-
-    propagatedBuildInputs = with self; [
-      django feedparser django_pipeline_1_3 pillowfight pytz ];
-
-    meta = {
-      description = "A collection of useful extensions for Django";
-      homepage = https://github.com/djblets/djblets;
-    };
-  };
-
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
   djmail = callPackage ../development/python-modules/djmail { };
