@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.libgnome-keyring gnome3.gsettings-desktop-schemas
+    gnome3.gsettings-desktop-schemas
     poppler ghostscriptX djvulibre libspectre
     libsecret librsvg gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
