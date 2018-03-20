@@ -2,6 +2,8 @@
 , libGL, libX11
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "epoxy-${version}";
   version = "1.5.0";
@@ -18,17 +20,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig utilmacros python ];
   buildInputs = [ libGL libX11 ];
 
-  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+  preConfigure = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace build_glx=no build_glx=yes
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
   '';
 
   # add libGL to rpath because libepoxy dlopen()s libEGL
-  postFixup = ''
+  postFixup = optionalString stdenv.isLinux ''
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libGL ]}:$(patchelf --print-rpath $out/lib/libepoxy.so.0.0.0)" $out/lib/libepoxy.so.0.0.0
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A library for handling OpenGL function pointer management";
     homepage = https://github.com/anholt/libepoxy;
     license = licenses.mit;

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "poco-${version}";
 
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://pocoproject.org/releases/${name}/${name}-all.tar.gz";
-    sha256 = "1pg48kk0354vsc6j2wnrk893l5xcsr3bjmkgykd3harcnvfqs7l8";
+    sha256 = "11z1i0drbacs7c7d5virc3kz7wh79svd06iffh8j6giikl7vz1q3";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

@@ -67,6 +67,8 @@ in stdenv.mkDerivation {
   patches = [
     ./no-ldconfig.patch
     ./ld_library_path.patch
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
   ];
 
   postPatch = ''
