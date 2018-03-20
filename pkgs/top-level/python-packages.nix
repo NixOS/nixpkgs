@@ -8889,24 +8889,8 @@ in {
 
   keyutils = callPackage ../development/python-modules/keyutils { };
 
-  klein = buildPythonPackage rec {
-    name = "klein-15.3.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/klein/${name}.tar.gz";
-      sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
-    };
-
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ werkzeug twisted ];
-
-    meta = {
-      description = "Klein Web Micro-Framework";
-      homepage    = "https://github.com/twisted/klein";
-      license     = licenses.mit;
-    };
-  };
-
+  klein = callPackage ../development/python-modules/klein { };
+ 
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
