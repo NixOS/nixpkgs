@@ -626,6 +626,11 @@
     github = "bradediger";
     name = "Brad Ediger";
   };
+  brainrape = {
+    email = "martonboros@gmail.com";
+    github = "brainrape";
+    name = "Marton Boros";
+  };
   bramd = {
     email = "bram@bramd.nl";
     github = "bramd";
