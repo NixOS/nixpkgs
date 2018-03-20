@@ -16,7 +16,7 @@ let
     inherit system;
   } // args);
 
-  callTestOnTheseSystems = systems: fn: args: forTheseSystems systems (system: hydraJob (importTest fn args system));
+  callTestOnTheseSystems = systems: fn: args: forMatchingSystems systems (system: hydraJob (importTest fn args system));
   callTest = callTestOnTheseSystems supportedSystems;
 
   callSubTests = callSubTestsOnTheseSystems supportedSystems;
@@ -123,7 +123,7 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forTheseSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
     inherit system;
     modules = [
       ./modules/installer/netboot/netboot-minimal.nix
@@ -137,7 +137,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -145,7 +145,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forTheseSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -153,7 +153,7 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forTheseSystems [ "x86_64-linux" ] (system:
+  ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
