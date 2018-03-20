@@ -1,23 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, six, twisted, werkzeug, incremental
-, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, werkzeug, twisted }:
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "17.10.0";
+  version = "15.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30aaf0d78a987d5dbfe0968a07367ad0c73e02823cc8eef4c54f80ab848370d0";
+    sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
   };
 
-  propagatedBuildInputs = [ six twisted werkzeug incremental ];
+  disabled = isPy3k;
 
-  checkInputs = [ mock ];
-
-  checkPhase = ''
-    trial klein
-  '';
+  propagatedBuildInputs = [ werkzeug twisted ];
 
   meta = with lib; {
     description = "Klein Web Micro-Framework";
