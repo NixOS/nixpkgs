@@ -6,6 +6,13 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "osx-10.12.6" = {
+      Libsystem     = "1238.60.2";
+      xnu           = "3789.70.16";
+      objc4         = "709.1";
+      Libc          = "1158.50.2";
+    };
+
     "osx-10.11.6" = {
       dtrace        = "168";
       xnu           = "3248.60.10";
@@ -224,7 +231,7 @@ let
     libplatform     = applePackage "libplatform"       "osx-10.11.6"     "1v4ik6vlklwsi0xb1g5kmhy29j9xk5m2y8xb9zbi1k4ng8x39czk" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
+    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "1082ircc1ggaq3wha218vmfa75jqdaqidsy1bmrc4ckfkbr3bwx2" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libutil-new     = applePackage "libutil/new.nix"   "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
