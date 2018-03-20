@@ -3670,6 +3670,11 @@
     github = "utdemir";
     name = "Utku Demir";
   };
+  uvnikita = {
+    email = "uv.nikita@gmail.com";
+    github = "uvNikita";
+    name = "Nikita Uvarov";
+  };
   uwap = {
     email = "me@uwap.name";
     github = "uwap";
