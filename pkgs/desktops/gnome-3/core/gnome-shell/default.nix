@@ -37,11 +37,13 @@ in stdenv.mkDerivation rec {
     libXtst gjs mutter libpulseaudio evolution-data-server
     libical gtk gstreamer gdm libcanberra-gtk3 geoclue2
     defaultIconTheme gnome3.gnome-bluetooth
-    libgweather # not declared at build time, but typelib is needed at runtime
     gnome3.gnome-clocks # schemas needed
     at-spi2-core upower ibus gnome-desktop telepathy-logger gnome3.gnome-settings-daemon
     gst_all_1.gst-plugins-good # recording
     gobjectIntrospection
+
+    # not declared at build time, but typelib is needed at runtime
+    libgweather networkmanagerapplet
   ];
   propagatedUserEnvPkgs = [
     # Needed to support on-screen keyboard used with touch screen devices
