@@ -6379,23 +6379,7 @@ in {
 
   schema = callPackage ../development/python-modules/schema {};
 
-  stem = buildPythonPackage rec {
-    name = "stem-${version}";
-    version = "1.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stem/${name}.tar.gz";
-      sha256 = "1va9p3ij7lxg6ixfsvaql06dn11l3fgpxmss1dhlvafm7sqizznp";
-    };
-
-    meta = {
-      description = "Controller library that allows applications to interact with Tor (https://www.torproject.org/";
-      homepage = https://stem.torproject.org/;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ phreedom ];
-    };
-
-  };
+  stem = callPackage ../development/python-modules/stem { };
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
