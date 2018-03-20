@@ -17,11 +17,11 @@
   };
 in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "1li95ni122fzinzlmxbln63nmgij63irxfvi52ws4zfbzv3am4sg";
+    sha256 = "0jfsfnh9bxlxiwxws60yah4ybjw2hshmvqp31pri4m4h8ivrbnry";
   };
 
   patches = if hostPlatform.isRiscV then ./riscv.patch else null;
