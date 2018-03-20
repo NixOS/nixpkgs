@@ -34,8 +34,8 @@ in
 , enableStaticLibraries ? true
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
-, platforms ? ghc.meta.platforms
-, hydraPlatforms ? platforms
+, platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
+, hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
@@ -404,7 +404,7 @@ stdenv.mkDerivation ({
          // optionalAttrs broken               { inherit broken; }
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
-         // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
+         // optionalAttrs (hydraPlatforms != null) { inherit hydraPlatforms; }
          ;
 
 }
