@@ -2,12 +2,12 @@
 , python, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "6.0.0";
   name = "varnish-${version}";
 
   src = fetchurl {
     url = "http://varnish-cache.org/_downloads/${name}.tgz";
-    sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
+    sha256 = "1vhbdch33m6ig4ijy57zvrramhs9n7cba85wd8rizgxjjnf87cn7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
