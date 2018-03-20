@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     description = "VisualOn Adaptive Multi Rate Wideband (AMR-WB) encoder";
     license = "stdenv.lib.licenses.apache";
     maintainers = [ stdenv.lib.maintainers.Esteth ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
