@@ -8810,7 +8810,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -20203,6 +20203,8 @@ EOF
   pytoml = callPackage ../development/python-modules/pytoml { };
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
+
+  mdv = callPackage ../development/python-modules/mdv { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 
