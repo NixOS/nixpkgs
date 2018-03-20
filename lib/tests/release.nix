@@ -13,7 +13,6 @@ pkgs.stdenv.mkDerivation {
     export NIX_DB_DIR=$TEST_ROOT/db
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
-    export NIX_MANIFESTS_DIR=$TEST_ROOT/var/nix/manifests
     export NIX_STATE_DIR=$TEST_ROOT/var/nix
     export NIX_STORE_DIR=$TEST_ROOT/store
     export PAGER=cat
