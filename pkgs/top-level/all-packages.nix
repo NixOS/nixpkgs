@@ -1328,6 +1328,8 @@ with pkgs;
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  pbzx = callPackage ../tools/compression/pbzx { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
