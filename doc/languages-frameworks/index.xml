@@ -30,6 +30,7 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="rust.xml" />
 <xi:include href="texlive.xml" />
 <xi:include href="vim.xml" />
+<xi:include href="emscripten.xml" />
 
 
 </chapter>

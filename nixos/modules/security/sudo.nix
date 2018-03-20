@@ -47,8 +47,8 @@ in
       default = true;
       description =
         ''
-          Whether users of the <code>wheel</code> group can execute
-          commands as super user without entering a password.
+          Whether users of the <code>wheel</code> group must
+          provide a password to run commands as super user via <command>sudo</command>.
         '';
       };
 

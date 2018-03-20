@@ -11,8 +11,8 @@
     {
       owner   = "terraform-providers";
       repo    = "terraform-provider-archive";
-      version = "1.0.1";
-      sha256  = "1qxw9c38hsdmxyrrnl7s9iwlzjrwzml2m74bs4iw120gljpqphqz";
+      version = "1.0.2";
+      sha256  = "0n8939qai01lrk4kq3w344a73z6bfqbfq9yl28yh93fvmpkv6jz2";
     };
   arukas =
     {
@@ -46,8 +46,8 @@
     {
       owner   = "terraform-providers";
       repo    = "terraform-provider-azurerm";
-      version = "1.2.0";
-      sha256  = "10j7lk3rrlix04pcnnz25h0bm336nnmf3c2a1760v272sjdph51z";
+      version = "1.3.0";
+      sha256  = "0szw7fmdwy8r99w40z2h7fp5znj8s0ddbcwrgm1g3vdcp757vcg5";
     };
   bitbucket =
     {
@@ -431,8 +431,8 @@
     {
       owner   = "terraform-providers";
       repo    = "terraform-provider-scaleway";
-      version = "1.1.0";
-      sha256  = "10ghzwss3n95yln7brzwghkc0gv7bkmyml7zlj7hfbkjr3382m1p";
+      version = "1.2.0";
+      sha256  = "123rjvslq7gy2m96rikm0i2298jjpsnyh9civbyvbxj3h47z9h4v";
     };
   softlayer =
     {

@@ -1,4 +1,4 @@
-{ pkgs, lib, emscripten }:
+{ pkgs, lib, emscripten, python }:
 
 { buildInputs ? [], nativeBuildInputs ? []
 
@@ -11,8 +11,8 @@ pkgs.stdenv.mkDerivation (
   {
 
   name = "emscripten-${args.name}";
-  buildInputs = [ emscripten ] ++ buildInputs;
-  nativeBuildInputs = [ emscripten ] ++ nativeBuildInputs;
+  buildInputs = [ emscripten python ] ++ buildInputs;
+  nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
 
   # fake conftest results with emscripten's python magic
   EMCONFIGURE_JS=2;
@@ -38,8 +38,17 @@ pkgs.stdenv.mkDerivation (
     runHook postBuild
   '';
 
+  doCheck = true;
+
   checkPhase = args.checkPhase or ''
     runHook preCheck
+
+    echo "Please provide a test for your emscripten based library/tool, see libxml2 as an exmple on how to use emcc/node to verify your build"
+    echo ""
+    echo "In normal C 'unresolved symbols' would yield an error and a breake of execution. In contrast, in emscripten they are only a warning which is ok given that emscripten assumptions about shared libraries."
+    echo "  -> https://github.com/kripken/emscripten/wiki/Linking"
+    echo "So just assume the dependencies were built using hydra, then YOU WILL NEVER see the warning and your code depending on a library will always fail!"
+    exit 1
 
     runHook postCheck
   '';

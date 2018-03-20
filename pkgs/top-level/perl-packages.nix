@@ -2349,6 +2349,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigIniFiles = buildPerlPackage rec {
+    name = "Config-IniFiles-2.94";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "d6d38a416da79de874c5f1825221f22e972ad500b6527d190cc6e9ebc45194b4";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ IOstringy ];
+    meta = {
+      description = "A module for reading .ini-style configuration files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   ConfigMerge = buildPerlPackage {
     name = "Config-Merge-1.04";
     src = fetchurl {
@@ -11275,6 +11290,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PkgConfig = buildPerlPackage rec {
+    name = "PkgConfig-0.19026";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "5cb6e934d29dd93e04c2fa779f4b7e51361edaf56957b47a232017a4bb7e922c";
+    };
+    meta = {
+      homepage = https://metacpan.org/pod/PkgConfig;
+      description = "Pure-Perl Core-Only replacement for pkg-config";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   Plack = buildPerlPackage rec {
     name = "Plack-1.0039";
     src = fetchurl {
@@ -13202,10 +13231,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysVirt = buildPerlPackage rec {
-    name = "Sys-Virt-1.2.19";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
-      sha256 = "18v8x0514in0zpvq1rv78hmvhpij1xjh5xn0wa6wmg2swky54sp4";
+    version = "4.1.0";
+    name = "Sys-Virt-${version}";
+    src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
+      url = git://libvirt.org/libvirt-perl.git;
+      rev = "v${version}";
+      sha256 = "0m0snv6gqh97nh1c31qvbm4sdzp49vixn7w3r69h6a5r71sn78x4";
     };
     propagatedBuildInputs = [XMLXPath];
     nativeBuildInputs = [ pkgs.pkgconfig ];
