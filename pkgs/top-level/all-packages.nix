@@ -11881,7 +11881,9 @@ with pkgs;
     czmq = czmq3;
   };
 
-  zig = callPackage ../development/compilers/zig {};
+  zig = callPackage ../development/compilers/zig {
+    llvmPackages = llvmPackages_6;
+  };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
