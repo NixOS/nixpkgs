@@ -683,6 +683,7 @@ self: super: {
   brick = self.brick_0_35;
   timezone-olson = self.timezone-olson_0_1_9;
   matrix = self.matrix_0_3_6_1;
+  getopt-generics = self.getopt-generics_0_13_0_2;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
