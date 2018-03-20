@@ -28,6 +28,14 @@ let
       sha256 = "1amjrxyasplv4alfwcxwnw4nrx7dz2ydmddkq16k6hg90i9njq81";
     };
 
+    patches = [
+      (fetchurl {
+        name = "texlive-poppler-0.59.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.59.patch?h=packages/texlive-bin&id=6308ec39bce2a4d735f6ff8a4e94473748d7b450;
+        sha256 = "1c4ikq4kxw48bi3i33bzpabrjvbk01fwjr2lz20gkc9kv8l0bg3n";
+      })
+    ];
+
     configureFlags = [
       "--with-banner-add=/NixOS.org"
       "--disable-missing" "--disable-native-texlive-build"
@@ -58,7 +66,7 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src;
+  inherit (common) src patches;
 
   outputs = [ "out" "doc" ];
 
@@ -168,7 +176,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
-  patches = [ ./luatex-gcc7.patch ];
+  patches = common.patches ++ [ ./luatex-gcc7.patch ];
 
   configureScript = ":";
 

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager, libsecret
 , withGnome ? true, gnome3, procps, kmod }:
 
-stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+let
   pname   = "NetworkManager-openvpn";
-  major   = "1.8";
-  version = "${major}.0";
+  version = "1.8.0";
+in stdenv.mkDerivation rec {
+  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1973n89g66a3jfx8r45a811fga4kadh6r1w35cb25cz1mlii2vhn";
   };
 
@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
      substituteInPlace "properties/auth-helpers.c" \
        --replace "/sbin/openvpn" "${openvpn}/bin/openvpn"
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager-openvpn";
+    };
+  };
 
   meta = {
     description = "NetworkManager's OpenVPN plugin";

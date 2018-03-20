@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "asynctest";
-  version = "0.11.1";
+  version = "0.12.0";
 
   disabled = pythonOlder "3.4";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "Martiusweb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vvh5vbq2fbz6426figs85z8779r7svb4dp2v3xynhhv05nh2y6v";
+    sha256 = "0rcb3kz2m0iwvgxpx2avfz9cqsd9xbaq93zykr2fki3ikmnp3vyg";
   };
 
   postPatch = ''

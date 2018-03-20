@@ -48,7 +48,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   gcj = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
@@ -110,7 +109,8 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  netcat = all;
+  # netcat broken on darwin
+  netcat = linux;
   nfs-utils = linux;
   nix = all;
   nixUnstable = all;

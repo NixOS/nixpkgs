@@ -22,7 +22,8 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.9";
+  majorVersion = "0.16";
+  version = "${majorVersion}.9";
 
   src = fetchurl {
     name = "${name}.tar.bz2";
@@ -30,6 +31,18 @@ stdenv.mkDerivation rec {
         + "ref=${name}";
     sha256 = "121dh906zya9n7npyk7b5xama0z3ycy9jl7l5jm39pc86h1winh3";
   };
+
+  # Needed for Plugin Installer
+  release = fetchurl {
+    url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
+    sha256 = "0v08zdvpqaig0wxpxn1l8rsj3wr3fqvnagn8cnvch17vfqv9gcr1";
+  };
+
+  postUnpack = ''
+    tar -xaf $release
+    cp -r ${name}/plugins/plugin_installer gajim-${name}-*/plugins
+    rm -rf ${name}
+  '';
 
   patches = let
     # An attribute set of revisions to apply from the upstream repository.

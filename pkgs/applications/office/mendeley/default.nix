@@ -24,7 +24,6 @@
 , qtwebengine
 , sqlite
 , xorg
-, xlibs
 , zlib
 # The provided wrapper does this, but since we don't use it
 # we emulate the behavior.  The downside is that this
@@ -78,7 +77,7 @@ let
     orc
     sqlite
     xorg.libX11
-    xlibs.xcbutilkeysyms
+    xorg.xcbutilkeysyms
     xorg.libxcb
     xorg.libXcomposite
     xorg.libXext

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = https://tasktools.org/projects/timewarrior.html;
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost ilmbase libjpeg libpng 
+    boost ilmbase libjpeg libpng
     libtiff opencolorio openexr
     unzip
   ];
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

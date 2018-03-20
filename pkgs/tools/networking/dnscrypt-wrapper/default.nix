@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-wrapper-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Cofyc";
     repo = "dnscrypt-wrapper";
     rev = "v${version}";
-    sha256 = "121y93sb06qc50fj7vv47r6dpzv77hh7ywl7sgrfp8i4jf4kaspa";
+    sha256 = "187sq99zxdfv3xhq939rybb0pps3l6wgyyvbj3zns5jr6mms64vd";
   };
 
   enableParallelBuilding = true;

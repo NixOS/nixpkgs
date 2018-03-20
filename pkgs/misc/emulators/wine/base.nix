@@ -39,7 +39,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional vaSupport              pkgs.libva-full
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
-  ++ lib.optional saneSupport            pkgs.saneBackends
+  ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap

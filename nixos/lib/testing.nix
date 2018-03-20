@@ -3,7 +3,11 @@
 with import ./build-vms.nix { inherit system minimal config; };
 with pkgs;
 
-rec {
+let
+  jquery-ui = callPackage ./testing/jquery-ui.nix { };
+  jquery = callPackage ./testing/jquery.nix { };
+
+in rec {
 
   inherit pkgs;
 
@@ -143,8 +147,8 @@ rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // { 
-      inherit nodes driver test; 
+    in (if makeCoverageReport then report else test) // {
+      inherit nodes driver test;
     };
 
   runInMachine =

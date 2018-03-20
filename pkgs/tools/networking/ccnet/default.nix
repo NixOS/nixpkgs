@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "A framework for writing networked applications in C";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.calrama ];
+    maintainers = [ ];
   };
 }

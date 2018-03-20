@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "biboumi-${version}";
-  version = "6.1";
+  version = "7.2";
 
   src = fetchurl {
     url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "1la1n502v2wyfm0vl8v4m0hbigkkjchi21446n9mb203fz1cvr77";
+    sha256 = "0gyr2lp2imrjm5hvijcq0s7k9fzkirfl70cprjy9r4yvq6mg1jvd";
   };
 
   louiz_catch = fetchgit {

@@ -227,6 +227,18 @@ $ sudo groupdel nixbld</screen>
                         line)</para></listitem>
             </itemizedlist>
 
+            <note><para>Support for <literal>NIXOS_LUSTRATE</literal> was added
+                    in NixOS 16.09. The act of "lustrating" refers to the
+                    wiping of the existing distribution. Creating
+                    <literal>/etc/NIXOS_LUSTRATE</literal> can also be used on
+                    NixOS to remove all mutable files from your root partition
+                    (anything that's not in <literal>/nix</literal> or
+                    <literal>/boot</literal> gets "lustrated" on the next
+                    boot.</para>
+                <para>lustrate /ˈlʌstreɪt/ verb.</para>
+                <para>purify by expiatory sacrifice, ceremonial washing, or
+                    some other ritual action.</para></note>
+
             <para>Let's create the files:</para>
 
             <screen>

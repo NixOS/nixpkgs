@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4mixer, hicolor-icon-theme
+, makeWrapper, xfce4-mixer, hicolor-icon-theme
 , withGtk3 ? false, gtk3, gettext, glib-networking
 }:
 let
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util exo libwnck
       garcon xfconf libstartup_notification makeWrapper hicolor-icon-theme
-    ] ++ xfce4mixer.gst_plugins
+    ] ++ xfce4-mixer.gst_plugins
       ++ optional withGtk3 gtk3;
 
   propagatedBuildInputs = [ (if withGtk3 then libxfce4ui_gtk3 else libxfce4ui) ];
