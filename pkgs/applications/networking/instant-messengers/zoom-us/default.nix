@@ -59,7 +59,7 @@ in stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    $preInstallHooks
+    runHook preInstall
 
     packagePath=$out/share/zoom-us
     mkdir -p $packagePath
