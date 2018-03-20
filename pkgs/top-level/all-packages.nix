@@ -6165,9 +6165,9 @@ with pkgs;
     inherit (llvmPackages_4) llvm;
   };
 
-  rust121bin = lowPrio (callPackage ../development/compilers/rust/1.21.0-bin.nix {
+  rust124bin = lowPrio (callPackage ../development/compilers/rust/1.24.0-bin.nix {
      buildRustPackage = callPackage ../build-support/rust {
-       rust = rust121bin;
+       rust = rust124bin;
      };
   });
   rustBeta = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/beta.nix {}));
@@ -14552,8 +14552,8 @@ with pkgs;
       python = python2;
       gnused = gnused_422;
       icu = icu59;
-      cargo = rust121bin.cargo;
-      rustc = rust121bin.rustc;
+      cargo = rust124bin.cargo;
+      rustc = rust124bin.rustc;
     };
   });
 
