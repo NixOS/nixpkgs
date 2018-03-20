@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, lib
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
-  patches = [] ++ lib.optional stdenv.isDarwin [ ./no_symbolic_links.patch ];
+  patches = [ ./no_symbolic_links.patch ];
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
