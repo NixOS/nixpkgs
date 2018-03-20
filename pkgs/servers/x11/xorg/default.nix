@@ -848,11 +848,11 @@ let
   }) // {inherit libX11 xextproto xproto ;};
 
   libXfixes = (mkDerivation "libXfixes" {
-    name = "libXfixes-5.0.2";
+    name = "libXfixes-5.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfixes-5.0.2.tar.bz2;
-      sha256 = "1slsk898386xii0r3l7szwwq3s6y2m4dsj0x93ninjh8xkghxllv";
+      url = mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2;
+      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fixesproto libX11 xextproto xproto ];
