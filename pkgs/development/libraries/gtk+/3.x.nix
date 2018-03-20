@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
 , xorg, epoxy, json-glib, libxkbcommon, gmp
 , waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+
+    # TODO: patch glib directly
+    for f in $dev/bin/gtk-encode-symbolic-svg; do
+      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    done
   '';
 
   passthru = {
