@@ -176,7 +176,8 @@ in stdenv.mkDerivation {
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
