@@ -7,21 +7,21 @@ in rec {
   inherit (lib.systems.doubles) all mesaPlatforms;
   none = [];
 
-  arm     = [ patterns.Arm ];
-  aarch64 = [ patterns.Aarch64 ];
-  x86     = [ patterns.x86 ];
-  i686    = [ patterns.i686 ];
-  x86_64  = [ patterns.x86_64 ];
-  mips    = [ patterns.Mips ];
+  arm     = [ patterns.isArm ];
+  aarch64 = [ patterns.isAarch64 ];
+  x86     = [ patterns.isx86 ];
+  i686    = [ patterns.isi686 ];
+  x86_64  = [ patterns.isx86_64 ];
+  mips    = [ patterns.isMips ];
 
-  cygwin  = [ patterns.Cygwin ];
-  darwin  = [ patterns.Darwin ];
-  freebsd = [ patterns.FreeBSD ];
+  cygwin  = [ patterns.isCygwin ];
+  darwin  = [ patterns.isDarwin ];
+  freebsd = [ patterns.isFreeBSD ];
   # Should be better, but MinGW is unclear, and HURD is bit-rotted.
   gnu     = [ { kernel = parse.kernels.linux; abi = parse.abis.gnu; } ];
-  illumos = [ patterns.SunOS ];
-  linux   = [ patterns.Linux ];
-  netbsd  = [ patterns.NetBSD ];
-  openbsd = [ patterns.OpenBSD ];
-  unix    = patterns.Unix; # Actually a list
+  illumos = [ patterns.isSunOS ];
+  linux   = [ patterns.isLinux ];
+  netbsd  = [ patterns.isNetBSD ];
+  openbsd = [ patterns.isOpenBSD ];
+  unix    = patterns.isUnix; # Actually a list
 }
