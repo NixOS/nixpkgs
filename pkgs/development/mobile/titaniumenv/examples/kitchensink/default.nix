@@ -1,4 +1,4 @@
-{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "25" "26" ], tiVersion ? "6.3.1.GA", release ? false
+{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "25" "26" ], tiVersion ? "7.1.0.GA", release ? false
 , rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null, iosVersion ? "11.2"
 , enableWirelessDistribution ? false, installURL ? null
 }:
