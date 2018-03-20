@@ -2968,9 +2968,11 @@ in {
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
-  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
-
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
+
+  pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
+
+  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -3022,6 +3024,8 @@ in {
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
+
+  pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -3079,6 +3083,10 @@ in {
   };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
+
+  pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
+
+  pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
