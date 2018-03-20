@@ -10,7 +10,7 @@ let
   arch = if stdenv.isx86_64 then "x64"
             else if stdenv.isi686 then "ia32"
             else if stdenv.isAarch64 then "arm64"
-            else if stdenv.isArm then "arm"
+            else if stdenv.isAarch32 then "arm"
             else throw "Unknown architecture for v8";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";

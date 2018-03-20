@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     stdenv.lib.optional stdenv.isLinux utillinux;
 
   buildPhase =
-    stdenv.lib.optionalString stdenv.isArm "Seccomp_NO=1 "
+    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
