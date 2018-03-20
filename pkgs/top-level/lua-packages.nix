@@ -268,14 +268,14 @@ let
   };
 
   luafilesystem = buildLuaPackage rec {
-    version = "1.6.3";
+    version = "1.7.0.2";
     name = "filesystem-${version}";
 
     src = fetchFromGitHub {
       owner = "keplerproject";
       repo = "luafilesystem";
       rev = "v${stdenv.lib.replaceChars ["."] ["_"] version}";
-      sha256 = "1hxcnqj53540ysyw8fzax7f09pl98b8f55s712gsglcdxp2g2pri";
+      sha256 = "0zmprgkm9zawdf9wnw0v3w6ibaj442wlc6alp39hmw610fl4vghi";
     };
 
     preConfigure = ''
