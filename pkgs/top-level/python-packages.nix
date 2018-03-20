@@ -12993,6 +12993,8 @@ in {
 
   pylint = callPackage ../development/python-modules/pylint { };
 
+  pyomo = callPackage ../development/python-modules/pyomo { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyproj = callPackage ../development/python-modules/pyproj {
