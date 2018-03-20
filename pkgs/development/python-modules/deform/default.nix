@@ -1,35 +1,25 @@
 { lib, buildPythonPackage, fetchPypi
-, chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
-, nose, coverage, beautifulsoup4, flaky }:
+, beautifulsoup4, peppercorn, colander, translationstring
+, chameleon, zope_deprecation, coverage, nose }:
 
 buildPythonPackage rec {
   pname = "deform";
-  version = "2.0.5";
+  version = "2.0a2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "874d3346a02c500432efdcc73b1a7174aa0ea69cd52a99bb9a812967f54f6f79";
+    sha256 = "3fa4d287c8da77a83556e4a5686de006ddd69da359272120b915dc8f5a70cabd";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "iso8601<=0.1.11" iso8601
-  '';
-
   propagatedBuildInputs = [
-    chameleon
-    colander
-    iso8601
-    peppercorn
-    translationstring
-    zope_deprecation
-  ];
-
-  checkInputs = [
-    nose
-    coverage
     beautifulsoup4
-    flaky
+    peppercorn
+    colander
+    translationstring
+    chameleon
+    zope_deprecation
+    coverage
+    nose
   ];
 
   meta = with lib; {
