@@ -109,6 +109,7 @@ in buildFHSUserEnv rec {
     networkmanager098
 
     # Verified games requirements
+    xorg.libXt
     xorg.libXmu
     xorg.libxcb
     libGLU
@@ -121,6 +122,9 @@ in buildFHSUserEnv rec {
     openssl
     libidn
     tbb
+    wayland
+    mesa_noglu
+    libxkbcommon
 
     # Other things from runtime
     flac
