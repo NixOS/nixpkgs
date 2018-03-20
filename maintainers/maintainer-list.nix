@@ -3986,6 +3986,11 @@
     github = "yrashk";
     name = "Yurii Rashkovskii";
   };
+  ysndr = {
+    email = "me@ysndr.de";
+    github = "ysndr";
+    name = "Yannik Sander";
+  };
   yuriaisaka = {
     email = "yuri.aisaka+nix@gmail.com";
     github = "yuriaisaka";
