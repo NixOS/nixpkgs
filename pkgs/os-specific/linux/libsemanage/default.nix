@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("DESTDIR=$out")
     makeFlagsArray+=("MAN3DIR=$out/share/man/man3")
     makeFlagsArray+=("MAN5DIR=$out/share/man/man5")
-    makeFlagsArray+=("PYSITEDIR=$out/lib/python2.7/site-packages")
+    makeFlagsArray+=("PYSITEDIR=$out/lib/${python.libPrefix}/site-packages")
   '';
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
