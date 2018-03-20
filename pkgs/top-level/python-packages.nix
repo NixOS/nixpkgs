@@ -6940,35 +6940,6 @@ in {
 
   django_pipeline = callPackage ../development/python-modules/django-pipeline { };
 
-  django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
-    name = "django-pipeline-1.3.27";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
-      sha256 = "0iva3cmnh5jw54c7w83nx9nqv523hjvkbjchzd2pb6vzilxf557k";
-    };
-  });
-
-
-  djblets = if (versionOlder self.django.version "1.6.11") ||
-               (versionAtLeast self.django.version "1.9")
-            then throw "djblets only suported for Django<1.8.999,>=1.6.11"
-            else buildPythonPackage rec {
-    name = "Djblets-0.9";
-
-    src = pkgs.fetchurl {
-      url = "http://downloads.reviewboard.org/releases/Djblets/0.9/${name}.tar.gz";
-      sha256 = "1rr5vjwiiw3kih4k9nawislf701l838dbk5xgizadvwp6lpbpdpl";
-    };
-
-    propagatedBuildInputs = with self; [
-      django feedparser django_pipeline_1_3 pillowfight pytz ];
-
-    meta = {
-      description = "A collection of useful extensions for Django";
-      homepage = https://github.com/djblets/djblets;
-    };
-  };
-
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
   djmail = callPackage ../development/python-modules/djmail { };
@@ -14492,27 +14463,6 @@ in {
   };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
-
-  reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-2.5.1.1";
-
-    src = pkgs.fetchurl {
-      url = "http://downloads.reviewboard.org/releases/ReviewBoard/2.5/${name}.tar.gz";
-      sha256 = "14m8yy2aqxnnzi822b797wc9nmkfkp2fqmq24asdnm66bxhyzjwn";
-    };
-
-    patchPhase = ''
-      sed -i 's/mimeparse/python-mimeparse/' setup.py
-      sed -i 's/markdown>=2.4.0,<2.4.999/markdown/' setup.py
-    '';
-
-    propagatedBuildInputs = with self;
-      [ django recaptcha_client pytz memcached dateutil_1_5 paramiko flup
-        pygments djblets django_evolution pycrypto pysvn pillow
-        psycopg2 django-haystack python_mimeparse markdown django-multiselectfield
-      ];
-  };
-
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
