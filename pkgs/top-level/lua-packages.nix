@@ -138,7 +138,7 @@ let
   };
 
   luacyrussasl = buildLuaPackage rec {
-    version = "1.1.0";
+    version = "1.2.0";
     name = "lua-cyrussasl-${version}";
     src = fetchFromGitHub {
       owner = "JorjBauer";
@@ -512,13 +512,13 @@ let
 
   luazlib = buildLuaPackage rec {
     name = "zlib-${version}";
-    version = "1.1";
+    version = "1.2";
 
     src = fetchFromGitHub {
       owner = "brimworks";
       repo = "lua-zlib";
       rev = "v${version}";
-      sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
+      sha256 = "0bbcj0zsz5z8zclz6gk6fg047cassz8dhxjm4jf4j6cwh8xxh06y";
     };
 
     buildInputs = [ zlib ];
