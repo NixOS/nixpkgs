@@ -6938,23 +6938,7 @@ in {
     };
   };
 
-  django_pipeline = buildPythonPackage rec {
-    name = "django-pipeline-${version}";
-    version = "1.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
-      sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
-    };
-
-    propagatedBuildInputs = with self; [ django futures ];
-
-    meta = with stdenv.lib; {
-      description = "Pipeline is an asset packaging library for Django";
-      homepage = https://github.com/cyberdelia/django-pipeline;
-      license = stdenv.lib.licenses.mit;
-    };
-  };
+  django_pipeline = callPackage ../development/python-modules/django-pipeline { };
 
   django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
     name = "django-pipeline-1.3.27";
