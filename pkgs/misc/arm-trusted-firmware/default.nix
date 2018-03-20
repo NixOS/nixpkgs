@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, buildPackages }:
 
 let
-  buildArmTrustedFirmware = { targetPlatforms
-            , filesToInstall
+  buildArmTrustedFirmware = { filesToInstall
             , installDir ? "$out"
             , platform
             , extraMakeFlags ? []
@@ -46,8 +45,6 @@ let
       description = "A reference implementation of secure world software for ARMv8-A";
       license = licenses.bsd3;
       maintainers = [ maintainers.lopsided98 ];
-      # TODO: Fix when #34444 is merged
-      # platforms = targetPlatforms;
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 
@@ -64,13 +61,13 @@ in rec {
       sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
     };
     platform = "sun50iw1p1";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
 
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [
       "build/${platform}/release/bl1.bin"
       "build/${platform}/release/bl2.bin"
@@ -81,7 +78,7 @@ in rec {
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3328";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
   };
 }
