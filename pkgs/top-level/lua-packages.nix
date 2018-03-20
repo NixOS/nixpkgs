@@ -696,13 +696,13 @@ let
 
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
-    version = "0.9.1";
+    version = "0.9.2";
 
     src = fetchFromGitHub {
       owner = "pavouk";
       repo = "lgi";
       rev = version;
-      sha256 = "09pbapjhyc3sn0jgx747shqr9286wqfzw02h43p4pk8fv2b766b9";
+      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
     };
 
     nativeBuildInputs = [ pkgconfig ];
