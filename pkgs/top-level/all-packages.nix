@@ -6178,6 +6178,20 @@ with pkgs;
     inherit binutils;
   };
 
+  gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
+    inherit noSysDirs;
+    texinfo = texinfo4;
+
+    ppl = null;
+    cloogppl = null;
+
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = !stdenv.isAarch32;
+
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
+  }));
+
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
@@ -6492,6 +6506,14 @@ with pkgs;
 
   openjdk = openjdk8;
 
+<<<<<<< HEAD
+=======
+  jdk7 = openjdk7 // { outputs = [ "out" ]; };
+  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (openjdk7.jre // { outputs = [ "jre" ]; }));
+
+>>>>>>> b9acfb4ecfb... treewide: isArm -> isAarch32
   jdk8 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejdk8 else openjdk8 // { outputs = [ "out" ]; };
   jre8 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejre8 else lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
@@ -6506,6 +6528,7 @@ with pkgs;
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
+<<<<<<< HEAD
   jdk10 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
   jre10 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
@@ -6513,6 +6536,15 @@ with pkgs;
   jre10_headless =
     if stdenv.isAarch32 || stdenv.isAarch64 then
       oraclejre10
+=======
+  jdk9 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejdk9 else openjdk9 // { outputs = [ "out" ]; };
+  jre9 = if stdenv.isAarch32 || stdenv.isAarch64 then oraclejre9 else lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (openjdk9.jre // { outputs = [ "jre" ]; }));
+  jre9_headless =
+    if stdenv.isAarch32 || stdenv.isAarch64 then
+      oraclejre9
+>>>>>>> b9acfb4ecfb... treewide: isArm -> isAarch32
     else if stdenv.isDarwin then
       jre10
     else

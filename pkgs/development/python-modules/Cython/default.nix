@@ -20,6 +20,15 @@ buildPythonPackage rec {
     sha256 = "152ee5f345012ca3bb7cc71da2d3736ee20f52cd8476e4d49e5e25c5a4102b12";
   };
 
+  # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
+  # result is "3L" instead of "3", so let's fix it in-place.
+  #
+  # Upstream issue: https://github.com/cython/cython/issues/1548
+  postPatch = lib.optionalString ((stdenv.isi686 || stdenv.isAarch32) && !isPy3k) ''
+    sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
+      tests/run/cpdef_enums.pyx
+  '';
+
   nativeBuildInputs = [
     pkgconfig
   ];
