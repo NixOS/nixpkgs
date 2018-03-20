@@ -15021,6 +15021,8 @@ in {
     };
   };
 
+  slimit = callPackage ../development/python-modules/slimit { };
+
   slob = buildPythonPackage rec {
     name = "slob-unstable-2016-11-03";
 
