@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "19asyrypjhx2cgjdmwfvmgc0hk3xg00zvgkl89vwxngdb40bkwfq";
   };
 
+  # Fails on 32-bit otherwise
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   postPatch = ''
     patchShebangs ./configure
     patchShebangs ./scripts/

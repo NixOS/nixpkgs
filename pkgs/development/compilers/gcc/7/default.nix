@@ -3,8 +3,6 @@
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
-, langAda ? false
-, langVhdl ? false
 , langGo ? false
 , profiledCompiler ? false
 , staticCompiler ? false
@@ -21,13 +19,11 @@
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , x11Support ? langJava
-, gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? false
-, gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
@@ -40,8 +36,6 @@
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
-assert langAda      -> gnatboot != null;
-assert langVhdl     -> gnat != null;
 
 # LTO needs libelf and zlib.
 assert libelf != null -> zlib != null;
@@ -70,10 +64,9 @@ let version = "7.3.0";
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
-      # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
-      # target libraries and tools.
-      ++ optional langAda ../gnat-cflags.patch
-      ++ optional langFortran ../gfortran-driving.patch;
+      ++ optional langFortran ../gfortran-driving.patch
+         # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
+      ++ optional targetPlatform.isRiscV ./riscv-pthread-reentrant.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -306,8 +299,6 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-    ++ (optionals langAda [gnatboot])
-    ++ (optionals langVhdl [gnat])
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
@@ -359,8 +350,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langAda      "ada"
-          ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
           ++ optional langObjC     "objc"
           ++ optional langObjCpp   "obj-c++"
@@ -393,8 +382,6 @@ stdenv.mkDerivation ({
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
 
-    # Ada
-    optional langAda "--enable-libada" ++
 
     platformFlags ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
@@ -488,7 +475,7 @@ stdenv.mkDerivation ({
     ]);
 
   passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
 
   inherit enableParallelBuilding enableMultilib;
 
@@ -511,12 +498,10 @@ stdenv.mkDerivation ({
 
     maintainers = with stdenv.lib.maintainers; [ ];
 
-    # gnatboot is not available out of linux platforms, so we disable the darwin build
-    # for the gnat (ada compiler).
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
-      optionals (langAda == false) stdenv.lib.platforms.darwin;
+      stdenv.lib.platforms.darwin;
   };
 }
 

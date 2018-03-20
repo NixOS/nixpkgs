@@ -6,7 +6,7 @@ let
   cfg = config.programs.rootston;
 
   rootstonWrapped = pkgs.writeScriptBin "rootston" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     if [[ "$#" -ge 1 ]]; then
       exec ${pkgs.rootston}/bin/rootston "$@"
     else

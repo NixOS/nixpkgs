@@ -11,15 +11,13 @@ assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
-let
-  version = "3.22.26";
-in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
+  version = "3.22.28";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${gnome3.versionBranch version}/gtk+-${version}.tar.xz";
-    sha256 = "61eef0d320e541976e2dfe445729f12b5ade53050ee9de6184235cb60cd4b967";
+    sha256 = "d299612b018cfed7b2c689168ab52b668023708e17c335eb592260d186f15e1f";
   };
 
   outputs = [ "out" "dev" ];

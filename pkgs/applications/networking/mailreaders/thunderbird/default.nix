@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
           exec = "thunderbird %U";
           desktopName = "Thunderbird";
           icon = "$out/lib/thunderbird-${version}/chrome/icons/default/default256.png";
-          genericName = "Main Reader";
+          genericName = "Mail Reader";
           categories = "Application;Network";
           mimeType = stdenv.lib.concatStringsSep ";" [
             # Email

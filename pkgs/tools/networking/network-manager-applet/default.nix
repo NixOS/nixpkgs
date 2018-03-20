@@ -4,15 +4,15 @@
 , udev, libgudev, hicolor-icon-theme, jansson, wrapGAppsHook, webkitgtk
 , libindicator-gtk3, libappindicator-gtk3, withGnome ? false }:
 
-stdenv.mkDerivation rec {
-  name    = "${pname}-${major}.${minor}";
+let
   pname   = "network-manager-applet";
-  major   = "1.8";
-  minor   = "6";
+  version = "1.8.10";
+in stdenv.mkDerivation rec {
+  name    = "${pname}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "0c4wxwxpa7wlskvnqaqfa7mmc0c6a2pj7jcvymcchjnq4wn9wx01";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1hy9ni2rwpy68h7jhn5lm2s1zm1vjchfy8lwj8fpm7xlx3x4pp0a";
   };
 
   configureFlags = [
@@ -41,6 +41,13 @@ stdenv.mkDerivation rec {
   preInstall = ''
     installFlagsArray=( "sysconfdir=$out/etc" )
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanagerapplet";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage    = http://projects.gnome.org/NetworkManager/;

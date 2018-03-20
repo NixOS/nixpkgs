@@ -104,6 +104,7 @@
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
+  ./programs/singularity.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
@@ -159,6 +160,7 @@
   ./services/audio/ympd.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix

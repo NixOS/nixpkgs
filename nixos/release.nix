@@ -1,4 +1,4 @@
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 }:
@@ -16,11 +16,15 @@ let
     inherit system;
   } // args);
 
-  callTestOnTheseSystems = systems: fn: args: forMatchingSystems systems (system: hydraJob (importTest fn args system));
-  callTest = callTestOnTheseSystems supportedSystems;
+  # Note: only supportedSystems are considered.
+  callTestOnMatchingSystems = systems: fn: args:
+    forMatchingSystems
+      (intersectLists supportedSystems systems)
+      (system: hydraJob (importTest fn args system));
+  callTest = callTestOnMatchingSystems supportedSystems;
 
-  callSubTests = callSubTestsOnTheseSystems supportedSystems;
-  callSubTestsOnTheseSystems = systems: fn: args: let
+  callSubTests = callSubTestsOnMatchingSystems supportedSystems;
+  callSubTestsOnMatchingSystems = systems: fn: args: let
     discover = attrs: let
       subTests = filterAttrs (const (hasAttr "test")) attrs;
     in mapAttrs (const (t: hydraJob t.test)) subTests;
@@ -229,9 +233,9 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
   tests.buildbot = callTest tests/buildbot.nix {};
-  tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
-  tests.ceph = callTestOnTheseSystems ["x86_64-linux"] tests/ceph.nix {};
-  tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable;
+  tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
+  tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -245,21 +249,21 @@ in rec {
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.couchdb = callTest tests/couchdb.nix {};
-  tests.docker = callTestOnTheseSystems ["x86_64-linux"] tests/docker.nix {};
-  tests.docker-tools = callTestOnTheseSystems ["x86_64-linux"] tests/docker-tools.nix {};
-  tests.docker-edge = callTestOnTheseSystems ["x86_64-linux"] tests/docker-edge.nix {};
+  tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
+  tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
+  tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
-  tests.dnscrypt-proxy = callTestOnTheseSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
+  tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
-  tests.ec2-nixops = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops;
-  tests.ec2-config = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config;
-  tests.elk = callSubTestsOnTheseSystems ["x86_64-linux"] tests/elk.nix {};
+  tests.etcd = callTestOnMatchingSystems ["x86_64-linux"] tests/etcd.nix {};
+  tests.ec2-nixops = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
+  tests.ec2-config = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
+  tests.elk = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/elk.nix {};
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = callTestOnTheseSystems ["x86_64-linux"] tests/fleet.nix {};
+  tests.fleet = callTestOnMatchingSystems ["x86_64-linux"] tests/fleet.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
@@ -292,7 +296,7 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes = hydraJob (import tests/kubernetes/default.nix { system = "x86_64-linux"; });
+  tests.kubernetes = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
@@ -322,14 +326,14 @@ in rec {
   tests.nginx = callTest tests/nginx.nix { };
   tests.nghttpx = callTest tests/nghttpx.nix { };
   tests.nix-ssh-serve = callTest tests/nix-ssh-serve.nix { };
-  tests.novacomd = callTestOnTheseSystems ["x86_64-linux"] tests/novacomd.nix { };
+  tests.novacomd = callTestOnMatchingSystems ["x86_64-linux"] tests/novacomd.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.openldap = callTest tests/openldap.nix {};
   tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = callTestOnTheseSystems ["x86_64-linux"] tests/panamax.nix {};
+  #tests.panamax = callTestOnMatchingSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
@@ -362,8 +366,9 @@ in rec {
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
-  tests.virtualbox = callSubTestsOnTheseSystems ["x86_64-linux"] tests/virtualbox.nix {};
+  tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};
   tests.wordpress = callTest tests/wordpress.nix {};
+  tests.xautolock = callTest tests/xautolock.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
   tests.xrdp = callTest tests/xrdp.nix {};

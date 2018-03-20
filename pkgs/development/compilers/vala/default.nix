@@ -20,10 +20,10 @@ let
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
-      homepage = http://live.gnome.org/Vala;
+      homepage = https://wiki.gnome.org/Projects/Vala;
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono lethalman peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg ];
     };
   };
 
@@ -55,14 +55,14 @@ in rec {
 
   vala_0_34 = generic {
     major   = "0.34";
-    minor   = "13";
-    sha256  = "0ahbnhgwhhjkndmbr1d039ws0g2bb324c60fk6wgx7py5wvmgcd2";
+    minor   = "17";
+    sha256  = "0wd2zxww4z1ys4iqz218lvzjqjjqwsaad4x2by8pcyy43sbr7qp2";
   };
 
   vala_0_36 = generic {
     major   = "0.36";
-    minor   = "8";
-    sha256  = "1nz5a8kcb22ss9idb7k1higwpvghd617xwf40fi0a9ggws614lfz";
+    minor   = "12";
+    sha256  = "1nvw721piwdh15bipg0sdll9kvgpz0y9i5fpszlc7y9w64yis25l";
   };
 
   vala_0_38 = generic {

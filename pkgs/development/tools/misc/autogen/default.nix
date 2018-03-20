@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which pkgconfig perl ]
     # autogen needs a build autogen when cross-compiling
     ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      buildPackages.autogen buildPackages.texinfo ];
+      buildPackages.buildPackages.autogen buildPackages.texinfo ];
   buildInputs = [
     guile libxml2
   ];

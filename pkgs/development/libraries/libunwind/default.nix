@@ -33,4 +33,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.mit;
   };
+
+  passthru.supportsHost = !stdenv.hostPlatform.isRiscV;
 }

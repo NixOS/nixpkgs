@@ -1,7 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, pytest, pytestcov, tox }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "distro";
   version = "1.2.0";
 

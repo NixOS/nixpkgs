@@ -29,6 +29,7 @@
 , writeTextFile
 , xkeyboard_config
 , zlib
+, gtk2, gnome_vfs, glib, GConf
 , fontsConf
 }:
 
@@ -95,6 +96,11 @@ let
           libpulseaudio
           libX11
 
+          # For GTKLookAndFeel
+          gtk2
+          gnome_vfs
+          glib
+          GConf
         ]}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
@@ -106,6 +112,7 @@ let
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
     name = "${pname}-fhs-env";
+    multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 
 in

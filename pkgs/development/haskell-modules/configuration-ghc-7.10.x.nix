@@ -41,7 +41,8 @@ self: super: {
 
   gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_2_0; };
 
-  megaparsec = addBuildDepend super.megaparsec self.fail;
+  # https://github.com/mrkkrp/megaparsec/issues/282
+  megaparsec = addBuildDepend (dontCheck super.megaparsec) self.fail;
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -186,6 +187,7 @@ self: super: {
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   bytes = addBuildDepend super.bytes self.doctest;
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  cmdargs = addBuildDepend super.cmdargs self.semigroups;
   contravariant = addBuildDepend super.contravariant self.semigroups;
   dependent-map = addBuildDepend super.dependent-map self.semigroups;
   distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
@@ -198,9 +200,11 @@ self: super: {
   natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   optparse-applicative = addBuildDepends super.optparse-applicative [self.semigroups self.fail];
   parsec = addBuildDepends super.parsec [self.fail self.semigroups];
+  parser-combinators = addBuildDepend super.parser-combinators self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   reflection = addBuildDepend super.reflection self.semigroups;
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
+  tar = addBuildDepend super.tar self.semigroups;
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
 

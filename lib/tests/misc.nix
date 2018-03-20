@@ -93,6 +93,7 @@ runTests {
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
+        storePathDerivation = isStorePath (import ../.. {}).hello;
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
@@ -106,6 +107,7 @@ runTests {
       };
     expected = {
       storePath = true;
+      storePathDerivation = true;
       storePathAppendix = false;
       nonAbsolute = false;
       asPath = true;

@@ -20,6 +20,6 @@ import ./make-test.nix ({ lib, ... }:
     $machine->start;
     $machine->waitForUnit("grafana.service");
     $machine->waitForOpenPort(3000);
-    $machine->succeed("curl -sS http://127.0.0.1:3000/");
+    $machine->succeed("curl -sSfL http://127.0.0.1:3000/");
   '';
 })

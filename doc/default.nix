@@ -81,6 +81,10 @@ pkgs.stdenv.mkDerivation {
       inputFile = ./languages-frameworks/vim.md;
       outputFile = "./languages-frameworks/vim.xml";
     }
+  + toDocbook {
+      inputFile = ./languages-frameworks/emscripten.md;
+      outputFile = "./languages-frameworks/emscripten.xml";
+    }
   + ''
     echo ${lib.nixpkgsVersion} > .version
 

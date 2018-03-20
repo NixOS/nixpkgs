@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit rev sha256;
   };
 
-  buildInputs = [ bzip2 perl nix ]
+  buildInputs = [ bzip2 perl nix nix.perl-bindings ]
     ++ (with perlPackages; [ DBI DBDSQLite Plack Starman ]);
 
   dontBuild = true;

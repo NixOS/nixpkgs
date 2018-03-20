@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "umockdev-${version}";
-  version = "0.11";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "umockdev";
     rev = version;
-    sha256 ="1gpk2f03nad4qv084hx7549d68cqc1xibxm0ncanafm5xjz1hp55";
+    sha256 ="0cmswac8m7zfvk6cb8k5iisqr7arnn1yhcmasri072yz0pmr6dr0";
   };
 
   buildInputs = [ glib systemd libgudev ];
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
     maintainers = [ maintainers.ndowens ];
+    platforms = with platforms; linux;
   };
 }

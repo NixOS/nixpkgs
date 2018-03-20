@@ -25,7 +25,12 @@ stdenv.mkDerivation {
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-decls" "-Wno-error=format-nonliteral"
+    # these flags were added to build with gcc7
+    "-Wno-error=implicit-fallthrough"
+    "-Wno-error=format-truncation"
+    "-Wno-error=pointer-compare"
+  ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent

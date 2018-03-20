@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "telegraf-${version}";
-  version = "1.5.1";
+  version = "1.5.3";
 
   goPackagePath = "github.com/influxdata/telegraf";
 

@@ -18,11 +18,11 @@ let
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl ];
 in stdenv.mkDerivation rec {
   name = "insomnia-${version}";
-  version = "5.14.7";
+  version = "5.14.9";
 
   src = fetchurl {
     url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "1y6bn9kaxxplzyv7jjrcsfkrjnivjqdk5mbdp8vz32hv2bmdvzzy";
+    sha256 = "0hq9pcfw1ic2acaknwp2d5yphg901dmk7d4n7ikx42nya8p39c6j";
   };
 
   nativeBuildInputs = [ makeWrapper dpkg ];
