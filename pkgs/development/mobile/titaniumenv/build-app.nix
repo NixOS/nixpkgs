@@ -15,34 +15,12 @@ let
     abiVersions = androidAbiVersions;
     useGoogleAPIs = true;
   };
-  
+
   deleteKeychain = ''
     security default-keychain -s login.keychain
     security delete-keychain $keychainName
     rm -f $HOME/lock-keychain
   '';
-  
-  # On macOS, the java executable shows an -unoffical postfix in the version
-  # number. This confuses the build script's version detector.
-  # We fix this by creating a wrapper that strips it out of the output.
-  
-  javaVersionFixWrapper = stdenv.mkDerivation {
-    name = "javaVersionFixWrapper";
-    buildCommand = ''
-      mkdir -p $out/bin
-      cat > $out/bin/javac <<EOF
-      #! ${stdenv.shell} -e
-      
-      if [ "\$1" = "-version" ]
-      then
-          ${jdk}/bin/javac "\$@" 2>&1 | sed "s|-unofficial||" | sed "s|-u60|_60|" >&2
-      else
-          exec ${jdk}/bin/javac "\$@"
-      fi
-      EOF
-      chmod +x $out/bin/javac
-    '';
-  };
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
@@ -74,13 +52,6 @@ stdenv.mkDerivation {
     
     ${if target == "android" then
         ''
-          ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
-            # Hack to make version detection work with OpenJDK on macOS
-            export PATH=${javaVersionFixWrapper}/bin:$PATH
-            export JAVA_HOME=${javaVersionFixWrapper}
-            javac -version
-          ''}
-
           titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec
 
           export PATH=$(echo ${androidsdkComposition}/libexec/tools):$(echo ${androidsdkComposition}/libexec/build-tools/android-*):$PATH
