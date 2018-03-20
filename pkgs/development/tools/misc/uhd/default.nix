@@ -38,14 +38,14 @@ in stdenv.mkDerivation {
   # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
 
   cmakeFlags = [ "-DLIBUSB_INCLUDE_DIRS=${libusb1.dev}/include/libusb-1.0"] ++
-               [ (stdenv.lib.optionalString stdenv.isArm "-DCMAKE_CXX_FLAGS=-Wno-psabi") ];
+               [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];
 
   # Build only the host software
   preConfigure = "cd host";
-  patches = if stdenv.isArm then ./neon.patch else null;
+  patches = if stdenv.isAarch32 then ./neon.patch else null;
 
   postPhases = [ "installFirmware" ];
 

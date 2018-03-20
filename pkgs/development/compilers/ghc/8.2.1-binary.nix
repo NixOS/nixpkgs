@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isArm || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
+  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
