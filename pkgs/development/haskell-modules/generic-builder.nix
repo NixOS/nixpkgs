@@ -228,7 +228,10 @@ stdenv.mkDerivation ({
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
-  setupCompilerEnvironmentPhase = ''
+  setupCompilerEnvironmentPhase =
+  (optionalString doVerbose ''
+    set -x
+  '') + ''
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
@@ -315,7 +318,7 @@ stdenv.mkDerivation ({
        ''
        echo GHC_PACKAGE_PATH="$setupPackageConfDir:"
        GHC_PACKAGE_PATH="$setupPackageConfDir:" ''
-    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    }${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i${optionalString doVerbose " -v3"}
 
     runHook postCompileBuildDriver
   '';
