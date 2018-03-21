@@ -2396,11 +2396,11 @@ let
   }) // {inherit ;};
 
   xinit = (mkDerivation "xinit" {
-    name = "xinit-1.3.4";
+    name = "xinit-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.3.4.tar.bz2;
-      sha256 = "1cq2g469mb2cfgr8k57960yrn90bl33vfqri4pdh2zm0jxrqvn3m";
+      url = mirror://xorg/individual/app/xinit-1.4.0.tar.bz2;
+      sha256 = "1vw2wlg74ig52naw0cha3pgzcwwk25l834j42cg8m5zmybp3a213";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
