@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "./httpseverywhere_test";
+  checkPhase = "(cd test && ./httpseverywhere_test)";
 
   outputs = [ "out" "devdoc" ];
 
