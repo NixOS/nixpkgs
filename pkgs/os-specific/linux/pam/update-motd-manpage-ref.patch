@@ -1,0 +1,28 @@
+diff --git a/modules/pam_motd/pam_motd.8 b/modules/pam_motd/pam_motd.8
+index d63f54f..74c6023 100644
+--- a/modules/pam_motd/pam_motd.8
++++ b/modules/pam_motd/pam_motd.8
+@@ -78,7 +78,8 @@ session  optional  pam_motd\&.so  motd=/etc/motd
+ \fBmotd\fR(5),
+ \fBpam.conf\fR(5),
+ \fBpam.d\fR(5),
+-\fBpam\fR(8)
++\fBpam\fR(8),
++\fBupdate-motd\fR(5)
+ .SH "AUTHOR"
+ .PP
+ pam_motd was written by Ben Collins <bcollins@debian\&.org>\&.
+diff --git a/modules/pam_motd/pam_motd.8.xml b/modules/pam_motd/pam_motd.8.xml
+index ff92154..9506e35 100644
+--- a/modules/pam_motd/pam_motd.8.xml
++++ b/modules/pam_motd/pam_motd.8.xml
+@@ -101,6 +101,9 @@ session  optional  pam_motd.so  motd=/etc/motd
+       <citerefentry>
+ 	<refentrytitle>pam</refentrytitle><manvolnum>8</manvolnum>
+       </citerefentry>
++      <citerefentry>
++	<refentrytitle>update-motd</refentrytitle><manvolnum>5</manvolnum>
++      </citerefentry>
+     </para>
+   </refsect1>
+ 

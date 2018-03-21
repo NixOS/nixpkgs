@@ -9,10 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "1fyi04d5nsh8ivd0rn2y0z83ylgc0licz7kifbb6xxi2ylgfs6i4";
   };
 
-  patches = stdenv.lib.optionals (hostPlatform.libc == "musl") [
+  patches = [
+    # Taken from the Debian/Ubuntu patchsets, available at:
+    # https://bazaar.launchpad.net/~ubuntu-core-dev/pam/ubuntu/files/head:/debian/patches-applied/
+    # Revision 907
+    ./update-motd.patch
+    ./update-motd-manpage-ref.patch
+  ] ++ stdenv.lib.optionals (hostPlatform.libc == "musl") [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
-      sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
+        url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/fix-compat.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
+        sha256 = "1h5yp5h2mqp1fcwiwwklyfpa69a3i03ya32pivs60fd7g5bqa7sf";
     })
     (fetchpatch {
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
