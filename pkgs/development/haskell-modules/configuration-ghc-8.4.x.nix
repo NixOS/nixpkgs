@@ -42,9 +42,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Need newer version.
-  haskell-src = super.haskell-src_1_0_3_0;
-
   ## Shadowed:
 
   ## Needs bump to a versioned attribute
@@ -300,23 +297,6 @@ self: super: {
 
 
   ## Unmerged
-
-  ## Unmerged.  PR: https://github.com/lpsmith/blaze-builder/pull/10
-  ## Issue: https://github.com/lpsmith/blaze-builder/issues/12
-  blaze-builder = overrideCabal super.blaze-builder (drv: {
-    ##     • No instance for (Semigroup Poke)
-    ##         arising from the superclasses of an instance declaration
-    ##     • In the instance declaration for ‘Monoid Poke’
-    src = pkgs.fetchFromGitHub {
-      owner  = "bgamari";
-      repo   = "blaze-builder";
-      rev    = "b7195f160795a081adbb9013810d843f1ba5e062";
-      sha256 = "1g351fdpsvn2lbqiy9bg2s0wwrdccb8q1zh7gvpsx5nnj24b1c00";
-    };
-    ## Setup: Encountered missing dependencies:
-    ## base >=4 && <4.11
-    jailbreak       = true;
-  });
 
   ## Unmerged.  PR: https://github.com/wrengr/bytestring-trie/pull/3
   bytestring-trie = overrideCabal super.bytestring-trie (drv: {
@@ -679,9 +659,6 @@ self: super: {
       sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
     });
 
-  # 1.3.0.0 does not compile.
-  conduit = self.conduit_1_3_0_1;
-
   # https://github.com/jgm/pandoc-types/issues/37
   pandoc-types = self.pandoc-types_1_17_4_2;
 
@@ -705,10 +682,8 @@ self: super: {
   # Older versions don't compile.
   brick = self.brick_0_35;
   timezone-olson = self.timezone-olson_0_1_9;
-  matrix = self.matrix_0_3_6_0;
-
-  # https://github.com/pikajude/th-printf/issues/8
-  th-printf = doJailbreak super.th-printf;
+  matrix = self.matrix_0_3_6_1;
+  getopt-generics = self.getopt-generics_0_13_0_2;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch

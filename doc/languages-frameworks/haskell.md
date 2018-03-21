@@ -689,9 +689,7 @@ might be necessary to purge the local caches that store data from those
 machines to disable these binary channels for the duration of the previous
 command, i.e. by running:
 ```shell
-rm /nix/var/nix/binary-cache-v3.sqlite
-rm /nix/var/nix/manifests/*
-rm /nix/var/nix/channel-cache/*
+rm ~/.cache/nix/binary-cache*.sqlite
 ```
 
 ### Builds on Darwin fail with `math.h` not found

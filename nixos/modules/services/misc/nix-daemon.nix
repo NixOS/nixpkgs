@@ -445,12 +445,10 @@ in
         mkdir -m 0755 -p \
           /nix/var/nix/gcroots \
           /nix/var/nix/temproots \
-          /nix/var/nix/manifests \
           /nix/var/nix/userpool \
           /nix/var/nix/profiles \
           /nix/var/nix/db \
-          /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache
+          /nix/var/log/nix/drvs
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \

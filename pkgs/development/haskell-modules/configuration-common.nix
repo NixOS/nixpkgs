@@ -344,6 +344,7 @@ self: super: {
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
+  pure-zlib = dontCheck super.pure-zlib; # https://github.com/NixOS/nixpkgs/issues/37499
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
@@ -1004,14 +1005,5 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
-
-  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
-  SHA = appendPatch super.SHA (pkgs.fetchpatch {
-    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
-    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
-  });
-
-  # https://github.com/Daniel-Diaz/matrix/issues/55
-  matrix_0_3_6_0 = dontCheck super.matrix_0_3_6_0;
 
 }

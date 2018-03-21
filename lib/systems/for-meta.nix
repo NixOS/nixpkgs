@@ -4,8 +4,8 @@ let
   inherit (lib.systems.inspect) patterns;
 
 in rec {
-  inherit (lib.systems.doubles) all mesaPlatforms;
-  none = [];
+  all     = [ {} ]; # `{}` matches anything
+  none    = [];
 
   arm     = [ patterns.isArm ];
   aarch64 = [ patterns.isAarch64 ];
@@ -24,4 +24,7 @@ in rec {
   netbsd  = [ patterns.isNetBSD ];
   openbsd = [ patterns.isOpenBSD ];
   unix    = patterns.isUnix; # Actually a list
+  windows = [ patterns.isWindows ];
+
+  inherit (lib.systems.doubles) mesaPlatforms;
 }
