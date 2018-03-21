@@ -15,6 +15,10 @@ stdenv.mkDerivation {
   readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
+  # On Darwin the installer tries to symlink the help files into a system
+  # directory
+  patches = [ ./no_symbolic_links.patch ];
+
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
     "--without-opengl"

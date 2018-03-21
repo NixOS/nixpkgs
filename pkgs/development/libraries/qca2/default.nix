@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qt }:
+{ stdenv, fetchurl, cmake, pkgconfig, qt, darwin }:
 
 stdenv.mkDerivation rec {
   name = "qca-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt ];
+  buildInputs = [ (stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security) qt ];
 
   enableParallelBuilding = true;
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
     maintainers = [ maintainers.sander ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -17225,7 +17225,9 @@ with pkgs;
 
   qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
 
-  qgis = callPackage ../applications/gis/qgis {};
+  qgis = callPackage ../applications/gis/qgis {
+    inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
+  };
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 
