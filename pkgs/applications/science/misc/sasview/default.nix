@@ -1,10 +1,5 @@
 {lib, fetchgit, gcc, python}:
 
-let
-  html5 = import ./myHtml5.nix {inherit python;};
-  xhtml2pdf = import ./xhtml2pdf.nix {inherit python html5;};
-in
-
 python.pkgs.buildPythonApplication rec {
   name = "sasview-${version}";
   version = "4.1.2";
@@ -13,7 +8,6 @@ python.pkgs.buildPythonApplication rec {
     bumps
     gcc
     h5py
-    html5
     libxslt
     lxml
     matplotlib

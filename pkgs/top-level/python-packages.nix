@@ -17902,6 +17902,8 @@ EOF
     propagatedBuildInputs = with self; [ eventlib application ];
   };
 
+  xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf {};
+
   xlib = buildPythonPackage (rec {
     name = "xlib-${version}";
     version = "0.17";
