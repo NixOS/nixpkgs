@@ -23,8 +23,9 @@ let
       account     = cfg.awsAccount;
       defaultrole = cfg.awsDefaultRole;
     };
-    stats  = cfg.statsAddress;
-    listen = cfg.listenAddress;
+    stats        = cfg.statsAddress;
+    listen       = cfg.listenAddress;
+    cachetimeout = cfg.cacheTimeoutSeconds;
   });
 in {
   options = {
@@ -105,6 +106,12 @@ in {
         type        = types.str;
         default     = "";
         description = "Address of statsd server";
+      };
+
+      cacheTimeoutSeconds = mkOption {
+        type        = types.int;
+        default     = 3600;
+        description = "How often (in seconds) to refresh the LDAP cache";
       };
     };
   };
