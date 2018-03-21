@@ -139,7 +139,7 @@ let
 
   manual-combined = runCommand "nixos-manual-combined"
     { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual as plain docbook XML";
     }
     ''
@@ -194,7 +194,7 @@ let
 
   olinkDB = runCommand "manual-olinkdb"
     { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
     }
     ''
       xsltproc \
@@ -244,7 +244,7 @@ in rec {
   # Generate the NixOS manual.
   manual = runCommand "nixos-manual"
     { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
@@ -272,7 +272,7 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2 libxslt zip ];
+      buildInputs = [ libxml2.bin libxslt.bin zip ];
     }
     ''
       # Generate the epub manual.
@@ -302,7 +302,7 @@ in rec {
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
     { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2 buildPackages.libxslt ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
       allowedReferences = ["out"];
     }
     ''
