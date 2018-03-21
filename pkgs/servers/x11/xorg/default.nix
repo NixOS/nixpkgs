@@ -1136,10 +1136,10 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.12";
+    name = "libxcb-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.12.tar.bz2;
+      url = http://xcb.freedesktop.org/dist/libxcb-1.13.tar.bz2;
       sha256 = "0nvv0la91cf8p5qqlb3r5xnmg1jn2wphn4fb5jfbr6byqsvv3psa";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1448,11 +1448,11 @@ let
   }) // {inherit ;};
 
   xcbproto = (mkDerivation "xcbproto" {
-    name = "xcb-proto-1.12";
+    name = "xcb-proto-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.12.tar.bz2;
-      sha256 = "01j91946q8f34l1mbvmmgvyc393sm28ym4lxlacpiav4qsjan8jr";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2;
+      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ python ];
