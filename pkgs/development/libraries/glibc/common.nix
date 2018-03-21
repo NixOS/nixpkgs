@@ -41,6 +41,8 @@ stdenv.mkDerivation ({
 
   patches =
     [
+      ./NIX_LD_LIBRARY_PATH.patch
+
       /*  No tarballs for stable upstream branch, only https://sourceware.org/git/?p=glibc.git
           $ git co release/2.25/master; git describe
           glibc-2.25-49-gbc5ace67fe
