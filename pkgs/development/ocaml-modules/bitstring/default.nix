@@ -2,10 +2,10 @@
 
 buildOcaml rec {
   name = "bitstring";
-  version = "2.1.0";
+  version = "2.1.1";
   src = fetchurl {
-    url = http://github.com/xguerin/bitstring/archive/v2.1.0.tar.gz;
-    sha256 = "0miw4banfpmx4kxrckpqr57b1fcmsqdmspyjx6gqjd4kghm4l7xj";
+    url = http://github.com/xguerin/bitstring/archive/v2.1.1.tar.gz;
+    sha256 = "0vy8ibrxccii1jbsk5q6yh1kxjigqvi7lhhcmizvd5gfhf7mfyc8";
   };
 
   patches = [ ./camlp4-git.patch ./srcdir.patch ];
