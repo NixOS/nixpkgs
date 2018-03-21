@@ -18,7 +18,6 @@ let
     inherit src;
     buildPhase = ''
       sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" tiapp.xml
-      sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" manifest
     '';
     installPhase = ''
       mkdir -p $out
