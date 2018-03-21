@@ -16614,7 +16614,9 @@ with pkgs;
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  monero = callPackage ../applications/altcoins/monero { };
+  monero = callPackage ../applications/altcoins/monero {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui { };
 
