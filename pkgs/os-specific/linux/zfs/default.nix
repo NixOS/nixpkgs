@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch, perl
 , configFile ? "all"
 
 # Userspace dependencies
@@ -71,6 +71,9 @@ let
           substituteInPlace "$f" --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
         done
 
+        # ./scripts/enum-extract.pl does not exist in older branches such as legacy crypto
+        substituteInPlace ./scripts/enum-extract.pl   --replace "/usr/bin/perl"           "${perl}/bin/perl" || true
+
         ./autogen.sh
       '';
 
@@ -142,9 +145,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.6";
+    version = "0.7.7";
 
-    sha256 = "1k3a69zfdk4ia4z2l69lbz0mj26bwdanxd2wynkdpm2kl3zjj18h";
+    sha256 = "0lrzy27sh1cinkf04ki2vfjrgpgbiza2s59i2by45qdd8kmkcc5r";
 
     extraPatches = [
       (fetchpatch {
