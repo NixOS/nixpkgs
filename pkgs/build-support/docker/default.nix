@@ -212,7 +212,7 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
       '';
     };
 
@@ -277,7 +277,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -359,7 +359,7 @@ rec {
 
         echo "Packing layer..."
         mkdir $out
-        tar -C layer --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+        tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
 
         # Compute the tar checksum and add it to the output json.
         echo "Computing checksum..."
@@ -489,7 +489,7 @@ rec {
         comm <(sort -n baseFiles|uniq) \
              <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         # Append the new files to the layer.
-        tar -rpf temp/layer.tar --mtime="@$SOURCE_DATE_EPOCH" \
+        tar -rpf temp/layer.tar --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
           --owner=0 --group=0 --no-recursion --files-from newFiles
 
         echo "Adding meta..."
@@ -537,7 +537,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
 
         echo "Finished."
       '';
