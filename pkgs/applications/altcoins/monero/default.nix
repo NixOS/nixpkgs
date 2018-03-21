@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git
-, boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline
-, CoreData, IOKit, PCSC
+{ stdenv, fetchpatch, fetchFromGitHub, cmake
+, boost, miniupnpc, openssl, pkgconfig, unbound
+, IOKit
 }:
 
 assert stdenv.isDarwin -> IOKit != null;
@@ -21,10 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig git ];
 
-  buildInputs = [
-    boost miniupnpc openssl unbound
-    cppzmq zeromq pcsclite readline
-  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
+  buildInputs = [ boost miniupnpc openssl unbound ]
+    ++ stdenv.lib.optional stdenv.isDarwin IOKit;
+
+  patches = [
+    ./build-wallet-rpc.patch # fixed in next release
+  ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
