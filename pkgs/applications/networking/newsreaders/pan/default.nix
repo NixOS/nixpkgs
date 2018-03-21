@@ -1,10 +1,11 @@
 { spellChecking ? true
-, stdenv, fetchurl, pkgconfig, gtk2, gtkspell2 ? null
-, perl, pcre, gmime, gettext, intltool, itstool, libxml2, dbus-glib, libnotify
+, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
+, perl, pcre, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
 , makeWrapper, gnupg
+, gnomeSupport ? true, libgnome-keyring3
 }:
 
-assert spellChecking -> gtkspell2 != null;
+assert spellChecking -> gtkspell3 != null;
 
 let version = "0.144"; in
 
@@ -17,8 +18,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ gtk2 perl gmime gettext gnupg intltool itstool libxml2 dbus-glib libnotify ]
-    ++ stdenv.lib.optional spellChecking gtkspell2;
+  buildInputs = [ gtk3 perl gmime2 gettext intltool itstool libxml2 dbus-glib libnotify gnutls ]
+    ++ stdenv.lib.optional spellChecking gtkspell3
+    ++ stdenv.lib.optional gnomeSupport libgnome-keyring3;
+
+  configureFlags = [
+    "--with-dbus"
+    "--with-gtk3"
+    "--with-gnutls"
+    "--enable-libnotify"
+  ] ++ stdenv.lib.optional spellChecking "--with-gtkspell"
+    ++ stdenv.lib.optional gnomeSupport "--enable-gkr";
 
   postInstall = ''
     wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin
