@@ -10,6 +10,10 @@ let param =
       rev = "V8.7.0";
       sha256 = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
     };
+    "8.8" = {
+      rev = "V8.8+beta1";
+      sha256 = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
+    };
   }."${coq.coq-version}"
 ; in
 
