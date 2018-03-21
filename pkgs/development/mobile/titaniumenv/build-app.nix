@@ -58,7 +58,13 @@ stdenv.mkDerivation {
           export GRADLE_USER_HOME=$TMPDIR/gradle
 
           ${if release then
-            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --store-password ${androidKeyStorePassword} --output-dir $out''
+            ''
+              ${stdenv.lib.optionalString stdenv.isDarwin ''
+                # Signing the app does not work with OpenJDK on macOS, use host SDK instead
+                export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+              ''}
+              titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --store-password ${androidKeyStorePassword} --output-dir $out
+            ''
           else
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only -B foo --output $out''}
         ''
