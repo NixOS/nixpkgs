@@ -2,11 +2,11 @@
 with python3Packages; buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "pipenv";
-    version = "10.1.2";
+    version = "11.8.3";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "ce6dbb305fb1f262dba0dcb50c06591e4d146f7bfe079cc9f0ce3f89c7516ae9";
+      sha256 = "0bm8gcsfz70ynprr7i1z51sydfrbgm5wl1gnp0b88ql96axk0ww4";
     };
 
     LC_ALL = "en_US.UTF-8";
