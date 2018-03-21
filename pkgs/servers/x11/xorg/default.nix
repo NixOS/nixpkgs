@@ -800,10 +800,10 @@ let
   }) // {inherit compositeproto libX11 libXfixes xproto ;};
 
   libXcursor = (mkDerivation "libXcursor" {
-    name = "libXcursor-1.1.15";
+    name = "libXcursor-1.1.25";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXcursor-1.1.15.tar.bz2;
+      url = mirror://xorg/individual/lib/libXcursor-1.1.25.tar.bz2;
       sha256 = "0syzlfvh29037p0vnlc8f3jxz8nl55k65blswsakklkwsc6nfki9";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1184,10 +1184,10 @@ let
   }) // {inherit xproto ;};
 
   luit = (mkDerivation "luit" {
-    name = "luit-1.1.1";
+    name = "luit-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.2.tar.bz2;
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1316,10 +1316,10 @@ let
   }) // {inherit ;};
 
   sessreg = (mkDerivation "sessreg" {
-    name = "sessreg-1.1.1";
+    name = "sessreg-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/sessreg-1.1.1.tar.bz2;
+      url = mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2;
       sha256 = "1qd66mg2bnppqz4xgdjzif2488zl82vx2c26ld3nb8pnyginm9vq";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1436,10 +1436,10 @@ let
   }) // {inherit libxcb xcbutil ;};
 
   xbitmaps = (mkDerivation "xbitmaps" {
-    name = "xbitmaps-1.1.1";
+    name = "xbitmaps-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.2.tar.bz2;
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1616,10 +1616,10 @@ let
   }) // {inherit libXcursor ;};
 
   xdm = (mkDerivation "xdm" {
-    name = "xdm-1.1.11";
+    name = "xdm-1.1.21";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdm-1.1.11.tar.bz2;
+      url = mirror://xorg/individual/app/xdm-1.1.21.tar.bz2;
       sha256 = "0iqw11977lpr9nk1is4fca84d531vck0mq7jldwl44m0vrnl5nnl";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1676,11 +1676,11 @@ let
   }) // {inherit ;};
 
   xeyes = (mkDerivation "xeyes" {
-    name = "xeyes-1.1.1";
+    name = "xeyes-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xeyes-1.1.1.tar.bz2;
-      sha256 = "08d5x2kar5kg4yammw6hhk10iva6jmh8cqq176a1z7nm1il9hplp";
+      url = mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2;
+      sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu libXrender libXt ];
