@@ -38,7 +38,7 @@ let
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
     gnome-system-log gnome-system-monitor simple-scan
     gnome-terminal gnome-user-docs evolution file-roller gedit
-    gnome-clocks gnome-music gnome-tweak-tool gnome-photos
+    gnome-clocks gnome-music gnome-tweaks gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
@@ -394,7 +394,7 @@ let
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
-  gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
+  gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
 
@@ -426,6 +426,7 @@ let
   gnome_terminal = gnome-terminal; # added 2018-02-25
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
+  gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   libcanberra_gtk2 = libcanberra-gtk2; # added 2018-02-25
   libgames-support = libgnome-games-support; # added 2018-03-14

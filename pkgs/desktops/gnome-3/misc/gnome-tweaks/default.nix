@@ -4,14 +4,14 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 let
-  pname = "gnome-tweak-tool";
-  version = "3.27.3";
+  pname = "gnome-tweaks";
+  version = "3.28.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1z8l1ym6qmhqirsny4hcqv989ilv5mm764y8q7920zprdcjprds3";
+    sha256 = "0d8zxfa8r4n4l6jzyzy6q58padxjlrad3c71mwqidm2ww8nm6i19";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,7 @@ in stdenv.mkDerivation rec {
     libnotify gnome3.gnome-shell python3Packages.pygobject3
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
+    gnome3.nautilus
   ];
 
   postPatch = ''
@@ -33,24 +34,6 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}:$PYTHONPATH")
   '';
-
-  patches = [
-    (fetchurl {
-      name = "find_gsettings.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=365642;
-      sha256 = "14ik1kad0w99xa2wn3d4ynrkhnwchjlqfbaij7p11y5zpiwhaha4";
-    })
-    (fetchurl {
-      name = "0001-Search-for-themes-and-icons-in-system-data-dirs.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=365643;
-      sha256 = "1phq3c7hc9lryih6rp3m5wmp88rfbl6iv42ng4g6bzm1jphgl89f";
-    })
-    (fetchurl {
-      name = "0001-appearance-Don-t-duplicate-the-cursor-theme-name.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=365648;
-      sha256 = "1n9vwsfz4sx72qsi1gd1y7460zmagwirvmi9qrfhc3ahanpyn4fr";
-    })
-  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
