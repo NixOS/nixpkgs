@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchsubmodule
 }:
 
 buildPythonPackage rec {
@@ -9,10 +9,7 @@ buildPythonPackage rec {
 
   name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b8bf6847b5c8e50e0842024d2911bfc1048db9abf37582a310cd57070971d692";
-  };
+  src = fetchsubmodule "development/python-modules/linuxfd";
 
   # no tests
   doCheck = false;

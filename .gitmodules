@@ -1,0 +1,6 @@
+[submodule "sources/tools/system/supervise"]
+	path = sources/tools/system/supervise
+	url = https://github.com/catern/supervise.git
+[submodule "sources/development/python-modules/linuxfd"]
+	path = sources/development/python-modules/linuxfd
+	url = https://github.com/FrankAbelbeck/linuxfd.git

@@ -1,14 +1,16 @@
-{ stdenv, fetchzip }:
+{ stdenv
+, fetchsubmodule
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
 
   name = "supervise-${version}";
   version = "1.4.0";
 
-  src = fetchzip {
-    url = "https://github.com/catern/supervise/releases/download/v${version}/supervise-${version}.tar.gz";
-    sha256 = "0jk6q2f67pfs18ah040lmsbvbrnjap7w04jjddsfn1j5bcrvs13x";
-  };
+  src = fetchsubmodule "tools/system/supervise";
+
+  # buildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/catern/supervise;
