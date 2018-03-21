@@ -249,7 +249,11 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
-  '' + (optionalString stdenv.isDarwin ''
+  ''
+  # only use the links hack if we're actually building dylibs. otherwise, the
+  # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
+  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+  + (optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
