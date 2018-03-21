@@ -7,6 +7,11 @@ let
     };
     inherit (gnome2) GConf gnome_vfs;
   };
+  latestVersion = {
+    version = "3.2.0.6"; # "Android Studio 3.2 Canary 7"
+    build = "173.4658582";
+    sha256Hash = "0a6ssw5mb9my5kfd5fkfdddkgdi2jdq23jlhd6rrqcs6rhdlpl38";
+  };
 in rec {
   # Old alias
   preview = beta;
@@ -46,25 +51,19 @@ in rec {
     };
   };
 
-  dev = mkStudio {
+  dev = mkStudio (latestVersion // {
     pname = "android-studio-dev";
-    version = "3.2.0.5"; # "Android Studio 3.2 Canary 6"
-    build = "173.4640885";
-    sha256Hash = "1fbjk1dhvi975dm09s9iz9ja53fjqca07nw5h068gdj3358pj3k8";
 
     meta = beta.meta // {
       description = "The Official IDE for Android (dev channel)";
     };
-  };
+  });
 
-  canary = mkStudio {
+  canary = mkStudio (latestVersion // {
     pname = "android-studio-canary";
-    version = "3.2.0.5"; # "Android Studio 3.2 Canary 6"
-    build = "173.4640885";
-    sha256Hash = "1fbjk1dhvi975dm09s9iz9ja53fjqca07nw5h068gdj3358pj3k8";
 
     meta = beta.meta // {
       description = "The Official IDE for Android (canary channel)";
     };
-  };
+  });
 }
