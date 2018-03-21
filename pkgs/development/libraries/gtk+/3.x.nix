@@ -13,11 +13,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
-  version = "3.22.28";
+  version = "3.22.29";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${gnome3.versionBranch version}/gtk+-${version}.tar.xz";
-    sha256 = "d299612b018cfed7b2c689168ab52b668023708e17c335eb592260d186f15e1f";
+    sha256 = "a07d64b939fcc034a066b7723fdf9b24e92c9cfb6a8497593f3471fe56fbbbf8";
   };
 
   outputs = [ "out" "dev" ];
