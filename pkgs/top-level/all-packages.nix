@@ -5252,6 +5252,8 @@ with pkgs;
 
   solaar = callPackage ../applications/misc/solaar {};
 
+  solaar-master = callPackage ../applications/misc/solaar-master {};
+
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spaceFM = callPackage ../applications/misc/spacefm { };
