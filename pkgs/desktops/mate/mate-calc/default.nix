@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Calculator for the MATE desktop";
     homepage = http://mate-desktop.org;
     license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
 }
