@@ -16,7 +16,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/axiros/terminal_markdown_viewer;
     description = "Terminal Markdown Viewer";
-    license = licenses.bsd;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];
   };
 }
