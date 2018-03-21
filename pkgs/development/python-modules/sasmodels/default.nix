@@ -1,4 +1,4 @@
-{lib, fetchgit, licenses, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils}:
+{lib, fetchgit, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils}:
 
 buildPythonPackage rec {
   name = "sasmodels-${version}";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of small angle scattering models";
     homepage = http://sasview.org;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rprospero ];
   };
 }

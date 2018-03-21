@@ -15321,9 +15321,7 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
-  sasmodels = callPackage ../development/python-modules/sasmodels {
-    inherit licenses;
-  };
+  sasmodels = callPackage ../development/python-modules/sasmodels { };
 
   scapy = callPackage ../development/python-modules/scapy { };
 
