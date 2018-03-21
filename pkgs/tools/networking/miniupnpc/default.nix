@@ -27,8 +27,8 @@ let
     };
 in {
   miniupnpc_2 = generic {
-    version = "2.0.20171212";
-    sha256 = "0za7pr6hrr3ajkifirhhxfn3hlhl06f622g8hnj5h8y18sp3bwff";
+    version = "2.0.20180222";
+    sha256 = "0xavcrifk8v8gwig3mj0kjkm7rvw1kbsxcs4jxrrzl39cil48yaq";
   };
   miniupnpc_1 = generic {
     version = "1.9.20160209";
