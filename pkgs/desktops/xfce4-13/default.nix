@@ -92,4 +92,24 @@ makeScope newScope (self: with self; {
   xfce4-xkb-plugin = callPackage ./xfce4-xkb-plugin { };
 
   xfwm4 = callPackage ./xfwm4 { };
+
+  ## COMMON PARTS WITH XFCE 4.12
+
+  gtk-xfce-engine = callPackage ../xfce/core/gtk-xfce-engine.nix { withGtk3 = false; };
+
+  xfce4-icon-theme = callPackage ../xfce/art/xfce4-icon-theme.nix { };
+
+  xfwm4-themes = callPackage ../xfce/art/xfwm4-themes.nix { };
+
+  xfce4-embed-plugin = callPackage ../xfce/panel-plugins/xfce4-embed-plugin.nix { };
+
+  xfce4-hardware-monitor-plugin = callPackage ../xfce/panel-plugins/xfce4-hardware-monitor-plugin.nix { };
+
+  ## THIRD PARTY PLIGINS
+
+  xfce4-dockbarx-plugin = callPackage ../xfce/panel-plugins/xfce4-dockbarx-plugin.nix { };
+
+  xfce4-namebar-plugin = callPackage ../xfce/panel-plugins/xfce4-namebar-plugin.nix { };
+
+  xfce4-windowck-plugin = callPackage ../xfce/panel-plugins/xfce4-windowck-plugin.nix { };
 })
