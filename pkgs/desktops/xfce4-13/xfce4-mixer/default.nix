@@ -1,5 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, dbus_glib, gst-plugins-base, gtk2
-, libICE, libSM, libunique, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ mkXfceDerivation, automakeAddFlags, dbus-glib, gtk2, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation rec {
   category = "apps";
@@ -16,12 +15,8 @@ mkXfceDerivation rec {
   '';
 
   buildInputs = [
-    dbus_glib
-    gst-plugins-base
+    dbus-glib
     gtk2
-    libICE
-    libSM
-    libunique
     libxfce4ui
     libxfce4util
     xfce4-panel
