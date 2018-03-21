@@ -5002,6 +5002,8 @@ in {
 
   JPype1 = callPackage ../development/python-modules/JPype1 {};
 
+  josepy = callPackage ../development/python-modules/josepy {};
+
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
   jug = callPackage ../development/python-modules/jug {};
