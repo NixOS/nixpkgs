@@ -1296,7 +1296,9 @@ with pkgs;
 
   mathics = pythonPackages.mathics;
 
-  masscan = callPackage ../tools/security/masscan { };
+  masscan = callPackage ../tools/security/masscan {
+    stdenv = gccStdenv;
+  };
 
   massren = callPackage ../tools/misc/massren { };
 
