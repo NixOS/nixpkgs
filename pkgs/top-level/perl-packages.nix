@@ -1679,7 +1679,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8c58f4a529bb92a914b22b7e64c5e31185c9854a4070a6dfad44fe5cc248e7d4";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
-    propagatedBuildInputs = [ HTMLParser self."if" ];
+    propagatedBuildInputs = [ HTMLParser ];
     meta = {
       homepage = https://metacpan.org/module/CGI;
       description = "Handle Common Gateway Interface requests and responses";
