@@ -11666,10 +11666,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ProtocolWebSocket = buildPerlModule rec {
-    name = "Protocol-WebSocket-0.20";
+    name = "Protocol-WebSocket-0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VT/VTI/${name}.tar.gz";
-      sha256 = "00ga7sjrqcbr46kwfbaa37lxqqbp9z5gymjckzps6ll2jf7k58mx";
+      sha256 = "1w0l9j1bnmw82jfhrx5yfw4hbl0bpcwmrl5laa1gz06mkzkdpa6z";
     };
     buildInputs = [ ModuleBuildTiny ];
   };
