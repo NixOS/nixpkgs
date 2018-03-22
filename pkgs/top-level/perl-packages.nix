@@ -10307,7 +10307,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetAmazonS3Policy = buildPerlPackage {
+  NetAmazonS3Policy = buildPerlModule {
     name = "Net-Amazon-S3-Policy-0.1.6";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PO/POLETTIX/Net-Amazon-S3-Policy-0.1.6.tar.gz;
