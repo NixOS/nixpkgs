@@ -609,8 +609,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TE/TEEJAY/${name}.tar.gz";
       sha256 = "08pl5y18nsvy8ihfzdsbd8rz6a8al09wqfna07zdjfdyib42b0dc";
     };
-    propagatedBuildInputs = [ TemplateToolkit Inline InlineJava GraphViz
-      XMLSimple DBI ];
+    propagatedBuildInputs = [ TemplateToolkit XMLSimple ];
 
     meta = {
       description = "AutoDia, create UML diagrams from source code";
@@ -632,6 +631,7 @@ let self = _self // overrides; _self = with self; {
 
       maintainers = [ ];
     };
+    buildInputs = [ DBI ];
   };
 
   autodie = null; # part of Perl
