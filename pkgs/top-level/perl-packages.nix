@@ -2616,6 +2616,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  curry = buildPerlPackage rec {
+     version = "1.001000";
+     name = "curry-1.001000";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MS/MSTROUT/curry-1.001000.tar.gz;
+       sha256 = "1m2n3w67cskh8ic6vf6ik0fmap9zma875kr5rhyznr1041wn064b";
+     };
+     meta = {
+       description = "Create automatic curried method call closures for any class or object";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   constantdefer = pkgs.perlPackages.constant-defer;
 
   constant-defer = buildPerlPackage rec {
@@ -4119,13 +4132,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage rec {
-    name = "DBIx-Class-Schema-Loader-0.07047";
+    name = "DBIx-Class-Schema-Loader-0.07048";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "6671fb3afbb1b4f3eb5905f34fb47ce18b29af3e055e479b06c09424bbc1421b";
+      sha256 = "353cb8ad3cd67a88937cd1a74b5980aa28b8a22d54f1333baa9648694fadc327";
     };
-    buildInputs = [ ConfigAny ConfigGeneral DBDSQLite DBIxClassIntrospectableM2M Moose MooseXMarkAsMethods MooseXNonMoose TestDeep TestDifferences TestException TestPod TestWarn namespaceautoclean ];
-    propagatedBuildInputs = [ CarpClan ClassAccessorGrouped ClassC3Componentised ClassInspector ClassUnload DBIxClass DataDump HashMerge LinguaENInflectNumber LinguaENInflectPhrase LinguaENTagger MROCompat ScalarListUtils ScopeGuard StringCamelCase StringToIdentifierEN TryTiny namespaceclean ];
+    buildInputs = [ DBDSQLite DBIxClassIntrospectableM2M TestDeep TestDifferences TestException TestWarn ];
+    propagatedBuildInputs = [ CarpClan ClassUnload DBIxClass DataDump StringCamelCase StringToIdentifierEN curry ];
     meta = {
       description = "Create a DBIx::Class::Schema based on a database";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
