@@ -1411,6 +1411,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0z4328rr6l9xi45hyv6q9pwwamp0864q6skcp29jrz9f919ycdra";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassThrowable ];
+    buildInputs = [ CatalystPluginAuthentication CatalystPluginAuthorizationRoles CatalystPluginSession CatalystPluginSessionStateCookie TestWWWMechanizeCatalyst ];
   };
 
   CatalystPluginAuthorizationRoles = buildPerlPackage {
