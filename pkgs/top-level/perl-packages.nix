@@ -1467,7 +1467,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DI/DIEGOK/Catalyst-Plugin-Captcha-0.04.tar.gz;
       sha256 = "0llyj3v5nx9cx46jdbbvxf1lc9s9cxq5ml22xmx3wkb201r5qgaa";
     };
-    propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession GDSecurityImage HTTPDate ];
+    propagatedBuildInputs = [ CatalystPluginSession GDSecurityImage ];
     meta = {
       description = "Create and validate Captcha for Catalyst";
       platforms = stdenv.lib.platforms.linux;
