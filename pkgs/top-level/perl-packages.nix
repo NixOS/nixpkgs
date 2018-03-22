@@ -5550,10 +5550,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileFindRule = buildPerlPackage rec {
-    name = "File-Find-Rule-0.33";
+    name = "File-Find-Rule-0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
-      sha256 = "0w73b4jr2fcrd74a1w3b2jryq3mqzc8z5mk7ia9p85xn3qmpa5r4";
+      sha256 = "1znachnhmi1w5pdqx8dzgfa892jb7x8ivrdy4pzjj7zb6g61cvvy";
     };
     propagatedBuildInputs = [ NumberCompare TextGlob ];
   };
