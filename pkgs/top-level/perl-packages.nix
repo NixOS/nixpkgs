@@ -8583,10 +8583,10 @@ let self = _self // overrides; _self = with self; {
   LWPUserAgent = LWP;
 
   LWPUserAgentDetermined = buildPerlPackage {
-    name = "LWP-UserAgent-Determined-1.06";
+    name = "LWP-UserAgent-Determined-1.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/LWP-UserAgent-Determined-1.06.tar.gz;
-      sha256 = "c31d8e16dc92e2113c81cdbfb11149cfd19039e789f77cd34333ac9184346fc5";
+      url = mirror://cpan/authors/id/A/AL/ALEXMV/LWP-UserAgent-Determined-1.07.tar.gz;
+      sha256 = "06d8d50e8cd3692a11cb4fb44a2f84e5476a98f0e2e6a4a0dfce9f67e55ddb53";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
