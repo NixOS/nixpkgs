@@ -5554,16 +5554,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileChangeNotify = buildPerlModule {
-    name = "File-ChangeNotify-0.24";
+  FileChangeNotify = buildPerlPackage {
+    name = "File-ChangeNotify-0.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-ChangeNotify-0.24.tar.gz;
-      sha256 = "3c8180169de0f97ad852a55942f74e520cbe433aa0889d0b65548ee38a111124";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-ChangeNotify-0.28.tar.gz;
+      sha256 = "e00fe809d481131a08dca26e851cf0ffce8d9e9d03d58c58f15aa62e28aa2f05";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs =
-      [ ClassLoad ListMoreUtils ModulePluggable Moose MooseXParamsValidate MooseXSemiAffordanceAccessor namespaceautoclean ]
-      ++ stdenv.lib.optional stdenv.isLinux LinuxInotify2;
+    buildInputs = [ TestException TestRequires TestWithoutModule ];
+    propagatedBuildInputs = [ ClassLoad ModulePluggable Moo TypeTiny namespaceautoclean ];
     meta = with stdenv.lib; {
       description = "Watch for changes to files, cross-platform style";
       license = licenses.artistic2;
