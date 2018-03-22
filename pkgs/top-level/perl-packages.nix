@@ -13747,12 +13747,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000094";
+    name = "Test2-Suite-0.000111";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "7135ccb6af82bac39801234e1ce49eb8693dfe8f8e215c7de577c7ded65b6e5f";
+      sha256 = "4ca28df74c7c2f37fe63897c5041aee92fba4530544d0afc371e7d14a9b4d0ad";
     };
-    propagatedBuildInputs = [ Importer ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
+    propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
