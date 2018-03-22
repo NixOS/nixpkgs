@@ -4651,17 +4651,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginMojibakeTests = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-MojibakeTests-0.5";
+    name = "Dist-Zilla-Plugin-MojibakeTests-0.8";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SY/SYP/Dist-Zilla-Plugin-MojibakeTests-0.5.tar.gz;
-      sha256 = "0630acc9bcb415feba49b55a1b70da6e49a740673b4a483fc8058d03c6a21676";
+      url = mirror://cpan/authors/id/S/SY/SYP/Dist-Zilla-Plugin-MojibakeTests-0.8.tar.gz;
+      sha256 = "f1fff547ea24a8f7a483406a72ed6c4058d746d9dae963725502ddba025ab380";
     };
-    propagatedBuildInputs = [ DistZilla Moose TestMojibake UnicodeCheckUTF8 ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://github.com/creaktive/Dist-Zilla-Plugin-MojibakeTests;
       description = "Release tests for source encoding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMojibake ];
   };
 
   DistZillaPluginNoTabsTests = buildPerlPackage {
