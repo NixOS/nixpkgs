@@ -1763,7 +1763,7 @@ let self = _self // overrides; _self = with self; {
       ../development/perl-modules/CatalystXScriptServerStarman-fork-arg.patch
     ];
     buildInputs = [ TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystRuntime Moose namespaceautoclean Starman ];
+    propagatedBuildInputs = [ CatalystRuntime Starman ];
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
