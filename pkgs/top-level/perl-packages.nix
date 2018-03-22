@@ -10463,14 +10463,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesStructured = buildPerlPackage {
-    name = "MooseX-Types-Structured-0.30";
+  MooseXTypesStructured = buildPerlModule {
+    name = "MooseX-Types-Structured-0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Structured-0.30.tar.gz;
-      sha256 = "0svfgbyzwdipywh7bfp954hncm8ihfr8xpppcyy59wr1inx2f55c";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Structured-0.36.tar.gz;
+      sha256 = "0mrxc00sid7526c6brrnjr6288468sszic3wazij71v3z59bdka3";
     };
-    buildInputs = [ DateTime MooseXTypesDateTime TestFatal ];
-    propagatedBuildInputs = [ DevelPartialDump Moose MooseXTypes SubExporter ];
+    buildInputs = [ DateTime ModuleBuildTiny MooseXTypesDateTime TestFatal TestNeeds ];
+    propagatedBuildInputs = [ DevelPartialDump MooseXTypes ];
     meta = {
       homepage = https://metacpan.org/release/MooseX-Types-Structured;
       description = "MooseX::Types::Structured - Structured Type Constraints for Moose";
