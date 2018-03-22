@@ -3473,8 +3473,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0m7d1505af9z2hj5aw020grcmjjlvnkjpvjam457d7k5qfy4m8lf";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs =
-      [ ClassLoad Moose TaskWeaken TieToObject namespaceclean ];
+    propagatedBuildInputs = [ Moose TaskWeaken TieToObject namespaceclean ];
   };
 
   DateCalc = buildPerlPackage {
