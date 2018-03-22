@@ -4,7 +4,7 @@ let
   pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "2.3.2";
   pname = "sabnzbd";
   name = "${pname}-${version}";
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1rw6f455p0n8qigzkvnlr0d6rzkx2mpzhcp7m0j8fwqdbq831q8y";
+    sha256 = "0c0ap8bygvz643fgfvvmwshcyfblq2c5jziqwgpf30g6rsbfv2v0";
   };
 
   buildInputs = [ pythonEnv makeWrapper ];

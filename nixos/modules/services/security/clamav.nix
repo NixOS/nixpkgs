@@ -97,8 +97,8 @@ in
 
     systemd.services.clamav-daemon = optionalAttrs cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
-      after = mkIf cfg.updater.enable [ "clamav-freshclam.service" ];
-      requires = mkIf cfg.updater.enable [ "clamav-freshclam.service" ];
+      after = optional cfg.updater.enable "clamav-freshclam.service";
+      requires = optional cfg.updater.enable "clamav-freshclam.service";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 

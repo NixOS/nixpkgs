@@ -660,6 +660,32 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
   passing <command>-q</command> to the Emacs command.
 </para>
 
+<para>
+  Sometimes <varname>emacsWithPackages</varname> is not enough, as
+  this package set has some priorities imposed on packages (with
+  the lowest priority assigned to Melpa Unstable, and the highest for
+  packages manually defined in
+  <filename>pkgs/top-level/emacs-packages.nix</filename>). But you
+  can't control this priorities when some package is installed as a
+  dependency. You can override it on per-package-basis, providing all
+  the required dependencies manually - but it's tedious and there is
+  always a possibility that an unwanted dependency will sneak in
+  through some other package. To completely override such a package
+  you can use <varname>overrideScope</varname>.
+</para>
+
+<screen>
+overrides = super: self: rec {
+  haskell-mode = self.melpaPackages.haskell-mode;
+  ...
+};
+((emacsPackagesNgGen emacs).overrideScope overrides).emacsWithPackages (p: with p; [
+  # here both these package will use haskell-mode of our own choice
+  ghc-mod
+  dante
+])
+</screen>
+
 </section>
 
 </section>

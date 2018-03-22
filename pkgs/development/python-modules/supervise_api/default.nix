@@ -2,20 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , supervise
+, isPy3k
+, whichcraft
 }:
 
 buildPythonPackage rec {
   pname = "supervise_api";
-  version = "0.1.5";
+  version = "0.4.0";
 
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pqqlw80cjdgrlpvdmydkyhsrr4s531mn6bfkshm68j9gk4kq6px";
+    sha256 = "029h1mlfhkm9lw043rawh24ld8md620y94k6c1l9hs5vvyq4fs84";
   };
 
-  propagatedBuildInputs = [ supervise ];
+  propagatedBuildInputs = [
+    supervise
+  ] ++ lib.optionals ( !isPy3k ) [
+    whichcraft
+  ];
 
   # no tests
   doCheck = false;

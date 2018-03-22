@@ -19,25 +19,41 @@ in
   options = {
 
     services.tomcat = {
-
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Apache Tomcat";
-      };
+      enable = mkEnableOption "Apache Tomcat";
 
       package = mkOption {
         type = types.package;
         default = pkgs.tomcat85;
         defaultText = "pkgs.tomcat85";
-        example = lib.literalExample "pkgs.tomcatUnstable";
+        example = lib.literalExample "pkgs.tomcat9";
         description = ''
           Which tomcat package to use.
         '';
       };
 
       baseDir = mkOption {
+        type = lib.types.path;
         default = "/var/tomcat";
         description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+      };
+
+      logDirs = mkOption {
+        default = [];
+        type = types.listOf types.path;
+        description = "Directories to create in baseDir/logs/";
+      };
+
+      extraConfigFiles = mkOption {
+        default = [];
+        type = types.listOf types.path;
+        description = "Extra configuration files to pull into the tomcat conf directory";
+      };
+
+      extraEnvironment = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "ENVIRONMENT=production" ];
+        description = "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = mkOption {
@@ -47,31 +63,46 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "tomcat";
         description = "User account under which Apache Tomcat runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "tomcat";
         description = "Group account under which Apache Tomcat runs.";
       };
 
       javaOpts = mkOption {
+        type = types.either (types.listOf types.str) types.str;
         default = "";
         description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
 
       catalinaOpts = mkOption {
+        type = types.either (types.listOf types.str) types.str;
         default = "";
         description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
       };
 
       sharedLibs = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
       };
 
+      serverXml = mkOption {
+        type = types.lines;
+        default = "";
+        description = "
+          Verbatim server.xml configuration.
+          This is mutually exclusive with the virtualHosts options.
+        ";
+      };
+
       commonLibs = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
@@ -84,11 +115,21 @@ in
       };
 
       virtualHosts = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.listOf types.str;
+              description = "name of the virtualhost";
+              default = [];
+            };
+          };
+        });
         default = [];
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
       logPerVirtualHost = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable logging per virtual host.";
       };
@@ -104,11 +145,13 @@ in
 
         enable = mkOption {
           default = false;
+          type = types.bool;
           description = "Whether to enable an Apache Axis2 container";
         };
 
         services = mkOption {
           default = [];
+          type = types.listOf types.str;
           description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
 
@@ -140,130 +183,104 @@ in
       description = "Apache Tomcat server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
 
       preStart = ''
         # Create the base directory
-        mkdir -p ${cfg.baseDir}
+        mkdir -p \
+          ${cfg.baseDir}/{conf,virtualhosts,logs,temp,lib,shared/lib,webapps,work}
+        chown ${cfg.user}:${cfg.group} \
+          ${cfg.baseDir}/{conf,virtualhosts,logs,temp,lib,shared/lib,webapps,work}
 
         # Create a symlink to the bin directory of the tomcat component
         ln -sfn ${tomcat}/bin ${cfg.baseDir}/bin
 
-        # Create a conf/ directory
-        mkdir -p ${cfg.baseDir}/conf
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/conf
-
         # Symlink the config files in the conf/ directory (except for catalina.properties and server.xml)
-        for i in $(ls ${tomcat}/conf | grep -v catalina.properties | grep -v server.xml)
-        do
-            ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
+        for i in $(ls ${tomcat}/conf | grep -v catalina.properties | grep -v server.xml); do
+          ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
         done
 
-        # Create subdirectory for virtual hosts
-        mkdir -p ${cfg.baseDir}/virtualhosts
+        ${if cfg.extraConfigFiles != [] then ''
+          for i in ${toString cfg.extraConfigFiles}; do
+            ln -sfn $i ${cfg.baseDir}/conf/`basename $i`
+          done
+        '' else ""}
 
         # Create a modified catalina.properties file
         # Change all references from CATALINA_HOME to CATALINA_BASE and add support for shared libraries
         sed -e 's|''${catalina.home}|''${catalina.base}|g' \
-            -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
-            ${tomcat}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
+          -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
+          ${tomcat}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
 
-        # Create a modified server.xml which also includes all virtual hosts
-        sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${
-                     toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
-            ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
-
-        # Create a logs/ directory
-        mkdir -p ${cfg.baseDir}/logs
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs
-        ${if cfg.logPerVirtualHost then
-           toString (map (h: ''
-                                mkdir -p ${cfg.baseDir}/logs/${h.name}
-                                chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/${h.name}
-                             '') cfg.virtualHosts) else ''''}
-
-        # Create a temp/ directory
-        mkdir -p ${cfg.baseDir}/temp
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/temp
-
-        # Create a lib/ directory
-        mkdir -p ${cfg.baseDir}/lib
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/lib
-
-        # Create a shared/lib directory
-        mkdir -p ${cfg.baseDir}/shared/lib
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/shared/lib
-
-        # Create a webapps/ directory
-        mkdir -p ${cfg.baseDir}/webapps
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps
+        ${if cfg.serverXml != "" then ''
+          cp -f ${pkgs.writeTextDir "server.xml" cfg.serverXml}/* ${cfg.baseDir}/conf/
+          '' else ''
+          # Create a modified server.xml which also includes all virtual hosts
+          sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
+                ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
+          ''
+        }
+        ${optionalString (cfg.logDirs != []) ''
+          for i in ${toString cfg.logDirs}; do
+            mkdir -p ${cfg.baseDir}/logs/$i
+            chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/$i
+          done
+        ''}
+        ${optionalString cfg.logPerVirtualHost (toString (map (h: ''
+          mkdir -p ${cfg.baseDir}/logs/${h.name}
+          chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/${h.name}
+        '') cfg.virtualHosts))}
 
         # Symlink all the given common libs files or paths into the lib/ directory
-        for i in ${tomcat} ${toString cfg.commonLibs}
-        do
-            if [ -f $i ]
-            then
-                # If the given web application is a file, symlink it into the common/lib/ directory
-                ln -sfn $i ${cfg.baseDir}/lib/`basename $i`
-            elif [ -d $i ]
-            then
-                # If the given web application is a directory, then iterate over the files
-                # in the special purpose directories and symlink them into the tomcat tree
+        for i in ${tomcat} ${toString cfg.commonLibs}; do
+          if [ -f $i ]; then
+            # If the given web application is a file, symlink it into the common/lib/ directory
+            ln -sfn $i ${cfg.baseDir}/lib/`basename $i`
+          elif [ -d $i ]; then
+            # If the given web application is a directory, then iterate over the files
+            # in the special purpose directories and symlink them into the tomcat tree
 
-                for j in $i/lib/*
-                do
-                    ln -sfn $j ${cfg.baseDir}/lib/`basename $j`
-                done
-            fi
+            for j in $i/lib/*; do
+              ln -sfn $j ${cfg.baseDir}/lib/`basename $j`
+            done
+          fi
         done
 
         # Symlink all the given shared libs files or paths into the shared/lib/ directory
-        for i in ${toString cfg.sharedLibs}
-        do
-            if [ -f $i ]
-            then
-                # If the given web application is a file, symlink it into the common/lib/ directory
-                ln -sfn $i ${cfg.baseDir}/shared/lib/`basename $i`
-            elif [ -d $i ]
-            then
-                # If the given web application is a directory, then iterate over the files
-                # in the special purpose directories and symlink them into the tomcat tree
+        for i in ${toString cfg.sharedLibs}; do
+          if [ -f $i ]; then
+            # If the given web application is a file, symlink it into the common/lib/ directory
+            ln -sfn $i ${cfg.baseDir}/shared/lib/`basename $i`
+          elif [ -d $i ]; then
+            # If the given web application is a directory, then iterate over the files
+            # in the special purpose directories and symlink them into the tomcat tree
 
-                for j in $i/shared/lib/*
-                do
-                    ln -sfn $j ${cfg.baseDir}/shared/lib/`basename $j`
-                done
-            fi
+            for j in $i/shared/lib/*; do
+              ln -sfn $j ${cfg.baseDir}/shared/lib/`basename $j`
+            done
+          fi
         done
 
         # Symlink all the given web applications files or paths into the webapps/ directory
-        for i in ${toString cfg.webapps}
-        do
-            if [ -f $i ]
-            then
-                # If the given web application is a file, symlink it into the webapps/ directory
-                ln -sfn $i ${cfg.baseDir}/webapps/`basename $i`
-            elif [ -d $i ]
-            then
-                # If the given web application is a directory, then iterate over the files
-                # in the special purpose directories and symlink them into the tomcat tree
+        for i in ${toString cfg.webapps}; do
+          if [ -f $i ]; then
+            # If the given web application is a file, symlink it into the webapps/ directory
+            ln -sfn $i ${cfg.baseDir}/webapps/`basename $i`
+          elif [ -d $i ]; then
+            # If the given web application is a directory, then iterate over the files
+            # in the special purpose directories and symlink them into the tomcat tree
 
-                for j in $i/webapps/*
-                do
-                    ln -sfn $j ${cfg.baseDir}/webapps/`basename $j`
-                done
+            for j in $i/webapps/*; do
+              ln -sfn $j ${cfg.baseDir}/webapps/`basename $j`
+            done
 
-                # Also symlink the configuration files if they are included
-                if [ -d $i/conf/Catalina ]
-                then
-                    for j in $i/conf/Catalina/*
-                    do
-                        mkdir -p ${cfg.baseDir}/conf/Catalina/localhost
-                        ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
-                    done
-                fi
+            # Also symlink the configuration files if they are included
+            if [ -d $i/conf/Catalina ]; then
+              for j in $i/conf/Catalina/*; do
+                mkdir -p ${cfg.baseDir}/conf/Catalina/localhost
+                ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+              done
             fi
+          fi
         done
 
         ${toString (map (virtualHost: ''
@@ -275,94 +292,79 @@ in
 
           # Symlink all the given web applications files or paths into the webapps/ directory
           # of this virtual host
-          for i in "${if virtualHost ? webapps then toString virtualHost.webapps else ""}"
-          do
-              if [ -f $i ]
-              then
-                  # If the given web application is a file, symlink it into the webapps/ directory
-                  ln -sfn $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`
-              elif [ -d $i ]
-              then
-                  # If the given web application is a directory, then iterate over the files
-                  # in the special purpose directories and symlink them into the tomcat tree
+          for i in "${if virtualHost ? webapps then toString virtualHost.webapps else ""}"; do
+            if [ -f $i ]; then
+              # If the given web application is a file, symlink it into the webapps/ directory
+              ln -sfn $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`
+            elif [ -d $i ]; then
+              # If the given web application is a directory, then iterate over the files
+              # in the special purpose directories and symlink them into the tomcat tree
 
-                  for j in $i/webapps/*
-                  do
-                      ln -sfn $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
-                  done
+              for j in $i/webapps/*; do
+                ln -sfn $j ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $j`
+              done
 
-                  # Also symlink the configuration files if they are included
-                  if [ -d $i/conf/Catalina ]
-                  then
-                      for j in $i/conf/Catalina/*
-                      do
-                          mkdir -p ${cfg.baseDir}/conf/Catalina/${virtualHost.name}
-                          ln -sfn $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
-                      done
-                  fi
+              # Also symlink the configuration files if they are included
+              if [ -d $i/conf/Catalina ]; then
+                for j in $i/conf/Catalina/*; do
+                  mkdir -p ${cfg.baseDir}/conf/Catalina/${virtualHost.name}
+                  ln -sfn $j ${cfg.baseDir}/conf/Catalina/${virtualHost.name}/`basename $j`
+                done
               fi
+            fi
           done
+        '') cfg.virtualHosts)}
 
-          ''
-        ) cfg.virtualHosts) }
+        ${optionalString cfg.axis2.enable ''
+          # Copy the Axis2 web application
+          cp -av ${pkgs.axis2}/webapps/axis2 ${cfg.baseDir}/webapps
 
-        # Create a work/ directory
-        mkdir -p ${cfg.baseDir}/work
-        chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/work
+          # Turn off addressing, which causes many errors
+          sed -i -e 's%<module ref="addressing"/>%<!-- <module ref="addressing"/> -->%' ${cfg.baseDir}/webapps/axis2/WEB-INF/conf/axis2.xml
 
-        ${if cfg.axis2.enable then
-            ''
-            # Copy the Axis2 web application
-            cp -av ${pkgs.axis2}/webapps/axis2 ${cfg.baseDir}/webapps
+          # Modify permissions on the Axis2 application
+          chown -R ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps/axis2
 
-            # Turn off addressing, which causes many errors
-            sed -i -e 's%<module ref="addressing"/>%<!-- <module ref="addressing"/> -->%' ${cfg.baseDir}/webapps/axis2/WEB-INF/conf/axis2.xml
+          # Symlink all the given web service files or paths into the webapps/axis2/WEB-INF/services directory
+          for i in ${toString cfg.axis2.services}; do
+            if [ -f $i ]; then
+              # If the given web service is a file, symlink it into the webapps/axis2/WEB-INF/services
+              ln -sfn $i ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $i`
+            elif [ -d $i ]; then
+              # If the given web application is a directory, then iterate over the files
+              # in the special purpose directories and symlink them into the tomcat tree
 
-            # Modify permissions on the Axis2 application
-            chown -R ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps/axis2
+              for j in $i/webapps/axis2/WEB-INF/services/*; do
+                ln -sfn $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
+              done
 
-            # Symlink all the given web service files or paths into the webapps/axis2/WEB-INF/services directory
-            for i in ${toString cfg.axis2.services}
-            do
-                if [ -f $i ]
-                then
-                    # If the given web service is a file, symlink it into the webapps/axis2/WEB-INF/services
-                    ln -sfn $i ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $i`
-                elif [ -d $i ]
-                then
-                    # If the given web application is a directory, then iterate over the files
-                    # in the special purpose directories and symlink them into the tomcat tree
-
-                    for j in $i/webapps/axis2/WEB-INF/services/*
-                    do
-                        ln -sfn $j ${cfg.baseDir}/webapps/axis2/WEB-INF/services/`basename $j`
-                    done
-
-                    # Also symlink the configuration files if they are included
-                    if [ -d $i/conf/Catalina ]
-                    then
-                        for j in $i/conf/Catalina/*
-                        do
-                            ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
-                        done
-                    fi
-                fi
-            done
-            ''
-        else ""}
+              # Also symlink the configuration files if they are included
+              if [ -d $i/conf/Catalina ]; then
+                for j in $i/conf/Catalina/*; do
+                  ln -sfn $j ${cfg.baseDir}/conf/Catalina/localhost/`basename $j`
+                done
+              fi
+            fi
+          done
+        ''}
       '';
 
-      script = ''
-          ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
-      '';
-
-      preStop = ''
-        echo "Stopping tomcat..."
-        CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
-      '';
-
+      serviceConfig = {
+        Type = "forking";
+        PermissionsStartOnly = true;
+        PIDFile="/run/tomcat/tomcat.pid";
+        RuntimeDirectory = "tomcat";
+        User = cfg.user;
+        Environment=[
+          "CATALINA_BASE=${cfg.baseDir}"
+          "CATALINA_PID=/run/tomcat/tomcat.pid"
+          "JAVA_HOME='${cfg.jdk}'"
+          "JAVA_OPTS='${builtins.toString cfg.javaOpts}'"
+          "CATALINA_OPTS='${builtins.toString cfg.catalinaOpts}'"
+        ] ++ cfg.extraEnvironment;
+        ExecStart = "${tomcat}/bin/startup.sh";
+        ExecStop = "${tomcat}/bin/shutdown.sh";
+      };
     };
-
   };
-
 }

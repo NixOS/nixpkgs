@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig
 , gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
-, libxkbcommon, epoxy, at_spi2_core, dbus, libdbusmenu-glib
+, libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoconf automake autoreconfHook
     gtk glib pcre libappindicator libpthreadstubs
-    libXdmcp libxkbcommon epoxy at_spi2_core
+    libXdmcp libxkbcommon epoxy at-spi2-core
     dbus libdbusmenu-glib
   ];
 

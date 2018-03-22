@@ -62,6 +62,5 @@ in stdenv.mkDerivation rec {
     homepage = http://gillesdegottex.github.io/dfasma/;
     license = [ licenses.gpl3Plus reaperFork.meta.license ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

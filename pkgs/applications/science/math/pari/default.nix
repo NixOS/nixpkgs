@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
 
   name = "pari-${version}";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0qqal1lpggd6dvs19svnz0dil86xk0xkcj5s3b7104ibkmvjfsp7";
+    sha256 = "0ir6m3a8r46md5x6zk4xf159qra7aqparby9zk03k81hjrrxr72g";
   };
 
   buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];

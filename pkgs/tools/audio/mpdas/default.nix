@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "mpdas-${version}";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "mpdas";
     rev = version;
-    sha256 = "1i6i36jd582y3nm5plcrswqljf528hd23whp8zw06hwqnsgca5b6";
+    sha256 = "0fcqc4w6iwbi1n3cllcgj0k61zffhqkbr8668myxap21m35x8y1r";
   };
 
   nativeBuildInputs = [ pkgconfig ];

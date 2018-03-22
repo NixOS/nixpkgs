@@ -1,19 +1,23 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg, pcre }:
+, poppler, libpthreadstubs, gstreamer, gst-plugins-base, librsvg, pcre, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "pdfpc";
-  version = "4.0.7";
+  version = "4.1";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    sha256 = "00qfmmk8h762p53z46g976z7j4fbxyi16w5axzsv1ymvdq95ds8c";
+    sha256 = "02cp0x5prqrizxdp0sf2sk5ip0363vyw6fxsb3zwyx4dw0vz4g96";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig vala ];
+  nativeBuildInputs = [
+    cmake pkgconfig vala
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = [ gstreamer gst-plugins-base gtk3 libgee poppler
     libpthreadstubs makeWrapper librsvg pcre ];
 

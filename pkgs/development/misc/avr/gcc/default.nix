@@ -11,6 +11,16 @@ stdenv.mkDerivation {
     sha256 = "0fihlcy5hnksdxk0sn6bvgnyq8gfrgs8m794b1jxwd1dxinzg3b0";
   };
 
+  patches = [
+    ./avrbinutils-path.patch
+  ];
+
+  # avrbinutils-path.patch introduces a reference to @avrbinutils@, substitute
+  # it now.
+  postPatch = ''
+    substituteInPlace gcc/gcc-ar.c --subst-var-by avrbinutils ${avrbinutils}
+  '';
+
   buildInputs = [ gmp mpfr libmpc zlib avrbinutils ];
 
   nativeBuildInputs = [ texinfo ];
@@ -44,7 +54,7 @@ stdenv.mkDerivation {
     description = "GNU Compiler Collection, version ${version} for AVR microcontrollers";
     homepage = http://gcc.gnu.org;
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mguentner ];
   };
 }

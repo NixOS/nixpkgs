@@ -2,19 +2,24 @@
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2017.12.06";
+  version = "2018.03.21";
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "14b44ca866665352e7146778bb932e45b5fdedbd";
-    sha256 = "18qy7gylnydgzmqry1b4r0ilm6lkjdcyn0wj03syxdig9dbjiacm";
+    rev    = "4476d83f76fa0222be0b691fe27c1e0228266f82";
+    sha256 = "1r43vwwz61rvdpc3kylg8yzv0flz9p4j3yc1cc4h904zsdwjx39a";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 libftdi ];
-  preBuild = ''
-    makeFlags="PREFIX=$out $makeFlags"
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  # fix icebox_vlog chipdb path. icestorm issue:
+  #   https://github.com/cliffordwolf/icestorm/issues/125
+  patchPhase = ''
+    substituteInPlace ./icebox/icebox_vlog.py \
+      --replace /usr/local/share "$out/share"
   '';
 
   meta = {

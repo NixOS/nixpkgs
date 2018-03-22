@@ -72,8 +72,8 @@ in {
     '';
   };
   haxe_3_4 = generic {
-    version = "3.4.4";
-    sha256 = "057psarsmz8q2y9pqv5221vpdya241gcy8xnl2wg9wyscn6z1lx6";
+    version = "3.4.6";
+    sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
     prePatch = ''
       sed -i -e 's|"/usr/lib/haxe/std/";|"'"$out/lib/haxe/std/"'";\n&|g' src/main.ml
       sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/haxelib/client/Main.hx

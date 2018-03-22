@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
     sed -e '/^\/\//d' -i include/acl.h
   '';
 
-  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
+  configureFlags = [ "MAKE=make" "MSGFMT=msgfmt" "MSGMERGE=msgmerge" "XGETTEXT=xgettext" "ZIP=gzip" "ECHO=echo" "SED=sed" "AWK=gawk" ];
 
-  installTargets = "install install-lib install-dev";
+  installTargets = [ "install" "install-lib" "install-dev" ];
 
-  meta = {
-    homepage = http://savannah.nongnu.org/projects/acl;
+  meta = with stdenv.lib; {
+    homepage = "http://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

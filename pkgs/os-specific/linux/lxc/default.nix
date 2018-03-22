@@ -12,11 +12,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1qld0gi19mximxm0qyr6vzav32gymhc7fvp0bzwv37j0b8q0fi1r";
+    sha256 = "1xpghrinxhm2072fwmn42pxhjwh7qx6cbsipw4s6g38a8mkklrk8";
   };
 
   nativeBuildInputs = [
@@ -29,12 +29,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
-    # Fix build error against glibc 2.26
-    (fetchpatch {
-      url = "https://github.com/lxc/lxc/commit/"
-          + "180c477a326ce85632249ff16990e8c29db1b6fa.patch";
-      sha256 = "05jkiiixxk9ibj1fwzmy56rkkign28bd9mrmgiz12g92r2qahm2z";
-    })
   ];
 
   postPatch = ''

@@ -2,21 +2,21 @@
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd
 }:
 
-let version = "4.14"; in
+let version = "4.15.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1bwirg6hz6gyfj5r3xkj4lfwadvl9pxlccf916fsmdn27fy5q289";
+    sha256 = "15izak6jg6pqr6ha9447cdrdj9k6kfiarvwlrj53cpvrsv02l437";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    attr acl zlib libuuid e2fsprogs lzo
-    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt zstd
+  nativeBuildInputs = [
+    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
+
+  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nckx raskin wkennington ];
+    maintainers = with maintainers; [ raskin wkennington ];
     platforms = platforms.linux;
   };
 }

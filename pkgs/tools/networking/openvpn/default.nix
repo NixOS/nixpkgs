@@ -1,29 +1,32 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig
+{ stdenv, fetchurl, iproute, lzo, openssl, pam, pkgconfig
+, useSystemd ? stdenv.isLinux, systemd ? null
 , pkcs11Support ? false, pkcs11helper ? null,
 }:
 
+assert useSystemd -> (systemd != null);
 assert pkcs11Support -> (pkcs11helper != null);
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openvpn-${version}";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.xz";
-    sha256 = "102an395nv8l7qfx3syydzhmd9xfbycd6gvwy0h2kjz8w67ipkcn";
+    sha256 = "17njq59hsraqyxrbhkrxr7dvx0p066s3pn8w1mi0yd9jldis7h23";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ lzo openssl ]
-                  ++ optionals stdenv.isLinux [ pam systemd iproute ]
+                  ++ optionals stdenv.isLinux [ pam iproute ]
+                  ++ optional useSystemd systemd
                   ++ optional pkcs11Support pkcs11helper;
 
   configureFlags = optionals stdenv.isLinux [
-    "--enable-systemd"
     "--enable-iproute2"
     "IPROUTE=${iproute}/sbin/ip" ]
+    ++ optional useSystemd "--enable-systemd"
     ++ optional pkcs11Support "--enable-pkcs11"
     ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
 

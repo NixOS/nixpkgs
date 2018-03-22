@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rqqavhqbs7pajcblg92mjlz2dxk8b60vgdh271axz7kjs2wf9mr";
   };
 
-  buildInputs = [ mkfontdir mkfontscale bdf2psf ];
+  nativeBuildInputs = [ mkfontdir mkfontscale bdf2psf ];
 
   unpackPhase = ''
     mkdir pcf bdf

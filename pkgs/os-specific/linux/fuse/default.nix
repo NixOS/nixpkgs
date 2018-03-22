@@ -9,7 +9,7 @@ in {
   fuse_2 = mkFuse {
     version = "2.9.7";
     sha256Hash = "1wyjjfb7p4jrkk15zryzv33096a5fmsdyr2p4b00dd819wnly2n2";
-    maintainers = [ maintainers.mornfall ];
+    maintainers = [ ];
   };
 
   fuse_3 = mkFuse {

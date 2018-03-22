@@ -390,7 +390,7 @@ in
   };
 
   xf86videoqxl = attrs: attrs // {
-    buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+    buildInputs =  attrs.buildInputs ++ [ args.spice-protocol ];
   };
 
   xf86videosiliconmotion = attrs: attrs // {
@@ -429,8 +429,9 @@ in
   xorgserver = with xorg; attrs_passed:
     # exchange attrs if abiCompat is set
     let
+      version = (builtins.parseDrvName attrs_passed.name).version;
       attrs = with args;
-        if (args.abiCompat == null) then attrs_passed
+        if (args.abiCompat == null || lib.hasPrefix args.abiCompat version) then attrs_passed
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -452,7 +453,7 @@ in
             buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
-        } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
+        } else throw "unsupported xorg abiCompat ${args.abiCompat} for ${attrs_passed.name}";
 
     in attrs //
     (let
@@ -493,6 +494,9 @@ in
           args.udev
         ];
         patches = commonPatches;
+        prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+          export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
+        '';
         configureFlags = [
           "--enable-kdrive"             # not built by default
           "--enable-xephyr"
@@ -546,7 +550,7 @@ in
           "--with-sha1=CommonCrypto"
         ];
         preConfigure = ''
-          ensureDir $out/Applications
+          mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
           substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${args.apple_sdk.frameworks.ApplicationServices}
         '';

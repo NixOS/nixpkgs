@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, glfw, pkgconfig, libXrandr, libXdamage
 , libXext, libXrender, libXinerama, libXcursor, libXxf86vm, libXi
-, libX11, mesa_glu, Cocoa
+, libX11, libGLU, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glfw mesa_glu glfw libXrandr libXdamage
+    glfw libGLU glfw libXrandr libXdamage
     libXext libXrender libXinerama libXcursor libXxf86vm
     libXi libX11
   ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;

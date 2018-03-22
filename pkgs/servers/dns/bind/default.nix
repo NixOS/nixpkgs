@@ -1,16 +1,17 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, enableSeccomp ? false, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null, buildPackages
+}:
 
 assert enableSeccomp -> libseccomp != null;
 
-let version = "9.11.2"; in
+let version = "9.12.0"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0yn7wgi2y8mpmvbjbkl4va7p0xsnn48m4yjx6ynb1hzp423asikz";
+    sha256 = "10iwkghl5g50b7wc17bsb9wa0dh2gd57bjlk6ynixhywz6dhx1r9";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -18,10 +19,13 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
-  buildInputs = [ openssl libtool perl libxml2 ] ++
+  nativeBuildInputs = [ perl ];
+  buildInputs = [ openssl libtool libxml2 ] ++
     stdenv.lib.optional enableSeccomp libseccomp;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -38,6 +42,11 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
+    "--with-randomdev=/dev/random"
+    "--with-ecdsa"
+    "--with-gost"
+    "--without-eddsa"
+    "--with-aes"
   ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
@@ -58,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.isc.org/software/bind;
     description = "Domain name server";
-    license = stdenv.lib.licenses.isc;
+    license = stdenv.lib.licenses.mpl20;
 
     maintainers = with stdenv.lib.maintainers; [viric peti];
     platforms = with stdenv.lib.platforms; unix;

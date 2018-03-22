@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable nixUnstable.perl-bindings
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -59,6 +59,7 @@ my $s3 = Net::Amazon::S3->new(
     { aws_access_key_id     => $aws_access_key_id,
       aws_secret_access_key => $aws_secret_access_key,
       retry                 => 1,
+      host                  => "s3-eu-west-1.amazonaws.com",
     });
 
 my $bucket = $s3->bucket("nixpkgs-tarballs") or die;

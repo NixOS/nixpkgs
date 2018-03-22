@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.14.0";
 
   src = fetchurl {
-    url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
+    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
     sha256 = "1f3sla6h0bw15fz8pjc67jhwj7pwmfdc7qlj42j5k9v116ycm07d";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Reference implementation of the wayland protocol";
-    homepage    = http://wayland.freedesktop.org/;
+    homepage    = https://wayland.freedesktop.org/;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ codyopel wkennington ];

@@ -7,21 +7,21 @@
 }:
 
 buildPythonPackage rec {
-    baseName = "fuse";
-    version = "0.2.1";
-    name = "${baseName}-${version}";
-    disabled = isPy3k;
+  pname = "fuse";
+  version = "0.2.1";
 
-    src = fetchurl {
-      url = "mirror://sourceforge/fuse/fuse-python-${version}.tar.gz";
-      sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
-    };
+  disabled = isPy3k;
 
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fuse ];
+  src = fetchurl {
+    url = "mirror://sourceforge/fuse/fuse-python-${version}.tar.gz";
+    sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
+  };
 
-    meta = {
-      description = "Python bindings for FUSE";
-      license = lib.licenses.lgpl21;
-    };
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse ];
+
+  meta = {
+    description = "Python bindings for FUSE";
+    license = lib.licenses.lgpl21;
+  };
 }

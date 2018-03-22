@@ -1,7 +1,7 @@
 { fetchurl, fetchpatch, stdenv, intltool, pkgconfig, file, makeWrapper
 , libxml2, libxslt, perl, perlPackages, gconf, guile
 , glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
-, webkit, glibcLocales, gsettings_desktop_schemas, dconf
+, webkit, glibcLocales, gsettings-desktop-schemas, dconf
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
 , pango, gdk_pixbuf
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # glib, gtk...
     glib gtk2 goffice webkit
     # gnome...
-    dconf gconf libgnomecanvas gsettings_desktop_schemas
+    dconf gconf libgnomecanvas gsettings-desktop-schemas
     # financial
     libofx aqbanking gwenhywfar
     # perl

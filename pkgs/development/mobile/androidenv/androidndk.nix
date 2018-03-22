@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   phases = "buildPhase";
 
-  buildInputs = [ p7zip makeWrapper ];
+  nativeBuildInputs = [ p7zip makeWrapper ];
 
   buildCommand = let
     bin_path = "$out/bin";

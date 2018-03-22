@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   name = "opengrok-${version}";
-  version = "0.12.5";
+  version = "1.0";
 
-  # 0.12.5 is the latest distributed as a .tar.gz file.
+  # 1.0 is the latest distributed as a .tar.gz file.
   # Newer are distribued as .zip so a source build is required.
 
   # if builded from source
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # binary distribution
   src = fetchurl {
     url = https://github.com/OpenGrok/OpenGrok/files/213268/opengrok-0.12.1.5.tar.gz;
-    sha256 = "c3ce079f6ed1526c475cb4b9a7aa901f75507318c93b436d6c14eba4098e4ead";
+    sha256 = "1bafiq4s9sqldinl6fy931rm0x8zj2magfdlbi3nqlnidsghgkn3";
   };
 
   buildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Source code search and cross reference engine";
-    homepage = http://opengrok.github.io/OpenGrok/;
+    homepage = https://opengrok.github.io/OpenGrok/;
     license = licenses.cddl;
     maintainers = [ maintainers.lethalman ];
   };

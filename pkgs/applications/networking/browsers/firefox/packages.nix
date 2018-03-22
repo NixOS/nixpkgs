@@ -1,23 +1,32 @@
 { lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
-let common = opts: callPackage (import ./common.nix opts); in
+let
+
+  common = opts: callPackage (import ./common.nix opts);
+
+  nixpkgsPatches = [
+    ./env_var_for_system_dir.patch
+
+    # this one is actually an omnipresent bug
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+    ./fix-pa-context-connect-retval.patch
+  ];
+
+in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "57.0.3";
+    version = "59.0.1";
     src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "1f887ab6bb16ef69bce56b689e761b3e09fc106b4bee7842be2c8e7eac05981f9922e9c3a8bd22b4935545cbbc10bf0a0c79df7800cd3c80fd4137070c9bfd09";
+      url = "https://hg.mozilla.org/releases/mozilla-release/archive/3db9e3d52b17563efca181ccbb50deb8660c59ae.tar.bz2";
+      sha512 = "3da3gmfv2aalsbsx15csas4mwnvlliy1q081sd2riz3nvxr7qyrdx1qvxj4gdr97wlmvz7mig9djhh5gwx7ddah5hfhj23cvccmw6jw";
     };
 
-    patches =
-      [ ./no-buildconfig.patch ./env_var_for_system_dir.patch ]
-      ++ lib.optional stdenv.isi686 (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-      });
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -32,14 +41,13 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.5.3esr";
+    version = "52.7.2esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7b9c87905c53bc681dc6475e05596449fed88850f9dc07c8223d0d3edd2dd9d8a0dd88ebae1cd59eced2165696df9370de5e85cc03cded58ec4d0f622634417f";
+      sha512 = "e275fd10fd32a0dc237135af3395e3a1ae501844632c973ff3b9bca1456702ee36dbee99fc57300598403c924c0db63bd62a199845c8f4a2e29db5d1e5973395";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -82,15 +90,18 @@ rec {
         It will use your default Firefox profile if you're not careful
         even! Be careful!
 
-        It will clash with firefox binary if you install both. But its
-        not a problem since you should run browsers in separate
-        users/VMs anyway.
+        It will clash with firefox binary if you install both. But it
+        should not be a problem because you should run browsers in
+        separate users/VMs anyway.
 
         Create new profile by starting it as
 
         $ firefox -ProfileManager
 
         and then configure it to use your tor instance.
+
+        Or just use `tor-browser-bundle` package that packs this
+        `tor-browser` back into a sanely-built bundle.
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
@@ -98,26 +109,6 @@ rec {
   };
 
 in rec {
-
-  tor-browser-6-5 = common (rec {
-    pname = "tor-browser";
-    version = "6.5.2";
-    isTorBrowserLike = true;
-    extraConfigureFlags = [ "--disable-loop" ];
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo = "tor-browser";
-      # branch "tor-browser-45.8.0esr-6.5-2-slnos"
-      rev = "e4140ea01b9906934f0347e95f860cec207ea824";
-      sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
-    };
-  } // commonAttrs) {
-    stdenv = overrideCC stdenv gcc5;
-    ffmpegSupport = false;
-    gssSupport = false;
-  };
 
   tor-browser-7-0 = common (rec {
     pname = "tor-browser";
@@ -133,10 +124,43 @@ in rec {
       sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
-    patches =
-      [ ./env_var_for_system_dir.patch ];
+    patches = nixpkgsPatches;
   } // commonAttrs) {};
 
-  tor-browser = tor-browser-7-0;
+  tor-browser-7-5 = common (rec {
+    pname = "tor-browser";
+    version = "7.5.2";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-52.7.0esr-7.5-1-slnos";
+      rev   = "211b2be3fea45a450915b0addcd7783aa939e24a";
+      sha256 = "18gv4r8cjf89mamjh93a856a5yfp7dm3jrk8g05w89vxb3lrl74v";
+    };
+
+    patches = nixpkgsPatches;
+  } // commonAttrs) {};
+
+  tor-browser-8-0 = common (rec {
+    pname = "tor-browser";
+    version = "8.0.1";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-52.7.0esr-8.0-1-slnos";
+      rev   = "58314ccb043882e830ee9a21c37a92d6e0d34e94";
+      sha256 = "09gb7chw2kly53b599xwpi75azj00957rnxly9fqv8zi3n5k2pdb";
+    };
+
+    patches = nixpkgsPatches;
+  } // commonAttrs) {};
+
+  tor-browser = tor-browser-7-5;
 
 })

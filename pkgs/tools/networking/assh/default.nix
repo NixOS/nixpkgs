@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "assh-${version}";
-  version = "2.6.0";
+  version = "2.7.0";
 
   goPackagePath = "github.com/moul/advanced-ssh-config";
   subPackages = [ "cmd/assh" ];
@@ -18,7 +18,7 @@ buildGoPackage rec {
     repo = "advanced-ssh-config";
     owner = "moul";
     rev = "v${version}";
-    sha256 = "1vv98dz5822k51xklnmky0lwfjw8nc6ryvn8lmv9n63ppwh9s2s6";
+    sha256 = "0jfpcr8990lb7kacadbishdkz5l8spw24ksdlb79x34sdbbp3fm6";
   };
 
   meta = with stdenv.lib; {

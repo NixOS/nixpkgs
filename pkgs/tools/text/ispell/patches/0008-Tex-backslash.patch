@@ -1,0 +1,48 @@
+From: Ken Stevens <kstevens@ece.utah.edu>
+Date: Sat, 15 Jul 2000 22:10:53 -0400
+Subject: 0008 Tex backslash
+
+Version 3.1.20 contains an irritating bug when using latex that causes all
+sorts of problems when the backslash is used. (The backslash is a common
+character in latex that is used, among other things, to create a forced space
+similar to the tilde character.) In the current version, 3.1.20, the next TWO
+characters are skipped after a backslash. This can results in misspellings and
+the file being incorrectly parsed. (For example, if the text contains the
+sequence `\ $' math mode will not be entered until the matching $ which should
+end it, resulting in the body of the text not being spell checked and the math
+region being checked.)
+
+Make sure to undefine NO8BIT and use a larger number for MASKBITS if you are
+using iso character sets.
+
+http://www.kdstevens.com/~stevens/ispell-faq.html#bslash
+---
+ defmt.c |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/defmt.c b/defmt.c
+index 35f93e4..7499752 100644
+--- a/defmt.c
++++ b/defmt.c
+@@ -884,6 +884,8 @@ static int TeX_math_end (bufp)
+ 	return 0;
+     }
+ 
++/* Updates bufp to point to the next character to skip. */
++/*  Should only be called on non-word characters. */
+ static int TeX_math_begin (bufp)
+     unsigned char **	bufp;
+     {
+@@ -902,10 +904,7 @@ static int TeX_math_begin (bufp)
+ 	if (**bufp == TEXLEFTPAREN  ||  **bufp == TEXLEFTSQUARE)
+ 	    return 1;
+ 	else if (!isalpha(**bufp)  &&  **bufp != '@')
+-	    {
+-	    (*bufp)++;
+-	    continue;
+-	    }
++	    return 0;
+ 	else if (TeX_strncmp (*bufp, "begin", 5) == 0)
+ 	    {
+ 	    if (TeX_math_check ('b', bufp))
+-- 

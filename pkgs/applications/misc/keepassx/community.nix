@@ -1,28 +1,53 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
-, libgcrypt, zlib, libmicrohttpd, libXtst, qtbase, libgpgerror, glibcLocales, libyubikey, yubikey-personalization, libXi, qtx11extras
-, withKeePassHTTP ? true
+
+, curl
+, libargon2
+, libgcrypt
+, libsodium
+, zlib
+, libmicrohttpd
+, libXtst
+, qtbase
+, libgpgerror
+, glibcLocales
+, libyubikey
+, yubikey-personalization
+, libXi
+, qtx11extras
+
+, withKeePassBrowser ? true
+, withKeePassSSHAgent ? true
+, withKeePassHTTP ? false
+, withKeePassNetworking ? false
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassxc-${version}";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "0q913v2ka6p7jr7c4w9fq8aqh5v6nxqgcv9h7zllk5p0amsf8d80";
+    sha256 = "1zch1qbqgphhp2p2kvjlah8s337162m69yf4y00kcnfb3539ii5f";
   };
 
-  patches = [ ./cmake.patch ./darwin.patch ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-old-style-cast";
+
+  patches = [ ./darwin.patch ];
 
   cmakeFlags = [
+    "-DKEEPASSXC_BUILD_TYPE=Release"
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_YUBIKEY=ON"
-  ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
+  ]
+  ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON")
+  ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
@@ -32,7 +57,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper qttools ];
 
-  buildInputs = [ libgcrypt zlib qtbase libXtst libmicrohttpd libgpgerror glibcLocales libyubikey yubikey-personalization libXi qtx11extras ];
+  buildInputs = [
+    curl
+    glibcLocales
+    libXi
+    libXtst
+    libargon2
+    libgcrypt
+    libgpgerror
+    libmicrohttpd
+    libsodium
+    libyubikey
+    qtbase
+    qtx11extras
+    yubikey-personalization
+    zlib
+  ];
 
   postInstall = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "nss_wrapper-1.0.3";
+  name = "nss_wrapper-1.1.3";
 
   src = fetchurl {
     url = "mirror://samba/cwrap/${name}.tar.gz";
-    sha256 = "0bysdijvi9n0jk74iklbfhbp0kvv81a727lcfd5q03q2hkzjfm18";
+    sha256 = "18rsaw8r8xwn5003arc7xw8iliwbmzxfxgacmp6lhsdwqla4rf69";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     ./quartz-webcore.patch
     ./libc++.patch
     ./plugin-none.patch
+  ] ++ optionals stdenv.hostPlatform.isMusl [
+    ./fix-execinfo.patch
   ];
 
   configureFlags = with stdenv.lib; [

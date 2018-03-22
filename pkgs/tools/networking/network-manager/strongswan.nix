@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM, procps
-, gnome3, libgnome_keyring, libsecret }:
+, gnome3, libgnome-keyring, libsecret }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ networkmanager strongswanNM libsecret ]
-      ++ (with gnome3; [ gtk libgnome_keyring networkmanagerapplet ]);
+      ++ (with gnome3; [ gtk libgnome-keyring networkmanagerapplet ]);
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  # Fixes deprecation errors with networkmanager 1.10.2
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   preConfigure = ''
      substituteInPlace "configure" \

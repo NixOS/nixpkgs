@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "translate-shell";
-  version = "0.9.4";
+  version = "0.9.6.6";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v" + version;
-    sha256 = "166zhic3k4z37vc8p1fnhc4xx7i7q0j30nr324frmp1mrnwrdib8";
+    sha256 = "0hbwvc554v6fi4ardidwsnn8hk7p68p155yjllvljjawkbq4qljq";
   };
 
   phases = [ "buildPhase" "installPhase" "postFixup" ];

@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "ed-${version}";
   version = "1.14.2";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ lzip ];
 
-  doCheck = hostPlatform == buildPlatform;
+  doCheck = true; # not cross;
 
   meta = {
     description = "An implementation of the standard Unix editor";
@@ -36,4 +36,9 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
-}
+} // stdenv.lib.optionalAttrs (hostPlatform != buildPlatform) {
+  # This may be moved above during a stdenv rebuild.
+  preConfigure = ''
+    configureFlagsArray+=("CC=$CC")
+  '';
+})

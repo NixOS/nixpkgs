@@ -256,7 +256,7 @@ def interpret(x):
     Output: One of 1. Dict with keys 'name' and 'attrs'
                    2. 'unrecognized' (if interpretation failed)
     """
-    for f in [interpret_md5, interpret_sha256, interpret_tarball_with_md5, interpret_tarball]:
+    for f in [interpret_md5, interpret_sha256, interpret_tarball_with_md5, interpret_tarball, interpret_jar]:
         result = f(x)
         if result is not None:
             return result
@@ -291,6 +291,13 @@ def interpret_tarball(x):
     """
 
     match = re.match('^(.*)_TARBALL$', x['key'])
+
+    if match:
+        return {'name': match.group(1),
+                'attrs': {'tarball': x['value'], 'brief': True}}
+
+def interpret_jar(x):
+    match = re.match('^(.*)_JAR$', x['key'])
 
     if match:
         return {'name': match.group(1),

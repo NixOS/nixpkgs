@@ -1,6 +1,6 @@
 {
 stdenv, fetchFromGitHub, cmake
-,qtbase, qttools, python, mesa
+,qtbase, qttools, python, libGLU_combined
 ,libXt, qtx11extras, qtxmlpatterns
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python
-    mesa
+    libGLU_combined
     libXt
     qtbase
     qtx11extras

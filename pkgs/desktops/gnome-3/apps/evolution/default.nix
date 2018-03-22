@@ -1,42 +1,51 @@
-{ stdenv, cmake, intltool, fetchurl, libxml2, webkitgtk, highlight
+{ stdenv, cmake, ninja, intltool, fetchurl, libxml2, webkitgtk, highlight
 , pkgconfig, gtk3, glib, libnotify, gtkspell3
-, wrapGAppsHook, itstool, shared_mime_info, libical, db, gcr, sqlite
+, wrapGAppsHook, itstool, shared-mime-info, libical, db, gcr, sqlite
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu
-, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit, openldap }:
+, libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
 
 let
-  majVer = gnome3.version;
+  version = "3.26.6";
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "evolution-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1adqh5f5aijkj5cnj1qprig8cd594m0qb0mzxn0zx44k0b6z5m1p";
+  };
+
+  propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];
+
+  buildInputs = [
+    gtk3 glib gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
+    gnome3.evolution-data-server libsecret libical gcr
+    webkitgtk shared-mime-info gnome3.gnome-desktop gtkspell3
+    libcanberra-gtk3 bogofilter gnome3.libgdata sqlite
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base p11-kit
+    nss nspr libnotify procps highlight gnome3.libgweather
+    gnome3.gsettings-desktop-schemas
+    gnome3.libgnome-keyring gnome3.glib-networking openldap
+  ];
+
+  nativeBuildInputs = [ cmake ninja intltool itstool libxml2 pkgconfig wrapGAppsHook ];
+
+  cmakeFlags = [
+    "-DENABLE_AUTOAR=OFF"
+    "-DENABLE_LIBCRYPTUI=OFF"
+    "-DENABLE_YTNEF=OFF"
+    "-DENABLE_PST_IMPORT=OFF"
+  ];
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
-                            gnome3.evolution_data_server ];
+  checkPhase = "ctest";
 
-  buildInputs = [ gtk3 glib gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
-                  gnome3.evolution_data_server libsecret libical gcr
-                  webkitgtk shared_mime_info gnome3.gnome_desktop gtkspell3
-                  libcanberra_gtk3 bogofilter gnome3.libgdata sqlite
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base p11_kit
-                  nss nspr libnotify procps highlight gnome3.libgweather
-                  gnome3.gsettings_desktop_schemas
-                  gnome3.libgnome_keyring gnome3.glib_networking openldap
-                ];
-
-  nativeBuildInputs = [ cmake intltool itstool libxml2 pkgconfig wrapGAppsHook ];
-
-
-  configureFlags = [ "--disable-pst-import" "--disable-autoar"
-                     "--disable-libcryptui" "--with-openldap"];
-
-  cmakeFlags = [ "-DENABLE_AUTOAR=OFF" "-DENABLE_LIBCRYPTUI=OFF"
-                 "-DENABLE_YTNEF=OFF" "-DENABLE_PST_IMPORT=OFF"
-               ];
-
-  NIX_CFLAGS_COMPILE = "-I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
-
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "evolution";
+      attrPath = "gnome3.evolution";
+    };
+  };
 
   requiredSystemFeatures = [ "big-parallel" ];
 

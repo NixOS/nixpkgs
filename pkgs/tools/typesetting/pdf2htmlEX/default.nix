@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, poppler, xlibs, pcre, python, glib, fontforge, cairo, pango, openjdk8
+, poppler, xorg, pcre, python, glib, fontforge, cairo, pango, openjdk8
 
 }:
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xlibs.libpthreadstubs
-    xlibs.libXdmcp
+    xorg.libpthreadstubs
+    xorg.libXdmcp
     pcre
     python
     glib

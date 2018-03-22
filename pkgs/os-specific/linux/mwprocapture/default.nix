@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ri7c4l4xgkhpz0f15jra1p7mpzi8ir6lpwjm7q7hc9m4cvxcs1g";
   };
 
+  nativeBuildInputs = [ kernel.moduleBuildDependencies ];
+
   patches = [ ./linux_4_14_fix.patch ];
 
   preConfigure =

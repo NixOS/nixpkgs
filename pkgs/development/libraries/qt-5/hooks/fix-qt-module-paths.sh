@@ -15,8 +15,8 @@ fixQtModulePaths () {
             if grep -q '\$\$QT_MODULE_' "${pr:?}"; then
                 echo "fixQtModulePaths: Fixing module paths in \`${pr:?}'..."
                 sed -i "${pr:?}" \
-                    -e "s|\\\$\\\$QT_MODULE_LIB_BASE|$dev/lib|g" \
-                    -e "s|\\\$\\\$QT_MODULE_HOST_LIB_BASE|$dev/lib|g" \
+                    -e "s|\\\$\\\$QT_MODULE_LIB_BASE|$lib/lib|g" \
+                    -e "s|\\\$\\\$QT_MODULE_HOST_LIB_BASE|$lib/lib|g" \
                     -e "s|\\\$\\\$QT_MODULE_INCLUDE_BASE|$dev/include|g" \
                     -e "s|\\\$\\\$QT_MODULE_BIN_BASE|$dev/bin|g"
             fi
@@ -25,13 +25,6 @@ fixQtModulePaths () {
         echo "fixQtModulePaths: Warning: \`$dir' is not a directory"
     else
         echo "fixQtModulePaths: Warning: \`$dir' does not exist"
-    fi
-
-    if [ "z$dev" != "z$lib" ]; then
-        if [ -d "$lib/lib" ]; then
-            mkdir -p "$dev/lib"
-            lndir -silent "$lib/lib" "$dev/lib"
-        fi
     fi
 
     if [ "z$bin" != "z$dev" ]; then

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, perl, python2, ruby, bison, gperf, cmake
 , pkgconfig, gettext, gobjectIntrospection, libnotify, gnutls
-, gtk3, wayland, libwebp, enchant, xlibs, libxkbcommon, epoxy, at_spi2_core
-, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11_kit
-, libidn, libedit, readline, mesa, libintlOrEmpty
+, gtk3, wayland, libwebp, enchant, xorg, libxkbcommon, epoxy, at-spi2-core
+, libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11-kit
+, libidn, libedit, readline, libGLU_combined, libintlOrEmpty
 , enableGeoLocation ? true, geoclue2, sqlite
 , enableGtk2Plugins ? false, gtk2 ? null
 , gst-plugins-base, gst-plugins-bad
@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.18.4";
+  version = "2.18.6";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1f1j0r996l20cgkvbwpizn7d4yp58cy334b1pvn4kfb5c2dbpdl7";
+    sha256 = "0g5cpdijjv5hlrbi4i4dh97yrh5apnyvm90wpr9f84hgyk12r4ck";
   };
 
   # see if we can clean this up....
@@ -88,12 +88,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = libintlOrEmpty ++ [
     libwebp enchant libnotify gnutls pcre nettle libidn
-    libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
-    sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at_spi2_core
+    libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11-kit
+    sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
-    ++ (with xlibs; [ libXdmcp libXt libXtst ])
-    ++ optionals stdenv.isDarwin [ libedit readline mesa ]
+    ++ (with xorg; [ libXdmcp libXt libXtst ])
+    ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
     ++ optional stdenv.isLinux wayland;
 
   propagatedBuildInputs = [

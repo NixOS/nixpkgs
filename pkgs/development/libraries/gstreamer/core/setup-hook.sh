@@ -5,5 +5,5 @@ addGstreamer1LibPath () {
     fi
 }
 
-envHooks+=(addGstreamer1LibPath)
+addEnvHooks "$hostOffset" addGstreamer1LibPath
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk, libXcomposite, libXcursor, libXdamage
-, libcanberra_gtk2, intltool, GConf, startup_notification, zenity, gnome_doc_utils
-, gsettings_desktop_schemas }:
+, libcanberra-gtk2, intltool, GConf, startup_notification, zenity, gnome-doc-utils
+, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation {
   name = "metacity-2.30.3";
@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ pkgconfig glib gtk libXcomposite libXcursor libXdamage libcanberra_gtk2
-      intltool GConf startup_notification zenity gnome_doc_utils
-      gsettings_desktop_schemas
+    [ pkgconfig glib gtk libXcomposite libXcursor libXdamage libcanberra-gtk2
+      intltool GConf startup_notification zenity gnome-doc-utils
+      gsettings-desktop-schemas
     ];
 }

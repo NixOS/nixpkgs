@@ -1,7 +1,6 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest_29 }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "libtmux";
   version = "0.7.7";
 
@@ -10,10 +9,13 @@ buildPythonPackage rec {
     sha256 = "5670c8da8d0192d932ac1e34f010e0eeb098cdb2af6daad0307b5418e7a37733";
   };
 
-  buildInputs = [ pytest_29 ];
-  patchPhase = ''
+  checkInputs = [ pytest ];
+  postPatch = ''
     sed -i 's/==.*$//' requirements/test.txt
   '';
+
+  # No tests in archive
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Scripting library for tmux";

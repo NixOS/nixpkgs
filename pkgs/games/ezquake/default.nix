@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, curl, expat
-, jansson, libpng, libjpeg, mesa, pcre
+, jansson, libpng, libjpeg, libGLU_combined, pcre
 , pkgconfig, SDL2, vimNox }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    expat curl jansson libpng libjpeg mesa pcre SDL2 vimNox
+    expat curl jansson libpng libjpeg libGLU_combined pcre SDL2 vimNox
   ];
 
   installPhase = with stdenv.lib; let

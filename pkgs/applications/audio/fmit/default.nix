@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmake
+{ stdenv, fetchFromGitHub, fftw, freeglut, libGLU, qtbase, qtmultimedia, qmake
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = http://gillesdegottex.github.io/fmit/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

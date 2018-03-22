@@ -1,24 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi,
-  pytest, requests, requests_oauthlib, six
+{ lib, buildPythonPackage, pytest, requests, requests_oauthlib, six
+, fetchFromGitHub, responses, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.6.5";
+  version = "0.7.0";
   name = "${pname}-${version}";
 
-  meta = {
-    description = "Python client library for Asana";
-    homepage = https://github.com/asana/python-asana;
-    license = lib.licenses.mit;
+  src = fetchFromGitHub {
+    owner = "asana";
+    repo = "python-asana";
+    rev = "v${version}";
+    sha256 = "0786y3wxqxxhsb0kkpx4bfzif3dhvv3dmm6vnq58iyj94862kpxf";
   };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "eab8d24c2a4670b541b75da2f4bf5b995fe71559c1338da53ce9039f7b19c9a0";
-  };
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest responses ];
   propagatedBuildInputs = [ requests requests_oauthlib six ];
 
   patchPhase = ''
@@ -27,11 +23,13 @@ buildPythonPackage rec {
     sed -i "s/requests_oauthlib~=0.6.1/requests_oauthlib >=0.6.1/" setup.py
   '';
 
-  # ERROR: file not found: tests
-  doCheck = false; 
-
   checkPhase = ''
     py.test tests
   '';
 
+  meta = with stdenv.lib; {
+    description = "Python client library for Asana";
+    homepage = https://github.com/asana/python-asana;
+    license = licenses.mit;
+  };
 }

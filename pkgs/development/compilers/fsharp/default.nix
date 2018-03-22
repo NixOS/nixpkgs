@@ -1,4 +1,4 @@
-# Temporaririly avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
+# Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
 { stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
 

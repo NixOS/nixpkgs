@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
+  preConfigure = ''
+    substituteInPlace src/plugins/plugins.pro \
+      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
+  '';
+
   preBuild = optional withDocumentation ''
     ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';

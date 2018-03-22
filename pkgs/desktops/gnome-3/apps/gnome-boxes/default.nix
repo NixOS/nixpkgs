@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice_gtk
-, spice_protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
-, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop_file_utils
+, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
+, spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
+, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
 , libcap_ng, numactl, xen, libapparmor
 }:
@@ -9,7 +9,17 @@
 # TODO: ovirt (optional)
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-boxes-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "d00fc083182963dc1bbdee5e743ceb28ba03fbf5a9ea87c78d29dca5fb5b9210";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-boxes"; attrPath = "gnome3.gnome-boxes"; };
+  };
 
   enableParallelBuilding = true;
 
@@ -21,9 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     itstool libvirt-glib glib gobjectIntrospection libxml2 gtk3 gtkvnc
-    libvirt spice_gtk spice_protocol libsoup libosinfo systemd
+    libvirt spice-gtk spice-protocol libsoup libosinfo systemd
     tracker tracker-miners vala libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg desktop_file_utils acl libgudev libsecret
+    gnome3.defaultIconTheme librsvg desktop-file-utils acl libgudev libsecret
     libcap_ng numactl xen libapparmor
   ];
 
@@ -31,7 +41,7 @@ stdenv.mkDerivation rec {
     for prog in "$out/bin/"*; do
         wrapProgram "$prog" \
             --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-            --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+            --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
             --prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}"
     done
   '';

@@ -334,14 +334,10 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080
+hoogle server -p 8080 --local
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/). Note, however, that Firefox and
-possibly other browsers disallow navigation from `http:` to `file:` URIs for
-security reasons, which might be quite an inconvenience. See [this
-page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
-workarounds.
+[Hoogle](https://www.haskell.org/hoogle/).
 
 ### How to build a Haskell project using Stack
 
@@ -693,9 +689,7 @@ might be necessary to purge the local caches that store data from those
 machines to disable these binary channels for the duration of the previous
 command, i.e. by running:
 ```shell
-rm /nix/var/nix/binary-cache-v3.sqlite
-rm /nix/var/nix/manifests/*
-rm /nix/var/nix/channel-cache/*
+rm ~/.cache/nix/binary-cache*.sqlite
 ```
 
 ### Builds on Darwin fail with `math.h` not found

@@ -15,7 +15,7 @@
 with stdenv.lib;
 let
   inherit (python2Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.11-RC1";
+  version = "1.9.12";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "0i708ar3ll5p8yj0h7ffg84nrn49ap47l2yy75rxyw30cyywhxp4";
+    sha256 = "0ynpyn0l77m94b50g7ysl795nvam3ra65wx5zb46nxspgbf6wnkh";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
 
   # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch ./darwin-cf.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-cf.patch ];
 
   prePatch = ''
     substituteInPlace svnversion_regenerate.sh \

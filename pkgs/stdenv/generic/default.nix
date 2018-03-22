@@ -135,6 +135,8 @@ let
       inherit overrides;
 
       inherit cc;
+
+      isCross = targetPlatform != buildPlatform;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

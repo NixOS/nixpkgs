@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, buildPackages, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "pic" "relro" ];
 
+  configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {
     homepage = http://horms.net/projects/kexec/kexec-tools;
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -10,7 +10,7 @@ let
 
   breezePlymouth = pkgs.breeze-plymouth.override {
     nixosBranding = true;
-    nixosVersion = config.system.nixosRelease;
+    nixosVersion = config.system.nixos.release;
   };
 
   themesEnv = pkgs.buildEnv {

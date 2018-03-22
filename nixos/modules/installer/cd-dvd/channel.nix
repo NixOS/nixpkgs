@@ -12,7 +12,7 @@ let
   # CD.  These are installed into the "nixos" channel of the root
   # user, as expected by nixos-rebuild/nixos-install. FIXME: merge
   # with make-channel.nix.
-  channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}"
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}"
     { }
     ''
       mkdir -p $out
@@ -21,7 +21,7 @@ let
       if [ ! -e $out/nixos/nixpkgs ]; then
         ln -s . $out/nixos/nixpkgs
       fi
-      echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
+      echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
     '';
 
 in

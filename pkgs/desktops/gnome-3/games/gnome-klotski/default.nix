@@ -2,7 +2,17 @@
 , librsvg, libxml2, intltool, itstool, libgee, libgames-support }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-klotski-${version}";
+  version = "3.22.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-klotski/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "16hd6yk01rhb4pj8m01fyn72wykf41d72gsms81q0n4zm5bm1a4h";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-klotski"; attrPath = "gnome3.gnome-klotski"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

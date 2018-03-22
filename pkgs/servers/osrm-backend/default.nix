@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "osrm-backend-${version}";
-  version = "5.14.1";
+  version = "5.16.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner  = "Project-OSRM";
     repo   = "osrm-backend";
-    sha256 = "0n7fpm8m5r93dxciagp2n8ij1wg483yb9srbzdzjqf1zzyh637sz";
+    sha256 = "14vf0av63zizz1knjzhj34hxadxwcza2zakhaj6si3kb8zhihmaf";
   };
 
-  buildInputs = [ cmake pkgconfig bzip2 libxml2 libzip boost lua luabind tbb expat];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 

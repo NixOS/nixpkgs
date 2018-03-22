@@ -21,7 +21,7 @@
 , kplotting
 , ktextwidgets
 , mlt
-, shared_mime_info
+, shared-mime-info
 , libv4l
 , kfilemetadata
 , ffmpeg
@@ -62,7 +62,7 @@ mkDerivation {
     qtquickcontrols
     qtscript
     qtwebkit
-    shared_mime_info
+    shared-mime-info
     libv4l
     ffmpeg
   ];

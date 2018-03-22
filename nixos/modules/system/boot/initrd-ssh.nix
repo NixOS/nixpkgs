@@ -118,7 +118,7 @@ in
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
 
-      dropbear -s -j -k -E -m -p ${toString cfg.port} ${optionalString (cfg.hostRSAKey == null && cfg.hostDSSKey == null && cfg.hostECDSAKey == null) "-R"}
+      dropbear -s -j -k -E -p ${toString cfg.port} ${optionalString (cfg.hostRSAKey == null && cfg.hostDSSKey == null && cfg.hostECDSAKey == null) "-R"}
     '';
 
     boot.initrd.secrets =

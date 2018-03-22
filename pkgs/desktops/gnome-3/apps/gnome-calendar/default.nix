@@ -1,16 +1,26 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
-, gettext, libxml2, gnome3, gtk, evolution_data_server, libsoup
-, glib, gnome_online_accounts, gsettings_desktop_schemas }:
+, gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
+, glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-calendar-${version}";
+  version = "3.26.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-calendar/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1clnfvvsaqw9vpxrs6qrxzmgpaw9x2nkjik2x2vwvm07pdvhddxn";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-calendar"; attrPath = "gnome3.gnome-calendar"; };
+  };
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
   buildInputs = [
-    gtk evolution_data_server libsoup glib gnome_online_accounts
-    gsettings_desktop_schemas gnome3.defaultIconTheme
+    gtk evolution-data-server libsoup glib gnome-online-accounts
+    gsettings-desktop-schemas gnome3.defaultIconTheme
   ];
 
   postPatch = ''

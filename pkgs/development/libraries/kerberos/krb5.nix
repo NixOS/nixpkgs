@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
-    ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';
+    ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+       [ "krb5_cv_attr_constructor_destructor=yes,yes"
+         "ac_cv_func_regcomp=yes"
+         "ac_cv_printf_positional=yes"
+       ];
 
   nativeBuildInputs = [ pkgconfig perl ]
     ++ optional (!libOnly) yacc

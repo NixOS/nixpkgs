@@ -1,18 +1,28 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
 , meson, ninja, gtk, glib, wrapGAppsHook, libnotify
 , itstool, gnome3, gdk_pixbuf, libxml2
-, libcanberra_gtk3, libxslt, docbook_xsl, libpwquality }:
+, libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-disk-utility-${version}";
+  version = "3.26.2";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-disk-utility/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "aa2b96c2c64d8bde6cf802ff8da5796720d0becb21111342ced0637961e256f2";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-disk-utility"; attrPath = "gnome3.gnome-disk-utility"; };
+  };
+
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxslt docbook_xsl
                         wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk glib libsecret libpwquality libnotify libdvdread libcanberra_gtk3
+  buildInputs = [ gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
                   gdk_pixbuf udisks2 gnome3.defaultIconTheme
-                  gnome3.gnome_settings_daemon gnome3.gsettings_desktop_schemas ];
+                  gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

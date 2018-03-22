@@ -628,10 +628,10 @@
   puma = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rmcny3jr1jj01f9fqijwmikj212a5iql7ghifklm77x4a8pp399";
+      sha256 = "1k13n500r7v480rcbxm7k09hip0zi7p8zvy3vajj8g9hb7gdcwnp";
       type = "gem";
     };
-    version = "3.6.0";
+    version = "3.9.1";
   };
   rack = {
     source = {

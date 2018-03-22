@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "06mm2x4b01k3m7wnrxblk9j0mybyr4pfz28ml7944xhjx6fy2w7j";
   };
 
+  patches = [
+    ./Use-stdlib-uint-instead-of-u_int.patch
+  ];
+
   meta = {
     description = "Low-level library for netfilter related kernel/userspace communication";
     longDescription = ''

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   postBuild = ''
     find . -name 'config' -type f | xargs \
     sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g" \
-           -e "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" \
+           -e 's#[^"]*libgdiplus[^"]*"#${libgdiplus}/lib/libgdiplus.so"#' \
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "NumPy-based text/binary PLY file reader/writer for Python";
-    homepage    = "https://github.com/dranjan/python-plyfile";
+    homepage    = https://github.com/dranjan/python-plyfile;
     maintainers = with maintainers; [ abbradar ];
   };
 

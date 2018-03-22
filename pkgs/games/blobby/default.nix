@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL2, SDL2_image, mesa, cmake, physfs, boost, zip, zlib
+{stdenv, fetchurl, SDL2, SDL2_image, libGLU_combined, cmake, physfs, boost, zip, zlib
 , pkgconfig, unzip}:
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [SDL2 SDL2_image mesa cmake physfs boost zip zlib
+  buildInputs = [SDL2 SDL2_image libGLU_combined cmake physfs boost zip zlib
     unzip];
 
   preConfigure=''

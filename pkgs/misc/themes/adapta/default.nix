@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     inkscape
     libxml2
     glib.dev
-    gnome3.gnome_shell
+    gnome3.gnome-shell
   ];
 
   buildInputs = [

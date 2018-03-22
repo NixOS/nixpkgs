@@ -20,14 +20,20 @@ let
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
-      homepage = http://live.gnome.org/Vala;
+      homepage = https://wiki.gnome.org/Projects/Vala;
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono lethalman peterhoeg ];
+      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg ];
     };
   };
 
 in rec {
+
+  vala_0_23 = generic {
+    major   = "0.23";
+    minor   = "3";
+    sha256  = "101xjbc818g4849n9a80c2aai13zakj7mpnd7470xnkvz5jwqq96";
+  };
 
   vala_0_26 = generic {
     major   = "0.26";
@@ -37,8 +43,8 @@ in rec {
 
   vala_0_28 = generic {
     major   = "0.28";
-    minor   = "0";
-    sha256  = "0zwpzhkhfk3piya14m7p2hl2vaabahprphppfm46ci91z39kp7hd";
+    minor   = "1";
+    sha256  = "0isg327w6rfqqdjja6a8pc3xcdkj7pqrkdhw48bsyxab2fkaw3hw";
   };
 
   vala_0_32 = generic {
@@ -49,14 +55,20 @@ in rec {
 
   vala_0_34 = generic {
     major   = "0.34";
-    minor   = "1";
-    sha256  = "16cjybjw100qps6jg0jdyjh8hndz8a876zmxpybnf30a8vygrk7m";
+    minor   = "17";
+    sha256  = "0wd2zxww4z1ys4iqz218lvzjqjjqwsaad4x2by8pcyy43sbr7qp2";
+  };
+
+  vala_0_36 = generic {
+    major   = "0.36";
+    minor   = "12";
+    sha256  = "1nvw721piwdh15bipg0sdll9kvgpz0y9i5fpszlc7y9w64yis25l";
   };
 
   vala_0_38 = generic {
     major   = "0.38";
-    minor   = "1";
-    sha256  = "112hl3lkcyakrk8c3qgw12gzn3nxjkvx7bn0jhl5f2m57d7k8d8h";
+    minor   = "4";
+    sha256  = "1sg5gaq3jhgr9vzh2ypiw475167k150wmyglymr7wwqppmikmcrc";
     extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
     extraBuildInputs = [ graphviz ];
   };

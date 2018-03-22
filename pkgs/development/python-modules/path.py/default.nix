@@ -5,20 +5,21 @@
 , pytestrunner
 , pytest
 , glibcLocales
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "path.py";
-  version = "10.4";
+  version = "11.0";
   name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c63c75777c8a01f7b273c0065a8ea1e3ba0c9b369fa4a2601831e412b2c4881a";
+    sha256 = "16134e5b287aba4a4125a6722e7837cf2a149fccc5000c500ae6c71a5525488b";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  buildInputs = [setuptools_scm glibcLocales ];
+  checkInputs = [ pytest pytestrunner glibcLocales packaging ];
+  buildInputs = [ setuptools_scm ];
 
   LC_ALL="en_US.UTF-8";
 

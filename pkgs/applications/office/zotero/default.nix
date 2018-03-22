@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, buildFHSUserEnv, makeDesktopItem, runCommand, bash, wrapGAppsHook, gsettings_desktop_schemas, gtk3, gnome3 }:
+{ stdenv, fetchurl, buildFHSUserEnv, makeDesktopItem, runCommand, bash, wrapGAppsHook, gsettings-desktop-schemas, gtk3, gnome3 }:
 
 let
-version = "5.0.25";
+version = "5.0.35.1";
 meta = with stdenv.lib; {
   homepage = https://www.zotero.org;
   description = "Collect, organize, cite, and share your research sources";
@@ -15,10 +15,10 @@ zoteroSrc = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "1y3q5582xp4inpz137x0r9iscs1g0cjlqcfjpzl3klsq3yas688k";
+    sha256 = "0d2imvp84svllrnja1dl4nldp634z632g5xkm2q9v7j3dwbzw1hw";
   };
 
-  buildInputs= [ wrapGAppsHook gsettings_desktop_schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
+  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
   phases = [ "unpackPhase" "installPhase" "fixupPhase"];
 
   installPhase = ''
@@ -31,8 +31,8 @@ zoteroSrc = stdenv.mkDerivation rec {
 
 fhsEnv = buildFHSUserEnv {
   name = "zotero-fhs-env";
-  targetPkgs = pkgs: with pkgs; with xlibs; [
-    gtk3 dbus_glib
+  targetPkgs = pkgs: with pkgs; with xorg; [
+    gtk3 dbus-glib
     libXt nss
   ];
 };

@@ -1,16 +1,19 @@
 { stdenv, buildPythonPackage, fetchPypi, termcolor, pytest }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pytest-sugar";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11lni9kn0r1y896xg20qjv4yjcyr56h0hx9dprdgjnam4dqcl6lg";
+    sha256 = "ab8cc42faf121344a4e9b13f39a51257f26f410e416c52ea11078cdd00d98a2c";
   };
 
   propagatedBuildInputs = [ termcolor pytest ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "A plugin that changes the default look and feel of py.test";

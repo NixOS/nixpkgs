@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DMYSQL_LIB_DIR=${mysql}/lib" ];
 
   meta = {
-    homepage = http://dev.mysql.com/downloads/connector/cpp/;
+    homepage = https://dev.mysql.com/downloads/connector/cpp/;
     description = "C++ library for connecting to mysql servers.";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

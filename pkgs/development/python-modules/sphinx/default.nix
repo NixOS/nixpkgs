@@ -27,10 +27,10 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Sphinx";
-  version = "1.6.5";
+  version = "1.7.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6de5dbdbb7a0d7d2757f4389cc00e8f6eb3c49e1772378967a12cfcf2cfe098";
+    sha256 = "da987de5fcca21a4acc7f67a86a363039e67ac3e8827161e61b91deb131c0ee8";
   };
   LC_ALL = "en_US.UTF-8";
 

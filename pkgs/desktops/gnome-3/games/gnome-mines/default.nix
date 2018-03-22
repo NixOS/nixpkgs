@@ -2,7 +2,17 @@
 , librsvg, intltool, itstool, libxml2, libgames-support, libgee }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-mines-${version}";
+  version = "3.26.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-mines/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "2b041eaf0d57307498c56d8e285b2e539f634fdba95d689f6af75aa4ed6edde9";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gnome-mines"; attrPath = "gnome3.gnome-mines"; };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

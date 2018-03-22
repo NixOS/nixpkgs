@@ -1,11 +1,11 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, mesa_glu, alsaLib, dbus, xkeyboardconfig, bc }:
+{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, alsaLib, dbus, xkeyboardconfig, bc }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
     "/run/opengl-driver/lib"
     (stdenv.lib.makeLibraryPath [
-      mesa_glu
+      libGLU
       xorg.libXmu
       xorg.libXi
       xorg.libXext
@@ -29,11 +29,11 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "16.0.671";
+  version = "16.5.405";
   name = "houdini-runtime-${version}";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc4.8.tar.gz";
-    sha256 = "1d3c1a1128szlgaf3ilw5y20plz5azwp37v0ljawgm80y64hq15r";
+    sha256 = "14i0kzv881jqd5z9jshri1fxxi3pkxdmi5l4p2b51c9i3apsxmw6";
     message = ''
       This nix expression requires that ${name} is already part of the store.
       Download it from https://sidefx.com and add it to the nix store with:

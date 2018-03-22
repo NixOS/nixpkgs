@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Python Fedora Module";
     homepage = https://github.com/fedora-infra/python-fedora;
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = with maintainers; [ ];
   };
 }

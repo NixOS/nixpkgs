@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pythonEnv = python3Packages.python.buildEnv.override {
     extraLibs = [ python3Packages.httplib2 ];
   };
-  propogatedBuildInputs = [ pythonEnv ];
+  propagatedBuildInputs = [ pythonEnv ];
 
   postInstall = ''
     substituteInPlace $out/bin/calcurse-caldav --replace /usr/bin/python3 ${pythonEnv}/bin/python3

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, mesa, libdrm,
+{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGLU_combined, libdrm,
   python27, wayland, libudev }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libjpeg libpng xorg.libxcb libX11 mesa libdrm python27 wayland libudev
+    libjpeg libpng xorg.libxcb libX11 libGLU_combined libdrm python27 wayland libudev
   ];
 
   buildPhase = ''

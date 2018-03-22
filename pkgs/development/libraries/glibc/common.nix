@@ -4,7 +4,7 @@
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
-, fetchurl
+, fetchurl, fetchpatch ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 }:
@@ -20,7 +20,7 @@
 
 let
   version = "2.26";
-  patchSuffix = "-75";
+  patchSuffix = "-131";
   sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
@@ -47,6 +47,10 @@ stdenv.mkDerivation ({
           $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
       */
       ./2.26-75.patch.gz
+      ./2.26-75to115.diff.gz
+      # contains fix for CVE-2018-1000001 as the last commit:
+      # https://sourceware.org/git/?p=glibc.git;a=commit;h=fabef2edbc
+      ./2.26-115to131.diff.gz
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
@@ -64,8 +68,33 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
+
+      /* Allow running with RHEL 6 -like kernels.  The patch adds an exception
+        for glibc to accept 2.6.32 and to tag the ELFs as 2.6.32-compatible
+        (otherwise the loader would refuse libc).
+        Note that glibc will fully work only on their heavily patched kernels
+        and we lose early mismatch detection on 2.6.32.
+
+        On major glibc updates we should check that the patched kernel supports
+        all the required features.  ATM it's verified up to glibc-2.26-131.
+        # HOWTO: check glibc sources for changes in kernel requirements
+        git log -p glibc-2.25.. sysdeps/unix/sysv/linux/x86_64/kernel-features.h sysdeps/unix/sysv/linux/kernel-features.h
+        # get kernel sources (update the URL)
+        mkdir tmp && cd tmp
+        curl http://vault.centos.org/6.9/os/Source/SPackages/kernel-2.6.32-696.el6.src.rpm | rpm2cpio - | cpio -idmv
+        tar xf linux-*.bz2
+        # check syscall presence, for example
+        less linux-*?/arch/x86/kernel/syscall_table_32.S
+       */
+      ./allow-kernel-2.6.32.patch
     ]
-    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch;
+    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
+    ++ lib.optional stdenv.hostPlatform.isMusl
+      (fetchpatch {
+        name = "fix-with-musl.patch";
+        url = "https://sourceware.org/bugzilla/attachment.cgi?id=10151&action=diff&collapsed=&headers=1&format=raw";
+        sha256 = "18kk534k6da5bkbsy1ivbi77iin76lsna168mfcbwv4ik5vpziq2";
+      });
 
   postPatch =
     # Needed for glibc to build with the gnumake 3.82
@@ -104,7 +133,6 @@ stdenv.mkDerivation ({
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (cross != null) [
-      (if cross.withTLS then "--with-tls" else "--without-tls")
       (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
     ] ++ lib.optionals (cross != null) [
       "--with-__thread"
@@ -121,7 +149,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "bin" "dev" "static" ];
 
-  nativeBuildInputs = lib.optional (cross != null) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
@@ -133,8 +161,7 @@ stdenv.mkDerivation ({
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}${patchSuffix}" +
-    lib.optionalString (cross != null) "-${cross.config}";
+  name = name + "-${version}${patchSuffix}";
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
@@ -167,14 +194,7 @@ stdenv.mkDerivation ({
     libc_cv_forced_unwind=yes
     libc_cv_c_cleanup=yes
     libc_cv_gnu89_inline=yes
-    # Only due to a problem in gcc configure scripts:
-    libc_cv_sparc64_tls=${if cross.withTLS then "yes" else "no"}
     EOF
-
-    export BUILD_CC=gcc
-    export CC="$crossConfig-gcc"
-    export AR="$crossConfig-ar"
-    export RANLIB="$crossConfig-ranlib"
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
@@ -208,6 +228,6 @@ stdenv.mkDerivation ({
 
   # To avoid a dependency on the build system 'bash'.
   preFixup = ''
-    rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
+    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
   '';
 })

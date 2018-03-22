@@ -27,6 +27,7 @@
 
 , wirelessSupport     ? true      , wirelesstools ? null
 , nvidiaSupport       ? false     , libXNVCtrl ? null
+, pulseSupport        ? false     , libpulseaudio ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport
@@ -54,6 +55,7 @@ assert luaCairoSupport || luaImlib2Support
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
+assert pulseSupport        -> libpulseaudio != null;
 
 assert curlSupport         -> curl != null;
 assert rssSupport          -> curlSupport && libxml2 != null;
@@ -64,24 +66,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "conky-${version}";
-  version = "1.10.6";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "15j8h251v9jpdg6h6wn1vb45pkk806pf9s5n3rdrps9r185w8hn8";
+    sha256 = "18kxjmaplqvn81vmvybvpc9qczm7wgcgd4af3a8vsqdv77cn5bwq";
   };
-
-  patches = [
-    # Patch to fix compilation on gcc-7 from conky PR
-    # https://github.com/brndnmtthws/conky/pull/402
-    (fetchpatch {
-      name = "gcc7.patch";
-      url = "https://github.com/brndnmtthws/conky/commit/6140122b82d50acc333e5d2a813cc1933ecc6d21.patch";
-      sha256 = "1fblfj1w2kc0gshc2pq9lc1pxxsgmgh8byb1xs2v6amx15kj11k7";
-    })
-  ];
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
@@ -95,8 +87,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib cmake libXinerama ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glib libXinerama ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper
@@ -110,6 +102,7 @@ stdenv.mkDerivation rec {
     ++ optional  rssSupport         libxml2
     ++ optional  weatherXoapSupport libxml2
     ++ optional  nvidiaSupport      libXNVCtrl
+    ++ optional  pulseSupport       libpulseaudio
     ;
 
   cmakeFlags = []
@@ -129,6 +122,7 @@ stdenv.mkDerivation rec {
     ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
+    ++ optional pulseSupport        "-DBUILD_PULSEAUDIO=ON"
     ;
 
   # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:

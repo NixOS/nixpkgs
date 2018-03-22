@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "rocksndiamonds";
-  version = "4.0.0.2";
+  version = "4.0.1.3";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/unix/${project}/${name}.tar.gz";
-    sha256 = "0dzn6vlayvnkjm64zwva337rn07lc21kq93m2h8zz8j3wpl11pb4";
+    sha256 = "0y8w96hav7k5qwpm6rvzn3g4czfpsc58dix3x98anqii9l6vwrdd";
   };
 
   desktopItem = makeDesktopItem {

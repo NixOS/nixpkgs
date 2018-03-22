@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus_glib, ppp, intltool, pkgconfig
+{ stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, intltool, pkgconfig
 , libmbim, libqmi, systemd }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  buildInputs = [ udev libgudev polkit dbus_glib ppp libmbim libqmi systemd ];
+  buildInputs = [ udev libgudev polkit dbus-glib ppp libmbim libqmi systemd ];
 
   configureFlags = [
     "--with-polkit"

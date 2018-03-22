@@ -1,0 +1,22 @@
+--- ./src/gallium/winsys/svga/drm/vmw_screen.h.orig
++++ ./src/gallium/winsys/svga/drm/vmw_screen.h
+@@ -34,7 +34,7 @@
+ #ifndef VMW_SCREEN_H_
+ #define VMW_SCREEN_H_
+ 
+-
++#include <sys/stat.h>
+ #include "pipe/p_compiler.h"
+ #include "pipe/p_state.h"
+ 
+--- a/src/util/u_endian.h.orig	2016-11-04 12:16:00.480356454 +0100
++++ b/src/util/u_endian.h	2016-11-04 12:16:11.984347944 +0100
+@@ -27,7 +27,7 @@
+ #ifndef U_ENDIAN_H
+ #define U_ENDIAN_H
+ 
+-#if defined(__GLIBC__) || defined(ANDROID) || defined(__CYGWIN__)
++#if defined(__linux__) || defined(ANDROID) || defined(__CYGWIN__)
+ #include <endian.h>
+ 
+ #if __BYTE_ORDER == __LITTLE_ENDIAN

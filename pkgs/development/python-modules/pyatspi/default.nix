@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, at_spi2_core, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, at-spi2-core, pythonPackages }:
 
 stdenv.mkDerivation rec {
   pname = "pyatspi";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   broken = true;
 
   buildInputs = [
-    at_spi2_core
+    at-spi2-core
     pkgconfig
     pythonPackages.python
     pythonPackages.pygobject3

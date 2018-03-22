@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
   poppler, imagemagick, glew, openexr, ffmpeg, opencolorio, openimageio,
-  qmake4Hook, libpng, mesa_noglu, lndir }:
+  qmake4Hook, libpng, libGL, lndir }:
 
 let
   minorVersion = "2.1";
@@ -68,7 +68,7 @@ let
       sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        libpng ffmpeg openexr opencolorio openimageio boost mesa_noglu
+        libpng ffmpeg openexr opencolorio openimageio boost libGL
         seexpr
       ];
     })
@@ -76,7 +76,7 @@ let
       pluginName = "misc";
       sha256 = "02h79jrll0c17azxj16as1mks3lmypm4m3da4mms9sg31l3n82qi";
       buildInputs = [
-        mesa_noglu
+        libGL
       ];
       preConfigure = ''
         cp ${CImgh} CImg/CImg.h

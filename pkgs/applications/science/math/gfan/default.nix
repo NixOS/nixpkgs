@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "gfan";
-  version = "0.6";
+  version = "0.6.2";
 
   src = fetchurl {
     url = "http://home.math.au.dk/jensen/software/gfan/gfan${version}.tar.gz";
-    sha256 = "02d6dvzfwy0lnidfgf98052jfqwy285nfm1h5nnx7jbgic1nnpgz";
+    sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
   makeFlags = ''PREFIX=$(out) CC=cc CXX=c++ cddnoprefix=1'';

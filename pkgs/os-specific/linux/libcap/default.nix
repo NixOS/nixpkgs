@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, attr, perl, pam ? null }:
+{ stdenv, buildPackages, fetchurl, attr, perl, pam ? null }:
 assert pam != null -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ stdenv.lib.optional (pam != null) "pam";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ pam ];
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "lib=lib"
     (stdenv.lib.optional (pam != null) "PAM_CAP=yes")
+    "BUILD_CC=$(CC_FOR_BUILD)"
+    "CC:=$(CC)"
   ];
 
   prePatch = ''

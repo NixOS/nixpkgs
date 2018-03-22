@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
   buildInputs = [ glib gjs mutter gnome3.adwaita-icon-theme
-                  gtk3 gnome3.gnome_control_center dbus
+                  gtk3 gnome3.gnome-control-center dbus
                   clutter pango appstream-glib systemd gobjectIntrospection ];
 
   configureFlags = [ "--with-controlcenterdir=$(out)/share/gnome-control-center/keybindings"

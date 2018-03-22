@@ -179,6 +179,19 @@ in
         description = "Whether to enable the prosody server";
       };
 
+      package = mkOption {
+        type = types.package;
+        description = "Prosody package to use";
+        default = pkgs.prosody;
+        defaultText = "pkgs.prosody";
+        example = literalExample ''
+          pkgs.prosody.override {
+            withExtraLibs = [ pkgs.luaPackages.lpty ];
+            withCommunityModules = [ "auth_external" ];
+          };
+        '';
+      };
+
       allowRegistration = mkOption {
         type = types.bool;
         default = false;
@@ -306,7 +319,7 @@ in
         User = "prosody";
         Type = "forking";
         PIDFile = "/var/lib/prosody/prosody.pid";
-        ExecStart = "${pkgs.prosody}/bin/prosodyctl start";
+        ExecStart = "${cfg.package}/bin/prosodyctl start";
       };
     };
 

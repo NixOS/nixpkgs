@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, autoconf, gtk_doc, automake, libtool, pkgconfig, glib, libsoup, gobjectIntrospection }:
+{ stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkgconfig, glib, libsoup, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   version="0.5.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf gtk_doc automake libtool glib libsoup gobjectIntrospection ];
+  buildInputs = [ autoconf gtk-doc automake libtool glib libsoup gobjectIntrospection ];
 
   preConfigure = "./autogen.sh";
 

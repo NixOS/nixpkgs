@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ninja, meson, pkgconfig, gcc7, nixUnstable, isPy3k }:
+{ stdenv, fetchFromGitHub, ninja, meson, pkgconfig, nixUnstable, isPy3k }:
 
 assert isPy3k;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1piblysypyr442a6najk4mdh87xc377i2fdbfw6fr569z60mnnnj";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja gcc7 ];
+  nativeBuildInputs = [ meson pkgconfig ninja ];
 
   buildInputs = [ nixUnstable ];
 

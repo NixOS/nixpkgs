@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "libgpuarray";
-  version = "0.6.9";
+  version = "0.7.5";
   name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "Theano";
     repo = "libgpuarray";
     rev = "v${version}";
-    sha256 = "06z47ls42a37gbv0x7f3l1qvils7q0hvy02s95l530klgibp19s0";
+    sha256 = "0zkdwjq3k6ciiyf8y5w663fbsnmzhgy27yvpxfhkpxazw9vg3l5v";
   };
 
   # requires a GPU
@@ -40,7 +40,6 @@ buildPythonPackage rec {
     make -j$NIX_BUILD_CORES
     make install
 
-    ls $out/lib
     export NIX_CFLAGS_COMPILE="-L $out/lib -I $out/include $NIX_CFLAGS_COMPILE"
 
     cd ..

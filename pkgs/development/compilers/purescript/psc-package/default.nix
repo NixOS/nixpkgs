@@ -22,5 +22,5 @@ mkDerivation rec {
 
   description = "An experimental package manager for PureScript";
   license = licenses.bsd3;
-  maintainers = with lib.maintainers; [ profpatsch ];
+  maintainers = with lib.maintainers; [ Profpatsch ];
 }

@@ -4,7 +4,7 @@
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
-, libxkbcommon, xcbutilxrm, hicolor_icon_theme
+, libxkbcommon, xcbutilxrm, hicolor-icon-theme
 }:
 
 with luaPackages; stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ with luaPackages; stdenv.mkDerivation rec {
     docbook_xsl findXMLCatalogs
   ];
 
-  propagatedUserEnvPkgs = [ hicolor_icon_theme ];
+  propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [ cairo librsvg dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
@@ -41,7 +41,6 @@ with luaPackages; stdenv.mkDerivation rec {
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
-  LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
@@ -49,10 +48,9 @@ with luaPackages; stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/awesome \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix LUA_CPATH ";" '${lgi}/lib/lua/${lua.luaversion}/?.so' \
-      --prefix LUA_PATH ";" '${lgi}/share/lua/${lua.luaversion}/?.lua' \
+      --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
+      --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"
 
     wrapProgram $out/bin/awesome-client \

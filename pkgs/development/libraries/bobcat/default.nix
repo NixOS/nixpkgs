@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     homepage = https://fbb-git.github.io/bobcat/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

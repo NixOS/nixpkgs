@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1

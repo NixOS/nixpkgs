@@ -3,11 +3,11 @@
 , intltool
 , docbook2x, docbook_xml_dtd_412, libxslt
 , sword, clucene_core, biblesync
-, gnome_doc_utils
+, gnome-doc-utils
 , libgsf, gconf
 , gtkhtml, libglade, scrollkeeper
 , webkitgtk
-, dbus_glib, enchant, isocodes, libuuid, icu
+, dbus-glib, enchant, isocodes, libuuid, icu
 , wrapGAppsHook
 }:
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ python intltool docbook2x docbook_xml_dtd_412 libxslt
-                  sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml
-                  libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid icu ];
+                  sword clucene_core biblesync gnome-doc-utils libgsf gconf gtkhtml
+                  libglade scrollkeeper webkitgtk dbus-glib enchant isocodes libuuid icu ];
 
   prePatch = ''
     patchShebangs .;

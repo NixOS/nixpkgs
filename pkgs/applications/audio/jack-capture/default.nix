@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jack_capture-${version}";
-  version = "0.9.69";
+  version = "0.9.73";
 
   src = fetchurl {
     url = "http://archive.notam02.no/arkiv/src/${name}.tar.gz";
-    sha256 = "0sk7b92my1v1g7rhkpl1c608rb0rdb28m9zqfll95kflxajd16zv";
+    sha256 = "1pji0zdwm3kxjrkbzj7fnxhr8ncrc8pyqnwyrh47fhypgqjv1br1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

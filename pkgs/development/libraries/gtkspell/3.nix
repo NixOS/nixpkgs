@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, intltool}:
+{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool}:
 
 stdenv.mkDerivation rec {
   name = "gtkspell-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ aspell gtk3 enchant ];
+  buildInputs = [ aspell gtk3 enchant isocodes ];
   propagatedBuildInputs = [ enchant ];
 
   meta = with stdenv.lib; {

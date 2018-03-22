@@ -1,7 +1,7 @@
-{ fetchurl, fetchpatch, stdenv, meson, ninja, pkgconfig, gnome3, json_glib, libcroco, gettext, libsecret
-, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at_spi2_core
-, libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip, glibcLocales
-, sqlite, libgweather, libcanberra_gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42
+{ fetchurl, fetchpatch, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, libcroco, gettext, libsecret
+, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
+, libstartup_notification, telepathy-glib, telepathy-logger, libXtst, p11-kit, unzip, glibcLocales
+, sqlite, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42
 , libpulseaudio, libical, nss, gobjectIntrospection, gstreamer, wrapGAppsHook
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
 , gst_all_1 }:
@@ -12,7 +12,13 @@ let
   pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 
 in stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gnome-shell-${version}";
+  version = "3.26.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "e5a87f2f838d981db9823352b90b2ce2f40d24d31ed9f062dccfa41b820e0b1c";
+  };
 
   # Needed to find /etc/NetworkManager/VPN
   mesonFlags = [ "--sysconfdir=/etc" ];
@@ -21,17 +27,17 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales ];
   buildInputs = with gnome3;
-    [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
+    [ gsettings-desktop-schemas gnome-keyring gnome-menus glib gcr json-glib accountsservice
       libcroco libsecret pkgconfig libsoup polkit gdk_pixbuf
       (librsvg.override { enableIntrospection = true; })
-      clutter networkmanager libstartup_notification telepathy_glib
-      libXtst p11_kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution_data_server
+      clutter networkmanager libstartup_notification telepathy-glib
+      libXtst p11-kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution-data-server
       libical nss gtk gstreamer gdm
-      libcanberra_gtk3 gnome_control_center geoclue2
+      libcanberra-gtk3 gnome-control-center geoclue2
       defaultIconTheme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime
       gnome3.gnome-clocks # schemas needed
-      at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon
+      at-spi2-core upower ibus gnome-desktop telepathy-logger gnome3.gnome-settings-daemon
       gst_all_1.gst-plugins-good # recording
       gobjectIntrospection (stdenv.lib.getLib dconf) ];
   propagatedUserEnvPkgs = [
@@ -70,6 +76,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";
+    updateScript = gnome3.updateScript { packageName = "gnome-shell"; attrPath = "gnome3.gnome-shell"; };
   };
 
   meta = with stdenv.lib; {

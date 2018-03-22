@@ -1,5 +1,5 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, libiconv
+, guileBindings, guile, perl, gmp, autogen, libidn, p11-kit, libiconv
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , unbound, dns-root-data, gettext
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen libunistring unbound ]
+  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional stdenv.isDarwin gettext
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers

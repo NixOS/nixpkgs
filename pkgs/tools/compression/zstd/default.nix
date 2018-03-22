@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, gnugrep
+, fixDarwinDylibNames
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +12,8 @@ stdenv.mkDerivation rec {
     repo = "zstd";
     owner = "facebook";
   };
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
@@ -45,6 +48,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd2 ];
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

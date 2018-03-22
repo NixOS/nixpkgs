@@ -12,11 +12,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.1";
+  version = "5.6.2";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0lxbyiary8iapx3ysw40czrmxf983fhfzs5mvz2hk1j1mpc85hp0";
+    sha256 = "14ifqay54brw2b2hbmm517bxw8bs9631d7jm4g139igkxcq0m9p0";
   };
 
   dontPatchELF = true;
@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
          "--enable-aikgen"
          "--enable-sqlite" ]
     ++ optional enableNetworkManager "--enable-nm";
+
+  postInstall = ''
+    # this is needed for l2tp
+    echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
+  '';
 
   NIX_LDFLAGS = "-lgcc_s" ;
 

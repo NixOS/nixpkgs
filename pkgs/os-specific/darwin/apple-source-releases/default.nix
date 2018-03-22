@@ -186,7 +186,7 @@ let
     # There should be an IOVideo here, but they haven't released it :(
   };
 
-  IOKitSrcs = stdenv.lib.mapAttrs (name: value: if builtins.isFunction value then value name else value) IOKitSpecs;
+  IOKitSrcs = stdenv.lib.mapAttrs (name: value: if stdenv.lib.isFunction value then value name else value) IOKitSpecs;
 
   adv_cmds = applePackage "adv_cmds" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 

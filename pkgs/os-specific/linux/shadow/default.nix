@@ -1,5 +1,5 @@
 { stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_412, docbook_xsl, gnome_doc_utils, flex, bison
+, docbook_xml_dtd_412, docbook_xsl, gnome-doc-utils, flex, bison
 , pam ? null, glibcCross ? null
 , buildPlatform, hostPlatform
 }:
@@ -9,7 +9,7 @@ let
   glibc =
     if hostPlatform != buildPlatform
     then glibcCross
-    else assert stdenv ? glibc; stdenv.glibc;
+    else assert hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
   dots_in_usernames = fetchpatch {
     url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_412 docbook_xsl gnome_doc_utils flex bison
+    docbook_xml_dtd_412 docbook_xsl gnome-doc-utils flex bison
     ];
 
   patches =
@@ -60,9 +60,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
-  configureFlags = " --enable-man ";
+  configureFlags = " --enable-man "
+    + stdenv.lib.optionalString (hostPlatform.libc != "glibc") " --disable-nscd ";
 
-  preBuild = assert glibc != null;
+  preBuild = stdenv.lib.optionalString (hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';

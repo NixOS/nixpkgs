@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   pname = "tribler";
   name = "${pname}-${version}";
-  version = "7.0.0-rc3";
+  version = "7.0.1";
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "0f1f8mzbk1ygkh8lv9y1s9mvslv12d94mxvmp3b4s2vm8w4syza7";
+    sha256 = "0cqg6319x2lid5la5vdlj6lwja8g712196j39jzv5yiaq8d0zym4";
   };
 
   buildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ xvapx ];
-    homepage = http://www.tribler.org/;
+    homepage = https://www.tribler.org/;
     description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "yle-dl-${version}";
-  version = "2.30";
+  version = "2.31";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "08qqsg0rmp4xfzmla81f0a4vblqfw3rh90wvxm91vbm6937b4i7i";
+    sha256 = "0k93p9csyjm0w33diwl5s22kzs3g78jl3n9k8nxxpqrybfjl912f";
   };
 
   propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests future ffmpeg ];

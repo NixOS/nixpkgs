@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "advancecomp-${version}";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "advancecomp";
     rev = "v${version}";
-    sha256 = "1lvrcxcxbxac47j0ml11nikx38zan7bbr3dfjssm52r5v4cmh8j9";
+    sha256 = "1pd6czamamrd0ppk5a3a65hcgdlqwja98aandhqiajhnibwldv8x";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

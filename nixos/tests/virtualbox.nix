@@ -43,6 +43,9 @@ let
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
 
+    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
+    boot.kernelPackages = pkgs.linuxPackages_4_9;
+
     fileSystems."/" = {
       device = "vboxshare";
       fsType = "vboxsf";

@@ -64,8 +64,8 @@ in
 
   config = {
     # Note: this is set here rather than up there so that changing
-    # nixosLabel would not rebuild manual pages
-    services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixosLabel} (\m) - \l >>>'';
+    # nixos.label would not rebuild manual pages
+    services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [

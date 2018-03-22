@@ -1,10 +1,8 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
-, langAda ? false
-, langVhdl ? false
 , langGo ? false
 , profiledCompiler ? false
 , staticCompiler ? false
@@ -21,13 +19,11 @@
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , x11Support ? langJava
-, gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? false
-, gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
@@ -40,17 +36,12 @@
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
-assert langAda      -> gnatboot != null;
-assert langVhdl     -> gnat != null;
 
 # LTO needs libelf and zlib.
 assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
 assert hostPlatform.isDarwin -> gnused != null;
-
-# Need c++filt on darwin
-assert hostPlatform.isDarwin -> targetPackages.stdenv.cc.bintools or null != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -70,14 +61,15 @@ let version = "5.5.0";
       [ ../use-source-date-epoch.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
-      # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
-      # target libraries and tools.
-      ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
 
       # This could be applied unconditionally but I don't want to cause a full
       # Linux rebuild.
-      ++ optional stdenv.cc.isClang ./libcxx38-and-above.patch;
+      ++ optional stdenv.cc.isClang ./libcxx38-and-above.patch
+      ++ optional stdenv.hostPlatform.isMusl (fetchpatch {
+        url = https://raw.githubusercontent.com/richfelker/musl-cross-make/e84b1bd1fc12a3def33111ca6df522cd6e5ec361/patches/gcc-5.3.0/0001-musl.diff;
+        sha256 = "0pppbf8myi2kjhm3z3479ihn1cm60kycfv60gj8yy1bs0pl1qcfm";
+      });
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -163,7 +155,7 @@ let version = "5.5.0";
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ] else
-          optionals (targetPlatform.libc == "uclibc") [
+          optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
             # libsanitizer requires netrom/netrom.h which is not
             # available in uclibc.
             "--disable-libsanitizer"
@@ -261,15 +253,22 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
-        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
+        (
+        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER', \`UCLIBC_DYNAMIC_LINKER', and \`MUSL_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
            do
-             grep -q LIBC_DYNAMIC_LINKER "$header" || continue
+             grep -q _DYNAMIC_LINKER "$header" || continue
              echo "  fixing \`$header'..."
              sed -i "$header" \
-                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g'
+                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
+                 -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
+        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        ''
+            sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
+        ''
+        )
     else null;
 
   # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
@@ -277,19 +276,27 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr libmpc libelf ]
-    ++ (optional (isl != null) isl)
+  # For building runtime libs
+  depsBuildTarget =
+    if hostPlatform == buildPlatform then [
+      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+    ] else assert targetPlatform == hostPlatform; [ # build != host == target
+      stdenv.cc
+    ];
+
+  buildInputs = [
+    gmp mpfr libmpc libelf
+    targetPackages.stdenv.cc.bintools # For linking code at run-time
+  ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
-    ++ (optionals (buildPlatform != hostPlatform) [buildPackages.stdenv.cc])
-    ++ (optionals langAda [gnatboot])
-    ++ (optionals langVhdl [gnat])
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
@@ -311,7 +318,7 @@ stdenv.mkDerivation ({
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if hostPlatform == targetPlatform && targetPlatform.isArm
+    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
@@ -341,8 +348,6 @@ stdenv.mkDerivation ({
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
-          ++ optional langAda      "ada"
-          ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
           ++ optional langObjC     "objc"
           ++ optional langObjCpp   "obj-c++"
@@ -375,9 +380,6 @@ stdenv.mkDerivation ({
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
 
-    # Ada
-    optional langAda "--enable-libada" ++
-
     platformFlags ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
@@ -389,6 +391,7 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
@@ -404,57 +407,12 @@ stdenv.mkDerivation ({
 
   /* For cross-built gcc (build != host == target) */
   crossAttrs = {
-    AR_FOR_BUILD = "ar";
-    AS_FOR_BUILD = "as";
-    LD_FOR_BUILD = "ld";
-    NM_FOR_BUILD = "nm";
-    OBJCOPY_FOR_BUILD = "objcopy";
-    OBJDUMP_FOR_BUILD = "objdump";
-    RANLIB_FOR_BUILD = "ranlib";
-    SIZE_FOR_BUILD = "size";
-    STRINGS_FOR_BUILD = "strings";
-    STRIP_FOR_BUILD = "strip";
-    CC_FOR_BUILD = "gcc";
-    CXX_FOR_BUILD = "g++";
-
-    AR = "${targetPlatform.config}-ar";
-    AS = "${targetPlatform.config}-as";
-    LD = "${targetPlatform.config}-ld";
-    NM = "${targetPlatform.config}-nm";
-    OBJCOPY = "${targetPlatform.config}-objcopy";
-    OBJDUMP = "${targetPlatform.config}-objdump";
-    RANLIB = "${targetPlatform.config}-ranlib";
-    SIZE = "${targetPlatform.config}-size";
-    STRINGS = "${targetPlatform.config}-strings";
-    STRIP = "${targetPlatform.config}-strip";
-    CC = "${targetPlatform.config}-gcc";
-    CXX = "${targetPlatform.config}-g++";
-
-    AR_FOR_TARGET = "${targetPlatform.config}-ar";
-    AS_FOR_TARGET = "${targetPlatform.config}-as";
-    LD_FOR_TARGET = "${targetPlatform.config}-ld";
-    NM_FOR_TARGET = "${targetPlatform.config}-nm";
-    OBJCOPY_FOR_TARGET = "${targetPlatform.config}-objcopy";
-    OBJDUMP_FOR_TARGET = "${targetPlatform.config}-objdump";
-    RANLIB_FOR_TARGET = "${targetPlatform.config}-ranlib";
-    SIZE_FOR_TARGET = "${targetPlatform.config}-size";
-    STRINGS_FOR_TARGET = "${targetPlatform.config}-strings";
-    STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
-    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
-    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-
     dontStrip = true;
     buildFlags = "";
   };
 
-  NIX_BUILD_BINTOOLS = buildPackages.stdenv.cc.bintools;
-  NIX_BUILD_CC = buildPackages.stdenv.cc;
-
-  # Needed for the cross compilation to work
-  AR = "ar";
-  LD = "ld";
   # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  CC = if stdenv.system == "x86_64-solaris" then "gcc -m64" else "gcc";
+  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.
@@ -515,7 +473,7 @@ stdenv.mkDerivation ({
     ]);
 
   passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
 
   inherit enableParallelBuilding enableMultilib;
 
@@ -538,12 +496,10 @@ stdenv.mkDerivation ({
 
     maintainers = with stdenv.lib.maintainers; [ viric peti ];
 
-    # gnatboot is not available out of linux platforms, so we disable the darwin build
-    # for the gnat (ada compiler).
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
-      optionals (langAda == false) stdenv.lib.platforms.darwin;
+      stdenv.lib.platforms.darwin;
   };
 }
 

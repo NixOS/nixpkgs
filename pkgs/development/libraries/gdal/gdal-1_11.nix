@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
 , libpng }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--with-libz=${zlib.dev}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
+    "--with-mysql=${mysql57.connector-c}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional

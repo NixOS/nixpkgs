@@ -1,4 +1,5 @@
 { stdenv, fetchurl, which }:
+
 stdenv.mkDerivation rec {
   name = "eprover-${version}";
   version = "2.0";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ which ];
 
   preConfigure = ''
-    sed -e 's/ *CC *= gcc$//' -i Makefile.vars
+    sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
   '';
   configureFlags = "--exec-prefix=$(out) --man-prefix=$(out)/share/man";
 

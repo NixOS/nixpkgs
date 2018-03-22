@@ -1,16 +1,16 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl, go-bindata }:
 
 let
-  version = "10.2.0";
+  version = "10.5.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-x86_64.tar.xz";
-    sha256 = "191yzh9k6ivj7mdfi5mv7wgbdcclb5q99rcbry70h064vzwfgkp6";
+    sha256 = "1ywfki1599ggyq0g3r8f7pi1njvvjz41kjhssfax20ljm2c6q5v0";
   };
 
   docker_arm = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/docker/prebuilt-arm.tar.xz";
-    sha256 = "1xvfsffwks5z74kxba6f4cilbabcsxhr0kskbxwczi90pn0rxsnn";
+    sha256 = "0r71zvyg17926h2vpjr3q16l1yqcb8ky21ic5arc7jh82nzywywl";
   };
 in
 buildGoPackage rec {
@@ -29,7 +29,7 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "1psnajn4b3ym2fpvn6rizxqb093s78lvxcs3bysgrmf9q1ivf3a6";
+    sha256 = "13c9jzqj92xf2dzk77xpsfc4dwffvjfp8bqy685shzz1lrrfhfvq";
   };
 
   patches = [ ./fix-shell-path.patch ];

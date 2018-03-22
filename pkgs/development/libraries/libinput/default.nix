@@ -16,11 +16,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-${version}";
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "09wkc5qqk1k2a68cwfy4x853z8z35wf2qkijh66kacsvc2fjq394";
+    sha256 = "0mrzsf0349d1g68lizkzxw7vaw459fl8xhl7v0s8njb31hp2riy2";
   };
 
   outputs = [ "out" "dev" ];
@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = testsSupport;
-
-  checkPhase = "meson test";
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";

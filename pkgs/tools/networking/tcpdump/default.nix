@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     LDFLAGS = if enableStatic then "-static" else "";
     configureFlags = [ "ac_cv_linux_vers=2" ] ++ (stdenv.lib.optional
-      (hostPlatform.platform.kernelMajor == "2.4") "--disable-ipv6");
+      (hostPlatform.platform.kernelMajor or null == "2.4") "--disable-ipv6");
   };
 
   meta = {
     description = "Network sniffer";
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ mornfall jgeerds ];
+    maintainers = with stdenv.lib.maintainers; [ jgeerds ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

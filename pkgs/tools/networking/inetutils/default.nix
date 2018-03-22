@@ -15,7 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ help2man ];
 
-  configureFlags = "--with-ncurses-include-dir=${ncurses.dev}/include";
+  configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
+  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
+    "--disable-rcp"
+    "--disable-rsh"
+    "--disable-rlogin"
+    "--disable-rexec"
+  ];
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # XXX: These programs are normally installed setuid but since it
     # fails, they end up being non-executable, hence this hack.
-    chmod +x $out/bin/{ping,ping6,rcp,rlogin,rsh,traceroute}
+    chmod +x $out/bin/{ping,ping6,${stdenv.lib.optionalString (!stdenv.hostPlatform.isMusl) ''rcp,rlogin,rsh,''}traceroute}
   '';
 
   meta = {

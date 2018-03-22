@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
-  version = "0.26.0";
+  version = "0.26.1";
 
   src = fetchurl {
     url = "http://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "1brnh5x3fd91j3v8rz3van08m9i0ym4lv4hqz274s86v1kx4k330";
+    sha256 = "04ahfm52vcf1w0c2km0wdgj2jpffp45bpawczmygcg8fdcm021lp";
   };
 
   buildInputs = with perlPackages; [ asciidoc-full makeWrapper perl DateCalc ];
@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
       --replace '$btrbk' 'btrbk'
   '';
 
-  fixupPhase = ''
-    patchShebangs $out/
-
+  preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"

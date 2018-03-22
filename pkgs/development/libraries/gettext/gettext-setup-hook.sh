@@ -4,4 +4,4 @@ gettextDataDirsHook() {
     fi
 }
 
-envHooks+=(gettextDataDirsHook)
+addEnvHooks "$hostOffset" gettextDataDirsHook

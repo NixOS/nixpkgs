@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json_glib, libsoup, geoip
-, dbus, dbus_glib, modemmanager, avahi, glib_networking, wrapGAppsHook
+{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json-glib, libsoup, geoip
+, dbus, dbus-glib, modemmanager, avahi, glib-networking, wrapGAppsHook
 }:
 
 with stdenv.lib;
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = libintlOrEmpty ++
-   [ glib json_glib libsoup geoip
-     dbus dbus_glib avahi
+   [ glib json-glib libsoup geoip
+     dbus dbus-glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
-  propagatedBuildInputs = [ dbus dbus_glib glib glib_networking ];
+  propagatedBuildInputs = [ dbus dbus-glib glib glib-networking ];
 
   preConfigure = ''
      substituteInPlace configure --replace "-Werror" ""

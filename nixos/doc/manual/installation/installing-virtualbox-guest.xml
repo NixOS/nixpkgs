@@ -4,18 +4,18 @@
          version="5.0"
          xml:id="sec-instaling-virtualbox-guest">
 
-<title>Installing in a Virtualbox guest</title>
+<title>Installing in a VirtualBox guest</title>
 <para>
-  Installing NixOS into a Virtualbox guest is convenient for users who want to
+  Installing NixOS into a VirtualBox guest is convenient for users who want to
   try NixOS without installing it on bare metal. If you want to use a pre-made
-  Virtualbox appliance, it is available at <link
+  VirtualBox appliance, it is available at <link
   xlink:href="https://nixos.org/nixos/download.html">the downloads page</link>.
-  If you want to set up a Virtualbox guest manually, follow these instructions:
+  If you want to set up a VirtualBox guest manually, follow these instructions:
 </para>
 
 <orderedlist>
 
-  <listitem><para>Add a New Machine in Virtualbox with OS Type "Linux / Other
+  <listitem><para>Add a New Machine in VirtualBox with OS Type "Linux / Other
   Linux"</para></listitem>
 
   <listitem><para>Base Memory Size: 768 MB or higher.</para></listitem>

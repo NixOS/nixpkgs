@@ -29,7 +29,11 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
+
+    [git]
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -70,7 +74,7 @@ let
       secret_key_base: ${cfg.secrets.secret}
       otp_key_base: ${cfg.secrets.otp}
       db_key_base: ${cfg.secrets.db}
-      jws_private_key: ${builtins.toJSON cfg.secrets.jws}
+      openid_connect_signing_key: ${builtins.toJSON cfg.secrets.jws}
   '';
 
   gitlabConfig = {
@@ -104,6 +108,7 @@ let
       ldap.enabled = false;
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
+      gitaly.client_path = "${cfg.packages.gitaly}/bin";
       backup.path = "${cfg.backupPath}";
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
@@ -117,8 +122,6 @@ let
       };
       git = {
         bin_path = "git";
-        max_size = 20971520; # 20MB
-        timeout = 10;
       };
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
@@ -140,6 +143,7 @@ let
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
     GITLAB_STATE_PATH = "${cfg.statePath}";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
+    SCHEMA = "${cfg.statePath}/db/schema.rb";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
     GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
     GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
@@ -489,13 +493,15 @@ in {
       after = [ "network.target" "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
-      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ];
+      environment.GEM_HOME = "${cfg.packages.gitaly.rubyEnv}/${ruby.gemPath}";
+      environment.GITLAB_SHELL_CONFIG_PATH = gitlabEnv.GITLAB_SHELL_CONFIG_PATH;
+      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ruby ];
       serviceConfig = {
         #PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        TimeoutSec = "300";
+        TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
@@ -561,6 +567,7 @@ in {
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
         mkdir -p ${cfg.statePath}/shell
+        mkdir -p ${cfg.statePath}/db
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
@@ -575,6 +582,7 @@ in {
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
+        ln -sf $GITLAB_SHELL_CONFIG_PATH /run/gitlab/shell-config.yml
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
         # Prepare home directory
@@ -582,6 +590,7 @@ in {
         touch ${gitlabEnv.HOME}/.ssh/authorized_keys
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
 
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb

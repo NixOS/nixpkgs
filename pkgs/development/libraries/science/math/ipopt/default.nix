@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ipopt-${version}";
-  version = "3.12.8";
+  version = "3.12.9";
 
   src = fetchurl {
     url = "http://www.coin-or.org/download/source/Ipopt/Ipopt-${version}.zip";
-    sha256 = "1lyhgashyk2wswv0z2qnkxng32pim80kzf9jfgxi07wl09x753w1";
+    sha256 = "1fqdjgxh6l1xjvw1ffma7lg92xqg0l8sj02y0zqvbfnx8i47qs9a";
   };
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];

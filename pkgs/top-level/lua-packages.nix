@@ -8,8 +8,8 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, libmysql, postgresql, cyrus_sasl
-, fetchFromGitHub, libmpack, which
+, mysql, postgresql, cyrus_sasl
+, fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
 
 let
@@ -35,10 +35,41 @@ let
   getLuaCPath   = lib : getPath lib "so";
 
   #define build lua package function
-  buildLuaPackage = callPackage ../development/lua-modules/generic lua;
+  buildLuaPackage = callPackage ../development/lua-modules/generic {
+    inherit lua writeText;
+  };
 
   luarocks = callPackage ../development/tools/misc/luarocks {
     inherit lua;
+  };
+
+  bit32 = buildLuaPackage rec {
+    version = "5.3.0";
+    name = "bit32-${version}";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "lua-compat-5.2";
+      rev = "bitlib-${version}";
+      sha256 = "1ipqlbvb5w394qwhm2f3w6pdrgy8v4q8sps5hh3pqz14dcqwakhj";
+    };
+
+    buildPhase = ''
+      cc ${if stdenv.isDarwin then "-bundle -undefined dynamic_lookup -all_load" else "-shared"} -Ic-api lbitlib.c -o bit32.so
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p bit32.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Lua 5.2 bit manipulation library";
+      homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms = platforms.unix;
+    };
   };
 
   luabitop = buildLuaPackage rec {
@@ -210,7 +241,7 @@ let
     };
     sourceRoot = ".";
 
-    buildInputs = [ libmysql postgresql sqlite ];
+    buildInputs = [ mysql.connector-c postgresql sqlite ];
 
     preConfigure = ''
       substituteInPlace Makefile --replace CC=gcc CC=cc
@@ -220,7 +251,8 @@ let
     '';
 
     NIX_CFLAGS_COMPILE = [
-      "-I${libmysql.dev}/include/mysql"
+      "-I${mysql.connector-c}/include/mysql"
+      "-L${mysql.connector-c}/lib/mysql"
       "-I${postgresql}/include/server"
     ];
 
@@ -267,22 +299,34 @@ let
 
   luaposix = buildLuaPackage rec {
     name = "posix-${version}";
-    version = "33.4.0";
+    version = "34.0.4";
 
     src = fetchFromGitHub {
       owner = "luaposix";
       repo = "luaposix";
       rev = "release-v${version}";
-      sha256 = "0y531p54lx2yf243bcsyp6sv8fvbqidp20yry0xvb85p8zw9dlrq";
+      sha256 = "0p5583vidsm7s97zihf47c34vscwgbl86axrnj44j328v45kxb2z";
     };
 
-    buildInputs = [ perl ];
+    propagatedBuildInputs = [ std.normalize bit32 ];
+
+    buildPhase = ''
+      ${lua}/bin/lua build-aux/luke \
+        package="luaposix" \
+        version="${version}"
+    '';
+
+    installPhase = ''
+      ${lua}/bin/lua build-aux/luke install --quiet \
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}" \
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+    '';
 
     meta = with stdenv.lib; {
       description = "Lua bindings for POSIX API";
       homepage = "https://github.com/luaposix/luaposix";
       license = licenses.mit;
-      maintainers = with maintainers; [ vyp ];
+      maintainers = with maintainers; [ vyp lblasc ];
       platforms = platforms.unix;
     };
   };
@@ -401,7 +445,7 @@ let
       description = "Network support for Lua";
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       license = licenses.mit;
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
     };
   };
@@ -652,13 +696,13 @@ let
 
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
-    version = "0.9.1";
+    version = "0.9.2";
 
     src = fetchFromGitHub {
       owner = "pavouk";
       repo = "lgi";
       rev = version;
-      sha256 = "09pbapjhyc3sn0jgx747shqr9286wqfzw02h43p4pk8fv2b766b9";
+      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -669,6 +713,14 @@ let
     preBuild = ''
       sed -i "s|/usr/local|$out|" lgi/Makefile
     '';
+
+    patches = [
+        (fetchpatch {
+            name = "lgi-find-cairo-through-typelib.patch";
+            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
+            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
+        })
+    ];
 
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
@@ -712,6 +764,64 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = with platforms; linux ++ darwin;
+    };
+  };
+
+  std._debug = buildLuaPackage rec {
+    name = "std._debug-${version}";
+    version = "1.0";
+
+    src = fetchFromGitHub {
+      owner = "lua-stdlib";
+      repo = "_debug";
+      rev = "v${version}";
+      sha256 = "01kfs6k9j9zy4bvk13jx18ssfsmhlciyrni1x32qmxxf4wxyi65n";
+    };
+
+    # No Makefile.
+    dontBuild = true;
+
+    installPhase = ''
+      mkdir -p $out/share/lua/${lua.luaversion}/std
+      cp -r lib/std/_debug $out/share/lua/${lua.luaversion}/std/
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Manage an overall debug state, and associated hint substates.";
+      homepage    = https://lua-stdlib.github.io/_debug;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  std.normalize = buildLuaPackage rec {
+    name = "std.normalize-${version}";
+    version = "2.0.1";
+
+    src = fetchFromGitHub {
+      owner = "lua-stdlib";
+      repo = "normalize";
+      rev = "v${version}";
+      sha256 = "1yz96r28d2wcgky6by92a21755bf4wzpn65rdv2ps0fxywgw5rda";
+    };
+
+    propagatedBuildInputs = [ std._debug ];
+
+    # No Makefile.
+    dontBuild = true;
+
+    installPhase = ''
+      mkdir -p $out/share/lua/${lua.luaversion}/std
+      cp -r lib/std/normalize $out/share/lua/${lua.luaversion}/std/
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Normalized Lua Functions";
+      homepage    = https://lua-stdlib.github.io/normalize;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lblasc ];
+      platforms   = platforms.unix;
     };
   };
 

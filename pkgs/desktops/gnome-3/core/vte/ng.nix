@@ -1,4 +1,4 @@
-{ gnome3, fetchFromGitHub, autoconf, automake, gtk_doc, gettext, libtool, gperf }:
+{ gnome3, fetchFromGitHub, autoconf, automake, gtk-doc, gettext, libtool, gperf }:
 
 gnome3.vte.overrideAttrs (oldAttrs: rec {
   name = "vte-ng-${version}";
@@ -14,5 +14,5 @@ gnome3.vte.overrideAttrs (oldAttrs: rec {
   preConfigure = oldAttrs.preConfigure + "; NOCONFIGURE=1 ./autogen.sh";
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs or []
-    ++ [ gtk_doc autoconf automake gettext libtool gperf ];
+    ++ [ gtk-doc autoconf automake gettext libtool gperf ];
 })

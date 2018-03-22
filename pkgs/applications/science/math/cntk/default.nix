@@ -12,28 +12,22 @@ let
   cub = fetchFromGitHub {
     owner = "NVlabs";
     repo = "cub";
-    rev = "1.4.1";
-    sha256 = "1lcdwblz03c0yq1lxndg566kg14b5qm14x5qixjbmz6wq85kgmqc";
+    rev = "1.7.4";
+    sha256 = "0ksd5n1lxqhm5l5cd2lps4cszhjkf6gmzahaycs7nxb06qci8c66";
   };
 
 in stdenv.mkDerivation rec {
   name = "CNTK-${version}";
-  version = "2.2";
+  version = "2.4";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/Microsoft/CNTK";
     rev = "v${version}";
-    sha256 = "0q4knrwiyphb2fbqf9jzqvkz2jzj6jmbmang3lavdvsh7z0n8zz9";
+    sha256 = "0m28wb0ljixcpi14g3gcfiraimh487yxqhd9yrglgyvjb69x597y";
   };
 
-  patches = [
-    # Fix "'exp' was not declared"
-    (fetchpatch {
-      url = "https://github.com/imriss/CNTK/commit/ef1cca6df95cc507deb8471df2c0dd8cbfeef23b.patch";
-      sha256 = "0z7xyrxwric0c4h7rfs05f544mcq6d10wgs0vvfcyd2pcf410hy7";
-    })
-  ];
+  patches = [ ./fix_std_bind.patch ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -48,8 +42,10 @@ in stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
     "--with-mpi=${openmpi}"
+    "--cuda=${if cudaSupport then "yes" else "no"}"
+    # FIXME
+    "--asgd=no"
   ] ++ lib.optionals cudaSupport [
-    "--cuda=yes"
     "--with-cuda=${cudatoolkit}"
     "--with-gdk-include=${cudatoolkit}/include"
     "--with-gdk-nvml-lib=${nvidia_x11}/lib"
@@ -85,16 +81,12 @@ in stdenv.mkDerivation rec {
     cp bin/cntk $out/bin
   '';
 
-  hardeningDisable = [ "format" ];
-
-  # on 2.2: fatal error: tensorboard/tensorboard.pb.h: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://github.com/Microsoft/CNTK";
+    homepage = https://github.com/Microsoft/CNTK;
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    broken = true; # Never succeeded to build.
   };
 }

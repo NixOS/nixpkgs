@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv
+}:
 
 with rustPlatform;
 
@@ -16,7 +18,10 @@ buildRustPackage rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security ]
+  ;
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;

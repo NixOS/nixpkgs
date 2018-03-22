@@ -1,41 +1,24 @@
-{ stdenv, fetchFromGitHub
-, gcc5, eject, cudatoolkit
-}:
+{ callPackage, cudatoolkit8, cudatoolkit9 }:
 
-stdenv.mkDerivation rec {
-  name = "cudatoolkit-${cudatoolkit.majorVersion}-nccl-${version}";
-  version = "1.3.4-1";
-
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "nccl";
-    rev = "v${version}";
-    sha256 = "0fvnrfn572lc6i2a3xyhbifm53ivcrr46z6cqr3b0bwb1iq79m7q";
+let
+  generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
+    inherit (args) cudatoolkit;
   };
 
-  nativeBuildInputs = [
-    gcc5
-    eject
-  ];
+in
 
-  propagatedBuildInputs = [
-    cudatoolkit
-  ];
+{
+  nccl_cudatoolkit8 = generic rec {
+    version = "2.1.4";
+    cudatoolkit = cudatoolkit8;
+    srcName = "nccl_${version}-1+cuda${cudatoolkit.majorVersion}_x86_64.txz";
+    sha256 = "1lwwm8kdhna5m318yg304kl2gsz1jwhv4zv4gn8av2m57zh848zi";
+  };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "CUDA_HOME=${cudatoolkit}"
-    "CUDA_LIB=${cudatoolkit.lib}/lib"
-  ];
-
-  meta = with stdenv.lib; {
-    description = ''
-      NVIDIA Collective Communications Library.
-      Multi-GPU and multi-node collective communication primitives.
-    '';
-    homepage = https://developer.nvidia.com/nccl;
-    license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ hyphon81 ];
+  nccl_cudatoolkit9 = generic rec {
+    version = "2.1.4";
+    cudatoolkit = cudatoolkit9;
+    srcName = "nccl_${version}-1+cuda${cudatoolkit.majorVersion}_x86_64.txz";
+    sha256 = "0pajmqzkacpszs63jh2hw2qqc49kj75kcf7r0ky8hdh560q8xn0p";
   };
 }

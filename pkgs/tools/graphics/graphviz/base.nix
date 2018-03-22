@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
   CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
-  configureFlags = optional (xorg == null) "--without-x";
+  configureFlags = [
+    "--with-ltdl-lib=${libtool.lib}/lib"
+    "--with-ltdl-include=${libtool}/include"
+  ] ++ stdenv.lib.optional (xorg == null) [ "--without-x" ];
 
   postPatch = ''
     for f in $(find . -name Makefile.in); do

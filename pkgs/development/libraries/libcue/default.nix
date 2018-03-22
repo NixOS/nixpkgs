@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libcue-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lipnitsk";
     repo = "libcue";
     rev = "v${version}";
-    sha256 = "14a84d6sq3yp8s8i05lxvifjpkgpjwfpchrqf3bbpbwa8gvrc0rj";
+    sha256 = "0znn9scamy1nsz1dzvsamqg46zr7ldfvpxiyzi1ss9d6gbcm0frs";
   };
 
   nativeBuildInputs = [ cmake bison flex ];

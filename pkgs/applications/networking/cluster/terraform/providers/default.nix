@@ -11,11 +11,15 @@ let
         inherit owner repo sha256;
         rev = "v${version}";
       };
+
+      # Terraform allow checking the provider versions, but this breaks
+      # if the versions are not provided via file paths.
+      postBuild = "mv go/bin/${repo}{,_v${version}}";
     };
 
   maybeDrv = name: data:
-    # vsphere is currently broken
-    if name == "vsphere" then null
+    # azure-classic is an archived repo
+    if name == "azure-classic" then null
     else toDrv data;
 in
   lib.mapAttrs maybeDrv list

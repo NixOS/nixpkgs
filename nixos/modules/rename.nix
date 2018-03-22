@@ -148,6 +148,12 @@ with lib;
     # parsoid
     (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
 
+    # piwik was renamed to matomo
+    (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
+    (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
+    (mkRenamedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] [ "services" "matomo" "phpfpmProcessManagerConfig" ])
+    (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
+
     # tarsnap
     (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
 
@@ -186,6 +192,17 @@ with lib;
     (mkRenamedOptionModule [ "config" "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "config" "fonts" "fontconfig" "forceAutohint" ])
     (mkRenamedOptionModule [ "config" "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "config" "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
 
+    # Profile splitting
+    (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
+
+    # misc/version.nix
+    (mkRenamedOptionModule [ "config" "system" "nixosVersion" ] [ "config" "system" "nixos" "version" ])
+    (mkRenamedOptionModule [ "config" "system" "nixosRelease" ] [ "config" "system" "nixos" "release" ])
+    (mkRenamedOptionModule [ "config" "system" "nixosVersionSuffix" ] [ "config" "system" "nixos" "versionSuffix" ])
+    (mkRenamedOptionModule [ "config" "system" "nixosRevision" ] [ "config" "system" "nixos" "revision" ])
+    (mkRenamedOptionModule [ "config" "system" "nixosCodeName" ] [ "config" "system" "nixos" "codeName" ])
+    (mkRenamedOptionModule [ "config" "system" "nixosLabel" ] [ "config" "system" "nixos" "label" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
@@ -202,11 +219,14 @@ with lib;
       "See the 16.09 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [ "services" "firefox" "syncserver" "user" ] "")
+    (mkRemovedOptionModule [ "services" "firefox" "syncserver" "group" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ] "You don't need this option anymore, it will work without it.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
@@ -217,5 +237,8 @@ with lib;
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "theme" ] [ "programs" "zsh" "ohMyZsh" "theme" ])
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "custom" ] [ "programs" "zsh" "ohMyZsh" "custom" ])
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "plugins" ] [ "programs" "zsh" "ohMyZsh" "plugins" ])
+
+    # Xen
+    (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [ "virtualisation" "xen" "package-qemu" ])
   ];
 }

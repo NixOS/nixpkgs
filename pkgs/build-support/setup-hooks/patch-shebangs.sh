@@ -54,7 +54,11 @@ patchShebangs() {
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
+                touch -r "$f" "$f.timestamp"
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+                touch -r "$f.timestamp" "$f"
+                rm "$f.timestamp"
             fi
         fi
     done

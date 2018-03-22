@@ -1,7 +1,7 @@
-{stdenv, fetchurl, freeglut, mesa, libXmu, libXext, libX11, libXi}:
+{stdenv, fetchurl, freeglut, libGLU_combined, libXmu, libXext, libX11, libXi}:
 stdenv.mkDerivation {
   name = "glui-2.35";
-  buildInputs = [freeglut mesa libXmu libXext libX11 libXi];
+  buildInputs = [freeglut libGLU_combined libXmu libXext libX11 libXi];
   preConfigure = ''cd src'';
   installPhase = ''
     mkdir -p "$out"/{bin,lib,share/glui/doc,include}

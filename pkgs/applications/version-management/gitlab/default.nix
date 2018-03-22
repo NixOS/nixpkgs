@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "10.1.1";
+  version = "10.5.6";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "0xvzxcygy6ffqm24rk6v9gs6g9r744vpwwvk9d00wjla7hwmq3w2";
+    sha256 = "1kml7iz4q9g5gcfqqarivlnkmkmq9250wgm95yi4rgzynb5jndd0";
   };
 
 in
@@ -30,20 +30,19 @@ in
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
-  buildInputs = [
-    rubyEnv ruby bundler tzdata git procps dpkg nettools
-  ];
-
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0p118msad6l12pd4q3vkvjggiiasbkh6pnl94riqyb5zkb7yrb1a";
+    sha256 = "059h63jn552fcir2dgsjv85zv1ihbyiwzws4h2j15mwj2cdpjkh0";
   };
+
+  buildInputs = [
+    rubyEnv ruby bundler tzdata git procps dpkg nettools
+  ];
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./nulladapter.patch
     ./fix-36783.patch
   ];
 
@@ -58,6 +57,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
         --replace "ps -U" "${procps}/bin/ps -U"
+
+    sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 
     # required for some gems:
     cat > config/database.yml <<EOF
@@ -74,7 +75,11 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
+    # work around unpacking deb containing binary with suid bit
+    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
+    tar -xf gitlab-deb-data.tar
+
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 

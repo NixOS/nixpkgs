@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2Python, libxslt, libxklavier, cairo, popt, which, python
-, shared_mime_info, desktop_file_utils, libunique, libtool, bzip2
-, glib, gtk, pango, atk, gnome_doc_utils, intltool, GConf, libglade, libgnome, libgnomeui, libgnomekbd
-, librsvg, gnome_menus, gnome_desktop, gnome_panel, metacity, gnome_settings_daemon
+{ stdenv, fetchurl, pkgconfig, dbus-glib, libxml2Python, libxslt, libxklavier, cairo, popt, which, python
+, shared-mime-info, desktop-file-utils, libunique, libtool, bzip2
+, glib, gtk, pango, atk, gnome-doc-utils, intltool, GConf, libglade, libgnome, libgnomeui, libgnomekbd
+, librsvg, gnome_menus, gnome-desktop, gnome_panel, metacity, gnome-settings-daemon
 , libbonobo, libbonoboui, libgnomecanvas, libart_lgpl, gnome_vfs, ORBit2
 , libSM }:
 
@@ -14,9 +14,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus_glib libxml2Python libxslt libxklavier popt which python shared_mime_info desktop_file_utils
-                  gtk gnome_doc_utils intltool GConf libglade libgnomekbd libunique libtool bzip2 
-                  libgnomeui librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon
+  buildInputs = [ dbus-glib libxml2Python libxslt libxklavier popt which python shared-mime-info desktop-file-utils
+                  gtk gnome-doc-utils intltool GConf libglade libgnomekbd libunique libtool bzip2 
+                  libgnomeui librsvg gnome_menus gnome-desktop gnome_panel metacity gnome-settings-daemon
                   libSM
   ];
   configureFlags = "--disable-scrollkeeper";

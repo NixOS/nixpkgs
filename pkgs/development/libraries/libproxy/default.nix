@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, dbus, networkmanager, spidermonkey_38, pcre, python2, python3 }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, zlib
+, dbus, networkmanager, spidermonkey_38, pcre, python2, python3
+, SystemConfiguration, CoreFoundation, JavaScriptCore }:
 
 stdenv.mkDerivation rec {
   name = "libproxy-${version}";
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ dbus networkmanager spidermonkey_38 pcre python2 python3 ];
+  buildInputs = [ pcre python2 python3 zlib ]
+        ++ (if stdenv.hostPlatform.isDarwin
+            then [ SystemConfiguration CoreFoundation JavaScriptCore ]
+            else [ spidermonkey_38 dbus networkmanager ]);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.lgpl21;
     homepage = http://libproxy.github.io/libproxy/;
     description = "A library that provides automatic proxy configuration management";

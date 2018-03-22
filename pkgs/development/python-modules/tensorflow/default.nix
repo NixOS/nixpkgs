@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, symlinkJoin, buildPythonPackage, isPy3k, pythonOlder
-, bazel, which, swig, binutils, glibcLocales
+{ stdenv, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+, buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast
+, which, swig, binutils, glibcLocales
 , python, jemalloc, openmpi
-, numpy, six, protobuf, tensorflow-tensorboard, backports_weakref
-, wheel, mock, scipy
-, xlaSupport ? true
+, numpy, six, protobuf, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null
+# XLA without CUDA is broken
+, xlaSupport ? cudaSupport
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
 , sse42Support ? false
@@ -12,7 +13,8 @@
 , fmaSupport ? false
 }:
 
-assert cudaSupport -> cudatoolkit != null
+assert cudaSupport -> nvidia_x11 != null
+                   && cudatoolkit != null
                    && cudnn != null;
 
 # unsupported combination
@@ -27,40 +29,49 @@ let
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
 
-  cudaLibPath = lib.makeLibraryPath [ cudatoolkit.out cudatoolkit.lib nvidia_x11 cudnn ];
-
   tfFeature = x: if x then "1" else "0";
 
-  common = rec {
-    version = "1.3.1";
+  version = "1.5.0";
+
+  pkg = buildBazelPackage rec {
+    name = "tensorflow-build-${version}";
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0gvi32dvv4ynr05p0gg5i0a6c55pig48k5qm7zslcqnp4sifwx0i";
+      sha256 = "1c4djsaip901nasm7a6dsimr02bsv70a7b1g0kysb4n39qpdh22q";
     };
 
-    nativeBuildInputs = [ swig which wheel scipy ];
+    patches = [
+      # Fix build with Bazel >= 0.10
+      (fetchpatch {
+        url = "https://github.com/tensorflow/tensorflow/commit/6fcfab770c2672e2250e0f5686b9545d99eb7b2b.patch";
+        sha256 = "0p61za1mx3a7gj1s5lsps16fcw18iwnvq2b46v1kyqfgq77a12vb";
+      })
+      (fetchpatch {
+        url = "https://github.com/tensorflow/tensorflow/commit/3f57956725b553d196974c9ad31badeb3eabf8bb.patch";
+        sha256 = "11dja5gqy0qw27sc9b6yw9r0lfk8dznb32vrqqfcnypk2qmv26va";
+      })
+    ];
 
-    buildInputs = [ python jemalloc openmpi glibcLocales ]
-      ++ lib.optionals cudaSupport [ cudatoolkit cudnn ];
+    nativeBuildInputs = [ swig which ];
 
-    propagatedBuildInputs = [ numpy six protobuf ]
-                            ++ lib.optional (!isPy3k) mock
-                            ++ lib.optional (pythonOlder "3.4") backports_weakref
-                            ++ lib.optional withTensorboard tensorflow-tensorboard;
+    buildInputs = [ python jemalloc openmpi glibcLocales numpy ]
+      ++ lib.optionals cudaSupport [ cudatoolkit cudnn nvidia_x11 ];
 
     preConfigure = ''
       patchShebangs configure
-      export HOME="$NIX_BUILD_TOP"
 
       export PYTHON_BIN_PATH="${python.interpreter}"
+      export PYTHON_LIB_PATH="$NIX_BUILD_TOP/site-packages"
       export TF_NEED_GCP=1
       export TF_NEED_HDFS=1
-      export TF_NEED_CUDA=${tfFeature cudaSupport}
-      export TF_NEED_MPI=1
       export TF_ENABLE_XLA=${tfFeature xlaSupport}
+      export CC_OPT_FLAGS=" "
+      # https://github.com/tensorflow/tensorflow/issues/14454
+      export TF_NEED_MPI=${tfFeature cudaSupport}
+      export TF_NEED_CUDA=${tfFeature cudaSupport}
       ${lib.optionalString cudaSupport ''
         export CUDA_TOOLKIT_PATH=${cudatoolkit_joined}
         export TF_CUDA_VERSION=${cudatoolkit.majorVersion}
@@ -70,12 +81,10 @@ let
         export TF_CUDA_COMPUTE_CAPABILITIES=${lib.concatStringsSep "," cudaCapabilities}
       ''}
 
-      # There is _no_ non-interactive mode of configure.
-      sed -i \
-        -e 's,read -p,echo,g' \
-        -e 's,lib64,lib,g' \
-        configure
+      mkdir -p "$PYTHON_LIB_PATH"
     '';
+
+    NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcublas" "-lcudnn" "-lcuda" "-lcudart" ];
 
     hardeningDisable = [ "all" ];
 
@@ -87,101 +96,60 @@ let
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package";
 
-    meta = with stdenv.lib; {
-      description = "Computation using data flow graphs for scalable machine learning";
-      homepage = "http://tensorflow.org";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ jyp abbradar ];
-      platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
+    fetchAttrs = {
+      preInstall = ''
+        rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
+      '';
+
+      sha256 = "1nc98aqrp14q7llypcwaa0kdn9xi7r0p1mnd3vmmn1m299py33ca";
     };
-  };
 
-in buildPythonPackage (common // {
-  pname = "tensorflow";
-  version = common.version;
-  name = "tensorflow-${common.version}";
+    buildAttrs = {
+      preBuild = ''
+        patchShebangs .
+        find -type f -name CROSSTOOL\* -exec sed -i \
+          -e 's,/usr/bin/ar,${binutils.bintools}/bin/ar,g' \
+          {} \;
+      '';
 
-  deps = stdenv.mkDerivation (common // {
-    name = "tensorflow-external-${common.version}";
-
-    nativeBuildInputs = common.nativeBuildInputs ++ [ bazel ];
-
-    preConfigure = common.preConfigure + ''
-      export PYTHON_LIB_PATH="$(pwd)/site-packages"
-    '';
-
-    buildPhase = ''
-      mkdir site-packages
-      bazel --output_base="$(pwd)/output" fetch $bazelFlags $bazelTarget
-    '';
-
-    installPhase = ''
-      rm -rf output/external/{bazel_tools,\@bazel_tools.marker,local_*,\@local_*}
-      # Patching markers to make them deterministic
-      for i in output/external/\@*.marker; do
-        sed -i 's, -\?[0-9][0-9]*$, 1,' "$i"
-      done
-      # Patching symlinks to remove build directory reference
-      find output/external -type l | while read symlink; do
-        ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
-      done
-
-      cp -r output/external $out
-    '';
+      installPhase = ''
+        sed -i 's,.*bdist_wheel.*,cp -rL . "$out"; exit 0,' bazel-bin/tensorflow/tools/pip_package/build_pip_package 
+        bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/dist
+      '';
+    };
 
     dontFixup = true;
+  };
 
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "0xs2n061gnpizfcnhs5jjpfk2av634j1l2l17zhy10bbmrwn3vrp";
-  });
+in buildPythonPackage rec {
+  pname = "tensorflow";
+  inherit version;
+  name = "${pname}-${version}";
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ (bazel.override { enableNixHacks = true; }) ];
+  src = pkg;
 
-  configurePhase = ''
-    runHook preConfigure
-    export PYTHON_LIB_PATH="$out/${python.sitePackages}"
-    ./configure
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    mkdir -p output/external
-    cp -r $deps/* output/external
-    chmod -R +w output
-    find output -type l | while read symlink; do
-      ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
-    done
-
-    patchShebangs .
-    find -type f -name CROSSTOOL\* -exec sed -i \
-      -e 's,/usr/bin/ar,${binutils}/bin/ar,g' \
-      {} \;
-
-    mkdir -p $out/${python.sitePackages}
-    bazel --output_base="$(pwd)/output" build $bazelFlags $bazelTarget
-
-    bazel-bin/tensorflow/tools/pip_package/build_pip_package $PWD/dist
-  '';
-
-  # tensorflow depends on tensorflow_tensorboard, which cannot be
-  # built at the moment (some of its dependencies do not build
-  # [htlm5lib9999999 (seven nines) -> tensorboard], and it depends on an old version of
-  # bleach) Hence we disable dependency checking for now.
   installFlags = lib.optional (!withTensorboard) "--no-dependencies";
 
-  # Tests are slow and impure.
-  doCheck = false;
-
-  # For some reason, CUDA is not retained in RPATH.
-  postFixup = lib.optionalString cudaSupport ''
-    libPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
-    patchelf --set-rpath "$(patchelf --print-rpath "$libPath"):${cudaLibPath}" "$libPath"
+  postPatch = lib.optionalString (pythonAtLeast "3.4") ''
+    sed -i '/enum34/d' setup.py
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    cd $NIX_BUILD_TOP
+  propagatedBuildInputs = [ numpy six protobuf absl-py ]
+                 ++ lib.optional (!isPy3k) mock
+                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref enum34 ]
+                 ++ lib.optional withTensorboard tensorflow-tensorboard;
+
+  # Actual tests are slow and impure.
+  checkPhase = ''
     ${python.interpreter} -c "import tensorflow"
   '';
-})
+
+  meta = with stdenv.lib; {
+    description = "Computation using data flow graphs for scalable machine learning";
+    homepage = http://tensorflow.org;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jyp abbradar ];
+    platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
+    broken = !(xlaSupport -> cudaSupport);
+  };
+}

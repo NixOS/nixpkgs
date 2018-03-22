@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsodium libmsgpack ncurses
+    libsodium libmsgpack ncurses libconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     libopus
     libvpx

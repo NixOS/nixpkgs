@@ -16,7 +16,7 @@ index eb8b828..1ff2440 100644
  function ParamStrUTF8(Param: Integer): utf8string;
  begin
 -  Result:=FileUtil.ParamStrUTF8(Param);
-+  Result:=ParamStrUTF8(Param);
++  Result:=LazUtf8.ParamStrUTF8(Param);
  end;
  
  function ParamCount: integer;

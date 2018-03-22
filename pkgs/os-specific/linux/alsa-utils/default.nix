@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p" \
       --replace "lspci" "${pciutils}/bin/lspci"
   '';
-  buildInputs = [ gettext alsaLib ncurses libsamplerate fftw ];
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 

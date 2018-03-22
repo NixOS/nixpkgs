@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , withMySQL ? false, withPSQL ? false, withSQLite ? false
-, mariadb, postgresql, sqlite, gawk, which
+, mysql, postgresql, sqlite, gawk, which
 , lib
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     patchShebangs .
 
     substituteInPlace shmig \
-      --replace "\`which mysql\`" "${lib.optionalString withMySQL "${mariadb}/bin/mysql"}" \
+      --replace "\`which mysql\`" "${lib.optionalString withMySQL "${mysql.client}/bin/mysql"}" \
       --replace "\`which psql\`" "${lib.optionalString withPSQL "${postgresql}/bin/psql"}" \
       --replace "\`which sqlite3\`" "${lib.optionalString withSQLite "${sqlite}/bin/sqlite3"}" \
       --replace "awk" "${gawk}/bin/awk" \

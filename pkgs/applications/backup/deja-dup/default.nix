@@ -1,8 +1,8 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, vala_0_38, gettext
 , gnome3, libnotify, intltool, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
-, libpthreadstubs, libXdmcp, epoxy, at_spi2_core, dbus, libgpgerror
-, appstream-glib, desktop_file_utils, duplicity
+, libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
+, appstream-glib, desktop-file-utils, duplicity
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_38 gettext intltool itstool
-    appstream-glib desktop_file_utils libxml2 wrapGAppsHook
+    appstream-glib desktop-file-utils libxml2 wrapGAppsHook
   ];
 
   buildInputs = [
    libnotify gnome3.libpeas glib gtk3 libsecret
    pcre libxkbcommon libpthreadstubs libXdmcp epoxy gnome3.nautilus
-   at_spi2_core dbus gnome3.gnome_online_accounts libgpgerror
+   at-spi2-core dbus gnome3.gnome-online-accounts libgpgerror
   ];
 
   propagatedUserEnvPkgs = [ duplicity ];

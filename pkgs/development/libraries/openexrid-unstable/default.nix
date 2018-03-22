@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, mesa, openexr }:
+{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU_combined, openexr }:
 
 stdenv.mkDerivation rec
 {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec
                        -I${openfx.dev}/include/OpenFX
                       '';
 
-  buildInputs = [ unzip re2 openfx zlib ilmbase mesa openexr ];
+  buildInputs = [ unzip re2 openfx zlib ilmbase libGLU_combined openexr ];
 
   enableParallelBuilding = true;
 

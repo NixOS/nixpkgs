@@ -9,10 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "1m55m7s7f8ng8a7lmcw9z4n5zv7xk4vp9n6fp9j84z6rk2imf7a2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ poppler zathura_core girara ];
+  nativeBuildInputs = [ pkgconfig zathura_core ];
+  buildInputs = [ poppler girara ];
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    string1='-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}'
+    string2='-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}'
+    makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
+    echo "''${makefileC1/$string1/$string2}" > Makefile
+  '';
 
   meta = with lib; {
     homepage = http://pwmt.org/projects/zathura/;
@@ -22,7 +29,7 @@ stdenv.mkDerivation rec {
       using the poppler rendering library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan garbas ];
   };
 }

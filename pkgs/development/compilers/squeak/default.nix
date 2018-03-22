@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     downloadPage = http://squeakvm.org/unix/index.html;
     license = with licenses; [ asl20 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

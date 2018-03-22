@@ -12,17 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "1dky2kllv469k8966ilnf4xrr7z35pq8mdvs7kwziy59cdikapxj";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ makeWrapper intltool vala_0_32 glib gtk3 gnome3.libgee
-    libsoup libgdata gnome3.gnome_online_accounts gnome3.evolution_data_server
-    sqlite itstool xdg_utils gnome3.gsettings_desktop_schemas ];
+    libsoup libgdata gnome3.gnome-online-accounts gnome3.evolution-data-server
+    sqlite itstool xdg_utils gnome3.gsettings-desktop-schemas ];
 
   preFixup = ''
     wrapProgram "$out/bin/california" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.defaultIconTheme}/share:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH:${gnome3.gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.defaultIconTheme}/share:${gnome3.gnome-themes-standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH:${gnome3.gsettings-desktop-schemas}/share"
   '';
 
   enableParallelBuilding = true;

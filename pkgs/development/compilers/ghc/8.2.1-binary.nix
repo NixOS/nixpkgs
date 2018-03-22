@@ -1,7 +1,10 @@
 { stdenv
-, fetchurl, perl, gcc
+, fetchurl, perl, gcc, llvm_39
 , ncurses5, gmp, libiconv
 }:
+
+# Prebuilt only does native
+assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
   libPath = stdenv.lib.makeLibraryPath ([
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "543b81bf610240bd0398111d6c6607a9094dc2d159b564057d46c8a3d1aaa130";
     };
-    "armv7-linux" = {
+    "armv7l-linux" = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
       sha256 = "0f0e5e1d4fad3fa1a87ca1fe0d19242f4a94d158b7b8a08f99efefd98b51b019";
     };
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
+  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isArm || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -151,6 +155,8 @@ stdenv.mkDerivation rec {
     [ $(./main) == "yes" ]
   '';
 
+  passthru = { targetPrefix = ""; };
+
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
 }

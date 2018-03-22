@@ -1,6 +1,6 @@
 { lib, python3Packages, fetchFromGitHub, gtk3, cairo
 , aspellDicts, buildEnv
-, gnome3, hicolor_icon_theme, librsvg
+, gnome3, hicolor-icon-theme, librsvg
 , xvfb_run, dbus, libnotify
 }:
 
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [ xvfb_run dbus.daemon ];
   buildInputs = [
-    gnome3.defaultIconTheme hicolor_icon_theme libnotify librsvg
+    gnome3.defaultIconTheme hicolor-icon-theme libnotify librsvg
   ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not

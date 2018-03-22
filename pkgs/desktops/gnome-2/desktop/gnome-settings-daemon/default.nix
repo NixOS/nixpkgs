@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxklavier, gtk
-, intltool, GConf, gnome_desktop, libglade, libgnomekbd, polkit, libpulseaudio
+{ stdenv, fetchurl, pkgconfig, dbus-glib, libxklavier, gtk
+, intltool, GConf, gnome-desktop, libglade, libgnomekbd, polkit, libpulseaudio
 , libSM }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ dbus_glib libxklavier gtk GConf gnome_desktop libglade libgnomekbd polkit
+    [ dbus-glib libxklavier gtk GConf gnome-desktop libglade libgnomekbd polkit
       libpulseaudio libSM
     ];
 

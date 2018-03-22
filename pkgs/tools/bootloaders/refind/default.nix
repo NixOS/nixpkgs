@@ -13,31 +13,17 @@ in
 
 stdenv.mkDerivation rec {
   name = "refind-${version}";
-  version = "0.10.3";
+  version = "0.11.2";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1r2qp29mz08lx36i7x52i2598773bxvfhwryd954ssq2baifjav5";
+    sha256 = "1k0xpm4y0gk1rxqdyprqyqpg5j16xw3l2gm3d9zpi5n9id43jkzn";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=831258;filename=002-efiprot.patch;msg=10";
-      sha256 = "17h03h5mgkpamcj9jcq8h6x2admpknysrbdwccg7yxirlc52fc2s";
-      name = "002-efiprot.patch";
-    })
-  ];
 
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
-
-  postPatch = ''
-    sed -e 's|-DEFI_FUNCTION_WRAPPER|-DEFI_FUNCTION_WRAPPER -maccumulate-outgoing-args|g' -i Make.common
-    sed -e 's|-DEFIX64|-DEFIX64 -maccumulate-outgoing-args|g' -i Make.common
-    sed -e 's|-m64|-maccumulate-outgoing-args -m64|g' -i filesystems/Make.gnuefi
-  '';
 
   makeFlags =
     [ "prefix="
@@ -139,7 +125,6 @@ EOF
     homepage = http://refind.sourceforge.net/;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = true;
   };
 
 }

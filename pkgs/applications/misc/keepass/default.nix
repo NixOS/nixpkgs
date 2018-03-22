@@ -1,24 +1,34 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, gtk2, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
 
-# KeePass looks for plugins in under directory in which KeePass.exe is
-# located. It follows symlinks where looking for that directory, so
-# buildEnv is not enough to bring KeePass and plugins together.
-#
-# This derivation patches KeePass to search for plugins in specified
-# plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.37";
+  version = "2.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1wfbpfjng1blzkbjnxsdnny544297bm9869ianbr6l0hrvcgv3qx";
+    sha256 = "0m33gfpvv01xc28k4rrc8llbyk6qanm9rsqcnv8ydms0cr78dbbk";
   };
 
   sourceRoot = ".";
 
   buildInputs = [ unzip makeWrapper icoutils ];
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xorg.xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+    })
+  ];
+
+  # KeePass looks for plugins in under directory in which KeePass.exe is
+  # located. It follows symlinks where looking for that directory, so
+  # buildEnv is not enough to bring KeePass and plugins together.
+  #
+  # This derivation patches KeePass to search for plugins in specified
+  # plugin derivations in the Nix store and nowhere else.
   pluginLoadPathsPatch =
     let outputLc = toString (add 7 (length plugins));
         patchTemplate = readFile ./keepass-plugins.patch;

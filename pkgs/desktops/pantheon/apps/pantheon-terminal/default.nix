@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.4";
@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ perl cmake vala_0_38 pkgconfig makeWrapper ];
+  nativeBuildInputs = [
+    perl cmake vala_0_38 pkgconfig makeWrapper
+    # For setup hook
+    gobjectIntrospection
+  ];
   buildInputs = with gnome3; [
     glib gtk3 granite libnotify gettext vte_290 libgee
-    gsettings_desktop_schemas defaultIconTheme
+    gsettings-desktop-schemas defaultIconTheme
   ];
   meta = {
     description = "Elementary OS's terminal";

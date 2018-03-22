@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let
-  version = "0.3.6";
+  version = "0.3.8";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
     rev = "${version}";
-    sha256 = "193yd0c3j62lhy7n7y9l0viwdiymvrfbqcgki69dm2414n3mlh05";
+    sha256 = "05ynd38br2kn657g7l01jg1q8ja9xwrdyb95w02gh7j9cww2k06w";
   };
 
   installPhase = ''

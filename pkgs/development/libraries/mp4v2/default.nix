@@ -8,11 +8,19 @@ stdenv.mkDerivation rec {
     sha256 = "0f438bimimsvxjbdp4vsr8hjw2nwggmhaxgcw07g2z361fkbj683";
   };
 
-  # From Handbrake
-  # mp4v2 doesn't seem to be actively maintained any more :-/
   patches = [
+    # From Handbrake
+    # mp4v2 doesn't seem to be actively maintained any more :-/
     ./A02-meaningful-4gb-warning.patch
+
+    (fetchurl {
+      name = "gcc-7.patch";
+      url = "https://src.fedoraproject.org/cgit/rpms/libmp4v2.git/plain/"
+          + "0004-Fix-GCC7-build.patch?id=d7aeedabb";
+      sha256 = "0sbn0il7lmk77yrjyb4f0a3z3h8gsmdkscvz5n9hmrrrhrwf672w";
+    })
   ];
+
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";
 

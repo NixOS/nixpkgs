@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "weka-${version}";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/weka/${stdenv.lib.replaceChars ["."]["-"] name}.zip";
-    sha256 = "16n1a74d1cispp0a22zyiivi78izi354y67gmbyvv2lv9sc45wmk";
+    sha256 = "0p353lhhcv3swwn1bl64vkyjk480vv9ghhlyqjxiar4p3xifjayb";
   };
 
   buildInputs = [ unzip ];

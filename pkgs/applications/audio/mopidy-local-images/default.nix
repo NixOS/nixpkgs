@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ stdenv, fetchFromGitHub, pythonPackages, mopidy, gobjectIntrospection }:
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-local-images-${version}";
@@ -11,6 +11,12 @@ pythonPackages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0gdqxws0jish50mmi57mlqcs659wrllzv00czl18niz94vzvyc0d";
   };
+
+  buildInputs = [ gobjectIntrospection ];
+
+  checkInputs = [
+    pythonPackages.mock
+  ];
 
   propagatedBuildInputs = [
     mopidy

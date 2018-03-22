@@ -1,28 +1,35 @@
 { stdenv, fetchurl, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, mesa, glew, libtheora, libvpx, SDL, libupnp
+, libopus, ffmpeg, libX11, libXv, libGLU_combined, glew, libtheora, libvpx, SDL, libupnp
 , ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
-, python, libXext, libmatroska, openssl
+, python, libXext, libmatroska, openssl, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   baseName = "mediastreamer2";
-  version = "2.14.0";
+  version = "2.16.1";
   name = "${baseName}-${version}";
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
     repo = "${baseName}";
     rev = "${version}";
-    sha256 = "1b59rzsaw54mhy4pz9hndmim4rgidkn7s6c4iyl34mz58lwxpmqp";
+    sha256 = "02745bzl2r1jqvdqzyv94fjd4w92zr976la4c4nfvsy52waqah7j";
   };
 
-  patches = [ ./plugins_dir.patch ];
+  patches = [
+    (fetchpatch {
+      name = "allow-build-without-git.patch";
+      url = "https://github.com/BelledonneCommunications/mediastreamer2/commit/de3a24b795d7a78e78eab6b974e7ec5abf2259ac.patch";
+      sha256 = "1zqkrab42n4dha0knfsyj4q0wc229ma125gk9grj67ps7r7ipscy";
+    })
+    ./plugins_dir.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig intltool cmake doxygen python ];
 
   propagatedBuildInputs = [
     alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv mesa glew libtheora libvpx SDL libupnp
+    ffmpeg libX11 libXv libGLU_combined glew libtheora libvpx SDL libupnp
     ortp libv4l libpcap srtp bctoolbox libXext libmatroska
     openssl
   ];

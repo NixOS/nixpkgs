@@ -31,7 +31,8 @@ qtModule {
   '';
 
   NIX_CFLAGS_COMPILE =
-    optionals flashplayerFix
+    [ "-Wno-expansion-to-defined" ] # with gcc7 this warning blows the log over Hydra's limit
+    ++ optionals flashplayerFix
       [
         ''-DNIXPKGS_LIBGTK2="${getLib gtk2}/lib/libgtk-x11-2.0"''
         ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''

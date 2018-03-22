@@ -2,7 +2,8 @@
   pkgs ? import <nixpkgs> {},
   internalDomain ? "cloud.yourdomain.net",
   externalDomain ? "myawesomecluster.cluster.yourdomain.net",
-  serviceClusterIp ? "10.0.0.1"
+  serviceClusterIp ? "10.0.0.1",
+  kubelets
 }:
 let
   runWithCFSSL = name: cmd:
@@ -123,9 +124,10 @@ let
   };
 
   apiserver-client = {
-    kubelet = createClientCertKey {
+    kubelet = hostname: createClientCertKey {
       inherit ca;
-      cn = "apiserver-client-kubelet";
+      name = "apiserver-client-kubelet-${hostname}";
+      cn = "system:node:${hostname}.${externalDomain}";
       groups = ["system:nodes"];
     };
 
@@ -175,10 +177,9 @@ in {
     paths = [
       (writeCFSSL (noKey ca))
       (writeCFSSL kubelet)
-      (writeCFSSL apiserver-client.kubelet)
       (writeCFSSL apiserver-client.kube-proxy)
       (writeCFSSL etcd-client)
-    ];
+    ] ++ map (hostname: writeCFSSL (apiserver-client.kubelet hostname)) kubelets;
   };
 
   admin = writeCFSSL apiserver-client.admin;

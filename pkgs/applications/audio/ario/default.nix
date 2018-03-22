@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, gtk2, expat, intltool, libgcrypt,
-  libunique, gnutls, libxml2, curl, mpd_clientlib, dbus_glib, libnotify,
+  libunique, gnutls, libxml2, curl, mpd_clientlib, dbus-glib, libnotify,
   libsoup, avahi, taglib
   }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     gettext gtk2 expat intltool libgcrypt libunique gnutls
-    libxml2 curl mpd_clientlib dbus_glib libnotify libsoup avahi taglib
+    libxml2 curl mpd_clientlib dbus-glib libnotify libsoup avahi taglib
   ];
 
   meta = {

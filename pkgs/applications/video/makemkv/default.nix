@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, openssl, qt4, mesa, zlib, pkgconfig, libav
+, openssl, qt4, libGLU_combined, zlib, pkgconfig, libav
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [openssl qt4 mesa zlib libav];
+  buildInputs = [openssl qt4 libGLU_combined zlib libav];
 
-  libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl mesa qt4 zlib ]
+  libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl libGLU_combined qt4 zlib ]
           + ":" + stdenv.cc.cc + "/lib64";
 
   meta = with stdenv.lib; {

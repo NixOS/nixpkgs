@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gtkflags.patch ];
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    string1='-shared ''${LDFLAGS} -o $@ ''$(OBJECTS) ''${LIBS}'
+    string2='-Wl,-dylib_install_name,''${PLUGIN}.dylib -Wl,-bundle_loader,${zathura_core}/bin/.zathura-wrapped -bundle ''${LDFLAGS} -o $@ ''${OBJECTS} ''${LIBS}'
+    makefileC1=$(sed -r 's/\.so/.dylib/g' Makefile)
+    echo "''${makefileC1/$string1/$string2}" > Makefile
+  '';
+
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with stdenv.lib; {
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
       djvulibre library.
     '';
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ garbas ];
   };
 }

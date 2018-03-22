@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, fetchgit, git, openssl, autoconf, pkgs }:
+{ stdenv, fetchurl, fetchgit, git, openssl, autoconf, pkgs, makeStaticLibraries }:
 
 # TODO: distinct packages for gambit-release and gambit-devel
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
-  version = "4.8.8-415-g29ed48bb";
+  version = "4.8.9";
   bootstrap = import ./bootstrap.nix ( pkgs );
 
   src = fetchgit {
     url = "https://github.com/feeley/gambit.git";
-    rev = "29ed48bb688e8302d2430b5d24a2fc7c2039aeec";
-    sha256 = "1h3kmczvjir0pi6cmqa2bsc09n68jhw0bxq7m6w4b1f0xvgvn3fr";
+    rev = "dd54a71dfc0bd09813592f1645d755867a02195d";
+    sha256 = "120kg73k39gshrwas8a3xcrxgnq1c7ww92wgy4d3mmrwy3j9nzzc";
   };
 
-  buildInputs = [ openssl git autoconf bootstrap ];
+  # Use makeStaticLibraries to enable creation of statically linked binaries
+  buildInputs = [ git autoconf bootstrap openssl (makeStaticLibraries openssl)];
 
   configurePhase = ''
     options=(

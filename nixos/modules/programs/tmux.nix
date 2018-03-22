@@ -61,7 +61,12 @@ in {
   options = {
     programs.tmux = {
 
-      enable = mkEnableOption "<command>tmux</command> - a <command>screen</command> replacement.";
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whenever to configure <command>tmux</command> system-wide.";
+        relatedPackages = [ "tmux" ];
+      };
 
       aggressiveResize = mkOption {
         default = false;

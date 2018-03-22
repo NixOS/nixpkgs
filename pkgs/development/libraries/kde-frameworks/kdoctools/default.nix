@@ -8,10 +8,18 @@
 mkDerivation {
   name = "kdoctools";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedNativeBuildInputs = [ perl perlPackages.URI ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    # The build system insists on having native Perl.
+    perl perlPackages.URI
+  ];
+  propagatedBuildInputs = [
+    # kdoctools at runtime actually needs Perl for the platform kdoctools is
+    # running on, not necessarily native perl.
+    perl perlPackages.URI
+    qtbase
+  ];
   buildInputs = [ karchive ki18n ];
-  propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];
   patches = [ ./kdoctools-no-find-docbook-xml.patch ];
   cmakeFlags = [

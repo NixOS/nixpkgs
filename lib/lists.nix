@@ -385,6 +385,30 @@ rec {
       if len < 2 then list
       else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
 
+  /* Compare two lists element-by-element.
+
+     Example:
+       compareLists compare [] []
+       => 0
+       compareLists compare [] [ "a" ]
+       => -1
+       compareLists compare [ "a" ] []
+       => 1
+       compareLists compare [ "a" "b" ] [ "a" "c" ]
+       => 1
+  */
+  compareLists = cmp: a: b:
+    if a == []
+    then if b == []
+         then 0
+         else -1
+    else if b == []
+         then 1
+         else let rel = cmp (head a) (head b); in
+              if rel == 0
+              then compareLists cmp (tail a) (tail b)
+              else rel;
+
   /* Return the first (at most) N elements of a list.
 
      Example:
@@ -440,8 +464,12 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  /* FIXME(zimbatm) Not used anywhere
-   */
+  /* return the image of the cross product of some lists by a function
+
+    Example:
+      crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+      => [ "13" "14" "23" "24" ]
+  */
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
 

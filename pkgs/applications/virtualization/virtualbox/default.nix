@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "98e9df4f23212c3de827af9d770b391cf2dba8d21f4de597145512c1479302cd";
-  extpackRev = "119785";
-  main = "053xpf0kxrig4jq5djfz9drhkxy1x5a4p9qvgxc0b3hnk6yn1869";
-  version = "5.2.4";
+  extpack = "355ea5fe047f751534720c65398b44290d53f389e0f5f66818f3f36746631d26";
+  extpackRev = "121009";
+  main = "ee2759d47b0b4ac81b8b671c9485c87fb2db12c097b3e7e69b94c1291a8084e8";
+  version = "5.2.8";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -94,8 +94,6 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-     # https://www.virtualbox.org/pipermail/vbox-dev/2017-December/014888.html
-  ++ optional headless [ ./HostServices-SharedClipboard-x11-stub.cpp-use-RT_NOR.patch ]
   ++ [ ./qtx11extras.patch ];
 
 
@@ -207,7 +205,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "PC emulator";
     license = licenses.gpl2;
-    homepage = http://www.virtualbox.org/;
+    homepage = https://www.virtualbox.org/;
     maintainers = with maintainers; [ flokli sander ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

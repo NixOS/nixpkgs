@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pjsip-${version}";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "http://www.pjsip.org/release/${version}/pjproject-${version}.tar.bz2";
-    sha256 = "09ii5hgl5s7grx4fiimcl3s77i385h7b3kwpfa2q0arbl1ibryjr";
+    sha256 = "0wiph6g51wanzwjjrpwsz63amgvly8g08jz033gnwqmppa584b4w";
   };
 
   buildInputs = [ openssl libsamplerate alsaLib ];

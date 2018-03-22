@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, leveldb
 }:
 
 let
-  version = "0.4.15";
+  version = "0.4.16";
   sources = {
     src = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest";
       rev = "${version}";
-      sha256 = "0bn4102d0hq774bn6hqhrs6qzl4sancrs4j15w4318bqdndk4676";
+      sha256 = "048m8as01bw4pnwfxx04wfnyljxq7ivk88l214zi18prrrkfamj3";
     };
     data = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest_game";
       rev = "${version}";
-      sha256 = "1mjj40slfiw0khg9nrq8yfmnay237z5jm1cg9hrsiq2fkjrr8w2m";
+      sha256 = "0alikzyjvj9hd8s3dd6ghpz0y982w2j0yd2zgd7a047mxw21hrcn";
     };
   };
 in stdenv.mkDerivation {
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
+    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm libGLU_combined
     openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen ncurses
     leveldb
   ];

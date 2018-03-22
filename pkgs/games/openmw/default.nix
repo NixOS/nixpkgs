@@ -6,12 +6,12 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
-      rev = "35f1a459a4ab6da9d70427e6539bdf4faae4cc91";
-      sha256 = "1s3a9dpbcc6v8d05pqin4xfv36i2031xpdja1vl8x11cw05fln91";
+      rev = "2b4c8e37268e595b82da4b9aadd5507852569b87";
+      sha256 = "0admnllxic6dcpic0h100927yw766ab55dix002vvdx36i6994jb";
     };
   });
 in stdenv.mkDerivation rec {
-  version = "0.42.0";
+  version = "0.43.0";
   name = "openmw-${version}";
 
   src = fetchFromGitHub {

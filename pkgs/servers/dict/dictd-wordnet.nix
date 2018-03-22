@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://wordnet.princeton.edu/;
 
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }
