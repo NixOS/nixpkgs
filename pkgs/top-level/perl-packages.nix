@@ -3346,7 +3346,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "06e08432a6b97705606c925709b99129ad926516e477d58e4461e4b3d9f30917";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ Moose PathClass SubExporter namespaceclean ];
+    propagatedBuildInputs = [ Moose PathClass namespaceclean ];
     meta = {
       homepage = https://metacpan.org/release/Data-Stream-Bulk;
       description = "N at a time iteration API";
