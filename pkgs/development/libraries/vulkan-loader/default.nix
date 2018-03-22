@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, libXrandr,
-  libXext, wayland, libGL, makeWrapper }:
+  libXext, wayland, libGL_driver, makeWrapper }:
 
 let
   version = "1.0.61.1";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_WSI_MIR_SUPPORT=OFF"
-    "-DFALLBACK_DATA_DIRS=${libGL.driverLink}/share:/usr/local/share:/usr/share"
+    "-DFALLBACK_DATA_DIRS=${libGL_driver.driverLink}/share:/usr/local/share:/usr/share"
   ];
 
   outputs = [ "out" "dev" "demos" ];

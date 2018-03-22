@@ -1,12 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintlOrEmpty
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
+, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland
+, mesa_noglu, gnome3
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
   pname = "cogl";
-  version = "1.22.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
@@ -24,7 +25,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobjectIntrospection wayland
+      glib gdk_pixbuf gobjectIntrospection wayland mesa_noglu
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ libintlOrEmpty
