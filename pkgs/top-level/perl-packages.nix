@@ -6760,12 +6760,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormatTextWithLinksAndTables = buildPerlPackage {
-    name = "HTML-FormatText-WithLinks-AndTables-0.06";
+    name = "HTML-FormatText-WithLinks-AndTables-0.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DALEEVANS/HTML-FormatText-WithLinks-AndTables-0.06.tar.gz;
-      sha256 = "e5b23f0475fb81fd6fed688bb914295a39542b3e5b43c8517494226a52d868fa";
+      url = mirror://cpan/authors/id/D/DA/DALEEVANS/HTML-FormatText-WithLinks-AndTables-0.07.tar.gz;
+      sha256 = "809ee2f11705706b33c54312b5c7bee674838f2beaaedaf8cb945e702aae39b6";
     };
-    propagatedBuildInputs = [ HTMLFormatTextWithLinks HTMLFormatter HTMLTree ];
+    propagatedBuildInputs = [ HTMLFormatTextWithLinks ];
     meta = {
       description = "Converts HTML to Text with tables intact";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
