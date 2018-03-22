@@ -15001,7 +15001,7 @@ let self = _self // overrides; _self = with self; {
       TextTabularDisplay];
   };
 
-  TextReform = buildPerlPackage {
+  TextReform = buildPerlModule {
     name = "Text-Reform-1.20";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Text-Reform-1.20.tar.gz;
