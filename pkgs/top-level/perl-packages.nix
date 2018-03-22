@@ -10171,13 +10171,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.libdiscid ];
   };
 
-  MusicBrainz = buildPerlPackage rec {
-    name = "WebService-MusicBrainz-0.93";
+  MusicBrainz = buildPerlModule rec {
+    name = "WebService-MusicBrainz-1.0.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BF/BFAIST/${name}.tar.gz";
-      sha256 = "1gg62x6qv4jj73jsqh0sb237k96i22blj29afpbp1scp3m7i5g61";
+      sha256 = "182z3xjajk6s7k5xm3kssjy3hqx2qbnq4f8864hma098ryy2ph3a";
     };
-    propagatedBuildInputs = [ XMLLibXML LWP ClassAccessor URI ];
+    propagatedBuildInputs = [ Mojolicious ];
     doCheck = false; # Test performs network access.
   };
 
