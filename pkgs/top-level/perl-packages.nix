@@ -13961,10 +13961,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestLeakTrace = buildPerlPackage rec {
-    name = "Test-LeakTrace-0.14";
+    name = "Test-LeakTrace-0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
-      sha256 = "06cn4g35l2gi9vbsdi2j49cxsji9fvfi7xp4xgdyxxds9vrxydia";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/Test-LeakTrace-0.16.tar.gz;
+      sha256 = "00z4hcjra5nk700f3fgpy8fs036d7ry7glpn8g3wh7jzj7nrw22z";
     };
     meta = {
       description = "Traces memory leaks";
