@@ -6853,7 +6853,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MS/MSISK/${name}.tar.gz";
       sha256 = "01jimmss3q68a89696wmclvqwb2ybz6xgabpnbp6mm6jcni82z8a";
     };
-    propagatedBuildInputs = [ HTMLElementExtended HTMLParser ];
+    propagatedBuildInputs = [ HTMLElementExtended ];
   };
 
   HTMLTagset = buildPerlPackage rec {
