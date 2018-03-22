@@ -16897,14 +16897,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  XMLRSS = buildPerlPackage {
-    name = "XML-RSS-1.57";
+  XMLRSS = buildPerlModule {
+    name = "XML-RSS-1.60";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.57.tar.gz;
-      sha256 = "c540a1aa7445bf611635537015590575c90c2b07c19529537677a4bcf3a4e6ae";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.60.tar.gz;
+      sha256 = "4b3359878bb1a2bc06dae7ed17b00143a2b89c814b8b12f6e2780f35b1528677";
     };
-    buildInputs = [ TestManifest ];
-    propagatedBuildInputs = [ DateTime DateTimeFormatMail DateTimeFormatW3CDTF HTMLParser XMLParser ];
+    propagatedBuildInputs = [ DateTimeFormatMail DateTimeFormatW3CDTF XMLParser ];
     meta = {
       homepage = http://perl-rss.sourceforge.net/;
       description = "Creates and updates RSS files";
