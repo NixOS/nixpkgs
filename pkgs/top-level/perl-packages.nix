@@ -1383,7 +1383,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
       sha256 = "873db8e4e72a994e3e17aeb53d2b837e6d524b4b8b0f3539f262135c88cc2120";
     };
-    propagatedBuildInputs = [ CatalystRuntime DateTime Moose namespaceautoclean ];
+    propagatedBuildInputs = [ CatalystRuntime DateTime ];
     meta = {
       homepage = https://metacpan.org/release/Catalyst-Plugin-AccessLog;
       description = "Request logging from within Catalyst";
