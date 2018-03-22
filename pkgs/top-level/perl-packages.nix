@@ -13743,13 +13743,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestCompile = buildPerlPackage rec {
+  TestCompile = buildPerlModule rec {
     name = "Test-Compile-v1.3.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EG/EGILES/${name}.tar.gz";
       sha256 = "77527e9477ac5260443c756367a7f7bc3d8f6c6ebbc561b0b2fb3f79303bad33";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
       description = "Check whether Perl files compile correctly";
