@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
-    touch setup.cfg
+    echo "" > setup.cfg
   '';
 
   checkPhase = ''
