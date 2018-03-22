@@ -710,6 +710,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  barewordfilehandles = buildPerlPackage rec {
+     version = "0.005";
+     name = "bareword-filehandles-0.005";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IL/ILMARI/bareword-filehandles-0.005.tar.gz;
+       sha256 = "0fdirls2pg7d6ymvlzzz59q3dy6hgh08k0qpr2mw51w127s8rav6";
+     };
+     propagatedBuildInputs = [ BHooksOPCheck LexicalSealRequireHints ];
+     buildInputs = [ ExtUtilsDepends ];
+     meta = {
+       description = "disables bareword filehandles";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/ilmari/bareword-filehandles";
+     };
+  };
+
   base = buildPerlPackage {
     name = "base-2.23";
     src = fetchurl {
@@ -2496,6 +2512,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigIdentity = buildPerlPackage rec {
+     version = "0.0019";
+     name = "Config-Identity-0.0019";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Config-Identity-0.0019.tar.gz;
+       sha256 = "1a0jx12pxwpbnkww4xg4lav8j6ls89hrdimhj4a697k56zdhnli9";
+     };
+     propagatedBuildInputs = [ FileHomeDir IPCRun ];
+     buildInputs = [ TestDeep ];
+     meta = {
+       description = "Load (and optionally decrypt via GnuPG) user/pass identity information ";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/dagolden/Config-Identity";
+     };
+  };
+
   ConfigIniFiles = buildPerlModule rec {
     name = "Config-IniFiles-2.95";
     src = fetchurl {
@@ -2604,6 +2636,21 @@ let self = _self // overrides; _self = with self; {
       description = "A generic connection to a hierarchical-structured data set";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  ConstFast = buildPerlModule rec {
+     version = "0.014";
+     name = "Const-Fast-0.014";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/L/LE/LEONT/Const-Fast-0.014.tar.gz;
+       sha256 = "1nwlldgrx86yn7y6a53cqgvzm2ircsvxg1addahlcy6510x9a1gq";
+     };
+     propagatedBuildInputs = [ SubExporterProgressive ];
+     buildInputs = [ ModuleBuildTiny TestFatal ];
+     meta = {
+       description = "Facility for creating read-only scalars, arrays, and hashes";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ConvertASN1 = buildPerlPackage rec {
@@ -6588,6 +6635,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  indirect = buildPerlPackage rec {
+     version = "0.38";
+     name = "indirect-0.38";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/V/VP/VPIT/indirect-0.38.tar.gz;
+       sha256 = "13k5a8p903m8x3pcv9qqkzvnb8gpgq36cr3dvn3lk1ngsi9w5ydy";
+     };
+     meta = {
+       description = "Lexically warn about using the indirect method call syntax.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://search.cpan.org/dist/indirect/";
+     };
+  };
+
   GrowlGNTP = buildPerlModule rec {
     name = "Growl-GNTP-0.21";
     src = fetchurl {
@@ -7033,12 +7094,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLScrubber = buildPerlPackage rec {
-    name = "HTML-Scrubber-0.15";
+    name = "HTML-Scrubber-0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PO/PODMASTER/${name}.tar.gz";
-      sha256 = "0xb5zj67y2sjid9bs3yfm81rgi91fmn38wy1ryngssw6vd92ijh2";
+      url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-Scrubber-0.17.tar.gz;
+      sha256 = "06p7w4zd42b2yh541mlzyqj40lwmvvn3fyqi8big4mf34la7m2jm";
     };
     propagatedBuildInputs = [ HTMLParser ];
+    buildInputs = [ PodCoverageTrustPod TestCPANMeta TestDifferences TestEOL TestKwalitee TestMemoryCycle TestNoTabs TestPAUSEPermissions TestPod TestPodCoverage ];
   };
 
   HTMLTableExtract = buildPerlPackage rec {
@@ -8079,6 +8141,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LexicalSealRequireHints = buildPerlModule rec {
+     version = "0.011";
+     name = "Lexical-SealRequireHints-0.011";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.011.tar.gz;
+       sha256 = "0fh1arpr0hsj7skbn97yfvbk22pfcrpcvcfs15p5ss7g338qx4cy";
+     };
+     meta = {
+       description = "prevent leakage of lexical hints";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   lib_ = buildPerlPackage {
     name = "lib-0.63";
     src = fetchurl {
@@ -8472,6 +8547,21 @@ let self = _self // overrides; _self = with self; {
     LANG="C";
   };
 
+  LocaleMOFile = buildPerlPackage rec {
+     version = "0.08";
+     name = "Locale-MO-File-0.08";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-MO-File-0.08.tar.gz;
+       sha256 = "1flpk7jdn5cp7pld3f0vi3v5527p76jp1fqp4pzrhhqjlhyp3im4";
+     };
+     propagatedBuildInputs = [ ConstFast MooXStrictConstructor MooXTypesMooseLike ParamsValidate namespaceautoclean ];
+     buildInputs = [ TestDifferences TestException TestHexDifferences TestNoWarnings ];
+     meta = {
+       description = "Locale::MO::File - Write or read gettext MO files.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   LocaleMaketext = buildPerlPackage {
     name = "Locale-Maketext-1.28";
     src = fetchurl {
@@ -8538,6 +8628,81 @@ let self = _self // overrides; _self = with self; {
       platforms = stdenv.lib.platforms.linux;
       maintainers = with maintainers; [ ];
     };
+  };
+
+  LocaleTextDomainOO = buildPerlPackage rec {
+     version = "1.033";
+     name = "Locale-TextDomain-OO-1.033";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-1.033.tar.gz;
+       sha256 = "1nkjncwa5kg7avrly0ldfxijgkrjgwj3rggb2r6mi72h427xwjic";
+     };
+     propagatedBuildInputs = [ ClassLoad Clone JSON LocaleMOFile LocalePO LocaleTextDomainOOUtil LocaleUtilsPlaceholderBabelFish LocaleUtilsPlaceholderMaketext LocaleUtilsPlaceholderNamed MooXSingleton PathTiny TieSub ];
+     buildInputs = [ TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Locale::TextDomain::OO - Perl OO Interface to Uniforum Message Translation";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  LocaleTextDomainOOUtil = buildPerlPackage rec {
+     version = "3.008";
+     name = "Locale-TextDomain-OO-Util-3.008";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-Util-3.008.tar.gz;
+       sha256 = "1kj633apv20ah5nazjlig4w25l021lvmlb6a6fhwrixis08mdqxb";
+     };
+     propagatedBuildInputs = [ namespaceautoclean ];
+     buildInputs = [ TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Locale::TextDomain::OO::Util - Lexicon utils";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  LocaleUtilsPlaceholderBabelFish = buildPerlPackage rec {
+     version = "0.006";
+     name = "Locale-Utils-PlaceholderBabelFish-0.006";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderBabelFish-0.006.tar.gz;
+       sha256 = "1k54njj8xz19c8bjb0iln1mnfq55j3pvbff7samyrab3k59h071f";
+     };
+     propagatedBuildInputs = [ HTMLParser MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
+     buildInputs = [ TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Locale::Utils::PlaceholderBabelFish - Utils to expand BabelFish palaceholders";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  LocaleUtilsPlaceholderMaketext = buildPerlPackage rec {
+     version = "1.005";
+     name = "Locale-Utils-PlaceholderMaketext-1.005";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderMaketext-1.005.tar.gz;
+       sha256 = "1srlbp8sfnzhndgh9s4d8bglpzw0vb8gnab9r8r8sggkv15n0a2h";
+     };
+     propagatedBuildInputs = [ MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
+     buildInputs = [ TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Locale::Utils::PlaceholderMaketext - Utils to expand maketext placeholders";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  LocaleUtilsPlaceholderNamed = buildPerlPackage rec {
+     version = "1.004";
+     name = "Locale-Utils-PlaceholderNamed-1.004";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderNamed-1.004.tar.gz;
+       sha256 = "1gd68lm5w5c6ndcilx91rn84zviqyrk3fx92jjx5khxm76i8xmvg";
+     };
+     propagatedBuildInputs = [ MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
+     buildInputs = [ TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Locale::Utils::PlaceholderNamed - Utils to expand named placeholders";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   locallib = buildPerlPackage rec {
@@ -9358,6 +9523,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Mo = buildPerlPackage rec {
+     version = "0.40";
+     name = "Mo-0.40";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/T/TI/TINITA/Mo-0.40.tar.gz;
+       sha256 = "1fff81awg9agfawf3wxx0gpf6vgav8w920rmxsbjg30z75943lli";
+     };
+     meta = {
+       description = "Micro Objects. Mo is less.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/ingydotnet/mo-pm";
+     };
+  };
+
   MockConfig = buildPerlPackage rec {
      version = "0.03";
      name = "Mock-Config-0.03";
@@ -9811,6 +9990,22 @@ let self = _self // overrides; _self = with self; {
       license = stdenv.lib.licenses.asl20;
     };
   };
+
+  multidimensional = buildPerlPackage rec {
+     version = "0.013";
+     name = "multidimensional-0.013";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IL/ILMARI/multidimensional-0.013.tar.gz;
+       sha256 = "02p5zv68i39hnkmzzxsk1fi7xy56pfcsslrd7yqwzhq74czcw81x";
+     };
+     propagatedBuildInputs = [ BHooksOPCheck LexicalSealRequireHints ];
+     buildInputs = [ ExtUtilsDepends ];
+     meta = {
+       description = "disables multidimensional array emulation";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/ilmari/multidimensional";
+     };
+  };
   Mojolicious = buildPerlPackage rec {
     name = "Mojolicious-7.71";
     src = fetchurl {
@@ -9915,6 +10110,84 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXLocalePassthrough = buildPerlPackage rec {
+     version = "0.001";
+     name = "MooX-Locale-Passthrough-0.001";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RE/REHSACK/MooX-Locale-Passthrough-0.001.tar.gz;
+       sha256 = "04h5xhqdvydd4xk9ckb6a79chn0ygf915ix55vg1snmba9z841bs";
+     };
+     propagatedBuildInputs = [ Moo ];
+     meta = {
+       description = "provide API used in translator modules without translating";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/release/MooX-Locale-Passthrough";
+     };
+  };
+
+  MooXLocaleTextDomainOO = buildPerlPackage rec {
+     version = "0.001";
+     name = "MooX-Locale-TextDomain-OO-0.001";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RE/REHSACK/MooX-Locale-TextDomain-OO-0.001.tar.gz;
+       sha256 = "0g8pwj45ccqrzvs9cqyhw29nm68vai1vj46ad39rajnqzp7m53jv";
+     };
+     propagatedBuildInputs = [ LocaleTextDomainOO MooXLocalePassthrough ];
+     meta = {
+       description = "provide API used in translator modules without translating";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/release/MooX-Locale-TextDomain-OO";
+     };
+  };
+
+  MooXOptions = buildPerlPackage rec {
+     version = "4.103";
+     name = "MooX-Options-4.103";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RE/REHSACK/MooX-Options-4.103.tar.gz;
+       sha256 = "0v9j0wxx4f6z6lrmdqf2k084b2c2f2jbvh86pwib0vgjz1sdbyad";
+     };
+     propagatedBuildInputs = [ GetoptLongDescriptive MROCompat MooXLocalePassthrough PathClass UnicodeLineBreak strictures ];
+     buildInputs = [ Mo MooXCmd MooXLocaleTextDomainOO Moose TestTrap ];
+     meta = {
+       description = "Explicit Options eXtension for Object Class";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/celogeek/MooX-Options";
+     };
+  };
+
+  MooXSingleton = buildPerlModule rec {
+     version = "1.20";
+     name = "MooX-Singleton-1.20";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AJ/AJGB/MooX-Singleton-1.20.tar.gz;
+       sha256 = "03i1wfag279ldjjkwi9gvpfs8fgi05my47icq5ggi66yzxpn5mzp";
+     };
+     propagatedBuildInputs = [ RoleTiny ];
+     buildInputs = [ Moo ];
+     meta = {
+       description = "turn your Moo class into singleton";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://search.cpan.org/dist/MooX-Singleton";
+     };
+  };
+
+  MooXStrictConstructor = buildPerlModule rec {
+     version = "0.008";
+     name = "MooX-StrictConstructor-0.008";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.008.tar.gz;
+       sha256 = "1b41f3k618vmryykx28x7y2vszwry7g7pamggsivm7rfsaszf7xz";
+     };
+     propagatedBuildInputs = [ Moo barewordfilehandles indirect multidimensional strictures ];
+     buildInputs = [ PodCoverageTrustPod TestCPANMeta TestFatal TestPod TestPodCoverage ];
+     meta = {
+       description = "Make your Moo-based object constructors blow up on unknown attributes.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/release/MooX-StrictConstructor";
+     };
+  };
+
   MooXTypesMooseLike = buildPerlPackage rec {
     name = "MooX-Types-MooseLike-0.29";
     src = fetchurl {
@@ -10009,6 +10282,22 @@ let self = _self // overrides; _self = with self; {
       description = "Using Moo and MooX:: packages the most lazy way";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  MooXCmd = buildPerlPackage rec {
+     version = "0.017";
+     name = "MooX-Cmd-0.017";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RE/REHSACK/MooX-Cmd-0.017.tar.gz;
+       sha256 = "1xbhmq07v9z371ygkyghva9aryhc22kwbzn5qwkp72c0ma6z4gwl";
+     };
+     propagatedBuildInputs = [ ListMoreUtils ModulePluggable Moo PackageStash ParamsUtil RegexpCommon ];
+     buildInputs = [ CaptureTiny ];
+     meta = {
+       description = "Giving an easy Moo style way to make command organized CLI apps";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/release/MooX-Cmd";
+     };
   };
 
   MooXlate = buildPerlPackage {
@@ -11541,6 +11830,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PAUSEPermissions = buildPerlPackage rec {
+     version = "0.17";
+     name = "PAUSE-Permissions-0.17";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/PAUSE-Permissions-0.17.tar.gz;
+       sha256 = "021ink414w4mdk6rd54cc1f23kfqg0zk4njx4ngr0bw3wc6r4kks";
+     };
+     propagatedBuildInputs = [ FileHomeDir HTTPDate MooXOptions TimeDurationParse ];
+     buildInputs = [ PathTiny ];
+     meta = {
+       description = "interface to PAUSE's module permissions file (06perms.txt)";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/neilb/PAUSE-Permissions";
+     };
+  };
+
   Parent = buildPerlPackage {
     name = "parent-0.236";
     src = fetchurl {
@@ -11574,6 +11879,35 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/~jaybonci/Parse-DebControl;
       license = with licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  ParseLocalDistribution = buildPerlPackage rec {
+     version = "0.19";
+     name = "Parse-LocalDistribution-0.19";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-LocalDistribution-0.19.tar.gz;
+       sha256 = "17p92nj4k3acrqqjnln1j5x8hbra9jkx5hdcybrq37ld9qnc62vb";
+     };
+     propagatedBuildInputs = [ ParsePMFile ];
+     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
+     meta = {
+       description = "parses local .pm files as PAUSE does";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  ParsePMFile = buildPerlPackage rec {
+     version = "0.41";
+     name = "Parse-PMFile-0.41";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.41.tar.gz;
+       sha256 = "1ffv9msp4xjfaylay2zfqangxhgyr5xk993k5n1k08hh6qagq8df";
+     };
+     buildInputs = [ ExtUtilsMakeMakerCPANfile ];
+     meta = {
+       description = "parses .pm file as PAUSE does";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ParseRecDescent = buildPerlModule rec {
@@ -14663,6 +14997,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestHexDifferences = buildPerlPackage rec {
+     version = "1.001";
+     name = "Test-HexDifferences-1.001";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Test-HexDifferences-1.001.tar.gz;
+       sha256 = "18lh6shpfx567gjikrid4hixydgv1hi3mycl20qzq2j2vpn4afd6";
+     };
+     propagatedBuildInputs = [ SubExporter TextDiff ];
+     buildInputs = [ TestDifferences TestNoWarnings ];
+     meta = {
+     };
+  };
+
   TestHTTPServerSimple = buildPerlPackage {
     name = "Test-HTTP-Server-Simple-0.11";
     src = fetchurl {
@@ -14918,6 +15265,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "193y1xjvgc1p9pdgdwps2127knvpz9wc1xh6gmr74y3ihmqz7f7q";
     };
     propagatedBuildInputs = [ CaptureTiny ];
+  };
+
+  TestPAUSEPermissions = buildPerlPackage rec {
+     version = "0.06";
+     name = "Test-PAUSE-Permissions-0.06";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Test-PAUSE-Permissions-0.06.tar.gz;
+       sha256 = "1rspdxwfr1mxjrpcsd4asd5q1qpmiyw0sm7g008yy1gsz6i2yl88";
+     };
+     propagatedBuildInputs = [ ConfigIdentity PAUSEPermissions ParseLocalDistribution ];
+     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
+     meta = {
+       description = "tests module permissions in your distribution";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   TestPerlCritic = buildPerlModule rec {
@@ -16204,6 +16566,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       license = stdenv.lib.licenses.artistic1;
     };
+  };
+
+  TieSub = buildPerlPackage rec {
+     version = "1.001";
+     name = "Tie-Sub-1.001";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/ST/STEFFENW/Tie-Sub-1.001.tar.gz;
+       sha256 = "1cgiyj85hhw2m4x2iv4zgaj3hzf3fghircpcfqmjndni4r4a0wgg";
+     };
+     propagatedBuildInputs = [ ParamsValidate ];
+     buildInputs = [ ModuleBuild TestDifferences TestException TestNoWarnings ];
+     meta = {
+       description = "Tie::Sub - Tying a subroutine, function or method to a hash";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   TieToObject = buildPerlPackage {
