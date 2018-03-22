@@ -10569,12 +10569,12 @@ let self = _self // overrides; _self = with self; {
   NetSMTP = libnet;
 
   NetSMTPSSL = buildPerlPackage {
-    name = "Net-SMTP-SSL-1.03";
+    name = "Net-SMTP-SSL-1.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Net-SMTP-SSL-1.03.tar.gz;
-      sha256 = "05y94mb1vdw32mvwb0cp2h4ggh32f8j8nwwfjb8kjwxvfkfhyp9h";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Net-SMTP-SSL-1.04.tar.gz;
+      sha256 = "001a6dcfahf7kkyirqkc8jd4fh4fkal7n7vm9c4dblqrvmdc8abv";
     };
-    propagatedBuildInputs = [IOSocketSSL];
+    propagatedBuildInputs = [ IOSocketSSL ];
   };
 
   NetSMTPTLS = buildPerlPackage {
