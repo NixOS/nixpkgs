@@ -426,6 +426,9 @@ in
       log = "*syslog"
 
       data_path = "/var/lib/prosody"
+      plugin_paths = {
+        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
+      }
 
       ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
 
@@ -440,9 +443,6 @@ in
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
-        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
-      };
-
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
