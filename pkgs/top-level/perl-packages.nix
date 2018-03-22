@@ -9280,13 +9280,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleRuntimeConflicts = buildPerlPackage {
-    name = "Module-Runtime-Conflicts-0.001";
+    name = "Module-Runtime-Conflicts-0.003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Module-Runtime-Conflicts-0.001.tar.gz;
-      sha256 = "0f73d03846575dd1492d3760deeb9627afaa1f8b04d4d526b1775174201be25f";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Module-Runtime-Conflicts-0.003.tar.gz;
+      sha256 = "707cdc75038c70fe91779b888ac050f128565d3967ba96680e1b1c7cc9733875";
     };
-    buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ DistCheckConflicts ModuleRuntime ];
+    propagatedBuildInputs = [ DistCheckConflicts ];
     meta = {
       homepage = https://github.com/karenetheridge/Module-Runtime-Conflicts;
       description = "Provide information on conflicts for Module::Runtime";
