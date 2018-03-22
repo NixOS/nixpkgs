@@ -5666,13 +5666,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CryptRijndael ];
   };
 
-  Filelchown = buildPerlPackage rec {
+  Filelchown = buildPerlModule rec {
     name = "File-lchown-0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
       sha256 = "a02fbf285406a8a4d9399284f032f2d55c56975154c2e1674bd109837b8096ec";
     };
-    buildInputs = [ ExtUtilsCChecker ModuleBuild ];
+    buildInputs = [ ExtUtilsCChecker ];
     meta = {
       description = "Modify attributes of symlinks without dereferencing them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
