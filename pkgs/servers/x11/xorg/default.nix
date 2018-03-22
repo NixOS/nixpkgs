@@ -908,10 +908,10 @@ let
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
   libXinerama = (mkDerivation "libXinerama" {
-    name = "libXinerama-1.1.3";
+    name = "libXinerama-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2;
+      url = mirror://xorg/individual/lib/libXinerama-1.1.4.tar.bz2;
       sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1088,10 +1088,10 @@ let
   }) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
 
   libdmx = (mkDerivation "libdmx" {
-    name = "libdmx-1.1.3";
+    name = "libdmx-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2;
+      url = mirror://xorg/individual/lib/libdmx-1.1.4.tar.bz2;
       sha256 = "00djlxas38kbsrglcmwmxfbmxjdchlbj95pqwjvdg8jn5rns6zf9";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1100,10 +1100,10 @@ let
   }) // {inherit dmxproto libX11 libXext xextproto ;};
 
   libfontenc = (mkDerivation "libfontenc" {
-    name = "libfontenc-1.1.3";
+    name = "libfontenc-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libfontenc-1.1.3.tar.bz2;
+      url = mirror://xorg/individual/lib/libfontenc-1.1.4.tar.bz2;
       sha256 = "08gxmrhgw97mv0pvkfmd46zzxrn6zdw4g27073zl55gwwqq8jn3h";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2504,11 +2504,11 @@ let
   }) // {inherit libxcb ;};
 
   xlsclients = (mkDerivation "xlsclients" {
-    name = "xlsclients-1.1.3";
+    name = "xlsclients-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2;
-      sha256 = "0g9x7rrggs741x9xwvv1k9qayma980d88nhdqw7j3pn3qvy6d5jx";
+      url = mirror://xorg/individual/app/xlsclients-1.1.4.tar.bz2;
+      sha256 = "1h8931sn34mcip6vpi4v7hdmr1r58gkbw4s2p97w98kykks2lgvp";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb ];
@@ -2720,10 +2720,10 @@ let
   }) // {inherit ;};
 
   xvinfo = (mkDerivation "xvinfo" {
-    name = "xvinfo-1.1.3";
+    name = "xvinfo-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xvinfo-1.1.3.tar.bz2;
+      url = mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2;
       sha256 = "1sz5wqhxd1fqsfi1w5advdlwzkizf2fgl12hdpk66f7mv9l8pflz";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2744,10 +2744,10 @@ let
   }) // {inherit libX11 xproto ;};
 
   xwininfo = (mkDerivation "xwininfo" {
-    name = "xwininfo-1.1.3";
+    name = "xwininfo-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xwininfo-1.1.3.tar.bz2;
+      url = mirror://xorg/individual/app/xwininfo-1.1.4.tar.bz2;
       sha256 = "1y1zn8ijqslb5lfpbq4bb78kllhch8in98ps7n8fg3dxjpmb13i1";
     };
     nativeBuildInputs = [ pkgconfig ];
