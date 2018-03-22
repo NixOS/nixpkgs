@@ -4298,6 +4298,21 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestDifferences ];
   };
 
+  DevelOverloadInfo = buildPerlPackage rec {
+     version = "0.005";
+     name = "Devel-OverloadInfo-0.005";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.005.tar.gz;
+       sha256 = "1rx6g8pyhi7lx6z130b7vlf8syzrq92w9ky8mpw4d6bwlkzy5zcb";
+     };
+     propagatedBuildInputs = [ MROCompat PackageStash SubIdentify ];
+     buildInputs = [ TestFatal ];
+     meta = {
+       description = "introspect overloaded operators";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   DevelPartialDump = buildPerlPackage {
     name = "Devel-PartialDump-0.20";
     src = fetchurl {
@@ -9723,13 +9738,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Moose = buildPerlPackage {
-    name = "Moose-2.1213";
+    name = "Moose-2.2010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Moose-2.1213.tar.gz;
-      sha256 = "0f3b196ae67dc1daaa43c44ae7703f27c4f92c391ad3e252a90e90c50c851e03";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2010.tar.gz;
+      sha256 = "af0905b69f18c27de1177c9bc7778ee495d4ec91be1f223e8ca8333af4de08c5";
     };
-    buildInputs = [ CPANMetaCheck CPANMetaRequirements DistCheckConflicts TestCleanNamespaces TestFatal TestRequires ModuleMetadata ];
-    propagatedBuildInputs = [ ClassLoad ClassLoadXS DataOptList DevelGlobalDestruction DevelStackTrace DistCheckConflicts EvalClosure ListMoreUtils MROCompat ModuleRuntime ModuleRuntimeConflicts PackageDeprecationManager PackageStash PackageStashXS ParamsUtil SubExporter SubName TaskWeaken TryTiny ];
+    buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
+    propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS ScalarListUtils SubExporter ];
     preConfigure = ''
       export LD=$CC
     '';
