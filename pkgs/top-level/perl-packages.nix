@@ -8738,7 +8738,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Math-Random-MT-Auto-6.22.tar.gz;
       sha256 = "07zha5zjxyvqwnycb1vzk4hk2m46n9yc5lrbvhkc22595dsyjahz";
     };
-    propagatedBuildInputs = [ ExceptionClass ObjectInsideOut ];
+    propagatedBuildInputs = [ ObjectInsideOut ];
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = "unrestricted";
