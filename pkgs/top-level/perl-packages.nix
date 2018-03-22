@@ -1198,13 +1198,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystAuthenticationCredentialHTTP = buildPerlPackage {
-    name = "Catalyst-Authentication-Credential-HTTP-1.015";
+    name = "Catalyst-Authentication-Credential-HTTP-1.016";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Authentication-Credential-HTTP-1.015.tar.gz;
-      sha256 = "02gyq0vkhj2psd7hvw4b095mvsz7vbq8kv4k8lq748jnx5kmnfrq";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Authentication-Credential-HTTP-1.016.tar.gz;
+      sha256 = "0r4kah3qr9d7iq16i64qbj6hxjfwv5fjy3jzwgs2qmr4mjixsg51";
     };
     buildInputs = [ TestException TestMockObject ];
-    propagatedBuildInputs = [ CatalystPluginAuthentication CatalystRuntime ClassAccessorFast DataUUID StringEscape URI ];
+    propagatedBuildInputs = [ CatalystPluginAuthentication DataUUID StringEscape ];
     meta = {
       description = "HTTP Basic and Digest authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
