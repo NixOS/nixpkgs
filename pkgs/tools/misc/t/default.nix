@@ -1,7 +1,7 @@
 { stdenv, lib, bundlerEnv, ruby }:
 
 bundlerEnv {
-  name = "t-2.9.0";
+  name = "t-3.1.0";
 
   inherit ruby;
   gemfile = ./Gemfile;
