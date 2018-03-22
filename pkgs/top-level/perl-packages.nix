@@ -14566,18 +14566,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestPodNo404s = buildPerlPackage rec {
+  TestPodNo404s = buildPerlModule rec {
     name = "Test-Pod-No404s-0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-No404s-0.02.tar.gz";
       sha256 = "0ycfghsyl9f31kxdppjwx2g5iajrqh3fyywz0x7d8ayndw2hdihi";
     };
-    propagatedBuildInputs = [ LWPUserAgent ModuleBuildTiny URIFind TestPod ];
+    propagatedBuildInputs = [ LWP URIFind ];
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod-No404s/;
       description = "Checks POD for any http 404 links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ ModuleBuildTiny TestPod ];
   };
 
   TestPortabilityFiles = buildPerlPackage {
