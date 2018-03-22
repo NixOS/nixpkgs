@@ -15343,10 +15343,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TieCycle = buildPerlPackage rec {
-    name = "Tie-Cycle-1.21";
+    name = "Tie-Cycle-1.225";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "0r1mdmd01s42vwlwr2mvr1ywjvvfkc79vz6ysdii5fvcgs6wk50y";
+      sha256 = "0i9xq2qm50p2ih24265jndp2x8hfq7ap0d88nrlv5yaad4hxhc7k";
     };
     meta = {
       description = "Cycle through a list of values via a scalar";
