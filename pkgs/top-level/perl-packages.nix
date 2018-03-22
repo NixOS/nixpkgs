@@ -16772,12 +16772,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLTwig = buildPerlPackage rec {
-    name = "XML-Twig-3.49";
+    name = "XML-Twig-3.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIROD/${name}.tar.gz";
-      sha256 = "00af6plljrx2dc0js60975wqp725ka4i3gzs4y6gmzkpfj5fy39y";
+      sha256 = "1bc0hrz4jp6199hi29sdxmb9gyy45whla9hd19yqfasgq8k5ixzy";
     };
-    propagatedBuildInputs = [XMLParser];
+    propagatedBuildInputs = [ XMLParser ];
     doCheck = false;  # requires lots of extra packages
   };
 
