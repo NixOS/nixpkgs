@@ -3528,14 +3528,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTime = buildPerlModule rec {
-    name = "DateTime-1.21";
+  DateTime = buildPerlPackage rec {
+    name = "DateTime-1.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1cgnscbh40f783znpq15rkvbfflfm8azdl0v6yqr7minmq6899d3";
+      sha256 = "1247d2q2gm912bxj88a0sr5gvj2nx4a7n6z1smkq16iy21cziz79";
     };
-    buildInputs = [ TestFatal TestWarnings ];
-    propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
+    buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
+    propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ];
     meta = {
       description = "A date and time object";
       license = stdenv.lib.licenses.artistic2;
