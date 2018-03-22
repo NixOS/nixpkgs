@@ -16036,12 +16036,12 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0nhhfrrai3ndziz873vpa1j0vljjnib4wqafd6yyvkf58ad7v0lv";
     };
     doCheck = false; # listens on an external port
-    propagatedBuildInputs = [ CatalystRuntime LWP Moose namespaceclean
-      TestWWWMechanize WWWMechanize ];
+    propagatedBuildInputs = [ CatalystRuntime WWWMechanize ];
     meta = {
       description = "Test::WWW::Mechanize for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ CatalystPluginSession CatalystPluginSessionStateCookie TestException TestWWWMechanize Testutf8 ];
   };
 
   TestWWWMechanizeCGI = buildPerlPackage {
