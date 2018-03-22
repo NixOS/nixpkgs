@@ -12824,15 +12824,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SQLAbstractLimit = buildPerlPackage rec {
+  SQLAbstractLimit = buildPerlModule rec {
     name = "SQL-Abstract-Limit-0.141";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVEBAIRD/${name}.tar.gz";
       sha256 = "1qqh89kz065mkgyg5pjcgbf8qcpzfk8vf1lgkbwynknadmv87zqg";
     };
-    propagatedBuildInputs =
-      [ SQLAbstract TestException DBI TestDeep ];
-    buildInputs = [ TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DBI SQLAbstract ];
+    buildInputs = [ TestDeep TestException ];
   };
 
   SQLSplitStatement = buildPerlPackage rec {
