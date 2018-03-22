@@ -1,10 +1,11 @@
 {lib, fetchgit, buildPythonPackage, pytest, numpy, scipy, matplotlib, docutils}:
 
 buildPythonPackage rec {
-  name = "sasmodels-${version}";
+  pname = "sasmodels";
   version = "0.96";
 
-  propagatedBuildInputs = [docutils matplotlib numpy pytest scipy];
+  buildInputs = [pytest];
+  propagatedBuildInputs = [docutils matplotlib numpy scipy];
 
   preCheck = ''export HOME=$(mktemp -d)'';
 

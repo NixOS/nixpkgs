@@ -12,7 +12,6 @@ let
 in
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "xhtml2pdf";
   version = "0.2.1";
 

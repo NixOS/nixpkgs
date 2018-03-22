@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, six}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "bumps";
   version = "0.7.6";
 

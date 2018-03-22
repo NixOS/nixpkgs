@@ -1,8 +1,26 @@
 {lib, fetchgit, gcc, python}:
 
+let
+  xhtml2pdf = import ./xhtml2pdf.nix { inherit lib;
+    fetchPypi = python.pkgs.fetchPypi;
+    buildPythonPackage = python.pkgs.buildPythonPackage;
+    html5lib = python.pkgs.html5lib;
+    httplib2 = python.pkgs.httplib2;
+    nose = python.pkgs.nose;
+    pillow = python.pkgs.pillow;
+    pypdf2 = python.pkgs.pypdf2;
+    reportlab = python.pkgs.reportlab;
+};
+
+in
+
 python.pkgs.buildPythonApplication rec {
-  name = "sasview-${version}";
+  pname = "sasview";
   version = "4.1.2";
+
+  buildInputs = with python.pkgs; [
+    pytest
+    unittest-xml-reporting];
 
   propagatedBuildInputs = with python.pkgs; [
     bumps
@@ -17,13 +35,11 @@ python.pkgs.buildPythonApplication rec {
     pillow
     pylint
     pyopencl
-    pytest
     reportlab
     sasmodels
     scipy
     six
     sphinx
-    unittest-xml-reporting
     wxPython
     xhtml2pdf];
 
@@ -34,7 +50,6 @@ python.pkgs.buildPythonApplication rec {
   };
 
   patches = [./pyparsing-fix.patch ./local_config.patch];
-  sandbox = true;
 
   meta = {
     homepage = https://www.sasview.org;
