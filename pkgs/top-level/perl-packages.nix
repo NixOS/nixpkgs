@@ -8563,19 +8563,20 @@ let self = _self // overrides; _self = with self; {
   LWPProtocolhttps = pkgs.perlPackages.LWPProtocolHttps;
 
   LWPProtocolHttps = buildPerlPackage rec {
-    name = "LWP-Protocol-https-6.04";
+    name = "LWP-Protocol-https-6.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz;
-      sha256 = "0agnga5dg94222h6rlzqxa0dri2sh3gayncvfb7jad9nxr87gxhy";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.07.tar.gz;
+      sha256 = "1rxrpwylfw1afah0nk96kgkwjbl2p1a7lwx50iipg8c4rx3cjb2j";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
-    propagatedBuildInputs = [ LWP IOSocketSSL ];
+    propagatedBuildInputs = [ IOSocketSSL LWP MozillaCA ];
     doCheck = false; # tries to connect to https://www.apache.org/.
     meta = {
       description = "Provide https support for LWP::UserAgent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
+    buildInputs = [ TestRequiresInternet ];
   };
 
   LWPUserAgent = LWP;
