@@ -14969,8 +14969,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "ea4fb6768c4f6645cedf87d9b7c6baf97364ebc6f4171e4dd5f68939fb2bdd3a";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ TestRun TestRunCmdLine ] ++ moreInputs;
+    buildInputs = [ TestRun TestRunCmdLine TestTrap ];
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
