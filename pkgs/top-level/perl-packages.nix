@@ -4257,16 +4257,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelPartialDump = buildPerlPackage {
-    name = "Devel-PartialDump-0.15";
+    name = "Devel-PartialDump-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Devel-PartialDump-0.15.tar.gz;
-      sha256 = "0xm42030qlbimay5x72sjj0na43ciniai2xdcdx8zf191jw5dz7n";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Devel-PartialDump-0.20.tar.gz;
+      sha256 = "01yrsdpn9ns9iwwc92bhjn2605b7ys7i3198gjb935lsllzgzw5f";
     };
-    propagatedBuildInputs = [ Moose namespaceclean SubExporter Testuseok TestWarn ];
+    propagatedBuildInputs = [ ClassTiny SubExporter namespaceclean ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestSimple13 TestWarnings ];
   };
 
   DevelStackTrace = buildPerlPackage {
