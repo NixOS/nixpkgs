@@ -10183,13 +10183,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXParamsValidate = buildPerlPackage {
-    name = "MooseX-Params-Validate-0.18";
+    name = "MooseX-Params-Validate-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-Params-Validate-0.18.tar.gz;
-      sha256 = "02yim0lmr7p2nzswy97d5ylbs4ksmgklqq350p119i2611x7ai0k";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-Params-Validate-0.21.tar.gz;
+      sha256 = "1n9ry6gnskkp9ir6s7d5jirn3mh14ydgpmwqz6wcp6d9md358ac8";
     };
-    buildInputs = [ Moose TestFatal ];
-    propagatedBuildInputs = [ DevelCaller Moose ParamsValidate SubExporter ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ DevelCaller Moose ParamsValidate ];
     meta = {
       description = "An extension of Params::Validate using Moose's types";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
