@@ -12572,8 +12572,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.006.tar.gz;
       sha256 = "1lylfvarjfy6wy34dfny3032pc6r33mjby5yzzhmxybg8zhdp9pn";
     };
-    buildInputs = [ Moose ];
-    propagatedBuildInputs = [ Moose MooseXRoleParameterized StringErrf TryTiny namespaceclean ];
+    propagatedBuildInputs = [ MooseXRoleParameterized StringErrf ];
     meta = {
       description = "A thing with a message method";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
