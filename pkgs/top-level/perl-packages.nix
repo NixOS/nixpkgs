@@ -7554,7 +7554,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "7e2bd984b1ebd43e336b937896463f2c6cb682c956cbd2c311a464363d2ccef6";
     };
     buildInputs = [ TestWarn ];
-    propagatedBuildInputs = [ ParseRecDescent ];
     meta = {
       homepage = https://github.com/ingydotnet/inline-pm;
       description = "Write Perl Subroutines in Other Programming Languages";
