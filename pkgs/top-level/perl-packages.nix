@@ -6086,11 +6086,11 @@ let self = _self // overrides; _self = with self; {
   GDGraph = buildPerlPackage rec {
     name = "GDGraph-1.54";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/R/RU/RUZ/GDGraph-1.54.tar.gz";
+      url = mirror://cpan/authors/id/R/RU/RUZ/GDGraph-1.54.tar.gz;
       sha256 = "0kzsdc07ycxjainmz0dnsclb15w2j1y7g8b5mcb7vhannq85qvxr";
     };
-    propagatedBuildInputs = [ GD GDText ];
-    buildInputs = [ TestException CaptureTiny ];
+    propagatedBuildInputs = [ GDText ];
+    buildInputs = [ CaptureTiny TestException ];
     meta = {
       description = "Graph Plotting Module for Perl 5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
