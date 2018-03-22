@@ -1397,8 +1397,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
       sha256 = "0v6hb4r1wv3djrnqvnjcn3xx1scgqzx8nyjdg9lfc1ybvamrl0rn";
     };
-    buildInputs = [ ClassMOP Moose TestException ];
-    propagatedBuildInputs = [ CatalystPluginSession CatalystRuntime ClassInspector Moose MooseXEmulateClassAccessorFast MROCompat namespaceautoclean StringRewritePrefix TryTiny ];
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
       description = "Infrastructure plugin for the Catalyst authentication framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
