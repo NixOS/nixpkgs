@@ -271,6 +271,11 @@ in
   };
 
   libxshmfence = attrs: attrs // {
+    name = "libxshmfence-1.3";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
+    };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
   };
 

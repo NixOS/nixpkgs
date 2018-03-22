@@ -7462,8 +7462,6 @@ with pkgs;
   binutils =
     if targetPlatform.isDarwin
     then darwin.binutils
-    else if targetPlatform.isRiscV
-    then binutils_2_30
     else binutils-raw;
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
@@ -7474,15 +7472,6 @@ with pkgs;
     libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
     bintools = binutils-unwrapped;
   };
-  binutils-unwrapped_2_30 = callPackage ../development/tools/misc/binutils/2.30.nix {
-    # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-  };
-  binutils-raw_2_30 = wrapBintoolsWith {
-    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
-    bintools = binutils-unwrapped_2_30;
-  };
-  binutils_2_30 = binutils-raw_2_30;
 
   binutils_nogold = lowPrio (binutils-raw.override {
     bintools = binutils-raw.bintools.override {
@@ -8926,13 +8915,9 @@ with pkgs;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
-  glibc_2_26 = callPackage ../development/libraries/glibc {
+  glibc = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
   };
-  glibc_2_27 = callPackage ../development/libraries/glibc/2.27.nix {
-    installLocales = config.glibc.locales or false;
-  };
-  glibc = if hostPlatform.isRiscV then glibc_2_27 else glibc_2_26;
 
   glibc_memusage = callPackage ../development/libraries/glibc {
     installLocales = false;
@@ -8940,11 +8925,7 @@ with pkgs;
   };
 
   # Being redundant to avoid cycles on boot. TODO: find a better way
-  glibcCross = let
-    expr = if hostPlatform.isRiscV
-             then ../development/libraries/glibc/2.27.nix
-           else ../development/libraries/glibc;
-  in callPackage expr {
+  glibcCross = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
     stdenv = crossLibcStdenv;
   };

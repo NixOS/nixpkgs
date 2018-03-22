@@ -5,10 +5,7 @@
 }:
 
 let
-  # Note to whoever is upgrading this: 2.29 is broken.
-  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
-  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
-  version = "2.28.1";
+  version = "2.30";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
@@ -21,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
+    sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
   };
 
   patches = [
@@ -61,6 +58,9 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+    ./gold-symbol-visibility.patch
   ];
 
   outputs = [ "out" "info" "man" ];

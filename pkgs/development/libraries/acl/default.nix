@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     echo "Removing C++-style comments from include/acl.h"
     sed -e '/^\/\//d' -i include/acl.h
+
+    patchShebangs .
   '';
 
   configureFlags = [ "MAKE=make" "MSGFMT=msgfmt" "MSGMERGE=msgmerge" "XGETTEXT=xgettext" "ZIP=gzip" "ECHO=echo" "SED=sed" "AWK=gawk" ];
