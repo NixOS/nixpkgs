@@ -1009,6 +1009,8 @@ with pkgs;
 
   colpack = callPackage ../applications/science/math/colpack { };
 
+  compactor = callPackage ../applications/networking/compactor { };
+
   consul = callPackage ../servers/consul { };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
