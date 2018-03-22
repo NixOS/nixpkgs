@@ -474,11 +474,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveZip = buildPerlPackage {
-    name = "Archive-Zip-1.16";
+    name = "Archive-Zip-1.60";
     src = fetchurl {
-      url = http://tarballs.nixos.org/Archive-Zip-1.16.tar.gz;
-      sha256 = "1ghgs64by3ybjlb0bj65kxysb03k72i7iwmw63g41bj175l44ima";
+      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.60.tar.gz;
+      sha256 = "02y2ylq83hy9kgj57sc0239x65br9sm98c0chsm61s08yc2mpiza";
     };
+    buildInputs = [ TestMockModule ];
   };
 
   ArchiveZip_1_53 = buildPerlPackage {
@@ -2629,16 +2630,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPAN = buildPerlPackage rec {
-    name = "CPAN-2.10";
+    name = "CPAN-2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/${name}.tar.gz";
-      sha256 = "090e9e3d9fca83b89341a75c514c7411b743c887743723dbfe80f30d4ee5f3ad";
+      sha256 = "7dbd61c172b99b05c16a2fce790140489494c744190f6c4f80c162d5ae3ccc2c";
     };
-    propagatedBuildInputs = [ ArchiveZip CompressBzip2 Expect FileHomeDir FileWhich JSONPP LWP ModuleBuild ModuleSignature TermReadKey TextGlob YAML YAMLLibYAML YAMLSyck ];
+    propagatedBuildInputs = [ Expect FileWhich LWP ModuleBuild ModuleSignature TermReadKey TextGlob YAML ];
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ ArchiveZip_1_53 ];
   };
 
   CpanelJSONXS = buildPerlPackage rec {
