@@ -5196,10 +5196,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsConstant = buildPerlPackage {
-    name = "ExtUtils-Constant-0.23";
+    name = "ExtUtils-Constant-0.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.23.tar.gz;
-      sha256 = "23b77025c8a5d3b93c586d4f0e712bcca3ef934edbee00a78c3fad4285f48eab";
+      url = mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.24.tar.gz;
+      sha256 = "aa9e8c0b564576195a7508374f4a80b97fe3cf4a4c13efe4c949ece3e76b217d";
     };
   };
 
