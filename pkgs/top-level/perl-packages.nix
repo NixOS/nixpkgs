@@ -15385,9 +15385,8 @@ let self = _self // overrides; _self = with self; {
     # at /etc/fonts/font.conf is not available.
     doCheck = false;
 
-    propagatedBuildInputs = [ TestException IOStringy ClassAccessor Readonly
-      ListMoreUtils TestPod TestPodCoverage GraphViz ReadonlyXS
-      TextTabularDisplay];
+    propagatedBuildInputs = [ ClassAccessor IOStringy ListMoreUtils Readonly TextAutoformat ];
+    buildInputs = [ TestException ];
   };
 
   TextReform = buildPerlModule {
