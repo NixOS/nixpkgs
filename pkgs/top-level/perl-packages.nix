@@ -12620,13 +12620,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   RTClientREST = buildPerlPackage {
-    name = "RT-Client-REST-0.49";
+    name = "RT-Client-REST-0.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DM/DMITRI/RT-Client-REST-0.49.tar.gz;
-      sha256 = "832c84b4f19e97781e8902f123a659fdcfef68e0ed9cfe09055852e9d68f7afc";
+      url = mirror://cpan/authors/id/D/DM/DMITRI/RT-Client-REST-0.51.tar.gz;
+      sha256 = "6a9df61c7f209f634613a8824393932d2faf2497b1c580ed8e5dd7794a36ea7d";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ CGI DateTime DateTimeFormatDateParse Error ExceptionClass HTTPCookies HTTPMessage LWP ParamsValidate URI ];
+    buildInputs = [ CGI DateTime DateTimeFormatDateParse Error ExceptionClass HTTPCookies LWP ParamsValidate TestException ];
     meta = {
       description = "Talk to RT installation using REST protocol";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
