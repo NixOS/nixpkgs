@@ -1693,13 +1693,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystViewJSON = buildPerlPackage rec {
-    name = "Catalyst-View-JSON-0.35";
+    name = "Catalyst-View-JSON-0.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK//${name}.tar.gz";
-      sha256 = "184pyghlrkl7p387bnyvswi2d9myvdg4v3lax6xrd59shskvpmkm";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-JSON-0.36.tar.gz;
+      sha256 = "0x943j1n2r0zqanyzdrs1xsnn8ayn2wqskn7h144xcqa6v6gcisl";
     };
-    buildInputs = [ JSON ];
-    propagatedBuildInputs = [ CatalystRuntime JSONAny MROCompat YAML ];
+    buildInputs = [ YAML ];
+    propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "JSON view for your data";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
