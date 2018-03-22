@@ -4730,8 +4730,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/${name}.tar.gz";
       sha256 = "215b3a5c3c58c8bab0ea27130441bbdaec737eecc00f0670937f608bdbf64806";
     };
-    buildInputs = [ CPANChanges DistZilla ];
-    propagatedBuildInputs = [ CPANChanges DataSection DistZilla Moose ];
+    buildInputs = [ CPANChanges TestDeep ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-CPAN-Changes/;
       description = "Release tests for your changelog";
