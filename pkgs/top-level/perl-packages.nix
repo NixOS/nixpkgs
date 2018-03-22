@@ -11786,14 +11786,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PPIxUtilities = buildPerlPackage {
+  PPIxUtilities = buildPerlModule {
     name = "PPIx-Utilities-1.001000";
     src = fetchurl {
       url = mirror://cpan/authors/id/E/EL/ELLIOTJS/PPIx-Utilities-1.001000.tar.gz;
       sha256 = "03a483386fd6a2c808f09778d44db06b02c3140fb24ba4bf12f851f46d3bcb9b";
     };
-    buildInputs = [ PPI TestDeep ];
-    propagatedBuildInputs = [ ExceptionClass PPI Readonly TaskWeaken ];
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ ExceptionClass PPI Readonly ];
     meta = {
       description = "Extensions to L<PPI|PPI>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
