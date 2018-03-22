@@ -9929,7 +9929,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "77288441fdadd15beeec9a0813ece8aec1542f1d8ceaaec14755b3f316fbcf8b";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ AnyMoose Mouse ];
+    propagatedBuildInputs = [ AnyMoose ];
     meta = {
       description = "Organize your Mouse types in libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
