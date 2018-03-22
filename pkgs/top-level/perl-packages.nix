@@ -7244,7 +7244,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.11.tar.gz;
       sha256 = "14kz7z4xw179aya3116wxac29l4y2wmwrba087lya4v2gxdgiz4g";
     };
-    propagatedBuildInputs = [PerlIOviadynamic];
+    propagatedBuildInputs = [ PerlIOviadynamic ];
   };
 
   IOHTML = buildPerlPackage {
