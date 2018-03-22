@@ -10288,14 +10288,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTraits = buildPerlPackage rec {
+  MooseXTraits = buildPerlModule rec {
     name = "MooseX-Traits-0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "74afe0c4faf4e3b97c57f289437caa60becca34cd5821f489dd4cc9da4fbe29a";
     };
-    buildInputs = [ ModuleBuildTiny Moose MooseXRoleParameterized TestFatal TestRequires TestSimple ];
-    propagatedBuildInputs = [ ClassLoad Moose SubExporter namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny MooseXRoleParameterized TestFatal TestRequires TestSimple13 ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Traits;
       description = "Automatically apply roles at object creation time";
