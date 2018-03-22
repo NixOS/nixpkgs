@@ -2501,7 +2501,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  constantboolean = buildPerlPackage {
+  constantboolean = buildPerlModule {
     name = "constant-boolean-0.02";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/constant-boolean-0.02.tar.gz;
