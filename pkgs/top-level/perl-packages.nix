@@ -7444,10 +7444,10 @@ let self = _self // overrides; _self = with self; {
 
 
   IPCRun = buildPerlPackage {
-    name = "IPC-Run-0.92";
+    name = "IPC-Run-0.96";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-0.92.tar.gz;
-      sha256 = "1lj6kmr8rs6na77b3v673vvw6qsr511bmhgf257x4xqmvxnv91p1";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-0.96.tar.gz;
+      sha256 = "0h26ry3rw4flygwk07crfqmsfv9qyk4n4x82vjrk5hp14zq4zlmv";
     };
     doCheck = false; /* attempts a network connection to localhost */
     meta = {
@@ -7456,6 +7456,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
+    propagatedBuildInputs = [ IOTty ];
   };
 
   IPCRun3 = buildPerlPackage rec {
