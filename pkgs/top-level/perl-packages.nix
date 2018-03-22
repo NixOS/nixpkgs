@@ -10329,14 +10329,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesCommon = buildPerlPackage rec {
+  MooseXTypesCommon = buildPerlModule rec {
     name = "MooseX-Types-Common-0.001014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "ef93718b6d2f240d50b5c3acb1a74b4c2a191869651470001a82be1f35d0ef0f";
     };
-    buildInputs = [ ModuleBuildTiny TestDeep TestWarnings perl ];
-    propagatedBuildInputs = [ MooseXTypes self."if" ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestWarnings ];
+    propagatedBuildInputs = [ MooseXTypes ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types-Common;
       description = "A library of commonly used type constraints";
