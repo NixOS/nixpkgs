@@ -1587,8 +1587,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/${name}.tar.gz";
       sha256 = "1rvxbfnpf9x2pc2zgpazlcgdlr2dijmxgmcs0m5nazs0w6xikssb";
     };
-    buildInputs = [ TestMockObject ];
-    propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession ];
+    propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
       platforms = stdenv.lib.platforms.linux;
     };
