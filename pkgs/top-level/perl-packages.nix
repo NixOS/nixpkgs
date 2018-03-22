@@ -14248,12 +14248,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestPodCoverage = buildPerlPackage rec {
-    name = "Test-Pod-Coverage-1.08";
+    name = "Test-Pod-Coverage-1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
-      sha256 = "0y2md932zhbxdjwzskx0vmw2qy7jxkn87f9lb5h3f3vxxg1kcqz0";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Test-Pod-Coverage-1.10.tar.gz;
+      sha256 = "1m203mhgfilz7iqc8mxaw4lw02fz391mni3n25sfx7nryylwrja8";
     };
-    propagatedBuildInputs = [PodCoverage];
+    propagatedBuildInputs = [ PodCoverage ];
   };
 
   TestPodLinkCheck = buildPerlPackage rec {
