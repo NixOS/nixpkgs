@@ -16265,8 +16265,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-1.12.tar.gz;
       sha256 = "1vz5pbi4lm5fhq2slrs2hlp6bnk29863abgjlcx43l4dky2rbsa7";
     };
-    propagatedBuildInputs = [ constant ];
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   XMLParser = buildPerlPackage {
@@ -16341,7 +16339,6 @@ let self = _self // overrides; _self = with self; {
     postInstall = ''
       perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
       '';
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   XMLSAXBase = buildPerlPackage {
@@ -16355,7 +16352,6 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/grantm/XML-SAX-Base;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ ExtUtilsMakeMaker TestSimple13 ];
   };
 
   XMLSAXWriter = buildPerlPackage {
