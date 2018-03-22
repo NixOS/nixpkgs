@@ -8702,10 +8702,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathRound = buildPerlPackage rec {
-    name = "Math-Round-0.06";
+    name = "Math-Round-0.07";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
-      sha256 = "194dvggf1cmzc701j4wma38jgrcv2pwwzk69rnysjjdcjdv6y255";
+      url = mirror://cpan/authors/id/G/GR/GROMMEL/Math-Round-0.07.tar.gz;
+      sha256 = "09wkvqj4hfq9y0fimri967rmhnq90dc2wf20lhlmqjp5hsd359vk";
     };
   };
 
