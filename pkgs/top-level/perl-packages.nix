@@ -9849,14 +9849,14 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Moose ];
   };
 
-  MooseXAppCmd = buildPerlPackage rec {
+  MooseXAppCmd = buildPerlModule rec {
     name = "MooseX-App-Cmd-0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "2e3bbf7283a4bee72d91d26eb204436030992bbe55cbd35ec33a546f16f973ff";
     };
     buildInputs = [ ModuleBuildTiny MooseXConfigFromFile TestOutput YAML ];
-    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose MooseXGetopt MooseXNonMoose namespaceautoclean ];
+    propagatedBuildInputs = [ AppCmd MooseXGetopt MooseXNonMoose ];
     meta = {
       homepage = https://github.com/moose/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
