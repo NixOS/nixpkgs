@@ -1015,10 +1015,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CarpAssert = buildPerlPackage {
-    name = "Carp-Assert-0.20";
+    name = "Carp-Assert-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/Carp-Assert-0.20.tar.gz;
-      sha256 = "1wzy4lswvwi45ybsm65zlq17rrqx84lsd7rajvd0jvd5af5lmlqd";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Carp-Assert-0.21.tar.gz;
+      sha256 = "0km5fc6r6whxh6h5yd7g1j0bi96sgk0gkda6cardicrw9qmqwkwj";
     };
     meta = {
     };
