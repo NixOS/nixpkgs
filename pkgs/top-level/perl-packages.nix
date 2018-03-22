@@ -1036,16 +1036,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CarpAssertMore = buildPerlPackage {
-    name = "Carp-Assert-More-1.14";
+    name = "Carp-Assert-More-1.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-1.14.tar.gz;
-      sha256 = "0cq7qk4qbhqppm4raby5k24b5mx5qjgy1884nrddhxillnzlq01z";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-1.16.tar.gz;
+      sha256 = "1x9jd6s3lq97na6gz7g0zaq62l8z297xsfpdj2v42p3ijpfirl4f";
     };
-    propagatedBuildInputs = [ CarpAssert TestException ];
+    propagatedBuildInputs = [ CarpAssert ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       license = stdenv.lib.licenses.artistic2;
     };
+    buildInputs = [ TestException ];
   };
 
   CarpClan = buildPerlPackage {
