@@ -12633,10 +12633,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StreamBuffered = buildPerlPackage {
-    name = "Stream-Buffered-0.02";
+    name = "Stream-Buffered-0.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Stream-Buffered-0.02.tar.gz;
-      sha256 = "0bfa3h2pryrbrcd1r7235k0ik4gw35r5ig8h8y3dfmk9l3y96vjr";
+      url = mirror://cpan/authors/id/D/DO/DOY/Stream-Buffered-0.03.tar.gz;
+      sha256 = "0fs2n9zw6isfkha2kbqrvl9mwg572x1x0jlfaps0qsyynn846bcv";
     };
     meta = {
       homepage = http://plackperl.org;
