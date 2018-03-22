@@ -11826,13 +11826,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   PlackMiddlewareDebug = buildPerlModule rec {
-    name = "Plack-Middleware-Debug-0.16";
+    name = "Plack-Middleware-Debug-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
-      sha256 = "e1e4ff6e9b246fe67547ebac8a3e83d4ae77873f889d1f63411c21c8c6bf96d5";
+      sha256 = "a30b62f1bb94e641f7b60b5ea5335e140c553b4131ec4003b56db37f47617a26";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
-    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir Plack TextMicroTemplate ];
+    propagatedBuildInputs = [ ClassMethodModifiers DataDump DataDumperConcise Plack TextMicroTemplate ];
     meta = {
       homepage = https://github.com/miyagawa/Plack-Middleware-Debug;
       description = "Display information about the current request/response";
