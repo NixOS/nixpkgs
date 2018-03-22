@@ -704,10 +704,10 @@ let
   }) // {inherit fontsproto xproto xtrans ;};
 
   libICE = (mkDerivation "libICE" {
-    name = "libICE-1.0.9";
+    name = "libICE-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2;
+      url = mirror://xorg/individual/lib/libICE-1.0.10.tar.bz2;
       sha256 = "00p2b6bsg6kcdbb39bv46339qcywxfl4hsrz8asm4hy6q7r34w4g";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1148,10 +1148,10 @@ let
   }) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
 
   libxkbfile = (mkDerivation "libxkbfile" {
-    name = "libxkbfile-1.0.9";
+    name = "libxkbfile-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxkbfile-1.0.9.tar.bz2;
+      url = mirror://xorg/individual/lib/libxkbfile-1.0.10.tar.bz2;
       sha256 = "0smimr14zvail7ar68n7spvpblpdnih3jxrva7cpa6cn602px0ai";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1352,11 +1352,11 @@ let
   }) // {inherit libICE libSM libXmu libXt ;};
 
   twm = (mkDerivation "twm" {
-    name = "twm-1.0.9";
+    name = "twm-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/twm-1.0.9.tar.bz2;
-      sha256 = "02iicvhkp3i7q5rliyymiq9bppjr0pzfs6rgb78kppryqdx1cxf5";
+      url = mirror://xorg/individual/app/twm-1.0.10.tar.bz2;
+      sha256 = "1ms5cj1w3g26zg6bxdv1j9hl0pxr4300qnv003cz1q3cl7ffljb4";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE libSM libX11 libXext libXmu xproto libXt ];
@@ -2552,10 +2552,10 @@ let
   }) // {inherit libXaw libXt ;};
 
   xmodmap = (mkDerivation "xmodmap" {
-    name = "xmodmap-1.0.9";
+    name = "xmodmap-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmodmap-1.0.9.tar.bz2;
+      url = mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2;
       sha256 = "0y649an3jqfq9klkp9y5gj20xb78fw6g193f5mnzpl0hbz6fbc5p";
     };
     nativeBuildInputs = [ pkgconfig ];
