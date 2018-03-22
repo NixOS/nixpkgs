@@ -11979,7 +11979,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/P/PE/PERLER/${name}.tar.gz";
       sha256 = "ccb42272c7503379cb1131394620ee50276d72844e0e80eb4b007a9d58f87623";
     };
-    buildInputs = [ TestMore ];
     propagatedBuildInputs = [ PodPOM ];
     meta = {
       description = "Generate the TOC of a POD with Pod::POM";
