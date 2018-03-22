@@ -17085,7 +17085,7 @@ with pkgs;
     gtksharp = gtk-sharp-2_0;
   };
 
-  plover = callPackage ../applications/misc/plover { };
+  plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
