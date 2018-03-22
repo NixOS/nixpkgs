@@ -3659,10 +3659,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeFormatMail = buildPerlPackage {
-    name = "DateTime-Format-Mail-0.402";
+    name = "DateTime-Format-Mail-0.403";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.402.tar.gz;
-      sha256 = "d788c883969e1647ed0524cc130d897276de23eaa3261f3616458ddd3a4a88fb";
+      url = mirror://cpan/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz;
+      sha256 = "8df8e35c4477388ff5c7ce8b3e8b6ae4ed30209c7a5051d41737bd14d755fcb0";
     };
     propagatedBuildInputs = [ DateTime ParamsValidate ];
     meta = {
