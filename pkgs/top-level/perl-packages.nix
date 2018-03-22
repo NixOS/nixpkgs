@@ -13168,7 +13168,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/B/BO/BOBTFISH/String-TT-0.03.tar.gz;
       sha256 = "1asjr79wqcl9wk96afxrm1yhpj8lk9bk8kyz78yi5ypr0h55yq7p";
     };
-    buildInputs = [ Testuseok TestException TestTableDriven ];
+    buildInputs = [ TestException TestSimple13 TestTableDriven ];
     propagatedBuildInputs = [ PadWalker SubExporter TemplateToolkit ];
     meta = {
       description = "Use TT to interpolate lexical variables";
