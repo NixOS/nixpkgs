@@ -3734,7 +3734,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/${name}.tar.gz";
       sha256 = "cc1f4e0ae1d39b0d4c3dddccfd7423c77c67a70950c4b5ecabf8ca553ab294b4";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
       description = "Parse and format SQLite dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
