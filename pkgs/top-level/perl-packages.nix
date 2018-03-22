@@ -2564,8 +2564,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Config-Versioned-1.01.tar.gz;
       sha256 = "bc9a4ae3738bd89f86a07bca673627ca3c92ba969737cd6dbc7ab7ad17cd2348";
     };
-    buildInputs = [ DateTime PathClass ];
-    propagatedBuildInputs = [ ConfigStd GitPurePerl Moose ];
+    propagatedBuildInputs = [ ConfigStd GitPurePerl ];
     doCheck = false;
     meta = {
       description = "Simple, versioned access to configuration data";
