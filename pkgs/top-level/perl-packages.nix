@@ -7617,13 +7617,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  JavaScriptMinifierXS = buildPerlPackage rec {
+  JavaScriptMinifierXS = buildPerlModule rec {
     name = "JavaScript-Minifier-XS-0.11";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz";
+      url = mirror://cpan/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz;
       sha256 = "1vlyhckpjbrg2v4dy9szsxxl0q44n0y1xl763mg2y2ym9g5144hm";
     };
-    propagatedBuildInputs = [ ];
     meta = {
       description = "XS based JavaScript minifier";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
