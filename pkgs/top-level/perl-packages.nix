@@ -12823,7 +12823,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "aa03c08e01f802a358c175c6093c02adf9688659a087a8ddefdc3e9cef72640b";
     };
-    propagatedBuildInputs = [ JSONMaybeXS ParamsUtil SubExporter ];
+    propagatedBuildInputs = [ JSONMaybeXS SubExporter ];
     meta = {
       homepage = https://github.com/rjbs/String-Flogger;
       description = "String munging for loggers";
