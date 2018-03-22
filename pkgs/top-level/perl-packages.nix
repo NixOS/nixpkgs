@@ -10131,10 +10131,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MROCompat = buildPerlPackage {
-    name = "MRO-Compat-0.12";
+    name = "MRO-Compat-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/MRO-Compat-0.12.tar.gz;
-      sha256 = "1mhma2g83ih9f8nkmg2k9l0x6izhhbb6k5lli4rpllxad4wbk9dv";
+      url = mirror://cpan/authors/id/H/HA/HAARG/MRO-Compat-0.13.tar.gz;
+      sha256 = "1y547lr6zccf7919vx01v22zsajy528psanhg5aqschrrin3nb4a";
     };
     meta = {
       description = "Mro::* interface compatibility for Perls < 5.9.5";
