@@ -15442,7 +15442,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/${name}.tar.gz";
       sha256 = "1bf740450d3a6d7c12b48c25f7da5964e44e7cc38b28572cfb76ff22464f4469";
     };
-    propagatedBuildInputs = [ CarpAssert ClassDataInheritable ClassVirtual enum ];
+    propagatedBuildInputs = [ ClassVirtual enum ];
     meta = {
       description = "A Least-Recently Used cache";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
