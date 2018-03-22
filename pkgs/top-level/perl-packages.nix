@@ -4069,10 +4069,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassCursorCached = buildPerlPackage {
-    name = "DBIx-Class-Cursor-Cached-1.001002";
+    name = "DBIx-Class-Cursor-Cached-1.001004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AR/ARCANEZ/DBIx-Class-Cursor-Cached-1.001002.tar.gz;
-      sha256 = "19r7jr6pknxiirrybq0cd0lnr76xiw05arnfqgk9nrhp6c7vvil0";
+      url = mirror://cpan/authors/id/A/AR/ARCANEZ/DBIx-Class-Cursor-Cached-1.001004.tar.gz;
+      sha256 = "09b2jahn2x12qm4f7qm1jzsxbz7qn1czp6a3fnl5l2i3l4r5421p";
     };
     buildInputs = [ CacheCache DBDSQLite ];
     propagatedBuildInputs = [ CarpClan DBIxClass ];
