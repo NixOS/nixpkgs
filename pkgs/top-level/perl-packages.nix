@@ -14172,13 +14172,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestOutput = buildPerlPackage rec {
-    name = "Test-Output-1.01";
+    name = "Test-Output-1.031";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "0hg2hv6sify6qcx4865m4gyfdfbi96aw7fx39zpvnrivk3i2jdcd";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Test-Output-1.031.tar.gz;
+      sha256 = "193y1xjvgc1p9pdgdwps2127knvpz9wc1xh6gmr74y3ihmqz7f7q";
     };
-    buildInputs = [ TestTester ];
-    propagatedBuildInputs = [ SubExporter ];
+    propagatedBuildInputs = [ CaptureTiny ];
   };
 
   TestPerlCritic = buildPerlPackage rec {
