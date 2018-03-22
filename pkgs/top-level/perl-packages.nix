@@ -5058,13 +5058,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   EvalClosure = buildPerlPackage {
-    name = "Eval-Closure-0.11";
+    name = "Eval-Closure-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Eval-Closure-0.11.tar.gz;
-      sha256 = "1b3rc9smdyyi0janckfiyg1kwph893sqwx7dr5n4mky0x8x3v4m1";
+      url = mirror://cpan/authors/id/D/DO/DOY/Eval-Closure-0.14.tar.gz;
+      sha256 = "1bcc47r6zm3hfr6ccsrs72kgwxm3wkk07mgnpsaxi67cypr482ga";
     };
     buildInputs = [ TestFatal TestRequires ];
-    propagatedBuildInputs = [ SubExporter TryTiny ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Safely and cleanly create closures via string eval";
