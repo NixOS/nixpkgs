@@ -4737,13 +4737,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginReadmeAnyFromPod = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-ReadmeAnyFromPod-0.131500";
+    name = "Dist-Zilla-Plugin-ReadmeAnyFromPod-0.163250";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeAnyFromPod-0.131500.tar.gz;
-      sha256 = "4d02ce5f185e0d9061019c1925a410931d0c1848db7e5ba5f8e676f04634b06e";
+      url = mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeAnyFromPod-0.163250.tar.gz;
+      sha256 = "d44f2799922f78b2a7961ed89123e11bdd77abfe85ba2040d82b80ad72ed13bc";
     };
-    buildInputs = [ DistZilla TestMost ];
-    propagatedBuildInputs = [ DistZilla FileSlurp IOstringy Moose MooseAutobox MooseXHasSugar PodMarkdown ];
+    buildInputs = [ TestDeep TestDifferences TestException TestFatal TestMost TestRequires TestSharedFork TestWarn ];
+    propagatedBuildInputs = [ DistZillaRoleFileWatcher MooseXHasSugar PodMarkdownGithub ];
     meta = {
       homepage = https://github.com/DarwinAwardWinner/Dist-Zilla-Plugin-ReadmeAnyFromPod;
       description = "Automatically convert POD to a README in any format for Dist::Zilla";
@@ -4959,6 +4959,22 @@ let self = _self // overrides; _self = with self; {
       description = "Release Test::Version tests";
       license = stdenv.lib.licenses.artistic2;
     };
+  };
+
+  DistZillaRoleFileWatcher = buildPerlModule rec {
+     version = "0.006";
+     name = "Dist-Zilla-Role-FileWatcher-0.006";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Role-FileWatcher-0.006.tar.gz;
+       sha256 = "15jfpr257xxp27gz156npgpj7kh2dchzgfmvzivi5bvdb2wl8fpy";
+     };
+     propagatedBuildInputs = [ DistZilla SafeIsa ];
+     buildInputs = [ ModuleBuildTiny TestDeep TestFatal ];
+     meta = {
+       description = "Receive notification when something changes a file's contents";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/karenetheridge/Dist-Zilla-Role-FileWatcher";
+     };
   };
 
   EmailAbstract = buildPerlPackage rec {
@@ -12985,6 +13001,21 @@ let self = _self // overrides; _self = with self; {
       description = "Convert POD to Markdown";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  PodMarkdownGithub = buildPerlPackage rec {
+     version = "0.03";
+     name = "Pod-Markdown-Github-0.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MINIMAL/Pod-Markdown-Github-0.03.tar.gz;
+       sha256 = "0y555pb78j0lz24kdgiwkmk1vcv4lg3a3mvnw9vm2qqnkp7p0nag";
+     };
+     propagatedBuildInputs = [ PodMarkdown ];
+     buildInputs = [ TestDifferences ];
+     meta = {
+       description = "Convert POD to Github's specific markdown";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   PodSimple = buildPerlPackage {
