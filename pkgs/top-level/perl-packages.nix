@@ -550,7 +550,7 @@ let self = _self // overrides; _self = with self; {
   AuthenRadius = buildPerlPackage rec {
     name = "Authen-Radius-0.26";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/P/PO/PORTAONE/${name}.tar.gz";
+      url = mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.26.tar.gz;
       sha256 = "4f272c19b8a9f6514a1107e98efae6773208233df4db11f2dc4764b4784b17c3";
     };
     buildInputs = [ TestNoWarnings ];
