@@ -1,13 +1,13 @@
 { stdenv, fetchFromBitbucket, qtbase, flex, bison, docutils }:
 
 stdenv.mkDerivation rec {
-  name = "xxdiff-4.0.1.20170623";
+  name = "xxdiff-401";
 
   src = fetchFromBitbucket {
     owner = "blais";
     repo = "xxdiff";
     rev = "5e5f885dfc43559549a81c59e9e8c9525306356a";
-    sha256 = "0gbvxrkwkbvag3298j89smszghpr8ilxxfb0cvsknfqdf15b296w";
+    sha256 = "0x954xinn91clf0v7bg4p5nx72lzy2jf6hzhx31zi2ff2v01p4qx";
   };
 
   nativeBuildInputs = [ flex bison docutils ];
