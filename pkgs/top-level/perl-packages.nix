@@ -12178,16 +12178,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   RSSParserLite = buildPerlPackage {
-    name = "RSS-Parser-Lite-0.10";
+    name = "RSS-Parser-Lite-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EB/EBOSRUP/RSS-Parser-Lite-0.10.tar.gz;
-      sha256 = "1spvi0z62saz2cam8kwk2k561aavw2w42g3ykj38w1kmydvsk8z6";
+      url = mirror://cpan/authors/id/T/TF/TFPBL/RSS-Parser-Lite-0.12.tar.gz;
+      sha256 = "1fcmp4qp7q3xr2mw7clqqwph45icbvgfs2n41gp9zamim2y39p49";
     };
-    propagatedBuildInputs = [ SOAPLite ];
+    propagatedBuildInputs = [ locallib ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    doCheck = false;
   };
 
   RTClientREST = buildPerlPackage {
