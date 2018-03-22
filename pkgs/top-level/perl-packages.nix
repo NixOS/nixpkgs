@@ -3103,7 +3103,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "0yx7d4qwsr9n85gslip0y3mdwr5fkncfbwxz7si2a17x95yl7bxq";
     };
-    propagatedBuildInputs = [ DataUUID SubExporter SubInstall ];
+    propagatedBuildInputs = [ DataUUID SubExporter ];
     meta = {
       homepage = https://github.com/rjbs/Data-GUID;
       description = "Globally unique identifiers";
