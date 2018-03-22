@@ -3765,12 +3765,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelCheckOS = buildPerlPackage rec {
-    name = "Devel-CheckOS-1.76";
+    name = "Devel-CheckOS-1.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${name}.tar.gz";
-      sha256 = "f83fb4cb8de060f607214b1e88c98ac6c4e065371e646fe896f16ea887aecb0c";
+      sha256 = "f3c17b56b79283b62616f938d36c57adc9df06bfaa295ff98be21e9014a23b10";
     };
-    propagatedBuildInputs = [ DataCompare FileFindRule ];
+    propagatedBuildInputs = [ DataCompare ];
   };
 
   DevelPatchPerl = buildPerlPackage rec {
