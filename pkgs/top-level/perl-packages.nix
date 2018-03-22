@@ -9187,11 +9187,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModuleScanDeps = let version = "1.20"; in buildPerlPackage {
+  ModuleScanDeps = let version = "1.24"; in buildPerlPackage {
     name = "Module-ScanDeps-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSCHUPP/Module-ScanDeps-${version}.tar.gz";
-      sha256 = "14a623b3gzr0mq5n93lrxm6wjmdp8dwj91gb43wk7f3dwd3ka03j";
+      sha256 = "0s6cj90ckhy351gql52ksh4ms1x8piv26iadl09fcpzkx7j0srw9";
     };
     buildInputs = [ TestRequires ];
     meta = {
