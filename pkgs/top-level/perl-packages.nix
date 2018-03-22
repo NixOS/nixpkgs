@@ -13111,12 +13111,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubOverride = buildPerlPackage rec {
-    name = "Sub-Override-0.08";
+    name = "Sub-Override-0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/${name}.tar.gz";
-      sha256 = "13s5zi6qz02q50vv4bmwdmhn9gvg0988fydjlrrv500g6hnyzlkj";
+      sha256 = "1d955qn44brkcfif3gi0q2vvvqahny6rax0vr068x5i9yz0ng6lk";
     };
-    propagatedBuildInputs = [SubUplevel TestException];
+    buildInputs = [ TestFatal ];
   };
 
   SubQuote = buildPerlPackage rec {
