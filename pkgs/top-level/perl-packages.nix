@@ -16722,18 +16722,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   X11XCB = buildPerlPackage rec {
-    name = "X11-XCB-0.16";
+    name = "X11-XCB-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
-      sha256 = "14mnvr1001py2z1n43l18yaw0plwvjg5pcsyc7k81sa0amw8ahzw";
+      sha256 = "12qyf98s5hbybmh0mblpz50c00i68srq73w5rw31m2dhclj8n96q";
     };
     AUTOMATED_TESTING = false;
-    buildInputs = [
-      ExtUtilsDepends ExtUtilsPkgConfig DataDump
-      XMLSimple XMLDescent TestDeep TestException
-      pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm
-    ];
-    propagatedBuildInputs = [ XSObjectMagic Mouse MouseXNativeTraits TryTiny ];
+    buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
+    propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
     NIX_CFLAGS_LINK = [ "-lxcb" "-lxcb-util" "-lxcb-xinerama" "-lxcb-icccm" ];
     doCheck = false; # requires an X server
     meta = {
