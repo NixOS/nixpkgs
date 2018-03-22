@@ -674,4 +674,7 @@ self: super: {
       sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
     })) self.semigroups;
 
+  # https://github.com/xmonad/xmonad-contrib/issues/235
+  xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
+
 }
