@@ -13616,16 +13616,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   TemplateToolkit = buildPerlPackage rec {
-    name = "Template-Toolkit-2.25";
+    name = "Template-Toolkit-2.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.25.tar.gz;
-      sha256 = "048yg07j48rix3cly13j5wzms7kd5argviicj0kwykb004xpc8zl";
+      url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.27.tar.gz;
+      sha256 = "1p66y9mwj7nkc1bcwgp2xjw78l4x5bzhj0xghp2k80ad4q1s848k";
     };
     propagatedBuildInputs = [ AppConfig ];
     meta = {
       description = "Comprehensive template processing system";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ CGI TestLeakTrace ];
   };
 
    TemplateGD = buildPerlPackage rec {
