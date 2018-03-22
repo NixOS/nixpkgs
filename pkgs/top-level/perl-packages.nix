@@ -2510,7 +2510,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConvertColor = buildPerlPackage {
+  ConvertColor = buildPerlModule {
     name = "Convert-Color-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.11.tar.gz;
