@@ -9888,8 +9888,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MJ/MJGARDNER/MouseX-SimpleConfig-0.11.tar.gz;
       sha256 = "257f384091d33d340373a6153947039c698dc449d1ef989335644fc3d2da0069";
     };
-    buildInputs = [ Mouse PathClass ];
-    propagatedBuildInputs = [ ConfigAny Mouse MouseXConfigFromFile ];
+    propagatedBuildInputs = [ ConfigAny MouseXConfigFromFile ];
     meta = {
       description = "A Mouse role for setting attributes from a simple configfile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
