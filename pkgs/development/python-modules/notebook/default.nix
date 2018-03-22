@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf8";
 
-  buildInputs = [ nose glibcLocales ]
+  checkInputs = [ nose glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
-    echo "" > setup.cfg
-    cat setup.cfg
+    touch setup.cfg
   '';
+
   checkPhase = ''
     runHook preCheck
     mkdir tmp
