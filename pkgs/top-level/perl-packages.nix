@@ -4946,13 +4946,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestVersion = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-Version-0.002004";
+    name = "Dist-Zilla-Plugin-Test-Version-1.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Dist-Zilla-Plugin-Test-Version-0.002004.tar.gz;
-      sha256 = "4ae5055071e07442223d07d818e9484430368b59c15966b90b18c8abc06f8e36";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Dist-Zilla-Plugin-Test-Version-1.09.tar.gz;
+      sha256 = "7240508731bc1bf6dfad7701ec65450a18ef9245a521ab26ebd6acb39a9ebe17";
     };
-    buildInputs = [ DistZilla TestNoTabs TestScript ];
-    propagatedBuildInputs = [ DistZilla Moose TestVersion namespaceautoclean ];
+    buildInputs = [ Filechdir TestDeep TestEOL TestNoTabs TestScript TestVersion ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-Version/;
       description = "Release Test::Version tests";
