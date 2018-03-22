@@ -7665,13 +7665,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   JSONMaybeXS = buildPerlPackage rec {
-    name = "JSON-MaybeXS-1.003005";
+    name = "JSON-MaybeXS-1.003010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "02n8dkj3qpzikkqyki8gvdk1pfdqrs9qcrdr96fla42gar5nkd5x";
+      url = mirror://cpan/authors/id/H/HA/HAARG/JSON-MaybeXS-1.003010.tar.gz;
+      sha256 = "0hs504x5zsa2vl6r7b3rvbygsak1ly24m1lg636bqp3x7jirmb30";
     };
-    buildInputs = [ TestWithoutModule ];
-    propagatedBuildInputs = [ JSONPP ];
     meta = {
       description = "Use L<Cpanel::JSON::XS> with a fallback to L<JSON::XS> and L<JSON::PP>";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
