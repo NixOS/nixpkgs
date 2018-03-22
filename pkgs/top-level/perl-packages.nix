@@ -4350,8 +4350,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DO/DOY/${name}.tar.gz";
       sha256 = "1i7dr9jpdiy2nijl2p4q5zg2q2s9ckbj2hs4kmnnckf9hsb4p17a";
     };
-    buildInputs = [ TestFatal ModuleRuntime ];
-    propagatedBuildInputs = [ SubExporter ListMoreUtils ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ ModuleRuntime ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Declare version conflicts for your dist";
