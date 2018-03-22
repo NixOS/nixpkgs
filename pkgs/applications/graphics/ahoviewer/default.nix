@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "ahoviewer-${version}";
-  version = "1.4.9";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
     rev = version;
-    sha256 = "194h3k5zvd8gjrbs91qba7d9h7i30yh4rjk4w3aa1vwvv0qm2amx";
+    sha256 = "1adzxp30fwh41y339ha8i5qp89zf21dw18vcicqqnzvyxbk5r3ig";
   };
 
   enableParallelBuilding = true; 
@@ -20,9 +20,13 @@ stdenv.mkDerivation rec {
                   libsecret curl unrar libzip librsvg 
                   gst_all_1.gstreamer
                   gst_all_1.gst-plugins-good 
-                  gst_all_1.gst-plugins-bad 
                   gst_all_1.gst-libav
                   gst_all_1.gst-plugins-base ];
+
+  # https://github.com/ahodesuka/ahoviewer/issues/60
+  # Already fixed in the master branch
+  # TODO: remove this next release
+  makeFlags = [ ''LIBS=-lssl -lcrypto'' ];
   
   postPatch = ''patchShebangs version.sh'';
   
