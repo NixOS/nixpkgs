@@ -3683,13 +3683,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatMySQL = buildPerlPackage rec {
+  DateTimeFormatMySQL = buildPerlModule rec {
     name = "DateTime-Format-MySQL-0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XM/XMIKEW/${name}.tar.gz";
       sha256 = "07cgz60gxvrv7xqvngyll60pa8cx93h3jyx9kc9wdkn95qbd864q";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ModuleBuild ];
+    propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
       description = "Parse and format MySQL dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
