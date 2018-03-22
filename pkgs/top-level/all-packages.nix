@@ -9580,6 +9580,8 @@ in
 
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
 
+  gnome-multi-writer = callPackage ../applications/misc/gnome-multi-writer {};
+
   gnome-online-accounts = callPackage ../development/libraries/gnome-online-accounts { };
 
   gnome-video-effects = callPackage ../development/libraries/gnome-video-effects { };
