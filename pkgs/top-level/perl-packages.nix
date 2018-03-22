@@ -207,7 +207,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ApacheSession = buildPerlPackage {
+  ApacheSession = buildPerlModule {
     name = "Apache-Session-1.93";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Apache-Session-1.93.tar.gz;
