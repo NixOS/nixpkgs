@@ -2427,7 +2427,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DR/DRTECH/Config-Merge-1.04.tar.gz;
       sha256 = "a932477b43ae5fb04a16f071a891da7bd2086c10c680592f2888fa9d9972cccf";
     };
-    buildInputs = [ ConfigAny YAML ];
+    buildInputs = [ YAML ];
     propagatedBuildInputs = [ ConfigAny ];
     meta = {
       description = "Load a configuration directory tree containing YAML, JSON, XML, Perl, INI or Config::General files";
