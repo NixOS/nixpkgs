@@ -808,6 +808,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  BUtils = buildPerlPackage rec {
+     version = "0.27";
+     name = "B-Utils-0.27";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/E/ET/ETHER/B-Utils-0.27.tar.gz;
+       sha256 = "1spzhmk3z6c4blmra3kn84nq20fira2b3vjg86m0j085lgv56zzr";
+     };
+     propagatedBuildInputs = [ TaskWeaken ];
+     buildInputs = [ ExtUtilsDepends ];
+     meta = {
+       description = "Helper functions for op tree manipulation";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://search.cpan.org/dist/B-Utils";
+     };
+  };
+
   BusinessHours = buildPerlPackage rec {
     name = "Business-Hours-0.12";
     src = fetchurl {
@@ -9106,16 +9122,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleInfo = buildPerlPackage rec {
-    name = "Module-Info-0.35";
+    name = "Module-Info-0.37";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MB/MBARBON/Module-Info-0.35.tar.gz";
-      sha256 = "0r7vxg1iy3lam0jgb2sk8ghgpmp3x5fskvzqlgkb09bssq83s1xb";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Module-Info-0.37.tar.gz;
+      sha256 = "0j143hqxgdkdpj5qssppq72gjr0n73c4f7is6wgrrcchjx905a4f";
     };
     buildInputs = [ TestPod TestPodCoverage ];
     meta = {
       description = "Information about Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ BUtils ];
   };
 
   ModuleInstall = let version = "1.19"; in buildPerlPackage {
