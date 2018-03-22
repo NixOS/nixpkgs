@@ -11869,12 +11869,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   PlackMiddlewareRemoveRedundantBody = buildPerlPackage {
-    name = "Plack-Middleware-RemoveRedundantBody-0.05";
+    name = "Plack-Middleware-RemoveRedundantBody-0.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-RemoveRedundantBody-0.05.tar.gz;
-      sha256 = "a0676e1c792bea7f25f1d901bee59054d35012d5ea8cd42529d336143fa87cd8";
+      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-RemoveRedundantBody-0.07.tar.gz;
+      sha256 = "64b841d5d74b4c4a595b85749d69297f4f5f5c0829a6e99e0099f05dd69be3c3";
     };
-    buildInputs = [ HTTPMessage Plack ];
     propagatedBuildInputs = [ Plack ];
     meta = {
       homepage = https://github.com/Sweet-kid/Plack-Middleware-RemoveRedundantBody;
