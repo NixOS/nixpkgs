@@ -17912,6 +17912,8 @@ with pkgs;
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
+  toxiproxy = callPackage ../development/tools/toxiproxy { };
+
   tqsl = callPackage ../applications/misc/tqsl { };
 
   transcode = callPackage ../applications/audio/transcode { };
