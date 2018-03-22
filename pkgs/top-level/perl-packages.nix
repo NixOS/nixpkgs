@@ -9143,7 +9143,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Module-Pluggable-Fast-0.19.tar.gz;
       sha256 = "0pq758wlasmh77xyd2xh75m5b2x14s8pnsv63g5356gib1q5gj08";
     };
-    propagatedBuildInputs = [UNIVERSALrequire];
+    propagatedBuildInputs = [ UNIVERSALrequire ];
   };
 
   ModuleRefresh = buildPerlPackage {
