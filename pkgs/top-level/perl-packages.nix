@@ -8858,20 +8858,11 @@ let self = _self // overrides; _self = with self; {
   MIMETools = buildPerlPackage rec {
     name = "MIME-tools-5.509";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/D/DS/DSKOLL/MIME-tools-5.509.tar.gz";
+      url = mirror://cpan/authors/id/D/DS/DSKOLL/MIME-tools-5.509.tar.gz;
       sha256 = "0wv9rzx5j1wjm01c3dg48qk9wlbm6iyf91j536idk09xj869ymv4";
     };
-    propagatedBuildInputs = [
-      MailTools
-      FilePath
-      FileTemp
-      MIMEBase64
-    ];
-    buildInputs = [
-      TestDeep
-      TestPod
-      TestPodCoverage
-    ];
+    propagatedBuildInputs = [ MailTools ];
+    buildInputs = [ TestDeep ];
     meta = {
       description = "class for parsed-and-decoded MIME message";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
