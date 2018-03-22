@@ -702,10 +702,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BHooksOPCheck = buildPerlPackage {
-    name = "B-Hooks-OP-Check-0.19";
+    name = "B-Hooks-OP-Check-0.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/B-Hooks-OP-Check-0.19.tar.gz;
-      sha256 = "0pp1piv74pv9irqlvl5xcs2dvzbb74niwjhnj6dsckxf1j34mzrg";
+      url = mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-OP-Check-0.22.tar.gz;
+      sha256 = "1kfdv25gn6yik8jrwik4ajp99gi44s6idcvyyrzhiycyynzd3df7";
     };
     buildInputs = [ ExtUtilsDepends ];
     meta = {
