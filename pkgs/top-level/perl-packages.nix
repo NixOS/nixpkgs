@@ -15808,12 +15808,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   URIdb = buildPerlModule {
-    name = "URI-db-0.15";
+    name = "URI-db-0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.15.tar.gz;
-      sha256 = "ac3dc3eeb8ca58dc4f7e1dfed6bca5bb8ebbc5dfacee63161490b09a4bfac982";
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.18.tar.gz;
+      sha256 = "460a1d3b9a45779f56dbbeebc60612370b32771f3158c87da981857163b43e0b";
     };
-    propagatedBuildInputs = [ URI URINested ];
+    propagatedBuildInputs = [ URINested ];
     meta = {
       homepage = https://search.cpan.org/dist/URI-db/;
       description = "Database URIs";
