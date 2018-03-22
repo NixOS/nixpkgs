@@ -10891,13 +10891,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParamsClassify = buildPerlPackage rec {
-    name = "Params-Classify-0.013";
+  ParamsClassify = buildPerlModule rec {
+    name = "Params-Classify-0.015";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Params/${name}.tar.gz";
-      sha256 = "1d4ysd95flszrxrnjgy6s7b80jkagjsb939h42i2hix4q20sy0a1";
+      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Params-Classify-0.015.tar.gz;
+      sha256 = "052r198xyrsv8wz21gijdigz2cgnidsa37nvyfzdiz4rv1fc33ir";
     };
-    buildInputs = [ ModuleBuild ExtUtilsParseXS ];
   };
 
   ParamsUtil = buildPerlPackage {
