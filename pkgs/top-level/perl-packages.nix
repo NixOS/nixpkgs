@@ -4795,14 +4795,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestCompile = buildPerlPackage rec {
-    name = "Dist-Zilla-Plugin-Test-Compile-2.054";
+  DistZillaPluginTestCompile = buildPerlModule rec {
+    name = "Dist-Zilla-Plugin-Test-Compile-2.058";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "363fc251785a36a0b2028fda3b38d71d30c7048b09145362bbfac13fc41eab7e";
+      sha256 = "d0cf93e525f102eca0f7f3967124d2e59d0a212f738ce54c1ddd91dda268d88a";
     };
-    buildInputs = [ CPANMetaCheck DistZilla Filepushd ModuleBuildTiny PerlPrereqScanner TestDeep TestMinimumVersion TestWarnings self."if" ];
-    propagatedBuildInputs = [ DataSection DistZilla Moose PathTiny SubExporterForMethods namespaceautoclean ];
+    buildInputs = [ CPANMetaCheck ModuleBuildTiny TestDeep TestMinimumVersion TestWarnings ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-Compile;
       description = "Common tests to check syntax of your modules, only using core modules";
