@@ -14600,10 +14600,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWithoutModule = buildPerlPackage {
-    name = "Test-Without-Module-0.17";
+    name = "Test-Without-Module-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/Test-Without-Module-0.17.tar.gz;
-      sha256 = "a691b0bf6d92dedbacfd547551021389ebc79c51937de2b914e792457da56ff7";
+      url = mirror://cpan/authors/id/C/CO/CORION/Test-Without-Module-0.20.tar.gz;
+      sha256 = "8e9aeb7c32a6c6d0b8a93114db2a8c072721273a9d9a2dd4f9ca86cfd28aa524";
     };
     meta = {
       description = "Test fallback behaviour in absence of modules";
