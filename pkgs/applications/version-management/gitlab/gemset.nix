@@ -1931,10 +1931,10 @@
     dependencies = ["omniauth-oauth2"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dhfl01519q1cp4w0ml481j1cg05g7qvam0x4ia9jhdz8yx6npfs";
+      sha256 = "0id5gn14av81kh41cq4q6c9knyvzl7vc4rs3m4pmpd43g2z6jdw2";
       type = "gem";
     };
-    version = "1.4.1";
+    version = "2.0.0";
   };
   omniauth-authentiq = {
     dependencies = ["omniauth-oauth2"];
