@@ -12336,12 +12336,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ServerStarter = buildPerlModule rec {
-    name = "Server-Starter-0.33";
+    name = "Server-Starter-0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/${name}.tar.gz";
-      sha256 = "109cc1ede244f2edb7e020c507d4a1ff7a8074f22a8f7c30253fb00af1aba6f6";
+      sha256 = "96a20d4a1f341655bd1b26df5795d57c5d7498d9bcf8ca9d0d6e2ed743608f78";
     };
-    buildInputs = [ ModuleBuild TestRequires TestSharedFork TestTCP ];
+    buildInputs = [ TestRequires TestSharedFork TestTCP ];
     meta = {
       homepage = https://github.com/kazuho/p5-Server-Starter;
       description = "A superdaemon for hot-deploying server programs";
