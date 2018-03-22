@@ -123,10 +123,11 @@ mkDerivation rec {
   '';
 
   meta = {
-    description = "Telegram Desktop messaging app";
+    description = "Telegram Desktop messaging app "
+      + (if stable then "(stable version)" else "(pre-release)");
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ abbradar garbas primeos ];
+    maintainers = with maintainers; [ primeos abbradar garbas ];
   };
 }
