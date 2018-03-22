@@ -1667,8 +1667,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MC/MCB/${name}.tar.gz";
       sha256 = "e41326b6099891f244b432921ed10096ac619f32b8c4f8b41633313bd54662db";
     };
-    buildInputs = [ CatalystActionRenderView CatalystModelDBICSchema CatalystPluginConfigLoader CatalystRuntime CatalystXComponentTraits ConfigGeneral DBDSQLite DBIxClass Moose TestException ];
-    propagatedBuildInputs = [ CatalystRuntime TextCSV URI ];
+    buildInputs = [ CatalystActionRenderView CatalystModelDBICSchema CatalystPluginConfigLoader CatalystXComponentTraits ConfigGeneral DBDSQLite DBIxClass TestException ];
+    propagatedBuildInputs = [ CatalystRuntime TextCSV ];
     meta = {
       description = "CSV view class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
