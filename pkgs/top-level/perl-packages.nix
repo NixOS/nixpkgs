@@ -14390,16 +14390,17 @@ let self = _self // overrides; _self = with self; {
   TestMore = TestSimple;
 
   TestMost = buildPerlPackage {
-    name = "Test-Most-0.33";
+    name = "Test-Most-0.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.33.tar.gz;
-      sha256 = "0jp4jcwk97bgf85wwyjpxfsx4165s6w1v4ymn9gnv03yn77inyij";
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.35.tar.gz;
+      sha256 = "0zv5dyzq55r28plffibcr7wd00abap0h2zh4s4p8snaiszsad5wq";
     };
-    propagatedBuildInputs = [ ExceptionClass TestDeep TestDifferences TestException TestWarn ];
+    propagatedBuildInputs = [ ExceptionClass ];
     meta = {
       description = "Most commonly needed test functions and features";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestDeep TestDifferences TestException TestSimple13 TestWarn ];
   };
 
   TestNeeds = buildPerlPackage rec {
