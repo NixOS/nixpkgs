@@ -7189,12 +7189,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOAll = buildPerlPackage {
-    name = "IO-All-0.60";
+    name = "IO-All-0.87";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/IO-All-0.60.tar.gz;
-      sha256 = "1bwsd2f5rlivcqyd7rb0ap5vrzv8s8fappi3b1v553yr5vl5pyq9";
+      url = mirror://cpan/authors/id/F/FR/FREW/IO-All-0.87.tar.gz;
+      sha256 = "0nsd9knlbd7if2v6zwj4q978axq0w5hk8ymp61z14a821hjivqjl";
     };
-    propagatedBuildInputs = [ IOString ];
     meta = {
       homepage = https://github.com/ingydotnet/io-all-pm/tree;
       description = "IO::All of it to Graham and Damian!";
