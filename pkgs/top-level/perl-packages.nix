@@ -12607,7 +12607,7 @@ let self = _self // overrides; _self = with self; {
   StatisticsDistributions = buildPerlPackage rec {
     name = "Statistics-Distributions-1.02";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Statistics/${name}.tar.gz";
+      url = mirror://cpan/authors/id/M/MI/MIKEK/Statistics-Distributions-1.02.tar.gz;
       sha256 = "1j1kswl98f4i9dn176f9aa3y9bissx2sscga5jm3gjl4pxm3k7zr";
     };
   };
