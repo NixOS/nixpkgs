@@ -15264,10 +15264,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   threadsshared = buildPerlPackage rec {
-    name = "threads-shared-1.51";
+    name = "threads-shared-1.58";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "0qsbl8rx8p09cb5vj1yhwf1h2awvimfyckw1qwrqbk7dxjldrimn";
+      sha256 = "04qbypzgp49sq1wq5kip0m95lffv0pc8xj2wplrdpyqz87y105xd";
     };
     meta = {
       description = "Perl extension for sharing data structures between threads";
