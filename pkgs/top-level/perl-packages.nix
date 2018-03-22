@@ -3155,7 +3155,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8ae9d20af244e5a6f606c7325e9d145dd0002676a178357af860a5e156925720";
     };
     buildInputs = [ TestLongString TestNoWarnings TestWarn ];
-    propagatedBuildInputs = [ ClassAccessor ClassReturnValue TextvFileasData ];
+    propagatedBuildInputs = [ ClassReturnValue TextvFileasData ];
     meta = {
       description = "Generates iCalendar (RFC 2445) calendar files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
