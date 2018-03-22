@@ -11901,8 +11901,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "5baf5c57fe0c06412deec9c5abe7952ab8a04f8c47b4bbd8e9e9982268903ed0";
     };
-    buildInputs = [ HTTPMessage Plack TestTCP ];
-    propagatedBuildInputs = [ LWP URI ];
+    buildInputs = [ Plack TestSharedFork TestTCP ];
+    propagatedBuildInputs = [ LWP ];
     meta = {
       homepage = https://github.com/perl-catalyst/Plack-Test-ExternalServer;
       description = "Run HTTP tests on external live servers";
