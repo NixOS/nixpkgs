@@ -8159,13 +8159,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   ListSomeUtils = buildPerlPackage rec {
-    name = "List-SomeUtils-0.52";
+    name = "List-SomeUtils-0.56";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1e8c900332ac08c314b78ca1b0d23aba28c146b6133606a817d828d5bd0485ac";
+      sha256 = "eaa7d99ce86380c0389876474c8eb84acc0a6bfeef1b0fc23a292592de6f89f7";
     };
     buildInputs = [ TestLeakTrace ];
-    propagatedBuildInputs = [ ExporterTiny ModuleImplementation ];
+    propagatedBuildInputs = [ ModuleImplementation ];
     meta = {
       homepage = https://metacpan.org/release/List-SomeUtils;
       description = "Provide the stuff missing in List::Util";
