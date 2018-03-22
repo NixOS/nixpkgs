@@ -3754,6 +3754,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DevelCheckBin = buildPerlPackage rec {
+     version = "0.04";
+     name = "Devel-CheckBin-0.04";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Devel-CheckBin-0.04.tar.gz;
+       sha256 = "1r735yzgvsxkj4m6ks34xva5m21cfzp9qiis2d4ivv99kjskszqm";
+     };
+     meta = {
+       description = "check that a command is available";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/tokuhirom/Devel-CheckBin";
+     };
+  };
+
   DevelChecklib = buildPerlPackage rec {
     name = "Devel-CheckLib-1.11";
     src = fetchurl {
@@ -13098,12 +13112,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubName = buildPerlPackage rec {
-    name = "Sub-Name-0.19";
+    name = "Sub-Name-0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "b06ba8252ce3b1bb88fa0ea0fe9ec8b572e5ed36c69f55e9e3d9db8a73efe22b";
+      sha256 = "bd32e9dee07047c10ae474c9f17d458b6e9885a6db69474c7a494ccc34c27117";
     };
-    buildInputs = [ self."if" ];
+    buildInputs = [ BC DevelCheckBin ];
     meta = {
       homepage = https://github.com/p5sagit/Sub-Name;
       description = "(Re)name a sub";
