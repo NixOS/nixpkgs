@@ -7938,7 +7938,7 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
-  LinuxDistribution = buildPerlPackage {
+  LinuxDistribution = buildPerlModule {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Linux-Distribution-0.23.tar.gz;
