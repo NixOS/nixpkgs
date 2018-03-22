@@ -15078,13 +15078,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextTable = buildPerlPackage rec {
-    name = "Text-Table-1.130";
+  TextTable = buildPerlModule rec {
+    name = "Text-Table-1.133";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "02c8v38k639r23dgxwgvsy4myjjzvgdb238kpiffsiz25ab3xp5j";
+      sha256 = "04kh5x5inq183rdg221wlqaaqi1ipyj588mxsslik6nhc14f17nd";
     };
-    buildInputs = [ TestPod TestPodCoverage ];
     propagatedBuildInputs = [ TextAligner ];
     meta = {
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
