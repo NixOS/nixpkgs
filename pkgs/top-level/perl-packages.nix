@@ -4056,10 +4056,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelCycle = buildPerlPackage {
-    name = "Devel-Cycle-1.11";
+    name = "Devel-Cycle-1.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LD/LDS/Devel-Cycle-1.11.tar.gz;
-      sha256 = "17c73yx9r32xvrsh8y7q24y0m3b98yihjyf3q4y68j869nh2b4rs";
+      url = mirror://cpan/authors/id/L/LD/LDS/Devel-Cycle-1.12.tar.gz;
+      sha256 = "1hhb77kz3dys8yaik452j22cm3510zald2mpvfyv5clqv326aczx";
     };
     meta = {
       description = "Find memory cycles in objects";
