@@ -12832,7 +12832,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-0.102084.tar.gz;
       sha256 = "0mlwm0rirv46gj4h072q8gdync5zxxsxy8p028gdyrhczl942dc3";
     };
-    propagatedBuildInputs = [ ParamsUtil SubExporter ];
+    propagatedBuildInputs = [ SubExporter ];
     meta = with stdenv.lib; {
       description = "Build sprintf-like functions of your own";
       license = licenses.gpl2;
