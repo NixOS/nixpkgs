@@ -10768,14 +10768,14 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TextSoundex ];
   };
 
-  NetOAuth = buildPerlPackage {
+  NetOAuth = buildPerlModule {
     name = "Net-OAuth-0.28";
     src = fetchurl {
       url = mirror://cpan/authors/id/K/KG/KGRENNAN/Net-OAuth-0.28.tar.gz;
       sha256 = "0k4h4a5048h7qgyx25ih64x0l4airx8a6d9gjq08wmxcl2fk3z3v";
     };
-    buildInputs = [ ModuleBuild TestWarn ];
-    propagatedBuildInputs = [ ClassAccessor ClassDataInheritable DigestHMAC DigestSHA1 LWPUserAgent URI ];
+    buildInputs = [ TestWarn ];
+    propagatedBuildInputs = [ ClassAccessor ClassDataInheritable DigestHMAC DigestSHA1 LWP ];
     meta = {
       description = "An implementation of the OAuth protocol";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
