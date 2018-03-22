@@ -6791,10 +6791,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLSelectorXPath = buildPerlPackage {
-    name = "HTML-Selector-XPath-0.16";
+    name = "HTML-Selector-XPath-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.16.tar.gz;
-      sha256 = "0v12plal866ifcv7m8x22abrddd6cf12gn55qclk53qqa6c8f8m6";
+      url = mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.23.tar.gz;
+      sha256 = "0vvvdrccypwv3qpf9hq5h2b6k0p5qrmz60p2swjh009dvr601h7j";
     };
     buildInputs = [ TestBase ];
     meta = {
