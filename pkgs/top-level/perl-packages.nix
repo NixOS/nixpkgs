@@ -9296,10 +9296,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MojoIOLoopForkCall = buildPerlModule rec {
-    name = "Mojo-IOLoop-ForkCall-0.17";
+    name = "Mojo-IOLoop-ForkCall-0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
-      sha256 = "886de5c3b44194a86228471075fac4036073bda19093e776c702aa65c3ef1824";
+      sha256 = "a436b71c7d1450f79b9810f4f46e24f5ffe1e1428da473d4315673e08e4dec62";
     };
     propagatedBuildInputs = [ IOPipely Mojolicious ];
     meta = {
