@@ -14814,10 +14814,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextCSV = buildPerlPackage rec {
-    name = "Text-CSV-UniqueColumns_0.4";
+    name = "Text-CSV-1.95";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TU/TUSHAR/Text-CSV-UniqueColumns_0.4.tar.gz;
-      sha256 = "30ebe22d5ad56bccb1c3976bfca09045882cce792fe460219feaf45eb676b114";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-1.95.tar.gz;
+      sha256 = "7e0a11d9c1129a55b68a26aa4b37c894279df255aa63ec8341d514ab848dbf61";
     };
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
