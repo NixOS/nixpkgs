@@ -16502,7 +16502,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  XMLDescent = buildPerlPackage rec {
+  XMLDescent = buildPerlModule rec {
     name = "XML-Descent-1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
