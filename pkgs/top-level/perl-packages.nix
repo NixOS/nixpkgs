@@ -12227,10 +12227,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ScopeUpper = buildPerlPackage rec {
-    name = "Scope-Upper-0.29";
+    name = "Scope-Upper-0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "4b07360a243ce0ccaacfdfa98ae38ef2686aa908fcf4ef3d669105ac36759e0a";
+      sha256 = "7f151582423850d814034404b1e23b5efb281b9dd656b9afe81c761ebb88bbb4";
     };
     meta = {
       homepage = http://search.cpan.org/dist/Scope-Upper/;
