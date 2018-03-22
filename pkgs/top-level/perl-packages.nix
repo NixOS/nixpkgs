@@ -10053,14 +10053,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXGetopt = buildPerlPackage rec {
+  MooseXGetopt = buildPerlModule rec {
     name = "MooseX-Getopt-0.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "de18f8ea0a5650cbbdebecb8f4c028f5f951fc5698332f7b8e20c7874902c259";
     };
-    buildInputs = [ ModuleBuildTiny ModuleRuntime Moose PathTiny TestDeep TestFatal TestRequires TestTrap TestWarnings self."if" ];
-    propagatedBuildInputs = [ GetoptLongDescriptive Moose MooseXRoleParameterized TryTiny namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny MooseXStrictConstructor PathTiny TestDeep TestFatal TestRequires TestTrap TestWarnings ];
+    propagatedBuildInputs = [ GetoptLongDescriptive MooseXRoleParameterized ];
     meta = {
       homepage = https://github.com/moose/MooseX-Getopt;
       description = "A Moose role for processing command line options";
