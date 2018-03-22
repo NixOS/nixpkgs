@@ -16391,10 +16391,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLSAXWriter = buildPerlPackage {
-    name = "XML-SAX-Writer-0.56";
+    name = "XML-SAX-Writer-0.57";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PERIGRIN/XML-SAX-Writer-0.56.tar.gz;
-      sha256 = "d073f7a25072c8150317b86b99d07031316a15bffab99e63e5afe591c8217d03";
+      url = mirror://cpan/authors/id/P/PE/PERIGRIN/XML-SAX-Writer-0.57.tar.gz;
+      sha256 = "3d61d07ef43b0126f5b4de4f415a256fa859fa88dc4fdabaad70b7be7c682cf0";
     };
     propagatedBuildInputs = [ XMLFilterBufferText XMLNamespaceSupport XMLSAXBase ];
     meta = {
