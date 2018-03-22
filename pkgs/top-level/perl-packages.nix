@@ -12976,10 +12976,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubInstall = buildPerlPackage {
-    name = "Sub-Install-0.927";
+    name = "Sub-Install-0.928";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.927.tar.gz;
-      sha256 = "0nmgsdbwi8f474jkyd6w9jfnpav99xp8biydcdri8qri623f6plm";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.928.tar.gz;
+      sha256 = "03zgk1yh128gciyx3q77zxzxg9kf8yy2gm46gdxqi24mcykngrb1";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
