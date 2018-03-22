@@ -12206,14 +12206,13 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
   };
 
-  SCGI = buildPerlPackage rec {
+  SCGI = buildPerlModule rec {
     name = "SCGI-0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPERCODE/${name}.tar.gz";
       sha256 = "196rj47mh4fq2vlnw595q391zja5v6qg7s3sy0vy8igfyid8rdsq";
     };
     preConfigure = "export HOME=$(mktemp -d)";
-    buildInputs = [ ModuleBuild ];
   };
 
   ScopeGuard = buildPerlPackage {
