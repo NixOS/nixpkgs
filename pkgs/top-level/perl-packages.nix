@@ -11042,7 +11042,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.37.tar.gz;
       sha256 = "06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c";
     };
-    buildInputs = [ DistCheckConflicts TestFatal TestRequires ];
+    buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
       homepage = https://metacpan.org/release/Package-Stash;
