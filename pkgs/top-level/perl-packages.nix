@@ -16723,11 +16723,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  XMLSemanticDiff = buildPerlPackage {
-    name = "XML-SemanticDiff-1.0000";
+  XMLSemanticDiff = buildPerlModule {
+    name = "XML-SemanticDiff-1.0006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-SemanticDiff-1.0000.tar.gz;
-      sha256 = "05rzm433vvndh49k8p4gqnyw4x4lxa4zr6qdlrlgplqkxvhvk6jk";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-SemanticDiff-1.0006.tar.gz;
+      sha256 = "1z0lkb7xzhw9calz4pbwzry2lqqpy6pw6pvfn2gv70ry1xqycr0k";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
