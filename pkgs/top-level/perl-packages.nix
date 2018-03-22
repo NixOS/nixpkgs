@@ -4889,14 +4889,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestUnusedVars = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-UnusedVars-2.000005";
+  DistZillaPluginTestUnusedVars = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-UnusedVars-2.000007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-UnusedVars-2.000005.tar.gz;
-      sha256 = "37ec462dc82f45cfd9d6d92ee59b8fd215a9a14b18d179b05912baee77359804";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-UnusedVars-2.000007.tar.gz;
+      sha256 = "ea0199a3a0043213ddc132508b9ed9b131ef717735b8f93d78291191d04b43c2";
     };
-    buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
-    propagatedBuildInputs = [ DistZilla Moose TestVars namespaceautoclean ];
+    buildInputs = [ TestDeep TestOutput TestVars ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-UnusedVars/;
       description = "Release tests for unused variables";
