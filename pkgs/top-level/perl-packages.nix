@@ -14680,15 +14680,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestScript = buildPerlPackage rec {
-    name = "Test-Script-1.10";
+    name = "Test-Script-1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
-      sha256 = "0wxbia5mmn73n5rkv857fv547kihpg3amizqllyh5flap6kbc7fn";
+      sha256 = "1ca4mwcghgpdrpcg6xc0iwp3ga9c94qni9zf4hhqq8lpjwdyg89k";
     };
 
-    buildInputs = [ TestTester ];
+    buildInputs = [ Test2Suite ];
 
-    propagatedBuildInputs = [ ProbePerl IPCRun3 ];
+    propagatedBuildInputs = [ CaptureTiny ProbePerl TestSimple13 ];
   };
 
   TestSharedFork = buildPerlPackage rec {
