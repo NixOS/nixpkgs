@@ -5278,10 +5278,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage {
-    name = "ExtUtils-MakeMaker-7.32";
+    name = "ExtUtils-MakeMaker-7.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.32.tar.gz;
-      sha256 = "9a269f52ab59b125eb80b968271d9f49da0975d43e51363dbfd1695000ed69de";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.34.tar.gz;
+      sha256 = "95f1eb44de480d00b28d031b574ec868f7aeeee199eb5abe5666f6bcbbf68480";
     };
     meta = {
       homepage = https://metacpan.org/release/ExtUtils-MakeMaker;
