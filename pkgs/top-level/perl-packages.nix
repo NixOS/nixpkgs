@@ -8556,7 +8556,7 @@ let self = _self // overrides; _self = with self; {
   MathLibm = buildPerlPackage rec {
     name = "Math-Libm-1.00";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      url = mirror://cpan/authors/id/D/DS/DSLEWART/Math-Libm-1.00.tar.gz;
       sha256 = "0xn2a950mzzs5q1c4q98ckysn9dz20x7r35g02zvk35chgr0klxz";
     };
   };
