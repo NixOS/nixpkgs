@@ -13083,7 +13083,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SymbolUtil = buildPerlPackage {
+  SymbolUtil = buildPerlModule {
     name = "Symbol-Util-0.0203";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz;
