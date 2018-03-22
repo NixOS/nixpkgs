@@ -1025,6 +1025,7 @@ let self = _self // overrides; _self = with self; {
       description = "Warns and dies noisily with stack backtraces";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestBase ];
   };
 
   CarpAssert = buildPerlPackage {
