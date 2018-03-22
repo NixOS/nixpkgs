@@ -2047,10 +2047,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassMethodModifiers = buildPerlPackage rec {
-    name = "Class-Method-Modifiers-2.11";
+    name = "Class-Method-Modifiers-2.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "14nk2gin9cjwpysakli7f0gs4q1w220sn73xzv35rhlspngrggyy";
+      sha256 = "1j3swa212wh14dq5r6zjarm2lzpx6mrdfplpjy65px8b09ri0k74";
     };
     buildInputs = [ TestFatal TestRequires ];
     meta = {
