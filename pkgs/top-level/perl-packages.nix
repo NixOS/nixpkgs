@@ -2733,14 +2733,13 @@ let self = _self // overrides; _self = with self; {
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
-  CryptEksblowfish = buildPerlPackage rec {
+  CryptEksblowfish = buildPerlModule rec {
     name = "Crypt-Eksblowfish-0.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ClassMix];
+    propagatedBuildInputs = [ ClassMix ];
   };
 
   CryptJWT = buildPerlPackage rec {
