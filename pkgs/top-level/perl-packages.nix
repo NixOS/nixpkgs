@@ -3590,14 +3590,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatDateParse = buildPerlPackage {
+  DateTimeFormatDateParse = buildPerlModule {
     name = "DateTime-Format-DateParse-0.05";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-DateParse-0.05.tar.gz;
       sha256 = "f6eca4c8be66ce9992ee150932f8fcf07809fd3d1664caf200b8a5fd3a7e5ebc";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ DateTime DateTimeTimeZone TimeDate ];
+    propagatedBuildInputs = [ DateTime TimeDate ];
     meta = {
       description = "Parses Date::Parse compatible formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
