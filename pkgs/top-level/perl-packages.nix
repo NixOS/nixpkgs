@@ -10096,10 +10096,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MozillaCA = buildPerlPackage rec {
-    name = "Mozilla-CA-20160104";
+    name = "Mozilla-CA-20180117";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABH/${name}.tar.gz";
-      sha256 = "27a7069a243162b65ada4194ff9d21b6ebc304af723eb5d3972fb74c11b03f2a";
+      sha256 = "f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406";
     };
     meta = {
       description = "Mozilla's CA cert bundle in PEM format";
