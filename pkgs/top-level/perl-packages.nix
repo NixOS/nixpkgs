@@ -7677,10 +7677,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   JSONPP = buildPerlPackage rec {
-    name = "JSON-PP-2.27203";
+    name = "JSON-PP-2.97001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-2.27203.tar.gz;
-      sha256 = "0ljwya1fb4969pckcq2j1g6axgx8qh9yscxbs6qf62qxf8wkj1mp";
+      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-2.97001.tar.gz;
+      sha256 = "1d1731yqv2py039qxcr0j9r4jb8m9kq387pj1q6gxawbfwvlmxb7";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
