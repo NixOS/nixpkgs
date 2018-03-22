@@ -12038,10 +12038,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RegexpParser = buildPerlPackage {
-    name = "Regexp-Parser-0.21";
+    name = "Regexp-Parser-0.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.21.tar.gz;
-      sha256 = "d70cb66821f1f67a9b1ff53f0fa33c06aec8693791e0a5943be6760c25d2768d";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.22.tar.gz;
+      sha256 = "d6d3c711657a380f1cb24d8b54a1cd20f725f7f54665189e9e67bb0b877109a3";
     };
     meta = {
       homepage = http://wiki.github.com/toddr/Regexp-Parser;
