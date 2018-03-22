@@ -7972,7 +7972,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
       sha256 = "1jy9af0ljyzj7wakqli0437zb2vrbplqj4xhab7bfj2xgfdhawa5";
     };
-    propagatedBuildInputs = [XMLParser];
+    propagatedBuildInputs = [ XMLParser ];
   };
 
   LinguaENFindNumber = buildPerlPackage {
