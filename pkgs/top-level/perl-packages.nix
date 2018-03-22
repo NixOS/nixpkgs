@@ -6427,15 +6427,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   GraphViz = buildPerlPackage rec {
-    name = "GraphViz-2.18";
+    name = "GraphViz-2.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
-      sha256 = "1zdgdd42ywg7bklysd8p8dra66q64vlm4fmnj5gjslp98cm02p9h";
+      sha256 = "1bgm4a8kan53r30qiknr4kasvhar1khf7vq064l1inzfrp2glpnr";
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
-    buildInputs = [ pkgs.graphviz ];
-    propagatedBuildInputs = [ IPCRun TestMore ];
+    buildInputs = [ pkgs.graphviz TestPod ];
+    propagatedBuildInputs = [ FileWhich IPCRun ParseRecDescent XMLTwig XMLXPath ];
 
     meta = with stdenv.lib; {
       description = "Perl interface to the GraphViz graphing tool";
