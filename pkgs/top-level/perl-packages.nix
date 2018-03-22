@@ -3641,13 +3641,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatISO8601 = buildPerlPackage {
+  DateTimeFormatISO8601 = buildPerlModule {
     name = "DateTime-Format-ISO8601-0.08";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-ISO8601-0.08.tar.gz;
       sha256 = "1syccqd5jlwms8v78ksnf68xijzl97jky5vbwhnyhxi5gvgfx8xk";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ModuleBuild ];
+    propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
       description = "Parses ISO8601 formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
