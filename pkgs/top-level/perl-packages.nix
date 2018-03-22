@@ -14572,14 +14572,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestMockClass = buildPerlPackage {
+  TestMockClass = buildPerlModule {
     name = "Test-Mock-Class-0.0303";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Mock-Class-0.0303.tar.gz;
       sha256 = "00pkfqcz7b34q1mvx15k46sbxs22zcrvrbv15rnbn2na57z54bnd";
     };
-    buildInputs = [ ClassInspector TestUnitLite ];
-    propagatedBuildInputs = [ ExceptionBase FatalException Moose namespaceclean TestAssert ];
+    buildInputs = [ ClassInspector TestAssert TestUnitLite ];
+    propagatedBuildInputs = [ FatalException Moose namespaceclean ];
     meta = with stdenv.lib; {
       description = "Simulating other classes";
       license = licenses.lgpl2Plus;
