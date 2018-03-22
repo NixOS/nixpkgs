@@ -11779,8 +11779,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${name}.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ self."if" ];
     meta = {
       homepage = https://github.com/timj/perl-Pod-LaTeX/tree/master;
       description = "Convert Pod data to formatted Latex";
