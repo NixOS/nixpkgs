@@ -3178,14 +3178,13 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestException ];
   };
 
-  DataPagePageset = buildPerlPackage rec {
+  DataPagePageset = buildPerlModule rec {
     name = "Data-Page-Pageset-1.02";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/C/CH/CHUNZI/Data-Page-Pageset-1.02.tar.gz";
+      url = mirror://cpan/authors/id/C/CH/CHUNZI/Data-Page-Pageset-1.02.tar.gz;
       sha256 = "142isi8la383dbjxj7lfgcbmmrpzwckcc4wma6rdl8ryajsipb6f";
     };
-    buildInputs = [ TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ DataPage ];
+    buildInputs = [ ClassAccessor DataPage TestException ];
     meta = {
       description = "change long page list to be shorter and well navigate";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
