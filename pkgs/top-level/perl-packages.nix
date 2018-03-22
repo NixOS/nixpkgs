@@ -1467,7 +1467,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
       sha256 = "19j7p4v7mbx6wrmpvmrnd974apx7hdl2s095ga3b9zcbdrl77h5q";
     };
-    propagatedBuildInputs = [CatalystRuntime DataVisitor ConfigAny MROCompat];
+    propagatedBuildInputs = [ CatalystRuntime ConfigAny DataVisitor ];
   };
 
   CatalystPluginFormValidator = buildPerlPackage rec {
