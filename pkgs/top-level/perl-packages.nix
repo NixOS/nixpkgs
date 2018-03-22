@@ -4253,10 +4253,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestMD5 = buildPerlPackage {
-    name = "Digest-MD5-2.54";
+    name = "Digest-MD5-2.55";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-MD5-2.54.tar.gz;
-      sha256 = "90de11e3743ef1c753a5c2032b434e09472046fbcf346996cbe5d135b217f390";
+      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-MD5-2.55.tar.gz;
+      sha256 = "03b198a2d14425d951e5e50a885d3818c3162c8fe4c21e18d7798a9a179d0e3c";
     };
     meta = {
       description = "Perl interface to the MD-5 algorithm";
