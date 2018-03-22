@@ -7234,10 +7234,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOCompress = buildPerlPackage rec {
-    name = "IO-Compress-2.070";
+    name = "IO-Compress-2.074";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-      sha256 = "3e761b833c8e55eb811a5eeab07831bb380dcdce256cc45cfe8816602a3574ff";
+      sha256 = "b4bd68ce895a6578e5be96ade36449461becc328cc7ab900ae4e362380f097f2";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     meta = {
