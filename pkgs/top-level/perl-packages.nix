@@ -3299,11 +3299,11 @@ let self = _self // overrides; _self = with self; {
 
   DataTaxi = buildPerlPackage {
     name = "Data-Taxi-0.96";
-    propagatedBuildInputs = [DebugShowStuff];
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MI/MIKO/Data-Taxi-0.96.tar.gz;
       sha256 = "0y4wls4jlwd6prvd77szymddhq9sfj06kaqnk4frlvd0zh83djxb";
     };
+    buildInputs = [ DebugShowStuff ];
   };
 
   DataUniqid = buildPerlPackage rec {
