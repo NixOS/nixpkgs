@@ -6780,7 +6780,7 @@ let self = _self // overrides; _self = with self; {
   HTMLTagset = buildPerlPackage rec {
     name = "HTML-Tagset-3.20";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz;
       sha256 = "1qh8249wgr4v9vgghq77zh1d2zs176bir223a8gh3k9nksn7vcdd";
     };
   };
