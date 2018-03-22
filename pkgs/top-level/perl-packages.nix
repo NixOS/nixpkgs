@@ -8797,7 +8797,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
     };
-    propagatedBuildInputs = [ EmailDateFormat MailTools MIMETypes ];
+    propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
       description = "Low-calorie MIME generator (DEPRECATED)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
