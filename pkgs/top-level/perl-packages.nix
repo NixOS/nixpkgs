@@ -4813,7 +4813,7 @@ let self = _self // overrides; _self = with self; {
   EmailReply = buildPerlPackage rec {
     name = "Email-Reply-1.204";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Reply-1.204.tar.gz;
       sha256 = "ba4fd80ac5017d6d132e0358c786b0ecd1c7adcbeee5c19fb3da2964791a56f0";
     };
     propagatedBuildInputs = [ EmailAbstract EmailAddress EmailMIME ];
