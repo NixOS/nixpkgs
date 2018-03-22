@@ -979,6 +979,8 @@ with pkgs;
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cddl = callPackage ../development/tools/cddl { };
+
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
