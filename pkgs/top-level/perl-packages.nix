@@ -9637,7 +9637,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "b0946f23b3537763b8a96b8a83afcdaa64fce4b45235e98064845729acccfe8c";
     };
     buildInputs = [ MooXTypesMooseLike TestException TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DataPerl ModuleRuntime Moo RoleTiny ];
+    propagatedBuildInputs = [ DataPerl Moo ];
     meta = {
       description = "NativeTrait-like behavior for Moo";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
