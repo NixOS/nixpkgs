@@ -9713,7 +9713,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
       sha256 = "2ff91a656e78aae0aca42293829d7a7e5acb9bf22b0401635b2ab6c870de32d5";
     };
-    propagatedBuildInputs = [ DataOptList ImportInto ModuleRuntime Moo ];
+    propagatedBuildInputs = [ DataOptList ImportInto Moo ];
     meta = {
       homepage = https://github.com/Getty/p5-moox;
       description = "Using Moo and MooX:: packages the most lazy way";
