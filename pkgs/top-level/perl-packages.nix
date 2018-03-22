@@ -16775,16 +16775,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Workflow = buildPerlPackage rec {
-    name = "Workflow-1.42";
+  Workflow = buildPerlModule rec {
+    name = "Workflow-1.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JONASBN/${name}.tar.gz";
-      sha256 = "0d93wc9cgw862x9x5zmbx6l6326dhq8py25yqpw7nqym6yphisnc";
+      sha256 = "0w814z4j85gghzqnbxzsr60m8dbqc02yi7137sq58lhbsfshmvhx";
     };
-    buildInputs = [ DBDMock ListMoreUtils TestException ];
-    propagatedBuildInputs = [ ClassAccessor ClassFactory ClassObservable DBI
-      DateTime DateTimeFormatStrptime ExceptionClass FileSlurp LogDispatch
-      Log4Perl XMLSimple DataUUID ];
+    buildInputs = [ DBDMock ListMoreUtils PodCoverageTrustPod TestException TestKwalitee TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ ClassAccessor ClassFactory ClassObservable DBI DataUUID DateTimeFormatStrptime FileSlurp LogDispatch LogLog4perl XMLSimple ];
     meta = {
       homepage = https://github.com/jonasbn/perl-workflow;
       description = "Simple, flexible system to implement workflows";
