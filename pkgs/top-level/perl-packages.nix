@@ -1771,17 +1771,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CGI ];
   };
 
-  CGISimple = buildPerlPackage rec {
-    name = "CGI-Simple-1.115";
+  CGISimple = buildPerlModule rec {
+    name = "CGI-Simple-1.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SZ/SZABGAB/${name}.tar.gz";
-      sha256 = "1nkyb1m1g5r47xykflf68dplanih5p15njv82frbgbsms34kp1sg";
+      url = mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.15.tar.gz;
+      sha256 = "013dcy9k4sj9alkksk5aqz65ryxw0rxgg71c7w666y941gd8n46q";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
       description = "A Simple totally OO CGI interface that is CGI.pm compliant";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestException TestNoWarnings ];
   };
 
   CGIStruct = buildPerlPackage {
