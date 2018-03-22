@@ -667,7 +667,6 @@ self: super: {
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_1_3;
   pandoc-types = self.pandoc-types_1_17_4_2;
-  timezone-olson = self.timezone-olson_0_1_9;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
