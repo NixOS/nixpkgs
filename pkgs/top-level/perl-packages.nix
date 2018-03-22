@@ -8777,10 +8777,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MIMECharset = buildPerlPackage {
-    name = "MIME-Charset-1.011.1";
+    name = "MIME-Charset-1.012.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.011.1.tar.gz;
-      sha256 = "2955a3b617fe12654efc2a13ae1dc7d32aad81d35cfae21f74337213cf2435d5";
+      url = mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.012.2.tar.gz;
+      sha256 = "878c779c0256c591666bd06c0cde4c0d7820eeeb98fd1183082aee9a1e7b1d13";
     };
     meta = {
       description = "Charset Information for MIME";
