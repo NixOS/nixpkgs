@@ -2703,7 +2703,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/${name}.tar.gz";
       sha256 = "1rypxlhpd1jc0c327aghgl9y6ls47drmpvn0a40b4k3vhfsypc9d";
     };
-    buildInputs = [CryptCBC];
   };
 
   CryptDH = buildPerlPackage rec {
