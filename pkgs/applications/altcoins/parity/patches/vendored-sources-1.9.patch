@@ -1,9 +1,9 @@
 diff --git a/.cargo/config b/.cargo/config
 new file mode 100644
 index 000000000..0efb69724
---- a/.cargo/config
+--- /dev/null
 +++ b/.cargo/config
-@@ -0,0 +4,104 @@
+@@ -0,0 +1,100 @@
 +
 +[source."https://github.com/alexcrichton/mio-named-pipes"]
 +git = "https://github.com/alexcrichton/mio-named-pipes"
