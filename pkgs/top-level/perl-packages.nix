@@ -7211,11 +7211,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "02w21rd30cza094m5xs9clzw8ayigbhg2ddzl6jycp4jam0dyhmy";
     };
     doCheck = false;
-    propagatedBuildInputs = [
-      TestNoWarnings ClassAccessor ClassAccessorChained
-      ClassDataAccessor ModulePluggableFast HTMLTree
-      HTMLScrubber EmailValid DateCalc
-    ];
+    propagatedBuildInputs = [ ClassAccessorChained ClassDataAccessor DateCalc EmailValid HTMLScrubber HTMLTree ModulePluggableFast ];
+    buildInputs = [ TestNoWarnings ];
   };
 
   HTTPBody = buildPerlPackage rec {
