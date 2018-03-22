@@ -6228,13 +6228,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gnome2 = buildPerlPackage rec {
-    name = "Gnome2-1.046";
+    name = "Gnome2-1.047";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "a6c787232ab7e82a423a9ff5a49cec6bf586c1bb3c04c2052a91cdda5b66ae40";
+      sha256 = "ccc85c5dc3c14f915ed1a186d238681d83fef3d17eed1c20001499ff56b6390c";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 ];
-    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 Pango pkgs.gnome2.libgnomeui ];
+    propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net;
       description = "Perl interface to the 2.x series of the GNOME libraries";
