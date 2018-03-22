@@ -10564,7 +10564,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GA/GANGLION/${name}.tar.gz";
       sha256 = "d3f6a608b85e09a8080a67a9933837aae6f2cd0e8ee39df3380123dc5e3de912";
     };
-    buildInputs = [TestPod TestPodCoverage];
     propagatedBuildInputs = [ IOSocketSSL ListMoreUtils ];
     meta = {
       description = "Not so simple IMAP client library";
