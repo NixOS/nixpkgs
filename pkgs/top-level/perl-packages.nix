@@ -3190,13 +3190,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DataSerializer = buildPerlPackage {
+  DataSerializer = buildPerlModule {
     name = "Data-Serializer-0.60";
     src = fetchurl {
       url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.60.tar.gz;
       sha256 = "0ca4s811l7f2bqkx7vnyxbpp4f0qska89g2pvsfb3k0bhhbk0jdk";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Modules that serialize data structures";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
