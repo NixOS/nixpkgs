@@ -5247,10 +5247,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsInstallPaths = buildPerlPackage {
-    name = "ExtUtils-InstallPaths-0.010";
+    name = "ExtUtils-InstallPaths-0.011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.010.tar.gz;
-      sha256 = "0mi1px42in7i442jqncg3gmxd5zn7sw5b2s85h690rz433qvyk6i";
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.011.tar.gz;
+      sha256 = "0z06y0fhx9hy9x01abb7s2xdbqrh9x4ps7avmlf4bwfwih2gl2bn";
     };
     propagatedBuildInputs = [ ExtUtilsConfig ];
     meta = {
