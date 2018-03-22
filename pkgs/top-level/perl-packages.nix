@@ -98,14 +98,15 @@ let self = _self // overrides; _self = with self; {
 
   AlienTidyp = buildPerlModule rec {
     name = "Alien-Tidyp-${version}";
-    version = "1.4.7";
+    version = "v1.4.7";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KM/KMX/Alien-Tidyp-v${version}.tar.gz";
+      url = mirror://cpan/authors/id/K/KM/KMX/Alien-Tidyp-v1.4.7.tar.gz;
       sha256 = "0raapwp4155lqag1kzhsd20z4if10hav9wx4d7mc1xpvf7dcnr5r";
     };
 
-    buildInputs = [ FileShareDir ArchiveExtract ];
+    buildInputs = [ ArchiveExtract ];
     TIDYP_DIR = "${pkgs.tidyp}";
+    propagatedBuildInputs = [ FileShareDir ];
   };
 
   AlienWxWidgets = buildPerlPackage rec {
