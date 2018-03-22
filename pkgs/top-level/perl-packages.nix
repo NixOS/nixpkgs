@@ -8527,7 +8527,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TI/TIMBRODY/${name}.tar.gz";
       sha256 = "e78e0bd7de8002cfb4760073258d555ef55b2c27c07a94b3d8a2166a17fd96bc";
     };
-    propagatedBuildInputs = [ LWP URI ];
+    propagatedBuildInputs = [ LWP ];
     meta = {
       description = "Generate signed OAuth requests";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
