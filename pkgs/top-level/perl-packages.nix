@@ -8863,13 +8863,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModernPerl = buildPerlPackage {
-    name = "Modern-Perl-1.20140107";
+  ModernPerl = buildPerlModule {
+    name = "Modern-Perl-1.20170117";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20140107.tar.gz;
-      sha256 = "9cf66b2f93340dfe1cd7162262a47e7c4ba82475a52dc2a036c2fdc8a65298b8";
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20170117.tar.gz;
+      sha256 = "5df2a83461163212db22b9c3353606a1a123616820fe50675041c34f004b3628";
     };
-    propagatedBuildInputs = [ perl ];
     meta = {
       homepage = https://github.com/chromatic/Modern-Perl;
       description = "Enable all of the features of Modern Perl with one import";
