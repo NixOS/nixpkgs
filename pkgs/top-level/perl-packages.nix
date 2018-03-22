@@ -15111,13 +15111,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextSprintfNamed = buildPerlPackage rec {
+  TextSprintfNamed = buildPerlModule rec {
     name = "Text-Sprintf-Named-0.0402";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "951317fce8fa5dd08190ba760182bc71f2b4346fa21df55c76155e6353e2864f";
     };
-    buildInputs = [ ModuleBuild TestWarn ];
+    buildInputs = [ TestWarn ];
     meta = {
       description = "Sprintf-like function with named conversions";
       license = stdenv.lib.licenses.mit;
