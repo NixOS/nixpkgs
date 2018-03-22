@@ -16389,10 +16389,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XSLoader = buildPerlPackage {
-    name = "XSLoader-0.20";
+    name = "XSLoader-0.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.20.tar.gz;
-      sha256 = "020fyjhfp385nlkp217fm511sbjz768vqk1lmxz99k4bah740y7i";
+      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.24.tar.gz;
+      sha256 = "0pyqr12jsqagna75fm2gijfzw06wy1hrh5chn9hwnmcfddda66g8";
     };
     meta = {
       homepage = https://metacpan.org/module/Math::BigInt;
