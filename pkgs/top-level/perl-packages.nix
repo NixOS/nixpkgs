@@ -14866,10 +14866,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestInter = buildPerlPackage {
-    name = "Test-Inter-1.05";
+    name = "Test-Inter-1.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.05.tar.gz;
-      sha256 = "bda95ef503f1c1b39a5cd1ea686d18a67a63b56a8eb458f0614fc2acc51f7988";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.07.tar.gz;
+      sha256 = "c3b1e2c753b88a893e08ec2dd3d0f0b3eb513cdce7afa52780cb0e02b6c576ee";
     };
     meta = {
       description = "Framework for more readable interactive test scripts";
