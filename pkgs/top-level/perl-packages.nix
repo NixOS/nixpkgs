@@ -11117,12 +11117,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ParamsValidate = buildPerlModule rec {
-    name = "Params-Validate-1.24";
+    name = "Params-Validate-1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1e1576f16e6e01ba63aa73775da563b410b49f26ee44169a45280feb958a5f0d";
+      sha256 = "49a68dfb430bea028042479111d19068e08095e5a467e320b7ab7bde3d729733";
     };
-    buildInputs = [ ModuleBuild TestFatal TestRequires ];
+    buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
     perlPreHook = "export LD=$CC";
     meta = {
