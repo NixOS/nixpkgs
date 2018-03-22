@@ -12381,13 +12381,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  RESTUtils = buildPerlPackage {
+  RESTUtils = buildPerlModule {
     name = "REST-Utils-0.6";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JA/JALDHAR/REST-Utils-0.6.tar.gz;
       sha256 = "1zdrf3315rp2b8r9dwwj5h93xky7i33iawf4hzszwcddhzflmsfl";
     };
-    buildInputs = [ TestWWWMechanizeCGI ];
+    buildInputs = [ TestLongString TestWWWMechanize TestWWWMechanizeCGI ];
     meta = {
       homepage = http://jaldhar.github.com/REST-Utils;
       description = "Utility functions for REST applications";
