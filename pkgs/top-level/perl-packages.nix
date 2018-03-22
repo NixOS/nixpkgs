@@ -3877,7 +3877,7 @@ let self = _self // overrides; _self = with self; {
       \$(BASEEXT)\$(OBJ_EXT): \$(BASEEXT).xsi
 
       \$(BASEEXT).xsi: \$(DBI_DRIVER_XST) $autodir/Driver_xst.h
-       \$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsif
+      	\$(PERL) -p -e "s/~DRIVER~/\$(BASEEXT)/g" \$(DBI_DRIVER_XST) > \$(BASEEXT).xsi
 
       # ---
       ';
