@@ -1,8 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, coreutils
 , python3, python3Packages, substituteAll }:
 
-assert stdenv.isLinux;
-
 python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
   version = "0.17.1.14";
@@ -37,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

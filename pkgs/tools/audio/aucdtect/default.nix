@@ -1,7 +1,5 @@
 { stdenv, fetchurl, lib, rpmextract }:
 
-assert stdenv.isLinux;
-
 with lib;
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
    version = "2.13.0";
@@ -31,5 +29,6 @@ stdenv.mkDerivation rec {
 
    meta = with stdenv.lib; {
     license = licenses.unfree;
+    platforms = stdenv.lib.platforms.linux;
    };
   }

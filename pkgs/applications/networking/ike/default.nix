@@ -1,8 +1,6 @@
 { stdenv, fetchurl, cmake, openssl, libedit, flex, bison, qt4, makeWrapper
 , gcc, nettools, iproute, linuxHeaders }:
 
-assert stdenv.isLinux;
-
 # NOTE: use $out/etc/iked.conf as sample configuration and also set: dhcp_file "/etc/iked.dhcp";
 # launch with "iked -f /etc/iked.conf"
 
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://www.shrew.net/software;
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
     license = licenses.sleepycat;
   };

@@ -2,13 +2,11 @@
   pythonPackages, readline, libsndfile, udev, libical,
   systemd, enableWiimote ? false }:
 
-assert stdenv.isLinux;
-
 let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
   name = "bluez-5.28";
-   
+
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
     sha256 = "1a8qzh38wpq5c0rydpx9isf0jc6g14g2qs18j1rmi8a79f7v9fl5";
@@ -22,7 +20,7 @@ in stdenv.mkDerivation rec {
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
-      # gstreamer gst-plugins-base 
+      # gstreamer gst-plugins-base
     ];
 
   preConfigure = ''

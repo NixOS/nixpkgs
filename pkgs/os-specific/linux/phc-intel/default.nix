@@ -1,6 +1,5 @@
 { stdenv, fetchurl, kernel, which }:
 
-assert stdenv.isLinux;
 # Don't bother with older versions, though some might even work:
 assert stdenv.lib.versionAtLeast kernel.version "4.10";
 

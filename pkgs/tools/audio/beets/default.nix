@@ -190,7 +190,7 @@ in pythonPackages.buildPythonApplication rec {
     runHook preCheck
 
     LANG=en_US.UTF-8 \
-    LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
+    LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
     HOME="$(mktemp -d)" \

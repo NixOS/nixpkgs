@@ -1,7 +1,5 @@
 { stdenv, fetchurl, flex, systemd, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "drbd-8.4.4";
 

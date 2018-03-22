@@ -3,8 +3,6 @@
 , buildPlatform, hostPlatform
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "mdadm-4.0";
 
