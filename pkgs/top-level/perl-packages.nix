@@ -6395,12 +6395,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   GrowlGNTP = buildPerlModule rec {
-    name = "Growl-GNTP-0.20";
+    name = "Growl-GNTP-0.21";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Growl/${name}.tar.gz";
-      sha256 = "150x65lwf7pfsygcpmvj3679lhlfwx87xylwnrmwll67f9dpkjdi";
+      url = mirror://cpan/authors/id/M/MA/MATTN/Growl-GNTP-0.21.tar.gz;
+      sha256 = "0gq8ypam6ifp8f3s2mf5d6sw53m7h3ki1zfahh2p41kl8a77yy98";
     };
-    buildInputs = [ DataUUID CryptCBC ];
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CryptCBC DataUUID ];
   };
 
   GSSAPI = buildPerlPackage rec {
