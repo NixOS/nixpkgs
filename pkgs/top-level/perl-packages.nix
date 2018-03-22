@@ -3561,7 +3561,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/F/FG/FGLOCK/${name}.tar.gz";
       sha256 = "1skmykxbrf98ldi72d5s1v6228gfdr5iy4y0gpl0xwswxy247njk";
     };
-    propagatedBuildInputs = [ DateTime DateTimeEventRecurrence ];
+    propagatedBuildInputs = [ DateTimeEventRecurrence ];
     meta = {
       description = "DateTime rfc2445 recurrences";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
