@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ln -s ${appliance} $out/lib/guestfs
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = appliance != null;
   installCheckPhase = ''
     export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
 
