@@ -14965,12 +14965,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextPDF = buildPerlPackage rec {
-    name = "Text-PDF-0.29a";
+    name = "Text-PDF-0.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MH/MHOSKEN/${name}.tar.gz";
-      sha256 = "11jig38vps957zyc9372q2g0jcabxgkql3b5vazc1if1ajhlvc4s";
+      url = mirror://cpan/authors/id/B/BH/BHALLISSY/Text-PDF-0.31.tar.gz;
+      sha256 = "0s5cimfr4wwzgv15k30x83ncg1257jwsvmbmb86lp02rw5g537yz";
     };
-    propagatedBuildInputs = [ CompressZlib ];
   };
 
   TextQuoted = buildPerlPackage {
