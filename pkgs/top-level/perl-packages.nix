@@ -3744,10 +3744,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeFormatW3CDTF = buildPerlPackage {
-    name = "DateTime-Format-W3CDTF-0.06";
+    name = "DateTime-Format-W3CDTF-0.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.06.tar.gz;
-      sha256 = "b9a542bed9c52b0a89dd590a5184e38ee334c824bbe6bac842dd7dd1f88fbd7a";
+      url = mirror://cpan/authors/id/G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.07.tar.gz;
+      sha256 = "69a02b661bbf1daa14a4813cb6786eaa66dbdf2743f0b3f458e30234c3a26268";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
