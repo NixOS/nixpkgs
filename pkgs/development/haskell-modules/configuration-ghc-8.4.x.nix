@@ -659,20 +659,6 @@ self: super: {
       sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
     });
 
-  # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4_2;
-
-  ## Need latest git version to support current haddock-library versions.
-  pandoc = overrideSrc super.pandoc {
-    version = "2.1.2-git";
-    src = pkgs.fetchFromGitHub {
-      owner  = "jgm";
-      repo   = "pandoc";
-      rev    = "fad8d0d67ff4736e1af554d2bfcf1688aa28c8ec";
-      sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
-    };
-  };
-
   # Fix missing semigroup instance.
   json = appendPatch super.json (pkgs.fetchpatch
     { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
@@ -681,9 +667,12 @@ self: super: {
 
   # Older versions don't compile.
   brick = self.brick_0_35;
-  timezone-olson = self.timezone-olson_0_1_9;
-  matrix = self.matrix_0_3_6_1;
   getopt-generics = self.getopt-generics_0_13_0_2;
+  HaTeX = self.HaTeX_3_19_0_0;
+  matrix = self.matrix_0_3_6_1;
+  pandoc = self.pandoc_2_1_3;
+  pandoc-types = self.pandoc-types_1_17_4_2;
+  timezone-olson = self.timezone-olson_0_1_9;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
