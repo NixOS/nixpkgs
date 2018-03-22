@@ -4784,14 +4784,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestEOL = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-EOL-0.10";
+  DistZillaPluginTestEOL = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-EOL-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Dist-Zilla-Plugin-Test-EOL-0.10.tar.gz;
-      sha256 = "1sl7zvjzpwf7wl188a3j13k1qcb63hawx82iy6r3dx2gns8nc0nw";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-EOL-0.19.tar.gz;
+      sha256 = "0f23g931azz1k41xdfxw7kayy4snhw4qdr9ysknk5k1cl33mkfd2";
     };
-    buildInputs = [ DistZilla TestScript ];
-    propagatedBuildInputs = [ DistZilla Moose TestEOL namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestEOL TestWarnings ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-EOL/;
       description = "Author tests making sure correct line endings are used";
