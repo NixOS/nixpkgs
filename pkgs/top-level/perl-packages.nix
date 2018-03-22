@@ -12013,11 +12013,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  RegexpGrammars = buildPerlPackage rec {
-    name = "Regexp-Grammars-1.045";
+  RegexpGrammars = buildPerlModule rec {
+    name = "Regexp-Grammars-1.048";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCONWAY/${name}.tar.gz";
-      sha256 = "8ab001f5641d03f7acce09ca5826b219b02ce40f8e56c2066737228a9232b594";
+      sha256 = "d7718d9bb0d4259eabf326838e3f841b440c4e959faf9615d9ad9c345f4a3d6f";
     };
     meta = {
       homepage = http://search.cpan.org/~dconway/Regexp-Grammars-1.045/lib/Regexp/Grammars.pm;
