@@ -9969,12 +9969,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXAttributeChained = buildPerlModule rec {
-    name = "MooseX-Attribute-Chained-1.0.1";
+    name = "MooseX-Attribute-Chained-1.0.3";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "101kwjzidppcsnyvp9x1vw8vpvkp1cc1csqmzbashwvqy8d0g4af";
+      url = mirror://cpan/authors/id/T/TO/TOMHUKINS/MooseX-Attribute-Chained-1.0.3.tar.gz;
+      sha256 = "0kjydmkxh8hpkbbmsgd5wrkhgq7w69lgfg6lx4s5g2xpqfkqmqz7";
     };
-    propagatedBuildInputs = [ Moose TryTiny ];
+    propagatedBuildInputs = [ Moose ];
   };
 
   MooseXAttributeHelpers = buildPerlPackage {
