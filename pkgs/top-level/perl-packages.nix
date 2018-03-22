@@ -5210,14 +5210,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExtUtilsCppGuess = buildPerlModule rec {
-    name = "ExtUtils-CppGuess-0.07";
+  ExtUtilsCppGuess = buildPerlPackage rec {
+    name = "ExtUtils-CppGuess-0.12";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
+      url = mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.12.tar.gz;
+      sha256 = "0sqq8vadch633cx7w7i47fca49pxzyh82n5kwxdgvsg32mdppi1i";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
+    buildInputs = [ ModuleBuild ];
   };
 
   ExtUtilsDepends = buildPerlPackage {
