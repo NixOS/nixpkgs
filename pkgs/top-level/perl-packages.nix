@@ -3548,11 +3548,11 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/P/PI/PIJLL/${name}.tar.gz";
       sha256 = "03h0llkwsiw2d2ci1ah5x9sp8xrvnbgd471i5hnpgl5w32nnhndv";
     };
-    propagatedBuildInputs = [ DateTime ];
     meta = {
       description = "Dates in the Julian calendar";
       license = stdenv.lib.licenses.artistic2;
     };
+    buildInputs = [ DateTime ];
   };
 
   DateTimeEventICal = buildPerlPackage rec {
