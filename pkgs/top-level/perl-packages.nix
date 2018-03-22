@@ -14482,10 +14482,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSubCalls = buildPerlPackage rec {
-    name = "Test-SubCalls-1.09";
+    name = "Test-SubCalls-1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-      sha256 = "a334b0457da338d79be2dbb62d403701fc90f7607df840115ff45ee1e2bd6e70";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-SubCalls-1.10.tar.gz;
+      sha256 = "cbc1e9b35a05e71febc13e5ef547a31c8249899bb6011dbdc9d9ff366ddab6c2";
     };
     propagatedBuildInputs = [ HookLexWrap ];
   };
