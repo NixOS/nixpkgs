@@ -15216,8 +15216,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
       sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
     };
-    buildInputs = [ FileSlurp ListMoreUtils Encode ExtUtilsMakeMaker
-      TestException HTMLTidy TestDifferences ];
+    buildInputs = [ ListMoreUtils TestDifferences TestException ];
   };
 
   TestMagpie = buildPerlPackage {
