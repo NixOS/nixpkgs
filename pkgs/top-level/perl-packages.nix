@@ -2719,7 +2719,7 @@ let self = _self // overrides; _self = with self; {
       url    = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
       sha256 = "0pvzlgwpx8fzdy64ki15155vhsj30i9zxmw6i4p7irh17d1g7368";
     };
-    buildInputs = [ MathBigInt MathBigIntGMP ];
+    propagatedBuildInputs = [ MathBigIntGMP ];
   };
 
   CryptDHGMP = buildPerlPackage rec {
