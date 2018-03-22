@@ -1643,7 +1643,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/H/HK/HKCLARK/${name}.tar.gz";
       sha256 = "649c894ab16f9f48ada8f9cc599a7ecbb8891ab3761ff6fd510520c6de407c1f";
     };
-    propagatedBuildInputs = [ CatalystRuntime SubName strictures ];
+    propagatedBuildInputs = [ CatalystRuntime strictures ];
     meta = {
       description = "Handle passing of status messages between screens of a web application";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
