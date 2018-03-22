@@ -10264,17 +10264,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Moose ];
   };
 
-  MooseXSingleton = buildPerlPackage rec {
-    name = "MooseX-Singleton-0.29";
+  MooseXSingleton = buildPerlModule rec {
+    name = "MooseX-Singleton-0.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAARE/MooseX-Singleton-0.29.tar.gz;
-      sha256 = "0103f0hi7fp3mc0y0ydnz4ghcnag5gwgn2160y2zp6rnydx2p2sc";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz;
+      sha256 = "0hb5s1chsgbx2nlb0f112mdh2v1zwww8f4i3gvfvcghx3grv5135";
     };
-    buildInputs = [ Moose TestFatal TestRequires ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestRequires TestWarnings ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    propagatedBuildInputs = [ Moose ];
   };
 
   MooseXStrictConstructor = buildPerlPackage {
