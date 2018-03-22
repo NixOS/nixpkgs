@@ -1163,8 +1163,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
       sha256 = "8565203950a057d43ecd64e9593715d565c2fbd8b02c91f43c53b2111acd3948";
     };
-    buildInputs = [ HTTPRequestAsCGI ];
-    propagatedBuildInputs = [ CatalystRuntime DataVisitor MROCompat ];
+    propagatedBuildInputs = [ CatalystRuntime DataVisitor ];
     meta = {
       description = "Sensible default end action";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
