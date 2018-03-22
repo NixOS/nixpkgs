@@ -14647,13 +14647,12 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
-  TestTrailingSpace = buildPerlPackage rec {
+  TestTrailingSpace = buildPerlModule rec {
     name = "Test-TrailingSpace-0.0301";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "a28875747adb7a0e7d1ae8a4ffe71869e7ceb3a85d0cb30172959dada7de5970";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ FileFindObjectRule ];
     meta = {
       description = "Test for trailing space in source files";
