@@ -15577,10 +15577,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   UNIVERSALisa = buildPerlPackage {
-    name = "UNIVERSAL-isa-1.20120726";
+    name = "UNIVERSAL-isa-1.20171012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-isa-1.20120726.tar.gz;
-      sha256 = "1qal99sp888b50kwank9ffyprv7kqx42p4vyfahdabf915lyzc61";
+      url = mirror://cpan/authors/id/E/ET/ETHER/UNIVERSAL-isa-1.20171012.tar.gz;
+      sha256 = "0avzv9j32aab6l0rd63n92v0pgliz1p4yabxxjfq275hdh1mcsfi";
     };
     meta = {
       homepage = https://github.com/chromatic/UNIVERSAL-isa;
