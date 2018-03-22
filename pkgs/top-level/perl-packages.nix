@@ -4722,13 +4722,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginPodWeaver = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-PodWeaver-3.102000";
+    name = "Dist-Zilla-Plugin-PodWeaver-4.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-3.102000.tar.gz;
-      sha256 = "0xayy50fgfc7wlsnygz28ka2ax9pmr0rn845i8d6p40amrkzzlml";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-4.008.tar.gz;
+      sha256 = "0ff1i26s54z292j8w8vm3gw3p7w1yq35wi8g978c84ia7y1y7n8z";
     };
-    buildInputs = [ FileFindRule ];
-    propagatedBuildInputs = [ DistZilla ListMoreUtils Moose PPI PodElementalPerlMunger PodWeaver namespaceautoclean ];
+    propagatedBuildInputs = [ DistZilla PodElementalPerlMunger PodWeaver ];
     meta = {
       homepage = https://github.com/rjbs/Dist-Zilla-Plugin-PodWeaver;
       description = "Weave your Pod together from configuration and Dist::Zilla";
