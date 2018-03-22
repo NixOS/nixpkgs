@@ -6865,12 +6865,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLTemplate = buildPerlPackage rec {
-    name = "HTML-Template-2.95";
+    name = "HTML-Template-2.97";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WO/WONKO/${name}.tar.gz";
-      sha256 = "07ahpfgidxsw2yb7y8i7bbr8s64aq6qgq832h9jswmksxbd0l43q";
+      url = mirror://cpan/authors/id/S/SA/SAMTREGAR/HTML-Template-2.97.tar.gz;
+      sha256 = "17qjw8swj2q4b1ic285pndgrkmvpsqw0j68nhqzpk1daydhsyiv5";
     };
     propagatedBuildInputs = [ CGI ];
+    buildInputs = [ TestPod ];
   };
 
   HTMLTidy = buildPerlPackage rec {
