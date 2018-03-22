@@ -6029,8 +6029,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1ampz82kf0ixybncfgpvq2bp9nq5sjsmmw4c8srsv0g5jpz02pfh";
     };
 
-    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
-                    pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm GetoptLong ];
+    buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ];
 
     # Patch needed to get arguments past the first GetOptions call
     # and to specify libfontconfig search path.
