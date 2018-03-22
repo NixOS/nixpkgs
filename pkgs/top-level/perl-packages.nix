@@ -338,23 +338,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppSqitch = buildPerlModule rec {
-    version = "0.9996";
+    version = "0.9997";
     name = "App-Sqitch-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
-      sha256 = "864edde554e7cd6578e8fe2a4c17ea8eda82da878cdfd00fd9fb3c53f696fc1e";
+      sha256 = "985ade1a4181bef776016a287194711051e79c7a3c18f1ee1ec47e22ccf319d2";
     };
-    buildInputs = [
-      CaptureTiny PathClass TestDeep TestDir TestException
-      TestFile TestFileContents TestMockModule TestNoWarnings
-    ];
-    propagatedBuildInputs = [
-      Clone ConfigGitLike DBI DateTime
-      DevelStackTrace EncodeLocale FileHomeDir HashMerge IOPager IPCRun3
-      IPCSystemSimple ListMoreUtils Moo PathClass PerlIOutf8_strict StringFormatter
-      StringShellQuote SubExporter TemplateTiny Throwable TryTiny TypeTiny URI
-      URIdb libintlperl namespaceautoclean
-    ];
+    buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestNoWarnings ];
+    propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale FileHomeDir HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl_perl ];
     doCheck = false;  # Can't find home directory.
     meta = {
       homepage = http://sqitch.org/;
