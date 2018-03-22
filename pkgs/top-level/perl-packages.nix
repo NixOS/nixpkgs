@@ -8205,7 +8205,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/B/BI/BINGOS/Log-Message-0.08.tar.gz;
       sha256 = "bd697dd62aaf26d118e9f0a0813429deb1c544e4501559879b61fcbdfe99fe46";
     };
-    propagatedBuildInputs = [ if_ ];
     meta = {
       description = "Powerful and flexible message logging mechanism";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
