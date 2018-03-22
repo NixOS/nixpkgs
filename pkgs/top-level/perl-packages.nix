@@ -2847,14 +2847,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CryptRandomSource = buildPerlPackage {
-    name = "Crypt-Random-Source-0.07";
+  CryptRandomSource = buildPerlModule {
+    name = "Crypt-Random-Source-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NU/NUFFIN/Crypt-Random-Source-0.07.tar.gz;
-      sha256 = "0kxcqcpknh9hhfnpiymxrjg74yj7nfr7k4fgrfmd9s2cw9p9mqdv";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Crypt-Random-Source-0.12.tar.gz;
+      sha256 = "00mw5m52sbz9nqp3f6axyrgcrihqxn7k8gv0vi1kvm1j1nc9g29h";
     };
-    buildInputs = [ Testuseok TestException ];
-    propagatedBuildInputs = [ AnyMoose CaptureTiny ModuleFind namespaceclean SubExporter ];
+    buildInputs = [ ModuleBuildTiny TestException TestSimple13 ];
+    propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
     meta = {
       homepage = http://search.cpan.org/dist/Crypt-Random-Source;
       description = "Get weak or strong random data from pluggable sources";
