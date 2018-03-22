@@ -1832,10 +1832,10 @@ let
   }) // {inherit ;};
 
   xf86videoamdgpu = (mkDerivation "xf86videoamdgpu" {
-    name = "xf86-video-amdgpu-1.4.0";
+    name = "xf86-video-amdgpu-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.4.0.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.4.1.tar.bz2;
       sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2420,11 +2420,11 @@ let
   }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
 
   xkbcomp = (mkDerivation "xkbcomp" {
-    name = "xkbcomp-1.4.0";
+    name = "xkbcomp-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbcomp-1.4.0.tar.bz2;
-      sha256 = "0syfc6zscvai824mzihlnrqxhkcr27dzkpy8zndavi83iischsdw";
+      url = mirror://xorg/individual/app/xkbcomp-1.4.1.tar.bz2;
+      sha256 = "0djp7bb0ch2ddwmc1bkg4fddxdvamiiz375x0r0ni5dcb37w93bl";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile xproto ];
