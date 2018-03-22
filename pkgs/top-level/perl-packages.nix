@@ -4906,13 +4906,14 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "4bbec933558d7cc9b8152bad86dd313de277a21a89b4ea83d84e61587e95dbc6";
     };
-    propagatedBuildInputs = [ EmailAbstract EmailAddress EmailSimple ModulePluggable ReturnValue ];
+    propagatedBuildInputs = [ EmailAbstract EmailAddress ReturnValue ];
     meta = {
       homepage = https://github.com/rjbs/Email-Send;
       description = "Simply Sending Email";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+    buildInputs = [ MIMETools MailTools ];
   };
 
   EmailOutlookMessage = buildPerlPackage rec {
