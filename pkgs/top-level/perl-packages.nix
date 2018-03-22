@@ -5111,10 +5111,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExporterTiny = buildPerlPackage {
-    name = "Exporter-Tiny-0.042";
+    name = "Exporter-Tiny-1.000000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-0.042.tar.gz;
-      sha256 = "8f1622c5ebbfbcd519ead81df7917e48cb16cc527b1c46737b0459c3908a023f";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.000000.tar.gz;
+      sha256 = "ffdd77d57de099e8f64dd942ef12a00a3f4313c2531f342339eeed2d366ad078";
     };
     meta = {
       homepage = https://metacpan.org/release/Exporter-Tiny;
