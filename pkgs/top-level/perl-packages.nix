@@ -15125,13 +15125,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestTrap = buildPerlPackage rec {
-    name = "Test-Trap-0.3.2";
+  TestTrap = buildPerlModule rec {
+    name = "Test-Trap-v0.3.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/${name}.tar.gz";
-      sha256 = "1ci5ag9pm850ww55n2929skvw3avy6xcrwmmi2yyn0hifxx9dybs";
+      sha256 = "1676gqjyk0zig3yyqv053y5j1pajp2af08ffmgx94n414whbhm5c";
     };
-    buildInputs = [ TestTester ];
     propagatedBuildInputs = [ DataDump ];
     meta = {
       description = "Trap exit codes, exceptions, output, etc";
