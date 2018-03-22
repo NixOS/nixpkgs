@@ -1925,14 +1925,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassC3AdoptNEXT = buildPerlPackage rec {
+  ClassC3AdoptNEXT = buildPerlModule rec {
     name = "Class-C3-Adopt-NEXT-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "1xsbydmiskpa1qbmnf6n39cb83nlb432xgkad9kfhxnvm8jn4rw5";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ ListMoreUtils MROCompat ];
+    buildInputs = [ ModuleBuildTiny TestException ];
+    propagatedBuildInputs = [ MROCompat ];
     meta = {
       homepage = http://search.cpan.org/dist/Class-C3-Adopt-NEXT;
       description = "Make NEXT suck less";
