@@ -13708,7 +13708,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestCommand = buildPerlPackage {
+  TestCommand = buildPerlModule {
     name = "Test-Command-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DA/DANBOO/Test-Command-0.11.tar.gz;
