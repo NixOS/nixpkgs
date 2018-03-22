@@ -8503,7 +8503,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
       sha256 = "1r38qbkj7jwj8cqy1rnqzkk81psxi08b1aiq392817f3bk5ri2jv";
     };
-    propagatedBuildInputs = [ DigestMD5 MIMEBase64 Socket TimeLocal ];
     # The test suite simply loads the module and attempts to send an email to
     # the module's author, the latter of which is a) more of an integration
     # test, b) impossible to verify, and c) won't work from a sandbox. Replace
