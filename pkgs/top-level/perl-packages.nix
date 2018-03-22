@@ -9137,13 +9137,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModuleRuntime = buildPerlPackage {
-    name = "Module-Runtime-0.014";
+  ModuleRuntime = buildPerlModule {
+    name = "Module-Runtime-0.016";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.014.tar.gz;
-      sha256 = "19326f094jmjs6mgpwkyisid54k67w34br8yfh0gvaaml87gwi2c";
+      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz;
+      sha256 = "097hy2czwkxlppri32m599ph0xfvfsbf0a5y23a4fdc38v32wc38";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Runtime module handling";
