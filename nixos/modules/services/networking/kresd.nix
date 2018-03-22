@@ -89,6 +89,7 @@ in
     # Create the cacheDir; tmpfiles don't work on nixos-rebuild switch.
     systemd.services.kresd-cachedir = {
       serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = "yes";
       script = ''
         if [ ! -d '${cfg.cacheDir}' ]; then
           mkdir -p '${cfg.cacheDir}'
