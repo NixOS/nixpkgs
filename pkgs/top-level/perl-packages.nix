@@ -7401,10 +7401,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOTieCombine = buildPerlPackage {
-    name = "IO-TieCombine-1.004";
+    name = "IO-TieCombine-1.005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/IO-TieCombine-1.004.tar.gz;
-      sha256 = "0awyyjdbjjawdkzs08rfjhfkkm7pni523x3ddmq9ixa82ibnn430";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/IO-TieCombine-1.005.tar.gz;
+      sha256 = "1bv9ampayf4bvyxg4ivy18l8k79jvq55x6gl68b2fg8b62w4sba0";
     };
     meta = {
       homepage = https://github.com/rjbs/io-tiecombine;
