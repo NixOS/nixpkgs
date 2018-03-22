@@ -5436,14 +5436,14 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestBase TestDifferences ];
   };
 
-  FatalException = buildPerlPackage {
-    name = "Fatal-Exception-0.0204";
+  FatalException = buildPerlModule {
+    name = "Fatal-Exception-0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.0204.tar.gz;
-      sha256 = "10a9j0fa83s3apv0xgi01l2h6s43my031097hg72wa80n07rgs2c";
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.05.tar.gz;
+      sha256 = "0kzfwc44vpxla3j637kfmnwmv57g6x4899ijqb4ljamk7whms298";
     };
     buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
-    propagatedBuildInputs = [ ExceptionBase ExceptionDied ];
+    propagatedBuildInputs = [ ExceptionDied ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
