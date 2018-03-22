@@ -7820,10 +7820,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LinguaENFindNumber = buildPerlPackage {
-    name = "Lingua-EN-FindNumber-1.31";
+    name = "Lingua-EN-FindNumber-1.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Lingua-EN-FindNumber-1.31.tar.gz;
-      sha256 = "f67f4d4983bd29da5cbbff3cb18dd70788692b35e2dabcd4c65bef1cd2bf658f";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Lingua-EN-FindNumber-1.32.tar.gz;
+      sha256 = "1d176d1c863fb9844bd19d2c2a4e68a0ed73da158f724a89405b90db7e8dbd04";
     };
     propagatedBuildInputs = [ LinguaENWords2Nums ];
     meta = {
