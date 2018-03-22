@@ -14471,10 +14471,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSynopsis = buildPerlPackage rec {
-    name = "Test-Synopsis-0.11";
+    name = "Test-Synopsis-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/${name}.tar.gz";
-      sha256 = "1jn3vna5r5fa9nv33n1x0bmgc434sk0ggar3jm78xx0zzy5jnsxv";
+      sha256 = "1cxxidhwf8j8n41d423ankvls2wdi7aw755csi3hcv3mj9k67mfi";
     };
     meta = {
       description = "Test your SYNOPSIS code";
