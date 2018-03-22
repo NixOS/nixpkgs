@@ -6626,7 +6626,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/HTML-FromANSI-2.03.tar.gz;
       sha256 = "21776345ed701b2c04c7b09380af943f9984cc7f99624087aea45db5fc09c359";
     };
-    propagatedBuildInputs = [ HTMLParser TermVT102Boundless Testuseok ];
+    propagatedBuildInputs = [ HTMLParser TermVT102Boundless ];
     meta = {
     };
   };
