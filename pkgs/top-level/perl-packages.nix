@@ -13813,10 +13813,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestEOL = buildPerlPackage {
-    name = "Test-EOL-1.5";
+    name = "Test-EOL-2.00";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-EOL-1.5.tar.gz;
-      sha256 = "0qfdn71562xzmgnhmkkdbpp3vj851ldl1zlmxvharxsr16gjh6s3";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-EOL-2.00.tar.gz;
+      sha256 = "0l3bxpsw0x7j9nclizcp53mnf9wny25dmg2iglfhzgnk0xfpwzwf";
     };
     meta = {
       homepage = https://metacpan.org/release/Test-EOL;
