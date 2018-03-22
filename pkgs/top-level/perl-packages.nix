@@ -13774,14 +13774,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Plack PSGI ModuleBuildTiny ];
   };
 
-  TaskTestRunAllPlugins = buildPerlPackage rec {
+  TaskTestRunAllPlugins = buildPerlModule rec {
     name = "Task-Test-Run-AllPlugins-0.0105";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "fd43bd053aa884a5abca851f145a0e29898515dcbfc3512f18cd0d86d28eb0a9";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
+    buildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
     meta = {
       homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Specifications for installing all the Test::Run";
