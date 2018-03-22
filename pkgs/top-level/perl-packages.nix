@@ -12077,8 +12077,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "280a1c4710390865fb9f310a861a34720b28b4cbe50609c841af5cf2d3a2bced";
     };
-    buildInputs = [ PPI TryTiny ];
-    propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI ParamsUtil StringRewritePrefix namespaceautoclean ];
+    propagatedBuildInputs = [ GetoptLongDescriptive ModulePath Moose PPI StringRewritePrefix namespaceautoclean ];
     meta = {
       homepage = https://github.com/rjbs/Perl-PrereqScanner;
       description = "A tool to scan your Perl code for its prerequisites";
