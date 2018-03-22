@@ -1213,15 +1213,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystAuthenticationStoreHtpasswd = buildPerlPackage rec {
-    name = "Catalyst-Authentication-Store-Htpasswd-1.003";
+  CatalystAuthenticationStoreHtpasswd = buildPerlModule rec {
+    name = "Catalyst-Authentication-Store-Htpasswd-1.006";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "09mn0wjwfvnfi28y47g816nx50zdpvwvbxp0nrpsap0ir1m80wi3";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Authentication-Store-Htpasswd-1.006.tar.gz;
+      sha256 = "0kw0w2g1qmym896bgnqr1bfhvgb6xja39mv10701ipp8fmi8bzf7";
     };
-    buildInputs = [ TestWWWMechanizeCatalyst Testuseok ];
-    propagatedBuildInputs =
-      [ CatalystPluginAuthentication ClassAccessor CryptPasswdMD5 AuthenHtpasswd HTMLForm ];
+    buildInputs = [ ModuleBuildTiny TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ AuthenHtpasswd CatalystPluginAuthentication ];
   };
 
   CatalystAuthenticationStoreDBIxClass = buildPerlPackage {
