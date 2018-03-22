@@ -10246,10 +10246,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXSemiAffordanceAccessor = buildPerlPackage rec {
-    name = "MooseX-SemiAffordanceAccessor-0.09";
+    name = "MooseX-SemiAffordanceAccessor-0.10";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "1724cxvgy1wh1kfawcj2sanlm90zarfh7k186pgyx1lk8fhnlj4m";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-SemiAffordanceAccessor-0.10.tar.gz;
+      sha256 = "1mdil9ckgmgr78z59p8wfa35ixn5855ndzx14y01dvfxpiv5gf55";
     };
     propagatedBuildInputs = [ Moose ];
   };
