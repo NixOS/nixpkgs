@@ -14847,10 +14847,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextGlob = buildPerlPackage rec {
-    name = "Text-Glob-0.09";
+    name = "Text-Glob-0.11";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
-      sha256 = "0lr76wrsj8wcxrq4wi8z1640w4dmdbkznp06q744rg3g0bd238d5";
+      url = mirror://cpan/authors/id/R/RC/RCLAMP/Text-Glob-0.11.tar.gz;
+      sha256 = "11sj62fynfgwrlgkv5a051cq6yn0pagxqjsz27dxx8phsd4wv706";
     };
   };
 
