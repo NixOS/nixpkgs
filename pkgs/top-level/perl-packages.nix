@@ -11433,8 +11433,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RC/RCAPUTO/${name}.tar.gz";
       sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
     };
-    buildInputs = [ ];
-    propagatedBuildInputs = [ ];
     meta = {
       maintainers = [ maintainers.limeytexan ];
       description = "Reusable tests for POE::Loop authors";
