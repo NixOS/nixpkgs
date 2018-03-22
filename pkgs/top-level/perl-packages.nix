@@ -16431,10 +16431,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLSyck = buildPerlPackage rec {
-    name = "YAML-Syck-1.29";
+    name = "YAML-Syck-1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
-      sha256 = "0ff9rzb1gg12iiizjqv6bsxdxk39g3f6sa18znha4476acv7nmnk";
+      sha256 = "1iwd4pbwg7m1vwc74s3f3hk9yyqmhn1ssrbh9466lmbnc4hl9cv2";
     };
     meta = {
       homepage = http://search.cpan.org/dist/YAML-Syck;
