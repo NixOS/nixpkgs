@@ -5227,10 +5227,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsHelpers = buildPerlPackage {
-    name = "ExtUtils-Helpers-0.022";
+    name = "ExtUtils-Helpers-0.026";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.022.tar.gz;
-      sha256 = "15dalfwmpfmifw312i5pwiai8134pxf7b2804shlqhdk1xqczy6k";
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz;
+      sha256 = "05ilqcj1rg5izr09dsqmy5di4fvq6ph4k0chxks7qmd4j1kip46y";
     };
     meta = {
       description = "Various portability utilities for module builders";
