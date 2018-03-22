@@ -8051,10 +8051,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LocaleMaketext = buildPerlPackage {
-    name = "Locale-Maketext-1.23";
+    name = "Locale-Maketext-1.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Locale-Maketext-1.23.tar.gz;
-      sha256 = "1r1sq7djafvk5abzc4l068p39dz44hlpgdldj3igvn2bjz78cli1";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Locale-Maketext-1.28.tar.gz;
+      sha256 = "1sgpcnh9kqdnsizpwxzsyfv44id7gxsgkd9bmnhmj4g8hfs9712p";
     };
   };
 
