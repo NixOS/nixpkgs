@@ -915,13 +915,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CacheMemory = buildPerlPackage {
-    name = "Cache-Memory-2.04";
+  CacheMemory = buildPerlModule {
+    name = "Cache-2.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLEISHMAN/Cache-2.04.tar.gz;
-      sha256 = "1zykapgl9lxnlx79xfghzb26qimhry94xfxfyswwfhra1ywd9yyg";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Cache-2.11.tar.gz;
+      sha256 = "14m513f4g02daklmnvdm7vqh3w3ick65wvmvqnmnc4cqfybdilp1";
     };
-    propagatedBuildInputs = [ TimeDate DBFile DigestSHA1 FileNFSLock HeapFibonacci IOString ];
+    propagatedBuildInputs = [ DBFile FileNFSLock HeapFibonacci IOString TimeDate ];
     doCheck = false; # can time out
     meta = {
       maintainers = with maintainers; [ ];
