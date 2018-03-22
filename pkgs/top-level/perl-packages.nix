@@ -12215,10 +12215,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ScopeGuard = buildPerlPackage {
-    name = "Scope-Guard-0.20";
+    name = "Scope-Guard-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.20.tar.gz;
-      sha256 = "1lsagnz6pli035zvx5c1x4qm9fabi773vns86yd8lzfpldhfv3sv";
+      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz;
+      sha256 = "0y6jfzvxiz8h5yfz701shair0ilypq2mvimd7wn8wi2nbkm1p6wc";
     };
     meta = {
       description = "Lexically-scoped resource management";
