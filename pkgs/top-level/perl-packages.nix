@@ -12600,10 +12600,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StatisticsBasic = buildPerlPackage {
-    name = "Statistics-Basic-1.6607";
+    name = "Statistics-Basic-1.6611";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JETTERO/Statistics-Basic-1.6607.tar.gz;
-      sha256 = "105agxl2581iqmwj1crgz33l5r19snf47h91hnjgm1nf555z79r7";
+      url = mirror://cpan/authors/id/J/JE/JETTERO/Statistics-Basic-1.6611.tar.gz;
+      sha256 = "1ywl398z42hz9w1k0waf1caa6agz8jzsjlf4rzs1lgpx2mbcwmb8";
     };
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
