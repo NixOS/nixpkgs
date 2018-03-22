@@ -6384,7 +6384,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "7969e569ec54b2f569a5af56ac4d884c630ad850974658219b0b6953e97b5d3d";
     };
     buildInputs = [ FileSlurp URI ];
-    propagatedBuildInputs = [ DateManip DigestMD5 MailMboxMessageParser TimeDate ];
+    propagatedBuildInputs = [ MailMboxMessageParser TimeDate ];
     outputs = [ "out" ];
     meta = {
       homepage = https://github.com/coppit/grepmail;
