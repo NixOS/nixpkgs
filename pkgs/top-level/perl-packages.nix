@@ -10613,7 +10613,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/F/FA/FAYLAND/Net-SMTP-TLS-ButMaintained-0.24.tar.gz;
       sha256 = "0vi5cv7f9i96hgp3q3jpxzn1ysn802kh5xc304f8b7apf67w15bb";
     };
-    propagatedBuildInputs = [NetSSLeay DigestHMAC IOSocketSSL];
+    propagatedBuildInputs = [ DigestHMAC IOSocketSSL ];
   };
 
   NetSNMP = buildPerlModule rec {
