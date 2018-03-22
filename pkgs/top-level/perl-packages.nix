@@ -15274,7 +15274,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextWikiFormat = buildPerlPackage {
+  TextWikiFormat = buildPerlModule {
     name = "Text-WikiFormat-0.81";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CY/CYCLES/Text-WikiFormat-0.81.tar.gz;
