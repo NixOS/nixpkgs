@@ -1733,8 +1733,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-TraitFor-Request-ProxyBase-0.000005.tar.gz;
       sha256 = "a7bf0faa7e12ca5df625d9f5fc710f11bfd16ba5385837e48d42b3d286c9710a";
     };
-    buildInputs = [ CatalystRuntime HTTPMessage ];
-    propagatedBuildInputs = [ CatalystXRoleApplicator Moose URI namespaceautoclean ];
+    buildInputs = [ CatalystRuntime CatalystXRoleApplicator HTTPMessage ];
+    propagatedBuildInputs = [ Moose URI namespaceautoclean ];
     meta = {
       description = "Replace request base with value passed by HTTP proxy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
