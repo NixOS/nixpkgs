@@ -13146,10 +13146,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysSigAction = buildPerlPackage {
-    name = "Sys-SigAction-0.21";
+    name = "Sys-SigAction-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.21.tar.gz;
-      sha256 = "e144207a6fd261eb9f98554c76bea66d95870ee1f62d2d346a1ea95fdccf80db";
+      url = mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz;
+      sha256 = "c4ef6c9345534031fcbbe2adc347fc7194d47afc945e7a44fac7e9563095d353";
     };
     meta = {
       description = "Perl extension for Consistent Signal Handling";
