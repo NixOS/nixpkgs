@@ -9244,12 +9244,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-6.56";
+    name = "Mojolicious-7.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "82f73553836ac378edf825fd9f24be982653be9e0d78f8ba38b7841aabdafb02";
+      sha256 = "25d8ab46fd7c340abcbbe740f690c197df6ff40a9c3dddf907629211bf3ad905";
     };
-    propagatedBuildInputs = [ JSONPP ];
     meta = {
       homepage = http://mojolicious.org;
       description = "Real-time web framework";
