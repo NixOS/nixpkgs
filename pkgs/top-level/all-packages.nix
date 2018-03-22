@@ -16748,6 +16748,8 @@ with pkgs;
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
 
+  mucommander = callPackage ../applications/misc/mucommander { };
+
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
