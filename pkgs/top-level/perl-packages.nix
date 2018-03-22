@@ -15177,10 +15177,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextUnidecode = buildPerlPackage rec {
-    name = "Text-Unidecode-1.24";
+    name = "Text-Unidecode-1.30";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
-      sha256 = "124q1zfiyj70zz691nrfjfmv4i8dyalddhqisp8y28kzfnba9vrh";
+      url = mirror://cpan/authors/id/S/SB/SBURKE/Text-Unidecode-1.30.tar.gz;
+      sha256 = "1imii0p6wvhrxsr5z2zhazpx5vl4l4ybf1y2c5hy480xvi6z293c";
     };
   };
 
