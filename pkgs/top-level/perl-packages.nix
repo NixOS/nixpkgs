@@ -10374,14 +10374,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesLoadableClass = buildPerlPackage {
-    name = "MooseX-Types-LoadableClass-0.012";
+  MooseXTypesLoadableClass = buildPerlModule {
+    name = "MooseX-Types-LoadableClass-0.015";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-LoadableClass-0.012.tar.gz;
-      sha256 = "a1d2b186c2b69f416bb0c9271dc8692c2287c2f6ce144cc3b9b2c922427060df";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-LoadableClass-0.015.tar.gz;
+      sha256 = "e037d3778253dcf92946435715bada0e6449c0a2808fa3ff32a965064d5a3bf4";
     };
-    buildInputs = [ ModuleBuildTiny Moose TestFatal ];
-    propagatedBuildInputs = [ ClassLoad ModuleRuntime Moose MooseXTypes namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestFatal ];
+    propagatedBuildInputs = [ MooseXTypes ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
