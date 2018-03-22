@@ -4859,14 +4859,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestPortability = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-Portability-2.000005";
+  DistZillaPluginTestPortability = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-Portability-2.001000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-Portability-2.000005.tar.gz;
-      sha256 = "b32d0a4b1d78ba76fabedd299c1a11efed05c3ce9752d7da6babe06d3515242b";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001000.tar.gz;
+      sha256 = "e08ff5bd9e24cf9503055330148913808d91a3dfe320a2bdf8b0fc638719b179";
     };
-    buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
-    propagatedBuildInputs = [ DistZilla Moose TestPortabilityFiles ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestPortabilityFiles TestWarnings ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-Portability/;
       description = "Release tests for portability";
