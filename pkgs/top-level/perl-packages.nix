@@ -15610,13 +15610,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TreeSimpleVisitorFactory = buildPerlPackage {
-    name = "Tree-Simple-VisitorFactory-0.12";
+    name = "Tree-Simple-VisitorFactory-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-VisitorFactory-0.12.tgz;
-      sha256 = "1g27xl48q1vr7aikhxg4vvcsj1si8allxz59vmnks61wsw4by7vg";
+      url = mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-VisitorFactory-0.15.tgz;
+      sha256 = "06y2vazkl307k59hnkp9h5bp3p7711kgmp1qdhb2lgnfwzn84zin";
     };
-    propagatedBuildInputs = [TreeSimple];
-    buildInputs = [TestException];
+    propagatedBuildInputs = [ TreeSimple ];
+    buildInputs = [ TestException ];
   };
 
   TryTiny = buildPerlPackage {
