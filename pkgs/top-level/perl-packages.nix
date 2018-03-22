@@ -1763,13 +1763,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CGISession = buildPerlPackage rec {
+  CGISession = buildPerlModule rec {
     name = "CGI-Session-4.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSTOS/${name}.tar.gz";
       sha256 = "1xsl2pz1jrh127pq0b01yffnj4mnp9nvkp88h5mndrscq9hn8xa6";
     };
-    buildInputs = [ DBFile ];
     propagatedBuildInputs = [ CGI ];
   };
 
