@@ -10775,7 +10775,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CY/CYCLES/Net-CoverArtArchive-1.02.tar.gz;
       sha256 = "1lfx8lrjgb3s11fcm243jp5sghngd9svkgmg7xmssmj34q4f49ap";
     };
-    buildInputs = [ FileFindRule TryTiny ];
+    buildInputs = [ FileFindRule ];
     propagatedBuildInputs = [ JSONAny LWP Moose namespaceautoclean ];
     meta = {
       homepage = https://github.com/metabrainz/CoverArtArchive;
