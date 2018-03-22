@@ -15014,10 +15014,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextRoman = buildPerlPackage rec {
-    name = "Text-Roman-3.3";
+    name = "Text-Roman-3.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EC/ECALDER/${name}.tar.gz";
-      sha256 = "1ris38kdj15l8l7cl5whdpyyvb0rz8dh9p0w36wgydi3b2pxsa25";
+      url = mirror://cpan/authors/id/S/SY/SYP/Text-Roman-3.5.tar.gz;
+      sha256 = "0sh47svzz0wm993ywfgpn0fvhajl2sj5hcnf5zxjz02in6ihhjnb";
     };
     meta = {
       description = "Allows conversion between Roman and Arabic algarisms";
