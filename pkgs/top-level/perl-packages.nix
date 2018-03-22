@@ -12851,13 +12851,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   SQLTranslator = buildPerlPackage rec {
-    name = "SQL-Translator-0.11021";
+    name = "SQL-Translator-0.11024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "64cb38a9f78367bc115359a999003bbeb3c32cc75bba8306ec1a938fc441bfd1";
+      sha256 = "5bde9d6f67850089ef35a9296d6f53e5ee8e991438366b71477f3f27c1581bb1";
     };
     buildInputs = [ JSON TestDifferences TestException XMLWriter YAML ];
-    propagatedBuildInputs = [ CarpClan DBI FileShareDir ListMoreUtils Moo PackageVariant ParseRecDescent TryTiny ];
+    propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny ];
     meta = {
       description = "SQL DDL transformations and more";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
