@@ -10515,10 +10515,10 @@ let self = _self // overrides; _self = with self; {
 
 
   NetServer = buildPerlPackage {
-    name = "Net-Server-2.007";
+    name = "Net-Server-2.009";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RH/RHANDOM/Net-Server-2.007.tar.gz;
-      sha256 = "0a03m237cw6j5bvm2yxk2b2gbfx7wj0w2x5zivi9ddqvbcad6vqw";
+      url = mirror://cpan/authors/id/R/RH/RHANDOM/Net-Server-2.009.tar.gz;
+      sha256 = "0gw1k9gcw7habbkxvsfa2gz34brlbwcidk6khgsf1qjm0dbccrw2";
     };
     doCheck = false; # seems to hang waiting for connections
     meta = {
