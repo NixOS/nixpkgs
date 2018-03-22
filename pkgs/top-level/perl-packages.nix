@@ -10468,14 +10468,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesURI = buildPerlPackage rec {
+  MooseXTypesURI = buildPerlModule rec {
     name = "MooseX-Types-URI-0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "d310d20fa361fe2dff758236df87949cc7bf98e5cf3a7c79115365eccde6ccc1";
     };
-    buildInputs = [ ModuleBuildTiny Moose TestSimple ];
-    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass URI URIFromHash namespaceautoclean self."if" ];
+    buildInputs = [ ModuleBuildTiny TestSimple13 ];
+    propagatedBuildInputs = [ MooseXTypesPathClass URIFromHash ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types-URI;
       description = "URI related types and coercions for Moose";
