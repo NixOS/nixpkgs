@@ -12900,7 +12900,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100602.tar.gz;
       sha256 = "0vjz4fd4cvcy12gk5bdha7z73ifmfpmk748khha94dhiq3pd98xa";
     };
-    propagatedBuildInputs = [ SubExporter SubInstall ];
+    propagatedBuildInputs = [ SubExporter ];
     meta = {
       description = "A module for when strings are too long to be displayed in";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
