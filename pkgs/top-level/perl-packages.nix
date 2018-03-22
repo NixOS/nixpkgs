@@ -6421,7 +6421,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BORUP/${name}.tar.gz";
       sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
     };
-    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gtk2 ];
+    propagatedBuildInputs = [ pkgs.gtk2 Gtk2 Pango ];
     meta = {
       license = stdenv.lib.licenses.gpl2;
     };
