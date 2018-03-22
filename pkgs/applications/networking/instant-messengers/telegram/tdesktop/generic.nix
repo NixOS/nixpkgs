@@ -117,16 +117,18 @@ mkDerivation rec {
     # This is necessary to run Telegram in a pure environment.
     wrapProgram $out/bin/telegram-desktop \
       --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}" \
+      --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
 
   meta = {
-    description = "Telegram Desktop messaging app";
+    description = "Telegram Desktop messaging app "
+      + (if stable then "(stable version)" else "(pre-release)");
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
     homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ abbradar garbas primeos ];
+    maintainers = with maintainers; [ primeos abbradar garbas ];
   };
 }
