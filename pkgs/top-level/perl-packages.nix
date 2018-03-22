@@ -820,10 +820,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BusinessISBNData = buildPerlPackage rec {
-    name = "Business-ISBN-Data-20140910.002";
+    name = "Business-ISBN-Data-20140910.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "1bnbiv4vsz0hr1bm3nq9pjsjnf0mndp2vahwsvxbnv1gczb1691y";
+      sha256 = "1jc5jrjwkr6pqga7998zkgw0yrxgb5n1y7lzgddawxibkf608mn7";
     };
     meta = {
       description = "Data pack for Business::ISBN";
