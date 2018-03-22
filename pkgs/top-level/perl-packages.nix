@@ -11123,10 +11123,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlIOeol = buildPerlPackage rec {
-    name = "PerlIO-eol-0.16";
+    name = "PerlIO-eol-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "159zrrf44469sjklsi0pb4c005q74d9242q7mqawvbwnxjqbh0a5";
+      sha256 = "1fayp27vcmypqyzcd4003036h3g5zy6jk1ia25frdca58pzcpk6f";
     };
   };
 
