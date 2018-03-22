@@ -10075,8 +10075,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PS/PSHANGOV/MooseX-Has-Options-0.003.tar.gz;
       sha256 = "07c21cf8ed500b272020ff8da19f194728bb414e0012a2f0cc54ef2ef6222a68";
     };
-    buildInputs = [ Moose TestMost namespaceautoclean ];
-    propagatedBuildInputs = [ ClassLoad ListMoreUtils PackageStash StringRewritePrefix ];
+    buildInputs = [ Moose TestDeep TestDifferences TestException TestMost TestWarn namespaceautoclean ];
+    propagatedBuildInputs = [ ClassLoad ListMoreUtils StringRewritePrefix ];
     meta = {
       homepage = https://github.com/pshangov/moosex-has-options;
       description = "Succinct options for Moose";
