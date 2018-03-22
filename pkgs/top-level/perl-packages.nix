@@ -6588,7 +6588,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RO/ROKR/Hash-Merge-Simple-0.051.tar.gz;
       sha256 = "1c56327873d2f04d5722777f044863d968910466997740d55a754071c6287b73";
     };
-    buildInputs = [ TestMost ];
+    buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ Clone ];
     meta = {
       description = "Recursively merge two or more hashes, simply";
