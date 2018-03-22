@@ -11890,12 +11890,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodUsage = buildPerlPackage {
-    name = "Pod-Usage-1.67";
+    name = "Pod-Usage-1.69";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAREKR/Pod-Usage-1.67.tar.gz;
-      sha256 = "c8be6d29b0dfe304c4ddfcc140f93d4c4de7a8362ea6e2651611c288b53cc68a";
+      url = mirror://cpan/authors/id/M/MA/MAREKR/Pod-Usage-1.69.tar.gz;
+      sha256 = "1a920c067b3c905b72291a76efcdf1935ba5423ab0187b9a5a63cfc930965132";
     };
-    propagatedBuildInputs = [ perl ];
+    propagatedBuildInputs = [ podlators ];
     meta = {
       description = "Pod::Usage extracts POD documentation and shows usage information";
     };
