@@ -211,7 +211,7 @@ let
     });
 
   buildWebStorm = { name, version, src, license, description, wmClass, update-channel }:
-    (mkJetBrainsProduct {
+    lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
       meta = with stdenv.lib; {
@@ -225,8 +225,13 @@ let
         maintainers = with maintainers; [ abaldeau ];
         platforms = platforms.linux;
       };
+    }) (attrs: {
+      patchPhase = (attrs.patchPhase or "") + optionalString (stdenv.isLinux) ''
+        # Webstorm tries to use bundled jre if available.
+        # Lets prevent this for the moment
+        rm -r jre64
+      '';
     });
-
 in
 
 {
