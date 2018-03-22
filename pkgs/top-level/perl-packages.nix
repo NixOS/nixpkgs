@@ -4875,13 +4875,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestSynopsis = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-Synopsis-2.000004";
+    name = "Dist-Zilla-Plugin-Test-Synopsis-2.000007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-Synopsis-2.000004.tar.gz;
-      sha256 = "d073de3206c5e588f60f55e4be64fab4c2595f5bc3013cd91307993691598d59";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-Synopsis-2.000007.tar.gz;
+      sha256 = "e7d5e2530cd8a5bb5aadf3e1669a653aaa96e32cad7bd6b9caba6b425ceab563";
     };
-    buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
-    propagatedBuildInputs = [ DistZilla Moose TestSynopsis ];
+    buildInputs = [ TestDeep TestOutput TestSynopsis ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-Synopsis/;
       description = "Release tests for synopses";
