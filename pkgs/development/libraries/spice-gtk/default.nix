@@ -19,23 +19,18 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    spice-protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
+    spice-protocol celt_0_5_1 openssl libpulseaudio pixman
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
     polkit acl usbutils
   ];
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala ];
+  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
-
-  # put polkit action in the $out/share/polkit-1/actions
-  preAutoreconf = ''
-    substituteInPlace configure.ac \
-      --replace 'POLICYDIR=`''${PKG_CONFIG} polkit-gobject-1 --variable=policydir`' "POLICYDIR=$out/share/polkit-1/actions"
-  '';
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   configureFlags = [
     "--with-gtk3"
+    "--enable-introspection"
     "--enable-vala"
   ];
 
