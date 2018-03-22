@@ -14610,8 +14610,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1mnym49j1lj7gzylma5b6nr4vp75rmgz2v71904v01xmxhy9l4i1";
     };
 
-    propagatedBuildInputs = [ strictures Moo MooXTypesMooseLike SubInstall
-      CaptureTiny ];
+    propagatedBuildInputs = [ Moo MooXTypesMooseLike SubInstall strictures ];
+    buildInputs = [ CaptureTiny ];
   };
 
   TestRoutine = buildPerlPackage {
