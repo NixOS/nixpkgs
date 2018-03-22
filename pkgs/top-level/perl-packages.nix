@@ -13460,7 +13460,7 @@ let self = _self // overrides; _self = with self; {
     version = "2.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSTOWE/${name}.tar.gz";
-      sha256 = "1czarrdxgnxmmbaasjnq3sj14nf1cvzhm37padq6xvl7h7r2acb2";
+      sha256 = "0hdj5mldpj3pyprd4hbbalfx9yjgi5p59gg2ixk9808f5v7q74sa";
     };
   };
 
