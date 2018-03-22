@@ -9137,12 +9137,13 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
       sha256 = "e5bb2acb117792c984628812acb0fec376cb970caee8ede57535e04d762b0e40";
     };
-    propagatedBuildInputs = [ ClassAccessorLite ClassMethodModifiers DataOptList ModuleBuild TestSharedFork ];
+    propagatedBuildInputs = [ ClassAccessorLite ClassMethodModifiers DataOptList ];
     meta = {
       homepage = https://github.com/tokuhirom/Module-Build-Pluggable;
       description = "Module::Build meets plugins";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestSharedFork ];
   };
 
   ModuleBuildPluggablePPPort = buildPerlModule rec {
