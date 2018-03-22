@@ -6123,13 +6123,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   GamesSolitaireVerify = buildPerlModule {
-    name = "Games-Solitaire-Verify-0.1400";
+    name = "Games-Solitaire-Verify-0.1701";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1400.tar.gz;
-      sha256 = "0c897c17f23ed6710d0e3ddfb54cce0f00f5b68c55277181adc94a03b7d8c659";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1701.tar.gz;
+      sha256 = "71383f9c44a344aa92eca6ad999103b05809f19b3e078cf01651f2298bc435c1";
     };
     buildInputs = [ TestDifferences ];
-    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils MooXlate ];
+    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils ];
     meta = {
       description = "Verify solutions for solitaire games";
       license = stdenv.lib.licenses.mit;
