@@ -4840,14 +4840,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestKwalitee = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-Kwalitee-2.06";
+  DistZillaPluginTestKwalitee = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-Kwalitee-2.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Kwalitee-2.06.tar.gz;
-      sha256 = "1723beb96d4048fd4fb0fea2ed36c0c6f3ea4648ce7f93d4cb73e5d49e274bf6";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Kwalitee-2.12.tar.gz;
+      sha256 = "bddbcfcc75e8eb2d2d9c8611552f00cdc1b051f0f00798623b8692ff5030af2f";
     };
-    buildInputs = [ CaptureTiny DistZilla PathClass perl ];
-    propagatedBuildInputs = [ DataSection DistZilla Moose SubExporterForMethods namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestFatal TestKwalitee ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-Kwalitee;
       description = "Release tests for kwalitee";
