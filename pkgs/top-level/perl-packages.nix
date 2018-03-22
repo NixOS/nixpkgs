@@ -2347,14 +2347,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigIniFiles = buildPerlPackage rec {
-    name = "Config-IniFiles-2.94";
+  ConfigIniFiles = buildPerlModule rec {
+    name = "Config-IniFiles-2.95";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "d6d38a416da79de874c5f1825221f22e972ad500b6527d190cc6e9ebc45194b4";
+      sha256 = "414a19f98cc745769ce762aefce01fa52d031bc244403cd32fd1f6257f2dedc2";
     };
-    buildInputs = [ ModuleBuild perl ];
-    propagatedBuildInputs = [ IOstringy ];
+    propagatedBuildInputs = [ IOStringy ];
     meta = {
       description = "A module for reading .ini-style configuration files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
