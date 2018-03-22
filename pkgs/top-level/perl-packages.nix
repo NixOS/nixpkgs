@@ -1713,7 +1713,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "06d1zg4nbb6kcyjbnyxrkf8z4zlscxr8650d94f7187jygfl8rvh";
     };
-    propagatedBuildInputs = [ CatalystRuntime ClassAccessor MROCompat PathClass TemplateToolkit TemplateTimer ];
+    propagatedBuildInputs = [ CatalystRuntime TemplateTimer ];
     meta = {
       description = "Template View Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
