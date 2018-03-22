@@ -8534,10 +8534,10 @@ let self = _self // overrides; _self = with self; {
 
 
   MailTools = buildPerlPackage rec {
-    name = "MailTools-2.14";
+    name = "MailTools-2.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
-      sha256 = "1y6zndb4rsn8i65g1bg3b0zb7966cz83q19zg7m7bvxjfkv7wz2b";
+      sha256 = "15iizg2x1w7ca0r8rn3wwhp7w160ljvf55prspljwd6cm7vhcmpm";
     };
     propagatedBuildInputs = [ TimeDate ];
     meta = {
