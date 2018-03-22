@@ -3038,13 +3038,12 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ParamsClassify DataFloat CryptRijndael HTTPLite];
   };
 
-  DataFloat = buildPerlPackage rec {
-    name = "Data-Float-0.012";
+  DataFloat = buildPerlModule rec {
+    name = "Data-Float-0.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "698ecb092a3284e260cd3c3208408feb791d7d0f06a02673f9125ab2d51cc2d8";
+      sha256 = "e2b1523d858930b8bbdbd196f08235f5e678b84919ba87712e26313b9c27518a";
     };
-    buildInputs = [ ModuleBuild ];
   };
 
   DataFormValidator = buildPerlPackage rec {
