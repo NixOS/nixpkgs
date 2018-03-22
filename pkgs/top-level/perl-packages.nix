@@ -6733,13 +6733,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLFormatTextWithLinks = buildPerlPackage {
+  HTMLFormatTextWithLinks = buildPerlModule {
     name = "HTML-FormatText-WithLinks-0.15";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/ST/STRUAN/HTML-FormatText-WithLinks-0.15.tar.gz;
       sha256 = "7fcc1ab79eb58fb97d43e5bdd14e21791a250a204998918c62d6a171131833b1";
     };
-    propagatedBuildInputs = [ HTMLFormatter HTMLTree URI ];
+    propagatedBuildInputs = [ HTMLFormatter URI ];
     meta = {
       description = "HTML to text conversion with links as footnotes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
