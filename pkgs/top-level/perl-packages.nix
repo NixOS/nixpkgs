@@ -1451,8 +1451,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/G/GR/GRAF/Catalyst-Plugin-Cache-HTTP-0.001000.tar.gz;
       sha256 = "0v5iphbq4csc4r6wkvxnqlh97p8g0yhjky9qqmsdyqczn87agbba";
     };
-    buildInputs = [ CatalystRuntime Testuseok TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ ClassAccessorFast HTTPMessage MROCompat ];
+    buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ ClassAccessor HTTPMessage MROCompat ];
     meta = {
       description = "HTTP/1.1 cache validators for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
