@@ -3124,10 +3124,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataOptList = buildPerlPackage {
-    name = "Data-OptList-0.109";
+    name = "Data-OptList-0.110";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-OptList-0.109.tar.gz;
-      sha256 = "1j44rm2spprlq3bc80cxni3dzs3gfjiqv1qc9q7820n1qj0wgmqw";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-OptList-0.110.tar.gz;
+      sha256 = "1hzmgr2imdg1fc3hmwx0d56fhsdfyrgmgx7jb4jkyiv6575ifq9n";
     };
     propagatedBuildInputs = [ ParamsUtil SubInstall ];
     meta = {
