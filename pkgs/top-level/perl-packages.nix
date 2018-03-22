@@ -5094,14 +5094,14 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
   };
 
-  ExceptionDied = buildPerlPackage {
+  ExceptionDied = buildPerlModule {
     name = "Exception-Died-0.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Died-0.06.tar.gz;
       sha256 = "1dcajw2m3x5m76fpi3fvy9fjkmfrd171pnx087i5fkgx5ay41i1m";
     };
     buildInputs = [ TestAssert TestUnitLite ];
-    propagatedBuildInputs = [ constantboolean ExceptionBase ];
+    propagatedBuildInputs = [ ExceptionBase constantboolean ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
