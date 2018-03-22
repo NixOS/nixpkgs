@@ -6983,7 +6983,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
       sha256 = "fc0d2c585b3bd1532d92609965d589e0c87cd380e7cca42fb9ad0a1311227297";
     };
-    buildInputs = [ HTTPMessage TestDeep ];
+    buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "HTTP Body Parser";
