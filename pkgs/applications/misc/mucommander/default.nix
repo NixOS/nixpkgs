@@ -10,11 +10,30 @@ let
     rev = version;
     sha256 = "1fvij0yjjz56hsyddznx7mdgq1zm25fkng3axl03iyrij976z7b8";
   };
+  
+  postPatch = ''
+    # there is no .git anyway
+    substituteInPlace build.gradle \
+      --replace "git = org.ajoberstar.grgit.Grgit.open(file('.'))"  "" \
+      --replace "revision = git.head().id"                          "revision = 'abcdefgh'"
+
+    # disable gradle plugins with native code and their targets
+    perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
+    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
+
+    # fix source encoding
+    find . -type f -name build.gradle \
+      -exec perl -i.bak3 -pe "s#(repositories\.jcenter\(\))#
+                                \1
+                                compileJava.options.encoding = 'UTF-8'
+                                compileTestJava.options.encoding = 'UTF-8'
+                               #" {} \;
+  '';
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     name = "${name}-deps";
-    inherit src;
+    inherit src postPatch;
     nativeBuildInputs = [ gradle_3_5 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -32,27 +51,16 @@ let
   };
 
 in stdenv.mkDerivation {
-  inherit name src;
+  inherit name src postPatch;
   nativeBuildInputs = [ gradle_3_5 perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
 
-    # there is no .git anyway
-    substituteInPlace build.gradle \
-      --replace "git = org.ajoberstar.grgit.Grgit.open(file('.'))"  "" \
-      --replace "revision = git.head().id"                          "revision = 'abcdefgh'"
-
-    # disable gradle plugins with native code and their targets
-    perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
-    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
-
-    # point to offline repo and fix source encoding
+    # point to offline repo
     find . -type f -name build.gradle \
       -exec perl -i.bak3 -pe "s#repositories\.jcenter\(\)#
                                 repositories { mavenLocal(); maven { url '${deps}' } }
-                                compileJava.options.encoding = 'UTF-8'
-                                compileTestJava.options.encoding = 'UTF-8'
                                #" {} \;
 
     gradle --offline --no-daemon build
