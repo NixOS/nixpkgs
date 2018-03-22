@@ -1741,10 +1741,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIFormBuilder = buildPerlPackage rec {
-    name = "CGI-FormBuilder-3.09";
+    name = "CGI-FormBuilder-3.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NW/NWIGER/${name}.tgz";
-      sha256 = "0qx8kxj0iy55ss9kraqr8q2m4igi2ylajff7d6qvphqpfx90fjb5";
+      url = mirror://cpan/authors/id/B/BI/BIGPRESH/CGI-FormBuilder-3.10.tar.gz;
+      sha256 = "163ixq9kninqq094z2rnkg9pv3bcmvjphlww4vksfrzhq3h9pjdf";
     };
 
     propagatedBuildInputs = [ CGI ];
