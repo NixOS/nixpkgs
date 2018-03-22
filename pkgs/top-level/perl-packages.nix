@@ -10940,10 +10940,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Parent = buildPerlPackage {
-    name = "parent-0.228";
+    name = "parent-0.236";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.228.tar.gz;
-      sha256 = "0w0i02y4z8465z050kml57mvhv7c5gl8w8ivplhr3cms0zbaq87b";
+      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.236.tar.gz;
+      sha256 = "0yhjps1fprifhvzdwwl09bp1ngyqx85rvyn96j34papn0jypx0rd";
     };
   };
 
