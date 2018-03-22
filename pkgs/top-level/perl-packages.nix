@@ -7393,10 +7393,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOTee = buildPerlPackage rec {
-    name = "IO-Tee-0.64";
+    name = "IO-Tee-0.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KE/KENSHAN/${name}.tar.gz";
-      sha256 = "1mjy6hmwrzipzxcm33qs7ja89ljk6zkk499wclw16lfkqaqpdliy";
+      url = mirror://cpan/authors/id/N/NE/NEILB/IO-Tee-0.65.tar.gz;
+      sha256 = "04hc94fk6qlazrarcznw2d8wiqw289js4za0czw65296kc8csgf6";
     };
   };
 
