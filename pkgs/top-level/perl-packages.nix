@@ -12092,6 +12092,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RO/ROODE/${name}.tar.gz";
       sha256 = "8ae5c4e85299e5c8bddd1b196f2eea38f00709e0dc0cb60454dc9114ae3fff0d";
     };
+    propagatedBuildInputs = [ Readonly ];
   };
 
   Redis = buildPerlPackage rec {
