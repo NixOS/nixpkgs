@@ -11933,16 +11933,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodEventual = buildPerlPackage {
-    name = "Pod-Eventual-0.093330";
+    name = "Pod-Eventual-0.094001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Eventual-0.093330.tar.gz;
-      sha256 = "29de14a69df8a26f7e8ff73daca5afa7acc84cc9b7ae28093a5b1af09a4830b6";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Eventual-0.094001.tar.gz;
+      sha256 = "be9fb8910b108e5d1a66f002b659ad22576e88d779b703dff9d15122c3f80834";
     };
-    propagatedBuildInputs = [ MixinLinewise TestDeep ];
+    propagatedBuildInputs = [ MixinLinewise ];
     meta = {
       description = "Read a POD document as a series of trivial events";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestDeep ];
   };
 
   PodParser = buildPerlPackage {
