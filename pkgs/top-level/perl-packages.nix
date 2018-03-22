@@ -8617,13 +8617,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailDKIM = buildPerlPackage rec {
-    name = "Mail-DKIM-0.40";
+    name = "Mail-DKIM-0.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JA/JASLONG/${name}.tar.gz";
-      sha256 = "1wd6mab4fp47v1nh85jfxsjmysnyv5mwvfv47cn5m2h2lb1s0piw";
+      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.52.tar.gz;
+      sha256 = "1dbczg7vyvvm12d9gbiqd9a24qg4254cz7bh7yf3p27i58hhpbwy";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRSA NetDNS MailTools ];
+    propagatedBuildInputs = [ CryptOpenSSLRSA MailTools NetDNSResolverMock YAMLLibYAML ];
     doCheck = false; # tries to access the domain name system
+    buildInputs = [ TestRequiresInternet ];
   };
 
   MailIMAPClient = buildPerlPackage {
@@ -10577,6 +10578,20 @@ let self = _self // overrides; _self = with self; {
       description = "Perl Interface to the Domain Name System";
       license = stdenv.lib.licenses.mit;
     };
+  };
+
+  NetDNSResolverMock = buildPerlPackage rec {
+     version = "1.20171219";
+     name = "Net-DNS-Resolver-Mock-1.20171219";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20171219.tar.gz;
+       sha256 = "0m3rxpkv1b9121srvbqkrgzg4m8mnydiydqv34in1i1ixwrl6jn9";
+     };
+     propagatedBuildInputs = [ NetDNS ];
+     meta = {
+       description = "Mock a DNS Resolver object for testing";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   NetDomainTLD = buildPerlPackage rec {
@@ -14483,6 +14498,20 @@ let self = _self // overrides; _self = with self; {
       description = "Checks to see if the module can be loaded";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  TestRequiresInternet = buildPerlPackage rec {
+     version = "0.05";
+     name = "Test-RequiresInternet-0.05";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MA/MALLEN/Test-RequiresInternet-0.05.tar.gz;
+       sha256 = "0gl33vpj9bb78pzyijp884b66sbw6jkh1ci0xki8rmf03hmb79xv";
+     };
+     meta = {
+       description = "Easily test network connectivity";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://metacpan.org/dist/Test-RequiresInternet";
+     };
   };
 
   TestRoo = buildPerlPackage rec {
