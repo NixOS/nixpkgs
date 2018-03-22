@@ -14781,14 +14781,14 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ PodCoverage ];
   };
 
-  TestPodLinkCheck = buildPerlPackage rec {
+  TestPodLinkCheck = buildPerlModule rec {
     name = "Test-Pod-LinkCheck-0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AP/APOCAL/${name}.tar.gz";
       sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
-    buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ CaptureTiny Moose TestPod podlinkcheck ];
+    buildInputs = [ ModuleBuildTiny TestPod ];
+    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod-LinkCheck/;
       description = "Tests POD for invalid links";
