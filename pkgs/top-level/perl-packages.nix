@@ -301,13 +301,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Appperlbrew = buildPerlPackage rec {
-    name = "App-perlbrew-0.73";
+    name = "App-perlbrew-0.82";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GU/GUGOD/${name}.tar.gz";
-      sha256 = "0ym7ahjm95igm1hg0qwy29zdcjqdcakcmrn3r8xlbvqkk5xrxg5c";
+      sha256 = "0p6l5i85zp89f5sh0gyz7didla672zg169yprbqcf97icmr46g80";
     };
-    buildInputs = [ pkgs.curl IOAll PathClass TestException TestNoWarnings TestOutput TestSpec ];
-    propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
+    buildInputs = [ pkgs.curl FileWhich IOAll PathClass PodMarkdown TestException TestNoWarnings TestOutput TestSpec ];
+    propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl PodUsage locallib ];
 
     preConfigure = ''
       patchShebangs .
