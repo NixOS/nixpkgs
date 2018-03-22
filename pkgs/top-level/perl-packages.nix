@@ -15790,10 +15790,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URIFind = buildPerlModule rec {
-    name = "URI-Find-20140709";
+    name = "URI-Find-20160806";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/${name}.tar.gz";
-      sha256 = "0czc4h182s7sx3k123m7qlg7yybnwxgh369hap3c3b6xgrglrhy0";
+      sha256 = "1mk3jv8x0mcq3ajrn9garnxd0jc7sw4pkwqi88r5apqvlljs84z2";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
