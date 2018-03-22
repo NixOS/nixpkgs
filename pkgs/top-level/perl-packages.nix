@@ -1007,13 +1007,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CaptchaReCAPTCHA = buildPerlPackage rec {
-    name = "Captcha-reCAPTCHA-0.97";
+    name = "Captcha-reCaptcha-0.99";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Captcha-reCAPTCHA-0.97.tar.gz;
-      sha256 = "12f2yh89aji6mnkrqxjcllws5dlg545wvz0j7wamy149xyqi12wq";
+      url = mirror://cpan/authors/id/S/SU/SUNNYP/Captcha-reCaptcha-0.99.tar.gz;
+      sha256 = "14j3lk6fhfzda5d3d7z6f373ng3fzxazzwpjyziysrhic1v3b4mq";
     };
-    propagatedBuildInputs = [HTMLTiny LWP];
-    buildInputs = [TestPod];
+    propagatedBuildInputs = [ HTMLTiny LWP ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
