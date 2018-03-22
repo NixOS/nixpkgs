@@ -5657,7 +5657,7 @@ let self = _self // overrides; _self = with self; {
   FileListing = buildPerlPackage rec {
     name = "File-Listing-6.04";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      url = mirror://cpan/authors/id/G/GA/GAAS/File-Listing-6.04.tar.gz;
       sha256 = "1xcwjlnxaiwwpn41a5yi6nz95ywh3szq5chdxiwj36kqsvy5000y";
     };
     propagatedBuildInputs = [ HTTPDate ];
