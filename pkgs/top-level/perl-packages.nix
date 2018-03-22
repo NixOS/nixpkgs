@@ -1727,8 +1727,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
       sha256 = "0iq4ci8m6g2c4g01fvdl568y7pjz28f3widk986v3pyhr7ll8j88";
     };
-    propagatedBuildInputs =
-      [ CatalystRuntime MooseXTraitsPluggable namespaceautoclean ListMoreUtils ];
+    propagatedBuildInputs = [ CatalystRuntime MooseXTraitsPluggable ];
   };
 
   CatalystXRoleApplicator = buildPerlPackage rec {
