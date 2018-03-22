@@ -11649,10 +11649,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodChecker = buildPerlPackage {
-    name = "Pod-Checker-1.71";
+    name = "Pod-Checker-1.73";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.71.tar.gz;
-      sha256 = "4b90e745f4d6357bb7e8999e0e7d192216b98e3f3c8a86fa6ed446f8c36601df";
+      url = mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.73.tar.gz;
+      sha256 = "7dee443b03d80d0735ec50b6d1caf0209c51ab0a97d64050cfc10e1555cb9305";
     };
   };
 
