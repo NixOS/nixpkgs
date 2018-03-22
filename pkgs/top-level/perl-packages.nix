@@ -8343,13 +8343,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogHandler = buildPerlPackage rec {
+  LogHandler = buildPerlModule rec {
     name = "Log-Handler-0.88";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BL/BLOONIX/${name}.tar.gz";
       sha256 = "45bf540ab2138ed3ff93afc205b0516dc75755b86acdcc5e75c41347833c293d";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
       description = "Log messages to several outputs";
