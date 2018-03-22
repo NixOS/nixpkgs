@@ -10416,10 +10416,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   namespaceclean = buildPerlPackage rec {
-    name = "namespace-clean-0.26";
+    name = "namespace-clean-0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "73986e19c4ad0e634e35f4f26e81437f152d8026eb1d91fe795725746ce13eca";
+      sha256 = "8a10a83c3e183dc78f9e7b7aa4d09b47c11fb4e7d3a33b9a12912fd22e31af9d";
     };
     propagatedBuildInputs = [ BHooksEndOfScope PackageStash ];
     meta = {
