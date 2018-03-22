@@ -4163,7 +4163,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0fp6h71xv4pgb8l815rs6ad4camzhjqf64s1sf7zmhchqqn4vacn";
     };
 
-    propagatedBuildInputs = [ TestFatal TestRoo Moo DBI DBDSQLite ];
+    propagatedBuildInputs = [ DBI Moo ];
+    buildInputs = [ DBDSQLite TestFatal TestRoo ];
   };
 
   DevelCycle = buildPerlPackage {
