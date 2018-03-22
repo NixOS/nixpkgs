@@ -9914,7 +9914,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "228d4b4f3f0ed9547278691d0b7c5fe53d90874a69df709a49703c6af87c09de";
     };
     buildInputs = [ TestUseAllModules ];
-    propagatedBuildInputs = [ Mouse MouseXTypes PathClass ];
+    propagatedBuildInputs = [ MouseXTypes PathClass ];
     meta = {
       description = "A Path::Class type library for Mouse";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
