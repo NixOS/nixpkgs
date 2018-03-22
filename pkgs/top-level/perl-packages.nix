@@ -15290,10 +15290,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestVersion = buildPerlPackage rec {
-    name = "Test-Version-2.05";
+    name = "Test-Version-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
-      sha256 = "39c0ec02663da0e56962bdafaef6790cf83d12b4d90e8a4cdc971d57d869d63f";
+      sha256 = "eae8b758395d6b23d4ce3109b055663379b9970fb8f81e5803d145dbc5ccdbac";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ FileFindRulePerl ];
