@@ -12434,7 +12434,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
       sha256 = "18qxshrjh0ibpzjm2314157mxlibh3smyg64nr4mq990hh564n4g";
     };
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   SpreadsheetParseExcel = buildPerlPackage rec {
