@@ -11593,10 +11593,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PadWalker = buildPerlPackage rec {
-    name = "PadWalker-2.2";
+    name = "PadWalker-2.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
-      sha256 = "fc1df2084522e29e892da393f3719d2c1be0da022fdd89cff4b814167aecfea3";
+      sha256 = "2a6c44fb600861e54568e74081a8d1f121f0060076069ceab34b1ae89d6588cf";
     };
   };
 
