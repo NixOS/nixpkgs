@@ -1421,7 +1421,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0l83lkwmq0lngwh8b1rv3r719pn8w1gdbyhjqm74rnd0wbjl8h7f";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ CatalystPluginAuthentication CatalystRuntime SetObject UNIVERSALisa ];
+    propagatedBuildInputs = [ CatalystPluginAuthentication SetObject UNIVERSALisa ];
     meta = {
       description = "Role based authorization for Catalyst based on Catalyst::Plugin::Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
