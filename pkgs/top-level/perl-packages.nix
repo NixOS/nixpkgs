@@ -15824,7 +15824,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
-    buildInputs = [URI TestMore];
+    propagatedBuildInputs = [ URI ];
   };
 
   URIIMAP = buildPerlPackage {
