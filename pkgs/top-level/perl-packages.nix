@@ -8031,17 +8031,33 @@ let self = _self // overrides; _self = with self; {
   };
 
   ListMoreUtils = buildPerlPackage rec {
-    name = "List-MoreUtils-0.413";
+    name = "List-MoreUtils-0.428";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
-      sha256 = "4d6429d5672ce74a59d6490320252cb8b5b8285db8fe9c6551a4162e5375ef37";
+      sha256 = "713e0945d5f16e62d81d5f3da2b6a7b14a4ce439f6d3a7de74df1fd166476cc2";
     };
-    propagatedBuildInputs = [ ExporterTiny ];
+    propagatedBuildInputs = [ ExporterTiny ListMoreUtilsXS ];
     meta = {
       homepage = https://metacpan.org/release/List-MoreUtils;
       description = "Provide the stuff missing in List::Util";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestLeakTrace ];
+  };
+
+  ListMoreUtilsXS = buildPerlPackage rec {
+     version = "0.428";
+     name = "List-MoreUtils-XS-0.428";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.428.tar.gz;
+       sha256 = "0bfndmnkqaaf3gffprak143bzplxd69c368jxgr7rzlx88hyd7wx";
+     };
+     propagatedBuildInputs = [ XSLoader ];
+     meta = {
+       description = "Provide the stuff missing in List::Util in XS";
+       license = with stdenv.lib.licenses; [ asl20 ];
+       homepage = "https://metacpan.org/release/List-MoreUtils-XS";
+     };
   };
 
   ListSomeUtils = buildPerlPackage rec {
