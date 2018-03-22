@@ -4995,11 +4995,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Error = buildPerlPackage rec {
-    name = "Error-0.17022";
+  Error = buildPerlModule rec {
+    name = "Error-0.17025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "1vzpz6syb82ir8svp2wjh95x6lpf01lgkxn2xy60ixrszc24zdya";
+      sha256 = "1bzgzmf1v4md02vadm46b4j4ilqxrcrfasvbzymhrznlsd54g7vc";
     };
   };
 
