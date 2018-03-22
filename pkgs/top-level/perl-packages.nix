@@ -2541,7 +2541,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AG/AGENT/${name}.tar.gz";
       sha256 = "1616rcn2qn1cwiv3rxb8mq5fmwxpj4gya1lxxxq2w952h03p3fd3";
     };
-    buildInputs = [ TestMore ];
     propagatedBuildInputs = [ CGICookieXS ];
   };
 
