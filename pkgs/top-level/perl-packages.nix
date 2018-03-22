@@ -8554,7 +8554,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "9f252394775e23aa42c3176611e5930638ab528d5190110b4731aa5b0bf35a15";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ HTTPMessage IOSocketSSL LWP LWPProtocolhttps URI ];
+    propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Provides HTTP/CONNECT proxy support for LWP::UserAgent";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
