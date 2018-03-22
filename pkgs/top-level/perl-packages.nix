@@ -3569,12 +3569,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeEventRecurrence = buildPerlPackage {
-    name = "DateTime-Event-Recurrence-0.16";
+    name = "DateTime-Event-Recurrence-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-0.16.tar.gz;
-      sha256 = "3872e0126cd9527a918d3e537f85342d1fbb1e6a9ae5833262201b31879f8609";
+      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-0.19.tar.gz;
+      sha256 = "f9408789a461107766ca1a232bb3ec1e702eec7ca8167401ea6ec3f4b6d0b5a5";
     };
-    propagatedBuildInputs = [ DateTime DateTimeSet ];
+    propagatedBuildInputs = [ DateTimeSet ];
   };
 
   DateTimeFormatBuilder = buildPerlPackage {
