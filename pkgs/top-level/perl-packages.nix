@@ -1489,7 +1489,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DH/DHOSS/${name}.tar.gz";
       sha256 = "5834f11bf5c9f4b5d336d65c7ce6639b76ce7bfe7a2875eb048d7ea1c82ce05a";
     };
-    propagatedBuildInputs = [ CatalystRuntime DataFormValidator MROCompat Moose ];
+    propagatedBuildInputs = [ CatalystRuntime DataFormValidator ];
     meta = {
       description = "Data::FormValidator";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
