@@ -10685,6 +10685,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NumberMisc = buildPerlModule rec {
+     version = "1.2";
+     name = "Number-Misc-1.2";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MIKO/Number-Misc-1.2.tar.gz;
+       sha256 = "1n4ivj4ydplanwbxn3jbsfyfcl91ngn2d0addzqrq1hac26bdfbp";
+     };
+     meta = {
+       description = "Number::Misc - handy utilities for numbers";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   NTLM = buildPerlPackage rec {
     name = "NTLM-1.09";
     src = fetchurl {
@@ -12872,17 +12885,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  StringUtil = let version = "1.24"; in buildPerlPackage {
+  StringUtil = let version = "1.26"; in buildPerlModule {
     name = "String-Util-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKO/String-Util-${version}.tar.gz";
-      sha256 = "16c7dbpz87ywq49lnsaml0k28jbkraf1p2njh72jc5xcxys7vykv";
+      sha256 = "0bgs6fsc0gcj9qa1k98nwjp4xbkl3ckz71rz3qhmav0lgkrr96pl";
     };
     meta = {
       inherit version;
       description = "String::Util -- String processing utilities";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ NumberMisc ];
+    buildInputs = [ TestToolbox ];
   };
 
   libfile-stripnondeterminism = buildPerlPackage rec {
@@ -14566,6 +14581,19 @@ let self = _self // overrides; _self = with self; {
       description = "Overrides the time() and sleep() core functions for testing";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  TestToolbox = buildPerlModule rec {
+     version = "0.4";
+     name = "Test-Toolbox-0.4";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MIKO/Test-Toolbox-0.4.tar.gz;
+       sha256 = "1hxx9rhvncvn7wvzhzx4sk00w0xq2scgspfhhyqwjnm1yg3va820";
+     };
+     meta = {
+       description = "Test::Toolbox - tools for testing";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   TestTrailingSpace = buildPerlPackage rec {
