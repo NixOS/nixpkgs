@@ -13736,6 +13736,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0fch1cvivnszbnwhpfmwv1rin04j5xkj1n1ylfmlxg6bm72qqdjj";
     };
     propagatedBuildInputs = [ Spiffy ];
+    buildInputs = [ AlgorithmDiff TextDiff ];
   };
 
   TestCheckDeps = buildPerlPackage rec {
