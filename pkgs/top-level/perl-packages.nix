@@ -10767,10 +10767,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetOpenSSH = buildPerlPackage rec {
-    name = "Net-OpenSSH-0.73";
+    name = "Net-OpenSSH-0.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
-      sha256 = "f45a54b3c6015d4dc44cbff9f9be57bc9d54dfb104fb38bcf3c4eb04789582d9";
+      sha256 = "16e965c6ed3dfe0f1288a6ba932d0e8d5c7846ce86de05c0dbd64259df2a2477";
     };
     meta = {
       description = "Perl SSH client package implemented on top of OpenSSH";
