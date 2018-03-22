@@ -3697,19 +3697,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatPg = buildPerlPackage {
-    name = "DateTime-Format-Pg-0.16008";
+  DateTimeFormatPg = buildPerlModule {
+    name = "DateTime-Format-Pg-0.16013";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16008.tar.gz;
-      sha256 = "0mvh4wp54vh7mnhfd2lndzjfikjify98vaav6vwbraxlhjvwyn3x";
+      url = mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16013.tar.gz;
+      sha256 = "16siw0f3a0ilzv5fnfas5s9n92drjy271yf6qvmmpm0vwnjjx1kz";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder DateTimeTimeZone ];
+    propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
       description = "Parse and format PostgreSQL dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   DateTimeFormatStrptime = buildPerlPackage rec {
