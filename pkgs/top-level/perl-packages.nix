@@ -4230,7 +4230,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AN/ANDREMAR/${name}.tar.gz";
       sha256 = "05zhniyzl31nq410ywhxm0vmvac53h7ax42hjs9mmpvf45ipahj1";
     };
-    propagatedBuildInputs = [DBIxClass HTMLWidget];
+    propagatedBuildInputs = [ DBIxClass HTMLWidget ];
   };
 
   DBIxClassHelpers = buildPerlPackage rec {
