@@ -11289,8 +11289,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/J/JA/JAYBONCI/${name}.tar.gz";
       sha256 = "0ad78qri4sg9agghqdm83xsjgks94yvffs23kppy7mqjy8gwwjxn";
     };
-    buildInputs = [ TestPod LWPUserAgent ];
-    propagatedBuildInputs = [ IOStringy ];
+    propagatedBuildInputs = [ IOStringy LWP ];
     meta = with stdenv.lib; {
       homepage = http://search.cpan.org/~jaybonci/Parse-DebControl;
       license = with licenses; [ artistic1 gpl1Plus ];
