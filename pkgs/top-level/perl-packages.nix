@@ -9942,7 +9942,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "921b31cb13fc1f982a602f8e23815b7add23a224257e43790e287504ce879534";
     };
     buildInputs = [ TestUseAllModules ];
-    propagatedBuildInputs = [ Mouse MouseXTypesPathClass ];
+    propagatedBuildInputs = [ MouseXTypesPathClass ];
     meta = {
       description = "An abstract Mouse role for setting attributes from a configfile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
