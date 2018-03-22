@@ -5840,11 +5840,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileShareDirInstall = buildPerlPackage {
-    name = "File-ShareDir-Install-0.08";
+  FileShareDirInstall = buildPerlModule {
+    name = "File-ShareDir-Install-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GW/GWYN/File-ShareDir-Install-0.08.tar.gz;
-      sha256 = "188pgn43wa6hgpcrv997lp3bad50030p4wmrcdzvfrqxj0bx2amf";
+      url = mirror://cpan/authors/id/E/ET/ETHER/File-ShareDir-Install-0.11.tar.gz;
+      sha256 = "1j0cw1aq9fdv9kl1a6fnfa4zihsvmcqzy9sb0xk0i9pyx5r8ggrj";
     };
     meta = {
       description = "Install shared files";
@@ -5852,6 +5852,7 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   FilesysNotifySimple = buildPerlPackage {
