@@ -1801,7 +1801,7 @@ let self = _self // overrides; _self = with self; {
   Chart = buildPerlPackage rec {
     name = "Chart-2.4.10";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/C/CH/CHARTGRP/${name}.tar.gz";
+      url = mirror://cpan/authors/id/C/CH/CHARTGRP/Chart-2.4.10.tar.gz;
       sha256 = "84bd99a1a0ce72477b15e35881e6120398bb3f553aeeb5e8d72b088520e4f6bf";
     };
     propagatedBuildInputs = [ GD ];
