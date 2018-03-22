@@ -15372,13 +15372,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWWWMechanizePSGI = buildPerlPackage {
-    name = "Test-WWW-Mechanize-PSGI-0.35";
+    name = "Test-WWW-Mechanize-PSGI-0.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LB/LBROCARD/Test-WWW-Mechanize-PSGI-0.35.tar.gz;
-      sha256 = "1hih8s49zf38bisvhnhzrrj0zwyiivkrbs7nmmdqm1qqy27wv7pc";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/Test-WWW-Mechanize-PSGI-0.38.tar.gz;
+      sha256 = "0fsh2i05kf1kfavv2r9kmnjl7qlyqrd11ikc0qcqzzxsqzzjkg9r";
     };
-    buildInputs = [ TestPod CGI ];
-    propagatedBuildInputs = [ Plack TestWWWMechanize TryTiny ];
+    buildInputs = [ CGI TestLongString TestWWWMechanize ];
+    propagatedBuildInputs = [ Plack ];
     meta = {
       description = "Test PSGI programs using WWW::Mechanize";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
