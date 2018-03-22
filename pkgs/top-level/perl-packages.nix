@@ -10223,14 +10223,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRunnable = buildPerlPackage rec {
+  MooseXRunnable = buildPerlModule rec {
     name = "MooseX-Runnable-0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "40d8fd1b5524ae965965a1f144d7a0a0c850594c524402b2319b24d5c4af1199";
     };
-    buildInputs = [ ModuleBuildTiny MooseXGetopt TestFatal TestSimple TestTableDriven ];
-    propagatedBuildInputs = [ ClassLoad ListSomeUtils Moose MooseXTypes MooseXTypesPathTiny ParamsUtil PathTiny namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 TestTableDriven ];
+    propagatedBuildInputs = [ ListSomeUtils MooseXTypesPathTiny ];
     meta = {
       homepage = https://github.com/moose/MooseX-Runnable;
       description = "Tag a class as a runnable application";
