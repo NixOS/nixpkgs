@@ -6456,10 +6456,11 @@ let self = _self // overrides; _self = with self; {
   HashFlatten = buildPerlPackage rec {
     name = "Hash-Flatten-1.19";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Hash/${name}.tar.gz";
+      url = mirror://cpan/authors/id/B/BB/BBC/Hash-Flatten-1.19.tar.gz;
       sha256 = "162b9qgkr19f97w4pic6igyk3zd0sbnrhl3s8530fikciffw9ikh";
     };
-    buildInputs = [ TestAssertions LogTrace ];
+    buildInputs = [ TestAssertions ];
+    propagatedBuildInputs = [ LogTrace ];
   };
 
   HashMerge = buildPerlPackage rec {
