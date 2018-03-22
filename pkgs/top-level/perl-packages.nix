@@ -12084,7 +12084,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  RoleBasic = buildPerlPackage {
+  RoleBasic = buildPerlModule {
     name = "Role-Basic-0.13";
     src = fetchurl {
       url = mirror://cpan/authors/id/O/OV/OVID/Role-Basic-0.13.tar.gz;
