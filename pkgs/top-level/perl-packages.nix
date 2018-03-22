@@ -9993,17 +9993,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXClone = buildPerlPackage {
-    name = "MooseX-Clone-0.05";
+  MooseXClone = buildPerlModule {
+    name = "MooseX-Clone-0.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NU/NUFFIN/MooseX-Clone-0.05.tar.gz;
-      sha256 = "11pbw3zdbcn54hrj6z74qisnmj9k4qliy6yjj9d71qndq3xg3x0f";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Clone-0.06.tar.gz;
+      sha256 = "19wd74dihybnz1lbbsqn0clwxzb6y0aa0i25a8zhajz7p5fq5myb";
     };
-    propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat Moose namespaceclean Testuseok ];
+    propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat namespaceautoclean ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   MooseXConfigFromFile = buildPerlPackage rec {
