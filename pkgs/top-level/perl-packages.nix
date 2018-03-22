@@ -3811,6 +3811,21 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  DevelCheckCompiler = buildPerlModule rec {
+     version = "0.07";
+     name = "Devel-CheckCompiler-0.07";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/SY/SYOHEX/Devel-CheckCompiler-0.07.tar.gz;
+       sha256 = "1db973a4dbyknjxq608hywil5ai6vplnayshqxrd7m5qnjbpd2vn";
+     };
+     buildInputs = [ ModuleBuildTiny ];
+     meta = {
+       description = "Check the compiler's availability";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/tokuhirom/Devel-CheckCompiler";
+     };
+  };
+
   DevelChecklib = buildPerlPackage rec {
     name = "Devel-CheckLib-1.11";
     src = fetchurl {
@@ -9218,16 +9233,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuildXSUtil = buildPerlModule rec {
-    name = "Module-Build-XSUtil-0.10";
+    name = "Module-Build-XSUtil-0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HI/HIDEAKIO/${name}.tar.gz";
-      sha256 = "1323vxp8vf5xdz66lbc1wfciaks93mrbqfsjgb9nz1w9bb21xj36";
+      sha256 = "1vjl77iwbwr2xhdlyqva3hhma9r1fgr2rappwsimwqjmybdrfd6b";
     };
-    buildInputs = [ FileCopyRecursive CwdGuard CaptureTiny ];
+    buildInputs = [ CaptureTiny CwdGuard FileCopyRecursive ];
     meta = {
       description = "A Module::Build class for building XS modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ DevelCheckCompiler ];
   };
 
   ModuleCoreList = buildPerlPackage {
