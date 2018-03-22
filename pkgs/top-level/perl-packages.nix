@@ -16075,10 +16075,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URIFromHash = buildPerlPackage {
-    name = "URI-FromHash-0.04";
+    name = "URI-FromHash-0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.04.tar.gz;
-      sha256 = "03yckli4fj8cgsyh1l1lmyxj56q9qc04a3r8kv0whbnb37zz1j23";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.05.tar.gz;
+      sha256 = "1l3g5ygv83vn9y1zpwjdqq5cs4ip2q058q0gmpcf5wp9rsycbjm7";
     };
     propagatedBuildInputs = [ ParamsValidate URI ];
     meta = {
@@ -16087,6 +16087,7 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestFatal ];
   };
 
   UriGoogleChart = buildPerlPackage rec {
