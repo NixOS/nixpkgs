@@ -11873,12 +11873,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodSimple = buildPerlPackage {
-    name = "Pod-Simple-3.05";
+    name = "Pod-Simple-3.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AR/ARANDAL/Pod-Simple-3.05.tar.gz;
-      sha256 = "1j0kqcvr9ykcqlkr797j1npkbggykb3p4w5ri73s8mi163lzxkqb";
+      url = mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.35.tar.gz;
+      sha256 = "0gg11ibbc02l2aw0bsv4jx0jax8z0apgfy3p5csqnvhlsb6218cr";
     };
-    propagatedBuildInputs = [constant PodEscapes];
+    propagatedBuildInputs = [ TextTabsWrap ];
   };
 
   PodSpell = buildPerlPackage rec {
