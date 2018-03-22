@@ -15178,15 +15178,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTemplate = buildPerlPackage {
-    name = "Text-Template-1.46";
+    name = "Text-Template-1.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MJ/MJD/Text-Template-1.46.tar.gz;
-      sha256 = "77d812cb86e48091bcd59aa8522ef887b33a0ff758f8a269da8c2b733889d580";
+      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.51.tar.gz;
+      sha256 = "1437d8a182cc0fe8c0016f59e4b3494370b15f1b53bc6ee16c8ddfd6994605d1";
     };
     meta = {
       description = "Unknown";
       license = "unknown";
     };
+    buildInputs = [ TestWarnings ];
   };
 
   TestTrap = buildPerlModule rec {
