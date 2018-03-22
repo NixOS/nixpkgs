@@ -8824,11 +8824,11 @@ let self = _self // overrides; _self = with self; {
   MathClipper = buildPerlModule rec {
     name = "Math-Clipper-1.23";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/Math-Clipper-1.23.tar.gz;
       sha256 = "0i9wzvig7ayijc9nvh5x5rryk1jrcj1hcvfmlcj449rnnxx24dav";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
-    propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsXSpp ExtUtilsTypemapsDefault TestDeep ];
+    buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp TestDeep ];
   };
 
   MathComplex = buildPerlPackage {
