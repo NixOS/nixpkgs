@@ -14068,10 +14068,10 @@ let self = _self // overrides; _self = with self; {
   TestMoose = Moose;
 
   TestMockTime = buildPerlPackage rec {
-    name = "Test-MockTime-0.12";
+    name = "Test-MockTime-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DD/DDICK/${name}.tar.gz";
-      sha256 = "104p9qsqcchfbxh6b6w7q9jhkwb4hc424js0cyivyanjm6bcqvj9";
+      sha256 = "1vxv7y7jn71m8v8ag0z0dd0zadhxp264dppb40islcjl4g7r6x08";
     };
   };
 
