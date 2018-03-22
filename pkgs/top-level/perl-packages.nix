@@ -4054,13 +4054,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassCandy = buildPerlPackage rec {
-    name = "DBIx-Class-Candy-0.005002";
+    name = "DBIx-Class-Candy-0.005003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
-      sha256 = "fb109e765674a52e9eac03f52403bb3cf717254b8b9fa46f06a6f205392f987d";
+      sha256 = "b8a229a7b15f559095d4561cf8220460128541ba7fc3545ed35869923d46565c";
     };
     buildInputs = [ TestDeep TestFatal ];
-    propagatedBuildInputs = [ DBIxClass LinguaENInflect MROCompat StringCamelCase SubExporter namespaceclean ];
+    propagatedBuildInputs = [ DBIxClass LinguaENInflect SubExporter ];
     meta = {
       homepage = https://github.com/frioux/DBIx-Class-Candy;
       description = "Sugar for your favorite ORM, DBIx::Class";
