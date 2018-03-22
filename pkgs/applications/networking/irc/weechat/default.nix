@@ -83,25 +83,36 @@ in if configure == null then weechat else
     config = configure {
       availablePlugins = let
           simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
-        in rec {
-          python = {
-            pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
-            withPackages = pkgsFun: (python // {
+        in
+          lib.optionalAttrs pythonSupport {
+            python = {
+              pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+              withPackages = pkgsFun: (python // {
+                extraEnv = ''
+                  export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
+                '';
+              });
+            };
+          } //
+          lib.optionalAttrs perlSupport {
+            perl = (simplePlugin "perl") // {
               extraEnv = ''
-                export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
+                export PATH="${perlInterpreter}/bin:$PATH"
               '';
-            });
+            };
+          } //
+          lib.optionalAttrs tclSupport {
+            tcl = simplePlugin "tcl";
+          } //
+          lib.optionalAttrs rubySupport {
+            ruby = simplePlugin "ruby";
+          } //
+          lib.optionalAttrs guileSupport {
+            guile = simplePlugin "guile";
+          } //
+          lib.optionalAttrs luaSupport {
+            lua = simplePlugin "lua";
           };
-          perl = (simplePlugin "perl") // {
-            extraEnv = ''
-              export PATH="${perlInterpreter}/bin:$PATH"
-            '';
-          };
-          tcl = simplePlugin "tcl";
-          ruby = simplePlugin "ruby";
-          guile = simplePlugin "guile";
-          lua = simplePlugin "lua";
-        };
       };
 
     inherit (config) plugins;
