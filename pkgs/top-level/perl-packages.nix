@@ -8214,7 +8214,7 @@ let self = _self // overrides; _self = with self; {
   LogTrace = buildPerlPackage rec {
     name = "Log-Trace-1.070";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Log/${name}.tar.gz";
+      url = mirror://cpan/authors/id/B/BB/BBC/Log-Trace-1.070.tar.gz;
       sha256 = "1qrnxn9b05cqyw1286djllnj8wzys10754glxx6z5hihxxc85jwy";
     };
   };
