@@ -12055,7 +12055,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "478b5824791b87fc74c94a892180682bd06ad2cdf34034b1a4b859273927802a";
     };
     buildInputs = [ TestScript ];
-    propagatedBuildInputs = [ FileFindRule FileFindRulePerl PPI PPIxRegexp ParamsUtil PerlCritic ];
+    propagatedBuildInputs = [ FileFindRulePerl PerlCritic ];
     meta = {
       homepage = https://github.com/neilbowers/Perl-MinimumVersion;
       description = "Find a minimum required version of perl for Perl code";
