@@ -236,12 +236,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppCLI = buildPerlPackage {
-    name = "App-CLI-0.313";
+    name = "App-CLI-0.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORNELIUS/App-CLI-0.313.tar.gz;
-      sha256 = "0ni1z14xis1b634qjc3zra9c9pl2icfr6sp5qxs0xy8nvib65037";
+      url = mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.49.tar.gz;
+      sha256 = "0gv4dcscxiacdrb9aqxc9mdl1w8wszicmg2q86zlz31ya5spjvv3";
     };
-    propagatedBuildInputs = [LocaleMaketextSimple];
+    propagatedBuildInputs = [ CaptureTiny ClassLoad ];
+    buildInputs = [ TestKwalitee TestPod ];
   };
 
   AppCmd = buildPerlPackage rec {
@@ -319,6 +320,21 @@ let self = _self // overrides; _self = with self; {
       description = "Manage perl installations in your $HOME";
       license = stdenv.lib.licenses.mit;
     };
+  };
+
+  ArchiveAnyLite = buildPerlPackage rec {
+     version = "0.11";
+     name = "Archive-Any-Lite-0.11";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Archive-Any-Lite-0.11.tar.gz;
+       sha256 = "0w2i50fd81ip674zmnrb15nadw162fdpiw4rampbd94k74jqih8m";
+     };
+     propagatedBuildInputs = [ ArchiveZip_1_53 ];
+     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
+     meta = {
+       description = "simple CPAN package extractor";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   AppSqitch = buildPerlModule rec {
@@ -403,6 +419,20 @@ let self = _self // overrides; _self = with self; {
 
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ Moo TypeTiny ];
+  };
+
+  ArrayDiff = buildPerlPackage rec {
+     version = "0.07";
+     name = "Array-Diff-0.07";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/T/TY/TYPESTER/Array-Diff-0.07.tar.gz;
+       sha256 = "0il3izx45wkh71fli2hvaq32jyin95k8x3qrnwby2x2c6yix7rvq";
+     };
+     propagatedBuildInputs = [ AlgorithmDiff ClassAccessor ];
+     meta = {
+       description = "Find the differences between two arrays";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ArrayFIFO = buildPerlPackage rec {
@@ -2666,6 +2696,19 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ rycee ];
     };
+  };
+
+  CPANDistnameInfo = buildPerlPackage rec {
+     version = "0.12";
+     name = "CPAN-DistnameInfo-0.12";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/G/GB/GBARR/CPAN-DistnameInfo-0.12.tar.gz;
+       sha256 = "0d94kx596w7k328cvq4y96z1gz12hdhn3z1mklkbrb7fyzlzn91g";
+     };
+     meta = {
+       description = "Extract distribution name and version from a distribution filename";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   CPANMeta = buildPerlPackage rec {
@@ -5426,6 +5469,20 @@ let self = _self // overrides; _self = with self; {
       description = "Create a module Makefile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  ExtUtilsMakeMakerCPANfile = buildPerlPackage rec {
+     version = "0.08";
+     name = "ExtUtils-MakeMaker-CPANfile-0.08";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.08.tar.gz;
+       sha256 = "0yg2z4six807lraqh8ncsq6l62vj7zi0a38ha9nvmhd6lbipmsql";
+     };
+     propagatedBuildInputs = [ ModuleCPANfile ];
+     meta = {
+       description = "cpanfile support for EUMM";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
@@ -9261,6 +9318,36 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DevelCheckCompiler ];
   };
 
+  ModuleCPANTSAnalyse = buildPerlPackage rec {
+     version = "0.96";
+     name = "Module-CPANTS-Analyse-0.96";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-0.96.tar.gz;
+       sha256 = "1c38fnbx9w1s841am1i5h33lcqr9bwc9bni21n907nmyp41wr297";
+     };
+     propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff CPANDistnameInfo FileFindObject IOCapture JSONMaybeXS ModuleExtractUse ModulePluggable SetScalar SoftwareLicenseCCpack ];
+     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
+     meta = {
+       description = "Generate Kwalitee ratings for a distribution";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://cpants.cpanauthors.org";
+     };
+  };
+
+  ModuleCPANfile = buildPerlPackage rec {
+     version = "1.1002";
+     name = "Module-CPANfile-1.1002";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-CPANfile-1.1002.tar.gz;
+       sha256 = "1z9wsps70h7ypaxmwq8l8wp0dg4kqrxmaqgzbh2fq8jw9idw55dz";
+     };
+     meta = {
+       description = "Parse cpanfile";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/miyagawa/cpanfile";
+     };
+  };
+
   ModuleCoreList = buildPerlPackage {
     name = "Module-CoreList-5.20180220";
     src = fetchurl {
@@ -9272,6 +9359,21 @@ let self = _self // overrides; _self = with self; {
       description = "What modules shipped with versions of perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  ModuleExtractUse = buildPerlModule rec {
+     version = "0.342";
+     name = "Module-ExtractUse-0.342";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DO/DOMM/Module-ExtractUse-0.342.tar.gz;
+       sha256 = "06z6iz4zc1rdm3w3zkddgv832rghlpvb4r494vdz65pphr65saax";
+     };
+     propagatedBuildInputs = [ ParseRecDescent PodStrip ];
+     buildInputs = [ TestDeep TestNoWarnings ];
+     meta = {
+       description = "Find out what modules are used";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ModuleFind = buildPerlPackage {
@@ -12210,6 +12312,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
+  PodStrip = buildPerlModule rec {
+     version = "1.02";
+     name = "Pod-Strip-1.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DO/DOMM/Pod-Strip-1.02.tar.gz;
+       sha256 = "1zsjfw2cjq1bd3ppl67fdvrx46vj9lina0c3cv9qgk5clzvaq3fq";
+     };
+     meta = {
+       description = "Remove POD from Perl code";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   PodUsage = buildPerlPackage {
     name = "Pod-Usage-1.69";
     src = fetchurl {
@@ -12778,6 +12893,22 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  SoftwareLicenseCCpack = buildPerlPackage rec {
+     version = "1.11";
+     name = "Software-License-CCpack-1.11";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BB/BBYRD/Software-License-CCpack-1.11.tar.gz;
+       sha256 = "1cakbn7am8mhalwas5h33l7c6avdqpg42z478p6rav11pim5qksr";
+     };
+     propagatedBuildInputs = [ SoftwareLicense ];
+     buildInputs = [ TestCheckDeps ];
+     meta = {
+       description = "Software::License pack for Creative Commons' licenses";
+       license = with stdenv.lib.licenses; [ lgpl3Plus ];
+       homepage = "https://github.com/SineSwiper/Software-License-CCpack";
+     };
   };
 
   SortKey = buildPerlPackage rec {
@@ -14365,6 +14496,22 @@ let self = _self // overrides; _self = with self; {
       platforms   = stdenv.lib.platforms.unix;
     };
     buildInputs = [ TestDifferences ];
+  };
+
+  TestKwalitee = buildPerlPackage rec {
+     version = "1.27";
+     name = "Test-Kwalitee-1.27";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/E/ET/ETHER/Test-Kwalitee-1.27.tar.gz;
+       sha256 = "095kpj2011jk1mpnb07fs7yi190hmqh85mj662gx0dkpl9ic7a5w";
+     };
+     propagatedBuildInputs = [ ModuleCPANTSAnalyse ];
+     buildInputs = [ CPANMetaCheck TestDeep TestWarnings ];
+     meta = {
+       description = "Test the Kwalitee of a distribution before you release it";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/karenetheridge/Test-Kwalitee";
+     };
   };
 
   TestLeakTrace = buildPerlPackage rec {
