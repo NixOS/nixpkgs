@@ -269,6 +269,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "A bundle of Perl5 modules for reading configuration files and parsing command line arguments";
     };
+    buildInputs = [ TestPod ];
   };
 
   Appcpanminus = buildPerlPackage rec {
