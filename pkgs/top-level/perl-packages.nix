@@ -14466,12 +14466,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestRunValgrind = buildPerlModule rec {
-    name = "Test-RunValgrind-0.0.1";
+    name = "Test-RunValgrind-0.2.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "67bf3cf3e7d5d23ec33e592f8b0dbcccfa01205d5bf0a3d73d8c8358d167e83f";
+      sha256 = "70947565ad0be3e5d0cd9aca9e1fd0cb07c873e574310e92e8eca629ec6cd631";
     };
-    buildInputs = [ ModuleBuild perl ];
+    buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ PathTiny ];
     meta = {
       description = "Tests that an external program is valgrind-clean";
