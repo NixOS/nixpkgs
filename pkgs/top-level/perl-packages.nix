@@ -6241,8 +6241,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TS/TSCH/${name}.tar.gz";
       sha256 = "604a8ece88ac29f132d59b0caac27657ec31371c1606a4698a2160e88ac586e5";
     };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.libwnck pkgs.glib pkgs.gtk2 ];
-    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 ];
+    buildInputs = [ pkgs.libwnck pkgs.glib pkgs.gtk2 ];
+    propagatedBuildInputs = [ Gtk2 Pango ];
     meta = {
       description = "Perl interface to the Window Navigator Construction Kit";
       license = stdenv.lib.licenses.lgpl21Plus;
