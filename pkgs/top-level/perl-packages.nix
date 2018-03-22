@@ -507,6 +507,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ArchiveTarWrapper = buildPerlPackage rec {
+     version = "0.23";
+     name = "Archive-Tar-Wrapper-0.23";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MS/MSCHILLI/Archive-Tar-Wrapper-0.23.tar.gz;
+       sha256 = "1ykl0r2dwa93l0nxrjgs8qqkwjxn44qbvxpmrwiy269na4x3j0jc";
+     };
+     propagatedBuildInputs = [ FileWhich IPCRun LogLog4perl ];
+     meta = {
+       description = "API wrapper around the 'tar' utility";
+     };
+  };
+
   ArchiveZip = buildPerlPackage {
     name = "Archive-Zip-1.60";
     src = fetchurl {
@@ -4595,13 +4608,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZilla = buildPerlPackage {
-    name = "Dist-Zilla-4.300039";
+    name = "Dist-Zilla-6.011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-4.300039.tar.gz;
-      sha256 = "10cighwsqp53kbk2gwlnl9m18sbs7ijr2v37vwca9qxbscy2yr21";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.011.tar.gz;
+      sha256 = "0cai08gzrvf9mkqsj3b8vhcwxaxs30h4gx0wffq8c5dja9fhzjxs";
     };
-    buildInputs = [ FileShareDirInstall SoftwareLicense TestFatal TestFileShareDir TestScript ];
-    propagatedBuildInputs = [ AppCmd CPANUploader ClassLoad ConfigINI ConfigMVP ConfigMVPReaderINI DataSection DateTime FileCopyRecursive FileFindRule FileHomeDir FileShareDir FileShareDirInstall Filepushd HashMergeSimple JSON ListAllUtils ListMoreUtils LogDispatchouli Moose MooseAutobox MooseXLazyRequire MooseXRoleParameterized MooseXSetOnce MooseXTypes MooseXTypesPathClass MooseXTypesPerl PPI ParamsUtil PathClass PerlPrereqScanner PerlVersion PodEventual SoftwareLicense StringFormatter StringRewritePrefix SubExporter SubExporterForMethods TermReadKey TestDeep TextGlob TextTemplate TryTiny YAMLTiny autobox namespaceautoclean CPANMetaRequirements ];
+    buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
+    propagatedBuildInputs = [ AppCmd ArchiveTarWrapper CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PerlPrereqScanner PodEventual SoftwareLicense TermEncoding TermUI YAMLTiny ];
     meta = {
       homepage = http://dzil.org/;
       description = "Distribution builder; installer not included!";
@@ -8794,6 +8807,20 @@ let self = _self // overrides; _self = with self; {
       description = "Powerful and flexible message logging mechanism";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  LogMessageSimple = buildPerlPackage rec {
+     version = "0.10";
+     name = "Log-Message-Simple-0.10";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BI/BINGOS/Log-Message-Simple-0.10.tar.gz;
+       sha256 = "15nxi935nfrf8dkdrgvcrf2qlai4pbz03yj8sja0n9mcq2jd24ma";
+     };
+     propagatedBuildInputs = [ LogMessage ];
+     meta = {
+       description = "Simplified interface to Log::Message";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   LogTrace = buildPerlPackage rec {
@@ -14570,6 +14597,20 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  TermUI = buildPerlPackage rec {
+     version = "0.46";
+     name = "Term-UI-0.46";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BI/BINGOS/Term-UI-0.46.tar.gz;
+       sha256 = "19p92za5cx1v7g57pg993amprcvm1az3pp7y9g5b1aplsy06r54i";
+     };
+     propagatedBuildInputs = [ LogMessageSimple ];
+     meta = {
+       description = "User interfaces via Term::ReadLine made easy";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   TermVT102 = buildPerlPackage {
