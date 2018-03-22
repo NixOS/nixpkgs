@@ -7143,10 +7143,10 @@ let self = _self // overrides; _self = with self; {
   HTTPRequestAsCGI = buildPerlPackage rec {
     name = "HTTP-Request-AsCGI-1.2";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
+      url = mirror://cpan/authors/id/F/FL/FLORA/HTTP-Request-AsCGI-1.2.tar.gz;
       sha256 = "1smwmiarwcgq7vjdblnb6ldi2x1s5sk5p15p7xvm5byiqq3znnwl";
     };
-    propagatedBuildInputs = [ ClassAccessor LWP ];
+    propagatedBuildInputs = [ ClassAccessor HTTPMessage ];
   };
 
   HTTPResponseEncoding = buildPerlPackage {
