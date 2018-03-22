@@ -11861,7 +11861,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
       sha256 = "2b4a6e67006f97a2b4cf7980900f6a8ababb1cf97d6597319f9897ada3c555bc";
     };
-    buildInputs = [ Plack URI ];
     propagatedBuildInputs = [ Plack ];
     meta = {
       description = "Override REST methods to Plack apps via POST";
