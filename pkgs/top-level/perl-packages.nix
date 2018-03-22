@@ -14083,13 +14083,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestDistManifest = buildPerlPackage {
-    name = "Test-DistManifest-1.012";
+  TestDistManifest = buildPerlModule {
+    name = "Test-DistManifest-1.014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-DistManifest-1.012.tar.gz;
-      sha256 = "4b128bef9beea2f03bdca037ceb722de43b4a2c516c3f50c2a26421548a72208";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-DistManifest-1.014.tar.gz;
+      sha256 = "3d26c20df42628981cbfcfa5b1ca028c6ceadb344c1dcf97a25ad6a88b73d7c5";
     };
-    buildInputs = [ TestNoWarnings ];
+    buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ ModuleManifest ];
     meta = {
       homepage = http://search.cpan.org/dist/Test-DistManifest;
