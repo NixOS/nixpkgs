@@ -13595,7 +13595,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Term-VT102-Boundless-0.04.tar.gz;
       sha256 = "5bb88b5aecb44ebf56d3ac7240be80cd26def9dcf1ebeb4e77d9983dfc7a8f19";
     };
-    propagatedBuildInputs = [ TermVT102 Testuseok ];
+    propagatedBuildInputs = [ TermVT102 ];
     meta = {
       license = "unknown";
     };
