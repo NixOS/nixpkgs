@@ -13026,10 +13026,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubUplevel = buildPerlPackage {
-    name = "Sub-Uplevel-0.24";
+    name = "Sub-Uplevel-0.2800";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Sub-Uplevel-0.24.tar.gz;
-      sha256 = "1yzxqsim8vpavzqm2wfksh8dpmy6qbr9s3hdqqicp38br3lzd4qg";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Sub-Uplevel-0.2800.tar.gz;
+      sha256 = "14z2xjiw931wizcx3mblmby753jspvfm321d6chs907nh0xzdwxl";
     };
     meta = {
       homepage = https://github.com/dagolden/sub-uplevel;
