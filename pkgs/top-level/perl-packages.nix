@@ -110,14 +110,14 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ FileShareDir ];
   };
 
-  AlienWxWidgets = buildPerlPackage rec {
-    name = "Alien-wxWidgets-0.67";
+  AlienWxWidgets = buildPerlModule rec {
+    name = "Alien-wxWidgets-0.69";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
-      sha256 = "075m880klf66pbcfk0la2nl60vd37jljizqndrklh5y4zvzdy1nr";
+      sha256 = "0jg2dmkzhj03f6b0vmv597yryfw9cclsdn9ynvvlrzzgpd5lw8jk";
     };
-    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK
-      ModulePluggable ModuleBuild ];
+    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ModulePluggable ];
+    buildInputs = [ LWPProtocolHttps ];
   };
 
   AnyEvent = buildPerlPackage rec {
