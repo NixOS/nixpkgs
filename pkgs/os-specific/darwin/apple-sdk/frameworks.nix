@@ -1,4 +1,4 @@
-# Current as of 10.9
+# Current as of 10.11
 # Epic weird knot-tying happening here.
 # TODO: clean up the process for generating this and include it
 
@@ -23,9 +23,6 @@ with frameworks; with libs; {
   CalendarStore           = [];
   Cocoa                   = [ AppKit ];
   Collaboration           = [];
-  # Impure version of CoreFoundation, this should not be used unless another
-  # framework includes headers that are not available in the pure version.
-  CoreFoundation          = [];
   CoreAudio               = [ CF IOKit ];
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];

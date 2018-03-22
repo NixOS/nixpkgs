@@ -123,7 +123,8 @@ let
       linkFramework "${name}.framework"
     '';
 
-    propagatedBuildInputs = deps;
+    propagatedBuildInputs = deps
+      ++ stdenv.lib.optional (name != "CoreFoundation") CoreFoundation;
 
     # don't use pure CF for dylibs that depend on frameworks
     setupHook = ./framework-setup-hook.sh;
@@ -142,6 +143,9 @@ let
       platforms   = platforms.darwin;
     };
   };
+
+  CoreFoundation = framework "CoreFoundation" [];
+
 in rec {
   libs = {
     xpc = stdenv.mkDerivation {
@@ -217,7 +221,8 @@ in rec {
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) CF cf-private libobjc;
+    inherit (pkgs.darwin) cf-private libobjc;
+    CF = CoreFoundation;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;
