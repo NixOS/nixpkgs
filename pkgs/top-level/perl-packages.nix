@@ -7950,7 +7950,7 @@ let self = _self // overrides; _self = with self; {
   LinuxInotify2 = buildPerlPackage rec {
     name = "Linux-Inotify2-1.22";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Linux/${name}.tar.gz";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Linux-Inotify2-1.22.tar.gz;
       sha256 = "1l916p8xak6c51x4x1vrzd8wpi55bld74wf0p5w5m4vr80zjb7dw";
     };
     propagatedBuildInputs = [ commonsense ];
