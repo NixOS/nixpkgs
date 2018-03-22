@@ -1291,7 +1291,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MG/MGRIMES/${name}.tar.gz";
       sha256 = "06jq1lmpq88rmp9zik5gqczg234xac0hiyc3l698iif7zsgcyb80";
     };
-    propagatedBuildInputs = [ Moose TextSimpleTable ];
+    propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "Regex DispatchType";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
