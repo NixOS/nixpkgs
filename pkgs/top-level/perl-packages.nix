@@ -5100,10 +5100,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExporterLite = buildPerlPackage {
-    name = "Exporter-Lite-0.04";
+    name = "Exporter-Lite-0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.04.tar.gz;
-      sha256 = "01g6a2ixgdi825v0l4ny3vx4chzsfxirka741x0i057cf6y5ciir";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.08.tar.gz;
+      sha256 = "1hns15imih8z2h6zv3m1wwmv9fiysacsb52y94v6zf2cmw4kjny0";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
