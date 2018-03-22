@@ -982,6 +982,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CryptRC4 TextPDF ];
   };
 
+  capitalization = buildPerlPackage rec {
+     version = "0.03";
+     name = "capitalization-0.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/capitalization-0.03.tar.gz;
+       sha256 = "0g7fpckydzxsf8mjkfbyj0pv42dzym4hwbizqahnh7wlfbaicdgi";
+     };
+     propagatedBuildInputs = [ DevelSymdump ];
+     meta = {
+     };
+  };
+
   CanaryStability = buildPerlPackage rec {
     name = "Canary-Stability-2012";
     src = fetchurl {
@@ -4088,13 +4100,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxSearchBuilder = buildPerlPackage {
-    name = "DBIx-SearchBuilder-1.66";
+    name = "DBIx-SearchBuilder-1.67";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AL/ALEXMV/DBIx-SearchBuilder-1.66.tar.gz;
-      sha256 = "e2703c3f4b38cf232dec48be98aeab6d2dbee077dcf059369b825629c4be702e";
+      url = mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.67.tar.gz;
+      sha256 = "453179c22a61af573e502c8396f3f28daea03dfdc162094b90f9b3c331d563da";
     };
     buildInputs = [ DBDSQLite ];
-    propagatedBuildInputs = [ CacheSimpleTimedExpiry ClassAccessor ClassReturnValue Clone DBI DBIxDBSchema Want ];
+    propagatedBuildInputs = [ CacheSimpleTimedExpiry ClassAccessor ClassReturnValue Clone DBIxDBSchema Want capitalization ];
     meta = {
       description = "Encapsulate SQL queries and rows in simple perl objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
