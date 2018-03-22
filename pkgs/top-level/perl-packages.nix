@@ -14166,6 +14166,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestAbortable = buildPerlPackage rec {
+     version = "0.002";
+     name = "Test-Abortable-0.002";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Abortable-0.002.tar.gz;
+       sha256 = "0v97y31j56f4mxw0vxyjbdprq4951h4wcdh4acnfm63np7wvg44p";
+     };
+     propagatedBuildInputs = [ SubExporter TestSimple13 ];
+     buildInputs = [ TestNeeds ];
+     meta = {
+       description = "subtests that you can die your way out of ... but survive";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/rjbs/Test-Abortable";
+     };
+  };
+
   TestAssert = buildPerlModule {
     name = "Test-Assert-0.0504";
     src = fetchurl {
@@ -14847,13 +14863,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestRoutine = buildPerlPackage {
-    name = "Test-Routine-0.018";
+    name = "Test-Routine-0.025";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.018.tar.gz;
-      sha256 = "1slaljcija2pbsxdyrqsh09pgajxbln68gb47l9fwffb6gsp5f3m";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.025.tar.gz;
+      sha256 = "13gxczy0mx3rqnp55vc0j2d936qldrimmad87nmf4wrj0kd2lw92";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ Moose namespaceautoclean namespaceclean ParamsUtil SubExporter ];
+    buildInputs = [ TestAbortable TestFatal ];
+    propagatedBuildInputs = [ Moose TestSimple13 namespaceautoclean ];
     meta = {
       homepage = https://github.com/rjbs/Test-Routine;
       description = "Composable units of assertion";
