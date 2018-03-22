@@ -1743,12 +1743,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIFast = buildPerlPackage {
-    name = "CGI-Fast-2.10";
+    name = "CGI-Fast-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.10.tar.gz;
-      sha256 = "98263afcc9f5d88c7cbbd39651c5431b434c1c815fe284962d887ed7be3a1dd3";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.13.tar.gz;
+      sha256 = "792f21fc3b94380e37c99faa7901ecedf01d6855191000d1ffb2a7003813b1d4";
     };
-    propagatedBuildInputs = [ FCGI if_ ];
+    propagatedBuildInputs = [ CGI FCGI ];
     doCheck = false;
     meta = {
       homepage = https://metacpan.org/module/CGI::Fast;
