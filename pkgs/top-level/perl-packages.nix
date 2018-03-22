@@ -12387,12 +12387,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   RpcXML = buildPerlPackage {
-    name = "RPC-XML-0.78";
+    name = "RPC-XML-0.80";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.78.tar.gz;
-      sha256 = "0spci3sj2hq9k916sk9k2gchqrbnz9lwmlcnwf1k33wzl8j2gh52";
+      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.80.tar.gz;
+      sha256 = "1xvy9hs7bqsjnk0663kf7zk2qjg0pzv96n6z2wlc2w5bgal7q3ga";
     };
-    propagatedBuildInputs = [LWP XMLLibXML XMLParser];
+    propagatedBuildInputs = [ XMLParser ];
     doCheck = false;
   };
 
