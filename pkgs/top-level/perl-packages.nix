@@ -10131,13 +10131,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXMethodAttributes = buildPerlPackage {
-    name = "MooseX-MethodAttributes-0.28";
+    name = "MooseX-MethodAttributes-0.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.28.tar.gz;
-      sha256 = "0srk85z6py9brw1jfvacd76y6219wycq3dj0wackbkmmbq04ln0g";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.31.tar.gz;
+      sha256 = "1whd10w7bm3dwaj7gpgw40bci9vvb2zmxs4349ifji91hvinwqck";
     };
-    buildInputs = [ namespaceautoclean TestCheckDeps TestException ModuleMetadata ];
-    propagatedBuildInputs = [ Moose MooseXTypes namespaceautoclean ];
+    buildInputs = [ MooseXRoleParameterized TestFatal TestRequires ];
+    propagatedBuildInputs = [ MooseXTypes ];
     meta = {
       homepage = https://github.com/karenetheridge/moosex-methodattributes;
       description = "Code attribute introspection";
