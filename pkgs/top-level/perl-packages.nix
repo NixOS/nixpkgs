@@ -4680,16 +4680,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginCheckChangeLog = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-CheckChangeLog-0.01";
+    name = "Dist-Zilla-Plugin-CheckChangeLog-0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FA/FAYLAND/Dist-Zilla-Plugin-CheckChangeLog-0.01.tar.gz;
-      sha256 = "153dbe5ff8cb3c060901e003237a0515d7b9b5cc870eebfd417a6c91e28edec2";
+      url = mirror://cpan/authors/id/F/FA/FAYLAND/Dist-Zilla-Plugin-CheckChangeLog-0.05.tar.gz;
+      sha256 = "b0b34d6d70b56f1944d03c5f0dc3b8f6f24474c816d07b657a116c692c2e052a";
     };
     propagatedBuildInputs = [ DistZilla ];
     meta = {
       description = "Dist::Zilla with Changes check";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ PathClass PodCoverage PodCoverageTrustPod PodMarkdown TestDeep TestException TestPod TestPodCoverage ];
   };
 
   DistZillaPluginMojibakeTests = buildPerlPackage {
