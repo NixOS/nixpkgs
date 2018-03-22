@@ -3136,6 +3136,7 @@ let self = _self // overrides; _self = with self; {
       description = "Validates user input (usually from an HTML form) based on input profile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ CGI ];
   };
 
   DataGUID = buildPerlPackage rec {
