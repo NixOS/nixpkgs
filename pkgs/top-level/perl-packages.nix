@@ -10428,7 +10428,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "cd410a1681add521a28805da2e138d44f0d542407b50999252a147e553c26c39";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ BHooksEndOfScope SubIdentify namespaceclean ];
+    propagatedBuildInputs = [ SubIdentify namespaceclean ];
     meta = {
       homepage = https://github.com/moose/namespace-autoclean;
       description = "Keep imports out of your namespace";
