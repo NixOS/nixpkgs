@@ -5685,7 +5685,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
       sha256 = "c8a695fac1454f52e18e2e1b624c0647cf117326014023dda69fa3e1a5f33d60";
     };
-    buildInputs = [ TestFatal pkgs.file ];
+    buildInputs = [ pkgs.file TestFatal ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
     preCheck = ''
       substituteInPlace t/oo-api.t \
