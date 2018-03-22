@@ -6092,10 +6092,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GetoptLong = buildPerlPackage rec {
-    name = "Getopt-Long-2.42";
+    name = "Getopt-Long-2.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/${name}.tar.gz";
-      sha256 = "12c5pvmx0jxx0mls8qll9ixb1lbacs7p1rwvmciv0dvw3w25dmr7";
+      sha256 = "0rsb7ri8210xv09mnxykw5asbcqivd0v38x0z4jkis3k5gdim210";
     };
   };
 
