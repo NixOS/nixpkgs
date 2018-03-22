@@ -7024,12 +7024,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPLite = buildPerlPackage rec {
-    name = "HTTP-Lite-2.43";
+    name = "HTTP-Lite-2.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "10svyy8r5ca86spz21r0k2mdy8g2slzssin4qbg101zc9kr5r65a";
+      sha256 = "0z77nflj8zdcfg70kc93glq5kmd6qxn2nf7h70x4xhfg25wkvr1q";
     };
-    buildInputs = [ ModuleBuild ];
+    buildInputs = [ CGI ];
   };
 
   HTTPMessage = buildPerlPackage rec {
