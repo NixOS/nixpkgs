@@ -11577,7 +11577,7 @@ let self = _self // overrides; _self = with self; {
   ProcWaitStat = buildPerlPackage rec {
     name = "Proc-WaitStat-1.00";
     src = fetchurl {
-      url = "mirror://cpan//authors/id/R/RO/ROSCH/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RO/ROSCH/Proc-WaitStat-1.00.tar.gz;
       sha256 = "1g3l8jzx06x4l4p0x7fyn4wvg6plfzl420irwwb9v447wzsn6xfh";
     };
     propagatedBuildInputs = [ IPCSignal ];
