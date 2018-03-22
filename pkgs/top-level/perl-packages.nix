@@ -10427,7 +10427,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Types-Perl-0.101343.tar.gz;
       sha256 = "0nijy676q27bvjb8swxrb1j4lq2xq8jbqkaxs1l9q81k7jpvx17h";
     };
-    propagatedBuildInputs = [ MooseXTypes ParamsUtil ];
+    propagatedBuildInputs = [ MooseXTypes ];
     meta = {
       description = "Moose types that check against Perl syntax";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
