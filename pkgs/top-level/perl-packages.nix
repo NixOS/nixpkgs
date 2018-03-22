@@ -10196,14 +10196,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRoleParameterized = buildPerlPackage {
-    name = "MooseX-Role-Parameterized-1.02";
+  MooseXRoleParameterized = buildPerlModule {
+    name = "MooseX-Role-Parameterized-1.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SARTAK/MooseX-Role-Parameterized-1.02.tar.gz;
-      sha256 = "089czh2pipvdajjy4rxlix0y20ilp3ldbzi0vs68b7k6k9q3mqdk";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-Parameterized-1.10.tar.gz;
+      sha256 = "0plx25n80mv9qwhix52z79md0qil616nbcryk2f4216kghpw2ij8";
     };
-    buildInputs = [ TestFatal TestMoose ];
-    propagatedBuildInputs = [ Moose ];
+    buildInputs = [ CPANMetaCheck ModuleBuildTiny MooseXRoleWithOverloading TestFatal TestRequires ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
       homepage = https://github.com/sartak/MooseX-Role-Parameterized/tree;
       description = "Roles with composition parameters";
