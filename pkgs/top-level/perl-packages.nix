@@ -16066,7 +16066,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/C/CT/CTRONDLP/${name}.tar.gz";
       sha256 = "0jznws68skdzkhgkgcgjlj40qdyh9i75r7fw8bqzy406f19xxvnw";
     };
-    buildInputs = [pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi];
+    buildInputs = [ pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi ];
     NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
     doCheck = false; # requires an X server
   };
