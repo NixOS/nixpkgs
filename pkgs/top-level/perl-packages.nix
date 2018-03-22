@@ -1350,13 +1350,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystRuntime = buildPerlPackage rec {
-    name = "Catalyst-Runtime-5.90104";
+    name = "Catalyst-Runtime-5.90117";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/${name}.tar.gz";
-      sha256 = "91d551944beb3a0ae8635c78d5f2e1583ef1e7873d5c8ee407e2f64380ad870b";
+      sha256 = "fe12d82c4e0704d1f15946651554ca069abccb6afbe5d9de315e97d90c0c92a3";
     };
-    buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal TypeTiny ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
+    buildInputs = [ TestFatal TypeTiny ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable DataDump HTTPBody HTTPRequestAsCGI ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
