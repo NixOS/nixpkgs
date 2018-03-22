@@ -12252,10 +12252,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SelfLoader = buildPerlPackage {
-    name = "SelfLoader-1.20";
+    name = "SelfLoader-1.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/SelfLoader-1.20.tar.gz;
-      sha256 = "79b1e2b8e4081854fba666441287c18b6bd822defb5bbee79067370edba1a042";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/SelfLoader-1.24.tar.gz;
+      sha256 = "4c7cd20fd82aa10520ac14b05fa003f60c72bb4c95527bd12aec8bf3c4546098";
     };
     meta = {
       description = "Load functions only on demand";
