@@ -2794,13 +2794,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CryptPKCS10 = buildPerlPackage {
-    name = "Crypt-PKCS10-1.0";
+  CryptPKCS10 = buildPerlModule {
+    name = "Crypt-PKCS10-1.9";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GK/GKNOCKE/Crypt-PKCS10-1.0.zip;
-      sha256 = "08de199411056df1a1e6374b503574d21089913daa3823ebb21aa399dc59bdb6";
+      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-PKCS10-1.9.tar.gz;
+      sha256 = "ee0ce58cc17e9a8d7a6f33f3f26aca5be7edfc054204f7946370b3a8d291f0fd";
     };
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.unzip ModuleBuildTiny ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
