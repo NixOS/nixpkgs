@@ -15254,13 +15254,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestVars = buildPerlModule rec {
-    name = "Test-Vars-0.008";
+    name = "Test-Vars-0.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1h0kifiia78s3425hvpjs5di5539vsz15mmkkk0cwshwizhcwp7h";
+      sha256 = "0qr8q0ksr925ycwbsyxjwgz4p9r7a8vkxpn33vy23zbijwpa3xx7";
     };
 
-    buildInputs = [ TestTester ];
+    buildInputs = [ ModuleBuildTiny ];
 
     meta = {
       homepage = https://github.com/gfx/p5-Test-Vars;
