@@ -10217,8 +10217,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "0rb8k0dp1a55bm2pr6r0vsi5msvjl1dslfidxp1gj80j7zbrbc4j";
     };
-    buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
-    propagatedBuildInputs = [ aliased Moose namespaceautoclean namespaceclean ];
+    propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
       homepage = https://metacpan.org/release/MooseX-Role-WithOverloading;
       description = "Roles which support overloading";
