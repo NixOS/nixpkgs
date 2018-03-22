@@ -7026,12 +7026,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPHeadersFast = buildPerlModule rec {
-    name = "HTTP-Headers-Fast-0.20";
+    name = "HTTP-Headers-Fast-0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
-      sha256 = "d2f4c9724618e74f300fc746498fb5849692ef0cfc4af47fe499c4063969e520";
+      sha256 = "5e68ed8e3e67531e1d43c6a2cdfd0ee2daddf2e5b94c1a2648f3a6500a6f12d5";
     };
-    buildInputs = [ ModuleBuild TestRequires ];
+    buildInputs = [ ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ HTTPDate ];
     meta = {
       homepage = https://github.com/tokuhirom/HTTP-Headers-Fast;
