@@ -16296,12 +16296,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLLibXMLSimple = buildPerlPackage {
-    name = "XML-LibXML-Simple-0.93";
+    name = "XML-LibXML-Simple-0.99";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/XML-LibXML-Simple-0.93.tar.gz;
-      sha256 = "f2eb1c1523d6414cf2a646a289b0325b489954382c862928d165a03a7cce767c";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/XML-LibXML-Simple-0.99.tar.gz;
+      sha256 = "14fe45c9fcb36c1cf14ac922da4439f1f83d451a5e70aa7177cb6edb705c9e44";
     };
-    propagatedBuildInputs = [ FileSlurp XMLLibXML ];
+    propagatedBuildInputs = [ XMLLibXML ];
     meta = {
       description = "XML::LibXML based XML::Simple clone";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
