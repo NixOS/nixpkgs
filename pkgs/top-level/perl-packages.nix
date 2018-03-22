@@ -12747,7 +12747,7 @@ let self = _self // overrides; _self = with self; {
   SQLSplitStatement = buildPerlPackage rec {
     name = "SQL-SplitStatement-1.00020";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/SQL/${name}.tar.gz";
+      url = mirror://cpan/authors/id/E/EM/EMAZEP/SQL-SplitStatement-1.00020.tar.gz;
       sha256 = "0bqg45k4c9qkb2ypynlwhpvzsl4ssfagmsalys18s5c79ps30z7p";
     };
     buildInputs = [ TestException ];
