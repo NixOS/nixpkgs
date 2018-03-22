@@ -12695,17 +12695,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  StatisticsDescriptive = buildPerlPackage {
-    name = "Statistics-Descriptive-3.0605";
+  StatisticsDescriptive = buildPerlModule {
+    name = "Statistics-Descriptive-3.0612";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0605.tar.gz;
-      sha256 = "8e7dae184444e27ee959e33b3ae161cc83115d11da189ed5003b004450e04b48";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0612.tar.gz;
+      sha256 = "772413148e5e00efb32f277c4254aa78b9112490a896208dcd0025813afdbf7a";
     };
     meta = {
       #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
       description = "Module of basic descriptive statistical functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ ListMoreUtils ];
   };
 
   StatisticsDistributions = buildPerlPackage rec {
