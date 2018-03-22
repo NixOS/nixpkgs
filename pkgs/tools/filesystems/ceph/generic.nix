@@ -160,7 +160,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapPythonPrograms
-    wrapProgram $out/bin/ceph-mgr --set PYTHONPATH $out/lib/python2.7/site-packages
+    wrapProgram $out/bin/ceph-mgr --set PYTHONPATH $out/${python2Packages.python.sitePackages}
   '';
 
   enableParallelBuilding = true;
