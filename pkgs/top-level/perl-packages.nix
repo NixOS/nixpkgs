@@ -4027,10 +4027,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxSimple = buildPerlPackage {
-    name = "DBIx-Simple-1.35";
+    name = "DBIx-Simple-1.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JU/JUERD/DBIx-Simple-1.35.tar.gz;
-      sha256 = "445535b3dfab88140c7a0d2776b1e78f254dc7e9c81072d5a01afc95a5db499a";
+      url = mirror://cpan/authors/id/J/JU/JUERD/DBIx-Simple-1.37.tar.gz;
+      sha256 = "46d311aa2ce08907401c56119658426dbb044c5a40de73d9a7b79bf50390cae3";
     };
     propagatedBuildInputs = [ DBI ];
     meta = {
