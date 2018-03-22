@@ -2008,10 +2008,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassMakeMethods = buildPerlPackage rec {
-    name = "Class-MakeMethods-1.009";
+    name = "Class-MakeMethods-1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EV/EVO/${name}.tar.gz";
-      sha256 = "10f65j4ywrnwyz0dm1q5ymmpv875drj40mj1xvsjv0bnjinnwzj8";
+      sha256 = "0ricb0mn0i06ngfhq5y035yx8i7ahlx83yyqwixqmv6hg4p79b5c";
     };
   };
 
