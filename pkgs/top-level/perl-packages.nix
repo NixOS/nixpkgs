@@ -13772,11 +13772,12 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/L/LB/LBROCARD/Term-ProgressBar-Quiet-0.31.tar.gz;
       sha256 = "25675292f588bc29d32e710cf3667da9a2a1751e139801770a9fdb18cd2184a6";
     };
-    propagatedBuildInputs = [ IOInteractive TermProgressBar TestMockObject ];
+    propagatedBuildInputs = [ IOInteractive TermProgressBar ];
     meta = {
       description = "";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMockObject ];
   };
 
   TermProgressBarSimple = buildPerlPackage {
