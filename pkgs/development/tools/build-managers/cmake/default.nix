@@ -19,7 +19,7 @@ with (
   {
     "3.10" = {
       minorVersion = "2";
-      sha256 = "80d0faad4ab56de07aa21a7fc692c88c4ce6156d42b0579c6962004a70a3218b";
+      sha256 = "12r1ldq4l032d6f5gc22dlayck4cr29cczqsl9xf0vdm9anzml40";
     };
     "3.9" = {
       minorVersion = "6";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.10/cmake-3.10.2-SHA-256.txt
+    # from https://cmake.org/files/v3.10/cmake-3.10.3-SHA-256.txt
     inherit sha256;
   };
 
