@@ -80,6 +80,7 @@ let
 in if configure == null then weechat else
   let
     perlInterpreter = perl;
+    pythonInterpreter = python;
     config = configure {
       availablePlugins = let
           simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
@@ -87,6 +88,9 @@ in if configure == null then weechat else
           lib.optionalAttrs pythonSupport {
             python = {
               pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
+              extraEnv = ''
+                export PATH="${pythonInterpreter}/bin:$PATH"
+              '';
               withPackages = pkgsFun: (python // {
                 extraEnv = ''
                   export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
