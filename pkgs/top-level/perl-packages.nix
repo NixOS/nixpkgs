@@ -9078,12 +9078,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleMetadata = buildPerlPackage rec {
-    name = "Module-Metadata-1.000027";
+    name = "Module-Metadata-1.000033";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Module/${name}.tar.gz";
-      sha256 = "1rrjj48vvv3i1jrmw97i4mvsmknll7hxga4cq2s9qvc2issdrxz2";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Module-Metadata-1.000033.tar.gz;
+      sha256 = "13pzydb22693l33rfx6drwbhjxj04q80ds4m2nn2sbmm95wwr5mw";
     };
-    propagatedBuildInputs = [ version ];
   };
 
   ModulePath = buildPerlPackage rec {
