@@ -7267,10 +7267,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOInteractive = buildPerlPackage {
-    name = "IO-Interactive-0.0.6";
+    name = "IO-Interactive-1.022";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-0.0.6.tar.gz;
-      sha256 = "9cc016cbd94b500027e137cb5070d19487e4431bf822f0cb534c38b6b2c1038c";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-1.022.tar.gz;
+      sha256 = "0ed53b8ae93ae877e98e0d89b7b429e29ccd1ee4c28e952c4ea9aa73d01febdc";
     };
     meta = {
       description = "Utilities for interactive I/O";
