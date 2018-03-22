@@ -14440,10 +14440,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSharedFork = buildPerlPackage rec {
-    name = "Test-SharedFork-0.34";
+    name = "Test-SharedFork-0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "1yq4xzify3wqdc07zq33lwgh9gywp3qd8w6wzwrllbjw0hhkm4s8";
+      sha256 = "17y52j20k1bs9dgf4n6rhh9dn4cfxxbnfn2cfs7pb00fc5jyhci9";
     };
     buildInputs = [ TestRequires ];
     meta = {
