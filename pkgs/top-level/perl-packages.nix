@@ -4738,14 +4738,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestCPANMetaJSON = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.003";
+  DistZillaPluginTestCPANMetaJSON = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.003.tar.gz;
-      sha256 = "c76b9f5745f4626969bb9c60e1330ebd0d8b197f8dd33f9a6e6fce63877b4883";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.004.tar.gz;
+      sha256 = "0a573e1d5640374e6ee4d56d4fb94a3c67d4e75d52b3ddeae70cfa6450e1af22";
     };
-    buildInputs = [ DistZilla ];
-    propagatedBuildInputs = [ DistZilla Moose MooseAutobox ];
+    buildInputs = [ MooseAutobox TestCPANMetaJSON TestDeep ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = http://p3rl.org/Dist::Zilla::Plugin::Test::CPAN::Meta::JSON;
       description = "Release tests for your META.json";
@@ -14844,6 +14844,20 @@ let self = _self // overrides; _self = with self; {
       description = "Validate your CPAN META.yml files";
       license = stdenv.lib.licenses.artistic2;
     };
+  };
+
+  TestCPANMetaJSON = buildPerlPackage rec {
+     version = "0.16";
+     name = "Test-CPAN-Meta-JSON-0.16";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BA/BARBIE/Test-CPAN-Meta-JSON-0.16.tar.gz;
+       sha256 = "1jg9ka50ixwq083wd4k12rhdjq87w0ihb34gd8jjn7gvvyd51b37";
+     };
+     propagatedBuildInputs = [ JSON ];
+     meta = {
+       description = "Validate your CPAN META.json files";
+       license = with stdenv.lib.licenses; [ artistic2 ];
+     };
   };
 
   TestDataSplit = buildPerlModule rec {
