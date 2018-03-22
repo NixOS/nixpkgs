@@ -6449,8 +6449,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/${name}.tar.gz";
       sha256 = "087186c3693acf196451cf59cc8b7f5cf9a7b05abe20d32dcbcba0822953fb80";
     };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gtkimageview pkgs.gtk2 ];
-    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 ];
+    buildInputs = [ pkgs.gtkimageview pkgs.gtk2 ];
+    propagatedBuildInputs = [ Gtk2 Pango ];
     # Tests fail due to no display server:
     #   Gtk-WARNING **: cannot open display:  at /nix/store/HASH-perl-Gtk2-1.2498/lib/perl5/site_perl/5.22.2/x86_64-linux-thread-multi/Gtk2.pm line 126.
     #   t/animview.t ...........
