@@ -12754,13 +12754,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   PackageVariant = buildPerlPackage {
-    name = "Package-Variant-1.002002";
+    name = "Package-Variant-1.003002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Package-Variant-1.002002.tar.gz;
-      sha256 = "826780f19522f42c6b3d9f717ab6b5400f198cec08f4aa15b71aef9aa17e9b13";
+      url = mirror://cpan/authors/id/M/MS/MSTROUT/Package-Variant-1.003002.tar.gz;
+      sha256 = "b2ed849d2f4cdd66467512daa3f143266d6df810c5fae9175b252c57bc1536dc";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ImportInto ModuleRuntime strictures ];
+    propagatedBuildInputs = [ ImportInto strictures ];
     meta = {
       description = "Parameterizable packages";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
