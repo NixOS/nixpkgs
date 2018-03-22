@@ -8618,24 +8618,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailBox = buildPerlPackage rec {
-    version = "2.118";
+    version = "3.005";
     name = "Mail-Box-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
-      sha256 = "1ixi7xpvj8kn2y0l8rxkvdnnl7x5wqg7mi2av0viwdh5l828dcfc";
+      sha256 = "103v5jiv5mlckss1yardjvil506sx60f3g2ph2kgx9x6sy1sd93m";
     };
 
     doCheck = false;
 
-    propagatedBuildInputs = [
-      Later
-
-      DevelGlobalDestruction
-      FileRemove
-      IOStringy
-      MailTools
-      MIMETypes
-    ];
+    propagatedBuildInputs = [ DevelGlobalDestruction FileRemove Later MailTransport ];
   };
 
   MailMboxMessageParser = buildPerlPackage rec {
@@ -8652,6 +8644,20 @@ let self = _self // overrides; _self = with self; {
       license = stdenv.lib.licenses.gpl2;
       maintainers = with maintainers; [ romildo ];
     };
+  };
+
+  MailMessage = buildPerlPackage rec {
+     version = "3.006";
+     name = "Mail-Message-3.006";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.006.tar.gz;
+       sha256 = "08bdf06bmxdqbslk3k9av542pjhyw9wx10j79fxz0dwpalimc6zi";
+     };
+     propagatedBuildInputs = [ IOStringy MIMETypes MailTools URI UserIdentity ];
+     meta = {
+       description = "Processing MIME messages";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   MailDKIM = buildPerlPackage rec {
@@ -8748,6 +8754,20 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  MailTransport = buildPerlPackage rec {
+     version = "3.002";
+     name = "Mail-Transport-3.002";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.002.tar.gz;
+       sha256 = "0wm4j9w15nsvjxi9x22fn2rnljbffd88v27p0z0305bfg35gh4kg";
+     };
+     propagatedBuildInputs = [ MailMessage ];
+     meta = {
+       description = "Email message exchange";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   MathLibm = buildPerlPackage rec {
@@ -16111,6 +16131,19 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     propagatedBuildInputs = [ URI ];
+  };
+
+  UserIdentity = buildPerlPackage rec {
+     version = "0.99";
+     name = "User-Identity-0.99";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-0.99.tar.gz;
+       sha256 = "0c2qwxgpqncm4ya3rb5zz2hgiwwf559j1b1a6llyarf9jy43hfzm";
+     };
+     meta = {
+       description = "Collect information about a user";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   URIIMAP = buildPerlPackage {
