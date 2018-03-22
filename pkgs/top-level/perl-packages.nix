@@ -14854,10 +14854,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextDiff = buildPerlPackage rec {
-    name = "Text-Diff-1.43";
+    name = "Text-Diff-1.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "1ampmj1k5cabgcaw2iqwqbmnq6hrnl96f7rk8hh22gsw6my86bac";
+      sha256 = "013g13prdghxvrp5754gyc7rmv1syyxrhs33yc5f0lrz3dxs1fp8";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
