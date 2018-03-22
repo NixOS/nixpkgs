@@ -8948,13 +8948,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathRandomSecure = buildPerlPackage {
-    name = "Math-Random-Secure-0.06";
+    name = "Math-Random-Secure-0.080001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MK/MKANAT/Math-Random-Secure-0.06.tar.gz;
-      sha256 = "0392h78l3shkba9l2c43rgz6sm5qv7pzdylgb7gp9milprn77crc";
+      url = mirror://cpan/authors/id/F/FR/FREW/Math-Random-Secure-0.080001.tar.gz;
+      sha256 = "0dgbf4ncll4kmgkyb9fsaxn0vf2smc9dmwqzgh3259zc2zla995z";
     };
-    buildInputs = [ ListMoreUtils TestWarn ];
-    propagatedBuildInputs = [ AnyMoose CryptRandomSource MathRandomISAAC ];
+    buildInputs = [ ListMoreUtils TestSharedFork TestWarn ];
+    propagatedBuildInputs = [ CryptRandomSource MathRandomISAAC ];
     meta = {
       description = "Cryptographically-secure, cross-platform replacement for rand()";
       license = stdenv.lib.licenses.artistic2;
