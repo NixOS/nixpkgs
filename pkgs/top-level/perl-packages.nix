@@ -13448,7 +13448,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8b4975f21b1992a7e6c2df5dcc92b254c61925595eddcdfaf0b1498717aa95ef";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ SubExporterProgressive syntax ];
+    propagatedBuildInputs = [ syntax ];
     meta = {
       homepage = https://github.com/frioux/Syntax-Keyword-Junction;
       description = "Perl6 style Junction operators in Perl5";
