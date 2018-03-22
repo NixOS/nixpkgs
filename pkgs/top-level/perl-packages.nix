@@ -7121,13 +7121,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ImageSize = buildPerlPackage rec {
-    name = "Image-Size-3.232";
+    name = "Image-Size-3.300";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJRAY/${name}.tar.gz";
-      sha256 = "1mx065134gy75pgdldh65118bpcs6yfbqmr7bf9clwq44zslxhxc";
+      sha256 = "0sq2kwdph55h4adx50fmy86brjkkv8grsw33xrhf1k9icpwb3jak";
     };
-    buildInputs = [ TestMore ];
-    propagatedBuildInputs = [ ModuleRuntime ];
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Read the dimensions of an image in several popular formats";
       license = with stdenv.lib.licenses; [ artistic1 lgpl21Plus ];
