@@ -11470,11 +11470,7 @@ let self = _self // overrides; _self = with self; {
     # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
     # this module don't disable themselves when "run_network_tests" is
     # not present (see below).
-    buildInputs = [
-      Curses EmailMIME HTTPMessage IOTty LWPProtocolHttps POETestLoops
-      TermReadKey TestPod TestPodCoverage TestPodNo404s YAML
-    ];
-    propagatedBuildInputs = [ pkgs.cacert IOPipely ];
+    propagatedBuildInputs = [ pkgs.cacert IOPipely IOTty POETestLoops ];
     meta = {
       maintainers = [ maintainers.limeytexan ];
       description = "Portable multitasking and networking framework for any event loop";
