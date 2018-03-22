@@ -4872,13 +4872,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestPerlCritic = buildPerlModule {
-    name = "Dist-Zilla-Plugin-Test-Perl-Critic-2.112410";
+    name = "Dist-Zilla-Plugin-Test-Perl-Critic-3.001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JQ/JQUELIN/Dist-Zilla-Plugin-Test-Perl-Critic-2.112410.tar.gz;
-      sha256 = "3ce59ce3ef6cf56d7de0debb33c26f899492d9742c8b82073e257787fd85630f";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Perl-Critic-3.001.tar.gz;
+      sha256 = "9250b59d5dc1ae4c6893ba783bd3f05131b14ff9e91afb4555314f55268a3825";
     };
-    buildInputs = [ DistZilla MooseAutobox ];
-    propagatedBuildInputs = [ DataSection DistZilla Moose namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestPerlCritic ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-Perl-Critic/;
       description = "Tests to check your code against best practices";
