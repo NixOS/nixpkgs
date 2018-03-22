@@ -3808,13 +3808,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DBDMock = buildPerlPackage {
+  DBDMock = buildPerlModule {
     name = "DBD-Mock-1.45";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DI/DICHI/DBD-Mock/DBD-Mock-1.45.tar.gz;
       sha256 = "40a80c37b31ef14536b58b4a8b483e65953b00b8fa7397817c7eb76d540bd00f";
     };
-    propagatedBuildInputs = [ DBI TestException ];
+    propagatedBuildInputs = [ DBI ];
+    buildInputs = [ TestException ];
   };
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
