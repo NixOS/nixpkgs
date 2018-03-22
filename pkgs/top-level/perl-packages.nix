@@ -11013,8 +11013,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.104.tar.gz;
       sha256 = "c69f1dcfeb4aa004086deb9bc14c7d79f45798b947f1efbd634a3442e267aaef";
     };
-    buildInputs = [ DevelHide Filepushd TestDeep TestFailWarnings TestFatal perl ];
-    propagatedBuildInputs = [ autodie ];
     meta = {
       homepage = https://metacpan.org/release/Path-Tiny;
       description = "File path utility";
