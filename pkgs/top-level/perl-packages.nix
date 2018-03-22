@@ -15459,10 +15459,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TimeLocal = buildPerlPackage {
-    name = "Time-Local-1.2300";
+    name = "Time-Local-1.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Time-Local-1.2300.tar.gz;
-      sha256 = "b2acca03700a09f8ae737d3084f3f6287e983da9ab7b537c6599c291b669fb49";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Time-Local-1.25.tar.gz;
+      sha256 = "1ae9c51d777ac44a3ebc154dc625ba24d7c0cde6a8b6dba87b46d0777889fef2";
     };
     meta = {
       description = "Efficiently compute time from local and GMT time";
