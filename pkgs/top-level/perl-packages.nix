@@ -7156,10 +7156,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ImportInto = buildPerlPackage {
-    name = "Import-Into-1.002004";
+    name = "Import-Into-1.002005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Import-Into-1.002004.tar.gz;
-      sha256 = "110hifk3cj14lxgjq2vaa2qfja21gll4lpn8vbimy0gzqadjbjyy";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Import-Into-1.002005.tar.gz;
+      sha256 = "0rq5kz7c270q33jq6hnrv3xgkvajsc62ilqq7fs40av6zfipg7mx";
     };
     propagatedBuildInputs = [ ModuleRuntime ];
     meta = {
