@@ -1,6 +1,6 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
 , meson, ninja, gtk, glib, wrapGAppsHook, libnotify
-, itstool, gnome3, gdk_pixbuf, libxml2
+, itstool, gnome3, libxml2
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +16,15 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gnome-disk-utility"; attrPath = "gnome3.gnome-disk-utility"; };
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxslt docbook_xsl
-                        wrapGAppsHook libxml2 ];
-  buildInputs = [ gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
-                  gdk_pixbuf udisks2 gnome3.defaultIconTheme
-                  gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxslt docbook_xsl
+    wrapGAppsHook libxml2
+  ];
+  buildInputs = [
+    gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3
+    udisks2 gnome3.defaultIconTheme
+    gnome3.gnome-settings-daemon gnome3.gsettings-desktop-schemas
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
