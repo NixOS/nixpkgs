@@ -7093,12 +7093,12 @@ let self = _self // overrides; _self = with self; {
   if_ = self."if";
 
   ImageInfo = buildPerlPackage rec {
-    name = "Image-Info-1.39";
+    name = "Image-Info-1.41";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/${name}.tar.gz";
-      sha256 = "af155264667a2c22e3e2225195b8f6589329f9567e1789b7ce439ee21178713d";
+      sha256 = "c546d27414686660dbc3cd8501537128c5285a8db0faf742c2dc12b9a29ba3db";
     };
-    propagatedBuildInputs = [ IOstringy ];
+    propagatedBuildInputs = [ IOStringy ];
     meta = {
       description = "Extract meta information from image files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
