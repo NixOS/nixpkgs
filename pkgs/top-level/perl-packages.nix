@@ -6191,12 +6191,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gnome2VFS = buildPerlPackage rec {
-    name = "Gnome2-VFS-1.082";
+    name = "Gnome2-VFS-1.083";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "19dacfedef8770300861cb75f98ca5402e6e56501a888af3c18266a0790911b7";
+      sha256 = "eca974669df4e7f21b4fcedb96c8a328422369c68b8c2cd99b9ce9cc5d7a7979";
     };
-    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib pkgs.gnome2.gnome_vfs ];
+    propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
     meta = {
       description = "Perl interface to the 2.x series of the GNOME VFS library";
       license = stdenv.lib.licenses.lgpl21Plus;
