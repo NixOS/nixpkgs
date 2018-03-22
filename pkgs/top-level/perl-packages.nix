@@ -12301,10 +12301,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SetObject = buildPerlPackage rec {
-    name = "Set-Object-1.35";
+    name = "Set-Object-1.39";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "189a4d7cc3e583faa8518a63a95cf4aa3a320f79b5c6f5e40970687244080ee7";
+      sha256 = "5effcfeb104da334f413a20dee9cdc5e874246096c3b282190a5f44453401810";
     };
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
