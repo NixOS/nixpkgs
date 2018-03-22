@@ -6900,14 +6900,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLTokeParserSimple = buildPerlPackage rec {
+  HTMLTokeParserSimple = buildPerlModule rec {
     name = "HTML-TokeParser-Simple-3.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/${name}.tar.gz";
       sha256 = "17aa1v62sp8ycxcicwhankmj4brs6nnfclk9z7mf1rird1f164gd";
     };
-    propagatedBuildInputs = [HTMLParser SubOverride];
-    buildInputs = [TestPod];
+    propagatedBuildInputs = [ HTMLParser SubOverride ];
   };
 
   HTMLTree = buildPerlModule {
