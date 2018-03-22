@@ -56,10 +56,10 @@ let
   }) // {inherit ;};
 
   bigreqsproto = (mkDerivation "bigreqsproto" {
-    name = "bigreqsproto-1.1.2";
+    name = "bigreqsproto-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.3.tar.bz2;
       sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -92,10 +92,10 @@ let
   }) // {inherit ;};
 
   damageproto = (mkDerivation "damageproto" {
-    name = "damageproto-1.2.1";
+    name = "damageproto-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/damageproto-1.3.1.tar.bz2;
       sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -488,10 +488,10 @@ let
   }) // {inherit mkfontdir mkfontscale ;};
 
   fontmiscmisc = (mkDerivation "fontmiscmisc" {
-    name = "font-misc-misc-1.1.2";
+    name = "font-misc-misc-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.3.tar.bz2;
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -512,10 +512,10 @@ let
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontschumachermisc = (mkDerivation "fontschumachermisc" {
-    name = "font-schumacher-misc-1.1.2";
+    name = "font-schumacher-misc-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.3.tar.bz2;
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -716,10 +716,10 @@ let
   }) // {inherit xproto xtrans ;};
 
   libSM = (mkDerivation "libSM" {
-    name = "libSM-1.2.2";
+    name = "libSM-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/lib/libSM-1.3.2.tar.bz2;
       sha256 = "1gc7wavgs435g9qkp9jw4lhmaiq6ip9llv49f054ad6ryp4sib0b";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -752,10 +752,10 @@ let
   }) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
 
   libXScrnSaver = (mkDerivation "libXScrnSaver" {
-    name = "libXScrnSaver-1.2.2";
+    name = "libXScrnSaver-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.3.2.tar.bz2;
       sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -824,10 +824,10 @@ let
   }) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
 
   libXdmcp = (mkDerivation "libXdmcp" {
-    name = "libXdmcp-1.1.2";
+    name = "libXdmcp-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXdmcp-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/lib/libXdmcp-1.1.3.tar.bz2;
       sha256 = "1qp4yhxbfnpj34swa0fj635kkihdkwaiw7kf55cg5zqqg630kzl1";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -920,10 +920,10 @@ let
   }) // {inherit libX11 libXext xextproto xineramaproto ;};
 
   libXmu = (mkDerivation "libXmu" {
-    name = "libXmu-1.1.2";
+    name = "libXmu-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXmu-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/lib/libXmu-1.1.3.tar.bz2;
       sha256 = "02wx6jw7i0q5qwx87yf94fsn3h0xpz1k7dz1nkwfwm1j71ydqvkm";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -992,10 +992,10 @@ let
   }) // {inherit renderproto libX11 xproto ;};
 
   libXres = (mkDerivation "libXres" {
-    name = "libXres-1.2.0";
+    name = "libXres-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2;
+      url = mirror://xorg/individual/lib/libXres-1.3.0.tar.bz2;
       sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1016,10 +1016,10 @@ let
   }) // {inherit libICE kbproto libSM libX11 xproto ;};
 
   libXtst = (mkDerivation "libXtst" {
-    name = "libXtst-1.2.3";
+    name = "libXtst-1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXtst-1.2.3.tar.bz2;
+      url = mirror://xorg/individual/lib/libXtst-1.3.3.tar.bz2;
       sha256 = "012jpyj7xfm653a9jcfqbzxyywdmwb2b5wr1dwylx14f3f54jma6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1160,11 +1160,11 @@ let
   }) // {inherit kbproto libX11 ;};
 
   libxshmfence = (mkDerivation "libxshmfence" {
-    name = "libxshmfence-1.2";
+    name = "libxshmfence-1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2;
-      sha256 = "032b0nlkdrpbimdld4gqvhqx53rzn8fawvf1ybhzn7lcswgjs6yj";
+      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xproto ];
@@ -1220,10 +1220,10 @@ let
   }) // {inherit ;};
 
   mkfontscale = (mkDerivation "mkfontscale" {
-    name = "mkfontscale-1.1.2";
+    name = "mkfontscale-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/mkfontscale-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/app/mkfontscale-1.1.3.tar.bz2;
       sha256 = "081z8lwh9c1gyrx3ad12whnpv3jpfbqsc366mswpfm48mwl54vcc";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1292,10 +1292,10 @@ let
   }) // {inherit ;};
 
   resourceproto = (mkDerivation "resourceproto" {
-    name = "resourceproto-1.2.0";
+    name = "resourceproto-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.3.0.tar.bz2;
       sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1304,10 +1304,10 @@ let
   }) // {inherit ;};
 
   scrnsaverproto = (mkDerivation "scrnsaverproto" {
-    name = "scrnsaverproto-1.2.2";
+    name = "scrnsaverproto-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.3.2.tar.bz2;
       sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1424,10 +1424,10 @@ let
   }) // {inherit libX11 libXau libXext libXmu xproto ;};
 
   xbacklight = (mkDerivation "xbacklight" {
-    name = "xbacklight-1.2.1";
+    name = "xbacklight-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2;
+      url = mirror://xorg/individual/app/xbacklight-1.3.1.tar.bz2;
       sha256 = "0arnd1j8vzhzmw72mqhjjcb2qwcbs9qphsy3ps593ajyld8wzxhp";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1556,10 +1556,10 @@ let
   }) // {inherit libX11 libXaw libXft libxkbfile libXmu xproto libXrender libXt ;};
 
   xcmiscproto = (mkDerivation "xcmiscproto" {
-    name = "xcmiscproto-1.2.2";
+    name = "xcmiscproto-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.3.2.tar.bz2;
       sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1652,10 +1652,10 @@ let
   }) // {inherit glproto libX11 ;};
 
   xev = (mkDerivation "xev" {
-    name = "xev-1.2.2";
+    name = "xev-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xev-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/app/xev-1.3.2.tar.bz2;
       sha256 = "0krivhrxpq6719103r541xpi3i3a0y15f7ypc4lnrx8sdhmfcjnr";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1688,10 +1688,10 @@ let
   }) // {inherit libX11 libXext libXmu libXrender libXt ;};
 
   xf86bigfontproto = (mkDerivation "xf86bigfontproto" {
-    name = "xf86bigfontproto-1.2.0";
+    name = "xf86bigfontproto-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.3.0.tar.bz2;
       sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1880,10 +1880,10 @@ let
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videochips = (mkDerivation "xf86videochips" {
-    name = "xf86-video-chips-1.2.7";
+    name = "xf86-video-chips-1.3.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-chips-1.2.7.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-chips-1.3.7.tar.bz2;
       sha256 = "0n4zypmbkjzkw36cjy2braaivhvj60np6w80lcs9mfpabs66ia3f";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1940,10 +1940,10 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoglide = (mkDerivation "xf86videoglide" {
-    name = "xf86-video-glide-1.2.2";
+    name = "xf86-video-glide-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-glide-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-glide-1.3.2.tar.bz2;
       sha256 = "1vaav6kx4n00q4fawgqnjmbdkppl0dir2dkrj4ad372mxrvl9c4y";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1952,10 +1952,10 @@ let
   }) // {inherit xextproto xorgserver xproto ;};
 
   xf86videoglint = (mkDerivation "xf86videoglint" {
-    name = "xf86-video-glint-1.2.9";
+    name = "xf86-video-glint-1.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-glint-1.2.9.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-glint-1.3.9.tar.bz2;
       sha256 = "1lkpspvrvrp9s539bhfdjfh4andaqyk63l6zjn8m3km95smk6a45";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2024,10 +2024,10 @@ let
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoneomagic = (mkDerivation "xf86videoneomagic" {
-    name = "xf86-video-neomagic-1.2.9";
+    name = "xf86-video-neomagic-1.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.9.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.3.9.tar.bz2;
       sha256 = "1whb2kgyqaxdjim27ya404acz50izgmafwnb6y9m89q5n6b97y3j";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2060,10 +2060,10 @@ let
   }) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videonv = (mkDerivation "xf86videonv" {
-    name = "xf86-video-nv-2.1.21";
+    name = "xf86-video-nv-2.1.31";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-nv-2.1.21.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-nv-2.1.31.tar.bz2;
       sha256 = "0bdk3pc5y0n7p53q4gc2ff7bw16hy5hwdjjxkm5j3s7hdyg6960z";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2180,10 +2180,10 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
 
   xf86videosuncg6 = (mkDerivation "xf86videosuncg6" {
-    name = "xf86-video-suncg6-1.1.2";
+    name = "xf86-video-suncg6-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-suncg6-1.1.3.tar.bz2;
       sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2192,10 +2192,10 @@ let
   }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
 
   xf86videosunffb = (mkDerivation "xf86videosunffb" {
-    name = "xf86-video-sunffb-1.2.2";
+    name = "xf86-video-sunffb-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-sunffb-1.3.2.tar.bz2;
       sha256 = "07z3ngifwg2d4jgq8pms47n5lr2yn0ai72g86xxjnb3k20n5ym7s";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2204,10 +2204,10 @@ let
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videosunleo = (mkDerivation "xf86videosunleo" {
-    name = "xf86-video-sunleo-1.2.2";
+    name = "xf86-video-sunleo-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-sunleo-1.3.2.tar.bz2;
       sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2228,10 +2228,10 @@ let
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videotga = (mkDerivation "xf86videotga" {
-    name = "xf86-video-tga-1.2.2";
+    name = "xf86-video-tga-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-tga-1.3.2.tar.bz2;
       sha256 = "0cb161lvdgi6qnf1sfz722qn38q7kgakcvj7b45ba3i0020828r0";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2288,10 +2288,10 @@ let
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
 
   xf86videovoodoo = (mkDerivation "xf86videovoodoo" {
-    name = "xf86-video-voodoo-1.2.5";
+    name = "xf86-video-voodoo-1.3.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-voodoo-1.3.5.tar.bz2;
       sha256 = "1s6p7yxmi12q4y05va53rljwyzd6ry492r1pgi7wwq6cznivhgly";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2384,10 +2384,10 @@ let
   }) // {inherit libX11 libXau libXmu xproto ;};
 
   xineramaproto = (mkDerivation "xineramaproto" {
-    name = "xineramaproto-1.2.1";
+    name = "xineramaproto-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.3.1.tar.bz2;
       sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2492,10 +2492,10 @@ let
   }) // {inherit libX11 libXmu xproto ;};
 
   xlsatoms = (mkDerivation "xlsatoms" {
-    name = "xlsatoms-1.1.2";
+    name = "xlsatoms-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsatoms-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2;
       sha256 = "196yjik910xsr7dwy8daa0amr0r22ynfs360z0ndp9mx7mydrra7";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2624,10 +2624,10 @@ let
   }) // {inherit libX11 libXmu xproto ;};
 
   xprop = (mkDerivation "xprop" {
-    name = "xprop-1.2.2";
+    name = "xprop-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xprop-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/app/xprop-1.3.2.tar.bz2;
       sha256 = "1ilvhqfjcg6f1hqahjkp8qaay9rhvmv2blvj3w9asraq0aqqivlv";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2684,10 +2684,10 @@ let
   }) // {inherit libX11 xproto ;};
 
   xset = (mkDerivation "xset" {
-    name = "xset-1.2.3";
+    name = "xset-1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xset-1.2.3.tar.bz2;
+      url = mirror://xorg/individual/app/xset-1.3.3.tar.bz2;
       sha256 = "0qw0iic27bz3yz2wynf1gxs70hhkcf9c4jrv7zhlg1mq57xz90j3";
     };
     nativeBuildInputs = [ pkgconfig ];
