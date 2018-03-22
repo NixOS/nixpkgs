@@ -3758,13 +3758,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeLocale = buildPerlPackage rec {
-    name = "DateTime-Locale-1.03";
+    name = "DateTime-Locale-1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "3100568a62a91ca1c09c0aac8e1e4ba34e6f82047ec64f714733a647c040f511";
+      sha256 = "0ca6598b3f89e92e3d1140e5685c69f6f795f6eed158fa482f33ce2122b35cc9";
     };
-    buildInputs = [ DistCheckConflicts TestFatal TestRequires TestWarnings ];
-    propagatedBuildInputs = [ DistCheckConflicts ListMoreUtils ParamsValidate ];
+    buildInputs = [ CPANMetaCheck FileShareDirInstall TestFatal TestFileShareDir TestRequires TestWarnings ];
+    propagatedBuildInputs = [ FileShareDir ParamsValidationCompiler ScalarListUtils Specio namespaceautoclean ];
     meta = {
       homepage = https://metacpan.org/release/DateTime-Locale;
       description = "Localization support for DateTime.pm";
