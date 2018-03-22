@@ -977,6 +977,8 @@ with pkgs;
 
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
 
+  cbor-diag = callPackage ../development/tools/cbor-diag { };
+
   ccnet = callPackage ../tools/networking/ccnet { };
 
   cddl = callPackage ../development/tools/cddl { };
