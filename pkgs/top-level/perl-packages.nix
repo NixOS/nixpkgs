@@ -12197,13 +12197,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ScalarString = buildPerlPackage rec {
-    name = "Scalar-String-0.002";
+  ScalarString = buildPerlModule rec {
+    name = "Scalar-String-0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "d3a45cc137bb9f7d8848d5a10a5142d275a98f8dcfd3adb60593cee9d33fa6ae";
+      sha256 = "f54a17c9b78713b02cc43adfadf60b49467e7634d31317e8b9e9e97c26d68b52";
     };
-    buildInputs = [ ModuleBuild ];
   };
 
   SCGI = buildPerlModule rec {
