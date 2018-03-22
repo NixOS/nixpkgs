@@ -97,6 +97,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuildTiny ];
   };
 
+  asa = buildPerlPackage rec {
+     version = "1.03";
+     name = "asa-1.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AD/ADAMK/asa-1.03.tar.gz;
+       sha256 = "1w97m0gf3n9av61d0qcw7d1i1rac4gm0fd2ba5wyh53df9d7p0i2";
+     };
+     meta = {
+       description = "Lets your class/object say it works like something else";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   AlienTidyp = buildPerlModule rec {
     name = "Alien-Tidyp-${version}";
     version = "v1.4.7";
@@ -608,6 +621,20 @@ let self = _self // overrides; _self = with self; {
       description = "Simple Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  AuthenSimplePasswd = buildPerlModule rec {
+     version = "0.6";
+     name = "Authen-Simple-Passwd-0.6";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-Passwd-0.6.tar.gz;
+       sha256 = "1ckl2ry9r5nb1rcn1ik2l5b5pp1i3g4bmllsmzb0zpwy4lvbqmfg";
+     };
+     propagatedBuildInputs = [ AuthenSimple ];
+     meta = {
+       description = "Simple Passwd authentication";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   autobox = buildPerlPackage rec {
@@ -7144,6 +7171,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTTPEntityParser = buildPerlModule rec {
+     version = "0.21";
+     name = "HTTP-Entity-Parser-0.21";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.21.tar.gz;
+       sha256 = "1n7qhyscllialds5jsk1k8x2vmfbjvisa3342as5x15hpm13wkf1";
+     };
+     propagatedBuildInputs = [ HTTPMultiPartParser HashMultiValue JSONMaybeXS StreamBuffered WWWFormUrlEncoded ];
+     buildInputs = [ HTTPMessage ModuleBuildTiny ];
+     meta = {
+       description = "PSGI compliant HTTP Entity Parser";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/kazeburo/HTTP-Entity-Parser";
+     };
+  };
+
   HTTPDAV = buildPerlPackage rec {
     name = "HTTP-DAV-0.48";
     src = fetchurl {
@@ -7201,6 +7244,20 @@ let self = _self // overrides; _self = with self; {
       description = "HTTP style message (base class)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  HTTPMultiPartParser = buildPerlPackage rec {
+     version = "0.02";
+     name = "HTTP-MultiPartParser-0.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/C/CH/CHANSEN/HTTP-MultiPartParser-0.02.tar.gz;
+       sha256 = "04hbs0b1lzv2c8dqfcc9qjm5akh25fn40903is36zlalkwaxmpay";
+     };
+     buildInputs = [ TestDeep ];
+     meta = {
+       description = "HTTP MultiPart Parser";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   HTTPNegotiate = buildPerlPackage {
@@ -7297,6 +7354,21 @@ let self = _self // overrides; _self = with self; {
       description = "A simple mason server";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  HTTPServerSimplePSGI = buildPerlPackage rec {
+     version = "0.16";
+     name = "HTTP-Server-Simple-PSGI-0.16";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Server-Simple-PSGI-0.16.tar.gz;
+       sha256 = "1fhx2glycd66m4l4m1gja81ixq8nh4r5g9wjhhkrffq4af2cnz2z";
+     };
+     propagatedBuildInputs = [ HTTPServerSimple ];
+     meta = {
+       description = "PSGI handler for HTTP::Server::Simple";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/miyagawa/HTTP-Server-Simple-PSGI";
+     };
   };
 
   I18NCollate = buildPerlPackage {
@@ -7482,6 +7554,18 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  IOHandleUtil = buildPerlPackage rec {
+     version = "0.01";
+     name = "IO-Handle-Util-0.01";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NU/NUFFIN/IO-Handle-Util-0.01.tar.gz;
+       sha256 = "1g7746gh3y9a9df3xb3l504czgwrrzr7lp87j7jwm2mklarrig6k";
+     };
+     propagatedBuildInputs = [ IOString SubExporter asa ];
+     meta = {
+     };
   };
 
   IOInteractive = buildPerlPackage {
@@ -8663,6 +8747,20 @@ let self = _self // overrides; _self = with self; {
       platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
     buildInputs = [ TestRequiresInternet ];
+  };
+
+  LWPProtocolhttp10 = buildPerlPackage rec {
+     version = "6.03";
+     name = "LWP-Protocol-http10-6.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-http10-6.03.tar.gz;
+       sha256 = "1lxq40qfwfai9ryhzhsdnycc4189c8kfl43rf7qq34fmz48skzzk";
+     };
+     propagatedBuildInputs = [ LWP ];
+     meta = {
+       description = "Legacy HTTP/1.0 support for LWP";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   LWPUserAgent = LWP;
@@ -11714,13 +11812,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   Plack = buildPerlPackage rec {
-    name = "Plack-1.0039";
+    name = "Plack-1.0047";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
-      sha256 = "d24a572e88644c7d39c7e6ff1af005b728dec94a878cf06d9027ab7d1a2fd0a9";
+      sha256 = "322c93f5acc0a0f0e11fd4a76188f978bdc14338a9f1df3ae535227017046561";
     };
-    buildInputs = [ FileShareDirInstall TestRequires ];
-    propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPHeadersFast HTTPMessage HashMultiValue StreamBuffered TestTCP TryTiny URI ];
+    buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
+    propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
     meta = {
       homepage = https://github.com/plack/Plack;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
@@ -14653,6 +14751,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestMockTimeHiRes = buildPerlModule rec {
+     version = "0.08";
+     name = "Test-MockTime-HiRes-0.08";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/T/TA/TARAO/Test-MockTime-HiRes-0.08.tar.gz;
+       sha256 = "1hfykcjrls6ywgbd49w29c7apj3nq4wlyx7jzpd2glwmz2pgfjaz";
+     };
+     buildInputs = [ AnyEvent ModuleBuildTiny TestClass TestMockTime TestRequires ];
+     meta = {
+       description = "Replaces actual time with simulated high resolution time";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/tarao/perl5-Test-MockTime-HiRes";
+     };
+  };
+
   TestMojibake = buildPerlPackage {
     name = "Test-Mojibake-1.3";
     src = fetchurl {
@@ -16569,6 +16682,21 @@ let self = _self // overrides; _self = with self; {
       '';
     NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
+  };
+
+  WWWFormUrlEncoded = buildPerlModule rec {
+     version = "0.24";
+     name = "WWW-Form-UrlEncoded-0.24";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/K/KA/KAZEBURO/WWW-Form-UrlEncoded-0.24.tar.gz;
+       sha256 = "04fh54zgmrlhrmdaqs2yrwqmqwk9hd737z7rnbbd438l36skn7vd";
+     };
+     buildInputs = [ JSON ];
+     meta = {
+       description = "parser and builder for application/x-www-form-urlencoded";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/kazeburo/WWW-Form-UrlEncoded";
+     };
   };
 
   WWWMechanize = buildPerlPackage {
