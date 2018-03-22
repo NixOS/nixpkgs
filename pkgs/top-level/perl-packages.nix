@@ -13849,10 +13849,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestException = buildPerlPackage rec {
-    name = "Test-Exception-0.32";
+    name = "Test-Exception-0.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADIE/${name}.tar.gz";
-      sha256 = "0issbjh5yl62lpaff5zhn28zhbf8sv8n2g79vklfr5s703k2fi5s";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Exception-0.43.tar.gz;
+      sha256 = "0cxm7s4bg0xpxa6l6996a6iq3brr4j7p4hssnkc6dxv4fzq16sqm";
     };
     propagatedBuildInputs = [ SubUplevel ];
   };
