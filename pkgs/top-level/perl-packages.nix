@@ -523,7 +523,7 @@ let self = _self // overrides; _self = with self; {
   AuthenHtpasswd = buildPerlPackage rec {
     name = "Authen-Htpasswd-0.171";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Authen/${name}.tar.gz";
+      url = mirror://cpan/authors/id/M/MS/MSTROUT/Authen-Htpasswd-0.171.tar.gz;
       sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
