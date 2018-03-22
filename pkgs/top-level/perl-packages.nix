@@ -9832,7 +9832,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DO/DOY/${name}.tar.gz";
       sha256 = "0j07zqczjfmng3md6nkha7560i786d0cp3gdmrx49hr64jbhz1f4";
     };
-    buildInputs = [ TestFatal TestRequires ];
+    buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
   };
 
