@@ -10442,10 +10442,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetHTTP = buildPerlPackage rec {
-    name = "Net-HTTP-6.12";
+    name = "Net-HTTP-6.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/${name}.tar.gz";
-      sha256 = "8565aff76b3d09084642f3a83c654fb4ced8220e8e19d35c78b661519b4c1be6";
+      sha256 = "1e8624b1618dc6f7f605f5545643ebb9b833930f4d7485d4124aa2f2f26d1611";
     };
     propagatedBuildInputs = [ URI ];
     __darwinAllowLocalNetworking = true;
@@ -10454,6 +10454,7 @@ let self = _self // overrides; _self = with self; {
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    doCheck = false;
   };
 
   NetIDNEncode = buildPerlModule {
