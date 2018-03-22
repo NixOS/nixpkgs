@@ -4121,13 +4121,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassHelpers = buildPerlPackage rec {
-    name = "DBIx-Class-Helpers-2.032001";
+    name = "DBIx-Class-Helpers-2.033004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
-      sha256 = "c7af96d17e11f0957b7187bb6002341a7b130bb79b61f6d91b39178ef000eff5";
+      sha256 = "14bc7adda3b30867311717faa11a4534bceda3061229dc2533647c1906d8784c";
     };
     buildInputs = [ DBDSQLite DateTimeFormatSQLite TestDeep TestFatal TestRoo aliased ];
-    propagatedBuildInputs = [ CarpClan DBIxClass DBIxClassCandy DBIxIntrospector LinguaENInflect ModuleRuntime Moo SafeIsa StringCamelCase SubExporterProgressive TextBrew TryTiny namespaceclean ];
+    propagatedBuildInputs = [ CarpClan DBIxClassCandy DBIxIntrospector SafeIsa TextBrew ];
     meta = {
       homepage = https://github.com/frioux/DBIx-Class-Helpers;
       description = "Simplify the common case stuff for DBIx::Class";
