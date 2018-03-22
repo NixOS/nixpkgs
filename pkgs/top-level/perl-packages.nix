@@ -1624,14 +1624,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginStaticSimple = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Static-Simple-0.33";
+    name = "Catalyst-Plugin-Static-Simple-0.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/${name}.tar.gz";
-      sha256 = "1h8f12bhzh0ssq9gs8r9g3hqn8zn2k0q944vc1vm8j81bns16msy";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Plugin-Static-Simple-0.36.tar.gz;
+      sha256 = "0m4l627p2fvzr4i6sgdxhdvsx4wpa6qmaibsbxlg5x5yjs7k7drn";
     };
     patches = [ ../development/perl-modules/catalyst-plugin-static-simple-etag.patch ];
-    propagatedBuildInputs = [ CatalystRuntime MIMETypes Moose MooseXTypes
-      namespaceautoclean ];
+    propagatedBuildInputs = [ CatalystRuntime MIMETypes ];
     meta = {
       description = "Make serving static pages painless";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
