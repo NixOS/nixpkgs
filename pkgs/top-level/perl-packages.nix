@@ -5524,13 +5524,13 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ FileWhich ];
   };
 
-  FileBOM = buildPerlPackage rec {
+  FileBOM = buildPerlModule rec {
     name = "File-BOM-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTLAW/${name}.tar.gz";
       sha256 = "431c8b39397fd5ad5b1a1100d3647a06e9f94304d46db44ffc0a0e5c5c06a1c1";
     };
-    buildInputs = [ ModuleBuild TestException ];
+    buildInputs = [ TestException ];
     propagatedBuildInputs = [ Readonly ];
     meta = {
       description = "Utilities for handling Byte Order Marks";
