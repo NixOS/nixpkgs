@@ -10008,14 +10008,14 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuildTiny ];
   };
 
-  MooseXConfigFromFile = buildPerlPackage rec {
+  MooseXConfigFromFile = buildPerlModule rec {
     name = "MooseX-ConfigFromFile-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "9ad343cd9f86d714be9b54b9c68a443d8acc6501b6ad6b15e9ca0130b2e96f08";
     };
-    buildInputs = [ ModuleBuildTiny Moose MooseXGetopt TestDeep TestFatal TestRequires TestWithoutModule self."if" ];
-    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathTiny namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestFatal TestRequires TestWithoutModule ];
+    propagatedBuildInputs = [ MooseXTypesPathTiny ];
     meta = {
       homepage = https://github.com/moose/MooseX-ConfigFromFile;
       description = "An abstract Moose role for setting attributes from a configfile";
