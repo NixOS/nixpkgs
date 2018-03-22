@@ -5380,12 +5380,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   FCGI = buildPerlPackage rec {
-    name = "FCGI-0.74";
+    name = "FCGI-0.78";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/FCGI/${name}.tar.gz";
-      sha256 = "0m089q07kpsk8y8g2wmi3d8i1jzn5m5m00shs7vnf2lnvvv4d7pm";
+      url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.78.tar.gz;
+      sha256 = "1cxavhzg4gyw4gl9kirpbdimjr8gk1rjc3pqs3xrnh1gjybld5xa";
     };
-    buildInputs = [ ];
   };
 
   FCGIProcManager = buildPerlPackage {
