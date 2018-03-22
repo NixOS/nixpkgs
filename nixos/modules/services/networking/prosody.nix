@@ -362,6 +362,12 @@ in
         description = "Enable custom modules";
       };
 
+      extraPluginPaths = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = "Addtional path in which to look find plugins/modules";
+      };
+
       virtualHosts = mkOption {
 
         description = "Define the virtual hosts";
@@ -411,16 +417,18 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.prosody ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc."prosody/prosody.cfg.lua".text = ''
 
       pidfile = "/var/lib/prosody/prosody.pid"
 
-
       log = "*syslog"
 
       data_path = "/var/lib/prosody"
+      plugin_paths = {
+        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
+      }
 
       ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
 
@@ -434,7 +442,7 @@ in
         ${ lib.concatStringsSep "\n\ \ " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
-
+        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
