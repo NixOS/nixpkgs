@@ -9984,7 +9984,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "3f63f60d94d840a309d9137f78605e15f07c977fd15a4f4b55bd47b65ed52be1";
     };
     patches = [ ../development/perl-modules/MooseXAttributeHelpers-perl-5.20.patch ];
-    buildInputs = [ Moose TestException ];
+    buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moose ];
     meta = {
       description = "Extend your attribute interfaces (deprecated)";
