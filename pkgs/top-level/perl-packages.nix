@@ -12421,10 +12421,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SortVersions = buildPerlPackage rec {
-    name = "Sort-Versions-1.5";
+    name = "Sort-Versions-1.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ED/EDAVIS/${name}.tar.gz";
-      sha256 = "1yhyxaakyhcffgr9lwd314badhlc2gh9f6n47013ljshbnkgzhh9";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Sort-Versions-1.62.tar.gz;
+      sha256 = "1aifzm79ky03gi2lwxyx4mk6yky8x215j0kz4f0jbgkf803k6pxz";
     };
   };
 
