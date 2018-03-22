@@ -3616,7 +3616,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatHTTP = buildPerlPackage rec {
+  DateTimeFormatHTTP = buildPerlModule rec {
     name = "DateTime-Format-HTTP-0.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CK/CKRAS/${name}.tar.gz";
