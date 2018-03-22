@@ -9172,8 +9172,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
       sha256 = "44084ba3d8815f343bd391585ac5d8339a4807ce5c0dd84c98db8f310b64c0ea";
     };
-    buildInputs = [ ModuleBuild TestRequires ];
-    propagatedBuildInputs = [ ClassAccessorLite ModuleBuildPluggable ];
+    buildInputs = [ TestRequires TestSharedFork ];
+    propagatedBuildInputs = [ ModuleBuildPluggable ];
     meta = {
       description = "Generate ppport.h";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
