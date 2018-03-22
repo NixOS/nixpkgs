@@ -1725,8 +1725,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/H/HD/HDP/${name}.tar.gz";
       sha256 = "0vwaapxn8g5hs2xp63c4dwv9jmapmji4272fakssvgc9frklg3p2";
     };
-    buildInputs = [ ];
-    propagatedBuildInputs = [ MooseXRelatedClassRoles CatalystRuntime ];
+    propagatedBuildInputs = [ CatalystRuntime MooseXRelatedClassRoles ];
   };
 
   CatalystTraitForRequestProxyBase = buildPerlPackage {
