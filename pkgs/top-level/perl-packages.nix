@@ -15414,7 +15414,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz;
       sha256 = "1x1smn1kw383xc5h9wajxk9dlx92bgrbf7gk4abga57y6120s6m3";
     };
-    propagatedBuildInputs = [Testuseok];
   };
 
   TimeDate = buildPerlPackage {
