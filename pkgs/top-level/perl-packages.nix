@@ -16444,10 +16444,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLTiny = buildPerlPackage rec {
-    name = "YAML-Tiny-1.69";
+    name = "YAML-Tiny-1.73";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "14pmhksj68ii3rf4dza8im1i6jw3zafxkvxww5xlz7ib95cv135w";
+      sha256 = "0i3p4nz8ysrsrs6vlzc6gkjcfpcaf05xjc7lwbjkw7lg5shmycdw";
     };
   };
 
