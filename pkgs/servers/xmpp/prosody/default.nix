@@ -4,6 +4,7 @@
 , withDBI ? true, luadbi ? null
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
+, withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
 assert withLibevent -> luaevent != null;
@@ -38,7 +39,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nfx3lngcy88nd81gb7v4kh3nz1bzsm67bxgpd2lprk54diqcrz1";
   };
 
-  buildInputs = [ lua5 makeWrapper libidn openssl ];
+  buildInputs = [ lua5 makeWrapper libidn openssl ]
+    ++ optional withDBI luadbi;
 
   configureFlags = [
     "--ostype=linux"
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
-      '') withCommunityModules}
+      '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
       wrapProgram $out/bin/prosody \
         --set LUA_PATH '${luaPath};' \
         --set LUA_CPATH '${luaCPath};'
@@ -59,11 +61,13 @@ stdenv.mkDerivation rec {
         --set LUA_CPATH '${luaCPath};'
     '';
 
+  passthru.communityModules = withCommunityModules;
+
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
     homepage = https://prosody.im;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

@@ -347,6 +347,11 @@ following incompatible changes:</para>
     <para>
       The better-performing <literal>libevent</literal> backend is now enabled by default.
     </para>
+
+    <para>
+      <literal>withCommunityModules</literal> now passes through the modules to <option>services.prosody.extraModules</option>.
+      Use <literal>withOnlyInstalledCommunityModules</literal> for modules that should not be enabled directly, e.g <literal>lib_ldap</literal>.
+    </para>
   </listitem>
 
 </itemizedlist>
