@@ -3098,7 +3098,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/C/CL/CLKAO/Data-Hierarchy-0.34.tar.gz;
       sha256 = "1vfrkygdaq0k7006i83jwavg9wgszfcyzbl9b7fp37z2acmyda5k";
     };
-    propagatedBuildInputs = [TestException];
+    buildInputs = [ TestException ];
   };
 
   DataICal = buildPerlPackage {
