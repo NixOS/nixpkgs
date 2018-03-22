@@ -3629,14 +3629,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatICal = buildPerlPackage {
+  DateTimeFormatICal = buildPerlModule {
     name = "DateTime-Format-ICal-0.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ICal-0.09.tar.gz;
       sha256 = "8b09f6539f5e9c0df0e6135031699ed4ef9eef8165fc80aefeecc817ef997c33";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ DateTime DateTimeEventICal DateTimeSet DateTimeTimeZone ];
+    propagatedBuildInputs = [ DateTimeEventICal ];
     meta = {
       description = "Parse and format iCal datetime and duration strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
