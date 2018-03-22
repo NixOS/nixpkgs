@@ -10099,13 +10099,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXLazyRequire = buildPerlPackage {
-    name = "MooseX-LazyRequire-0.10";
+  MooseXLazyRequire = buildPerlModule {
+    name = "MooseX-LazyRequire-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-LazyRequire-0.10.tar.gz;
-      sha256 = "a555f80c0e91bc428f040015f00dd98f3c022704ec089516b9b3507f3d437090";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-LazyRequire-0.11.tar.gz;
+      sha256 = "ef620c1e019daf9cf3f23a943d25a94c91e93ab312bcd63be2e9740ec0b94288";
     };
-    buildInputs = [ TestCheckDeps TestFatal ModuleMetadata ];
+    buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
       homepage = https://github.com/karenetheridge/moosex-lazyrequire;
