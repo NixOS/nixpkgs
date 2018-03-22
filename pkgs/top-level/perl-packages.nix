@@ -14143,10 +14143,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestObject = buildPerlPackage rec {
-    name = "Test-Object-0.07";
+    name = "Test-Object-0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-      sha256 = "d142a91b039928dc5d616c7bd9bb62ffb06e58991f00c54e26ef7e62ed61032a";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-Object-0.08.tar.gz;
+      sha256 = "65278964147837313f4108e55b59676e8a364d6edf01b3dc198aee894ab1d0bb";
     };
   };
 
