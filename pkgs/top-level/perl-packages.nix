@@ -7106,13 +7106,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   ImageScale = buildPerlPackage rec {
-    name = "Image-Scale-0.13";
+    name = "Image-Scale-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "5b2c92dc2dd635b488879461760cd251aa2b1feef41b64f17914a6e4bbe3e442";
+      sha256 = "f09c5f0663b87738365ac2819e186b909abeb9ed85d83bc15ee76872c947cdf8";
     };
-    buildInputs = [ pkgs.libpng pkgs.libjpeg ];
-    propagatedBuildInputs = [ TestNoWarnings pkgs.zlib ];
+    buildInputs = [ pkgs.libpng pkgs.libjpeg TestNoWarnings ];
+    propagatedBuildInputs = [ pkgs.zlib ];
     makeMakerFlags = "--with-jpeg-includes=${pkgs.libjpeg.dev}/include --with-jpeg-libs=${pkgs.libjpeg.out}/lib --with-png-includes=${pkgs.libpng.dev}/include --with-png-libs=${pkgs.libpng.out}/lib";
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
