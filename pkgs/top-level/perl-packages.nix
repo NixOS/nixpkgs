@@ -2759,7 +2759,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DM/DMAKI/${name}.tar.gz";
       sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
     };
-    buildInputs = [ DevelChecklib TestRequires pkgs.gmp ];
+    buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
