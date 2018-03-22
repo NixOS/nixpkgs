@@ -1287,7 +1287,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "bce371ba801c7d79eff3257e0af907cf62f140de968f0d63bf55be37d702a58a";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple CatalystRuntime ConfigGeneral FileChangeNotify FileCopyRecursive FileShareDir ModuleInstall Moose MooseXDaemonize MooseXEmulateClassAccessorFast PathClass TemplateToolkit Starman namespaceautoclean namespaceclean ];
+    propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive ModuleInstall TemplateToolkit ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "Catalyst Development Tools";
