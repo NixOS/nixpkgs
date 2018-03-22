@@ -12534,7 +12534,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/D/DO/DOUGW/${name}.tar.gz";
       sha256 = "6ec4cb429bd58d81640fe12116f435c46f51ff1040c68f09cc8b7681c1675bec";
     };
-    propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOstringy OLEStorage_Lite ];
+    propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOStringy OLEStorage_Lite ];
     meta = {
       homepage = https://github.com/runrig/spreadsheet-parseexcel/;
       description = "Read information from an Excel file";
