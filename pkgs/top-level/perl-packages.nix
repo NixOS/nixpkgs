@@ -8016,13 +8016,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   LinguaENInflectPhrase = buildPerlPackage rec {
-    name = "Lingua-EN-Inflect-Phrase-0.18";
+    name = "Lingua-EN-Inflect-Phrase-0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "290a5b8fc2be28d6d479517655027a90e944476cb3552f10cbf6db37af79f9a6";
+      sha256 = "55058911a99f1755de3eb449a99ffbeb92d88c01ff5dc60511a24679050ddea8";
     };
     buildInputs = [ TestNoWarnings ];
-    propagatedBuildInputs = [ LinguaENFindNumber LinguaENInflect LinguaENInflectNumber LinguaENNumberIsOrdinal LinguaENTagger ];
+    propagatedBuildInputs = [ LinguaENInflectNumber LinguaENNumberIsOrdinal LinguaENTagger ];
     meta = {
       homepage = https://metacpan.org/release/Lingua-EN-Inflect-Phrase;
       description = "Inflect short English Phrases";
