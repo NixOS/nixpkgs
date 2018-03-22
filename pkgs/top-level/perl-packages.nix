@@ -5679,13 +5679,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileMimeInfo = buildPerlPackage rec {
-    name = "File-MimeInfo-0.27";
+    name = "File-MimeInfo-0.28";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "0d3jcs2fgrrfwl3rxk8xg0varjah2llm66jk6rk2gznpzqkgi72p";
+      url = mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.28.tar.gz;
+      sha256 = "1ipbh63bkh1r2gy5g7q4bzhki8j29mm1jkhbv60p9vwsdys5s91a";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
-    propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
+    buildInputs = [ FileBaseDir ];
   };
 
   FileMMagic = buildPerlPackage rec {
