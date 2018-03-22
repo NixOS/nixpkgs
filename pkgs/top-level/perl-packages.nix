@@ -14311,12 +14311,12 @@ let self = _self // overrides; _self = with self; {
 
 
   TestMockObject = buildPerlPackage rec {
-    name = "Test-MockObject-1.20150527";
+    name = "Test-MockObject-1.20161202";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/${name}.tar.gz";
-      sha256 = "adf1357a9014b3a397ff7ecbf1835dec376a67a37bb2e788734a627e17dc1d98";
+      sha256 = "14b225fff3645338697976dbbe2c39e44c1c93536855b78b3bbc6e9bfe94a0a2";
     };
-    buildInputs = [ TestException TestWarn CGI ];
+    buildInputs = [ CGI TestException TestWarn ];
     propagatedBuildInputs = [ UNIVERSALcan UNIVERSALisa ];
     meta = {
       description = "Perl extension for emulating troublesome interfaces";
