@@ -8769,10 +8769,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MIMEBase64 = buildPerlPackage rec {
-    name = "MIME-Base64-3.14";
+    name = "MIME-Base64-3.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "1qbcipxij7pv25qhnfdc2lnkqi2cf60frlhlh86gjxslc8kr8nhj";
+      sha256 = "1f8y78dskf91p4xym73n9lqbj15av5vxpsivm7nr7jx9lrk3b1kz";
     };
   };
 
