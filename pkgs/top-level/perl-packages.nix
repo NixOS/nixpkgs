@@ -5824,15 +5824,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   FilesysNotifySimple = buildPerlPackage {
-    name = "Filesys-Notify-Simple-0.08";
+    name = "Filesys-Notify-Simple-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Filesys-Notify-Simple-0.08.tar.gz;
-      sha256 = "042klyvi8fbkhmyg1h7883bbjdhiclmky9w2wfga7piq5il6nxgi";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Filesys-Notify-Simple-0.13.tar.gz;
+      sha256 = "18jv96k1pf8wqf4vn2ahs7dv44lc9cyqj0bja9z17qici3dx7qxd";
     };
     meta = {
       description = "Simple and dumb file system watcher";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestSharedFork ];
   };
 
   FileTemp = null;
