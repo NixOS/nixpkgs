@@ -2964,10 +2964,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataClone = buildPerlPackage {
-    name = "Data-Clone-0.003";
+    name = "Data-Clone-0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFUJI/Data-Clone-0.003.tar.gz;
-      sha256 = "16ldkjfag4dc3gssj051j212rzr2mawy7d001jflcab9g8hg3f1g";
+      url = mirror://cpan/authors/id/G/GF/GFUJI/Data-Clone-0.004.tar.gz;
+      sha256 = "0g1qhi5qyk4fp0pwyaw90vxiyyn8las0i8ghzrnr4srai1wy3r9g";
     };
     buildInputs = [ TestRequires ];
     meta = {
