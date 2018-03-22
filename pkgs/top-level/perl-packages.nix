@@ -16055,7 +16055,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SM/SMCCAM/${name}.tar.gz";
       sha256 = "1dq89bh6fqv7l5mbffqcismcljpq5f869bx7g8lg698zgindv5ny";
     };
-    buildInputs = [pkgs.xlibsWrapper];
+    buildInputs = [ pkgs.xlibsWrapper ];
     NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
   };
