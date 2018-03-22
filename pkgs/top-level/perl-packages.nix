@@ -8028,10 +8028,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LocaleCodes = buildPerlPackage {
-    name = "Locale-Codes-3.35";
+    name = "Locale-Codes-3.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.35.tar.gz;
-      sha256 = "b1a2f944b03972d2b7282767cf88100e3c0d7daa3f4ca7aef8460c1c5e246480";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.56.tar.gz;
+      sha256 = "d82f3340ecb7f8700493df0273dede0c049fbc44c2fe1e811fc6c5a79b79ae79";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
