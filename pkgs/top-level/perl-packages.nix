@@ -10174,10 +10174,9 @@ let self = _self // overrides; _self = with self; {
   MooseXRelatedClassRoles = buildPerlPackage rec {
     name = "MooseX-RelatedClassRoles-0.004";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
+      url = mirror://cpan/authors/id/H/HD/HDP/MooseX-RelatedClassRoles-0.004.tar.gz;
       sha256 = "17vynkf6m5d039qkr4in1c9lflr8hnwp1fgzdwhj4q6jglipmnrh";
     };
-    buildInputs = [ ];
     propagatedBuildInputs = [ MooseXRoleParameterized ];
   };
 
