@@ -13857,11 +13857,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestDifferences = buildPerlPackage {
-    name = "Test-Differences-0.63";
+  TestDifferences = buildPerlModule {
+    name = "Test-Differences-0.64";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.63.tar.gz;
-      sha256 = "7c657a178c32f48de3b469f6d4f67b75f018a3a19c1e6d0d8892188b0d261a66";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.64.tar.gz;
+      sha256 = "9f459dd9c2302a0a73e2f5528a0ce7d09d6766f073187ae2c69e603adf2eb276";
     };
     propagatedBuildInputs = [ CaptureTiny TextDiff ];
     meta = {
