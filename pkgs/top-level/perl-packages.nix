@@ -9098,14 +9098,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModuleInstall = let version = "1.16"; in buildPerlPackage {
+  ModuleInstall = let version = "1.19"; in buildPerlPackage {
     name = "Module-Install-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Install-${version}.tar.gz";
-      sha256 = "0ph242hmz11wv41yh1g8k9zj1bgzkamg2kgq8hnq4kaz4mj15b5g";
+      sha256 = "06q12cm97yh4p7qbm0a2p96996ii6ss59qy57z0f7f9svy6sflqs";
     };
-    buildInputs = [ YAMLTiny ];
-    propagatedBuildInputs = [ FileRemove ModuleScanDeps YAMLTiny ];
+    propagatedBuildInputs = [ FileRemove ModuleBuild ModuleScanDeps YAMLTiny ];
     meta = {
       description = "Standalone, extensible Perl module installer";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
