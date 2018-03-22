@@ -4886,13 +4886,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestPodLinkCheck = buildPerlPackage rec {
-    name = "Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.002";
+    name = "Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/${name}.tar.gz";
-      sha256 = "26f3b257d5037aeec8335910cfdaf76fc8612f38f5d3134f46cd433e116947b0";
+      sha256 = "325d236da0940388d2aa86ec5c1326516b4ad45adef8e7a4f83bb91d5ee15490";
     };
-#    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ DistZilla Moose TestPodLinkCheck ];
+#    buildInputs = [ TestPodLinkCheck ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://github.com/rwstauner/Dist-Zilla-Plugin-Test-Pod-LinkCheck;
       description = "Add release tests for POD links";
