@@ -1615,7 +1615,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-StackTrace-0.12.tar.gz;
       sha256 = "1b2ksz74cpigxqzf63rddar3vfmnbpwpdcbs11v0ml89pb8ar79j";
     };
-    propagatedBuildInputs = [ CatalystRuntime DevelStackTrace MROCompat ];
+    propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "Display a stack trace on the debug screen";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
