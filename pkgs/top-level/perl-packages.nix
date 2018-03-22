@@ -13726,7 +13726,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
       sha256 = "1vjinlixxdx6gfcw8y1dw2rla8bfhi8nmgcqr3nffc7kqskcrz36";
     };
-    buildInputs = [ ModuleBuildTiny ModuleMetadata ];
     propagatedBuildInputs = [ CPANMetaCheck ];
     meta = {
       description = "Check for presence of dependencies";
