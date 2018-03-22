@@ -13787,6 +13787,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "a20db3c67d5bdfd0c1fab392c6d1c26880a7ee843af602af4f9b53a7043579a6";
     };
     propagatedBuildInputs = [ TermProgressBarQuiet ];
+    buildInputs = [ TestMockObject ];
   };
 
   TermReadKey = buildPerlPackage rec {
