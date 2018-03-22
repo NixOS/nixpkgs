@@ -1978,10 +1978,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassInspector = buildPerlPackage {
-    name = "Class-Inspector-1.28";
+    name = "Class-Inspector-1.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Inspector-1.28.tar.gz;
-      sha256 = "04iij8dbcgaim7g109frpyf7mh4ydsd8zh53r53chk0zxnivg91w";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Class-Inspector-1.32.tar.gz;
+      sha256 = "0d85rihxahdvhj8cysqrgg0kbmcqghz5hgy41dbkxr1qaf5xrynf";
     };
     meta = {
       description = "Get information about a class and its structure";
