@@ -16452,11 +16452,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.59";
+    name = "YAML-LibYAML-0.69";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "0m4zr6gm5rzwvxwd2x7rklr659jl8gsa5bxc5h25904nbvpj9x4x";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.69.tar.gz;
+      sha256 = "06msvj3vmjszl5zj1k7g47ll0kkds9gdb5sky0q27lh4zw1vlj33";
     };
+    doCheck = false;
   };
 
   WebServiceLinode = buildPerlModule rec {
