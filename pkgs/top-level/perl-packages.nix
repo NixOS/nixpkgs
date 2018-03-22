@@ -2153,7 +2153,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0bb983da46c146534fc77a556d6e40d925142f2eb43103534025ee545265ca36";
     };
     buildInputs = [ TestFatal TestNeeds ];
-    propagatedBuildInputs = [ DataOptList ModuleImplementation ModuleRuntime PackageStash TryTiny ];
+    propagatedBuildInputs = [ DataOptList PackageStash ];
     meta = {
       homepage = https://github.com/moose/Class-Load;
       description = "A working (require \"Class::Name\") and more";
