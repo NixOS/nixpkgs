@@ -16519,12 +16519,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLDOM = buildPerlPackage rec {
-    name = "XML-DOM-1.45";
+    name = "XML-DOM-1.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJMATHER/${name}.tar.gz";
-      sha256 = "1jvqfi0jm8wh80rd5h9c3k72car8l7x1jywj8rck8w6rm1mlxldy";
+      sha256 = "0phpkc4li43m2g44hdcvyxzy9pymqwlqhh5hwp2xc0cv8l5lp8lb";
     };
-    propagatedBuildInputs = [XMLRegExp XMLParser LWP libxml_perl];
+    propagatedBuildInputs = [ XMLRegExp libxml_perl ];
   };
 
   XMLFilterBufferText = buildPerlPackage {
