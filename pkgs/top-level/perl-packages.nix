@@ -9127,7 +9127,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
       sha256 = "0d39fjg9c0n820bk3fb50vvlwhdny4hdl69xmlyzql5xzp4cicsk";
     };
-    propagatedBuildInputs = [ ExtUtilsXSpp ExtUtilsCppGuess ];
+    propagatedBuildInputs = [ ExtUtilsCppGuess ExtUtilsXSpp ];
   };
 
   ModuleBuildXSUtil = buildPerlModule rec {
