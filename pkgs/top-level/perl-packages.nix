@@ -13135,13 +13135,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringToIdentifierEN = buildPerlPackage rec {
-    name = "String-ToIdentifier-EN-0.11";
+    name = "String-ToIdentifier-EN-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "1bawghkgkkx7j3avnrj5sg3vix1z5564ks6wf9az3jc2knh8s5nh";
+      sha256 = "12nw7h2yiybhdw0vnnpc7bif8ylhsn6kqf6s39dsrf9h54iq9yrs";
     };
-    propagatedBuildInputs =
-      [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
+    propagatedBuildInputs = [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
   };
 
   StringTruncate = buildPerlPackage {
