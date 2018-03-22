@@ -11862,8 +11862,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/C/CR/CRUX/${name}.tar.gz";
       sha256 = "06y1djgzbn340hixav85728dvp8mj2mx2qf5fzkqxh145g5q860g";
     };
-    buildInputs = [ ModuleBuildTiny TestLeakTrace  TestTCP ];
-    propagatedBuildInputs = [ AnyEvent NetSSLeay ];
+    buildInputs = [ AnyEvent ModuleBuildTiny NetSSLeay TestLeakTrace TestSharedFork TestTCP ];
   };
 
   PSGI = buildPerlPackage rec {
