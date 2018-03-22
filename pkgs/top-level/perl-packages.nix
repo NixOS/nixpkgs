@@ -6703,13 +6703,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLFormatter = buildPerlModule {
-    name = "HTML-Formatter-2.14";
+  HTMLFormatter = buildPerlPackage {
+    name = "HTML-Formatter-2.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-Formatter-2.14.tar.gz;
-      sha256 = "d28eeeab48ab5f7bfcc73cc106b0f756073d98d48dfdb91ca2951f832f8e035e";
+      url = mirror://cpan/authors/id/N/NI/NIGELM/HTML-Formatter-2.16.tar.gz;
+      sha256 = "cb0a0dd8aa5e8ba9ca214ce451bf4df33aa09c13e907e8d3082ddafeb30151cc";
     };
-    buildInputs = [ FileSlurper TestCPANMeta TestEOL TestNoTabs perl ];
+    buildInputs = [ FileSlurper TestWarnings ];
     propagatedBuildInputs = [ FontAFM HTMLTree ];
     meta = {
       homepage = https://metacpan.org/release/HTML-Formatter;
