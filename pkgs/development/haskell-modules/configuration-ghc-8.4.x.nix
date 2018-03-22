@@ -659,16 +659,11 @@ self: super: {
       sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
     });
 
-  # Fix missing semigroup instance.
-  json = appendPatch super.json (pkgs.fetchpatch
-    { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
-      sha256 = "1xw2gab0wzhszgcbjhg98kkzgnbfn9n3bx1qlk6g7ir6hhwppm9z";
-    });
-
   # Older versions don't compile.
   brick = self.brick_0_35;
   getopt-generics = self.getopt-generics_0_13_0_2;
   HaTeX = self.HaTeX_3_19_0_0;
+  json = self.json_0_9_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_1_3;
   pandoc-types = self.pandoc-types_1_17_4_2;
