@@ -7281,7 +7281,7 @@ let self = _self // overrides; _self = with self; {
   IOLockedFile = buildPerlPackage rec {
     name = "IO-LockedFile-0.23";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RA/RANI/IO-LockedFile-0.23.tar.gz;
       sha256 = "1dgq8zfkaszisdb5hz8jgcl0xc3qpv7bbv562l31xgpiddm7xnxi";
     };
   };
