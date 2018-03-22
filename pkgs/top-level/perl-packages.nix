@@ -742,10 +742,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BKeywords = buildPerlPackage rec {
-    name = "B-Keywords-1.14";
+    name = "B-Keywords-1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
-      sha256 = "1llaqhx6711lsf6mxmvrhjigpy3ymmf3wl8kvn7l0fsppnmn45lw";
+      sha256 = "0f5bb2fpbq5jzdb2jfs73hrggrq2gnpacd2kkxgifjl7q7xd9ck5";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
