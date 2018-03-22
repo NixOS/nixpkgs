@@ -6992,12 +6992,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPCookies = buildPerlPackage {
-    name = "HTTP-Cookies-6.01";
+    name = "HTTP-Cookies-6.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Cookies-6.01.tar.gz;
-      sha256 = "087bqmg22dg3vj7gssh3pcsh9y1scimkbl5h1kc8jqyfhgisvlzm";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.04.tar.gz;
+      sha256 = "1m0kxcirbvbkrm2c59p1bkbvzlcdymg8fdpa7wlxijlx0xwz1iqc";
     };
-    propagatedBuildInputs = [ HTTPDate HTTPMessage ];
+    propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "HTTP cookie jars";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
