@@ -10744,11 +10744,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ObjectInsideOut = buildPerlPackage {
-    name = "Object-InsideOut-3.98";
+  ObjectInsideOut = buildPerlModule {
+    name = "Object-InsideOut-4.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-3.98.tar.gz;
-      sha256 = "1zxfm2797p8b9dsvnbgd6aa4mgpxqxjqzbpfbla1g7f9alxm9f1z";
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-4.04.tar.gz;
+      sha256 = "01pncagr3k7yj0rn22xap08s17nw2p2ffcg6j00gs9fg4jv9pfmj";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     meta = {
