@@ -34,8 +34,8 @@ let
     nativeBuildInputs = [ autoconf automake libtool_2 ];
     buildInputs = [ libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
-      stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+      #stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
+      [ libcxxabi libobjc ];
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch

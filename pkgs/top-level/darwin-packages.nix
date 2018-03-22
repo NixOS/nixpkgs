@@ -34,6 +34,7 @@ in
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
   maloader = callPackage ../os-specific/darwin/maloader {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     inherit (darwin) opencflite;
   };
 

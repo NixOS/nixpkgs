@@ -1,4 +1,5 @@
-{ stdenv, binutils-raw, cctools
+{ stdenvNoCC, lib
+, binutils-raw, cctools
 , hostPlatform, targetPlatform
 }:
 
@@ -15,7 +16,7 @@ let
 in
 
 # TODO loop over targetPrefixed binaries too
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "${targetPrefix}cctools-binutils-darwin";
   outputs = [ "out" "info" "man" ];
   buildCommand = ''
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
     # - strip: the binutils one seems to break mach-o files
     # - lipo: gcc build assumes it exists
     # - nm: the gnu one doesn't understand many new load commands
-    for i in ${stdenv.lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)}; do
+    for i in ${lib.concatStringsSep " " (builtins.map (e: targetPrefix + e) cmds)}; do
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
