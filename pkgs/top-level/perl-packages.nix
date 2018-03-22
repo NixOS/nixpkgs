@@ -2905,10 +2905,10 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Clone ];
   };
 
-  CSSMinifierXP = buildPerlPackage rec {
+  CSSMinifierXP = buildPerlModule rec {
     name = "CSS-Minifier-XS-0.09";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
+      url = mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz;
       sha256 = "1myswrmh0sqp5xjpp03x45z8arfmgkjx0srl3r6kjsyzl1zrk9l8";
     };
     meta = {
