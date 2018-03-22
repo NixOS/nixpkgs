@@ -11847,7 +11847,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SW/SWEETKID/${name}.tar.gz";
       sha256 = "6c22d069f5a57ac206d4659b28b8869bb9270640bb955efddd451dcc58cdb391";
     };
-    buildInputs = [ HTTPMessage Plack ];
     propagatedBuildInputs = [ HTMLParser Plack ];
     meta = {
       homepage = https://github.com/Sweet-kid/Plack-Middleware-FixMissingBodyInRedirect;
