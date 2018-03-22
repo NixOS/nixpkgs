@@ -8710,7 +8710,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   Memoize = buildPerlPackage {
-    name = "Memoize-1.03.tgz";
+    name = "Memoize-1.03";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MJ/MJD/Memoize-1.03.tgz;
       sha256 = "5239cc5f644a50b0de9ffeaa51fa9991eb06ecb1bf4678873e3ab89af9c0daf3";
