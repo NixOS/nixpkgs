@@ -2512,7 +2512,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "0iflnsh0sgihff3ra8sr7awiiscmqvrp1anaskkwksqi6yzidab9";
     };
-    propagatedBuildInputs = [ ConfigINI ConfigMVP Moose ];
+    propagatedBuildInputs = [ ConfigINI ConfigMVP ];
     meta = {
       homepage = https://github.com/rjbs/Config-MVP-Reader-INI;
       description = "An MVP config reader for .ini files";
