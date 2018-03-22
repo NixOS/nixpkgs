@@ -7106,15 +7106,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPServerSimple = buildPerlPackage {
-    name = "HTTP-Server-Simple-0.44";
+    name = "HTTP-Server-Simple-0.52";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/HTTP-Server-Simple-0.44.tar.gz;
-      sha256 = "05klpfkss2a6i5ihmvcm27fyar0f2v4ispg2f49agab3va1gix6g";
+      url = mirror://cpan/authors/id/B/BP/BPS/HTTP-Server-Simple-0.52.tar.gz;
+      sha256 = "0k6bg7k6mjixfzxdkkdrhqvaqmdhjszx0zsk8g0bimiby6j9z4yq";
     };
     doCheck = false;
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ CGI ];
   };
 
   HTTPServerSimpleAuthen = buildPerlPackage rec {
