@@ -10947,7 +10947,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-XS-0.28.tar.gz;
       sha256 = "11nl69n8i56p91pd0ia44ip0vpv2cxwpbfakrv01vvv8az1cbn13";
     };
-    buildInputs = [ TestRequires TestFatal ];
+    buildInputs = [ TestFatal TestRequires ];
     meta = {
       homepage = https://metacpan.org/release/Package-Stash-XS;
       description = "Faster and more correct implementation of the Package::Stash API";
