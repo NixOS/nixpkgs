@@ -6215,10 +6215,11 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TS/TSCH/${name}.tar.gz";
       sha256 = "47a34204cd5f3a0ef5c8b9e1c9c96f41740edab7e9abf1d0560fa8666ba1916e";
     };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gtk2 Pango pkgs.gnome2.libgnomecanvas ];
+    buildInputs = [ pkgs.gnome2.libgnomecanvas ];
     meta = {
       license = stdenv.lib.licenses.lgpl2Plus;
     };
+    propagatedBuildInputs = [ Gtk2 Pango ];
   };
 
   Gnome2VFS = buildPerlPackage rec {
