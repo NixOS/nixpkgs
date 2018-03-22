@@ -636,10 +636,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   autovivification = buildPerlPackage rec {
-    name = "autovivification-0.16";
+    name = "autovivification-0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "1422kw9fknv7rbjkgdfflg1q3mb69d3yryszp38dn0bgzkqhwkc1";
+      sha256 = "01giacr2sx6b9bgfz6aqw7ndcnf08j8n6kwhm7880a94hmb9g69d";
     };
     meta = {
       homepage = http://search.cpan.org/dist/autovivification/;
