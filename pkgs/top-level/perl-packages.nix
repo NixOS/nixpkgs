@@ -13187,8 +13187,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-${version}.tar.gz";
       sha256 = "1sbb5rb3vs82rlh1fjkgkcmj5pj62b4y9si4ihh45sl9m8c2qxx5";
     };
-    buildInputs = [ LWP ModuleBuildTiny TestRequires ];
-    propagatedBuildInputs = [ DataDump HTTPDate HTTPMessage HTTPParserXS NetServer Plack TestTCP ];
+    buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
+    propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
     doCheck = false; # binds to various TCP ports
     meta = {
       inherit version;
