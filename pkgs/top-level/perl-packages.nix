@@ -10257,7 +10257,7 @@ let self = _self // overrides; _self = with self; {
   MooseXSetOnce = buildPerlPackage rec {
     name = "MooseX-SetOnce-0.200002";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/MooseX-SetOnce-0.200002.tar.gz;
       sha256 = "0ndnl8dj7nh8lvckl6r3jw31d0dmq30qf2pqkgcz0lykzjvhdvfb";
     };
     buildInputs = [ TestFatal ];
