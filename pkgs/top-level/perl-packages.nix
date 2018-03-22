@@ -535,15 +535,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AuthenPassphrase = buildPerlPackage rec {
+  AuthenPassphrase = buildPerlModule rec {
     name = "Authen-Passphrase-0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "55db4520617d859d88c0ee54965da815b7226d792b8cdc8debf92073559e0463";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
-      DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
+    propagatedBuildInputs = [ AuthenDecHpwd CryptDES CryptEksblowfish CryptMySQL CryptPasswdMD5 CryptUnixCryptXS DataEntropy DigestMD4 ModuleRuntime ];
     meta = {
       description = "Hashed passwords/passphrases as objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
