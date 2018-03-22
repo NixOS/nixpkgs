@@ -9192,13 +9192,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModuleUtil = buildPerlPackage {
+  ModuleUtil = buildPerlModule {
     name = "Module-Util-1.09";
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MATTLAW/Module-Util-1.09.tar.gz;
       sha256 = "6cfbcb6a45064446ec8aa0ee1a7dddc420b54469303344187aef84d2c7f3e2c6";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Module name tools and transformations";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
