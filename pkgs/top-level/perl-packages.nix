@@ -2968,7 +2968,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
     };
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
-    buildInputs = [ PathClass TryTiny ];
+    buildInputs = [ PathClass ];
+    propagatedBuildInputs = [ LWPProtocolHttps ];
   };
 
   CSSDOM = buildPerlPackage rec {
