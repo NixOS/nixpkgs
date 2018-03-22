@@ -9925,14 +9925,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXHasSugar = buildPerlModule {
-    name = "MooseX-Has-Sugar-0.05070421";
+  MooseXHasSugar = buildPerlPackage {
+    name = "MooseX-Has-Sugar-1.000006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KE/KENTNL/MooseX-Has-Sugar-0.05070421.tar.gz;
-      sha256 = "5acf92a6dcac50a6edfcbdb2c38802f8c1f9dc7194a79d0b85a3d4105ebba7df";
+      url = mirror://cpan/authors/id/K/KE/KENTNL/MooseX-Has-Sugar-1.000006.tar.gz;
+      sha256 = "efeed3ddb3a8ea18f416d485f3c2b0427145d267e63368c651d488eaa8c28d09";
     };
-    buildInputs = [ Moose MooseXTypes TestFatal namespaceautoclean ];
-    propagatedBuildInputs = [ SubExporter ];
+    buildInputs = [ TestFatal namespaceclean ];
+    propagatedBuildInputs = [ SubExporterProgressive ];
     meta = {
       homepage = https://github.com/kentfredric/MooseX-Has-Sugar;
       description = "Sugar Syntax for moose 'has' fields";
