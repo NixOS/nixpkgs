@@ -10309,9 +10309,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
       sha256 = "1jjqmcidy4kdgp5yffqqwxrsab62mbhbpvnzdy1rpwnb1savg5mb";
     };
-    buildInputs =[ TestException ];
-    propagatedBuildInputs =
-      [ ClassMOP Moose namespaceautoclean ListMoreUtils ];
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ ListMoreUtils Moose namespaceautoclean ];
   };
 
   MooseXTypes = buildPerlModule rec {
