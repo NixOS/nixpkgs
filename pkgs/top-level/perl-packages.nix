@@ -13974,14 +13974,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ LogTrace ];
   };
 
-  TestAggregate = buildPerlPackage rec {
-    name = "Test-Aggregate-0.373";
+  TestAggregate = buildPerlModule rec {
+    name = "Test-Aggregate-0.375";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/${name}.tar.gz";
-      sha256 = "00d218daa7ba29d82bcf364b61d391d3a14356cf3bcb4b12144270108a14fd14";
+      sha256 = "c6cc0abfd0d4fce85371acca93ec245381841d32b4caa2d6475e4bc8130427d1";
     };
-    buildInputs = [ TestMost TestTrap ];
-    propagatedBuildInputs = [ TestNoWarnings ];
+    buildInputs = [ TestMost TestNoWarnings TestTrap ];
     meta = {
       description = "Aggregate C<*.t> tests to make them run faster";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
