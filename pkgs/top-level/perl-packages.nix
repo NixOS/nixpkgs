@@ -5431,10 +5431,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Filechdir = buildPerlPackage rec {
-    name = "File-chdir-0.1008";
+    name = "File-chdir-0.1010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "0n8dz80fgk3shfxncyr4aff5hnsd846c5np6d68kc0mxqj2g0flr";
+      sha256 = "009b8p2fzj4nhl03fpkhrn0rsh7myxqbrf69iqpzd86p1gs23hgg";
     };
   };
 
