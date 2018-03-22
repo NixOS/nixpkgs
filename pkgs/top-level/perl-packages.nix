@@ -14979,14 +14979,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestRunPluginTrimDisplayedFilenames = buildPerlPackage rec {
+  TestRunPluginTrimDisplayedFilenames = buildPerlModule rec {
     name = "Test-Run-Plugin-TrimDisplayedFilenames-0.0125";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "2255bc5cb6ab65ee4dfff3bcdf007fb74785ff3bb439a9cef5052c66d80424a5";
     };
-    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
-    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ Moose ];
     meta = {
       homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Trim the first components";
