@@ -16552,7 +16552,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
       sha256 = "03fghj7hq0fiicmfdxhmzfm4mzv7s097pgkd32ji7jnljvhm9six";
     };
-    buildInputs = [ ExtUtilsDepends TestFatal Testuseok ];
+    buildInputs = [ ExtUtilsDepends TestFatal ];
     meta = {
       description = "XS pointer backed objects using sv_magic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
