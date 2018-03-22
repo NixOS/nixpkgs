@@ -12951,12 +12951,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubExporter = buildPerlPackage {
-    name = "Sub-Exporter-0.984";
+    name = "Sub-Exporter-0.987";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.984.tar.gz;
-      sha256 = "190qly7nv7zf17c1v0gnqhyf25p6whhh2m132mh4xzs5mqadwq0f";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.987.tar.gz;
+      sha256 = "1ml3n1ck4ln9qjm2mcgkczj1jb5n1fkscz9c4x23v4db0glb4g2l";
     };
-    propagatedBuildInputs = [ DataOptList ParamsUtil SubInstall ];
+    propagatedBuildInputs = [ DataOptList ];
     meta = {
       homepage = https://github.com/rjbs/sub-exporter;
       description = "A sophisticated exporter for custom-built routines";
