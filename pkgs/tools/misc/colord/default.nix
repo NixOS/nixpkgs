@@ -1,17 +1,15 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
-, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_38
+, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_40
 , libgudev, sane-backends, udev, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.4.1";
+  name = "colord-1.4.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0m854clp8szvq38z16jpazzlqfb3lb3icxcfnsisfrc25748y1ib";
+    sha256 = "19zc9gldz469jshl16av7na459kwr5nhvs2pz98xm5lw582xaw2c";
   };
-
-  enableParallelBuilding = true;
 
   mesonFlags = [
     "-Denable-sane=true"
@@ -23,18 +21,19 @@ stdenv.mkDerivation rec {
     "-Denable-docs=false"
   ];
 
-  patches = [
-    ./fix-build-paths.patch
-  ];
+  nativeBuildInputs = [ meson pkgconfig vala_0_40 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
 
-  nativeBuildInputs = [ meson pkgconfig vala_0_38 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
-
-  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus
-                  bash-completion argyllcms libgudev sane-backends ];
+  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   postFixup = ''
     wrapProgram "$out/libexec/colord-session" \
