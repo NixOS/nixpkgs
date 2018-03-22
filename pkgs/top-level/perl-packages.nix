@@ -15577,12 +15577,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TreeSimple = buildPerlPackage rec {
-    name = "Tree-Simple-1.25";
+    name = "Tree-Simple-1.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
-      sha256 = "1xj1n70v4qbx7m9k01bj9aixk77yssliavgvfds3xj755hcan0nr";
+      sha256 = "1alnwb6c7n4al91m9cyknvcyvdz521lh22dz1hyk4v7c50adffnv";
     };
-    buildInputs = [ TestException TestMemoryCycle ];
+    buildInputs = [ TestException ];
     meta = {
       description = "A simple tree object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
