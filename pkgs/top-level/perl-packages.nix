@@ -16545,10 +16545,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAML = buildPerlPackage rec {
-    name = "YAML-1.15";
+    name = "YAML-1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "06wx1pzc2sb7vidlp17g1x11rrz57ch8q68gjj8fbgd75wr9bx40";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.24.tar.gz;
+      sha256 = "1dpzgnjbd8yvf94vf45cmyj5bc6vrm6bchhx9xqwxqd5f9d093dm";
     };
 
     buildInputs = [ TestBase TestYAML ];
