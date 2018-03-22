@@ -7074,15 +7074,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPDAV = buildPerlPackage rec {
-    name = "HTTP-DAV-0.44";
+    name = "HTTP-DAV-0.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OP/OPERA/${name}.tar.gz";
-      sha256 = "1pp7xbfn6yr87cqy2m2kl2v5zgvmmikhl7wmaw6c5nksj4wi9xq1";
+      url = mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.48.tar.gz;
+      sha256 = "1fnw3wd9zrkxq54jqgi4iw48ndysgy73glva4129s8243pn05a86";
     };
-    buildInputs = [ LWP XMLDOM ];
     meta = {
       description = "WebDAV client library.";
     };
+    propagatedBuildInputs = [ XMLDOM ];
   };
 
   HTTPHeaderParserXS = buildPerlPackage rec {
