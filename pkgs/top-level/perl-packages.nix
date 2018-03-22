@@ -10506,8 +10506,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
       sha256 = "0pnbchkxfz9fwa8sniyjqp0mz75b3k2fafq9r09znbbh51dbz9gq";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ AnyMoose ];
+    buildInputs = [ AnyMoose TestFatal ];
+    propagatedBuildInputs = [ Mouse ];
     meta = {
       description = "Extend attribute interfaces for Mouse";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
