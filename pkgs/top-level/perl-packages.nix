@@ -13935,10 +13935,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestFileContents = buildPerlModule {
-    name = "Test-File-Contents-0.21";
+    name = "Test-File-Contents-0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.21.tar.gz;
-      sha256 = "1b5a13f86f5df625ffd30361f628d34b0ceda80b9f39ca74bf0a4c1105828317";
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.23.tar.gz;
+      sha256 = "cd6fadfb910b34b4b53991ff231dad99929ca8850abec3ad0e2810c4bd7b1f3d";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
