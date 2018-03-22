@@ -945,12 +945,13 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
       sha256 = "1i25kks408c54k2zxskvg54l5k3qadzm8n72ffga9jy7ic0h6j76";
     };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.cairo ];
+    buildInputs = [ pkgs.cairo ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the cairo 2D vector graphics library";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
+    propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
   };
 
   cam_pdf = buildPerlPackage rec {
