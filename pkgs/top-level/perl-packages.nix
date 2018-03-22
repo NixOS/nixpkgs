@@ -14550,16 +14550,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestTCP = buildPerlPackage rec {
-    name = "Test-TCP-2.14";
+    name = "Test-TCP-2.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
-      sha256 = "00bxgm7qva4fd25phwl8fvv36h8h5k3jk89hz9302a288wv3ysmr";
+      sha256 = "14ahzklq3xgmwj58p9vdcfgpggrmh3nigq5mzqk4wakbb6fjs0fx";
     };
-    propagatedBuildInputs = [ TestSharedFork ];
     meta = {
       description = "Testing TCP program";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestSharedFork ];
   };
 
   TestTester = buildPerlPackage {
