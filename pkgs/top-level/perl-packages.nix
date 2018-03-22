@@ -15070,11 +15070,12 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Test-WWW-Mechanize-CGI-0.1.tar.gz;
       sha256 = "0bwwdk0iai5dlvvfpja971qpgvmf6yq67iag4z4szl9v5sra0xm5";
     };
-    propagatedBuildInputs = [ CGI TestWWWMechanize WWWMechanizeCGI ];
+    propagatedBuildInputs = [ WWWMechanizeCGI ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestLongString TestWWWMechanize ];
   };
 
   TestWWWMechanizePSGI = buildPerlPackage {
