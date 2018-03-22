@@ -10318,10 +10318,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetCIDR = buildPerlPackage {
-    name = "Net-CIDR-0.17";
+    name = "Net-CIDR-0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.17.tar.gz;
-      sha256 = "4a968e700d382cf0946e47df420d0151fbd8e0135f037d404c7c63713b66daf0";
+      url = mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.18.tar.gz;
+      sha256 = "c3df7ea8d42b2d8ec328c187329c5f8c4db6a2470873f61e3d0dd91430ef1427";
     };
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
