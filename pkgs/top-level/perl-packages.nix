@@ -3835,10 +3835,10 @@ let self = _self // overrides; _self = with self; {
 
   DBI = buildPerlPackage rec {
     name = "DBI-${version}";
-    version = "1.6.36";
+    version = "1.640";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMB/${name}.tar.gz";
-      sha256 = "8f7ddce97c04b4b7a000e65e5d05f679c964d62c8b02c94c1a7d815bb2dd676c";
+      sha256 = "327e1bd92cd8ca2539b307b6d8c9d9527e5e707da99b87d52020841bc049a14a";
     };
     postInstall = stdenv.lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/lib/perl5/site_perl/cross_perl/${perl.version}/DBI
