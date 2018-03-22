@@ -34,11 +34,11 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "7.1.4.1529";
+  version = "7.1.8.3036-r0";
   name = "googleearth-${version}";
 
   src = fetchurl {
-    url = "https://dl.google.com/earth/client/current/google-earth-stable_current_${arch}.deb";
+    url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-stable/google-earth-stable_${version}_${arch}.deb";
     inherit sha256;
   };
 
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     mv usr/* $out/
     rmdir usr
     mv * $out/
-    rm $out/bin/google-earth $out/opt/google/earth/free/google-earth
-    ln -s $out/opt/google/earth/free/googleearth $out/bin/google-earth
+    rm $out/bin/google-earth $out/opt/google/earth/free/google-earth $out/opt/google/earth/free/googleearth
+    ln -s $out/opt/google/earth/free/googleearth-bin $out/bin/google-earth
 
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${fullPath}:\$ORIGIN" \
