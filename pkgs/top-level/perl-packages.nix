@@ -8015,11 +8015,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ListUtilsBy = buildPerlPackage rec {
-    name = "List-UtilsBy-0.09";
+  ListUtilsBy = buildPerlModule rec {
+    name = "List-UtilsBy-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.09.tar.gz;
-      sha256 = "1xcsgz8898h670zmwqd8azfn3a2y9nq7z8cva9dsyhzkk8ajmra1";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.11.tar.gz;
+      sha256 = "0nkpylkqccxanr8wc7j9wg6jdrizybjjd6p8q3jbh7f29cxz9pgs";
     };
     meta = {
       maintainers = with maintainers; [ ];
