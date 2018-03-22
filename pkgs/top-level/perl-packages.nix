@@ -7617,11 +7617,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   InlineJava = buildPerlPackage rec {
-    name = "Inline-Java-0.52";
+    name = "Inline-Java-0.53";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PA/PATL/${name}.tar.gz";
-      sha256 = "0xdx1nnjvsih2njcncmwxwdi3w2zf74vqb9wpn1va8ii93mlakff";
+      sha256 = "1d9hq09nv3l6m015ws08b3gbfp8daxryqr7p0yi0xhqr44j9qcj8";
     };
 
     propagatedBuildInputs = [ Inline ];
