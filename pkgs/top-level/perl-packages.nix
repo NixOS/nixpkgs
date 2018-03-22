@@ -479,15 +479,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveZip_1_53 = buildPerlPackage {
-    name = "Archive-Zip-1.53";
+    name = "Archive-Zip-1.60";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.53.tar.gz;
-      sha256 = "c66f3cdfd1965d47d84af1e37b997e17d3f8c5f2cceffc1e90d04d64001424b9";
+      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.60.tar.gz;
+      sha256 = "eac75b05f308e860aa860c3094aa4e7915d3d31080e953e49bc9c38130f5c20b";
     };
     meta = {
       description = "Provide an interface to ZIP archive files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMockModule ];
   };
 
   AudioScan = buildPerlPackage rec {
