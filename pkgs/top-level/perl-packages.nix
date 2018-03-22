@@ -12727,10 +12727,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringFormat = buildPerlPackage rec {
-    name = "String-Format-1.17";
+    name = "String-Format-1.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DARREN/${name}.tar.gz";
-      sha256 = "0sxfavcsb349rfafxflq2f9h3xpxabrw0q7vhmh9n3hjij8fa1jk";
+      url = mirror://cpan/authors/id/S/SR/SREZIC/String-Format-1.18.tar.gz;
+      sha256 = "0y77frxzjifd4sw0j19cc346ysas1mya84rdxaz279lyin7plhcy";
     };
   };
 
