@@ -2525,12 +2525,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ContextPreserve = buildPerlPackage rec {
-    name = "Context-Preserve-0.01";
+    name = "Context-Preserve-0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JR/JROCKWAY/${name}.tar.gz";
-      sha256 = "0gssillawjknqks81x7fg7w2x94bnyklgd8ry2pr1k6ifkjhwz46";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Context-Preserve-0.03.tar.gz;
+      sha256 = "07zxgmb11bn4zj3w9g1zwbb9iv4jyk5q7hc0nv59knvv5i64m489";
     };
-    buildInputs = [ TestException Testuseok ];
+    buildInputs = [ TestException TestSimple13 ];
   };
 
   CookieBaker = buildPerlModule rec {
