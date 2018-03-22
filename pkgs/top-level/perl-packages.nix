@@ -11684,7 +11684,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
       sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
-    propagatedBuildInputs = [DevelSymdump];
+    propagatedBuildInputs = [ DevelSymdump ];
   };
 
   PodCoverageTrustPod = buildPerlPackage {
