@@ -9014,8 +9014,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz;
       sha256 = "7d580ff6ace0cbe555bf36b86dc8ea232581530cbeaaea09bccb57b55797f11c";
     };
-    buildInputs = [ ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths JSONPP TestHarness perl ];
-    propagatedBuildInputs = [ ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths JSONPP TestHarness ];
+    buildInputs = [ FileShareDir ];
+    propagatedBuildInputs = [ ExtUtilsHelpers ExtUtilsInstallPaths ];
     meta = {
       description = "A tiny replacement for Module::Build";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
