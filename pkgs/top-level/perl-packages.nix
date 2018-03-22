@@ -10121,8 +10121,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RS/RSRCHBOY/MooseX-MarkAsMethods-0.15.tar.gz;
       sha256 = "1y3yxwcjjajm66pvca54cv9fax7a6dy36xqr92x7vzyhfqrw3v69";
     };
-    buildInputs = [ TestMoose ];
-    propagatedBuildInputs = [ BHooksEndOfScope Moose namespaceautoclean ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
       homepage = https://metacpan.org/release/MooseX-MarkAsMethods/;
       description = "Mark overload code symbols as methods";
