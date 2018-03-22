@@ -13134,10 +13134,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysHostnameLong = buildPerlPackage rec {
-    name = "Sys-Hostname-Long-1.4";
+    name = "Sys-Hostname-Long-1.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOTT/${name}.tar.gz";
-      sha256 = "0hy1225zg2yg11xhgj0wbiapzjyf6slx17ln36zqvfm07k6widlx";
+      sha256 = "1jv5n8jv48c1p8svjsigyxndv1ygsq8wgwj9c7ypx1vaf3rns679";
     };
     doCheck = false; # no `hostname' in stdenv
     meta = {
