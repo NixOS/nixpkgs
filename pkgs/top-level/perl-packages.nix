@@ -14748,10 +14748,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextAutoformat = buildPerlPackage {
-    name = "Text-Autoformat-1.72";
+    name = "Text-Autoformat-1.74";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Text-Autoformat-1.72.tar.gz;
-      sha256 = "b541152699fcd0f026322f283b7d9184839742aee0edb317a014c195ea26ae51";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Text-Autoformat-1.74.tar.gz;
+      sha256 = "07eb3c2b3515897340ca6e9377495bbe2e05ec80d7f3f146adab8e534a818d5e";
     };
     propagatedBuildInputs = [ TextReform ];
     meta = {
