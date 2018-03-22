@@ -9519,10 +9519,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NI/NIERLEIN/${name}.tar.gz";
       sha256 = "030cw86j8712z8rn66k935gbilb5rcj3lnk4n53vh1b2phrszvjw";
     };
-    buildInputs = [ TestMore ];
-    propagatedBuildInputs = [
-      Carp ClassAccessor ConfigTiny
-      MathCalcUnits ParamsValidate ];
+    propagatedBuildInputs = [ ClassAccessor ConfigTiny MathCalcUnits ParamsValidate ];
     meta = {
       description = ''
         A family of perl modules to streamline writing Naemon,
