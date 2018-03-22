@@ -4752,13 +4752,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginReadmeMarkdownFromPod = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-ReadmeMarkdownFromPod-0.120120";
+    name = "Dist-Zilla-Plugin-ReadmeMarkdownFromPod-0.141140";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeMarkdownFromPod-0.120120.tar.gz;
-      sha256 = "5a3346daab4e2bba850ee4a7898467da9f80bc93cc10d2d625f9880a46092160";
+      url = mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeMarkdownFromPod-0.141140.tar.gz;
+      sha256 = "9caad7b366ea59119ad73cdd99dcdd53f877a515bd0164fc28b339c01739a801";
     };
-    buildInputs = [ DistZilla TestMost ];
-    propagatedBuildInputs = [ DistZillaPluginReadmeAnyFromPod Moose ];
+    buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
+    propagatedBuildInputs = [ DistZillaPluginReadmeAnyFromPod ];
     meta = {
       homepage = https://github.com/DarwinAwardWinner/Dist-Zilla-Plugin-ReadmeMarkdownFromPod;
       description = "Automatically convert POD to a README.mkdn for Dist::Zilla";
