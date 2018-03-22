@@ -12000,6 +12000,7 @@ let self = _self // overrides; _self = with self; {
       description = "Collaborative, content-based spam filtering network agent";
       license = stdenv.lib.licenses.mit;
     };
+    doCheck = false;
   };
 
 
