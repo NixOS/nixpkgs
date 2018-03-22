@@ -232,10 +232,11 @@ in with stdenv.lib.licenses;
 
   mame = (mkLibRetroCore {
     core = "mame";
+    version = "2018-03-02";
     src = fetchRetro {
       repo = "mame";
-      rev = "9f8a36adeb4dc54ec2ecac992ce91bcdb377519e";
-      sha256 = "0blfvq28hgv9kkpijd8c9d9sa5g2qr448clwi7wrj8kqfdnrr8m1";
+      rev = "893f1ac2231b348b63209fd5b2545f770458ae8f";
+      sha256 = "1j9p82q9jhf5lf4w392zd09bq0j4iw1afhznymg0v60jv592h3gz";
     };
     description = "Port of MAME to libretro";
     license = gpl2Plus;
