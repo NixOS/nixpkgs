@@ -12507,7 +12507,7 @@ let self = _self // overrides; _self = with self; {
   SQLTokenizer = buildPerlPackage rec {
     name = "SQL-Tokenizer-0.24";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/SQL/${name}.tar.gz";
+      url = mirror://cpan/authors/id/I/IZ/IZUT/SQL-Tokenizer-0.24.tar.gz;
       sha256 = "1qa2dfbzdlr5qqdam9yn78z5w3al5r8577x06qan8wv58ay6ka7s";
     };
   };
