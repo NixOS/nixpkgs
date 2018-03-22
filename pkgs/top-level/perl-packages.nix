@@ -1424,7 +1424,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1q23aipvrl888h06ldr4mmjbykz0j4rqwipxg1jv094kki2fspr9";
     };
     buildInputs = [ TestDeep TestException ];
-    propagatedBuildInputs = [ CatalystRuntime MROCompat TaskWeaken ];
+    propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "Flexible caching support for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
