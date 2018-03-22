@@ -10494,12 +10494,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetLDAP = buildPerlPackage {
-    name = "Net-LDAP-0.4001";
+    name = "perl-ldap-0.65";
     propagatedBuildInputs = [ ConvertASN1 ];
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.4001.tar.gz;
-      sha256 = "0spwid70yxkh5zbad3ldw8yb2m5shkm59a7f0kllw8bb7ccczqps";
+      url = mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.65.tar.gz;
+      sha256 = "0d1qybra8dywds8m26hmf7grhrajd7zdlb975aabyvn13lkdsmsz";
     };
+    buildInputs = [ TextSoundex ];
   };
 
   NetOAuth = buildPerlPackage {
