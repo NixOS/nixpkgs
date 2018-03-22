@@ -1812,10 +1812,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassAccessor = buildPerlPackage {
-    name = "Class-Accessor-0.34";
+    name = "Class-Accessor-0.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.34.tar.gz;
-      sha256 = "1z6fqg0yz8gay15r1iasslv8f1n1mzjkrhs47fvbj3rqz36y1cfd";
+      url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.51.tar.gz;
+      sha256 = "07215zzr4ydf49832vn54i3gf2q5b97lydkv8j56wb2svvjs64mz";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
