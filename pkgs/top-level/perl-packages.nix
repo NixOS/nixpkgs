@@ -15451,10 +15451,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9726";
+    name = "Time-HiRes-1.9753";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "17hhd53p72z08l1riwz5f6rch6hngby1pympkla5miznn7cjlrpz";
+      url = mirror://cpan/authors/id/J/JH/JHI/Time-HiRes-1.9753.tar.gz;
+      sha256 = "05a9xhn8y0f679kg8n0n3ng4mk6sd7isihqbbhfh29nxkkwxbgqg";
     };
   };
 
