@@ -3904,8 +3904,6 @@ with pkgs;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
-  nixbot = callPackage ../tools/misc/nixbot {};
-
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
   nkf = callPackage ../tools/text/nkf {};
