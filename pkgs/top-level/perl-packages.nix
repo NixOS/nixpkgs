@@ -15620,12 +15620,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TryTiny = buildPerlPackage {
-    name = "Try-Tiny-0.22";
+    name = "Try-Tiny-0.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Try-Tiny-0.22.tar.gz;
-      sha256 = "60fba46f4693d33d54539104f9001df008dabb400b6837e9605c39a6ee6a1b19";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Try-Tiny-0.30.tar.gz;
+      sha256 = "da5bd0d5c903519bbf10bb9ba0cb7bcac0563882bcfe4503aee3fb143eddef6b";
     };
-    buildInputs = [ if_ ];
+    buildInputs = [ CPANMetaCheck CaptureTiny ];
     meta = {
       homepage = https://metacpan.org/release/Try-Tiny;
       description = "Minimal try/catch with proper preservation of $@";
