@@ -15515,18 +15515,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestMagpie = buildPerlPackage {
-    name = "Test-Magpie-0.05";
+    name = "Test-Magpie-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CY/CYCLES/Test-Magpie-0.05.tar.gz;
-      sha256 = "0a0c6vcj92spy6ngfdqn9yfym37jwxlds7hlw6xphkdmcklynh0b";
+      url = mirror://cpan/authors/id/S/ST/STEVENL/Test-Magpie-0.11.tar.gz;
+      sha256 = "1c4iy35yg3fa9mrc4phmpz46fkihl6yic6a13fpcxyd3xafd5zhm";
     };
-    propagatedBuildInputs = [ aliased DevelPartialDump ListAllUtils Moose MooseXParamsValidate MooseXTypes MooseXTypesStructured namespaceautoclean SetObject SubExporter TestFatal ];
+    propagatedBuildInputs = [ MooseXTypesStructured SetObject UNIVERSALref aliased ];
     meta = {
       description = "Spy on objects to achieve test doubles (mock testing)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    buildInputs = [ TestFatal Throwable ];
   };
 
   TestMinimumVersion = buildPerlPackage rec {
@@ -16214,6 +16215,20 @@ let self = _self // overrides; _self = with self; {
       description = "Attempt to recover from people calling UNIVERSAL::isa as a function";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  UNIVERSALref = buildPerlPackage rec {
+     version = "0.14";
+     name = "UNIVERSAL-ref-0.14";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/J/JJ/JJORE/UNIVERSAL-ref-0.14.tar.gz;
+       sha256 = "1ar8dfj90nn52cb8c6yyj4bi6ya8hk2f2sl0a5q7pmchj321bn1m";
+     };
+     propagatedBuildInputs = [ BUtils ];
+     meta = {
+       description = "Turns ref() into a multimethod";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   UNIVERSALrequire = buildPerlPackage rec {
