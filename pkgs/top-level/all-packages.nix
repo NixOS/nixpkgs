@@ -6818,6 +6818,7 @@ with pkgs;
     vala_0_34
     vala_0_36
     vala_0_38
+    vala_0_40
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -7799,6 +7800,8 @@ with pkgs;
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing {};
 
+  gnome-usage = callPackage ../applications/misc/gnome-usage {};
+
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
@@ -8669,6 +8672,8 @@ with pkgs;
 
   enchant = callPackage ../development/libraries/enchant { };
 
+  enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
+
   enet = callPackage ../development/libraries/enet { };
 
   epoxy = callPackage ../development/libraries/epoxy {};
@@ -9229,6 +9234,12 @@ with pkgs;
 
   gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
 
+  gtksourceview = gtksourceview3;
+
+  gtksourceview3 = callPackage ../development/libraries/gtksourceview/3.x.nix { };
+
+  gtksourceview4 = callPackage ../development/libraries/gtksourceview/4.x.nix { };
+
   gtkspell2 = callPackage ../development/libraries/gtkspell { };
 
   gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
@@ -9625,6 +9636,8 @@ with pkgs;
 
   libdap = callPackage ../development/libraries/libdap { };
 
+  libdazzle = callPackage ../development/libraries/libdazzle { };
+
   libdbi = callPackage ../development/libraries/libdbi { };
 
   libdbiDriversBase = callPackage ../development/libraries/libdbi-drivers {
@@ -9836,8 +9849,10 @@ with pkgs;
 
   libgudev = callPackage ../development/libraries/libgudev { };
 
+  libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
   libguestfs = callPackage ../development/libraries/libguestfs {
     inherit (perlPackages) libintlperl GetoptLong SysVirt;
+    appliance = libguestfs-appliance;
   };
 
   libhangul = callPackage ../development/libraries/libhangul { };
@@ -11718,7 +11733,7 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk218x;
+  webkitgtk = webkitgtk220x;
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu-58;
@@ -11726,7 +11741,7 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  webkitgtk218x = callPackage ../development/libraries/webkitgtk/2.18.nix {
+  webkitgtk220x = callPackage ../development/libraries/webkitgtk/2.20.nix {
     harfbuzz = harfbuzz-icu;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     stdenv = overrideCC stdenv gcc6;
@@ -14325,7 +14340,9 @@ with pkgs;
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji;
 
-  nullmailer = callPackage ../servers/mail/nullmailer { };
+  nullmailer = callPackage ../servers/mail/nullmailer {
+    stdenv = gccStdenv;
+  };
 
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
@@ -19467,7 +19484,7 @@ with pkgs;
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
-  gnome-themes-standard = gnome3.gnome-themes-standard;
+  gnome-themes-extra = gnome3.gnome-themes-extra;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
@@ -20620,7 +20637,6 @@ with pkgs;
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
-    librsvg = librsvg.override { enableIntrospection = true; };
   };
 
   sct = callPackage ../tools/X11/sct {};

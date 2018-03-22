@@ -201,18 +201,6 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # The rpath to the shared systemd library is not added by meson. The
-  # functionality was removed by a nixpkgs patch because it would overwrite
-  # the existing rpath.
-  postFixup = ''
-    sharedLib=libsystemd-shared-${version}.so
-    for prog in `find $out -type f -executable`; do
-      (patchelf --print-needed $prog | grep $sharedLib > /dev/null) && (
-        patchelf --set-rpath `patchelf --print-rpath $prog`:"$out/lib/systemd" $prog
-      ) || true
-    done
-  '';
-
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes

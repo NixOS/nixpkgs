@@ -3,13 +3,13 @@
 
 let
   pname = "libgepub";
-  version = "0.5.3";
+  version = "0.6.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0gn14k1qnkfj0677i2wc42ig4m8biqib9apk23dnl92m3h1f2lmb";
+    sha256 = "16dkyywqdnfngmwsgbyga0kl9vcnzczxi3lmhm27pifrq5f3k2n7";
   };
 
   doCheck = true;

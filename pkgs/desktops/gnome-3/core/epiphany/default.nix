@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.26.6";
+  version = "3.28.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1a1hyv326w4in4pl26gi2n3p9b38ih6zjdiigpqy0aiibnjnmc81";
+    sha256 = "023q6xnwsafac38lavxwgph5lcd2igxpiwqb4kr72mv56xlb0m3i";
   };
 
   passthru = {
@@ -36,13 +36,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x post_install.py # patchShebangs requires executable file
     patchShebangs post_install.py
-  '';
-
-  postFixup = ''
-    # Patched meson does not add internal libraries to rpath
-    for f in $out/bin/.*-wrapped $out/libexec/.*-wrapped $out/libexec/epiphany/.*-wrapped $out/lib/epiphany/*.so $out/lib/epiphany/web-extensions/*.so; do
-      patchelf --set-rpath "$out/lib/epiphany:$(patchelf --print-rpath $f)" "$f"
-    done
   '';
 
   meta = with stdenv.lib; {

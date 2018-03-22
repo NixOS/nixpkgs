@@ -1,30 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, libsoup, gconf
-, pango, gdk_pixbuf, atk, tzdata, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, libxml2, glib, gtk, gettext, libsoup
+, gtk-doc, docbook_xsl, gobjectIntrospection, tzdata, geocode-glib, vala, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name = "libgweather-${version}";
-  version = "3.26.1";
+let
+  pname = "libgweather";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgweather/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "fca78470b345bce948e0333cab0a7c52c32562fc4a75de37061248a64e8fc4b8";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "13z12ra5fhn7xhsrskd7q8dnc2qnd1kylhndg6zlhk0brj6yfjsr";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "libgweather"; attrPath = "gnome3.libgweather"; };
-  };
+  nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl gobjectIntrospection ];
+  buildInputs = [ glib gtk libsoup libxml2 geocode-glib ];
 
-  configureFlags = [ "--with-zoneinfo-dir=${tzdata}/share/zoneinfo" "--enable-vala" ];
-  propagatedBuildInputs = [ libxml2 gtk libsoup gconf pango gdk_pixbuf atk gnome3.geocode-glib ];
-  nativeBuildInputs = [ pkgconfig intltool gnome3.vala ];
-
-  # Prevent building vapi into ${vala} derivation directory
-  prePatch = ''
-    substituteInPlace libgweather/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
+  postPatch = ''
+    chmod +x meson/meson_post_install.py
+    patchShebangs meson/meson_post_install.py
   '';
 
+  mesonFlags = [
+    "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
+    "-Denable_vala=true"
+    "-Dgtk_doc=true"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    description = "A library to access weather information from online services for numerous locations";
+    homepage = https://wiki.gnome.org/Projects/LibGWeather;
+    license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
   };
 }

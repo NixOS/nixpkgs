@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gedit-${version}";
-  version = "3.22.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "aa7bc3618fffa92fdb7daf2f57152e1eb7962e68561a9c92813d7bbb7fc9492b";
+    sha256 = "0pyam0zi44xq776x20ycqnvmf86l98jns8ldv4m81gnp9wnhmycv";
   };
 
   passthru = {

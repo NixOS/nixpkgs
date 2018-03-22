@@ -1,17 +1,29 @@
-{ stdenv, pkgs, buildPythonPackage, fetchFromGitHub, isPy27
+{ stdenv, pkgs, buildPythonPackage, fetchurl, isPy27, fetchpatch
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
   pname = "pygame_sdl2";
-  version = "6.99.10.1227";
-  name = "${pname}-${version}";
+  version = "2.1.0";
+  renpy_version = "6.99.14";
+  name = "${pname}-${version}-${renpy_version}";
 
-  src = fetchFromGitHub {
-    owner = "renpy";
-    repo = "${pname}";
-    rev = "renpy-${version}";
-    sha256 = "10n6janvqh5adn7pcijqwqfh234sybjz788kb8ac6b4l11hy2lx1";
+  src = fetchurl {
+    url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}-for-renpy-${renpy_version}.tar.gz";
+    sha256 = "1zsnb2bivbwysgxmfg9iv12arhpf3gqkmqinhciz955hlqv016b9";
   };
+
+  # force rebuild of headers needed for install
+  prePatch = ''
+    rm -rf gen gen3
+  '';
+
+  patches = [
+    # fix for recent sdl2
+    (fetchpatch {
+      url = "https://github.com/apoleon/pygame_sdl2/commit/ced6051f4a4559a725804cc58c079e1efea0a573.patch";
+      sha256 = "08rqjzvdlmmdf8kyd8ws5lzjy1mrwnds4fdy38inkyw7saydcxyr";
+    })
+  ];
 
   buildInputs = [
     SDL2 SDL2_image SDL2_ttf SDL2_mixer

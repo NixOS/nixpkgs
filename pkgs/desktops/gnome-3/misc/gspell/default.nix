@@ -1,22 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, enchant, isocodes, vala, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobjectIntrospection, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name = "gspell-${version}";
-  version = "1.6.1";
+let
+  pname = "gspell";
+  version = "1.8.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" ];
+  outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gspell/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "f4d329348775374eec18158f8dcbbacf76f85be5ce002a92d93054ece70ec4de";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0ickabxngl567lv1jax4fasr5brq29hg04ymaay47pjfp32w4zqv";
   };
+
+  propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
+
+  nativeBuildInputs = [ pkgconfig vala gobjectIntrospection libxml2 ];
+  buildInputs = [ glib gtk3 isocodes ];
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gspell"; attrPath = "gnome3.gspell"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
-
-  propagatedBuildInputs = [ enchant ]; # required for pkgconfig
-
-  nativeBuildInputs = [ pkgconfig vala gobjectIntrospection ];
-  buildInputs = [ glib gtk3 isocodes ];
 
   meta = with stdenv.lib; {
     description = "A spell-checking library for GTK+ applications";

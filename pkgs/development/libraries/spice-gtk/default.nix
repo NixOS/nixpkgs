@@ -11,6 +11,8 @@ let
 in stdenv.mkDerivation rec {
   name = "spice-gtk-0.34";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
     sha256 = "1vknp72pl6v6nf3dphhwp29hk6gv787db2pmyg4m312z2q0hwwp9";
@@ -34,6 +36,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gtk3"
+    "--enable-vala"
   ];
 
   # usb redirection needs spice-client-glib-usb-acl-helper to run setuid root
