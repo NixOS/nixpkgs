@@ -2132,6 +2132,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ClassTiny = buildPerlPackage rec {
+     version = "1.006";
+     name = "Class-Tiny-1.006";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Class-Tiny-1.006.tar.gz;
+       sha256 = "0knbi1agcfc9d7fca0szvxr6335pb22pc5n648q1vrcba8qvvz1f";
+     };
+     meta = {
+       description = "Minimalist class construction";
+       license = with stdenv.lib.licenses; [ asl20 ];
+       homepage = "https://github.com/dagolden/Class-Tiny";
+     };
+  };
+
   ClassLoad = buildPerlPackage rec {
     name = "Class-Load-0.24";
     src = fetchurl {
@@ -12098,11 +12112,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodSpell = buildPerlPackage rec {
-    name = "Pod-Spell-1.01";
+    name = "Pod-Spell-1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBURKE/${name}.tar.gz";
-      sha256 = "938648dca5b62e591783347f9d4d4e2a5239f9629c6adfed9a581b9457ef7d2e";
+      url = mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz;
+      sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
     };
+    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny ];
+    buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
   PodUsage = buildPerlPackage {
