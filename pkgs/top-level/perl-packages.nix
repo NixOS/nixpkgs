@@ -1961,11 +1961,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassContainer = buildPerlPackage {
-    name = "Class-Container-0.12";
+  ClassContainer = buildPerlModule {
+    name = "Class-Container-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Class-Container-0.12.tar.gz;
-      sha256 = "771206f2b7a916ce0dfb93d82200472beaeb910248482734179bf36808e486b1";
+      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Class-Container-0.13.tar.gz;
+      sha256 = "f5d495b1dfb826d5c0c45d03b4d0e6b6047cbb06cdbf6be15fd4dc902aeeb70b";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
