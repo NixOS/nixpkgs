@@ -2393,10 +2393,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigGitLike = buildPerlPackage {
-    name = "Config-GitLike-1.16";
+    name = "Config-GitLike-1.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.16.tar.gz;
-      sha256 = "48c7f7e71405219582a96e5266cbec51c0ff3ec4bf0bb6db1fd12725ee23fe8f";
+      url = mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.17.tar.gz;
+      sha256 = "674a07b814fdcf9d323088d093245bcd066aaee24ec0914cb4decc9a943de54e";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
