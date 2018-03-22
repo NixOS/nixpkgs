@@ -2338,6 +2338,22 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  CodeTidyAll = buildPerlPackage rec {
+     version = "0.69";
+     name = "Code-TidyAll-0.69";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.69.tar.gz;
+       sha256 = "0pl5pnq9flcak1m9rvqxbygk9vp5ma7dymr90waaazpdqrx4zyhk";
+     };
+     propagatedBuildInputs = [ CaptureTiny ConfigINI FileWhich FileZglob Filepushd IPCRun3 IPCSystemSimple ListCompare ListSomeUtils LogAny Moo ScopeGuard SpecioLibraryPathTiny TextDiff TimeDate TimeDurationParse ];
+     buildInputs = [ TestClass TestClassMost TestDeep TestDifferences TestException TestFatal TestMost TestWarn TestWarnings librelative ];
+     meta = {
+       description = "Engine for tidyall, your all-in-one code tidier and validator";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "http://metacpan.org/release/Code-TidyAll";
+     };
+  };
+
   # For backwards compatibility.
   CommonSense = self.commonsense;
 
@@ -6150,6 +6166,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileZglob = buildPerlPackage rec {
+     version = "0.11";
+     name = "File-Zglob-0.11";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/T/TO/TOKUHIROM/File-Zglob-0.11.tar.gz;
+       sha256 = "16v61rn0yimpv5kp6b20z2f1c93n5kpsyjvr0gq4w2dc43gfvc8w";
+     };
+     meta = {
+       description = "Extended globs.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   Filter = buildPerlPackage {
     name = "Filter-1.58";
     src = fetchurl {
@@ -8116,6 +8145,20 @@ let self = _self // overrides; _self = with self; {
       description = "Collection of network protocol modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  librelative = buildPerlPackage rec {
+     version = "0.002";
+     name = "lib-relative-0.002";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DB/DBOOK/lib-relative-0.002.tar.gz;
+       sha256 = "1i51qa22lgm1gpakn1vy4sf574fsmz141dx90i6pq84w9hc9xbry";
+     };
+     meta = {
+       description = "Add paths relative to the current file to @INC";
+       license = with stdenv.lib.licenses; [ artistic2 ];
+       homepage = "https://github.com/Grinnz/lib-relative";
+     };
   };
 
   libxml_perl = buildPerlPackage rec {
@@ -13050,6 +13093,22 @@ let self = _self // overrides; _self = with self; {
      };
   };
 
+  SpecioLibraryPathTiny = buildPerlPackage rec {
+     version = "0.04";
+     name = "Specio-Library-Path-Tiny-0.04";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Specio-Library-Path-Tiny-0.04.tar.gz;
+       sha256 = "0cyfx8gigsgisdwynjamh8jkpad23sr8v6a98hq285zmibm16s7g";
+     };
+     propagatedBuildInputs = [ PathTiny Specio ];
+     buildInputs = [ Filepushd TestFatal ];
+     meta = {
+       description = "Path::Tiny types and coercions for Specio";
+       license = with stdenv.lib.licenses; [ asl20 ];
+       homepage = "http://metacpan.org/release/Specio-Library-Path-Tiny";
+     };
+  };
+
   Spiffy = buildPerlPackage rec {
     name = "Spiffy-0.46";
     src = fetchurl {
@@ -13837,13 +13896,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TaskFreecellSolverTesting = buildPerlModule rec {
-    name = "Task-FreecellSolver-Testing-v0.0.10";
+    name = "Task-FreecellSolver-Testing-v0.0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "ce8960c0250a9947ae5b4485e8a3e807bb2d87b1120096464b3d2247d2c194ff";
+      sha256 = "a2f73c65d0e5676cf4aae213ba4c3f88bf85f084a2165f1e71e3ce5b19023206";
     };
-    buildInputs = [ ModuleBuild perl ];
-    propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify Inline InlineC ListMoreUtils Moo MooX PathTiny StringShellQuote TaskTestRunAllPlugins TemplateToolkit TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace YAMLLibYAML ];
+    buildInputs = [ CodeTidyAll TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace TestTrap ];
+    propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify InlineC MooX PathTiny StringShellQuote TaskTestRunAllPlugins TemplateToolkit YAMLLibYAML ];
     meta = {
       homepage = https://metacpan.org/release/Task-FreecellSolver-Testing;
       description = "Install the CPAN dependencies of the Freecell Solver test suite";
@@ -14347,6 +14406,20 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  TestClassMost = buildPerlModule rec {
+     version = "0.08";
+     name = "Test-Class-Most-0.08";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/O/OV/OVID/Test-Class-Most-0.08.tar.gz;
+       sha256 = "1zvx9hil0mg0pnb8xfa4m0xgjpvh8s5gnbyprq3xwpdsdgcdwk33";
+     };
+     buildInputs = [ TestClass TestDeep TestDifferences TestException TestMost TestWarn ];
+     meta = {
+       description = "Test Classes the easy way";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   TestCleanNamespaces = buildPerlPackage {
