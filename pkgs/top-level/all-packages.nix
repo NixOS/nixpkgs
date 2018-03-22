@@ -8683,6 +8683,8 @@ with pkgs;
 
   esdl = callPackage ../development/libraries/esdl { };
 
+  libesmtp = callPackage ../development/libraries/libesmtp { };
+
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
   expat = callPackage ../development/libraries/expat { };
