@@ -15568,10 +15568,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TypeTiny = buildPerlPackage {
-    name = "Type-Tiny-1.000005";
+    name = "Type-Tiny-1.002001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.000005.tar.gz;
-      sha256 = "42ed36c011825aa1e6995a4e8638621a1b2103a0970b15764ca3919368042365";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.002001.tar.gz;
+      sha256 = "93c9eeaaf23016625126794af483bc626a149f7226f9a6ec1081ef896acc13dd";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     meta = {
