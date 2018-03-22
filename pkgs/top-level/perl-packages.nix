@@ -5399,10 +5399,10 @@ let self = _self // overrides; _self = with self; {
   ExtUtilsXSpp = buildPerlModule rec {
     name = "ExtUtils-XSpp-0.18";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-XSpp-0.18.tar.gz;
       sha256 = "1zx84f93lkymqz7qa4d63gzlnhnkxm5i3gvsrwkvvqr9cxjasxli";
     };
-    buildInputs = [ Spiffy TestBase TestDifferences ];
+    buildInputs = [ TestBase TestDifferences ];
   };
 
   FatalException = buildPerlPackage {
