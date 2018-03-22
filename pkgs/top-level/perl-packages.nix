@@ -12828,13 +12828,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringErrf = buildPerlPackage {
-    name = "String-Errf-0.007";
+    name = "String-Errf-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.007.tar.gz;
-      sha256 = "1apnmxdsqwrvn1kkbba4sw6yh6hdfxxar545p6m9dkid7xsiqjfj";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.008.tar.gz;
+      sha256 = "1nyn9s52jgbffrsv0m7rhcx1awjj43n68bfjlap8frdc7mw6y4xf";
     };
-    buildInputs = [ JSON TimeDate ];
-    propagatedBuildInputs = [ ParamsUtil StringFormatter SubExporter ];
+    buildInputs = [ JSONMaybeXS TimeDate ];
+    propagatedBuildInputs = [ StringFormatter ];
     meta = {
       description = "A simple sprintf-like dialect";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
