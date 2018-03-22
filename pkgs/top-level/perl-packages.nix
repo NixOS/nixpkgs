@@ -7475,7 +7475,7 @@ let self = _self // overrides; _self = with self; {
   IPCShareLite = buildPerlPackage rec {
     name = "IPC-ShareLite-0.17";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/IPC/${name}.tar.gz";
+      url = mirror://cpan/authors/id/A/AN/ANDYA/IPC-ShareLite-0.17.tar.gz;
       sha256 = "1gz7dbwxrzbzdsjv11kb49jlf9q6lci2va6is0hnavd93nwhdm0l";
     };
   };
