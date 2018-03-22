@@ -3724,12 +3724,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelChecklib = buildPerlPackage rec {
-    name = "Devel-CheckLib-1.05";
+    name = "Devel-CheckLib-1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTN/${name}.tar.gz";
-      sha256 = "0qs7c8jffar2rpvscrd8rcds75zsc46cizp5fi5369821jl4fw3a";
+      sha256 = "1h9jna2d83kpckkm87xwqx84kwd83d2dsynky3hnvgl0gqc1qvdx";
     };
-    propagatedBuildInputs = [ IOCaptureOutput ];
+    buildInputs = [ IOCaptureOutput MockConfig ];
   };
 
   DevelCheckOS = buildPerlPackage rec {
@@ -8869,6 +8869,19 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  MockConfig = buildPerlPackage rec {
+     version = "0.03";
+     name = "Mock-Config-0.03";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/R/RU/RURBAN/Mock-Config-0.03.tar.gz;
+       sha256 = "06q0xkg5cwdwafzmb9rkaa305ddv7vli9gpm6n9jnkyaaxbk9f55";
+     };
+     meta = {
+       description = "temporarily set Config or XSConfig values";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus artistic2 ];
+     };
   };
 
   ModernPerl = buildPerlModule {
