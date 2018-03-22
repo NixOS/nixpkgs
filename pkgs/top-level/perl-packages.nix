@@ -5108,7 +5108,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExceptionWarning = buildPerlPackage {
+  ExceptionWarning = buildPerlModule {
     name = "Exception-Warning-0.0401";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Warning-0.0401.tar.gz;
