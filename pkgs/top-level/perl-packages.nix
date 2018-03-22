@@ -11974,10 +11974,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RegexpAssemble = buildPerlPackage rec {
-    name = "Regexp-Assemble-0.35";
+    name = "Regexp-Assemble-0.38";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Regexp/${name}.tar.gz";
-      sha256 = "1msxrriq74q8iacn2hkcw6g4qjjwv777avryiyz1w29h55mwq083";
+      url = mirror://cpan/authors/id/R/RS/RSAVAGE/Regexp-Assemble-0.38.tgz;
+      sha256 = "0hp4v8mghmpflq9l9fqrkjg4cw0d3ha2nrmnsnzwjwqvmvwyfsx0";
     };
   };
 
