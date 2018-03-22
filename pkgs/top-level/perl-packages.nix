@@ -12163,8 +12163,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "09fd3b5d53119437a01dced66b42eafdcd53895b3c32a2b0f781f36fda0f665b";
     };
-    buildInputs = [ Moose PodElemental ];
-    propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
+    buildInputs = [ TestDifferences ];
+    propagatedBuildInputs = [ PPI PodElemental ];
     meta = {
       homepage = https://github.com/rjbs/Pod-Elemental-PerlMunger;
       description = "A thing that takes a string of Perl and rewrites its documentation";
