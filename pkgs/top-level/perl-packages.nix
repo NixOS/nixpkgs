@@ -13973,10 +13973,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestLongString = buildPerlPackage rec {
-    name = "Test-LongString-0.15";
+    name = "Test-LongString-0.17";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "0r2i3a35l116ccwx88jwiii2fq4b8wm16sl1lkxm2kh44s4z7s5s";
+      url = mirror://cpan/authors/id/R/RG/RGARCIA/Test-LongString-0.17.tar.gz;
+      sha256 = "0kwp7rfr1i2amz4ckigkv13ah7jr30q6l5k4wk0vxl84myg39i5b";
     };
   };
 
