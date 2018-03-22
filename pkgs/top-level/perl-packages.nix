@@ -10439,7 +10439,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetIDNEncode = buildPerlPackage {
+  NetIDNEncode = buildPerlModule {
     name = "Net-IDN-Encode-2.400";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.400.tar.gz;
