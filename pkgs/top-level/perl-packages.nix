@@ -434,12 +434,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveExtract = buildPerlPackage rec {
-    name = "Archive-Extract-0.76";
+    name = "Archive-Extract-0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "9ae7080ca70346dd7d9845c581d2e112f4513ec0f7d79c2011c0e0a2ce874cfc";
+      sha256 = "25cbc2d5626c14d39a0b5e4fe8383941e085c9a7e0aa873d86e81b6e709025f4";
     };
-    propagatedBuildInputs = [ self."if" ];
+    propagatedBuildInputs = [ ModuleLoadConditional ];
     meta = {
       description = "Generic archive extracting mechanism";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -9060,6 +9060,19 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+  };
+
+  ModuleLoadConditional = buildPerlPackage rec {
+     version = "0.68";
+     name = "Module-Load-Conditional-0.68";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/B/BI/BINGOS/Module-Load-Conditional-0.68.tar.gz;
+       sha256 = "1zcq0s7q9bvk9wdv9ijfyddh3b8ck4n3w87rcx31lbsav5fba9vn";
+     };
+     meta = {
+       description = "Looking up module information / loading at runtime";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
   };
 
   ModuleManifest = buildPerlPackage {
