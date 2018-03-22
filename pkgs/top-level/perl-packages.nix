@@ -4854,11 +4854,11 @@ let self = _self // overrides; _self = with self; {
 
   EmailMIMEAttachmentStripper = buildPerlPackage rec {
     name = "Email-MIME-Attachment-Stripper-1.317";
-    buildInputs = [ CaptureTiny TestPod ];
+    buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailMIME ];
 
     src = fetchurl {
-        url = "http://www.cpan.org/authors/id/R/RJ/RJBS/${name}.tar.gz";
+        url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Attachment-Stripper-1.317.tar.gz;
         sha256 = "dcb98b09dc3e8f757ec3882a4234548108bb2d12e3cfadf95a26cef381a9e789";
     };
     meta = {
