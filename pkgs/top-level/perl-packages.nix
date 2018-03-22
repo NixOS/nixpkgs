@@ -13724,14 +13724,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestAssert = buildPerlPackage {
+  TestAssert = buildPerlModule {
     name = "Test-Assert-0.0504";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Assert-0.0504.tar.gz;
       sha256 = "194bzflmzc0cw5727kznbj1zwzj7gnj7nx1643zk2hshdjlnv8yg";
     };
     buildInputs = [ ClassInspector TestUnitLite ];
-    propagatedBuildInputs = [ constantboolean ExceptionBase SymbolUtil ];
+    propagatedBuildInputs = [ ExceptionBase constantboolean ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
