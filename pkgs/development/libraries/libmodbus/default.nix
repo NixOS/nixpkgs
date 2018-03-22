@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libmodbus-3.0.6";
+  name = "libmodbus-3.1.4";
 
   src = fetchurl {
     url = "http://libmodbus.org/releases/${name}.tar.gz";
-    sha256 = "1dkijjv3dq0c5vc5z5f1awm8dlssbwg6ivsnvih22pkm1zqn6v84";
+    sha256 = "0drnil8bzd4n4qb0wv3ilm9zvypxvwmzd65w96d6kfm7x6q65j68";
   };
 
   meta = with stdenv.lib; {

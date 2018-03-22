@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, glib }:
+{ stdenv, fetchurl, fetchpatch, python, pkgconfig, glib }:
 
 stdenv.mkDerivation (rec {
   name = "gamin-0.1.10";
@@ -18,7 +18,12 @@ stdenv.mkDerivation (rec {
 
   patches = [ ./deadlock.patch ]
     ++ map fetchurl (import ./debian-patches.nix)
-    ++ stdenv.lib.optional stdenv.cc.isClang ./returnval.patch;
+    ++ stdenv.lib.optional stdenv.cc.isClang ./returnval.patch
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "fix-pthread-mutex.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/gamin/fix-pthread-mutex.patch?h=3.4-stable&id=a1a836b089573752c1b0da7d144c0948b04e8ea8";
+      sha256 = "13igdbqsxb3sz0h417k6ifmq2n4siwqspj6slhc7fdl5wd1fxmdz";
+    });
 
 
   meta = with stdenv.lib; {

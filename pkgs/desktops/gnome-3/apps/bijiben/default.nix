@@ -1,37 +1,55 @@
-{ stdenv, intltool, fetchurl, pkgconfig, glib
-, evolution_data_server, evolution, sqlite
-, makeWrapper, itstool, desktop_file_utils
-, clutter_gtk, libuuid, webkitgtk, zeitgeist
-, gnome3, librsvg, gdk_pixbuf, libxml2 }:
+{ stdenv, meson, ninja, gettext, fetchurl, pkgconfig
+, wrapGAppsHook, itstool, desktop-file-utils
+, glib, gtk3, evolution-data-server
+, libuuid, webkitgtk, zeitgeist
+, gnome3, libxml2 }:
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+let
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "bijiben-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/bijiben/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "047w8kigrdmphd17dma2lldf6r60sgx3zybai9bz9yr0hm601kr6";
+  };
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib intltool itstool libxml2
-                  clutter_gtk libuuid webkitgtk gnome3.tracker
-                  gnome3.gnome_online_accounts zeitgeist desktop_file_utils
-                  gnome3.gsettings_desktop_schemas makeWrapper
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  evolution_data_server evolution sqlite ];
-
-  enableParallelBuilding = true;
-
-  preFixup = ''
-    wrapProgram "$out/bin/bijiben" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
 
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib gtk3 libuuid webkitgtk gnome3.tracker
+    gnome3.gnome-online-accounts zeitgeist
+    gnome3.gsettings-desktop-schemas
+    evolution-data-server
+    gnome3.defaultIconTheme
+  ];
+
+  mesonFlags = [
+    "-Dzeitgeist=true"
+    "-Dupdate_mimedb=false"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "bijiben";
+      attrPath = "gnome3.bijiben";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Bijiben;
     description = "Note editor designed to remain simple to use";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Bijiben;
     license = licenses.gpl3;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

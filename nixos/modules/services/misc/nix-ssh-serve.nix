@@ -1,8 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-{
+let cfg = config.nix.sshServe;
+    command =
+      if cfg.protocol == "ssh"
+        then "nix-store --serve"
+      else "nix-daemon --stdio";
+in {
   options = {
 
     nix.sshServe = {
@@ -10,7 +14,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable serving the Nix store as a binary cache via SSH.";
+        description = "Whether to enable serving the Nix store as a remote store via SSH.";
       };
 
       keys = mkOption {
@@ -20,14 +24,20 @@ with lib;
         description = "A list of SSH public keys allowed to access the binary cache via SSH.";
       };
 
+      protocol = mkOption {
+        type = types.enum [ "ssh" "ssh-ng" ];
+        default = "ssh";
+        description = "The specific Nix-over-SSH protocol to use.";
+      };
+
     };
 
   };
 
-  config = mkIf config.nix.sshServe.enable {
+  config = mkIf cfg.enable {
 
     users.extraUsers.nix-ssh = {
-      description = "Nix SSH substituter user";
+      description = "Nix SSH store user";
       uid = config.ids.uids.nix-ssh;
       useDefaultShell = true;
     };
@@ -41,11 +51,11 @@ with lib;
         PermitTTY no
         PermitTunnel no
         X11Forwarding no
-        ForceCommand ${config.nix.package.out}/bin/nix-store --serve
+        ForceCommand ${config.nix.package.out}/bin/${command}
       Match All
     '';
 
-    users.extraUsers.nix-ssh.openssh.authorizedKeys.keys = config.nix.sshServe.keys;
+    users.extraUsers.nix-ssh.openssh.authorizedKeys.keys = cfg.keys;
 
   };
 }

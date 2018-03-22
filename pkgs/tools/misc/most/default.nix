@@ -1,11 +1,11 @@
 { stdenv, fetchurl, slang, ncurses }:
 
 stdenv.mkDerivation {
-  name = "most-5.0.0";
+  name = "most-5.0.0a";
 
   src = fetchurl {
-    url = ftp://space.mit.edu/pub/davis/most/most-5.0.0.tar.bz2;
-    sha256 = "1f5x7rvjg89b5klfqs1gb91jmbnd3fy08d8rwgdvgg0plqkxr7ja";
+    url = ftp://space.mit.edu/pub/davis/most/most-5.0.0a.tar.bz2;
+    sha256 = "1aas904g8x48vsfh3wcr2k6mjzkm5808lfgl2qqhdfdnf4p5mjwl";
   };
 
   preConfigure = ''

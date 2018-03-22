@@ -1,36 +1,44 @@
-{ stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
-, mesa_noglu
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+, libXext, libdrm, libXfixes, wayland, libffi, libX11
+, libGL
 , minimal ? true, libva
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${version}";
-  version = "1.7.3";
+  name = "libva-${lib.optionalString (!minimal) "full-"}${version}";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "1ndrf136rlw03xag7j1xpmf9015d1h0dpnv6v587jnh6k2a17g12";
+  # update libva-utils and vaapiIntel as well
+  src = fetchFromGitHub {
+    owner  = "01org";
+    repo   = "libva";
+    rev    = version;
+    sha256 = "1a60lrgr65hx9b2qp0gjky1298c4d4zp3ap6vnmmz850sxx5rm8w";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  configureFlags =
-    [ "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri" ] ++
-    lib.optionals (!minimal) [ "--enable-glx" ];
+  enableParallelBuilding = true;
 
-  installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
+  configureFlags = [
+    "--with-drivers-path=${libGL.driverLink}/lib/dri"
+  ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
+
+  installFlags = [
+    "dummy_drv_video_ladir=$(out)/lib/dri"
+  ];
 
   meta = with stdenv.lib; {
+    description = "VAAPI library: Video Acceleration API";
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
     license = licenses.mit;
-    description = "VAAPI library: Video Acceleration API";
-    platforms = platforms.unix;
     maintainers = with maintainers; [ garbas ];
+    platforms = platforms.unix;
   };
 }

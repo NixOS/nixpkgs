@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ sass glib libxml2 gdk_pixbuf ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = ''
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out

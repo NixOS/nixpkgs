@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sbcl lispPackages;
+    inherit sbcl lispPackages contrib;
   };
 
   meta = with stdenv.lib; {

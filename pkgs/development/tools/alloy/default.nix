@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     downloadPage = http://alloy.mit.edu/alloy/download.html;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

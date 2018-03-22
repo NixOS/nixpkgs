@@ -7,13 +7,13 @@
 buildPythonPackage rec {
   pname = "Django";
   name = "${pname}-${version}";
-  version = "1.11.7";
+  version = "1.11.9";
 
   disabled = pythonOlder "2.7";
 
   src = fetchurl {
     url = "http://www.djangoproject.com/m/releases/1.11/${name}.tar.gz";
-    sha256 = "16ab3p6jj1da94wkz2b5fb128ycy4826bbsnbabcd3qdaf9f6649";
+    sha256 = "0d0hh9sh2rwazi7z2lnqvz1424bq6ps6c5h6ss04klp14agi4g9m";
   };
 
   patches = stdenv.lib.optionals withGdal [

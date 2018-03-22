@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$path" \
         --prefix PERL5LIB : $PERL5LIB:$out/bin \
         --set POPFILE_ROOT $out/bin \
-        --set POPFILE_USER \$\{POPFILE_USER:-\$HOME/.popfile\} \
-        --run "test -d \$POPFILE_USER || mkdir -m 0700 -p \$POPFILE_USER"
+        --run 'export POPFILE_USER=''${POPFILE_USER:-$HOME/.popfile}' \
+        --run 'test -d "$POPFILE_USER" || mkdir -m 0700 -p "$POPFILE_USER"'
     done
   '';
 

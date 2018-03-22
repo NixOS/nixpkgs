@@ -39,6 +39,12 @@ stdenv.mkDerivation  rec {
     runHook postInstall
   '';
 
+  # `make build/rcc/qrc_rbutilqt-lang.cpp` fails with
+  #      RCC: Error in 'rbutilqt-lang.qrc': Cannot find file 'lang/rbutil_cs.qm'
+  # Do not add `lrelease rbutilqt.pro` into preConfigure, otherwise `make lrelease`
+  # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "Open source firmware for mp3 players";
     homepage = http://www.rockbox.org;

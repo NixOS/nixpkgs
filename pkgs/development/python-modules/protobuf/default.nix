@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 buildPythonPackage rec {
-  inherit (protobuf) name src;
+  inherit (protobuf) name src version;
   inherit disabled doCheck;
 
   NIX_CFLAGS_COMPILE =

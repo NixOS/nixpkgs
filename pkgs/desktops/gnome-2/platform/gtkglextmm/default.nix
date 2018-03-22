@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtkglext, gtkmm, gtk, mesa, gdk_pixbuf
+{ stdenv, fetchurl, pkgconfig, gtkglext, gtkmm, gtk, libGLU_combined, gdk_pixbuf
 , pangox_compat, libXmu
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [pkgconfig];
 
-  propagatedBuildInputs = [ gtkglext gtkmm gtk mesa gdk_pixbuf ];
+  propagatedBuildInputs = [ gtkglext gtkmm gtk libGLU_combined gdk_pixbuf ];
 
   meta = {
     description = "C++ wrappers for GtkGLExt";

@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-terminal-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "1";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1zihm609d2d9cw53ry385whshjl1dnkifpk41g1ddm9f58hv4da1";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "03366hs7mxazn6m6y53ppkb1din4jywljg0lx8zw101qg6car0az";
   };
 
   buildInputs = [

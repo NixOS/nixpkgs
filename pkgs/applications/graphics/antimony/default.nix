@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, libpng, python3, boost, mesa, qtbase, ncurses, cmake, flex, lemon }:
+{ stdenv, fetchFromGitHub, libpng, python3, boost, libGLU_combined, qtbase, ncurses, cmake, flex, lemon }:
 
 let
-  gitRev    = "e8480c718e8c49ae3cc2d7af10ea93ea4c2fff9a";
+  gitRev    = "020910c25614a3752383511ede5a1f5551a8bd39";
   gitBranch = "master";
-  gitTag    = "0.9.2";
-in 
+  gitTag    = "0.9.3";
+in
   stdenv.mkDerivation rec {
     name    = "antimony-${version}";
     version = gitTag;
@@ -13,7 +13,7 @@ in
       owner = "mkeeter";
       repo = "antimony";
       rev = gitTag;
-      sha256 = "0fpgy5cb4knz2z9q078206k8wzxfs8b9g76mf4bz1ic77931ykjz";
+      sha256 = "1vm5h5py8l3b8h4pbmm8s3wlxvlw492xfwnlwx0nvl0cjs8ba6r4";
     };
 
     patches = [ ./paths-fix.patch ];
@@ -24,7 +24,7 @@ in
 
     buildInputs = [
       libpng python3 (boost.override { python = python3; })
-      mesa qtbase ncurses
+      libGLU_combined qtbase ncurses
     ];
 
     nativeBuildInputs = [ cmake flex lemon ];

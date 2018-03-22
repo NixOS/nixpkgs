@@ -21,11 +21,11 @@ assert enableAllFeatures ->
   ghostscript != null;
 
 stdenv.mkDerivation rec {
-  name = "dblatex-0.3.7";
+  name = "dblatex-0.3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/dblatex/${name}.tar.bz2";
-    sha256 = "0bkjgrn03dy5c7438s429wnv6z5ynxkr4pbhp2z49kynskgkzkjr";
+    sha256 = "1yicd861rqz78i2khl35j7nvc0ccv4jx4hzqrbhll17082vrdmkg";
   };
 
   buildInputs = [ python2 libxslt tex ]

@@ -14,17 +14,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
+  # Fixes build with Qt 5.9
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+
   preConfigure = ''
-    ln -s ${qtbase.dev}/mkspecs/* ../__nix_qt*__/mkspecs
-    ln -s ${qtbase.dev}/bin/* ../__nix_qt*__/bin || true
+    cd src
+    make -f Makefile.bootstrap
   '';
 
-  NIX_CFLAGS_COMPILE="-I${qtbase.dev}/include/QtCore -I${qtbase.dev}/include/QtGui -I${qtbase.dev}/include/QtWidgets";
-  
-  configurePhase = "${preConfigure} cd src; make -f Makefile.bootstrap";
-
-  installPhase = "mkdir -pv $out/bin; cp -v ../bin/xxdiff $out/bin";
-
+  postInstall = ''
+    install -D ../bin/xxdiff $out/bin/xxdiff
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://furius.ca/xxdiff/;

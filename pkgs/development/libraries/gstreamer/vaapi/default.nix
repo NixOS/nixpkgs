@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva, wayland
-, libdrm, udev, xorg, mesa, yasm, gstreamer, gst-plugins-bad, nasm
+, libdrm, udev, xorg, libGLU_combined, yasm, gstreamer, gst-plugins-bad, nasm
 , libvpx, python
 }:
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "1.12.2";
+  version = "1.12.4";
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "0fhncs27hcdcnb9a4prkxlyvr883hnzsx148zzk7lg2b8zh19ir3";
+    sha256 = "1jg9nvc8000yi2bcl3wn2yh2hwl7yvlwldj6778w8c0z5qj7fb8w";
   };
 
   outputs = [ "out" "dev" ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
     xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM
-    xorg.libICE mesa nasm libvpx python
+    xorg.libICE libGLU_combined nasm libvpx python
   ];
 
   preConfigure = "

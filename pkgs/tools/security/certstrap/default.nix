@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "certstrap-${version}";
-  version = "1.0.1";
+  version = "1.1.1";
 
   goPackagePath = "github.com/square/certstrap";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "square";
     repo = "certstrap";
     rev = "v${version}";
-    sha256 = "0pw1g6nyb212ayic42rkm6i0cf4n2003f02qym6zp130m6aysb47";
+    sha256 = "0j7gi2nzykny7i0gjax9vixw72l9jcm4wnwxgm72hh1pji0ysa8n";
   };
 
   meta = with stdenv.lib; {

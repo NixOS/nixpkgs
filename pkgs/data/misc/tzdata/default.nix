@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
@@ -28,17 +28,35 @@ stdenv.mkDerivation rec {
     "MANDIR=$(man)/share/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
+    "cc=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  installFlags = [ "ZIC=./zic-native" ];
+
+  preInstall = ''
+     mv zic.o zic.o.orig
+     mv zic zic.orig
+     make $makeFlags cc=cc AR=ar zic
+     mv zic zic-native
+     mv zic.o.orig zic.o
+     mv zic.orig zic
+  '';
 
   postInstall =
     ''
       rm $out/share/zoneinfo-posix
-      ln -s . $out/share/zoneinfo/posix
+      mkdir $out/share/zoneinfo/posix
+      ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
       mkdir -p "$dev/include"
       cp tzfile.h "$dev/include/tzfile.h"
     '';
+
+  setupHook = ./tzdata-setup-hook.sh;
 
   meta = {
     homepage = http://www.iana.org/time-zones;

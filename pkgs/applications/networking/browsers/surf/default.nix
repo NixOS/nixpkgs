@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, wrapGAppsHook
-, glib, glib_networking, gsettings_desktop_schemas, gtk, libsoup, webkitgtk
+, glib, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
 , patches ? null
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ glib glib_networking gsettings_desktop_schemas gtk libsoup webkitgtk ];
+  buildInputs = [ glib glib-networking gsettings-desktop-schemas gtk libsoup webkitgtk ];
 
   inherit patches;
 

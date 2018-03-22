@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
-, libXrandr, mesa, libXft, libXfixes, xinput
+, libXrandr, libGLU_combined, libXft, libXfixes, xinput
 , CoreServices }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
-    libXft mesa libXfixes xinput
+    libXft libGLU_combined libXfixes xinput
   ] ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;

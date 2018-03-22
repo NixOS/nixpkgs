@@ -4,9 +4,16 @@ ninjaBuildPhase() {
     if [[ -z "$ninjaFlags" && ! ( -e build.ninja ) ]]; then
         echo "no build.ninja, doing nothing"
     else
+        local buildCores=1
+
+        # Parallel building is enabled by default.
+        if [ "${enableParallelBuilding-1}" ]; then
+            buildCores="$NIX_BUILD_CORES"
+        fi
+
         # shellcheck disable=SC2086
         local flagsArray=( \
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
+            -j"$buildCores" -l"$NIX_BUILD_CORES" \
             $ninjaFlags "${ninjaFlagsArray[@]}" \
             $buildFlags "${buildFlagsArray[@]}")
 

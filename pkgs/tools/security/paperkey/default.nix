@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "paperkey-${version}";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchurl {
     url = "http://www.jabberwocky.com/software/paperkey/${name}.tar.gz";
-    sha256 = "0vrkryxqbsjcmqalsnxvc3pahg6vvyrn139aj8md29sihgnb0az1";
+    sha256 = "1prd2jaf4zjad3xhv160hmi5n408ssljfg7iz90jxs9w111pjwy4";
   };
 
   enableParallelBuilding = true;

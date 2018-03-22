@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox, nlohmann_json
-, hostPlatform
+, libseccomp, busybox-sandbox-shell
+, hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -10,23 +10,13 @@
 
 let
 
-  sh = busybox.override {
-    useMusl = true;
-    enableStatic = true;
-    enableMinimal = true;
-    extraConfig = ''
-      CONFIG_ASH y
-      CONFIG_ASH_BUILTIN_ECHO y
-      CONFIG_ASH_BUILTIN_TEST y
-      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
-    '';
-  };
+  sh = busybox-sandbox-shell;
 
   common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;
     version = lib.getVersion name;
 
-    is112 = lib.versionAtLeast version "1.12pre";
+    is20 = lib.versionAtLeast version "2.0pre";
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
@@ -34,14 +24,14 @@ let
 
     nativeBuildInputs =
       [ pkgconfig ]
-      ++ lib.optionals (!is112) [ perl ]
+      ++ lib.optionals (!is20) [ curl perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
-    buildInputs = [ curl openssl sqlite xz ]
+    buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli readline nlohmann_json ] # Since 1.12
-      ++ lib.optional stdenv.isLinux libseccomp
-      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
+      ++ lib.optionals is20 [ brotli ] # Since 1.12
+      ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
@@ -49,14 +39,8 @@ let
 
     propagatedBuildInputs = [ boehmgc ];
 
-    # Note: bzip2 is not passed as a build input, because the unpack phase
-    # would end up using the wrong bzip2 when cross-compiling.
-    # XXX: The right thing would be to reinstate `--with-bzip2' in Nix.
-    postUnpack =
-      '' export CPATH="${bzip2.dev}/include"
-         export LIBRARY_PATH="${bzip2.out}/lib"
-         export CXXFLAGS="-Wno-error=reserved-user-defined-literal"
-      '';
+    # Seems to be required when using std::atomic with 64-bit types
+    NIX_LDFLAGS = lib.optionalString (stdenv.system == "armv6l-linux") "-latomic";
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -65,45 +49,29 @@ let
         "--disable-init-state"
         "--enable-gc"
       ]
-      ++ lib.optionals (!is112) [
+      ++ lib.optionals (!is20) [
         "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
-      ] ++ lib.optionals (is112 && stdenv.isLinux) [
+      ] ++ lib.optionals (is20 && stdenv.isLinux) [
         "--with-sandbox-shell=${sh}/bin/busybox"
-      ];
+      ]
+      ++ lib.optional (
+          hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
+      ) ''--with-system=${hostPlatform.nix.system}''
+         # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+      ++ lib.optional (!hostPlatform.isSeccomputable) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
     installFlags = "sysconfdir=$(out)/etc";
 
-    doInstallCheck = true;
+    doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
     preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
 
     separateDebugInfo = stdenv.isLinux;
-
-    crossAttrs = {
-      postUnpack =
-        '' export CPATH="${bzip2.crossDrv}/include"
-           export NIX_CROSS_LDFLAGS="-L${bzip2.crossDrv}/lib -rpath-link ${bzip2.crossDrv}/lib $NIX_CROSS_LDFLAGS"
-        '';
-
-      configureFlags =
-        ''
-          --with-store-dir=${storeDir} --localstatedir=${stateDir}
-          --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
-          --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
-          --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
-          --disable-init-state
-          --enable-gc
-        '' + stdenv.lib.optionalString (
-            hostPlatform ? nix && hostPlatform.nix ? system
-        ) ''--with-system=${hostPlatform.nix.system}'';
-
-      doInstallCheck = false;
-    };
 
     enableParallelBuilding = true;
 
@@ -151,24 +119,35 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = (common rec {
-    name = "nix-1.11.15";
+  nix1 = (common rec {
+    name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "d20f20e45d519f54fae5c61d55eadcf53e6d7cdbde9870eeec80d499f9805165";
+      sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
   }) // { perl-bindings = nixStable; };
 
+  nixStable = (common rec {
+    name = "nix-2.0";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+    };
+  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+
+  nixUnstable = nix;
+/*
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-unstable-1.12${suffix}";
-    suffix = "pre5732_fd10f6f2";
+    name = "nix-2.0${suffix}";
+    suffix = "pre5968_a6c0b773";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "fd10f6f2414521947ca60b9d1508d909f50e9faa";
-      sha256 = "17561jll94c8hdpxnyvdbjslnwr9g7ii4wqvrla7gfza236j9hff";
+      rev = "a6c0b773b72d4e30690e01f1f1dcffc28f2d9ea1";
+      sha256 = "0i8wcblcjw3291ba6ki4llw3fgm8ylp9q52kajkyr58dih537346";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+*/
 
 }

@@ -116,7 +116,7 @@ in
           include "${cfg.rulesetFile}"
         '';
         checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.stdenv.shell} -e
+          #! ${pkgs.runtimeShell} -e
           if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
             echo "Unload ip_tables before using nftables!" 1>&2
             exit 1

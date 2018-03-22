@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "kaitaistruct";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19j3snmr0qbd48f7yd3cc21ffv13dahf8ys591dnalbhvnkar71i";
+    sha256 = "d1d17c7f6839b3d28fc22b21295f787974786c2201e8788975e72e2a1d109ff5";
   };
 
   meta = with stdenv.lib; {

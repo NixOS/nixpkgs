@@ -1,10 +1,19 @@
---- old/build/pkgs/giac/spkg-install	2017-07-21 14:10:00.000000000 -0500
-+++ new/build/pkgs/giac/spkg-install	2017-10-15 15:55:55.321237645 -0500
-@@ -4,6 +4,8 @@
+diff --git a/build/pkgs/giac/spkg-install b/build/pkgs/giac/spkg-install
+index bdd8df6cb8..3fd7a3ef8a 100644
+--- a/build/pkgs/giac/spkg-install
++++ b/build/pkgs/giac/spkg-install
+@@ -2,6 +2,15 @@
  ## Giac
  ###########################################
  
-+find . -type f -exec sed -e 's@/bin/cp@cp@g' -i '{}' ';' && echo "Patching input parser" && find . -iname 'input_parser.cc'
++# Fix hardcoded paths, while making sure to only update timestamps of actually
++# changed files (otherwise confuses make)
++grep -rlF '/bin/cp' . | while read file
++do
++	sed -e 's@/bin/cp@cp@g' -i "$file"
++done
++
++# Fix input parser syntax
 +sed -e 's@yylex (&yylval)@yylex (\&yyval, scanner)@gp' -i 'src/src/input_parser.cc'
  
  if [ "$SAGE_LOCAL" = "" ]; then

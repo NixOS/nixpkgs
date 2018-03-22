@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     sed 1i'#include <sys/sysmacros.h>' -i platform/linux/linux.c
   '';
 
+  # Needed with GCC 7
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+
   makeFlags = ["PREFIX=$(out)"];
   meta = {
     platforms = [ "i686-linux" "x86_64-linux" ];

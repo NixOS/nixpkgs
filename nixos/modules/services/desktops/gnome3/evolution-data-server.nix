@@ -30,11 +30,11 @@ with lib;
 
   config = mkIf config.services.gnome3.evolution-data-server.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.evolution_data_server ];
+    environment.systemPackages = [ pkgs.gnome3.evolution-data-server ];
 
-    services.dbus.packages = [ pkgs.gnome3.evolution_data_server ];
+    services.dbus.packages = [ pkgs.gnome3.evolution-data-server ];
 
-    systemd.packages = [ pkgs.gnome3.evolution_data_server ];
+    systemd.packages = [ pkgs.gnome3.evolution-data-server ];
 
   };
 

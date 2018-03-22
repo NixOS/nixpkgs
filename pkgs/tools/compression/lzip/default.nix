@@ -2,18 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "lzip-${version}";
-  version = "1.19";
+  version = "1.20";
 
   buildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${name}.tar.gz";
-    sha256 = "1abbch762gv8rjr579q3qyyk6c80plklbv2mw4x0vg71dgsw9bgz";
+    sha256 = "0319q59kb8g324wnj7xzbr7vvlx5bcs13lr34j0zb3kqlyjq2fy9";
   };
 
-  configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
+  configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3" + stdenv.lib.optionalString stdenv.isCross " CXX=${stdenv.cc.targetPrefix}c++";
+
+  setupHook = ./lzip-setup-hook.sh;
 
   doCheck = true;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.nongnu.org/lzip/lzip.html;

@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A collection of custom extensions for the Django Framework";
     homepage = https://github.com/django-extensions/django-extensions;
-    licenses = [ licenses.mit ];
+    license = licenses.mit;
   };
 }

@@ -3,7 +3,7 @@
 }:
 
 let
-  baseVersion = "43";
+  baseVersion = "44";
   patchVersion = "05";
   dfVersion = "0.${baseVersion}.${patchVersion}";
   libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc dwarf-fortress-unfuck SDL ];
@@ -12,8 +12,8 @@ let
     else if stdenv.system == "i686-linux" then "linux32"
     else throw "Unsupported platform";
   sha256 =
-    if stdenv.system == "x86_64-linux" then "1r0b96yrdf24m9476k5x7rmp3faxr0kfwwdf35agpvlb1qbi6v45"
-    else if stdenv.system == "i686-linux" then "16l1lydpkbnl3zhz4i2snmjk7pps8vmw3zv0bjgr8dncbsrycd03"
+    if stdenv.system == "x86_64-linux" then "18bjyhjp5458bfbizm8vq4s00pqpfs097qp6pv76m84kgbc4ghg3"
+    else if stdenv.system == "i686-linux" then "1b9i4kf4c8s6bhqwn8jx100mg7fqp8nmswrai5w8dsma01py4amr"
     else throw "Unsupported platform";
 
 in

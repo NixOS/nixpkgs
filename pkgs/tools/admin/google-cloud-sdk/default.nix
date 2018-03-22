@@ -17,25 +17,20 @@ let
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
-    i686-linux = {
-      url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "0aq938s1w9mzj60avmcc68kgll54pl7635vl2mi89f6r56n0xslp";
-    };
-
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "13k2i1svry9q800s1jgf8jss0rzfxwk6qci3hsy1wrb9b2mwlz5g";
+      sha256 = "0c4jj580f7z6phiw4zhd32dlf4inkrxy3cig6ng66fi4zi6vnpc9";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1kvaz8p1iflsi85wwi7lb6km6frj70xsricyz1ah0sw3q71zyqmc";
+      sha256 = "0rblb0akwdzr5i8al0dcz482xmx1xdnjnzgqywjvwd8fzdyzq7bp";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "177.0.0";
+  version = "190.0.1";
 
   src = fetchurl (sources name stdenv.system);
 
@@ -65,6 +60,13 @@ in stdenv.mkDerivation rec {
         ln -s $programPath $binaryPath
     done
 
+    # disable component updater and update check
+    substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
+      --replace "\"disable_updater\": false" "\"disable_updater\": true"
+    echo "
+    [component_manager]
+    disable_update_check = true" >> $out/google-cloud-sdk/properties
+
     # setup bash completion
     mkdir -p "$out/etc/bash_completion.d/"
     mv "$out/google-cloud-sdk/completion.bash.inc" "$out/etc/bash_completion.d/gcloud.inc"
@@ -81,6 +83,6 @@ in stdenv.mkDerivation rec {
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     maintainers = with maintainers; [ stephenmw zimbatm ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

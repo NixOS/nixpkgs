@@ -23,7 +23,7 @@ python2.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python2.pkgs; [
     argparse
     boto
-    dns
+    dnspython
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild, opam }:
+{ stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ocaml-react-1.2.1";
@@ -9,9 +9,7 @@ stdenv.mkDerivation {
   };
 
   unpackCmd = "tar xjf $src";
-  buildInputs = [ ocaml findlib topkg ocamlbuild opam ];
-
-  createFindlibDestdir = true;
+  buildInputs = [ ocaml findlib topkg ocamlbuild ];
 
   inherit (topkg) buildPhase installPhase;
 

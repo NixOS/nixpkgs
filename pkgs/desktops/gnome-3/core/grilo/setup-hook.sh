@@ -4,4 +4,4 @@ make_grilo_find_plugins() {
     fi
 }
 
-envHooks+=(make_grilo_find_plugins)
+addEnvHooks "$hostOffset" make_grilo_find_plugins

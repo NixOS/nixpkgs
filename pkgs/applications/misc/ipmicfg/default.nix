@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ipmicfg-${version}";
-  version = "1.27.0";
-  buildVersion = "170620";
+  version = "1.27.1";
+  buildVersion = "170901";
 
   src = fetchzip {
     url = "ftp://ftp.supermicro.com/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "0jr2vih4hzymb62mbqyykwcrjhbhazf6wr1g0cq8ji586i3z3vw5";
+    sha256 = "11xhzw36pg4has8857pypf44cni8m2mg8qsqi1s4bfjbxlfgxgwk";
+    extraPostFetch = "chmod u+rwX,go-rwx+X $out/";
   };
 
   installPhase = ''

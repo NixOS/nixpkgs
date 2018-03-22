@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi
+{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
 , buildPlatform, hostPlatform
 }:
 
@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "doc" ];
 
   buildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
+  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
+    substituteInPlace config/Makefile.darwin --replace /usr/local "$out"
     ${optionalString (hostPlatform != buildPlatform) ''
-    sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
+      sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
 
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";

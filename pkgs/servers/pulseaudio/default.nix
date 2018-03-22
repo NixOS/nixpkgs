@@ -36,14 +36,19 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "11.0";
+  version = "11.1";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0sf92knqkvqmfhrbz4vlsagzqlps72wycpmln5dygicg07a0a8q7";
+    sha256 = "17ndr6kc7hpv4ih4gygwlcpviqifbkvnk4fbwf4n25kpb991qlpj";
   };
 
-  patches = [ ./caps-fix.patch ];
+  patches = [ ./caps-fix.patch ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "padsp-fix.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/pulseaudio/0001-padsp-Make-it-compile-on-musl.patch?id=167be02bf4618a90328e2b234f6a63a5dc05f244";
+      sha256 = "0gf4w25zi123ghk0njapysvrlljkc3hyanacgiswfnnm1i8sab1q";
+    });
 
   outputs = [ "out" "dev" ];
 

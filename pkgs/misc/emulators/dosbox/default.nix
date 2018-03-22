@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, SDL, makeDesktopItem, mesa }:
+{ stdenv, lib, fetchurl, SDL, makeDesktopItem, libGLU_combined }:
 
 stdenv.mkDerivation rec {
   name = "dosbox-0.74";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ SDL mesa ];
+  buildInputs = [ SDL libGLU_combined ];
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "A DOS emulator";
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
   };
 }

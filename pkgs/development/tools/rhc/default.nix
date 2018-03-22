@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby_2_2, stdenv, makeWrapper }:
+{ lib, bundlerEnv, ruby, stdenv, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "rhc-1.38.7";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   env = bundlerEnv {
     name = "rhc-1.38.7-gems";
 
-    ruby = ruby_2_2;
+    inherit ruby;
 
     gemdir = ./.;
   };
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true; # requires ruby 2.2
     homepage = https://github.com/openshift/rhc;
     description = "OpenShift client tools";
     license = licenses.asl20;
-    maintaners = maintainers.szczyp;
+    maintainers = [ maintainers.szczyp ];
   };
 }

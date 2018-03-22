@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "gerrit-${version}";
-  version = "2.14.3";
+  version = "2.14.6";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    sha256 = "1hxrlhp5l5q4lp5b5bq8va7856cnm4blfv01rgqq3yhvn432sq6v";
+    sha256 = "0fsqwfsnyb4nbxgb1i1mp0vshl0mk8bwqlddzqr9x2v99mbca28q";
   };
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1j1afxv7yj2fxaw0wy8kmxi6sl9fwj8xsxs5kzg9qz5gzayb26kp";
+  outputHash = "1qrmvqqnlbabqz4yx06vi030ci12v0063iq2palxmbj3whrzv9la";
 
   buildCommand = ''
     mkdir -p "$out"/webapps/

@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lisp-unit2'';
-  version = ''20160531-git'';
+  version = ''20180131-git'';
 
   parasites = [ "lisp-unit2-test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."symbol-munger" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lisp-unit2/2016-05-31/lisp-unit2-20160531-git.tgz'';
-    sha256 = ''17frcygs515l611cwggm90xapl8xng9cylsrdh11ygmdxwwy59sv'';
+    url = ''http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz'';
+    sha256 = ''04kwrg605mqzf3ghshgbygvvryk5kipl6gyc5kdaxafjxvhxaak7'';
   };
 
   packageName = "lisp-unit2";
@@ -21,9 +21,9 @@ rec {
 }
 /* (SYSTEM lisp-unit2 DESCRIPTION
     Common Lisp library that supports unit testing. SHA256
-    17frcygs515l611cwggm90xapl8xng9cylsrdh11ygmdxwwy59sv URL
-    http://beta.quicklisp.org/archive/lisp-unit2/2016-05-31/lisp-unit2-20160531-git.tgz
-    MD5 913675bff1f86453887681e72ae5914d NAME lisp-unit2 FILENAME lisp-unit2
+    04kwrg605mqzf3ghshgbygvvryk5kipl6gyc5kdaxafjxvhxaak7 URL
+    http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz
+    MD5 d061fa640837441a5d2eecbefd8b2e69 NAME lisp-unit2 FILENAME lisp-unit2
     DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME cl-interpol FILENAME cl-interpol) (NAME cl-ppcre FILENAME cl-ppcre)
@@ -34,4 +34,4 @@ rec {
     DEPENDENCIES
     (alexandria cl-interpol cl-ppcre cl-unicode flexi-streams iterate
      symbol-munger)
-    VERSION 20160531-git SIBLINGS NIL PARASITES (lisp-unit2-test)) */
+    VERSION 20180131-git SIBLINGS NIL PARASITES (lisp-unit2-test)) */

@@ -58,16 +58,18 @@ let
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
 
-        # Remove static libraries in case dynamic are available.
-        for i in $out/lib/*.a; do
-          name="$(basename "$i")"
-          if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
-            rm "$i"
-          fi
-        done
+        if [ -z "''${dontDisableStatic:-}" ]; then
+          # Remove static libraries in case dynamic are available.
+          for i in $out/lib/*.a; do
+            name="$(basename "$i")"
+            if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
+              rm "$i"
+            fi
+          done
+        fi
       '';
 
-    postFixup = lib.optionalString (!stdenv.isDarwin)
+    postFixup = lib.optionalString (!stdenv.isDarwin && stdenv.hostPlatform.libc == "glibc")
       ''
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
@@ -91,33 +93,33 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.19";
+    version = "9.3.21";
     psqlSchema = "9.3";
-    sha256 = "1d9gmi1psg4aa6h6ylvsrdm5jnnb7p36pn4h2qrvl9z9v4n8g7pv";
+    sha256 = "1q2038rvqa00rpk8sjbnwb19x64fcyjphw9x087432hq918vrfmr";
   };
 
   postgresql94 = common {
-    version = "9.4.14";
+    version = "9.4.16";
     psqlSchema = "9.4";
-    sha256 = "0szc0navrcjnpyafw2sai8cmwr3znsy0w6031lv7n1ab20xg4zcf";
+    sha256 = "10ay2cy3m4g66jwvxknc0f0w6mv2v7vm0dzkq92s9n7446v65g6w";
   };
 
   postgresql95 = common {
-    version = "9.5.9";
+    version = "9.5.11";
     psqlSchema = "9.5";
-    sha256 = "1m6d4y3m3ir20dzl6q3s3yvmr0a7hq3si2v1hg5hanmbck3db379";
+    sha256 = "1pf8fwx8a6vn344b80a1bf2p4hjg06sh69kb2qwswxbsw9scv0l1";
   };
 
   postgresql96 = common {
-    version = "9.6.5";
+    version = "9.6.7";
     psqlSchema = "9.6";
-    sha256 = "0k3ls2x182jz6djjiqj9kycddabdl2gk1y1ajq1vipnxwfki5nh6";
+    sha256 = "1ii4lrw8sncnz5g0fss1011shjhmbajzzhxx4f0bgsniq7rkvgif";
   };
 
   postgresql100 = common {
-    version = "10.0";
+    version = "10.2";
     psqlSchema = "10.0";
-    sha256 = "1lbzwpmdxmk5bh0ix0rn72qbd52dq5cb55nzajscb0bvwa95abvi";
+    sha256 = "1bav2iyi93h866skrrlqlvsp4sfv1sfww1s305zpzffxcadh0cpy";
   };
 
 }

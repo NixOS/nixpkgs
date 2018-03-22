@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.1.11";
+  version = "0.1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yfrfnf404cxzn3iswibqjxklsl0b1lwgqiml6pwiqj79a7zbwbn";
+    sha256 = "90dc18e028989c609146e241ea153250be451e05ecc0c2832565231dacdf59c1";
   };
 
   foo = 1;

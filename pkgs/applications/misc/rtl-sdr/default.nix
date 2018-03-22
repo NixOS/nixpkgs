@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   #   /etc/udev/rules.d/, and there is no option to install elsewhere. So install
   #   rules manually.
   # * Propagate libusb-1.0 dependency in pkg-config file.
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d/"
     cp ../rtl-sdr.rules "$out/etc/udev/rules.d/99-rtl-sdr.rules"
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

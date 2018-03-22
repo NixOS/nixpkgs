@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
-, glib, dbus_glib, json_glib
+, glib, dbus-glib, json-glib
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
 
 with lib;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
 
   buildInputs = [
-    glib dbus_glib json_glib
+    glib dbus-glib json-glib
     gtk3 libindicator-gtk3 libdbusmenu-gtk3 libappindicator-gtk3
   ];
 

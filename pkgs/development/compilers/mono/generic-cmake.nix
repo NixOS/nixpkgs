@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which, enableParallelBuilding ? true }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -45,9 +45,6 @@ stdenv.mkDerivation rec {
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
 
-  # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
-  enableParallelBuilding = false;
-
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
   patches = [ ./pkgconfig-before-gac.patch ];
@@ -67,7 +64,7 @@ stdenv.mkDerivation rec {
   postBuild = ''
     find . -name 'config' -type f | xargs \
     sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g" \
-           -e "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" \
+           -e 's#[^"]*libgdiplus[^"]*"#${libgdiplus}/lib/libgdiplus.so"#' \
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with
@@ -82,6 +79,8 @@ stdenv.mkDerivation rec {
   + ''
     ln -s $out/bin/mcs $out/bin/gmcs
   '';
+
+  inherit enableParallelBuilding;
 
   meta = {
     homepage = http://mono-project.com/;

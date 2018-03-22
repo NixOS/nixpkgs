@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.1";
+  version = "1.6.2";
   name = "hunspell-${version}";
 
   src = fetchurl {
     url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
-    sha256 = "0j9c20sj7bgd6f77193g1ihy8w905byk2gdhdc0r9dsh7irr7x9h";
+    sha256 = "1i7lsv2cm0713ia3j5wjkcrhpfp3lqpjpwp4d3v18n7ycaqcxn9w";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];

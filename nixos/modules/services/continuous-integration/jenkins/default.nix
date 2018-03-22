@@ -145,6 +145,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # server references the dejavu fonts
+    environment.systemPackages = [
+      pkgs.dejavu_fonts
+    ];
+
     users.extraGroups = optional (cfg.group == "jenkins") {
       name = "jenkins";
       gid = config.ids.gids.jenkins;
@@ -200,15 +205,17 @@ in {
           ${replacePlugins}
         '';
 
+      # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
         ${pkgs.jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
+                                                  -Djava.awt.headless=true \
                                                   ${concatStringsSep " " cfg.extraOptions}
       '';
 
       postStart = ''
-        until [[ $(${pkgs.curl.bin}/bin/curl -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
+        until [[ $(${pkgs.curl.bin}/bin/curl -L -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
           sleep 1
         done
       '';

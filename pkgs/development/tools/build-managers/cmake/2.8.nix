@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
     });
 
+  postPatch = ''
+    substituteInPlace Utilities/cmlibarchive/CMakeLists.txt \
+      --replace '"-framework CoreServices"' '""'
+  '';
+
   buildInputs = [ curl expat zlib bzip2 ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
@@ -76,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ mornfall ];
+    platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

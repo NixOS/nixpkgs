@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, procps
-, gnome3, libgnome_keyring, libsecret }:
+{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM, procps
+, gnome3, libgnome-keyring, libsecret }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
@@ -16,19 +16,23 @@ stdenv.mkDerivation rec {
     sed -i "s,nm_libexecdir=.*,nm_libexecdir=$out/libexec," "configure"
   '';
 
-  buildInputs = [ networkmanager libsecret ]
-      ++ (with gnome3; [ gtk libgnome_keyring networkmanagerapplet ]);
+  buildInputs = [ networkmanager strongswanNM libsecret ]
+      ++ (with gnome3; [ gtk libgnome-keyring networkmanagerapplet ]);
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  # Fixes deprecation errors with networkmanager 1.10.2
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   preConfigure = ''
      substituteInPlace "configure" \
        --replace "/sbin/sysctl" "${procps}/bin/sysctl"
   '';
 
+  configureFlags = [ "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm" ];
+
   meta = {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
   };
 }
-

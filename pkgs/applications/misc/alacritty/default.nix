@@ -12,6 +12,7 @@
   libXcursor,
   libXxf86vm,
   libXi,
+  libXrandr,
   xclip }:
 
 with rustPlatform;
@@ -24,22 +25,23 @@ let
     libX11
     libXcursor
     libXxf86vm
+    libXrandr
     libXi
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2017-11-12";
+  version = "2018-03-04";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "0096fzrfzj0a2n2n531r4b6c8rlfj5qc90d6i4iin5axalk3i1h4";
+    sha256 = "0pxnc6r75c7rwnsqc0idi4a60arpgchl1i8yppibhv0px5w11mwa";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "10blch8pzk1zk3w27sbcszhcnq908xh1q55vqgy8iv5x47rpl02q";
+  cargoSha256 = "0q2yy9cldng8znkmhysgrwi43z2x7a8nb1bnxpy9z170q8ds0m0j";
 
   nativeBuildInputs = [
     cmake

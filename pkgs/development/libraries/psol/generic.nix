@@ -3,7 +3,7 @@
 { inherit version; } // fetchzip {
   inherit sha256;
   name   = "psol-${version}";
-  url    = "https://dl.google.com/dl/page-speed/psol/${version}.tar.gz";
+  url    = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";
 
   meta = {
     description = "PageSpeed Optimization Libraries";

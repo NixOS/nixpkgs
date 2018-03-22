@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, dns, pycountry, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, dnspython, pycountry, nose }:
 
 buildPythonPackage rec {
   pname = "FormEncode";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1xm77h2mds2prlaz0z4nzkx13g61rx5c2v3vpgjq9d5ij8bzb8md";
   };
 
-  buildInputs = [ dns pycountry nose ];
+  buildInputs = [ dnspython pycountry nose ];
 
   patchPhase = ''
     # dnspython3 has been superseded, see its PyPI page

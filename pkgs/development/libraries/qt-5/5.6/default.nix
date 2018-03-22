@@ -27,13 +27,13 @@ existing packages here and modify it as necessary.
 {
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base,
 
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
-  debug ? null,
+  debug ? false,
 }:
 
 with stdenv.lib;
@@ -51,8 +51,8 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine =
-      optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+    qtwebengine = [ ./qtwebengine-seccomp.patch ]
+      ++ optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
     qtwebkit = [ ./qtwebkit.patch ];
   };
 
@@ -74,7 +74,7 @@ let
       inherit mkDerivation;
 
       qtbase = callPackage ../modules/qtbase.nix {
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit developerBuild decryptSslTraffic;
@@ -113,7 +113,7 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
+      full = env "qt-full-${qtbase.version}" [
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects qtimageformats
         qtlocation qtmultimedia qtquickcontrols qtquickcontrols2 qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland

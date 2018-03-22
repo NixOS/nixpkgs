@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-unstable-${version}";
-  version = "2017-10-30";
+  version = "2018-03-19";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
-    rev = "3f7bd0a62d1a243562e182d9051ebb54f3414aaa"; # nightly
-    sha256 = "0g6wf4j3dfy3yfkby3wlqajryv4kffqvhljq2q0x482fsrl4vipz";
+    rev = "c76ad181f5753984e39608628ac4def4183b53a4"; # nightly
+    sha256 = "1wsmljina9n2zij7gzh7b4zbzi7sdsa6hnyaj75nsmqn9lshngap";
   };
 
   goPackagePath = "github.com/gokcehan/lf";

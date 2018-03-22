@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
+, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip
+, yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
 , autoconf213, which, m4
@@ -22,11 +22,11 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.4.0";
+  version = "52.6.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "6ac39cecca9e53b51754d7a8bd7cae228d197eb234b03a2386c16fd665f4f7a67f10bbdf981c20b3f7a21a5ef67e2771154a3dd9f249c6a884c48a9e59bcfc78";
+    sha512 = "80742c95ed61d1cb2e72b71bb23bdd211a40240ab4393e9f028a38f902547372084a8f56445e2394484be088a7b9801405f3d6618fb2742601cc968bf34427f0";
   };
 
   # New sed no longer tolerates this mistake.
@@ -39,9 +39,9 @@ in stdenv.mkDerivation rec {
   # from firefox, but without sound libraries
   buildInputs =
     [ gtk2 zip libIDL libjpeg zlib bzip2
-      dbus dbus_glib pango freetype fontconfig xorg.libXi
+      dbus dbus-glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-      nspr nss libnotify xorg.pixman yasm mesa
+      nspr nss libnotify xorg.pixman yasm libGLU_combined
       xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
@@ -72,7 +72,6 @@ in stdenv.mkDerivation rec {
       "--enable-system-sqlite"
       #"--enable-system-cairo"
       "--enable-startup-notification"
-      "--enable-content-sandbox"            # available since 26.0, but not much info available
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
@@ -141,7 +140,7 @@ in stdenv.mkDerivation rec {
           exec = "thunderbird %U";
           desktopName = "Thunderbird";
           icon = "$out/lib/thunderbird-${version}/chrome/icons/default/default256.png";
-          genericName = "Main Reader";
+          genericName = "Mail Reader";
           categories = "Application;Network";
           mimeType = stdenv.lib.concatStringsSep ";" [
             # Email

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
 , topkg, result, lwt, cmdliner, fmt }:
 let
   pname = "logs";
@@ -18,17 +18,12 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg fmt cmdliner lwt ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg fmt cmdliner lwt ];
   propagatedBuildInputs = [ result ];
 
-  buildPhase = ''
-    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build \
-      --with-js_of_ocaml false
-    '';
+  buildPhase = "${topkg.run} build --with-js_of_ocaml false";
 
   inherit (topkg) installPhase;
-
-  createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
     description = "Logging infrastructure for OCaml";

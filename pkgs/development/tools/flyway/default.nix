@@ -1,12 +1,12 @@
 { stdenv, fetchurl, jre_headless, makeWrapper }:
   let
-    version = "4.2.0";
+    version = "5.0.7";
   in
     stdenv.mkDerivation {
       name = "flyway-${version}";
       src = fetchurl {
-        url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/4.2.0/flyway-commandline-${version}.tar.gz";
-        sha256 = "1fxj760qx6apsz50p60c9n79k6bqkjcv2zfgab0awvmdvdy4k661";
+        url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.0.7/flyway-commandline-${version}.tar.gz";
+        sha256 = "1zmnzz7d5kb2wpmfizryxxhpjs16j5k9mich1hbb2qfkqvygk6sv";
       };
       buildInputs = [ makeWrapper ];
       dontBuild = true;
@@ -23,7 +23,7 @@
         description = "Evolve your Database Schema easily and reliably across all your instances";
         homepage = "https://flywaydb.org/";
         license = licenses.asl20;
-        platforms = platforms.linux;
-        maintainers = maintainers.cmcdragonkai;
+        platforms = platforms.unix;
+        maintainers = [ maintainers.cmcdragonkai ];
       };
     }

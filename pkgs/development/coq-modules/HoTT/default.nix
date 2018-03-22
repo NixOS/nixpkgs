@@ -1,8 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, coq }:
 
-if !stdenv.lib.versionAtLeast coq.coq-version "8.6"
-then throw "This version of HoTT requires Coq 8.6"
-else stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "coq${coq.coq-version}-HoTT-${version}";
   version = "20170921";
 
@@ -55,5 +53,9 @@ else stdenv.mkDerivation rec {
     description = "Homotopy type theory";
     maintainers = with maintainers; [ siddharthist ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: v == "8.6";
   };
 }

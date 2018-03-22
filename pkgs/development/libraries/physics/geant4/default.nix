@@ -25,7 +25,7 @@
 , motif ? null # motif or lesstif
 
 # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, mesa   ? null
+, libGLU_combined   ? null
 , xlibsWrapper    ? null
 , libXmu ? null
 }:
@@ -40,7 +40,7 @@ assert enableQT -> qt != null;
 assert enableXM -> motif != null;
 
 # OpenGL/X11 User Interface and Visualisation drivers.
-assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> mesa   != null;
+assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libGLU_combined   != null;
 assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> xlibsWrapper    != null;
 assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libXmu != null;
 
@@ -81,8 +81,8 @@ let
       };
 
       enableParallelBuilding = true;
-      buildInputs = [ cmake clhep expat zlib xercesc qt motif mesa xlibsWrapper libXmu ];
-      propagatedBuildInputs = [ g4data clhep expat zlib xercesc qt motif mesa xlibsWrapper libXmu ];
+      buildInputs = [ cmake clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu ];
+      propagatedBuildInputs = [ g4data clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu ];
 
       setupHook = ./setup-hook.sh;
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "sshlatex-${version}";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "iblech";
     repo = "sshlatex";
     rev = "${version}";
-    sha256 = "02h81i8n3skg9jnlfrisyg5bhqicrn6svq64kp20f70p64s3d7ix";
+    sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 
   buildInputs = [ makeWrapper ];

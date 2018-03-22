@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   qtscript, kconfig, kinit, karchive, kcrash,
   kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5,
-  shared_mime_info
+  shared-mime-info
 }:
 
 mkDerivation {
@@ -13,7 +13,7 @@ mkDerivation {
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
-  buildInputs = [ shared_mime_info ];
+  buildInputs = [ shared-mime-info ];
   propagatedBuildInputs = [
     kconfig kinit kcmutils kconfigwidgets knewstuff kparts qca-qt5
     karchive kcrash

@@ -8,16 +8,17 @@
 # Should use buildPythonPackage here somehow
 stdenv.mkDerivation rec {
   pname = "setuptools";
-  version = "36.6.0";
+  version = "38.4.1";
   name = "${python.libPrefix}-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "62074589522a798da243f47348f38020d55b6c945652e2f2c09d3a96299812b7";
+    sha256 = "3b5f74bd33b046a121f052632f248b580f5e83848bb4cebda9e38741a445a969";
   };
 
-  buildInputs = [ python wrapPython unzip ];
+  nativeBuildInputs = [ unzip wrapPython ];
+  buildInputs = [ python ];
   doCheck = false;  # requires pytest
   installPhase = ''
       dst=$out/${python.sitePackages}

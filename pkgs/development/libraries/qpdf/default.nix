@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libjpeg, zlib, perl }:
 
-let version = "7.0.0";
+let version = "8.0.0";
 in
 stdenv.mkDerivation rec {
   name = "qpdf-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qpdf/qpdf/${version}/${name}.tar.gz";
-    sha256 = "0py6p27fx4qrwq9mvcybna42b0bdi359x38lzmggxl5a9khqvl7y";
+    sha256 = "01a1d5wyrj1m35d68yj0cyqfjyrwhxq2yqwaw5an1d1p4aaid8gz";
   };
 
   nativeBuildInputs = [ perl ];

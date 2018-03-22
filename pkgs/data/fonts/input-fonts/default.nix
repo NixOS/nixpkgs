@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fonts for Code, from Font Bureau";
-    longDescrition = ''
+    longDescription = ''
       Input is a font family designed for computer programming, data,
       and text composition. It was designed by David Jonathan Ross
       between 2012 and 2014 and published by The Font Bureau. It

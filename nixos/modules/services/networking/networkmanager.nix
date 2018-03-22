@@ -133,10 +133,10 @@ in {
       basePackages = mkOption {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
-                            networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect networkmanager_fortisslvpn
-                            networkmanager_pptp networkmanager_l2tp
-                            networkmanager_iodine; };
+                            networkmanager-openvpn networkmanager-vpnc
+                            networkmanager-openconnect networkmanager-fortisslvpn
+                            networkmanager-pptp networkmanager-l2tp
+                            networkmanager-iodine; };
         internal = true;
       };
 
@@ -241,6 +241,19 @@ in {
           A list of scripts which will be executed in response to  network  events.
         '';
       };
+
+      enableStrongSwan = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the StrongSwan plugin.
+          </para><para>
+          If you enable this option the
+          <literal>networkmanager_strongswan</literal> plugin will be added to
+          the <option>networking.networkmanager.packages</option> option
+          so you don't need to to that yourself.
+        '';
+      };
     };
   };
 
@@ -260,28 +273,28 @@ in {
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
-      { source = "${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
+      { source = "${networkmanager-openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
         target = "NetworkManager/VPN/nm-openvpn-service.name";
       }
-      { source = "${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
+      { source = "${networkmanager-vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
         target = "NetworkManager/VPN/nm-vpnc-service.name";
       }
-      { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
+      { source = "${networkmanager-openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+      { source = "${networkmanager-fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
         target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
-      { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
+      { source = "${networkmanager-pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";
       }
-      { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+      { source = "${networkmanager-l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
       }
       { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
         target = "NetworkManager/VPN/nm-strongswan-service.name";
       }
-      { source = "${networkmanager_iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
+      { source = "${networkmanager-iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
         target = "NetworkManager/VPN/nm-iodine-service.name";
       }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
@@ -322,6 +335,7 @@ in {
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
+        mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
     };
@@ -333,13 +347,13 @@ in {
       wireless.enable = lib.mkDefault false;
     };
 
-    powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl restart network-manager
-    '';
-
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages = cfg.packages;
+    networking.networkmanager.packages =
+      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
+
+    services.dbus.packages =
+      optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
 
     services.udev.packages = cfg.packages;
   };

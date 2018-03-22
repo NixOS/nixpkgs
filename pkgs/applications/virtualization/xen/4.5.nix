@@ -9,7 +9,7 @@
 , withLibHVM ? true
 
 # qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice_protocol, usbredir
+, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
 , alsaLib
 , ... } @ args:
 
@@ -29,7 +29,7 @@ let
   });
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
+    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
   ];
 
@@ -38,6 +38,10 @@ in
 
 callPackage (import ./generic.nix (rec {
   version = "4.5.5";
+
+  meta = {
+    knownVulnerabilities = [ "Security support ended in January 2018" ];
+  };
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
@@ -230,6 +234,12 @@ callPackage (import ./generic.nix (rec {
     XSA_243_45
     XSA_244_45
     XSA_245
+    XSA_246_45
+    XSA_247_45
+    XSA_248_45
+    XSA_249
+    XSA_250_45
+    XSA_251_45
   ];
 
   # Fix build on Glibc 2.24.
@@ -241,5 +251,11 @@ callPackage (import ./generic.nix (rec {
       -i tools/blktap2/control/tap-ctl-allocate.c \
       -i tools/libxl/libxl_device.c
   '';
+
+  passthru = {
+    qemu-system-i386 = if withInternalQemu
+      then "lib/xen/bin/qemu-system-i386"
+      else throw "this xen has no qemu builtin";
+  };
 
 })) ({ ocamlPackages = ocamlPackages_4_02; } // args)

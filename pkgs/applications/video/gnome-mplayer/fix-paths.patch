@@ -1,0 +1,87 @@
+--- a/src/gui.c
++++ b/src/gui.c
+@@ -7470,7 +7470,7 @@
+         filename = g_strdup_printf("%s/00000001.jpg", dirname);
+         g_free(basepath);
+         // run mplayer and try to get the first frame and convert it to a jpeg
+-        av[ac++] = g_strdup_printf("mplayer");
++        av[ac++] = g_strdup_printf("@mplayer@");
+         av[ac++] = g_strdup_printf("-vo");
+         av[ac++] = g_strdup_printf("jpeg:outdir=%s", dirname);
+         av[ac++] = g_strdup_printf("-ao");
+--- a/src/property_page_common.c
++++ b/src/property_page_common.c
+@@ -80,7 +80,7 @@
+     MetaData *ret;
+     ret = g_new0(MetaData, 1);
+ 
+-    av[ac++] = g_strdup_printf("mplayer");
++    av[ac++] = g_strdup_printf("@mplayer@");
+     av[ac++] = g_strdup_printf("-vo");
+     av[ac++] = g_strdup_printf("null");
+     av[ac++] = g_strdup_printf("-ao");
+--- a/src/support.c
++++ b/src/support.c
+@@ -566,7 +566,7 @@
+     } else {
+         playlist = FALSE;
+         if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-            av[ac++] = g_strdup_printf("mplayer");
++            av[ac++] = g_strdup_printf("@mplayer@");
+         } else {
+             av[ac++] = g_strdup_printf("%s", mplayer_bin);
+         }
+@@ -728,7 +728,7 @@
+         playlist = FALSE;
+         // run mplayer and try to get the first frame and convert it to a jpeg
+         if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-            av[ac++] = g_strdup_printf("mplayer");
++            av[ac++] = g_strdup_printf("@mplayer@");
+         } else {
+             av[ac++] = g_strdup_printf("%s", mplayer_bin);
+         }
+@@ -825,7 +825,7 @@
+         playlist = FALSE;
+ 
+         if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-            av[ac++] = g_strdup_printf("mplayer");
++            av[ac++] = g_strdup_printf("@mplayer@");
+         } else {
+             av[ac++] = g_strdup_printf("%s", mplayer_bin);
+         }
+@@ -1251,7 +1251,7 @@
+     gm_log(verbose, G_LOG_LEVEL_INFO, "getting file metadata for %s", name);
+ 
+     if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-        av[ac++] = g_strdup_printf("mplayer");
++        av[ac++] = g_strdup_printf("@mplayer@");
+     } else {
+         av[ac++] = g_strdup_printf("%s", mplayer_bin);
+     }
+@@ -1532,7 +1532,7 @@
+         return 0;
+ 
+     if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-        av[ac++] = g_strdup_printf("mplayer");
++        av[ac++] = g_strdup_printf("@mplayer@");
+     } else {
+         av[ac++] = g_strdup_printf("%s", mplayer_bin);
+     }
+@@ -1597,7 +1597,7 @@
+ 
+     if (control_id == 0) {
+         ac = 0;
+-        av[ac++] = g_strdup_printf("mencoder");
++        av[ac++] = g_strdup_printf("@mencoder@");
+         av[ac++] = g_strdup_printf("-ovc");
+         av[ac++] = g_strdup_printf("copy");
+         av[ac++] = g_strdup_printf("-oac");
+@@ -2830,7 +2830,7 @@
+     gboolean ret = TRUE;
+ 
+     if (mplayer_bin == NULL || !g_file_test(mplayer_bin, G_FILE_TEST_EXISTS)) {
+-        av[ac++] = g_strdup_printf("mplayer");
++        av[ac++] = g_strdup_printf("@mplayer@");
+     } else {
+         av[ac++] = g_strdup_printf("%s", mplayer_bin);
+     }

@@ -1,29 +1,41 @@
-{stdenv, fetchurl, gnome3, glib, json_glib, libxml2, libarchive, libsoup, gobjectIntrospection, meson, ninja, pkgconfig,  valadoc}:
+{ stdenv, fetchurl, pkgconfig, meson, ninja, makeFontsConf
+, gnome3, glib, json-glib, libarchive, libsoup, gobjectIntrospection }:
 
-stdenv.mkDerivation rec {
-  major = "0.4";
-  minor = "5";
-  version = "${major}.${minor}";
-
-  name = "libhttpseverywhere-${version}";
+let
+  pname = "libhttpseverywhere";
+  version = "0.8.2";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
-    sha256 = "07sgcw285rl9wqr5k7srs3fj7fhgrrw6w780jx8wy8jw2bfwlvj2";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0vcnimlfcscyvjbh845xbnjb9qc8x0mliaqz2gczxxpakxrbl3gh";
   };
 
-  nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
-  buildInputs = [ glib gnome3.libgee libxml2 json_glib libsoup libarchive ];
+  nativeBuildInputs = [ gnome3.vala gobjectIntrospection meson ninja pkgconfig ];
+  buildInputs = [ glib gnome3.libgee json-glib libsoup libarchive ];
+
+  mesonFlags = [ "-Denable_valadoc=true" ];
 
   doCheck = true;
 
-  checkPhase = "./httpseverywhere_test";
+  checkPhase = "(cd test && ./httpseverywhere_test)";
 
-  meta = {
-    description = "library to use HTTPSEverywhere in desktop applications";
-    homepage    = https://git.gnome.org/browse/libhttpseverywhere;
-    license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  outputs = [ "out" "devdoc" ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with stdenv.lib; {
+    description = "Library to use HTTPSEverywhere in desktop applications";
+    homepage = https://git.gnome.org/browse/libhttpseverywhere;
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sternenseemann ] ++ gnome3.maintainers;
   };
 }

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
         sha256 = "1skx2pfnic7pyss7c69qb7kg2xvflpxf112xkf9awk516dw1w4h7";
       }
     else
-      abort "Saleae Logic software requires i686-linux or x86_64-linux";
+      throw "Saleae Logic software requires i686-linux or x86_64-linux";
 
   desktopItem = makeDesktopItem {
     name = "saleae-logic";

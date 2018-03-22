@@ -1,6 +1,7 @@
 { lib, stdenv
-, fetchurl, fetchFromGitHub
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5, protobuf
+, fetchurl, fetchFromGitHub, fetchpatch
+, cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, glog, boost, google-gflags, protobuf
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -11,37 +12,43 @@
 , enableJPEG2K    ? true, jasper
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
+, enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
+, enableUnfree    ? false
 , enableIpp       ? false
-, enableContrib   ? false  #, caffe, glog, boost, google-gflags
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
+, enableVtk       ? false, vtk
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
+, enableTbb       ? false, tbb
+, enableOvis      ? false, ogre
+, enableGPhoto2   ? false, libgphoto2
+, enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, QTKit
+, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
 }:
 
 let
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0266kg337wij9rz602z5088jn2fq56aqpxxflf0fbh28kygchvk4";
+    sha256 = "08yahgf427d2qbs2mw02xww6bv5yjkfc1hihihh7fhqgfz0jnj1h";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "0qxdvzdszzlpsya1pn4d2r9z4j98isxrgk15a2wwa3dqjmgv880d";
+    sha256 = "00x1x53qv2pnc7i56244b5nf44wm2mp77hj486i5697r6hikk8n3";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -52,16 +59,16 @@ let
     src = fetchFromGitHub {
       owner  = "opencv";
       repo   = "opencv_3rdparty";
-      rev    = "a62e20676a60ee0ad6581e217fe7e4bada3b95db";
-      sha256 = "04idycc479l7fidj6r107sv65iszndswm287ms3nh896jbpbaxbv";
+      rev    = "dfe3162c237af211e98b8960018b564bc209261d";
+      sha256 = "1k5xiwdi5r2y3fs5g70lpknxqi4pj32w6l311gfwng3q1cb2crif";
     } + "/ippicv";
-    files = let name = platform : "ippicv_2017u2_${platform}_20170418.tgz"; in
+    files = let name = platform : "ippicv_2017u3_${platform}_general_20170822.tgz"; in
       if stdenv.system == "x86_64-linux" then
-      { ${name "lnx_intel64"} = "87cbdeb627415d8e4bc811156289fa3a"; }
+      { ${name "lnx_intel64"} = "4e0352ce96473837b1d671ce87f17359"; }
       else if stdenv.system == "i686-linux" then
-      { ${name "lnx_ia32"}    = "f2cece00d802d4dea86df52ed095257e"; }
+      { ${name "lnx_ia32"}    = "dcdb0ba4b123f240596db1840cd59a76"; }
       else if stdenv.system == "x86_64-darwin" then
-      { ${name "mac_intel64"} = "0c25953c99dbb499ff502485a9356d8d"; }
+      { ${name "mac_intel64"} = "c1ebb5dfa5b7f54b0c44e1917805a463"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -104,6 +111,21 @@ let
     dst = ".cache/xfeatures2d/boostdesc";
   };
 
+  # See opencv_contrib/modules/face/CMakeLists.txt
+  face = {
+    src = fetchFromGitHub {
+      owner  = "opencv";
+      repo   = "opencv_3rdparty";
+      rev    = "8afa57abc8229d611c4937165d20e2a2d9fc5a12";
+      sha256 = "061lsvqdidq9xa2hwrcvwi9ixflr2c2lfpc8drr159g68zi8bp4v";
+    };
+    files = {
+      "face_landmark_model.dat" = "7505c44ca4eb54b4ab1e4777cb96ac05";
+    };
+    dst = ".cache/data";
+  };
+
+  # See opencv/cmake/OpenCVDownload.cmake
   installExtraFiles = extra : with lib; ''
     mkdir -p "${extra.dst}"
   '' + concatStrings (mapAttrsToList (name : md5 : ''
@@ -121,8 +143,9 @@ let
     dst  = ".cache/tiny_dnn";
   };
 
-  opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
+  opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
+  printEnabled = enabled : if enabled then "ON" else "OFF";
 in
 
 stdenv.mkDerivation rec {
@@ -150,16 +173,18 @@ stdenv.mkDerivation rec {
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
+      ${installExtraFiles face}
 
       mkdir -p "${tinyDnn.dst}"
       ln -s "${tinyDnn.src}" "${tinyDnn.dst}/${tinyDnn.md5}-${tinyDnn.name}"
     '');
 
   buildInputs =
-       [ zlib pcre hdf5 protobuf ]
+       [ zlib pcre hdf5 glog boost google-gflags protobuf ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
+    ++ lib.optional enableVtk vtk
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
@@ -167,20 +192,21 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg
+    ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
+                     [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optional enableOvis ogre
+    ++ lib.optional enableGPhoto2 libgphoto2
+    ++ lib.optional enableDC1394 libdc1394
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
     # There is seemingly no compile-time flag for Tesseract.  It's
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
+    ++ lib.optional enableTbb tbb
     ++ lib.optional enableCuda cudatoolkit
-
-    # These are only needed for the currently disabled
-    # cnn_3dobj and dnn_modern modules
-    # ++ lib.optionals buildContrib [ caffe glog boost google-gflags ]
-
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ]
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -189,10 +215,17 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
+  # Configure can't find the library without this.
+  OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
+
   cmakeFlags = [
+    "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
     "-DPROTOBUF_UPDATE_FILES=ON"
-    "-DWITH_OPENMP=ON"
+    "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_PERF_TESTS=OFF"
+    "-DBUILD_DOCS=${printEnabled enableDocs}"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
@@ -202,20 +235,18 @@ stdenv.mkDerivation rec {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
+    (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
-  ] ++ lib.optionals buildContrib [
-         # the cnn_3dobj module fails to build
-         "-DBUILD_opencv_cnn_3dobj=OFF"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DWITH_OPENCL=OFF"
+    "-DWITH_LAPACK=OFF"
 
-         # the dnn_modern module causes:
-         # https://github.com/opencv/opencv_contrib/issues/823
-         #
-         # On OS X its dependency tiny-dnn-1.0.0a3 also fails to build.
-         "-DBUILD_opencv_dnn_modern=OFF"
-       ]
-    ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
+    # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
+    "-DBUILD_opencv_dnn_modern=OFF"
+  ];
 
   enableParallelBuilding = true;
 
@@ -230,7 +261,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = with stdenv.lib.licenses; if enableUnfree then unfree else bsd3;
     maintainers = with stdenv.lib.maintainers; [viric mdaiter basvandijk];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };

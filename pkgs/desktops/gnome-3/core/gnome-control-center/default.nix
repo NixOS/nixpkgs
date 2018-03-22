@@ -1,54 +1,69 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, wrapGAppsHook
-, libcanberra_gtk2, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
-, gdk_pixbuf, librsvg, libxkbfile, libnotify, libgudev
+{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, ibus, gettext, upower, wrapGAppsHook
+, libcanberra-gtk3, accountsservice, libpwquality, libpulseaudio
+, gdk_pixbuf, librsvg, libnotify, libgudev, gnome-color-manager
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, cracklib, python, libkrb5, networkmanagerapplet, networkmanager
-, libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev
-, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
+, cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
+, libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
+, docbook_xsl, modemmanager, clutter, clutter-gtk, cheese
 , fontconfig, sound-theme-freedesktop, grilo }:
 
-# http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
-# TODO: bluetooth, wacom, printers
+let
+  pname = "gnome-control-center";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
-stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0nyx5nl2rky0249rdcy0hsccnxf3angpya0q859rrbrwaixqnxh3";
+  };
 
-  propagatedUserEnvPkgs =
-    [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext wrapGAppsHook libtool libxslt docbook_xsl
+    shared-mime-info
+  ];
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=752596
-  enableParallelBuilding = false;
+  buildInputs = with gnome3; [
+    ibus gtk glib glib-networking upower gsettings-desktop-schemas
+    libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
+    gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
+    accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify
+    grilo libpwquality cracklib vino libcanberra-gtk3 libgudev
+    gdk_pixbuf defaultIconTheme librsvg clutter clutter-gtk cheese
+    networkmanager modemmanager gnome-bluetooth tracker
+  ];
 
-  buildInputs = with gnome3;
-    [ pkgconfig intltool ibus gtk glib glib_networking upower libcanberra_gtk2 gsettings_desktop_schemas
-      libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
-      gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk libpwquality
-      accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
-      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
-      gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
-      gnome3.vino udev libcanberra_gtk3 libgudev wrapGAppsHook
-      networkmanager modemmanager gnome3.gnome-bluetooth grilo tracker
-      cracklib ];
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      gcm = gnome-color-manager;
+      inherit glibc libgnomekbd tzdata;
+    })
+  ];
 
-  preBuild = ''
-    substituteInPlace panels/datetime/tz.h --replace "/usr/share/zoneinfo/zone.tab" "${tzdata}/share/zoneinfo/zone.tab"
-
-    # hack to make test-endianess happy
-    mkdir -p $out/share/locale
-    substituteInPlace panels/datetime/test-endianess.c --replace "/usr/share/locale/" "$out/share/locale/"
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
-  preFixup = with gnome3; ''
+  preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:${sound-theme-freedesktop}/share"
       # Thumbnailers (for setting user profile pictures)
       --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
     )
     for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
+      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the GNOME desktop";
@@ -56,5 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
-
 }

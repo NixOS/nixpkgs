@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "1.204";
+  version = "1.205";
 in fetchzip {
   name = "fira-code-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0gngbnrq42ysz13w3s227ghv1yigw399r3w2415ipb5pba8vipad";
+  sha256 = "0h8b89d1n3y56k7x9zrwm9fic09ccg1mc7g1258g152m5g6z6zms";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tonsky/FiraCode;

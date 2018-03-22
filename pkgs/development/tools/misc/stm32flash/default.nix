@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "stm32flash-1.0";
+stdenv.mkDerivation rec {
+  name = "stm32flash-0.5";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/stm32flash/stm32flash.tar.gz";
-    sha256 = "04k631g9lzvp9xr4sw51xpq1g542np61s1l8fpwx9rbsc8m5l0i6";
+    url = "mirror://sourceforge/stm32flash/${name}.tar.gz";
+    sha256 = "01p396daqw3zh6nijffbfbwyqza33bi2k4q3m5yjzs02xwi99alp";
   };
 
   buildFlags = [ "CC=cc" ];
@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     homepage = https://sourceforge.net/projects/stm32flash/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.all; # Should work on all platforms
-    maintainers = [ maintainers.the-kenny ];
+    maintainers = with maintainers; [ the-kenny elitak ];
   };
 }

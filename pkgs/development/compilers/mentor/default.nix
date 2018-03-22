@@ -46,7 +46,7 @@ let
 
       meta = with stdenv.lib; {
         inherit description;
-        homepage = http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/;
+        homepage = https://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/;
         license = licenses.gpl3;
         platforms = platforms.linux;
         maintainers = [ maintainers.bjornfor ];

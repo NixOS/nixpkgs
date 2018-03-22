@@ -9,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  name = "paperwork-backend-${version}";
-  version = "1.2.1";
+  pname = "paperwork-backend";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "openpaperwork";
     repo = "paperwork-backend";
     rev = version;
-    sha256 = "1lrawibm6jnykj1bkrl8196kcxrhndzp7r0brdrb4hs54gql7j5x";
+    sha256 = "1rvf06vphm32601ja1bfkfkfpgjxiv0lh4yxjy31jll0bfnsf7pf";
   };
 
   # Python 2.x is not supported.

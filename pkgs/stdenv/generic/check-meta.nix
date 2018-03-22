@@ -1,12 +1,9 @@
-# Extend a derivation with checks for brokenness, license, etc.  Throw a
-# descriptive error when the check fails; return `derivationArg` otherwise.
-# Note: no dependencies are checked in this step.
+# Checks derivation meta and attrs for problems (like brokenness,
+# licenses, etc).
 
-{ lib, config, system, meta, derivationArg, mkDerivationArg }:
+{ lib, config, hostPlatform, meta }:
 
 let
-  attrs = mkDerivationArg; # TODO: probably get rid of passing this one
-
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
@@ -64,7 +61,7 @@ let
     !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
-  allowInsecurePredicate = x: (config.allowUnfreePredicate or allowInsecureDefaultPredicate) x;
+  allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
     (attrs.meta.knownVulnerabilities or []) == [] ||
@@ -97,8 +94,7 @@ let
     ''
 
       Known issues:
-
-    '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
         You can install it anyway by whitelisting this package, using the
         following methods:
@@ -125,46 +121,60 @@ let
 
       '';
 
-  throwEvalHelp = { reason , errormsg ? "" }:
-    throw (''
-      Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+  handleEvalIssue = attrs: { reason , errormsg ? "" }:
+    let
+      msg = ''
+        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
-      '' + ((builtins.getAttr reason remediation) attrs));
+      '' + (builtins.getAttr reason remediation) attrs;
+
+      handler = if config ? "handleEvalIssue"
+        then config.handleEvalIssue reason
+        else throw;
+    in handler msg;
+
 
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
     longDescription = str;
     branch = str;
-    homepage = str;
+    homepage = either (listOf str) str;
     downloadPage = str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    maintainers = listOf str;
+    maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf str;
+    platforms = listOf (either str lib.systems.parsed.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
 
     # Weirder stuff that doesn't appear in the documentation?
+    knownVulnerabilities = listOf str;
+    name = str;
     version = str;
     tag = str;
     updateWalker = bool;
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
+    available = bool;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
-    schedulingPriority = str;
+    schedulingPriority = int;
     downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
+    isGutenprint = bool;
   };
 
   checkMetaAttr = k: v:
     if metaTypes?${k} then
-      if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+      if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+
+  checkPlatform = attrs:
+    lib.any (lib.meta.platformMatch hostPlatform) attrs.meta.platforms;
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -179,21 +189,21 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem system attrs.meta.platforms then
-      { valid = false; reason = "broken"; errormsg = "is not supported on ‘${system}’"; }
+    else if !allowUnsupportedSystem && !allowBroken && attrs.meta.platforms or null != null && !(checkPlatform attrs) then
+      { valid = false; reason = "broken"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };
 
-  # Throw an error if trying to evaluate an non-valid derivation
-  validityCondition =
-         let v = checkValidity attrs;
-         in if !v.valid
-           then throwEvalHelp (removeAttrs v ["valid"])
-           else true;
+  assertValidity = attrs: let
+      validity = checkValidity attrs;
+    in validity // {
+      # Throw an error if trying to evaluate an non-valid derivation
+      handled = if !validity.valid
+        then handleEvalIssue attrs (removeAttrs validity ["valid"])
+        else true;
+  };
 
-in
-  assert validityCondition;
-  derivationArg
+in assertValidity

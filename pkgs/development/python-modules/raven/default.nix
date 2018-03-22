@@ -1,18 +1,23 @@
-{ lib, buildPythonPackage, fetchurl, isPy3k, contextlib2 }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+, contextlib2, blinker
+}:
 
 buildPythonPackage rec {
-  name = "raven-6.3.0";
+  pname = "raven";
+  version = "6.6.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/r/raven/${name}.tar.gz";
-    sha256 = "1wgddbd092vih6k6mknp68vvm1pp12fikjqzglw6mnyw8njnbr7k";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "raven-python";
+    rev = version;
+    sha256 = "184wpr0zdcm260pxqll9kpmp2ywisn75k8pdm8gc6xmk740in1hj";
   };
 
   # way too many dependencies to run tests
   # see https://github.com/getsentry/raven-python/blob/master/setup.py
   doCheck = false;
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ contextlib2 ];
+  propagatedBuildInputs = [ blinker ] ++ lib.optionals (!isPy3k) [ contextlib2 ];
 
   meta = {
     description = "A Python client for Sentry (getsentry.com)";

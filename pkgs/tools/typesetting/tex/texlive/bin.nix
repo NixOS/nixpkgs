@@ -14,7 +14,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2016";
+  year = "2017";
   version = year; # keep names simple for now
 
   common = rec {
@@ -22,10 +22,19 @@ let
       url = # "ftp://tug.org/historic/systems/texlive/${year}/"
       #"http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016"
       # FIXME: a proper mirror, though tarballs.nixos.org saves this case ATM
-        http://146.185.144.154/texlive-2016
-        + "/texlive-${year}0523b-source.tar.xz";
-      sha256 = "1v91vahxlxkdra0qz3f132vvx5d9cx2jy84yl1hkch0agyj2rcx8";
+      # http://146.185.144.154/texlive-2016
+      # + "/texlive-${year}0523b-source.tar.xz";
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0524-source.tar.xz";
+      sha256 = "1amjrxyasplv4alfwcxwnw4nrx7dz2ydmddkq16k6hg90i9njq81";
     };
+
+    patches = [
+      (fetchurl {
+        name = "texlive-poppler-0.59.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.59.patch?h=packages/texlive-bin&id=6308ec39bce2a4d735f6ff8a4e94473748d7b450;
+        sha256 = "1c4ikq4kxw48bi3i33bzpabrjvbk01fwjr2lz20gkc9kv8l0bg3n";
+      })
+    ];
 
     configureFlags = [
       "--with-banner-add=/NixOS.org"
@@ -57,7 +66,7 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src;
+  inherit (common) src patches;
 
   outputs = [ "out" "doc" ];
 
@@ -167,6 +176,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
+  patches = common.patches ++ [ ./luatex-gcc7.patch ];
+
   configureScript = ":";
 
   # we use static libtexlua, because it's only used by a single binary
@@ -187,7 +198,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   '';
 
   preBuild = "cd texk/web2c";
-  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2017 is out?
+  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
   # now distribute stuff into outputs, roughly as upstream TL

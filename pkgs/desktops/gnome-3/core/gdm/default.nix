@@ -1,14 +1,29 @@
 { stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, xorg, dbus
 , intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
-, gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg }:
+, gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
+, librsvg, coreutils }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gdm-${version}";
+  version = "3.28.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gdm/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0i5rzr6fdvlm88gl85gvql1wf1yflkmg90x81dqjf39as3ixs81s";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gdm"; attrPath = "gnome3.gdm"; };
+  };
 
   # Only needed to make it build
   preConfigure = ''
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
+  '';
+
+  postPatch = ''
+    substituteInPlace daemon/gdm-manager.c --replace "/bin/plymouth" "${plymouth}/bin/plymouth"
+    substituteInPlace data/gdm.service.in  --replace "/bin/kill" "${coreutils}/bin/kill"
   '';
 
   configureFlags = [ "--sysconfdir=/etc"
@@ -17,11 +32,10 @@ stdenv.mkDerivation rec {
                      "--with-initial-vt=7"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ glib itstool libxml2 intltool
-                  accountsservice gnome3.dconf systemd
+  nativeBuildInputs = [ pkgconfig libxml2 itstool intltool autoreconfHook libtool gnome3.dconf ];
+  buildInputs = [ glib accountsservice systemd
                   gobjectIntrospection libX11 gtk
-                  libcanberra_gtk3 pam libtool plymouth librsvg ];
+                  libcanberra-gtk3 pam plymouth librsvg ];
 
   enableParallelBuilding = true;
 
@@ -30,6 +44,11 @@ stdenv.mkDerivation rec {
               ./gdm-x-session_extra_args.patch
               ./gdm-session-worker_xserver-path.patch
              ];
+
+  postInstall = ''
+    # Prevent “Could not parse desktop file orca-autostart.desktop or it references a not found TryExec binary”
+    rm $out/share/gdm/greeter/autostart/orca-autostart.desktop
+  '';
 
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1imzbrradkfn8s2m1qcimyn74dn1mz2p3j381jljn166rf2i6hlc";
   };
 
-  propogatedBuildInputs = [ future ];
+  propagatedBuildInputs = [ future ];
 
   meta = with stdenv.lib; {
     description = "Backport of Python 3 csv module";

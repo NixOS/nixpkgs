@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     message = ''
       Nix can't download kdb+ for you automatically. Go to
       http://kx.com and download the free, 32-bit version for
-      Linux. Then run "nix-prefetch-url file:///linux.zip" in the
-      directory where you saved it. Note you need version 3.3.
+      Linux. Then run "nix-prefetch-url file://\$PWD/linux.zip" in
+      the directory where you saved it. Note you need version 3.3.
     '';
     name   = "linux.zip";
     sha256 = "5fd0837599e24f0f437a8314510888a86ab0787684120a8fcf592299800aa940";

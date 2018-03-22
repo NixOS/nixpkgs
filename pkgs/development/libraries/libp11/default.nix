@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libp11-${version}";
-  version = "0.4.4";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
     rev = name;
-    sha256 = "1jnpnwipmw3skw112qff36w046nyz5amiil228rn5divpkvx4axa";
+    sha256 = "0n1i0pxj6l0vdq8gpdwfp5p9qd7wkymg0lpy6a17ix8hpqsljlhr";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];

@@ -14,7 +14,7 @@
 }:
 
 /** Packaging design:
-  - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
+  - The basic mesa ($out) contains headers and libraries (GLU is in libGLU now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI drivers are compiled into $drivers output, which is much bigger and
@@ -66,7 +66,7 @@ let
 in
 
 let
-  version = "17.2.4";
+  version = "17.3.6";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0l75q9l4g15y66rqk2swqvj18qj60hpimv0f97jk44bfrpz0i92v";
+    sha256 = "e5915680d44ac9d05defdec529db7459ac9edd441c9845266eff2e2d3e57fbf8";
   };
 
   prePatch = "patchShebangs .";
@@ -92,13 +92,13 @@ stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
-    "--sysconfdir=/etc"
+    "--sysconfdir=${driverLink}/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
     "--enable-shared-glapi"
     "--enable-sysfs"
     "--enable-llvm-shared-libs"
-    "--enable-omx"
+    "--enable-omx-bellagio"
     "--enable-va"
     "--disable-opencl"
   ];
@@ -197,7 +197,6 @@ stdenv.mkDerivation {
   '';
 
   # TODO:
-  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = ''
@@ -214,7 +213,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
-    homepage = http://www.mesa3d.org/;
+    homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ eduarrrd vcunat ];

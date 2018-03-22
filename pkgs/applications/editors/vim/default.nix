@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
     "vim_cv_tty_group=tty"
     "vim_cv_tty_mode=0660"
     "vim_cv_getcwd_broken=no"

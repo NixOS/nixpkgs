@@ -1,0 +1,40 @@
+{ stdenv, fetchFromGitHub, bash }:
+
+stdenv.mkDerivation rec {
+  name = "zsh-autoenv-${version}";
+  version = "2017-12-16";
+
+  src = fetchFromGitHub {
+    owner = "Tarrasch";
+    repo = "zsh-autoenv";
+    rev = "2c8cfbcea8e7286649840d7ec98d7e9d5e1d45a0";
+    sha256 = "004svkfzhc3ab6q2qvwzgj36wvicg5bs8d2gcibx6adq042di7zj";
+  };
+
+  buildPhase = ":";
+
+  installPhase = ''
+    mkdir -p $out/{bin,share}
+    cp -R $src $out/share/zsh-autoenv
+
+    cat <<SCRIPT > $out/bin/zsh-autoenv-share
+    #!${stdenv.shell}
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $out/share/zsh-autoenv
+    SCRIPT
+    chmod +x $out/bin/zsh-autoenv-share
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Automatically sources whitelisted .autoenv.zsh files";
+    longDescription = ''
+      zsh-autoenv automatically sources (known/whitelisted)
+      .autoenv.zsh files, typically used in project root directories.
+      It handles "enter" and "leave" events, nesting, and stashing of
+      variables (overwriting and restoring).
+    '';
+    homepage = https://github.com/Tarrasch/zsh-autoenv;
+    platforms = stdenv.lib.platforms.all;
+  };
+}

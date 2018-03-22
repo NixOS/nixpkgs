@@ -28,7 +28,7 @@ in
 if (!hasHash) then throw "Specify sha for fetchipfs fixed-output derivation" else stdenv.mkDerivation {
   name = ipfs;
   builder = ./builder.sh;
-  buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   # New-style output content requirements.
   outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else

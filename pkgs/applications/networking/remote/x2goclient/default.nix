@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     homepage = http://x2go.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

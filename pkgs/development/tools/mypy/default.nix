@@ -1,19 +1,18 @@
-{ stdenv, fetchPypi, buildPythonApplication, lxml, typed-ast }:
+{ stdenv, fetchPypi, buildPythonApplication, lxml, typed-ast, psutil }:
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "mypy";
-  version = "0.540";
+  version = "0.570";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d82f51e228a88e5de6ac1d6699dd09e250ce7de217a5ff1256e317266e738ec";
+    sha256 = "09cz0h4d6xcdqlchw080nkjlwki3mgjrlvfnj5hxxwi3cgv9imw3";
   };
 
-  propagatedBuildInputs = [ lxml typed-ast ];
+  propagatedBuildInputs = [ lxml typed-ast psutil ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";

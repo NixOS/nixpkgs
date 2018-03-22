@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "0nn5icrfm9lkhzw1xjvaks9bq3w6mjg86ggv3fn7kgi4nfvg8kj0";
   };
 
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
+
   meta = {
     platforms = stdenv.lib.platforms.unix;
   };

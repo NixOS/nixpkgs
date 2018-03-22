@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     libkomparediff2
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     maintainers = [ maintainers.ambrop72 ];
     platforms = platforms.linux;

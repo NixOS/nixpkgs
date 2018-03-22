@@ -1,20 +1,18 @@
 { stdenv, fetchzip }:
 
 let
-  version = "2.020";
+  version = "3.002";
 in fetchzip rec {
   name = "hack-font-${version}";
 
-  url = let
-    version_ = with stdenv.lib; concatStringsSep "_" (splitString "." version);
-  in "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version_}-ttf.zip";
+  url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
   '';
 
-  sha256 = "0cpsglb9vnhmpsn496aqisfvmq3yxvjnj7c361dspy0fn6z8x60c";
+  sha256 = "11f3hl4nvxq6pvsmwr1c1r5wrxhrp7ixr5bshrz2dmqn7l8bxa63";
 
   meta = with stdenv.lib; {
     description = "A typeface designed for source code";
@@ -25,7 +23,7 @@ in fetchzip rec {
       The face has been re-designed with a larger glyph set, modifications of
       the original glyph shapes, and meticulous attention to metrics.
     '';
-    homepage = http://sourcefoundry.org/hack/;
+    homepage = https://sourcefoundry.org/hack/;
 
     /*
      "The font binaries are released under a license that permits unlimited
@@ -36,7 +34,7 @@ in fetchzip rec {
       the license is available in LICENSE.md" (From the GitHub page)
     */
     license = licenses.free;
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
   };
 }

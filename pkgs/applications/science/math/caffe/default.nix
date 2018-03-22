@@ -7,17 +7,19 @@
 , hdf5-cpp
 , leveldb
 , lmdb
-, opencv
+, opencv3
 , protobuf
 , snappy
-, atlas
 , doxygen
+, openblas
 , cudaSupport ? true, cudatoolkit
 , cudnnSupport ? false, cudnn ? null
+, ncclSupport ? false, nccl ? null
 , pythonSupport ? false, python ? null, numpy ? null
 }:
 
 assert cudnnSupport -> cudaSupport;
+assert ncclSupport -> cudaSupport;
 assert pythonSupport -> (python != null && numpy != null);
 
 stdenv.mkDerivation rec {
@@ -35,14 +37,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [
-    "-DCUDA_ARCH_NAME=All"
-    (if pythonSupport then "-Dpython_version=${python.version}" else "-DBUILD_python=OFF")
-  ] ++ lib.optional (!cudaSupport) "-DCPU_ONLY=ON";
+  cmakeFlags =
+    [ (if pythonSupport then "-Dpython_version=${python.version}" else "-DBUILD_python=OFF")
+      "-DBLAS=open"
+    ] ++ (if cudaSupport then [
+           "-DCUDA_ARCH_NAME=All"
+           "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+         ] else [ "-DCPU_ONLY=ON" ])
+      ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
-  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv atlas ]
+  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
+                ++ lib.optional ncclSupport nccl
                 ++ lib.optionals pythonSupport [ python numpy ];
 
   propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;

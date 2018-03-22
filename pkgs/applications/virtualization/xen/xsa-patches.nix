@@ -771,4 +771,166 @@ in rec {
       sha256 = "1k6z5r7wnrswsczn2j3a1mc4nvxqm4ydj6n6rvgqizk2pszdkqg8";
     })
   ];
+
+  # 4.5 - 4.7
+  XSA_246_45 = [
+    (xsaPatch {
+      name = "246-4.7";
+      sha256 = "13rad4k8z3bq15d67dhgy96kdbrjiq9sy8px0jskbpx9ygjdahkn";
+    })
+  ];
+
+  # 4.8 - 4.9
+  XSA_246 = [
+    (xsaPatch {
+      name = "246-4.9";
+      sha256 = "0z68vm0z5zvv9gm06pxs9kxq2q9fdbl0l0cm71ggzdplg1vw0snz";
+    })
+  ];
+
+  # 4.8
+  XSA_247_48 = [
+    (xsaPatch {
+      name = "247-4.8/0001-p2m-Always-check-to-see-if-removing-a-p2m-entry-actu";
+      sha256 = "0kvjrk90n69s721c2qj2df5raml3pjk6bg80aig353p620w6s3xh";
+    })
+    (xsaPatch {
+      name = "247-4.8/0002-p2m-Check-return-value-of-p2m_set_entry-when-decreas";
+      sha256 = "1s9kv6h6dd8psi5qf5l5gpk9qhq8blckwhl76cjbldcgi6imb3nr";
+    })
+  ];
+
+  # 4.5
+  XSA_247_45 = [
+    (xsaPatch {
+      name = "247-4.5/0001-p2m-Always-check-to-see-if-removing-a-p2m-entry-actu";
+      sha256 = "0h1mp5s9si8aw2gipds317f27h9pi7bgnhj0bcmw11p0ch98sg1m";
+    })
+    (xsaPatch {
+      name = "247-4.5/0002-p2m-Check-return-value-of-p2m_set_entry-when-decreas";
+      sha256 = "0vjjybxbcm4xl26wbqvcqfiyvvlayswm4f98i1fr5a9abmljn5sb";
+    })
+  ];
+
+	# 4.5
+  XSA_248_45 = [
+    (xsaPatch {
+      name = "248-4.5";
+      sha256 = "0csxg6h492ddsa210b45av28iqf7cn2dfdqk4zx10zwf1pv2shyn";
+    })
+  ];
+
+  # 4.8
+  XSA_248_48 = [
+    (xsaPatch {
+      name = "248-4.8";
+      sha256 = "1ycw29q22ymxg18kxpr5p7vhpmp8klssbp5gq77hspxzz2mb96q1";
+    })
+  ];
+
+  # 4.5 .. 4.9
+  XSA_249 = [
+   (xsaPatch {
+      name = "249";
+      sha256 = "0v6ngzqhkz7yv4n83xlpxfbkr2qyg5b1cds7ikkinm86hiqy6agl";
+    })
+  ];
+  # 4.5
+  XSA_250_45 = [
+   (xsaPatch {
+      name = "250-4.5";
+      sha256 = "0pqldl6qnl834gvfp90z247q9xcjh3835s2iffnajz7jhjb2145d";
+    })
+  ];
+  # 4.8 ...
+  XSA_250 = [
+   (xsaPatch {
+      name = "250";
+      sha256 = "1wpigg8kmha57sspqqln3ih9nbczsw6rx3v72mc62lh62qvwd7x8";
+    })
+  ];
+  # 4.5
+  XSA_251_45 = [
+   (xsaPatch {
+      name = "251-4.5";
+      sha256 = "0lc94cx271z09r0mhxaypyd9d4740051p28idf5calx5228dqjgm";
+    })
+  ];
+  # 4.8
+  XSA_251_48 = [
+   (xsaPatch {
+      name = "251-4.8";
+      sha256 = "079wi0j6iydid2zj7k584w2c393kgh588w7sjz2nn4039qn8k9mq";
+    })
+  ];
+  # 4.8
+  XSA_252_49 = [
+   (xsaPatch {
+      name = "252-4.9";
+      sha256 = "03sbn90nlkk5ba1n168rxjkc7x3mqj7rfqvspbwblmwikfbnms2n";
+    })
+  ];
+  # 4.8
+  XSA_255_49_1= [
+   (xsaPatch {
+      name = "255-4.9-1";
+      sha256 = "0gbin7yxbkq40lvm3gvj1vffavvbng3zpd2m8l1kqyz0rv4vm9zc";
+    })
+  ];
+  # 4.8
+  XSA_255_49_2= [
+   (xsaPatch {
+      name = "255-4.9-2";
+      sha256 = "0fyg5nnyfpfr80qq83pr64zjp5w1nx94bdblzsjap8gaqcahyr12";
+    })
+  ];
+  # 4.8
+  XSA_256_48= [
+   (xsaPatch {
+      name = "256-4.8";
+      sha256 = "1w84f717kxwx0h3rw18r4f8pl0l1h5xlj5fy80sr0ws4xkp1qdn4";
+    })
+  ];
+
+
+  # 4.10
+  XSA_252 = [
+   (xsaPatch {
+      name = "252";
+      sha256 = "0v4sg20dnvnwrjh3x69gk81v2kmcql7g2s044vg3wcxhzvij1rrn";
+    })
+  ];
+
+  # 4.10
+  XSA_253 = [
+   (xsaPatch {
+      name = "253";
+      sha256 = "0445vzlzy3gd499xraqh5r4qjar6qr0y3813h22jy1n84nhxz27i";
+    })
+  ];
+
+  # 4.10
+  XSA_255_1 = [
+   (xsaPatch {
+      name = "255-1";
+      sha256 = "05g2f3ji1rrjlw3yw4nrns50pnmsib8ybrf64scr1817mj0q9myr";
+    })
+  ];
+
+  # 4.10
+  XSA_255_2 = [
+   (xsaPatch {
+      name = "255-2";
+      sha256 = "08wbngw5z0f9g8di59hww3hhi7j9z49bpc4xlwn5akfcwbgf0961";
+    })
+  ];
+
+  # 4.10
+  XSA_256 = [
+   (xsaPatch {
+      name = "256";
+      sha256 = "1hicwhbwj6k25px55f4ncx1c5xiihi8pfvsb3kv57k7kaicb7pza";
+    })
+  ];
+
 }

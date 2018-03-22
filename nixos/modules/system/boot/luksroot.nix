@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: assert name' == name; ''
+  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
 
     # Wait for a target (e.g. device, keyFile, header, ...) to appear.
     wait_target() {
@@ -43,8 +43,17 @@ let
     open_normally() {
         echo luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
           ${optionalString (header != null) "--header=${header}"} \
-          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"} \
           > /.luksopen_args
+        ${optionalString (keyFile != null) ''
+        ${optionalString fallbackToPassword "if [ -e ${keyFile} ]; then"}
+            echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
+              >> /.luksopen_args
+        ${optionalString fallbackToPassword ''
+        else
+            echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
+        fi
+        ''}
+        ''}
         cryptsetup-askpass
         rm /.luksopen_args
     }
@@ -227,6 +236,7 @@ in
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
+
           (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
@@ -320,6 +330,16 @@ in
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
               activating it.
+            '';
+          };
+
+          fallbackToPassword = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Whether to fallback to interactive passphrase prompt if the keyfile
+              cannot be found. This will prevent unattended boot should the keyfile
+              go missing.
             '';
           };
 
@@ -434,7 +454,12 @@ in
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
+    # Also load input_leds to get caps lock light working (#12456)
+    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" "input_leds" ]
+      ++ luks.cryptoModules
+      # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+      # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''

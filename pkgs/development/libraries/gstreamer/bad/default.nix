@@ -6,7 +6,7 @@
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
-, mesa, libintlOrEmpty, libgme
+, libGLU_combined, libintlOrEmpty, libgme
 , openssl, x265, libxml2
 }:
 
@@ -23,7 +23,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.12.2";
+  name = "gst-plugins-bad-1.12.3";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -35,16 +35,20 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 
+  # TODO: Fix Cocoa build. The problem was ARC, which might be related to too
+  #       old version of Apple SDK's.
+  configureFlags = optional stdenv.isDarwin "--disable-cocoa";
+
   patchPhase = ''
-    sed -i 's/openjpeg-2.1/openjpeg-${openJpegVersion}/' ext/openjpeg/*
+    sed -i 's/openjpeg-2.2/openjpeg-${openJpegVersion}/' ext/openjpeg/*
   '';
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "0dwyq03g2m0p16dwx8q5qvjn5x9ia72h21sf87mp97gmwkfpwb4w";
+    sha256 = "1v5z3i5ha20gmbb3r9dwsaaspv5fm1jfzlzwlzqx1gjj31v5kl1n";
   };
 
   outputs = [ "out" "dev" ];
@@ -57,8 +61,8 @@ stdenv.mkDerivation rec {
     libmodplug mpeg2dec mpg123
     openjpeg libopus librsvg
     fluidsynth libvdpau
-    libwebp xvidcore gnutls mesa
-    mjpegtools libgme openssl x265 libxml2
+    libwebp xvidcore gnutls libGLU_combined
+    libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
     ++ optional faacSupport faac
@@ -67,7 +71,11 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi;
+    ++ optional (!stdenv.isDarwin) wildmidi
+    # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
+    ++ optional (!stdenv.isDarwin) mjpegtools;
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+
+  enableParallelBuilding = true;
 }

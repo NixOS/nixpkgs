@@ -24,6 +24,7 @@ in
       description = "lldpd user";
       group = "_lldpd";
       home = "/var/run/lldpd";
+      isSystemUser = true;
     };
     users.extraGroups._lldpd = {};
 

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, openssl, pcsclite }:
+{ stdenv, fetchurl, pkgconfig, openssl, pcsclite, check }:
 
 stdenv.mkDerivation rec {
-  name = "yubico-piv-tool-1.4.4";
+  name = "yubico-piv-tool-1.5.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-piv-tool/Releases/${name}.tar.gz";
-    sha256 = "0s9pib3g4lmxw9rjjd5h3ad401150kb1wqrzf8w1bq79g0zsq3mb";
+    sha256 = "1axa0lnky5gsc8yack6mpfbjh49z0czr1cv52gbgjnx2kcbpb0y1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl pcsclite ];
+  buildInputs = [ openssl pcsclite check ];
 
   configureFlags = [ "--with-backend=pcsc" ];
 

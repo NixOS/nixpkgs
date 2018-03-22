@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.4";
+  version = "3.6";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0v0wvsxw78g6yl606if25k1adghr5764chwy1kl7dsxvchqwvmg0";
+    sha256 = "1639sf200n9rxgkvvhlhnrjsb7vn42p1fl1rx562axh3vpr6j4c4";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,9 @@ with python3.pkgs; buildPythonApplication rec {
 
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
-      --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')"
+      --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
+      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
+      --replace "self.assertEqual(url, 'https://www.google.com')" ""
   '';
 
   installPhase = ''

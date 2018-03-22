@@ -15,15 +15,15 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.8.0";
+  localkube-version = "1.9.0";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "09mv1g9i0d14brvvp2wxgmfqvgp0na5dbm4z76a660q1fxszvgqc";
+    sha256 = "1z5c061mx2flg6hq05d00bvkn722gxv8y9rfpjyk23nk697k31fh";
   };
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.23.0";
+  version = "0.25.0";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -31,7 +31,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1f7kjn26y7knmab5avj8spb40ny1y0jix5j5p0dqfjvg9climl0h";
+    sha256 = "0nsdi8mr8p69z696ksfb5ahzqqnvjn4a2z6cp0kyby8sakcjhsby";
   };
 
   patches = [
@@ -65,6 +65,8 @@ in buildGoPackage rec {
   postInstall = ''
     mkdir -p $bin/share/bash-completion/completions/
     MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
+    mkdir -p $bin/share/zsh/site-functions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
   '';
 
   postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";

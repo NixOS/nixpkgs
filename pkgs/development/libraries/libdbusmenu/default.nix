@@ -1,7 +1,7 @@
 { stdenv, fetchurl, lib, file
 , pkgconfig, intltool
-, glib, dbus_glib, json_glib
-, gobjectIntrospection, vala_0_23, gnome_doc_utils
+, glib, dbus-glib, json-glib
+, gobjectIntrospection, vala_0_38, gnome-doc-utils
 , gtkVersion ? null, gtk2 ? null, gtk3 ? null }:
 
 with lib;
@@ -10,19 +10,19 @@ stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == null then "glib" else "gtk${gtkVersion}";
           in "libdbusmenu-${postfix}-${version}";
   version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "2";
+  versionMajor = "16.04";
+  versionMinor = "0";
 
   src = fetchurl {
     url = "${meta.homepage}/${versionMajor}/${version}/+download/libdbusmenu-${version}.tar.gz";
-    sha256 = "9d6ad4a0b918b342ad2ee9230cce8a095eb601cb0cee6ddc1122d0481f9d04c9";
+    sha256 = "12l7z8dhl917iy9h02sxmpclnhkdjryn08r8i4sr8l3lrlm4mk5r";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
   buildInputs = [
-    glib dbus_glib json_glib
-    gobjectIntrospection vala_0_23 gnome_doc_utils
+    glib dbus-glib json-glib
+    gobjectIntrospection vala_0_38 gnome-doc-utils
   ] ++ optional (gtkVersion != null) (if gtkVersion == "2" then gtk2 else gtk3);
 
   postPatch = ''
@@ -49,10 +49,11 @@ stdenv.mkDerivation rec {
   installFlags = [
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
+    "typelibdir=\${out}/lib/girepository-1.0"
   ];
 
   meta = {
-    description = "A library for passing menu structures across DBus";
+    description = "Library for passing menu structures across DBus";
     homepage = https://launchpad.net/dbusmenu;
     license = with licenses; [ gpl3 lgpl21 lgpl3 ];
     platforms = platforms.linux;

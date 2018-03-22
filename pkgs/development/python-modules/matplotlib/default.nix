@@ -8,6 +8,7 @@
 , enableQt ? false, pyqt4
 , libcxx
 , Cocoa
+, pythonOlder
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -20,13 +21,13 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  version = "2.1.0";
+  version = "2.1.2";
   pname = "matplotlib";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/matplotlib/${name}.tar.gz";
-    sha256 = "4b5f16c9cefde553ea79975305dcaa67c8e13d927b6e55aa14b4a8d867e25387";
+    sha256 = "725a3f12739d133adfa381e1b33bd70c6f64db453bfc536e148824816e568894";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -39,8 +40,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype
-      libpng pkgconfig mock pytz backports_functools_lru_cache
-    ]
+      libpng pkgconfig mock pytz ]
+    ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]

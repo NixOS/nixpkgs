@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch, writeText, conf ? null }:
 
+let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
-  version = "0.12.6";
+  version = "0.13.5";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "00hxjhnsm4622hv46xm7lc81kbnzi2iz77qppwma14cbh63jbilv";
+    sha256 = "1ap62ksi3dg7qijxxysjpnlmngzgh2jdldvb8s1jx14avanccch6";
   };
 
   installPhase = ''
     mkdir -p $out/
     cp -R . $out/
+    ${lib.optionalString (conf != null) "ln -s ${configFile} $out/config.json"}
   '';
 
   meta = {

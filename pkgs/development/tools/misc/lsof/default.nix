@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, buildPackages, ncurses }:
 
 let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
 
@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   name = "lsof-${version}";
   version = "4.89";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
 
   src = fetchurl {
@@ -29,9 +30,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dfile.patch ];
 
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  '';
+
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${stdenv.cc.libc}/include";
-  configurePhase = "./Configure -n ${dialect}";
+  configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
     sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;' -e 's/-lcurses/-lncurses/'
     for filepath in $(find dialects/${dialect} -type f); do
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

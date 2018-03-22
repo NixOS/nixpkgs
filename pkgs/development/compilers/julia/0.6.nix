@@ -33,16 +33,16 @@ let
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "52d72a52cc7ccd570929990f010ed16e2ec604c8";
+  libuvVersion = "d8ab1c6a33e77bf155facb54215dd8798e13825d";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "1vldy94sfmlfqmi14126g590wi61fv78rzh7afk82zkipaixvak8";
+    sha256 = "0q5ahc9dzca2yc6cjbhpfi9nwc4yhhjbgxgsychksn13d24gv7ba";
   };
 
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
-    sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
+    sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
   
   virtualenvVersion = "15.0.0";
@@ -54,12 +54,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.6.0";
+  version = "0.6.2";
   name = "${pname}-${version}";
 
   src = fetchzip {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "19xk2cs43lnsy9y0d8wmxj7ich908ipb40vkf7xg9031x272brxw";
+    sha256 = "0ym4n9vn6w8vj175mmsc2nzvdk2ij0cdrs44lkr3p0signji73b5";
   };
   prePatch = ''
     mkdir deps/srccache
@@ -163,7 +163,6 @@ stdenv.mkDerivation rec {
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
-    set
   '';
 
   preBuild = ''

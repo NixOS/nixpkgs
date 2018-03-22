@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, majorVersion ? "3.10"
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -14,10 +15,23 @@ assert useQt4 -> withQt5 == false;
 
 with stdenv.lib;
 
+with (
+  {
+    "3.10" = {
+      minorVersion = "2";
+      sha256 = "80d0faad4ab56de07aa21a7fc692c88c4ce6156d42b0579c6962004a70a3218b";
+    };
+    "3.9" = {
+      minorVersion = "6";
+      sha256 = "7410851a783a41b521214ad987bb534a7e4a65e059651a2514e6ebfc8f46b218";
+    };
+
+  }.${majorVersion}
+    or (abort ''Unsupported configuration for cmake: majorVersion = "${majorVersion}";'')
+);
+
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.9";
-  minorVersion = "4";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -28,8 +42,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.9/cmake-3.9.4-SHA-256.txt
-    sha256 = "b5d86f12ae0072db520fdbdad67405f799eb728b610ed66043c20a92b4906ca1";
+    # from https://cmake.org/files/v3.10/cmake-3.10.2-SHA-256.txt
+    inherit sha256;
   };
 
   prePatch = optionalString (!useSharedLibraries) ''
@@ -69,15 +83,29 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--docdir=share/doc/${name}" ]
     ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ optional (useQt4 || withQt5) "--qt-gui"
-    ++ optionals (!useNcurses) [ "--" "-DBUILD_CursesDialog=OFF" ];
+    ++ ["--"]
+    ++ optionals (!useNcurses) [ "-DBUILD_CursesDialog=OFF" ]
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
+      "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
+      "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+      "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+      "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+      # TODO: Why are ar and friends not provided by the bintools wrapper?
+    ];
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
+
+  # This isn't an autoconf configure script; triples are passed via
+  # CMAKE_SYSTEM_NAME, etc.
+  configurePlatforms = [ ];
+
 
   meta = with stdenv.lib; {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
-    maintainers = with maintainers; [ mornfall ttuegel lnl7 ];
+    maintainers = with maintainers; [ ttuegel lnl7 ];
   };
 }

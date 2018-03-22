@@ -113,7 +113,6 @@ in
 
     tasksDirectory = mkOption {
       type = types.path;
-      default = "${inginious}/lib/python2.7/site-packages/inginious/tasks";
       example = "/var/lib/INGInious/tasks";
       description = ''
         Path to the tasks folder.
@@ -218,6 +217,7 @@ in
 
       # Common
       {
+        services.lighttpd.inginious.tasksDirectory = mkDefault "${inginious}/lib/python2.7/site-packages/inginious/tasks";
         # To access inginous tools (like inginious-test-task)
         environment.systemPackages = [ inginious ];
 

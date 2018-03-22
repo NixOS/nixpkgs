@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pidgin } :
 
 let
-  version = "0.7";
+  version = "0.8";
 in
 stdenv.mkDerivation rec {
   name = "pidgin-xmpp-receipts-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "noonien-d";
     repo = "pidgin-xmpp-receipts";
     rev = "release_${version}";
-    sha256 = "1ackqwsqgy1nfggl9na4jicv7hd542aazkg629y2jmbyj1dl3kjm";
+    sha256 = "13kwaymzkymjsdv8q95byd173i4vanj211vgx9cm0y8ag2r3cjsb";
   };
 
   buildInputs = [ pidgin ];

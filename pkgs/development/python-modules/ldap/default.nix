@@ -1,18 +1,18 @@
 { lib, writeText, buildPythonPackage, isPy3k, fetchPypi
-, openldap, cyrus_sasl, openssl, pytest }:
+, openldap, cyrus_sasl, openssl, pytest, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "2.4.45";
+  version = "2.5.2";
   name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "824fde180a53772e23edc031c4dd64ac1af4a3eade78f00d9d510937d562f64e";
+    sha256 = "b8c134dfedaef0e6ff4a4b94277708dcadb758b448905a83b8946df077356ed2";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest pyasn1 ];
 
   checkPhase = ''
     # Needed by tests to setup a mockup ldap server.

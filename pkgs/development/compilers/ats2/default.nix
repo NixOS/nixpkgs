@@ -3,11 +3,11 @@
 , withContrib ? true }:
 
 let
-  versionPkg = "0.3.0" ;
+  versionPkg = "0.3.9" ;
 
   contrib = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz" ;
-    sha256 = "1s4yscisn9gsr692jmh4y5mz03012pv84cm7l5n51v83wc08fks0" ;
+    sha256 = "627bb99ecf2e3d5976f95f2faa13c7c330726601e8bb05a2113c9b69c98749b5";
   };
 
   postInstallContrib = stdenv.lib.optionalString withContrib
@@ -31,10 +31,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "1knf03r8a5sis7n8rw54flf1lxfbr3prywxb1czcdp6hsbcd1v1d";
+    sha256 = "c69a7c58964df26227e77656659129ca4c05205d2ebcacc7084edba818fb6e81";
   };
-
-  patches = [ ./install-postiats-contrib.patch ];
 
   buildInputs = [ gmp ];
 

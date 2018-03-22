@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra_gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
+, libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
 , lensfun
 }:
 
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1r6sx9zl1wkykgfx6k26268xadair6hzl15v5hmiri9sdhrn33q7";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    cmake pixman libpthreadstubs gtkmm3 libXau libXdmcp
-    lcms2 libiptcdata libcanberra_gtk3 fftw expat pcre libsigcxx lensfun
+    pixman libpthreadstubs gtkmm3 libXau libXdmcp
+    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun
   ];
 
   cmakeFlags = [

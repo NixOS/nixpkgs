@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, mesa
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, libGLU_combined
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qtbase mesa freeglut openal SDL2 ];
+  buildInputs = [ qtbase libGLU_combined freeglut openal SDL2 ];
 
   patches = [ ./emu-compatibility.com.patch ./linkage-rwx-linux-elf.patch ];
 

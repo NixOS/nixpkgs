@@ -2,10 +2,10 @@
 
 rec {
   # 18MB
-  noto-fonts = let version = "git-2016-03-29"; in fetchzip {
+  noto-fonts = let version = "2017-10-24-phase3-second-cleanup"; in fetchzip {
     name = "noto-fonts-${version}";
 
-    url = https://github.com/googlei18n/noto-fonts/archive/e8b0af48b15d64bd490edab4418b5e396cf29644.zip;
+    url = "https://github.com/googlei18n/noto-fonts/archive/v${version}.zip";
     postFetch = ''
       unzip $downloadedFile
 
@@ -17,7 +17,7 @@ rec {
       cp -n noto-fonts-*/unhinted/*.ttf $out/share/fonts/noto
       cp -n noto-fonts-*/alpha/*.ttf $out/share/fonts/noto
     '';
-    sha256 = "0wphc8671dpbx3rxzmjisnjipg2c2vkhw2i6mmyamd6vvcwajd64";
+    sha256 = "013l816cq9svdji266sccscm9sf9pfn472gq9lnqkzlwaxx9qrrl";
 
     meta = with stdenv.lib; {
       inherit version;
@@ -75,14 +75,14 @@ rec {
     };
   };
   # 12MB
-  noto-fonts-emoji = let version = "git-2016-03-17"; in stdenv.mkDerivation {
+  noto-fonts-emoji = let version = "2017-09-13-design-refresh"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-emoji";
-      rev = "c6379827aaa9cb0baca1a08a9d44ae74ca505236";
-      sha256 = "1zh1b617cjr5laha6lx0ys4k1c3az2zkgzjwc2nlb7dsdmfw1n0q";
+      rev = "v${version}";
+      sha256 = "1ixz03207kzh6jhmw8bpi77pxkfzq46dk26sr41m5kkvc14d14vl";
     };
 
     buildInputs = [ cairo ];

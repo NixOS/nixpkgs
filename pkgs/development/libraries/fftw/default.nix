@@ -5,7 +5,7 @@ with lib;
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
-  version = "3.3.6-pl1";
+  version = "3.3.7";
   withDoc = stdenv.cc.isGNU;
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-    sha256 = "0g8qk98lgq770ixdf7n36yd5xjsgm2v3wzvnphwmhy6r4y2amx0y";
+    sha256 = "0wsms8narnbhfsa8chdflv2j9hzspvflblnqdn7hw8x5xdzrnq1v";
   };
 
   outputs = [ "out" "dev" "man" ]
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     # all x86_64 have sse2
     # however, not all float sizes fit
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional stdenv.cc.isGNU "--enable-openmp"
+    ++ optional (stdenv.cc.isGNU && !stdenv.hostPlatform.isMusl) "--enable-openmp"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";
 

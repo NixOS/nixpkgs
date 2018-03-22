@@ -9,7 +9,7 @@ let
     if isx86_64 then "64bit"
     else
     if isi686 then "32bit"
-    else abort "${system} not considered in build derivation. Might still be supported.";
+    else throw "${system} not considered in build derivation. Might still be supported.";
 
 in
   stdenv.mkDerivation {

@@ -3,7 +3,17 @@
   gtksourceviewmm, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "nemiver-${version}";
+  version = "0.9.6";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/nemiver/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "85ab8cf6c4f83262f441cb0952a6147d075c3c53d0687389a3555e946b694ef2";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "nemiver"; attrPath = "gnome3.nemiver"; };
+  };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 

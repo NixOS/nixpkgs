@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytest_30
+, pytest
 , mock
 , pytest_xdist
 , isPy3k
@@ -11,15 +11,15 @@
 buildPythonPackage rec {
   pname = "SQLAlchemy";
   name = "${pname}-${version}";
-  version = "1.1.15";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b79a5ed91cdcb5abe97b0045664c55c140aec09e5dd5c01303e23de5fe7a95a";
+    sha256 = "6997507af46b10630e13b605ac278b78885fd683d038896dbee0e7ec41d809d2";
   };
 
   checkInputs = [
-    pytest_30
+    pytest
     mock
 #     Disable pytest_xdist tests for now, because our version seems to be too new.
 #     pytest_xdist

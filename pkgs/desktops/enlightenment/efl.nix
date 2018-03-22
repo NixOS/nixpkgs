@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
-, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, fribidi, SDL2, SDL, libGLU_combined, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.20.5";
+  version = "1.20.6";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "07624c71l9d1jx1zvdhwkr1bgb1n7i0i5hyg6579zdwl3jw6jpns";
+    sha256 = "1h9jkb1pkp2g6ld7ra9mxgblx3x5id4162ja697klx9mfjkpxijn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL mesa
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL libGLU_combined
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev systemd ];

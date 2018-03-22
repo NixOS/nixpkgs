@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "opensaml-cpp-${version}";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    rev = "61193de29e4c9f1ccff7ed7e1f42c2748c62be77";
-    sha256 = "1jlxa1f2qn0kd15fzjqp80apxn42v47wg3mx1vk424m31rhi00xr";
+    rev = version;
+    sha256 = "0wjb6jyvh4hwpy1pvhh63i821746nqijysrd4vasbirkf4h6z7nx";
   };
 
   buildInputs = [ boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib ];

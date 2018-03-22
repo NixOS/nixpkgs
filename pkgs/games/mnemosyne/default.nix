@@ -1,32 +1,42 @@
 { stdenv
 , fetchurl
-, pythonPackages
+, python
 }:
-let
-  version = "2.3.2";
-in pythonPackages.buildPythonApplication rec {
-  name = "mnemosyne-${version}";
+
+python.pkgs.buildPythonApplication rec {
+  pname = "mnemosyne";
+  version = "2.6";
+
   src = fetchurl {
-    url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";
-    sha256 = "0jkrw45i4v24p6xyq94z7rz5948h7f5dspgs5mcdaslnlp2accfp";
+    url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
+    sha256 = "0b7b5sk5bfbsg5cyybkv5xw9zw257v3khsn0lwlbxnlhakd0rsg4";
   };
-  propagatedBuildInputs = with pythonPackages; [
-    pyqt4
+
+  propagatedBuildInputs = with python.pkgs; [
+    pyqt5
     matplotlib
     cherrypy
+    cheroot
     webob
+    pillow
   ];
-  preConfigure = ''
+
+  # No tests/ directrory in tarball
+  doCheck = false;
+
+  prePatch = ''
     substituteInPlace setup.py --replace /usr $out
     find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
+
   postInstall = ''
     mkdir -p $out/share
-    mv $out/lib/python2.7/site-packages/$out/share/locale $out/share
-    rm -r $out/lib/python2.7/site-packages/nix
+    mv $out/${python.sitePackages}/$out/share/locale $out/share
+    rm -r $out/${python.sitePackages}/nix
   '';
+
   meta = {
-    homepage = http://mnemosyne-proj.org/;
+    homepage = https://mnemosyne-proj.org/;
     description = "Spaced-repetition software";
     longDescription = ''
       The Mnemosyne Project has two aspects:

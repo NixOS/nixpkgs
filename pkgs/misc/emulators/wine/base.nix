@@ -39,7 +39,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional vaSupport              pkgs.libva-full
   ++ lib.optional pcapSupport            pkgs.libpcap
   ++ lib.optional v4lSupport             pkgs.libv4l
-  ++ lib.optional saneSupport            pkgs.saneBackends
+  ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gsmSupport             pkgs.gsm
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
@@ -53,7 +53,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.mesa pkgs.mesa_noglu.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.libGL.osmesa pkgs.libdrm ]
   ++ (with pkgs.xorg; [
     libX11  libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])));
@@ -92,7 +92,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
   '' + lib.optionalString supportFlags.gstreamerSupport ''
-    for i in wine wine64; do
+    for i in wine ; do
       if [ -e "$out/bin/$i" ]; then
         wrapProgram "$out/bin/$i" \
           --argv0 "" \

@@ -36,11 +36,9 @@ rec {
         sha256 = containerdSha256;
       };
 
-      # This should go into the containerd derivation once 1.0.0 is out
-      preBuild = ''
-        mkdir $(pwd)/vendor/src
-        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
-      '' + oldAttrs.preBuild;
+      hardeningDisable = [ "fortify" ];
+
+      buildInputs = [ removeReferencesTo go btrfs-progs ];
     });
 
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
@@ -90,7 +88,7 @@ rec {
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
-      sqlite devicemapper btrfs-progs systemd libtool libseccomp
+      sqlite devicemapper btrfs-progs systemd libseccomp
     ];
 
     dontStrip = true;
@@ -100,6 +98,7 @@ rec {
       cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
+      export VERSION="${version}"
       ./hack/make.sh dynbinary
       cd -
     '') + ''
@@ -131,11 +130,7 @@ rec {
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
 
     installPhase = optionalString (stdenv.isLinux) ''
-      if [ -d "./components/engine/bundles/${version}" ]; then
-        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      else
-        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-      fi
+      install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
         --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -202,26 +197,26 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
 
-  docker_17_09 = dockerGen rec {
-    version = "17.09.0-ce";
-    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
-    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
-    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
-    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+  docker_17_12 = dockerGen rec {
+    version = "17.12.1-ce";
+    rev = "7390fc6103da41cf98ae66cfac80fa143268bf60"; # git commit
+    sha256 = "14pz5yqsjypjb6xiq828jrg9aq7wajrrf3mnd9109lw224p03d8i";
+    runcRev = "9f9c96235cc97674e935002fc3d78361b696a69e";
+    runcSha256 = "18f8vqdbf685dd777pjh8jzpxafw2vapqh4m43xgyi7lfwa0gsln";
+    containerdRev = "9b55aab90508bd389d7654c4baf173a981477d55";
+    containerdSha256 = "0kfafqi66yp4qy738pl11f050hfrx9m4kc670qpx7fmf9ii7q6p2";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_10 = dockerGen rec {
-    version = "17.10.0-ce";
-    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
-    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
-    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
-    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+  docker_18_02 = dockerGen rec {
+    version = "18.02.0-ce";
+    rev = "fc4de447b563498eb4da89f56fb858bbe761d91b"; # git commit
+    sha256 = "1025cwv2niiwg5pc30nb1qky1raisvd9ix2qw6rdib232hwq9k8m";
+    runcRev = "9f9c96235cc97674e935002fc3d78361b696a69e";
+    runcSha256 = "18f8vqdbf685dd777pjh8jzpxafw2vapqh4m43xgyi7lfwa0gsln";
+    containerdRev = "9b55aab90508bd389d7654c4baf173a981477d55";
+    containerdSha256 = "0kfafqi66yp4qy738pl11f050hfrx9m4kc670qpx7fmf9ii7q6p2";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

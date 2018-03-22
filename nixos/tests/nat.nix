@@ -35,7 +35,7 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
             { virtualisation.vlans = [ 1 ];
               networking.firewall.allowPing = true;
               networking.defaultGateway =
-                (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address;
+                (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
             }
             (lib.optionalAttrs withConntrackHelpers {
               networking.firewall.connectionTrackingModules = [ "ftp" ];

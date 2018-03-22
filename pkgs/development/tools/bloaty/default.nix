@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/bloaty.cc \
       --replace "c++filt" \
-                "${stdenv.lib.getBin binutils}/bin/c++filt"
+                "${binutils.bintools}/bin/c++filt"
   '';
 
   doCheck = true;

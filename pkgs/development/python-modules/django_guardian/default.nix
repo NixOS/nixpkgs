@@ -16,12 +16,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django six ];
 
   checkPhase = ''
-    ${python.interpreter} nix_run_setup.py test --addopts="--ignore build"
+    ${python.interpreter} nix_run_setup test --addopts="--ignore build"
   '';
 
   meta = with stdenv.lib; {
     description = "Per object permissions for Django";
     homepage = https://github.com/django-guardian/django-guardian;
-    licenses = [ licenses.mit licenses.bsd2 ];
+    license = [ licenses.mit licenses.bsd2 ];
   };
 }

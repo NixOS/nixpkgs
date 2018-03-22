@@ -4,13 +4,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.31.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rust-bindgen";
-    rev = "v${version}";
-    sha256 = "0b0nr42vvxzrykzn11mwk1h9cqn87fh8423wwrs3h8vpk5jqg55i";
+    rev = version;
+    sha256 = "15m1y468c7ixzxwx29wazag0i19a3bmzjp53np6b62sf9wfzbsfa";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/bindgen --set LIBCLANG_PATH "${llvmPackages.clang-unwrapped}/lib"
   '';
 
-  cargoSha256 = "1pjyancb5w9rrxirwx8ghhjbnfcc2r0ha5bfnmlfamj8aaaqdc5w";
+  cargoSha256 = "01h0y5phdv3ab8mk2yxw8lgg9783pjjnjl4087iddqhqanlv600d";
 
   doCheck = false; # A test fails because it can't find standard headers in NixOS
 

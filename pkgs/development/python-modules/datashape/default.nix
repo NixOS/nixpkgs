@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , mock
 , numpy
@@ -8,21 +8,33 @@
 , dateutil
 }:
 
-buildPythonPackage rec {
-  pname = "datashape";
-  version = "0.5.2";
-  name = "${pname}-${version}";
+let
+  # Fetcher function looks similar to fetchPypi.
+  # Allows for easier overriding, without having to know
+  # how the source is actually fetched.
+  fetcher = {pname, version, sha256}: fetchFromGitHub {
+    owner = "blaze";
+    repo = pname;
+    rev = version;
+    inherit sha256;
+  };
 
-  src = fetchPypi {
+in buildPythonPackage rec {
+  pname = "datashape";
+  version = "0.5.4";
+
+  src = fetcher {
     inherit pname version;
-    sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
+    sha256 = "0rhlj2kjj1vx5m73wnc5518rd6cs1zsbgpsvzk893n516k69shcf";
   };
 
   checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ numpy multipledispatch dateutil ];
 
+  # Disable several tests
+  # https://github.com/blaze/datashape/issues/232
   checkPhase = ''
-    py.test datashape/tests
+    py.test -k "not test_validate and not test_nested_iteratables and not test_validate_dicts and not test_tuples_can_be_records_too" datashape/tests
   '';
 
   meta = {

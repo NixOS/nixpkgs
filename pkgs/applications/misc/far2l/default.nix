@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  rev = "1ecd3a37c7b866a4599c547ea332541de2a2af26";
-  build = "unstable-2017-09-30.git${builtins.substring 0 7 rev}";
+  rev = "819d131110a9fedfc14f3b3bea8f1f56e68b077a";
+  build = "unstable-2018-02-27.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "0mavg9z1n81b1hbkj320m36r8lpw28j07rl1d2hpg69y768yyq05";
+    sha256 = "1xjy2ricd68pm9j758pb2axc2269ns2xh86443x5llfcaxrjja4b";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];

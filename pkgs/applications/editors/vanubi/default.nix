@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, vala_0_26, which, autoconf, automake
+{ stdenv, fetchurl, pkgconfig, vala_0_28, which, autoconf, automake
 , libtool, glib, gtk3, gnome3, libwnck3, asciidoc, python3Packages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ vala_0_26 which autoconf automake
+  buildInputs = [ vala_0_28 which autoconf automake
                   libtool glib gtk3 libwnck3 asciidoc
                   gnome3.gtksourceview gnome3.vte_290 python3Packages.pygments ];
 

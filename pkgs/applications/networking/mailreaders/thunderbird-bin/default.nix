@@ -1,12 +1,12 @@
 { stdenv, fetchurl, config, makeWrapper
 , gconf
 , alsaLib
-, at_spi2_atk
+, at-spi2-atk
 , atk
 , cairo
 , cups
 , curl
-, dbus_glib
+, dbus-glib
 , dbus_libs
 , fontconfig
 , freetype
@@ -27,11 +27,11 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra_gtk2
+, libcanberra-gtk2
 , libgnome
 , libgnomeui
 , defaultIconTheme
-, mesa
+, libGLU_combined
 , nspr
 , nss
 , pango
@@ -82,12 +82,12 @@ stdenv.mkDerivation {
     [ stdenv.cc.cc
       gconf
       alsaLib
-      at_spi2_atk
+      at-spi2-atk
       atk
       cairo
       cups
       curl
-      dbus_glib
+      dbus-glib
       dbus_libs
       fontconfig
       freetype
@@ -108,10 +108,10 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra_gtk2
+      libcanberra-gtk2
       libgnome
       libgnomeui
-      mesa
+      libGLU_combined
       nspr
       nss
       pango

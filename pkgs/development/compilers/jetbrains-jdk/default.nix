@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
-, mesa_noglu , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
+, libGL , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
 , gdk_pixbuf, atk }:
 
 # TODO: Investigate building from source instead of patching binaries.
@@ -16,7 +16,7 @@ let drv = stdenv.mkDerivation rec {
       sha256 = "1768f02i3dxdbxn8n29d522h8v0mkgnhpb8ixzq5p54vwjmfl6md";
     }
   else
-    abort "unsupported system: ${stdenv.system}";
+    throw "unsupported system: ${stdenv.system}";
 
   nativeBuildInputs = [ file ];
 
@@ -51,7 +51,7 @@ let drv = stdenv.mkDerivation rec {
   '';
 
   rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
   ] ++ (with xorg; [
     libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
@@ -73,7 +73,7 @@ let drv = stdenv.mkDerivation rec {
      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = with platforms; [ "x86_64-linux" ];
   };

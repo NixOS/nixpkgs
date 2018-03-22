@@ -24,8 +24,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "http://beta.quicklisp.org/dist/quicklisp/2017-07-25/distinfo.txt";
-        sha256 = "165fd4a10zc3mxyy7wr4i2r3n6fzd1wd2hgzfyp32xlc41qj2ajf";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2018-01-31/distinfo.txt";
+        sha256 = "0z28yz205cl8pa8lbflw9072mywg69jx0gf091rhx2wjjf9h14qy";
       };
       buildPhase = '' true; '';
       postInstall = ''
@@ -69,7 +69,7 @@ let lispPackages = rec {
     deps = [];
     system-info = quicklisp-to-nix-system-info;
     buildPhase = ''
-      ${sbcl}/bin/sbcl --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
+      ${clwrapper}/bin/cl-wrapper.sh "${sbcl}/bin/sbcl" --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
     '';
     installPhase = ''
       mkdir -p $out/bin

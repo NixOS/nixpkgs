@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "blackbox_exporter-${version}";
-  version = "0.10.0";
+  version = "0.12.0";
   rev = version;
 
   goPackagePath = "github.com/prometheus/blackbox_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "0xxlmg6yin63pghlvjj8amf0h5plnichvcrmcq67bffhz6d792gc";
+    sha256 = "0gd3vymk3qdfjnf0rx9kwc6v0jv7f8l30igvj2v7bljar2d6hzxf";
   };
 
   meta = with stdenv.lib; {

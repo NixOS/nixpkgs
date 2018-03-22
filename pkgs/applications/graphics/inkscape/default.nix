@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.2";
+  name = "inkscape-0.92.3";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
-    sha256 = "1lyghk6yarcv9nwkh6k366p6hb7rfilqcvbyji09hki59khd0a56";
+    sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
 
   unpackPhase = ''

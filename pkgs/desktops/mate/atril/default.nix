@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, hicolor_icon_theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.19";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0v829yvr738y5s2knyvimcgqv351qzb0rpw5il19qc27rbzyri1r";
+    url = "https://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "1639jxcdhcn5wvb4gj9xncdj5d5c3rnyydwwsgqj66cmfmb53l1n";
   };
 
   nativeBuildInputs = [
@@ -23,12 +21,13 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     poppler
-    hicolor_icon_theme
+    mate.caja
     mate.mate-desktop
+    hicolor-icon-theme
   ];
-
-  configureFlags = [ "--disable-caja" ];
   
+  makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
+
   meta = {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = http://mate-desktop.org;

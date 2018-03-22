@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pythonPackages, httpie }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.11.0";
+  version = "0.11.1";
   name = "http-prompt";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     repo = "http-prompt";
     owner = "eliangcs";
-    sha256 = "0arl85880nnyfx8cvpzm6cr8nalhyrkz5zqfr628p487rwqv45ip";
+    sha256 = "0gi76wcn6lxkd74ljpbyhr7ylhq6sm8z7h66dnfmpsw4nhw49178";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -19,6 +19,10 @@ pythonPackages.buildPythonApplication rec {
     pygments
     six
   ];
+
+  checkPhase = ''
+    $out/bin/${name} --version | grep -q "${version}"
+  '';
 
   meta = with stdenv.lib; {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";

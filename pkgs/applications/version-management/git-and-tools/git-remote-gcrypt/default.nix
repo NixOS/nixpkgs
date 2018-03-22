@@ -14,12 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  buildInputs = [ docutils makeWrapper ];
-
-  # The install.sh script expects rst2man, but here it's named rst2man.py
-  patchPhase = ''
-    sed -i 's/rst2man/rst2man.py/g' install.sh
-  '';
+  nativeBuildInputs = [ docutils makeWrapper ];
 
   installPhase = ''
     prefix="$out" ./install.sh

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 , hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -102,7 +102,7 @@
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, mesa ? null # OpenGL rendering
+, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg_1 ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
@@ -225,20 +225,21 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> mesa != null;
+assert openglExtlib -> libGLU_combined != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.4";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1vzvpx8ixy8m44f8qwp833hv253hpghybgzbc4n8b3div3j0dvmf";
+    sha256 = "0h6prjn1ijkzzhkyj8mazp0wpx7m0n9ycadjxagf9czqirbyk4ib";
   };
 
-  patchPhase = ''patchShebangs .
+  prePatch = ''
+    patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
   '' + stdenv.lib.optionalString (frei0r != null) ''
@@ -405,7 +406,7 @@ stdenv.mkDerivation rec {
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
-  ] ++ optional openglExtlib mesa
+  ] ++ optional openglExtlib libGLU_combined
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
@@ -438,7 +439,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.prefix}"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
       "--arch=${hostPlatform.arch}"

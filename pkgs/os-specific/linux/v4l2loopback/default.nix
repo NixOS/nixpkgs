@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     export PATH=${kmod}/sbin:$PATH
   '';
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ kmod ];
 
   makeFlags = [

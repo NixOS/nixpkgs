@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk2, libpng, exiv2, lcms
-, intltool, gettext, shared_mime_info, glib, gdk_pixbuf, perl}:
+, intltool, gettext, shared-mime-info, glib, gdk_pixbuf, perl}:
 
 stdenv.mkDerivation rec {
   name = "viewnior-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
     [ pkgconfig gtk2 libpng exiv2 lcms intltool gettext
-      shared_mime_info glib gdk_pixbuf perl
+      shared-mime-info glib gdk_pixbuf perl
     ];
 
   preFixup = ''

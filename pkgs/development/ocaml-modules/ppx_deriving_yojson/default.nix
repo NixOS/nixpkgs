@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg, cppo
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, cppo
 , ppx_import, ppx_deriving, yojson, ounit
 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ppx_deriving_yojson-${version}";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
-    owner = "whitequark";
+    owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
     rev = "v${version}";
-    sha256 = "1id1a29qq0ax9qp98b5hv6p2q2r0vp4fbkkwzm1bxdhnasw97msk";
+    sha256 = "1pwfnq7z60nchba4gnf58918ll11w3gj5i88qhz1p2jm45hxqgnw";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam cppo ounit ppx_import ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ppx_import ];
 
   propagatedBuildInputs = [ ppx_deriving yojson ];
 
@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
-    broken = stdenv.lib.versionAtLeast ocaml.version "4.05";
   };
 }

@@ -8,8 +8,8 @@
 
 # Wrapper runtime
 , coreutils
-, hicolor_icon_theme
-, shared_mime_info
+, hicolor-icon-theme
+, shared-mime-info
 , noto-fonts
 , noto-fonts-emoji
 
@@ -197,8 +197,8 @@ stdenv.mkDerivation rec {
     # Generate a suitable wrapper
     wrapper_PATH=${makeBinPath [ coreutils ]}
     wrapper_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      hicolor_icon_theme
-      shared_mime_info
+      hicolor-icon-theme
+      shared-mime-info
     ]}
 
     ${optionalString audioSupport ''

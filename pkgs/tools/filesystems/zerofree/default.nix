@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zerofree-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "http://frippery.org/uml/${name}.tgz";
-    sha256 = "059g29x5r1xj6wcj4xj85l8w6qrxyl86yqbybjqqz6nxz4falxzf";
+    sha256 = "0rrqfa5z103ws89vi8kfvbks1cfs74ix6n1wb6vs582vnmhwhswm";
   };
 
   buildInputs = [ e2fsprogs ];

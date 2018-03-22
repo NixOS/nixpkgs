@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "worker-${version}";
-  version = "3.8.5";
+  version = "3.15.0";
 
   src = fetchurl {
     url = "http://www.boomerangsworld.de/cms/worker/downloads/${name}.tar.gz";
-    sha256 = "1xy02jdf60wg2jycinl6682xg4zvphdj80f8xgs26ip45iqgkmvw";
+    sha256 = "0baaxa10jnf4nralhjdi7525wd1wj0161z2ixz1j5pb0rl38brl8";
   };
 
   buildInputs = [ libX11 ];

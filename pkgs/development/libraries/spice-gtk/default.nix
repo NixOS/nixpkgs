@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, spice_protocol, gettext, celt_0_5_1
+{ stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
+, polkit, acl, usbutils, vala
 , gtk3, epoxy }:
 
 with stdenv.lib;
@@ -10,29 +11,38 @@ let
 in stdenv.mkDerivation rec {
   name = "spice-gtk-0.34";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
     sha256 = "1vknp72pl6v6nf3dphhwp29hk6gv787db2pmyg4m312z2q0hwwp9";
   };
 
   buildInputs = [
-    spice_protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
+    spice-protocol celt_0_5_1 openssl libpulseaudio pixman
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
+    polkit acl usbutils
   ];
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
-
-  preAutoreconf = ''
-    substituteInPlace src/Makefile.am \
-          --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
-  '';
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   configureFlags = [
-    "--disable-maintainer-mode"
     "--with-gtk3"
+    "--enable-introspection"
+    "--enable-vala"
   ];
+
+  # usb redirection needs spice-client-glib-usb-acl-helper to run setuid root
+  # the helper then uses polkit to check access
+  # in nixos, enable this with
+  # security.wrappers.spice-client-glib-usb-acl-helper.source =
+  #   "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper.real";
+  postFixup = ''
+    mv $out/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper.real
+    ln -sf /run/wrappers/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper
+  '';
 
   dontDisableStatic = true; # Needed by the coroutine test
 
@@ -49,7 +59,7 @@ in stdenv.mkDerivation rec {
 
     homepage = http://www.spice-space.org/;
     license = licenses.lgpl21;
-
+    maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;
   };
 }

@@ -70,9 +70,21 @@ $ ./result/bin/run-*-vm
 </screen>
 
 The VM does not have any data from your host system, so your existing
-user accounts and home directories will not be available.  You can
-forward ports on the host to the guest.  For instance, the following
-will forward host port 2222 to guest port 22 (SSH):
+user accounts and home directories will not be available unless you
+have set <literal>mutableUsers = false</literal>.  Another way is to
+temporarily add the following to your configuration:
+
+<screen>
+users.extraUsers.your-user.initialPassword = "test"  
+</screen>
+
+<emphasis>Important:</emphasis> delete the $hostname.qcow2 file if you
+have started the virtual machine at least once without the right
+users, otherwise the changes will not get picked up.
+
+You can forward ports on the host to the guest.  For
+instance, the following will forward host port 2222 to guest port 22
+(SSH):
 
 <screen>
 $ QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm

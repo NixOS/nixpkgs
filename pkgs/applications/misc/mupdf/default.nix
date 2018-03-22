@@ -1,7 +1,8 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig
-, freetype, harfbuzz, openjpeg, jbig2dec, libjpeg
-, enableX11 ? true, libX11, libXext
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+, jbig2dec, libjpeg , darwin
+, enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
+, enableGL ? true, freeglut, libGLU
 }:
 
 let
@@ -13,58 +14,80 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.11";
+  version = "1.12.0";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "02phamcchgsmvjnb3ir7r5sssvx9fcrscn297z73b82n1jl79510";
+    sha256 = "0mc7a92zri27lk17wdr2iffarbfi4lvrmxhc53sz84hm5yl56qsw";
   };
 
   patches = [
     # Compatibility with new openjpeg
     (fetchpatch {
-      name = "mupdf-1.11-openjpeg-version.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=c19349f42838e4dca02e564b97e0a5ab3e1b943f";
-      sha256 = "0sx7jq84sr8bj6sg2ahg9cdgqz8dh4w6r0ah2yil8vrsznn4la8r";
+      name = "mupdf-1.12-openjpeg-version.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=a910cd33a2b311712f83710dc042fbe80c104306";
+      sha256 = "05i9v2ia586jyjqdb7g68ss4vkfwgp6cwhagc8zzggsba83azyqk";
     })
-
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-6060.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=blobdiff_plain;f=platform/x11/jstest_main.c;h=f158d9628ed0c0a84e37fe128277679e8334422a;hp=13c3a0a3ba3ff4aae29f6882d23740833c1d842f;hb=06a012a42c9884e3cd653e7826cff1ddec04eb6e;hpb=34e18d127a02146e3415b33c4b67389ce1ddb614";
-      sha256 = "163bllvjrbm0gvjb25lv7b6sih4zr4g4lap3h0cbq8dvpjxx0jfc";
-    })
-
     (fetchpatch {
-      name = "mupdf-1.11-shared_libs-1.patch";
-      url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.11-shared_libs-1.patch";
-      sha256 = "127x8jhyj3i9cn3mxw9mm5barw2yk43rvmghg54bhn4rjalx857j";
+      name = "CVE-2018-6544.1.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=b03def134988da8c800adac1a38a41a1f09a1d89;hp=26527eef77b3e51c2258c8e40845bfbc015e405d";
+      sha256 = "1rlmjibl73ls8xfpsz69axa3lw5l47vb0a1dsjqziszsld4lpj5i";
     })
+    (fetchpatch {
+      name = "CVE-2018-6544.2.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=26527eef77b3e51c2258c8e40845bfbc015e405d;hp=ab98356f959c7a6e94b1ec10f78dd2c33ed3f3e7";
+      sha256 = "1brcc029s5zmd6ya0d9qk3mh9qwx5g6vhsf1j8h879092sya5627";
+    })
+    (fetchpatch {
+      # Bugs 698804/698810/698811, 698819: Keep PDF object numbers below limit.
+      name = "CVE-2017-17858.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=55c3f68d638ac1263a386e0aaa004bb6e8bde731";
+      sha256 = "1bf683d59i5009cv1hhmwmrp2rsb75cbf98qd44dk39cpvq8ydwv";
+    })
+    (fetchpatch {
+      # Bug 698825: Do not drop borrowed colorspaces.
+      name = "CVE-2018-1000051.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=321ba1de287016b0036bf4a56ce774ad11763384";
+      sha256 = "0jbcc9j565q5y305pi888qzlp83zww6nhkqbsmkk91gim958zikm";
+    })
+    (fetchpatch {
+      # Bug 698908 preprecondition: Add portable pseudo-random number generator based on the lrand48 family.
+      name = "CVE-2018-6187.0.1.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2d5b4683e912d6e6e1f1e2ca5aa0297beb3e6807";
+      sha256 = "028bxinbjs5gg9myjr3vs366qxg9l2iyba2j3pxkxsh1851hj728";
+    })
+    (fetchpatch {
+      # Bug 698908 precondition: Fix "being able to search for redacted text" bug.
+      name = "CVE-2018-6187.0.2.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=25593f4f9df0c4a9b9adaa84aaa33fe2a89087f6";
+      sha256 = "195y69c3f8yqxcsa0bxrmxbdc3fx1dzvz8v66i56064mjj0mx04s";
+    })
+    (fetchpatch {
+      # Bug 698908: Resize object use and renumbering lists after repair.
+      name = "CVE-2018-6187.1.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=3e30fbb7bf5efd88df431e366492356e7eb969ec";
+      sha256 = "0wzbqj750h06q1wa6vxbpv5a5q9pfg0cxjdv88yggkrjb3vrkd9j";
+    })
+    (fetchpatch {
+      # Bug 698908: Plug PDF object leaks when decimating pages in pdfposter.
+      name = "CVE-2018-6187.2.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a71e7c85a9f2313cde20d4479cd727a5f5518ed2";
+      sha256 = "1pcjkq8lg6l2m0186rl79lilg79crgdvz9hrmm3w60gy2gxkgksc";
+    })
+    (fetchpatch {
+      # Bug 698916: Indirect object numbers must be in range.
+      name = "CVE-2018-6192.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=5e411a99604ff6be5db9e273ee84737204113299";
+      sha256 = "134zc07fp0p1mwqa8xrkq3drg4crajzf1hjf4mdwmcy1jfj2pfhj";
+    })
+  ]
 
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-14685.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=ab1a420613dec93c686acbee2c165274e922f82a";
-      sha256 = "120xapwj0af333n3a32ypxk0jmjv2ia476jg8pzsfqk9a5qqkx46";
-    })
+  # Use shared libraries to decrease size
+  ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.12-shared_libs-1.patch
 
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-14686.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=0f0fbc07d9be31f5e83ec5328d7311fdfd8328b1";
-      sha256 = "0pkn7mfqhmnsyia4rh4mw4q435bzvlc22crqa1bxpaa0gcyky51c";
-    })
-
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-14687.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2b16dbd8f73269cb15ca61ece75cf8d2d196ed28";
-      sha256 = "01v41cwrdnz3k32fcadk2gk4knqrm3mavzp6pxhn19nwgmqkshjd";
-    })
-
-    (fetchurl {
-      name = "mupdf-1.11-CVE-2017-15587.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=82df2631d7d0446b206ea6b434ea609b6c28b0e8";
-      sha256 = "04kfww7y0wazg6372g44fa2k5kiiigq4616ihkvmp18rz86903n9";
-    })
-  ];
+  ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+  ;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
@@ -72,9 +95,15 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg ]
-                ++ lib.optionals enableX11 [ libX11 libXext ]
-                ++ lib.optionals enableCurl [ curl openssl ];
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
+                ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
+                ++ lib.optionals enableCurl [ curl openssl ]
+                ++ lib.optionals enableGL (
+                  if stdenv.isDarwin then
+                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+                  else
+                    [ freeglut libGLU ])
+                ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -117,6 +146,6 @@ in stdenv.mkDerivation rec {
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric vrthra fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

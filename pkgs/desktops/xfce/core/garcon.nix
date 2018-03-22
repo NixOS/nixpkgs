@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
+  patches = [ ./garcon-10967.patch ./garcon-12700.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool glib libxfce4util gtk libxfce4ui ];
@@ -24,4 +25,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/vain/xpointerbarrier;
     description = "Create X11 pointer barriers around your working area";
     license = stdenv.lib.licenses.mit;
-    maintainers = stdenv.lib.maintainers.xzfc;
+    maintainers = [ stdenv.lib.maintainers.xzfc ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

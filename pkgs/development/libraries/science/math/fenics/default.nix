@@ -158,7 +158,7 @@ stdenv.mkDerivation {
   meta = {
     description = "The FEniCS Problem Solving Environment in Python and C++";
     homepage = http://fenicsproject.org/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.lgpl3;
   };
 }

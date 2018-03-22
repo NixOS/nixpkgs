@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json_glib, libsoup, geoip
-, dbus, dbus_glib, modemmanager, avahi, glib_networking, wrapGAppsHook
+{ fetchurl, stdenv, intltool, libintlOrEmpty, pkgconfig, glib, json-glib, libsoup, geoip
+, dbus, dbus-glib, modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
 }:
 
 with stdenv.lib;
@@ -15,21 +15,21 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook
+    pkgconfig intltool wrapGAppsHook gobjectIntrospection
   ];
 
   buildInputs = libintlOrEmpty ++
-   [ glib json_glib libsoup geoip
-     dbus dbus_glib avahi
+   [ glib json-glib libsoup geoip
+     dbus dbus-glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
-  propagatedBuildInputs = [ dbus dbus_glib glib glib_networking ];
+  propagatedBuildInputs = [ dbus dbus-glib glib glib-networking ];
 
   preConfigure = ''
      substituteInPlace configure --replace "-Werror" ""
   '';
 
-  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ] ++
+  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system" "--enable-introspection" ] ++
                    optionals stdenv.isDarwin [
                        "--disable-silent-rules"
                        "--disable-3g-source"
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
+    homepage = https://freedesktop.org/wiki/Software/GeoClue/;
     maintainers = with maintainers; [ raskin garbas ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2;

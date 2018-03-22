@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, poppler_qt4, zlib, pkgconfig}:
+{ stdenv, fetchurl, qt5, poppler_qt5, zlib, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.4";
+  version = "2.12.6";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "03917faqyy0a1k6b86blc2fcards5a1819ydgkc4jlhwiaym4iyw";
+    sha256 = "18rxd7ra5k2f7s4c296b3v3pqhxjmfix9xpy9i1g4jm87ygqrbnd";
   };
 
-  nativeBuildInputs = [ qmake4Hook pkgconfig ];
-  buildInputs = [ qt4 poppler_qt4 zlib ];
+  nativeBuildInputs = [ qt5.qmake pkgconfig ];
+  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler_qt5 zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 	'';
     homepage = http://texstudio.sourceforge.net;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cfouche ];
   };
 }

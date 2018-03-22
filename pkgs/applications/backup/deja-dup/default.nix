@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala_0_38, gettext
-, gnome3, libnotify, intltool, itstool, glib, gtk3, libxml2
+{ stdenv, fetchurl, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
+, gnome3, libnotify, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
-, libpthreadstubs, libXdmcp, epoxy, at_spi2_core, dbus, libgpgerror
-, appstream-glib, desktop_file_utils, atk, pango, duplicity
+, libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
+, appstream-glib, desktop-file-utils, duplicity
 }:
 
 stdenv.mkDerivation rec {
@@ -15,58 +15,35 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-paths.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit coreutils;
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace libdeja/tools/duplicity/DuplicityInstance.vala --replace \
-      "/bin/rm" \
-      "${coreutils}/bin/rm"
-  '';
-
-  # couldn't find gio/gdesktopappinfo.h
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   nativeBuildInputs = [
-    meson ninja pkgconfig vala_0_38 gettext intltool itstool
-    appstream-glib desktop_file_utils libxml2 wrapGAppsHook
+    meson ninja pkgconfig vala_0_40 gettext itstool
+    appstream-glib desktop-file-utils libxml2 wrapGAppsHook
   ];
 
   buildInputs = [
    libnotify gnome3.libpeas glib gtk3 libsecret
    pcre libxkbcommon libpthreadstubs libXdmcp epoxy gnome3.nautilus
-   at_spi2_core dbus gnome3.gnome_online_accounts libgpgerror
+   at-spi2-core dbus gnome3.gnome-online-accounts libgpgerror
   ];
 
   propagatedUserEnvPkgs = [ duplicity ];
+
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  # Manual rpath definition until https://github.com/mesonbuild/meson/issues/314 is fixed
-  postFixup =
-    let
-      rpath = stdenv.lib.makeLibraryPath [
-        glib
-        gtk3
-        gnome3.gnome_online_accounts
-        gnome3.libpeas
-        gnome3.nautilus
-        libgpgerror
-        libsecret
-        # Transitive
-        atk
-        pango
-      ];
-    in ''
-      # Unwrap accidentally wrapped library
-      mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
-
-      for elf in "$out"/bin/.*-wrapped "$out"/libexec/deja-dup/.deja-dup-monitor-wrapped "$out"/libexec/deja-dup/tools/*.so "$out"/lib/deja-dup/*.so "$out"/lib/nautilus/extensions-3.0/*.so; do
-        patchelf --set-rpath '${rpath}':"$out/lib/deja-dup" "$elf"
-      done
-    '';
+  postFixup = ''
+    # Unwrap accidentally wrapped library
+    mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple backup tool";

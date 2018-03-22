@@ -1,6 +1,10 @@
 { stdenv
 , jshon
+, glib
+, nspr
+, nss
 , fetchzip
+, patchelfUnstable
 , enablePepperFlash ? false
 , enableWideVine ? false
 
@@ -45,6 +49,8 @@ let
 
     src = upstream-info.binary;
 
+    nativeBuildInputs = [ patchelfUnstable ];
+
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
@@ -63,14 +69,12 @@ let
       ! find -iname '*.so' -exec ldd {} + | grep 'not found'
     '';
 
-    patchPhase = ''
-      for sofile in libwidevinecdm.so libwidevinecdmadapter.so; do
-        chmod +x "$sofile"
-        patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" "$sofile"
-      done
+    PATCH_RPATH = mkrpath [ stdenv.cc.cc glib nspr nss ];
 
-      patchelf --set-rpath "$out/lib:${mkrpath [ stdenv.cc.cc ]}" \
-        libwidevinecdmadapter.so
+    patchPhase = ''
+      chmod +x libwidevinecdm.so libwidevinecdmadapter.so
+      patchelf --set-rpath "$PATCH_RPATH" libwidevinecdm.so
+      patchelf --set-rpath "$out/lib:$PATCH_RPATH" libwidevinecdmadapter.so
     '';
 
     installPhase = let
@@ -94,12 +98,12 @@ let
 
   flash = stdenv.mkDerivation rec {
     name = "flashplayer-ppapi-${version}";
-    version = "27.0.0.187";
+    version = "29.0.0.113";
 
     src = fetchzip {
       url = "https://fpdownload.adobe.com/pub/flashplayer/pdc/"
           + "${version}/flash_player_ppapi_linux.x86_64.tar.gz";
-      sha256 = "102z9aflm0a29klc26jch3wl4y8hdrxzqdqvf5yj0bnibx3hwpsy";
+      sha256 = "1ix86jv4ckn5pcj37fgx4mncqjyvabdvwxp9zs9frdfbyx740izr";
       stripRoot = false;
     };
 

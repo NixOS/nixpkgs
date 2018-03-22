@@ -1,11 +1,11 @@
 { fetchurl, stdenv, slang, popt }:
 
 stdenv.mkDerivation rec {
-  name = "newt-0.52.15";
+  name = "newt-0.52.20";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/n/e/newt/${name}.tar.gz";
-    sha256 = "0hg2l0siriq6qrz6mmzr6l7rpl40ay56c8cak87rb2ks7s952qbs";
+    sha256 = "1g3dpfnvaw7vljbr7nzq1rl88d6r8cmrvvng9inphgzwxxmvlrld";
   };
 
   patchPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
-    makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
+    makeFlags = "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
   };
 
   meta = with stdenv.lib; {

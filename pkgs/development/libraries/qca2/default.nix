@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # tells CMake to use this CA bundle file if it is accessible
+  preConfigure = ''export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt'';
+
+  # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
+  cmakeFlags = [ "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt" ];
+
   meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";

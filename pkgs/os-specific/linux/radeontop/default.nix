@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/clbr/radeontop;
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rycee nckx ];
+    maintainers = with maintainers; [ rycee ];
   };
 }

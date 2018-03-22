@@ -8,7 +8,8 @@ hicolorIconThemeHook() {
 	
 }
 
-envHooks+=(hicolorIconThemeHook)
+# I think this is meant to be a runtime dep
+addEnvHooks "$hostOffset" hicolorIconThemeHook
 
 # Remove icon cache
 hicolorPreFixupPhase() {

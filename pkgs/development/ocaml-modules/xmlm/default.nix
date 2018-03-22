@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 let
   pname = "xmlm";
   webpage = "http://erratique.ch/software/${pname}";
@@ -30,19 +30,12 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam ] ++ param.buildInputs;
-
-  createFindlibDestdir = true;
+  buildInputs = [ ocaml findlib ocamlbuild ] ++ param.buildInputs;
 
   unpackCmd = "tar xjf $src";
 
   inherit (param) buildPhase;
-
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
-  '';
+  inherit (topkg) installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml streaming codec to decode and encode the XML data format";

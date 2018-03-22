@@ -1,5 +1,5 @@
 { stdenv, fetchzip, fetchurl, fetchpatch, cmake, pkgconfig
-, zlib, libpng
+, zlib, libpng, openjpeg
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
@@ -40,11 +40,7 @@ stdenv.mkDerivation rec {
       # Patches from previous 1.10a version in nixpkgs
       patches = [
         # Compatibility with new openjpeg
-        (fetchpatch {
-         name = "mupdf-1.9a-openjpeg-2.1.1.patch";
-         url = "https://git.archlinux.org/svntogit/community.git/plain/mupdf/trunk/0001-mupdf-openjpeg.patch?id=5a28ad0a8999a9234aa7848096041992cc988099";
-         sha256 = "1i24qr4xagyapx4bijjfksj4g3bxz8vs5c2mn61nkm29c63knp75";
-        })
+        ./load-jpx.patch
 
         (fetchurl {
          name = "CVE-2017-5896.patch";
@@ -64,6 +60,14 @@ stdenv.mkDerivation rec {
         # Don't remove mujs because upstream version is incompatible
         rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
       '';
+      postPatch = let
+        # OpenJPEG version is hardcoded in package source
+        openJpegVersion = with stdenv;
+          lib.concatStringsSep "." (lib.lists.take 2
+          (lib.splitString "." (lib.getVersion openjpeg)));
+        in ''
+          sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+        '';
     });
     leptonica_modded = leptonica.overrideAttrs (attrs: {
       prePatch = ''

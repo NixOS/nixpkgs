@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, wrapGAppsHook
-, python3Packages, gst, gtk3, hicolor_icon_theme
+, python3Packages, gst, gtk3, hicolor-icon-theme
 , gobjectIntrospection, librsvg, gnome3, libnotify
 # for gst-transcoder:
 , which, meson, ninja
@@ -34,9 +34,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
 
   buildInputs = [
-    gobjectIntrospection gtk3 librsvg gnome3.gnome_desktop
+    gobjectIntrospection gtk3 librsvg gnome3.gnome-desktop
     gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas libnotify
+    gnome3.gsettings-desktop-schemas libnotify
     gst-transcoder
   ] ++ (with gst; [
     gstreamer gst-editing-services

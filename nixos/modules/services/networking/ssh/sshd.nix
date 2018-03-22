@@ -21,7 +21,7 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this 
+          Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
       };
@@ -137,6 +137,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically open the specified ports in the firewall.
+        '';
+      };
+
       listenAddresses = mkOption {
         type = with types; listOf (submodule {
           options = {
@@ -248,13 +256,10 @@ in
       let
         service =
           { description = "SSH Daemon";
-
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
-
+            after = [ "network.target" ];
             stopIfChanged = false;
-
             path = [ cfgc.package pkgs.gawk ];
-
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
             preStart =
@@ -305,7 +310,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;
@@ -365,14 +370,11 @@ in
 
         KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
         Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-        MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
+        MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 
         # LogLevel VERBOSE logs user's key fingerprint on login.
         # Needed to have a clear audit track of which key was used to log in.
         LogLevel VERBOSE
-
-        # Use kernel sandbox mechanisms where possible in unprivileged processes.
-        UsePrivilegeSeparation sandbox
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

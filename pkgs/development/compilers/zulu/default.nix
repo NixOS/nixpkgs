@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
-, zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, mesa_noglu, alsaLib
+, zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, libGL, alsaLib
 , fontconfig, freetype, gnome2, cairo, gdk_pixbuf, atk, xorg, zlib
 , swingSupport ? true }:
 
@@ -15,7 +15,7 @@ let
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
 
   libraries = [
-    stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
     gnome2.gtk cairo gdk_pixbuf atk zlib
   ] ++ (lib.optionals swingSupport (with xorg; [
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
     mkdir -p $out/nix-support
-    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook

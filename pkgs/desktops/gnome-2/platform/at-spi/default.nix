@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, popt, atk, gtk, libX11, libICE, libXtst, libXi
-, intltool, libbonobo, ORBit2, GConf, dbus_glib }:
+, intltool, libbonobo, ORBit2, GConf, dbus-glib }:
 
 stdenv.mkDerivation {
   name = "at-spi-1.32.0";
@@ -13,5 +13,5 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python popt atk gtk libX11 libICE libXtst libXi
-                  intltool libbonobo ORBit2 GConf dbus_glib ];
+                  intltool libbonobo ORBit2 GConf dbus-glib ];
 }

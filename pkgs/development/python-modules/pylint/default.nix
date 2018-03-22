@@ -4,16 +4,16 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pylint";
-  version = "1.7.4";
+  version = "1.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f65b3815c3bf7524b845711d54c4242e4057dd93826586620239ecdfe591fb1";
+    sha256 = "4fe3b99da7e789545327b75548cee6b511e4faa98afe268130fea1af4b5ec022";
   };
 
   buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
 
-  propagatedBuildInputs = [ astroid configparser isort ];
+  propagatedBuildInputs = [ astroid configparser isort mccabe ];
 
   postPatch = ''
     # Remove broken darwin tests

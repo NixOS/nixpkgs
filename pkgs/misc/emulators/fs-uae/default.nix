@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, gettext, gtk2, SDL2, zlib, glib, openal, mesa, lua, freetype, libmpeg2, zip }:
+, gettext, gtk2, SDL2, zlib, glib, openal, libGLU_combined, lua, freetype, libmpeg2, zip }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext gtk2 SDL2 zlib glib openal mesa lua freetype libmpeg2 zip ];
+  buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU_combined lua freetype libmpeg2 zip ];
 
   meta = {
     description = "An accurate, customizable Amiga Emulator";

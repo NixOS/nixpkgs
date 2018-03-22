@@ -14,7 +14,7 @@ index 1c4b5000..c9f120d4 100644
 -	if err != nil {
 -		return errors.Wrap(err, "Error updating localkube from uri")
 -	}
-+	localkubeFile = assets.NewBinDataAsset("out/localkube", "/", "localkube", "0777")
++	localkubeFile = assets.NewBinDataAsset("out/localkube", "/usr/local/bin/", "localkube", "0777")
  	copyableFiles = append(copyableFiles, localkubeFile)
 
  	// user added files

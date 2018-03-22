@@ -9,9 +9,9 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "36.4.0";
+    version = "38.4.1";
     format = "wheel";
-    sha256 = "4d54c0bfee283e78609169213f9c075827d5837086f58b588b417b093c23464b";
+    sha256 = "22f8bcff5ce7fd1867785701769eaba42b79331d0abf890974a9288787dc015b";
   };
 
   # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  buildInputs = [ python makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ python ];
 
   installPhase = ''
 

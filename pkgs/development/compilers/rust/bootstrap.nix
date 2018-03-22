@@ -3,14 +3,16 @@
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.20.0";
+  version = "1.23.0";
 
-  # fetch hashes by running `print-hashes.sh 1.20.0`
+  # fetch hashes by running `print-hashes.sh 1.23.0`
   hashes = {
-    i686-unknown-linux-gnu = "abe592e06616cdc2fcca56ddbe482050dd49a1fada35e2af031c64fe6eb14668";
-    x86_64-unknown-linux-gnu = "ca1cf3aed73ff03d065a7d3e57ecca92228d35dc36d9274a6597441319f18eb8";
-    i686-apple-darwin = "b3c2470f8f132d285e6c989681e251592b67071bc9d93cac8a2e6b66f7bdfcb5";
-    x86_64-apple-darwin = "fa1fb8896d5e327cbe6deeb50e6e9a3346de629f2e6bcbd8c10f19f3e2ed67d5";
+    i686-unknown-linux-gnu = "dc5bd0ef47e1036c8ca64676d8967102cb86ce4bf50b90a9845951c3e940423f";
+    x86_64-unknown-linux-gnu = "9a34b23a82d7f3c91637e10ceefb424539dcfa327c2dcd292ff10c047b1fdc7e";
+    armv7-unknown-linux-gnueabihf = "587027899267f1961520438c2c7f6775fe224160d43ddf07332b9b943a26b08e";
+    aarch64-unknown-linux-gnu = "38379fbd976d2286cb73f21466db40a636a583b9f8a80af5eea73617c7912bc7";
+    i686-apple-darwin = "4709eb1ad2fb871fdaee4b3449569cef366b0d170453cf17484a12286564f2ad";
+    x86_64-apple-darwin = "9274e977322bb4b153f092255ac9bd85041142c73eaabf900cb2ef3d3abb2eba";
   };
 
   platform =
@@ -18,6 +20,10 @@ let
     then "i686-unknown-linux-gnu"
     else if stdenv.system == "x86_64-linux"
     then "x86_64-unknown-linux-gnu"
+    else if stdenv.system == "armv7l-linux"
+    then "armv7-unknown-linux-gnueabihf"
+    else if stdenv.system == "aarch64-linux"
+    then "aarch64-unknown-linux-gnu"
     else if stdenv.system == "i686-darwin"
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"

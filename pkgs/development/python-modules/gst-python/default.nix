@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-python";
-  version = "1.12.2";
+  version = "1.12.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "0iwy0v2k27wd3957ich6j5f0f04b0wb2mb175ypf2lx68snk5k7l";
+    sha256 = "19rb06x2m7103zwfm0plxx95gb8bp01ng04h4q9k6ii9q7g2kxf3";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];

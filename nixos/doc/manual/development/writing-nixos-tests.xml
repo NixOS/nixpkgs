@@ -262,8 +262,47 @@ startAll;
     <literal>waitForWindow(qr/Terminal/)</literal>.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><methodname>copyFileFromHost</methodname></term>
+    <listitem><para>Copies a file from host to machine, e.g.,
+    <literal>copyFileFromHost("myfile", "/etc/my/important/file")</literal>.</para>
+    <para>The first argument is the file on the host. The file needs to be
+    accessible while building the nix derivation. The second argument is
+    the location of the file on the machine.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>systemctl</methodname></term>
+    <listitem>
+      <para>Runs <literal>systemctl</literal> commands with optional support for
+      <literal>systemctl --user</literal></para>
+    <para>
+      <programlisting>
+        $machine->systemctl("list-jobs --no-pager"); // runs `systemctl list-jobs --no-pager`
+        $machine->systemctl("list-jobs --no-pager", "any-user"); // spawns a shell for `any-user` and runs `systemctl --user list-jobs --no-pager`
+      </programlisting>
+    </para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
+</para>
+
+<para>
+  To test user units declared by <literal>systemd.user.services</literal> the optional <literal>$user</literal>
+  argument can be used:
+
+  <programlisting>
+    $machine->start;
+    $machine->waitForX;
+    $machine->waitForUnit("xautolock.service", "x-session-user");
+  </programlisting>
+
+  This applies to <literal>systemctl</literal>, <literal>getUnitInfo</literal>,
+  <literal>waitForUnit</literal>, <literal>startJob</literal>
+  and <literal>stopJob</literal>.
 </para>
 
 </section>

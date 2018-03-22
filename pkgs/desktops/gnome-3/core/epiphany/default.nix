@@ -1,31 +1,42 @@
-{ stdenv, intltool, fetchurl, pkgconfig, gtk3, glib, nspr, icu
-, bash, wrapGAppsHook, gnome3, libwnck3, libxml2, libxslt, libtool
-, webkitgtk, libsoup, glib_networking, libsecret, gnome_desktop, libnotify, p11_kit
-, sqlite, gcr, avahi, nss, isocodes, itstool, file, which
-, gdk_pixbuf, librsvg, gnome_common, gst_all_1, json_glib }:
+{ stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
+, wrapGAppsHook, gnome3, libxml2, libxslt, itstool
+, webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
+, sqlite, gcr, isocodes, desktop-file-utils, file
+, gdk_pixbuf, gnome-common, gst_all_1, json-glib }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "epiphany-${version}";
+  version = "3.28.0.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/epiphany/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "023q6xnwsafac38lavxwgph5lcd2igxpiwqb4kr72mv56xlb0m3i";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "epiphany"; };
+  };
 
   # Tests need an X display
-  configureFlags = [ "--disable-static --disable-tests" ];
+  mesonFlags = [ "-Dunit_tests=false" ];
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
-  nativeBuildInputs = [ pkgconfig file wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja libxslt pkgconfig itstool gettext file wrapGAppsHook desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib intltool libwnck3 libxml2 libxslt file
-                  webkitgtk libsoup libsecret gnome_desktop libnotify libtool
-                  sqlite isocodes nss itstool p11_kit nspr icu gnome3.yelp_tools
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common
-                  gcr avahi gnome3.gsettings_desktop_schemas gnome3.dconf
-                  gnome3.glib_networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
+  buildInputs = [ gtk glib webkitgtk libsoup libxml2 libsecret gnome-desktop libnotify
+                  sqlite isocodes p11-kit icu gnome3.yelp-tools
+                  gdk_pixbuf gnome3.defaultIconTheme gnome-common gcr
+                  glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-                  gst_all_1.gst-libav json_glib ];
-
-  NIX_CFLAGS_COMPILE = "-I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
+                  gst_all_1.gst-libav json-glib ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    chmod +x post_install.py # patchShebangs requires executable file
+    patchShebangs post_install.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Epiphany;

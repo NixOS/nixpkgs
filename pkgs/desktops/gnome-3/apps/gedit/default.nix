@@ -4,16 +4,26 @@
 , gnome3, librsvg, gdk_pixbuf, file, gspell }:
 
 stdenv.mkDerivation rec {
-  inherit (import ./src.nix fetchurl) name src;
+  name = "gedit-${version}";
+  version = "3.28.0";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/gedit/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0pyam0zi44xq776x20ycqnvmf86l98jns8ldv4m81gnp9wnhmycv";
+  };
+
+  passthru = {
+    updateScript = gnome3.updateScript { packageName = "gedit"; attrPath = "gnome3.gedit"; };
+  };
+
+  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
   buildInputs = [ gtk3 glib intltool itstool enchant isocodes
                   gdk_pixbuf gnome3.defaultIconTheme librsvg libsoup
                   gnome3.libpeas gnome3.gtksourceview libxml2
-                  gnome3.gsettings_desktop_schemas gnome3.dconf file gspell ];
+                  gnome3.gsettings-desktop-schemas gnome3.dconf file gspell ];
 
   enableParallelBuilding = true;
 

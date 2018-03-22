@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, dbus_glib, libxml2, sqlite, telepathy_glib, pkgconfig
+{ stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
 , gnome3, makeWrapper, intltool, libxslt, gobjectIntrospection, dbus_libs }:
 
 stdenv.mkDerivation rec {
   project = "telepathy-logger";
-  name = "${project}-0.8.0";
+  name = "${project}-0.8.2";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${project}/${name}.tar.bz2";
     sha256 = "18i00l8lnp5dghqmgmpxnn0is2a20pkisxy0sb78hnd2dz0z6xnl";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
-
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib intltool libxslt 
-                  gobjectIntrospection dbus_libs telepathy_glib.python (stdenv.lib.getLib gnome3.dconf) ];
+  nativeBuildInputs = [
+    makeWrapper pkgconfig intltool libxslt gobjectIntrospection
+  ];
+  buildInputs = [
+    dbus-glib libxml2 sqlite telepathy-glib
+    dbus_libs telepathy-glib.python
+  ];
 
   configureFlags = "--enable-call";
 
@@ -24,10 +26,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Logger service for Telepathy framework";
-    homepage = http://telepathy.freedesktop.org/wiki/Logger ;
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu; # Arbitrary choice
+    homepage = https://telepathy.freedesktop.org/components/telepathy-logger/;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.gnu; # Arbitrary choice
   };
 }

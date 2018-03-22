@@ -2,20 +2,18 @@
 
 with pythonPackages;buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.1.0";
+  version = "3.2.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d89634a57981ed43cb5dcd25e00c9454ea111189c5ddc08d945b3d5187ada5fd";
+    sha256 = "e9afa277a9b227d92335c49fab40be2e9bb112c0f4dda84906c14addb1ded2f7";
   };
 
   propagatedBuildInputs = [ requests py ];
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    # Don't know why this test is failing!
-    substituteInPlace testing/test_request.py --replace "test_env" "noop_test_env"
     py.test
   '';
 

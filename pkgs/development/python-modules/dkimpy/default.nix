@@ -1,11 +1,12 @@
 { stdenv, fetchurl, openssl, makeWrapper, buildPythonApplication
-, pytest, dns }:
+, pytest, dnspython }:
 
 buildPythonApplication rec {
-  name = "${pname}-${majorversion}.${minorversion}";
+  name = "${pname}-${version}";
   pname = "dkimpy";
   majorversion = "0.6";
   minorversion = "2";
+  version = "${majorversion}.${minorversion}";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/${majorversion}/${majorversion}.${minorversion}/+download/${name}.tar.gz";
@@ -13,7 +14,7 @@ buildPythonApplication rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs =  [ openssl dns ];
+  propagatedBuildInputs =  [ openssl dnspython ];
 
   patchPhase = ''
     substituteInPlace dknewkey.py --replace \

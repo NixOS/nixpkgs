@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "df374c20d53ed082b8cf0d0da52b1a181abf387b";
-      sha256 = "0my26kjx1inh0ajh85n34wrl18mizx627cl0xhxlhcyw01p24792";
+      rev = "628f99e2cda77dd323992ede8b05961b41f4352f";
+      sha256 = "0dbr4czbjpnkira9bhackq01s9b13yvw5dscnxi3mr9adb89y9pm";
     };
   }
   {
@@ -23,8 +23,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/go-errors/errors";
-      rev = "8fa88b06e5974e97fbf9899a7f86a344bfd1f105";
-      sha256 = "02mvb2clbmfcqb4yclv5zhs4clkk9jxi2hiawsynl5fwmgn0d3xa";
+      rev = "a6af135bd4e28680facf08a3d206b454abc877a4";
+      sha256 = "0rznpknk19rxkr7li6dqs52c26pjazp69lh493l4ny4sxn5922lp";
+    };
+  }
+  {
+    goPackagePath = "github.com/hashicorp/go-cleanhttp";
+    fetch = {
+      type = "git";
+      url = "https://github.com/hashicorp/go-cleanhttp";
+      rev = "d5fe4b57a186c716b0e00b8c301cbd9b4182694d";
+      sha256 = "1m20y90syky4xr81sm3980jpil81nnpzmi6kv0vjr6p584gl1hn8";
     };
   }
   {
@@ -32,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-getter";
-      rev = "6aae8e4e2dee8131187c6a54b52664796e5a02b0";
-      sha256 = "0hxjwph0ghx0732xq62bszk18wb18hdq6vzb6b6bdn3rsdva1d68";
+      rev = "64040d90d4ab861e7e833d689dc76a0f176d8dec";
+      sha256 = "0g25nx42z6ykd7jqzlrxf161h8lqrpxpddmbspl4w3a84wphhgms";
     };
   }
   {
@@ -41,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-version";
-      rev = "03c5bf6be031b6dd45afec16b1cf94fc8938bc77";
-      sha256 = "0sjq57gpfznaqdrbyb2p0bn90g9h661cvr0jrk6ngags4pbw14ik";
+      rev = "4fe82ae3040f80a03d04d2cccb5606a626b8e1ee";
+      sha256 = "0gq4207s1yf2nq4c2ir3bsai29svzz4830g1vbvzdrpis58r1x4m";
     };
   }
   {
@@ -50,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/hcl";
-      rev = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca";
-      sha256 = "1rfm67kma2hpakabf7hxlj196jags4rpjpcirwg4kan4g9b6j0kb";
+      rev = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8";
+      sha256 = "0db4lpqb5m130rmfy3s3gjjf4dxllypmyrzxv6ggqhkmwmc7w4mc";
     };
   }
   {
@@ -59,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-zglob";
-      rev = "95345c4e1c0ebc9d16a3284177f09360f4d20fab";
-      sha256 = "012hrd67v4gp3b621rykg2kp6a7iq4dr585qavragbif0z1whckx";
+      rev = "4959821b481786922ac53e7ef25c61ae19fb7c36";
+      sha256 = "0rwkdw143kphpmingsrw1zp030zf3p08f64h347jpdm4lz8z5449";
     };
   }
   {
@@ -77,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/go-testing-interface";
-      rev = "9a441910b16872f7b8283682619b3761a9aa2222";
-      sha256 = "0gfi97m6sadrwbq56as3d368c3ipcn3wz8pxqkk7kkba0h5wjc7v";
+      rev = "a61a99592b77c9ba629d254a693acffaeb4b7e28";
+      sha256 = "139hq835jpgk9pjg94br9d08nka8bfm7zyw92zxlwrkska4pgigx";
     };
   }
   {
@@ -86,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/mapstructure";
-      rev = "d0303fe809921458f417bcf828397a65db30a7e4";
-      sha256 = "1fjwi5ghc1ibyx93apz31n4hj6gcq1hzismpdfbg2qxwshyg0ya8";
+      rev = "00c29f56e2386353d58c599509e8dc3801b0d716";
+      sha256 = "1vw8fvhax0d567amgvxr7glcl12lvzg2sbzs007q5k5bbwn1szyb";
     };
   }
   {
@@ -95,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/stretchr/testify";
-      rev = "05e8a0eda380579888eb53c394909df027f06991";
-      sha256 = "03l83nrgpbyc2hxxfi928gayj16fsclbr88dja6r9kikq19a6yhv";
+      rev = "b89eecf5ca5db6d3ba60b237ffe3df7bafb7662f";
+      sha256 = "0g946ii8qjaynvidj648z8izl91i6yhy0ir6g3qsrn136im3r8wk";
     };
   }
   {
@@ -113,8 +122,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "4b90d79a682b4bf685762c7452db20f2a676ecb2";
-      sha256 = "0ls3lfmbfwirm9j95b6yrw41wgh72lfkp1cvs873zw04si4yvaqr";
+      rev = "8e01ec4cd3e2d84ab2fe90d8210528ffbb06d8ff";
+      sha256 = "0cpr10n4ps3gcdbcink71ry9hzhdb5rrcysmylybs8h2lzxqgc1i";
     };
   }
 ]

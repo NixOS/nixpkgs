@@ -109,7 +109,7 @@ fun! nix#NixDerivation(opts, name, repository) abort
           \ '    buildInputs = [ unzip ];',
           \ '    dependencies = ['.join(map(copy(dependencies), "'\"'.nix#ToNixAttrName(v:val).'\"'")).'];',
           \ '    meta = {',
-          \ '       url = "http://www.vim.org/scripts/script.php?script_id='.a:repository.vim_script_nr.'";',
+          \ '       homepage = "http://www.vim.org/scripts/script.php?script_id='.a:repository.vim_script_nr.'";',
           \ '    };',
           \ addon_info == {} ? '' : ('    addon_info = '.nix#ToNix(string(addon_info), [], "").';'),
           \ additional_nix_code,

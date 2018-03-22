@@ -1,19 +1,23 @@
-{lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, typing, aiohttp }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, typing, aiohttp
+}:
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
-  version = "0.5.3";
-  name = "${pname}-${version}";
+  version = "0.7.0";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
+    sha256 = "0pczn54bqd32v8zhfbjfybiza6xh1szwxy6as577dn8g23bwcfad";
   };
 
-  # Requires network access
-  doCheck = false;
+  disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [ aiohttp ]
   ++ lib.optional (pythonOlder "3.5") typing;
+
+  # Requires network access
+  doCheck = false;
 
   meta = with lib; {
     description = "CORS support for aiohttp";

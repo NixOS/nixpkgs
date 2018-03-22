@@ -1,39 +1,68 @@
-{ fetchFromGitHub, stdenv, makeWrapper, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
-SDL2_mixer, freetype, gettext }:
+{ fetchFromGitHub, stdenv, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
+SDL2_mixer, freetype, gettext, CoreFoundation, Cocoa,
+tiles ? true }:
 
 stdenv.mkDerivation rec {
-  version = "2017-07-12";
+  version = "2017-12-09";
   name = "cataclysm-dda-git-${version}";
 
   src = fetchFromGitHub {
     owner = "CleverRaven";
     repo = "Cataclysm-DDA";
-    rev = "2d7aa8c";
-    sha256 = "0xx7si4k5ivyb5gv98fzlcghrg3w0dfblri547x7x4is7fj5ffjd";
+    rev = "24e92956db5587809750283873c242cc0796d7e6";
+    sha256 = "1a7kdmx76na4g65zra01qaq98lxp9j2dl9ddv09r0p5yxaizw68z";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ];
+  buildInputs = with stdenv.lib; [ ncurses lua gettext ]
+    ++ optionals stdenv.isDarwin [ CoreFoundation ]
+    ++ optionals tiles [ SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype ]
+    ++ optionals (tiles && stdenv.isDarwin) [ Cocoa ];
+
+  patches = [ ./patches/fix_locale_dir_git.patch ];
 
   postPatch = ''
     patchShebangs .
-    sed -i Makefile \
-      -e 's,-Werror,,g' \
-      -e 's,\(DATA_PREFIX=$(PREFIX)/share/\)cataclysm-dda/,\1,g'
-
-    sed '1i#include <cmath>' \
-      -i src/{crafting,skill,weather_data,melee,vehicle,overmap,iuse_actor}.cpp
+    sed -i data/xdg/com.cataclysmdda.cataclysm-dda.desktop \
+        -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
   '';
 
-  makeFlags = "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1";
+  makeFlags = with stdenv.lib; [
+    "PREFIX=$(out)"
+    "LUA=1"
+    "RELEASE=1"
+    "USE_HOME_DIR=1"
+    "LANGUAGES=all"
+    "VERSION=git-${version}-${substring 0 8 src.rev}"
+  ] ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ] ++ optionals stdenv.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
+  ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cataclysm-tiles \
-      --add-flags "--datadir $out/share/cataclysm-dda/"
+  postInstall = with stdenv.lib; optionalString (tiles && !stdenv.isDarwin) ''
+    install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T $out/share/applications/cataclysm-dda.desktop
+    install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
+  '' + optionalString (tiles && stdenv.isDarwin) ''
+    app=$out/Applications/Cataclysm.app
+    install -D -m 444 data/osx/Info.plist -t $app/Contents
+    install -D -m 444 data/osx/AppIcon.icns -t $app/Contents/Resources
+    mkdir $app/Contents/MacOS
+    launcher=$app/Contents/MacOS/Cataclysm.sh
+    cat << SCRIPT > $launcher
+    #!/bin/sh
+    $out/bin/cataclysm-tiles
+    SCRIPT
+    chmod 555 $launcher
   '';
 
-  enableParallelBuilding = true;
+  # https://hydra.nixos.org/build/65193254
+  # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
+  # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
@@ -60,8 +89,8 @@ stdenv.mkDerivation rec {
       substances or radiation, now more closely resemble insects, birds or fish
       than their original form.
     '';
-    homepage = http://en.cataclysmdda.com/;
+    homepage = http://cataclysmdda.org/;
     license = licenses.cc-by-sa-30;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

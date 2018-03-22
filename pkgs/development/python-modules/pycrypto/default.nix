@@ -3,10 +3,9 @@
 # This is a dummy package providing the drop-in replacement pycryptodome.
 # https://github.com/NixOS/nixpkgs/issues/21671
 
-let
+buildPythonPackage rec {
   version = pycryptodome.version;
   pname = "pycrypto";
-in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   # Cannot build wheel otherwise (zip 1980 issue)

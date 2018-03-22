@@ -3,12 +3,11 @@
 , buildPythonPackage
 , python
 , fetchPypi
-, fetchFromGitHub
-, pytest 
+, html5lib
+, pytest
 , cython
-, cymem
 , preshed
-, pathlib2
+, ftfy
 , numpy
 , murmurhash
 , plac
@@ -16,57 +15,63 @@
 , ujson
 , dill
 , requests
-, ftfy
 , thinc
 , pip
+, regex
 }:
-let
-  enableDebugging = true;
-  regexLocked = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "regex";
-    version = "2017.04.05";
 
-    src = fetchPypi {
-      inherit pname version;      
-      sha256 = "0c95gf3jzz8mv52lkgq0h7sbasjwvdhghm4s0phmy5k9sr78f4fq";
-    };
+buildPythonPackage rec {
+  pname = "spacy";
+  version = "2.0.9";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
   };
-in buildPythonPackage rec {
-  name = "spacy-${version}";
-  version = "1.8.2";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "spaCy";
-    rev = "v${version}";
-    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";    
-  };  
+  prePatch = ''
+    substituteInPlace setup.py --replace \
+      "'html5lib==1.0b8'," \
+      "'html5lib',"
+
+    substituteInPlace setup.py --replace \
+      "'regex==2017.4.5'," \
+      "'regex',"
+
+    substituteInPlace setup.py --replace \
+      "'ftfy==2017.4.5'," \
+      "'ftfy',"
+
+    substituteInPlace setup.py --replace \
+      "'pathlib'," \
+      "\"pathlib; python_version<'3.4'\","
+  '';
 
   propagatedBuildInputs = [
    cython
-   cymem
-   pathlib2
-   preshed
-   numpy
-   murmurhash
-   plac
-   six
-   ujson
    dill
+   html5lib
+   murmurhash
+   numpy
+   plac
+   preshed
+   regex
    requests
-   regexLocked
-   ftfy
+   six
    thinc
-   pytest
-   pip
+   ujson
+   ftfy
+  ];
+
+  checkInputs = [
+    pytest
   ];
 
   doCheck = false;
   # checkPhase = ''
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
-  # '';  
-  
+  # '';
+
   meta = with stdenv.lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;

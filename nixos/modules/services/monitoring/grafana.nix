@@ -25,6 +25,7 @@ let
     DATABASE_USER = cfg.database.user;
     DATABASE_PASSWORD = cfg.database.password;
     DATABASE_PATH = cfg.database.path;
+    DATABASE_CONN_MAX_LIFETIME = cfg.database.connMaxLifetime;
 
     SECURITY_ADMIN_USER = cfg.security.adminUser;
     SECURITY_ADMIN_PASSWORD = cfg.security.adminPassword;
@@ -111,7 +112,7 @@ in {
       type = mkOption {
         description = "Database type.";
         default = "sqlite3";
-        type = types.enum ["mysql" "sqlite3" "postgresql"];
+        type = types.enum ["mysql" "sqlite3" "postgres"];
       };
 
       host = mkOption {
@@ -142,6 +143,15 @@ in {
         description = "Database path.";
         default = "${cfg.dataDir}/data/grafana.db";
         type = types.path;
+      };
+
+      connMaxLifetime = mkOption {
+        description = ''
+          Sets the maximum amount of time (in seconds) a connection may be reused.
+          For MySQL this setting should be shorter than the `wait_timeout' variable.
+        '';
+        default = 14400;
+        type = types.int;
       };
     };
 
@@ -241,7 +251,9 @@ in {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
-      environment = mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
+      environment = {
+        QT_QPA_PLATFORM = "offscreen";
+      } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       serviceConfig = {
         ExecStart = "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}";
         WorkingDirectory = cfg.dataDir;
@@ -249,7 +261,7 @@ in {
       };
       preStart = ''
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}
-        ln -fs ${cfg.package}/share/grafana/vendor ${cfg.dataDir}
+        ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
     };
 

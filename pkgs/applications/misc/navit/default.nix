@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, pkgconfig, gtk2, SDL, fontconfig, freetype, imlib2, SDL_image, mesa,
+{ stdenv, fetchsvn, pkgconfig, gtk2, SDL, fontconfig, freetype, imlib2, SDL_image, libGLU_combined,
 libXmu, freeglut, python, gettext, quesoglc, gd, postgresql, cmake, qt4, SDL_ttf, fribidi}:
 stdenv.mkDerivation rec {
   name = "navit-svn-3537";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ gtk2 SDL fontconfig freetype imlib2 SDL_image mesa
+  buildInputs = [ gtk2 SDL fontconfig freetype imlib2 SDL_image libGLU_combined
     libXmu freeglut python gettext quesoglc gd postgresql qt4 SDL_ttf fribidi ];
 
   nativeBuildInputs = [ pkgconfig cmake ];

@@ -1,4 +1,4 @@
-{ fetchsvn, stdenv, cmake, qt4, mesa }:
+{ fetchsvn, stdenv, cmake, qt4, libGLU_combined }:
 
 # ViTE 1.1 has several bugs, so use the SVN version.
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     ln -sv "${externals}" externals
   '';
 
-  buildInputs = [ cmake qt4 mesa ];
+  buildInputs = [ cmake qt4 libGLU_combined ];
 
   NIX_LDFLAGS = "-lGLU";
 

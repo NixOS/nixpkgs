@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A general-purpose command-line pipe buffer";
-    homepage = http://www.glines.org/wiki/bfr;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

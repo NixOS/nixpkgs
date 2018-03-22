@@ -1,6 +1,5 @@
 { stdenv, fetchurl, m4, cxx ? true
 , buildPackages
-, buildPlatform, hostPlatform
 , withStatic ? false }:
 
 let inherit (stdenv.lib) optional optionalString; in
@@ -19,8 +18,8 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
-  nativeBuildInputs = [ m4 ]
-    ++ stdenv.lib.optional (buildPlatform != hostPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ m4 ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
@@ -43,7 +42,7 @@ let self = stdenv.mkDerivation rec {
       configureFlagsArray+=("--build=$(./configfsf.guess)")
     '';
 
-  doCheck = buildPlatform == hostPlatform;
+  doCheck = true; # not cross;
 
   dontDisableStatic = withStatic;
 

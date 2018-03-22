@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
 
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
     '';
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

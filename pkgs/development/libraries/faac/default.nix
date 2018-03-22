@@ -8,11 +8,11 @@ assert mp4v2Support -> (mp4v2 != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "faac-${version}";
-  version = "1.29.3";
+  version = "1.29.9.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/faac/${name}.tar.gz";
-    sha256 = "0gssrz2vq52mj8x2hvdqc9bwkp64s4f4g7yj7ac6dwxs8dw8kwnf";
+    sha256 = "0wf781vp7rzmxkx5h0w8j2i4xc63iixxikgbvvkdljbwhffj0pyl";
   };
 
   configureFlags = [ ]
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optional mp4v2Support mp4v2;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";

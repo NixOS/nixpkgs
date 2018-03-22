@@ -9,15 +9,15 @@ let
     "macosx"
   else if stdenv.system == "aarch64-linux" then
     "linux-arm"
-  else abort "Platform ${stdenv.system} not yet supported.";
+  else throw "Platform ${stdenv.system} not yet supported.";
 in
 
 stdenv.mkDerivation rec {
-  name = "iozone-3.434";
+  name = "iozone-3.471";
 
   src = fetchurl {
-    url = http://www.iozone.org/src/current/iozone3_434.tar;
-    sha256 = "0aj63mlb91aivz3z71zn8nbwci1pi18qk8zc65dm19cknffqsf1c";
+    url = http://www.iozone.org/src/current/iozone3_471.tar;
+    sha256 = "0w63b3d4ws1sm52lpdd08sl7n4ay438dl3wy0q9la12iq81rglid";
   };
 
   license = fetchurl {

@@ -1,16 +1,17 @@
 { stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
+  version = "2.9.3.1";
   name = "electrum-dash-${version}";
-  version = "2.4.1";
 
   src = fetchurl {
-    url = "https://github.com/dashpay/electrum-dash/releases/download/v${version}/Electrum-DASH-${version}.tar.gz";
-    sha256 = "02k7m7fyn0cvlgmwxr2gag7rf2knllkch1ma58shysp7zx9jb000";
+    url = "https://github.com/akhavr/electrum-dash/releases/download/${version}/Electrum-DASH-${version}.tar.gz";
+    #"https://github.com/dashpay/electrum-dash/releases/download/v${version}/Electrum-DASH-${version}.tar.gz";
+    sha256 = "9b7ac205f63fd4bfb15d77a34a4451ef82caecf096f31048a7603bd276dfc33e";
   };
 
   propagatedBuildInputs = with python2Packages; [
-    dns
+    dnspython
     ecdsa
     pbkdf2
     protobuf
@@ -20,10 +21,11 @@ python2Packages.buildPythonApplication rec {
     pyqt4
     qrcode
     requests
-    slowaes
+    pyaes
     tlslite
     x11_hash
     mnemonic
+    jsonrpclib
 
     # plugins
     trezor

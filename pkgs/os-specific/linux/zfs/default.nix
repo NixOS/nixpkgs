@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+, perl, fetchpatch
 , configFile ? "all"
 
 # Userspace dependencies
 , zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null
+, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
 }:
 
 with stdenv.lib;
@@ -19,6 +20,7 @@ let
     , spl
     , rev ? "zfs-${version}"
     , isUnstable ? false
+    , isLegacyCrypto ? false
     , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
@@ -38,11 +40,16 @@ let
 
       patches = extraPatches;
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      postPatch = optionalString buildKernel ''
+        patchShebangs scripts
+      '';
+
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
-        ++ optionals (buildUser && isUnstable) [ openssl ];
+        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -125,7 +132,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        home = http://zfsonlinux.org/;
+        homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
@@ -140,9 +147,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.3";
+    version = "0.7.7";
 
-    sha256 = "1bbajrwfilnmfhn1n69gvsaznyc4q29wi7nkwc0p9r4dli37w28b";
+    sha256 = "0lrzy27sh1cinkf04ki2vfjrgpgbiza2s59i2by45qdd8kmkcc5r";
 
     extraPatches = [
       (fetchpatch {
@@ -159,19 +166,41 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-11-16";
+    version = "2018-02-02";
 
-    rev = "d4a72f23863382bdf6d0ae33196f5b5decbc48fd";
-    sha256 = "0q2gkkj11hy8m8cjd70g99bs69ldxvc17ym0x1pgwvs4722hzpha";
+    rev = "fbd42542686af053f0d162ec4630ffd4fff1cc30";
+    sha256 = "0qzkwnnk7kz1hwvcaqlpzi5yspfhhmd2alklc07k056ddzbx52qb";
     isUnstable = true;
 
     extraPatches = [
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/ded8f06a3cfee...nixos-zfs-2017-09-12.patch";
-        sha256 = "033wf4jn0h0kp0h47ai98rywnkv5jwvf3xwym30phnaf8xxdx8aj";
+        url = "https://github.com/Mic92/zfs/compare/fbd42542686af053f0d162ec4630ffd4fff1cc30...nixos-zfs-2018-02-02.patch";
+        sha256 = "05wqwjm9648x60vkwxbp8l6z1q73r2a5l2ni28i2f4pla8s3ahln";
       })
     ];
 
     spl = splUnstable;
   };
+
+  zfsLegacyCrypto = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-02-01";
+
+    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
+    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
+    isUnstable = true;
+
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
+        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
+      })
+    ];
+
+    spl = splLegacyCrypto;
+  };
+
 }
