@@ -7000,12 +7000,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPParserXS = buildPerlPackage rec {
-    name = "HTTP-Parser-XS-0.16";
+    name = "HTTP-Parser-XS-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/${name}.tar.gz";
-      sha256 = "1sp9vllf012paslmn11b7z7fbk3hhkcp7gj59yp6qzh11xzpxlai";
+      sha256 = "02d84xq1mm53c7jl33qyb7v5w4372vydp74z6qj0vc96wcrnhkkr";
     };
-    buildInputs = [ TestMore ];
   };
 
   HTTPProxy = buildPerlPackage rec {
