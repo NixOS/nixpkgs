@@ -8658,6 +8658,19 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ MathBigInt ];
   };
 
+  MathBigIntLite = buildPerlPackage rec {
+     version = "0.17";
+     name = "Math-BigInt-Lite-0.17";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.17.tar.gz;
+       sha256 = "1pii36cykpja9al6bdnsxn2w0la674qagqcff6lhk9yx6xakycpk";
+     };
+     propagatedBuildInputs = [ MathBigInt ];
+     meta = {
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   MathBigRat = buildPerlPackage rec {
     name = "Math-BigRat-0.2613";
     src = fetchurl {
@@ -8707,12 +8720,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathPlanePath = buildPerlPackage rec {
-    name = "Math-PlanePath-123";
+    name = "Math-PlanePath-126";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
-      sha256 = "13by23pzwfa2f3rxiws7blqxb8lr3mfczdfq6jsi1kb3ml2wnxyc";
+      sha256 = "014gr79gg992paas6v1glciyycqp2hg7pg4y03kgfbxz1slc6zhq";
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
+    buildInputs = [ DataFloat MathBigIntLite ];
   };
 
   MathRandomISAAC = buildPerlPackage {
