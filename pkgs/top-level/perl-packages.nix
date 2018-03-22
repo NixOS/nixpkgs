@@ -1232,7 +1232,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GR/GRODITI/${name}.tar.gz";
       sha256 = "7f63f930e1e613f15955c9e6d73873675c50c0a3bc2a61a034733361ed26d271";
     };
-    propagatedBuildInputs = [ CatalystRuntime Moose ];
+    propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
       description = "Moose role to create only one instance of component per context";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
