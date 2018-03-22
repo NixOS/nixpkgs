@@ -12921,10 +12921,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubExporterProgressive = buildPerlPackage {
-    name = "Sub-Exporter-Progressive-0.001011";
+    name = "Sub-Exporter-Progressive-0.001013";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001011.tar.gz;
-      sha256 = "01kwzbqwdhvadpphnczid03nlyj0h4cxaq3m3v2401bckkkcc606";
+      url = mirror://cpan/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001013.tar.gz;
+      sha256 = "0mn0x8mkh36rrsr58s1pk4srwxh2hbwss7sv630imnk49navfdfm";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
