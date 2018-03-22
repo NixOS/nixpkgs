@@ -14591,12 +14591,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWarn = buildPerlPackage {
-    name = "Test-Warn-0.30";
+    name = "Test-Warn-0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.30.tar.gz;
-      sha256 = "0haf2ii7br5z0psmkvlvmx2z2q9qz1c70gx0969r378qjidmb5w1";
+      url = mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.32.tar.gz;
+      sha256 = "1lkkpx8gyfsxfkys1psp990xyy1zxf8rsqd44az57x4y3zkidi9g";
     };
-    propagatedBuildInputs = [ SubUplevel TreeDAGNode ];
+    propagatedBuildInputs = [ SubUplevel ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Perl extension to test methods for warnings";
