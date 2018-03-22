@@ -6893,13 +6893,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLTree = buildPerlModule {
-    name = "HTML-Tree-5.03";
+    name = "HTML-Tree-5.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CJ/CJM/HTML-Tree-5.03.tar.gz;
-      sha256 = "13qlqbpixw470gnck0xgny8hyjj576m8y24bba2p9ai2lvy76vbx";
+      url = mirror://cpan/authors/id/K/KE/KENTNL/HTML-Tree-5.07.tar.gz;
+      sha256 = "1gyvm4qlwm9y6hczkpnrdfl303ggbybr0nqxdjw09hii8yw4sdzh";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ HTMLParser HTMLTagset ];
+    propagatedBuildInputs = [ HTMLParser ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Work with HTML in a DOM-like tree structure";
