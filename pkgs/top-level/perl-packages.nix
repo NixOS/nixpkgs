@@ -8631,7 +8631,7 @@ let self = _self // overrides; _self = with self; {
   MathConvexHullMonotoneChain = buildPerlPackage rec {
     name = "Math-ConvexHull-MonotoneChain-0.01";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/Math-ConvexHull-MonotoneChain-0.01.tar.gz;
       sha256 = "1xcl7cz62ydddji9qzs4xsfxss484jqjlj4iixa4aci611cw92r8";
     };
   };
