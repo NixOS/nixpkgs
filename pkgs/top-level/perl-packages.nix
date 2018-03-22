@@ -10391,17 +10391,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesPathClass = buildPerlPackage {
-    name = "MooseX-Types-Path-Class-0.06";
+  MooseXTypesPathClass = buildPerlModule {
+    name = "MooseX-Types-Path-Class-0.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TH/THEPLER/MooseX-Types-Path-Class-0.06.tar.gz;
-      sha256 = "02lw86r6pp6saiwc7ns890mlwq93vhkqyri3cipsfwhnhcap847g";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Path-Class-0.09.tar.gz;
+      sha256 = "0zpgwzxj6d9k2lbg6v6zd1bcbzjz2h336rm816krbblq6ssvm177";
     };
-    propagatedBuildInputs = [ ClassMOP Moose MooseXTypes PathClass ];
+    propagatedBuildInputs = [ MooseXTypes PathClass ];
     meta = {
       description = "A Path::Class type library for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ ModuleBuildTiny TestNeeds ];
   };
 
   MooseXTypesPathTiny = buildPerlModule {
