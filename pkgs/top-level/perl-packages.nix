@@ -12659,10 +12659,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringApprox = buildPerlPackage rec {
-    name = "String-Approx-3.27";
+    name = "String-Approx-3.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHI/${name}.tar.gz";
-      sha256 = "2b8c1acd24fa9681ebba0ccb3c49f16289de1d579af8a0c898ea8f8d1baf5d36";
+      sha256 = "43201e762d8699cb0ac2c0764a5454bdc2306c0771014d6c8fba821480631342";
     };
   };
 
