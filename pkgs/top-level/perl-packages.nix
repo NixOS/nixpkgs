@@ -12450,7 +12450,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "5af25b29a55783e495a9df5ef6293240e2c9ab02764613d79f1ed50b12dec5ae";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
-    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise ModuleRuntime Moose ParamsUtil PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
+    propagatedBuildInputs = [ ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli PodElemental ];
     meta = {
       homepage = https://github.com/rjbs/Pod-Weaver;
       description = "Weave together a Pod document from an outline";
