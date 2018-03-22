@@ -4769,14 +4769,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestDistManifest = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-DistManifest-2.000004";
+  DistZillaPluginTestDistManifest = buildPerlModule {
+    name = "Dist-Zilla-Plugin-Test-DistManifest-2.000005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-DistManifest-2.000004.tar.gz;
-      sha256 = "a832d9d04f85e9dd09f30af67c5d636efe79847ec3790939de081ee5e412fb68";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-DistManifest-2.000005.tar.gz;
+      sha256 = "4f0af27bb38745d2dec7d941bcf749e6d7fbeaf8e7bcf8a79a1310a9639b0f65";
     };
-    buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
-    propagatedBuildInputs = [ DistZilla Moose TestDistManifest ];
+    buildInputs = [ TestDeep TestDistManifest TestOutput ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-DistManifest/;
       description = "Release tests for the manifest";
