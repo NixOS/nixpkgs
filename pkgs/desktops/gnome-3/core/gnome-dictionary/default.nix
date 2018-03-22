@@ -11,18 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "16b8bc248dcf68987826d5e39234b1bb7fd24a2607fcdbf4258fde88f012f300";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-dictionary"; attrPath = "gnome3.gnome-dictionary"; };
-  };
-
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-  propagatedBuildInputs = [ gnome3.defaultIconTheme ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig wrapGAppsHook libxml2 gettext itstool
+    desktop-file-utils appstream-glib libxslt docbook_xsl docbook_xml_dtd_43
+  ];
+  buildInputs = [ gtk glib gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig wrapGAppsHook libxml2 gettext itstool
-                        desktop-file-utils appstream-glib libxslt docbook_xsl docbook_xml_dtd_43];
-  buildInputs = [ gtk glib gnome3.gsettings-desktop-schemas ];
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-dictionary";
+      attrPath = "gnome3.gnome-dictionary";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Dictionary;
