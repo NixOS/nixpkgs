@@ -10975,7 +10975,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ParseRecDescent = buildPerlPackage rec {
+  ParseRecDescent = buildPerlModule rec {
     name = "Parse-RecDescent-1.967015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JT/JTBRAUN/${name}.tar.gz";
