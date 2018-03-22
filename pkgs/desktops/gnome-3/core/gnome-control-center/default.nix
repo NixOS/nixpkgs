@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:${sound-theme-freedesktop}/share"
+      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
       # Thumbnailers (for setting user profile pictures)
       --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
