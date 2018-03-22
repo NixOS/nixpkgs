@@ -1682,8 +1682,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/G/GA/GAUDEON/${name}.tar.gz";
       sha256 = "1qgq6y9iwfbhbkbgpw9czang2ami6z8jk1zlagrzdisy4igqzkvs";
     };
-    buildInputs = [  TestWWWMechanizeCatalyst Testuseok ];
-    propagatedBuildInputs = [ CatalystRuntime TextCSV XMLSimple ];
+    buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
