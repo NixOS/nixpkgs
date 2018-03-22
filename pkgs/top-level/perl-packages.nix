@@ -5573,8 +5573,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "2ce55766b25fb8799d37b95bca61e8a71d8a437e28541e1cd06b7eb89f7739d1";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ ClassXSAccessor FileFindObject NumberCompare TextGlob ];
+    propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     meta = {
       homepage = http://www.shlomifish.org/open-source/projects/File-Find-Object/;
       description = "Alternative interface to File::Find::Object";
