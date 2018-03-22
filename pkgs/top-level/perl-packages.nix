@@ -10808,7 +10808,7 @@ let self = _self // overrides; _self = with self; {
   PatchReader = buildPerlPackage rec {
     name = "PatchReader-0.9.6";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/T/TM/TMANNERM/${name}.tar.gz";
+      url = mirror://cpan/authors/id/T/TM/TMANNERM/PatchReader-0.9.6.tar.gz;
       sha256 = "b8de37460347bb5474dc01916ccb31dd2fe0cd92242c4a32d730e8eb087c323c";
     };
     meta = {
