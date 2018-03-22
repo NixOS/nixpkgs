@@ -3742,10 +3742,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelPatchPerl = buildPerlPackage rec {
-    name = "Devel-PatchPerl-1.38";
+    name = "Devel-PatchPerl-1.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "0997ms4ksvxy0x0bnhrm7mhx3d2rbmgdiv3xdsawb17r2695vrgk";
+      sha256 = "1zlh1pmlihzcabj2zyfdnrqj6kfl3n9769yfrs296wxgaa7bra96";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
