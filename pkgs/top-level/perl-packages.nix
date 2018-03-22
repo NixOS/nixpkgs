@@ -3168,13 +3168,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DataPage = buildPerlPackage {
+  DataPage = buildPerlModule {
     name = "Data-Page-2.02";
     src = fetchurl {
       url = mirror://cpan/authors/id/L/LB/LBROCARD/Data-Page-2.02.tar.gz;
       sha256 = "1hvi92c4h2angryc6pngw7gbm3ysc2jfmyxk2wh9ia4vdwpbs554";
     };
-    propagatedBuildInputs = [TestException ClassAccessorChained];
+    propagatedBuildInputs = [ ClassAccessorChained ];
+    buildInputs = [ TestException ];
   };
 
   DataPagePageset = buildPerlPackage rec {
