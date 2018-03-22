@@ -15357,6 +15357,7 @@ let self = _self // overrides; _self = with self; {
       description = "Word wrap text by breaking long lines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestDifferences ];
   };
 
   threads = buildPerlPackage rec {
