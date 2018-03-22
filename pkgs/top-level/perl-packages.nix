@@ -3392,12 +3392,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateCalc = buildPerlPackage {
-    name = "Date-Calc-6.3";
+    name = "Date-Calc-6.4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STBEY/Date-Calc-6.3.tar.gz;
-      sha256 = "14yvbgy9n8icwlm5zi86lskvxd6nsl42i1g9f5dwdaw9my463diy";
+      url = mirror://cpan/authors/id/S/ST/STBEY/Date-Calc-6.4.tar.gz;
+      sha256 = "1barz0jgdaan3jm7ciphs5n3ahwkl42imprs3y8c1dwpwyr3gqbw";
     };
-    propagatedBuildInputs = [CarpClan BitVector];
+    propagatedBuildInputs = [ BitVector ];
     doCheck = false; # some of the checks rely on the year being <2015
     meta = {
       maintainers = with maintainers; [ ];
