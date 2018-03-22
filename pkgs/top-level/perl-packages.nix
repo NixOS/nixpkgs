@@ -1833,7 +1833,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "c7f1a2b3570a8fede484e933f89ba1729e0abd05935791d146c522dd120ee851";
     };
     buildInputs = [ TestClass TestDeep TestException TestWarn TimeDate ];
-    propagatedBuildInputs = [ CarpAssert ClassLoad DataUUID DigestJHash HashMoreUtils JSONMaybeXS ListMoreUtils LogAny Moo MooXTypesMooseLike MooXTypesMooseLikeNumeric StringRewritePrefix TaskWeaken TimeDuration TimeDurationParse TryTiny ];
+    propagatedBuildInputs = [ CarpAssert ClassLoad DataUUID DigestJHash HashMoreUtils JSONMaybeXS ListMoreUtils LogAny Moo MooXTypesMooseLikeNumeric StringRewritePrefix TaskWeaken TimeDuration TimeDurationParse ];
     meta = {
       description = "Unified cache handling interface";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
