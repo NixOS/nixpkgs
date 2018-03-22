@@ -1229,12 +1229,13 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-DBIx-Class-0.1506.tar.gz;
       sha256 = "0i5ja7690fs9nhxcij6lw51j804sm8s06m5mvk1n8pi8jljrymvw";
     };
-    propagatedBuildInputs = [ CatalystModelDBICSchema CatalystPluginAuthentication CatalystRuntime DBIxClass ListMoreUtils Moose namespaceautoclean TryTiny ];
+    propagatedBuildInputs = [ CatalystModelDBICSchema CatalystPluginAuthentication ];
     meta = {
       description = "A storage class for Catalyst Authentication using DBIx::Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
     };
+    buildInputs = [ TestWarn ];
   };
 
   CatalystComponentInstancePerContext = buildPerlPackage rec {
