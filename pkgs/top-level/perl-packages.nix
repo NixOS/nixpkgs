@@ -13656,10 +13656,10 @@ let self = _self // overrides; _self = with self; {
   TestAssertions = buildPerlPackage rec {
     name = "Test-Assertions-1.054";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
+      url = mirror://cpan/authors/id/B/BB/BBC/Test-Assertions-1.054.tar.gz;
       sha256 = "10026w4r3yv6k3vc6cby7d61mxddlqh0ls6z39c82f17awfy9p7w";
     };
-    buildInputs = [ LogTrace ];
+    propagatedBuildInputs = [ LogTrace ];
   };
 
   TestAggregate = buildPerlPackage rec {
