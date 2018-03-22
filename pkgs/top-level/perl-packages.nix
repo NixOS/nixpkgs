@@ -10549,17 +10549,16 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # wants to create actual EC2 instances (for $$$)
   };
 
-  NetAmazonMechanicalTurk = buildPerlPackage rec {
-    name = "Net-Amazon-MechanicalTurk-1.01";
+  NetAmazonMechanicalTurk = buildPerlModule rec {
+    name = "Net-Amazon-MechanicalTurk-1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MT/MTURK/${name}.tar.gz";
-      sha256 = "17xh6qcp2sw721r8cpcal80an49264db497namms4k139fsr1yig";
+      sha256 = "13hgggfchhp4m3l2rn3d1v6g6ccwmwf9xiyc9izv5570930mw2cd";
     };
     patches =
       [ ../development/perl-modules/net-amazon-mechanicalturk.patch ];
-    propagatedBuildInputs =
-      [ DigestHMAC LWP LWPProtocolHttps URI XMLParser IOString ];
-    buildInputs = [ DBI DBDSQLite ];
+    propagatedBuildInputs = [ DigestHMAC LWPProtocolHttps XMLParser ];
+    doCheck = false;
   };
 
   NetAmazonS3 = buildPerlPackage rec {
