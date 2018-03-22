@@ -16440,7 +16440,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MB/MBARBON/${name}.tar.gz";
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ Wx OpenGL pkgs.libGLU ];
+    propagatedBuildInputs = [ pkgs.libGLU Wx ];
     doCheck = false;
   };
 
