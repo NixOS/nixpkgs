@@ -8825,7 +8825,7 @@ let self = _self // overrides; _self = with self; {
   MathGeometryVoronoi = buildPerlPackage rec {
     name = "Math-Geometry-Voronoi-1.3";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SA/SAMTREGAR/Math-Geometry-Voronoi-1.3.tar.gz;
       sha256 = "0b206k2q5cznld45cjhgm0as0clc9hk135ds8qafbkl3k175w1vj";
     };
     propagatedBuildInputs = [ ClassAccessor ParamsValidate ];
