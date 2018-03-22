@@ -13762,12 +13762,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestDeep = buildPerlPackage {
-    name = "Test-Deep-0.112";
+    name = "Test-Deep-1.127";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-0.112.tar.gz;
-      sha256 = "1vg1bb1lpqpj0pxk738ykip4kw3agbi88g90wxb3pc11l84nlsan";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.127.tar.gz;
+      sha256 = "0s3jmyvkgk48piw46sxppx11nfsbzhmisb0y513iza8vqiczr35p";
     };
-    propagatedBuildInputs = [ TestNoWarnings TestTester ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
     };
