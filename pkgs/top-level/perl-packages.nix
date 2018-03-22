@@ -8000,13 +8000,75 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LinguaStem = buildPerlPackage rec {
+  LinguaPTStemmer = buildPerlPackage rec {
+     version = "0.02";
+     name = "Lingua-PT-Stemmer-0.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/Lingua-PT-Stemmer-0.02.tar.gz;
+       sha256 = "17c48sfbgwd2ivlgf59sr6jdhwa3aim8750f8pyzz7xpi8gz0var";
+     };
+     meta = {
+       description = "Portuguese language stemming";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/neilb/Lingua-PT-Stemmer";
+     };
+  };
+
+  LinguaStem = buildPerlModule rec {
     name = "Lingua-Stem-0.84";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Lingua/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SN/SNOWHARE/Lingua-Stem-0.84.tar.gz;
       sha256 = "12avh2mnnc7llmmshrr5bgb473fvydxnlqrqbl2815mf2dp4pxcg";
     };
     doCheck = false;
+    propagatedBuildInputs = [ LinguaPTStemmer LinguaStemFr LinguaStemIt LinguaStemRu LinguaStemSnowballDa SnowballNorwegian SnowballSwedish TextGerman ];
+  };
+
+  LinguaStemFr = buildPerlPackage rec {
+     version = "0.02";
+     name = "Lingua-Stem-Fr-0.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/S/SD/SDP/Lingua-Stem-Fr-0.02.tar.gz;
+       sha256 = "0vyrspwzaqjxm5mqshf4wvwa3938mkajd1918d9ii2l9m2rn8kwx";
+     };
+     meta = {
+     };
+  };
+
+  LinguaStemIt = buildPerlPackage rec {
+     version = "0.02";
+     name = "Lingua-Stem-It-0.02";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AC/ACALPINI/Lingua-Stem-It-0.02.tar.gz;
+       sha256 = "1207r183s5hlh4mfwa6p46vzm0dhvrs2dnss5s41a0gyfkxp7riq";
+     };
+     meta = {
+     };
+  };
+
+  LinguaStemRu = buildPerlPackage rec {
+     version = "0.04";
+     name = "Lingua-Stem-Ru-0.04";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/N/NE/NEILB/Lingua-Stem-Ru-0.04.tar.gz;
+       sha256 = "0a2jmdz7jn32qj5hyiw5kbv8fvlpmws8i00a6xcbkzb48yvwww0j";
+     };
+     meta = {
+       description = "Porter's stemming algorithm for Russian (KOI8-R only)";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/neilb/Lingua-Stem-Ru";
+     };
+  };
+
+  LinguaStemSnowballDa = buildPerlPackage rec {
+     version = "1.01";
+     name = "Lingua-Stem-Snowball-Da-1.01";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/C/CI/CINE/Lingua-Stem-Snowball-Da-1.01.tar.gz;
+       sha256 = "0mm0m7glm1s6i9f6a78jslw6wh573208arxhq93yriqmw17bwf9f";
+     };
+     meta = {
+     };
   };
 
   LinguaTranslit = buildPerlPackage rec {
@@ -12487,6 +12549,32 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SnowballNorwegian = buildPerlModule rec {
+     version = "1.2";
+     name = "Snowball-Norwegian-1.2";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AS/ASKSH/Snowball-Norwegian-1.2.tar.gz;
+       sha256 = "0675v45bbsh7vr7kpf36xs2q79g02iq1kmfw22h20xdk4rzqvkqx";
+     };
+     meta = {
+       description = "Porters stemming algorithm for norwegian.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
+  SnowballSwedish = buildPerlModule rec {
+     version = "1.2";
+     name = "Snowball-Swedish-1.2";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/A/AS/ASKSH/Snowball-Swedish-1.2.tar.gz;
+       sha256 = "0agwc12jk5kmabnpsplw3wf4ii5w1zb159cpin44x3srb0sr5apg";
+     };
+     meta = {
+       description = "Porters stemming algorithm for swedish.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   SOAPLite = buildPerlPackage {
     name = "SOAP-Lite-1.11";
     src = fetchurl {
@@ -15000,6 +15088,17 @@ let self = _self // overrides; _self = with self; {
       description = "Perform diffs on files and record sets";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  TextGerman = buildPerlPackage rec {
+     version = "0.06";
+     name = "Text-German-0.06";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/U/UL/ULPFR/Text-German-0.06.tar.gz;
+       sha256 = "1p87pgap99lw0nv62i3ghvsi7yg90lhn8vsa3yqp75rd04clybcj";
+     };
+     meta = {
+     };
   };
 
   TextGlob = buildPerlPackage rec {
