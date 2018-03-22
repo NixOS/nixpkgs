@@ -2655,12 +2655,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANPLUS = buildPerlPackage rec {
-    name = "CPANPLUS-0.9154";
+    name = "CPANPLUS-0.9172";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "1mz20qlk0wjl4mwi4b9nji4hyh9a0l7m1v5bmypwwmhzpac5rq5c";
+      sha256 = "1q4b0fkdn4sh8ym9dig21w96p7kzrhq66lqhn0dy1l3pgx413zlc";
     };
-    propagatedBuildInputs = [ ArchiveExtract LogMessage ModulePluggable ObjectAccessor PackageConstants ];
     doCheck = false;
     meta = {
       homepage = https://github.com/jib/cpanplus-devel;
