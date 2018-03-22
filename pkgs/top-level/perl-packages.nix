@@ -14543,7 +14543,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestUnitLite = buildPerlPackage {
+  TestUnitLite = buildPerlModule {
     name = "Test-Unit-Lite-0.1202";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Unit-Lite-0.1202.tar.gz;
