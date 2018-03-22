@@ -6150,9 +6150,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
       sha256 = "0gzbq85738f299jaw4nj3ljnka380j2y6yspmyl71rgfypqjvbr7";
     };
-    propagatedBuildInputs = [
-      CGI CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP LWPProtocolHttps MozillaCA
-      DateCalc DateTime JSON ];
+    propagatedBuildInputs = [ CGI DateTime HTMLTableExtract JSON LWPProtocolHttps ];
     meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
