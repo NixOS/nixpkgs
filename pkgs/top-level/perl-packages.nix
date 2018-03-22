@@ -7314,11 +7314,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.utillinux.bin FileWhich ]; # `more` used in tests
   };
 
-  IOPrompt = buildPerlPackage {
-    name = "IO-Prompt-0.997002";
+  IOPrompt = buildPerlModule {
+    name = "IO-Prompt-0.997004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCONWAY/IO-Prompt-0.997002.tar.gz;
-      sha256 = "08ad24f58335ce9696666e4411b2f3cd9c2e1fb72b306b6018c1a13971361ced";
+      url = mirror://cpan/authors/id/D/DC/DCONWAY/IO-Prompt-0.997004.tar.gz;
+      sha256 = "f17bb305ee6ac8b5b203e6d826eb940c4f3f6d6f4bfe719c3b3a225f46f58615";
     };
     propagatedBuildInputs = [ TermReadKey Want ];
     doCheck = false; # needs access to /dev/tty
