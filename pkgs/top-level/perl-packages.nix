@@ -15517,17 +15517,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   TreeDAGNode = buildPerlPackage rec {
-    name = "Tree-DAG_Node-1.27";
+    name = "Tree-DAG_Node-1.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/${name}.tgz";
-      sha256 = "1i2i445gh7720bvv06dz67szk2z6q1pi30kb5p2shsa806sj4vr2";
+      sha256 = "016kr76azxzfcpxjkhqp2piyyl6529shjis20mc3g2snfabsd2qw";
     };
-    buildInputs = [ TestPod FileSlurpTiny ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "An N-ary tree";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ FileSlurpTiny ];
   };
 
   TreeSimple = buildPerlPackage rec {
