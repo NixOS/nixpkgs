@@ -7185,10 +7185,11 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DA/DANKOGAI/HTTP-Response-Encoding-0.06.tar.gz;
       sha256 = "1am8lis8107s5npca1xgazdy5sknknzcqyhdmc220s4a4f77n5hh";
     };
-    propagatedBuildInputs = [ LWPUserAgent HTTPMessage ];
+    propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "Adds encoding() to HTTP::Response";
     };
+    buildInputs = [ LWP ];
   };
 
   HTTPServerSimple = buildPerlPackage {
