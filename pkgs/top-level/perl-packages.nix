@@ -5446,18 +5446,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileBaseDir = buildPerlPackage rec {
-    version = "0.03";
+  FileBaseDir = buildPerlModule rec {
+    version = "0.07";
     name = "File-BaseDir-${version}";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "0029cba7a3b5d8aa5f7d03cb1b7ba2bcf2829382f7f26aa3bee06fce8611a886";
+      url = mirror://cpan/authors/id/K/KI/KIMRYAN/File-BaseDir-0.07.tar.gz;
+      sha256 = "120a57ef78535e13e1465717b4056aff4ce69af1e31c67c65d1177a52169082b";
     };
     configurePhase = ''
       preConfigure || true
       perl Build.PL PREFIX="$out" prefix="$out"
     '';
-    propagatedBuildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ IPCSystemSimple ];
+    buildInputs = [ FileWhich ];
   };
 
   FileBOM = buildPerlPackage rec {
