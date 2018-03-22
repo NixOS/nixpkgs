@@ -1,10 +1,14 @@
 { stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
+  pname = "PyQt-x11-gpl";
   version = "4.12";
+
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 in buildPythonPackage {
-  name = "PyQt-x11-gpl-${version}";
+  pname = pname;
+  name = pname + "-" + version;
+  version = version;
   format = "other";
 
   src = fetchurl {
@@ -19,7 +23,7 @@ in buildPythonPackage {
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
     ''}
 
     substituteInPlace configure.py \
@@ -37,7 +41,8 @@ in buildPythonPackage {
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper qt4 lndir dbus_libs ];
 
   propagatedBuildInputs = [ sip ];
 

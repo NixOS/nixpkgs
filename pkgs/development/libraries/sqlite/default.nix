@@ -3,11 +3,11 @@
 assert interactive -> readline != null && ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.19.3";
+  name = "sqlite-3.22.0";
 
   src = fetchurl {
-    url = "http://sqlite.org/2017/sqlite-autoconf-3190300.tar.gz";
-    sha256 = "00b3l2qglpl1inx21fckiwxnfq5xf6441flc79rqg7zdvh1rq4h6";
+    url = "http://sqlite.org/2018/sqlite-autoconf-3220000.tar.gz";
+    sha256 = "04n6hnw2g818d7r92cp2608kd5mhzyysy83k29kbq1mp709an918";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -31,6 +31,8 @@ stdenv.mkDerivation {
     "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
     "-DSQLITE_SOUNDEX"
     "-DSQLITE_SECURE_DELETE"
+    "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
+    "-DSQLITE_MAX_EXPR_DEPTH=10000"
   ];
 
   # Test for features which may not be available at compile time

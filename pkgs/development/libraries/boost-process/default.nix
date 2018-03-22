@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.highscore.de/boost/process0.5/";
+    homepage = http://www.highscore.de/boost/process0.5/;
     description = "Library to manage system processes";
     license = licenses.boost;
     platforms = platforms.unix;

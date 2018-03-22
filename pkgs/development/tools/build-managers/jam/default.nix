@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ yacc ];
 
+  preConfigure = ''
+    unset AR
+  '';
+
   buildPhase = ''
     make jam0
     ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install

@@ -11,7 +11,7 @@
 , boost
 , ecasound
 , glibcLocales
-, mesa # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
+, libGLU_combined # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +27,13 @@ stdenv.mkDerivation rec {
 
   # Without it doesn't find all of the boost libraries.
   BOOST_LIB_DIR="${boost}/lib";
+  # uses the deprecated get_generic_category() in boost_system
+  NIX_CFLAGS_COMPILE="-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ autoreconfHook boost boost.dev ecasound mesa help2man pkgconfig libsndfile fftwFloat libjack2 libxml2 qt4 glibcLocales ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ boost boost.dev ecasound libGLU_combined help2man libsndfile fftwFloat libjack2 libxml2 qt4 glibcLocales ];
 
   # 1) Fix detecting version. https://github.com/SoundScapeRenderer/ssr/pull/53
   # 2) Make it find ecasound headers
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = http://spatialaudio.net/ssr/;
     description = "The SoundScape Renderer (SSR) is a tool for real-time spatial audio reproduction";
     license = stdenv.lib.licenses.gpl3;
-    maintainer = stdenv.lib.maintainers.fridh;
+    maintainers = [ stdenv.lib.maintainers.fridh ];
   };
 
 }

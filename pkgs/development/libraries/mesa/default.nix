@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, intltool, autoreconfHook, substituteAll
-, file, expat, libdrm, xorg, wayland, openssl
+, file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau, valgrind-light
+, libelf, libvdpau, valgrind-light, python2
 , grsecEnabled ? false
-, enableRadv ? false
+, enableRadv ? true
 # Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
 # It's overridden for mesa_drivers.
 , enableTextureFloats ? false
@@ -14,7 +14,7 @@
 }:
 
 /** Packaging design:
-  - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
+  - The basic mesa ($out) contains headers and libraries (GLU is in libGLU now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI drivers are compiled into $drivers output, which is much bigger and
@@ -36,7 +36,7 @@ let
     then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["nouveau" "vc4" ]
-    else ["i915" "r300" "r600" "radeonsi" "nouveau"];
+    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
     then ["nouveau"]
@@ -51,8 +51,7 @@ let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
 
 let
   galliumDrivers =
-    ["svga"]
-    ++ (if gallium_ == null
+    (if gallium_ == null
           then defaultGalliumDrivers
           else gallium_)
     ++ ["swrast"];
@@ -67,7 +66,7 @@ let
 in
 
 let
-  version = "17.1.4";
+  version = "17.3.6";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -80,9 +79,9 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
-      "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
+      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "06f3b0e6a28f0d20b7f3391cf67fe89ae98ecd0a686cd545da76557b6cec9cad";
+    sha256 = "e5915680d44ac9d05defdec529db7459ac9edd441c9845266eff2e2d3e57fbf8";
   };
 
   prePatch = "patchShebangs .";
@@ -93,13 +92,13 @@ stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   configureFlags = [
-    "--sysconfdir=/etc"
+    "--sysconfdir=${driverLink}/etc"
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -135,24 +134,24 @@ stdenv.mkDerivation {
     "--enable-shared-glapi"
     "--enable-sysfs"
     "--enable-llvm-shared-libs"
-    "--enable-omx"
+    "--enable-omx-bellagio"
     "--enable-va"
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
 
   propagatedBuildInputs = with xorg;
     [ libXdamage libXxf86vm ]
     ++ optional stdenv.isLinux libdrm;
 
   buildInputs = with xorg; [
-    autoreconfHook intltool expat llvmPackages.llvm
+    expat llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi wayland libvdpau libelf libXvMC
+    libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light
+    valgrind-light python2
   ];
 
 
@@ -198,7 +197,6 @@ stdenv.mkDerivation {
   '';
 
   # TODO:
-  #  @vcunat isn't sure if drirc will be found when in $out/etc/;
   #  check $out doesn't depend on llvm: builder failures are ignored
   #  for some reason grep -qv '${llvmPackages.llvm}' -R "$out";
   postFixup = ''
@@ -215,7 +213,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
-    homepage = http://www.mesa3d.org/;
+    homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ eduarrrd vcunat ];

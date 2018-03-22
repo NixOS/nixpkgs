@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gbsh2qw0a7kgck6w0apydiy37nnz5xvdgipa0yqrfmghl86vmv4";
   };
 
-  buildInputs = [ pkgconfig utillinux ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ utillinux ];
 
   # * Remove broken install rules (they ignore $PREFIX) for stuff we don't need
   #   anyway (it's distro specific stuff).
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
       User documentation is in Documentation/bcache.txt in the Linux kernel
       tree.
     '';
-    homepage = http://bcache.evilpiepirate.org/;
+    homepage = https://bcache.evilpiepirate.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

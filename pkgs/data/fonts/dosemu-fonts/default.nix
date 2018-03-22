@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     for i in */etc/*.bdf; do
       fontOut="$out/share/fonts/X11/misc/dosemu/$(basename "$i" .bdf).pcf.gz"
       echo -n "Installing font $fontOut..." >&2
-      ${bdftopcf}/bin/bdftopcf $i | gzip -c -9 > "$fontOut"
+      ${bdftopcf}/bin/bdftopcf $i | gzip -c -9 -n > "$fontOut"
       echo " done." >&2
     done
     cp */etc/dosemu.alias "$fontPath/fonts.alias"
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     ${mkfontdir}/bin/mkfontdir
     ${mkfontscale}/bin/mkfontscale
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1miqv0ral5vazx721wildjlzvji5r7pbgm39c0cpj5ywafaikxr8";
 
   meta = {
     description = "Various fonts from the DOSEmu project";

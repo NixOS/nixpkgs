@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
-, doxygen, catch, pkgconfig, git, gcc6
+, doxygen, catch, pkgconfig, git
 }:
 
 stdenv.mkDerivation rec {
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
              -DCMAKE_BUILD_TYPE=Release
   '';
 
-  installPhase = '' 
+  installPhase = ''
     mkdir -p $out
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${stdenv.lib.makeLibraryPath [ gcc6 jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${stdenv.lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
       patchelf --set-rpath $q $1
     }
 
@@ -53,8 +53,10 @@ stdenv.mkDerivation rec {
     cp -r Install/* $out
   '';
 
-  nativeBuildInputs = [ pkgconfig gcc6 ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";

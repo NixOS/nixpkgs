@@ -77,4 +77,8 @@ appleDerivation {
     cp auto_zone.h auto_weak.h auto_tester/auto_tester.h auto_gdb_interface.h $out/include
     cp libauto.dylib $out/lib
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

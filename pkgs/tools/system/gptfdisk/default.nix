@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "gptfdisk-${version}";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchurl {
     # http://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
     # page clearly implies a preference for using SourceForge's bandwidth:
     url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
-    sha256 = "1izazbyv5n2d81qdym77i8mg9m870hiydmq4d0s51npx5vp8lk46";
+    sha256 = "0p0vr67lnqdsgdv2y144xmjqa1a2nijrrd3clc8dc2f46pn5mzc9";
   };
+  # https://sourceforge.net/p/gptfdisk/code/merge-requests/9/
+  patches = [ ./cross-makefile.patch ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.mac --replace \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
     substituteInPlace Makefile.mac --replace \
@@ -39,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = http://www.rodsbooks.com/gdisk/;
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.all;
   };
 }

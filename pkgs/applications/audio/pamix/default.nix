@@ -1,19 +1,23 @@
 { stdenv, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkgconfig
+, pkgconfig, cmake
 , libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "pamix-${version}";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner  = "patroclos";
     repo   = "pamix";
     rev    = version;
-    sha256 = "1d6b0iv8p73bwq88kdaanm4igvmp9rkq082vyaxpc67mz398yjbp";
+    sha256 = "1d44ggnwkf2gff62959pj45v3a2k091q8v154wc5pmzamam458wp";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkgconfig ];
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc/xdg"
+  '';
+
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libpulseaudio ncurses ];
 
   meta = with stdenv.lib; {

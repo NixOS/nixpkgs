@@ -1,27 +1,34 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  rev = "ab240373f69824c56e9255d452b689cff3b1ecfb";
-  build = "2017-05-09-${builtins.substring 0 10 rev}";
+  rev = "819d131110a9fedfc14f3b3bea8f1f56e68b077a";
+  build = "unstable-2018-02-27.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "1b6w6xhja3xkfzhrdy8a8qpbhxws75khm1zhwz8sc8la9ykd541q";
+    sha256 = "1xjy2ricd68pm9j758pb2axc2269ns2xh86443x5llfcaxrjja4b";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre ];
+  buildInputs = [ wxGTK30 glib pcre ]
+    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
-  postPatch = ''
-    echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
+  patches = [ ./add-nix-syntax-highlighting.patch ];
 
-    substituteInPlace far2l/bootstrap/open.sh              \
+  postPatch = optionalString stdenv.isLinux ''
+    substituteInPlace far2l/bootstrap/open.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
+  '' + optionalString stdenv.isDarwin ''
+    substituteInPlace far2l/CMakeLists.txt \
+      --replace "-framework System" -lSystem
+  '' + ''
+    echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
     substituteInPlace far2l/bootstrap/open.sh              \
       --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
@@ -60,9 +67,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An orthodox file manager";
-    homepage = http://github.com/elfmz/far2l;
+    homepage = https://github.com/elfmz/far2l;
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

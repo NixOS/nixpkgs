@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small, fast s-expression library";
-    homepage = "http://sexpr.sourceforge.net/";
+    homepage = http://sexpr.sourceforge.net/;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
     platforms = with platforms; unix;

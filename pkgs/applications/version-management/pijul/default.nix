@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, rustPlatform, perl, darwin }:
+{ stdenv, fetchurl, rustPlatform, darwin }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "pijul-${version}";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://pijul.org/releases/${name}.tar.gz";
-    sha256 = "a6b066b49b25d1083320c5ab23941deee795e1fcbe1faa951e95189fd594cdb3";
+    sha256 = "00pi03yp2bgnjpsz2hgaapxfw2i4idbjqc88cagpvn4yr1612wqx";
   };
 
-  sourceRoot = "pijul";
+  sourceRoot = "${name}/pijul";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ Security ]);
 
   doCheck = false;
 
-  depsSha256 = "0raim0ahqg6fkidb6picfzircdzwdbsdmmv8in70r5hw770bv67r";
+  cargoSha256 = "1cnr08qbpia3336l37k1jli20d7kwnrw2gys8s9mg271cb4vdx03";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";

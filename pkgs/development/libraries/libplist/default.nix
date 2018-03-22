@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   passthru.swig = swig2;
 
-  outputs = ["out" "dev" "bin" "py"];
+  outputs = ["bin" "dev" "out" "py"];
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://github.com/JonathanBeck/libplist;
+    homepage = https://github.com/JonathanBeck/libplist;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
   };

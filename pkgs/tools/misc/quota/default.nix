@@ -1,12 +1,12 @@
 { stdenv, fetchurl, e2fsprogs, openldap, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "4.03";
+  version = "4.04";
   name = "quota-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${version}.tar.gz";
-    sha256 = "0jv7vhxhjp3gc4hwgmrhg448sbzzqib80gdas9nm0c5zwyd4sv4w";
+    sha256 = "1pwfxza923j75z5lx0w89pj09745zi1swy77cm0zalbzgs4f2nvk";
   };
 
   outputs = [ "out" "dev" "doc" "man" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools to manage kernel-level quotas in Linux";
-    homepage = http://sourceforge.net/projects/linuxquota/;
+    homepage = https://sourceforge.net/projects/linuxquota/;
     license = licenses.gpl2; # With some files being BSD as an exception
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];

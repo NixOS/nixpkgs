@@ -9,8 +9,8 @@ let
 
   certdata2pem = fetchurl {
     name = "certdata2pem.py";
-    url = "https://anonscm.debian.org/cgit/collab-maint/ca-certificates.git/plain/mozilla/certdata2pem.py?h=debian/20160104";
-    sha256 = "0bw11mgfrf19qziyvdnq22kirp0nn54lfsanrg5h6djs6ig1c2im";
+    url = "https://anonscm.debian.org/cgit/collab-maint/ca-certificates.git/plain/mozilla/certdata2pem.py?h=debian/20170717";
+    sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
 in
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   name = "nss-cacert-${nss.version}";
 
   src = nss.src;
+
+  outputs = [ "out" "unbundled" ];
 
   nativeBuildInputs = [ python ];
 
@@ -29,7 +31,8 @@ stdenv.mkDerivation rec {
     ${concatStringsSep "\n" (map (c: ''"${c}"'') blacklist)}
     EOF
 
-    cp ${certdata2pem} certdata2pem.py
+    cat ${certdata2pem} > certdata2pem.py
+    patch -p1 < ${./fix-unicode-ca-names.patch}
     ${optionalString includeEmail ''
       # Disable CAs used for mail signing
       substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
@@ -49,10 +52,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -pv $out/etc/ssl/certs
     cp -v ca-bundle.crt $out/etc/ssl/certs
+    # install individual certs in unbundled output
+    mkdir -pv $unbundled/etc/ssl/certs
+    cp -v *.crt $unbundled/etc/ssl/certs
+    rm -f $unbundled/etc/ssl/certs/ca-bundle.crt  # not wanted in unbundled
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
-    homepage = http://curl.haxx.se/docs/caextract.html;
+    homepage = https://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington fpletz ];

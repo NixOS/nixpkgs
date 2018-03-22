@@ -19,10 +19,11 @@ stdenv.mkDerivation {
       url = "https://src.fedoraproject.org/cgit/rpms/openslp.git/plain/openslp-2.0.0-cve-2016-7567.patch";
       sha256 = "0zp61axx93b7nrbsyhn2x4dnw7n9y6g4rys21hyqxk4khrnc2yr9";
     })
+    ./CVE-2016-4912.patch
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://openslp.org/";
+    homepage = http://openslp.org/;
     description = "An open-source implementation of the IETF Service Location Protocol";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.bsd3;

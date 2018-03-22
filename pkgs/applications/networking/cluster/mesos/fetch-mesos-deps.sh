@@ -1127,10 +1127,12 @@ fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.pom
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.pom.sha1
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.jar
 fetchArtifact org/vafer/jdependency/0.7/jdependency-0.7.jar.sha1
-fetchArtifact com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.pom
-fetchArtifact com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.pom.sha1
-fetchArtifact com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.jar
-fetchArtifact com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.jar.sha1
+fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom
+fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.pom.sha1
+fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar
+fetchArtifact com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar.sha1
+fetchArtifact com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom
+fetchArtifact com/google/protobuf/protobuf-parent/3.3.0/protobuf-parent-3.3.0.pom.sha1
 fetchArtifact com/google/google/1/google-1.pom
 fetchArtifact com/google/google/1/google-1.pom.sha1
 fetchArtifact com/google/guava/guava/11.0.2/guava-11.0.2.pom

@@ -1,17 +1,17 @@
 {fetchurl, stdenv, dpkg, makeWrapper,
  alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, libxml2, libxslt, mesa, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name = "viber-${version}";
-  version = "6.5.5.1481";
+  version = "7.0.0.1035";
 
   src = fetchurl {
     url = "http://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "0gvpaprfki04x66ga2ljksspdxd4cz455h92a7i2dnd69w1kik5s";
+    sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
   };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libxml2
       libxslt
-      mesa
+      libGLU_combined
       nspr
       nss
       openssl

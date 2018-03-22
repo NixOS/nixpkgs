@@ -3,7 +3,7 @@
 appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ ed unifdef ];
+  nativeBuildInputs = [ ed unifdef ];
 
   # TODO: asl.h actually comes from syslog project now
   installPhase = ''

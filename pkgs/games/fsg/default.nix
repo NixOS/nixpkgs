@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, mesa, wxGTK, libX11, xproto }:
+{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU_combined, wxGTK, libX11, xproto }:
 
 stdenv.mkDerivation {
   name = "fsg-4.4";
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ gtk2 glib pkgconfig mesa wxGTK libX11 xproto ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 glib libGLU_combined wxGTK libX11 xproto ];
 
   preBuild = ''
     sed -e '

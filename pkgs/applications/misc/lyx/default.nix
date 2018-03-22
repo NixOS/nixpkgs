@@ -12,15 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig qtbase qtsvg python file/*for libmagic*/ bc
+    qtbase qtsvg python file/*for libmagic*/ bc
     hunspell makeWrapper # enchant
   ];
-
-  # bogus configure script tests
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags Qt5Core)"
-  '';
 
   configureFlags = [
     "--enable-qt5"
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = "http://www.lyx.org";
+    homepage = http://www.lyx.org;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;

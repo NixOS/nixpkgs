@@ -92,7 +92,7 @@ in
     '');
 
     assertions = [
-      { assertion = cfg.agent.enableSSHSupport && !config.programs.ssh.startAgent;
+      { assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
         message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
       }
     ];

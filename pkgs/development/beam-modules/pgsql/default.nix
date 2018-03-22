@@ -22,7 +22,7 @@ let
     meta = {
       description = "Erlang PostgreSQL Driver";
       license = stdenv.lib.licenses.mit;
-      homepage = "https://github.com/semiocast/pgsql";
+      homepage = https://github.com/semiocast/pgsql;
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 

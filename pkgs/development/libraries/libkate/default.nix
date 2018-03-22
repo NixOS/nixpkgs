@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libogg, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "libkate-0.3.8";
+  name = "libkate-0.4.1";
 
   src = fetchurl {
-    url = "http://libkate.googlecode.com/files/${name}.tar.gz";
-    sha256 = "00d6561g31la9bb8q99b7l4rvi67yiwm50ky8dhlsjd88h7rks2n";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libkate/${name}.tar.gz";
+    sha256 = "0s3vr2nxfxlf1k75iqpp4l78yf4gil3f0v778kvlngbchvaq23n4";
   };
 
   buildInputs = [ libogg libpng ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       bitstream format. Kate is a karaoke and text codec meant for encapsulation
       in an Ogg container. It can carry Unicode text, images, and animate
       them.'';
-    homepage = http://code.google.com/p/libkate;
+    homepage = https://code.google.com/archive/p/libkate/;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };

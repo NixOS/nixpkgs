@@ -1,5 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
-, glib, gtk2, gtk3, gnome2, gnome3, gsettings_desktop_schemas
+, glib, gtk3, gnome3, gsettings-desktop-schemas
 
 # package customization
 , channel ? "stable"
@@ -35,7 +35,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "chromium";
+    name = "chromium-browser";
     exec = "chromium %U";
     icon = "chromium";
     comment = "An open source web browser from Google";
@@ -67,9 +67,6 @@ let
 
   inherit (stdenv.lib) versionAtLeast;
 
-  gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
-  gnome = if (versionAtLeast version "59.0.0.0") then gnome3 else gnome2;
-
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -78,10 +75,10 @@ in stdenv.mkDerivation {
     makeWrapper ed
 
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings_desktop_schemas glib gtk
+    gsettings-desktop-schemas glib gtk3
 
     # needed for XDG_ICON_DIRS
-    gnome.defaultIconTheme
+    gnome3.defaultIconTheme
   ];
 
   outputs = ["out" "sandbox"];
@@ -93,7 +90,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      ${commandLineArgs} \
+      --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF
@@ -120,13 +117,19 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
     mkdir -p "$out/share/applications"
-    for f in '${chromium.browser}'/share/*; do
+    for f in '${chromium.browser}'/share/*; do # hello emacs */
       ln -s -t "$out/share/" "$f"
     done
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) packageName;
+  meta = chromium.browser.meta // {
+    broken = if enableWideVine then
+          builtins.trace "WARNING: WideVine is not functional, please only use for testing"
+             true
+        else false;
+  };
 
   passthru = {
     inherit (chromium) upstream-info browser;

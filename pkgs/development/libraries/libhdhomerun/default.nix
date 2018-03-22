@@ -14,18 +14,16 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "-arch i386" ""
   '';
 
-  installPhase = let
-    libSuff = if stdenv.isDarwin then "dylib" else "so";
-  in ''
+  installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}
-    install -Dm444 libhdhomerun.${libSuff} $out/lib
+    install -Dm444 libhdhomerun${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     install -Dm555 hdhomerun_config $out/bin
     cp *.h $out/include/hdhomerun
   '';
 
   meta = with stdenv.lib; {
     description = "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
-    homepage = "https://github.com/Silicondust/libhdhomerun";
+    homepage = https://github.com/Silicondust/libhdhomerun;
     repositories.git = "https://github.com/Silicondust/libhdhomerun.git";
     license = stdenv.lib.licenses.lgpl2;
     platforms = stdenv.lib.platforms.unix;

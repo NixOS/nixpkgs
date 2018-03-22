@@ -7,17 +7,21 @@ assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.0.1";
+  version = "3.2";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "0dgrj26dzdy4n3s9b5hwc6lm54vans1v4qx9hdp1q8w1qqcdriq9";
+    sha256 = "11q4121s0rxva63njjwya7syfx9w0p4hzr6avh8s57vfbrcakc93";
   };
 
   buildInputs = [ coq ]
   ++ (with ocamlPackages; [ ocaml findlib menhir ]);
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    sed -i -e 's/8\.6\.1|8\.7\.0|8\.7\.1)/8.6.1|8.7.0|8.7.1|8.7.2)/' configure
+  '';
 
   configurePhase = ''
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
-    license     = licenses.inria;
+    license     = licenses.inria-compcert;
     platforms   = platforms.linux ++
                   platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];

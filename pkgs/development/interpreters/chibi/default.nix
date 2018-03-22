@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   inherit name;
 
   meta = {
-    homepage = "https://github.com/ashinn/chibi-scheme";
+    homepage = https://github.com/ashinn/chibi-scheme;
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.bsd3;

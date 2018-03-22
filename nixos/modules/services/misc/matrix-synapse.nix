@@ -4,6 +4,8 @@ with lib;
 
 let
   cfg = config.services.matrix-synapse;
+  pg = config.services.postgresql;
+  usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
   mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
   mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
@@ -38,13 +40,12 @@ database: {
   name: "${cfg.database_type}",
   args: {
     ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${v}") cfg.database_args
+      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
     )}
   }
 }
 event_cache_size: "${cfg.event_cache_size}"
 verbose: ${cfg.verbose}
-log_file: "/var/log/matrix-synapse/homeserver.log"
 log_config: "${logConfigFile}"
 rc_messages_per_second: ${cfg.rc_messages_per_second}
 rc_message_burst_count: ${cfg.rc_message_burst_count}
@@ -53,8 +54,8 @@ federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
 federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
 federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
 federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "/var/lib/matrix-synapse/media"
-uploads_path: "/var/lib/matrix-synapse/uploads"
+media_store_path: "${cfg.dataDir}/media"
+uploads_path: "${cfg.dataDir}/uploads"
 max_upload_size: "${cfg.max_upload_size}"
 max_image_pixels: "${cfg.max_image_pixels}"
 dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
@@ -86,7 +87,7 @@ ${optionalString (cfg.macaroon_secret_key != null) ''
 expire_access_token: ${boolToString cfg.expire_access_token}
 enable_metrics: ${boolToString cfg.enable_metrics}
 report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "/var/lib/matrix-synapse/homeserver.signing.key"
+signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
 key_refresh_interval: "${cfg.key_refresh_interval}"
 perspectives:
   servers: {
@@ -156,7 +157,7 @@ in {
       tls_certificate_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.crt";
+        example = "${cfg.dataDir}/homeserver.tls.crt";
         description = ''
           PEM encoded X509 certificate for TLS.
           You can replace the self-signed certificate that synapse
@@ -168,7 +169,7 @@ in {
       tls_private_key_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.key";
+        example = "${cfg.dataDir}/homeserver.tls.key";
         description = ''
           PEM encoded private key for TLS. Specify null if synapse is not
           speaking TLS directly.
@@ -177,7 +178,7 @@ in {
       tls_dh_params_path = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/matrix-synapse/homeserver.tls.dh";
+        example = "${cfg.dataDir}/homeserver.tls.dh";
         description = ''
           PEM dh parameters for ephemeral keys
         '';
@@ -185,6 +186,7 @@ in {
       server_name = mkOption {
         type = types.str;
         example = "example.com";
+        default = config.networking.hostName;
         description = ''
           The domain name of the server, with optional explicit port.
           This is used by remote servers to connect to this server,
@@ -340,16 +342,39 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = "sqlite3";
+        default = if versionAtLeast config.system.stateVersion "18.03"
+          then "psycopg2"
+          else "sqlite3";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
       };
+      create_local_database = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to create a local database automatically.
+        '';
+      };
+      database_name = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+        description = "Database name.";
+      };
+      database_user = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+        description = "Database user name.";
+      };
       database_args = mkOption {
         type = types.attrs;
         default = {
-          database = "/var/lib/matrix-synapse/homeserver.db";
-        };
+          sqlite3 = { database = "${cfg.dataDir}/homeserver.db"; };
+          psycopg2 = {
+            user = cfg.database_user;
+            database = cfg.database_name;
+          };
+        }."${cfg.database_type}";
         description = ''
           Arguments to pass to the engine.
         '';
@@ -579,11 +604,31 @@ in {
           Extra config options for matrix-synapse.
         '';
       };
+      extraConfigFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          Extra config files to include.
+
+          The configuration files will be included based on the command line
+          argument --config-path. This allows to configure secrets without
+          having to go through the Nix store, e.g. based on deployment keys if
+          NixOPS is in use.
+        '';
+      };
       logConfig = mkOption {
         type = types.lines;
         default = readFile ./matrix-synapse-log_config.yaml;
         description = ''
           A yaml python logging config file
+        '';
+      };
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/matrix-synapse";
+        description = ''
+          The directory where matrix-synapse stores its stateful data such as
+          certificates, media and uploads.
         '';
       };
     };
@@ -593,7 +638,7 @@ in {
     users.extraUsers = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
-        home = "/var/lib/matrix-synapse";
+        home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
@@ -604,23 +649,48 @@ in {
         gid = config.ids.gids.matrix-synapse;
       } ];
 
+    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" ];
+      after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
-          --keys-directory /var/lib/matrix-synapse \
+          --keys-directory ${cfg.dataDir} \
           --generate-keys
+      '' + optionalString (usePostgresql && cfg.create_local_database) ''
+        if ! test -e "${cfg.dataDir}/db-created"; then
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+            ${pg.package}/bin/createuser \
+            --login \
+            --no-createdb \
+            --no-createrole \
+            --encrypted \
+            ${cfg.database_user}
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+            ${pg.package}/bin/createdb \
+            --owner=${cfg.database_user} \
+            --encoding=UTF8 \
+            --lc-collate=C \
+            --lc-ctype=C \
+            --template=template0 \
+            ${cfg.database_name}
+          touch "${cfg.dataDir}/db-created"
+        fi
       '';
       serviceConfig = {
         Type = "simple";
         User = "matrix-synapse";
         Group = "matrix-synapse";
-        WorkingDirectory = "/var/lib/matrix-synapse";
+        WorkingDirectory = cfg.dataDir;
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse";
+        ExecStart = ''
+          ${cfg.package}/bin/homeserver \
+            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            --keys-directory ${cfg.dataDir}
+        '';
         Restart = "on-failure";
       };
     };

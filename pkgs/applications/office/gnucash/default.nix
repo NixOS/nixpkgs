@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "058mgfwic6a2g7jq6iip5hv45md1qaxy25dj4lvlzjjr141wm4gx";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libxml2 gconf glib gtk2 libgnomeui libgtkhtml gtkhtml
+    libxml2 gconf glib gtk2 libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
     perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar
   ];
+  propagatedUserEnvPkgs = [ gconf ];
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx --enable-aqbanking";
 
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,
       freely licensed under the GNU GPL and available for GNU/Linux, BSD,
-      Solaris, Mac OS X and Microsoft Windows.
+      Solaris, macOS and Microsoft Windows.
 
       Designed to be easy to use, yet powerful and flexible, GnuCash allows
       you to track bank accounts, stocks, income and expenses.  As quick and

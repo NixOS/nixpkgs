@@ -1,15 +1,16 @@
 { stdenv, fetchurl, opensp, pkgconfig, libxml2, curl }:
         
 stdenv.mkDerivation rec {
-  name = "libofx-0.9.10";
+  name = "libofx-0.9.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/libofx/${name}.tar.gz";
-    sha256 = "15gnbh4mszfxk70srdcjkdykk7dbhzqxi3pxgh48a9zg8i4nmqjl";
+    sha256 = "0wvkgffq9qjhjrggg8r1nbhmw65j3lcl4y4cdpmmkrqiz9ia0py1";
   };
 
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
-  buildInputs = [ opensp pkgconfig libxml2 curl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ opensp libxml2 curl ];
 
   meta = { 
     description = "Opensource implementation of the Open Financial eXchange specification";

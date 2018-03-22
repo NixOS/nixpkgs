@@ -1,61 +1,54 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, utillinux, hexdump, which
-, knot-dns, luajit, libuv, lmdb
-, cmocka, systemd, hiredis, libmemcached
-, gnutls, nettle
-, luajitPackages, makeWrapper
+{ stdenv, fetchurl, runCommand, pkgconfig, hexdump, which
+, knot-dns, luajit, libuv, lmdb, gnutls, nettle
+, cmocka, systemd, dns-root-data, makeWrapper
+, extraFeatures ? false /* catch-all if defaults aren't enough */
+, hiredis, libmemcached, luajitPackages
 }:
+let # un-indented, over the whole file
 
-let
-  inherit (stdenv.lib) optional;
-in
-stdenv.mkDerivation rec {
+result = if extraFeatures then wrapped-full else unwrapped;
+
+inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
+
+unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.3.1";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "cc9631fe1a92628e81e74b324a7f70c0b29840d426de05d7d045fdf85ab01117";
+    sha256 = "0b9caee03d7cd30e1dc8fa0ce5fafade31fc1785314986bbf77cad446522a1b3";
   };
 
   outputs = [ "out" "dev" ];
 
   configurePhase = ":";
 
-  nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
+  nativeBuildInputs = [ pkgconfig which hexdump ];
 
-  buildInputs = [ knot-dns luajit libuv gnutls ]
-    ++ optional stdenv.isLinux lmdb # system lmdb causes some problems on Darwin
-    ## optional dependencies; TODO: libedit, dnstap?
-    ++ optional doInstallCheck cmocka
-    ++ optional stdenv.isLinux systemd # socket activation
-    ++ [
-      nettle # DNS cookies
-      hiredis libmemcached # additional cache backends
-      # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
-    ];
+  # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
+  buildInputs = [ knot-dns luajit libuv gnutls nettle lmdb ]
+    ++ optional doCheck cmocka
+    ++ optional stdenv.isLinux systemd # sd_notify
+    ## optional dependencies; TODO: libedit, dnstap
+    ;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ROOTHINTS=${dns-root-data}/root.hints"
+    "KEYFILE_DEFAULT=${dns-root-data}/root.ds"
+  ];
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
-  installCheckTarget = "check";
+  doCheck = true;
+  doInstallCheck = false; # FIXME
   preInstallCheck = ''
-    export LD_LIBRARY_PATH="$out/lib"
+    patchShebangs tests/config/runtest.sh
   '';
 
-  # optional: to allow auto-bootstrapping root trust anchor via https
-  postInstall = with luajitPackages; ''
-    wrapProgram "$out/sbin/kresd" \
-      --set LUA_PATH '${
-        stdenv.lib.concatStringsSep ";"
-          (map getLuaPath [ luasec luasocket ])
-        }' \
-      --set LUA_CPATH '${
-        stdenv.lib.concatStringsSep ";"
-          (map getLuaCPath [ luasec luasocket ])
-        }'
+  postInstall = ''
+    rm "$out"/etc/knot-resolver/root.hints # using system-wide instead
   '';
 
   meta = with stdenv.lib; {
@@ -66,5 +59,24 @@ stdenv.mkDerivation rec {
     platforms = filter (p: p != "aarch64-linux") platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
   };
-}
+};
+
+wrapped-full = with luajitPackages; let
+    luaPkgs =  [ luasec luasocket ]; # TODO: cqueues and others for http2 module
+  in runCommand unwrapped.name
+  {
+    nativeBuildInputs = [ makeWrapper ];
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  }
+  ''
+    mkdir -p "$out/sbin" "$out/share"
+    makeWrapper '${unwrapped}/sbin/kresd' "$out"/sbin/kresd \
+      --set LUA_PATH  '${concatStringsSep ";" (map getLuaPath  luaPkgs)}' \
+      --set LUA_CPATH '${concatStringsSep ";" (map getLuaCPath luaPkgs)}'
+    ln -sr '${unwrapped}/share/man' "$out"/share/
+    ln -sr "$out"/{sbin,bin}
+  '';
+
+in result
 

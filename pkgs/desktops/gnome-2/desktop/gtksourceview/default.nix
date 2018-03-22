@@ -1,5 +1,5 @@
 {stdenv, fetchpatch, fetchurl, autoreconfHook, pkgconfig, atk, cairo, glib
-, gnome_common, gtk, pango
+, gnome-common, gtk, pango
 , libxml2Python, perl, intltool, gettext, gtk-mac-integration }:
 
 with stdenv.lib;
@@ -26,12 +26,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig atk cairo glib gtk
+    atk cairo glib gtk
     pango libxml2Python perl intltool
     gettext
   ] ++ optionals stdenv.isDarwin [
-    autoreconfHook gnome_common gtk-mac-integration
+    autoreconfHook gnome-common gtk-mac-integration
   ];
 
   preConfigure = optionalString stdenv.isDarwin ''

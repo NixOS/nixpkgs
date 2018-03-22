@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey }:
-pythonPackages.buildPythonApplication rec {
+{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey
+, pkgs }:
+
+let
+  beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {
+    inherit pythonPackages;
+  };
+
+in pythonPackages.buildPythonApplication rec {
   version = "0.4.9-next";
   name = "pyLoad-" + version;
 

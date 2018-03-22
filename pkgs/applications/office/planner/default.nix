@@ -28,8 +28,8 @@ in stdenv.mkDerivation {
     autoconf
     libtool
 
-    gnome_common
-    gtk_doc
+    gnome-common
+    gtk-doc
 
     GConf
     gtk
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.gnome.org/Apps/Planner";
+    homepage = https://wiki.gnome.org/Apps/Planner;
     description = "Project management application for GNOME";
     longDescription = ''
       Planner is the GNOME project management tool.

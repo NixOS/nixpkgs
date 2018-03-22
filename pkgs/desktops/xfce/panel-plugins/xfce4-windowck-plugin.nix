@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, python3, imagemagick, libwnck, gtk2
-, exo, libxfce4ui, libxfce4util, xfce4panel, xfconf, xfce4_dev_tools }:
+, exo, libxfce4ui, libxfce4util, xfce4-panel, xfconf, xfce4-dev-tools }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-windowck-plugin";
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${version}";
 
-  buildInputs = [ pkgconfig intltool python3 imagemagick libwnck gtk2
-    exo libxfce4ui libxfce4util xfce4panel xfconf xfce4_dev_tools ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool python3 imagemagick libwnck gtk2
+    exo libxfce4ui libxfce4util xfce4-panel xfconf xfce4-dev-tools ];
 
   preConfigure = ''
     ./autogen.sh

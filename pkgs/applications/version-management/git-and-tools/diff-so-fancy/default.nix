@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "diff-so-fancy-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "0wd9npcfp41ggvddrbif8qr25pm7jlzxzd3xn5rlq0y0frwx5akj";
+    sha256 = "0j8dxfl4js7agwdpcvxwigzpp0lik33h7s3vsjg0pd413h2j4mvz";
   };
 
   # Perl is needed here for patchShebangs

@@ -15,6 +15,9 @@ in rec {
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
+  # Avoid messing with libkrb5 and libnghttp2.
+  curl_ = curl.override (args: { gssSupport = false; http2Support = false; });
+
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
@@ -34,7 +37,7 @@ in rec {
 
       cp -rL ${darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${icu.dev}/include*             $out/include
+      cp -rL ${darwin.ICU}/include*             $out/include
       cp -rL ${libiconv}/include/*       $out/include
       cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
       mv $out/include $out/include-Libsystem
@@ -60,8 +63,8 @@ in rec {
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
-      cp ${curl.bin}/bin/curl $out/bin
-      cp -d ${curl.out}/lib/libcurl*.dylib $out/lib
+      cp ${curl_.bin}/bin/curl $out/bin
+      cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${openssl.out}/lib/*.dylib $out/lib
 
@@ -84,7 +87,7 @@ in rec {
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
-      cp -d ${icu.out}/lib/libicu*.dylib $out/lib
+      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib

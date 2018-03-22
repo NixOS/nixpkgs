@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   patches = [
     ./getcwd-chroot.patch
     ./CVE-2012-0804.patch
+    ./CVE-2017-12836.patch
   ];
 
   hardeningDisable = [ "fortify" "format" ];
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   buildInputs = [ nano ];
 
   meta = {
-    homepage = "http://cvs.nongnu.org";
+    homepage = http://cvs.nongnu.org;
     description = "Concurrent Versions System - a source control system";
     platforms = stdenv.lib.platforms.all;
   };

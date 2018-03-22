@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
   };
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   installPhase = ''
     mkdir -p $out/share/fonts
@@ -17,6 +17,10 @@ stdenv.mkDerivation {
     mkfontdir
     mkfontscale
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  sha256 = "0rfly7r6blr2ykxlv0f6my2w41vvxcw85chspljd2p1fxlr28jd7";
 
   meta = {
     description = "Unicode VGA font";

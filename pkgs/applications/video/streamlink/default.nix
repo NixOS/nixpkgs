@@ -1,19 +1,19 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.7.0";
+  version = "0.10.0";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = "${version}";
-    sha256 = "0knh7lw6bv1vix3p40hjp5lc0z9pavvx6rncviw5h095rzcw5287";
+    sha256 = "1p9gkwcvqlnv09ihqh71nh82nnmq9ybp1v8d8kd2vhkg1vm5ximn";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
+  checkInputs = with pythonPackages; [ pytest mock requests-mock ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 ]) ++ [ rtmpdump ffmpeg ];
+  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client ]) ++ [ rtmpdump ffmpeg ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/streamlink/streamlink;

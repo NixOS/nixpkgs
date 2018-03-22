@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.nic.ad.jp/ja/idn/idnkit;
     description = "Provides functionalities about i18n domain name processing";
     license = "idnkit-2 license";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }

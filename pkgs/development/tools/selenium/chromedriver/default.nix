@@ -4,28 +4,31 @@
 }:
 let
   allSpecs = {
-    "i686-linux" = {
-      system = "linux32";
-      sha256 = "70845d81304c5f5f0b7f65274216e613e867e621676a09790c8aa8ef81ea9766";
-    };
-
     "x86_64-linux" = {
       system = "linux64";
-      sha256 = "bb2cf08f2c213f061d6fbca9658fc44a367c1ba7e40b3ee1e3ae437be0f901c2";
+      sha256 = "1m119kbsr6gm8a37q92rflp5mp3fjzw8cy4r5j4bnihkai7khq94";
     };
 
     "x86_64-darwin" = {
       system = "mac64";
-      sha256 = "6c30bba7693ec2d9af7cd9a54729e10aeae85c0953c816d9c4a40a1a72fd8be0";
+      sha256 = "11hs4mmlvxjaanq41h0dljj4sff0lfwk31svvdmzfg91idlikpsz";
     };
   };
 
   spec = allSpecs."${stdenv.system}"
     or (throw "missing chromedriver binary for ${stdenv.system}");
+
+  libs = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+    cairo fontconfig freetype
+    gdk_pixbuf glib gtk2 gconf
+    libX11 nspr nss pango libXrender
+    gconf libXext libXi
+  ];
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
-  version = "2.29";
+  version = "2.36";
 
   src = fetchurl {
     url = "http://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -36,14 +39,6 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "unzip $src";
 
-  libs = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc.lib
-    cairo fontconfig freetype
-    gdk_pixbuf glib gtk2 gconf
-    libX11 nspr nss pango libXrender
-    gconf libXext libXi
-  ];
-
   installPhase = ''
     install -m755 -D chromedriver $out/bin/chromedriver
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -52,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/chromedriver/;
+    homepage = https://sites.google.com/a/chromium.org/chromedriver;
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];

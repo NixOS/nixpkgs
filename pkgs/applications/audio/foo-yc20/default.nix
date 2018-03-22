@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i8261n95n4xic766h70xkrpbvw3sag96n1883ahmg6h7yb94avq";
   };
 
-  buildInputs = [ libjack2 gtk2 lv2 faust pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 gtk2 lv2 faust ];
 
   makeFlags = "PREFIX=$(out)";
 

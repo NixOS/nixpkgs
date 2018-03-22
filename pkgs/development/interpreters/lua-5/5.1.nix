@@ -8,7 +8,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "lua-5.1.5";
+  name = "lua-${version}";
+  version = "5.1.5";
   luaversion = "5.1";
 
   src = fetchurl {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2" LDFLAGS="" CC="$CC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.5.1.5.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDFLAGS="-fPIC" )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDFLAGS="-fPIC" CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1 liblua.so.5.1.5" INSTALL_DATA='cp -d' )
   '';
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

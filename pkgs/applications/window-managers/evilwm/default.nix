@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.6809.org.uk/evilwm/";
+    homepage = http://www.6809.org.uk/evilwm/;
     description = "Minimalist window manager for the X Window System";
 
     license = {

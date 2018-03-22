@@ -1,22 +1,22 @@
 {
-  stdenv, fetchFromGitHub, fetchurl, standardPatch,
+  stdenv, fetchFromGitHub,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
-  kguiaddons, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys, libsysstat,
+  kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
   xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-  lxmenu-data
+  lxmenu-data, pcre
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-panel";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "097rivly61i99v0w9a3dgbwbc4c5x9nh3jl0n94dix1qgd4w983y";
+    sha256 = "01xmnb17jpydyfvxwaa6kymzdasnyd94z62gjah8y4pzsmykcr4x";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     kguiaddons
     liblxqt
     libqtxdg
-    lxqt-common
     lxqt-globalkeys
     libsysstat
     xorg.libpthreadstubs
@@ -47,18 +46,19 @@ stdenv.mkDerivation rec {
     alsaLib
     menu-cache
     lxmenu-data
-  ];
-
-  patches = [
-    (fetchurl {
-       url = https://github.com/lxde/lxqt-panel/commit/ec62109e0fa678875a9b10fc6f1975267432712d.patch;
-       sha256 = "1ywwk8gb6gbvs8z9gwgsnb13z1jvyvjij349nq7ij6iyhyld0jlr";
-    })
+    pcre
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = standardPatch;
+  postPatch = ''
+    for dir in  autostart menu; do
+      substituteInPlace $dir/CMakeLists.txt \
+        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
+    done
+    substituteInPlace panel/CMakeLists.txt \
+      --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg"
+  '';
 
   meta = with stdenv.lib; {
     description = "The LXQt desktop panel";

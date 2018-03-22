@@ -2,15 +2,15 @@
   git, stdenv }:
 
 buildPythonPackage rec {
-  version = "0.1.12";
+  version = "0.2.0";
   pname = "pytorch";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "pytorch";
-    repo = "pytorch";
-    rev = "v${version}";
-    sha256 = "0r8mf4xya76gz83y5z3hfxh0rydkydafhipl8g7d0bfrgw961jy9";
+    owner  = "pytorch";
+    repo   = "pytorch";
+    rev    = "v${version}";
+    sha256 = "1s3f46ga1f4lfrcj3lpvvhgkdr1pi8i2hjd9xj9qiz3a9vh2sj4n";
   };
 
   checkPhase = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
      git
      numpy.blas
   ];
-  
+
   propagatedBuildInputs = [
     cffi
     numpy
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   preConfigure = ''
     export NO_CUDA=1
   '';
-  
+
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
     homepage = http://pytorch.org/;

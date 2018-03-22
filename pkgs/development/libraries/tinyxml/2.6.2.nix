@@ -2,7 +2,7 @@
 
 let
   version = "2.6.2";
-  SHLIB_EXT = if stdenv.isDarwin then "dylib" else "so";
+  SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation {
   name = "tinyxml-${version}";
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     # build the lib as a shared library
     ''${CXX} -Wall -O2 -shared -fpic tinyxml.cpp \
     tinyxmlerror.cpp tinyxmlparser.cpp      \
-    tinystr.cpp -o libtinyxml.${SHLIB_EXT}
+    tinystr.cpp -o libtinyxml${SHLIB_EXT}
   '';
 
   doCheck = true;
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
     mkdir -pv $out/lib/pkgconfig/
     mkdir -pv $out/share/doc/tinyxml/
 
-    cp -v libtinyxml.${SHLIB_EXT} $out/lib/
+    cp -v libtinyxml${SHLIB_EXT} $out/lib/
     cp -v *.h $out/include/
 
     substituteInPlace tinyxml.pc --replace "@out@" "$out"
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
+    homepage = http://www.grinninglizard.com/tinyxml/index.html;
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
   };

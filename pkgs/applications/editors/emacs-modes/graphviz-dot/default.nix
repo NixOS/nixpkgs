@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.graphviz.org/";
+    homepage = http://www.graphviz.org/;
     description = "An emacs mode for the DOT Language, used by graphviz";
   };
 }

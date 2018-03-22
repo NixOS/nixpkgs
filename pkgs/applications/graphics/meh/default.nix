@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     make PREFIX=$out install
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
   buildInputs = [ libXext libX11 libjpeg libpng giflib ];
 
   meta = {
     description = "A minimal image viewer using raw XLib";
-    homepage = http://www.johnhawthorn.com/meh/;
+    homepage = https://www.johnhawthorn.com/meh/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };

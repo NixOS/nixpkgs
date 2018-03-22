@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/projects/nedit;
+    homepage = https://sourceforge.net/projects/nedit;
     platforms = with platforms; linux ++ darwin;
   };
 }

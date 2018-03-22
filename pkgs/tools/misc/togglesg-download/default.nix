@@ -3,13 +3,13 @@
 pythonPackages.buildPythonApplication rec {
 
   name = "togglesg-download-git-${version}";
-  version = "2016-05-31";
+  version = "2017-12-07";
 
   src = fetchFromGitHub {
-    owner = "0x776b7364";
-    repo = "toggle.sg-download";
-    rev = "7d7c5f4d549360f95e248accd9771949abd94ad2";
-    sha256 = "0xj42khvacwmhbiy2p8rxk7lqg7pvya4zdc2c34lnr3avdp49fjn";
+    owner  = "0x776b7364";
+    repo   = "toggle.sg-download";
+    rev    = "e64959f99ac48920249987a644eefceee923282f";
+    sha256 = "0j317wmyzpwfcixjkybbq2vkg52vij21bs40zg3n1bs61rgmzrn8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,14 +19,20 @@ pythonPackages.buildPythonApplication rec {
   dontStrip = true;
 
   installPhase = ''
-    mkdir -p $out/bin
+    runHook preInstall
+
+    mkdir -p $out/{bin,share/doc/togglesg-download}
     substitute $src/download_toggle_video2.py $out/bin/download_toggle_video2.py \
       --replace "ffmpeg_download_cmd = 'ffmpeg" "ffmpeg_download_cmd = '${lib.getBin ffmpeg_3}/bin/ffmpeg"
     chmod 0755 $out/bin/download_toggle_video2.py
+
+    cp LICENSE README.md $out/share/doc/togglesg-download
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/0x776b7364/toggle.sg-download";
+    homepage = https://github.com/0x776b7364/toggle.sg-download;
     description = "Command-line tool to download videos from toggle.sg written in Python";
     longDescription = ''
       toggle.sg requires SilverLight in order to view videos. This tool will
@@ -34,7 +40,7 @@ pythonPackages.buildPythonApplication rec {
       on your OS of choice.
     '';
     license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
-    maintainers = [ maintainers.peterhoeg ];
   };
 }

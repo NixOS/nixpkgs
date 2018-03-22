@@ -12,21 +12,18 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, cpio, contents, ubootChooser, compressor, prepend
+{ stdenv, perl, cpio, contents, compressor, prepend, ubootTools
 , hostPlatform
 }:
 
-let
-  inputsFun = ubootName : [ perl cpio ]
-    ++ stdenv.lib.optional (ubootName != null) [ (ubootChooser ubootName) ];
-  makeUInitrdFun = ubootName : (ubootName != null);
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "initrd";
   builder = ./make-initrd.sh;
-  nativeBuildInputs = inputsFun hostPlatform.platform.uboot;
 
-  makeUInitrd = makeUInitrdFun hostPlatform.platform.uboot;
+  makeUInitrd = hostPlatform.platform.kernelTarget == "uImage";
+
+  nativeBuildInputs = [ perl cpio ]
+    ++ stdenv.lib.optional makeUInitrd ubootTools;
 
   # !!! should use XML.
   objects = map (x: x.object) contents;
@@ -34,6 +31,8 @@ stdenv.mkDerivation {
   suffices = map (x: if x ? suffix then x.suffix else "none") contents;
 
   # For obtaining the closure of `contents'.
+  # Note: we don't use closureInfo yet, as that won't build with nix-1.x.
+  # See #36268.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
   pathsFromGraph = ./paths-from-graph.pl;

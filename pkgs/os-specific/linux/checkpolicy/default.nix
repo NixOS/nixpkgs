@@ -10,15 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "1m5wjm43lzp6bld8higsvdm2dkddydihhwv9qw2w9r4dm0largcv";
   };
 
+  # Don't build tests
+  postPatch = ''
+    sed '/-C test/d' -i Makefile
+    sed '1i#include <ctype.h>' -i checkpolicy.c
+  '';
+
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libsepol ];
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-
-  # Don't build tests
-  postPatch = ''
-    sed -i '/-C test/d' Makefile
-  '';
 
   preBuild = ''
     makeFlagsArray+=("LEX=flex")

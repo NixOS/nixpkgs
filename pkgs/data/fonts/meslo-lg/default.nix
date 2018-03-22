@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256="0lnbkrvcpgz9chnvix79j6fiz36wj6n46brb7b1746182rl1l875";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   sourceRoot = ".";
 
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1cppf8sk6r5wjnnas9n6iyag6pj9jvaic66lvwpqg3742s5akx6x";
 
   meta = {
     description = "A customized version of Apple’s Menlo-Regular font";

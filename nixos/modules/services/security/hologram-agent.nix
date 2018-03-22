@@ -33,10 +33,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.interfaces.dummy0 = {
-      ipAddress = "169.254.169.254";
-      prefixLength = 32;
-    };
+    boot.kernelModules = [ "dummy" ];
+
+    networking.interfaces.dummy0.ipv4.addresses = [
+      { address = "169.254.169.254"; prefixLength = 32; }
+    ];
 
     systemd.services.hologram-agent = {
       description = "Provide EC2 instance credentials to machines outside of EC2";

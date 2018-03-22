@@ -1,7 +1,7 @@
 --- a/src/web_client.c.orig
 +++ b/src/web_client.c
-@@ -331,7 +331,7 @@
-         buffer_sprintf(w->response.data, "File '%s' does not exist, or is not accessible.", webfilename);
+@@ -302,7 +302,7 @@
+         buffer_strcat_htmlescape(w->response.data, webfilename);
          return 404;
      }
 -
@@ -9,8 +9,8 @@
      // check if the file is owned by expected user
      if(stat.st_uid != web_files_uid()) {
          error("%llu: File '%s' is owned by user %u (expected user %u). Access Denied.", w->id, webfilename, stat.st_uid, web_files_uid());
-@@ -345,7 +345,7 @@
-         buffer_sprintf(w->response.data, "Access to file '%s' is not permitted.", webfilename);
+@@ -320,7 +320,7 @@
+         buffer_strcat_htmlescape(w->response.data, webfilename);
          return 403;
      }
 -

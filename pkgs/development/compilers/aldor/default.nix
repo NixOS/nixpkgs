@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     # Please become a maintainer to fix this package
     broken = true;
-    homepage = "http://www.aldor.org/";
+    homepage = http://www.aldor.org/;
     description = "Programming language with an expressive type system";
     license = stdenv.lib.licenses.asl20;
 

@@ -1,6 +1,7 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
-, intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
-, webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
+{ fetchurl, fetchpatch, stdenv, intltool, pkgconfig, file, makeWrapper
+, libxml2, libxslt, perl, perlPackages, gconf, guile
+, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
+, webkit, glibcLocales, gsettings-desktop-schemas, dconf
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
 , pango, gdk_pixbuf
 }:
@@ -13,21 +14,31 @@ Two cave-ats right now:
 */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.6.12";
+  name = "gnucash-2.6.18-1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0x84f07p30pwhriamv8ifljgw755cj87rc12jy1xddf47spyj7rp";
+    sha256 = "1794qi7lkn1kbnhzk08wawacfcphbln3ngdl3q0qax5drv7hnwv8";
   };
+
+  patches = [
+    (fetchpatch {
+     sha256 = "11nlf9j7jm1i37mfcmmnkplxr3nlf257fxd01095vd65i2rn1m8h";
+     name = "fix-brittle-test.patch";
+     url = "https://github.com/Gnucash/gnucash/commit/42ac55e03a1a84739f4a5b7a247c31d91c0adc4a.patch";
+    })
+  ];
+
+  nativeBuildInputs = [ intltool pkgconfig file makeWrapper ];
 
   buildInputs = [
     # general
-    intltool pkgconfig libxml2 libxslt glibcLocales file gettext swig enchant
+    libxml2 libxslt glibcLocales gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
     glib gtk2 goffice webkit
     # gnome...
-    dconf gconf libgnomecanvas gsettings_desktop_schemas
+    dconf gconf libgnomecanvas gsettings-desktop-schemas
     # financial
     libofx aqbanking gwenhywfar
     # perl
@@ -36,12 +47,10 @@ stdenv.mkDerivation rec {
     guile slibGuile
     # database backends
     libdbi libdbiDrivers
-    # build
-    makeWrapper
   ];
 
-  patchPhase = ''
-  patchShebangs ./src
+  postPatch = ''
+    patchShebangs ./src
   '';
 
   configureFlags = [
@@ -71,7 +80,7 @@ stdenv.mkDerivation rec {
         --prefix PERL5LIB ":" "$PERL5LIB"                               \
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
-        --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"  \
+        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"  \
         --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
 
@@ -91,7 +100,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,
       freely licensed under the GNU GPL and available for GNU/Linux, BSD,
-      Solaris, Mac OS X and Microsoft Windows.
+      Solaris, macOS and Microsoft Windows.
 
       Designed to be easy to use, yet powerful and flexible, GnuCash allows
       you to track bank accounts, stocks, income and expenses.  As quick and

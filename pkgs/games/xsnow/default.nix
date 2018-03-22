@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "xsnow-${version}";
 
   src = fetchurl {
-    url = "http://dropmix.xs4all.nl/rick/Xsnow/${name}.tar.gz";
+    url = "http://janswaal.home.xs4all.nl/Xsnow/${name}.tar.gz";
     sha256 = "06jnbp88wc9i9dbmy7kggplw4hzlx2bhghxijmlhkjlizgqwimyh";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An X-windows application that will let it snow on the root, in between and on windows";
-    homepage = http://dropmix.xs4all.nl/rick/Xsnow/;
+    homepage = http://janswaal.home.xs4all.nl/Xsnow/;
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.robberer ];
   }; 

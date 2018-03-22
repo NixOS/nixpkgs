@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-perl=${perl}/bin/perl";
 
-  buildInputs = [ libpcap pkgconfig bison cyrus_sasl tcp_wrappers flex ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];
 
   meta = with stdenv.lib; {
     description = "Clients for ARGUS";

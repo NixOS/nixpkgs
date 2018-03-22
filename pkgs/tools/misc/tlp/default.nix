@@ -14,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tlp-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
         owner = "linrunner";
         repo = "TLP";
         rev = "${version}";
-        sha256 = "0gq1y1qnzwyv7cw32g4ymlfssi2ayrbnd04y4l242k6n41d05bij";
+        sha256 = "01bhb9hdsck1g2s5jvafr3ywml9k2qz7x2cf42a3z8g5d23pdfpy";
       };
 
   makeFlags = [ "DESTDIR=$(out)"
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Advanced Power Management for Linux";
-    homepage = "http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    homepage = http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2Plus;

@@ -12,7 +12,7 @@ interfaces.  However, you can configure an interface manually as
 follows:
 
 <programlisting>
-networking.interfaces.eth0.ip4 = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+networking.interfaces.eth0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
 </programlisting>
 
 Typically you’ll also want to set a default gateway and set of name

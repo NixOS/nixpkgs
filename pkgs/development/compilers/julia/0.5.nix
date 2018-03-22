@@ -42,7 +42,7 @@ let
   rmathVersion = "0.1";
   rmath-julia = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
-    sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
+    sha256 = "1qyps217175qhid46l8f5i1v8i82slgp23ia63x2hzxwfmx8617p";
   };
   
   virtualenvVersion = "15.0.0";
@@ -160,7 +160,6 @@ stdenv.mkDerivation rec {
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
-    set
   '';
 
   preBuild = ''
@@ -179,7 +178,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "http://julialang.org/";
+    homepage = https://julialang.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

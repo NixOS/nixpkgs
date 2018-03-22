@@ -9,6 +9,12 @@ in {
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
   options.amazonImage = {
+    name = mkOption {
+      type = types.str;
+      description = "The name of the generated derivation";
+      default = "nixos-disk-image";
+    };
+
     contents = mkOption {
       example = literalExample ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -22,15 +28,26 @@ in {
         generated image. Glob patterns work.
       '';
     };
+
+    sizeMB = mkOption {
+      type = types.int;
+      default = if config.ec2.hvm then 2048 else 8192;
+      description = "The size in MB of the image";
+    };
+
+    format = mkOption {
+      type = types.enum [ "raw" "qcow2" "vpc" ];
+      default = "qcow2";
+      description = "The image format to output";
+    };
   };
 
   config.system.build.amazonImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
-    inherit (cfg) contents;
+    inherit (cfg) contents format name;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
-    partitioned = config.ec2.hvm;
-    diskSize = if config.ec2.hvm then 2048 else 8192;
-    format = "qcow2";
+    partitionTableType = if config.ec2.hvm then "legacy" else "none";
+    diskSize = cfg.sizeMB;
     configFile = pkgs.writeText "configuration.nix"
       ''
         {
@@ -41,5 +58,4 @@ in {
         }
       '';
   };
-
 }

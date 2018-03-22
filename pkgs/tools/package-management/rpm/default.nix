@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, libarchive, nspr, nss, popt, db, xz, python, lua, pkgconfig, binutils, autoreconfHook }:
+{ stdenv
+, pkgconfig, autoreconfHook
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+}:
 
 stdenv.mkDerivation rec {
   name = "rpm-${version}";
-  version = "4.13.0.1";
+  version = "4.14.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-4.13.x/rpm-${version}.tar.bz2";
-    sha256 = "27fc7ba7d419622b1ce34d6507aa70b0808bc344021d298072a0c2ec165f9b0d";
+    url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
+    sha256 = "0fvrjq6jsvbllb5q6blchzh7p5flk61rz34g4g9mp9iwrhn0xx23";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive binutils ];
+  propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
+    ++ stdenv.lib.optional stdenv.isLinux elfutils;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -25,8 +30,6 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/com"
   ];
-
-  patches = [ ./rpm-4.13.0.1-bfd-config.patch ];
 
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = with maintainers; [ mornfall copumpkin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

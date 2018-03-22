@@ -12,11 +12,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "2.0.8";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "15449r56rqg3487kzsnfvz0w4p5ajrq0krcsdh6c9r6g0ark93hd";
+    sha256 = "1xpghrinxhm2072fwmn42pxhjwh7qx6cbsipw4s6g38a8mkklrk8";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
-    python3Packages.python systemd
+    python3Packages.python python3Packages.setuptools systemd
   ];
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://linuxcontainers.org/";
+    homepage = https://linuxcontainers.org/;
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;
 

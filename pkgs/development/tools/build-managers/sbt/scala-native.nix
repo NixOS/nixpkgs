@@ -3,6 +3,10 @@
 sbt.overrideDerivation(old: {
   nativeBuildInputs = [ makeWrapper ];
 
+  version = "0.13.16";
+
+  sha256 = "033nvklclvbirhpsiy28d3ccmbm26zcs9vb7j8jndsc1ln09awi2";
+
   postFixup = ''
     wrapProgram $out/bin/sbt \
       --set CLANG_PATH      "${llvmPackages.clang}/bin/clang" \

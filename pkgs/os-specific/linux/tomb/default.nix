@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tomb-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner  = "dyne";
     repo   = "Tomb";
     rev    = "v${version}";
-    sha256 = "192jpgn02mvi4d4inbq2q11zl7xw6njymvali7al8wmygkkycrw4";
+    sha256 = "1wk1aanzfln88min29p5av2j8gd8vj5afbs2gvarv7lvx1vi7kh1";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm755 tomb       $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
-    # it works fine with gnupg v2, but it looks for an executable named gpg
-    ln -s ${gnupg}/bin/gpg2 $out/bin/gpg
+    ln -s ${gnupg}/bin/gpg $out/bin/gpg
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext pinentry ]}

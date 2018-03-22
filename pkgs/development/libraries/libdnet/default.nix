@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = http://libdnet.googlecode.com/files/libdnet-1.12.tgz;
-    sha1 = "71302be302e84fc19b559e811951b5d600d976f8";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libdnet/libdnet-1.12.tgz";
+    sha256 = "09mhbr8x66ykhf5581a5zjpplpjxibqzgkkpx689kybwg0wk1cw3";
   };
 
   buildInputs = [ automake autoconf libtool ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Provides a simplified, portable interface to several low-level networking routines";
-    homepage = http://code.google.com/p/libdnet/;
+    homepage = https://github.com/dugsong/libdnet;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

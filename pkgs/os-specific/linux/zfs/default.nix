@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+, perl, fetchpatch
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr
+, zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null
+, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
 }:
 
 with stdenv.lib;
@@ -13,26 +14,42 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
-  common = { version, sha256, extraPatches, spl, incompatibleKernelVersion ? null } @ args:
+  common = { version
+    , sha256
+    , extraPatches
+    , spl
+    , rev ? "zfs-${version}"
+    , isUnstable ? false
+    , isLegacyCrypto ? false
+    , incompatibleKernelVersion ? null } @ args:
     if buildKernel &&
-       (incompatibleKernelVersion != null) &&
-       versionAtLeast kernel.version incompatibleKernelVersion then
-      throw "Linux v${kernel.version} is not yet supported by zfsonlinux v${version}. Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."
+      (incompatibleKernelVersion != null) &&
+        versionAtLeast kernel.version incompatibleKernelVersion then
+       throw ''
+         Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
+         ${stdenv.lib.optional (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
+       ''
     else stdenv.mkDerivation rec {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
         owner = "zfsonlinux";
         repo = "zfs";
-        rev = "zfs-${version}";
-        inherit sha256;
+        inherit rev sha256;
       };
 
       patches = extraPatches;
 
-      buildInputs = [ autoreconfHook nukeReferences ]
-      ++ optionals buildKernel [ spl ]
-      ++ optionals buildUser [ zlib libuuid python attr ];
+      postPatch = optionalString buildKernel ''
+        patchShebangs scripts
+      '';
+
+      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
+      buildInputs =
+           optionals buildKernel [ spl ]
+        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals (buildUser && (isUnstable || isLegacyCrypto)) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -44,7 +61,6 @@ let
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "mount -t zfs"            "${utillinux}/bin/mount -t zfs"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/mount"              "${utillinux}/bin/mount"
-        substituteInPlace ./udev/rules.d/*            --replace "/lib/udev/vdev_id"       "$out/lib/udev/vdev_id"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/ztest"         "$out/sbin/ztest"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/zdb"           "$out/sbin/zdb"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -54,6 +70,12 @@ let
         substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
           --replace "@bindir@/rm " "${coreutils}/bin/rm "
+
+        for f in ./udev/rules.d/*
+        do
+          substituteInPlace "$f" --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+        done
+
         ./autogen.sh
       '';
 
@@ -101,6 +123,8 @@ let
         rm -rf $out/share/zfs/zfs-tests
       '';
 
+      outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+
       meta = {
         description = "ZFS Filesystem Linux Kernel module";
         longDescription = ''
@@ -111,46 +135,72 @@ let
         homepage = http://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ jcumming wizeman wkennington fpletz ];
+        maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
       };
     };
-in
-  assert any (n: n == configFile) [ "kernel" "user" "all" ];
-  assert buildKernel -> kernel != null && spl != null;
-  {
-    # also check if kernel version constraints in
-    # ./nixos/modules/tasks/filesystems/zfs.nix needs
-    # to be adapted
-    zfsStable = common {
-      # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.12";
+in {
+  # also check if kernel version constraints in
+  # ./nixos/modules/tasks/filesystems/zfs.nix needs
+  # to be adapted
+  zfsStable = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
 
-      version = "0.6.5.11";
+    # this package should point to the latest release.
+    version = "0.7.7";
 
-      # this package should point to the latest release.
-      sha256 = "1wqz43cjr21m3f52ahcikl2798pbzj5sfy16zqxwiqpv7iy09kr3";
-      extraPatches = [
-        (fetchpatch {
-          url = "https://github.com/Mic92/zfs/compare/zfs-0.6.5.8...nixos-zfs-0.6.5.8.patch";
-          sha256 = "14kqqphzg02m9a7qncdhff8958cfzdrvsid3vsrm9k75lqv1w08z";
-        })
-      ];
-      inherit spl;
-    };
-    zfsUnstable = common {
-      # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = null;
+    sha256 = "0lrzy27sh1cinkf04ki2vfjrgpgbiza2s59i2by45qdd8kmkcc5r";
 
-      version = "0.7.0-rc5";
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
+        sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
+      })
+    ];
 
-      # this package should point to a version / git revision compatible with the latest kernel release
-      sha256 = "1k0fl6lbi5winri58v26k7gngd560hbj0247rnwcbc6j01ixsr5n";
-      extraPatches = [
-        (fetchpatch {
-          url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
-          sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
-        })
-      ];
-      spl = splUnstable;
-    };
-  }
+    inherit spl;
+  };
+
+  zfsUnstable = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-02-02";
+
+    rev = "fbd42542686af053f0d162ec4630ffd4fff1cc30";
+    sha256 = "0qzkwnnk7kz1hwvcaqlpzi5yspfhhmd2alklc07k056ddzbx52qb";
+    isUnstable = true;
+
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/fbd42542686af053f0d162ec4630ffd4fff1cc30...nixos-zfs-2018-02-02.patch";
+        sha256 = "05wqwjm9648x60vkwxbp8l6z1q73r2a5l2ni28i2f4pla8s3ahln";
+      })
+    ];
+
+    spl = splUnstable;
+  };
+
+  zfsLegacyCrypto = common {
+    # comment/uncomment if breaking kernel versions are known
+    incompatibleKernelVersion = null;
+
+    # this package should point to a version / git revision compatible with the latest kernel release
+    version = "2018-02-01";
+
+    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
+    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
+    isUnstable = true;
+
+    extraPatches = [
+      (fetchpatch {
+        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
+        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
+      })
+    ];
+
+    spl = splLegacyCrypto;
+  };
+
+}

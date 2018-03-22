@@ -2,14 +2,14 @@
 , ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.19.2";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "0m025i0sfm4iv3aiic88x4y4bbhhdb204pmd9r383fsl458fck2p";
+    sha256 = "118r8wigm65107fm7kzfz7gc4awy8xxg0knvwnshx1j40ks08x9z";
   };
 
   postPatch = let
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
+      "threadpool_multiple_event_loops" # times out on slow machines
     ]
       # sometimes: timeout (no output), failed uv_listen
       ++ stdenv.lib.optionals stdenv.isDarwin [ "process_title" "emfile" ];

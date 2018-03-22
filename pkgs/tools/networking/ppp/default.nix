@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
         url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/rc_mksid-no-buffer-overflow?h=debian/2.4.7-1%2b4";
         sha256 = "1dk00j7bg9nfgskw39fagnwv1xgsmyv0xnkd6n1v5gy0psw0lvqh";
       })
+      ./musl-fix-headers.patch
     ];
 
   buildInputs = [ libpcap ];
@@ -34,7 +35,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/{pon,poff,plog} --replace "/usr/sbin" "$out/bin"
+    for tgt in pon poff plog; do
+      substituteInPlace "$out/bin/$tgt" --replace "/usr/sbin" "$out/bin"
+    done
   '';
 
   meta = {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://tldr-pages.github.io;
     license = licenses.mit;
-    maintainers = with maintainers; [ taeer nckx ];
+    maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;
   };
 }

@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       For a list of implementations and tips, see ${homepage}.
     '';
 
-    homepage = "http://mustache.github.io/";
+    homepage = http://mustache.github.io/;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch ];
     platforms = lib.platforms.all;
   };
 }

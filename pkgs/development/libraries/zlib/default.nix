@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   configureFlags = stdenv.lib.optional (!static) "--shared";
 
   postInstall = ''
@@ -65,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${stdenv.cc.prefix}"
+    "PREFIX=${stdenv.cc.targetPrefix}"
   ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ stdenv.lib.optionals (!static) [

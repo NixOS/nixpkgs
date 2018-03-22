@@ -1,28 +1,23 @@
-{ stdenv, fetchurl
-, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "comic-neue-${version}";
+let
   version = "2.2";
+in fetchzip rec {
+  name = "comic-neue-${version}";
 
-  src = fetchurl {
-    url = "http://comicneue.com/${name}.zip";
-    sha256 = "1dmmjhxxc0bj2755yksiiwh275vmnyciknr9b995lmdkjgh7sz6n";
-  };
+  url = "http://comicneue.com/${name}.zip";
 
-  buildInputs = [ unzip ];
-  phases = [ "unpackPhase" "installPhase" ];
-  sourceRoot = name;
-
-  installPhase = ''
-    mkdir -vp $out/share/fonts/truetype $out/share/fonts/opentype $out/share/fonts/EOT $out/share/fonts/WOFF $out/share/fonts/WOFF2 $out/share/doc/${name}
-    cp -v OTF/*.otf  $out/share/fonts/opentype
-    cp -v Web/*.ttf $out/share/fonts/truetype
-    cp -v Web/*.eot  $out/share/fonts/EOT
-    cp -v Web/*.woff  $out/share/fonts/WOFF
-    cp -v Web/*.woff2  $out/share/fonts/WOFF2
-    cp -v Booklet-ComicNeue.pdf FONTLOG.txt OFL-FAQ.txt SIL-License.txt $out/share/doc/${name}
+  postFetch = ''
+    mkdir -vp $out/share/{doc,fonts}
+    unzip -j $downloadedFile comic-neue-2.2/\*.otf   -d $out/share/fonts/opentype
+    unzip -j $downloadedFile comic-neue-2.2/\*.ttf   -d $out/share/fonts/truetype
+    unzip -j $downloadedFile comic-neue-2.2/\*.eot   -d $out/share/fonts/EOT
+    unzip -j $downloadedFile comic-neue-2.2/\*.woff  -d $out/share/fonts/WOFF
+    unzip -j $downloadedFile comic-neue-2.2/\*.woff2 -d $out/share/fonts/WOFF2
+    unzip -j $downloadedFile comic-neue-2.2/\*.pdf comic-neue-2.2/FONTLOG.txt comic-neue-2.2/OFL-FAQ.txt comic-neue-2.2/SIL-License.txt -d $out/share/doc/${name}
   '';
+
+  sha256 = "1yypq5aqqzv3q1c6vx5130mi2iwihzzvrawhwqpwsfjl0p25sq9q";
 
   meta = with stdenv.lib; {
     homepage = http://comicneue.com/;

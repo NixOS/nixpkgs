@@ -1,6 +1,9 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
 , pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
 
+# Attributes needed for tests of the external plugins
+, callPackage, beets
+
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -77,15 +80,28 @@ let
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bash-completion}/share/bash-completion/bash_completion";
 
+  # This is a stripped down beets for testing of the external plugins.
+  externalTestArgs.beets = (beets.override {
+    enableAlternatives = false;
+    enableCopyArtifacts = false;
+  }).overrideAttrs (stdenv.lib.const {
+    doInstallCheck = false;
+  });
+
+  plugins = {
+    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+  };
+
 in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0fvfp9ckq3dhs4f8abg9fprfppyf0g6mv8br2xz99plg4wnffzmy";
+    sha256 = "0m8macydkn1fp4ymig0rg7bzw77rrm454q763gxdpq2kg08yl5py";
   };
 
   propagatedBuildInputs = [
@@ -101,26 +117,22 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobjectIntrospection
-  ] ++ optional enableAcoustid     pythonPackages.pyacoustid
+  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
               || enableAcousticbrainz)
-                                   pythonPackages.requests
-    ++ optional enableConvert      ffmpeg
-    ++ optional enableDiscogs      pythonPackages.discogs_client
-    ++ optional enableGmusic       pythonPackages.gmusicapi
-    ++ optional enableKeyfinder    keyfinder-cli
-    ++ optional enableLastfm       pythonPackages.pylast
-    ++ optional enableMpd          pythonPackages.mpd2
-    ++ optional enableThumbnails   pythonPackages.pyxdg
-    ++ optional enableWeb          pythonPackages.flask
-    ++ optional enableAlternatives (import ./alternatives-plugin.nix {
-      inherit stdenv pythonPackages fetchFromGitHub;
-    })
-    ++ optional enableCopyArtifacts (import ./copyartifacts-plugin.nix {
-      inherit stdenv pythonPackages fetchFromGitHub;
-    });
+                                    pythonPackages.requests
+    ++ optional enableConvert       ffmpeg
+    ++ optional enableDiscogs       pythonPackages.discogs_client
+    ++ optional enableGmusic        pythonPackages.gmusicapi
+    ++ optional enableKeyfinder     keyfinder-cli
+    ++ optional enableLastfm        pythonPackages.pylast
+    ++ optional enableMpd           pythonPackages.mpd2
+    ++ optional enableThumbnails    pythonPackages.pyxdg
+    ++ optional enableWeb           pythonPackages.flask
+    ++ optional enableAlternatives  plugins.alternatives
+    ++ optional enableCopyArtifacts plugins.copyartifacts;
 
   buildInputs = with pythonPackages; [
     beautifulsoup4
@@ -182,7 +194,8 @@ in pythonPackages.buildPythonApplication rec {
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
     HOME="$(mktemp -d)" \
-      nosetests -v
+      # Exclude failing test https://github.com/beetbox/beets/issues/2652
+      nosetests -v --exclude=test_single_month_nonmatch_ --exclude=test_asciify_variable --exclude=test_asciify_character_expanding_to_slash
 
     runHook postCheck
   '';
@@ -211,7 +224,7 @@ in pythonPackages.buildPythonApplication rec {
     description = "Music tagger and library organizer";
     homepage = http://beets.radbox.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig domenkozar pjones profpatsch ];
+    maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;
   };
 }

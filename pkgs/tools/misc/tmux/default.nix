@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "tmux-${version}";
-  version = "2.5";
+  version = "2.6";
 
   outputs = [ "out" "man" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0zwjngfaqrlwwbzicc5pq5pyws8f1qghcajvj0hwkipj51hqyswf";
+    sha256 = "0605y0nwfmf0mnq075vk80897c2cvhxxvxinqq7hvrpjf2ph5mww";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

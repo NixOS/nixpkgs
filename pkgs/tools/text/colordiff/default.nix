@@ -19,9 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
-    homepage = http://www.colordiff.org/;
+    homepage = https://www.colordiff.org/;
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+{ stdenv, lib, requireFile, makeWrapper, yacc, gcc
 , withISpin ? true, tk, swarm, graphviz }:
 
 let
@@ -7,21 +7,29 @@ let
 
 in stdenv.mkDerivation rec {
   name = "spin-${version}";
-  version = "6.4.6";
+  version = "6.4.8";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 
-  src = fetchurl {
-    # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
-    # Dropbox mirror from developers:
-    # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
-    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AAA-vBeJ7xty-CDZgk7OB58Ta/spin646.tar.gz?raw=1";
-    sha256 = "1n33qzlb7g30vhr5yxssw210b2m0242y9j21c7fqpn9z6b0rbhjp";
+  src = requireFile {
+    name = "spin${url-version}.tar.gz";
+    sha256 = "1rpazi5fj772121cn7r85fxypmaiv0x6x2l82b5y1xqzyf0fi4ph";
+    message = ''
+      reCAPTCHA is preventing us to download the file for you.
+      Please download it at http://spinroot.com/spin/Src/index.html
+      and add it to the nix-store using nix-prefetch-url.
+    '';
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ yacc ];
 
   sourceRoot = "Spin/Src${version}";
+
+  unpackPhase = ''
+    # The archive is compressed twice
+    gunzip -c $src > spin.tar.gz
+    tar -xzf spin.tar.gz
+  '';
 
   installPhase = ''
     install -Dm755 spin $out/bin/spin
@@ -38,6 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = http://spinroot.com/;
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mornfall pSub ];
+    maintainers = with maintainers; [ pSub ];
   };
 }

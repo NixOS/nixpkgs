@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, SDL, libjpeg, libpng, glew, libwebp, ncurses
+{ stdenv, fetchurl, cmake, libGLU_combined, SDL, libjpeg, libpng, glew, libwebp, ncurses
 , gmp, curl, nettle, openal, speex, libogg, libvorbis, libtheora, xvidcore
 , makeWrapper }:
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/Unvanquished/Unvanquished/archive/v${version}.tar.gz";
     sha256 = "1k7mlpwalimn6xb2s760f124xncpg455qvls6z3x0ii5x0wc1mp2";
   };
-  buildInputs = [ cmake mesa SDL libjpeg libpng glew libwebp ncurses gmp curl
+  buildInputs = [ cmake libGLU_combined SDL libjpeg libpng glew libwebp ncurses gmp curl
                   nettle openal speex libogg libvorbis libtheora xvidcore 
                   makeWrapper ];
   preConfigure = ''prefix="$prefix/opt"'';
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Unvanquished is a free, open-source first-person shooter
       combining real-time strategy elements with a futuristic, sci-fi
-      setting. It is available for Windows, Linux, and Mac OS X.
+      setting. It is available for Windows, Linux, and macOS.
 
       Features:
 

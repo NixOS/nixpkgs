@@ -15,15 +15,16 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
+  nativeBuildInputs = [
+    pkgconfig
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    pkgconfig cmake
+    cmake
     poppler pcre libxkbcommon epoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
-  ];
-
-  nativeBuildInputs = [
-    wrapGAppsHook
   ];
 
   patches = [
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/naihe2010/apvlv/commit/4c7a583e8431964def482e5471f02e6de8e62a7b.patch";
       sha256 = "1dszm120lwm90hcg5zmd4vr6pjyaxc84qmb7k0fr59mmb3qif62j";
+    })
+    # fix build with gcc7
+    (fetchpatch {
+      url = "https://github.com/naihe2010/apvlv/commit/a3a895772a27d76dab0c37643f0f4c73f9970e62.patch";
+      sha256 = "1fpc7wr1ajilvwi5gjsy5g9jcx4bl03gp5dmajg90ljqbhwz2bfi";
     })
   ];
 
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://naihe2010.github.io/apvlv/";
+    homepage = http://naihe2010.github.io/apvlv/;
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32
@@ -57,7 +63,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.ardumont ];
   };
 

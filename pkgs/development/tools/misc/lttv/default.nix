@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1faldxnh9dld5k0vxckwpqw241ya1r2zv286l6rpgqr500zqw7r1";
   };
 
-  buildInputs = [ pkgconfig glib gtk2 popt babeltrace ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 popt babeltrace ];
 
   meta = with stdenv.lib; {
     description = "Graphical trace viewer for LTTng trace files";

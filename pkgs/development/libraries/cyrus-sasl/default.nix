@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false }:
+{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext,
+  pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -21,6 +22,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
+    (fetchpatch { # CVE-2013-4122
+      url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
+      sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
+    })
   ] ++ lib.optional stdenv.isFreeBSD (
       fetchurl {
         url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://cyrusimap.web.cmu.edu/";
+    homepage = http://cyrusimap.web.cmu.edu/;
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
   };

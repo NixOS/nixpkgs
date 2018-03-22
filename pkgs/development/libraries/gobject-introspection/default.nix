@@ -1,29 +1,31 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, cctools
+, libintlOrEmpty, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
+, x11Support ? true
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.50";
-  ver_min = "0";
+  pname = "gobject-introspection";
+  version = "1.56.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "gobject-introspection-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "1c6597c666f543c70ef3d7c893ab052968afae620efdc080c36657f4226337c5";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1y50pbn5qqbcv2h9rkz96wvv5jls2gma9bkqjq6wapmaszx5jw0d";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ flex bison python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
@@ -37,10 +39,23 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  patches = stdenv.lib.singleton (substituteAll {
-    src = ./absolute_shlib_path.patch;
-    inherit nixStoreDir;
-  });
+  patches = [
+    (substituteAll {
+      src = ./absolute_shlib_path.patch;
+      inherit nixStoreDir;
+    })
+  ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
+    (substituteAll {
+      src = ./absolute_gir_path.patch;
+      cairoLib = "${getLib cairo}/lib";
+    });
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gobjectIntrospection";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

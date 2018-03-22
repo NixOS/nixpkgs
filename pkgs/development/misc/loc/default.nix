@@ -3,20 +3,20 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  version = "0.3.4";
+  version = "0.4.1";
   name = "loc-${version}";
 
   src = fetchFromGitHub {
     owner = "cgag";
     repo = "loc";
-    rev = "9f3590f6299a1be3560f00de7f4f8bef61a02642";
-    sha256 = "0dga8prwnnmsa616jh64wzic957ff0491xghm0bjlns35ajc8lif";
+    rev = "v${version}";
+    sha256 = "0086asrx48qlmc484pjz5r5znli85q6qgpfbd81gjlzylj7f57gg";
   };
 
-  depsSha256 = "1xcfhbnz208dk7xb748v8kv28zbhyr7wqg9gsgbiw3lnvc2a3nn6";
+  cargoSha256 = "0y2ww48vh667kkyg9pyjwcbh7fxi41bjnkhwp749crjqn2abimrk";
 
   meta = {
-    homepage = "http://github.com/cgag/loc";
+    homepage = https://github.com/cgag/loc;
     description = "Count lines of code quickly";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];

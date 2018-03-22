@@ -1,18 +1,36 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, lib, fetchurl
+, buildPackages
+, linuxHeaders ? null
+, useBSDCompatHeaders ? true
+}:
+let
+  cdefs_h = fetchurl {
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
+    sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
+  };
+  queue_h = fetchurl {
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
+    sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
+  };
+  tree_h = fetchurl {
+    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
+    sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
+  };
 
+in
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.16";
+  version = "1.1.19";
 
   src = fetchurl {
-    url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "048h0w4yjyza4h05bkc6dpwg3hq6l03na46g0q1ha8fpwnjqawck";
+    url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
+    sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
   };
 
   enableParallelBuilding = true;
 
-  # required to avoid busybox segfaulting on startup when invoking
-  # nix-build "<nixpkgs/pkgs/stdenv/linux/make-bootstrap-tools.nix>"
+  # Disable auto-adding stack protector flags,
+  # so musl can selectively disable as needed
   hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
@@ -22,17 +40,39 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--enable-static"
+    "CFLAGS=-fstack-protector-strong"
+    # Fix cycle between outputs
+    "--disable-wrapper"
   ];
 
-  patches = [];
+  outputs = [ "out" "dev" ];
 
   dontDisableStatic = true;
+  dontStrip = true;
+
+  postInstall =
+  ''
+    # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
+    # Apparently glibc provides scsi itself?
+    (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+  '' +
+  ''
+    mkdir -p $out/bin
+    # Create 'ldd' symlink, builtin
+    ln -s $out/lib/libc.so $out/bin/ldd
+  '' + lib.optionalString useBSDCompatHeaders ''
+    install -D ${queue_h} $dev/include/sys/queue.h
+    install -D ${cdefs_h} $dev/include/sys/cdefs.h
+    install -D ${tree_h} $dev/include/sys/tree.h
+  '';
+
+  passthru.linuxHeaders = linuxHeaders;
 
   meta = {
     description = "An efficient, small, quality libc implementation";
     homepage    = "http://www.musl-libc.org";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

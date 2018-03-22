@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
-  version = "1.5.8";
+  version = "1.5.9";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
 
   buildInputs = [
-    anthy glib gobjectIntrospection gtk3 ibus python3
+    anthy glib gobjectIntrospection gtk3 ibus (python3.withPackages (ps: [ps.pygobject3]))
   ];
 
   nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1aj7vnfky7izl23xyjky78z3qas3q72l3kr8dnql2lnivsrb8q1y";
+    sha256 = "1y8sf837rmp662bv6zakny0xcm7c9c5qda7f9kq9riv9ywpcbw6x";
   };
 }

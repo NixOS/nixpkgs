@@ -1,29 +1,54 @@
-{ stdenv, kernel, perl
-, hostPlatform
+{ stdenvNoCC, lib, buildPackages
+, buildPlatform, hostPlatform
+, fetchurl, perl
 }:
 
+assert hostPlatform.isLinux;
+
 let
-  baseBuildFlags = [ "INSTALL_HDR_PATH=$(out)" "headers_install" ];
-in stdenv.mkDerivation {
-  name = "linux-headers-${kernel.version}";
+  common = { version, sha256, patches ? null }: stdenvNoCC.mkDerivation {
+    name = "linux-headers-${version}";
 
-  inherit (kernel) src patches;
+    src = fetchurl {
+      url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
+      inherit sha256;
+    };
 
-  nativeBuildInputs = [ perl ];
+    ARCH = hostPlatform.platform.kernelArch;
 
-  buildFlags = [ "ARCH=${stdenv.platform.kernelArch}" ] ++ baseBuildFlags;
+    # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
+    # We do this so we have a build->build, not build->host, C compiler.
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ perl ];
 
-  crossAttrs = {
-    inherit (kernel.crossDrv) src patches;
-    buildFlags = [ "ARCH=${hostPlatform.platform.kernelArch}" ] ++ baseBuildFlags;
+    extraIncludeDirs = lib.optional hostPlatform.isPowerPC ["ppc"];
+
+    # "patches" array defaults to 'null' to avoid changing hash
+    # and causing mass rebuild
+    inherit patches;
+
+    buildPhase = ''
+      make mrproper headers_check SHELL=bash
+    '';
+
+    installPhase = ''
+      make INSTALL_HDR_PATH=$out headers_install
+
+      # Some builds (e.g. KVM) want a kernel.release.
+      mkdir -p $out/include/config
+      echo "${version}-default" > $out/include/config/kernel.release
+    '';
+
+    meta = with lib; {
+      description = "Header files and scripts for Linux kernel";
+      license = licenses.gpl2;
+      platforms = platforms.linux;
+    };
   };
+in {
 
-  installPhase = ''
-    find $out \( -name ..install.cmd -o -name .install \) -print0 | xargs -0 rm
-  '';
-
-  # Headers shouldn't reference anything else
-  allowedReferences = [];
-
-  meta.platforms = stdenv.lib.platforms.linux;
+  linuxHeaders = common {
+    version = "4.15";
+    sha256 = "0sd7l9n9h7vf9c6gd6ciji28hawda60yj0llh17my06m0s4lf9js";
+  };
 }

@@ -7,37 +7,35 @@
 , libsoup
 , gnome3
 , tdb
-, json_glib
+, json-glib
 , itstool
 , wrapGAppsHook
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
 let
-  version = "${major}.${minor}";
-  major = "3.2";
-  minor = "1";
-
+  pname = "rhythmbox";
+  version = "3.4.2";
 in stdenv.mkDerivation rec {
-  name = "rhythmbox-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/rhythmbox/${major}/${name}.tar.xz";
-    sha256 = "0f3radhlji7rxl760yl2vm49fvfslympxrpm8497acbmbd7wlhxz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0hzcns8gf5yb0rm4ss8jd8qzarcaplp5cylk6plwilsqfvxj4xn2";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     pkgconfig
+    intltool perl perlPackages.XMLParser
+    itstool
+    wrapGAppsHook
+  ];
 
+  buildInputs = [
     python3
-    perl
-    perlPackages.XMLParser
-
-    intltool
     libsoup
     tdb
-    json_glib
-    itstool
+    json-glib
 
     gtk3
     gnome3.libpeas
@@ -46,11 +44,16 @@ in stdenv.mkDerivation rec {
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-
-    wrapGAppsHook
   ] ++ gst_plugins;
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Rhythmbox;

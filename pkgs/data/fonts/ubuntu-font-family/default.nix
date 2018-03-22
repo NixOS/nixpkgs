@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "ubuntu-font-family-0.83";
-  buildInputs = [unzip];
 
-  src = fetchurl {
-    url = "http://font.ubuntu.com/download/${name}.zip";
-    sha256 = "0hjvq2x758dx0sfwqhzflns0ns035qm7h6ygskbx1svzg517sva5";
-  };
+  url = "http://font.ubuntu.com/download/${name}.zip";
 
-  installPhase =
-    ''
-      mkdir -p $out/share/fonts/ubuntu
-      cp *.ttf $out/share/fonts/ubuntu
-    '';
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/ubuntu
+  '';
+
+  sha256 = "090y665h4kf2bi623532l6wiwkwnpd0xds0jr7560xwfwys1hiqh";
 
   meta = {
     description = "Ubuntu Font Family";

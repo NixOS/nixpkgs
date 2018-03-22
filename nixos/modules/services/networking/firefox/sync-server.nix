@@ -4,6 +4,10 @@ with lib;
 
 let
   cfg = config.services.firefox.syncserver;
+
+  defaultDbLocation = "/var/db/firefox-sync-server/firefox-sync-server.db";
+  defaultSqlUri = "sqlite:///${defaultDbLocation}";
+
   syncServerIni = pkgs.writeText "syncserver.ini" ''
     [DEFAULT]
     overrides = ${cfg.privateConfig}
@@ -25,9 +29,12 @@ let
     backend = tokenserver.verifiers.LocalVerifier
     audiences = ${removeSuffix "/" cfg.publicUrl}
   '';
+
 in
 
 {
+  meta.maintainers = with lib.maintainers; [ nadrieril ];
+
   options = {
     services.firefox.syncserver = {
       enable = mkOption {
@@ -85,7 +92,7 @@ in
 
       sqlUri = mkOption {
         type = types.str;
-        default = "sqlite:////var/db/firefox-sync-server.db";
+        default = defaultSqlUri;
         example = "postgresql://scott:tiger@localhost/test";
         description = ''
           The location of the database. This URL is composed of
@@ -119,22 +126,54 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services.syncserver = {
+    systemd.services.syncserver = let
+      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript requests ]);
+      user = "syncserver";
+      group = "syncserver";
+    in {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.pythonPackages.pasteScript pkgs.coreutils ];
-      environment.PYTHONPATH = "${pkgs.pythonPackages.syncserver}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages";
+      path = [ pkgs.coreutils syncServerEnv ];
+
+      serviceConfig = {
+        User = user;
+        Group = group;
+        PermissionsStartOnly = true;
+      };
+
       preStart = ''
         if ! test -e ${cfg.privateConfig}; then
-          umask u=rwx,g=x,o=x
           mkdir -p $(dirname ${cfg.privateConfig})
           echo  > ${cfg.privateConfig} '[syncserver]'
+          chmod 600 ${cfg.privateConfig}
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
+        chmod 600 ${cfg.privateConfig}
+        chmod 755 $(dirname ${cfg.privateConfig})
+        chown ${user}:${group} ${cfg.privateConfig}
+
+      '' + optionalString (cfg.sqlUri == defaultSqlUri) ''
+        if ! test -e $(dirname ${defaultDbLocation}); then
+          mkdir -m 700 -p $(dirname ${defaultDbLocation})
+          chown ${user}:${group} $(dirname ${defaultDbLocation})
+        fi
+
+        # Move previous database file if it exists
+        oldDb="/var/db/firefox-sync-server.db"
+        if test -f $oldDb; then
+          mv $oldDb ${defaultDbLocation}
+          chown ${user}:${group} ${defaultDbLocation}
+        fi
       '';
-      serviceConfig.ExecStart = "${pkgs.pythonPackages.pasteScript}/bin/paster serve ${syncServerIni}";
+      serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
     };
 
+    users.users.syncserver = {
+      group = "syncserver";
+      isSystemUser = true;
+    };
+
+    users.groups.syncserver = {};
   };
 }

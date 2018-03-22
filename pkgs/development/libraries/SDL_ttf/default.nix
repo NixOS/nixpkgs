@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL freetype ];
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
   meta = with stdenv.lib; {
     description = "SDL TrueType library";
     license = licenses.zlib;
     platforms = platforms.all;
-    homepage = "https://www.libsdl.org/projects/SDL_ttf/release-1.2.html";
+    homepage = https://www.libsdl.org/projects/SDL_ttf/release-1.2.html;
     maintainers = with maintainers; [ abbradar ];
   };
 }

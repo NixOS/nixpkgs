@@ -173,7 +173,7 @@ in
 
         preStart = ''
           mkdir -p ${cfg.statePath}/{data,config,logs}
-          ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,webapp} ${cfg.statePath}
+          ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
         '' + lib.optionalString (!cfg.mutableConfig) ''
           ln -sf ${mattermostConfJSON} ${cfg.statePath}/config/config.json
         '' + lib.optionalString cfg.mutableConfig ''
@@ -184,10 +184,12 @@ in
           fi
         '' + lib.optionalString cfg.localDatabaseCreate ''
           if ! test -e "${cfg.statePath}/.db-created"; then
-            ${config.services.postgresql.package}/bin/psql postgres -c \
-              "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
-            ${config.services.postgresql.package}/bin/createdb \
-              --owner ${cfg.localDatabaseUser} ${cfg.localDatabaseName}
+            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
+              ${config.services.postgresql.package}/bin/psql postgres -c \
+                "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
+            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
+              ${config.services.postgresql.package}/bin/createdb \
+                --owner ${cfg.localDatabaseUser} ${cfg.localDatabaseName}
             touch ${cfg.statePath}/.db-created
           fi
         '' + ''

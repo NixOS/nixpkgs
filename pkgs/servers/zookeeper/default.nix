@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zookeeper-${version}";
-  version = "3.4.9";
+  version = "3.4.11";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${name}/${name}.tar.gz";
-    sha256 = "0dgmja1lm7qn92x2xfmz5qj2k6sj2f6yzyj3a55r7iv1590l1wz7";
+    sha256 = "110fs5manyaq6rxbzwzs9x3aqw8d5l4177y9qaj3xhgpr2hniggn";
   };
 
   buildInputs = [ makeWrapper jre ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://zookeeper.apache.org";
+    homepage = http://zookeeper.apache.org;
     description = "Apache Zookeeper";
     license = licenses.asl20;
     maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ];

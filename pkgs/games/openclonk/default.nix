@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, gnome3, pcre, freetype, glew, gtk3, libjpeg, libpng,
   SDL, SDL_mixer, libupnp, xorg, pkgconfig, gtest, tinyxml, gmock, readline,
-  libxkbcommon, epoxy, at_spi2_core, dbus, libxml2,
+  libxkbcommon, epoxy, at-spi2-core, dbus, libxml2,
   enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
 }:
 
@@ -29,12 +29,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cmake gnome3.gtksourceview pcre freetype glew gtk3 libjpeg libpng SDL
     SDL_mixer libupnp tinyxml xorg.libpthreadstubs libxkbcommon xorg.libXdmcp
-    pkgconfig gtest gmock readline epoxy at_spi2_core dbus libxml2
+    pkgconfig gtest gmock readline epoxy at-spi2-core dbus libxml2
   ];
 
   meta = with stdenv.lib; {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
-    homepage = "http://openclonk.org";
+    homepage = http://openclonk.org;
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     platforms = platforms.all;
   };

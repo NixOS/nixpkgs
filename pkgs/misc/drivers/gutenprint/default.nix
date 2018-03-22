@@ -1,21 +1,21 @@
 # this package was called gimp-print in the past
-{ stdenv, lib, fetchurl, pkgconfig
-, ijs, makeWrapper
+{ stdenv, lib, fetchurl, makeWrapper, pkgconfig
+, ijs, zlib
 , gimp2Support ? false, gimp
 , cupsSupport ? true, cups, libusb, perl
 }:
 
 stdenv.mkDerivation rec {
-  name = "gutenprint-5.2.11";
+  name = "gutenprint-5.2.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/gimp-print/${name}.tar.bz2";
-    sha256 = "1yadw96rgp1z0jv1wxrz6cds36nb693w3xlv596xw9r5w394r8y1";
+    sha256 = "0hi7s0y59306p4kp06sankfa57k2805khbknkvl9d036hdfp9afr";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs =
-    [ ijs ]
+    [ ijs zlib ]
     ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
     ++ lib.optionals cupsSupport [ cups libusb perl ];
 
@@ -44,8 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ghostscript and cups printer drivers";
-    homepage = http://sourceforge.net/projects/gimp-print/;
+    homepage = https://sourceforge.net/projects/gimp-print/;
     license = licenses.gpl2;
     platforms = platforms.linux;
+    isGutenprint = true;
   };
 }

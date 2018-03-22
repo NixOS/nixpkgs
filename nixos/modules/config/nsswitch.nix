@@ -18,7 +18,7 @@ let
 
   hostArray = [ "files" ]
     ++ optionals mymachines [ "mymachines" ]
-    ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
+    ++ optionals nssmdns [ "mdns_minimal [NOTFOUND=return]" ]
     ++ optionals nsswins [ "wins" ]
     ++ optionals resolved ["resolve [!UNAVAIL=return]"]
     ++ [ "dns" ]
@@ -28,7 +28,8 @@ let
   passwdArray = [ "files" ]
     ++ optional sssd "sss"
     ++ optionals ldap [ "ldap" ]
-    ++ optionals mymachines [ "mymachines" ];
+    ++ optionals mymachines [ "mymachines" ]
+    ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
     ++ optional sssd "sss"

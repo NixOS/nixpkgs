@@ -21,7 +21,7 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to configure xnosh as an interactive shell.
+          Whether to configure xonsh as an interactive shell.
         '';
         type = types.bool;
       };

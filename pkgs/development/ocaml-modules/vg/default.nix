@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg
-, uchar, result, gg, uutf, otfm, js_of_ocaml,
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
+, uchar, result, gg, uutf, otfm
+, js_of_ocaml, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
 }:
@@ -25,13 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "1czd2fq85hy24w5pllarsq4pvbx9rda5zdikxfxdng8s9kff2h3f";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
-                          ++ optionals htmlcBackend [ js_of_ocaml ];
-
-  createFindlibDestdir = true;
+                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-ppx ];
 
   unpackCmd = "tar xjf $src";
 

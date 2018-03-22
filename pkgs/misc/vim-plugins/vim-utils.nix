@@ -325,11 +325,14 @@ rec {
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = {name, vimrcConfig}: vimWithRC {
+    customize = { name, vimrcConfig }: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
       inherit name;
       vimrcFile = vimrcFile vimrcConfig;
     };
+
+    override = f: makeCustomizable (vim.override f);
+    overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
@@ -373,8 +376,10 @@ rec {
   }
   '';
 
-  addRtp = path: derivation:
-    derivation // { rtp = "${derivation}/${path}"; };
+  addRtp = path: attrs: derivation:
+    derivation // { rtp = "${derivation}/${path}"; } // {
+      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
+    };
 
   buildVimPlugin = a@{
     name,
@@ -383,16 +388,20 @@ rec {
     unpackPhase ? "",
     configurePhase ? "",
     buildPhase ? "",
+    preInstall ? "",
+    postInstall ? "",
     path ? (builtins.parseDrvName name).name,
     addonInfo ? null,
     ...
   }:
-    addRtp "${rtpPath}/${path}" (stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" a (stdenv.mkDerivation (a // {
       name = namePrefix + name;
 
-      inherit unpackPhase configurePhase buildPhase addonInfo;
+      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
       installPhase = ''
+        runHook preInstall
+
         target=$out/${rtpPath}/${path}
         mkdir -p $out/${rtpPath}
         cp -r . $target
@@ -401,6 +410,8 @@ rec {
         if [ -n "$addonInfo" ]; then
           echo "$addonInfo" > $target/addon-info.json
         fi
+
+        runHook postInstall
       '';
     }));
 

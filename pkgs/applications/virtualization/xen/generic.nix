@@ -53,8 +53,9 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig which
+    cmake which
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib iasl libaio
@@ -153,12 +154,12 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/xenstat/Makefile \
       --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
-    ${optionalString (config.version >= "4.8") ''
+    ${optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
       substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
         --replace /bin/mkdir mkdir
     ''}
 
-    ${optionalString (config.version < "4.6") ''
+    ${optionalString (builtins.compareVersions config.version "4.6" < 0) ''
       # TODO: use this as a template and support our own if-up scripts instead?
       substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
         --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
@@ -220,6 +221,7 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  # TODO(@oxij): Stop referencing args here
   meta = {
     homepage = http://www.xen.org/;
     description = "Xen hypervisor and related components"
@@ -230,5 +232,5 @@ stdenv.mkDerivation (rec {
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
-  };
+  } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

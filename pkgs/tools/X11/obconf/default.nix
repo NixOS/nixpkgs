@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1fanjdmd8727kk74x5404vi8v7s4kpq48l583d12fsi4xvsfb8vi";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk2 libglade libSM openbox imlib2 libstartup_notification
+    gtk2 libglade libSM openbox imlib2 libstartup_notification
     makeWrapper
   ];
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GUI configuration tool for openbox";
-    homepage = "http://openbox.org/wiki/ObConf";
+    homepage = http://openbox.org/wiki/ObConf;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
     platforms = stdenv.lib.platforms.linux;

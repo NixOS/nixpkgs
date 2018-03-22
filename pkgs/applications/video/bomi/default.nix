@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, perl, python, which
-, libX11, libxcb, mesa
+, libX11, libxcb, libGLU_combined
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
 , libchardet
 , ffmpeg
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildInputs = with stdenv.lib;
                 [ libX11
                   libxcb
-                  mesa
+                  libGLU_combined
                   qtbase
                   qtx11extras
                   qtdeclarative
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Powerful and easy-to-use multimedia player";
-    homepage = "https://bomi-player.github.io/";
+    homepage = https://bomi-player.github.io/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

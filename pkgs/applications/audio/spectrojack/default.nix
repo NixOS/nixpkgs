@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://sed.free.fr/spectrojack/${name}.tar.gz";
     sha256 = "0p5aa55hnazv5djw0431mza068h7mjkb9pnglxfpqkx5z0czisdx";
   };
-  buildInputs = [ pkgconfig libjack2 fftwFloat gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 fftwFloat gtk2 ];
   configurePhase= ''
     sed -i 's/.*home.*/#&/' ./Makefile
     substituteInPlace ./Makefile \

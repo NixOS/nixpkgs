@@ -8,11 +8,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/omxil/omxil/Bellagio%20${version}/${name}.tar.gz";
     sha256 = "0k6p6h4npn8p1qlgq6z3jbfld6n1bqswzvxzndki937gr0lhfg2r";
   };
-  
+
+  configureFlags =
+    stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
+
   patches = [ ./fedora-fixes.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/projects/omxil/;
+    homepage = https://sourceforge.net/projects/omxil/;
     description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
     license = licenses.lgpl21;
     platforms = platforms.linux;

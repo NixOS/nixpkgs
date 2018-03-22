@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared_mime_info, hicolor_icon_theme }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info, hicolor-icon-theme }:
 
 let
   version = "2.11";
@@ -11,7 +11,8 @@ in stdenv.mkDerivation {
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  buildInputs = [ pkgconfig libxml2 gtk shared_mime_info hicolor_icon_theme libSM ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gtk shared-mime-info hicolor-icon-theme libSM ];
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
@@ -69,7 +70,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Fast, lightweight, gtk2 file manager";
-    homepage = "http://rox.sourceforge.net/desktop";
+    homepage = http://rox.sourceforge.net/desktop;
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];

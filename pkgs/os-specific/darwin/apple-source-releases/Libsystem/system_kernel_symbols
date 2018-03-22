@@ -376,7 +376,6 @@ _fsync
 _fsync$NOCANCEL
 _ftruncate
 _futimes
-_get_dp_control_port
 _getattrlist
 _getattrlistat
 _getattrlistbulk
@@ -452,7 +451,6 @@ _host_statistics
 _host_statistics64
 _host_swap_exception_ports
 _host_virtual_physical_table_info
-_host_zone_info
 _i386_get_ldt
 _i386_set_ldt
 _important_boost_assertion_token
@@ -838,7 +836,6 @@ _sendmsg$NOCANCEL
 _sendmsg_x
 _sendto
 _sendto$NOCANCEL
-_set_dp_control_port
 _setattrlist
 _setaudit
 _setaudit_addr

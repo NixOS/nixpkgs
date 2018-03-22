@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "iana-etc-${version}";
-  version = "20170512";
+  version = "20180108";
 
   src = fetchurl {
     url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "0zx2ag894qldvrv8f4hs84644kdcp8a83gjg33xsw8rrn38gll2a";
+    sha256 = "1x4jacrvjwcsan88rg2wf2a8bajsglg6w4396vbr18zh0sya84a2";
   };
 
   installPhase = ''
-    mkdir -p $out/etc
-    cp services protocols $out/etc/
+    install -D -t $out/etc services protocols
   '';
 
   meta = with stdenv.lib; {

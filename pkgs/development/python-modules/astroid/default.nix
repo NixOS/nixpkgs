@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "astroid";
-  version = "1.5.3";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "492c2a2044adbf6a84a671b7522e9295ad2f6a7c781b899014308db25312dd35";
+    sha256 = "f0a0e386dbca9f93ea9f3ea6f32b37a24720502b7baa9cb17c3976a680d43a06";
   };
 
   propagatedBuildInputs = [ logilab_common six lazy-object-proxy wrapt ]
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A abstract syntax tree for Python with inference support";
-    homepage = http://bitbucket.org/logilab/astroid;
+    homepage = https://bitbucket.org/logilab/astroid;
     license = licenses.lgpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ nand0p ];

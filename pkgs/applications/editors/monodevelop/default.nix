@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchNuGet
-, autoconf, automake, pkgconfig, shared_mime_info, intltool
+, autoconf, automake, pkgconfig, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
 }:
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p2" ];
   patches = [ ./git-revert-12d610fb3f6dce121df538e36f21d8c2eeb0a6e3.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake pkgconfig shared_mime_info intltool
+    autoconf automake shared-mime-info intltool
     mono gtk-sharp-2_0 gnome-sharp unzip
-    pkgconfig
     dotnetPackages.NUnit
     dotnetPackages.NUnitRunners
     dotnetPackages.Nuget

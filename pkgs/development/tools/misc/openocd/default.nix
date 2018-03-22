@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bhn2c85rdz4gf23358kg050xlzh7yxbbwmqp24c0akmh3bff4kk";
   };
 
-  buildInputs = [ libftdi libusb1 pkgconfig hidapi ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libftdi libusb1 hidapi ];
 
   configureFlags = [
     "--enable-jtag_vpi"
@@ -22,6 +23,12 @@ stdenv.mkDerivation rec {
     "--enable-buspirate"
     "--enable-sysfsgpio"
     "--enable-remote-bitbang"
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-implicit-fallthrough"
+    "-Wno-format-truncation"
+    "-Wno-format-overflow"
   ];
 
   postInstall = ''

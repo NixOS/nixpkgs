@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://www.dettus.net/n2048/";
+    homepage = http://www.dettus.net/n2048/;
   };
 }

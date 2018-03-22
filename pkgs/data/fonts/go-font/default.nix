@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     mv $out/share/fonts/truetype/README $out/share/doc/go-font/LICENSE
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "10hfm2cpxlx1ng7r2mbvykjhmy131qlgzpdzj7ibg9kr293bcjc0";
+
   meta = with stdenv.lib; {
     homepage = https://blog.golang.org/go-fonts;
     description = "The Go font family";

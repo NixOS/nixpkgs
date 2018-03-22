@@ -12,8 +12,10 @@ let
     url="mirror://sourceforge/project/libebook/libe-book-0.1.2/libe-book-0.1.2.tar.xz";
     sha256="1v48pd32r2pfysr3a3igc4ivcf6vvb26jq4pdkcnq75p70alp2bz";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gperf pkgconfig librevenge libxml2 boost icu cppunit zlib
+    gperf librevenge libxml2 boost icu cppunit zlib
   ];
 
   # Boost 1.59 compatability fix
@@ -24,7 +26,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs postPatch;
+  inherit nativeBuildInputs buildInputs postPatch;
   src = fetchurl {
     inherit (s) url sha256;
   };

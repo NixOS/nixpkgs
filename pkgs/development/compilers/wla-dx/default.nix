@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.villehelin.com/wla.html";
+    homepage = http://www.villehelin.com/wla.html;
     description = "Yet Another GB-Z80/Z80/6502/65C02/6510/65816/HUC6280/SPC-700 Multi Platform Cross Assembler Package";
     license = licenses.gpl2;
     maintainers = with maintainers; [ matthewbauer ];

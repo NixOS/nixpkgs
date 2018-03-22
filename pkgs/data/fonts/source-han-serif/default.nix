@@ -1,26 +1,20 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
 let
-  makePackage = {variant, language, region, sha256}: stdenv.mkDerivation rec {
+  makePackage = {variant, language, region, sha256}: let
     version = "1.000R";
-    name = "source-han-serif-${variant}-${version}";
     revision = "f6cf97d92b22e7bd77e355a61fe549ae44b6de76";
+  in fetchzip {
+    name = "source-han-serif-${variant}-${version}";
 
-    buildInputs = [ unzip ];
+    url = "https://github.com/adobe-fonts/source-han-serif/raw/${revision}/SubsetOTF/SourceHanSerif${region}.zip";
 
-    src = fetchurl {
-      url = "https://github.com/adobe-fonts/source-han-serif/raw/${revision}/SubsetOTF/SourceHanSerif${region}.zip";
-      inherit sha256;
-    };
-
-    setSourceRoot = ''
-      sourceRoot=$( echo SourceHanSerif* )
-    '';
-
-    installPhase = ''
+    postFetch = ''
       mkdir -p $out/share/fonts/opentype
-      cp $( find . -name '*.otf' ) $out/share/fonts/opentype
+      unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
     '';
+
+    inherit sha256;
 
     meta = {
       description = "${language} subset of an open source Pan-CJK serif typeface";
@@ -36,24 +30,24 @@ in
     variant = "japanese";
     language = "Japanese";
     region = "JP";
-    sha256 = "0488zxr6jpwinzayrznc4ciy8mqcq9afx80xnp37pl9gcxsv0jp7";
+    sha256 = "0cklcy6y3r7pg8z43fzd8zl5g46bkqa1iy0li49rm0fgdaw7kin2";
   };
   korean = makePackage {
     variant = "korean";
     language = "Korean";
     region = "KR";
-    sha256 = "1kwsqrb3s52nminq65n3la540dgvahnhvgwv5h168nrmz881ni9r";
+    sha256 = "0lxrr978djsych8fmbl57n1c9c7ihl61w0b9q4plw27vd6p41fza";
   };
   simplified-chinese = makePackage {
     variant = "simplified-chinese";
     language = "Simplified Chinese";
     region = "CN";
-    sha256 = "0y6js0hjgf1i8mf7kzklcl02qg0bi7j8n7j1l4awmkij1ix2yc43";
+    sha256 = "0k3x4kncjnbipf4i3lkk6b33zpf1ckp5648z51v48q47l3zqpm6p";
   };
   traditional-chinese = makePackage {
     variant = "traditional-chinese";
     language = "Traditional Chinese";
     region = "TW";
-    sha256 = "0q52dn0vh3pqpr9gn4r4qk99lkvhf2gl12y99n9423brrqyfbi6h";
+    sha256 = "00bi66nlkrargmmf4av24qfd716py7a9smcvr4xnll7fffldxv06";
   };
 }

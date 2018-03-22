@@ -1,17 +1,24 @@
 { stdenv
 , python3Packages
 , fetchFromGitHub
-, systemd }:
+, systemd
+, xrandr }:
 
 let
   python = python3Packages.python;
-  wrapPython = python3Packages.wrapPython;
-  version = "1.1";
+  version = "1.4";
 in
   stdenv.mkDerivation {
     name = "autorandr-${version}";
 
     buildInputs = [ python ];
+
+    # no wrapper, as autorandr --batch does os.environ.clear()
+    buildPhase = ''
+      substituteInPlace autorandr.py \
+        --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+        --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -33,6 +40,7 @@ in
         make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
           UDEV_RULES_DIR=/etc/udev/rules.d
       ''}
+
       runHook postInstall
     '';
 
@@ -40,11 +48,11 @@ in
       owner = "phillipberndt";
       repo = "autorandr";
       rev = "${version}";
-      sha256 = "05jlzxlrdyd4j90srr71fv91c2hf32diw40n9rmybgcdvy45kygd";
+      sha256 = "08i71r221ilc8k1c59w89g3iq5m7zwhnjjzapavhqxlr8y9dcpf5";
     };
 
     meta = {
-      homepage = "http://github.com/phillipberndt/autorandr/";
+      homepage = https://github.com/phillipberndt/autorandr/;
       description = "Auto-detect the connect display hardware and load the appropiate X11 setup using xrandr";
       license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ stdenv.lib.maintainers.coroa ];

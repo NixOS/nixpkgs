@@ -10,13 +10,14 @@ let
     url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
     sha256 = "0zysjhr58nnmx7ba01q3zvgidkgcqxjdj4ld3gx5fc7wzvl1dm7s";
   };
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    qt4 poppler_qt4 pkgconfig djvulibre libspectre cups file ghostscript
+    qt4 poppler_qt4 djvulibre libspectre cups file ghostscript
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://launchpad.net/qpdfview";
+    homepage = https://launchpad.net/qpdfview;
     updateWalker = true;
   };
 }

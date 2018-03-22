@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, avahi, libjpeg, libusb1, libv4l, net_snmp
+, avahi, libjpeg, libusb1, libv4l, net_snmp, libpng
 , gettext, pkgconfig
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -20,12 +20,13 @@ stdenv.mkDerivation {
   outputs = [ "out" "doc" "man" ];
 
   configureFlags = []
-    ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
+    ++ stdenv.lib.optional (avahi != null)   "--enable-avahi"
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
 
-  buildInputs = [ avahi libusb1 libv4l net_snmp ];
+  buildInputs = [ avahi libusb1 libv4l net_snmp libpng ];
   nativeBuildInputs = [ gettext pkgconfig ];
+  enableParallelBuilding = true;
 
   postInstall = let
 
@@ -67,10 +68,10 @@ stdenv.mkDerivation {
       video- and still-cameras, frame-grabbers, etc. For a list of supported
       scanners, see http://www.sane-project.org/sane-backends.html.
     '';
-    homepage = "http://www.sane-project.org/";
+    homepage = http://www.sane-project.org/;
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ nckx peti ];
+    maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;
   };
 }

@@ -1,51 +1,55 @@
-{ stdenv, lib, fetchurl, php }:
+{ stdenv, lib, fetchurl, writeScript, writeText, php }:
 
 let
-  version = "1.2.1";
+  name = "wp-cli-${version}";
+  version = "1.5.0";
 
-  bin  = "bin/wp";
-  ini  = "etc/php/wp-cli.ini";
-  phar = "share/wp-cli/wp-cli.phar";
+  src = fetchurl {
+    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
+    sha256 = "17dgbcalvz5gw6xqgcywh6jrybj0qlglm16cgbshjsp6axwxa5gn";
+  };
 
   completion = fetchurl {
     url    = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
     sha256 = "15d330x6d3fizrm6ckzmdknqg6wjlx5fr87bmkbd5s6a1ihs0g24";
   };
 
-in stdenv.mkDerivation rec {
-  name = "wp-cli-${version}";
+  bin = writeScript "wp" ''
+    #! ${stdenv.shell}
 
-  src = fetchurl {
-    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "1ds9nhm0akajwykblg0s131vki02k3rpf72a851r3wjw2qv116wz";
-  };
+    set -euo pipefail
 
-  buildCommand = ''
-    mkdir -p $out/bin $out/etc/php
+    exec ${lib.getBin php}/bin/php \
+      -c ${ini} \
+      -f ${src} -- "$@"
+  '';
 
-    cat <<_EOF > $out/${bin}
-    #! ${stdenv.shell} -eu
-    exec ${lib.getBin php}/bin/php \\
-      -c $out/${ini} \\
-      -f $out/${phar} "\$@"
-    _EOF
-    chmod 755 $out/${bin}
+  ini = writeText "wp-cli.ini" ''
+    [PHP]
+    memory_limit = -1 ; no limit as composer uses a lot of memory
 
-    cat <<_EOF > $out/${ini}
     [Phar]
     phar.readonly = Off
-    _EOF
-    chmod 644 $out/${ini}
+  '';
 
-    install -Dm644 ${src}        $out/${phar}
+in stdenv.mkDerivation rec {
+  inherit name version;
+
+  buildCommand = ''
+    mkdir -p $out/{bin,share/bash-completion/completions}
+
+    ln      -s     ${bin}        $out/bin/wp
     install -Dm644 ${completion} $out/share/bash-completion/completions/wp
+
+    # this is a very basic run test
+    $out/bin/wp --info
   '';
 
   meta = with stdenv.lib; {
     description = "A command line interface for WordPress";
+    homepage    = https://wp-cli.org;
+    license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
-    homepage = https://wp-cli.org;
-    license = licenses.mit;
+    platforms   = platforms.all;
   };
 }

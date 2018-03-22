@@ -1,6 +1,7 @@
 { stdenv, fetchurl, lightdm, pkgconfig, intltool
-, hicolor_icon_theme, makeWrapper
+, hicolor-icon-theme, makeWrapper
 , useGTK2 ? false, gtk2, gtk3 # gtk3 seems better supported
+, exo
 }:
 
 #ToDo: bad icons with gtk2;
@@ -8,31 +9,26 @@
 
 let
   ver_branch = "2.0";
-  version = "2.0.1";
+  version = "2.0.4";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-gtk-greeter-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.gz";
-    sha256 = "031iv7zrpv27zsvahvfyrm75zdrh7591db56q89k8cjiiy600r1j";
+    sha256 = "1svbyq2l3l2d72k10nw79jz940rqsskryaim2viy6jfpv9k5jfv1";
   };
 
-  patches = [
-    (fetchurl {
-      name = "lightdm-gtk-greeter-2.0.1-lightdm-1.19.patch";
-      url = "https://588764.bugs.gentoo.org/attachment.cgi?id=442616";
-      sha256 = "0r383kjkvq9yanjc1lk878xc5g8993pjgxylqhhjb5rkpi1mbfsv";
-    })
-  ];
-
-  buildInputs = [ pkgconfig lightdm intltool makeWrapper ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lightdm exo intltool makeWrapper ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   installFlags = [
     "localstatedir=\${TMPDIR}"
@@ -43,11 +39,11 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
       --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
     wrapProgram "$out/sbin/lightdm-gtk-greeter" \
-      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
+      --prefix XDG_DATA_DIRS ":" "${hicolor-icon-theme}/share"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://launchpad.net/lightdm-gtk-greeter;
+    homepage = https://launchpad.net/lightdm-gtk-greeter;
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ocharles wkennington ];

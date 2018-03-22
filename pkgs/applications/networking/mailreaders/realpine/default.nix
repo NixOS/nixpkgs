@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://re-alpine.sf.net/";
+    homepage = http://re-alpine.sf.net/;
     downloadPage = "http://sourceforge.net/projects/re-alpine/files/";
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , gtk, girara, ncurses, gettext, docutils
-, file, sqlite, glib, texlive
-, synctexSupport ? true
+, file, sqlite, glib, texlive, libintlOrEmpty
+, gtk-mac-integration, synctexSupport ? true
 }:
 
 assert synctexSupport -> texlive != null;
@@ -10,20 +10,26 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "zathura-core-${version}";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchurl {
     url    = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "1w0g74dq4z2vl3f99s2gkaqrb5pskgzig10qhbxj4gq9yj4zzbr2";
+    sha256 = "0dz5pky3vmf3s2cp2rv1c099gb1s49p9xlgm3ghyy4pzyxc8bgs6";
   };
 
   icon = ./icon.xpm;
 
-  buildInputs = [
-    pkgconfig file gtk girara
-    gettext makeWrapper sqlite glib
-  ] ++ optional synctexSupport texlive.bin.core;
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ optional stdenv.isDarwin [ libintlOrEmpty ];
 
+  buildInputs = [
+    file gtk girara
+    gettext makeWrapper sqlite glib
+  ] ++ optional synctexSupport texlive.bin.core
+    ++ optional stdenv.isDarwin [ gtk-mac-integration ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage    = http://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
     license     = licenses.zlib;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ garbas ];
   };
 }

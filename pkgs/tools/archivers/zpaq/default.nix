@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Incremental journaling backup utility and archiver";
     homepage = http://mattmahoney.net/dc/zpaq.html;
     license = licenses.gpl3Plus ;
-    maintainers = with maintainers; [ raskin nckx ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     inherit version;
   };

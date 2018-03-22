@@ -12,11 +12,11 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "liquibase";
-  version = "3.5.3";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${name}-bin.tar.gz";
-    sha256 = "04cpnfycv0ms70d70w8ijqp2yacj2svs7v3lk99z1bpq3rzx51gv";
+    sha256 = "1ipjbzdb32xigm0vg6zzjnbx9n248rrkr324n5igp53nxbvgf3fs";
   };
 
   buildInputs = [ jre makeWrapper ];
@@ -34,6 +34,15 @@ stdenv.mkDerivation rec {
     in ''
       mkdir -p $out/{bin,lib,sdk}
       mv ./* $out/
+
+      # Clean up documentation.
+      mkdir -p $out/share/doc/${name}
+      mv $out/LICENSE.txt \
+         $out/README.txt \
+         $out/share/doc/${name}
+
+      # Remove silly files.
+      rm $out/liquibase.bat $out/liquibase.spec
 
       # we provide our own script
       rm $out/liquibase
@@ -54,9 +63,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version Control for your database";
-    homepage = "http://www.liquibase.org/";
+    homepage = http://www.liquibase.org/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus profpatsch ];
+    maintainers = with maintainers; [ nequissimus ];
     platforms = with platforms; unix;
   };
 }

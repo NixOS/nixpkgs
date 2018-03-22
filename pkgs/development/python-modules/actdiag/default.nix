@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "actdiag";
-  version = "0.5.3";
+  version = "0.5.4";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vr4hnkr0gcvvpaycd8q3vcx029b2f5yv8swhdr8kwspaqb0dvfa";
+    sha256 = "983071777d9941093aaef3be1f67c198a8ac8d2bba264cdd1f337ca415ab46af";
   };
 
   buildInputs = [ pep8 nose unittest2 docutils ];

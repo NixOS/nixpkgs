@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, path }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "safefile";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = ''
       cd ${toString ./.}
-      ${toString <nixpkgs/pkgs/build-support/upstream-updater/update-walker.sh>} default.nix
+      ${toString path}/pkgs/build-support/upstream-updater/update-walker.sh default.nix
     '';
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://research.cs.wisc.edu/mist/safefile/";
+    homepage = http://research.cs.wisc.edu/mist/safefile/;
     updateWalker = true;
   };
 }

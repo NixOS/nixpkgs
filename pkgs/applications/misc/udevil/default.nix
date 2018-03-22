@@ -5,7 +5,8 @@ stdenv.mkDerivation {
     url = https://github.com/IgnorantGuru/udevil/archive/0.4.4.tar.gz;
     sha256 = "0z1bhaayambrcn7bgnrqk445k50ifabmw8q4i9qj49nnbcvxhbxd";
   };
-  buildInputs = [ intltool glib pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib udev ];
   configurePhase = ''
     substituteInPlace src/Makefile.in --replace "-o root -g root" ""
     # do not set setuid bit in nix store

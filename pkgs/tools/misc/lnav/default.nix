@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tstack";
     repo = "lnav";
     rev = "v${meta.version}";
-    sha256 = "1jdjn64cxgbhhyg73cisrfrk7vjg1hr9nvkmfdk8gxc4g82y3xxc";
+    sha256 = "0hq9ri6a18z682gihxlbh1rndka0v6brkdqsyfsgh4c2fgib4fb7";
     inherit name;
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/tstack/lnav";
+    homepage = https://github.com/tstack/lnav;
     description = "The Logfile Navigator";
     longDescription = ''
       The log file navigator, lnav, is an enhanced log file viewer that takes
@@ -43,8 +43,9 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.2";
+    version = "0.8.3";
     maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }

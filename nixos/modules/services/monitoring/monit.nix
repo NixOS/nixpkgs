@@ -17,20 +17,22 @@ in
       };
       config = mkOption {
         default = "";
-        description = "monit.conf content";
+        description = "monitrc content";
       };
     };
   };
 
   config = mkIf config.services.monit.enable {
 
+    environment.systemPackages = [ pkgs.monit ];
+
     environment.etc = [
       {
         source = pkgs.writeTextFile {
-          name = "monit.conf";
+          name = "monitrc";
           text = config.services.monit.config;
         };
-        target = "monit.conf";
+        target = "monitrc";
         mode = "0400";
       }
     ];
@@ -40,9 +42,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.monit}/bin/monit -I -c /etc/monit.conf";
-        ExecStop = "${pkgs.monit}/bin/monit -c /etc/monit.conf quit";
-        ExecReload = "${pkgs.monit}/bin/monit -c /etc/monit.conf reload";
+        ExecStart = "${pkgs.monit}/bin/monit -I -c /etc/monitrc";
+        ExecStop = "${pkgs.monit}/bin/monit -c /etc/monitrc quit";
+        ExecReload = "${pkgs.monit}/bin/monit -c /etc/monitrc reload";
         KillMode = "process";
         Restart = "always";
       };

@@ -10,7 +10,7 @@ with lib;
     i18n = {
       glibcLocales = mkOption {
         type = types.path;
-        default = pkgs.glibcLocales.override {
+        default = pkgs.buildPackages.glibcLocales.override {
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
@@ -43,7 +43,7 @@ with lib;
           <literal>"all"</literal> means that all locales supported by
           Glibc will be installed.  A full list of supported locales
           can be found at <link
-          xlink:href="http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc"/>.
+          xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
         '';
       };
 

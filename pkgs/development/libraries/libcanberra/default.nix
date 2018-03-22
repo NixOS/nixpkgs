@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libtool alsaLib libpulseaudio libvorbis gtk libcap
+    libtool alsaLib libpulseaudio libvorbis gtk libcap
     /*gstreamer gst-plugins-base*/      # ToDo: gstreamer not found (why?), add (g)udev?
   ];
 

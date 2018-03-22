@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  minorVersion = "6";
+  minorVersion = "8";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "0h2z248hkf8x1ix1z8npkqs9cq62i322sl4rcjdkp7mawsxjhd7i";
+    sha256 = "1sn3i9z9m56inlfrqs250qv8snl8w211wpig2pfjlyrcj3x75919";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -63,6 +63,13 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  patches = [
+    ./no-ldconfig.patch
+    ./ld_library_path.patch
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
+  ];
 
   postPatch = ''
     # Determinism
@@ -98,6 +105,9 @@ in stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''
+     + optionalString stdenv.hostPlatform.isMusl ''
+      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
      ''}
   '';
 
@@ -107,7 +117,10 @@ in stdenv.mkDerivation {
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/python${majorVersion}/test/*; do
-      if [[ "$item" != */test_support.py* ]]; then
+      if [[ "$item" != */test_support.py*
+         && "$item" != */test/support
+         && "$item" != */test/libregrtest
+         && "$item" != */test/regrtest.py* ]]; then
         rm -rf "$item"
       else
         echo $item
@@ -127,7 +140,6 @@ in stdenv.mkDerivation {
 
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
-    ln -s "$out/bin/pip3" "$out/bin/pip"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
@@ -153,7 +165,7 @@ in stdenv.mkDerivation {
   in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
-    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
     pkgs = pythonPackages;
     isPy3 = true;
@@ -178,6 +190,6 @@ in stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

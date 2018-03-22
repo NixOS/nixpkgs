@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libXft, cairo, harfbuzz
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libXft, cairo, harfbuzz
 , libintlOrEmpty, gobjectIntrospection, darwin
 }:
 
@@ -6,14 +6,14 @@ with stdenv.lib;
 
 let
   ver_maj = "1.40";
-  ver_min = "6";
+  ver_min = "14";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "ca152b7383a1e9f7fd74ae96023dc6770dc5043414793bfe768ff06b6759e573";
+    sha256 = "90af1beaa7bf9e4c52db29ec251ec4fd0a8f2cc185d521ad1f88d01b3a6a17e3";
   };
 
   outputs = [ "bin" "dev" "out" "devdoc" ];

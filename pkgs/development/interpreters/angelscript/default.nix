@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="angelscript";
-    version = "2.31.2";
+    version = "2.32.0";
     name="${baseName}-${version}";
     url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "1cl1yg36ad4wq0vks4xg0hv7iyvq6yzsd4y1jng5qdf8qybq02qc";
+    sha256 = "0675hza06v3grxyqfy70gzm57idmbbm7qvi6bg5vf8m6mpw757dl";
   };
   buildInputs = [
     unzip

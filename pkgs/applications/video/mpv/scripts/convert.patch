@@ -11,6 +11,21 @@
  -- default options, convert_script.conf is read
  local options = {
      bitrate_multiplier = 0.975,			-- to make sure the file won’t go over the target file size, set it to 1 if you don’t care
+@@ -247,12 +247,12 @@
+     if string.len(vf) > 0 then
+         vf = vf .. ","
+     end
+-    local sub_file_table = mp.get_property_native("options/sub-file")
++    local sub_file_table = mp.get_property_native("options/sub-files")
+     local sub_file = ""
+     for index, param in pairs(sub_file_table) do
+         sub_file = sub_file .. " --sub-file='" .. string.gsub(tostring(param), "'", "'\\''") .. "'"
+     end
+-    local audio_file_table = mp.get_property_native("options/audio-file")
++    local audio_file_table = mp.get_property_native("options/audio-files")
+     local audio_file = ""
+     for index, param in pairs(audio_file_table) do
+         audio_file = audio_file .. " --audio-file='" .. string.gsub(tostring(param), "'", "'\\''") .. "'"
 @@ -354,9 +358,9 @@
      if ovc == "gif" then
          full_command = full_command .. ' --vf-add=lavfi=graph=\\"framestep=' .. framestep .. '\\" && convert ' 

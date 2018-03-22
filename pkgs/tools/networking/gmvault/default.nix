@@ -21,11 +21,12 @@ pythonPackages.buildPythonApplication rec {
     cat ${startScript} > etc/scripts/gmvault
     chmod +x etc/scripts/gmvault
     substituteInPlace setup.py --replace "==" ">="
+    substituteInPlace setup.py --replace "argparse" ""
   '';
 
   meta = {
     description = "Backup and restore your gmail account";
-    homepage = "http://gmvault.org";
+    homepage = http://gmvault.org;
     license = pkgs.lib.licenses.agpl3Plus;
   };
 }

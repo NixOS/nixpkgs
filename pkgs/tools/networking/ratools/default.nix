@@ -11,15 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   makeFlags = "-C src";
 
   installPhase = ''
-    mkdir -p $out/{bin,sbin,share/man/man8}
-    cp bin/ractl $out/bin
-    cp bin/rad $out/sbin
-    cp man/* $out/share/man/man8
+    install -vD bin/* -t $out/bin
+    install -vD man/* -t $out/share/man/man8
   '';
 
   meta = with stdenv.lib; {

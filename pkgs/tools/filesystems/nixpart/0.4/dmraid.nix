@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Old-style RAID configuration utility";
-    longDescritipn = ''
+    longDescription = ''
       Old RAID configuration utility (still under development, though).
       It is fully compatible with modern kernels and mdadm recognizes
       its volumes. May be needed for rescuing an older system or nuking

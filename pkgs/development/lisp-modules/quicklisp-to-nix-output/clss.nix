@@ -1,35 +1,28 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clss'';
-  version = ''20170516-git'';
+  version = ''20180131-git'';
 
   description = ''A DOM tree searching engine based on CSS selectors.'';
 
-  deps = [ ];
+  deps = [ args."array-utils" args."documentation-utils" args."plump" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clss/2017-05-16/clss-20170516-git.tgz'';
-    sha256 = ''1c3fizlf4509hj4l6m9gjc64ijvlwnavwvvw3198cvvn6lp49r5f'';
+    url = ''http://beta.quicklisp.org/archive/clss/2018-01-31/clss-20180131-git.tgz'';
+    sha256 = ''0d4sblafhm5syjkv89h45i98dykpznb0ga3q9a2cxlvl98yklg8r'';
   };
-    
+
   packageName = "clss";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/clss[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["clss.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM clss DESCRIPTION A DOM tree searching engine based on CSS selectors. SHA256 1c3fizlf4509hj4l6m9gjc64ijvlwnavwvvw3198cvvn6lp49r5f URL
-    http://beta.quicklisp.org/archive/clss/2017-05-16/clss-20170516-git.tgz MD5 2e69a5197694a9654c0e9c5fced4152f NAME clss TESTNAME NIL FILENAME clss DEPS NIL
-    DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM clss DESCRIPTION A DOM tree searching engine based on CSS selectors.
+    SHA256 0d4sblafhm5syjkv89h45i98dykpznb0ga3q9a2cxlvl98yklg8r URL
+    http://beta.quicklisp.org/archive/clss/2018-01-31/clss-20180131-git.tgz MD5
+    138244b7871d8ea832832aa9cc5867e6 NAME clss FILENAME clss DEPS
+    ((NAME array-utils FILENAME array-utils)
+     (NAME documentation-utils FILENAME documentation-utils)
+     (NAME plump FILENAME plump) (NAME trivial-indent FILENAME trivial-indent))
+    DEPENDENCIES (array-utils documentation-utils plump trivial-indent) VERSION
+    20180131-git SIBLINGS NIL PARASITES NIL) */

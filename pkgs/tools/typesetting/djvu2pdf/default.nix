@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Creates djvu files from PDF files";
+    description = "Convert DjVu files to PDF files";
     homepage = http://0x2a.at/s/projects/djvu2pdf;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;

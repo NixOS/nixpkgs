@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
-  buildInputs = [ pkgconfig libxml2 libxslt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 libxslt ];
 
   preConfigure =
     ''

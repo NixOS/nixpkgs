@@ -1,25 +1,35 @@
-{ stdenv, fetchurl, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
+{ stdenv, fetchFromGitHub, fetchpatch, wxGTK, autoconf, automake, libtool, python, gettext, bash }:
 
 stdenv.mkDerivation rec {
   name = "wxHexEditor-${version}";
-  version = "v0.22";
+  version = "v0.24";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/wxhexeditor/${name}-src.tar.bz2";
-    sha256 = "15ir038g4lyw1q5bsay974hvj0nkg2yd9kccwxz808cd45fp411w";
+  src = fetchFromGitHub {
+    repo = "wxHexEditor";
+    owner = "EUA";
+    rev = version;
+    sha256 = "08xnhaif8syv1fa0k6lc3jm7yg2k50b02lyds8w0jyzh4xi5crqj";
   };
 
   buildInputs = [ wxGTK autoconf automake libtool python gettext ];
 
-  patchPhase = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+  preConfigure = "patchShebangs .";
+
+  prePatch = ''
+    substituteInPlace Makefile --replace "/usr" "$out"
     substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
-    substituteInPlace udis86/autogen.sh --replace "/bin/bash" "${bash}/bin/bash"
   '';
+
+  patches = [
+    # https://github.com/EUA/wxHexEditor/issues/90
+    (fetchpatch {
+      url = https://github.com/EUA/wxHexEditor/commit/d0fa3ddc3e9dc9b05f90b650991ef134f74eed01.patch;
+      sha256 = "1wcb70hrnhq72frj89prcqylpqs74xrfz3kdfdkq84p5qfz9svyj";
+    })
+  ];
 
   buildPhase = ''
     make OPTFLAGS="-fopenmp"
-
   '';
 
   meta = {
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
       a good reverse engineer tool like a good hex editor, you welcome.
       wxHexEditor could edit HDD/SDD disk devices or partitions in raw up to exabyte sizes.
     '';
-    homepage = "http://www.wxhexeditor.org/";
+    homepage = http://www.wxhexeditor.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -50,7 +50,9 @@ stdenv.mkDerivation {
       fontconfig intltool
     ];
 
-  enableParallelBuilding = true;
+  # $ make -C cinelerra edl.o
+  # edl.C:50:25: fatal error: versioninfo.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     description = "Video Editor";

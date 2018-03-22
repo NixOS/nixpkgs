@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     homepage = http://picat-lang.org/;
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.earldouglas ];
   };
 }

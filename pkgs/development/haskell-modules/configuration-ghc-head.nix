@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -18,6 +18,9 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
+  ghc-boot = null;
+  ghc-boot-th = null;
+  ghc-compact = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;
@@ -35,7 +38,7 @@ self: super: {
   xhtml = null;
 
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
@@ -43,10 +46,6 @@ self: super: {
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
-
-  # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
-  # https://github.com/haskell-suite/haskell-src-exts/issues/224
-  haskell-src-exts = dontCheck super.haskell-src-exts;
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {

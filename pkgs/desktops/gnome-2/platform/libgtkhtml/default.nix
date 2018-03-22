@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0msajafd42545dxzyr5zqka990cjrxw2yz09ajv4zs8m1w6pm9rw";
   };
 
-  buildInputs = [ pkgconfig gtk gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk gettext ];
   propagatedBuildInputs = [ libxml2 ];
 
   hardeningDisable = [ "format" ];

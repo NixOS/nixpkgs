@@ -15,7 +15,8 @@ stdenv.mkDerivation {
     sha256 = "0kmrjjjwrh6xgw590awcd52b86kksmv6rfgih75zvpiavr1ygwsi";
   };
 
-  buildInputs = [ autoreconfHook wxGTK30 boost lua zlib bzip2 xylib readline
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline
     gnuplot swig3 ];
 
   meta = {

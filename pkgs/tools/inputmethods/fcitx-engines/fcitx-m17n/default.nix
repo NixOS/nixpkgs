@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ffyhsg7bc6525k94kfhnja1h6ajlfprq72d286dp54cksnakyc4";
   };
 
-  buildInputs = [ cmake fcitx gettext m17n_lib m17n_db pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx gettext m17n_lib m17n_db ];
 
   preInstall = ''
     substituteInPlace im/cmake_install.cmake \

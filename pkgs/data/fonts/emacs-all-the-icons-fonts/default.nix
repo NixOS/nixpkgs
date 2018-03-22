@@ -1,20 +1,18 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "emacs-all-the-icons-fonts-${version}";
+let
   version = "3.1.1";
+in fetchzip {
+  name = "emacs-all-the-icons-fonts-${version}";
 
-  src = fetchFromGitHub {
-    owner = "domtronn";
-    repo = "all-the-icons.el";
-    rev = version;
-    sha256 = "0h8a2jvn2wfi3bqd35scmhm8wh20mlk09sy68m1whi9binzkm8rf";
-  };
+  url = "https://github.com/domtronn/all-the-icons.el/archive/${version}.zip";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/all-the-icons
-    for font in $src/fonts/*.ttf; do cp $font $out/share/fonts/all-the-icons; done
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/all-the-icons
   '';
+
+  sha256 = "0ps8q9nkx67ivgn8na4s012360v36jwr0951rsg7j6dyyw9g41jq";
 
   meta = with stdenv.lib; {
     description = "Icon fonts for emacs all-the-icons";

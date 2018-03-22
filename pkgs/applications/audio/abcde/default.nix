@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
+{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, eject, mkcue, glyr
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
-let version = "2.7.2";
+let version = "2.8.1";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
       url = "http://abcde.einval.com/download/abcde-${version}.tar.gz";
-      sha256 = "1pakpi41k8yd780mfp0snhia6mmwjwxk9lcrq6gynimch8b8hfda";
+      sha256 = "0f9bjs0phk23vry7gvh0cll9vl6kmc1y4fwwh762scfdvpbp3774";
     };
 
     # FIXME: This package does not support `distmp3', `eject', etc.
@@ -42,7 +42,7 @@ in
     postFixup = ''
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
         wrapProgram "$out/bin/$cmd" --prefix PATH ":" \
-          ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
+          ${stdenv.lib.makeBinPath [ "$out" which libcdio-paranoia cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
       done
     '';
 

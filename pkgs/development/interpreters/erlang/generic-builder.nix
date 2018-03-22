@@ -1,8 +1,8 @@
 { pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, gcc, autoreconfHook
+, libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, mesa ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 }:
 
 { baseName ? "erlang"
@@ -17,7 +17,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ mesa wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -26,12 +26,12 @@
 , installTargets ? "install install-docs"
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
-, meta ? null
+, meta ? {}
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else mesa != null && wxGTK != null && xorg != null);
+  else libGLU_combined != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;
@@ -47,9 +47,9 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  buildInputs =
-   [ perl gnum4 ncurses openssl autoreconfHook libxslt libxml2 makeWrapper gcc
-   ]
+  nativeBuildInputs = [ autoreconfHook makeWrapper perl gnum4 libxslt libxml2 ];
+
+  buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
@@ -101,8 +101,8 @@ in stdenv.mkDerivation ({
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.erlang.org/";
+  meta = with stdenv.lib; ({
+    homepage = http://www.erlang.org/;
     downloadPage = "http://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 
@@ -118,7 +118,7 @@ in stdenv.mkDerivation ({
     platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
-  };
+  } // meta);
 }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
@@ -140,5 +140,4 @@ in stdenv.mkDerivation ({
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
-// optionalAttrs (meta != null)         { inherit meta; }
 )

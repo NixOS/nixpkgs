@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.12.0";
+  name = "valgrind-3.13.0";
 
   src = fetchurl {
-    url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "18bnrw9b1d55wi1wnl68n25achsp9w48n51n1xw4fwjjnaal7jk7";
+    url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
+    sha256 = "0fqc3684grrbxwsic1rc5ryxzxmigzjx9p5vf3lxa37h0gpq0rnp";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -18,7 +18,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optionals (stdenv.isDarwin) [ ./valgrind-bzero.patch ];
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+    let OSRELEASE = ''
+      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+    in ''
+      echo "Don't derive our xnu version using uname -r."
+      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+    ''
+  );
 
   postPatch = stdenv.lib.optionalString (stdenv.isDarwin)
     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).

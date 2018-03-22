@@ -1,0 +1,71 @@
+diff -Naur ProCaptureForLinux_3773/src/sources/ospi/linux-file.c ProCaptureForLinux_3773_new/src/sources/ospi/linux-file.c
+--- ProCaptureForLinux_3773/src/sources/ospi/linux-file.c	2017-12-15 01:59:57.000000000 -0800
++++ ProCaptureForLinux_3773_new/src/sources/ospi/linux-file.c	2017-12-23 22:47:33.666823299 -0800
+@@ -7,8 +7,9 @@
+ 
+ #include "linux-file.h"
+ 
+-#include <asm/uaccess.h>
+ #include <linux/sched.h>
++#include <asm/uaccess.h>
++#include <linux/version.h>
+ 
+ struct file *linux_file_open(const char *path, int flags, int mode)
+ {
+@@ -28,29 +29,36 @@
+     filp_close(file, NULL);
+ }
+ 
+-ssize_t linux_file_read(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_read(struct file *file, loff_t offset, void *data, size_t size)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
++    return(kernel_read(file, data, size, &offset));
++#else
+     mm_segment_t oldfs;
+     ssize_t ret;
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_read(file, data, size, &offset);
++    ret = vfs_read(file, (unsigned char *)data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
++#endif
+ }
+ 
+-ssize_t linux_file_write(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_write(struct file *file, loff_t offset, const void *data, size_t size)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
++    return(kernel_write(file, data, size, &offset));
++#else
+     mm_segment_t oldfs;
+     ssize_t ret;
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_write(file, data, size, &offset);
++    ret = vfs_write(file, (const unsigned char *)data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
++#endif
+ }
+-
+diff -Naur ProCaptureForLinux_3773/src/sources/ospi/linux-file.h ProCaptureForLinux_3773_new/src/sources/ospi/linux-file.h
+--- ProCaptureForLinux_3773/src/sources/ospi/linux-file.h	2017-12-15 01:59:57.000000000 -0800
++++ ProCaptureForLinux_3773_new/src/sources/ospi/linux-file.h	2017-12-23 22:46:22.028545189 -0800
+@@ -13,9 +13,9 @@
+ 
+ void linux_file_close(struct file *file);
+ 
+-ssize_t linux_file_read(struct file *file, loff_t offset, unsigned char *data, size_t size);
++ssize_t linux_file_read(struct file *file, loff_t offset, void *data, size_t size);
+ 
+-ssize_t linux_file_write(struct file *file, loff_t offset, unsigned char *data, size_t size);
++ssize_t linux_file_write(struct file *file, loff_t offset, const void *data, size_t size);
+ 
+ #endif /* __LINUX_FILE_H__ */
+ 

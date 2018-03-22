@@ -4,7 +4,7 @@ tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
 
 let
   name    = "maxima";
-  version = "5.39.0";
+  version = "5.41.0";
 
   searchPath =
     stdenv.lib.makeBinPath
@@ -15,7 +15,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1cvignn5y6qzrby6qb885yc8zdcdqdr1d50vcvc3gapw2f0gk3zm";
+    sha256 = "0x0n81z0s4pl8nwpf7ivlsbvsdphm9w42250g7qdkizl0132by6s";
   };
 
   buildInputs = stdenv.lib.filter (x: x != null)
@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
 
   meta = {
     description = "Computer algebra system";
-    homepage = "http://maxima.sourceforge.net";
+    homepage = http://maxima.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

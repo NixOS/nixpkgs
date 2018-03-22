@@ -10,13 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "1h3rydnaswcmlradafpw8q18zj88bbziad2vb6gn0q7ydr48f3jm";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig openssl attr keyutils asciidoc libxslt ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ openssl attr keyutils asciidoc libxslt ];
 
   buildPhase = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   meta = {
     description = "evmctl utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
-    homepage = "http://sourceforge.net/projects/linux-ima/";
+    homepage = https://sourceforge.net/projects/linux-ima/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

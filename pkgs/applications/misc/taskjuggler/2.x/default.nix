@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     "kde_locale=\${out}/share/locale";
 
   meta = {
-    homepage = "http://www.taskjuggler.org";
+    homepage = http://www.taskjuggler.org;
     license = stdenv.lib.licenses.gpl2;
     description = "Project management tool";
     longDescription = ''

@@ -1,24 +1,34 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, gtk2, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+  unzip, icoutils, gtk2, xorg, xdotool, xsel, plugins ? [] }:
 
-# KeePass looks for plugins in under directory in which KeePass.exe is
-# located. It follows symlinks where looking for that directory, so
-# buildEnv is not enough to bring KeePass and plugins together.
-#
-# This derivation patches KeePass to search for plugins in specified
-# plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.36";
+  version = "2.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1j6qhy8h3z6higbpq3q9v04amvgbn90yj3kbsvj17azdkffkwzny";
+    sha256 = "0m33gfpvv01xc28k4rrc8llbyk6qanm9rsqcnv8ydms0cr78dbbk";
   };
 
   sourceRoot = ".";
 
   buildInputs = [ unzip makeWrapper icoutils ];
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xorg.xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+    })
+  ];
+
+  # KeePass looks for plugins in under directory in which KeePass.exe is
+  # located. It follows symlinks where looking for that directory, so
+  # buildEnv is not enough to bring KeePass and plugins together.
+  #
+  # This derivation patches KeePass to search for plugins in specified
+  # plugin derivations in the Nix store and nowhere else.
   pluginLoadPathsPatch =
     let outputLc = toString (add 7 (length plugins));
         patchTemplate = readFile ./keepass-plugins.patch;
@@ -98,7 +108,7 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = http://www.keepass.info/;
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };

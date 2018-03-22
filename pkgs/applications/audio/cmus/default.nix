@@ -17,7 +17,7 @@
 #, waveoutSupport
 
 , cddbSupport ? true, libcddb ? null
-, cdioSupport ? true, libcdio ? null
+, cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
 , cueSupport ? true, libcue ? null
 , discidSupport ? (!stdenv.isDarwin), libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
@@ -69,7 +69,7 @@ let
 
     # Input file formats
     (mkFlag cddbSupport    "CONFIG_CDDB=y"    libcddb)
-    (mkFlag cdioSupport    "CONFIG_CDIO=y"    libcdio)
+    (mkFlag cdioSupport    "CONFIG_CDIO=y"    [ libcdio libcdio-paranoia ])
     (mkFlag cueSupport     "CONFIG_CUE=y"     libcue)
     (mkFlag discidSupport  "CONFIG_DISCID=y"  libdiscid)
     (mkFlag ffmpegSupport  "CONFIG_FFMPEG=y"  ffmpeg)
@@ -116,10 +116,13 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  buildInputs = [ ncurses pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ]
     ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ concatMap (a: a.deps) opts;
+
+  makeFlags = [ "LD=$(CC)" ];
 
   meta = with stdenv.lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";

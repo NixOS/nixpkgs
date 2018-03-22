@@ -4,20 +4,20 @@
 
 python3Packages.buildPythonApplication rec {
   name = "openshot-qt-${version}";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "10j3p10q66m9nhzcd8315q1yiqscidkjbm474mllw7c281vacvzw";
+    sha256 = "182dldj9ybs6aqjfrc9dqx1mifdyhv0rf3ifxcp52cm9rz5yv8ml";
   };
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 sip httplib2 pyzmq ];
+  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 requests sip httplib2 pyzmq ];
 
 
   preConfigure = ''

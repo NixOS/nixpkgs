@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, mesa }:
+{ stdenv, fetchurl, autoreconfHook, libGLU_combined }:
 
 let version = "1.0"; in
 
@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ibfdib277fhbqvxzan0bmglwnsl1y1rw2g8skvz82l1sfmmn752";
   };
 
-  buildInputs = [ autoreconfHook mesa ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libGLU_combined ];
 
   meta = {
     description = "A patent-free S3TC compatible implementation";

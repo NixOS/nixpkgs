@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, opam}:
+{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg }:
 
 buildOcaml rec {
   version = "0.8.3";
@@ -11,16 +11,9 @@ buildOcaml rec {
 
   unpackCmd = "tar -xf $curSrc";
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
-  buildPhase = ''
-    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build
-  '';
-
-  installPhase = ''
-    opam-installer --script --prefix=$out astring.install | sh
-    ln -s $out/lib/astring $out/lib/ocaml/${ocaml.version}/site-lib/
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   meta = {
     homepage = http://erratique.ch/software/astring;

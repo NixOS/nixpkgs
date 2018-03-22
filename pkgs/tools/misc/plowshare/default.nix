@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "plowshare-${version}";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "mcrapet";
     repo = "plowshare";
     rev = "v${version}";
-    sha256 = "116291w0z1r61xm3a3zjlh85f05pk4ng9f1wbj9kv1j3xrjn4v4c";
+    sha256 = "1p8s60dlzaldp006yj710s371aan915asyjhd99188vrj4jj1x79";
   };
 
   buildInputs = [ makeWrapper ];

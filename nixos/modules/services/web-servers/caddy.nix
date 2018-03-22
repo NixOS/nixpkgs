@@ -5,12 +5,22 @@ with lib;
 let
   cfg = config.services.caddy;
   configFile = pkgs.writeText "Caddyfile" cfg.config;
-in
-{
+in {
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 
     config = mkOption {
+      default = "";
+      example = ''
+        example.com {
+        gzip
+        minify
+        log syslog
+
+        root /srv/http
+        }
+      '';
+      type = types.lines;
       description = "Verbatim Caddyfile to use";
     };
 

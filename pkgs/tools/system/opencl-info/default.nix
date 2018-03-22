@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tool to dump OpenCL platform/device information";
-    homepage = "https://github.com/marchv/opencl-info";
+    homepage = https://github.com/marchv/opencl-info;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -6,18 +6,18 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "alembic";
-  version = "0.9.2";
+  version = "0.9.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iw6wysm83hycvrycymf9b4mkji47536kl3x7grynfcbyjcvbdm2";
+    sha256 = "13b8611788acf0d7b617775db5c2ae26554a6d4263c590ef628d448fd05aef56";
   };
 
   buildInputs = [ pytest pytestcov mock coverage ];
   propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil ];
 
   meta = with stdenv.lib; {
-    homepage = http://bitbucket.org/zzzeek/alembic;
+    homepage = https://bitbucket.org/zzzeek/alembic;
     description = "A database migration tool for SQLAlchemy";
     license = licenses.mit;
   };

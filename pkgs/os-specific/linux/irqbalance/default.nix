@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
-  name = "irqbalance-1.1.0";
+  name = "irqbalance-${version}";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "irqbalance";
     repo = "irqbalance";
-    rev = "a23de3c455b88060620d102f6946b1d8be9e2680";
-    sha256 = "06yq5k5v9wiwajqcjkbkk46g212qx78x323bygnyqshc5s25mp2x";
+    rev = "v${version}";
+    sha256 = "009777p5v72x4r58skqgaf03qv3app9b8lkxkpxq0226l0x3j4qh";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ glib ncurses libcap_ng ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  LDFLAGS = "-lncurses";
 
   meta = {
     homepage = https://github.com/Irqbalance/irqbalance;

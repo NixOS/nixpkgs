@@ -68,12 +68,12 @@
 
       <varlistentry><term><varname>
         $outputDevdoc</varname></term><listitem><para>
-        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
+        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc and devhelp books in there.  It goes to <varname>devdoc</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
       </para></listitem></varlistentry>
 
       <varlistentry><term><varname>
         $outputMan</varname></term><listitem><para>
-        is for man pages (except for section 3). They go to <varname>man</varname> or <varname>doc</varname> or <varname>$outputBin</varname> by default.
+        is for man pages (except for section 3). They go to <varname>man</varname> or <varname>$outputBin</varname> by default.
       </para></listitem></varlistentry>
 
       <varlistentry><term><varname>
@@ -83,7 +83,7 @@
 
       <varlistentry><term><varname>
         $outputInfo</varname></term><listitem><para>
-        is for info pages. They go to <varname>info</varname> or <varname>doc</varname> or <varname>$outputMan</varname> by default.
+        is for info pages. They go to <varname>info</varname> or <varname>$outputBin</varname> by default.
       </para></listitem></varlistentry>
 
     </variablelist>

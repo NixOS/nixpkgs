@@ -4,36 +4,23 @@
 
 stdenv.mkDerivation rec {
   name = "drumstick-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${name}.tar.bz2";
-    sha256 = "13pkfqrav30bbcddgf1imd7jk6lpqbxkz1qv31718pdl446jq7df";
+    sha256 = "0avwxr6n9ra7narxc5lmkhdqi8ix10gmif8rpd06wp4g9iv46xrn";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   enableParallelBuilding = true;
 
-  # Prevent the manpage builds from attempting to access the Internet.
-  prePatch = ''
-    substituteInPlace cmake_admin/CreateManpages.cmake --replace \
-      http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl \
-      ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl
-
-    for xml in doc/*.xml.in; do
-      substituteInPlace "$xml" --replace \
-        http://www.docbook.org/xml/4.5/docbookx.dtd \
-        ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
-    done
-  '';
-
   #Temporarily remove drumstick-piano; Gives segment fault. Submitted ticket
   postInstall = ''
     rm $out/bin/drumstick-vpiano
     '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_45 ];
   buildInputs = [
     alsaLib doxygen fluidsynth qt5.qtbase qt5.qtsvg
   ];

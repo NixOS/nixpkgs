@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "feh-${version}";
-  version = "2.19";
+  version = "2.25.1";
 
   src = fetchurl {
-    url = "http://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1sfhr6628xpj9p6bqihdq35y139x2gmrpydjlrwsl1rs77c2bgnf";
+    url = "https://feh.finalrewind.org/${name}.tar.bz2";
+    sha256 = "197sm78bm33dvahr5nxqkbmpmdn4b13ahc9mrgn1l7n104bg4phc";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
-  preBuild = ''
-    makeFlags="PREFIX=$out exif=1"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)" "exif=1"
+  ] ++ optional stdenv.isDarwin "verscmp=0";
 
   postBuild = ''
     pushd man
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A light-weight image viewer";
-    homepage = https://derf.homelinux.org/projects/feh/;
+    homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.viric ];
+    maintainers = [ maintainers.viric maintainers.willibutz ];
     platforms = platforms.unix;
   };
 }

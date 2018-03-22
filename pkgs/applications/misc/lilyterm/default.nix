@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   inherit (stuff) src version;
 
-  buildInputs = [ pkgconfig autoconf automake intltool gettext gtk vte ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake intltool gettext gtk vte ];
 
   preConfigure = "sh autogen.sh";
 
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://lilyterm.luna.com.tw/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ AndersonTorres profpatsch ];
+    maintainers = with maintainers; [ AndersonTorres Profpatsch ];
     platforms = platforms.linux;
   };
 }

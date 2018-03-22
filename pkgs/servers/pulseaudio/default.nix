@@ -36,18 +36,19 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "10.0";
+  version = "11.1";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0mrg8qvpwm4ifarzphl3749p7p050kdx1l6mvsaj03czvqj6h653";
+    sha256 = "17ndr6kc7hpv4ih4gygwlcpviqifbkvnk4fbwf4n25kpb991qlpj";
   };
 
   patches = [ ./caps-fix.patch ]
-            ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
-              url = "https://bugs.freedesktop.org/attachment.cgi?id=127889";
-              sha256 = "063h5vmh4ykgxjbxyxjlj6qhyyxhazbh3p18p1ik69kq24nkny9m";
-            });
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "padsp-fix.patch";
+      url = "https://git.alpinelinux.org/cgit/aports/plain/testing/pulseaudio/0001-padsp-Make-it-compile-on-musl.patch?id=167be02bf4618a90328e2b234f6a63a5dc05f244";
+      sha256 = "0gf4w25zi123ghk0njapysvrlljkc3hyanacgiswfnnm1i8sab1q";
+    });
 
   outputs = [ "out" "dev" ];
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (

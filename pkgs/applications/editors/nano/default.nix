@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.8.6";
+  version = "2.9.4";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "0xjpm2ka56x5ycrgjh06v110na13xlbm42bs8qibk7g578m9cils";
+    sha256 = "0nm3zy4azr5rkxjq7jfybbj3cnddmvxc49rxyqm9cp2zfdp75y9c";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -41,6 +41,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://www.nano-editor.org/;

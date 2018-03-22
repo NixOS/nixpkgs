@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "aescrypt-${version}";
 
   src = fetchurl {
-    url = "http://www.aescrypt.com/download/v3/linux/${name}.tgz";
+    url = "https://www.aescrypt.com/download/v3/linux/${name}.tgz";
     sha256 = "1a1rs7xmbxh355qg3v02rln3gshvy3j6wkx4g9ir72l22mp6zkc7";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
-    homepage    = http://www.aescrypt.com/;
+    homepage    = https://www.aescrypt.com/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 qknight ];
     platforms   = stdenv.lib.platforms.all;

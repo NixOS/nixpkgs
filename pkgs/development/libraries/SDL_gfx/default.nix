@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ] ;
 
-  configureFlags = [ "--disable-mmx" ];
+  configureFlags = [ "--disable-mmx" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
   meta = with stdenv.lib; {
     description = "SDL graphics drawing primitives and support functions";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
          code. Its is written in plain C and can be used in C++ code.
        '';
 
-    homepage = "https://sourceforge.net/projects/sdlgfx/";
+    homepage = https://sourceforge.net/projects/sdlgfx/;
     license = licenses.zlib;
 
     maintainers = with maintainers; [ bjg ];

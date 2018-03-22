@@ -2,15 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "cdk-${version}";
-  version ="5.0-20161210";
+  version ="5.0-20171209";
 
   buildInputs = [
     ncurses
   ];
 
   src = fetchurl {
-    url = "ftp://invisible-island.net/cdk/cdk-${version}.tgz";
-    sha256 = "1bazwcwz4qhxyc8jaahdd2nlm30f5dhy0f6cnix5rjjhi35mhxcy";
+    urls = [
+      "ftp://ftp.invisible-island.net/cdk/cdk-${version}.tgz"
+      "https://invisible-mirror.net/archives/cdk/cdk-${version}.tgz"
+    ];
+    sha256 = "0jq0dx7gm7gl6lv5mhlfkxhw5362g9dxqdlpjlrag069nns8xdc8";
   };
 
   meta = with stdenv.lib; {

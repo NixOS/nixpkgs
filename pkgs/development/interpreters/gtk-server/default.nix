@@ -9,13 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "0z8ng5rhxc7fpsj3d50h25wkgcnxjfy030jm8r9w9m729w2c9hxb";
   };
 
-  buildInputs = [ libffcall gtk2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libffcall gtk2 ];
 
   configureOptions = [ "--with-gtk2" ];
 
   meta = {
     description = "gtk-server for interpreted GUI programming";
-    homepage = "http://www.gtk-server.org/";
+    homepage = http://www.gtk-server.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.tohl];
     platforms = stdenv.lib.platforms.linux;

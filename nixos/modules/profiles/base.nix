@@ -9,7 +9,7 @@
   environment.systemPackages = [
     pkgs.w3m-nox # needed for the manual anyway
     pkgs.testdisk # useful for repairing boot problems
-    pkgs.mssys # for writing Microsoft boot sectors / MBRs
+    pkgs.ms-sys # for writing Microsoft boot sectors / MBRs
     pkgs.efibootmgr
     pkgs.efivar
     pkgs.parted
@@ -20,6 +20,7 @@
 
     # Some networking tools.
     pkgs.fuse
+    pkgs.fuse3
     pkgs.sshfs-fuse
     pkgs.socat
     pkgs.screen

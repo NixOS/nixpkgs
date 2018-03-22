@@ -2,7 +2,7 @@
 , hostPlatform
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLSupported, libGL, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
@@ -67,15 +67,30 @@ stdenv.mkDerivation rec {
   patches =
     [ ./glib-2.32.patch
       ./libressl.patch
+      ./parallel-configure.patch
+      ./clang-5-darwin.patch
+      ./qt-4.8.7-unixmake-darwin.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then stdenv.lib.getLib cups else null;
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
-        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
+        openglDriver = if libGLSupported then libGL.driverLink else "/no-such-path";
       })
-    ] ++ stdenv.lib.optional gtkStyle (substituteAll ({
+      (fetchpatch {
+        name = "fix-medium-font.patch";
+        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
+          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
+        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
+      })
+      (fetchpatch {
+        name = "qt4-gcc6.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      })
+    ]
+    ++ stdenv.lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
         gtk = gtk2.out;
@@ -89,19 +104,16 @@ stdenv.mkDerivation rec {
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
-    ++ [
-      (fetchpatch {
-        name = "fix-medium-font.patch";
-        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
-          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
-        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
+    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
+        sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
       })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
-    ];
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+        ./qt-musl.patch
+        ./qt-musl-iconv-no-bom.patch
+        ./patch-qthread-stacksize.diff
+        ./qsettings-recursive-global-mutex.patch
+      ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
@@ -113,7 +125,9 @@ stdenv.mkDerivation rec {
       -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
+      --jobs=$NIX_BUILD_CORES
     "
+    unset LD # Makefile uses gcc for linking; setting LD interferes
   '' + optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
@@ -123,7 +137,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     ''
-      -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
+      -v -no-separate-debug-info -release -fast -confirm-license -opensource
 
       -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
       -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
@@ -145,7 +159,7 @@ stdenv.mkDerivation rec {
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
-    ++ optional mesaSupported mesa_glu
+    ++ optional libGLSupported libGLU
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
 
@@ -153,22 +167,23 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ optionals (mysql != null) [ mysql.lib ]
+    ++ optionals (mysql != null) [ mysql.connector-c ]
     ++ optionals gtkStyle [ gtk2 gdk_pixbuf ]
     ++ optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE =
-    optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
-    + optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
-    + optionalString stdenv.isDarwin " -I${libcxx}/include/c++/v1";
+    # with gcc7 the warnings blow the log over Hydra's limit
+    [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
+    ++ optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
+    ++ optionals (stdenv.isFreeBSD || stdenv.isDarwin)
+      [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
+    ++ optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-    "-lglib-2.0";
+  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
   preBuild = optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error
@@ -178,10 +193,9 @@ stdenv.mkDerivation rec {
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
 
-  postInstall =
-    ''
-      rm -rf $out/tests
-    '';
+  postInstall = ''
+    rm -rf $out/tests
+  '';
 
   crossAttrs = {
     # I've not tried any case other than i686-pc-mingw32.
@@ -196,11 +210,11 @@ stdenv.mkDerivation rec {
     '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
-        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
-        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
-        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
-        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.targetPrefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.targetPrefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.targetPrefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.targetPrefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.targetPrefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 
@@ -218,7 +232,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander ];
+    maintainers = with maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }

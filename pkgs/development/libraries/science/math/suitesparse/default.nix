@@ -7,7 +7,7 @@ let
   name = "suitesparse-${version}";
 
   int_t = if openblas.blas64 then "int64_t" else "int32_t";
-  SHLIB_EXT = if stdenv.isDarwin then "dylib" else "so";
+  SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 stdenv.mkDerivation {
   inherit name;
@@ -64,10 +64,10 @@ stdenv.mkDerivation {
         for i in "$out"/lib/lib*.a; do
           ar -x $i
         done
-        ${if enableCuda then cudatoolkit else stdenv.cc.outPath}/bin/${if enableCuda then "nvcc" else "cc"} *.o ${if stdenv.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse.${SHLIB_EXT}" -lopenblas ${stdenv.lib.optionalString enableCuda "-lcublas"}
+        ${if enableCuda then cudatoolkit else stdenv.cc.outPath}/bin/${if enableCuda then "nvcc" else "cc"} *.o ${if stdenv.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse${SHLIB_EXT}" -lopenblas ${stdenv.lib.optionalString enableCuda "-lcublas"}
     )
     for i in umfpack cholmod amd camd colamd spqr; do
-      ln -s libsuitesparse.${SHLIB_EXT} "$out"/lib/lib$i.${SHLIB_EXT}
+      ln -s libsuitesparse${SHLIB_EXT} "$out"/lib/lib$i${SHLIB_EXT}
     done
 
     # Install documentation

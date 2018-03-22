@@ -17,16 +17,17 @@
 , prompt_toolkit
 , pexpect
 , appnope
+, typing
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.1.0";
+  version = "6.2.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c53e8ee4d4bec27879982b9f3b4aa2d6e3cfd7b26782d250fa117f85bb29814";
+    sha256 = "51c158a6c8b899898d1c91c6b51a34110196815cc905f9be0fa5878e19355608";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -45,7 +46,8 @@ buildPythonPackage rec {
     traitlets
     prompt_toolkit
     pexpect
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+  ] ++ lib.optionals stdenv.isDarwin [appnope]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   LC_ALL="en_US.UTF-8";
 

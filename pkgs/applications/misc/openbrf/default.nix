@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, mesa }:
+{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU_combined }:
 
 
 stdenv.mkDerivation {
@@ -28,9 +28,10 @@ stdenv.mkDerivation {
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
 
     patchelf  \
-      --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc mesa ]}" \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU_combined ]}" \
       $out/share/openBrf/openBrf
 
+    mkdir -p "$out/bin"
     ln -s "$out/share/openBrf/openBrf" "$out/bin/openBrf"
   '';
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tool to edit resource files (BRF)";
-    homepage = "https://github.com/cfcohen/openbrf";
+    homepage = https://github.com/cfcohen/openbrf;
     maintainers = with stdenv.lib.maintainers; [ abbradar ];
     license = licenses.free;
     platforms = platforms.linux;

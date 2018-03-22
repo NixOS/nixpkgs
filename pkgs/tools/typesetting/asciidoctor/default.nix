@@ -1,9 +1,17 @@
-{ stdenv, lib, bundlerEnv, ruby_2_2, curl }:
+{ stdenv, lib, bundlerApp, ruby, curl }:
 
-bundlerEnv rec {
+bundlerApp {
+  inherit ruby;
   pname = "asciidoctor";
-  ruby = ruby_2_2;
   gemdir = ./.;
+
+  exes = [
+    "asciidoctor"
+    "asciidoctor-bespoke"
+    "asciidoctor-latex"
+    "asciidoctor-pdf"
+    "asciidoctor-safe"
+  ];
 
   meta = with lib; {
     description = "A faster Asciidoc processor written in Ruby";

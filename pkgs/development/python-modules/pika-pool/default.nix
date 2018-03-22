@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pika ];
   meta = with stdenv.lib; {
-    homepage = "https://github.com/bninja/pika-pool";
+    homepage = https://github.com/bninja/pika-pool;
     license = licenses.bsdOriginal;
     description = "Pools for pikas.";
   };

@@ -33,7 +33,7 @@ in {
   };
 
   libressl_2_6 = generic {
-    version = "2.6.0";
-    sha256 = "0lwapvfda4zj4r0kxn9ys43l5wyfgpljmhq0j1lr45spfis5b3g4";
+    version = "2.6.4";
+    sha256 = "07yi37a2ghsgj2b4w30q1s4d2inqnix7ika1m21y57p9z71212k3";
   };
 }

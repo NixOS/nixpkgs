@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, asciidoc, docbook_xml_dtd_45
 , docbook_xsl, libxslt, libxml2, makeWrapper
-, dbus, libconfig, libdrm, mesa_noglu, pcre, libX11, libXcomposite, libXdamage
+, dbus, libconfig, libdrm, libGL, pcre, libX11, libXcomposite, libXdamage
 , libXinerama, libXrandr, libXrender, libXext, xwininfo }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     pcre
     libconfig
     dbus
-    mesa_noglu
+    libGL
   ];
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/chjj/compton/";
+    homepage = https://github.com/chjj/compton/;
     description = "A fork of XCompMgr, a sample compositing manager for X servers";
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X

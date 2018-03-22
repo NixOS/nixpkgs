@@ -1,8 +1,7 @@
+{ lib }:
 rec {
   pcBase = {
     name = "pc";
-    uboot = null;
-    kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
@@ -30,7 +29,6 @@ rec {
     };
 
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v5_defconfig";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -49,15 +47,11 @@ rec {
     kernelTarget = "uImage";
     # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
     #kernelDTB = true;
-
-    # XXX can be anything non-null, pkgs actually only cares if it is set or not
-    uboot = "pogoplug4";
   };
 
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v5_defconfig";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -161,9 +155,6 @@ rec {
     '';
     kernelMakeFlags = [ "LOADADDR=0x0200000" ];
     kernelTarget = "uImage";
-    uboot = "sheevaplug";
-    # Only for uboot = uboot :
-    ubootConfig = "sheevaplug_config";
     kernelDTB = true; # Beyond 3.10
     gcc = {
       arch = "armv5te";
@@ -174,7 +165,6 @@ rec {
   raspberrypi = {
     name = "raspberrypi";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "bcm2835_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
@@ -250,7 +240,6 @@ rec {
       LATENCYTOP y
     '';
     kernelTarget = "zImage";
-    uboot = null;
     gcc = {
       arch = "armv6";
       fpu = "vfp";
@@ -341,7 +330,6 @@ rec {
       XEN? n
     '';
     kernelTarget = "zImage";
-    uboot = null;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // {
@@ -355,7 +343,6 @@ rec {
   utilite = {
     name = "utilite";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -373,7 +360,6 @@ rec {
     kernelMakeFlags = [ "LOADADDR=0x10800000" ];
     kernelTarget = "uImage";
     kernelDTB = true;
-    uboot = true; #XXX: any non-null value here is needed so that mkimage is present to build kernelTarget uImage
     gcc = {
       cpu = "cortex-a9";
       fpu = "neon";
@@ -388,13 +374,11 @@ rec {
     # patch.
 
     kernelBaseConfig = "guruplug_defconfig";
-    #kernelHeadersBaseConfig = "guruplug_defconfig";
   };
 
   fuloong2f_n32 = {
     name = "fuloong2f_n32";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "fuloong2e_defconfig";
     kernelBaseConfig = "lemote2f_defconfig";
     kernelArch = "mips";
     kernelAutoModules = false;
@@ -463,7 +447,6 @@ rec {
       FTRACE n
     '';
     kernelTarget = "vmlinux";
-    uboot = null;
     gcc = {
       arch = "loongson2f";
       abi = "n32";
@@ -472,25 +455,27 @@ rec {
 
   beaglebone = armv7l-hf-multiplatform // {
     name = "beaglebone";
-    kernelBaseConfig = "omap2plus_defconfig";
+    kernelBaseConfig = "bb.org_defconfig";
     kernelAutoModules = false;
     kernelExtraConfig = ""; # TBD kernel config
     kernelTarget = "zImage";
-    uboot = null;
   };
 
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelDTB = true;
     kernelAutoModules = true;
     kernelPreferBuiltin = true;
-    uboot = null;
     kernelTarget = "zImage";
     kernelExtraConfig = ''
+      # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.
+      SERIAL_8250_BCM2835AUX y
+      SERIAL_8250_EXTENDED y
+      SERIAL_8250_SHARE_IRQ y
+
       # Fix broken sunxi-sid nvmem driver.
       TI_CPTS y
 
@@ -524,7 +509,6 @@ rec {
   aarch64-multiplatform = {
     name = "aarch64-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-    kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     kernelArch = "arm64";
     kernelDTB = true;
@@ -543,12 +527,31 @@ rec {
 
       # Cavium ThunderX stuff.
       PCI_HOST_THUNDER_ECAM y
+
+      # Nvidia Tegra stuff.
+      PCI_TEGRA y
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA m
     '';
-    uboot = null;
     kernelTarget = "Image";
     gcc = {
       arch = "armv8-a";
     };
+  };
+
+  riscv-multiplatform = bits: {
+    name = "riscv-multiplatform";
+    kernelArch = "riscv";
+    bfdEmulation = "elf${bits}lriscv";
+    kernelTarget = "vmlinux";
+    kernelAutoModules = true;
+    kernelBaseConfig = "defconfig";
+    kernelExtraConfig = ''
+      FTRACE n
+      SERIAL_OF_PLATFORM y
+    '';
   };
 
   selectBySystem = system: {
@@ -558,6 +561,6 @@ rec {
       "armv6l-linux" = raspberrypi;
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
-      "mips64el-linux" = fuloong2f_n32;
+      "mipsel-linux" = fuloong2f_n32;
     }.${system} or pcBase;
 }

@@ -1,9 +1,0 @@
-diff -ru -x '*~' BayesBridge_orig/src/Makevars BayesBridge/src/Makevars
---- BayesBridge_orig/src/Makevars	2014-07-19 05:08:55.000000000 +0900
-+++ BayesBridge/src/Makevars	2014-10-25 18:35:01.398539305 +0900
-@@ -9,4 +9,4 @@
- # PKG_CPPFLAGS = -DUSE_R -DDISABLE_FIO -I../inst/include/ -DDISABLE_SINGLE -DNTHROW
- PKG_CPPFLAGS = -DUSE_R -DDISABLE_FIO -DDISABLE_SINGLE -DNTHROW
- # PKG_CPPFLAGS = -DUSE_R -DDISABLE_SINGLE -DNTHROW -Wall -pedantic -Wshadow  -ansi -Wsequence-point
--PKG_LIBS = $(BLAS_LIBS) $(FLIBS) $(LAPACK_LIBS) 
-+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)

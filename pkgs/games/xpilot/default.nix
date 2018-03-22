@@ -1,7 +1,7 @@
-{stdenv, fetchurl, libX11, libSM, SDL, mesa, expat, SDL_ttf, SDL_image, zlib}:
+{stdenv, fetchurl, libX11, libSM, SDL, libGLU_combined, expat, SDL_ttf, SDL_image, zlib}:
 let
   buildInputs = [
-    libX11 libSM SDL SDL_ttf SDL_image mesa expat zlib
+    libX11 libSM SDL SDL_ttf SDL_image libGLU_combined expat zlib
   ];
 in
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''A multiplayer X11 space combat game'';
-    homepage = "http://xpilot.sf.net/";
+    homepage = http://xpilot.sf.net/;
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

@@ -1,27 +1,14 @@
-Index: plasma-desktop-5.8.5/applets/pager/package/contents/ui/main.qml
-===================================================================
---- plasma-desktop-5.8.5.orig/applets/pager/package/contents/ui/main.qml
-+++ plasma-desktop-5.8.5/applets/pager/package/contents/ui/main.qml
-@@ -25,7 +25,7 @@ import org.kde.plasma.components 2.0 as
- import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddonsComponents
- import org.kde.draganddrop 2.0
- import org.kde.plasma.private.pager 2.0
--import "utils.js" as Utils
-+import "../code/utils.js" as Utils
- 
- MouseArea {
-     id: root
 Index: plasma-desktop-5.8.5/containments/desktop/package/contents/ui/FolderView.qml
 ===================================================================
 --- plasma-desktop-5.8.5.orig/containments/desktop/package/contents/ui/FolderView.qml
 +++ plasma-desktop-5.8.5/containments/desktop/package/contents/ui/FolderView.qml
 @@ -27,7 +27,7 @@ import org.kde.plasma.extras 2.0 as Plas
  import org.kde.kquickcontrolsaddons 2.0
- 
+
  import org.kde.private.desktopcontainment.folder 0.1 as Folder
 -import "FolderTools.js" as FolderTools
 +import "../code/FolderTools.js" as FolderTools
- 
+
  Item {
      id: main
 Index: plasma-desktop-5.8.5/containments/desktop/package/contents/ui/main.qml
@@ -29,14 +16,14 @@ Index: plasma-desktop-5.8.5/containments/desktop/package/contents/ui/main.qml
 --- plasma-desktop-5.8.5.orig/containments/desktop/package/contents/ui/main.qml
 +++ plasma-desktop-5.8.5/containments/desktop/package/contents/ui/main.qml
 @@ -30,8 +30,8 @@ import org.kde.kquickcontrolsaddons 2.0
- 
+
  import org.kde.private.desktopcontainment.desktop 0.1 as Desktop
- 
+
 -import "LayoutManager.js" as LayoutManager
 -import "FolderTools.js" as FolderTools
 +import "../code/LayoutManager.js" as LayoutManager
 +import "../code/FolderTools.js" as FolderTools
- 
+
  DragDrop.DropArea {
      id: root
 Index: plasma-desktop-5.8.5/containments/panel/contents/ui/main.qml
@@ -46,9 +33,9 @@ Index: plasma-desktop-5.8.5/containments/panel/contents/ui/main.qml
 @@ -25,7 +25,7 @@ import org.kde.plasma.components 2.0 as
  import org.kde.kquickcontrolsaddons 2.0
  import org.kde.draganddrop 2.0 as DragDrop
- 
+
 -import "LayoutManager.js" as LayoutManager
 +import "../code/LayoutManager.js" as LayoutManager
- 
+
  DragDrop.DropArea {
      id: root

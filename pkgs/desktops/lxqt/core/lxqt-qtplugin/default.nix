@@ -1,19 +1,19 @@
 {
-  stdenv, fetchFromGitHub, standardPatch,
+  stdenv, fetchFromGitHub,
   cmake, lxqt-build-tools,
-  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg,
+  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg, libfm-qt
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-qtplugin";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "12hyw7rk3zx51n6g2bazlqv70xap0lygm9v21ibxgy1aw0j6iy02";
+    sha256 = "1i1rga0pg764ccwhq7acdsckxpl1apxwj4lv4gygxxmpkrg62zkv";
   };
 
   nativeBuildInputs = [
@@ -28,11 +28,13 @@ stdenv.mkDerivation rec {
     qtsvg
     libdbusmenu
     libqtxdg
+    libfm-qt
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = standardPatch;
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
+  '';
 
   meta = with stdenv.lib; {
     description = "LXQt Qt platform integration plugin";

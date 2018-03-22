@@ -48,7 +48,7 @@ trouble with packages like `3dmodels` and `4Blocks`, because these names are
 invalid identifiers in the Nix language. The issue of how to deal with these
 rare corner cases is currently unresolved.)
 
-Haskell packages who's Nix name (second column) begins with a `haskell-` prefix
+Haskell packages whose Nix name (second column) begins with a `haskell-` prefix
 are packages that provide a library whereas packages without that prefix
 provide just executables. Libraries may provide executables too, though: the
 package `haskell-pandoc`, for example, installs both a library and an
@@ -334,14 +334,10 @@ navigate there.
 
 Finally, you can run
 ```shell
-hoogle server -p 8080
+hoogle server -p 8080 --local
 ```
 and navigate to http://localhost:8080/ for your own local
-[Hoogle](https://www.haskell.org/hoogle/). Note, however, that Firefox and
-possibly other browsers disallow navigation from `http:` to `file:` URIs for
-security reasons, which might be quite an inconvenience. See [this
-page](http://kb.mozillazine.org/Links_to_local_pages_do_not_work) for
-workarounds.
+[Hoogle](https://www.haskell.org/hoogle/).
 
 ### How to build a Haskell project using Stack
 
@@ -581,8 +577,8 @@ nix-shell "<nixpkgs>" -A haskellPackages.bar.env
 Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
-library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.config/nixpkgs/config.nix` file:
+library profiling for all packages. To accomplish that add the following
+snippet to your `~/.config/nixpkgs/config.nix` file:
 ```nix
 {
   packageOverrides = super: let self = super.pkgs; in
@@ -693,9 +689,7 @@ might be necessary to purge the local caches that store data from those
 machines to disable these binary channels for the duration of the previous
 command, i.e. by running:
 ```shell
-rm /nix/var/nix/binary-cache-v3.sqlite
-rm /nix/var/nix/manifests/*
-rm /nix/var/nix/channel-cache/*
+rm ~/.cache/nix/binary-cache*.sqlite
 ```
 
 ### Builds on Darwin fail with `math.h` not found
@@ -777,14 +771,14 @@ to find out the store path of the system's zlib library. Now, you can
     stack --extra-lib-dirs=/nix/store/alsvwzkiw4b7ip38l4nlfjijdvg3fvzn-zlib-1.2.8/lib build
     ```
 
-    Typically, you'll need `--extra-include-dirs` as well. It's possible
-    to add those flag to the project's `stack.yaml` or your user's
-    global `~/.stack/global/stack.yaml` file so that you don't have to
-    specify them manually every time. But again, you're likely better off
-    using Stack's Nix support instead.
+Typically, you'll need `--extra-include-dirs` as well. It's possible
+to add those flag to the project's `stack.yaml` or your user's
+global `~/.stack/global/stack.yaml` file so that you don't have to
+specify them manually every time. But again, you're likely better off
+using Stack's Nix support instead.
 
-    The same thing applies to `cabal configure`, of course, if you're
-    building with `cabal-install` instead of Stack.
+The same thing applies to `cabal configure`, of course, if you're
+building with `cabal-install` instead of Stack.
 
 ### Creating statically linked binaries
 
@@ -827,7 +821,7 @@ the work to be licensed" under the terms of the LGPL (including for free).
 
 The LGPL licensing for GMP is a problem for the overall licensing of binary
 programs compiled with GHC because most distributions (and builds) of GHC use
-static libraries. (Dynamic libraries are currently distributed only for OS X.)
+static libraries. (Dynamic libraries are currently distributed only for macOS.)
 The LGPL licensing situation may be worse: even though
 [The Glasgow Haskell Compiler License](https://www.haskell.org/ghc/license)
 is essentially a "free software" license (BSD3), according to
@@ -866,6 +860,67 @@ use the following to get the `scientific` package build with `integer-simple`:
 ```shell
 nix-build -A haskell.packages.integer-simple.ghc802.scientific
 ```
+
+### Quality assurance
+
+The `haskell.lib` library includes a number of functions for checking for
+various imperfections in Haskell packages. It's useful to apply these functions
+to your own Haskell packages and integrate that in a Continuous Integration
+server like [hydra](https://nixos.org/hydra/) to assure your packages maintain a
+minimum level of quality. This section discusses some of these functions.
+
+#### failOnAllWarnings
+
+Applying `haskell.lib.failOnAllWarnings` to a Haskell package enables the
+`-Wall` and `-Werror` GHC options to turn all warnings into build failures.
+
+#### buildStrictly
+
+Applying `haskell.lib.buildStrictly` to a Haskell package calls
+`failOnAllWarnings` on the given package to turn all warnings into build
+failures. Additionally the source of your package is gotten from first invoking
+`cabal sdist` to ensure all needed files are listed in the Cabal file.
+
+#### checkUnusedPackages
+
+Applying `haskell.lib.checkUnusedPackages` to a Haskell package invokes
+the [packunused](http://hackage.haskell.org/package/packunused) tool on the
+package. `packunused` complains when it finds packages listed as build-depends
+in the Cabal file which are redundant. For example:
+
+```
+$ nix-build -E 'let pkgs = import <nixpkgs> {}; in pkgs.haskell.lib.checkUnusedPackages {} pkgs.haskellPackages.scientific'
+these derivations will be built:
+  /nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv
+...
+detected package components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ - library
+ - testsuite(s): test-scientific
+ - benchmark(s): bench-scientific*
+
+(component names suffixed with '*' are not configured to be built)
+
+library
+~~~~~~~
+
+The following package dependencies seem redundant:
+
+ - ghc-prim-0.5.0.0
+
+testsuite(test-scientific)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+no redundant packages dependencies found
+
+builder for ‘/nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv’ failed with exit code 1
+error: build of ‘/nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv’ failed
+```
+
+As you can see, `packunused` finds out that although the testsuite component has
+no redundant dependencies the library component of `scientific-0.3.5.1` depends
+on `ghc-prim` which is unused in the library.
 
 ## Other resources
 

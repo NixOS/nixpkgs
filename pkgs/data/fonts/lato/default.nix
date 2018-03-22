@@ -1,21 +1,16 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation {
+fetchzip {
   name = "lato-2.0";
 
-  src = fetchurl {
-    url = http://www.latofonts.com/download/Lato2OFL.zip;
-    sha256 = "1f5540g0ja1nx3ddd3ywn77xc81ssrxpq8n3gyb9sabyq2b4xda2";
-  };
+  url = http://www.latofonts.com/download/Lato2OFL.zip;
 
-  sourceRoot = "Lato2OFL";
-
-  buildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/lato
-    cp *.ttf $out/share/fonts/lato
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/lato
   '';
+
+  sha256 = "1amwn6vcaggxrd2s4zw21s2pr47zmzdf2xfy4x9lxa2cd9bkhvg5";
 
   meta = with stdenv.lib; {
     homepage = http://www.latofonts.com/;

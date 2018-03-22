@@ -24,7 +24,7 @@ buildPythonApplication rec {
     PATH="${parted}/sbin:$PATH"
   '';
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ parted ];
 
@@ -34,7 +34,7 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "https://fedorahosted.org/pyparted/";
+    homepage = https://fedorahosted.org/pyparted/;
     description = "Python interface for libparted";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

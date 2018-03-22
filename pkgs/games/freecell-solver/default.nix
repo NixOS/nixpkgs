@@ -6,14 +6,15 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "freecell-solver-${version}";
-  version = "4.8.0";
+  version = "4.16.0";
 
   src = fetchurl {
     url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
-    sha256 = "0274l1p71ps222i62whqfkg80fcc8m4w2hmpbrbbd5gh8kfpman3";
+    sha256 = "1ihrmxbsli7c1lm5gw9xgrakyn4nsmaj1zgk5gza2ywnfpgdb0ac";
   };
 
-  buildInputs = [ pkgconfig cmake perl gmp libtap gperf
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake perl gmp libtap gperf
     perlPackages.TemplateToolkit perlPackages.StringShellQuote
     perlPackages.GamesSolitaireVerify perlPackages.TaskFreecellSolverTesting
     python3Packages.python python3Packages.random2 ];

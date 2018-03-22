@@ -1,45 +1,79 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool
-, glib, dbus, udev, libgudev, udisks2, libgcrypt, libcap, polkit
+{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+, glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
-, libxml2, libxslt, docbook_xsl, samba, libmtp
-, gnomeSupport ? false, gnome, makeWrapper }:
+, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
+, gnomeSupport ? false, gnome, makeWrapper
+, libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
+, libsecret, libgdata
+}:
 
 let
-  ver_maj = "1.30";
-  version = "${ver_maj}.1";
+  pname = "gvfs";
+  version = "1.36.0";
 in
 stdenv.mkDerivation rec {
-  name = "gvfs-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
-    sha256 = "e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1fsn6aa9a68cfbna9s00l1ry4ym1fr7ii2f45hzj2fipxfpqihwy";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libtool ];
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
+
+  nativeBuildInputs = [
+    meson ninja
+    pkgconfig gettext makeWrapper
+    libxml2 libxslt docbook_xsl docbook_xml_dtd_42
+  ];
 
   buildInputs =
-    [ makeWrapper glib dbus udev libgudev udisks2 libgcrypt
+    [ glib libgudev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
-      libxml2 libxslt docbook_xsl samba libmtp libcap polkit
+      samba libmtp libcap polkit libimobiledevice libbluray
+      libcdio-paranoia libnfs openssh
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
-      gtk libsoup libgnome_keyring gconf gcr
-      # ToDo: not working and probably useless until gnome3 from x-updates
+      libsoup gcr
+      gnome-online-accounts libsecret libgdata
     ]);
 
-  configureFlags = stdenv.lib.optional (!gnomeSupport) "--disable-gcr";
+  mesonFlags = [
+    "-Dgio_module_dir=${placeholder "out"}/lib/gio/modules"
+    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
+    "-Dtmpfilesdir=no"
+  ] ++ stdenv.lib.optionals (!gnomeSupport) [
+    "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
+    "-Dgoogle=false"
+  ] ++ stdenv.lib.optionals (samba == null) [
+    # Xfce don't want samba
+    "-Dsmb=false"
+  ];
 
   enableParallelBuilding = true;
 
-  # ToDo: one probably should specify schemas for samba and others here
   preFixup = ''
-    wrapProgram $out/libexec/gvfsd --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    for f in $out/libexec/*; do
+      wrapProgram $f \
+        ${stdenv.lib.optionalString gnomeSupport "--prefix GIO_EXTRA_MODULES : \"${stdenv.lib.getLib gnome.dconf}/lib/gio/modules\""} \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
   };
 }

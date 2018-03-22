@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lvnla1c1ig2w3xvvrqg2w9qm7a1ygzy1j2gg8j7p8c87i58x45v";
   };
 
-  buildInputs = [ openssl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = http://trousers.sourceforge.net/;
     license     = licenses.cpl10;
     maintainers = [ maintainers.ak ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }
 

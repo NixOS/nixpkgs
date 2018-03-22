@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1ai6vi5227z2ryxl403693xi63b42ylyfmzh8hbv4shp69zszm9c";
   };
 
-  buildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python ];
 
   phases = "unpackPhase installPhase";
 

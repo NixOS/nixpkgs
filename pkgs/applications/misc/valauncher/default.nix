@@ -1,17 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, gtk3, vala_0_26, pkgconfig, gnome3 }:
+{ stdenv, fetchFromGitHub, cmake, gtk3, vala, pkgconfig, gnome3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "1.2";
+  version = "1.3.1";
   name = "valauncher-${version}";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "valauncher";
     rev = "v${version}";
-    sha256 = "1d1gfmzmr5ra2rnjc6rbz31mf3hk7q04lh4i1hljgk7fh90dacb6";
+    sha256 = "18969v870737jg1q0l3d05pb9mxsrcpdi0mnyz94rwkspszvxxqi";
   };
 
-  buildInputs = [ cmake gtk3 vala_0_26 pkgconfig gnome3.libgee ];
+  nativeBuildInputs = [
+    cmake vala pkgconfig
+    # For setup hook
+    gobjectIntrospection
+  ];
+  buildInputs = [ gtk3 gnome3.libgee ];
 
   meta = with stdenv.lib; {
       description = "A fast dmenu-like gtk3 application launcher";

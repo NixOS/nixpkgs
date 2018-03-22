@@ -1,10 +1,12 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch
 , enableStatic ? false
 , enableMinimal ? false
-, useMusl ? false, musl
+, useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 , buildPlatform, hostPlatform
 }:
+
+assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 
 let
   configParser = ''
@@ -24,19 +26,30 @@ let
     }
   '';
 
+  libcConfig = lib.optionalString useMusl ''
+    CONFIG_FEATURE_UTMP n
+    CONFIG_FEATURE_WTMP n
+  '';
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.27.0";
+  name = "busybox-1.28.1";
 
+  # Note to whoever is updating busybox: please verify that:
+  # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
+  # still builds after the update.
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1kcr0jvik0c31ls4f3li359xv7w0b60hv64fknj28bwlkdgbvpx5";
+    sha256 = "0bk52cxxlya5hg9va87snr9caz9ppdrpdyjwrnbwamhi64y1vzlq";
   };
 
-  hardeningDisable = [ "format" ] ++ lib.optional enableStatic [ "fortify" ];
+  hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
 
-  patches = [ ./busybox-in-store.patch ];
+  patches = [
+    ./busybox-in-store.patch
+  ];
+
+  postPatch = "patchShebangs .";
 
   configurePhase = ''
     export KCONFIG_NOTIMESTAMP=1
@@ -62,8 +75,12 @@ stdenv.mkDerivation rec {
     # Set paths for console fonts.
     CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
+    # Bump from 4KB, much faster I/O
+    CONFIG_FEATURE_COPYBUF_KB 64
+
     ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    ${libcConfig}
     EOF
 
     make oldconfig
@@ -72,10 +89,10 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=${stdenv.cc.prefix}gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
-  nativeBuildInputs = lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = lib.optionals (enableStatic && !useMusl) [ stdenv.cc.libc stdenv.cc.libc.static ];
 
@@ -83,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = http://busybox.net/;
+    homepage = https://busybox.net/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;

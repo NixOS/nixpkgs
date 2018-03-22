@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "gotools-${version}";
-  version = "20160519-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "9ae4729fba20b3533d829a9c6ba8195b068f2abc";
+  version = "20170807-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "5d2fd3ccab986d52112bf301d47a819783339d0e";
 
   goPackagePath = "golang.org/x/tools";
   goPackageAliases = [ "code.google.com/p/go.tools" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
+    sha256 = "0r3fp7na6pg0bc5xfycjvv951f0vma1qfnpw5zy6l75yxm5r47kn";
   };
 
   goDeps = ./deps.nix;

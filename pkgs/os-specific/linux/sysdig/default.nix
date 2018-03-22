@@ -3,26 +3,18 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.16.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
+    sha256 = "0nbsfm2jh5gjy2wh79f35rqk3c3z15lymmcz3gviw0jaxdv6drzw";
   };
-
-  patches = [
-    (fetchpatch {
-       # Sysdig fails to run on linux kernels with unified cgroups enabled
-       url = https://github.com/draios/sysdig/files/909689/0001-Fix-for-linux-kernels-with-cgroup-v2-API-enabled.patch.txt;
-       sha256 = "10nmisifa500hzpa3899rs837bcal72pnqidxmrnr1js187z8j84";
-    })
-  ];
 
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
-  ];
+  ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 
@@ -43,23 +35,7 @@ stdenv.mkDerivation rec {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = makeLibraryPath [
-    zlib
-    luajit
-    ncurses
-    jsoncpp
-    curl
-    jq
-    openssl
-    libb64
-    gcc
-    stdenv.cc.cc
-  ];
-
-  postInstall = optionalString (!stdenv.isDarwin) ''
-    patchelf --set-rpath "$libPath" "$out/bin/sysdig"
-    patchelf --set-rpath "$libPath" "$out/bin/csysdig"
-  '' + optionalString (kernel != null) ''
+  postInstall = optionalString (kernel != null) ''
     make install_driver
     kernel_dev=${kernel.dev}
     kernel_dev=''${kernel_dev#/nix/store/}

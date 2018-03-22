@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "urh-${version}";
-  version = "1.5.5";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = "urh";
     rev = "v${version}";
-    sha256 = "1f7hz2zs2dx3v6hpdyz7wyyq1xf641jhpljyhvmjr4zg5m035isa";
+    sha256 = "02jq2jas6gm08z4l09azi6dcsydaaaqbxfv4mb7pnrc1w8m593zr";
   };
 
   buildInputs = [ hackrf rtl-sdr ];
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     inherit (src.meta) homepage;
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
     license = licenses.asl20;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
   };
 }

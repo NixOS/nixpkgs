@@ -2,15 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "unrar-${version}";
-  version = "5.5.5";
+  version = "5.5.8";
 
   src = fetchurl {
-    url = "http://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "1vv1s1pa0pf1r0h7dw89ha9y68x7hdm82csnkh6ms0igrcwkhmd4";
+    url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
+    sha256 = "1x7wnb6zgs09v2bf5xaqz14daba8k7zikadj1qabqi4r78sy8rlv";
   };
 
   postPatch = ''
-    sed 's/^CXX=g++/#CXX/' -i makefile
+    substituteInPlace makefile \
+      --replace "CXX=" "#CXX=" \
+      --replace "STRIP=" "#STRIP=" \
+      --replace "AR=" "#AR="
   '';
 
   buildPhase = ''

@@ -1,16 +1,20 @@
-{stdenv, fetchgit, autoconf, automake, boost, zlib, libpng, libjpeg, libtiff}:
+{ stdenv, fetchFromGitHub, autoconf, automake, boost
+, zlib, libpng, libjpeg, libtiff, x11, SDL
+}:
 
-stdenv.mkDerivation {
-  name = "povray-3.7";
+stdenv.mkDerivation rec {
+  name = "povray-${version}";
+  version = "3.7.0.7";
 
-  src = fetchgit {
-    url = "https://github.com/POV-Ray/povray.git";
-    rev = "39ce8a24e50651904010dda15872d63be15d7c37";
-    sha256 = "1nbs9vwf6fn3jkm0myfnbn7nrc17q8ppzmr4h7kj49nr0710ifw0";
+  src = fetchFromGitHub {
+    owner = "POV-Ray";
+    repo = "povray";
+    rev = "v${version}";
+    sha256 = "0gqbc4ycjfqpnixzzqxlygmargk6sm77b0k3xzff9dxdrak3xng7";
   };
 
 
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff ];
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff x11 SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
@@ -23,7 +27,7 @@ stdenv.mkDerivation {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
 
   enableParallelBuilding = true;
   
@@ -40,6 +44,6 @@ stdenv.mkDerivation {
     homepage = http://www.povray.org/;
     description = "Persistence of Vision Raytracer";
     license = licenses.free;
-	platforms = platforms.linux;
+    platforms = platforms.linux;
   };
 }

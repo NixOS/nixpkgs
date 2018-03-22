@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook libX11
+    autoreconfHook libX11
     pam libgcrypt libXrender imlib2
   ];
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
       xscreensaver and never will. It's just for locking the current
       X session.
     '';
-    platforms = with platforms; allBut cygwin;
+    platforms = platforms.unix; # Cygwin had problems at one point
     maintainers = with maintainers; [ ftrvxmtrx chris-martin ];
   };
 }

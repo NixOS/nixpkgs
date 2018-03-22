@@ -1,21 +1,23 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, libjack2
+{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
 , libxslt, lv2, pkgconfig, premake3, xorg, ladspa-sdk }:
 
 stdenv.mkDerivation rec {
-  name = "distrho-ports-unstable-2016-06-26";
+  name = "distrho-ports-unstable-2018-01-01";
 
-  src = fetchgit {
-    url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
-    rev = "e3969853ec9ba897c50ac060f0167313e2a18b29";
-    sha256 = "0id4p8dlnlv5271yvmyawfr754nzah7xhvjkj633lw5yr3mq707m";
+  src = fetchFromGitHub {
+    owner = "DISTRHO";
+    repo = "DISTRHO-Ports";
+    rev = "b200e7409aa9f6612c4d948932f6ce6f0a087f5a";
+    sha256 = "0672r0a9s6skzkxpjdraziwh5k8ivrfzvi4zcpkcg3zrv2hia2vz";
   };
 
   patchPhase = ''
     sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib fftwSinglePrec freetype libjack2 pkgconfig premake3
+    alsaLib fftwSinglePrec freetype libjack2 premake3
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender ladspa-sdk
   ];
@@ -36,12 +38,12 @@ stdenv.mkDerivation rec {
     description = "A collection of cross-platform audio effects and plugins";
     longDescription = ''
       Includes:
-      Dexed  drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
-      drowaudio-reverb drowaudio-tremolo drumsynt EasySSP  eqinox
-      JuceDemoPlugin klangfalter LUFSMeter luftikus obxd pitchedDelay
-      stereosourceseparation TAL-Dub-3 TAL-Filter TAL-Filter-2 TAL-NoiseMaker
-      TAL-Reverb TAL-Reverb-2 TAL-Reverb-3 TAL-Vocoder-2 TheFunction
-      ThePilgrim Vex Wolpertinger
+      Dexed drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
+      drowaudio-reverb drowaudio-tremolo drumsynth EasySSP eqinox HiReSam
+      JuceDemoPlugin KlangFalter LUFSMeter LUFSMeterMulti Luftikus Obxd
+      PitchedDelay ReFine StereoSourceSeparation TAL-Dub-3 TAL-Filter
+      TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
+      TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

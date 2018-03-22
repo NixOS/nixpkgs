@@ -6,8 +6,9 @@
 , sslSupport ? false, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , scpSupport ? false, libssh2 ? null
-, gssSupport ? false, gss ? null
+, gssSupport ? false, kerberos ? null
 , c-aresSupport ? false, c-ares ? null
+, brotliSupport ? false, brotli ? null
 }:
 
 assert http2Support -> nghttp2 != null;
@@ -19,13 +20,15 @@ assert !(gnutlsSupport && sslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
+assert brotliSupport -> brotli != null;
+assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.54.1";
+  name = "curl-7.58.0";
 
   src = fetchurl {
-    url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1815iz5a7qghipjcl7s97hk4jqh4f3kqc487xi20rvh1s3r4vz7x";
+    url = "https://curl.haxx.se/download/${name}.tar.bz2";
+    sha256 = "0cg7klhf1ksnbw5wvwa802qir877zv4y3dj7swz1xh07g3wq3c0w";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -43,13 +46,14 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport gss ++
+    optional gssSupport kerberos ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
-    optional scpSupport libssh2;
+    optional scpSupport libssh2 ++
+    optional brotliSupport brotli;
 
-  # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
+  # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
@@ -64,12 +68,13 @@ stdenv.mkDerivation rec {
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
+      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
 
-  CXX = "g++";
-  CXXCPP = "g++ -E";
+  CXX = "c++";
+  CXXCPP = "c++ -E";
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
@@ -96,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = http://curl.haxx.se/;
+    homepage    = https://curl.haxx.se/;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake
 , glew, ftgl, ttf_bitstream_vera
 , withQt ? true, qt4
 , withLibvisual ? false, libvisual, SDL
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Music Visualizer";
-    homepage = "http://projectm.sourceforge.net/";
+    homepage = http://projectm.sourceforge.net/;
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
   };
@@ -24,7 +24,13 @@ stdenv.mkDerivation {
     sha256 = "1vh6jk68a0jdb6qwppb6f8cbgmhnv2ba3bcavzfd6sq06gq08cji";
   };
 
+  patch_gcc6 = fetchpatch {
+    url = https://raw.githubusercontent.com/gentoo/gentoo/45abd63abc6644b6e177c057b5b42d894dbf8e29/media-libs/libprojectm/files/libprojectm-2.1.0-fix-c++14.patch;
+    sha256 = "1i50scxv1jlqvb3jm3sql89a7wqckxhlpvnhz20vvmm1kii6lrsn";
+  };
+
   patchPhase = ''
+    patch -d src/libprojectM -p1 -i "$patch_gcc6"
     sed -i 's:''${LIBVISUAL_PLUGINSDIR}:''${CMAKE_INSTALL_PREFIX}/lib/libvisual-0.4:' \
       src/projectM-libvisual/CMakeLists.txt
   '';

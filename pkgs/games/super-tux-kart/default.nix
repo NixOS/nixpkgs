@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
-, openal, freealut, mesa, libvorbis, libogg, gettext, curl, freetype
+, openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
 , fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr }:
 
 let
@@ -8,31 +8,38 @@ let
 in stdenv.mkDerivation rec {
   name = "supertuxkart-${version}";
 
-  version = "0.9.2";
+  version = "0.9.3";
+
   srcs = [
     (fetchFromGitHub {
       owner  = "supertuxkart";
       repo   = "stk-code";
       rev    = version;
-      sha256 = "1zsc5nw8il8xwppk624jampfk6qhqzjnni8zicrhqix0xg07nxca";
+      sha256 = "1smnanjjaj4yq2ywikv0l6xysh6n2h1cm549plbg5xdk9mx2sfia";
       name   = dir;
     })
     (fetchsvn {
       url    = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-      rev    = "16503"; # 0.9.2 crashes with 16937. Refer to stk-code/doc/assets_version
-      sha256 = "0j1dy27gxm4hx26xddr2ak6vw0lim0nqmjnszfb4c61y92j12cqp";
+      rev    = "17448";
+      sha256 = "0lxbb4k57gv4gj12l5hnvhwdycpzcxjwg7qdfwglj2bdvaxf9f21";
       name   = "stk-assets";
     })
   ];
 
+  nativeBuildInputs = [ cmake gettext libtool pkgconfig ];
+
   buildInputs = [
-    cmake libtool pkgconfig
     libX11 libXrandr
-    openal freealut mesa libvorbis libogg gettext zlib freetype
+    openal freealut libGLU_combined libvorbis libogg zlib freetype
     curl fribidi bluez libjpeg libpng
   ];
 
   enableParallelBuilding = true;
+
+  cmakeFlags = [
+    "-DBUILD_RECORDER=OFF"         # libopenglrecorder is not in nixpkgs
+    "-DUSE_SYSTEM_ANGELSCRIPT=OFF" # doesn't work with 2.31.2 or 2.32.0
+  ];
 
   sourceRoot = dir;
 

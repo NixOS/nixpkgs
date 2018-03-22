@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PURPLE_PLUGIN_DIR=$(out)/lib/pidgin" ];
 
-  buildInputs = [ libxml2 pidgin pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 pidgin ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/gkdr/carbons";
+    homepage = https://github.com/gkdr/carbons;
     description = "XEP-0280: Message Carbons plugin for libpurple";
     license = licenses.gpl2;
     platforms = platforms.linux;

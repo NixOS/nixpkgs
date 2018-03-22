@@ -3,8 +3,9 @@
 }:
 
 buildPythonPackage rec {
-  name = "pygame-${version}";
+  pname = "pygame";
   version = "2016-05-17";
+  name = pname + "-" + version;
 
   src = fetchFromBitbucket {
     owner = "pygame";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for games";
-    homepage = "http://www.pygame.org/";
+    homepage = http://www.pygame.org/;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     broken = true;

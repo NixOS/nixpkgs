@@ -8,13 +8,15 @@ stdenv.mkDerivation rec {
     owner = "freicoin";
     repo = "freicoin";
     rev = "v${version}";
-    sha256 = "1m5pcnfhwhcj7q00p2sy3h73rkdm3w6grmljgiq53gshcj08cq1z";
+    sha256 = "1v1qwv4x5agjba82s1vknmdgq67y26wzdwbmwwqavv7f7y3y860h";
   };
 
   qmakeFlags = ["USE_UPNP=-"];
 
   # I think that openssl and zlib are required, but come through other
   # packages
+
+  preBuild = "unset AR";
 
   installPhase = ''
     mkdir -p $out/bin

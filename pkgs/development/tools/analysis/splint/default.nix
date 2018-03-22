@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 
-  patches = [ ./tmpdir.patch ];
+  patches = [ ./tmpdir.patch ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ flex ];
 
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

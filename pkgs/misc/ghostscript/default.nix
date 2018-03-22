@@ -8,8 +8,9 @@
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
-  version = "9.20";
-  sha256 = "1az0dnvgingqv78yvfhzmx1zavn5sv1xrrscz984hy3gvz2ks3rw";
+  version = "9.${ver_min}";
+  ver_min = "22";
+  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
   name = "ghostscript-${version}";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs920/${name}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
     inherit sha256;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; };
 
   meta = {
-    homepage = "http://www.ghostscript.com/";
+    homepage = https://www.ghostscript.com/;
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''
@@ -117,7 +118,7 @@ stdenv.mkDerivation rec {
       of output drivers for various file formats and printers.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = stdenv.lib.licenses.agpl3;
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.viric ];

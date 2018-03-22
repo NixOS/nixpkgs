@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   name = "leaps-${version}";
-  version = "0.5.1";
+  version = "0.9.0";
 
-  goPackagePath = "github.com/jeffail/leaps";
+  goPackagePath = "github.com/Jeffail/leaps";
 
   src = fetchFromGitHub {
-    owner = "jeffail";
+    owner = "Jeffail";
     repo = "leaps";
-    sha256 = "0w63y777h5qc8fwnkrbawn3an9px0l1zz3649x0n8lhk125fvchj";
+    sha256 = "1bzas7ixyfsfh81lnvplhx59yghkmnmy5p7jv9rnwp219dwbylpz";
     rev = "v${version}";
   };
 
@@ -17,10 +17,10 @@ buildGoPackage rec {
   
   meta = {
     description = "A pair programming tool and library written in Golang";
-    homepage = "https://github.com/jeffail/leaps/";
+    homepage = https://github.com/jeffail/leaps/;
     license = "MIT";
     maintainers = with stdenv.lib.maintainers; [ qknight ];
-    meta.platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

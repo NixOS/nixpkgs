@@ -94,7 +94,7 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond"
+      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
     ])
     (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
@@ -104,6 +104,7 @@ let
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" boolValues)
     (assertValueOneOf "MulticastDNS" boolValues)
+    (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -141,6 +142,18 @@ let
     (assertValueOneOf "EmitNTP" boolValues)
     (assertValueOneOf "EmitTimezone" boolValues)
   ];
+
+  # .network files have a [Link] section with different options than in .netlink files
+  checkNetworkLink = checkUnitConfig "Link" [
+    (assertOnlyFields [
+      "MACAddress" "MTUBytes" "ARP" "Unmanaged"
+    ])
+    (assertMacAddress "MACAddress")
+    (assertByteFormat "MTUBytes")
+    (assertValueOneOf "ARP" boolValues)
+    (assertValueOneOf "Unmanaged" boolValues)
+  ];
+
 
   commonNetworkOptions = {
 
@@ -371,6 +384,18 @@ let
       '';
     };
 
+    linkConfig = mkOption {
+      default = {};
+      example = { Unmanaged = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkNetworkLink;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Link]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -581,6 +606,12 @@ let
     { inherit (def) enable;
       text = commonMatchText def +
         ''
+          ${optionalString (def.linkConfig != { }) ''
+            [Link]
+            ${attrsToSection def.linkConfig}
+
+          ''}
+
           [Network]
           ${attrsToSection def.networkConfig}
           ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
@@ -670,7 +701,6 @@ in
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-networkd.service" "systemd-networkd-wait-online.service"
-      "org.freedesktop.network1.busname"
     ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links

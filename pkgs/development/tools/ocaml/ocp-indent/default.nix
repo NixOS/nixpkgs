@@ -9,11 +9,11 @@ assert versionAtLeast (getVersion ocpBuild) "1.99.6-beta";
 stdenv.mkDerivation rec {
 
   name = "ocp-indent-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchzip {
     url = "https://github.com/OCamlPro/ocp-indent/archive/${version}.tar.gz";
-    sha256 = "1h9y597s3ag8w1z32zzv4dfk3ppq557s55bnlfw5a5wqwvia911f";
+    sha256 = "0rcaa11mjqka032g94wgw9llqpflyk3ywr3lr6jyxbh1rjvnipnw";
   };
 
   nativeBuildInputs = [ ocpBuild opam ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://typerex.ocamlpro.com/ocp-indent.html";
+    homepage = http://typerex.ocamlpro.com/ocp-indent.html;
     description = "A customizable tool to indent OCaml code";
     license = licenses.gpl3;
     platforms = ocaml.meta.platforms or [];

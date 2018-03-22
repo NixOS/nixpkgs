@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, flex, bison }:
 let
-  version = "2.0.14";
+  version = "2.1.7";
 in
 stdenv.mkDerivation {
   name = "minizinc-${version}";
@@ -11,12 +11,12 @@ stdenv.mkDerivation {
     rev = "${version}";
     owner = "MiniZinc";
     repo = "libminizinc";
-    sha256 = "02wy91nv79lrvvhhimcxp7sqz5wd457n1n68zl7qcsm5vfn1hm4q";
+    sha256 = "05rifsgzfaalv5ymv59sjcvhr6i1byzbmq5p36hj3hpi5f929kip";
   };
 
   # meta is all the information about the package..
   meta = with stdenv.lib; {
-    homepage = "http://www.minizinc.org/";
+    homepage = http://www.minizinc.org/;
     description = "MiniZinc is a medium-level constraint modelling language.";
 
     longDescription = ''

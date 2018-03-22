@@ -385,7 +385,7 @@ in
 
     httpAddress = mkOption {
       type = types.str;
-      default = "127.0.0.1:4180";
+      default = "http://127.0.0.1:4180";
       description = ''
         HTTPS listening address.  This module does not expose the port by
         default. If you want this URL to be accessible to other machines, please

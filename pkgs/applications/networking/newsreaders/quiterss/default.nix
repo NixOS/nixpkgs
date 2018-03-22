@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "quiterss-${version}";
-  version = "0.18.6";
+  version = "0.18.9";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
     rev = "${version}";
-    sha256 = "0qklgdv6b3zg4xil9yglja33vaa25d4i7vipv5aafhlavjz16mh6";
+    sha256 = "0n2rgzyxw6m29i8m8agri3cp5dbpjblhhyklvxsyzmkksnsxpw58";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       QuiteRSS is a open-source cross-platform RSS/Atom news feeds reader
       written on Qt/C++
     '';
-    homepage = "https://quiterss.org";
+    homepage = https://quiterss.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

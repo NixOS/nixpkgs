@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper
 , gawk, gnused, gnugrep, coreutils, which
 , perl, NetSMTP
-, withMySQL ? false, zlib, libmysql
+, withMySQL ? false, zlib, mysql57
 , withPgSQL ? false, postgresql
 , withSQLite ? false, sqlite
 , withDB ? false, db
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl ]
-                ++ lib.optionals withMySQL [ zlib libmysql ]
+                ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withSQLite sqlite
                 ++ lib.optional withDB db;
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     "--enable-preferences-extension"
     "--enable-long-usernames"
     "--enable-external-lookup"
-  ] ++ lib.optional withMySQL "--with-mysql-includes=${lib.getDev libmysql}/include/mysql"
+  ] ++ lib.optional withMySQL "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://nuclearelephant.com/";
+    homepage = http://nuclearelephant.com/;
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3;
     platforms = platforms.linux;

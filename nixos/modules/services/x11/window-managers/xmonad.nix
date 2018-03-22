@@ -29,6 +29,7 @@ in
 
       extraPackages = mkOption {
         default = self: [];
+        defaultText = "self: []";
         example = literalExample ''
           haskellPackages: [
             haskellPackages.xmonad-contrib

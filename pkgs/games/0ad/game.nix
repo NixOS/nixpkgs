@@ -1,7 +1,7 @@
 { stdenv, lib, callPackage, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, mesa, xproto, libX11, libXcursor, nspr, SDL, SDL2
+, openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -10,11 +10,11 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.21";
+  version = "0.0.22";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1kw3hqnr737ipx4f03khz3hvsh3ha7r8iy9njppk2faa53j27gln";
+    sha256 = "1cgmr4g5g9wv36v7ylbrvqhsjwgcsdgbqwc8zlqmnayk9zgkdpgx";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
-    mesa xproto libX11 libXcursor nspr SDL2 gloox
+    libGLU_combined xproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools
   ] ++ lib.optional withEditor wxGTK;
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
-    homepage = "http://wildfiregames.com/0ad/";
+    homepage = "https://play0ad.com/";
     license = with licenses; [
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib

@@ -4,11 +4,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "argcomplete";
-  version = "1.8.2";
+  version = "1.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sslhl1klvh92c8hjsz3y3mmnpcqspcgi49g5cik2rpbfkhcsb3s";
+    sha256 = "06c8a54ffaa6bfc9006314498742ec8843601206a3b94212f82657673662ecf1";
   };
 
   doCheck = false; # bash-completion test fails with "compgen: command not found".
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bash tab completion for argparse";
-    homepage = "https://argcomplete.readthedocs.io";
+    homepage = https://argcomplete.readthedocs.io;
     maintainers = [ maintainers.womfoo ];
     license = [ licenses.asl20 ];
   };

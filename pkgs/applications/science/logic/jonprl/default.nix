@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.jonprl.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

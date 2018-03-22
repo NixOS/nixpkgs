@@ -12,4 +12,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kio ];
+  outputs = [ "out" "dev" ];
 }

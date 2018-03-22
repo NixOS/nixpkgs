@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ stdenv, fetchFromGitHub, fetchpatch, kernel, bc }:
 
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";
-  version = "4.3.20";
+  version = "5.2.20_25672.20171213";
 
   src = fetchFromGitHub {
-    owner = "Grawp";
-    repo = "rtl8812au_rtl8821au";
-    rev = "d716b38abf5ca7da72d2be0adfcebe98cceeda8f";
-    sha256 = "01z5p2vps3an69bbzca7ig14llc5rd6067pgs47kkhfjbsbws4ry";
+    owner = "zebulon2";
+    repo = "rtl8812au-driver-5.2.20";
+    rev = "aca1e0677bfe56c6c4914358df007c97486e7095";
+    sha256 = "19av8fkh3mvs2f57iibrg0cfyhjnnx4cbnfzv5aj7v5gb0j3dp0p";
   };
 
-  hardeningDisable = [ "pic" ];
+  nativeBuildInputs = [ bc ];
+  buildInputs = kernel.moduleBuildDependencies;
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  hardeningDisable = [ "pic" "format" ];
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
     substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
-    substituteInPlace ./Makefile --replace /sbin/depmod #
+    substituteInPlace ./Makefile --replace /sbin/depmod \#
     substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
@@ -26,10 +27,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
-    homepage = "https://github.com/Grawp/rtl8812au_rtl8821au";
-    license = stdenv.lib.licenses.gpl2;
+    homepage = https://github.com/zebulon2/rtl8812au-driver-5.2.20;
+    license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ danielfullmer ];
   };
 }

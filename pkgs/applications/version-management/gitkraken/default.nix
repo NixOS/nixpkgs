@@ -1,29 +1,33 @@
-{ stdenv, lib, libXcomposite, libgnome_keyring, makeWrapper, udev, curl, alsaLib
+{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
-, libX11, libXi, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
+, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
 , dpkg, makeDesktopItem
 }:
 
 with stdenv.lib;
 
+let
+  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "2.7.0";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0088vdn47563f0v9zhk1vggn3c2cfg8rhmifc6nw4zbss49si5gp";
+    sha256 = "0jj3a02bz30xa7p4migyhvxd9s0cllymsp1rdh2pbh40p79g1fp1";
   };
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
-    curl
+    curlWithGnuTls
     udev
     libX11
     libXext
     libXcursor
     libXi
+    libxcb
     glib
     libXScrnSaver
     libxkbfile
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
     libXrender
     gtk2
     gnome2.GConf
-    libgnome_keyring
+    libgnome-keyring
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -66,27 +70,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dpkg ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  unpackPhase = "true";
+  buildCommand = ''
+    mkdir -p $out
+    dpkg -x $src $out
+    substituteInPlace $out/usr/share/applications/gitkraken.desktop \
+      --replace /usr/share/gitkraken $out/bin
+    cp -av $out/usr/* $out
+    rm -rf $out/etc $out/usr $out/share/lintian
+    chmod -R g-w $out
 
-  installPhase = ''
-    mkdir -p "$out/opt/gitkraken"
-    cp -r usr/share/gitkraken/* "$out/opt/gitkraken"
+    for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+      patchelf --set-rpath ${libPath}:$out/share/gitkraken $file || true
+    done
 
-    mkdir -p "$out/share/applications"
-    cp $desktopItem/share/applications/* "$out/share/applications"
+    find $out/share/gitkraken -name "*.node" -exec patchelf --set-rpath "${libPath}:$out/share/gitkraken" {} \;
 
-    mkdir -p "$out/share/pixmaps"
-    cp usr/share/pixmaps/app.png "$out/share/pixmaps"
-  '';
-
-  postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-             --set-rpath "$libPath:$out/opt/gitkraken" "$out/opt/gitkraken/gitkraken"
-    wrapProgram $out/opt/gitkraken/gitkraken \
-      --prefix LD_PRELOAD : "${makeLibraryPath [ curl ]}/libcurl.so.4" \
-      --prefix LD_PRELOAD : "${makeLibraryPath [ libgnome_keyring ]}/libgnome-keyring.so.0"
-    mkdir "$out/bin"
-    ln -s "$out/opt/gitkraken/gitkraken" "$out/bin/gitkraken"
+    rm $out/bin/gitkraken
+    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
   '';
 
   meta = {

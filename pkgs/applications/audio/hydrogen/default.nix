@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dy2jfkdw0nchars4xi4isrz66fqn53a9qk13bqza7lhmsg3s3qy";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib boost cmake glib lash libjack2 libarchive liblrdf libsndfile pkgconfig qt4
+    alsaLib boost cmake glib lash libjack2 libarchive liblrdf libsndfile qt4
   ];
 
   meta = with stdenv.lib; {

@@ -10,12 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hgb7xh3w455m00lpldwkyrc5spjn3q1pl2ry3kf7w3hiigjpphw";
   };
 
-  buildInputs = [ mpd_clientlib curl glib pkgconfig ];
-
-  preConfigure = ''
-    export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}
-    export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
-  '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mpd_clientlib curl glib ];
 
   meta = with stdenv.lib; {
     description = "A Music Player Daemon (MPD) client which submits information about tracks beeing played to a scrobbler (e.g. last.fm)";

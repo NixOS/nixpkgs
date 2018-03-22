@@ -22,7 +22,7 @@ let
 
     meta = with lib; {
       description = "Docker compose compatible client to deploy to Rancher";
-      homepage = "https://docs.rancher.com/rancher/rancher-compose/";
+      homepage = https://docs.rancher.com/rancher/rancher-compose/;
       license = licenses.asl20;
       platforms = platforms.unix;
       maintainers = [maintainers.mic92];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-mcpplib" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://mcpp.sourceforge.net/";
+    homepage = http://mcpp.sourceforge.net/;
     description = "A portable c preprocessor";
     license = licenses.bsd2;
     platforms = platforms.unix;

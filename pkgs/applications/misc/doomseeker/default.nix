@@ -1,22 +1,23 @@
-{ stdenv, cmake, fetchurl, pkgconfig, qt4, zlib, bzip2 }:
+{ stdenv, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "doomseeker-1.0";
+  name = "doomseeker-${version}";
+  version = "2018-03-03";
 
-  src = fetchurl {
-    url = "http://doomseeker.drdteam.org/files/${name}_src.tar.bz2";
-    sha256 = "172ybxg720r64hp6aah0hqvxklqv1cf8v7kwx0ng5ap0h20jydbw";
+  src = fetchFromBitbucket {
+    owner = "Doomseeker";
+    repo = "doomseeker";
+    rev = "072110a8fe0643c4a72461e7768560813bb0a62b";
+    sha256 = "1w4g5f7yifqk2d054dqrmy8qj4n5hxdan7n59845m1xh2f2r8i0p";
   };
 
-  buildInputs = [ qt4 zlib bzip2 ];
+  patches = [ ./fix_paths.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
+
+  nativeBuildInputs = [ cmake qttools pkgconfig ];
 
   enableParallelBuilding = true;
-
-  patchPhase = ''
-    substituteInPlace src/core/CMakeLists.txt --replace /usr/share/applications "$out"/share/applications
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://doomseeker.drdteam.org/;

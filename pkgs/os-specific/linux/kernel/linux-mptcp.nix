@@ -1,21 +1,22 @@
-{ stdenv, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
-  mptcpVersion = "0.91.3";
-  modDirVersion = "4.1.38";
+buildLinux (rec {
+  mptcpVersion = "0.93";
+  modDirVersion = "4.9.60";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
+  # autoModules= true;
 
   extraMeta = {
-    branch = "4.1";
-    maintainers = [ stdenv.lib.maintainers.layus ];
+    branch = "4.4";
+    maintainers = with stdenv.lib.maintainers; [ teto layus ];
   };
 
-  src = fetchurl {
-    url = "https://github.com/multipath-tcp/mptcp/archive/v${mptcpVersion}.tar.gz";
-    sha256 = "0vqjnkzcbbvyq24w3cryfmw7hhws1xqkkxqcv71szkbqqs6mcr14";
+  src = fetchFromGitHub {
+    owner = "multipath-tcp";
+    repo = "mptcp";
+    rev = "v${mptcpVersion}";
+    sha256 = "1irlppzvcmckrazs2c4vg6y8ji31552izc3wqabf401v57jvxcys";
   };
-
-  kernelPatches = args.kernelPatches;
 
   extraConfig = ''
     IPV6 y
@@ -41,10 +42,6 @@ import ./generic.nix (args // rec {
     TCP_CONG_OLIA m
     TCP_CONG_WVEGAS m
     TCP_CONG_BALIA m
-  '';
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
-} // (args.argsOverride or {}))
+  '' + (args.extraConfig or "");
+} // args)

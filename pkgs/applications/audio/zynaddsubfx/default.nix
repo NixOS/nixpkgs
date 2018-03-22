@@ -4,15 +4,19 @@
 
 stdenv.mkDerivation  rec {
   name = "zynaddsubfx-${version}";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/zynaddsubfx/zynaddsubfx-${version}.tar.bz2";
-    sha256 = "1qijvlbv41lnqaqbp6gh1i42xzf1syviyxz8wr39xbz55cw7y0d8";
+    sha256 = "1hfpiqdm337gl4ynkmmp2qss2m5z8mzqzjrbiyg6w1v4js7l9phi";
   };
 
   buildInputs = [ alsaLib cairo libjack2 fftw fltk13 lash libjpeg libXpm minixml ntk zlib liblo ];
   nativeBuildInputs = [ cmake pkgconfig ];
+
+  patchPhase = ''
+    substituteInPlace src/Misc/Config.cpp --replace /usr $out
+  '';
 
   hardeningDisable = [ "format" ];
 

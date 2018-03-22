@@ -1,8 +1,9 @@
-{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 }:
 
+with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 with import ../lib;
 
 let
@@ -11,15 +12,19 @@ let
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  forAllSystems = genAttrs supportedSystems;
-
   importTest = fn: args: system: import fn ({
     inherit system;
   } // args);
 
-  callTest = fn: args: forAllSystems (system: hydraJob (importTest fn args system));
+  # Note: only supportedSystems are considered.
+  callTestOnMatchingSystems = systems: fn: args:
+    forMatchingSystems
+      (intersectLists supportedSystems systems)
+      (system: hydraJob (importTest fn args system));
+  callTest = callTestOnMatchingSystems supportedSystems;
 
-  callSubTests = fn: args: let
+  callSubTests = callSubTestsOnMatchingSystems supportedSystems;
+  callSubTestsOnMatchingSystems = systems: fn: args: let
     discover = attrs: let
       subTests = filterAttrs (const (hasAttr "test")) attrs;
     in mapAttrs (const (t: hydraJob t.test)) subTests;
@@ -28,17 +33,14 @@ let
       ${system} = test;
     }) (discover (importTest fn args system));
 
-  # If the test is only for a particular system, use only the specified
-  # system instead of generating attributes for all available systems.
-  in if args ? system then discover (import fn args)
-     else foldAttrs mergeAttrs {} (map discoverForSystem supportedSystems);
+  in foldAttrs mergeAttrs {} (map discoverForSystem (intersectLists systems supportedSystems));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;
-      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    { system.nixos.versionSuffix = versionSuffix;
+      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
 
@@ -89,6 +91,28 @@ let
       });
   }).config));
 
+  makeNetboot = config:
+    let
+      configEvaled = import lib/eval-config.nix config;
+      build = configEvaled.config.system.build;
+      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
+    in
+      pkgs.symlinkJoin {
+        name = "netboot";
+        paths = [
+          build.netbootRamdisk
+          build.kernel
+          build.netbootIpxeScript
+        ];
+        postBuild = ''
+          mkdir -p $out/nix-support
+          echo "file ${kernelTarget} $out/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+        '';
+        preferLocalBuild = true;
+      };
+
 
 in rec {
 
@@ -103,28 +127,13 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot.x86_64-linux = let build = (import lib/eval-config.nix {
-      system = "x86_64-linux";
-      modules = [
-        ./modules/installer/netboot/netboot-minimal.nix
-        versionModule
-      ];
-    }).config.system.build;
-  in
-    pkgs.symlinkJoin {
-      name="netboot";
-      paths=[
-        build.netbootRamdisk
-        build.kernel
-        build.netbootIpxeScript
-      ];
-      postBuild = ''
-        mkdir -p $out/nix-support
-        echo "file bzImage $out/bzImage" >> $out/nix-support/hydra-build-products
-        echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
-        echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
-      '';
-    };
+  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    inherit system;
+    modules = [
+      ./modules/installer/netboot/netboot-minimal.nix
+      versionModule
+    ];
+  });
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -132,7 +141,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = genAttrs [ "x86_64-linux" ] (system: makeIso {
+  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -140,7 +149,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = genAttrs [ "x86_64-linux" ] (system: makeIso {
+  iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -148,7 +157,7 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = genAttrs [ "x86_64-linux" ] (system:
+  ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
@@ -214,13 +223,19 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
+  tests.atd = callTest tests/atd.nix {};
+  tests.acme = callTest tests/acme.nix {};
   tests.avahi = callTest tests/avahi.nix {};
+  tests.beegfs = callTest tests/beegfs.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
-  tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
-  tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
+  tests.borgbackup = callTest tests/borgbackup.nix {};
+  tests.buildbot = callTest tests/buildbot.nix {};
+  tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
+  tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -233,50 +248,75 @@ in rec {
   tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
-  tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
-  tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
+  tests.couchdb = callTest tests/couchdb.nix {};
+  tests.docker = callTestOnMatchingSystems ["x86_64-linux"] tests/docker.nix {};
+  tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
+  tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
+  tests.dovecot = callTest tests/dovecot.nix {};
+  tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
-  tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
-  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
+  tests.etcd = callTestOnMatchingSystems ["x86_64-linux"] tests/etcd.nix {};
+  tests.ec2-nixops = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
+  tests.ec2-config = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
+  tests.elk = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/elk.nix {};
+  tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
-  tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
+  tests.fleet = callTestOnMatchingSystems ["x86_64-linux"] tests/fleet.nix {};
+  tests.fwupd = callTest tests/fwupd.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
-  tests.glance = callTest tests/glance.nix {};
+  tests.gitolite = callTest tests/gitolite.nix {};
+  tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
+  tests.grafana = callTest tests/grafana.nix {};
+  tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix {};
+  tests.home-assistant = callTest tests/home-assistant.nix { };
   tests.hound = callTest tests/hound.nix {};
+  tests.hocker-fetchdocker = callTest tests/hocker-fetchdocker {};
   tests.i3wm = callTest tests/i3wm.nix {};
+  tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.plasma5 = callTest tests/plasma5.nix {};
+  tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.keystone = callTest tests/keystone.nix {};
-  tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
+  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
+  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
+  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
+  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
+  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
+  tests.kernel-latest = callTest tests/kernel-latest.nix {};
+  tests.kernel-lts = callTest tests/kernel-lts.nix {};
+  tests.kubernetes = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
   tests.mathics = callTest tests/mathics.nix {};
+  tests.matrix-synapse = callTest tests/matrix-synapse.nix {};
+  tests.mesos = callTest tests/mesos.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
+  tests.mutableUsers = callTest tests/mutable-users.nix {};
   tests.mysql = callTest tests/mysql.nix {};
+  tests.mysqlBackup = callTest tests/mysql-backup.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
   tests.nat.firewall-conntrack = callTest tests/nat.nix { withFirewall = true; withConntrackHelpers = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
   # TODO: put in networking.nix after the test becomes more complete
@@ -284,33 +324,57 @@ in rec {
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
+  tests.nghttpx = callTest tests/nghttpx.nix { };
+  tests.nix-ssh-serve = callTest tests/nix-ssh-serve.nix { };
+  tests.novacomd = callTestOnMatchingSystems ["x86_64-linux"] tests/novacomd.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
+  tests.openldap = callTest tests/openldap.nix {};
+  tests.owncloud = callTest tests/owncloud.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
-  #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
+  #tests.panamax = callTestOnMatchingSystems ["x86_64-linux"] tests/panamax.nix {};
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
-  tests.pgjwt = callTest tests/pgjwt.nix {};
+  tests.pgmanage = callTest tests/pgmanage.nix {};
+  tests.postgis = callTest tests/postgis.nix {};
+  tests.powerdns = callTest tests/powerdns.nix {};
+  #tests.pgjwt = callTest tests/pgjwt.nix {};
+  tests.predictable-interface-names = callSubTests tests/predictable-interface-names.nix {};
   tests.printing = callTest tests/printing.nix {};
+  tests.prometheus = callTest tests/prometheus.nix {};
+  tests.prosody = callTest tests/prosody.nix {};
   tests.proxy = callTest tests/proxy.nix {};
-  tests.pumpio = callTest tests/pump.io.nix {};
   # tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
+  tests.rabbitmq = callTest tests/rabbitmq.nix {};
+  tests.radicale = callTest tests/radicale.nix {};
+  tests.rspamd = callSubTests tests/rspamd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
   tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
+  tests.statsd = callTest tests/statsd.nix {};
+  tests.sudo = callTest tests/sudo.nix {};
+  tests.systemd = callTest tests/systemd.nix {};
+  tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
-  tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
+  tests.vault = callTest tests/vault.nix {};
+  tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};
   tests.wordpress = callTest tests/wordpress.nix {};
+  tests.xautolock = callTest tests/xautolock.nix {};
   tests.xfce = callTest tests/xfce.nix {};
-
+  tests.xmonad = callTest tests/xmonad.nix {};
+  tests.xrdp = callTest tests/xrdp.nix {};
+  tests.yabar = callTest tests/yabar.nix {};
+  tests.zookeeper = callTest tests/zookeeper.nix {};
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */

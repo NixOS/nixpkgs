@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "hieroglyph";
-  version = "0.7.1";
+  version = "1.0.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/h/hieroglyph/${name}.tar.gz";
-    sha256 = "0rswfk7x6zlj1z8388f153k3zn2h52k5h9b6p57pn7kqagsjilcb";
+    sha256 = "8e137f0b1cd60c47b870011089790d3c8ddb74fcf409a75ddf2c7f2516ff337c";
   };
 
   propagatedBuildInputs = [ sphinx ];

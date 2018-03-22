@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/uds-psl/autosubst.git;
     rev = "1c3bb3bbf5477e3b33533a0fc090399f45fe3034";
-    sha256 = "1wqfzc9az85fvx71xxfii502jgc3mp0r3xwfb8vnb03vkk625ln0";
+    sha256 = "06pcjbngzwqyncvfwzz88j33wvdj9kizxyg5adp7y6186h8an341";
   };
 
   propagatedBuildInputs = [ mathcomp ];

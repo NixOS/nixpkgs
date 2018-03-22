@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror }:
+{ stdenv, fetchurl, gettext, libgpgerror }:
 
 stdenv.mkDerivation rec {
   name = "libksba-1.3.5";
@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0h53q4sns1jz1pkmhcz5wp9qrfn9f5g9i3vjv6dafwzzlvblyi21";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "info" ];
 
+  buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
   propagatedBuildInputs = [ libgpgerror ];
 
   postInstall = ''

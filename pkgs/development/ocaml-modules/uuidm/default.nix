@@ -1,22 +1,18 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
+  version = "0.9.6";
   name = "uuidm-${version}"; 
   src = fetchurl {
     url = "http://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
-    sha256 = "03bgxs119bphv9ggg97nsl5m61s43ixgby05hhggv16iadx9zndm";
+    sha256 = "0hz4fdx0x16k0pw9995vkz5d1hmzz6b16wck9li399rcbfnv5jlc";
   };
 
   unpackCmd = "tar -xf $curSrc";
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg cmdliner ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $prefix";
-  buildPhase = "ocaml setup.ml -build";
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
+  inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml module implementing 128 bits universally unique identifiers version 3, 5 (name based with MD5, SHA-1 hashing) and 4 (random based) according to RFC 4122";

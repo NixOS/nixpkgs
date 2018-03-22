@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
       sha256 = "0a0x8rgqif4kxy7hj70hck7jma6c8jy4428ybl8fz9qxgxh014ml";
   };
 
-  buildInputs = [ libX11 libXinerama libXrandr libXft yacc pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft yacc ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

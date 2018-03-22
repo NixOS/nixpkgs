@@ -79,12 +79,30 @@ let
         description = "A list of commands called after shutting down the interface.";
       };
 
+      table = mkOption {
+        default = "main";
+        type = types.str;
+        description = ''The kernel routing table to add this interface's
+        associated routes to. Setting this is useful for e.g. policy routing
+        ("ip rule") or virtual routing and forwarding ("ip vrf"). Both numeric
+        table IDs and table names (/etc/rt_tables) can be used. Defaults to
+        "main".'';
+      };
+
       peers = mkOption {
         default = [];
         description = "Peers linked to the interface.";
         type = with types; listOf (submodule peerOpts);
       };
 
+      allowedIPsAsRoutes = mkOption {
+        example = false;
+        default = true;
+        type = types.bool;
+        description = ''
+          Determines whether to add allowed IPs as routes or not.
+        '';
+      };
     };
 
   };
@@ -177,6 +195,7 @@ let
         description = "WireGuard Tunnel - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment.DEVICE = name;
 
         serviceConfig = {
           Type = "oneshot";
@@ -207,9 +226,11 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (map (peer: (map (ip:
-            "${ipCommand} route replace ${ip} dev ${name}"
-            ) peer.allowedIPs)) values.peers)
+            (optionals (values.allowedIPsAsRoutes != false) (map (peer:
+            (map (allowedIP:
+            "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
+            ) peer.allowedIPs)
+            ) values.peers))
 
             values.postSetup
           ]);

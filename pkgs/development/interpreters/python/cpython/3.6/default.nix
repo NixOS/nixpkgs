@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl, fetchpatch, buildPackages
 , glibc
 , bzip2
 , expat
@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
-  minorVersion = "1";
+  minorVersion = "4";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -39,16 +39,19 @@ let
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
+  nativeBuildInputs =
+    optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.python3;
+
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
-  inherit buildInputs;
+  inherit buildInputs nativeBuildInputs;
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0ha03sbakxblzyvlramx5fj0ranzmzx4pa2png6nn8gczkfi0650";
+    sha256 = "1fna7g8jxzl4kd2pqmmqhva5724c5m920x3fsrpsgskaylmr76qm";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -63,6 +66,12 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  patches = [
+    ./no-ldconfig.patch
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
+  ];
 
   postPatch = ''
     # Determinism
@@ -83,6 +92,27 @@ in stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
   ];
 
   preConfigure = ''
@@ -92,6 +122,9 @@ in stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''
+     + optionalString stdenv.hostPlatform.isMusl ''
+      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
      ''}
   '';
 
@@ -101,7 +134,10 @@ in stdenv.mkDerivation {
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/python${majorVersion}/test/*; do
-      if [[ "$item" != */test_support.py* ]]; then
+      if [[ "$item" != */test_support.py*
+         && "$item" != */test/support
+         && "$item" != */test/libregrtest
+         && "$item" != */test/regrtest.py* ]]; then
         rm -rf "$item"
       else
         echo $item
@@ -121,7 +157,6 @@ in stdenv.mkDerivation {
 
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
-    ln -s "$out/bin/pip3" "$out/bin/pip"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
@@ -133,7 +168,7 @@ in stdenv.mkDerivation {
     for i in $out/lib/python${majorVersion}/_sysconfigdata*.py $out/lib/python${majorVersion}/config-${majorVersion}m*/Makefile; do
       sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
     done
-
+  '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
     # We rebuild three times, once for each optimization level
@@ -147,7 +182,7 @@ in stdenv.mkDerivation {
   in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
-    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
     withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
     pkgs = pythonPackages;
     isPy3 = true;
@@ -172,6 +207,6 @@ in stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan kragniz ];
+    maintainers = with maintainers; [ fridh kragniz ];
   };
 }

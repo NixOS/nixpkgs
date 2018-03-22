@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1pizz39l61rbps0wby75fkvzyrah805257j33siqybwhsfiy1kmw";
   };
 
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    pkgconfig qtbase qtsvg qtwebkit qtx11extras qttools
+    qtbase qtsvg qtwebkit qtx11extras qttools
     libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff
   ];
-
-  nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "CONFIG+=zim_support" ];
 

@@ -1,10 +1,10 @@
 { stdenv, pkgconfig, zlib, qtbase, qtsvg, qttools, qtmultimedia, qmake, fetchurl }:
 stdenv.mkDerivation rec {
   name = "chessx-${version}";
-  version = "1.4.0";
+  version = "1.4.6";
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
-    sha256 = "1x10c9idj2qks8xk9dy7aw3alc5w7z1kvv6dnahs0428j0sp4a74";
+    sha256 = "1vb838byzmnyglm9mq3khh3kddb9g4g111cybxjzalxxlc81k5dd";
   };
   buildInputs = [
    qtbase
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig qmake ];
 
   # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   installPhase = ''
       runHook preInstall

@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = https://clipgrab.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

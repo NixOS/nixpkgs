@@ -2,7 +2,7 @@
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl, patchelf
 , # glx
-  libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
+  libX11, libGLU_combined, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
   SDL2
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # required for both
     unzip libjpeg
     # glx
-    libX11 mesa libXpm libXext libXxf86vm alsaLib
+    libX11 libGLU_combined libXpm libXext libXxf86vm alsaLib
     # sdl
     SDL2
     zlib libvorbis curl
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "A free fast-paced first-person shooter";
     longDescription = ''
       Xonotic is a free, fast-paced first-person shooter that works on
-      Windows, OS X and Linux. The project is geared towards providing
+      Windows, macOS and Linux. The project is geared towards providing
       addictive arena shooter gameplay which is all spawned and driven
       by the community itself. Xonotic is a direct successor of the
       Nexuiz project with years of development between them, and it

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pName = "soundtouch";
-  name = "${pName}-1.9.2";
+  name = "${pName}-2.0.0";
   src = fetchurl {
     url = "http://www.surina.net/soundtouch/${name}.tar.gz";
-    sha256 = "04y5l56yn4jvwpv9mn1p3m2vi5kdym9xpdac8pmhwhl13r8qdsya";
+    sha256 = "09cxr02mfyj2bg731bj0i9hh565x8l9p91aclxs8wpqv8b8zf96j";
   };
 
   buildInputs = [ autoconf automake libtool ];

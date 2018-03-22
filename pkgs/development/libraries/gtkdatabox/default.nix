@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "gtkdatabox-0.9.2.0";
+  name = "gtkdatabox-0.9.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkdatabox/${name}.tar.gz";
-    sha256 = "0h20685bzw5j5h6mw8c6apbrbrd9w518c6xdhr55147px11nhnkl";
+    sha256 = "1wigd4bdlrz4pma2l2wd3z8sx7pqmsvq845nya5vma9ibi96nhhz";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ gtk2 ];
 

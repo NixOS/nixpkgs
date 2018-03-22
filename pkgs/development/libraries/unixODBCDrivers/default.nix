@@ -37,18 +37,11 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.lib ];
+    buildInputs = [ unixODBC mariadb.connector-c ];
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.lib}/include/mysql"
+      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
     ];
-
-    preConfigure = ''
-      sed -i \
-        -e 's,mariadb_config,mysql_config,g' \
-        -e 's,libmariadbclient,libmysqlclient,g' \
-        cmake/FindMariaDB.cmake
-    '';
 
     passthru = {
       fancyName = "MariaDB";
@@ -60,7 +53,6 @@
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
       platforms = platforms.linux;
-      broken = true;
     };
   };
 

@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-let optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "lmdb-${version}";
   version = "0.9.21";
 
@@ -16,7 +15,8 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" ];
 
-  makeFlags = [ "prefix=$(out)" "CC=cc" ];
+  makeFlags = [ "prefix=$(out)" "CC=cc" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
   doCheck = true;
   checkPhase = "make test";
@@ -25,12 +25,6 @@ in stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
     moveToOutput "lib/*.a" REMOVE # until someone needs it
   ''
-
-    # fix bogus library name
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-    mv "$out"/lib/liblmdb.{so,dylib}
-    ''
-
     # add lmdb.pc (dynamic only)
     + ''
     mkdir -p "$dev/lib/pkgconfig"

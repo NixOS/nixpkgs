@@ -8,20 +8,18 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "audio-recorder-${version}";
-  version = "1.9.4";
+  version = "1.9.7";
 
   src = fetchurl {
     name = "${name}-zesty.tar.gz";
     url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ezesty.tar.gz";
-    sha256 = "062bad38cz4fqzv418wza0x8sa4m5mqr3xsisrr1qgkqj9hg1f6x";
+    sha256 = "163c0vs5qj72y62731yp6sl6s0indh2szhjg02mxigv9b68dx89c";
   };
 
   nativeBuildInputs = [ pkgconfig intltool autoconf wrapGAppsHook ];
 
-  patches = [ ./icon-names.diff ];
-
   buildInputs = with gst_all_1; [
-    glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 gnome3.dconf
+    glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 (stdenv.lib.getLib gnome3.dconf)
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
   ] ++ optional pulseaudioSupport libpulseaudio;
 
@@ -34,9 +32,9 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=('--prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"'
-      '--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"'
-      '--prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"')
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $GST_PLUGIN_SYSTEM_PATH_1_0
+      --prefix GIO_EXTRA_MODULES : ${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules)
   '';
 
   meta = with stdenv.lib; {

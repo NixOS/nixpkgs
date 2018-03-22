@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "unifi-controller-${version}";
-  version = "5.5.19";
+  version = "5.6.36";
 
   src = fetchurl {
-    url = "https://www.ubnt.com/downloads/unifi/${version}/unifi_sysvinit_all.deb";
-    sha256 = "0bsfq48xjp230ir8pm9wpa5p4dh88zfy51lbi2xwpr454371ixcl";
+    url = "https://dl.ubnt.com/unifi/${version}/unifi_sysvinit_all.deb";
+    sha256 = "075q7vm56fdsjwh72y2cb1pirl2pxdkvqnhvd3bf1c2n64mvp6bi";
   };
 
   buildInputs = [ dpkg ];

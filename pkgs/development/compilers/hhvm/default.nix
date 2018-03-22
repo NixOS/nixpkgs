@@ -1,32 +1,37 @@
-{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
-, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
+{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached
+, pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
-, libvpx, imagemagick, fribidi, gperf
+, libxslt, freetype, gdb, git, perl, mysql, gmp, libyaml, libedit
+, libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.15.0";
+  version = "3.23.2";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "92a682ebaa3c85b84857852d8621f528607fe27d";
-    sha256 = "0mn3bfvhdf6b4lflyjfjyr7nppkq505xkaaagk111fqy91rdzd3b";
+    rev    = "HHVM-${version}";
+    sha256 = "1nic49j8nghx82lgvz0b95r78sqz46qaaqv4nx48p8yrj9ysnd7i";
     fetchSubmodules = true;
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind mysql.connector-c libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
-      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
-      gmp libyaml libedit libvpx imagemagick fribidi gperf
+      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
+      gmp libyaml libedit libvpx imagemagick fribidi gperf which
+      ocamlPackages.ocaml ocamlPackages.ocamlbuild
     ];
 
-  enableParallelBuilding = false; # occasional build problems;
+  patches = [
+    ./flexible-array-members-gcc6.patch
+  ];
+
+  enableParallelBuilding = true;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
 
@@ -39,15 +44,16 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DCMAKE_INSTALL_INCLUDEDIR=include";
 
   prePatch = ''
-    substituteInPlace hphp/util/generate-buildinfo.sh \
-      --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \
       --replace "/usr/bin/env bash" ${stdenv.shell}
+    substituteInPlace ./third-party/ocaml/CMakeLists.txt \
+      --replace "/bin/bash" ${stdenv.shell}
     perl -pi -e 's/([ \t(])(isnan|isinf)\(/$1std::$2(/g' \
       hphp/runtime/base/*.cpp \
       hphp/runtime/ext/std/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.cpp \
       hphp/runtime/ext_zend_compat/php-src/main/*.h
+    sed '1i#include <functional>' -i third-party/mcrouter/src/mcrouter/lib/cycles/Cycles.h
     patchShebangs .
   '';
 

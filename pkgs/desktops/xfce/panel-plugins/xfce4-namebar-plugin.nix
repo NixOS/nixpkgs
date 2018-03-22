@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, vala, gtk2, libwnck, libxfce4util, xfce4panel }:
+{ stdenv, pkgconfig, fetchFromGitHub, python2, vala, gtk2, libwnck, libxfce4util, xfce4-panel }:
 
 stdenv.mkDerivation rec {
   ver = "0.3.1";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sl4qmjywfvv53ch7hyfysjfd91zl38y7gdw2y3k69vkzd3h18ad";
   };
 
-  buildInputs = [ pkgconfig python2 vala gtk2 libwnck libxfce4util xfce4panel ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python2 vala gtk2 libwnck libxfce4util xfce4-panel ];
 
   postPatch = ''
     substituteInPlace src/preferences.vala --replace 'Environment.get_system_data_dirs()' "{ \"$out/share\" }"

@@ -5,10 +5,10 @@ diff -ru -x '*~' openssl-1.0.2j-orig/crypto/x509/by_file.c openssl-1.0.2j/crypto
      switch (cmd) {
      case X509_L_FILE_LOAD:
          if (argl == X509_FILETYPE_DEFAULT) {
--            file = (char *)getenv(X509_get_default_cert_file_env());
-+            file = (char *)getenv("NIX_SSL_CERT_FILE");
+-            file = getenv(X509_get_default_cert_file_env());
++            file = getenv("NIX_SSL_CERT_FILE");
 +            if (!file)
-+                file = (char *)getenv(X509_get_default_cert_file_env());
++                file = getenv(X509_get_default_cert_file_env());
              if (file)
                  ok = (X509_load_cert_crl_file(ctx, file,
                                                X509_FILETYPE_PEM) != 0);

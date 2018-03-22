@@ -1,0 +1,100 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p bash coreutils curl jq nix
+# vim: ft=sh sw=2 et
+#
+# This scripts scans the github terraform-providers repo for new releases,
+# generates the corresponding nix code and finally generates an index of
+# all the providers.
+set -euo pipefail
+
+GET() {
+  local url=$1
+  echo "fetching $url" >&2
+  curl -#fL -u "$GITHUB_AUTH" "$url"
+}
+
+get_org_repos() {
+  local org=$1
+  local page=1
+  GET "https://api.github.com/orgs/$org/repos?per_page=100" | jq -r '.[].name'
+}
+
+get_repo_tags() {
+  local owner=$1
+  local repo=$2
+  GET "https://api.github.com/repos/$owner/$repo/git/refs/tags?per_page=100" | \
+    jq -r '.[].ref' | \
+    cut -d '/' -f 3- | \
+    sort --version-sort
+}
+
+prefetch_github() {
+  local owner=$1
+  local repo=$2
+  local rev=$3
+  nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"
+}
+
+echo_entry() {
+  local owner=$1
+  local repo=$2
+  local version=${3:1}
+  local sha256=$4
+  cat <<EOF
+{
+  owner   = "$owner";
+  repo    = "$repo";
+  version = "$version";
+  sha256  = "$sha256";
+};
+EOF
+}
+
+indent() { sed 's/^/    /'; }
+
+## Main ##
+
+cd "$(dirname "$0")"
+
+if [[ -z "${GITHUB_AUTH:-}" ]]; then
+  cat <<'HELP'
+Missing the GITHUB_AUTH env. Thi is required to work around the 60 request
+per hour rate-limit.
+
+Go to https://github.com/settings/tokens and create a new token with the
+"public_repo" scope.
+
+Then `export GITHUB_AUTH=<your user>:<your token>` and run this script again.
+HELP
+  exit 1
+fi
+
+org=terraform-providers
+
+repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | sort)
+
+
+# Get all the providers with index
+
+cat <<HEADER > data.nix
+# Generated with ./update-all
+{
+HEADER
+
+for repo in $repos; do
+  echo "*** $repo ***"
+  name=$(echo "$repo" | cut -d - -f 3-)
+  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
+  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
+
+  {
+    echo "  $name ="
+    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
+  } >> data.nix
+done
+
+cat <<FOOTER >> data.nix
+}
+FOOTER
+
+echo Done.

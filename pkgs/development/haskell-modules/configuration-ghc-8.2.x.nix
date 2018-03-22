@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -36,6 +36,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Make sure we can still build Cabal 1.x.
+  Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
+    prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
+  });
+
   # cabal-install can use the native Cabal library.
   cabal-install = super.cabal-install.override { Cabal = null; };
 
@@ -48,28 +53,47 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
-  ## GHC > 8.0.2
-
   # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
   vector-algorithms = dontCheck super.vector-algorithms;
 
-  # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
-  yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;
 
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
-  # Older, LTS-8-based versions don't compile.
-  base-orphans = self.base-orphans_0_6;
-  hspec-meta = self.hspec-meta_2_4_4;
-  lens = self.lens_4_15_3;
-  primitive = self.primitive_0_6_2_0;
-  semigroupoids = self.semigroupoids_5_2;
-  syb = self.syb_0_7;
-  vector = super.vector_0_12_0_1;
+  # Upstream failed to distribute the testsuite for 8.2
+  # https://github.com/alanz/ghc-exactprint/pull/60
+  ghc-exactprint = dontCheck super.ghc-exactprint;
 
-  # Work around overly restrictive constraints on the version of 'base'.
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  hashable = doJailbreak super.hashable;
+  # Reduction stack overflow; size = 38
+  # https://github.com/jystic/hadoop-tools/issues/31
+  hadoop-rpc =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/shlevy/hadoop-tools/commit/f03a46cd15ce3796932c3382e48bcbb04a6ee102.patch;
+            sha256 = "09ls54zy6gx84fmzwgvx18ssgm740cwq6ds70p0p125phi54agcp";
+            stripLen = 1;
+          };
+    in appendPatch super.hadoop-rpc patch;
+
+  # Custom Setup.hs breaks with Cabal 2
+  # https://github.com/NICTA/coordinate/pull/4
+  coordinate =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/NICTA/coordinate/pull/4.patch;
+            sha256 = "06sfxk5cyd8nqgjyb95jkihxxk8m6dw9m3mlv94sm2qwylj86gqy";
+          };
+    in appendPatch super.coordinate patch;
+
+  # https://github.com/purescript/purescript/issues/3189
+  purescript = doJailbreak (super.purescript);
+
+  # These packages need Cabal 2.2.x, which is not the default.
+  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
+  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
+  cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
+  stylish-cabal = dontCheck (super.stylish-cabal.overrideScope (self: super: {
+    Cabal = self.Cabal_2_2_0_0;
+    haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
+  }));
 
 }

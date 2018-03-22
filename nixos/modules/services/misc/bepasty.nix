@@ -3,7 +3,7 @@
 with lib;
 let
   gunicorn = pkgs.pythonPackages.gunicorn;
-  bepasty = pkgs.pythonPackages.bepasty-server;
+  bepasty = pkgs.bepasty;
   gevent = pkgs.pythonPackages.gevent;
   python = pkgs.pythonPackages.python;
   cfg = config.services.bepasty;

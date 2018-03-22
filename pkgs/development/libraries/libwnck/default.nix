@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  buildInputs = [ pkgconfig gtk2 intltool xorg.libX11 xorg.libXres ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 intltool xorg.libX11 xorg.libXres ];
   # ?another optional: startup-notification
 
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK

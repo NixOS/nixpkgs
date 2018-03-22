@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1chzcy3kyi7wpr4iq4aj1v24fq1wwph1v5z96dimlqcrnvm66h2l";
   };
 
-  buildInputs = [unzip];
+  nativeBuildInputs = [unzip];
 
   sourceRoot = ".";
 
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     cp ${regular} $out/share/fonts/opentype/Poly-Regular.otf
     cp ${italic} $out/share/fonts/opentype/Poly-Italic.otf
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "11d7ldryfxi0wzfrg1bhw23a668a44vdb8gggxryvahmp5ahmq2h";
 
   meta = {
     description = "Medium contrast serif font";

@@ -12,19 +12,21 @@ let
         dn       = cfg.ldapBindDN;
         password = cfg.ldapBindPassword;
       };
-      insecureldap = cfg.ldapInsecure;
-      userattr     = cfg.ldapUserAttr;
-      baseDN       = cfg.ldapBaseDN;
+      insecureldap    = cfg.ldapInsecure;
+      userattr        = cfg.ldapUserAttr;
+      baseDN          = cfg.ldapBaseDN;
+      enableldapRoles = cfg.enableLdapRoles;
+      roleAttr        = cfg.roleAttr;
+      groupClassAttr  = cfg.groupClassAttr;
     };
     aws = {
       account     = cfg.awsAccount;
       defaultrole = cfg.awsDefaultRole;
     };
-    stats  = cfg.statsAddress;
-    listen = cfg.listenAddress;
+    stats        = cfg.statsAddress;
+    listen       = cfg.listenAddress;
+    cachetimeout = cfg.cacheTimeoutSeconds;
   });
-
-  script = "${pkgs.hologram.bin}/bin/hologram-server --debug --conf ${cfgFile}";
 in {
   options = {
     services.hologram-server = {
@@ -72,6 +74,24 @@ in {
         description = "Password of account to use to query the LDAP server";
       };
 
+      enableLdapRoles = mkOption {
+        type        = types.bool;
+        default     = false;
+        description = "Whether to assign user roles based on the user's LDAP group memberships";
+      };
+
+      groupClassAttr = mkOption {
+        type = types.str;
+        default = "groupOfNames";
+        description = "The objectclass attribute to search for groups when enableLdapRoles is true";
+      };
+
+      roleAttr = mkOption {
+        type        = types.str;
+        default     = "businessCategory";
+        description = "Which LDAP group attribute to search for authorized role ARNs";
+      };
+
       awsAccount = mkOption {
         type        = types.str;
         description = "AWS account number";
@@ -87,6 +107,12 @@ in {
         default     = "";
         description = "Address of statsd server";
       };
+
+      cacheTimeoutSeconds = mkOption {
+        type        = types.int;
+        default     = 3600;
+        description = "How often (in seconds) to refresh the LDAP cache";
+      };
     };
   };
 
@@ -96,15 +122,9 @@ in {
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
 
-      inherit script;
-    };
-
-    docker-containers.hologram-server = {
-      inherit script;
-    };
-
-    trivial-services.hologram-server = {
-      inherit script;
+      serviceConfig = {
+        ExecStart = "${pkgs.hologram.bin}/bin/hologram-server --debug --conf ${cfgFile}";
+      };
     };
   };
 }

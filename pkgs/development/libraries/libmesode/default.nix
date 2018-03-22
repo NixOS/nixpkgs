@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zb1x422zkpnxrz9d2b7pmi8ms60lbw49yh78mydqfypsmj2iyfh";
   };
 
-  buildInputs = [ autoreconfHook openssl expat libtool pkgconfig check ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ openssl expat libtool check ];
 
   dontDisableStatic = true;
 
@@ -30,9 +31,9 @@ stdenv.mkDerivation rec {
       Whilst Profanity will run against libstrophe, libmesode provides extra
       TLS functionality such as manual SSL certificate verification.
     '';
-    homepage = http://github.com/boothj5/libmesode/;
+    homepage = https://github.com/boothj5/libmesode/;
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }

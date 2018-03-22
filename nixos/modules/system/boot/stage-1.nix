@@ -13,12 +13,14 @@ let
 
   kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
+  firmware = config.hardware.firmware;
 
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
+    firmware = firmware;
     allowMissing = true;
   };
 
@@ -28,6 +30,50 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  # A utility for enumerating the shared-library dependencies of a program
+  findLibs = pkgs.writeShellScriptBin "find-libs" ''
+    set -euo pipefail
+
+    declare -A seen
+    declare -a left
+
+    patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
+
+    function add_needed {
+      rpath="$($patchelf --print-rpath $1)"
+      dir="$(dirname $1)"
+      for lib in $($patchelf --print-needed $1); do
+        left+=("$lib" "$rpath" "$dir")
+      done
+    }
+
+    add_needed $1
+
+    while [ ''${#left[@]} -ne 0 ]; do
+      next=''${left[0]}
+      rpath=''${left[1]}
+      ORIGIN=''${left[2]}
+      left=("''${left[@]:3}")
+      if [ -z ''${seen[$next]+x} ]; then
+        seen[$next]=1
+        IFS=: read -ra paths <<< $rpath
+        res=
+        for path in "''${paths[@]}"; do
+          path=$(eval "echo $path")
+          if [ -f "$path/$next" ]; then
+              res="$path/$next"
+              echo "$res"
+              add_needed "$res"
+              break
+          fi
+        done
+        if [ -z "$res" ]; then
+          echo "Couldn't satisfy dependency $next" >&2
+          exit 1
+        fi
+      fi
+    done
+  '';
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
@@ -35,7 +81,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
-    { buildInputs = [pkgs.nukeReferences];
+    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -101,9 +147,7 @@ let
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
         echo "Copying libs for executable $BIN"
-        LDD="$(ldd $BIN)" || continue
-        LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
-        for LIB in $LIBS; do
+        for LIB in $(${findLibs}/bin/find-libs $BIN); do
           TGT="$out/lib/$(basename $LIB)"
           if [ ! -f "$TGT" ]; then
             SRC="$(readlink -e $LIB)"
@@ -130,6 +174,7 @@ let
         fi
       done
 
+      if [ -z "${toString pkgs.stdenv.isCross}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -142,6 +187,7 @@ let
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
+      fi
     ''; # */
 
 
@@ -243,7 +289,7 @@ let
             { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
             ''
               target=$out
-              ${pkgs.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }

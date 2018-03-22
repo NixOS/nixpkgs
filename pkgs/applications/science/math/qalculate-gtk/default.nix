@@ -2,17 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "qalculate-gtk-${version}";
-  version = "0.9.9";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/qalculate-gtk/archive/v${version}.tar.gz";
-    sha256 = "0v9ibycilygmi9zzi7cxif7si56c85lfzdvbqnbf32whg8ydqqkg";
+    sha256 = "0sf4ywz8hsszaf0yr0ncdlp7mwjk6b276bwl0j9vf1j925c89pbn";
   };
+
+  patchPhase = ''
+    substituteInPlace src/main.cc --replace 'getPackageDataDir().c_str()' \"$out/share\"
+  '';
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook wrapGAppsHook ];
   buildInputs = [ libqalculate gtk3 ];
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The ultimate desktop calculator";

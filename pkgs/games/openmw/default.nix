@@ -6,28 +6,29 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
-      rev = "c0adcc0b43f37931ccb70e3e2b4227c4a86cfaaf";
-      sha256 = "12nrpayms0jl2knkv4kax93si1510hjyl1g3i1b73ydnzhvr3x02";
+      rev = "2b4c8e37268e595b82da4b9aadd5507852569b87";
+      sha256 = "0admnllxic6dcpic0h100927yw766ab55dix002vvdx36i6994jb";
     };
   });
 in stdenv.mkDerivation rec {
-  version = "0.41.0";
+  version = "0.43.0";
   name = "openmw-${version}";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
     rev = name;
-    sha256 = "1qay278965i7ja2rjllhcqfq7zpbapd7w57xly02apniadyfg0yz";
+    sha256 = "0lj8v81hk807dy0wcdhfp0iyn4l5yag53hx1a6xm44gh2dpyil43";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake boost ffmpeg qt4 bullet mygui openscenegraph_ SDL2 unshield openal pkgconfig libXt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake boost ffmpeg qt4 bullet mygui openscenegraph_ SDL2 unshield openal libXt ];
 
   meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
-    homepage = "http://openmw.org";
+    homepage = http://openmw.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

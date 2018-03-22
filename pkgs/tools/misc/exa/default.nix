@@ -1,51 +1,30 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv
+}:
 
 with rustPlatform;
 
-let
-  # check for updates
-  zoneinfo_compiled = fetchFromGitHub {
-    owner = "rust-datetime";
-    repo = "zoneinfo-compiled";
-    rev = "f56921ea5e9f7cf065b1480ff270a1757c1f742f";
-    sha256 = "1xmw7c5f5n45lkxnyxp4llfv1bnqhc876w98165ccdbbiylfkw26";
-  };
-  cargoPatch = ''
-    # use non-git dependencies
-    patch Cargo.toml <<EOF
-    46c46
-    < git = "https://github.com/rust-datetime/zoneinfo-compiled.git"
-    ---
-    > path = "${zoneinfo_compiled}"
-    EOF
-  '';
-in buildRustPackage rec {
+buildRustPackage rec {
   name = "exa-${version}";
-  version = "0.7.0";
+  version = "0.8.0";
 
-  depsSha256 = "0j320hhf2vqaha137pjj4pyiw6d3p5h3nhy3pl9vna1g5mnl1sn7";
+  cargoSha256 = "08zzn3a32xfjkmpawcjppn1mr26ws3iv40cckiz8ldz4qc8y9gdh";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
     rev = "v${version}";
-    sha256 = "0i9psgna2wwv9qyw9cif4qznqiyi16vl763hpm2yr195aj700339";
+    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv darwin.apple_sdk.frameworks.Security ]
+  ;
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
-
-  cargoUpdateHook = ''
-    ${cargoPatch}
-  '';
-  cargoDepsHook = ''
-    pushd $sourceRoot
-    ${cargoPatch}
-    popd
-  '';
 
   meta = with stdenv.lib; {
     description = "Replacement for 'ls' written in Rust";
@@ -57,8 +36,8 @@ in buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = http://the.exa.website;
+    homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainer = [ maintainers.ehegnes ];
+    maintainers = [ maintainers.ehegnes ];
   };
 }

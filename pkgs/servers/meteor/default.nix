@@ -2,14 +2,14 @@
 
 let
   bootstrap = fetchurl {
-    url = "https://meteorinstall-4168.kxcdn.com/packages-bootstrap/1.4.2.3/meteor-bootstrap-os.linux.x86_64.tar.gz";
-    sha256 = "1x5dp8y731qai882ghy3337844lc686r15a4dd9wjx2zvy7wmwhz";
+    url = "https://meteorinstall-4168.kxcdn.com/packages-bootstrap/1.5/meteor-bootstrap-os.linux.x86_64.tar.gz";
+    sha256 = "0cwwqv88h1ji7g4zmfz34xsrxkn640wr11ddjq5c6b9ygcljci3p";
   };
 in
 
 stdenv.mkDerivation rec {
   name = "meteor-${version}";
-  version = "1.4.2.3";
+  version = "1.5";
 
   dontStrip = true;
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
-    homepage = "http://www.meteor.com";
+    homepage = http://www.meteor.com;
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

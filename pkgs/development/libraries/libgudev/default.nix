@@ -1,22 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, udev, glib }:
+{ stdenv, fetchurl, pkgconfig, udev, glib, gnome3 }:
 
-stdenv.mkDerivation rec {
+let
+  pname = "libgudev";
+in stdenv.mkDerivation rec {
   name = "libgudev-${version}";
-  version = "231";
+  version = "232";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/libgudev/${version}/${name}.tar.xz";
-    sha256 = "15iz0qp57qy5pjrblsn36l0chlncqggqsg8h8i8c71499afzj7iv";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860";
   };
 
-  buildInputs = [ pkgconfig udev glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev glib ];
 
   # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
   configureFlags = [ "--disable-umockdev" ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/libgudev;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ maintainers.eelco ] ++ gnome3.maintainers;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

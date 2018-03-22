@@ -1,24 +1,27 @@
-{stdenv, fetchurl, openssl, curl, ncurses, libjpeg
+{stdenv, fetchurl, gnused, openssl, curl, ncurses, libjpeg
 , withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
-  version = "4.22.10";
-  debPatch = "2";
-  name = "centerim-${version}";
+  version = "5.0.1";
+  name = "centerim5-${version}";
 
   src = fetchurl {
-    url = "http://centerim.org/download/releases/${name}.tar.gz";
+    url = "http://centerim.org/download/cim5/${name}.tar.gz";
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
   };
-  patches = fetchurl {
-    url = "mirror://debian/pool/main/c/centerim/centerim_${version}-${debPatch}.diff.gz";
-    sha256 = "18iz3hkvr31jsyznryvyldxm9ckyrpy9sczxikrnw2i2r1xyfj8m";
-  };
+
+  CXXFLAGS = "-std=gnu++98";
 
   buildInputs = [ openssl curl ncurses libjpeg ]
     ++ stdenv.lib.optional withGpg gpgme;
 
-  configureFlags = [ "--with-openssl=${openssl.dev}" ];
+  preConfigure = ''
+    ${gnused}/bin/sed -i '1,1i#include <stdio.h>' libicq2000/libicq2000/sigslot.h
+  '';
+
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+  ];
 
   meta = {
     homepage = http://www.centerim.org/;

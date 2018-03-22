@@ -1,4 +1,11 @@
 { pkgs ? import <nixpkgs> {} }:
+## we default to importing <nixpkgs> here, so that you can use
+## a simple shell command to insert new sha256's into this file
+## e.g. with emacs C-u M-x shell-command
+##
+##     nix-prefetch-url sources.nix -A {stable{,.mono,.gecko64,.gecko32}, unstable, staging, winetricks}
+
+# here we wrap fetchurl and fetchFromGitHub, in order to be able to pass additional args around it
 let fetchurl = args@{url, sha256, ...}:
   pkgs.fetchurl { inherit url sha256; } // args;
     fetchFromGitHub = args@{owner, repo, rev, sha256, ...}:
@@ -6,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "2.0.2";
-    url = "https://dl.winehq.org/wine/source/2.0/wine-${version}.tar.xz";
-    sha256 = "16iwf48cfi39aqyy8131jz4x7lr551c9yc0mnks7g24j77sq867p";
+    version = "3.0";
+    url = "https://dl.winehq.org/wine/source/3.0/wine-${version}.tar.xz";
+    sha256 = "1v7vq9iinkscbq6wg85fb0d2137660fg2nk5iabxkl2wr850asil";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -24,31 +31,35 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.7.0";
+      version = "4.7.1";
       url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "18d5djnsb70740xs475jg1xsjsrq6zzjv0dmjq3vi7nbv56lg63n";
+      sha256 = "1ai9qsrgiwd371pyqr3mjaddaczly5d1z68r4lxl3hrkz2vmv39c";
     };
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "2.12";
-    url = "https://dl.winehq.org/wine/source/2.x/wine-${version}.tar.xz";
-    sha256 = "19qk880fk7xxzx9jcl6sjzilhzssn0csqlqr9vnfd1qlhjpi2v29";
+    version = "3.3";
+    url = "https://dl.winehq.org/wine/source/3.x/wine-${version}.tar.xz";
+    sha256 = "0cx31jsll7mxd9r7v0vpahajqwb6da6cpwybv06l5ydkgfrbv505";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
+    # https://github.com/wine-compholio/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "00qqpw5fmpwg4589q2dwlv3jrcyj0yzv4mk63w5ydhvmy5gq48wy";
-    owner = "wine-compholio";
+    # FIXME update winestaging sources, when 3.3 is released
+    # FIXME then revert the staging derivation in ./default.nix
+    sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+    owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
   };
 
   winetricks = fetchFromGitHub rec {
-    version = "20170614";
-    sha256 = "1xszflrdmixxr0v7vjby8fpnl8fgc9gldr1gnjpwzq1rnb84idqa";
+    # https://github.com/Winetricks/winetricks/releases
+    version = "20180217";
+    sha256 = "0k3vlsqjbzys5dfbxwgw76al8gh44jsjqkc06va103frkrgjxvc5";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

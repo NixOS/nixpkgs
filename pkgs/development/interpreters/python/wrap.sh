@@ -66,7 +66,9 @@ wrapPythonProgramsIn() {
                     # above. The script will set PYTHONPATH and PATH variables.!
                     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
                     local -a wrap_args=("$f"
-                                    --prefix PATH ':' "$program_PATH")
+                                    --prefix PATH ':' "$program_PATH"
+                                    --set PYTHONNOUSERSITE "true"
+                                    )
 
                     # Add any additional arguments provided by makeWrapperArgs
                     # argument to buildPythonPackage.
@@ -81,7 +83,7 @@ wrapPythonProgramsIn() {
 
 # Adds the lib and bin directories to the PYTHONPATH and PATH variables,
 # respectively. Recurses on any paths declared in
-# `propagated-native-build-inputs`, while avoiding duplicating paths by
+# `propagated-build-inputs`, while avoiding duplicating paths by
 # flagging the directories it has visited in `pythonPathsSeen`.
 _addToPythonPath() {
     local dir="$1"
@@ -94,7 +96,7 @@ _addToPythonPath() {
     addToSearchPath program_PATH $dir/bin
 
     # Inspect the propagated inputs (if they exist) and recur on them.
-    local prop="$dir/nix-support/propagated-native-build-inputs"
+    local prop="$dir/nix-support/propagated-build-inputs"
     if [ -e $prop ]; then
         local new_path
         for new_path in $(cat $prop); do

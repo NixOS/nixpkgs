@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus_glib }:
+{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "libunique-1.1.6";
@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     ./1.1.6-fix-test.patch
     ./1.1.6-G_CONST_RETURN.patch
     ./1.1.6-include-terminator.patch
-  ];
+  ]
+    ++ [ ./gcc7-bug.patch ];
 
-  buildInputs = [ pkgconfig glib gtk2 dbus_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 dbus-glib ];
 
   # don't make deprecated usages hard errors
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://live.gnome.org/LibUnique;
+    homepage = https://wiki.gnome.org/Attic/LibUnique;
     description = "A library for writing single instance applications";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;

@@ -15,7 +15,7 @@ let
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemuOvmf ''
-      nvram = ["${pkgs.OVMF.fd}/FV/OVMF_CODE.fd:${pkgs.OVMF.fd}/FV/OVMF_VARS.fd"]
+      nvram = ["/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd"]
     ''}
     ${cfg.qemuVerbatimConfig}
   '';
@@ -37,11 +37,13 @@ in {
       '';
     };
 
-    virtualisation.libvirtd.enableKVM = mkOption {
-      type = types.bool;
-      default = true;
+    virtualisation.libvirtd.qemuPackage = mkOption {
+      type = types.package;
+      default = pkgs.qemu;
       description = ''
-        This option enables support for QEMU/KVM in libvirtd.
+        Qemu package to use with libvirt.
+        `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
+        `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
       '';
     };
 
@@ -102,9 +104,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs;
-      [ libvirt netcat-openbsd ]
-       ++ optional cfg.enableKVM qemu_kvm;
+    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd cfg.qemuPackage ];
 
     boot.kernelModules = [ "tun" ];
 
@@ -119,18 +119,10 @@ in {
       after = [ "systemd-udev-settle.service" ]
               ++ optional vswitch.enable "vswitchd.service";
 
-      environment = {
-        LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
-      };
+      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
-      path = with pkgs; [
-          bridge-utils
-          dmidecode
-          dnsmasq
-          ebtables
-        ]
-        ++ optional cfg.enableKVM qemu_kvm
-        ++ optional vswitch.enable vswitch.package;
+      path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
+             ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
         mkdir -p /var/log/libvirt/qemu -m 755
@@ -155,34 +147,31 @@ in {
         # Copy generated qemu config to libvirt directory
         cp -f ${qemuConfigFile} /var/lib/libvirt/qemu.conf
 
-        # libvirtd puts the full path of the emulator binary in the machine
-        # config file. But this path can unfortunately be garbage collected
-        # while still being used by the virtual machine. So update the
-        # emulator path on each startup to something valid (re-scan $PATH).
-        for file in /var/lib/libvirt/qemu/*.xml /var/lib/libvirt/lxc/*.xml; do
-            test -f "$file" || continue
-            # get (old) emulator path from config file
-            emulator=$("${pkgs.xmlstarlet}/bin/xmlstarlet" select --template --value-of "/domain/devices/emulator" "$file")
-            # get a (definitely) working emulator path by re-scanning $PATH
-            new_emulator=$(PATH=${pkgs.libvirt}/libexec:$PATH command -v $(basename "$emulator"))
-            # write back
-            "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/devices/emulator" -v "$new_emulator" "$file"
-
-            # Also refresh the OVMF path. Files with no matches are ignored.
-            "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/os/loader" -v "${pkgs.OVMF.fd}/FV/OVMF_CODE.fd" "$file"
+        # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
+        mkdir -p /run/libvirt/nix-emulators
+        for emulator in ${pkgs.libvirt}/libexec/libvirt_lxc ${cfg.qemuPackage}/bin/qemu-kvm ${cfg.qemuPackage}/bin/qemu-system-*; do
+          ln -s --force "$emulator" /run/libvirt/nix-emulators/
         done
-      ''; # */
+
+        ${optionalString cfg.qemuOvmf ''
+            mkdir -p /run/libvirt/nix-ovmf
+            ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd /run/libvirt/nix-ovmf/
+            ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd /run/libvirt/nix-ovmf/
+        ''}
+      '';
 
       serviceConfig = {
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
-        Restart = "on-failure";
+        Restart = "no";
       };
+      restartIfChanged = false;
     };
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ coreutils libvirt gawk ];
+      restartIfChanged = false;
     };
 
     systemd.sockets.virtlogd = {
@@ -194,6 +183,7 @@ in {
     systemd.services.virtlogd = {
       description = "Virtual machine log manager";
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlogd virtlogd";
+      restartIfChanged = false;
     };
 
     systemd.sockets.virtlockd = {
@@ -205,6 +195,7 @@ in {
     systemd.services.virtlockd = {
       description = "Virtual machine lock manager";
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
+      restartIfChanged = false;
     };
   };
 }

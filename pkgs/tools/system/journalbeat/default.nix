@@ -7,7 +7,7 @@ let
 in buildGoPackage rec {
 
   name = "journalbeat-${version}";
-  version = "5.4.1";
+  version = "5.6.8";
 
   goPackagePath = "github.com/mheese/journalbeat";
 
@@ -15,6 +15,7 @@ in buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $bin/bin/journalbeat \
+      --argv0 journalbeat \
       --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
@@ -22,7 +23,7 @@ in buildGoPackage rec {
     owner = "mheese";
     repo = "journalbeat";
     rev = "v${version}";
-    sha256 = "14mhx3gqg19ljcr07ahbry9k5hkbj2mjji4qsjrbc7jknis6frz4";
+    sha256 = "1vgpwnwqjc93nvdpcd52748bwl3r371jb55l17bsgdzrmlcyfm8a";
   };
 
   meta = with lib; {

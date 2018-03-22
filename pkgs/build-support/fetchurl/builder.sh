@@ -39,7 +39,6 @@ tryDownload() {
           curlexit=$?;
        fi
     done
-    stopNest
 }
 
 
@@ -51,7 +50,6 @@ finish() {
     fi
 
     runHook postFetch
-    stopNest
     exit 0
 }
 

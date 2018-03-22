@@ -17,15 +17,12 @@ preConfigure() {
             first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
             if test "$first" = "#!"; then
                 echo "patching $fn..."
-                sed < "$fn" > "$fn".tmp \
-                    -e "s|^#\!\(.*/perl.*\)$|#\! \1$perlFlags|"
-                if test -x "$fn"; then chmod +x "$fn".tmp; fi
-                mv "$fn".tmp "$fn"
+                sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1$perlFlags|"
             fi
         fi
     done
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
+    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=$perl/bin/perl
 }
 
 
@@ -34,8 +31,8 @@ postFixup() {
     # dependencies in the user environment (since Perl modules don't
     # have something like an RPATH, so the only way to find the
     # dependencies is to have them in the PERL5LIB variable).
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 }
 

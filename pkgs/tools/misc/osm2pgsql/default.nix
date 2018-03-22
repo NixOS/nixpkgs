@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     version = "0.92.1-unstable";
     homepage = https://github.com/openstreetmap/osm2pgsql;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

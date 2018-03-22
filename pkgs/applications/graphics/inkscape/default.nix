@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
+, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, automake114x, potrace, cmake
+, libvisio, libcdr, libexif, potrace, cmake
 }:
 
 let
@@ -10,11 +10,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.1";
+  name = "inkscape-0.92.3";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${name}.tar_XlpI7qT.bz2";
-    sha256 = "01chr3vh728dkg7l7lilwgmh5nrp784khdhjgpqjbq9dh2zhax15";
+    url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
+    sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
 
   unpackPhase = ''
@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
+    perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif automake114x potrace cmake python2Env
+    makeWrapper gsl poppler imagemagick libwpg librevenge
+    libvisio libcdr libexif potrace cmake python2Env
   ];
 
   enableParallelBuilding = true;
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = "GPL";
-    homepage = http://www.inkscape.org;
+    homepage = https://www.inkscape.org;
     description = "Vector graphics editor";
     platforms = platforms.all;
     longDescription = ''

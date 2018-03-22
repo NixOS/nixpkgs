@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook, gettext, libssl }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, gettext, libssl }:
 
 stdenv.mkDerivation rec {
   name = "axel-${version}";
-  version = "2.12";
+  version = "2.16.1";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/axel/axel_${version}.orig.tar.gz";
-    sha256 = "12sa5whd5mjn1idd83hbhm0rmsh5bvhhgvv03fk5cgxynwkbprr8";
+    sha256 = "0v3hgqrpqqqkj8ghaky88a0wpnpwqd72vd04ywlbhgfzfkfrllk4";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ gettext libssl ];
 

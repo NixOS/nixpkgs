@@ -1,9 +1,11 @@
-{ symlinkJoin, lib, dwarf-therapist-original, dwarf-fortress-original, makeWrapper }:
+{ stdenv, symlinkJoin, lib, dwarf-therapist-original, dwarf-fortress-original, makeWrapper }:
 
 let
   df = dwarf-fortress-original;
   dt = dwarf-therapist-original;
-  inifile = "linux/v0${df.baseVersion}.${df.patchVersion}.ini";
+  platformSlug = if stdenv.targetPlatform.is32bit then
+    "linux32" else "linux64";
+  inifile = "linux/v0.${df.baseVersion}.${df.patchVersion}_${platformSlug}.ini";
   dfHashFile = "${df}/hash.md5";
 
 in symlinkJoin {

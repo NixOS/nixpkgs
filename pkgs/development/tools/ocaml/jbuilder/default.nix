@@ -1,10 +1,13 @@
-{ stdenv, fetchzip, ocaml, opam }:
+{ stdenv, fetchFromGitHub, ocaml, opam }:
 
-stdenv.mkDerivation {
-  name = "jbuilder-1.0+beta7";
-  src = fetchzip {
-    url = http://github.com/janestreet/jbuilder/archive/1.0+beta7.tar.gz;
-    sha256 = "10qjqs6gv9y8s580gvssjm56xw72pcxd5lkpzqpz6cz4390d45i8";
+stdenv.mkDerivation rec {
+  name = "jbuilder-${version}";
+  version = "1.0+beta17";
+  src = fetchFromGitHub {
+    owner = "ocaml";
+    repo = "dune";
+    rev = "${version}";
+    sha256 = "04pyry459hp2r2s9m5xkcq1glzp20ddz5wb1w8nzp3zgygy0431x";
   };
 
   buildInputs = [ ocaml ];

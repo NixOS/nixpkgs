@@ -1,8 +1,9 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
 , libXrandr, libXinerama
-, which, alsaLib, curl, libvpx, gawk, nettools, dbus
-, xorriso, makeself, perl, pkgconfig
+, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, gawk, nettools, dbus
+, xorriso, makeself, perl
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
@@ -18,10 +19,12 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  extpack = "1952ikz4xsjgdd0pzdx1riwaingyhkxp0ind31yzqc4d0hp8l6b5";
-  extpackRev = "117012";
-  main = "0q5vjsih4ndn1b0s9l1ppxng6dljld5bin5nqfrhvgr2ldlv2bgf";
-  version = "5.1.24";
+  # Manually sha256sum the extensionPack file, must be hex!
+  # Do not forget to update the hash in ./guest-additions/default.nix!
+  extpack = "355ea5fe047f751534720c65398b44290d53f389e0f5f66818f3f36746631d26";
+  extpackRev = "121009";
+  main = "ee2759d47b0b4ac81b8b671c9485c87fb2db12c097b3e7e69b94c1291a8084e8";
+  version = "5.2.8";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -50,10 +53,12 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ];
+
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam xorriso makeself perl
-      pkgconfig which libXmu libpng patchelfUnstable python ]
+      libXmu libpng patchelfUnstable python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
@@ -87,8 +92,11 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch
-    ++ [ ./qtx11extras.patch ];
+  patches =
+     optional enableHardening ./hardened.patch
+  ++ [ ./qtx11extras.patch ];
+
+
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -189,12 +197,16 @@ in stdenv.mkDerivation {
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
-  passthru = { inherit version; /* for guest additions */ };
+  passthru = {
+    inherit version;       # for guest additions
+    inherit extensionPack; # for inclusion in profile to prevent gc
+  };
 
   meta = {
     description = "PC emulator";
-    homepage = http://www.virtualbox.org/;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    homepage = https://www.virtualbox.org/;
+    maintainers = with maintainers; [ flokli sander ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

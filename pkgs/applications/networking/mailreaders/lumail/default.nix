@@ -1,19 +1,42 @@
-{ stdenv, fetchurl, pkgconfig, lua5_2, file, ncurses, gmime, pcre-cpp
-, perl, perlPackages }:
+{ stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
+, perl, perlPackages, makeWrapper
+, debugBuild ? false
+, alternativeGlobalConfigFilePath ? null
+}:
 
 let
-  version = "2.9";
+  version    = "3.1";
+  binaryName = if debugBuild then "lumail2-debug" else "lumail2";
+  alternativeConfig = builtins.toFile "lumail2.lua"
+    (builtins.readFile alternativeGlobalConfigFilePath);
+
+  globalConfig = if isNull alternativeGlobalConfigFilePath then ''
+    mkdir -p $out/etc/lumail2
+    cp global.config.lua $out/etc/lumail2.lua
+    for n in ./lib/*.lua; do
+      cp "$n" $out/etc/lumail2/
+    done
+  '' else ''
+    ln -s ${alternativeConfig} $out/etc/lumail2.lua
+  '';
+
+  getPath  = type : "${lua}/lib/?.${type};";
+  luaPath  = getPath "lua";
+  luaCPath = getPath "so";
 in
 stdenv.mkDerivation {
   name = "lumail-${version}";
 
   src = fetchurl {
     url = "https://lumail.org/download/lumail-${version}.tar.gz";
-    sha256 = "1rni5lbic36v4cd1r0l28542x0hlmfqkl6nac79gln491in2l2sc";
+    sha256 = "0vj7p7f02m3w8wb74ilajcwznc4ai4h2ikkz9ildy0c00aqsi5w4";
   };
 
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [
-    pkgconfig lua5_2 file ncurses gmime pcre-cpp
+    lua file ncurses gmime pcre-cpp
     perl perlPackages.JSON perlPackages.NetIMAPClient
   ];
 
@@ -28,15 +51,25 @@ stdenv.mkDerivation {
     sed -e "s|^#\!\(.*/perl.*\)$|#\!\1$perlFlags|" -i perl.d/imap-proxy
   '';
 
+  buildFlags = if debugBuild then "lumail2-debug" else "";
+
+  installPhase = ''
+    mkdir -p $out/bin || true
+    install -m755 ${binaryName} $out/bin/
+  ''
+  + globalConfig
+  + ''
+    wrapProgram $out/bin/${binaryName} \
+        --prefix LUA_PATH : "${luaPath}" \
+        --prefix LUA_CPATH : "${luaCPath}"
+  '';
+
   makeFlags = [
     "LVER=lua"
     "PREFIX=$(out)"
     "SYSCONFDIR=$(out)/etc"
+    "LUMAIL_LIBS=$(out)/etc/lumail2"
   ];
-
-  postInstall = ''
-    cp lumail2.user.lua $out/etc/lumail2/
-  '';
 
   meta = with stdenv.lib; {
     description = "Console-based email client";

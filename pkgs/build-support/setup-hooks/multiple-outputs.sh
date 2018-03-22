@@ -40,9 +40,9 @@ _overrideFirst outputLib "lib" "out"
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
-_overrideFirst outputMan "man" "doc" "$outputBin"
+_overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
-_overrideFirst outputInfo "info" "doc" "$outputMan"
+_overrideFirst outputInfo "info" "$outputBin"
 
 
 # Add standard flags to put files into the desired outputs.
@@ -140,6 +140,7 @@ _multioutDocs() {
     moveToOutput share/info "${!outputInfo}"
     moveToOutput share/doc "${!outputDoc}"
     moveToOutput share/gtk-doc "${!outputDevdoc}"
+    moveToOutput share/devhelp/books "${!outputDevdoc}"
 
     # the default outputMan is in $bin
     moveToOutput share/man "${!outputMan}"
@@ -164,8 +165,6 @@ _multioutDevs() {
 }
 
 # Make the "dev" propagate other outputs needed for development.
-# Note: with current cross-building setup, all packages are "native" if not cross-building;
-# however, if cross-building, the outputs are non-native. We have to choose the right file.
 _multioutPropagateDev() {
     if [ "$outputs" = "out" ]; then return; fi;
 
@@ -193,16 +192,8 @@ _multioutPropagateDev() {
         return
     fi
 
-    local propagatedBuildInputsFile
-    if [ -z "$crossConfig" ]; then
-        propagatedBuildInputsFile=propagated-native-build-inputs
-    else
-        propagatedBuildInputsFile=propagated-build-inputs
-    fi
-
     mkdir -p "${!propagaterOutput}"/nix-support
     for output in $propagatedBuildOutputs; do
-        echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/$propagatedBuildInputsFile
+        echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
-

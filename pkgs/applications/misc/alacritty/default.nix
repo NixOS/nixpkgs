@@ -1,5 +1,5 @@
 { stdenv,
-  fetchFromGitHub,
+  fetchgit,
   rustPlatform,
   cmake,
   makeWrapper,
@@ -12,50 +12,68 @@
   libXcursor,
   libXxf86vm,
   libXi,
+  libXrandr,
   xclip }:
 
 with rustPlatform;
 
-buildRustPackage rec {
-  name = "alacritty-unstable-2017-07-25";
-
-  src = fetchFromGitHub {
-    owner = "jwilm";
-    repo = "alacritty";
-    rev = "49c73f6d55e5a681a0e0f836cd3e9fe6af30788f";
-    sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
-  };
-
-  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
-
-  buildInputs = [
-    cmake
-    makeWrapper
+let
+  rpathLibs = [
+    expat
     freetype
     fontconfig
-    xclip
-    pkgconfig
-    expat
     libX11
     libXcursor
     libXxf86vm
+    libXrandr
     libXi
   ];
+in buildRustPackage rec {
+  name = "alacritty-unstable-${version}";
+  version = "2018-03-04";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    for f in $(find target/release -maxdepth 1 -type f); do
-      cp $f $out/bin
-    done;
-    wrapProgram $out/bin/alacritty --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}"
+  # At the moment we cannot handle git dependencies in buildRustPackage.
+  # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
+  src = fetchgit {
+    url = https://github.com/Mic92/alacritty.git;
+    rev = "rev-${version}";
+    sha256 = "0pxnc6r75c7rwnsqc0idi4a60arpgchl1i8yppibhv0px5w11mwa";
+    fetchSubmodules = true;
+  };
+
+  cargoSha256 = "0q2yy9cldng8znkmhysgrwi43z2x7a8nb1bnxpy9z170q8ds0m0j";
+
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkgconfig
+  ];
+
+  buildInputs = rpathLibs;
+
+  postPatch = ''
+    substituteInPlace copypasta/src/x11.rs \
+      --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    install -D target/release/alacritty $out/bin/alacritty
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+
+    install -D Alacritty.desktop $out/share/applications/alacritty.desktop
+
+    runHook postInstall
+  '';
+
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "doxygen-1.8.11";
+  name = "doxygen-1.8.14";
 
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0ja02pm3fpfhc5dkry00kq8mn141cqvdqqpmms373ncbwi38pl35";
+    sha256 = "d1757e02755ef6f56fd45f1f4398598b920381948d6fcfa58f5ca6aa56f59d4d";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = "http://doxygen.org/";
+    homepage = http://doxygen.org/;
     description = "Source code documentation generator tool";
 
     longDescription = ''

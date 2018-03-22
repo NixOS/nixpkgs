@@ -6,7 +6,7 @@ let
   );
 
   origKernel = pkgs.buildLinux {
-    inherit (pkgs.linux) src version;
+    inherit (pkgs.linux) src version stdenv;
     inherit configfile;
     allowImportFromDerivation = true;
     kernelPatches = [ pkgs.kernelPatches.cifs_timeout_2_6_38 ];

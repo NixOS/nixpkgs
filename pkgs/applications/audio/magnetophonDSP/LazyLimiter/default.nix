@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 LazyLimiter.dsp
-    sed -i "s|\[ *scale *: *log *\]||g ; s|\btgroup\b|hgroup|g" "GUI.lib"
     faust2lv2 -vec -time -t 99999  -gui LazyLimiter.dsp
   '';
 

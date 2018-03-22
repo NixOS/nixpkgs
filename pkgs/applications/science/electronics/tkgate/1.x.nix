@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
-    homepage = "http://www.tkgate.org/";
+    homepage = http://www.tkgate.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.peti ];
     hydraPlatforms = stdenv.lib.platforms.linux;

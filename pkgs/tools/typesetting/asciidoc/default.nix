@@ -37,6 +37,9 @@
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
+
+# java is problematic on some platforms, where it is unfree
+, enableJava ? true
 }:
 
 assert enableStandardFeatures ->
@@ -55,7 +58,7 @@ assert enableStandardFeatures ->
   docbook_xml_dtd_45 != null &&
   docbook5_xsl != null &&
   docbook_xsl != null &&
-  fop != null &&
+  (fop != null || !enableJava) &&
 # TODO: Package this:
 #  epubcheck != null &&
   gnused != null &&
@@ -63,7 +66,7 @@ assert enableStandardFeatures ->
 
 # filters
 assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
-assert enableExtraPlugins || enableDitaaFilter -> jre != null;
+assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre != null;
 assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
 assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
 assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
@@ -73,7 +76,7 @@ assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip !=
 
 let
 
-  _enableDitaaFilter = enableExtraPlugins || enableDitaaFilter;
+  _enableDitaaFilter = (enableExtraPlugins && enableJava) || enableDitaaFilter;
   _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
   _enableDiagFilter = enableExtraPlugins || enableDiagFilter;
   _enableQrcodeFilter = enableExtraPlugins || enableQrcodeFilter;
@@ -239,7 +242,7 @@ stdenv.mkDerivation rec {
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
-        -e "s|^FOP =.*|FOP = '${fop}/bin/fop'|" \
+        ${optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
         -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
         -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
         -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
@@ -269,7 +272,7 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
-    homepage = "http://www.methods.co.nz/asciidoc/";
+    homepage = http://www.methods.co.nz/asciidoc/;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

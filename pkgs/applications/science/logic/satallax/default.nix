@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     downloadPage = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
-    homepage = "http://www.ps.uni-saarland.de/~cebrown/satallax/index.php";
+    homepage = http://www.ps.uni-saarland.de/~cebrown/satallax/index.php;
     updateWalker = true;
   };
 }

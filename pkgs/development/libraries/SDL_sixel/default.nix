@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-video-sixel" ];
 
-  buildInputs = [ pkgconfig libsixel ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsixel ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library, that supports sixel graphics on consoles";

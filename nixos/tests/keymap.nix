@@ -46,9 +46,11 @@ let
   in makeTest {
     name = "keymap-${layout}";
 
+    machine.services.xserver.desktopManager.xterm.enable = false;
     machine.i18n.consoleKeyMap = mkOverride 900 layout;
     machine.services.xserver.layout = mkOverride 900 layout;
     machine.imports = [ ./common/x11.nix extraConfig ];
+    machine.services.xserver.displayManager.slim.enable = true;
 
     testScript = ''
       sub waitCatAndDelete ($) {

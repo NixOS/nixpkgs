@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.2";
   name = "goaccess-${version}";
 
   src = fetchurl {
     url = "http://tar.goaccess.io/goaccess-${version}.tar.gz";
-    sha256 = "1lxnhvh4xhkgzdv0l2fiza2099phn9zs04p9cqfhhl5k6xq18wsc";
+    sha256 = "051lrprg9svl5ccc3sif8fl78vfpkrgjcxgi2wngqn7a81jzdabb";
   };
 
   configureFlags = [
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     geoipWithDatabase
     ncurses
     glib

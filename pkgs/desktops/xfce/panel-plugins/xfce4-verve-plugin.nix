@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, exo, pcre
-, libxfce4util, xfce4panel, libxfce4ui, xfconf, gtk }:
+, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool glib exo pcre libxfce4util libxfce4ui xfce4panel xfconf gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib exo pcre libxfce4util libxfce4ui xfce4-panel xfconf gtk ];
 
   hardeningDisable = [ "format" ];
 

@@ -3,17 +3,18 @@
 stdenv.mkDerivation rec {
   name = "libtermkey-${version}";
 
-  version = "0.19";
+  version = "0.20";
 
   src = fetchzip {
     url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
-    sha256 = "0v85h0zacd5lqwkykl2ms4009x8mfidzb6jr4dsq4gh7kwm54w56";
+    sha256 = "1i5a2zangq61ba1vdkag34ig5g4gzccldccdbcmqmk93saa6lkbx";
   };
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  buildInputs = [ libtool pkgconfig ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool ncurses ];
 
   meta = with lib; {
     description = "Terminal keypress reading library";

@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "gocode-${version}";
-  version = "20170530-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "f1eef9a6ba005abb145d7b58fdd225e83a3c6a05";
+  version = "20170903-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "c7fddb39ecbc9ebd1ebe7d2a3af473ed0fffffa1";
 
   goPackagePath = "github.com/nsf/gocode";
 
@@ -15,6 +15,6 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/nsf/gocode";
-    sha256 = "1hkr46ikrprx203i2yr6xds1bzxggblh7bg026m2cda6dxgpnsgw";
+    sha256 = "0qx8pq38faig41xkl1a4hrgp3ziyjyn6g53vn5wj7cdgm5kk67nb";
   };
 }

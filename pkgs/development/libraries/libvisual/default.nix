@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
   };
 
-  buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
 
   hardeningDisable = [ "format" ];
 
   meta = {
     description = "An abstraction library for audio visualisations";
-    homepage = "http://sourceforge.net/projects/libvisual/";
+    homepage = https://sourceforge.net/projects/libvisual/;
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.unix;
   };

@@ -1,26 +1,28 @@
-{ fetchurl, stdenv, pkgconfig, poppler, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, poppler, libgcrypt, pcre, asciidoc }:
 
 stdenv.mkDerivation rec {
   name = "pdfgrep-${version}";
-  version = "1.3.1";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/pdfgrep/${version}/${name}.tar.gz";
-    sha256 = "6e8bcaf8b219e1ad733c97257a97286a94124694958c27506b2ea7fc8e532437";
+    url = "https://pdfgrep.org/download/${name}.tar.gz";
+    sha256 = "07llkrkcfjwd3ybai9ad10ybhr0biffcplmy7lw4fb87nd2dfw03";
   };
 
-  buildInputs = [ pkgconfig poppler makeWrapper ];
-
-  patchPhase = ''
-    sed -i -e "s%cpp/poppler-document.h%poppler/cpp/poppler-document.h%" pdfgrep.cc
-    sed -i -e "s%cpp/poppler-page.h%poppler/cpp/poppler-page.h%" pdfgrep.cc
+  postPatch = ''
+    for i in ./src/search.h ./src/pdfgrep.cc ./src/search.cc; do
+      substituteInPlace $i --replace '<cpp/' '<'
+    done
   '';
 
+  nativeBuildInputs = [ pkgconfig asciidoc ];
+  buildInputs = [ poppler libgcrypt pcre ];
+
   meta = {
-    description = "A tool to search text in PDF files";
-    homepage = http://pdfgrep.sourceforge.net/;
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    description = "Commandline utility to search text in PDF files";
+    homepage = https://pdfgrep.org/;
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ qknight fpletz ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

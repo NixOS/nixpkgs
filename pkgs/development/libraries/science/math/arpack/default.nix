@@ -4,29 +4,31 @@
 with stdenv.lib;
 
 let
-  version = "3.3.0";
+  version = "3.5.0";
 in
 stdenv.mkDerivation {
   name = "arpack-${version}";
 
   src = fetchurl {
     url = "https://github.com/opencollab/arpack-ng/archive/${version}.tar.gz";
-    sha256 = "1cz53wqzcf6czmcpfb3vb61xi0rn5bwhinczl65hpmbrglg82ndd";
+    sha256 = "0f8jx3fifmj9qdp289zr7r651y1q48k1jya859rqxq62mvis7xsh";
   };
 
   nativeBuildInputs = [ autoconf automake gettext libtool ];
   buildInputs = [ gfortran openblas ];
 
+  doCheck = true;
+
   BLAS_LIBS = "-L${openblas}/lib -lopenblas";
 
-  FFLAGS = optional openblas.blas64 "-fdefault-integer-8";
+  INTERFACE64 = optional openblas.blas64 "1";
 
   preConfigure = ''
     ./bootstrap
   '';
 
   meta = {
-    homepage = "http://github.com/opencollab/arpack-ng";
+    homepage = https://github.com/opencollab/arpack-ng;
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.

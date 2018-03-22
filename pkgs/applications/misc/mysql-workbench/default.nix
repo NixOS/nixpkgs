@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, cmake, pkgconfig
-, glibc, gnome_keyring, gtk, gtkmm, pcre, swig, sudo
+, glibc, gnome-keyring, gtk, gtkmm, pcre, swig, sudo
 , mysql, libxml2, libctemplate, libmysqlconnectorcpp
 , vsqlite, tinyxml, gdal, libiodbc, libpthreadstubs
-, libXdmcp, libuuid, libzip, libgnome_keyring, file
+, libXdmcp, libuuid, libzip, libgnome-keyring, file
 , pythonPackages, jre, autoconf, automake, libtool
 , boost, glibmm, libsigcxx, pangomm, libX11, openssl
 , proj, cairo, libglade
@@ -20,9 +20,10 @@ in stdenv.mkDerivation rec {
     sha256 = "1bxd828nrawmym6d8awh1vrni8dsbwh1k5am1lrq5ihp5c3kw9ka";
   };
 
-  buildInputs = [ cmake pkgconfig glibc gnome_keyring gtk gtk.dev gtkmm pcre swig python sudo
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake gnome-keyring gtk gtk.dev gtkmm pcre swig python sudo
     paramiko mysql libxml2 libctemplate libmysqlconnectorcpp vsqlite tinyxml gdal libiodbc file
-    libpthreadstubs libXdmcp libuuid libzip libgnome_keyring libgnome_keyring.dev jre autoconf
+    libpthreadstubs libXdmcp libuuid libzip libgnome-keyring libgnome-keyring.dev jre autoconf
     automake libtool boost glibmm glibmm.dev libsigcxx pangomm libX11 pexpect pycrypto openssl
     proj cairo cairo.dev makeWrapper libglade ] ;
 
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/mysql-workbench" \
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
       --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64" \
-      --prefix PATH : "${gnome_keyring}/bin" \
+      --prefix PATH : "${gnome-keyring}/bin" \
       --prefix PATH : "${python}/bin" \
       --set PYTHONPATH $PYTHONPATH \
       --run '

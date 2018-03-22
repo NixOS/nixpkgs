@@ -4,9 +4,6 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
 
   ###### interface
@@ -33,11 +30,11 @@ in
 
   config = mkIf config.services.gnome3.gnome-terminal-server.enable {
 
-    environment.systemPackages = [ gnome3.gnome_terminal ];
+    environment.systemPackages = [ pkgs.gnome3.gnome-terminal ];
 
-    services.dbus.packages = [ gnome3.gnome_terminal ];
+    services.dbus.packages = [ pkgs.gnome3.gnome-terminal ];
 
-    systemd.packages = [ gnome3.gnome_terminal ];
+    systemd.packages = [ pkgs.gnome3.gnome-terminal ];
 
   };
 

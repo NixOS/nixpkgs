@@ -6,11 +6,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "kmod-${version}";
-  version = "24";
+  version = "25";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "15xkkkzvca9flvkm48gkh8y8f13vlm3sl7nz9ydc7b3jy4fqs2v1";
+    sha256 = "1kgixs4m3jvwk7fb3d18n6j77qhgi9qfv4csj35rs5ancr4ycrbi";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.kernel.org/pub/linux/utils/kernel/kmod/;
+    homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
     platforms = stdenv.lib.platforms.linux;
   };

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python3Packages, gst_all_1, makeWrapper, gobjectIntrospection
-, gtk3, libwnck3, keybinder, intltool, libcanberra_gtk2 }:
+, gtk3, libwnck3, keybinder, intltool, libcanberra-gtk2 }:
 
 
 python3Packages.buildPythonApplication rec {
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   patches = [ ./datadir.patch ./bug_1190693.patch ];
   prePatch = ''
     rm setup.cfg
-    substituteInPlace kazam/backend/grabber.py --replace "/usr/bin/canberra-gtk-play" "${libcanberra_gtk2}/bin/canberra-gtk-play"
+    substituteInPlace kazam/backend/grabber.py --replace "/usr/bin/canberra-gtk-play" "${libcanberra-gtk2}/bin/canberra-gtk-play"
   '';
 
   # no tests
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
 
 
   meta = with stdenv.lib; {
-    description = "Cross-platform, Friend-2-Friend and secure decentralised communication platform";
+    description = "A screencasting program created with design in mind";
     homepage = https://code.launchpad.net/kazam;
-    #license = licenses.bsd2;
+    license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
   };

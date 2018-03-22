@@ -1,18 +1,20 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, mesa, libdrm, python27, wayland }:
+{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGLU_combined, libdrm,
+  python27, wayland, libudev }:
 
 stdenv.mkDerivation rec {
   name = "glmark2-${version}";
-  version = "2015-06-11";
+  version = "2017-09-01";
 
   src = fetchFromGitHub {
     owner = "glmark2";
     repo = "glmark2";
-    rev = "fa71af2dfab711fac87b9504b6fc9862f44bf72a";
-    sha256 = "1razwrmwk94wf8y7rnqpas9520gidixzcwa65pg946n823105znw";
+    rev = "7265e8e6c77c4f60302507eca0e18560b1117a86";
+    sha256 = "076l75rfl6pnp1wgiwlaihy1vg2advg1z8bi0x84kk259kldgvwn";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libjpeg libpng xorg.libxcb libX11 mesa libdrm python27 wayland
+    libjpeg libpng xorg.libxcb libX11 libGLU_combined libdrm python27 wayland libudev
   ];
 
   buildPhase = ''

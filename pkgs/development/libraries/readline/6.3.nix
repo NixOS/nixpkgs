@@ -10,11 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" "info" ];
 
   propagatedBuildInputs = [ncurses];
 
   patchFlags = "-p0";
+
+  configureFlags =
+    stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ # This test requires running host code
+      "bash_cv_wcwidth_broken=no"
+    ];
 
   patches =
     [ ./link-against-ncurses.patch

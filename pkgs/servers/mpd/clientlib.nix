@@ -1,30 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, doxygen }:
+{ stdenv, fetchFromGitHub, meson, ninja, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  version = "${passthru.majorVersion}.${passthru.minorVersion}";
+  version = "2.14";
   name = "libmpdclient-${version}";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "libmpdclient";
     rev    = "v${version}";
-    sha256 = "06rv2j8rw9v9l4nwpvbh28nad8bbg368hzd8s58znbr5pgb8dihd";
+    sha256 = "15vn9m4qcsccff5rg7jkzy5503skz6bmqqk6qc2smgvjgwn533sm";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen ];
-
-  enableParallelBuilding = true;
-
-  passthru = {
-    majorVersion = "2";
-    minorVersion = "11";
-  };
+  nativeBuildInputs = [ meson ninja ]
+  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   meta = with stdenv.lib; {
     description = "Client library for MPD (music player daemon)";
-    homepage = http://www.musicpd.org/libs/libmpdclient/;
+    homepage = https://www.musicpd.org/libs/libmpdclient/;
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mornfall ehmry ];
+    maintainers = with maintainers; [ ehmry ];
   };
 }

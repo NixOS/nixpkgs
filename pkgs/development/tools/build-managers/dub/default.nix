@@ -1,38 +1,103 @@
-{ stdenv, fetchFromGitHub, curl, dmd, gcc }:
+{ stdenv, fetchFromGitHub, fetchpatch, curl, dmd, libevent, rsync }:
 
-stdenv.mkDerivation rec {
-  name = "dub-${version}";
-  version = "1.1.0";
+let
 
-  src = fetchFromGitHub {
-    sha256 = "1smzlfs5gjmrlghccdgn04qzy5b8l0xm8y2virayb2adrwqviscm";
-    rev = "v${version}";
-    repo = "dub";
-    owner = "D-Programming-Language";
+  dubBuild = stdenv.mkDerivation rec {
+    name = "dubBuild-${version}";
+    version = "1.8.0";
+
+    enableParallelBuilding = true;
+
+    src = fetchFromGitHub {
+      owner = "dlang";
+      repo = "dub";
+      rev = "v${version}";
+      sha256 = "0788d375sc6xdak9x6xclkkz243lb7di68yxfvl4v0n178mi22bk";
+    };
+
+    postUnpack = ''
+        patchShebangs .
+    '';
+
+    # Can be removed with https://github.com/dlang/dub/pull/1368
+    dubvar = "\\$DUB";
+    postPatch = ''
+        substituteInPlace test/fetchzip.sh \
+            --replace "dub remove" "\"${dubvar}\" remove"
+    '';
+
+    nativeBuildInputs = [ dmd libevent rsync ];
+    buildInputs = [ curl ];
+
+    buildPhase = ''
+      export DMD=${dmd.out}/bin/dmd
+      ./build.sh
+    '';
+
+    installPhase = ''
+      mkdir $out
+      mkdir $out/bin
+      cp bin/dub $out/bin
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Package and build manager for D applications and libraries";
+      homepage = http://code.dlang.org/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ThomasMader ];
+      platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    };
   };
 
-  buildInputs = [ curl ];
-  propagatedBuildInputs = [ gcc dmd ];
+  # Need to test in a fixed-output derivation, otherwise the
+  # network tests would fail if sandbox mode is enabled.
+  dubUnittests = stdenv.mkDerivation rec {
+    name = "dubUnittests-${version}";
+    version = dubBuild.version;
 
-  buildPhase = ''
-    # Avoid that the version file is overwritten
-    substituteInPlace build.sh \
-      --replace source/dub/version_.d /dev/null
-    patchShebangs ./build.sh
-    ./build.sh
-  '';
+    enableParallelBuilding = dubBuild.enableParallelBuilding;
+    preferLocalBuild = true;
+    inputString = dubBuild.outPath;
+    outputHashAlgo = "sha256";
+    outputHash = builtins.hashString "sha256" inputString;
+
+    src = dubBuild.src;
+    
+    postUnpack = dubBuild.postUnpack;
+    postPatch = dubBuild.postPatch;
+
+    nativeBuildInputs = dubBuild.nativeBuildInputs;
+    buildInputs = dubBuild.buildInputs;
+
+    buildPhase = ''
+      # Can't use dub from dubBuild directly because one unittest 
+      # (issue895-local-configuration) needs to generate a config 
+      # file under ../etc relative to the dub location.
+      cp ${dubBuild}/bin/dub bin/
+      export DUB=$NIX_BUILD_TOP/source/bin/dub
+      export DC=${dmd.out}/bin/dmd
+      export HOME=$TMP
+      ./test/run-unittest.sh
+    '';
+
+    installPhase = ''
+        echo -n $inputString > $out
+    '';
+  };
+
+in
+
+stdenv.mkDerivation rec {
+  inherit dubUnittests;
+  name = "dub-${dubBuild.version}";
+  phases = "installPhase";
+  buildInputs = dubBuild.buildInputs;
 
   installPhase = ''
     mkdir $out
-    mkdir $out/bin
-    cp bin/dub $out/bin
+    cp -r --symbolic-link ${dubBuild}/* $out/
   '';
 
-  meta = with stdenv.lib; {
-    description = "Build tool for D projects";
-    homepage = http://code.dlang.org/;
-    license = licenses.mit;
-    platforms = platforms.unix;
-  };
+  meta = dubBuild.meta;
 }
 

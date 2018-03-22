@@ -1,22 +1,24 @@
-{ stdenv, fetchFromGitHub, bison, flex, geoip, geolite-legacy, libcli, libnet
-, libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
-, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
+, libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium
+, liburcu, ncurses, perl, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   name = "netsniff-ng-${version}";
-  version = "0.6.2";
+  version = "0.6.4";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub rec {
     repo = "netsniff-ng";
     owner = repo;
     rev = "v${version}";
-    sha256 = "1lz4hwgwdq3znlqjmvl7cw3g3ilbayn608h0hwqdf7v2jq6n67kg";
+    sha256 = "0nip1gmzxq5kak41n0y0qzbhk2876fypk83q14ssy32fk49lxjly";
   };
+
+  patches = [ ./glibc-2.26.patch ];
 
   buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
     libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
-    pkgconfig zlib ];
+    pkgconfig zlib makeWrapper ];
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
@@ -31,6 +33,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
 
   postInstall = ''
+    # trafgen and bpfc can call out to cpp to process config files.
+    wrapProgram "$out/sbin/trafgen" --prefix PATH ":" "${stdenv.cc}/bin"
+    wrapProgram "$out/sbin/bpfc" --prefix PATH ":" "${stdenv.cc}/bin"
+
     ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat
     ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat		$out/etc/netsniff-ng/country6.dat
     ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCity.dat		$out/etc/netsniff-ng/city4.dat
@@ -52,6 +58,5 @@ stdenv.mkDerivation rec {
     homepage = http://netsniff-ng.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 }

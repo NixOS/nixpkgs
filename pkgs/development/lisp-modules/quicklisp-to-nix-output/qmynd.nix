@@ -1,38 +1,42 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''qmynd'';
-  version = ''20160208-git'';
+  version = ''20180131-git'';
 
   description = ''MySQL Native Driver'';
 
-  deps = [ args."usocket" args."trivial-gray-streams" args."salza2" args."list-of" args."ironclad" args."flexi-streams" args."cl+ssl" args."chipz" args."babel" ];
+  deps = [ args."alexandria" args."asdf-finalizers" args."babel" args."bordeaux-threads" args."cffi" args."chipz" args."cl_plus_ssl" args."flexi-streams" args."ironclad" args."list-of" args."nibbles" args."salza2" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/qmynd/2016-02-08/qmynd-20160208-git.tgz'';
-    sha256 = ''0x9ml8id3s8l0rsa108bcs5lmyhb2y5a5p7s9ppvmqd4cgxnramq'';
+    url = ''http://beta.quicklisp.org/archive/qmynd/2018-01-31/qmynd-20180131-git.tgz'';
+    sha256 = ''1ripapyrpzp36wsb2xf8w63nf0cjc13xh6xx296p8wgi01jwm61c'';
   };
-    
+
   packageName = "qmynd";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/qmynd[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["qmynd.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM qmynd DESCRIPTION MySQL Native Driver SHA256 0x9ml8id3s8l0rsa108bcs5lmyhb2y5a5p7s9ppvmqd4cgxnramq URL
-    http://beta.quicklisp.org/archive/qmynd/2016-02-08/qmynd-20160208-git.tgz MD5 9483ba5330a4240a9d5a8016c16a0084 NAME qmynd TESTNAME NIL FILENAME qmynd DEPS
-    ((NAME usocket FILENAME usocket) (NAME trivial-gray-streams FILENAME trivial-gray-streams) (NAME salza2 FILENAME salza2) (NAME list-of FILENAME list-of)
-     (NAME ironclad FILENAME ironclad) (NAME flexi-streams FILENAME flexi-streams) (NAME cl+ssl FILENAME cl+ssl) (NAME chipz FILENAME chipz)
-     (NAME babel FILENAME babel))
-    DEPENDENCIES (usocket trivial-gray-streams salza2 list-of ironclad flexi-streams cl+ssl chipz babel) VERSION 20160208-git SIBLINGS (qmynd-test)) */
+/* (SYSTEM qmynd DESCRIPTION MySQL Native Driver SHA256
+    1ripapyrpzp36wsb2xf8w63nf0cjc13xh6xx296p8wgi01jwm61c URL
+    http://beta.quicklisp.org/archive/qmynd/2018-01-31/qmynd-20180131-git.tgz
+    MD5 60177d28b1945234fd72760007194b3e NAME qmynd FILENAME qmynd DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME asdf-finalizers FILENAME asdf-finalizers)
+     (NAME babel FILENAME babel)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cffi FILENAME cffi) (NAME chipz FILENAME chipz)
+     (NAME cl+ssl FILENAME cl_plus_ssl)
+     (NAME flexi-streams FILENAME flexi-streams)
+     (NAME ironclad FILENAME ironclad) (NAME list-of FILENAME list-of)
+     (NAME nibbles FILENAME nibbles) (NAME salza2 FILENAME salza2)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME trivial-features FILENAME trivial-features)
+     (NAME trivial-garbage FILENAME trivial-garbage)
+     (NAME trivial-gray-streams FILENAME trivial-gray-streams)
+     (NAME usocket FILENAME usocket))
+    DEPENDENCIES
+    (alexandria asdf-finalizers babel bordeaux-threads cffi chipz cl+ssl
+     flexi-streams ironclad list-of nibbles salza2 split-sequence
+     trivial-features trivial-garbage trivial-gray-streams usocket)
+    VERSION 20180131-git SIBLINGS (qmynd-test) PARASITES NIL) */

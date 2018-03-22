@@ -1,33 +1,40 @@
-{stdenv, fetchurl, python27, python27Packages, makeWrapper}:
+# Make sure that the "with-gce" flag is set when building `google-cloud-sdk`
+# for GCE hosts. This flag prevents "google-compute-engine" from being a
+# default dependency which is undesirable because this package is
+#
+#   1) available only on GNU/Linux (requires `systemd` in particular)
+#   2) intended only for GCE guests (and is useless elsewhere)
+#   3) used by `google-cloud-sdk` only on GCE guests
+#
 
-with python27Packages;
+{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
+  crcmod, google-compute-engine, with-gce ? false }:
 
-# other systems not supported yet
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin";
+let
+  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
+                 ++ lib.optional (with-gce) google-compute-engine;
+  pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
 
-stdenv.mkDerivation rec {
+  baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
+  sources = name: system: {
+    x86_64-darwin = {
+      url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
+      sha256 = "0c4jj580f7z6phiw4zhd32dlf4inkrxy3cig6ng66fi4zi6vnpc9";
+    };
+
+    x86_64-linux = {
+      url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
+      sha256 = "0rblb0akwdzr5i8al0dcz482xmx1xdnjnzgqywjvwd8fzdyzq7bp";
+    };
+  }.${system};
+
+in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "161.0.0";
+  version = "190.0.1";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "43a78a9d2c3ee9d9e50200b1e90512cd53ded40b56e05effe31fe9847b1bdd4c";
-      }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "0706dbea1279be2bc98a497d1bfed61a9cc29c305d908a376bcdb4403035b323";
-      }
-    else
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "7aa6094d1f9c87f4c2c4a6bdad6a1113aac5e72ea673e659d9acbb059dfd037e";
-      };
+  src = fetchurl (sources name stdenv.system);
 
-
-  buildInputs = [python27 makeWrapper];
+  buildInputs = [ python makeWrapper ];
 
   phases = [ "installPhase" "fixupPhase" ];
 
@@ -46,15 +53,19 @@ stdenv.mkDerivation rec {
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
-            --set CLOUDSDK_PYTHON "${python27}/bin/python" \
-            --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl}):$(toPythonPath ${crcmod})"
+            --set CLOUDSDK_PYTHON "${python}/bin/python" \
+            --prefix PYTHONPATH : "${pythonPath}"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
 
-    # install man pages
-    mv "$out/google-cloud-sdk/help/man" "$out"
+    # disable component updater and update check
+    substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
+      --replace "\"disable_updater\": false" "\"disable_updater\": true"
+    echo "
+    [component_manager]
+    disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
     mkdir -p "$out/etc/bash_completion.d/"
@@ -68,11 +79,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
-    version = version;
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [stephenmw zimbatm];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ stephenmw zimbatm ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

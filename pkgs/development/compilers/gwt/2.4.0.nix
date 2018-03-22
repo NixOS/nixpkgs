@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "gwt-java-2.4.0";
 
   src = fetchurl {
-    url=http://google-web-toolkit.googlecode.com/files/gwt-2.4.0.zip;
-    sha1 = "a91ac20db0ddd5994ac3cbfb0e8061d5bbf66f88";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-web-toolkit/gwt-2.4.0.zip";
+    sha256 = "1gvyg00vx7fdqgfl2w7nhql78clg3abs6fxxy7m03pprdm5qmm17";
   };
 
   buildInputs = [ unzip ];
@@ -17,8 +17,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://code.google.com/webtoolkit/;
+    homepage = http://www.gwtproject.org/;
     description = "A development toolkit for building and optimizing complex browser-based applications";
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
   };
 }

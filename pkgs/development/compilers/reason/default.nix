@@ -1,57 +1,42 @@
 { stdenv, makeWrapper, buildOcaml, fetchFromGitHub,
-  ocaml, opam, topkg, menhir, merlin_extend, ppx_tools_versioned, utop }:
+  ocaml, opam, jbuilder, menhir, merlin_extend, ppx_tools_versioned, utop }:
 
-let 
-  version = "2.0.0";
+buildOcaml rec {
+  name = "reason";
+  version = "3.0.4";
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
     rev = version;
-    sha256 = "0l3lwfvppplah707rq5nqjav2354lq6d7xfflfigkzhn74hlx6iy";
-  };
-  meta = with stdenv.lib; {
-    homepage = https://facebook.github.io/reason/;
-    description = "Facebook's friendly syntax to OCaml";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.volth ];
+    sha256 = "15qhx85him5rr4j0ygj3jh3qv9ijrn82ibr9scbn0qrnn43kj047";
   };
 
-  reason-parser = buildOcaml {
-    name = "reason-parser";
-    inherit version src meta;
-    sourceRoot = "reason-${version}-src/reason-parser";
+  propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-    minimumSupportedOcamlVersion = "4.02";
-
-    propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
-    buildInputs = [ opam topkg ];
-
-    createFindlibDestdir = true;
-
-    inherit (topkg) installPhase;
-  };
-in
-buildOcaml {
-  name = "reason";
-  inherit version src meta;
-
-  buildInputs = [ makeWrapper opam topkg reason-parser utop ];
+  buildInputs = [ makeWrapper opam jbuilder utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
   createFindlibDestdir = true;
 
   postPatch = ''
-    substituteInPlace src/reasonbuild.ml --replace "refmt --print binary" "$out/bin/refmt --print binary"
+    substituteInPlace src/reasonbuild/myocamlbuild.ml \
+      --replace "refmt --print binary" "$out/bin/refmt --print binary"
   '';
 
   installPhase = ''
-    ${topkg.installPhase}
+    ${jbuilder.installPhase}
 
-    wrapProgram $out/bin/reup \
-      --prefix PATH : "${opam}/bin"
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
       --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://reasonml.github.io/;
+    description = "Facebook's friendly syntax to OCaml";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.volth ];
+  };
 }

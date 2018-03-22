@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libargon2-${version}";
-  version = "20161029";
+  version = "20171227";
 
   src = fetchFromGitHub {
     owner = "P-H-C";
     repo = "phc-winner-argon2";
     rev = "${version}";
-    sha256 = "021g8wi4g67ywm8zf3yncqwrmfz7ypgm1ih9wcmnxip5n75rymh5";
+    sha256 = "0sc9zca1anqk41017vjpas4kxi4cbn0zvicv8vj8p2sb2gy94bh8";
   };
 
   installPhase = ''
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.argon2.com/;
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

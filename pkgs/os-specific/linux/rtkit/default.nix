@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ pkgconfig dbus libcap ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus libcap ];
 
   meta = {
     homepage = http://0pointer.de/blog/projects/rtkit;

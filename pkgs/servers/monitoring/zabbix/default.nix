@@ -29,7 +29,8 @@ in
 
     configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ postgresql curl openssl zlib ];
 
     postInstall =
       ''
@@ -43,7 +44,7 @@ in
 
     meta = {
       description = "An enterprise-class open source distributed monitoring solution";
-      homepage = http://www.zabbix.com/;
+      homepage = https://www.zabbix.com/;
       license = "GPL";
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.linux;
@@ -59,7 +60,7 @@ in
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
-      homepage = http://www.zabbix.com/;
+      homepage = https://www.zabbix.com/;
       license = licenses.gpl2;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.linux;

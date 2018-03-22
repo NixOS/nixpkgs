@@ -1,18 +1,25 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "gox-${version}";
-  version = "20140904-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "e8e6fd4fe12510cc46893dff18c5188a6a6dc549";
+  version = "0.4.0";
 
-  
   goPackagePath = "github.com/mitchellh/gox";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/mitchellh/gox";
-    sha256 = "14jb2vgfr6dv7zlw8i3ilmp125m5l28ljv41a66c9b8gijhm48k1";
+  src = fetchFromGitHub {
+    owner = "mitchellh";
+    repo = "gox";
+    rev = "v${version}";
+    sha256 = "1q4fdkw904mrmh1q5z8pfd3r0gcn5dm776kldqawddy93iiwnp8r";
   };
 
   goDeps = ./deps.nix;
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/mitchellh/gox;
+    description = "A dead simple, no frills Go cross compile tool";
+    platforms = platforms.all;
+    license = licenses.mpl20;
+  };
+
 }

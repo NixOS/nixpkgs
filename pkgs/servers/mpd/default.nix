@@ -18,6 +18,7 @@
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
+, lameSupport ? true, lame
 , pulseaudioSupport ? true, libpulseaudio
 , jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
@@ -33,7 +34,7 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "9";
+  minor = "18";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${version}";
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "17ly30syrlw5274washifr0nddll3g1zb4rr4f9sfnlxz9wz73p1";
+    sha256 = "020vdn94fwjbldnkgr2h3dk9sm6f5k59qic568mw88yi7cr3mjsh";
   };
 
   patches = [ ./x86.patch ];
@@ -72,6 +73,7 @@ in stdenv.mkDerivation rec {
     ++ opt mmsSupport libmms
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
+    ++ opt lameSupport lame
     ++ opt zipSupport zziplib
     ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
     ++ opt (!stdenv.isDarwin && jackSupport) libjack2
@@ -105,6 +107,7 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
+      (mkFlag lameSupport "lame-encoder")
       (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
       (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
       (mkFlag stdenv.isDarwin "osx")

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cni-${version}";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "cni";
     rev = "v${version}";
-    sha256 = "1nvixvf5slnsdrfpfs2km64x680wf83jbyp7il12bcim37q2az7m";
+    sha256 = "00ajs2r5r2z3l0vqwxrcwhjfc9px12qbcv5vnvs2mdipvvls1y2y";
   };
 
   buildInputs = [ go ];
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   outputs = ["out" "plugins"];
 
   buildPhase = ''
-    patchShebangs build
-    ./build
+    patchShebangs build.sh
+    ./build.sh
   '';
 
   installPhase = ''

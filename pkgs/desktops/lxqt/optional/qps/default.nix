@@ -1,39 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, makeDesktopItem }:
+{ stdenv, fetchFromGitHub, cmake, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qps";
-  version = "1.10.16";
+  version = "1.10.17";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "QtDesktop";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1s6hvqfv9hv1cl5pfsmghqn1zqhibr4plq3glzgd8s7swwdnsvjj";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "qps";
-    exec = "qps";
-    icon = "qps";
-    comment = "Visual process manager - Qt version of ps/top";
-    desktopName = "qps";
-    genericName = meta.description;
-    categories = "System;";
+    rev = version;
+    sha256 = "1d5r6w9wsxjdrzq2hllrj2n1d9azy6g05hg0w0s6pikrmn1yl0a3";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qt5.qtbase qt5.qtx11extras ];
-
-  installPhase = ''
-    mkdir -p $out/{bin,share/{man/man1,doc,icons}}
-    cp -a src/qps $out/bin/
-    cp -a ../README.md $out/share/doc/
-    cp -a ../qps.1 $out/share/man/man1/
-    cp -a ../icon/icon.xpm $out/share/icons/qps.xpm
-    ln -sv "${desktopItem}/share/applications" $out/share/
-  '';
+  buildInputs = [ qt5.qtbase qt5.qtx11extras qt5.qttools ];
 
   meta = with stdenv.lib; {
     description = "The Qt process manager";

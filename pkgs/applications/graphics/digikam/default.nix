@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook, fetchpatch
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -8,6 +8,7 @@
 , qtsvg
 , qtwebkit
 
+, kcalcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -28,12 +29,15 @@
 , lensfun
 , libgphoto2
 , libkipi
+, libksane
 , liblqr1
 , libqtav
 , libusb1
 , marble
+, libGLU_combined
 , mysql
-, opencv
+, opencv3
+, pcre
 , threadweaver
 
 # For panorama and focus stacking
@@ -46,16 +50,16 @@
 
 mkDerivation rec {
   name    = "digikam-${version}";
-  version = "5.4.0";
+  version = "5.9.0";
 
-  src = fetchurl {
-    url = "http://download.kde.org/stable/digikam/${name}.tar.xz";
-    sha256 = "0dgsgji14l5zvxny36hrfsp889fsfrsbbn9bg57m18404xp903kg";
+  src = fetchFromGitHub {
+    owner  = "KDE";
+    repo   = "digikam";
+    rev    = "v${version}";
+    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules kdoctools wrapGAppsHook ];
-
-  patches = [ ./0001-Disable-fno-operator-names.patch ];
+  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
 
   buildInputs = [
     bison
@@ -68,19 +72,20 @@ mkDerivation rec {
     lensfun
     libgphoto2
     libkipi
+    libksane
     liblqr1
     libqtav
     libusb1
-    mysql
-    opencv
-  ];
+    libGLU_combined
+    opencv3
+    pcre
 
-  propagatedBuildInputs = [
     qtbase
     qtxmlpatterns
     qtsvg
     qtwebkit
 
+    kcalcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
@@ -95,11 +100,7 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
-    "-DLIBUSB_LIBRARIES=${libusb1.out}/lib"
-    "-DLIBUSB_INCLUDE_DIR=${libusb1.dev}/include/libusb-1.0"
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"

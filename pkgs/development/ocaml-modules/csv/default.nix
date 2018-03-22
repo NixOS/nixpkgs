@@ -1,48 +1,26 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ocaml_lwt }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.2"
-  then {
-    version = "1.7";
-    url = https://math.umons.ac.be/anum/software/csv/csv-1.7.tar.gz;
-    sha256 = "1mmcjiiz0jppgipavpph5kn04xcpalw4scbjrw2z3drghvr3qqwf";
-    lwtSupport = true;
-  } else {
-    version = "1.5";
-    url = https://github.com/Chris00/ocaml-csv/releases/download/1.5/csv-1.5.tar.gz;
-    sha256 = "1ca7jgg58j24pccs5fshis726s06fdcjshnwza5kwxpjgdbvc63g";
-    lwtSupport = false;
-  };
-in
+stdenv.mkDerivation rec {
+	version = "2.0";
+	name = "ocaml${ocaml.version}-csv-${version}";
+	src = fetchurl {
+		url = "https://github.com/Chris00/ocaml-csv/releases/download/2.0/csv-2.0.tbz";
+		sha256 = "1g6xsybwc5ifr7n4hkqlh3294njzca12xg86ghh6pqy350wpq1zp";
+	};
 
-stdenv.mkDerivation {
+	unpackCmd = "tar -xjf $src";
 
-  name = "ocaml${ocaml.version}-csv-${param.version}";
+	buildInputs = [ ocaml findlib jbuilder ];
 
-  src = fetchzip {
-    inherit (param) url sha256;
-  };
+	buildPhase = "jbuilder build -p csv";
 
-  buildInputs = [ ocaml findlib ocamlbuild ]
-  ++ stdenv.lib.optional param.lwtSupport ocaml_lwt;
+	inherit (jbuilder) installPhase;
 
-  createFindlibDestdir = true;
-
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests"
-  + stdenv.lib.optionalString param.lwtSupport " --enable-lwt";
-
-  buildPhase = "ocaml setup.ml -build";
-
-  doCheck = true;
-  checkPhase = "ocaml setup.ml -test";
-
-  installPhase = "ocaml setup.ml -install";
-
-  meta = with stdenv.lib; {
-    description = "A pure OCaml library to read and write CSV files";
-    homepage = https://github.com/Chris00/ocaml-csv;
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
-  };
+	meta = {
+		description = "A pure OCaml library to read and write CSV files";
+		license = stdenv.lib.licenses.lgpl21;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		homepage = https://github.com/Chris00/ocaml-csv;
+		inherit (ocaml.meta) platforms;
+	};
 }

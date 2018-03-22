@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "screengrab-unstable-2017-02-18";
+  name = "screengrab-${version}";
+  version = "1.97";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "QtDesktop";
     repo = "screengrab";
-    rev = "6fc03c70fe132b89f35d4cef2f62c9d804de3b64";
-    sha256 = "1h3rlpmaqxzysaibcw7s5msbrwaxkg6sz7a8xv6cqzjvggv09my0";
+    rev = version;
+    sha256 = "0qhdxnv1pz745qgvdv5x7kyfx9dz9rrq0wxyfimppzxcszv4pl2z";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -22,10 +23,6 @@ stdenv.mkDerivation rec {
     xorg.libpthreadstubs
     xorg.libXdmcp
   ];
-
-  cmakeFlags = [ "-DSG_USE_SYSTEM_QXT=ON" "-DCMAKE_INSTALL_LIBDIR=lib" ];
-
-  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
 
   meta = with stdenv.lib; {
     description = "Crossplatform tool for fast making screenshots";

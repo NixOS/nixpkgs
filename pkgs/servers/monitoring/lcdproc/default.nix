@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ freetype libX11 libftdi libusb libusb1 ncurses ];
   nativeBuildInputs = [ autoreconfHook doxygen makeWrapper pkgconfig ];
-  enableParallelBuilding = true;
+
+  # In 0.5.9: gcc: error: libbignum.a: No such file or directory
+  enableParallelBuilding = false;
 
   postFixup = ''
     for f in $out/bin/*.pl ; do

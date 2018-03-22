@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, SDL, mesa, rebar, erlang, opencl-headers, ocl-icd }:
+{stdenv, fetchFromGitHub, SDL, libGLU_combined, rebar, erlang, opencl-headers, ocl-icd }:
 
 stdenv.mkDerivation rec {
   version = "1.2.3";

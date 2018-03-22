@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D binding and OO wrapper for GTK+";
-    homepage = "https://gtkd.org";
-    licence = licenses.lgpl3Plus;
+    homepage = https://gtkd.org;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

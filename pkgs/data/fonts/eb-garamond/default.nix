@@ -1,22 +1,19 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "eb-garamond-${version}";
+let
   version = "0.016";
+in fetchzip rec {
+  name = "eb-garamond-${version}";
 
-  src = fetchzip {
-    url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";
-    sha256 = "0j40bg1di39q7zis64il67xchldyznrl8wij9il10c4wr8nl4r9z";
-  };
+  url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "otf/"*.otf $out/share/fonts/opentype/
-    cp -v Changes README.markdown README.xelualatex $out/share/doc/${name}
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf                                          -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*Changes \*README.markdown \*README.xelualatex -d "$out/share/doc/${name}"
   '';
+
+  sha256 = "04jq4mpln85zzbla8ybsjw7vn9qr3r0snmk5zykrm24imq7ripv3";
 
   meta = with stdenv.lib; {
     homepage = http://www.georgduffner.at/ebgaramond/;

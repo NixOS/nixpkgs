@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "rdkafka-${version}";
-  version = "0.9.5";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "0yp8vmj3yc564hcmhx46ssyn8qayywnsrg4wg67qk6jw967qgwsn";
+    sha256 = "17ghq0kzk2fdpxhr40xgg3s0p0n0gkvd0d85c6jsww3mj8v5xd14";
   };
 
-  buildInputs = [ zlib perl pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib perl python ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "librdkafka - Apache Kafka C/C++ client library";
-    homepage = "https://github.com/edenhill/librdkafka";
+    homepage = https://github.com/edenhill/librdkafka;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ boothead wkennington ];

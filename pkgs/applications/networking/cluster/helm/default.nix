@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, kubernetes }:
+{ stdenv, fetchurl, kubectl }:
 let
-  arch = if stdenv.isLinux
+  isLinux = stdenv.isLinux;
+  arch = if isLinux
          then "linux-amd64"
          else "darwin-amd64";
-  checksum = if stdenv.isLinux
-             then "12dp2ggcjaqls4vrms21mvbphj8a8w156wmlqm19dppf6zsnxqxd"
-             else "1s3rhxfz663d255xc5ph6ndhb4x82baich8scyrgi84d7dxjx7mj";
+  checksum = if isLinux
+             then "1lr2s66kln6rp3sb156br9nfx51bdy654vdjr4vnncz4kp3mljv1"
+             else "04y4ii0w4s00z831q1wzxz6qkc8qfrhwzdrq3wwvrcl0413cza50";
   pname = "helm";
-  version = "2.5.0";
+  version = "2.8.2";
 in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ];
 
-  propagatedBuildInputs = [ kubernetes ];
+  propagatedBuildInputs = [ kubectl ];
 
   phases = [ "buildPhase" "installPhase" ];
 

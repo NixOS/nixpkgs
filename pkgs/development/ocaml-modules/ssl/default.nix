@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ssl-${version}";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchzip {
-    url = "https://github.com/savonet/ocaml-ssl/releases/download/0.5.3/ocaml-ssl-${version}.tar.gz";
-    sha256 = "0h2k19zpdvq1gqwrmmgkibw4j48l71vv6ajzxs0wi71y80c1vhwm";
+    url = "https://github.com/savonet/ocaml-ssl/releases/download/${version}/ocaml-ssl-${version}.tar.gz";
+    sha256 = "01sy3f94b463ff7dmkfsv67jh8g8h20wh7npjwqilniif7lgf4l3";
   };
 
   buildInputs = [which ocaml findlib];

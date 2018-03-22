@@ -13,14 +13,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-git-${version}";
-  version = "20170502";
+  name = "freerdp-${version}";
+  version = "2.0.0-rc1";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
-    rev    = "8569102c3a011602de3a1cdf69f7c69adbb864ee";
-    sha256 = "0m61aiy8l3ybnk2d2kjmpp9ql31zfs63gjixyj9x95jd4m507j67";
+    rev    = version;
+    sha256 = "0m28n3mq3ax0j6j3ai4pnlx3shg2ap0md0bxlqkhfv6civ9r11nn";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -46,17 +46,19 @@ stdenv.mkDerivation rec {
     cmake pkgconfig
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = false;
 
   cmakeFlags = with lib; [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DWITH_CUNIT=OFF"
     "-DWITH_OSS=OFF"
-  ] ++ optional (libpulseaudio != null) "-DWITH_PULSE=ON"
-    ++ optional (cups != null)          "-DWITH_CUPS=ON"
-    ++ optional (pcsclite != null)      "-DWITH_PCSC=ON"
-    ++ optional buildServer             "-DWITH_SERVER=ON"
-    ++ optional optimize                "-DWITH_SSE2=ON";
+  ] ++ optional (libpulseaudio != null)       "-DWITH_PULSE=ON"
+    ++ optional (cups != null)                "-DWITH_CUPS=ON"
+    ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
+    ++ optional buildServer                   "-DWITH_SERVER=ON"
+    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

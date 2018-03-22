@@ -1,15 +1,34 @@
-{stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx}:
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx
+, optimize ? false # impure
+}:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "givaro";
-  version = "4.0.2";
+  version = "4.0.4";
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "04n1lyc823z3l1d7mnmqpc9z1pkn646szjchasbfkn74m7cb0qz7";
+    sha256 = "199p8wyj5i63jbnk7j8qbdbfp5rm2lpmcxyk3mdjy9bz7ygx3hhy";
   };
-  buildInputs = [autoconf automake libtool autoreconfHook gmpxx];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [autoconf automake libtool gmpxx];
+  configureFlags = [
+    "--disable-optimization"
+  ] ++ stdenv.lib.optionals (!optimize) [
+    # disable SIMD instructions (which are enabled *when available* by default)
+    "--disable-sse"
+    "--disable-sse2"
+    "--disable-sse3"
+    "--disable-ssse3"
+    "--disable-sse41"
+    "--disable-sse42"
+    "--disable-avx"
+    "--disable-avx2"
+    "--disable-fma"
+    "--disable-fma4"
+  ];
+  doCheck = true;
   meta = {
     inherit version;
     description = ''A C++ library for arithmetic and algebraic computations'';

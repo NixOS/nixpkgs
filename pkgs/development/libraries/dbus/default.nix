@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.18";
-  sha256 = "0jjirhw6xwz2ffmbg5kr79108l8i1bdaw7szc67n3qpkygaxsjb0";
+  version = "1.10.24";
+  sha256 = "06ydmrg76l1kwl3190d72zpiy3qxy248x6gskxbj9qiqfsr4w63i";
 
 self = stdenv.mkDerivation {
     name = "dbus-${version}";

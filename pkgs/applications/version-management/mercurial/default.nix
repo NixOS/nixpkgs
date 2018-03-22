@@ -4,7 +4,7 @@
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.1.1";
+  version = "4.5";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
 in python2Packages.buildPythonApplication {
@@ -13,17 +13,17 @@ in python2Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "17imsf4haqgw364p1z9i416jinmfxfia537b84hcg0rg43hinmv3";
+    sha256 = "0rgjy42zdlbzgp4qq49amzplfcvycyijf4kdhc5wk3fqz7cki4sd";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
 
-  buildInputs = [ makeWrapper docutils unzip ];
+  buildInputs = [ makeWrapper docutils unzip ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  propagatedBuildInputs = [ hg-git dulwich ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices cf-private ];
+  propagatedBuildInputs = [ hg-git dulwich ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
@@ -34,21 +34,15 @@ in python2Packages.buildPythonApplication {
       hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
-      WRAP_TK=" --set TK_LIBRARY \"${tk}/lib/${tk.libPrefix}\"
-                --set HG \"$out/bin/hg\"
-                --prefix PATH : \"${tk}/bin\" "
+      WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
+                --set HG $out/bin/hg
+                --prefix PATH : ${tk}/bin "
     '') +
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
           $WRAP_TK
       done
-
-      mkdir -p $out/etc/mercurial
-      cat >> $out/etc/mercurial/hgrc << EOF
-      [web]
-      cacerts = /etc/ssl/certs/ca-certificates.crt
-      EOF
 
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
@@ -62,7 +56,7 @@ in python2Packages.buildPythonApplication {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = "http://mercurial.selenic.com/";
+    homepage = http://mercurial.selenic.com/;
     downloadPage = "http://mercurial.selenic.com/release/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];

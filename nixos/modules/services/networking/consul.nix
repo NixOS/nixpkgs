@@ -183,6 +183,7 @@ in
           ExecReload = "${cfg.package.bin}/bin/consul reload";
           PermissionsStartOnly = true;
           User = if cfg.dropPrivileges then "consul" else null;
+          Restart = "on-failure";
           TimeoutStartSec = "0";
         } // (optionalAttrs (cfg.leaveOnStop) {
           ExecStop = "${cfg.package.bin}/bin/consul leave";

@@ -4,9 +4,6 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
 
   ###### interface
@@ -33,11 +30,11 @@ in
 
   config = mkIf config.services.gnome3.tracker.enable {
 
-    environment.systemPackages = [ gnome3.tracker ];
+    environment.systemPackages = [ pkgs.gnome3.tracker ];
 
-    services.dbus.packages = [ gnome3.tracker ];
+    services.dbus.packages = [ pkgs.gnome3.tracker ];
 
-    systemd.packages = [ gnome3.tracker ];
+    systemd.packages = [ pkgs.gnome3.tracker ];
 
   };
 

@@ -36,8 +36,9 @@ in
       shellAliases = mkOption {
         default = config.environment.shellAliases;
         description = ''
-          Set of aliases for zsh shell. See <option>environment.shellAliases</option>
-          for an option format description.
+          Set of aliases for zsh shell. Overrides the default value taken from
+           <option>environment.shellAliases</option>.
+          See <option>environment.shellAliases</option> for an option format description.
         '';
         type = types.attrs; # types.attrsOf types.stringOrPath;
       };
@@ -89,8 +90,8 @@ in
         description = ''
           Enable zsh-autosuggestions
         '';
+        type = types.bool;
       };
-
     };
 
   };
@@ -107,7 +108,7 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
 
@@ -158,24 +159,24 @@ in
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
+        # Tell zsh how to find installed completions
+        for p in ''${(z)NIX_PROFILES}; do
+          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+        done
+
         ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
 
         ${optionalString (cfg.enableAutosuggestions)
           "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
         }
 
-        ${zshAliases}
-
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
 
-        ${cfg.promptInit}
+        ${zshAliases}
 
-        # Tell zsh how to find installed completions
-        for p in ''${(z)NIX_PROFILES}; do
-          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
-        done
+        ${cfg.promptInit}
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then

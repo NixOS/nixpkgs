@@ -2,8 +2,8 @@
 
 buildPythonPackage rec {
   pname = "spotipy";
-  name = "spotipy-${version}";
   version = "2.4.4";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   meta = with stdenv.lib; {
-    homepage = "http://spotipy.readthedocs.org/";
+    homepage = http://spotipy.readthedocs.org/;
     description = "A light weight Python library for the Spotify Web API";
     license = licenses.mit;
     maintainers = [ maintainers.rvolosatovs ];

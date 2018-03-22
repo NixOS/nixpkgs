@@ -8,13 +8,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gammu-${version}";
-  version = "1.38.2";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
     rev = version;
-    sha256 = "1rk3p3sjyy6n6mlqs4qgyxna4swrh1zm7b77npxv8j341wxj3khv";
+    sha256 = "1hr053z2l5mjgip83fsxnd1rqsp5gwywzagzrgdg243apn1nz0gs";
   };
 
   patches = [ ./bashcomp-dir.patch ./systemd.patch ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://wammu.eu/gammu/";
+    homepage = https://wammu.eu/gammu/;
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XML documents and web site compiler";
-    homepage = "https://zoggy.github.io/stog/";
+    homepage = https://zoggy.github.io/stog/;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

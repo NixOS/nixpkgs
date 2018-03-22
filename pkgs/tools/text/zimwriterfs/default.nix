@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ file icu libgumbo lzma zimlib zlib xapian ];
-  setSourceRoot = "cd openzim-*/zimwriterfs; export sourceRoot=`pwd`";
+  setSourceRoot = ''
+    sourceRoot=$(echo */zimwriterfs)
+  '';
   preConfigure = "./autogen.sh";
 
   meta = {

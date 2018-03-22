@@ -1,30 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, telepathy_glib, libxslt, makeWrapper, upower }:
+{ stdenv, fetchurl, pkgconfig, gnome3, telepathy-glib, libxslt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-5.16.3";
+  name = "${pname}-5.16.4";
   pname = "telepathy-mission-control";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "0zcbx69k0d3p2pjh3g7sa3q2zkd5xchxkqsmlfn3fwxaz0pmsmvi";
+    sha256 = "1jz6wwgsfxixha6ys2hbzbk5faqnj9kh2m5qdlgx5anqgandsscp";
   };
 
-  buildInputs = [ telepathy_glib telepathy_glib.python makeWrapper /*upower*/ ]; # ToDo: optional stuff missing
-  # 5.16.3 won't build with upower-0.99. Arch and Debian choose to disable it
+  buildInputs = [ telepathy-glib telepathy-glib.python ]; # ToDo: optional stuff missing
 
-  nativeBuildInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [ pkgconfig libxslt makeWrapper ];
 
   doCheck = true;
 
   preFixup = ''
     wrapProgram "$out/libexec/mission-control-5" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
     description = "An account manager and channel dispatcher for the Telepathy framework";
-    homepage = http://telepathy.freedesktop.org/wiki/;
+    homepage = https://telepathy.freedesktop.org/components/telepathy-mission-control/;
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
 }

@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libnotify, libxml2, libexif, exempi, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "caja-${version}";
-  version = "${major-ver}.${minor-ver}";
-  major-ver = "1.18";
-  minor-ver = "0";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1fc7dxj9hw8fffrcnwxbj8pq7gl08il68rkpk92rv3qm7siv1606";
+    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
+    sha256 = "05shyqqapqbz4w0gbhx0i3kj6xg7rcj80hkaq7wf5pyj91wmkxqg";
   };
 
   nativeBuildInputs = [
@@ -24,13 +22,18 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     mate.mate-desktop
+    hicolor-icon-theme
   ];
 
+  patches = [
+    ./caja-extension-dirs.patch
+  ];
+  
   configureFlags = [ "--disable-update-mimedb" ];
   
   meta = {
     description = "File manager for the MATE desktop";
-    homepage = "http://mate-desktop.org";
+    homepage = http://mate-desktop.org;
     license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

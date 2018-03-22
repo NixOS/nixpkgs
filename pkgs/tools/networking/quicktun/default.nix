@@ -11,21 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1ydvwasj84qljfbzh6lmhyzjc20yw24a0v2mykp8afsm97zzlqgx";
   };
 
-  buildInputs = [ libsodium ];
+  patches = [ ./tar-1.30.diff ]; # quicktun master seems not to need this
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  buildInputs = [ libsodium ];
 
   buildPhase = "bash build.sh";
 
   installPhase = ''
-    mkdir -p $out/bin
     rm out/quicktun*tgz
-    cp -v out/quicktun* $out/bin/
+    install -vD out/quicktun* -t $out/bin
   '';
 
   meta = with stdenv.lib; {
     description = "Very simple, yet secure VPN software";
-    homepage = "http://wiki.ucis.nl/QuickTun";
+    homepage = http://wiki.ucis.nl/QuickTun;
     maintainers = [ maintainers.fpletz ];
     platforms = platforms.unix;
   };

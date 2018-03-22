@@ -1,9 +1,11 @@
-let lib = import ./default.nix;
+{ lib }:
 
-inherit (builtins) trace attrNamesToStr isAttrs isFunction isList isInt
+let
+
+inherit (builtins) trace attrNamesToStr isAttrs isList isInt
         isString isBool head substring attrNames;
 
-inherit (lib) all id mapAttrsFlatten elem;
+inherit (lib) all id mapAttrsFlatten elem isFunction;
 
 in
 

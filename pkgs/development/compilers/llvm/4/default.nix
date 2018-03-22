@@ -1,4 +1,8 @@
-{ lowPrio, newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
+{ lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
+, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
+, darwin
+}:
+
 let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
@@ -6,7 +10,7 @@ let
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    url = "http://llvm.org/releases/${release_version}/${name}-${version}.src.tar.xz";
+    url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
@@ -16,7 +20,7 @@ let
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
     let drv-manpages = drv.override { enableManpages = true; }; in
-    drv // { man = drv-manpages.man; /*outputs = drv.outputs ++ ["man"];*/ };
+    drv // { man = drv-manpages.out; /*outputs = drv.outputs ++ ["man"];*/ };
 
   llvm = callPackage ./llvm.nix {
     inherit compiler-rt_src stdenv;
@@ -30,25 +34,35 @@ let
     llvm = overrideManOutput llvm;
     clang-unwrapped = overrideManOutput clang-unwrapped;
 
+    libclang = self.clang-unwrapped.lib;
     llvm-manpages = lowPrio self.llvm.man;
     clang-manpages = lowPrio self.clang-unwrapped.man;
 
-    clang = wrapCC self.clang-unwrapped;
+    clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
 
-    openmp = callPackage ./openmp.nix {};
+    libstdcxxClang = ccWrapperFun {
+      cc = self.clang-unwrapped;
+      /* FIXME is this right? */
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
+      extraPackages = [ libstdcxxHook ];
+    };
 
     libcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
-      isClang = true;
-      inherit (self) stdenv;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 
-    stdenv = overrideCC stdenv self.clang;
+    stdenv = stdenv.override (drv: {
+      allowedRequisites = null;
+      cc = self.clang;
+    });
 
-    libcxxStdenv = overrideCC stdenv self.libcxxClang;
+    libcxxStdenv = stdenv.override (drv: {
+      allowedRequisites = null;
+      cc = self.libcxxClang;
+    });
 
     lld = callPackage ./lld.nix {};
 
@@ -57,5 +71,8 @@ let
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
+
+    openmp = callPackage ./openmp.nix {};
   };
+
 in self

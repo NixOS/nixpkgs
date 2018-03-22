@@ -1,0 +1,41 @@
+diff --git a/bazel/cc_configure.bzl b/bazel/cc_configure.bzl
+index 8a7a69c4f..75526520c 100644
+--- a/bazel/cc_configure.bzl
++++ b/bazel/cc_configure.bzl
+@@ -292,6 +292,8 @@ def _crosstool_content(repository_ctx, cc, cpu_value, darwin):
+           "-fstack-protector",
+           # All warnings are enabled. Maybe enable -Werror as well?
+           "-Wall",
++
++          "-Wno-error=strict-aliasing"
+           # Enable a few more warnings that aren't part of -Wall.
+       ] + (["-Wthread-safety", "-Wself-assign"] if darwin else [
+           "-B" + str(repository_ctx.path(cc).dirname),
+@@ -365,10 +367,6 @@ def _opt_content(darwin):
+           # Profile first and / or use FDO if you need better performance than this.
+           "-O2",
+ 
+-          # Security hardening on by default.
+-          # Conservative choice; -D_FORTIFY_SOURCE=2 may be unsafe in some cases.
+-          "-D_FORTIFY_SOURCE=1",
+-
+           # Disable assertions
+           "-DNDEBUG",
+ 
+diff --git a/bazel/envoy_build_system.bzl b/bazel/envoy_build_system.bzl
+index f17671035..7938047bd 100644
+--- a/bazel/envoy_build_system.bzl
++++ b/bazel/envoy_build_system.bzl
+@@ -131,11 +131,9 @@ def envoy_cc_binary(name,
+             # --build-id and avoid doing the following.
+             '-Wl,--build-id=md5',
+             '-Wl,--hash-style=gnu',
+-            "-static-libstdc++",
+-            "-static-libgcc",
+         ],
+         testonly = testonly,
+-        linkstatic = 1,
++        linkstatic = 0,
+         visibility = visibility,
+         malloc = tcmalloc_external_dep(repository),
+         # See above comment on MD5 hash, this is another "force MD5 stamps" to make sure our

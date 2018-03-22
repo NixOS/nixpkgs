@@ -1,35 +1,28 @@
-{stdenv, fetchurl, which, pkgconfig, SDL, gtk2, mesa, SDL_ttf}:
+{stdenv, lib, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib }:
 
-stdenv.mkDerivation {
-  name = "mupen64plus-1.5";
+stdenv.mkDerivation rec {
+  name = "mupen64plus-${version}";
+  version = "2.5";
+
   src = fetchurl {
-    url = http://mupen64plus.googlecode.com/files/Mupen64Plus-1-5-src.tar.gz;
-    sha256 = "0gygfgyr2sg4yx77ijk133d1ra0v1yxi4xjxrg6kp3zdjmhdmcjq";
+    url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
+    sha256 = "0rmsvfn4zfvbhz6gf1xkb7hnwflv6sbklwjz2xk4dlpj4vcbjxcw";
   };
 
-  buildInputs = [ which pkgconfig SDL gtk2 mesa SDL_ttf ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost dash freetype libpng SDL which zlib ];
 
-  hardeningDisable = [ "format" ];
-
-  preConfigure = ''
-    # Some C++ incompatibility fixes
-    sed -i -e 's|char \* extstr = strstr|const char * extstr = strstr|' glide64/Main.cpp
-    sed -i -e 's|char \* extstr = strstr|const char * extstr = strstr|' glide64/Combine.cpp
-
-    # Fix some hardcoded paths
-    sed -i -e "s|/usr/local|$out|g" main/main.c
-
-    # Remove PATH environment variable from install script
-    sed -i -e "s|export PATH=|#export PATH=|" ./install.sh
+  buildPhase = ''
+    dash m64p_build.sh PREFIX="$out" COREDIR="$out/lib/" PLUGINDIR="$out/lib/mupen64plus" SHAREDIR="$out/share/mupen64plus"
   '';
-
-  buildPhase = "make all";
-  installPhase = "PREFIX=$out make install";
+  installPhase = ''
+    dash m64p_install.sh DESTDIR="$out" PREFIX=""
+  '';
 
   meta = {
     description = "A Nintendo 64 Emulator";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://code.google.com/p/mupen64plus;
+    homepage = http://www.mupen64plus.org/;
     maintainers = [ stdenv.lib.maintainers.sander ];
     platforms = stdenv.lib.platforms.linux;
   };

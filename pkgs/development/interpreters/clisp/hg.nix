@@ -23,13 +23,13 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xproto != null && libXext != null && xextproto != null);
 
 stdenv.mkDerivation rec {
-  v = "2.50pre20170130";
+  v = "2.50pre20171114";
   name = "clisp-${v}";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/clisp/clisp";
-    rev = "130e74c8ea17";
-    sha256 = "1aqaxskvghc4ipbs3m4syvzn6bzj165zqvjpw0xa696i07vkk19j";
+    rev = "36df6dc59b8f";
+    sha256 = "1pidiv1m55lvc4ln8vx0ylnnhlj95y6hrfdq96nrj14f4v8fkvmr";
   };
 
   inherit libsigsegv gettext coreutils;
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
+    sed -i -re '/ cfree /d' -i modules/bindings/glibc/linux.lisp
     cd builddir
   '';
 

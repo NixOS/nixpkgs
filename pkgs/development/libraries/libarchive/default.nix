@@ -10,12 +10,17 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1rr40hxlm9vy5z2zb5w7pyfkgd1a4s061qapm83s19accb8mpji9";
+    sha256 = "1km0mzfl6in7l5vz9kl09a88ajx562rw93ng9h2jqavrailvsbgd";
   };
+
+  patches = [
+    ./CVE-2017-14166.patch
+    ./CVE-2017-14502.patch
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 

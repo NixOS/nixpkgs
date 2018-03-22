@@ -31,6 +31,10 @@ in pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
     oauthlib pyserial configobj pyyaml requests jsonpatch ];
 
+  checkInputs = with pythonPackages; [ contextlib2 httpretty mock unittest2 ];
+
+  doCheck = false;
+
   meta = {
     homepage = http://cloudinit.readthedocs.org;
     description = "Provides configuration and customization of cloud instance";

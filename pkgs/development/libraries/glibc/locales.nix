@@ -3,10 +3,10 @@
    locales are included; otherwise, just the locales listed in
    `locales'.  See localedata/SUPPORTED in the Glibc source tree for
    the list of all supported locales:
-   http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc
+   https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
-{ stdenv, callPackage, writeText
+{ stdenv, buildPackages, callPackage, writeText
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
@@ -26,7 +26,7 @@ callPackage ./common.nix { inherit stdenv; } {
   # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
   buildPhase =
     ''
-      mkdir -p $TMPDIR/"${stdenv.cc.libc.out}/lib/locale"
+      mkdir -p $TMPDIR/"${buildPackages.stdenv.cc.libc.out}/lib/locale"
 
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile

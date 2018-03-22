@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "03vdbmqlbmk3j2ay1wy6snrm2y27faxz7qv81vyzjzngj345095a";
   };
 
-  buildInputs = [ gtk pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple drag-and-drop source/sink for X";
-    homepage = "https://github.com/mwh/dragon";
+    homepage = https://github.com/mwh/dragon;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
     platforms = with platforms; unix;

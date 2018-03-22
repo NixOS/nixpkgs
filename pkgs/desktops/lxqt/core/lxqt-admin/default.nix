@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, standardPatch, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-admin";
-  version = "0.11.1";
+  version = "0.12.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "12c1wdciqgiifsk5aslw3990pk9ylk9jhgwnrxvh798rr48hhflr";
+    sha256 = "0dg3gm5m19dc4jarh8xcn0mcnpgxzz7nhy5dzm8chddaa6pdm7vi";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
-  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "LXQt system administration tool";

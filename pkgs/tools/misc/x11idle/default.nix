@@ -1,4 +1,4 @@
-{ stdenv, xlibs, fetchgit, libXScrnSaver, libX11 }:
+{ stdenv, fetchgit, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation {
   name = "x11idle-unstable-2017-07-01";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Idle time passes when the user does not act, i.e. when the user doesn't move the mouse or use the keyboard.
     '';
-    homepage = "http://orgmode.org/";
+    homepage = http://orgmode.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.swflint ];

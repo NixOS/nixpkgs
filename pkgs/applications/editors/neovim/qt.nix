@@ -3,27 +3,19 @@
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "1bfni38l7cs0wbd9c6hgz2jfc8h3ixmg94izdvydm8j7amdz0cb6";
+    sha256 = "190yg6kkw953h8wajlqr2hvs2fz65y6z0blmywlg1nff724allaq";
   };
 
   cmakeFlags = [
     "-DMSGPACK_INCLUDE_DIRS=${libmsgpack}/include"
     "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
   ];
-
-  # The following tests FAILED:
-  #       2 - tst_neovimconnector (Failed)
-  #       3 - tst_callallmethods (Failed)
-  #       4 - tst_encoding (Failed)
-  #
-  # Tests failed when upgraded to neovim 0.2.0
-  doCheck = false;
 
   buildInputs = with pythonPackages; [
     neovim qtbase libmsgpack
@@ -38,9 +30,17 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # avoid cmake trying to download libmsgpack
     echo "" > third-party/CMakeLists.txt
-    # we rip out the gui test as spawning a GUI fails in our build environment
-    sed -i '/^add_xtest_gui/d' test/CMakeLists.txt
+    # we rip out a number of tests that fail in the build env
+    # the GUI tests will never work but the others should - they did before neovim 0.2.0
+    # was released
+    sed -i test/CMakeLists.txt \
+      -e '/^add_xtest_gui/d' \
+      -e '/tst_neovimconnector/d' \
+      -e '/tst_callallmethods/d' \
+      -e '/tst_encoding/d'
   '';
+
+  doCheck = true;
 
   postInstall = ''
     wrapProgram "$out/bin/nvim-qt" \
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Neovim client library and GUI, in Qt5";
-    license = licenses.isc;
+    license     = licenses.isc;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
     inherit version;

@@ -32,7 +32,7 @@ let
       build_dir=$PWD
       cd $TMPDIR
 
-      local_path=$(basename ${store_path} .zip | sed -e 's/^[a-z0-9]*-//')
+      local_path=$(basename ${url} .zip)
 
       cp -r ${store_path} $local_path
       chmod u+rwX -R $local_path
@@ -112,8 +112,9 @@ stdenv.mkDerivation rec {
   version = "9.3";
   name = "textadept-${version}";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk2 glib pkgconfig unzip ncurses zip
+    gtk2 glib unzip ncurses zip
   ];
 
   src = fetchhg {

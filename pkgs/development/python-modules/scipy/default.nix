@@ -1,16 +1,17 @@
-{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, numpy}:
+{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "0.19.0";
+  version = "1.0.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://pypi/s/scipy/scipy-${version}.zip";
-    sha256 = "4190d34bf9a09626cd42100bbb12e3d96b2daf1a8a3244e991263eb693732122";
+    url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
+    sha256 = "87ea1f11a0e9ec08c264dc64551d501fa307289460705f6fccd84cbfc7926d10";
   };
 
-  buildInputs = [ gfortran nose numpy.blas ];
+  checkInputs = [ nose pytest ];
+  buildInputs = [ gfortran numpy.blas ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
   preBuild = ''
@@ -30,6 +32,8 @@ buildPythonPackage rec {
     library_dirs = ${numpy.blas}/lib
     EOF
   '';
+
+  enableParallelBuilding = true;
 
   checkPhase = ''
     runHook preCheck

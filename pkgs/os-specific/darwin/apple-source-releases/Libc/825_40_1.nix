@@ -3,7 +3,7 @@
 appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ ed unifdef ];
+  nativeBuildInputs = [ ed unifdef ];
 
   installPhase = ''
     export SRCROOT=$PWD

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dqjj3mlc28s8ljnph6l086b4j9r5dly4fldq59crycwys72zzai";
   };
 
-  buildInputs = [ fontforge ];
+  nativeBuildInputs = [ fontforge ];
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/doc/${name}"
     cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "18brmw0h4hjq1m2l0abwc3zmib4rnfalpywdk68djm711zldxr76";
 
   meta = with stdenv.lib; {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";

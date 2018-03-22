@@ -61,7 +61,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
     license = licenses.mit;
-    homepage = "https://about.gitlab.com/gitlab-ci/";
+    homepage = https://about.gitlab.com/gitlab-ci/;
     platforms = platforms.unix;
     maintainers = [ lib.maintainers.bachp ];
   };

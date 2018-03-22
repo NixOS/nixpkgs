@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec{
   name = "grib-api-${version}";
-  version = "1.19.0";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-${version}-Source.tar.gz";
-    sha256 = "07cj9mw5bb249lxx1m9nmfdqb8b2a8cm7s6x62cdwca3sp16dv6a";
+    sha256 = "00cmmj44bhdlzhqbvwb3bb4xks3bpva669m6g3g6ffjaqm25b90c";
   };
 
   preConfigure = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec{
 
 
   meta = with stdenv.lib; {
-    homepage = "https://software.ecmwf.int/wiki/display/GRIB/Home";
+    homepage = https://software.ecmwf.int/wiki/display/GRIB/Home;
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
     description = "ECMWF Library for the GRIB file format";

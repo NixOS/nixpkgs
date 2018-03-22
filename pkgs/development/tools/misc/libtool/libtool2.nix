@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
-  propagatedNativeBuildInputs = [ m4 ];
-  nativeBuildInputs = [ perl help2man ];
+  nativeBuildInputs = [ perl help2man m4 ];
+  propagatedBuildInputs = [ m4 ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!

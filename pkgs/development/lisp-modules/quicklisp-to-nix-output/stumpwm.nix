@@ -1,35 +1,27 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''stumpwm'';
-  version = ''20170516-git'';
+  version = ''20180131-git'';
 
   description = ''A tiling, keyboard driven window manager'';
 
-  deps = [ ];
+  deps = [ args."alexandria" args."cl-ppcre" args."clx" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/stumpwm/2017-05-16/stumpwm-20170516-git.tgz'';
-    sha256 = ''0x3x0w1akarp0rjmig9x6d729z6lv6ywfg00b6xszm5kqfbx1659'';
+    url = ''http://beta.quicklisp.org/archive/stumpwm/2018-01-31/stumpwm-20180131-git.tgz'';
+    sha256 = ''1mlwgs0b8hd64wqk9qcv2x08zzfvbnn81fsdza7v5rcb8mx5abg0'';
   };
-    
+
   packageName = "stumpwm";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/stumpwm[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["stumpwm.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256 0x3x0w1akarp0rjmig9x6d729z6lv6ywfg00b6xszm5kqfbx1659 URL
-    http://beta.quicklisp.org/archive/stumpwm/2017-05-16/stumpwm-20170516-git.tgz MD5 ed076f733ef138aca3b04b3c3ff748f0 NAME stumpwm TESTNAME NIL FILENAME
-    stumpwm DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256
+    1mlwgs0b8hd64wqk9qcv2x08zzfvbnn81fsdza7v5rcb8mx5abg0 URL
+    http://beta.quicklisp.org/archive/stumpwm/2018-01-31/stumpwm-20180131-git.tgz
+    MD5 252427acf3f2dbc2a5522598c4e37be1 NAME stumpwm FILENAME stumpwm DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
+     (NAME clx FILENAME clx))
+    DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20180131-git SIBLINGS NIL
+    PARASITES NIL) */

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
       name = "lensfun-0.3.patch";
       sha256 = "0ys45x4r4bjjlx0zpd5d56rgjz7k8gxili4r4k8zx3zfka4a3zwv";
     })
+    ./gcc6.patch
   ];
 
   postPatch = '' # kinda icky
@@ -35,6 +36,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
       platforms = platforms.linux;
-      maintainers = [ maintainers.mornfall ];
+      maintainers = [ ];
   };
 }

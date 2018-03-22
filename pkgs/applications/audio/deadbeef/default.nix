@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, fetchpatch, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
+, gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
 # input plugins
 , vorbisSupport ? true, libvorbis ? null
 , mp123Support ? true, libmad ? null
@@ -30,7 +30,7 @@
 
 assert gtk2Support || gtk3Support;
 assert gtk2Support -> gtk2 != null;
-assert gtk3Support -> gtk3 != null && gsettings_desktop_schemas != null && wrapGAppsHook != null;
+assert gtk3Support -> gtk3 != null && gsettings-desktop-schemas != null && wrapGAppsHook != null;
 assert vorbisSupport -> libvorbis != null;
 assert mp123Support -> libmad != null;
 assert flacSupport -> flac != null;
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/deadbeef/${name}.tar.bz2";
-    sha256 = "0rwdxxn7h94vlgblbkswyvj6pm82488v8x5nrmlrcsbzjjf2pccw";
+    sha256 = "1168hgr1nf27pf24n1rlfh1kx1wiscwhpbhqw0rprwy203gsnqwa";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
     ++ optional gtk2Support gtk2
-    ++ optionals gtk3Support [ gtk3 gsettings_desktop_schemas ]
+    ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
     ++ optional vorbisSupport libvorbis
     ++ optional mp123Support libmad
     ++ optional flacSupport flac
@@ -91,9 +91,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";
-    homepage = "http://deadbeef.sourceforge.net/";
+    homepage = http://deadbeef.sourceforge.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];
     repositories.git = "https://github.com/Alexey-Yakovenko/deadbeef";
   };

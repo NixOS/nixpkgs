@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ pkgconfig qt4 qmake4Hook ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 qmake4Hook ];
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";

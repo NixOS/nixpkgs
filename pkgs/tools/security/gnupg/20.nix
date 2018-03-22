@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://gnupg.org";
+    homepage = https://gnupg.org;
     description = "Stable (2.0) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''

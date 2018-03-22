@@ -1,33 +1,32 @@
 { stdenv, fetchFromGitHub, pythonPackages, openssl }:
 
-stdenv.mkDerivation rec {
+pythonPackages.buildPythonApplication rec {
   name = "pybitmessage-${version}";
 
-  version = "0.4.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "bitmessage";
     repo = "PyBitmessage";
     rev = "v${version}";
-    sha256 = "1f4h0yc1mfjnxzvxiv9hxgak59mgr3a5ykv50vlyiay82za20jax";
+    sha256 = "04sgns9qczzw2152gqdr6bjyy4fmgs26cz8n3qck94l0j51rxhz8";
   };
 
-  buildInputs = with pythonPackages; [ python pyqt4 wrapPython ] ++ [ openssl ];
+  propagatedBuildInputs = with pythonPackages; [ msgpack-python pyqt4 numpy pyopencl ] ++ [ openssl ];
 
   preConfigure = ''
-    substituteInPlace Makefile \
-      --replace "PREFIX?=/usr/local" "" \
-      --replace "/usr" ""
-  '';
+    # Remove interaction and misleading output
+    substituteInPlace setup.py \
+      --replace "nothing = raw_input()" pass \
+      --replace 'print "It looks like building the package failed.\n" \' pass \
+      --replace '    "You may be missing a C++ compiler and the OpenSSL headers."' pass
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+    substituteInPlace src/pyelliptic/openssl.py \
+      --replace "libdir.append(find_library('ssl'))" "libdir.append('${openssl.out}/lib/libssl.so')"
 
-  postInstall = ''
-    substituteInPlace $out/bin/pybitmessage \
-      --replace "exec python2" "exec ${pythonPackages.python}/bin/python" \
-      --replace "/opt/openssl-compat-bitcoin/lib/" "${openssl.out}/lib/"
-    wrapProgram $out/bin/pybitmessage \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
+    substituteInPlace src/depends.py \
+      --replace "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
+
   '';
 
   meta = with stdenv.lib; {

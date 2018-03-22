@@ -19,14 +19,21 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.50";
+  version = "7.70";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "1ckl2qxqxkrfa2qxdrqyaa4k1hhj273aqckrc46fijdz0a76mag9";
+    sha256 = "063fg8adx23l4irrh5kn57hsmi1xvjkar4vm4k6g94ppan4hcyw4";
   };
 
   patches = ./zenmap.patch;
+
+  prePatch = optionalString stdenv.isDarwin ''
+    substituteInPlace libz/configure \
+        --replace /usr/bin/libtool ar \
+        --replace 'AR="libtool"' 'AR="ar"' \
+        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
 
   configureFlags = []
     ++ optional (!pythonSupport) "--without-ndiff"
@@ -39,7 +46,8 @@ in stdenv.mkDerivation rec {
       wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath $pygtk)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pygobject)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pycairo)/gtk-2.0
   '';
 
-  buildInputs = with python2Packages; [ libpcap pkgconfig openssl ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with python2Packages; [ libpcap openssl ]
     ++ optionals pythonSupport [ makeWrapper python ]
     ++ optionals graphicalSupport [
       libX11 gtk2 pygtk pysqlite pygobject2 pycairo
@@ -50,6 +58,6 @@ in stdenv.mkDerivation rec {
     homepage    = http://www.nmap.org;
     license     = licenses.gpl2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ mornfall thoughtpolice fpletz ];
+    maintainers = with maintainers; [ thoughtpolice fpletz ];
   };
 }

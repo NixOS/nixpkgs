@@ -1,20 +1,19 @@
 { stdenv, fetchFromGitHub, gnugrep
+, fixDarwinDylibNames
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
-    sha256 = "1rnxfhcmg8zsagyf70hiwm32mam60hq58pzgy7jn8c3iwv24mpz5";
+    sha256 = "15h9i9ygry0znlmvll5r21lzwgyqzynaw9q2wbj4bcn7zjy4c1pn";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
   };
 
-  # The Makefiles don't properly use file targets, but blindly rebuild
-  # all dependencies on every make invocation. So no nice phases. :-(
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
@@ -49,6 +48,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd2 ];
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

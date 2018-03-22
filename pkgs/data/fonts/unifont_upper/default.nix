@@ -1,21 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "10.0.06";
+in fetchzip rec {
   name = "unifont_upper-${version}";
-  version = "9.0.03";
 
-  ttf = fetchurl {
-    url = "http://unifoundry.com/pub/unifont-${version}/font-builds/${name}.ttf";
-    sha256 = "015v39y6nnyz4ld006349jzk9isyaqp4cnvmz005ylfnicl4zwhi";
-  };
+  url = "http://unifoundry.com/pub/unifont-${version}/font-builds/${name}.ttf";
 
-  phases = "installPhase";
+  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/unifont_upper.ttf";
 
-  installPhase =
-    ''
-      mkdir -p $out/share/fonts/truetype
-      cp -v ${ttf} $out/share/fonts/truetype/unifont_upper.ttf
-    '';
+  sha256 = "13x5z8iyh9xz5fllcy89yinnz1iy16a2pjf3vip66nz10sq8crlr";
 
   meta = with stdenv.lib; {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";

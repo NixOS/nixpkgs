@@ -1,35 +1,22 @@
-{ stdenv, fetchurl, SDL, mesa, SDL_ttf, gettext, zlib, SDL_mixer, SDL_image, guile
-, debug ? false }:
+{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_ttf, gettext, zlib, SDL2_mixer, SDL2_image, guile, libGLU_combined }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "trackballs-1.1.4";
-  
-  src = fetchurl {
-    url = mirror://sourceforge/trackballs/trackballs-1.1.4.tar.gz;
-    sha256 = "19ilnif59sxa8xmfisk90wngrd11pj8s86ixzypv8krm4znbm7a5";
+  name = "trackballs-${version}";
+  version = "1.2.4";
+
+  src = fetchFromGitHub {
+    owner = "trackballs";
+    repo = "trackballs";
+    rev = "v${version}";
+    sha256 = "0y5y8xzfsjd0rxl5wnxdq7m9n97s5xvcqyjsckz4qxrjcc3lk297";
   };
 
-  buildInputs = [ zlib mesa SDL SDL_ttf SDL_mixer SDL_image guile gettext ];
-
-  hardeningDisable = [ "format" ];
-
-  CFLAGS = optionalString debug "-g -O0";
-  CXXFLAGS = CFLAGS;
-  dontStrip = debug;
-  postUnpack = optionalString debug
-    "mkdir -p $out/src; cp -R * $out/src ; cd $out/src";
-
-  NIX_CFLAGS_COMPILE = "-iquote ${SDL.dev}/include/SDL";
-  configureFlags = optionalString debug "--enable-debug";
-
-  patchPhase = ''
-    sed -i -e 's/images icons music/images music/' share/Makefile.in
-  '';
+  buildInputs = [ cmake zlib SDL2 SDL2_ttf SDL2_mixer SDL2_image guile gettext libGLU_combined ];
 
   meta = {
-    homepage = http://trackballs.sourceforge.net/;
+    homepage = https://trackballs.github.io/;
     description = "3D Marble Madness clone";
     platforms = stdenv.lib.platforms.linux;
   };

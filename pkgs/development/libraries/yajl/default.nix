@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ruby }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "yajl-2.1.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
   };
 
-  buildInputs = [ cmake ruby ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Yet Another JSON Library";

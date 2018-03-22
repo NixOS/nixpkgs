@@ -1,20 +1,14 @@
 { stdenv, fetchFromRepoOrCz, perl, texinfo }:
 with stdenv.lib;
 
-let
-  date = "20170710";
-  version = "0.9.27pre-${date}";
-  rev = "2acb04f7f2077a4cff103421d79ceee48441918a";
-  sha256 = "1rh89dx1myqfm752d4rlzrm8aadfm17fm88ps0q9ibmbxavb45qw";
-in
-
 stdenv.mkDerivation rec {
   name = "tcc-${version}";
+  version = "0.9.27";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    inherit rev;
-    inherit sha256;
+    rev = "release_0_9_27";
+    sha256 = "12mm1lqywz0akr2yb2axjfbw8lwv57nh395vzsk534riz03ml977";
   };
 
   nativeBuildInputs = [ perl texinfo ];

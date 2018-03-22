@@ -6,7 +6,7 @@ let
   gce = pkgs.google-compute-engine;
 in
 {
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
   system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
     name = "google-compute-image";
@@ -14,7 +14,7 @@ in
       PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
       pushd $out
       mv $diskImage disk.raw
-      tar -Szcf nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';
@@ -29,6 +29,7 @@ in
     autoResize = true;
   };
 
+  boot.growPartition = true;
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
   boot.kernelModules = [ "virtio_pci" "virtio_net" ];
@@ -117,7 +118,7 @@ in
     before = ["sshd.service"];
     wants = ["local-fs.target" "network-online.target" "network.target"];
     wantedBy = [ "sshd.service" "multi-user.target" ];
-    path = with pkgs; [ ethtool ];
+    path = with pkgs; [ ethtool openssh ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_instance_setup --debug";
       Type = "oneshot";
@@ -211,7 +212,7 @@ in
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
           AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys
+          ${wget} -O $AUTH_KEYS --header="Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
           if [ -s $AUTH_KEYS ]; then
 
             # Read in key one by one, split in case Google decided

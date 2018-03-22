@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib
+{ stdenv, fetchurl, jdk, gmp, readline, openssl, libjpeg, unixODBC, zlib
 , libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
 , fontconfig, makeWrapper ? stdenv.isDarwin
 }:
 
 let
-  version = "7.2.3";
+  version = "7.6.4";
 in
 stdenv.mkDerivation {
   name = "swi-prolog-${version}";
 
   src = fetchurl {
     url = "http://www.swi-prolog.org/download/stable/src/swipl-${version}.tar.gz";
-    sha256 = "1da6sr8pz1zffs79nfa1d25a11ibhalm1vdwsb17p265nx8psra3";
+    sha256 = "14bq4sqs61maqpnmgy6687jjj0shwc27cpfsqbf056nrssmplg9d";
   };
 
-  buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
+  buildInputs = [ jdk gmp readline openssl libjpeg unixODBC libXinerama
     libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ]
   ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 

@@ -1,11 +1,10 @@
-{stdenv, lib, buildPythonPackage, fetchPypi, coverage, bash, which, writeText}:
+{stdenv, lib, buildPythonPackage, fetchPypi, bash, which, writeText}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "0.7";
   pname = "cram";
 
-  buildInputs = [ coverage which ];
+  checkInputs = [ which ];
 
   src = fetchPypi {
     inherit pname version;
@@ -13,20 +12,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    patchShebangs scripts/cram
     substituteInPlace tests/test.t \
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
-  # This testing is copied from Makefile. Simply using `make test` doesn't work
-  # because it uses the unpatched `scripts/cram` executable which has a bad
-  # shebang. Also, for some reason, coverage fails on one file so let's just
-  # ignore that one.
   checkPhase = ''
-    # scripts/cram tests
-    #COVERAGE=${coverage}/bin/coverage $out/bin/cram tests
-    #${coverage}/bin/coverage report --fail-under=100
-    COVERAGE=coverage $out/bin/cram tests
-    coverage report --fail-under=100 --omit="*/_encoding.py"
+    scripts/cram tests
   '';
 
   meta = {

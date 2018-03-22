@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.3.3";
-  name = "${pname}-${version}";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0628f2kn4gqimnhpf251fgzl723hwgyl3idy69dkzyjvi45s5zm6";
+    sha256 = "e914e6d5f84a76764887e4d909b09d63308725f0cbb5293872c2c92f07c11a5b";
   };
 
   # Fix tests: first requires network access, second is a bug (reported upstream)
@@ -25,8 +24,10 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/bebraw/pypandoc";
+    homepage = https://github.com/bebraw/pypandoc;
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs ];
+
+    broken = true; # incompatible with pandoc v2
   };
 }

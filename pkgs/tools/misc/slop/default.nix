@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake
-, glew, glm, mesa, libX11, libXext, libXrender, cppcheck, icu}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, glew, glm, libGLU_combined, libX11, libXext, libXrender, cppcheck, icu}:
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
-  version = "6.3.47";
+  version = "7.3.49";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "slop";
     rev = "v${version}";
-    sha256 = "05saxp5z2saq6b5hslxdc5kd7ln00svr5pazabcnchzydfhnkmsd";
+    sha256 = "0is3mh2d1jqgvv72v5x92w23yf26n8n384nbr1b6cn883aw8j7jz";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ glew glm mesa libX11 libXext libXrender icu ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glew glm libGLU_combined libX11 libXext libXrender icu ]
                 ++ stdenv.lib.optional doCheck cppcheck;
 
   doCheck = false;

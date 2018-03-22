@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with stdenv.lib; {
-    homepage = "http://aide.sourceforge.net/";
+    homepage = http://aide.sourceforge.net/;
     description = "A file and directory integrity checker";
     license = licenses.free;
     maintainers = [ maintainers.tstrobel ];

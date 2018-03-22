@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "catch-${version}";
-  version = "1.9.6";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
-    owner = "philsquared";
+    owner = "catchorg";
     repo = "Catch";
     rev = "v${version}";
-    sha256 = "0nqnyw6haa2771748ycag4hhjb8ni32cv4f7w3h0pji212542xan";
+    sha256 = "0hkcmycvyyazzi9dywnyiipnmbx399iirh5xk5g957c8zl0505kd";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";
-    homepage = "http://catch-lib.net";
+    homepage = http://catch-lib.net;
     license = licenses.boost;
     maintainers = with maintainers; [ edwtjo knedlsepp ];
     platforms = with platforms; unix;

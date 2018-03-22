@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ostree, rpm, which, autoconf, automake, libtool, pkgconfig,
-  libcap, glib, libgsystem, json_glib, libarchive, libsolv, librepo, gtk_doc, elfutils,
+  libcap, glib, libgsystem, json-glib, libarchive, libsolv, librepo, gtk-doc, elfutils,
   gperf, cmake, pcre, check, python, libxslt, docbook_xsl, docbook_xml_dtd_42, acl }:
 
 let
@@ -28,9 +28,10 @@ in stdenv.mkDerivation {
     sha256 = "0a0wwklzk1kvk3bbxxfvxgk4ck5dn7a7v32shqidb674fr2d5pvb";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    which autoconf automake pkgconfig libtool libcap ostree rpm glib libgsystem gperf
-    json_glib libarchive libsolv librepo gtk_doc libxslt docbook_xsl docbook_xml_dtd_42
+    which autoconf automake libtool libcap ostree rpm glib libgsystem gperf
+    json-glib libarchive libsolv librepo gtk-doc libxslt docbook_xsl docbook_xml_dtd_42
     cmake pcre check python
     # FIXME: get rid of this once libarchive properly propagates this
     acl

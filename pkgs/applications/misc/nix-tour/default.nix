@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
-    homepage = "https://nixcloud.io/tour";
+    homepage = https://nixcloud.io/tour;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ qknight ];

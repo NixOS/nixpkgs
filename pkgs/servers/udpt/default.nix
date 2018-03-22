@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, boost, sqlite }:
+{ stdenv, fetchFromGitHub, boost, sqlite, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   name = "udpt-${version}";
-  version = "2016-02-20"; # v2.0-rc0 with sample config
+  version = "2017-09-27";
 
   enableParallelBuilding = true;
 
@@ -12,11 +12,21 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
-    rev = "0790558de8b5bb841bb10a9115bbf72c3b4711b5";
-    sha256 = "0rgkjwvnqwbnqy7pm3dk176d3plb5lypaf12533yr0yfzcp6gnzk";
+    rev = "e0dffc83c8ce76b08a41a4abbd5f8065535d534f";
+    sha256 = "187dw96mzgcmh4k9pvfpb7ckbb8d4vlikamr2x8vkpwzgjs3xd6g";
   };
 
-  buildInputs = [ boost sqlite ];
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    make test
+
+    runHook postCheck
+  '';
+
+  buildInputs = [ boost sqlite cmake gtest ];
 
   postPatch = ''
     # Enabling optimization (implied by fortify hardening) causes htons
@@ -27,7 +37,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/etc/
     cp udpt $out/bin
-    cp udpt.conf $out/etc/
+    cp ../udpt.conf $out/etc/
     # without this, the resulting binary is unstripped.
     runHook postInstall
   '';

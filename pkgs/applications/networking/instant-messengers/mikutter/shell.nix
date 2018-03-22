@@ -8,6 +8,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   shellHook = ''
+    export MIKUTTER_CONFROOT="/homeless-shelter"
     truncate --size 0 Gemfile.lock
     bundle lock
     bundle package --path=vendor/bundle --no-install

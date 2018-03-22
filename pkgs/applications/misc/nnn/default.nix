@@ -4,17 +4,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nnn-${version}";
-  version = "1.2";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     rev = "v${version}";
-    sha256 = "1idrwm02218q7qd2pg2m8ld76bg32wbzl8y1h8ch7gzxihgn4559";
+    sha256 = "03cgsdj4l19gla5fx9d1ydqirpsah9d7gx9jaik73x38zqsabr89";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
+  preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses readline ];

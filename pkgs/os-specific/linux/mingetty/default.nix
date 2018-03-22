@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://sourceforge.net/projects/mingetty;
+    homepage = https://sourceforge.net/projects/mingetty;
     platforms = stdenv.lib.platforms.linux;
   };
 }

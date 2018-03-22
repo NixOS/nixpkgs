@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six regex ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/Toilal/rebulk/";
+    homepage = https://github.com/Toilal/rebulk/;
     license = licenses.mit;
     description = "Advanced string matching from simple patterns";
   };

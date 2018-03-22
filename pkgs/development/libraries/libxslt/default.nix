@@ -10,11 +10,13 @@ assert pythonSupport -> libxml2.pythonSupport;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.29";
+  pname = "libxslt";
+  version = "1.1.32";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "1klh81xbm9ppzgqk339097i39b7fnpmlj8lzn8bpczl3aww6x5xm";
+    sha256 = "0q2l6m56iv3ysxgm2walhg4c9wp7q183jb328687i9zlp85csvjj";
   };
 
   patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
@@ -25,18 +27,19 @@ stdenv.mkDerivation rec {
       --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
   '';
 
-  outputs = [ "bin" "dev" "out" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
+  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
   buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
-  # TODO move cryptoSupport as last flag, when upgrading libxslt
-  configureFlags = optional (!cryptoSupport) "--without-crypto" ++ [
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2.dev}"
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python2}";
+  ] ++ optional pythonSupport "--with-python=${python2}"
+    ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '' + optionalString pythonSupport ''
     mkdir -p $py/nix-support
-    echo ${libxml2.py} >> $py/nix-support/propagated-native-build-inputs
+    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
     moveToOutput lib/python2.7 "$py"
   '';
 

@@ -39,7 +39,7 @@ usage(){
 
 Options:
       --out path      Path where the output would be stored.
-      --url url       Any url understand by 'git clone'.
+      --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
       --deepClone     Clone the entire repository.
@@ -184,7 +184,7 @@ init_submodules(){
         local url
 
         # checkout each submodule
-        hash=$(echo "$l" | awk '{print substr($1,2)}')
+        hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
         dir=$(echo "$l" | awk '{print $2}')
         name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |

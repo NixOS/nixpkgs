@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, dbus, dbus_glib, glib, pkgconfig, libxml2, gnome2, libxslt }:
+{ stdenv, fetchurl, dbus, dbus-glib, glib, pkgconfig, libxml2, gnome2,
+  libxslt, glib-networking }:
 
 stdenv.mkDerivation rec {
   name = "geoclue-0.12.0";
@@ -7,9 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "15j619kvmdgj2hpma92mkxbzjvgn8147a7500zl3bap9g8bkylqg";
   };
 
-  buildInputs = [ pkgconfig libxml2 gnome2.GConf libxslt ];
+  outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [dbus glib dbus_glib];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gnome2.GConf libxslt glib-networking ];
+
+  propagatedBuildInputs = [dbus glib dbus-glib];
 
   hardeningDisable = [ "format" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, SDL, SDL_mixer, plib, libjpeg }:
+{ stdenv, fetchurl, libGLU_combined, SDL, SDL_mixer, plib, libjpeg }:
 let
   version = "0.9.13";
 in
@@ -11,13 +11,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    mesa SDL SDL_mixer plib libjpeg
+    libGLU_combined SDL SDL_mixer plib libjpeg
+  ];
+
+  patches = [
+    ./gcc6.patch
   ];
 
   meta = {
     description = "A model-airplane flight simulator";
     maintainers = with stdenv.lib.maintainers; [ raskin the-kenny ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, freetype, mesa_noglu }:
+{ stdenv, darwin, fetchurl, SDL2, freetype, libGL }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_ttf-${version}";
@@ -9,12 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0xljwcpvd2knrjdfag5b257xqayplz55mqlszrqp0kpnphh5xnrl";
   };
 
-  buildInputs = [ SDL2 freetype mesa_noglu ];
+  buildInputs = [ SDL2 freetype libGL ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with stdenv.lib; {
     description = "SDL TrueType library";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
-    homepage = "https://www.libsdl.org/projects/SDL_ttf/";
+    homepage = https://www.libsdl.org/projects/SDL_ttf/;
   };
 }

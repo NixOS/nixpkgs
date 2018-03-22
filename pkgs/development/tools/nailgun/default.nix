@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://martiansoftware.com/nailgun/;
     license = licenses.apsl20;
     platforms = platforms.linux;
-    maintainer = with maintainers; [ volth ];
+    maintainers = with maintainers; [ volth ];
   };
 }

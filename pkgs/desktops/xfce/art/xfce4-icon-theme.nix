@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk ];
 
   meta = {
     homepage = http://www.xfce.org/;

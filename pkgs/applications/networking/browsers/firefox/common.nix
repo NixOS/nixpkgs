@@ -1,15 +1,14 @@
 { pname, version, updateScript ? null
-, src, patches ? [], overrides ? {}, meta
+, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
 , isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
+, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper
+, yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, icu, libpng, jemalloc
-, autoconf213, which, gnused, cargo, rustc
-
+, autoconf213, which, gnused, cargo, rustc, llvmPackages
 , debugBuild ? false
 
 ### optionals
@@ -20,6 +19,7 @@
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
+, gssSupport ? true, kerberos
 
 ## privacy-related options
 
@@ -29,7 +29,6 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, loopSupport ? !privacySupport || !isTorBrowserLike
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -39,19 +38,32 @@
 
 ## other
 
-# If you want the resulting program to call itself
-# "Firefox"/"Torbrowser" instead of "Nightly" or whatever, enable this
-# option. However, in Firefox's case, those binaries may not be
-# distributed without permission from the Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? false
+# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+# have permission to use the official firefox branding.
+#
+# Fur purposes of documentation the statement of @sylvestre:
+# > As the person who did part of the work described in the LWN article
+# > and release manager working for Mozilla, I can confirm the statement
+# > that I made in
+# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+# >
+# > @garbas shared with me the list of patches applied for the Nix package.
+# > As they are just for portability and tiny modifications, they don't
+# > alter the experience of the product. In parallel, Rok also shared the
+# > build options. They seem good (even if I cannot judge the quality of the
+# > packaging of the underlying dependencies like sqlite, png, etc).
+# > Therefor, as long as you keep the patch queue sane and you don't alter
+# > the experience of Firefox users, you won't have any issues using the
+# > official branding.
+, enableOfficialBranding ? true
 }:
 
-assert stdenv.cc ? libc && stdenv.cc.libc != null;
-assert !isTorBrowserLike -> loopSupport; # can't be disabled on firefox :(
+assert stdenv.cc.libc or null != null;
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 
 stdenv.mkDerivation (rec {
@@ -61,9 +73,9 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
-    dbus dbus_glib pango freetype fontconfig xorg.libXi
+    dbus dbus-glib pango freetype fontconfig xorg.libXi
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    nspr libnotify xorg.pixman yasm mesa
+    nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
     xorg.libXext xorg.xextproto sqlite unzip makeWrapper
     hunspell libevent libstartup_notification libvpx /* cairo */
@@ -74,7 +86,10 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
-  ++ lib.optional  gtk3Support gtk3;
+  ++ lib.optional  gtk3Support gtk3
+  ++ lib.optional  gssSupport kerberos;
+
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
@@ -85,17 +100,26 @@ stdenv.mkDerivation (rec {
     rm -f configure
     rm -f js/src/configure
     rm -f .mozconfig*
-
-    # this will run autoconf213
+  '' + (if lib.versionAtLeast version "58"
+  # this will run autoconf213
+  then ''
+    configureScript="$(realpath ./mach) configure"
+  '' else ''
     make -f client.mk configure-files
-
     configureScript="$(realpath ./configure)"
-    cd obj-*
+  '') + ''
+    cxxLib=$( echo -n ${gcc}/include/c++/* )
+    archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
+
+    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
     # please get your own set of keys.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" >ga
+    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+    configureFlagsArray+=("--with-google-api-keyfile=$TMPDIR/ga")
+  '' + lib.optionalString (lib.versionOlder version "58") ''
+    cd obj-*
   '';
 
   configureFlags = [
@@ -122,6 +146,14 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
+  ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
+    # on i686-linux: --with-libclang-path is not available in this configuration
+    "--with-libclang-path=${llvmPackages.libclang}/lib"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "57") [
+    "--enable-webrender=build"
+  ]
 
   # TorBrowser patches these
   ++ lib.optionals (!isTorBrowserLike) [
@@ -130,7 +162,7 @@ stdenv.mkDerivation (rec {
   ]
 
   # and wants these
-  ++ lib.optionals isTorBrowserLike [
+  ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${version}"
     "--enable-signmar"
     "--enable-verify-mar"
@@ -140,26 +172,45 @@ stdenv.mkDerivation (rec {
     # possibilities on other platforms.
     # Lets save some space instead.
     "--with-system-nspr"
-  ]
+  ] ++ flag geolocationSupport "mozril-geoloc"
+    ++ flag safeBrowsingSupport "safe-browsing"
+  )
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
+  ++ flag gssSupport "negotiateauth"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optionals isTorBrowserLike
-       (flag loopSupport "loop")
-  ++ flag geolocationSupport "mozril-geoloc"
-  ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
-  ++ flag safeBrowsingSupport "safe-browsing"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"
                            "--enable-optimize"
                            "--enable-strip" ])
-  ++ lib.optional enableOfficialBranding "--enable-official-branding";
+  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ extraConfigureFlags;
+
+  # Before 58 we have to run `make -f client.mk configure-files` at
+  # the top level, and then run `./configure` in the obj-* dir (see
+  # above), but in 58 we have to instead run `./mach configure` at the
+  # top level and then run `make` in obj-*. (We can also run the
+  # `make` at the top level in 58, but then we would have to `cd` to
+  # `make install` anyway. This is ugly, but simple.)
+  postConfigure = lib.optionalString (lib.versionAtLeast version "58") ''
+    cd obj-*
+  '';
+
+  preBuild = lib.optionalString (enableOfficialBranding && isTorBrowserLike) ''
+    buildFlagsArray=("MOZ_APP_DISPLAYNAME=Tor Browser")
+  '';
+
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ]
+  ++ extraMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -170,7 +221,7 @@ stdenv.mkDerivation (rec {
 
   postInstall = ''
     # For grsecurity kernels
-    paxmark m $out/lib/firefox-[0-9]*/{firefox,firefox-bin,plugin-container}
+    paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
 
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -182,8 +233,8 @@ stdenv.mkDerivation (rec {
   postFixup = ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
-        "$out"/lib/firefox-*/libxul.so
+      }/lib:$(patchelf --print-rpath "$out"/lib/firefox*/libxul.so)" \
+        "$out"/lib/firefox*/libxul.so
   '';
 
   doInstallCheck = true;
@@ -200,6 +251,7 @@ stdenv.mkDerivation (rec {
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
+    inherit gssSupport;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)

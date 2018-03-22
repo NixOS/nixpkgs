@@ -1,15 +1,15 @@
 { stdenv, fetchurl, gfortran }:
-let
-  version = "3.5.0";
-in
+
 stdenv.mkDerivation rec {
   name = "blas-${version}";
+  version = "3.8.0";
+
   src = fetchurl {
     url = "http://www.netlib.org/blas/${name}.tgz";
-    sha256 = "096a3apnh899abjymjjg8m34hncagkzp9qxw08cms98g71fpfzgg";
+    sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
   };
 
-  buildInputs = [gfortran];
+  buildInputs = [ gfortran ];
 
   configurePhase = ''
     echo >make.inc  "SHELL = ${stdenv.shell}"
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.publicDomain;
-    homepage = "http://www.netlib.org/blas/";
+    homepage = http://www.netlib.org/blas/;
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, libpulseaudio, gtkmm2, libglademm
-, dbus_glib, GConf, gconfmm, intltool }:
+{ fetchurl, stdenv, pkgconfig, pulseaudioFull, gtkmm2, libglademm
+, dbus-glib, GConf, gconfmm, intltool }:
 
 stdenv.mkDerivation rec {
   name = "paprefs-0.9.10";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c5b3sb881szavly220q31g7rvpn94wr7ywlk00hqb9zaikml716";
   };
 
-  buildInputs = [ libpulseaudio gtkmm2 libglademm dbus_glib gconfmm ];
+  buildInputs = [ pulseaudioFull gtkmm2 libglademm dbus-glib gconfmm ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       dialog for the PulseAudio sound server.
     '';
 
-    homepage = "http://freedesktop.org/software/pulseaudio/paprefs/";
+    homepage = http://freedesktop.org/software/pulseaudio/paprefs/;
 
     license = licenses.gpl2Plus;
 

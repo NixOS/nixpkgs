@@ -9,6 +9,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , setupScript ? ./setup.sh
 
+, extraNativeBuildInputs ? []
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
@@ -41,7 +42,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 }:
 
 let
-  defaultNativeBuildInputs = extraBuildInputs ++
+  defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
@@ -58,11 +59,16 @@ let
       cc
     ];
 
+  defaultBuildInputs = extraBuildInputs;
+
   # The stdenv that we are producing.
   stdenv =
     derivation (
-    (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
-    {
+    lib.optionalAttrs (allowedRequisites != null) {
+      allowedRequisites = allowedRequisites
+        ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+    }
+    // {
       inherit name;
 
       # Nix itself uses the `system` field of a derivation to decide where to
@@ -75,7 +81,21 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath shell defaultNativeBuildInputs;
+      # We pretty much never need rpaths on Darwin, since all library path references
+      # are absolute unless we go out of our way to make them relative (like with CF)
+      # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
+      # there (yet?) so it goes here until then.
+      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+        export NIX_BUILD_DONT_SET_RPATH=1
+      '' + lib.optionalString hostPlatform.isDarwin ''
+        export NIX_DONT_SET_RPATH=1
+        export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString targetPlatform.isDarwin ''
+        export NIX_TARGET_DONT_SET_RPATH=1
+      '';
+
+      inherit initialPath shell
+        defaultNativeBuildInputs defaultBuildInputs;
     }
     // lib.optionalAttrs buildPlatform.isDarwin {
       __sandboxProfile = stdenvSandboxProfile;
@@ -91,14 +111,13 @@ let
 
       inherit buildPlatform hostPlatform targetPlatform;
 
-      inherit extraBuildInputs __extraImpureHostDeps extraSandboxProfile;
+      inherit extraNativeBuildInputs extraBuildInputs
+        __extraImpureHostDeps extraSandboxProfile;
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
         isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
-        isi686 isx86_64 is64bit isMips isBigEndian;
-      isArm = hostPlatform.isArm32;
-      isAarch64 = hostPlatform.isArm64;
+        isi686 isx86_64 is64bit isArm isAarch64 isMips isBigEndian;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
@@ -116,6 +135,8 @@ let
       inherit overrides;
 
       inherit cc;
+
+      isCross = targetPlatform != buildPlatform;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

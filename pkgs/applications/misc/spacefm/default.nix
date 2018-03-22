@@ -1,16 +1,16 @@
-{ pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop_file_utils
-, shared_mime_info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
-, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks, hicolor_icon_theme, adwaita-icon-theme }:
+{ pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop-file-utils
+, shared-mime-info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
+, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2, hicolor-icon-theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
     rev = "${version}";
-    sha256 = "06askkrwls09d1x382zjrmnvcm0ghfgz4cms2qbhdkazfyy0ff65";
+    sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
   configureFlags = [
@@ -23,12 +23,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f $out/etc/spacefm/spacefm.conf
-    ln -s /etc/spacefm/spacefm.conf $out/etc/spacefm/spacefm.conf 
+    ln -s /etc/spacefm/spacefm.conf $out/etc/spacefm/spacefm.conf
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig
-    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks
+    gtk3 udev desktop-file-utils shared-mime-info intltool
+    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
   ] ++ (if ifuseSupport then [ ifuse ] else []);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…

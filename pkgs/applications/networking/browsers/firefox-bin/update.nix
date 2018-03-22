@@ -22,7 +22,7 @@ in writeScript "update-${name}" ''
   pushd ${basePath}
 
   HOME=`mktemp -d`
-  cat ${./firefox.key} | gpg2 --import
+  cat ${./firefox.key} | gpg --import
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -37,7 +37,7 @@ in writeScript "update-${name}" ''
   #    versions or removes release versions if we are looking for beta
   #    versions
   # - this line pick up latest release
-  version=`xidel -q $url --extract "//a" | \
+  version=`xidel -s $url --extract "//a" | \
            sed s"/.$//" | \
            grep "^[0-9]" | \
            sort --version-sort | \
@@ -47,7 +47,7 @@ in writeScript "update-${name}" ''
 
   curl --silent -o $HOME/shasums "$url$version/SHA512SUMS"
   curl --silent -o $HOME/shasums.asc "$url$version/SHA512SUMS.asc"
-  gpgv2 --keyring=$HOME/.gnupg/pubring.kbx $HOME/shasums.asc $HOME/shasums
+  gpgv --keyring=$HOME/.gnupg/pubring.kbx $HOME/shasums.asc $HOME/shasums
 
   # this is a list of sha512 and tarballs for both arches
   shasums=`cat $HOME/shasums`

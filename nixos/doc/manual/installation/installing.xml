@@ -6,9 +6,18 @@
 
 <title>Installing NixOS</title>
 
+<para>NixOS can be installed on BIOS or UEFI systems.  The procedure
+for a UEFI installation is by and large the same as a BIOS installation. The differences are mentioned in the steps that follow.</para>
+
 <orderedlist>
 
-  <listitem><para>Boot from the CD.</para></listitem>
+  <listitem><para>Boot from the CD.</para>
+    <variablelist>
+      <varlistentry><term>UEFI systems</term>
+      <listitem><para>You should boot the live CD in UEFI mode
+  (consult your specific hardware's documentation for instructions).
+  You may find the <link xlink:href="http://www.rodsbooks.com/refind">rEFInd boot
+  manager</link> useful.</para></listitem></varlistentry></variablelist></listitem>
 
   <listitem><para>The CD contains a basic NixOS installation.  (It
   also contains Memtest86+, useful if you want to test new hardware).
@@ -16,7 +25,8 @@
   hardware.</para></listitem>
 
   <listitem><para>The NixOS manual is available on virtual console 8
-  (press Alt+F8 to access).</para></listitem>
+  (press Alt+F8 to access) or by running <command>nixos-help</command>.
+  </para></listitem>
 
   <listitem><para>You get logged in as <literal>root</literal>
   (with empty password).</para></listitem>
@@ -35,7 +45,10 @@
   using <command>ifconfig</command>.</para>
   <para>To manually configure the network on the graphical installer,
   first disable network-manager with
-  <command>systemctl stop network-manager</command>.</para></listitem>
+  <command>systemctl stop network-manager</command>.</para>
+  <para>To manually configure the wifi on the minimal installer, run
+  <command>wpa_supplicant -B -i interface -c &lt;(wpa_passphrase 'SSID' 'key')</command>.</para></listitem>
+
 
   <listitem><para>If you would like to continue the installation from a different
   machine you need to activate the SSH daemon via <literal>systemctl start sshd</literal>.
@@ -49,7 +62,31 @@
   <itemizedlist>
 
     <listitem><para>For partitioning:
-    <command>fdisk</command>.</para></listitem>
+    <command>fdisk</command>.
+<screen>
+# fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+-- for UEFI systems only
+> n      # <lineannotation>(create a new partition for /boot)</lineannotation>
+> 3      # <lineannotation>(make it a partition number 3)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> t      # <lineannotation>(change the partition type ...)</lineannotation>
+> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
+> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+-- for BIOS or UEFI systems
+> n      # <lineannotation>(create a new partition for /swap)</lineannotation>
+> 2      # <lineannotation>(make it a partition number 2)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+> +8G    # <lineannotation>(the size of the swap partition, set to whatever you like)</lineannotation>
+> n      # <lineannotation>(create a new partition for /)</lineannotation>
+> 1      # <lineannotation>(make it a partition number 1)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+>        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
+> a      # <lineannotation>(make the partition bootable)</lineannotation>
+> x      # <lineannotation>(enter expert mode)</lineannotation>
+> f      # <lineannotation>(fix up the partition ordering)</lineannotation>
+> r      # <lineannotation>(exit expert mode)</lineannotation>
+> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation></screen></para></listitem>
 
     <listitem><para>For initialising Ext4 partitions:
     <command>mkfs.ext4</command>.  It is recommended that you assign a
@@ -66,7 +103,25 @@
     <listitem><para>For creating swap partitions:
     <command>mkswap</command>.  Again it’s recommended to assign a
     label to the swap partition: <option>-L
-    <replaceable>label</replaceable></option>.</para></listitem>
+    <replaceable>label</replaceable></option>. For example:
+
+<screen>
+# mkswap -L swap /dev/sda2</screen>
+
+    </para></listitem>
+
+    <listitem>
+    <variablelist>
+      <varlistentry><term>UEFI systems</term>
+      <listitem><para>For creating boot partitions:
+    <command>mkfs.fat</command>.  Again it’s recommended to assign a
+    label to the boot partition: <option>-L
+    <replaceable>label</replaceable></option>. For example:
+
+<screen>
+# mkfs.fat -F 32 -L boot /dev/sda3</screen>
+
+    </para></listitem></varlistentry></variablelist></listitem>
 
     <listitem><para>For creating LVM volumes, the LVM commands, e.g.,
 
@@ -94,11 +149,27 @@
 
   </para></listitem>
 
+  <listitem>
+    <variablelist>
+      <varlistentry><term>UEFI systems</term>
+      <listitem><para>Mount the boot file system on <filename>/mnt/boot</filename>, e.g.
+
+<screen>
+# mount /dev/disk/by-label/boot /mnt/boot
+</screen>
+
+  </para></listitem></varlistentry></variablelist></listitem>
+
   <listitem><para>If your machine has a limited amount of memory, you
   may want to activate swap devices now (<command>swapon
   <replaceable>device</replaceable></command>).  The installer (or
   rather, the build actions that it may spawn) may need quite a bit of
-  RAM, depending on your configuration.</para></listitem>
+  RAM, depending on your configuration.
+
+<screen>
+# swapon /dev/sda2</screen>
+
+  </para></listitem>
 
   <listitem>
 
@@ -134,10 +205,30 @@
     install Emacs by running <literal>nix-env -i
     emacs</literal>.</para>
 
-    <para>You <emphasis>must</emphasis> set the option
+    <variablelist>
+
+      <varlistentry><term>BIOS systems</term>
+      <listitem><para>You <emphasis>must</emphasis> set the option
     <option>boot.loader.grub.device</option> to specify on which disk
     the GRUB boot loader is to be installed.  Without it, NixOS cannot
-    boot.</para>
+      boot.</para></listitem></varlistentry>
+
+      <varlistentry><term>UEFI systems</term>
+      <listitem><para>You <emphasis>must</emphasis> set the option
+      <option>boot.loader.systemd-boot.enable</option> to <literal>true</literal>.
+      <command>nixos-generate-config</command> should do this automatically for new
+      configurations when booted in
+      UEFI mode.</para>
+      <para>You may want to look at the options starting with
+      <option>boot.loader.efi</option> and <option>boot.loader.systemd-boot</option>
+      as well.</para></listitem></varlistentry>
+
+    </variablelist>
+
+    <para>If there are other operating systems running on the machine before
+    installing NixOS, the
+    <option>boot.loader.grub.useOSProber</option> option can be set to
+    <literal>true</literal> to automatically add them to the grub menu.</para>
 
     <para>Another critical option is <option>fileSystems</option>,
     specifying the file systems that need to be mounted by NixOS.
@@ -184,11 +275,20 @@ Enter new UNIX password: ***
 Retype new UNIX password: ***
 </screen>
 
+    <note>
+      <para>
+        To prevent the password prompt, set <code>users.mutableUsers = false;</code> in
+        <filename>configuration.nix</filename>, which allows unattended installation
+        necessary in automation.
+      </para>
+    </note>
+
     </para>
 
   </listitem>
 
-  <listitem><para>If everything went well:
+  <listitem>
+    <para>If everything went well:
 
 <screen>
 # reboot</screen>
@@ -241,10 +341,34 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 <example xml:id='ex-install-sequence'><title>Commands for Installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
 # fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+-- for UEFI systems only
+> n      # <lineannotation>(create a new partition for /boot)</lineannotation>
+> 3      # <lineannotation>(make it a partition number 3)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> t      # <lineannotation>(change the partition type ...)</lineannotation>
+> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
+> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+-- for BIOS or UEFI systems
+> n      # <lineannotation>(create a new partition for /swap)</lineannotation>
+> 2      # <lineannotation>(make it a partition number 2)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+> +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
+> n      # <lineannotation>(create a new partition for /)</lineannotation>
+> 1      # <lineannotation>(make it a partition number 1)</lineannotation>
+>        # <lineannotation>(press enter to accept the default)</lineannotation>
+>        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
+> a      # <lineannotation>(make the partition bootable)</lineannotation>
+> x      # <lineannotation>(enter expert mode)</lineannotation>
+> f      # <lineannotation>(fix up the partition ordering)</lineannotation>
+> r      # <lineannotation>(exit expert mode)</lineannotation>
+> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation>
 # mkfs.ext4 -L nixos /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
+# mkfs.fat -F 32 -L boot /dev/sda3        # <lineannotation>(for UEFI systems only)</lineannotation>
 # mount /dev/disk/by-label/nixos /mnt
+# mount /dev/disk/by-label/boot /mnt/boot # <lineannotation>(for UEFI systems only)</lineannotation>
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix
 # nixos-install
@@ -261,7 +385,8 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
       ./hardware-configuration.nix
     ];
 
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.device = "/dev/sda";   # <lineannotation>(for BIOS systems only)</lineannotation>
+  boot.loader.systemd-boot.enable = true; # <lineannotation>(for UEFI systems only)</lineannotation>
 
   # Note: setting fileSystems is generally not
   # necessary, since nixos-generate-config figures them out
@@ -273,9 +398,9 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 }</screen>
 </example>
 
-<xi:include href="installing-uefi.xml" />
 <xi:include href="installing-usb.xml" />
 <xi:include href="installing-pxe.xml" />
 <xi:include href="installing-virtualbox-guest.xml" />
+<xi:include href="installing-from-other-distro.xml" />
 
 </chapter>

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
-    homepage = "https://github.com/ram-on/imgurbash2";
+    homepage = https://github.com/ram-on/imgurbash2;
   };
 }

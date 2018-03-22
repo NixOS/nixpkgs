@@ -1,11 +1,12 @@
-let lib = import ./default.nix;
-    inherit (builtins) isFunction head tail isList isAttrs isInt attrNames;
+{ lib }:
+let
+    inherit (builtins) head tail isList isAttrs isInt attrNames;
 
 in
 
-with import ./lists.nix;
-with import ./attrsets.nix;
-with import ./strings.nix;
+with lib.lists;
+with lib.attrsets;
+with lib.strings;
 
 rec {
 
@@ -52,7 +53,7 @@ rec {
           f:        # the function applied to the arguments
           initial:  # you pass attrs, the functions below are passing a function taking the fix argument
     let
-        takeFixed = if isFunction initial then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
+        takeFixed = if lib.isFunction initial then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
         tidy = args:
             let # apply all functions given in "applyPreTidy" in sequence
                 applyPreTidyFun = fold ( n: a: x: n ( a x ) ) lib.id (maybeAttr "applyPreTidy" [] args);
@@ -62,7 +63,7 @@ rec {
                     let args = takeFixed fixed;
                         mergeFun = args.${n};
                     in if isAttrs x then (mergeFun args x)
-                       else assert isFunction x;
+                       else assert lib.isFunction x;
                             mergeFun args (x ( args // { inherit fixed; }));
             in overridableDelayableArgs f newArgs;
     in
@@ -309,48 +310,6 @@ rec {
   mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
   mergeAttrsByFuncDefaultsClean = list: removeAttrs (mergeAttrsByFuncDefaults list) ["mergeAttrBy"];
 
-  # merge attrs based on version key into mkDerivation args, see mergeAttrBy to learn about smart merge defaults
-  #
-  # This function is best explained by an example:
-  #
-  #     {version ? "2.x"}:
-  #
-  #     mkDerivation (mergeAttrsByVersion "package-name" version
-  #       { # version specific settings
-  #         "git" = { src = ..; preConfigre = "autogen.sh"; buildInputs = [automake autoconf libtool];  };
-  #         "2.x" = { src = ..; };
-  #       }
-  #       {  // shared settings
-  #          buildInputs = [ common build inputs ];
-  #          meta = { .. }
-  #       }
-  #     )
-  #
-  # Please note that e.g. Eelco Dolstra usually prefers having one file for
-  # each version. On the other hand there are valuable additional design goals
-  #  - readability
-  #  - do it once only
-  #  - try to avoid duplication
-  #
-  # Marc Weber and Michael Raskin sometimes prefer keeping older
-  # versions around for testing and regression tests - as long as its cheap to
-  # do so.
-  #
-  # Very often it just happens that the "shared" code is the bigger part.
-  # Then using this function might be appropriate.
-  #
-  # Be aware that its easy to cause recompilations in all versions when using
-  # this function - also if derivations get too complex splitting into multiple
-  # files is the way to go.
-  #
-  # See misc.nix -> versionedDerivation
-  # discussion: nixpkgs: pull/310
-  mergeAttrsByVersion = name: version: attrsByVersion: base:
-    mergeAttrsByFuncDefaultsClean [ { name = "${name}-${version}"; }
-                                    base
-                                    (maybeAttr version (throw "bad version ${version} for ${name}") attrsByVersion)
-                                  ];
-
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
     listToAttrs (map (n: nameValuePair n lib.concat)
@@ -415,7 +374,7 @@ rec {
       if isAttrs x then
           if x ? outPath then "derivation"
           else "attrs"
-      else if isFunction x then "function"
+      else if lib.isFunction x then "function"
       else if isList x then "list"
       else if x == true then "bool"
       else if x == false then "bool"

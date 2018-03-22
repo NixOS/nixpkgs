@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple Lisp with an integrated database";
-    homepage = http://picolisp.com/;
+    homepage = https://picolisp.com/;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ raskin tohl ];

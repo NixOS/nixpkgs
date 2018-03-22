@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, attr, perl, pam ? null }:
+{ stdenv, buildPackages, fetchurl, attr, perl, pam ? null }:
 assert pam != null -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
   };
 
-  outputs = [ "out" "dev" "lib" "doc" ]
+  outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ stdenv.lib.optional (pam != null) "pam";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ pam ];
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "lib=lib"
     (stdenv.lib.optional (pam != null) "PAM_CAP=yes")
+    "BUILD_CC=$(CC_FOR_BUILD)"
+    "CC:=$(CC)"
   ];
 
   prePatch = ''
@@ -30,9 +33,8 @@ stdenv.mkDerivation rec {
 
     # ensure capsh can find bash in $PATH
     substituteInPlace progs/capsh.c --replace execve execvpe
-  '';
 
-  preInstall = ''
+    # set prefixes
     substituteInPlace Make.Rules \
       --replace 'prefix=/usr' "prefix=$lib" \
       --replace 'exec_prefix=' "exec_prefix=$out" \

@@ -131,7 +131,7 @@ in
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
-          ({ mode = "0444"; inherit text; })
+          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
         ) // {
           "tinc/${network}/tinc.conf" = {
             mode = "0444";
@@ -141,7 +141,6 @@ in
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
               ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
               ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
             '';
@@ -164,15 +163,23 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
-          ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
+        restartTriggers =
+          let
+            drvlist = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
+                        ++ mapAttrsToList (host: _: config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
+          in # drvlist might be too long to be used directly
+            [ (builtins.hashString "sha256" (concatMapStrings (d: d.outPath) drvlist)) ];
         serviceConfig = {
           Type = "simple";
-          PIDFile = "/run/tinc.${network}.pid";
-          Restart = "on-failure";
+          Restart = "always";
+          RestartSec = "3";
+          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
+          chown tinc.${network} /etc/tinc/${network}/hosts
+          mkdir -p /etc/tinc/${network}/invitations
+          chown tinc.${network} /etc/tinc/${network}/invitations
 
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
@@ -188,9 +195,6 @@ in
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
           fi
         '';
-        script = ''
-          tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
-        '';
       })
     );
 
@@ -200,8 +204,10 @@ in
         buildInputs = [ pkgs.makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data: ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" --add-flags "--pidfile=/run/tinc.${network}.pid"
+          ${concatStringsSep "\n" (mapAttrsToList (network: data:
+            optionalString (versionAtLeast data.package.version "1.1pre") ''
+              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                --add-flags "--pidfile=/run/tinc.${network}.pid"
             '') cfg.networks)}
         '';
       };

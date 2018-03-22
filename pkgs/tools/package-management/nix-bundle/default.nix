@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "nix-bundle";
   name = "${pname}-${version}";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15r77pchf4s4cdv4lvw2zw1yic78k8p0n2r954qq370vscw30yac";
+    sha256 = "0klabmygbhzlwxja8p2w8fp8ip3xaa5ym9c15rp9qxzh03hfmdjx";
   };
 
   # coreutils, gnutar is actually needed by nix for bootstrap
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper $out/share/nix-bundle/nix-bundle.sh $out/bin/nix-bundle \
       --prefix PATH : ${binPath}
+    cp $out/share/nix-bundle/nix-run.sh $out/bin/nix-run
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, lwt, ocaml_react }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, lwt, react }:
 
 stdenv.mkDerivation rec {
 	version = "1.0.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib ocamlbuild ];
 
-	propagatedBuildInputs = [ lwt ocaml_react ];
+	propagatedBuildInputs = [ lwt react ];
 
 	createFindlibDestdir = true;
 

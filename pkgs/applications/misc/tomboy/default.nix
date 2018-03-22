@@ -15,7 +15,8 @@ stdenv.mkDerivation {
     sha256 = "0j5jmd079bm2fydqaic5ymbfdxna3qlx6fkp2mqhgcdr7prsbl3q";
   };
 
-  buildInputs = [ itstool intltool pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ itstool intltool
     libxml2 gnome2.GConf atk gtk2
     mono mono-addins dbus-sharp-2_0 dbus-sharp-glib-2_0 gnome-sharp gtk-sharp-2_0
     makeWrapper ];
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tomboy";
+    homepage = https://wiki.gnome.org/Apps/Tomboy;
     description = "A simple note-taking application with synchronization";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.lgpl2;

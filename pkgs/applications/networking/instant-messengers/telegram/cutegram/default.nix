@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     version = "2.7.1";
     description = "Telegram client forked from sigram";
-    homepage = "http://aseman.co/en/products/cutegram/";
+    homepage = http://aseman.co/en/products/cutegram/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ profpatsch AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }
-#TODO: appindicator, for system tray plugin (by @profpatsch)
+#TODO: appindicator, for system tray plugin

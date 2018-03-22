@@ -1,44 +1,60 @@
-{ stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes, modemmanager, librsvg
-, mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook, webkitgtk }:
+{ stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
+, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl
+, mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
+, libgudev, hicolor-icon-theme, jansson, wrapGAppsHook, webkitgtk, gobjectIntrospection
+, libindicator-gtk3, libappindicator-gtk3, withGnome ? false }:
 
-stdenv.mkDerivation rec {
-  name    = "${pname}-${major}.${minor}";
-  pname   = "network-manager-applet";
-  major   = "1.4";
-  minor   = "6";
+let
+  pname = "network-manager-applet";
+  version = "1.8.10";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "0xpcdwqmnwiqqqsd5rx1gh5rvv5m2skj59bqxhccy1k2ikzgr9hh";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1hy9ni2rwpy68h7jhn5lm2s1zm1vjchfy8lwj8fpm7xlx3x4pp0a";
   };
 
-  configureFlags = [ "--sysconfdir=/etc" ];
+  mesonFlags = [
+    "-Dselinux=false"
+    "-Dappindicator=true"
+    "-Dgcr=${if withGnome then "true" else "false"}"
+  ];
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [
-    gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
-    polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
-    modemmanager jansson librsvg glib_networking gnome3.dconf webkitgtk
+    gnome3.gtk networkmanager libnotify libsecret gsettings-desktop-schemas
+    polkit isocodes libgudev
+    modemmanager jansson glib-networking
+    libindicator-gtk3 libappindicator-gtk3
+  ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr webkitgtk ];
+
+  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl libxml2 ];
+
+  propagatedUserEnvPkgs = [ hicolor-icon-theme ];
+
+  NIX_CFLAGS = [
+    ''-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
-
-  propagatedUserEnvPkgs = [ gnome3.gconf gnome3.gnome_keyring hicolor_icon_theme ];
-
-  makeFlags = [
-    ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
-  ];
-
-  preInstall = ''
-    installFlagsArray=( "sysconfdir=$out/etc" )
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanagerapplet";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage    = http://projects.gnome.org/NetworkManager/;
+    homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "NetworkManager control applet for GNOME";
-    license     = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom rickynils ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

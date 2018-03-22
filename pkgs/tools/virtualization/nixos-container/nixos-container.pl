@@ -7,6 +7,7 @@ use File::Slurp;
 use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 use Cwd 'abs_path';
+use Time::HiRes;
 
 my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
@@ -214,27 +215,36 @@ if (!-e $confFile) {
     die "$0: container ‘$containerName’ does not exist\n" ;
 }
 
-sub isContainerRunning {
-    my $status = `systemctl show 'container\@$containerName'`;
-    return $status =~ /ActiveState=active/;
-}
-
-sub terminateContainer {
-    system("machinectl", "terminate", $containerName) == 0
-        or die "$0: failed to terminate container\n";
-}
-
-sub stopContainer {
-    system("systemctl", "stop", "container\@$containerName") == 0
-        or die "$0: failed to stop container\n";
-}
-
 # Return the PID of the init process of the container.
 sub getLeader {
     my $s = `machinectl show "$containerName" -p Leader`;
     chomp $s;
     $s =~ /^Leader=(\d+)$/ or die "unable to get container's main PID\n";
     return int($1);
+}
+
+sub isContainerRunning {
+    my $status = `systemctl show 'container\@$containerName'`;
+    return $status =~ /ActiveState=active/;
+}
+
+sub terminateContainer {
+    my $leader = getLeader;
+    system("machinectl", "terminate", $containerName) == 0
+        or die "$0: failed to terminate container\n";
+    # Wait for the leader process to exit
+    # TODO: As for any use of PIDs for process control where the process is
+    #       not a direct child of ours, this can go wrong when the pid gets
+    #       recycled after a PID overflow.
+    #       Relying entirely on some form of UUID provided by machinectl
+    #       instead of PIDs would remove this risk.
+    #       See https://github.com/NixOS/nixpkgs/pull/32992#discussion_r158586048
+    while ( kill 0, $leader ) { Time::HiRes::sleep(0.1) }
+}
+
+sub stopContainer {
+    system("systemctl", "stop", "container\@$containerName") == 0
+        or die "$0: failed to stop container\n";
 }
 
 # Run a command in the container.
@@ -331,7 +341,7 @@ elsif ($action eq "run") {
 
 elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
-    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m or die "$0: cannot get IP address\n";
+    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m or die "$0: cannot get IP address\n";
     print "$1\n";
 }
 

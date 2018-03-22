@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, cmake, blas, liblapack, gfortran, fltk, libjpeg
-, zlib, mesa, mesa_glu, xorg }:
+{ stdenv, fetchurl, cmake, blas, liblapack, gfortran, gmm, fltk, libjpeg
+, zlib, libGLU_combined, libGLU, xorg }:
 
-let version = "2.12.0"; in
+let version = "3.0.6"; in
 
 stdenv.mkDerivation {
   name = "gmsh-${version}";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "02cx2mfbxx6m18s54z4yzbk4ybch3v9489z7cr974y8y0z42xgbz";
+    sha256 = "0ywqhr0zmdhn8dvi6l8z1vkfycyv67fdrz6b95mb39np832bq04p";
   };
 
   # The original CMakeLists tries to use some version of the Lapack lib
   # that is supposed to work without Fortran but didn't for me.
   patches = [ ./CMakeLists.txt.patch ];
 
-  buildInputs = [ cmake blas liblapack gfortran fltk libjpeg zlib mesa
-    mesa_glu xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
+  buildInputs = [ cmake blas liblapack gfortran gmm fltk libjpeg zlib libGLU_combined
+    libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes xorg.libXext
     xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM xorg.libICE
   ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A three-dimensional finite element mesh generator";

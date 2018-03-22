@@ -1,4 +1,4 @@
-{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, mesa, boost,
+{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
   pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     ln -s $out/share/rigsofrods/{RoR,RoRConfig} $out/bin
   '';
 
-  buildInputs = [ wxGTK30 freeimage cmake zziplib mesa boost pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU_combined boost
     libuuid openal ogre ois curl gtk2 mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 

@@ -5,20 +5,21 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "runc-${version}";
-  version = "1.0.0-rc3";
+  version = "1.0.0-rc5";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "14hdhnni0rz3g0bhcaq95zn2zrhyds0mq2pm2padbamg4bgq4r1c";
+    sha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
   };
 
   outputs = [ "out" "man" ];
 
   hardeningDisable = ["fortify"];
 
-  buildInputs = [ removeReferencesTo go-md2man go pkgconfig libseccomp libapparmor apparmor-parser ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ removeReferencesTo go-md2man go libseccomp libapparmor apparmor-parser ];
 
   makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 

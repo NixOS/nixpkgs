@@ -6,7 +6,7 @@ diff --git a/django/contrib/gis/gdal/libgdal.py b/django/contrib/gis/gdal/libgda
  except (AttributeError, EnvironmentError,
          ImportError, ImproperlyConfigured):
 -    lib_path = None
-+    lib_path = "@gdal@/lib/libgdal.so"
++    lib_path = "@gdal@/lib/libgdal@extension@"
  
  if lib_path:
      lib_names = None
@@ -18,7 +18,7 @@ diff --git a/django/contrib/gis/geos/libgeos.py b/django/contrib/gis/geos/libgeo
      except (AttributeError, EnvironmentError,
              ImportError, ImproperlyConfigured):
 -        lib_path = None
-+        lib_path = "@geos@/lib/libgeos_c.so"
++        lib_path = "@geos@/lib/libgeos_c@extension@"
  
      # Setting the appropriate names for the GEOS-C library.
      if lib_path:

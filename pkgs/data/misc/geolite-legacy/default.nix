@@ -1,40 +1,40 @@
 { stdenv, fetchurl }:
 
 let
-  fetchDB = src: name: sha256: fetchurl {
-    inherit name sha256;
+  fetchDB = src: sha256: fetchurl {
+    inherit sha256;
     url = "https://geolite.maxmind.com/download/geoip/database/${src}";
   };
 in
 stdenv.mkDerivation rec {
   name = "geolite-legacy-${version}";
-  version = "2017-05-26";
+  version = "2017-12-02";
 
   srcGeoIP = fetchDB
-    "GeoLiteCountry/GeoIP.dat.gz" "GeoIP.dat.gz"
-    "04akk0jczvki8rdvz6z6v5s26ds0m27953lzvp3v0fsg7rl08q5n";
+    "GeoLiteCountry/GeoIP.dat.gz"
+    "1nggml11wzlanmzk6wbw2kla91fj8ggd9kh9yz42lnyckdlf5ac4";
   srcGeoIPv6 = fetchDB
-    "GeoIPv6.dat.gz" "GeoIPv6.dat.gz"
-    "0i0885vvj0s5sysyafvk8pc8gr3znh7gmiy8rp4iiai7qnbylb7y";
+    "GeoIPv6.dat.gz"
+    "0w809xgmr5zi4fgm9q3lhrnh1vl62s49n737bhq4jplm5918ki50";
   srcGeoLiteCity = fetchDB
-    "GeoLiteCity.dat.xz" "GeoIPCity.dat.xz"
-    "0bgf4kfg4mmqvgmrff27lbiglnnb3pnd7f3i4fxzl68c33bizmbm";
+    "GeoLiteCity.dat.gz"
+    "0cibajsv5xdjpw1qfx22izm5azqcj0d7nvk39irgwflkim9jfjbs";
   srcGeoLiteCityv6 = fetchDB
-    "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz" "GeoIPCityv6.dat.gz"
-    "06slyw2644y2z5bgn4yl79aa4smf94mdcddybldh1glc3ay3p4iz";
+    "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz"
+    "1ldwbzgs64irfgb3kq3jp8fmhwmwqk713dr4kkdqlglrblr9hfkc";
   srcGeoIPASNum = fetchDB
-    "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
-    "1gpvsqvq9z9pg9zfn86i50fb481llfyn79r1jwddwfflp1qqfrrv";
+    "asnum/GeoIPASNum.dat.gz"
+    "06qqs8qr8vxqwd80npz7n66k3bpc1vs7w43i2bb4k0di5yxnjwr9";
   srcGeoIPASNumv6 = fetchDB
-    "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
-    "0nmhz82dn9clm5w2y6z861ifj7i761spy1p1zcam93046cdpqqaa";
+    "asnum/GeoIPASNumv6.dat.gz"
+    "1qyq4h8cja62giv6q1qqc502vsq53wzz1kx80mgvwngmycrxa21k";
 
   meta = with stdenv.lib; {
     description = "GeoLite Legacy IP geolocation databases";
     homepage = https://geolite.maxmind.com/download/geoip;
     license = licenses.cc-by-sa-30;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nckx ];
+    maintainers = with maintainers; [ fpletz ];
   };
 
   builder = ./builder.sh;

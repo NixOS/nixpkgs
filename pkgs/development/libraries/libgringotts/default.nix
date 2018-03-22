@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bzfnpf2gwc2bisbrw06s63g9z9v4mh1n9ksqr6pbgj2prz7bvlk";
   };
 
-  buildInputs = [ pkgconfig zlib bzip2 libmcrypt libmhash ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib bzip2 libmcrypt libmhash ];
 
   meta = with stdenv.lib; {
     description = "A small library to encapsulate data in an encrypted structure";

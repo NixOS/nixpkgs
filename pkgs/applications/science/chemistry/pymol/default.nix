@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication {
 
   meta = {
     description = description;
-    homepage = "https://www.pymol.org/";
+    homepage = https://www.pymol.org/;
     license = licenses.psfl;
   };
 }

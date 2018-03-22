@@ -1,8 +1,8 @@
 # These can be passed to nixpkgs as either the `localSystem` or
 # `crossSystem`. They are put here for user convenience, but also used by cross
 # tests and linux cross stdenv building, so handle with care!
-
-let platforms = import ./platforms.nix; in
+{ lib }:
+let platforms = import ./platforms.nix { inherit lib; }; in
 
 rec {
   #
@@ -11,83 +11,77 @@ rec {
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";
-    bigEndian = false;
     arch = "armv5tel";
     float = "soft";
-    withTLS = true;
-    libc = "glibc";
     platform = platforms.sheevaplug;
-    openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   raspberryPi = rec {
     config = "armv6l-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv6l";
     float = "hard";
     fpu = "vfp";
-    withTLS = true;
-    libc = "glibc";
     platform = platforms.raspberrypi;
-    openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   armv7l-hf-multiplatform = rec {
     config = "arm-unknown-linux-gnueabihf";
-    bigEndian = false;
     arch = "armv7-a";
     float = "hard";
     fpu = "vfpv3-d16";
-    withTLS = true;
-    libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
-    openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   aarch64-multiplatform = rec {
     config = "aarch64-unknown-linux-gnu";
-    bigEndian = false;
     arch = "aarch64";
-    withTLS = true;
-    libc = "glibc";
     platform = platforms.aarch64-multiplatform;
-    inherit (platform) gcc;
+  };
+
+  aarch64-android-prebuilt = rec {
+    config = "aarch64-unknown-linux-android";
+    arch = "aarch64";
+    platform = platforms.aarch64-multiplatform;
+    useAndroidPrebuilt = true;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // rec {
     platform = platforms.scaleway-c1;
-    inherit (platform) gcc;
-    inherit (gcc) fpu;
+    inherit (platform.gcc) fpu;
   };
 
   pogoplug4 = rec {
     arch = "armv5tel";
-    config = "armv5tel-softfloat-linux-gnueabi";
+    config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
-
     platform = platforms.pogoplug4;
-
-    inherit (platform) gcc;
-    libc = "glibc";
-
-    withTLS = true;
-    openssl.system = "linux-generic32";
   };
 
   fuloongminipc = rec {
-    config = "mips64el-unknown-linux-gnu";
-    bigEndian = false;
+    config = "mipsel-unknown-linux-gnu";
     arch = "mips";
     float = "hard";
-    withTLS = true;
-    libc = "glibc";
     platform = platforms.fuloong2f_n32;
-    openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
+
+  muslpi = raspberryPi // {
+    config = "armv6l-unknown-linux-musleabihf";
+  };
+
+  aarch64-multiplatform-musl = aarch64-multiplatform // {
+    config = "aarch64-unknown-linux-musl";
+  };
+
+  musl64 = { config = "x86_64-unknown-linux-musl"; };
+  musl32  = { config = "i686-unknown-linux-musl"; };
+
+  riscv = bits: {
+    config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform bits;
+  };
+  riscv64 = riscv "64";
+  riscv32 = riscv "32";
+
 
   #
   # Darwin

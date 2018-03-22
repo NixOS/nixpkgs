@@ -1,7 +1,9 @@
 { stdenv, cctools, appleDerivation }:
 
 appleDerivation {
-  buildInputs = [ cctools ];
+  nativeBuildInputs = [ cctools ];
+
+  patches = [ ./clang-5.patch ];
 
   postPatch = ''
     substituteInPlace makefile \

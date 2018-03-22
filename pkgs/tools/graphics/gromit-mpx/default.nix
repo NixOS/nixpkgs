@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, pkgconfig
 , gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
-, libxkbcommon, epoxy, at_spi2_core, dbus, libdbusmenu-glib
+, libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1dkmp5rhzp56sz9cfxill2pkdz2anwb8kkxkypvk2xhqi64cvkrs";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake autoreconfHook pkgconfig
+    autoconf automake autoreconfHook
     gtk glib pcre libappindicator libpthreadstubs
-    libXdmcp libxkbcommon epoxy at_spi2_core
+    libXdmcp libxkbcommon epoxy at-spi2-core
     dbus libdbusmenu-glib
   ];
 

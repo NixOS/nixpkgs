@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, uchar, uucp, uutf, cmdliner }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uucp, uutf, cmdliner }:
 
 let
   pname = "uuseg";
@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "01q8ljjgi7d73x7ms489b5my83xds4jax1vbjhwwjdai01friscc";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam cmdliner topkg uutf ];
+  buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
   propagatedBuildInputs = [ uucp uchar ];
-
-  createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 

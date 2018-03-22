@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "https://github.com/noirbizarre/flask-restplus";
+    homepage = https://github.com/noirbizarre/flask-restplus;
     description = "Fast, easy and documented API development with Flask";
     license = lib.licenses.mit;
   };

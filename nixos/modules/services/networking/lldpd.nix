@@ -24,20 +24,16 @@ in
       description = "lldpd user";
       group = "_lldpd";
       home = "/var/run/lldpd";
+      isSystemUser = true;
     };
     users.extraGroups._lldpd = {};
 
     environment.systemPackages = [ pkgs.lldpd ];
+    systemd.packages = [ pkgs.lldpd ];
 
     systemd.services.lldpd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      requires = [ "network.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.lldpd}/bin/lldpd -d ${concatStringsSep " " cfg.extraArgs}";
-        PrivateTmp = true;
-        PrivateDevices = true;
-      };
+      environment.LLDPD_OPTIONS = concatStringsSep " " cfg.extraArgs;
     };
   };
 }

@@ -1,10 +1,13 @@
-{ lib, runCommand, fetchurl }:
+{ lib, fetchzip }:
 
-runCommand "sampradaya-2015-05-26" {
-  src = fetchurl {
-    url = "https://bitbucket.org/OorNaattaan/sampradaya/raw/afa9f7c6ab17e14bd7dd74d0acaec2f75454dfda/Sampradaya.ttf";
-    sha256 = "0110k1yh5kz3f04wp72bfz59pxjc7p6jv7m5p0rqn1kqbf7g3pck";
-  };
+fetchzip {
+  name = "sampradaya-2015-05-26";
+
+  url = "https://bitbucket.org/OorNaattaan/sampradaya/raw/afa9f7c6ab17e14bd7dd74d0acaec2f75454dfda/Sampradaya.ttf";
+
+  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/Sampradaya.ttf";
+
+  sha256 = "1pqyj5r5jc7dk8yyzl7i6qq2m9zvahcjj49a66wwzdby5zyw8dqv";
 
   meta = with lib; {
     homepage = https://bitbucket.org/OorNaattaan/sampradaya/;
@@ -14,7 +17,3 @@ runCommand "sampradaya-2015-05-26" {
     platforms = platforms.all;
   };
 }
-''
-  mkdir -p $out/share/fonts/truetype
-  cp $src $out/share/fonts/truetype/Sampradaya.ttf
-''

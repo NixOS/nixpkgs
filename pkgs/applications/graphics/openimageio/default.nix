@@ -4,20 +4,20 @@
 
 stdenv.mkDerivation rec {
   name = "openimageio-${version}";
-  version = "1.7.12";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "1ganx4f7zis5lkxxrwc83dbgngaxww2846bsc4vrg5dhjnns6n4y";
+    sha256 = "1jn4ph7giwxr65xxbm59i03wywnmxkqnpvqp0kcajl4k48vq3wkr";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost ilmbase libjpeg libpng 
+    boost ilmbase libjpeg libpng
     libtiff opencolorio openexr
     unzip
   ];
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

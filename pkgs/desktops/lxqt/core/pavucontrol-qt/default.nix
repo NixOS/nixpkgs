@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, lxqt, libpulseaudio }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio, pcre, qtbase, qttools, qtx11extras }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "pavucontrol-qt";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0k7sg4dxr48nk15gpqlnkjr9gbh7r5gs0s0ydifcmw281khrzlzj";
+    sha256 = "1pfqdzsbygvq77npsizydps25d9g6vgw177yqvmz3cg3a68dad27";
   };
 
   nativeBuildInputs = [
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
+    qtbase
+    qttools
+    qtx11extras
     libpulseaudio
+    pcre
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];

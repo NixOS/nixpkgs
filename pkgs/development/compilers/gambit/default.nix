@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, fetchgit, git, openssl, autoconf, pkgs }:
+{ stdenv, fetchurl, fetchgit, git, openssl, autoconf, pkgs, makeStaticLibraries }:
+
+# TODO: distinct packages for gambit-release and gambit-devel
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
-  version = "4.8.8-f3ffeb6";
+  version = "4.8.9";
   bootstrap = import ./bootstrap.nix ( pkgs );
 
-#  devver  = "4_8_8";
-#  src = fetchurl {
-#    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.8/source/gambit-v${version}-devel.tgz";
-#    sha256 = "0j3ka76cfb007rlcc3nv5p1s6vh31cwp87hwwabawf16vs1jb7bl";
-#  };
   src = fetchgit {
     url = "https://github.com/feeley/gambit.git";
-    rev = "f3ffeb695aeea80c18c1b9ef276b57898c780dca";
-    sha256 = "1lqixsrgk9z2gj6z1nkys0pfd3m5zjxrp3gvqn2wpr9h7hjb8x06";
+    rev = "dd54a71dfc0bd09813592f1645d755867a02195d";
+    sha256 = "120kg73k39gshrwas8a3xcrxgnq1c7ww92wgy4d3mmrwy3j9nzzc";
   };
 
-  buildInputs = [ openssl git autoconf bootstrap ];
+  # Use makeStaticLibraries to enable creation of statically linked binaries
+  buildInputs = [ git autoconf bootstrap openssl (makeStaticLibraries openssl)];
 
   configurePhase = ''
     options=(
@@ -28,6 +26,8 @@ stdenv.mkDerivation rec {
       --enable-absolute-shared-libs # Yes, NixOS will want an absolute path, and fix it.
       --enable-poll
       --enable-openssl
+      --enable-default-runtime-options="f8,-8,t8" # Default to UTF-8 for source and all I/O
+      #--enable-debug # Nope: enables plenty of good stuff, but also the costly console.log
 
       #--enable-multiple-versions # Nope, NixOS already does version multiplexing
       #--enable-guide
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     # Make bootstrap compiler, from release bootstrap
-    mkdir -p boot/wip-compiler &&
-    cp -rp ${bootstrap}/. boot/wip-compiler/. &&
+    mkdir -p boot &&
+    cp -rp ${bootstrap}/. boot/. &&
     chmod -R u+w boot &&
-    cd boot/wip-compiler && \
-    cp ../../gsc/makefile.in ../../gsc/*.scm gsc && \
-    (cd gsc && make bootclean ) &&
-    make bootstrap &&
-    cd ../.. &&
-    cp boot/wip-compiler/gsc/gsc gsc-boot &&
+    cd boot &&
+    cp ../gsc/makefile.in ../gsc/*.scm gsc && # */
+    ./configure &&
+    for i in lib gsi gsc ; do (cd $i ; make ) ; done &&
+    cd .. &&
+    cp boot/gsc/gsc gsc-boot &&
 
     # Now use the bootstrap compiler to build the real thing!
     make -j2 from-scratch

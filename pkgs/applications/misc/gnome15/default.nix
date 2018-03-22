@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A set of tools for configuring the Logitech G15 keyboard";
     license = licenses.gpl3;
-    homepage = "https://gnome15.org/";
+    homepage = https://gnome15.org/;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

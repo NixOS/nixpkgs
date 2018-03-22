@@ -2,10 +2,10 @@
 
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
-, glib, dbus_glib, gtkVersion
+, glib, dbus-glib, gtkVersion
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, python2Packages, gobjectIntrospection, vala_0_23
+, python2Packages, gobjectIntrospection, vala
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
     else [ gtk3 libdbusmenu-gtk3 ];
 
   buildInputs = [
-    glib dbus_glib
-    python pygobject2 pygtk gobjectIntrospection vala_0_23
+    glib dbus-glib
+    python pygobject2 pygtk gobjectIntrospection vala
   ] ++ (if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
@@ -43,8 +43,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace configure.ac \
       --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
     autoconf
-    substituteInPlace {configure,ltmain.sh,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+      substituteInPlace $f \
+        --replace /usr/bin/file ${file}/bin/file
+    done
   '';
 
   configureFlags = [
@@ -66,7 +68,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = "https://launchpad.net/libappindicator";
+    homepage = https://launchpad.net/libappindicator;
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

@@ -1,28 +1,26 @@
-{ stdenv, fetchurl, puredata }:
+{ stdenv, fetchFromGitHub, puredata }:
 
 stdenv.mkDerivation rec {
   name = "maxlib-${version}";
-  version = "1.5.5";
+  version = "1.5.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/pure-data/libraries/maxlib/${name}.tar.gz";
-    sha256 = "0vxl9s815dnay5r0067rxsfh8f6jbk61f0nxrydzjydfycza7p1w";
+  src = fetchFromGitHub {
+    owner = "electrickery";
+    repo = "pd-maxlib";
+    rev = "v${version}";
+    sha256 = "10w9qfgn26lj3zqjksf2r1wsjpf5xy4dx22jay9l6idy9q62mxsn";
   };
 
   buildInputs = [ puredata ];
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
-    for i in ${puredata}/include/pd/*; do
-      ln -s $i .
-    done
-    sed -i "s@/usr@$out@g" Makefile
-  '';
+  makeFlags = [ "prefix=$(out)" ];
 
   postInstall = ''
-    mv $out/local/lib/pd-externals/maxlib/ $out
+    mv $out/lib/pd-externals/maxlib/ $out
     rm -rf $out/local/
+    rm -rf $out/lib/
   '';
 
   meta = {

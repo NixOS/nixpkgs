@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lisp compiler";
-    homepage = "http://www.sbcl.org";
+    homepage = http://www.sbcl.org;
     license = licenses.publicDomain; # and FreeBSD
     maintainers = [maintainers.raskin maintainers.tohl];
     platforms = attrNames options;

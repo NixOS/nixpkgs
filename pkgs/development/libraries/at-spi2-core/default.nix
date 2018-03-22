@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, intltool, dbus_glib
+{ stdenv, fetchurl, python, pkgconfig, popt, gettext, dbus-glib
 , libX11, xextproto, libSM, libICE, libXtst, libXi, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  versionMajor = "2.24";
-  versionMinor = "1";
+  versionMajor = "2.26";
+  versionMinor = "2";
   moduleName   = "at-spi2-core";
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1e90d064b937aacfe79a96232ac7e63d28d716e85bd9ff4333f865305a959b5b";
+    sha256 = "0596ghkamkxgv08r4a1pdhm06qd5zzgcfqsv64038w9xbvghq3n8";
   };
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
   buildInputs = [
-    python pkgconfig popt  intltool dbus_glib
+    python popt dbus-glib
     libX11 xextproto libSM libICE libXtst libXi
-    gobjectIntrospection
   ];
 
   # ToDo: on non-NixOS we create a symlink from there?

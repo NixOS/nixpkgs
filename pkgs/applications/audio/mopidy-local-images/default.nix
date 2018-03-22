@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ stdenv, fetchFromGitHub, pythonPackages, mopidy, gobjectIntrospection }:
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-local-images-${version}";
@@ -12,6 +12,12 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0gdqxws0jish50mmi57mlqcs659wrllzv00czl18niz94vzvyc0d";
   };
 
+  buildInputs = [ gobjectIntrospection ];
+
+  checkInputs = [
+    pythonPackages.mock
+  ];
+
   propagatedBuildInputs = [
     mopidy
     pythonPackages.pykka
@@ -19,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mopidy/mopidy-local-images";
+    homepage = https://github.com/mopidy/mopidy-local-images;
     description = "Mopidy local library proxy extension for handling embedded album art";
     license = licenses.asl20;
     maintainers = [ maintainers.rvolosatovs ];

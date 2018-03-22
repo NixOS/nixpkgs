@@ -101,7 +101,7 @@ modulesTree = [kernel]
 $ nix-env -i ncurses
 $ export NIX_CFLAGS_LINK=-lncurses
 $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
-          
+
           </para>
         </listitem>
 
@@ -111,9 +111,9 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
         </listitem>
 
       </orderedlist>
-    
+
     </para>
-    
+
   </listitem>
 
   <listitem>
@@ -366,15 +366,33 @@ it. Place the resulting <filename>package.nix</filename> file into
 
 </section>
 
-<section xml:id="sec-autojump">
+<section xml:id="sec-shell-helpers">
 
-<title>Autojump</title>
+<title>Interactive shell helpers</title>
 
 <para>
-  autojump needs the shell integration to be useful but unlike other systems,
-  nix doesn't have a standard share directory location. This is why a
-  <command>autojump-share</command> script is shipped that prints the location
-  of the shared folder. This can then be used in the .bashrc like this:
+  Some packages provide the shell integration to be more useful. But
+  unlike other systems, nix doesn't have a standard share directory
+  location. This is why a bunch <command>PACKAGE-share</command>
+  scripts are shipped that print the location of the corresponding
+  shared folder.
+
+  Current list of such packages is as following:
+
+  <itemizedlist>
+    <listitem>
+      <para>
+        <literal>autojump</literal>: <command>autojump-share</command>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <literal>fzf</literal>: <command>fzf-share</command>
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  E.g. <literal>autojump</literal> can then used in the .bashrc like this:
 <screen>
   source "$(autojump-share)/autojump.bash"
 </screen>
@@ -391,24 +409,24 @@ it. Place the resulting <filename>package.nix</filename> file into
 <title>Steam in Nix</title>
 
 <para>
-  Steam is distributed as a <filename>.deb</filename> file, for now only 
-  as an i686 package (the amd64 package only has documentation). 
-  When unpacked, it has a script called <filename>steam</filename> that 
+  Steam is distributed as a <filename>.deb</filename> file, for now only
+  as an i686 package (the amd64 package only has documentation).
+  When unpacked, it has a script called <filename>steam</filename> that
   in ubuntu (their target distro) would go to <filename>/usr/bin
-  </filename>. When run for the first time, this script copies some 
-  files to the user's home, which include another script that is the 
-  ultimate responsible for launching the steam binary, which is also 
+  </filename>. When run for the first time, this script copies some
+  files to the user's home, which include another script that is the
+  ultimate responsible for launching the steam binary, which is also
   in $HOME.
 </para>
 <para>
   Nix problems and constraints:
 <itemizedlist>
-  <listitem><para>We don't have <filename>/bin/bash</filename> and many 
+  <listitem><para>We don't have <filename>/bin/bash</filename> and many
   scripts point there. Similarly for <filename>/usr/bin/python</filename>
   .</para></listitem>
   <listitem><para>We don't have the dynamic loader in <filename>/lib
   </filename>.</para></listitem>
-  <listitem><para>The <filename>steam.sh</filename> script in $HOME can 
+  <listitem><para>The <filename>steam.sh</filename> script in $HOME can
   not be patched, as it is checked and rewritten by steam.</para></listitem>
   <listitem><para>The steam binary cannot be patched, it's also checked.</para></listitem>
 </itemizedlist>
@@ -428,10 +446,10 @@ it. Place the resulting <filename>package.nix</filename> file into
 <title>How to play</title>
 
 <para>
-  For 64-bit systems it's important to have 
-  <programlisting>hardware.opengl.driSupport32Bit = true;</programlisting> 
-  in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need 
-  <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting> 
+  For 64-bit systems it's important to have
+  <programlisting>hardware.opengl.driSupport32Bit = true;</programlisting>
+  in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
+  <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
   if you are using PulseAudio - this will enable 32bit ALSA apps integration.
   To use the Steam controller, you need to add
   <programlisting>services.udev.extraRules = ''
@@ -452,31 +470,25 @@ it. Place the resulting <filename>package.nix</filename> file into
 
   <varlistentry>
     <term>Steam fails to start. What do I do?</term>
-    <listitem><para>Try to run 
+    <listitem><para>Try to run
     <programlisting>strace steam</programlisting>
     to see what is causing steam to fail.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-  <term>Using the FOSS Radeon drivers</term>
-  <listitem><itemizedlist><listitem><para>
-  The open source radeon drivers need a newer libc++ than is provided 
-  by the default runtime, which leads to a crash on launch. Use
-  <programlisting>environment.systemPackages = [(pkgs.steam.override { newStdcpp = true; })];</programlisting>
-  in your config if you get an error like
-  <programlisting>
-libGL error: unable to load driver: radeonsi_dri.so
-libGL error: driver pointer missing
-libGL error: failed to load driver: radeonsi
-libGL error: unable to load driver: swrast_dri.so
-libGL error: failed to load driver: swrast</programlisting></para></listitem>
-  <listitem><para>
-  Steam ships statically linked with a version of libcrypto that
-  conflics with the one dynamically loaded by radeonsi_dri.so.
-  If you get the error
-  <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
-  have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
-  </para></listitem>
+  <term>Using the FOSS Radeon or nouveau (nvidia) drivers</term>
+  <listitem><itemizedlist>
+    <listitem><para>The <literal>newStdcpp</literal> parameter
+    was removed since NixOS 17.09 and should not be needed anymore.
+    </para></listitem>
+
+    <listitem><para>
+    Steam ships statically linked with a version of libcrypto that
+    conflics with the one dynamically loaded by radeonsi_dri.so.
+    If you get the error
+    <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
+    have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
+    </para></listitem>
 
   </itemizedlist></listitem></varlistentry>
 
@@ -486,7 +498,7 @@ libGL error: failed to load driver: swrast</programlisting></para></listitem>
   <listitem><para>
   There is no java in steam chrootenv by default. If you get a message like
   <programlisting>/home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found</programlisting>
-  You need to add  
+  You need to add
   <programlisting> steam.override { withJava = true; };</programlisting>
   to your configuration.
   </para></listitem>
@@ -501,14 +513,14 @@ libGL error: failed to load driver: swrast</programlisting></para></listitem>
 
 <title>steam-run</title>
 <para>
-The FHS-compatible chroot used for steam can also be used to run 
+The FHS-compatible chroot used for steam can also be used to run
 other linux games that expect a FHS environment.
-To do it, add 
+To do it, add
 <programlisting>pkgs.(steam.override {
           nativeOnly = true;
           newStdcpp = true;
         }).run</programlisting>
-to your configuration, rebuild, and run the game with 
+to your configuration, rebuild, and run the game with
 <programlisting>steam-run ./foo</programlisting>
 </para>
 
@@ -648,8 +660,66 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
   passing <command>-q</command> to the Emacs command.
 </para>
 
-</section>
+<para>
+  Sometimes <varname>emacsWithPackages</varname> is not enough, as
+  this package set has some priorities imposed on packages (with
+  the lowest priority assigned to Melpa Unstable, and the highest for
+  packages manually defined in
+  <filename>pkgs/top-level/emacs-packages.nix</filename>). But you
+  can't control this priorities when some package is installed as a
+  dependency. You can override it on per-package-basis, providing all
+  the required dependencies manually - but it's tedious and there is
+  always a possibility that an unwanted dependency will sneak in
+  through some other package. To completely override such a package
+  you can use <varname>overrideScope</varname>.
+</para>
+
+<screen>
+overrides = super: self: rec {
+  haskell-mode = self.melpaPackages.haskell-mode;
+  ...
+};
+((emacsPackagesNgGen emacs).overrideScope overrides).emacsWithPackages (p: with p; [
+  # here both these package will use haskell-mode of our own choice
+  ghc-mod
+  dante
+])
+</screen>
 
 </section>
 
+</section>
+
+<section xml:id="sec-weechat">
+<title>Weechat</title>
+<para>
+Weechat can be configured to include your choice of plugins, reducing its
+closure size from the default configuration which includes all available
+plugins.  To make use of this functionality, install an expression that
+overrides its configuration such as
+<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+    plugins = with availablePlugins; [ python perl ];
+  }
+}</programlisting>
+</para>
+<para>
+The plugins currently available are <literal>python</literal>,
+<literal>perl</literal>, <literal>ruby</literal>, <literal>guile</literal>,
+<literal>tcl</literal> and <literal>lua</literal>.
+</para>
+<para>
+The python plugin allows the addition of extra libraries. For instance,
+the <literal>inotify.py</literal> script in weechat-scripts requires
+D-Bus or libnotify, and the <literal>fish.py</literal> script requires
+pycrypto. To use these scripts, use the <literal>python</literal>
+plugin's <literal>withPackages</literal> attribute:
+<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+    plugins = with availablePlugins; [
+            (python.withPackages (ps: with ps; [ pycrypto python-dbus ]))
+        ];
+    }
+}
+</programlisting>
+</para>
+</section>
 </chapter>

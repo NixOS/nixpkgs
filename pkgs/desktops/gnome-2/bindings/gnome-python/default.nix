@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://pygtk.org/";
+    homepage = http://pygtk.org/;
     description = "Python wrapper for GNOME libraries";
     platforms = platforms.linux;
     license = licenses.lgpl2;

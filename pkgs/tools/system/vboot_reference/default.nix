@@ -1,46 +1,42 @@
-{ stdenv, fetchgit, pkgconfig, libuuid, openssl }:
+{ stdenv, fetchgit, pkgconfig, libuuid, openssl, libyaml, lzma }:
 
 stdenv.mkDerivation rec {
-  version = "20130507";
-  checkout = "25/50225/2";
+  version = "20180311";
+  checkout = "4c84e077858c809ee80a9a6f9b38185cf7dcded7";
 
   name = "vboot_reference-${version}";
 
   src = fetchgit {
     url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;
-    rev = "refs/changes/${checkout}";
-    sha256 = "14d3a93ha5k4al4ib43nyn1ppx7kgb12xw6mkflhx8nxmx8827nc";
+    rev = "${checkout}";
+    sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 
-  buildInputs = [ pkgconfig openssl stdenv.cc.libc.static ]
-    ++ stdenv.lib.optional (libuuid != null)
-         (libuuid.overrideAttrs (attrs:
-           { configureFlags = attrs.configureFlags ++ [ "--enable-static" ]; }));
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl libuuid libyaml lzma ];
 
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "x86"
-    else throw "vboot_reference for: ${stdenv.system} not supported!";
+  enableParallelBuilding = true;
 
-  buildPhase = ''
-    make ARCH=${arch} `pwd`/build/cgpt/cgpt
-    make ARCH=${arch} `pwd`/build/utility/vbutil_kernel
-    make ARCH=${arch} `pwd`/build/utility/vbutil_key
-    make ARCH=${arch} `pwd`/build/utility/vbutil_keyblock
-    make ARCH=${arch} `pwd`/build/utility/vbutil_firmware
+  patches = [ ./dont_static_link.patch ];
+
+  preBuild = ''
+    patchShebangs scripts
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp build/cgpt/cgpt $out/bin
-    cp build/utility/vbutil_kernel $out/bin
-    cp build/utility/vbutil_key $out/bin
-    cp build/utility/vbutil_keyblock $out/bin
-    cp build/utility/vbutil_firmware $out/bin
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/vboot
+    cp -r tests/devkeys* $out/share/vboot/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Chrome OS partitioning and kernel signing tools";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

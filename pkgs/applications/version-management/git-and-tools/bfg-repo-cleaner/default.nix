@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 let
-  version = "1.12.15";
+  version = "1.13.0";
   jarName = "bfg-${version}.jar";
   mavenUrl = "http://central.maven.org/maven2/com/madgag/bfg/${version}/${jarName}";
 in
@@ -12,7 +12,7 @@ in
 
     src = fetchurl {
       url = mavenUrl;
-      sha256 = "17dh25jambkk55khknlhy8wa9s1i1xmh9hdgj72j1lzyl0ag42ik";
+      sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
     buildInputs = [ jre makeWrapper ];
@@ -27,7 +27,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
+      homepage = https://rtyley.github.io/bfg-repo-cleaner/;
       # Descriptions taken with minor modification from the homepage of bfg-repo-cleaner
       description = "Removes large or troublesome blobs in a git repository like git-filter-branch does, but faster";
       longDescription = ''

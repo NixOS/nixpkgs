@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, python
 , gst-plugins-base, orc
 , a52dec, libcdio, libdvdread
-, lame, libmad, libmpeg2, x264, libintlOrEmpty
+, lame, libmad, libmpeg2, x264, libintlOrEmpty, mpg123
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-1.10.4";
+  name = "gst-plugins-ugly-1.12.3";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Ugly Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that have good quality and correct functionality,
       but distributing them might pose problems.  The license on either
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
-    sha256 = "0ngsiwcsz3jd08id4mc0qiy2q1n7h2kkvdnh3r1vm725m1ycg1k3";
+    sha256 = "0lh00rg26iy5lr5al23lxsyncjqkgzph1bzkrgp8x9sfr62ab378";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc
     a52dec libcdio libdvdread
-    lame libmad libmpeg2 x264
+    lame libmad libmpeg2 x264 mpg123
   ] ++ libintlOrEmpty;
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;

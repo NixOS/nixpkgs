@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, mesa ? null # OpenGL (required for vwebp)
+, openglSupport ? false, freeglut ? null, libGLU_combined ? null # OpenGL (required for vwebp)
 , pngSupport ? true, libpng ? null # PNG image format
 , jpegSupport ? true, libjpeg ? null # JPEG image format
 , tiffSupport ? true, libtiff ? null # TIFF image format
@@ -14,7 +14,7 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-assert openglSupport -> ((freeglut != null) && (mesa != null));
+assert openglSupport -> ((freeglut != null) && (libGLU_combined != null));
 assert pngSupport -> (libpng != null);
 assert jpegSupport -> (libjpeg != null);
 assert tiffSupport -> (libtiff != null);
@@ -27,11 +27,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libwebp-${version}";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "http://downloads.webmproject.org/releases/webp/${name}.tar.gz";
-    sha256 = "0h1brwkyxc7lb8lc53aacdks5vc1y9hzngqi41gg7y6l56912a69";
+    sha256 = "1ayq2zq0zbgf5yizbm32zh7p1vb8kibw74am6am1n5cz5mw3ql06";
   };
 
   configureFlags = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ]
-    ++ optionals openglSupport [ freeglut mesa ]
+    ++ optionals openglSupport [ freeglut libGLU_combined ]
     ++ optional pngSupport libpng
     ++ optional jpegSupport libjpeg
     ++ optional tiffSupport libtiff

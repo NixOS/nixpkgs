@@ -5,26 +5,27 @@
 , pytestrunner
 , pytest
 , glibcLocales
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "path.py";
-  version = "10.3.1";
-  name = "path.py-${version}";
+  version = "11.0";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "412706be1cd8ab723c77829f9aa0c4d4b7c7b26c7b1be0275a6841c3cb1001e0";
+    sha256 = "16134e5b287aba4a4125a6722e7837cf2a149fccc5000c500ae6c71a5525488b";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  buildInputs = [setuptools_scm glibcLocales ];
+  checkInputs = [ pytest pytestrunner glibcLocales packaging ];
+  buildInputs = [ setuptools_scm ];
 
   LC_ALL="en_US.UTF-8";
 
   meta = {
     description = "A module wrapper for os.path";
-    homepage = http://github.com/jaraco/path.py;
+    homepage = https://github.com/jaraco/path.py;
     license = lib.licenses.mit;
   };
 

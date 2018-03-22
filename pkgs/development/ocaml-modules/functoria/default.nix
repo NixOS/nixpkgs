@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
 , bos, cmdliner, ocamlgraph
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
 	unpackCmd = "tar xjf $src";
 
-	buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 	propagatedBuildInputs = [ bos cmdliner ocamlgraph ];
 
 	inherit (topkg) buildPhase installPhase;

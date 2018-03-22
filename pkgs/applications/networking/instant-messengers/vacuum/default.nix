@@ -1,15 +1,17 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchFromGitHub
   , qt4, qmake4Hook, openssl
   , xproto, libX11, libXScrnSaver, scrnsaverproto
   , xz, zlib
 }:
 stdenv.mkDerivation rec {
   name = "vacuum-im-${version}";
-  version = "1.2.4";
+  version = "1.3.0.20160104";
 
-  src = fetchurl {
-    url = "https://googledrive.com/host/0B7A5K_290X8-d1hjQmJaSGZmTTA/vacuum-${version}.tar.gz";
-    sha256 = "10qxpfbbaagqcalhk0nagvi5irbbz5hk31w19lba8hxf6pfylrhf";
+  src = fetchFromGitHub {
+    owner = "Vacuum-IM";
+    repo = "vacuum-im";
+    rev = "1.3.0.20160104-Alpha";
+    sha256 = "1jcw9c7s75y4c3m4skfc3cc0i519z39b23n997vj5mwcjplxyc76";
   };
 
   buildInputs = [
@@ -34,6 +36,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    homepage = "http://code.google.com/p/vacuum-im/";
+    homepage = http://www.vacuum-im.org;
   };
 }

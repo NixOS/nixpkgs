@@ -1,24 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy, libarcus }:
+{ stdenv, lib, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy, libarcus, doxygen, gettext }:
 
 if lib.versionOlder python.version "3.5.0"
 then throw "Uranium not supported for interpreter ${python.executable}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "3.2.1";
   pname = "uranium";
   name = "${pname}-${version}";
-  
+
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1jpl0ryk8xdppillk5wzr2415n50cpa09shn1xqj6y96fg22l2il";
+    sha256 = "1p05iw1x3rvb51p6hj57yq6nsjawjba3pyyr4jx924iq96vcc3fz";
   };
-  
-  buildInputs = [ python ];
+
+  buildInputs = [ python gettext ];
   propagatedBuildInputs = [ pyqt5 numpy scipy libarcus ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = "https://github.com/Ultimaker/Uranium";
+    homepage = https://github.com/Ultimaker/Uranium;
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

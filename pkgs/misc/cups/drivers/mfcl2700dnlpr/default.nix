@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2700DN LPR driver";
-    homepage = "http://www.brother.com/";
+    homepage = http://www.brother.com/;
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = [ "i686-linux" ];

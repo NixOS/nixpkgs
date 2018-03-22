@@ -1,18 +1,19 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome_keyring, vala, wrapGAppsHook, xorg
+, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.18";
+  version = "1.8.19";
   name = "gnome-encfs-manager-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
-    sha256 = "1rpf683lxa78fmxxb0hnq7vdh3yn7qid2gqq67q9mk65sp9vdhdj";
+    sha256 = "1h6x8dyp1fvxvr8fwki98ppf4sa20qf7g59jc9797b2vrgm60h1i";
   };
 
-  buildInputs = [ autoconf automake intltool libtool pkgconfig vala glib encfs
-    gtk3 libgnome_keyring gnome3.libgee xorg.libSM xorg.libICE
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake intltool libtool vala glib encfs
+    gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
     wrapGAppsHook ];
 
   patches = [ ./makefile-mkdir.patch ];
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-appindicator" ];
 
   preFixup = ''gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)'';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.libertyzero.com/GEncfsM/;

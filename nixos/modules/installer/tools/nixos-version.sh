@@ -6,9 +6,9 @@ case "$1" in
     exit 1
     ;;
   --hash|--revision)
-    echo "@nixosRevision@"
+    echo "@revision@"
     ;;
   *)
-    echo "@nixosVersion@ (@nixosCodeName@)"
+    echo "@version@ (@codeName@)"
     ;;
 esac

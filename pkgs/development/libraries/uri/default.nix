@@ -1,30 +1,26 @@
 { stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation {
-  name = "uri-2016-09-04";
+  name = "uri-2017-07-16";
 
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "uri";
-    rev = "8b1eec80621ea7be1db3b28f1621e531cc72855c";
-    sha256 = "0f77y79b11pp31y0qpydki2nnxd6gpycp24fmrapi70fsni2ah0d";
+    rev = "ac30f19cc7a4745667a8ebd3eac68d5e70b9a4a6";
+    sha256 = "0ys295ij071rilwkk3xq1p3sdzgb0gyybvd3f0cahh67kh8hyk6n";
   };
 
-  buildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [ "-DUri_BUILD_TESTS=OFF" "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DUri_BUILD_TESTS=OFF" "-DUri_BUILD_DOCS=ON" "-DBUILD_SHARED_LIBS=ON"
+  ];
 
-  postBuild = ''
-    make doc
-  '';
+  postBuild = "make doc";
 
-  # https://github.com/cpp-netlib/uri/issues/90
   postInstall = ''
-    mv $out/include $out/include2
-    mv $out/include2/include $out/
-    rmdir $out/include2
-    mkdir -p $out/share/doc
-    mv html $out/share/doc/uri
+    install -vd $out/share/doc
+    cp -vR html $out/share/doc
   '';
 
   meta = {

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";
+    homepage = http://www.chiark.greenend.org.uk/~ian/adns/;
     description = "Asynchronous DNS Resolver Library";
     license = stdenv.lib.licenses.lgpl2;
 

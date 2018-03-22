@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/rarian/0.8/${name}.tar.bz2";
     sha256 = "aafe886d46e467eb3414e91fa9e42955bd4b618c3e19c42c773026b205a84577";
   };
-  buildInputs = [pkgconfig perl perlXMLParser libxml2 libxslt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl perlXMLParser libxml2 libxslt];
   configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat";
 }

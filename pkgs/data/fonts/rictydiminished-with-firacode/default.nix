@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    substituteInPlace apply-feature.py --replace \
+      'ricty = ttLib.TTFont(options.in_font)' \
+      'ricty = ttLib.TTFont(options.in_font, recalcTimestamp=False)'
+    substituteInPlace build-py3.py --replace \
+      'datetime.date.today()' \
+      'datetime.date.fromtimestamp(float(os.environ["SOURCE_DATE_EPOCH"]))'
+
     make
   '';
 
@@ -27,6 +34,10 @@ stdenv.mkDerivation rec {
       ps.fonttools
     ]))
   ];
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "09ldviapljn4bb1mcxap2pkz7cq3wr2k2qialbnav5y7ii82acd4";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/hakatashi/RictyDiminished-with-FiraCode;

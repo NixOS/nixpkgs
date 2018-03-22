@@ -69,7 +69,10 @@ let
         fontconfig perl file bootjdk
       ];
 
-    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+    NIX_CFLAGS_COMPILE = [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=format-overflow" # newly detected by gcc7
+    ];
 
     NIX_LDFLAGS = if minimal then null else "-lfontconfig -lXcursor -lXinerama";
 
@@ -184,13 +187,13 @@ let
     preFixup = ''
       prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
       patchELF $jre
-      propagatedNativeBuildInputs+=" $jre"
+      propagatedBuildInputs+=" $jre"
 
       # Propagate the setJavaClassPath setup hook from the JRE so that
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $jre/nix-support
-      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+      printWords ${setJavaClassPath} > $jre/nix-support/propagated-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support

@@ -1,28 +1,25 @@
-{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils, liburcu, zlib, libaio }:
+{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium
+, keyutils, liburcu, zlib, libaio }:
 
 stdenv.mkDerivation rec {
-  name = "bcachefs-tools-unstable-2016-05-13";
+  name = "bcachefs-tools-unstable-2018-02-08";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "565b4a74d6c25c78b0d2b82d9529595fc6269308";
-    sha256 = "1wnis26hq67vxqkxzck6wm6caq4c1rfmy9blmmgkzlhdd2nzisbx";
+    rev = "fc96071b58c28ea492103e7649c0efd5bab50ead";
+    sha256 = "0a2sxkz0mkmvb5g4k2v8g2c89dj29haw9bd3bpwk0dsfkjif92vy";
   };
 
-  buildInputs = [ pkgconfig attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
-
-  preConfigure = ''
-    substituteInPlace cmd_migrate.c --replace /usr/include/dirent.h ${stdenv.glibc.dev}/include/dirent.h
-  '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Tool for managing bcachefs filesystems";
-    homepage = "http://bcachefs.org/";
+    homepage = https://bcachefs.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.linux;
   };
 }
-

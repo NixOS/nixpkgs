@@ -22,7 +22,7 @@ let
 
   flashpolicydWrapper = pkgs.writeScriptBin "flashpolicyd"
     ''
-      #! ${pkgs.stdenv.shell}
+      #! ${pkgs.runtimeShell}
       exec ${flashpolicyd}/Perl_xinetd/in.flashpolicyd.pl \
         --file=${pkgs.writeText "flashpolixy.xml" cfg.policy} \
         2> /dev/null

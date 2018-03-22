@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, coreutils }:
 
-let version = "3.2.5"; in
+let version = "3.2.6"; in
 stdenv.mkDerivation {
   name = "ncftp-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.bz2";
-    sha256 = "0hlx12i0lwi99qsrx7nccf4nvwjj2gych4yks5y179b1ax0y5sxl";
+    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
+    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
   };
 
   buildInputs = [ ncurses ];

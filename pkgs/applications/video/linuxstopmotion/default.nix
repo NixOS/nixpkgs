@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "19v9d0v3laiwi0f1n92lvj2s5s1mxsrfygna0xyw9pkcnk3b26q6";
   };
 
-  buildInputs = [ pkgconfig qt4 SDL SDL_image libvorbis libtar libxml2 gamin qmake4Hook ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 SDL SDL_image libvorbis libtar libxml2 gamin qmake4Hook ];
 
   patches = [ ./linuxstopmotion-fix-wrong-isProcess-logic.patch ];
 

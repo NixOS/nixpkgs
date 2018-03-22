@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "XMPP python library";
-    homepage = "http://xmpppy.sourceforge.net/";
+    homepage = http://xmpppy.sourceforge.net/;
     license = licenses.gpl3;
     maintainers = [ maintainers.mic92 ];
   };

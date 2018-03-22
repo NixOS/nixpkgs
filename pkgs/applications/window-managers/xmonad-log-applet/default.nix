@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus_glib
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
 , desktopSupport
 , gtk2, gnome2_panel, GConf2
-, libxfce4util, xfce4panel
+, libxfce4util, xfce4-panel
 }:
 
 assert desktopSupport == "gnome2" || desktopSupport == "gnome3" || desktopSupport == "xfce4";
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =  with stdenv.lib;
-                 [ glib dbus_glib ]
+                 [ glib dbus-glib ]
               ++ optionals (desktopSupport == "gnome2") [ gtk2 gnome2_panel GConf2 ]
               # TODO: no idea where to find libpanelapplet-4.0
               ++ optionals (desktopSupport == "gnome3") [ ]
-              ++ optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4panel ]
+              ++ optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]
               ;
   
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-paths.patch ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/alexkay/xmonad-log-applet";
+    homepage = https://github.com/alexkay/xmonad-log-applet;
     license = licenses.bsd3;
     description = "An applet that will display XMonad log information (${desktopSupport} version)";
     platforms = platforms.linux;

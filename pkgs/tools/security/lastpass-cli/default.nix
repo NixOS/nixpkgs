@@ -1,24 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, openssl, curl, libxml2, libxslt, asciidoc, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, asciidoc, cmake, docbook_xsl, pkgconfig
+, bash-completion, openssl, curl, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "lastpass-cli-${version}";
 
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lastpass";
     repo = "lastpass-cli";
     rev = "v${version}";
-    sha256 = "1slqrv877c1bhivgd2i9cr1lsd72371dpz6a3h6s56l3qbyk28sa";
+    sha256 = "0k3vnlibv05wnn6qn3qjlcyj2s07di7zkmdnijd6cp1hfk76z2r5";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ asciidoc cmake docbook_xsl pkgconfig ];
+
   buildInputs = [
-    openssl curl libxml2 asciidoc docbook_xsl libxslt
+    bash-completion curl openssl libxml2 libxslt
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  enableParallelBuilding = true;
+
+  cmakeFlags = [
+    "-DBASH_COMPLETION_COMPLETIONSDIR=./share/bash-completion/completions"
+  ];
 
   installTargets = "install install-doc";
 
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://github.com/lastpass/lastpass-cli";
     license     = licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

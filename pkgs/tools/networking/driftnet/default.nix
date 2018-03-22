@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
   name = "driftnet-${version}";
   version = "1.1.5";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libpcap libjpeg libungif libpng giflib
+    libpcap libjpeg libungif libpng giflib
     glib gtk2 glib cairo pango gdk_pixbuf atk autoreconfHook
   ];
 

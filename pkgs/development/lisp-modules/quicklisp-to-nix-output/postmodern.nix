@@ -1,36 +1,42 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''postmodern'';
-  version = ''20170403-git'';
+  version = ''20180131-git'';
+
+  parasites = [ "postmodern/tests" ];
 
   description = ''PostgreSQL programming API'';
 
-  deps = [ args."closer-mop" args."bordeaux-threads" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."cl-postgres" args."cl-postgres_slash_tests" args."closer-mop" args."fiveam" args."md5" args."s-sql" args."simple-date" args."simple-date_slash_postgres-glue" args."split-sequence" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz'';
-    sha256 = ''1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p'';
+    url = ''http://beta.quicklisp.org/archive/postmodern/2018-01-31/postmodern-20180131-git.tgz'';
+    sha256 = ''0mz5pm759py1iscfn44c00dal2fijkyp5479fpx9l6i7wrdx2mki'';
   };
-    
+
   packageName = "postmodern";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/postmodern[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["postmodern.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM postmodern DESCRIPTION PostgreSQL programming API SHA256 1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p URL
-    http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz MD5 7a4145a0a5ff5bcb7a4bf29b5c2915d2 NAME postmodern TESTNAME NIL
-    FILENAME postmodern DEPS ((NAME closer-mop FILENAME closer-mop) (NAME bordeaux-threads FILENAME bordeaux-threads)) DEPENDENCIES
-    (closer-mop bordeaux-threads) VERSION 20170403-git SIBLINGS (cl-postgres s-sql simple-date)) */
+/* (SYSTEM postmodern DESCRIPTION PostgreSQL programming API SHA256
+    0mz5pm759py1iscfn44c00dal2fijkyp5479fpx9l6i7wrdx2mki URL
+    http://beta.quicklisp.org/archive/postmodern/2018-01-31/postmodern-20180131-git.tgz
+    MD5 a3b7bf25eb342cd49fe144fcd7ddcb16 NAME postmodern FILENAME postmodern
+    DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cl-postgres FILENAME cl-postgres)
+     (NAME cl-postgres/tests FILENAME cl-postgres_slash_tests)
+     (NAME closer-mop FILENAME closer-mop) (NAME fiveam FILENAME fiveam)
+     (NAME md5 FILENAME md5) (NAME s-sql FILENAME s-sql)
+     (NAME simple-date FILENAME simple-date)
+     (NAME simple-date/postgres-glue FILENAME simple-date_slash_postgres-glue)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME usocket FILENAME usocket))
+    DEPENDENCIES
+    (alexandria bordeaux-threads cl-postgres cl-postgres/tests closer-mop
+     fiveam md5 s-sql simple-date simple-date/postgres-glue split-sequence
+     usocket)
+    VERSION 20180131-git SIBLINGS (cl-postgres s-sql simple-date) PARASITES
+    (postmodern/tests)) */

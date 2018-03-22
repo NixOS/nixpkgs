@@ -1,16 +1,28 @@
-{ stdenv, fetchurl, pkgconfig, fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio }:
+{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libtool
+, fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.19";
+  version = "0.24-1";
   pname = "minimodem";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://www.whence.com/${pname}/${name}.tar.gz";
-    sha256 = "003xyqjq59wcjafrdv1b8w34xsn4nvzz51wwd7mqddajh0g4dz4g";
+  src = fetchFromGitHub {
+    owner = "kamalmostafa";
+    repo = "minimodem";
+    rev = "${pname}-${version}";
+    sha256 = "1b5xy36fjcp7vkp115dpx4mlmqg2fc7xvxdy648fb8im953bw7ql";
   };
 
-  buildInputs = [ pkgconfig fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
+  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  buildInputs = [ fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
+
+  preConfigure = ''
+    aclocal \
+    && autoheader \
+    && automake --gnu --add-missing \
+    && autoconf
+  '';
 
   meta = {
     description = "General-purpose software audio FSK modem";
@@ -27,3 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ relrod ];
   };
 }
+

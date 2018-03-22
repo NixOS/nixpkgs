@@ -13,6 +13,7 @@ let
     define('DB_HOST',     '${config.dbHost}');
     define('DB_CHARSET',  'utf8');
     $table_prefix  = '${config.tablePrefix}';
+    define('AUTOMATIC_UPDATER_DISABLED', true);
     ${config.extraConfig}
     if ( !defined('ABSPATH') )
     	define('ABSPATH', dirname(__FILE__) . '/');

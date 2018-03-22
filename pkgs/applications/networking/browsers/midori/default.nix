@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala_0_23, wrapGAppsHook
+{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala_0_34, wrapGAppsHook
 , gtk3, webkitgtk, librsvg, libnotify, sqlite
-, glib_networking, gsettings_desktop_schemas, libsoup, pcre, gnome3
-, libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at_spi2_core
+, glib-networking, gsettings-desktop-schemas, libsoup, pcre, gnome3
+, libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at-spi2-core
 , zeitgeistSupport ? false, zeitgeist ? null
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight WebKitGTK+ web browser";
-    homepage = "http://midori-browser.org";
+    homepage = http://midori-browser.org;
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
     maintainers = with maintainers; [ raskin ramkromberg ];
@@ -29,13 +29,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook cmake intltool
+    pkgconfig wrapGAppsHook cmake intltool vala_0_34
   ];
 
   buildInputs = [
-    vala_0_23
-    gtk3 webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas pcre gnome3.gcr
-    libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at_spi2_core
+    gtk3 webkitgtk librsvg libnotify sqlite gsettings-desktop-schemas pcre gnome3.gcr
+    libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core
     (libsoup.override {gnomeSupport = true; valaSupport = true;})
   ] ++ stdenv.lib.optionals zeitgeistSupport [
     zeitgeist
@@ -50,6 +49,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS="-lX11";
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules")
   '';
 }

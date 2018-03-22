@@ -1,12 +1,14 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "makeself-2.2.0";
+  version = "2.3.1";
+  name = "makeself-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/megastep/makeself.git";
-    rev = "b836b9281ae99abe1865608b065551da56c80719";
-    sha256 = "f7c97f0f8ad8128f2f1b54383319f2cc44cbb05b60ced222784debdf326f23ad";
+  src = fetchFromGitHub {
+    owner = "megastep";
+    repo = "makeself";
+    rev = "release-${version}";
+    sha256 = "01r7vb9vyb99s3g5cw0c04s1ahcingynk3ki17wknlk2asjrbc4p";
   };
 
   patchPhase = ''

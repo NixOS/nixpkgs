@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  buildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ mkfontdir mkfontscale ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     mkfontdir
     mkfontscale
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "04sjxfrlvjc2f0679cy4w366mpzbn3fp6gnrjb8vy12vjd1ffnc1";
 
   meta = with stdenv.lib; {
     description = ''

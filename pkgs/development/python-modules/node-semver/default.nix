@@ -1,15 +1,14 @@
 { stdenv, fetchPypi, buildPythonPackage, pytest, tox }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
-  version = "0.1.1";
+  version = "0.3.0";
   pname = "node-semver";
 
   buildInputs = [ pytest tox ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b3xiqgl436q33grbkh4chpfchl8i2dmcpggbb2q4vgv3vjy97p2";
+    sha256 = "d8a3906e7677f8ab05aeb3fc94c7a2fa163def5507271452ce6831282f23f1cb";
   };
 
   meta = with stdenv.lib; {

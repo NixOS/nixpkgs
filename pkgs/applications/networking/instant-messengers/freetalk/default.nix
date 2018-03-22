@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+ nativeBuildInputs = [ pkgconfig ];
  buildInputs = [
-    guile pkgconfig glib loudmouth gmp libidn readline libtool
+    guile glib loudmouth gmp libidn readline libtool
     libunwind ncurses curl jansson texinfo
     autoconf automake
   ];

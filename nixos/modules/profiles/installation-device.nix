@@ -28,7 +28,7 @@ with lib;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
-    services.rogue.enable = true;
+    #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
     security.sudo.enable = false;
@@ -72,12 +72,17 @@ with lib;
 
     # To speed up installation a little bit, include the complete
     # stdenv in the Nix store on the CD.
-    system.extraDependencies = with pkgs; [ stdenv stdenvNoCC busybox ];
+    system.extraDependencies = with pkgs;
+      [
+        stdenv
+        stdenvNoCC # for runCommand
+        busybox
+        jq # for closureInfo
+      ];
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
-    boot.consoleLogLevel = mkDefault 7;
     networking.firewall.logRefusedConnections = mkDefault false;
 
     environment.systemPackages = [ pkgs.vim ];

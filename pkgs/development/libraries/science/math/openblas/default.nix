@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, which, config, coreutils
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, which, config, coreutils
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -12,10 +12,26 @@ let blas64_ = blas64; in
 let
   # To add support for a new platform, add an element to this set.
   configs = {
+    armv6l-linux = {
+      BINARY = "32";
+      TARGET = "ARMV6";
+      DYNAMIC_ARCH = "0";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
     armv7l-linux = {
       BINARY = "32";
       TARGET = "ARMV7";
       DYNAMIC_ARCH = "0";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
+    aarch64-linux = {
+      BINARY = "64";
+      TARGET = "ARMV8";
+      DYNAMIC_ARCH = "1";
       CC = "gcc";
       USE_OPENMP = "1";
     };
@@ -61,13 +77,13 @@ let
       then blas64_
       else hasPrefix "x86_64" stdenv.system;
 
-  version = "0.2.19";
+  version = "0.2.20";
 in
 stdenv.mkDerivation {
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
-    sha256 = "0mw5ra1vjsqiba79zdhqfkqq6v3bla5a5c0wj7vca9qgjzjbah4w";
+    sha256 = "157kpkbpwlr57dkmqiwr3qp9fglfidagv7l6fibrhln6v4aqpwsy";
     name = "openblas-${version}.tar.gz";
   };
 
@@ -99,8 +115,15 @@ stdenv.mkDerivation {
       "NUM_THREADS=64"
       "INTERFACE64=${if blas64 then "1" else "0"}"
       "NO_STATIC=1"
-    ]
+    ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
+
+  patches = stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc")
+    # https://github.com/xianyi/OpenBLAS/pull/1247
+    (fetchpatch {
+      url = "https://github.com/xianyi/OpenBLAS/commit/88a35ff457f55e527e0e8a503a0dc61976c1846d.patch";
+      sha256 = "1a3qrhvl5hp06c53fjqghq4zgf6ls7narm06l0shcvs57hznh09n";
+    });
 
   doCheck = true;
   checkTarget = "tests";
@@ -108,7 +131,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = "https://github.com/xianyi/OpenBLAS";
+    homepage = https://github.com/xianyi/OpenBLAS;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };

@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = http://zdfmediathk.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ maintainers.chaoflow ];
-    platforms = platforms.linux;  #  also OS X and cygwin, but not investigated, yet
+    platforms = platforms.linux;  #  also macOS and cygwin, but not investigated, yet
   };
 }

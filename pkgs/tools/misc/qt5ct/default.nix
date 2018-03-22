@@ -1,22 +1,29 @@
 { stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
-  version = "0.33";
+  version = "0.35";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qt5ct/qt5ct-${version}.tar.bz2";
-    sha256 = "0by0wz40rl9gxvwbd85j0y5xy9mjab1cya96rv48x677v95lhm9f";
+    url = "mirror://sourceforge/qt5ct/${name}.tar.bz2";
+    sha256 = "0xzgd12cvm4vyzl8qax6izdmaf46bf18h055z6k178s8pybm1sqw";
   };
 
-  propagatedBuildInputs = [ qtbase qtsvg qttools ];
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ qtbase qtsvg ];
+  buildInputs = [ qtbase ];
+
+  qmakeFlags = [
+    "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
+  ];
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags PLUGINDIR=$out/$qtPluginPrefix"
+    qmakeFlags+=" PLUGINDIR=$out/$qtPluginPrefix"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Qt5 Configuration Tool";

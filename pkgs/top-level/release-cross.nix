@@ -16,11 +16,15 @@ let
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
+    nix = nativePlatforms;
+    nixUnstable = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
-    buildPackages.gccCrossStageFinal = nativePlatforms;
+    buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
+    haskell.packages.ghcHEAD.hello = nativePlatforms;
+    haskell.packages.ghc822.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -41,12 +45,22 @@ let
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
     windows.wxMSW = nativePlatforms;
+    windows.mingw_w64_pthreads = nativePlatforms;
   };
 
   darwinCommon = {
     buildPackages.binutils = darwin;
   };
 
+  rpiCommon = linuxCommon // {
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
+  };
 in
 
 {
@@ -74,11 +88,12 @@ in
         f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
-    testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
+    testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
 
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
+    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
@@ -108,21 +123,23 @@ in
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
   /* Linux on Raspberrypi */
-  rpi = mapTestOnCross lib.systems.examples.raspberryPi (linuxCommon // {
-    vim = nativePlatforms;
-    unzip = nativePlatforms;
-    ddrescue = nativePlatforms;
-    lynx = nativePlatforms;
-    patchelf = nativePlatforms;
-    buildPackages.binutils = nativePlatforms;
-    mpg123 = nativePlatforms;
-  });
+  rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
+  rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
 
+  aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
+
+  x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+
+  /* Linux on Aarch64 */
+  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
+  });
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = drv: hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+    mkBootstrapToolsJob = drv:
+      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

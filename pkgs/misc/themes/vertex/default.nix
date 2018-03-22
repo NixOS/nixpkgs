@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  configureFlags = [ "--disable-unity" "--with-gnome=${gnome3.version}" ];
+  configureFlags = [ "--disable-unity" ];
 
   postInstall = ''
     mkdir -p $out/share/plank/themes

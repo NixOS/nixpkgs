@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "smartgithg-${version}";
-  version = "17_0_3";
+  version = "17_1_4";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/static/smart/download/smartgit/smartgit-linux-${version}.tar.gz";
-    sha256 = "1swgh1bgjrbpxhj27b4gmn806nkqcl1w8lz7j7xkx3dlgljipw33";
+    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${version}.tar.gz";
+    sha256 = "1x8s1mdxg7m3fy3izgnb1smrn4ng3q31x0sqnjlchkb5vx7gp5rh";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk_doc, gobjectIntrospection
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, gobjectIntrospection
 , libgsystem, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse
-, libcap, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42
+, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42
 }:
 
 let
   libglnx-src = fetchFromGitHub {
     owner  = "GNOME";
     repo   = "libglnx";
-    rev    = "36396b49ad6636c9959f3dfac5e04d41584b1a92";
-    sha256 = "146flrpzybm2s12wg05rnglnfd2f2jx3xzvns2pq28kvg09bgcfn";
+    rev    = "5362f6bc3ff3e30f379e767b203d15c9e56d6f08";
+    sha256 = "1l4vm7bx3cf4q44n3a1i2gszyryqyimcxvx54gna72q7dw130mrr";
   };
 
   bsdiff-src = fetchFromGitHub {
@@ -18,7 +18,7 @@ let
     sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
   };
 
-  version = "2016.11";
+  version = "2017.12";
 in stdenv.mkDerivation {
   name = "ostree-${version}";
 
@@ -26,15 +26,15 @@ in stdenv.mkDerivation {
     rev    = "v${version}";
     owner  = "ostreedev";
     repo   = "ostree";
-    sha256 = "19xmg01mxdykx74r9ra11hc15qd1fjqbxdn23jrn2pcvz8dw9zgc";
+    sha256 = "0gxvpzwz7z4zihz5hkn6ajv7f6gas4zi2pznhi5v6wy7cw06if68";
   };
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk_doc gobjectIntrospection which yacc
+    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
     libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
-  buildInputs = [ libgsystem xz e2fsprogs libsoup gpgme fuse libcap ];
+  buildInputs = [ libgsystem xz e2fsprogs libsoup gpgme fuse libarchive libcap bzip2 ];
 
   prePatch = ''
     rmdir libglnx bsdiff
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage    = "http://live.gnome.org/OSTree/";
+    homepage    = https://ostree.readthedocs.io/en/latest/;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

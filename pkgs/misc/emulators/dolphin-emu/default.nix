@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib, mesa
+{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib, libGLU_combined
 , gettext, libpthreadstubs, libXrandr, libXext, readline, openal
 , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
 , wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake bluez ffmpeg libao libGLU_combined gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
                   libevdev libXdmcp portaudio libusb libpulseaudio
                   libevdev libXdmcp portaudio libusb libpulseaudio

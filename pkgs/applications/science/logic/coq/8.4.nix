@@ -27,7 +27,8 @@ stdenv.mkDerivation {
     sha256 = "1mpbj4yf36kpjg2v2sln12i8dzqn8rag6fd07hslj2lpm4qs4h55";
   };
 
-  buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
 
   patches = [ ./configure.patch ];
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation {
       fi
     }
 
-    envHooks=(''${envHooks[@]} addCoqPath)
+    addEnvHooks "$targetOffset" addCoqPath
   '';
 
   passthru = {
@@ -87,7 +88,7 @@ stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
+    homepage = http://coq.inria.fr;
     license = licenses.lgpl21;
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];

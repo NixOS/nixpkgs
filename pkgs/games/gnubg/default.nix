@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, glib, python, gtk2, readline }:
 
-let version = "1.04.000"; in
+let version = "1.06.001"; in
 stdenv.mkDerivation {
   name = "gnubg-"+version;
 
   src = fetchurl {
     url = "http://gnubg.org/media/sources/gnubg-release-${version}-sources.tar.gz";
-    sha256 = "0gsfl6qbj529d1jg3bkyj9m7bvb566wd7pq5fslgg5yn6c6rbjk6";
+    sha256 = "0snz3j1bvr25ji7lg82bl2gm2s2x9lrpc7viw0hclgz0ql74cw7b";
   };
 
-  buildInputs = [ pkgconfig python glib gtk2 readline ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python glib gtk2 readline ];
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 

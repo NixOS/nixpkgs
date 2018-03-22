@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pwcy599fw8by1a1sf91crkqba7679qhvhbacpmhis8c1xrpxnwq";
   };
 
-  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ confuse yajl alsaLib libpulseaudio libnl ];
 
   makeFlags = [ "all" "PREFIX=$(out)" ];
 

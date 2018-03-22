@@ -6,7 +6,7 @@ let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
 
-  homeDir = "/var/lib/transmission";
+  homeDir = cfg.home;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
@@ -69,6 +69,14 @@ in
         default = 9091;
         description = "TCP port number to run the RPC/web interface.";
       };
+
+      home = mkOption {
+        type = types.path;
+        default = "/var/lib/transmission";
+        description = ''
+          The directory where transmission will create files.
+        '';
+      };
     };
   };
 
@@ -82,7 +90,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
+          ${pkgs.runtimeShell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
       '';
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

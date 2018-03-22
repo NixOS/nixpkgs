@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rqqavhqbs7pajcblg92mjlz2dxk8b60vgdh271axz7kjs2wf9mr";
   };
 
-  buildInputs = [ mkfontdir mkfontscale bdf2psf ];
+  nativeBuildInputs = [ mkfontdir mkfontscale bdf2psf ];
 
   unpackPhase = ''
     mkdir pcf bdf
@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     mkfontdir
     mkfontscale
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0msl5y9q6hjbhc85v121x1b1rhsh2rbqqy4k234i5mpp8l3087r7";
 
   meta = with stdenv.lib; {
     description = ''

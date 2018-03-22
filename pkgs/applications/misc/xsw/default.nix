@@ -14,9 +14,9 @@ in stdenv.mkDerivation rec {
     sha256 = "092vp61ngd2vscsvyisi7dv6qrk5m1i81gg19hyfl5qvjq5p0p8g";
   };
 
-  nativeBuildInputs = [ SDL SDL_image SDL_ttf SDL_gfx flex bison ];
+  nativeBuildInputs = [ pkgconfig flex bison ];
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ SDL SDL_image SDL_ttf SDL_gfx ];
 
   NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ];
 

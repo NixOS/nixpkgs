@@ -1,18 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, cmake, glib, qt4, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi, glibmm
+{ stdenv, fetchurl, pkgconfig, cmake, glib, boost, libsigrok
+, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
+, pcre, librevisa, python3, qtbase, qtsvg
 }:
 
 stdenv.mkDerivation rec {
-  name = "pulseview-0.3.0";
+  name = "pulseview-0.4.0";
 
   src = fetchurl {
     url = "http://sigrok.org/download/source/pulseview/${name}.tar.gz";
-    sha256 = "03jk5xpsird5ssbnwkxw57jnqvnnpivhqh1xjdhdrz02lsvjrzjz";
+    sha256 = "1f8f2342d5yam98mmcb8f9g2vslcwv486bmi4x45pxn68l82ky3q";
   };
 
-  buildInputs = [ pkgconfig cmake glib qt4 boost libsigrok
-    libsigrokdecode libserialport libzip udev libusb1 libftdi glibmm
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [
+    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
+    pcre librevisa python3 qtbase qtsvg
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";

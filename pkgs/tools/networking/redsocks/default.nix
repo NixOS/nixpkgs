@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://darkk.net.ru/redsocks/;
     license = stdenv.lib.licenses.asl20;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

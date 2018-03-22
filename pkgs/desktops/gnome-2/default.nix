@@ -3,12 +3,17 @@
 
 let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
-  gtkdoc = self.gtk_doc;
+  gtkdoc = self.gtk-doc;
   startup_notification = libstartup_notification;
   startupnotification = libstartup_notification;
-  gnomedocutils = self.gnome_doc_utils;
+  gnomedocutils = self.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnomepanel = self.gnome_panel;
+  gnome_common = gnome-common;
+  gnome_keyring = gnome-keyring;
+  gnome_desktop = gnome-desktop;
+  gnome_settings_daemon = gnome-settings-daemon;
+  gnome_control_center = gnome-control-center;
 
 #### PLATFORM
 
@@ -41,7 +46,7 @@ let overridden = set // overrides; set = with overridden; {
   libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
 
   # for git-head builds
-  gnome_common = callPackage platform/gnome-common { };
+  gnome-common = callPackage platform/gnome-common { };
 
   gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
@@ -66,6 +71,8 @@ let overridden = set // overrides; set = with overridden; {
 
   gtkhtml = callPackage ./platform/gtkhtml { };
 
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
+
   # Required for nautilus
   inherit (libunique);
 
@@ -75,7 +82,7 @@ let overridden = set // overrides; set = with overridden; {
 
 #### DESKTOP
 
-  gnome_keyring = callPackage ./desktop/gnome-keyring { };
+  gnome-keyring = callPackage ./desktop/gnome-keyring { };
 
   libgweather = callPackage ./desktop/libgweather { };
 
@@ -95,15 +102,13 @@ let overridden = set // overrides; set = with overridden; {
 
   gnome_menus = callPackage ./desktop/gnome-menus { };
 
-  gnome_desktop = callPackage ./desktop/gnome-desktop { };
+  gnome-desktop = callPackage ./desktop/gnome-desktop { };
 
   gnome_panel = callPackage ./desktop/gnome-panel { };
 
-  gnome_session = callPackage ./desktop/gnome-session { };
+  gnome-settings-daemon = callPackage ./desktop/gnome-settings-daemon { };
 
-  gnome_settings_daemon = callPackage ./desktop/gnome-settings-daemon { };
-
-  gnome_control_center = callPackage ./desktop/gnome-control-center { };
+  gnome-control-center = callPackage ./desktop/gnome-control-center { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus_glib
+{ stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus-glib
 , polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
 , libxslt, docbook_xsl, utillinux, libgudev }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ sg3_utils udev glib dbus dbus_glib polkit parted libgudev
+    [ sg3_utils udev glib dbus dbus-glib polkit parted libgudev
       lvm2 libatasmart intltool libuuid libxslt docbook_xsl
     ];
 

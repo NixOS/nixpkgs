@@ -6,7 +6,8 @@
     packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net];
       };
     };
   }
@@ -62,11 +63,7 @@
     , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {
-  # The setup.sh script from stdenv will expect the native build inputs in
-  # the nativeBuildInputs environment variable.
-  nativeBuildInputs = [ ] ++ buildInputs;
-  # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
-  propagatedBuildInputs2 = propagatedBuildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   name = "env-${name}";
   phases = [ "buildPhase" "fixupPhase" ];
@@ -82,15 +79,15 @@ mkDerivation {
     mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
     s="$out/nix-support/setup-new-modified"
     # shut some warning up.., do not use set -e
-    sed -e 's@set -e@@' \
+    sed -e 's@set -eu@@' \
         -e 's@assertEnvExists\s\+NIX_STORE@:@' \
         -e 's@trap.*@@' \
         -e '1i initialPath="${toString initialPath}"' \
         "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
       defaultNativeBuildInputs="$defaultNativeBuildInputs"
-      nativeBuildInputs="$nativeBuildInputs"
-      propagatedBuildInputs="$propagatedBuildInputs2"
+      buildInputs="$buildInputs"
+      propagatedBuildInputs="$propagatedBuildInputs"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"

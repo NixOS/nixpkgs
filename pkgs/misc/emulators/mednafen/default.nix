@@ -1,35 +1,42 @@
-{ stdenv, fetchurl, pkgconfig
-, libX11, mesa, freeglut
-, libjack2, libcdio, libsndfile, libsamplerate
-, SDL, SDL_net, zlib
-}:
+{ stdenv, fetchurl, pkgconfig, freeglut, libGLU_combined, libcdio, libjack2
+, libsamplerate, libsndfile, libX11, SDL, SDL_net, zlib }:
 
 stdenv.mkDerivation rec {
-
-  name = "mednafen-${meta.version}";
+  name = "mednafen-${version}";
+  version = "0.9.48";
 
   src = fetchurl {
-    url = "http://mednafen.fobby.net/releases/files/${name}.tar.bz2";
-    sha256 = "1n6y7b86sv11vd6rv8if3wr4qyihkjai9km1s4smqcisi3pvxcqv";
+    url = "https://mednafen.github.io/releases/files/${name}.tar.xz";
+    sha256 = "00i12mywhp43274aq466fwavglk5b7d8z8bfdna12ra9iy1hrk6k";
   };
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig libX11 mesa freeglut libjack2 libcdio libsndfile libsamplerate SDL SDL_net zlib ];
-  
+  nativeBuildInputs = [ pkgconfig ];
 
-  # Install docs
+  buildInputs = [
+    freeglut
+    libGLU_combined
+    libcdio
+    libjack2
+    libsamplerate
+    libsndfile
+    libX11
+    SDL
+    SDL_net
+    zlib
+  ];
+
+  hardeningDisable = [ "pic" ];
+
   postInstall = ''
-    mkdir -p $out/share/doc/$name
-    cd Documentation
-    install -m 644 -t $out/share/doc/$name *.css *.def *.html *.php *.png *.txt
+    mkdir -p $out/share/doc
+    mv Documentation $out/share/doc/mednafen
   '';
 
   meta = with stdenv.lib; {
-    version = "0.9.38.7";
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
-    homepage = http://mednafen.sourceforge.net/;
+    homepage = https://mednafen.github.io/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

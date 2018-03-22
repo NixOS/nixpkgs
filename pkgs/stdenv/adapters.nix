@@ -59,79 +59,34 @@ rec {
   makeStdenvCross = { stdenv
                     , cc
                     , buildPlatform, hostPlatform, targetPlatform
+                    , # Prior overrides are surely not valid as packages built
+                      # with this run on a different platform, so disable by
+                      # default.
+                      overrides ? _: _: {}
                     } @ overrideArgs: let
     stdenv = overrideArgs.stdenv.override {
       inherit
         buildPlatform hostPlatform targetPlatform
-        cc;
+        cc overrides;
 
       allowedRequisites = null;
-
-      # Overrides are surely not valid as packages built with this run on a
-      # different platform.
-      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
     };
   in stdenv // {
     mkDerivation =
-      { name ? "", buildInputs ? [], nativeBuildInputs ? []
-      , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
-      , # Disabling the tests by default when cross compiling, as usually the
-        # tests rely on being able to run produced binaries.
-        doCheck ? false
-      , configureFlags ? []
-      , # Target is not included by default because most programs don't care.
-        # Including it then would cause needless massive rebuilds.
-        configurePlatforms   ? args.crossAttrs.configurePlatforms   or [ "build" "host" ]
-      , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
+      { nativeBuildInputs ? []
       , ...
       } @ args:
 
-      let
-        # *BuildInputs exists temporarily as another name for
-        # *HostInputs.
-
-        # The base stdenv already knows that nativeBuildInputs and
-        # buildInputs should be built with the usual gcc-wrapper
-        # And the same for propagatedBuildInputs.
-        nativeDrv = stdenv.mkDerivation args;
-
-        # Temporary expression until the cross_renaming, to handle the
-        # case of pkgconfig given as buildInput, but to be used as
-        # nativeBuildInput.
-        hostAsNativeDrv = drv:
-            builtins.unsafeDiscardStringContext drv.nativeDrv.drvPath
-            == builtins.unsafeDiscardStringContext drv.crossDrv.drvPath;
-        buildInputsNotNull = stdenv.lib.filter
-            (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
-        nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
-      in
         stdenv.mkDerivation (args // {
-          name = name + "-" + hostPlatform.config;
           nativeBuildInputs = nativeBuildInputs
-            ++ nativeInputsFromBuildInputs
-            ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional
+                 (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
+                 pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
-
-          inherit doCheck;
-
-          # This parameter is sometimes a string and sometimes a list, yuck
-          configureFlags = let inherit (stdenv.lib) optional elem; in
-            (if stdenv.lib.isString configureFlags then [configureFlags] else configureFlags)
-            ++ optional (elem "build"  configurePlatforms) "--build=${buildPlatform.config}"
-            ++ optional (elem "host"   configurePlatforms) "--host=${hostPlatform.config}"
-            ++ optional (elem "target" configurePlatforms) "--target=${targetPlatform.config}";
-
-          # Cross-linking dynamic libraries, every buildInput should
-          # be propagated because ld needs the -rpath-link to find
-          # any library needed to link the program dynamically at
-          # loader time. ld(1) explains it.
-          buildInputs = [];
-          propagatedBuildInputs = propagatedBuildInputs ++ buildInputs;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs;
 
           crossConfig = hostPlatform.config;
         } // args.crossAttrs or {});

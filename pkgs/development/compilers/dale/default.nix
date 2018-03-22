@@ -20,7 +20,8 @@ in stdenv.mkDerivation {
     sha256 = "0dc5cjahv7lzlp92hidlh83rwgrpgb6xz2pnba2pm5xrv2pnsskl";
   };
 
-  buildInputs = [ cmake pkgconfig libffi llvm_35 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libffi llvm_35 ]
              ++ stdenv.lib.optional doCheck perl;
 
   patches = [ ./link-llvm.patch ];
@@ -37,7 +38,7 @@ in stdenv.mkDerivation {
       Dale is a system (no GC) programming language that uses
       S-expressions for syntax and supports syntactic macros.
     '';
-    homepage = "https://github.com/tomhrr/dale";
+    homepage = https://github.com/tomhrr/dale;
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
     platforms = with platforms; [ "i686-linux" "x86_64-linux" ];

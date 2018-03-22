@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ upx patchelf ];
 
-  phases = "unpackPhase installPhase";
   unpackPhase = "tar xf ${src}";
   installPhase = ''
     mkdir -p $out/bin
@@ -40,6 +39,8 @@ stdenv.mkDerivation rec {
       --set-rpath ${dynlibPath} \
       $out/bin/jd-gui
   '';
+
+  dontStrip = true;
 
   meta = {
     description = "Fast Java Decompiler with powerful GUI";

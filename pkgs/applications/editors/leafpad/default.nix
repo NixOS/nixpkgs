@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0b0az2wvqgvam7w0ns1j8xp2llslm1rx6h7zcsy06a7j0yp257cm";
   };
 
-  buildInputs = [ intltool pkgconfig gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk2 ];
 
   hardeningDisable = [ "format" ];
 

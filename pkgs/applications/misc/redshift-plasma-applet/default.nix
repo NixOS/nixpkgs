@@ -1,4 +1,4 @@
-{ stdenv, cmake, extra-cmake-modules, plasma-framework, redshift, fetchFromGitHub, }:
+{ stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, redshift, fetchFromGitHub, }:
 
 let version = "1.0.18"; in
 
@@ -29,7 +29,10 @@ stdenv.mkDerivation {
     extra-cmake-modules
   ];
 
-  buildInputs = [ plasma-framework ];
+  buildInputs = [
+    plasma-framework
+    kwindowsystem
+  ];
 
   meta = with stdenv.lib; {
     description = "KDE Plasma 5 widget for controlling Redshift";

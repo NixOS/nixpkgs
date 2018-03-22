@@ -14,13 +14,16 @@ let
   bashCompletion = optionalString cfg.enableCompletion ''
     # Check whether we're running a version of Bash that has support for
     # programmable completion. If we do, enable all modules installed in
-    # the system (and user profile).
+    # the system and user profile in obsolete /etc/bash_completion.d/
+    # directories. Bash loads completions in all
+    # $XDG_DATA_DIRS/share/bash-completion/completions/
+    # on demand, so they do not need to be sourced here.
     if shopt -q progcomp &>/dev/null; then
       . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
       nullglobStatus=$(shopt -p nullglob)
       shopt -s nullglob
       for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"* "$p/share/bash-completion/completions/"*; do
+        for m in "$p/etc/bash_completion.d/"*; do
           . $m
         done
       done
@@ -123,7 +126,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
       '';
@@ -197,8 +200,9 @@ in
         fi
       '';
 
-    # Configuration for readline in bash.
-    environment.etc."inputrc".source = ./inputrc;
+    # Configuration for readline in bash. We use "option default"
+    # priority to allow user override using both .text and .source.
+    environment.etc."inputrc".source = mkOptionDefault ./inputrc;
 
     users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
@@ -206,6 +210,9 @@ in
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];
+
+    environment.systemPackages = optional cfg.enableCompletion
+      pkgs.nix-bash-completions;
 
     environment.shells =
       [ "/run/current-system/sw/bin/bash"

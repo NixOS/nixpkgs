@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, pkgconfig, cmake, libxml2, vala_0_23, intltool, libmx, gnome3, gtk3, gtk_doc
-, keybinder3, clutter_gtk, libnotify
+, pkgconfig, cmake, libxml2, vala_0_26, intltool, libmx, gnome3, gtk3, gtk-doc
+, keybinder3, clutter-gtk, libnotify
 , libxkbcommon, xorg, udev
 , bashInteractive
 }:
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig cmake intltool makeWrapper ];
   buildInputs = [
-    vala_0_23 gtk3 gnome3.gnome_common gnome3.libgee
-    gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify
+    vala_0_26 gtk3 gnome3.gnome-common gnome3.libgee
+    gtk-doc clutter-gtk libmx keybinder3 libxml2 libnotify
     xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence
     libxkbcommon
   ] ++ optionals stdenv.isLinux [ udev ];
@@ -42,12 +42,12 @@ stdenv.mkDerivation {
   postFixup = ''
     wrapProgram "$out/bin/finalterm" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${getLib gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:${gnome3.gtk.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {
-    homepage = "http://finalterm.org";
+    homepage = http://finalterm.org;
     description = "A new breed of terminal emulator";
     longDescription = ''
       Final Term is a new breed of terminal emulator.

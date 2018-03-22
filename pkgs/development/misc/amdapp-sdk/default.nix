@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, mesa, xorg,
+{ stdenv, fetchurl, makeWrapper, perl, libGLU_combined, xorg,
   version? "2.8", # What version
   samples? false # Should samples be installed
 }:
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
   patchFlags = "-p0";
-  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
+  buildInputs = [ makeWrapper perl libGLU_combined xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
-    homepage = http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/;
+    homepage = http://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
     license = licenses.amd;
     maintainers = [ maintainers.offline ];
     platforms = [ "i686-linux" "x86_64-linux" ];

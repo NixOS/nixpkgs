@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     })
   ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
 
-  buildInputs = [ pkgconfig ncurses boehmgc gettext zlib ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses boehmgc gettext zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
     ++ optional graphicsSupport imlib2
@@ -52,8 +53,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-ssl=${openssl.dev} --with-gc=${boehmgc.dev}"
-    + optionalString graphicsSupport " --enable-image=${optionalString x11Support "x11,"}fb";
+  configureFlags =
+    [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "ac_cv_func_setpgrp_void=yes"
+    ]
+    ++ optional graphicsSupport "--enable-image=${optionalString x11Support "x11,"}fb";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://w3m.sourceforge.net/;
     description = "A text-mode web browser";
-    maintainers = [ maintainers.mornfall maintainers.cstrahan ];
+    maintainers = [ maintainers.cstrahan ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, wrapGAppsHook
-, python3Packages, gst, gtk3, hicolor_icon_theme
+, python3Packages, gst, gtk3, hicolor-icon-theme
 , gobjectIntrospection, librsvg, gnome3, libnotify
 # for gst-transcoder:
 , which, meson, ninja
@@ -18,7 +18,8 @@ let
       url = "https://github.com/pitivi/gst-transcoder/archive/1.8.0.tar.gz";
       sha256 = "0iggr6idmp7cmfsf6pkhfl3jq1bkga37jl5prbcl1zapkzi26fg6";
     };
-    buildInputs = [ which meson ninja pkgconfig gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ which meson ninja gobjectIntrospection ]
       ++ (with gst; [ gstreamer gst-plugins-base ]);
   };
 
@@ -33,9 +34,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
 
   buildInputs = [
-    gobjectIntrospection gtk3 librsvg gnome3.gnome_desktop
+    gobjectIntrospection gtk3 librsvg gnome3.gnome-desktop
     gnome3.defaultIconTheme
-    gnome3.gsettings_desktop_schemas libnotify
+    gnome3.gsettings-desktop-schemas libnotify
     gst-transcoder
   ] ++ (with gst; [
     gstreamer gst-editing-services

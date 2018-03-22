@@ -1,4 +1,4 @@
-{ stdenv, requireFile, dpkg, makeWrapper, gcc, mesa, xdg_utils,
+{ stdenv, requireFile, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
   dbus_tools, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, gstreamer, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
@@ -6,7 +6,7 @@
 
 assert stdenv.system == "x86_64-linux";
 
-let version = "2017-SP1"; in
+let version = "2017-SP2"; in
 stdenv.mkDerivation {
   name = "draftsight-${version}";
 
@@ -56,10 +56,10 @@ stdenv.mkDerivation {
   src = requireFile {
     name = "draftSight.deb";
     url = "https://www.3ds.com/?eID=3ds_brand_download&uid=41&pidDown=13426&L=0";
-    sha256 = "0s7b74685r0961kd59hxpdp9s5yhvzx8307imsxm66f99s8rswdv";
+    sha256 = "04i3dqza6y4p2059pqg5inp3qzr5jmiqplzzk7h1a6gh380v1rbr";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [ gcc.cc mesa xdg_utils
+  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
     dbus_tools alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config gstreamer zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender

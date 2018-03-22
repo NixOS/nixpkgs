@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "182xl2w8syv6ky2h2bc9imc6ap8pzh0p7rp63hh8nw0xm38c3f14";
   };
 
-  buildInputs = [ gtk3 pkgconfig intltool alsaLib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 intltool alsaLib ];
 
   meta = with stdenv.lib; {
     description = "A lightweight volume control that sits in your systray";

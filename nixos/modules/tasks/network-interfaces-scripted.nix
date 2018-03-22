@@ -9,19 +9,19 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
   interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+    i.ipv4.addresses
+    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
   destroyBond = i: ''
     while true; do
@@ -71,7 +71,10 @@ let
              (hasAttr dev cfg.vswitches) ||
              (hasAttr dev cfg.wlanInterfaces)
           then [ "${dev}-netdev.service" ]
-          else optional (dev != null && !config.boot.isContainer) (subsystemDevice dev);
+          else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
+
+        hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
+                            || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];
@@ -84,8 +87,9 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
+            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
             conflicts = [ "shutdown.target" ];
-            wantedBy = [ "multi-user.target" ];
+            wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -113,24 +117,32 @@ let
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default ${optionalString (cfg.defaultGateway.metric != null)
+                  ${optionalString (cfg.defaultGateway.interface != null) ''
+                    ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${optionalString (cfg.defaultGateway.metric != null)
+                      "metric ${toString cfg.defaultGateway.metric}"
+                    } proto static
+                  ''}
+                  ip route replace default ${optionalString (cfg.defaultGateway.metric != null)
                       "metric ${toString cfg.defaultGateway.metric}"
                     } via "${cfg.defaultGateway.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} proto static || true
+                      "dev ${cfg.defaultGateway.interface}"} proto static
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip -6 route add ::/0 ${optionalString (cfg.defaultGateway6.metric != null)
+                  ${optionalString (cfg.defaultGateway6.interface != null) ''
+                    ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${optionalString (cfg.defaultGateway6.metric != null)
+                      "metric ${toString cfg.defaultGateway6.metric}"
+                    } proto static
+                  ''}
+                  ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } via "${cfg.defaultGateway6.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} proto static || true
+                      "dev ${cfg.defaultGateway6.interface}"} proto static
                 ''}
               '';
           };
@@ -149,9 +161,11 @@ let
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [ "network-setup.service" ];
-            # propagate stop and reload from network-setup
-            partOf = [ "network-setup.service" ];
+            wantedBy = [
+              "network-setup.service"
+              "network-link-${i.name}.service"
+              "network.target"
+            ];
             # order before network-setup because the routes that are configured
             # there may need ip addresses configured
             before = [ "network-setup.service" ];
@@ -165,33 +179,58 @@ let
             path = [ pkgs.iproute ];
             script =
               ''
-                # FIXME: shouldn't this be done in network-link?
-                echo "bringing up interface..."
-                ip link set "${i.name}" up
-
                 state="/run/nixos/network/addresses/${i.name}"
-
                 mkdir -p $(dirname "$state")
 
-              '' + flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo "${address}" >> $state
-                  if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                    echo "added ip ${address}"
-                  elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                    echo "failed to add ${address}"
-                    exit 1
-                  fi
-                '');
+                ${flip concatMapStrings ips (ip:
+                  let
+                    cidr = "${ip.address}/${toString ip.prefixLength}";
+                  in
+                  ''
+                    echo "${cidr}" >> $state
+                    echo -n "adding address ${cidr}... "
+                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                      echo "done"
+                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                      echo "failed"
+                      exit 1
+                    fi
+                  ''
+                )}
+
+                state="/run/nixos/network/routes/${i.name}"
+                mkdir -p $(dirname "$state")
+
+                ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
+                  let
+                    cidr = "${route.address}/${toString route.prefixLength}";
+                    via = optionalString (route.via != null) ''via "${route.via}"'';
+                    options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                  in
+                  ''
+                     echo "${cidr}" >> $state
+                     echo -n "adding route ${cidr}... "
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
+                       echo "done"
+                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                       echo "failed"
+                       exit 1
+                     fi
+                  ''
+                )}
+              '';
             preStop = ''
+              state="/run/nixos/network/routes/${i.name}"
+              while read cidr; do
+                echo -n "deleting route $cidr... "
+                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+              done < "$state"
+              rm -f "$state"
+
               state="/run/nixos/network/addresses/${i.name}"
-              while read address; do
-                echo -n "deleting $address..."
-                ip addr del "$address" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                echo ""
+              while read cidr; do
+                echo -n "deleting address $cidr... "
+                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
               done < "$state"
               rm -f "$state"
             '';
@@ -203,16 +242,14 @@ let
             after = [ "dev-net-tun.device" "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
-            before = [ "network-setup.service" (subsystemDevice i.name) ];
+            before = [ "network-setup.service" ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
             };
             script = ''
-              ip tuntap add dev "${i.name}" \
-              ${optionalString (i.virtualType != null) "mode ${i.virtualType}"} \
-              user "${i.virtualOwner}"
+              ip tuntap add dev "${i.name}" mode "${i.virtualType}" user "${i.virtualOwner}"
             '';
             postStop = ''
               ip link del ${i.name} || true
@@ -229,7 +266,7 @@ let
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -250,6 +287,17 @@ let
               echo "${flip concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
+
+              ${optionalString config.virtualisation.libvirtd.enable ''
+                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  for uri in qemu:///system lxc:///; do
+                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                      ${pkgs.bash}/bin/bash
+                    done
+                  done
+                ''}
 
               # Enable stp on the interface
               ${optionalString v.rstp ''
@@ -328,7 +376,7 @@ let
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -366,7 +414,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -391,7 +439,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -419,7 +467,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -462,5 +510,8 @@ in
   config = mkMerge [
     bondWarnings
     (mkIf (!cfg.useNetworkd) normalConfig)
+    { # Ensure slave interfaces are brought up
+      networking.interfaces = genAttrs slaves (i: {});
+    }
   ];
 }

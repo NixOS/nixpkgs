@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libtool, intltool, pkgconfig, glib
-, gtk2, curl, mpd_clientlib, libsoup, gob2, vala_0_23, libunique
-, libSM, libICE, sqlite, hicolor_icon_theme, wrapGAppsHook
+, gtk2, curl, mpd_clientlib, libsoup, gob2, vala, libunique
+, libSM, libICE, sqlite, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
       sha256 = "10vspwsgr8pwf3qp2bviw6b2l8prgdiswgv7qiqiyr0h1mmk487y";
     };
     patches = [ ./libmpd-11.8.17-remove-strndup.patch ];
-    buildInputs = [ pkgconfig glib ];
+
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib ];
   };
 
   src = fetchurl {
@@ -22,10 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
+  nativeBuildInputs = [ pkgconfig libtool intltool gob2 vala wrapGAppsHook ];
   buildInputs = [
-    libtool intltool pkgconfig glib gtk2 curl mpd_clientlib libsoup
-    libunique libmpd gob2 vala_0_23 libSM libICE sqlite hicolor_icon_theme
-    wrapGAppsHook
+    glib gtk2 curl mpd_clientlib libsoup
+    libunique libmpd libSM libICE sqlite hicolor-icon-theme
   ];
 
   meta = with stdenv.lib; {

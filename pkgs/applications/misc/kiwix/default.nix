@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
-, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
+, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
 }:
@@ -28,10 +28,6 @@ let
   xulrunner = if stdenv.system == "x86_64-linux"
               then { tar = xulrunner64_tar; sdk = xulrunnersdk64_tar; }
               else { tar = xulrunner32_tar; sdk = xulrunnersdk32_tar; };
-
-  ctpp2_ = ctpp2.override { inherit stdenv; };
-  xapian_ = xapian.override { inherit stdenv; };
-  zimlib_ = zimlib.override { inherit stdenv; };
 
   pugixml = stdenv.mkDerivation rec {
     version = "1.2";
@@ -66,9 +62,10 @@ stdenv.mkDerivation rec {
     sha256 = "0577phhy2na59cpcqjgldvksp0jwczyg0l6c9ghnr19i375l7yqc";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    zip pkgconfig python zlib xapian_ which icu libmicrohttpd
-    lzma zimlib_ ctpp2_ aria2 wget bc libuuid makeWrapper pugixml
+    zip python zlib xapian which icu libmicrohttpd
+    lzma zimlib ctpp2 aria2 wget bc libuuid makeWrapper pugixml
   ];
 
   postUnpack = ''
@@ -96,7 +93,7 @@ stdenv.mkDerivation rec {
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \
-      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus_glib gtk2 gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
+      --suffix LD_LIBRARY_PATH : ${makeLibraryPath [stdenv.cc.cc libX11 libXext libXt libXrender glib dbus dbus-glib gtk2 gdk_pixbuf pango cairo freetype fontconfig alsaLib atk]} \
       --suffix PATH : ${aria2}/bin
   '';
 

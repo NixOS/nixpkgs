@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
-, hostPlatform
+{ stdenv, buildPackages
+, buildPlatform, hostPlatform
+, fetchurl, makeWrapper, gawk, pkgconfig
+, libffi, libtool, readline, gmp, boehmgc, libunistring
+, coverageAnalysis ? null, gnu ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -10,33 +12,34 @@
 
 (rec {
   name = "guile-${version}";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "05dmvhd1y135x7w5qfw4my42cfp6l8bbhjfxvchcc1cbdvzri0f1";
+    sha256 = "11j01agvnci2cx32wwpqs9078856yxmvs15gcsz7ganpkj2ahlw3";
   };
 
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+                           buildPackages.buildPackages.guile;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
 
+  propagatedBuildInputs = [ gmp boehmgc ]
     # XXX: These ones aren't normally needed here, but since
     # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
     ++ [ libtool libunistring ];
 
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfNativeBuildInput = true;
-
   enableParallelBuilding = true;
 
   patches = [
     ./eai_system.patch
+    ./riscv.patch
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 

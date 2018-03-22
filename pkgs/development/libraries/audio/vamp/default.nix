@@ -13,11 +13,12 @@ rec {
       sha256 = "178kfgq08cmgdzv7g8dwyjp4adwx8q04riimncq4nqkm8ng9ywbv";
     };
 
-    buildInputs = [ pkgconfig libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libsndfile ];
 
     meta = with stdenv.lib; {
       description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
-      homepage = http://sourceforge.net/projects/vamp;
+      homepage = https://sourceforge.net/projects/vamp;
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu maintainers.marcweber ];
       platforms = platforms.linux;

@@ -2,18 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "snapraid-${version}";
-  version = "11.1";
+  version = "11.2";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    sha256 = "13v0gz22ng09gs87f7900z2sk2hg5543njl32rfn4cxxp0jncs3r";
+    sha256 = "01z8fl3x2j5bnm0rybj7hhch18is6dkwqc43yzwc6418spr4imsd";
   };
+
+  VERSION = version;
 
   doCheck = true;
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   meta = {
     homepage = http://www.snapraid.it/;

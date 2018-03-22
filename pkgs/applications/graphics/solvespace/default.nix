@@ -1,20 +1,24 @@
 { stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm2, pangomm, glew, mesa_glu, xlibs, pcre
+, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
+, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20170416";
-  rev = "b1d87bf284b32e875c8edba592113e691ea10bcd";
+  name = "solvespace-2.3-20170808";
+  rev = "16540b1b2c540a4b44500ac02aaa4493bccfba7e";
   src = fetchgit {
     url = https://github.com/solvespace/solvespace;
     inherit rev;
-    sha256 = "160qam04pfrwkh9qskfmjkj01wrjwhl09xi6jjxi009yqg3cff9l";
+    sha256 = "1z10i21xf3yagd984lp1hwasnsizx2s3faq3wdzzjngrikr2zn70";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    pkgconfig cmake wrapGAppsHook
+  ];
   buildInputs = [
-    cmake pkgconfig zlib libpng cairo freetype
-    json_c fontconfig gtkmm2 pangomm glew mesa_glu
-    xlibs.libpthreadstubs xlibs.libXdmcp pcre
+    zlib libpng cairo freetype
+    json_c fontconfig gtkmm3 pangomm glew libGLU
+    xorg.libpthreadstubs xorg.libXdmcp pcre
   ];
   enableParallelBuilding = true;
 
@@ -34,14 +38,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/bin/ $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A parametric 3d CAD program";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ edef ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.edef ];
+    platforms = platforms.linux;
     homepage = http://solvespace.com;
   };
 }

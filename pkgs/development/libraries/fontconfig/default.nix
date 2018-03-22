@@ -39,13 +39,15 @@ stdenv.mkDerivation rec {
   # additionally required for the glibc-2.25 patch; avoid requiring gperf
   postPatch = ''
     sed s/CHAR_WIDTH/CHARWIDTH/g -i src/fcobjshash.{h,gperf}
-    touch src/*
+    sleep 2
+    touch src/fcobjshash.h
   '';
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  buildInputs = [ pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ expat ];
 
   configureFlags = [
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/

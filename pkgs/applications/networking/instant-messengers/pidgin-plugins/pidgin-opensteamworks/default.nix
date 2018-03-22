@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pidgin, unzip, glib, json_glib, nss, nspr, libgnome_keyring } :
+{ stdenv, fetchFromGitHub, pidgin, unzip, glib, json-glib, nss, nspr, libgnome-keyring } :
 
 stdenv.mkDerivation rec {
   name = "pidgin-opensteamworks-${version}";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     unzip releases/icons.zip -d $out/share/pixmaps/pidgin/protocols/
   '';
 
-  buildInputs = [ pidgin unzip glib json_glib nss nspr libgnome_keyring ];
+  buildInputs = [ pidgin unzip glib json-glib nss nspr libgnome-keyring ];
 
   meta = with stdenv.lib; {
-    homepage = https://code.google.com/p/pidgin-opensteamworks;
+    homepage = https://github.com/EionRobb/pidgin-opensteamworks;
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;

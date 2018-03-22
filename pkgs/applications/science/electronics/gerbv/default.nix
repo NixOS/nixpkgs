@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "00jn1xhf6kblxc5gac1wvk8zm12fy6sk81nj3jwdag0z6wk3z446";
   };
 
-  buildInputs = [ pkgconfig gettext libtool automake autoconf cairo gtk2 autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gettext libtool automake autoconf cairo gtk2 ];
 
   configureFlags = ["--disable-update-desktop-database"];
 

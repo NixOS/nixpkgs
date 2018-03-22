@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "1.30.1";
+  version = "1.33";
 in
 
 stdenv.mkDerivation rec {
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "0ac360f1f3d6c28790a81d570252a7d40421f6e1d8e5a8d653756bd041d88491";
+    sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-  
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ gtk2 which file ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       - Simple project management
       - Plugin interface
     '';
-    homepage = http://www.geany.org/;
+    homepage = https://www.geany.org/;
     license = "GPL";
     maintainers = [];
     platforms = platforms.all;

@@ -13,18 +13,20 @@
 
 stdenv.mkDerivation rec {
   name = "lttng-ust-${version}";
-  version = "2.9.1";
+  version = "2.10.1";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "196snxrs1p205jz566rwxh7dqzsa3k16c7vm6k7i3gdvrmkx54dq";
+    sha256 = "17gfi1dn6bgg59qn4ihf8hag96lalx0g7dym2ccpzdz7f45krk07";
   };
 
-  buildInputs = [ liburcu python ];
+  buildInputs = [ python ];
 
   preConfigure = ''
     patchShebangs .
   '';
+  
+  propagatedBuildInputs = [ liburcu ];
 
   meta = with stdenv.lib; {
     description = "LTTng Userspace Tracer libraries";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 , ApplicationServices
@@ -10,11 +10,12 @@ let
     if stdenv.system == "i686-linux" then "i686"
     else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
     else if stdenv.system == "armv7l-linux" then "armv7l"
+    else if stdenv.system == "aarch64-linux" then "aarch64"
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-0";
-    sha256 = "02xnvgjnmz2d4yv4iy1kh7an5w631p1s319jw23c8zpmqhfhk2ha";
+    version = "6.9.9-34";
+    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -35,13 +36,10 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
   inherit (cfg) version;
 
-  src = fetchurl {
-    urls = [
-      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
-      # the original source above removes tarballs quickly
-      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
-      "https://bintray.com/homebrew/mirror/download_file?file_path=imagemagick-${version}.tar.xz"
-    ];
+  src = fetchFromGitHub {
+    owner = "ImageMagick";
+    repo = "ImageMagick";
+    rev = cfg.version;
     inherit (cfg) sha256;
   };
 
@@ -85,7 +83,9 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace pkg-config \
+      substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
+        ${pkgconfig}/bin/pkg-config
+      substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''

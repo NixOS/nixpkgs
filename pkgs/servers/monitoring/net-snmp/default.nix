@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, file, openssl, perl, unzip }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, file, openssl, perl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "net-snmp-5.7.3";
@@ -7,6 +7,19 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/net-snmp/${name}.zip";
     sha256 = "0gkss3zclm23zwpqfhddca8278id7pk6qx1mydpimdrrcndwgpz8";
   };
+
+  patches =
+    let fetchAlpinePatch = name: sha256: fetchpatch {
+      url = "https://git.alpinelinux.org/cgit/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
+      inherit name sha256;
+    };
+  in [
+    (fetchAlpinePatch "CVE-2015-5621.patch" "05098jyvd9ddr5q26z7scbbvk1bk6x4agpjm6pyprvpc1zpi0y09")
+    (fetchAlpinePatch "fix-Makefile-PL.patch" "14ilnkj3cr6mpi242hrmmmv8nv4dj0fdgn42qfk9aa7scwsc0lc7")
+    (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
+    (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
+    (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
+  ];
 
   preConfigure =
     ''
@@ -27,7 +40,8 @@ stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
     ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
-  buildInputs = [ autoreconfHook file perl unzip openssl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ file perl unzip openssl ];
 
   enableParallelBuilding = true;
 

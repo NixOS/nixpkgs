@@ -42,6 +42,7 @@ let
       adv_cmds      = "163";
       file_cmds     = "264.1.1";
       shell_cmds    = "187";
+      system_cmds   = "550.6";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
@@ -144,6 +145,10 @@ let
   appleDerivation_ = name: version: sha256: attrs: stdenv.mkDerivation ({
     inherit version;
     name = "${name}-${version}";
+    enableParallelBuilding = true;
+    meta = {
+      platforms = stdenv.lib.platforms.darwin;
+    };
   } // (if attrs ? srcs then {} else {
     src  = fetchApple version sha256 name;
   }) // attrs);
@@ -153,7 +158,7 @@ let
       name = builtins.elemAt (stdenv.lib.splitString "/" namePath) 0;
       appleDerivation = appleDerivation_ name version sha256;
       callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation name version; });
-    in callPackage (./. + builtins.toPath "/${namePath}");
+    in callPackage (./. + "/${namePath}");
 
   libsecPackage = pkgs.callPackage ./libsecurity_generic {
     inherit applePackage appleDerivation_;
@@ -181,7 +186,7 @@ let
     # There should be an IOVideo here, but they haven't released it :(
   };
 
-  IOKitSrcs = stdenv.lib.mapAttrs (name: value: if builtins.isFunction value then value name else value) IOKitSpecs;
+  IOKitSrcs = stdenv.lib.mapAttrs (name: value: if stdenv.lib.isFunction value then value name else value) IOKitSpecs;
 
   adv_cmds = applePackage "adv_cmds" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
@@ -221,6 +226,7 @@ let
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
     libutil         = applePackage "libutil"           "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
+    libutil-new     = applePackage "libutil/new.nix"   "osx-10.11.6"     "1gmgmcyqdyc684ih7dimdmxdljnq7mzjy5iqbf589wc0pa8h5abm" {};
     libunwind       = applePackage "libunwind"         "osx-10.11.6"     "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.11.6"     "069incq28a78yh1bnr17h9cd5if5mwqpq8ahnkyxxx25fkaxgzcf" {};
     objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
@@ -235,6 +241,7 @@ let
     network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
+    system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/donovan6000/M3D-Linux";
+    homepage = https://github.com/donovan6000/M3D-Linux;
     description = "A Linux program that can communicate with the Micro 3D printer";
     license = licenses.gpl2;
     platforms = platforms.linux;

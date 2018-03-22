@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elfutils }:
+{ stdenv, fetchurl, elfutils, libunwind }:
 
 stdenv.mkDerivation rec {
   name = "ltrace-0.7.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "00wmbdghqbz6x95m1mcdd3wd46l6hgcr4wggdp049dbifh3qqvqf";
   };
 
-  buildInputs = [ elfutils ];
+  buildInputs = [ elfutils libunwind ];
 
   preConfigure =
     ''
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
       makeFlagsArray=(INSTALL="install -c")
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library call tracer";
-    homepage = http://www.ltrace.org/;
+    homepage = https://www.ltrace.org/;
     platforms = stdenv.lib.platforms.linux;
   };
 }

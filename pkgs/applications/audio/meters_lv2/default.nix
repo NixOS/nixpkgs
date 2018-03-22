@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, lv2, mesa, gtk2, cairo, pango, fftw }:
+, lv2, libGLU_combined, gtk2, cairo, pango, fftw }:
 
 let
   version = "0.8.1";
@@ -25,7 +25,8 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  buildInputs = [ pkgconfig lv2 mesa gtk2 cairo pango fftw ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 libGLU_combined gtk2 cairo pango fftw ];
 
   srcs = [ src robtkSrc ];
   sourceRoot = name;

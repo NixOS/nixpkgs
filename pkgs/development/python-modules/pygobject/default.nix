@@ -1,9 +1,10 @@
 { stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib }:
 
 buildPythonPackage rec {
-  name = "pygobject-${version}";
+  pname = "pygobject";
   version = "2.28.6";
   format = "other";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/2.28/${name}.tar.xz";
@@ -20,7 +21,8 @@ buildPythonPackage rec {
 
   configureFlags = "--disable-introspection";
 
-  buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
 
   # in a "normal" setup, pygobject and pygtk are installed into the
   # same site-packages: we need a pth file for both. pygtk.py would be

@@ -113,7 +113,8 @@ manual</link> for the rest.</para>
       </row>
       <row>
         <entry><literal>assert 1 + 1 == 2; "yes!"</literal></entry>
-        <entry>Assertion check (evaluates to <literal>"yes!"</literal>)</entry>
+        <entry>Assertion check (evaluates to <literal>"yes!"</literal>). See <xref
+    linkend="sec-assertions"/> for using assertions in modules</entry>
       </row>
       <row>
         <entry><literal>let x = "foo"; y = "bar"; in x + y</literal></entry>

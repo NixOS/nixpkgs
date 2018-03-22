@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "120p9w7za6hi521hz8q235fkl4i3p1qqr8nqm4a3kxr0pcq40bd2";
   };
 
-  buildInputs = [ gtk3 ibus libhangul ];
+  buildInputs = [ gtk3 ibus libhangul python3 ];
 
   nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];
 

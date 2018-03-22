@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
 
 let
-  version = "4.11.0";
+  version = "4.13.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
-    sha256 = "12ddyiikqknpr8h6llsxbg2fz75xnayvcnsvr1cwv8xnjn7jpp73";
+    sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
@@ -63,13 +63,13 @@ stdenv.mkDerivation {
     homepage = http://www.call-cc.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = with stdenv.lib.platforms; allBut darwin;
+    platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.
       CHICKEN produces portable and efficient C, supports almost all
       of the R5RS Scheme language standard, and includes many
-      enhancements and extensions. CHICKEN runs on Linux, MacOS X,
+      enhancements and extensions. CHICKEN runs on Linux, macOS,
       Windows, and many Unix flavours.
     '';
   };

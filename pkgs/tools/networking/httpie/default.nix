@@ -2,7 +2,6 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "httpie-0.9.9";
-  namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/h/httpie/${name}.tar.gz";
@@ -15,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
-    homepage = http://httpie.org/;
+    homepage = https://httpie.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
   };

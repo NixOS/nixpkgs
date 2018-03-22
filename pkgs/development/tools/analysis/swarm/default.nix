@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Verification script generator for Spin";
-    homepage = "http://spinroot.com/";
+    homepage = http://spinroot.com/;
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

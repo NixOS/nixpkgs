@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, opam, ocb-stubblr }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, ocb-stubblr }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
@@ -18,10 +18,9 @@ stdenv.mkDerivation {
     sha256 = "13af37w2wybx8yzgjr5zz5l50402ldl614qiwphl1q69hig5mag2";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg result pkgconfig opam ocb-stubblr ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg result ocb-stubblr ];
   propagatedBuildInputs = [ SDL2 ctypes ];
-
-  createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 

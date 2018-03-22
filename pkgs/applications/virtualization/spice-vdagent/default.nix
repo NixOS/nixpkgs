@@ -1,5 +1,6 @@
-{stdenv, fetchurl, pkgconfig, alsaLib, spice_protocol, glib,
- libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus}:
+{stdenv, fetchurl, pkgconfig, alsaLib, spice-protocol, glib,
+ libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus,
+ systemd}:
 stdenv.mkDerivation rec {
   name = "spice-vdagent-0.17.0";
   src = fetchurl {
@@ -9,9 +10,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
-  buildInputs = [ pkgconfig alsaLib spice_protocol glib
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib spice-protocol glib
                   libpciaccess libxcb libXrandr libXinerama libXfixes
-                  dbus ] ;
+                  dbus systemd ] ;
   meta = {
     description = "Enhanced SPICE integration for linux QEMU guest";
     longDescription = ''

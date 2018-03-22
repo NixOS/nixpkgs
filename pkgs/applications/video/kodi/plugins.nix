@@ -19,11 +19,11 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=85724";
+      homepage = https://forum.kodi.tv/showthread.php?tid=85724;
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Launcher allows you to start any Linux, Windows and
-        OS X external applications (with command line support or not)
+        macOS external applications (with command line support or not)
         directly from the Kodi GUI. Advanced Launcher also give you
         the possibility to edit, download (from Internet resources)
         and manage all the meta-data (informations and images) related
@@ -49,7 +49,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=287826";
+      homepage = https://forum.kodi.tv/showthread.php?tid=287826;
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Emulator Launcher is a multi-emulator front-end for Kodi
@@ -129,7 +129,7 @@ rec {
       sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
     };
     meta = with stdenv.lib; {
-      homepage = http://forum.kodi.tv/showthread.php?tid=258159;
+      homepage = https://forum.kodi.tv/showthread.php?tid=258159;
       description = "A ROM launcher for Kodi that uses HyperSpin assets.";
       maintainers = with maintainers; [ edwtjo ];
     };
@@ -149,14 +149,14 @@ rec {
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";
-    version = "1.3.6";
+    version = "1.3.2";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "kodi-game";
       repo = namespace;
-      rev = "5b480ccdd4a87f2ca3283a7b8d1bd69a114af0db";
-      sha256 = "1zf5zwghx96bqk7bx53qra27lfbgfdi1dsk4s3hwixr8ii72cqpp";
+      rev = "96171dd32899553ffe8fc775fca66e8df5ff5cf1";
+      sha256 = "18m61v8z9fbh4imvzhh4g9629r9df49g2yk9ycaczirg131dhfbh";
     };
 
     meta = with stdenv.lib; {
@@ -184,7 +184,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=67110";
+      homepage = https://forum.kodi.tv/showthread.php?tid=67110;
       description = "Watch content from SVT Play";
       longDescription = ''
         With this addon you can stream content from SVT Play
@@ -234,7 +234,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=157499";
+      homepage = https://forum.kodi.tv/showthread.php?tid=157499;
       description = "Launch Steam in Big Picture Mode from Kodi";
       longDescription = ''
         This add-on will close/minimise Kodi, launch Steam in Big
@@ -263,8 +263,8 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://forum.kodi.tv/showthread.php?tid=187421;
-      descritpion = "A comic book reader";
+      homepage = https://forum.kodi.tv/showthread.php?tid=187421;
+      description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
     };
   };

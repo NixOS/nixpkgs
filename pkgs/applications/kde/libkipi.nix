@@ -7,5 +7,6 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kconfig ki18n kservice kxmlgui ];
+  buildInputs = [ kconfig ki18n kservice kxmlgui ];
+  outputs = [ "out" "dev" ];
 }

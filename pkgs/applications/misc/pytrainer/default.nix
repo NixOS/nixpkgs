@@ -1,42 +1,58 @@
-{ stdenv, fetchurl, pythonPackages, sqlite, gpsbabel }:
+{ stdenv, fetchFromGitHub, perl, python, sqlite, gpsbabel
+, withWebKit ? false }:
 
 let
 
   # Pytrainer needs a matplotlib with GTK backend. Also ensure we are
   # using the pygtk with glade support as needed by pytrainer.
-  matplotlibGtk = pythonPackages.matplotlib.override {
+  matplotlibGtk = python.pkgs.matplotlib.override {
     enableGtk2 = true;
-    pygtk = pythonPackages.pyGtkGlade;
+    pygtk = python.pkgs.pyGtkGlade;
   };
 
 in
 
-pythonPackages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   name = "pytrainer-${version}";
-  version = "1.10.0";
+  version = "1.12.0";
 
-  src = fetchurl {
-    url = "https://github.com/pytrainer/pytrainer/archive/v${version}.tar.gz";
-    sha256 = "0l42p630qhymgrcvxgry8chrpzcp6nr3d1vd7vhifh2npfq9l09y";
+  src = fetchFromGitHub {
+    owner = "pytrainer";
+    repo = "pytrainer";
+    rev = "v${version}";
+    sha256 = "09pfddjaqdpy3r27h21xvsvh04sb8hppinskxlahdqb3vjzkr581";
   };
 
   namePrefix = "";
 
-  # The existing use of pywebkitgtk shows raw HTML text instead of
-  # map. This patch solves the problems by showing the file from a
-  # string, which allows setting an explicit MIME type.
-  patches = [ ./pytrainer-webkit.patch ];
+  patches = [
+    # The test fails in the UTC timezone and C locale.
+    ./fix-test-tz.patch
 
-  propagatedBuildInputs = with pythonPackages; [
-    dateutil lxml matplotlibGtk pyGtkGlade pywebkitgtk
-    sqlalchemy_migrate
+    # The existing use of pywebkitgtk shows raw HTML text instead of
+    # map. This patch solves the problems by showing the file from a
+    # string, which allows setting an explicit MIME type.
+    ./pytrainer-webkit.patch
   ];
 
-  buildInputs = [ gpsbabel sqlite ];
+  postPatch = ''
+    substituteInPlace ./setup.py \
+      --replace "'mysqlclient'," ""
+  '';
+
+  propagatedBuildInputs = with python.pkgs; [
+    dateutil lxml matplotlibGtk pyGtkGlade sqlalchemy sqlalchemy_migrate psycopg2
+  ] ++ stdenv.lib.optional withWebKit [ pywebkitgtk ];
+
+  buildInputs = [ perl gpsbabel sqlite ];
 
   # This package contains no binaries to patch or strip.
   dontPatchELF = true;
   dontStrip = true;
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pytrainer/pytrainer/wiki;

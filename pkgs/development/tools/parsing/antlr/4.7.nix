@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "antlr-${version}";
-  version = "4.7";
+  version = "4.7.1";
   src = fetchurl {
     url ="http://www.antlr.org/download/antlr-${version}-complete.jar";
-    sha256 = "0r08ay63s5aajix5j8j7lf7j7l7wiwdkr112b66nyhkj5f6c72yd";
+    sha256 = "1236gwnzchama92apb2swmklnypj01m7bdwwfvwvl8ym85scw7gl";
   };
 
   unpackPhase = "true";
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

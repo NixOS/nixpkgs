@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -8,9 +8,7 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "plugin/cmd/kube-scheduler"
-    "cmd/kube-dns"
-    "federation/cmd/federation-apiserver"
-    "federation/cmd/federation-controller-manager"
+    "test/e2e/e2e.test"
   ]
 }:
 
@@ -18,18 +16,34 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.5.6";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0mkg4vgz9szgq1k5ignkdr5gmg703xlq8zsrr422a1qfqb8zp15w";
+    sha256 = "1dmq2g138h7fsswmq4l47b44gsl9anmm3ywqyi7y48f1rkvc11mk";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
+
+  patches = [
+    # patch is from https://github.com/kubernetes/kubernetes/pull/58207
+    (fetchpatch {
+      url = "https://github.com/kubernetes/kubernetes/commit/a990b04dc8a7d8408a71eee40db93621cf2b6d1b.patch";
+      sha256 = "0piqilc5c9frikl74hamkffawwg1mvdwfxqvjnmk6wdma43dbb7w";
+    })
+    (fetchpatch {
+      # https://github.com/kubernetes/kubernetes/pull/60978
+      # Fixes critical kube-proxy failure on iptables-restore >= 1.6.2 and
+      # non-critical failures on prior versions.
+      url = "https://github.com/kubernetes/kubernetes/commit/34ce573e9992ecdbc06dff1b4e3d0e9baa8353dd.patch";
+      sha256 = "1sd9qgc28zr6fkk0441f89bw8kq2kadys0qs7bgivy9cmcpw5x5p";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
@@ -55,11 +69,15 @@ stdenv.mkDerivation rec {
     cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
 
+    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
+    patchShebangs $out/bin/kube-addons
+    wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
+
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
   '';
 
   meta = {

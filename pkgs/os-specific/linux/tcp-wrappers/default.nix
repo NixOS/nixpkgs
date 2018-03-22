@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, libnsl }:
 
 let
   vanillaVersion = "7.6.q";
@@ -22,7 +22,9 @@ in stdenv.mkDerivation rec {
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
   '';
 
-  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
+  buildInputs = [ libnsl ];
+
+  makeFlags = [ "STRINGS=" "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
 
   installPhase = ''
     mkdir -p "$out/bin"

@@ -16,7 +16,7 @@
 
 */
 
-{ stdenv, version, kernelPlatform, extraConfig, features }:
+{ stdenv, version, extraConfig, features }:
 
 with stdenv.lib;
 
@@ -38,6 +38,7 @@ with stdenv.lib;
   DEBUG_STACKOVERFLOW n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+  DEBUG_INFO n # Not until we implement a separate debug output
 
   ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
@@ -50,7 +51,7 @@ with stdenv.lib;
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
-  ${optionalString (stdenv.system == "x86_64-linux" || stdenv.system == "aarch64-linux") ''
+  ${optionalString (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") ''
     NR_CPUS 384
   ''}
 
@@ -97,6 +98,7 @@ with stdenv.lib;
     MQ_IOSCHED_DEADLINE y
   ''}
   ${optionalString (versionAtLeast version "4.12") ''
+    BFQ_GROUP_IOSCHED y
     MQ_IOSCHED_KYBER y
     IOSCHED_BFQ m
   ''}
@@ -132,6 +134,7 @@ with stdenv.lib;
   ''}
   NETFILTER y
   NETFILTER_ADVANCED y
+  CGROUP_BPF? y # Required by systemd per-cgroup firewalling
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
@@ -167,6 +170,7 @@ with stdenv.lib;
   BONDING m
   NET_L3_MASTER_DEV? y
   NET_FOU_IP_TUNNELS? y
+  IP_NF_TARGET_REDIRECT m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -200,7 +204,7 @@ with stdenv.lib;
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
-  ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
+  ${optionalString (versionOlder version "4.3") ''
     DRM_I915_KMS y
   ''}
   # Allow specifying custom EDID on the kernel command line
@@ -229,18 +233,26 @@ with stdenv.lib;
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
-  USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
-  USB_SERIAL_KEYSPAN_USA28 y
-  USB_SERIAL_KEYSPAN_USA28X y
-  USB_SERIAL_KEYSPAN_USA28XA y
-  USB_SERIAL_KEYSPAN_USA28XB y
-  USB_SERIAL_KEYSPAN_USA19 y
-  USB_SERIAL_KEYSPAN_USA18X y
-  USB_SERIAL_KEYSPAN_USA19W y
-  USB_SERIAL_KEYSPAN_USA19QW y
-  USB_SERIAL_KEYSPAN_USA19QI y
-  USB_SERIAL_KEYSPAN_USA49W y
-  USB_SERIAL_KEYSPAN_USA49WLC y
+
+  # Include firmware for various USB serial devices.
+  # Only applicable for kernels below 4.16, after that no firmware is shipped in the kernel tree.
+  ${optionalString (versionOlder version "4.16") ''
+    USB_SERIAL_KEYSPAN_MPR y
+    USB_SERIAL_KEYSPAN_USA28 y
+    USB_SERIAL_KEYSPAN_USA28X y
+    USB_SERIAL_KEYSPAN_USA28XA y
+    USB_SERIAL_KEYSPAN_USA28XB y
+    USB_SERIAL_KEYSPAN_USA19 y
+    USB_SERIAL_KEYSPAN_USA18X y
+    USB_SERIAL_KEYSPAN_USA19W y
+    USB_SERIAL_KEYSPAN_USA19QW y
+    USB_SERIAL_KEYSPAN_USA19QI y
+    USB_SERIAL_KEYSPAN_USA49W y
+    USB_SERIAL_KEYSPAN_USA49WLC y
+  ''}
+
+  # Device mapper (RAID, LVM, etc.)
+  MD y
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
@@ -337,15 +349,16 @@ with stdenv.lib;
 
   # Security related features.
   RANDOMIZE_BASE? y
-  STRICT_DEVMEM y # Filter access to /dev/mem
+  STRICT_DEVMEM? y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
   DEVKMEM n # Disable /dev/kmem
-  ${if versionOlder version "3.14" then ''
-    CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
-  '' else ''
-    CC_STACKPROTECTOR_REGULAR? y
-  ''}
+  ${optionalString (! stdenv.hostPlatform.isArm)
+    (if versionOlder version "3.14" then ''
+        CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
+      '' else ''
+        CC_STACKPROTECTOR_REGULAR? y
+      '')}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
@@ -362,6 +375,15 @@ with stdenv.lib;
     MICROCODE_EARLY y
     MICROCODE_INTEL_EARLY y
     MICROCODE_AMD_EARLY y
+  ''}
+
+  ${optionalString (versionAtLeast version "4.10") ''
+    # Write Back Throttling
+    # https://lwn.net/Articles/682582/
+    # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
+    BLK_WBT y
+    BLK_WBT_SQ y
+    BLK_WBT_MQ y
   ''}
 
   # Misc. options.
@@ -429,6 +451,7 @@ with stdenv.lib;
   RC_DEVICES? y # Enable IR devices
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
+  CFS_BANDWIDTH y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
@@ -449,8 +472,11 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
-  # PCI-Expresscard hotplug support
-  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
+  ${optionalString (versionAtLeast version "3.12") ''
+    HOTPLUG_PCI_ACPI y # PCI hotplug using ACPI
+    HOTPLUG_PCI_PCIE y # PCI-Expresscard hotplug support
+  ''}
+
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
@@ -559,10 +585,16 @@ with stdenv.lib;
   # Media support.
   MEDIA_DIGITAL_TV_SUPPORT y
   MEDIA_CAMERA_SUPPORT y
-  MEDIA_RC_SUPPORT y
+  ${optionalString (versionOlder version "4.14") ''
+    MEDIA_RC_SUPPORT y
+  ''}
+  MEDIA_CONTROLLER y
   MEDIA_USB_SUPPORT y
-  ${optionalString (!(features.chromiumos or false)) ''
-    MEDIA_PCI_SUPPORT y
+  MEDIA_PCI_SUPPORT y
+  MEDIA_ANALOG_TV_SUPPORT y
+  VIDEO_STK1160_COMMON m
+  ${optionalString (versionOlder version "4.11") ''
+    VIDEO_STK1160_AC97 y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
@@ -605,15 +637,17 @@ with stdenv.lib;
   FW_LOADER_USER_HELPER_FALLBACK? n
 
   # Disable various self-test modules that have no use in a production system
-  ${optionalString (versionOlder version "4.4") ''
-    ARM_KPROBES_TEST? n
-  ''}
-
+  # This menu disables all/most of them on >= 4.16
+  RUNTIME_TESTING_MENU? n
+  # For older kernels, painstakingly disable each symbol.
+  ARM_KPROBES_TEST? n
   ASYNC_RAID6_TEST? n
   ATOMIC64_SELFTEST? n
   BACKTRACE_SELF_TEST? n
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
+  DRM_DEBUG_MM_SELFTEST? n
+  EFI_TEST? n
   GLOB_SELFTEST? n
   INTERVAL_TREE_TEST? n
   LNET_SELFTEST? n
@@ -622,98 +656,50 @@ with stdenv.lib;
   NOTIFIER_ERROR_INJECTION? n
   PERCPU_TEST? n
   RBTREE_TEST? n
+  RCU_PERF_TEST? n
   RCU_TORTURE_TEST? n
+  TEST_ASYNC_DRIVER_PROBE? n
+  TEST_BITMAP? n
   TEST_BPF? n
   TEST_FIRMWARE? n
+  TEST_HASH? n
   TEST_HEXDUMP? n
+  TEST_KMOD? n
   TEST_KSTRTOX? n
   TEST_LIST_SORT? n
   TEST_LKM? n
+  TEST_PARMAN? n
   TEST_PRINTF? n
   TEST_RHASHTABLE? n
+  TEST_SORT? n
   TEST_STATIC_KEYS? n
   TEST_STRING_HELPERS? n
   TEST_UDELAY? n
   TEST_USER_COPY? n
+  TEST_UUID? n
+  WW_MUTEX_SELFTEST? n
   XZ_DEC_TEST? n
 
-  ${optionalString (versionOlder version "4.4") ''
-    EFI_TEST? n
-    RCU_PERF_TEST? n
-    TEST_ASYNC_DRIVER_PROBE? n
-    TEST_BITMAP? n
-    TEST_HASH? n
-    TEST_UUID? n
+  ${optionalString (features.criu or false)  ''
+    EXPERT y
+    CHECKPOINT_RESTORE y
   ''}
 
-  ${optionalString (versionAtLeast version "4.11") ''
-    DRM_DEBUG_MM_SELFTEST? n
-    TEST_PARMAN? n
-    TEST_SORT? n
-    WW_MUTEX_SELFTEST? n
+  ${optionalString ((features.criu or false) && (features.criu_revert_expert or true))
+    # Revert some changes, introduced by EXPERT, when necessary for criu
+  ''
+    RFKILL_INPUT? y
+    HID_PICOLCD_FB? y
+    HID_PICOLCD_BACKLIGHT? y
+    HID_PICOLCD_LCD? y
+    HID_PICOLCD_LEDS? y
+    HID_PICOLCD_CIR? y
+    DEBUG_MEMORY_INIT? y
   ''}
 
-  # ChromiumOS support
-  ${optionalString (features.chromiumos or false) ''
-    CHROME_PLATFORMS y
-    VGA_SWITCHEROO n
-    MMC_SDHCI_PXAV2 n
-    NET_IPVTI n
-    IPV6_VTI n
-    REGULATOR_FIXED_VOLTAGE n
-    TPS6105X n
-    CPU_FREQ_STAT y
-    IPV6 y
-    MFD_CROS_EC y
-    MFD_CROS_EC_LPC y
-    MFD_CROS_EC_DEV y
-    CHARGER_CROS_USB_PD y
-    I2C y
-    MEDIA_SUBDRV_AUTOSELECT n
-    VIDEO_IR_I2C n
-    BLK_DEV_DM y
-    ANDROID_PARANOID_NETWORK n
-    DM_VERITY n
-    DRM_VGEM n
-    CPU_FREQ_GOV_INTERACTIVE n
-    INPUT_KEYRESET n
-    DM_BOOTCACHE n
-    UID_CPUTIME n
-
-    ${optionalString (versionAtLeast version "3.18") ''
-      CPUFREQ_DT n
-      EXTCON_CROS_EC n
-      DRM_POWERVR_ROGUE n
-      CHROMEOS_OF_FIRMWARE y
-      TEST_RHASHTABLE n
-      BCMDHD n
-      TRUSTY n
-    ''}
-
-    ${optionalString (versionOlder version "3.18") ''
-      MALI_MIDGARD n
-      DVB_USB_DIB0700 n
-      DVB_USB_DW2102 n
-      DVB_USB_PCTV452E n
-      DVB_USB_TTUSB2 n
-      DVB_USB_AF9015 n
-      DVB_USB_AF9035 n
-      DVB_USB_ANYSEE n
-      DVB_USB_AZ6007 n
-      DVB_USB_IT913X n
-      DVB_USB_LME2510 n
-      DVB_USB_RTL28XXU n
-      USB_S2255 n
-      VIDEO_EM28XX n
-      VIDEO_TM6000 n
-      USB_DWC2 n
-      USB_GSPCA n
-      SPEAKUP n
-      XO15_EBOOK n
-      USB_GADGET n
-    ''}
+  ${optionalString (features.debug or false)  ''
+    DEBUG_INFO y
   ''}
 
-  ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''

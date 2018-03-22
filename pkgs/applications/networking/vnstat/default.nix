@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "vnstat-${version}";
-  version = "1.15";
+  version = "1.18";
 
   src = fetchurl {
-    sha256 = "0fdw3nbrfm4acv48r0934ls6ld5lwkff3gyym2c72qlbm9dlp0f3";
+    sha256 = "1mc7qqvrnl0zyhgh8n7wx1g1cbwq74xpvbz8rfjmyi77p693a6fp";
     url = "http://humdi.net/vnstat/${name}.tar.gz";
   };
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://humdi.net/vnstat/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nckx ];
     platforms = platforms.linux;
   };
 }

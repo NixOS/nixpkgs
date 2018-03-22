@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qlipper";
-  version = "5.0.0";
+  version = "5.1.1";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "pvanek";
     repo = pname;
     rev = version;
-    sha256 = "1y34vadxxjg2l7021y1rpvb8x6pzhk2sk9p35wfm9inilwi8bg8j";
+    sha256 = "0vlm4ab9isi7i2bimnyrk6083j2dfdrs14qj59vjcjri7mcwmf76";
   };
 
   nativeBuildInputs = [ cmake ];

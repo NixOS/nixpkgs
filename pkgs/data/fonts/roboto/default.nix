@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "2.138";
+in fetchzip rec {
   name = "roboto-${version}";
-  version = "2.136";
 
-  src = fetchurl {
-    url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
-    sha256 = "0yx3q5wbbl1qkxfx1fglzy3rvms98jr8fcfj70vvvz3r3lppv201";
-  };
+  url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
 
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -a *.ttf $out/share/fonts/truetype/
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -x __MACOSX/\* -d $out/share/fonts/truetype
   '';
+
+  sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
 
   meta = {
     homepage = https://github.com/google/roboto;

@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   installCommand = "python setup.py install --prefix=$out";
 
   meta = {
-    homepage = "http://www.red-bean.com/decklin/lastfmsubmitd/";
+    homepage = http://www.red-bean.com/decklin/lastfmsubmitd/;
     description = "An last.fm audio scrobbler and daemon";
   };
 }

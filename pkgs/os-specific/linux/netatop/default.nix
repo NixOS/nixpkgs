@@ -34,9 +34,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Network monitoring module for atop";
-    homepage = http://www.atoptool.nl/downloadnetatop.php;
+    homepage = https://www.atoptool.nl/downloadnetatop.php;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [viric];
+    broken = !stdenv.lib.versionOlder kernel.version "4.13";
   };
 }

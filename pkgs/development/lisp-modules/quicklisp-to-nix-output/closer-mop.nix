@@ -1,36 +1,25 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''closer-mop'';
-  version = ''20170516-git'';
+  version = ''20180131-git'';
 
   description = ''Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/closer-mop/2017-05-16/closer-mop-20170516-git.tgz'';
-    sha256 = ''072nf6d0gg76vkb1wkkzlfcck5ksril4anmjbmylbrwm3mn61p5w'';
+    url = ''http://beta.quicklisp.org/archive/closer-mop/2018-01-31/closer-mop-20180131-git.tgz'';
+    sha256 = ''0lsfpxppbd8j4ayfrhd723ck367yb4amdywwaqj9yivh00zn4r6s'';
   };
-    
+
   packageName = "closer-mop";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/closer-mop[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["closer-mop.asd"];
+  overrides = x: x;
 }
 /* (SYSTEM closer-mop DESCRIPTION
     Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations.
-    SHA256 072nf6d0gg76vkb1wkkzlfcck5ksril4anmjbmylbrwm3mn61p5w URL http://beta.quicklisp.org/archive/closer-mop/2017-05-16/closer-mop-20170516-git.tgz MD5
-    169ba62f7f8f436e45f182cbe7dd8614 NAME closer-mop TESTNAME NIL FILENAME closer-mop DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+    SHA256 0lsfpxppbd8j4ayfrhd723ck367yb4amdywwaqj9yivh00zn4r6s URL
+    http://beta.quicklisp.org/archive/closer-mop/2018-01-31/closer-mop-20180131-git.tgz
+    MD5 d572109e102869d89f206a46619c2ed0 NAME closer-mop FILENAME closer-mop
+    DEPS NIL DEPENDENCIES NIL VERSION 20180131-git SIBLINGS NIL PARASITES NIL) */

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, SDL_ttf, SDL_image, SDL_mixer, pkgconfig, lua, zlib, unzip }:
 
 let
-  version = "3.0.1";
+  version = "3.2.0";
 
   # I took several games at random from http://instead.syscall.ru/games/
   games = [
@@ -33,12 +33,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "0ynqzmr35zd1vbbv8n3vk93zj0njhs45w9z33wwkphg2zlniwnzb";
+    sha256 = "0l57qdngxv9nbfj4ixr4fyanlazmdib2kr1nzv3g578308xzjv6a";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";
 
-  buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer pkgconfig lua zlib unzip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer lua zlib unzip ];
 
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh

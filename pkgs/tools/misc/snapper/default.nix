@@ -1,18 +1,26 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus_libs, diffutils, e2fsprogs, libxml2
 , lvm2, pam, python, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.3.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "12c2ygaanr4gny4ixnly4vpi0kv7snbg3khr3i5zwridhmdzz9hm";
+    sha256 = "14hrv23film4iihyclcvc2r2dgxl8w3as50r81xjjc85iyp6yxkm";
   };
+
+  patches = [
+    # Fix build with new Boost
+    (fetchpatch {
+      url = "https://github.com/openSUSE/snapper/commit/2e3812d2c1d1f54861fb79f5c2b0197de96a00a3.patch";
+      sha256 = "0yrzss1v7lmcvkajmchz917yqsvlsdfz871szzw790v6pql1322s";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig
@@ -62,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://snapper.io;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx tstrobel ];
+    maintainers = with maintainers; [ tstrobel ];
   };
 }

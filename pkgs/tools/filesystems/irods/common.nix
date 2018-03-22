@@ -9,8 +9,6 @@ with stdenv;
 
   buildInputs = [ bzip2 zlib autoconf automake cmake gnumake help2man texinfo libtool cppzmq libarchive avro-cpp jansson zeromq openssl pam libiodbc kerberos gcc boost libcxx which ];
 
-  propagateBuildInputs = [ boost ];
-
   cmakeFlags = [
     "-DIRODS_EXTERNALS_FULLPATH_CLANG=${stdenv.cc}"
     "-DIRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME=${stdenv.cc}"

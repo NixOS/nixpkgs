@@ -1,21 +1,22 @@
 { stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd
 }:
 
-let version = "4.8.2"; in
+let version = "4.15.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0pswcfmdnfc586770h74abp67gn2xv8fd46vxlimnmn837sj7h41";
+    sha256 = "15izak6jg6pqr6ha9447cdrdj9k6kfiarvwlrj53cpvrsv02l437";
   };
 
-  buildInputs = [
-    pkgconfig attr acl zlib libuuid e2fsprogs lzo
-    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+  nativeBuildInputs = [
+    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
+
+  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nckx raskin wkennington ];
+    maintainers = with maintainers; [ raskin wkennington ];
     platforms = platforms.linux;
   };
 }

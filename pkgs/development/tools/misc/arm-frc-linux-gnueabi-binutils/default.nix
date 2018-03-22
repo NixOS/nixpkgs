@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.colescott ];
     platforms = stdenv.lib.platforms.linux;
-
+    broken = true; # since 2017-09-10
     priority = 3;
   };
 }

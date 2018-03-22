@@ -26,10 +26,10 @@
   asciidoctor = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0kj2lls8f83nlhfkdkmbf7k5q9c9kk1cc15b1a4dy6arx4yzmvw7";
+      sha256 = "c4371c419306d69152809eb896c291ca09969dc26ca34be36f4eab82914fceca";
       type = "gem";
     };
-    version = "1.5.5";
+    version = "1.5.6.1";
   };
   asciidoctor-bespoke = {
     source = {
@@ -58,10 +58,10 @@
   asciidoctor-pdf = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0lp1q1yxy4y9k3znxxgj6pl0cbymz0yk5hsif73sg2bnpk62id9i";
+      sha256 = "0f6b2a1533577dfba218de5dd886771447e4d1cb670b81d2c3bf3a180e6029a1";
       type = "gem";
     };
-    version = "1.5.0.alpha.13";
+    version = "1.5.0.alpha.16";
   };
   concurrent-ruby = {
     source = {

@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Manga downloader";
-    homepage = http://sourceforge.net/projects/hakuneko/;
+    homepage = https://sourceforge.net/projects/hakuneko/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
+
+    # This project was abandoned upstream.
+    broken = true;
   };
 }

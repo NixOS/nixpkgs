@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh ./bootstrap";
 
-  buildInputs = [ libotr automake autoconf libtool glib pkgconfig irssi ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libotr automake autoconf libtool glib irssi ];
 
   NIX_CFLAGS_COMPILE="-I ${irssi}/include/irssi -I ${irssi}/include/irssi/src/core -I ${irssi}/include/irssi/src/";
 

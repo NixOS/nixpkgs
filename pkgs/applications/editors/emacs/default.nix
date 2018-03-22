@@ -4,8 +4,8 @@
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
-, withGTK3 ? true, gtk3 ? null, gsettings_desktop_schemas ? null
-, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib_networking ? null
+, withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
+, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
@@ -26,15 +26,29 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.2";
+  version = "25.3";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
+    sha256 = "02y00y9q42g1iqgz5qhmsja75hwxd88yrn9zp14lanay0zkwafi5";
   };
 
-  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch);
+  enableParallelBuilding = true;
+
+  patches = [
+    ./clean-env.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./at-fdcwd.patch
+
+    # Backport of the fix to
+    # https://lists.gnu.org/archive/html/bug-gnu-emacs/2017-04/msg00201.html
+    # Should be removed when switching to Emacs 26.1
+    (fetchurl {
+      url = "https://gist.githubusercontent.com/aaronjensen/f45894ddf431ecbff78b1bcf533d3e6b/raw/6a5cd7f57341aba673234348d8b0d2e776f86719/Emacs-25-OS-X-use-vfork.patch";
+      sha256 = "1nlsxiaynswqhy99jf4mw9x0sndhwcrwy8713kq1l3xqv9dbrzgj";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]
@@ -47,9 +61,9 @@ stdenv.mkDerivation rec {
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
     ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings_desktop_schemas ]
+    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib_networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib-networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

@@ -1,0 +1,67 @@
+diff --git i/source/ogre/CarModel_Create.cpp w/source/ogre/CarModel_Create.cpp
+index 834eac7..47ec647 100644
+--- i/source/ogre/CarModel_Create.cpp
++++ w/source/ogre/CarModel_Create.cpp
+@@ -130,7 +130,8 @@ void CarModel::Load(int startId)
+ 
+ 	///  load config .car
+ 	string pathCar;
+-	pApp->gui->GetCarPath(&pathCar, 0, 0, sDirname, pApp->mClient);  // force orig for newtorked games
++  string empty;
++	pApp->gui->GetCarPath(&pathCar, &empty, &empty, sDirname, bool(pApp->mClient));  // force orig for newtorked games
+ 	LoadConfig(pathCar);
+ 	
+ 	
+diff --git i/source/ogre/Gui_Tweak.cpp w/source/ogre/Gui_Tweak.cpp
+index 76ed8e9..9444271 100644
+--- i/source/ogre/Gui_Tweak.cpp
++++ w/source/ogre/Gui_Tweak.cpp
+@@ -412,8 +412,8 @@ bool CGui::GetCarPath(std::string* pathCar,
+ 		pathUserD = PATHMANAGER::CarSimU() + "/" + pSet->game.sim_mode + "/cars/",
+ 		pathUser  = pathUserD + file;
+ 
+-	if (pathSave)  *pathSave = pathUser;
+-	if (pathSaveDir)  *pathSaveDir = pathUserD;
++	if (pathSave != "")  *pathSave = pathUser;
++	if (pathSaveDir != "")  *pathSaveDir = pathUserD;
+ 	
+ 	if (!forceOrig && PATHMANAGER::FileExists(pathUser))
+ 	{
+diff --git i/source/vdrift/cartire.cpp w/source/vdrift/cartire.cpp
+index dd6dd48..083fa0c 100644
+--- i/source/vdrift/cartire.cpp
++++ w/source/vdrift/cartire.cpp
+@@ -3,6 +3,7 @@
+ #include "cardefs.h"
+ //#include "../ogre/common/Def_Str.h"
+ 
++using namespace std;
+ 
+ void CARTIRE::FindSigmaHatAlphaHat(Dbl load, Dbl & output_sigmahat, Dbl & output_alphahat, int iterations)
+ {
+diff --git i/source/vdrift/model_obj.cpp w/source/vdrift/model_obj.cpp
+index 338d122..e67c1db 100644
+--- i/source/vdrift/model_obj.cpp
++++ w/source/vdrift/model_obj.cpp
+@@ -205,7 +205,7 @@ bool MODEL_OBJ::Save(const std::string & strFileName, std::ostream & error_outpu
+ 	std::ofstream f(strFileName.c_str());
+ 	if (!f)
+ 	{
+-		error_output << "Error opening file for writing: " << error_output << endl;
++		error_output << "Error opening file for writing: " << endl;
+ 		return false;
+ 	}
+ 	
+diff --git i/source/vdrift/texture.h w/source/vdrift/texture.h
+index b21846a..c115fd6 100644
+--- i/source/vdrift/texture.h
++++ w/source/vdrift/texture.h
+@@ -125,7 +125,7 @@ class TEXTURELIBRARY
+ 		bool FileExists(const std::string & filename)
+ 		{
+ 			std::ifstream f(filename.c_str());
+-			return f;
++			return bool(f);
+ 		}
+ 
+ 	public:

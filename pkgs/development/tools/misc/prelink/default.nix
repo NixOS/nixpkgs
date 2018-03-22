@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://people.redhat.com/jakub/prelink/;
     license = "GPL";
     description = "ELF prelinking utility to speed up dynamic linking";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

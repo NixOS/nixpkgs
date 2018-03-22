@@ -1,27 +1,19 @@
-{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig
-, enableFan ? false
-}:
+{ fetchurl, stdenv, lib, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
-  version = "4.12.0";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0zdxdsxyaazl85xhwskvsmpyzwf5qp21cvjsi1lw3xnrc914q2if";
+    sha256 = "0mc3g4kj7h3jhwz2b2gdf41gp6bhqn7axh4mnyvhkdnpk5m63m28";
   };
-
-  patches = lib.optionals enableFan [
-    # These patches were pulled from:
-    # https://launchpad.net/ubuntu/xenial/+source/iproute2
-    ./1000-ubuntu-poc-fan-driver.patch
-    ./1001-ubuntu-poc-fan-driver-v3.patch
-    ./1002-ubuntu-poc-fan-driver-vxlan.patch
-  ];
 
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
+    # Don't build netem tools--they're not installed and require HOSTCC
+    substituteInPlace Makefile --replace " netem " " "
   '';
 
   makeFlags = [
@@ -46,6 +38,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.linuxfoundation.org/networking/iproute2;

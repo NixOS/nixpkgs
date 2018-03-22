@@ -6,9 +6,12 @@
   findutils,
   go,
   jshon,
+  jq,
   lib,
   pkgs,
   pigz,
+  nixUnstable,
+  perl,
   runCommand,
   rsync,
   shadow,
@@ -26,7 +29,7 @@
 rec {
 
   examples = import ./examples.nix {
-    inherit pkgs buildImage pullImage shadowSetup;
+    inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
   pullImage = callPackage ./pull.nix {};
@@ -209,7 +212,7 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
       '';
     };
 
@@ -223,6 +226,19 @@ rec {
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
+    '';
+
+  nixRegistration = contents: runCommand "nix-registration" {
+    buildInputs = [ nixUnstable perl ];
+    # For obtaining the closure of `contents'.
+    exportReferencesGraph =
+      let contentsList = if builtins.isList contents then contents else [ contents ];
+      in map (x: [("closure-" + baseNameOf x) x]) contentsList;
+    }
+    ''
+      mkdir $out
+      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out/db.dump
+      perl ${pkgs.pathsFromGraph} closure-* > $out/storePaths
     '';
 
   # Create a "layer" (set of files).
@@ -261,7 +277,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
+      tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -343,7 +359,7 @@ rec {
 
         echo "Packing layer..."
         mkdir $out
-        tar -C layer --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+        tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
 
         # Compute the tar checksum and add it to the output json.
         echo "Computing checksum..."
@@ -408,7 +424,7 @@ rec {
                   contents runAsRoot diskSize extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
-        buildInputs = [ jshon pigz coreutils findutils ];
+        buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         imageTag = lib.toLower tag;
@@ -436,8 +452,8 @@ rec {
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
           # Do not import the base image configuration and manifest
+          chmod a+w image image/*.json
           rm -f image/*.json
-          rm -f image/manifest.json
 
           if [[ -z "$fromImageName" ]]; then
             fromImageName=$(jshon -k < image/repositories|head -n1)
@@ -460,8 +476,6 @@ rec {
         cp ${layer}/* temp/
         chmod ug+w temp/*
 
-        echo "$(dirname ${storeDir})" >> layerFiles
-        echo '${storeDir}' >> layerFiles
         for dep in $(cat $layerClosure); do
           find $dep >> layerFiles
         done
@@ -475,7 +489,7 @@ rec {
         comm <(sort -n baseFiles|uniq) \
              <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         # Append the new files to the layer.
-        tar -rpf temp/layer.tar --mtime="@$SOURCE_DATE_EPOCH" \
+        tar -rpf temp/layer.tar --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
           --owner=0 --group=0 --no-recursion --files-from newFiles
 
         echo "Adding meta..."
@@ -496,6 +510,24 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        # Create image json and image manifest
+        imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
+        currentID=$layerID
+        while [[ -n "$currentID" ]]; do
+          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
+
+          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+        done
+
+        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        echo "$manifestJson" > image/manifest.json
+
         # Store the json under the name image/repositories.
         jshon -n object \
           -n object -s "$layerID" -i "$imageTag" \
@@ -505,11 +537,44 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 -c . | pigz -nT > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
 
         echo "Finished."
       '';
 
     in
     result;
+
+  # Build an image and populate its nix database with the provided
+  # contents. The main purpose is to be able to use nix commands in
+  # the container.
+  # Be careful since this doesn't work well with multilayer.
+  buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }:
+    buildImage (args // {
+      extraCommands = ''
+        echo "Generating the nix database..."
+        echo "Warning: only the database of the deepest Nix layer is loaded."
+        echo "         If you want to use nix commands in the container, it would"
+        echo "         be better to only have one layer that contains a nix store."
+        # This requires Nix 1.12 or higher
+        export NIX_REMOTE=local?root=$PWD
+        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
+
+        # We fill the store in order to run the 'verify' command that
+        # generates hash and size of output paths.
+        # Note when Nix 1.12 is be the stable one, the database dump
+        # generated by the exportReferencesGraph function will
+        # contains sha and size. See
+        # https://github.com/NixOS/nix/commit/c2b0d8749f7e77afc1c4b3e8dd36b7ee9720af4a
+        storePaths=$(cat ${nixRegistration contents}/storePaths)
+        echo "Copying everything to /nix/store (will take a while)..."
+        cp -prd $storePaths nix/store/
+        ${nixUnstable}/bin/nix-store --verify --check-contents
+
+        mkdir -p nix/var/nix/gcroots/docker/
+        for i in ${lib.concatStringsSep " " contents}; do
+          ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
+        done;
+      '' + extraCommands;
+    });
 }
