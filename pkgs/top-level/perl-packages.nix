@@ -3818,8 +3818,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RO/ROKR/DateTimeX-Easy-0.089.tar.gz;
       sha256 = "17e6d202e7ac6049523048e97bb8f195e3c79208570da1504f4313584e487a79";
     };
-    buildInputs = [ TestMost ModuleBuild ];
-    propagatedBuildInputs = [ DateTime DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
+    buildInputs = [ TestMost ];
+    propagatedBuildInputs = [ DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
     doCheck = false;
     meta = {
       description = "Parse a date/time string using the best method available";
