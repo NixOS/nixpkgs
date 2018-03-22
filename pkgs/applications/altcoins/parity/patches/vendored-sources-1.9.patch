@@ -1,22 +1,22 @@
 diff --git a/.cargo/config b/.cargo/config
 new file mode 100644
 index 000000000..0efb69724
---- /dev/null
+--- a/.cargo/config
 +++ b/.cargo/config
-@@ -0,0 +1,100 @@
+@@ -0,0 +4,104 @@
 +
 +[source."https://github.com/alexcrichton/mio-named-pipes"]
 +git = "https://github.com/alexcrichton/mio-named-pipes"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/js-dist-paritytech/parity-beta-1-9-shell.git"]
-+git = "https://github.com/js-dist-paritytech/parity-beta-1-9-shell.git"
++[source."https://github.com/js-dist-paritytech/parity-stable-1-9-shell.git"]
++git = "https://github.com/js-dist-paritytech/parity-stable-1-9-shell.git"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/js-dist-paritytech/parity-beta-1-9-v1.git"]
-+git = "https://github.com/js-dist-paritytech/parity-beta-1-9-v1.git"
++[source."https://github.com/js-dist-paritytech/parity-stable-1-9-v1.git"]
++git = "https://github.com/js-dist-paritytech/parity-stable-1-9-v1.git"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
@@ -90,8 +90,8 @@ index 000000000..0efb69724
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/pepyakin/wasmi"]
-+git = "https://github.com/pepyakin/wasmi"
++[source."https://github.com/paritytech/wasmi"]
++git = "https://github.com/paritytech/wasmi"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
