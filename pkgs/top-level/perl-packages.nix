@@ -735,11 +735,11 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
       sha256 = "28685b271251927d327851e5951e38649524a4e50cb0d1d35d649e2b814f212d";
     };
-    buildInputs = [ MathBigInt MathBigRat ];
     meta = {
       description = "Transparent BigNumber support for Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ MathBigInt ];
   };
 
   BitVector = buildPerlPackage {
