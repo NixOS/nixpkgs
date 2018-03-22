@@ -5829,7 +5829,7 @@ let self = _self // overrides; _self = with self; {
 
   FileTemp = null;
 
-  FileType = buildPerlPackage {
+  FileType = buildPerlModule {
     name = "File-Type-0.22";
     src = fetchurl {
       url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
