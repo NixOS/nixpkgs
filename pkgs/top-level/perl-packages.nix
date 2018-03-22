@@ -6213,12 +6213,13 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/L/LY/LYOKATO/${name}.tar.gz";
       sha256 = "fc3a63dc54b962d74586070176adaf5be869f09b561bb30f5fd32ef531792666";
     };
-    propagatedBuildInputs = [ CGI ClassAccessor ClassDataAccessor ClassDataInheritable ClassInspector DateCalc DateTimeFormatStrptime EmailValid EmailValidLoose ListMoreUtils MailTools TieIxHash UNIVERSALrequire YAML ];
+    propagatedBuildInputs = [ ClassAccessor ClassDataAccessor DateCalc DateTimeFormatStrptime EmailValidLoose ListMoreUtils TieIxHash UNIVERSALrequire YAML ];
     meta = {
       description = "Validation with simple chains of constraints";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
+    buildInputs = [ CGI ];
   };
 
   FreezeThaw = buildPerlPackage {
