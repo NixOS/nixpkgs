@@ -398,16 +398,7 @@
   ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
-  ./services/monitoring/prometheus/blackbox-exporter.nix
-  ./services/monitoring/prometheus/collectd-exporter.nix
-  ./services/monitoring/prometheus/fritzbox-exporter.nix
-  ./services/monitoring/prometheus/json-exporter.nix
-  ./services/monitoring/prometheus/minio-exporter.nix
-  ./services/monitoring/prometheus/nginx-exporter.nix
-  ./services/monitoring/prometheus/node-exporter.nix
-  ./services/monitoring/prometheus/snmp-exporter.nix
-  ./services/monitoring/prometheus/unifi-exporter.nix
-  ./services/monitoring/prometheus/varnish-exporter.nix
+  ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
