@@ -14094,12 +14094,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestDataSplit = buildPerlModule rec {
-    name = "Test-Data-Split-0.2.0";
+    name = "Test-Data-Split-0.2.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "90811c2af56750bf08eeff39e1e30f2ff8f625e809ed838b5ccb56a256c4b595";
+      sha256 = "9ba0c27a9e23c5dd8ede7611a049180485acc512a63783e1d1843b6569db5ae7";
     };
-    buildInputs = [ ModuleBuild TestDifferences perl ];
+    buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ IOAll ListMoreUtils MooX MooXlate ];
     meta = {
       description = "Split data-driven tests into several test scripts";
