@@ -10460,14 +10460,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesDateTimeMoreCoercions = buildPerlPackage rec {
+  MooseXTypesDateTimeMoreCoercions = buildPerlModule rec {
     name = "MooseX-Types-DateTime-MoreCoercions-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "21bb3a597719888edb6ceaa132418d5cf92ecb92a50cce37b94259a55e0e3796";
     };
-    buildInputs = [ ModuleBuildTiny TestFatal TestSimple ];
-    propagatedBuildInputs = [ DateTime DateTimeXEasy Moose MooseXTypes MooseXTypesDateTime TimeDurationParse namespaceclean self."if" ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 ];
+    propagatedBuildInputs = [ DateTimeXEasy MooseXTypesDateTime TimeDurationParse ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types-DateTime-MoreCoercions;
       description = "Extensions to MooseX::Types::DateTime";
