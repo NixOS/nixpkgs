@@ -6343,7 +6343,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "987c74366cc4c37ee084050f985fa254359c89c12507f5b8bfc6607de538d5a8";
     };
     buildInputs = [ Testutf8 ];
-    propagatedBuildInputs = [ ArchiveExtract ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest Moose MooseXStrictConstructor MooseXTypesPathClass namespaceautoclean ];
+    propagatedBuildInputs = [ ArchiveExtract ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest MooseXStrictConstructor MooseXTypesPathClass ];
     doCheck = false;
     meta = {
       description = "A Pure Perl interface to Git repositories";
