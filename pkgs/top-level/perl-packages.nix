@@ -8595,13 +8595,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LWPUserAgentMockable = buildPerlPackage {
-    name = "LWP-UserAgent-Mockable-1.10";
+  LWPUserAgentMockable = buildPerlModule {
+    name = "LWP-UserAgent-Mockable-1.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MM/MMORGAN/LWP-UserAgent-Mockable-1.10.tgz;
-      sha256 = "1z89jszgifvjb8irzd8wrzim7l5m4hypdl9mj4dpkb4jm4189kmn";
+      url = mirror://cpan/authors/id/M/MJ/MJEMMESON/LWP-UserAgent-Mockable-1.18.tar.gz;
+      sha256 = "0923ahl22c0gdzrihj7dqnrawia9hmcl462asf4ry8d5wd84z1i5";
     };
-    propagatedBuildInputs = [ LWP HookLexWrap ];
+    propagatedBuildInputs = [ HookLexWrap LWP SafeIsa ];
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
@@ -8610,6 +8610,7 @@ let self = _self // overrides; _self = with self; {
     # https://rt.cpan.org/Public/Bug/Display.html?id=63966 is the bug upstream,
     # which doesn't look like it will get fixed anytime soon.
     doCheck = false;
+    buildInputs = [ ModuleBuildTiny TestRequiresInternet ];
   };
 
   LWPxParanoidAgent = buildPerlPackage rec {
