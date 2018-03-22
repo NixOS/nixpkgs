@@ -10489,10 +10489,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetPing = buildPerlPackage {
-    name = "Net-Ping-2.41";
+    name = "Net-Ping-2.66";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMPETERS/Net-Ping-2.41.tar.gz;
-      sha256 = "cbff21a8d323f235b70237c7ee56ffa5f22e87511e70608c027e2ec27fce47e0";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.66.tar.gz;
+      sha256 = "a477b29e543695343513e65f3aff885a353ecebb612741e79f0bad5622e4b9e4";
     };
     meta = {
       description = "Check a remote host for reachability";
