@@ -1925,10 +1925,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassC3Componentised = buildPerlPackage {
-    name = "Class-C3-Componentised-1.001000";
+    name = "Class-C3-Componentised-1.001002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Class-C3-Componentised-1.001000.tar.gz;
-      sha256 = "1nzav8arxll0rya7r2vp032s3acliihbb9mjlfa13rywhh77bzvl";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Class-C3-Componentised-1.001002.tar.gz;
+      sha256 = "14wn1g45z3b5apqq7dcai5drk01hfyqydsd2m6hsxzhyvi3b2l9h";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassC3 ClassInspector MROCompat ];
