@@ -8463,12 +8463,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailIMAPClient = buildPerlPackage {
-    name = "Mail-IMAPClient-3.35";
+    name = "Mail-IMAPClient-3.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLOBBES/Mail-IMAPClient-3.35.tar.gz;
-      sha256 = "0qzn8370cr91jnq1kawy6v16bcz49pch6inmw85rhzg87j1h6ica";
+      url = mirror://cpan/authors/id/P/PL/PLOBBES/Mail-IMAPClient-3.39.tar.gz;
+      sha256 = "18sf8fd093qxvflscysm6pv6mj9cmm19zrnfic297jjvgnsgshdm";
     };
-    buildInputs = [ParseRecDescent];
+    propagatedBuildInputs = [ ParseRecDescent ];
   };
 
   MailPOP3Client = buildPerlPackage rec {
