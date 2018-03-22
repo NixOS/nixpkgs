@@ -10947,7 +10947,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
       sha256 = "0wdcidnfnb6nm79fzfs39ivawj3x8m98a147fmcxgv1zvwia9c1l";
     };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
+    buildInputs = [ pkgs.pango ];
     propagatedBuildInputs = [ Cairo Glib ];
     meta = {
       homepage = http://gtk2-perl.sourceforge.net/;
