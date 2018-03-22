@@ -15678,8 +15678,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "184gdcwxqwnkrx5md968v1ny70pq6blzpkihccm3bpdxnpgd11wr";
     };
-    buildInputs = [ DevelStackTrace ];
-    propagatedBuildInputs = [ DevelStackTrace ModuleRuntime Moo ];
+    propagatedBuildInputs = [ DevelStackTrace Moo ];
     meta = {
       homepage = https://github.com/rjbs/Throwable;
       description = "A role for classes that can be thrown";
