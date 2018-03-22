@@ -1596,11 +1596,10 @@ let self = _self // overrides; _self = with self; {
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
     name = "Catalyst-Plugin-Session-Store-FastMmap-0.16";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-Store-FastMmap-0.16.tar.gz;
       sha256 = "0x3j6zv3wr41jlwr6yb2jpmcx019ibyn11y8653ffnwhpzbpzsxs";
     };
-    propagatedBuildInputs =
-      [ PathClass CatalystPluginSession CacheFastMmap MROCompat ];
+    propagatedBuildInputs = [ CacheFastMmap CatalystPluginSession ];
     meta = {
       platforms = stdenv.lib.platforms.linux;
     };
