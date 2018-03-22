@@ -5981,10 +5981,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ForksSuper = buildPerlPackage {
-    name = "Forks-Super-0.72";
+    name = "Forks-Super-0.93";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.72.tar.gz;
-      sha256 = "0zyqwyndb3gnbsh43b6xyl3wmlnyi18vz3yrbsvp3lccz4d0v7qp";
+      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.93.tar.gz;
+      sha256 = "1blkhi3kpkqv6dlnbxz5r9j9lbr58vag3aa2c9yqpkqk59hivbgg";
     };
     doCheck = false;
     meta = {
@@ -5992,6 +5992,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
     };
+    propagatedBuildInputs = [ URI ];
   };
 
   FormValidatorSimple = buildPerlPackage rec {
