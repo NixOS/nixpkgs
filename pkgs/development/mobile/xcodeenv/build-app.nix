@@ -121,6 +121,10 @@ stdenv.mkDerivation {
           echo "doc install \"$out/$appname.html\"" >> $out/nix-support/hydra-build-products
         ''}
       ''}
+      ${stdenv.lib.optionalString generateXCArchive ''
+        mkdir -p $out
+        mv "${name}.xcarchive" $out
+      ''}
       
       # Delete our temp keychain
       ${deleteKeychain}
