@@ -14226,14 +14226,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestFileShareDir = buildPerlModule {
-    name = "Test-File-ShareDir-0.3.3";
+  TestFileShareDir = buildPerlPackage {
+    name = "Test-File-ShareDir-1.001002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KE/KENTNL/Test-File-ShareDir-0.3.3.tar.gz;
-      sha256 = "877e14afb6f432bd888ef730c0afd776dd149b14bc520bc2ce842d114e5886a2";
+      url = mirror://cpan/authors/id/K/KE/KENTNL/Test-File-ShareDir-1.001002.tar.gz;
+      sha256 = "b33647cbb4b2f2fcfbde4f8bb4383d0ac95c2f89c4c5770eb691f1643a337aad";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ FileCopyRecursive FileShareDir PathTiny ];
+    propagatedBuildInputs = [ ClassTiny FileCopyRecursive FileShareDir ScopeGuard ];
     meta = {
       homepage = https://github.com/kentfredric/Test-File-ShareDir;
       description = "Create a Fake ShareDir for your modules for testing";
