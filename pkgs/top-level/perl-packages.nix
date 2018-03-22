@@ -15512,8 +15512,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "3fba4e8fcf74806259aa639be7d90e70346ad0e0e4b8b619593490e378241970";
     };
-    buildInputs = [ TestTester ];
-    propagatedBuildInputs = [ FileFindRule FileFindRulePerl PerlMinimumVersion ];
+    propagatedBuildInputs = [ PerlMinimumVersion ];
     meta = {
       homepage = https://github.com/rjbs/Test-MinimumVersion;
       description = "Does your code require newer perl than you think?";
