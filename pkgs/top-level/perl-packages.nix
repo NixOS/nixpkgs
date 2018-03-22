@@ -7385,10 +7385,10 @@ let self = _self // overrides; _self = with self; {
   IOstringy = pkgs.perlPackages.IOStringy;
 
   IOStringy = buildPerlPackage rec {
-    name = "IO-stringy-2.110";
+    name = "IO-stringy-2.111";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSKOLL/${name}.tar.gz";
-      sha256 = "1vh4n0k22hx20rwvf6h7lp25wb7spg0089shrf92d2lkncwg8g3y";
+      sha256 = "178rpx0ym5l2m9mdmpnr92ziscvchm541w94fd7ygi6311kgsrwc";
     };
   };
 
