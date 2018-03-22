@@ -13671,7 +13671,7 @@ let self = _self // overrides; _self = with self; {
    TemplateGD = buildPerlPackage rec {
     name = "Template-GD-2.66";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/A/AB/ABW/${name}.tar.gz";
+      url = mirror://cpan/authors/id/A/AB/ABW/Template-GD-2.66.tar.gz;
       sha256 = "98523c8192f2e8184042e5a2e172bd767ac289dd2e480f35f680dce32160905b";
     };
     propagatedBuildInputs = [ GD TemplateToolkit ];
