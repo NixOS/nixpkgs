@@ -15244,7 +15244,7 @@ let self = _self // overrides; _self = with self; {
   TextWrapI18N = buildPerlPackage {
     name = "Text-WrapI18N-0.06";
     src = fetchurl {
-      url = http://search.cpan.org/CPAN/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz;
+      url = mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz;
       sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
     };
     propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
