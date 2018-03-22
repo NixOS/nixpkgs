@@ -6711,7 +6711,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Form-6.03.tar.gz;
       sha256 = "0dpwr7yz6hjc3bcqgcbdzjjk9l58ycdjmbam9nfcmm85y2a1vh38";
     };
-    propagatedBuildInputs = [ HTMLParser HTTPMessage URI ];
+    propagatedBuildInputs = [ HTMLParser HTTPMessage ];
     meta = {
       description = "Class that represents an HTML form element";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
