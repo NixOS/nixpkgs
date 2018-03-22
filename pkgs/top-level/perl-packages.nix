@@ -15607,7 +15607,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
       sha256 = "418a212808f9d0b8bb330ac905096d2dd364976753d4c71534dab9836a63194d";
     };
-    buildInputs = [ ModuleBuild ];
     meta = {
       homepage = https://metacpan.org/release/Unicode-CaseFold;
       description = "Unicode case-folding for case-insensitive lookups";
