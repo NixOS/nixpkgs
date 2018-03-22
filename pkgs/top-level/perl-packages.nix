@@ -10539,12 +10539,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDNSResolverProgrammable = buildPerlPackage rec {
-    name = "Net-DNS-Resolver-Programmable-v0.003";
+    name = "Net-DNS-Resolver-Programmable-0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMEHNLE/net-dns-resolver-programmable/${name}.tar.gz";
-      sha256 = "8d402260941f259c83bf1b2564408e75288df028f604136c29da11a9a6a076ec";
+      url = mirror://cpan/authors/id/B/BI/BIGPRESH/Net-DNS-Resolver-Programmable-0.009.tar.gz;
+      sha256 = "8080a2ab776629585911af1179bdb7c4dc2bebfd4b5efd77b11d1dac62454bf8";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ NetDNS ];
     meta = {
       description = "Programmable DNS resolver class for offline emulation of DNS";
