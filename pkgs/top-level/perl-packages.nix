@@ -7161,8 +7161,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BO/BOOK/${name}.tar.gz";
       sha256 = "b05290534ec73625c21a0565fc35170890dab163843d95331c292c23f504c69d";
     };
-    buildInputs = [ HTMLParser ];
-    propagatedBuildInputs = [ HTTPDaemon HTTPDate HTTPMessage LWP ];
+    propagatedBuildInputs = [ LWP ];
     meta = {
       description = "A pure Perl HTTP proxy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
