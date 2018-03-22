@@ -6371,7 +6371,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "247a9f5a88bb6745281c00d0f7d5d94e8599a92396849fd9571356dda047fd35";
     };
     buildInputs = [ pkgs.which pkgs.gnupg1compat ];
-    propagatedBuildInputs = [ Moo MooXHandlesVia MooXlate ];
+    propagatedBuildInputs = [ MooXHandlesVia MooXlate ];
     doCheck = false;
     meta = {
       description = "Supply object methods for interacting with GnuPG";
