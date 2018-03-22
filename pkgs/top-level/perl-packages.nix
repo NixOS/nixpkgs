@@ -8877,12 +8877,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuild = buildPerlPackage rec {
-    name = "Module-Build-0.4222";
+    name = "Module-Build-0.4224";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
-      sha256 = "0q5i03lbx52g22bwvyb04ycky4niq379j1c3fhmlfdj7lzclajz7";
+      sha256 = "10n7ggpmicwq1n503pg7kiwslda0bz48azzjvc7vb9s4hbbibjm6";
     };
-    buildInputs = [ CPANMeta ExtUtilsCBuilder ];
     meta = {
       description = "Build and install Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
