@@ -14916,14 +14916,14 @@ let self = _self // overrides; _self = with self; {
     };
    };
 
-  TestRunPluginAlternateInterpreters = buildPerlPackage rec {
+  TestRunPluginAlternateInterpreters = buildPerlModule rec {
     name = "Test-Run-Plugin-AlternateInterpreters-0.0124";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
       sha256 = "eecb3830d350b5d7853322df4f3090af42ff17e9c31075f8d4f69856c968bff3";
     };
-    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
-    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ Moose ];
     meta = {
       homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Define different interpreters for different test scripts with Test::Run";
