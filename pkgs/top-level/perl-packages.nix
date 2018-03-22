@@ -16891,7 +16891,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "66a315016999c0d2043caae86e664dad10c6613708f33a2f56aae8030326c509";
     };
     buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ JSON LWP LWPProtocolhttps ];
+    propagatedBuildInputs = [ JSON LWPProtocolHttps ];
     meta = {
       homepage = https://github.com/mikegrb/WebService-Linode;
       description = "Perl Interface to the Linode.com API";
