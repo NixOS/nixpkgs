@@ -14059,7 +14059,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SUPER = buildPerlPackage rec {
+  SUPER = buildPerlModule rec {
     name = "SUPER-1.20141117";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/${name}.tar.gz";
