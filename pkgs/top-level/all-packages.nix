@@ -4802,6 +4802,10 @@ with pkgs;
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
+  slstatus = callPackage ../applications/misc/slstatus {
+    conf = config.slstatus.conf or null;
+  };
+
   smartmontools = callPackage ../tools/system/smartmontools {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
