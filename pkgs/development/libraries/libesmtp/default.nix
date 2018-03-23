@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://brianstafford.info/libesmtp/index.html;
     description = "A Library for Posting Electronic Mail";
-    license = licenses.gpl3;
+    license = licenses.lgpl21;
   };
 }
 
