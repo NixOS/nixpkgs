@@ -1,3 +1,7 @@
+# You can control shibboleth's behavior through various environmental variables described here:
+# https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPEnvironment
+# We only expose the basic ones here, like config and logging configuration.
+
 {pkgs, config, lib, ...}:
 
 with lib;
@@ -16,6 +20,12 @@ in {
         type = types.path;
         example = "${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml";
         description = "Path to shibboleth config file";
+      };
+
+      loggingConfigFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "Path of a logging config for shibboleth to use";
       };
 
       fastcgi.enable = mkOption {
@@ -43,6 +53,7 @@ in {
       description = "Provides SSO and federation for web applications";
       after       = lib.optionals cfg.fastcgi.enable [ "shibresponder.service" "shibauthorizer.service" ];
       wantedBy    = [ "multi-user.target" ];
+      environment = if cfg.loggingConfigFile != null then { SHIBSP_LOGGING = "${cfg.loggingConfigFile}"; } else {};
       serviceConfig = {
         ExecStart = "${pkgs.shibboleth-sp}/bin/shibd -F -d ${pkgs.shibboleth-sp} -c ${cfg.configFile}";
       };
