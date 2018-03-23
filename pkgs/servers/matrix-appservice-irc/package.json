@@ -1,0 +1,47 @@
+{
+  "name": "matrix-appservice-irc",
+  "version": "0.8.0",
+  "description": "An IRC Bridge for Matrix",
+  "main": "app.js",
+  "bin": "./bin/matrix-appservice-irc",
+  "engines": {
+    "node": ">=4.5"
+  },
+  "scripts": {
+    "test": "BLUEBIRD_DEBUG=1 jasmine --stop-on-failure=true",
+    "lint": "eslint --max-warnings 0 lib spec",
+    "check": "npm test && npm run lint",
+    "ci-test": "BLUEBIRD_DEBUG=1 istanbul cover -x \"**/spec/**\" --report text jasmine",
+    "ci": "npm run lint && npm run ci-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matrix-org/matrix-appservice-irc.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/matrix-org/matrix-appservice-irc/issues"
+  },
+  "dependencies": {
+    "bluebird": "^3.1.1",
+    "crc": "^3.2.1",
+    "extend": "^2.0.0",
+    "irc": "matrix-org/node-irc#b1614bc784200c65247784d7b9e9ab867140412d",
+    "jayschema": "^0.3.1",
+    "js-yaml": "^3.2.7",
+    "matrix-appservice-bridge": "1.4.0a",
+    "nedb": "^1.1.2",
+    "nopt": "^3.0.1",
+    "prom-client": "^6.3.0",
+    "request": "^2.54.0",
+    "sanitize-html": "^1.6.1",
+    "winston": "^0.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.5.2",
+    "proxyquire": "^1.4.0"
+  }
+}

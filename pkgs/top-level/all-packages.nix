@@ -3251,6 +3251,8 @@ with pkgs;
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
+  matrix-appservice-irc = callPackage ../servers/matrix-appservice-irc { };
+
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
