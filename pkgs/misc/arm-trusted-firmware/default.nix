@@ -38,7 +38,8 @@ let
     hardeningDisable = [ "all" ];
     dontStrip = true;
 
-    enableParallelBuilding = true;
+    # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
+    enableParallelBuilding = false;
 
     meta = with stdenv.lib; {
       homepage = https://github.com/ARM-software/arm-trusted-firmware;
