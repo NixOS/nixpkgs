@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xz xz.bin ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+  buildInputs = stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc" && !hostPlatform.isCygwin) libiconv;
 
   setupHook = ./gettext-setup-hook.sh;
   gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
