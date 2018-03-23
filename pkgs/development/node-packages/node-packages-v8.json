@@ -9,6 +9,8 @@
 , "node-gyp-build"
 , "node-pre-gyp"
 , "pnpm"
+, "react-native-cli"
+, "re-natal"
 , "semver"
 , "sloc"
 , "npm"
