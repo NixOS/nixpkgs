@@ -15046,11 +15046,10 @@ with pkgs;
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
-    docker_17_12
-    docker_18_02;
+    docker_18_03;
 
-  docker = docker_17_12;
-  docker-edge = docker_18_02;
+  docker = docker_18_03;
+  docker-edge = docker_18_03;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
