@@ -13592,11 +13592,24 @@ with pkgs;
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
 
-  linuxPackages_custom = { version, src, configfile }:
+  linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile stdenv;
-      allowImportFromDerivation = true;
+      inherit version src configfile stdenv allowImportFromDerivation;
+      inherit (stdenv) hostPlatform;
     }));
+
+  # This serves as a test for linuxPackages_custom
+  linuxPackages_custom_tinyconfig_kernel = let
+    base = pkgs.linuxPackages.kernel;
+    tinyLinuxPackages = pkgs.linuxPackages_custom {
+      inherit (base) version src;
+      allowImportFromDerivation = false;
+      configfile = pkgs.linuxConfig {
+        makeTarget = "tinyconfig";
+        src = base.src;
+      };
+    };
+    in tinyLinuxPackages.kernel;
 
   # Build a kernel with bcachefs module
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
@@ -13635,6 +13648,20 @@ with pkgs;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
+
+  # Derive one of the default .config files
+  linuxConfig = { src, makeTarget ? "defconfig", name ? "kernel.config" }:
+    stdenv.mkDerivation {
+      inherit name src;
+      buildPhase = ''
+        set -x
+        make ${makeTarget}
+      '';
+      installPhase = ''
+        cp .config $out
+      '';
+    };
+
   buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
