@@ -71,15 +71,26 @@ in python3Packages.buildPythonApplication rec {
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
     install -Dm644 misc/qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
+
+    # Install icons
     for i in 16 24 32 48 64 128 256 512; do
         install -Dm644 "icons/qutebrowser-''${i}x''${i}.png" \
             "$out/share/icons/hicolor/''${i}x''${i}/apps/qutebrowser.png"
     done
     install -Dm644 icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
+
+    # Install scripts
+    sed -i "s,/usr/bin/qutebrowser,$out/bin/qutebrowser,g" scripts/open_url_in_instance.sh
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/open_url_in_instance.sh
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
-    install -Dm755 -t "$out/share/qutebrowser/scripts/" \
-      scripts/{importer.py,dictcli.py,keytester.py,open_url_in_instance.sh,utils.py}
+
+    # Install and patch python scripts
+    buildPythonPath "$out $propagatedBuildInputs"
+    for i in importer dictcli keytester utils; do
+      install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/$i.py
+      patchPythonScript "$out/share/qutebrowser/scripts/$i.py"
+    done
   '';
 
   postFixup = lib.optionalString (! withWebEngineDefault) ''
