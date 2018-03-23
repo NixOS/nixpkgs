@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)
     (fetchpatch {
       url = "https://cgit.freedesktop.org/ModemManager/ModemManager/patch/?id=0f377f943eeb81472fd73189f2c3d8fc65b8c609";
-      sha256 = "00m7ly1fgspapzkbvjsp25w58wcdax8rrwgvq3axrz4lagwfwnp6";
+      sha256 = "0av0sqdvbhwjnhqqylkc7rmqcj6awqmz5693l9x93nlwp7zya95j";
     })
   ];
 
