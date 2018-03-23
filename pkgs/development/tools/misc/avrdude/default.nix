@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.nongnu.org/avrdude/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

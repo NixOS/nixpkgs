@@ -1,5 +1,5 @@
 { stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, gettext, pkgconfig
-, libmbim, libqmi, systemd }:
+, libmbim, libqmi, systemd, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "ModemManager-${version}";
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext pkgconfig ];
 
   buildInputs = [ udev libgudev polkit dbus-glib ppp libmbim libqmi systemd ];
+
+  patches = [
+    # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/ModemManager/ModemManager/patch/?id=0f377f943eeb81472fd73189f2c3d8fc65b8c609";
+      sha256 = "0av0sqdvbhwjnhqqylkc7rmqcj6awqmz5693l9x93nlwp7zya95j";
+    })
+  ];
 
   configureFlags = [
     "--with-polkit"

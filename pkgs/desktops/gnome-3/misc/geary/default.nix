@@ -5,17 +5,16 @@
 , gnome3, librsvg, gnome-doc-utils, webkitgtk }:
 
 let
-  majorVersion = "0.12";
+  pname = "geary";
+  version = "0.12.1";
 in
 stdenv.mkDerivation rec {
-  name = "geary-${majorVersion}.1";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geary/${majorVersion}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "12hbpd5j3rb122nrsqmgsg31x82xl0ksm0nmsl614v1dd7crqnh6";
   };
-
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];
   buildInputs = [
@@ -28,14 +27,20 @@ stdenv.mkDerivation rec {
     "-DISOCODES_DIRECTORY=${isocodes}/share/xml/iso-codes"
   ];
 
-  preConfigure = ''
-    substituteInPlace src/CMakeLists.txt --replace '`''${PKG_CONFIG_EXECUTABLE} --variable=girdir gobject-introspection-1.0`' '${webkitgtk.dev}/share/gir-1.0'
-  '';
+  # TODO: This is bad, upstream should fix their code.
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${webkitgtk.dev}/share/gir-1.0";
 
   preFixup = ''
     # Add geary to path for geary-attach
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Geary;
