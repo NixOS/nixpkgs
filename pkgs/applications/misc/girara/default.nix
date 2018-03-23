@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses, libiconv, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses, libiconv, libintl
 , withBuildColors ? true
 }:
 
@@ -19,10 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk gettext libintlOrEmpty ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = [ gtk gettext libintl libiconv ];
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -65,4 +65,3 @@ stdenv.mkDerivation rec {
     inherit (libsepol.meta) homepage platforms maintainers;
   };
 }
-

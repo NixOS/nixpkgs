@@ -3,7 +3,7 @@
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib, libshout
 , cairo, gdk_pixbuf, aalib, libcaca
-, libsoup, libpulseaudio, libintlOrEmpty
+, libsoup, libpulseaudio, libintl
 , darwin
 }:
 
@@ -38,9 +38,8 @@ stdenv.mkDerivation rec {
     gst-plugins-base orc bzip2
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
-    libsoup libshout
+    libsoup libshout libintl
   ]
-  ++ libintlOrEmpty
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
 
@@ -48,6 +47,4 @@ stdenv.mkDerivation rec {
     mkdir -p "$dev/lib/gstreamer-1.0"
     mv "$out/lib/gstreamer-1.0/"*.la "$dev/lib/gstreamer-1.0"
   '';
-
-  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }

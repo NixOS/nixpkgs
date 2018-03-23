@@ -6,7 +6,7 @@
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
-, libGLU_combined, libintlOrEmpty, libgme
+, libGLU_combined, libintl, libgme
 , openssl, x265, libxml2
 }:
 
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     fluidsynth libvdpau
     libwebp xvidcore gnutls libGLU_combined
     libgme openssl x265 libxml2
+    libintl
   ]
-    ++ libintlOrEmpty
     ++ optional faacSupport faac
     # for gtksink
     ++ optional gtkSupport gtk3
@@ -74,8 +74,6 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     ++ optional (!stdenv.isDarwin) mjpegtools;
-
-  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 
   enableParallelBuilding = true;
 }

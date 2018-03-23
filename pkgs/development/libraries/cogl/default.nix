@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
 , pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
 , gstreamerSupport ? true, gst_all_1 }:
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig libintl ];
 
   configureFlags = [
     "--enable-introspection"
@@ -27,7 +27,6 @@ in stdenv.mkDerivation rec {
       glib gdk_pixbuf gobjectIntrospection wayland
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
-    ++ libintlOrEmpty
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
                                                gst_all_1.gst-plugins-base ];
 
@@ -36,8 +35,6 @@ in stdenv.mkDerivation rec {
   COGL_PANGO_DEP_CFLAGS
     = stdenv.lib.optionalString (stdenv.isDarwin && pangoSupport)
       "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   #doCheck = true; # all tests fail (no idea why)
 

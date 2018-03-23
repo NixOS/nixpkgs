@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk-doc
-, libgcrypt, gobjectIntrospection, vala_0_38, gnome3 }:
+, libgcrypt, gobjectIntrospection, vala_0_38, gnome3, libintl }:
 let
   pname = "libsecret";
   version = "0.18.5";
@@ -14,10 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
+  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl libintl ];
   buildInputs = [ libgcrypt gobjectIntrospection vala_0_38 ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 

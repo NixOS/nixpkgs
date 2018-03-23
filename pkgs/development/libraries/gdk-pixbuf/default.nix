@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, shared-mime-info, libintlOrEmpty, gobjectIntrospection, doCheck ? false, makeWrapper }:
+, jasper, shared-mime-info, libintl, gobjectIntrospection, doCheck ? false, makeWrapper }:
 
 let
   pname = "gdk-pixbuf";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 ] ++ stdenv.lib.optional (!stdenv.isDarwin) shared-mime-info ++ libintlOrEmpty;
+  buildInputs = [ libX11 libintl ] ++ stdenv.lib.optional (!stdenv.isDarwin) shared-mime-info;
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
@@ -78,4 +78,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

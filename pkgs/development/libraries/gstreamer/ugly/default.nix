@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python
 , gst-plugins-base, orc
 , a52dec, libcdio, libdvdread
-, lame, libmad, libmpeg2, x264, libintlOrEmpty, mpg123
+, lame, libmad, libmpeg2, x264, libintl, mpg123
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     gst-plugins-base orc
     a52dec libcdio libdvdread
     lame libmad libmpeg2 x264 mpg123
-  ] ++ libintlOrEmpty;
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+    libintl
+  ];
 }

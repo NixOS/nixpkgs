@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
 
   setupHook = ./gettext-setup-hook.sh;
+  gettextNeedsLdflags = hostPlatform.libc != "glibc";
 
   enableParallelBuilding = true;
 

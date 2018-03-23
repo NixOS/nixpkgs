@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib, libintlOrEmpty, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib, gobjectIntrospection, gnome3 }:
 
 let
   pname = "atk";
@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  buildInputs = libintlOrEmpty;
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
 

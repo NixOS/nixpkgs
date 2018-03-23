@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext
-, gobjectIntrospection, dbus, libintlOrEmpty
+, gobjectIntrospection, dbus
 , fixDarwinDylibNames
 }:
 
@@ -14,10 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
-  buildInputs = libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   patches = [
     # https://gitlab.gnome.org/GNOME/json-glib/issues/27
