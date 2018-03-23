@@ -24,16 +24,17 @@ runCommand "dbus-1"
           rewritePrefix="file://${dbus}/share/xml/dbus/"/>
       </catalog>
     '';
+    nativeBuildInputs = [ libxslt.bin ];
   }
   ''
     mkdir -p $out
 
-    ${libxslt.bin}/bin/xsltproc --nonet \
+    xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       --stringparam suidHelper "$suidHelper" \
       ${./make-system-conf.xsl} ${dbus}/share/dbus-1/system.conf \
       > $out/system.conf
-    ${libxslt.bin}/bin/xsltproc --nonet \
+    xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf

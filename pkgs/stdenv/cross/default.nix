@@ -10,9 +10,15 @@ let
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
-in bootStages ++ [
+in lib.init bootStages ++ [
 
-  # Build Packages
+  # Regular native packages
+  (somePrevStage: lib.last bootStages somePrevStage // {
+    # It's OK to change the built-time dependencies
+    allowCustomOverrides = true;
+  })
+
+  # Build tool Packages
   (vanillaPackages: {
     inherit config overlays;
     selfBuild = false;

@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
  stdenv.mkDerivation {
-  name = "cfitsio-3.43";
+  name = "cfitsio-3.430";
 
   src = fetchurl {
     url = "ftp://heasarc.gsfc.nasa.gov/software/fitsio/c/cfitsio3430.tar.gz";
-    sha256 = "1rw481bv5srfmldf1h8bqmyljjh0siqh87xh6rip67ms59ssxpn8";
+    sha256 = "07fghxh5fl8nqk3q0dh8rvc83npnm0hisxzcj16a6r7gj5pmp40l";
   };
 
   # Shared-only build

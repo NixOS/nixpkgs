@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libdvdcss-${version}";
-  version = "1.4.0";
+  version = "1.4.1";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin IOKit;
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdcss/${version}/${name}.tar.bz2";
-    sha256 = "0nl45ifc4xcb196snv9d6hinfw614cqpzcqp92dg43c0hickg290";
+    sha256 = "1b7awvyahivglp7qmgx2g5005kc5npv257gw7wxdprjsnx93f1zb";
   };
 
   meta = with stdenv.lib; {

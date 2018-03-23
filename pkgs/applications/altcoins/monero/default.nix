@@ -1,5 +1,6 @@
 { stdenv, fetchpatch, fetchFromGitHub, cmake
 , boost, miniupnpc, openssl, pkgconfig, unbound
+, IOKit
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ boost miniupnpc openssl unbound ];
+  buildInputs = [ boost miniupnpc openssl unbound ]
+    ++ stdenv.lib.optional stdenv.isDarwin IOKit;
 
   patches = [
     ./build-wallet-rpc.patch # fixed in next release

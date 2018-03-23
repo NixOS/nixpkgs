@@ -36,7 +36,6 @@ mapAliases (rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
-  bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
@@ -77,6 +76,7 @@ mapAliases (rec {
   go-pup = pup; # added 2017-12-19
   googleAuthenticator = google-authenticator; # added 2016-10-16
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
+  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25

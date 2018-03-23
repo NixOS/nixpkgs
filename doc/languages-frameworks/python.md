@@ -871,8 +871,10 @@ Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
 ```
 ValueError: ZIP does not support timestamps before 1980
 ```
-This is because files are included that depend on items in the Nix store which have a timestamp of, that is, it corresponds to January the 1st, 1970 at 00:00:00. And as the error informs you, ZIP does not support that.
-The command `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`, and `nix-shell` sets this to 1. By setting it to a value corresponding to 1980 or later, or by unsetting it, it is possible to build wheels.
+
+This is because files from the Nix store (which have a timestamp of the UNIX epoch of January 1, 1970) are included in the .ZIP, but .ZIP archives follow the DOS convention of counting timestamps from 1980.
+
+The command `bdist_wheel` reads the `SOURCE_DATE_EPOCH` environment variable, which `nix-shell` sets to 1. Unsetting this variable or giving it a value corresponding to 1980 or later enables building wheels.
 
 Use 1980 as timestamp:
 ```shell
@@ -882,7 +884,7 @@ or the current time:
 ```shell
 nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
 ```
-or unset:
+or unset `SOURCE_DATE_EPOCH`:
 ```shell
 nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
 ```

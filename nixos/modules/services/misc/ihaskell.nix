@@ -55,7 +55,7 @@ in
       serviceConfig = {
         User = config.users.extraUsers.ihaskell.name;
         Group = config.users.extraGroups.ihaskell.name;
-        ExecStart = "${pkgs.stdenv.shell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
+        ExecStart = "${pkgs.runtimeShell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
       };
     };
   };

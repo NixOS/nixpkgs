@@ -1,16 +1,17 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, enableSeccomp ? false, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null, buildPackages
+}:
 
 assert enableSeccomp -> libseccomp != null;
 
-let version = "9.12.0"; in
+let version = "9.12.1"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "10iwkghl5g50b7wc17bsb9wa0dh2gd57bjlk6ynixhywz6dhx1r9";
+    sha256 = "043mjcw405qa0ghm5dkhfsq35gsy279724fz3mjqpr1mbi14dr0n";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional enableSeccomp libseccomp;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -39,6 +42,11 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
+    "--with-randomdev=/dev/random"
+    "--with-ecdsa"
+    "--with-gost"
+    "--without-eddsa"
+    "--with-aes"
   ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''

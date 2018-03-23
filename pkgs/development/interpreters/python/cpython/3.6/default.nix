@@ -69,6 +69,8 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+  ] ++ optionals (x11Support && stdenv.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
   ];
 
   postPatch = ''
@@ -120,6 +122,9 @@ in stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''
+     + optionalString stdenv.hostPlatform.isMusl ''
+      export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
      ''}
   '';
 

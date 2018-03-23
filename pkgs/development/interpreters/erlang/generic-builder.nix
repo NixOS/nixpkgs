@@ -65,9 +65,9 @@ in stdenv.mkDerivation ({
   '';
 
   postPatch = ''
-    ${postPatch}
-
     patchShebangs make
+
+    ${postPatch}
   '';
 
   preConfigure = ''
@@ -88,9 +88,9 @@ in stdenv.mkDerivation ({
   # (PDFs are generated only when fop is available).
 
   postInstall = ''
-    ${postInstall}
-
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
+
+    ${postInstall}
   '';
 
   # Some erlang bin/ scripts run sed and awk

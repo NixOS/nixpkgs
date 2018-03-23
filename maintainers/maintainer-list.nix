@@ -63,6 +63,10 @@
     github = "DmitryTsygankov";
     name = "Dmitry Tsygankov";
   };
+  Esteth = {
+    email = "adam.copp@gmail.com";
+    name = "Adam Copp";
+  };
   FireyFly = {
     email = "nix@firefly.nu";
     github = "FireyFly";
@@ -87,6 +91,11 @@
     github = "MP2E";
     name = "Cray Elliott";
   };
+  Mogria = {
+    email = "m0gr14@gmail.com";
+    github = "mogria";
+    name = "Mogria";
+  };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
     github = "MostAwesomeDude";
@@ -110,6 +119,11 @@
     email = "mail@profpatsch.de";
     github = "Profpatsch";
     name = "Profpatsch";
+  };
+  roosemberth = {
+    email = "roosembert.palacios+nixpkgs@gmail.com";
+    github = "roosemberth";
+    name = "Roosembert (Roosemberth) Palacios";
   };
   SShrike = {
     email = "severen@shrike.me";
@@ -175,6 +189,11 @@
     email = "abigailbuccaneer@gmail.com";
     github = "abigailbuccaneer";
     name = "Abigail Bunyan";
+  };
+  aborsu = {
+    email = "a.borsu@gmail.com";
+    github = "aborsu";
+    name = "Augustin Borsu";
   };
   aboseley = {
     email = "adam.boseley@gmail.com";
@@ -606,6 +625,11 @@
     email = "brad@bradediger.com";
     github = "bradediger";
     name = "Brad Ediger";
+  };
+  brainrape = {
+    email = "martonboros@gmail.com";
+    github = "brainrape";
+    name = "Marton Boros";
   };
   bramd = {
     email = "bram@bramd.nl";
@@ -1246,6 +1270,11 @@
     github = "fare";
     name = "Francois-Rene Rideau";
   };
+  fdns = {
+    email = "fdns02@gmail.com";
+    github = "fdns";
+    name = "Felipe Espinoza";
+  };
   fgaz = {
     email = "francygazz@gmail.com";
     github = "fgaz";
@@ -1522,6 +1551,11 @@
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
     name = "Christoph Hrdinka";
+  };
+  hschaeidt = {
+    email = "he.schaeidt@gmail.com";
+    github = "hschaeidt";
+    name = "Hendrik Schaeidt";
   };
   htr = {
     email = "hugo@linux.com";
@@ -2022,6 +2056,11 @@
     github = "lo1tuma";
     name = "Mathias Schreck";
   };
+  lopsided98 = {
+    email = "benwolsieffer@gmail.com";
+    github = "lopsided98";
+    name = "Ben Wolsieffer";
+  };
   loskutov = {
     email = "ignat.loskutov@gmail.com";
     github = "loskutov";
@@ -2148,6 +2187,11 @@
     email = "markus.kowalewski@gmail.com";
     github = "markuskowa";
     name = "Markus Kowalewski";
+  };
+  marsam = {
+    email = "marsam@users.noreply.github.com";
+    github = "marsam";
+    name = "Mario Rodas";
   };
   martijnvermaat = {
     email = "martijn@vermaat.name";
@@ -2905,6 +2949,11 @@
     github = "rbasso";
     name = "Rafael Basso";
   };
+  rdnetto = {
+    email = "rdnetto@gmail.com";
+    github = "rdnetto";
+    name = "Reuben D'Netto";
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";
@@ -3432,6 +3481,11 @@
     github = "tavyc";
     name = "Octavian Cerna";
   };
+  tazjin = {
+    email = "mail@tazj.in";
+    github = "tazjin";
+    name = "Vincent Ambo";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
@@ -3620,6 +3674,11 @@
     email = "me@utdemir.com";
     github = "utdemir";
     name = "Utku Demir";
+  };
+  uvnikita = {
+    email = "uv.nikita@gmail.com";
+    github = "uvNikita";
+    name = "Nikita Uvarov";
   };
   uwap = {
     email = "me@uwap.name";

@@ -155,4 +155,4 @@ let result = stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
   };
 
-}; in result
+}; in stdenv.lib.warn "Oracle JDK/JRE 9 is not updated anymore. Use 10." result

@@ -14,7 +14,7 @@ let
       default_xserver ${dmcfg.xserverBin}
       xserver_arguments ${toString dmcfg.xserverArgs}
       sessiondir ${dmcfg.session.desktops}
-      login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
+      login_cmd exec ${pkgs.runtimeShell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       logfile /dev/stderr

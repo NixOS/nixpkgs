@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala_0_38, gettext
-, gnome3, libnotify, intltool, itstool, glib, gtk3, libxml2
+{ stdenv, fetchurl, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
+, gnome3, libnotify, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
 , libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
 , appstream-glib, desktop-file-utils, duplicity
@@ -15,20 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-paths.patch
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit coreutils;
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace libdeja/tools/duplicity/DuplicityInstance.vala --replace \
-      "/bin/rm" \
-      "${coreutils}/bin/rm"
-  '';
-
-  # couldn't find gio/gdesktopappinfo.h
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   nativeBuildInputs = [
-    meson ninja pkgconfig vala_0_38 gettext intltool itstool
+    meson ninja pkgconfig vala_0_40 gettext itstool
     appstream-glib desktop-file-utils libxml2 wrapGAppsHook
   ];
 
@@ -40,6 +34,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ duplicity ];
 
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
@@ -47,11 +43,6 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Unwrap accidentally wrapped library
     mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
-
-    # Patched meson does not add internal libraries to rpath
-    for elf in "$out/bin/.deja-dup-wrapped" "$out/libexec/deja-dup/.deja-dup-monitor-wrapped" "$out/libexec/deja-dup/tools/libduplicity.so"; do
-      patchelf --set-rpath "$(patchelf --print-rpath "$elf"):$out/lib/deja-dup" "$elf"
-    done
   '';
 
   meta = with stdenv.lib; {

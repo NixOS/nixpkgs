@@ -1,4 +1,4 @@
-{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "25" "26" ], tiVersion ? "6.3.1.GA", release ? false
+{ titaniumenv, fetchgit, target, androidPlatformVersions ? [ "25" "26" ], tiVersion ? "7.1.0.GA", release ? false
 , rename ? false, stdenv ? null, newBundleId ? null, iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? null, iosCertificatePassword ? null, iosVersion ? "11.2"
 , enableWirelessDistribution ? false, installURL ? null
 }:
@@ -7,9 +7,9 @@ assert rename -> (stdenv != null && newBundleId != null && iosMobileProvisioning
 
 let
   src = fetchgit {
-    url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "ec9edebf35030f61368000a8a9071dd7a0773884";
-    sha256 = "3e020004b73c9c2386f2672fdf9203083295f1524f5e504a07842e062de181c8";
+    url = https://github.com/appcelerator/kitchensink-v2.git;
+    rev = "94364df2ef60a80bd354a4273e3cb5f4c5185537";
+    sha256 = "0q4gzidpsq401frkngy4yk5kqvm8dz00ls74bw3fnpvg4714d6gf";
   };
 
   # Rename the bundle id to something else
@@ -18,7 +18,6 @@ let
     inherit src;
     buildPhase = ''
       sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" tiapp.xml
-      sed -i -e "s|com.appcelerator.kitchensink|${newBundleId}|" manifest
     '';
     installPhase = ''
       mkdir -p $out

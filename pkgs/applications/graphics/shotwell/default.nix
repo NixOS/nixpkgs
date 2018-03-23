@@ -1,23 +1,23 @@
 { fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
 , webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
 , gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
-, itstool, libgdata }:
+, gobjectIntrospection, itstool, libgdata }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
 let
   pname = "shotwell";
-  version = "0.27.4";
+  version = "0.28.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0g2vphhpxrljpy9sryfsgaayix807i1i9plj9bay72dk0zphqab2";
+    sha256 = "1d797nmlz9gs6ri0h65b76s40ss6ma6h6405xqx03lhg5xni3kmg";
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig itstool gettext desktop-file-utils wrapGAppsHook
+    meson ninja vala pkgconfig itstool gettext desktop-file-utils wrapGAppsHook gobjectIntrospection
   ];
 
   buildInputs = [

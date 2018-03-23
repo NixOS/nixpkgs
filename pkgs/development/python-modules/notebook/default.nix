@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -23,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd431fad9bdd25aa9ff8265da096ef770475e21bf1d327982611a7de5cd904ca";
+    sha256 = "01l6yp78sp27vns4cxh8ybr7x0pixxn97cp0i3w6s0lv1v8l6qbx";
   };
 
   LC_ALL = "en_US.utf8";
 
-  buildInputs = [ nose glibcLocales ]
+  checkInputs = [ nose glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
@@ -43,12 +44,16 @@ buildPythonPackage rec {
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
-    cat setup.cfg
   '';
+
   checkPhase = ''
     runHook preCheck
     mkdir tmp
-    HOME=tmp nosetests -v
+    HOME=tmp nosetests -v ${if (stdenv.isDarwin) then ''
+      --exclude test_delete \
+      --exclude test_checkpoints_follow_file
+    ''
+    else ""}
   '';
 
   meta = {

@@ -1,0 +1,37 @@
+From: Yegor Timoshenko <yegortimoshenko@gmail.com>
+Date: Thu, 14 Dec 2017 21:13:02 +0000
+Subject: [PATCH] Decrement allocation counter on item unref (#12700)
+
+diff --git a/garcon/garcon-menu-item-pool.c b/garcon/garcon-menu-item-pool.c
+index 2017180..355e520 100644
+--- a/garcon/garcon-menu-item-pool.c
++++ b/garcon/garcon-menu-item-pool.c
+@@ -191,7 +191,12 @@ garcon_menu_item_pool_filter_exclude (const gchar    *desktop_id,
+   g_return_val_if_fail (GARCON_IS_MENU_ITEM (item), FALSE);
+   g_return_val_if_fail (node != NULL, FALSE);
+
+-  return garcon_menu_node_tree_rule_matches (node, item);
++  gboolean matches = garcon_menu_node_tree_rule_matches (node, item);
++
++  if (matches)
++    garcon_menu_item_increment_allocated (item);
++
++  return matches;
+ }
+
+
+diff --git a/garcon/garcon-menu-item.c b/garcon/garcon-menu-item.c
+index ca8cb63..b44acfe 100644
+--- a/garcon/garcon-menu-item.c
++++ b/garcon/garcon-menu-item.c
+@@ -1908,6 +1908,8 @@ garcon_menu_item_unref (GarconMenuItem *item)
+ {
+   g_return_if_fail (GARCON_IS_MENU_ITEM (item));
+
++  garcon_menu_item_decrement_allocated (item);
++
+   /* Decrement the reference counter */
+   g_object_unref (G_OBJECT (item));
+ }
+--
+2.15.1

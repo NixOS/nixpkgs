@@ -13,7 +13,7 @@ let
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
     ''
-      #! ${pkgs.stdenv.shell} -e
+      #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
       exec ${askPassword}
     '';

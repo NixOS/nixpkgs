@@ -33,7 +33,7 @@ let
     in
       pkgs.writeScript "container-init"
       ''
-        #! ${pkgs.stdenv.shell} -e
+        #! ${pkgs.runtimeShell} -e
 
         # Initialise the container side of the veth pair.
         if [ "$PRIVATE_NETWORK" = 1 ]; then
@@ -223,7 +223,7 @@ let
   serviceDirectives = cfg: {
     ExecReload = pkgs.writeScript "reload-container"
       ''
-        #! ${pkgs.stdenv.shell} -e
+        #! ${pkgs.runtimeShell} -e
         ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
           bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
       '';

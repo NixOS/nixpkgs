@@ -1,42 +1,51 @@
-{ stdenv, gettext, fetchurl, evince, gjs
+{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
 , pkgconfig, gtk3, glib, tracker, tracker-miners
-, itstool, libxslt, webkitgtk
+, itstool, libxslt, webkitgtk, libgdata, gnome-online-accounts
+, gnome-desktop, libzapojit, libgepub
 , gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
 , gobjectIntrospection, json-glib, inkscape, poppler_utils
 , gmp, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0q7bp0mvmhqmsvm5sjavm46y7sz43na62d1hrl62vg19hdqr9ir4";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-documents"; attrPath = "gnome3.gnome-documents"; };
+    sha256 = "174q59gk9j0083bvv8sd2k66xrd4lydy2rcqbwsbzsy22fbhwcha";
   };
 
   doCheck = true;
 
-  configureFlags = [ "--enable-getting-started" ];
+  mesonFlags = [ "-Dgetting-started=true" ];
 
-  nativeBuildInputs = [ pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl wrapGAppsHook ];
-  buildInputs = [ gtk3 glib inkscape poppler_utils
-                  gnome3.gsettings-desktop-schemas gmp
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg evince
-                  libsoup webkitgtk gjs gobjectIntrospection gnome3.rest
-                  tracker tracker-miners gnome3.libgdata gnome3.gnome-online-accounts
-                  gnome3.gnome-desktop gnome3.libzapojit json-glib gnome3.libgepub ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl wrapGAppsHook
+    inkscape poppler_utils # building getting started
+  ];
+  buildInputs = [
+    gtk3 glib gnome3.gsettings-desktop-schemas
+    gdk_pixbuf gnome3.defaultIconTheme evince
+    libsoup webkitgtk gjs gobjectIntrospection
+    tracker tracker-miners libgdata
+    gnome-desktop libzapojit libgepub
+  ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   preFixup = ''
     substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
-
-    gappsWrapperArgs+=(--run 'if [ -z "$XDG_CACHE_DIR" ]; then XDG_CACHE_DIR=$HOME/.cache; fi; if [ -w "$XDG_CACHE_DIR/.." ]; then mkdir -p "$XDG_CACHE_DIR/gnome-documents"; fi')
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-documents";
+      attrPath = "gnome3.gnome-documents";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Documents;

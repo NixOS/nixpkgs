@@ -29,14 +29,12 @@ in stdenv.mkDerivation rec {
     alsaLib ffmpeg libjack2 libudev libva xorg.libX11 sbc SDL2
   ];
 
-  patches = [
-    ./fix-paths.patch
-  ];
-
   mesonFlags = [
     "-Denable_docs=true"
     "-Denable_gstreamer=true"
   ];
+
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 

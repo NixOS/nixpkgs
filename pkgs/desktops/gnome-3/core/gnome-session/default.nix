@@ -1,27 +1,33 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, glib, dbus-glib, json-glib, upower
-, libxslt, intltool, makeWrapper, systemd, xorg, epoxy }:
+{ fetchurl, stdenv, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
+, gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy }:
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
-  version = "3.26.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d9414b368db982d3837ca106e64019f18e6cdd5b13965bea6c7d02ddf5103708";
+    sha256 = "1ldcalj9i7qharvw8k8gf7pkcvwb1qwiag2ckffx9x8ic2d3v00b";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-session"; attrPath = "gnome3.gnome-session"; };
-  };
+  mesonFlags = [ "-Dsystemd=true" ];
 
-  configureFlags = "--enable-systemd";
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext makeWrapper
+    xmlto libxslt docbook_xsl docbook_xml_dtd_412
+    dbus # for DTD
+  ];
 
-  buildInputs = with gnome3;
-    [ pkgconfig glib gnome-desktop gtk dbus-glib json-glib libxslt
-      gnome3.gnome-settings-daemon xorg.xtrans gnome3.defaultIconTheme
-      gsettings-desktop-schemas upower intltool gconf makeWrapper systemd
-      epoxy
-    ];
+  buildInputs = [
+    glib gtk libICE gnome-desktop json-glib xorg.xtrans gnome3.defaultIconTheme
+    gnome3.gnome-settings-daemon gsettings-desktop-schemas systemd epoxy
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
 
   # FIXME: glib binaries shouldn't be in .dev!
   preFixup = ''
@@ -34,13 +40,22 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${glib.dev}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share" \
+      --suffix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share"\
       --suffix XDG_CONFIG_DIRS : "${gnome3.gnome-settings-daemon}/etc/xdg"
   '';
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-session";
+      attrPath = "gnome3.gnome-session";
+    };
   };
 
+  meta = with stdenv.lib; {
+    description = "GNOME session manager";
+    homepage = https://wiki.gnome.org/Projects/SessionManagement;
+    license = licenses.gpl2Plus;
+    maintainers = gnome3.maintainers;
+    platforms = platforms.linux;
+  };
 }

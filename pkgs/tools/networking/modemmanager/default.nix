@@ -1,18 +1,26 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, intltool, pkgconfig
-, libmbim, libqmi, systemd }:
+{ stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, gettext, pkgconfig
+, libmbim, libqmi, systemd, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "ModemManager-${version}";
-  version = "1.6.8";
+  version = "1.7.990";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/ModemManager/${name}.tar.xz";
-    sha256 = "0xj3ng7qcqxkib5qkprwghcivaz0mn449fw08l67h1zbpz23bh7z";
+    sha256 = "1v4hixmghlrw7w4ajq2x4k62js0594h223d0yma365zwqr7hjrfl";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ gettext pkgconfig ];
 
   buildInputs = [ udev libgudev polkit dbus-glib ppp libmbim libqmi systemd ];
+
+  patches = [
+    # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/ModemManager/ModemManager/patch/?id=0f377f943eeb81472fd73189f2c3d8fc65b8c609";
+      sha256 = "0av0sqdvbhwjnhqqylkc7rmqcj6awqmz5693l9x93nlwp7zya95j";
+    })
+  ];
 
   configureFlags = [
     "--with-polkit"
@@ -44,9 +52,11 @@ stdenv.mkDerivation rec {
       $out/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "WWAN modem manager, part of NetworkManager";
+    homepage = https://www.freedesktop.org/wiki/Software/ModemManager/;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

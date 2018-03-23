@@ -322,6 +322,43 @@ following incompatible changes:</para>
       <link xlink:href="https://github.com/rvl/pump.io-nixos">external module</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The Prosody XMPP server has received a major update. The following modules were renamed:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <option>services.prosody.modules.httpserver</option> is now <option>services.prosody.modules.http_files</option>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <option>services.prosody.modules.console</option> is now <option>services.prosody.modules.admin_telnet</option>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      Many new modules are now core modules, most notably <option>services.prosody.modules.carbons</option>
+      and <option>services.prosody.modules.mam</option>.
+    </para>
+
+    <para>
+      The better-performing <literal>libevent</literal> backend is now enabled by default.
+    </para>
+
+    <para>
+      <literal>withCommunityModules</literal> now passes through the modules to <option>services.prosody.extraModules</option>.
+      Use <literal>withOnlyInstalledCommunityModules</literal> for modules that should not be enabled directly, e.g <literal>lib_ldap</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      All prometheus exporter modules are now defined as submodules.
+      The exporters are configured using <literal>services.prometheus.exporters</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

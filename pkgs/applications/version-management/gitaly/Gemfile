@@ -1,11 +1,18 @@
 source 'https://rubygems.org'
 
 gem 'github-linguist', '~> 4.7.0', require: 'linguist'
-gem 'gitaly-proto', '~> 0.59.0', require: 'gitaly'
-gem 'activesupport'
+gem 'gitlab-markup', '~> 1.6.2'
+gem 'gitaly-proto', '~> 0.83.0', require: 'gitaly'
+gem 'activesupport', '~> 5.0.2'
+gem 'rdoc', '~> 4.2'
 gem 'gollum-lib', '~> 4.2', require: false
 gem 'gollum-rugged_adapter', '~> 0.4.4', require: false
+gem 'grpc', '~> 1.8.0'
+
+# Locked until https://github.com/google/protobuf/issues/4210 is closed
+gem 'google-protobuf', '= 3.5.1'
 
 group :development, :test do
   gem 'gitlab-styles', '~> 2.0.0', require: false
+  gem 'rspec', require: false
 end

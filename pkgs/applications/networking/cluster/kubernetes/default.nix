@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dmq2g138h7fsswmq4l47b44gsl9anmm3ywqyi7y48f1rkvc11mk";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -34,6 +35,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/kubernetes/kubernetes/commit/a990b04dc8a7d8408a71eee40db93621cf2b6d1b.patch";
       sha256 = "0piqilc5c9frikl74hamkffawwg1mvdwfxqvjnmk6wdma43dbb7w";
+    })
+    (fetchpatch {
+      # https://github.com/kubernetes/kubernetes/pull/60978
+      # Fixes critical kube-proxy failure on iptables-restore >= 1.6.2 and
+      # non-critical failures on prior versions.
+      url = "https://github.com/kubernetes/kubernetes/commit/34ce573e9992ecdbc06dff1b4e3d0e9baa8353dd.patch";
+      sha256 = "1sd9qgc28zr6fkk0441f89bw8kq2kadys0qs7bgivy9cmcpw5x5p";
     })
   ];
 
@@ -69,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
   '';
 
   meta = {
