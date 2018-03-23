@@ -28,7 +28,7 @@ let
   # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
   notNull = a: ! isNull a;
   mkZncConf = confOpts: ''
-    Version = 1.6.3
+    Version = ${pkgs.znc.version}
     ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
 
     <Listener l>
