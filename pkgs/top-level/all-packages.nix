@@ -3803,8 +3803,6 @@ with pkgs;
 
   networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
 
-  networkmanager-pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
-
   networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
 
   networkmanager-vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
