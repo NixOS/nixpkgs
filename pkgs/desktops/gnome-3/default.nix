@@ -203,10 +203,6 @@ let
     inherit gnome3;
   };
 
-  networkmanager-pptp = pkgs.networkmanager-pptp.override {
-    inherit gnome3;
-  };
-
   networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
     inherit gnome3;
   };
@@ -430,7 +426,6 @@ let
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_pptp = networkmanager-pptp; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
   yelp_xsl = yelp-xsl; # added 2018-02-25
   yelp_tools = yelp-tools; # added 2018-02-25
