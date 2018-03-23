@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "picat-1.9-4";
+  name = "picat-2.3";
 
   src = fetchurl {
     url = http://picat-lang.org/download/picat19_src.tar.gz;
-    sha256 = "0wvl95gf4pjs93632g4wi0mw1glzzhjp9g4xg93ll2zxggbxibli";
+    sha256 = "1l5vzsscpp6nds6ksn57vjkkpzznl5xh7x6idjfn7pyh8jjhp50g";
   };
 
   ARCH = if stdenv.system == "i686-linux" then "linux32"
