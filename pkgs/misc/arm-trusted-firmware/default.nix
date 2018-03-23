@@ -10,13 +10,13 @@ let
            stdenv.mkDerivation (rec {
 
     name = "arm-trusted-firmware-${platform}-${version}";
-    version = "1.4";
+    version = "1.5";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
-      rev = "b762fc7481c66b64eb98b6ff694d569e66253973";
-      sha256 = "15m10dfgqkgw6rmzgfg1xzp1si9d5jwzyrcb7cp3y9ckj6mvp3i3";
+      rev = "refs/tags/v${version}";
+      sha256 = "1gm0bn2llzfzz9bfsz11fhwxj5lxvyrq7bc13fjj033nljzxn7k8";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
