@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     libselinux
   ];
 
+  postPatch = ''
+    patchShebangs ./configure
+  '';
+
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
   LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
 
