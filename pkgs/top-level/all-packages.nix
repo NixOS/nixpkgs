@@ -8253,6 +8253,8 @@ with pkgs;
     inherit (gnu) mig;
   };
 
+  jhiccup = callPackage ../development/tools/java/jhiccup { };
+
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (darwin) xnu bootstrap_cmds cctools;
     llvm = llvm_39;
