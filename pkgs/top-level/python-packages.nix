@@ -267,6 +267,8 @@ in {
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
+  logster = callPackage ../development/python-modules/logster { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -5424,15 +5426,6 @@ in {
   };
 
   natsort = callPackage ../development/python-modules/natsort { };
-
-  logster = buildPythonPackage {
-    name = "logster-7475c53822";
-    src = pkgs.fetchgit {
-      url = git://github.com/etsy/logster;
-      rev = "7475c53822";
-      sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
-    };
-  };
 
   ncclient = callPackage ../development/python-modules/ncclient {};
 
