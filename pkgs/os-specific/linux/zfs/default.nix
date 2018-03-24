@@ -43,6 +43,9 @@ let
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
+      '' + optionalString stdenv.hostPlatform.isMusl ''
+        substituteInPlace config/user-libtirpc.m4 \
+          --replace /usr/include/tirpc ${libtirpc}/include/tirpc
       '';
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
