@@ -344,7 +344,6 @@ self: super: {
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
-  pure-zlib = dontCheck super.pure-zlib; # https://github.com/NixOS/nixpkgs/issues/37499
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
@@ -1005,5 +1004,8 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
+
+  # https://github.com/GaloisInc/pure-zlib/issues/6
+  pure-zlib = doJailbreak super.pure-zlib;
 
 }

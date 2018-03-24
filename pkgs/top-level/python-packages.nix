@@ -4184,6 +4184,10 @@ in {
     };
   };
 
+  face_recognition = callPackage ../development/python-modules/face_recognition { };
+
+  face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
+
   faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = buildPythonPackage rec {

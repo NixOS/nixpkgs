@@ -1,46 +1,40 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
-, docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, shared-mime-info, libintl, gobjectIntrospection, doCheck ? false, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, gnome3
+, jasper, gobjectIntrospection, doCheck ? false }:
 
 let
   pname = "gdk-pixbuf";
-  version = "2.36.11";
+  version = "2.36.7";
+  # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
+  # which apparently requires access to shared-mime-info files during runtime.
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1wz2vpciwdpdv612s8kbww08q80hgcs5dxrfsxp1a4q44n3snqmf";
+    sha256 = "1b6e5eef09d98f05f383014ecd3503e25dfb03d7e5b5f5904e5a65b049a6a4d8";
   };
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 libintl ] ++ stdenv.lib.optional (!stdenv.isDarwin) shared-mime-info;
+  buildInputs = [ libX11 gobjectIntrospection ];
 
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobjectIntrospection makeWrapper
-  ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
-  mesonFlags = [
-    # with_ & enable_will be removed in the future
-    "-Dwith_docs=true"
-    "-Denable_jasper=true"
-    "-Dx11=true" # will be added in the future (default atm)
-    "-Dwith_gir=${if gobjectIntrospection != null then "true" else "false"}"
-  ];
+  configureFlags = "--with-libjasper --with-x11"
+    + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
+    ;
 
-  postPatch = ''
-    chmod +x build-aux/* # patchShebangs only applies to executables
-    patchShebangs build-aux
+  # on darwin, tests don't link
+  preBuild = stdenv.lib.optionalString (stdenv.isDarwin && !doCheck) ''
+    substituteInPlace Makefile --replace "docs tests" "docs"
   '';
 
   postInstall =
@@ -48,17 +42,6 @@ stdenv.mkDerivation rec {
     ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
-
-      # We require runtime access to shared-mime-info
-      ${stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      for f in $dev/bin/*; do
-        wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      done
-      wrapProgram $out/bin/gdk-pixbuf-thumbnailer --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      ''}
-
-      # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
-      $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).

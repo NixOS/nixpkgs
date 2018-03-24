@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib, gobjectIntrospection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
+, fixDarwinDylibNames, gobjectIntrospection, gnome3
+}:
 
 let
   pname = "atk";
   version = "2.28.1";
 in
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -21,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
 

@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
 
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")
     (mkFlag (!minimal) "GLIB")
