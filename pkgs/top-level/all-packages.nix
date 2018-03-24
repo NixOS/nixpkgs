@@ -113,6 +113,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  derefPath = callPackage ../build-support/deref-path.nix { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
