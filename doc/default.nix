@@ -45,41 +45,41 @@ pkgs.stdenv.mkDerivation {
     cp -s '${sources-langs}'/* ./languages-frameworks
   ''
   + toDocbook {
-      inputFile = ./introduction.md;
-      outputFile = "introduction.xml";
+      inputFile = ./introduction.chapter.md;
+      outputFile = "introduction.chapter.xml";
       useChapters = true;
     }
   + toDocbook {
-      inputFile = ./shell.md;
-      outputFile = "shell.xml";
+      inputFile = ./shell.section.md;
+      outputFile = "shell.section.xml";
     }
   + toDocbook {
-      inputFile = ./languages-frameworks/python.md;
-      outputFile = "./languages-frameworks/python.xml";
+      inputFile = ./languages-frameworks/python.section.md;
+      outputFile = "./languages-frameworks/python.section.xml";
     }
   + toDocbook {
-      inputFile = ./languages-frameworks/haskell.md;
-      outputFile = "./languages-frameworks/haskell.xml";
+      inputFile = ./languages-frameworks/haskell.section.md;
+      outputFile = "./languages-frameworks/haskell.section.xml";
     }
   + toDocbook {
-      inputFile = ../pkgs/development/idris-modules/README.md;
-      outputFile = "languages-frameworks/idris.xml";
+      inputFile = ./languages-frameworks/idris.section.md;
+      outputFile = "languages-frameworks/idris.section.xml";
     }
   + toDocbook {
-      inputFile = ../pkgs/development/node-packages/README.md;
-      outputFile = "languages-frameworks/node.xml";
+      inputFile = ./languages-frameworks/node.section.md;
+      outputFile = "languages-frameworks/node.section.xml";
     }
   + toDocbook {
-      inputFile = ../pkgs/development/r-modules/README.md;
-      outputFile = "languages-frameworks/r.xml";
+      inputFile = ./languages-frameworks/r.section.md;
+      outputFile = "languages-frameworks/r.section.xml";
     }
   + toDocbook {
-      inputFile = ./languages-frameworks/rust.md;
-      outputFile = "./languages-frameworks/rust.xml";
+      inputFile = ./languages-frameworks/rust.section.md;
+      outputFile = "./languages-frameworks/rust.section.xml";
     }
   + toDocbook {
-      inputFile = ./languages-frameworks/vim.md;
-      outputFile = "./languages-frameworks/vim.xml";
+      inputFile = ./languages-frameworks/vim.section.md;
+      outputFile = "./languages-frameworks/vim.section.xml";
     }
   + ''
     echo ${lib.nixpkgsVersion} > .version
