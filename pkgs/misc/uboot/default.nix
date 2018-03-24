@@ -78,7 +78,9 @@ let
       runHook postInstall
     '';
 
-    enableParallelBuilding = true;
+    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
+    enableParallelBuilding = false;
+
     dontStrip = true;
 
     meta = with stdenv.lib; {
