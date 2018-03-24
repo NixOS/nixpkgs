@@ -9,7 +9,7 @@
 
   </info>
 
-  <xi:include href="introduction.xml" />
+  <xi:include href="introduction.chapter.xml" />
   <xi:include href="quick-start.xml" />
   <xi:include href="stdenv.xml" />
   <xi:include href="multiple-output.xml" />
