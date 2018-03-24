@@ -7,29 +7,81 @@ in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
-  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing ];
 
-  src = ./.;
+  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip ];
 
-  # Hacking on these variables? Make sure to close and open
-  # nix-shell between each test, maybe even:
-  # $ nix-shell --run "make clean all"
-  # otherwise they won't reapply :)
-  HIGHLIGHTJS = pkgs.documentation-highlighter;
-  XSL = "${pkgs.docbook5_xsl}/xml/xsl";
-  RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
-  xsltFlags = lib.concatStringsSep " " [
-    "--param section.autolabel 1"
-    "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
-    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
-    "--param xref.with.number.and.title 1"
-    "--param toc.section.depth 3"
-    "--stringparam admon.style ''"
-    "--stringparam callout.graphics.extension .svg"
-  ];
+  xsltFlags = ''
+    --param section.autolabel 1
+    --param section.label.includes.component.label 1
+    --param html.stylesheet 'style.css'
+    --param xref.with.number.and.title 1
+    --param toc.section.depth 3
+    --param admon.style '''
+    --param callout.graphics.extension '.gif'
+  '';
 
-  postPatch = ''
+
+  buildCommand = let toDocbook = { useChapters ? false, inputFile, outputFile }:
+    let
+      extraHeader = lib.optionalString (!useChapters)
+        ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
+    in ''
+      {
+        pandoc '${inputFile}' -w docbook+smart ${lib.optionalString useChapters "--top-level-division=chapter"} \
+          -f markdown+smart \
+          | sed -e 's|<ulink url=|<link xlink:href=|' \
+              -e 's|</ulink>|</link>|' \
+              -e 's|<sect. id=|<section xml:id=|' \
+              -e 's|</sect[0-9]>|</section>|' \
+              -e '1s| id=| xml:id=|' \
+              -e '1s|\(<[^ ]* \)|\1${extraHeader}|'
+      } > '${outputFile}'
+    '';
+  in
+
+  ''
+    ln -s '${sources}/'*.xml .
+    mkdir ./languages-frameworks
+    cp -s '${sources-langs}'/* ./languages-frameworks
+  ''
+  + toDocbook {
+      inputFile = ./introduction.chapter.md;
+      outputFile = "introduction.chapter.xml";
+      useChapters = true;
+    }
+  + toDocbook {
+      inputFile = ./shell.section.md;
+      outputFile = "shell.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/python.section.md;
+      outputFile = "./languages-frameworks/python.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/haskell.section.md;
+      outputFile = "./languages-frameworks/haskell.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/idris.section.md;
+      outputFile = "languages-frameworks/idris.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/node.section.md;
+      outputFile = "languages-frameworks/node.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/r.section.md;
+      outputFile = "languages-frameworks/r.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/rust.section.md;
+      outputFile = "./languages-frameworks/rust.section.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/vim.section.md;
+      outputFile = "./languages-frameworks/vim.section.xml";
+    }
+  + ''
     echo ${lib.nixpkgsVersion} > .version
   '';
 
