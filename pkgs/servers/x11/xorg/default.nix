@@ -32,11 +32,11 @@ let
   }) // {inherit ;};
 
   appres = (mkDerivation "appres" {
-    name = "appres-1.0.4";
+    name = "appres-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/appres-1.0.4.tar.bz2;
-      sha256 = "139yp08qy1w6dccamdy0fh343yhaf1am1v81m2j435nd4ya4wqcz";
+      url = mirror://xorg/individual/app/appres-1.0.5.tar.bz2;
+      sha256 = "0a2r4sxky3k7b3kdb5pbv709q9b5zi3gxjz336wl66f828vqkbgz";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto libXt ];
@@ -140,10 +140,10 @@ let
   }) // {inherit ;};
 
   encodings = (mkDerivation "encodings" {
-    name = "encodings-1.0.4";
+    name = "encodings-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.5.tar.bz2;
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -188,10 +188,10 @@ let
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopia100dpi = (mkDerivation "fontadobeutopia100dpi" {
-    name = "font-adobe-utopia-100dpi-1.0.4";
+    name = "font-adobe-utopia-100dpi-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.5.tar.bz2;
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -200,10 +200,10 @@ let
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopia75dpi = (mkDerivation "fontadobeutopia75dpi" {
-    name = "font-adobe-utopia-75dpi-1.0.4";
+    name = "font-adobe-utopia-75dpi-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.5.tar.bz2;
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -212,10 +212,10 @@ let
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontadobeutopiatype1 = (mkDerivation "fontadobeutopiatype1" {
-    name = "font-adobe-utopia-type1-1.0.4";
+    name = "font-adobe-utopia-type1-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.5.tar.bz2;
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -524,10 +524,10 @@ let
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
   fontscreencyrillic = (mkDerivation "fontscreencyrillic" {
-    name = "font-screen-cyrillic-1.0.4";
+    name = "font-screen-cyrillic-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.5.tar.bz2;
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -596,10 +596,10 @@ let
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontxfree86type1 = (mkDerivation "fontxfree86type1" {
-    name = "font-xfree86-type1-1.0.4";
+    name = "font-xfree86-type1-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.5.tar.bz2;
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1388,10 +1388,10 @@ let
   }) // {inherit ;};
 
   windowswmproto = (mkDerivation "windowswmproto" {
-    name = "windowswmproto-1.0.4";
+    name = "windowswmproto-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.5.tar.bz2;
       sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1604,10 +1604,10 @@ let
   }) // {inherit libpng libX11 libXcursor ;};
 
   xcursorthemes = (mkDerivation "xcursorthemes" {
-    name = "xcursor-themes-1.0.4";
+    name = "xcursor-themes-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xcursor-themes-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/data/xcursor-themes-1.0.5.tar.bz2;
       sha256 = "11mv661nj1p22sqkv87ryj2lcx4m68a04b0rs6iqh3fzp42jrzg3";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2444,10 +2444,10 @@ let
   }) // {inherit libX11 libxkbfile ;};
 
   xkbprint = (mkDerivation "xkbprint" {
-    name = "xkbprint-1.0.4";
+    name = "xkbprint-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbprint-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xkbprint-1.0.5.tar.bz2;
       sha256 = "04iyv5z8aqhabv7wcpvbvq0ji0jrz1666vw6gvxkvl7szswalgqb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2456,10 +2456,10 @@ let
   }) // {inherit libX11 libxkbfile xproto ;};
 
   xkbutils = (mkDerivation "xkbutils" {
-    name = "xkbutils-1.0.4";
+    name = "xkbutils-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xkbutils-1.0.5.tar.bz2;
       sha256 = "0c412isxl65wplhl7nsk12vxlri29lk48g3p52hbrs3m0awqm8fj";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2480,10 +2480,10 @@ let
   }) // {inherit libX11 xproto ;};
 
   xkill = (mkDerivation "xkill" {
-    name = "xkill-1.0.4";
+    name = "xkill-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkill-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xkill-1.0.5.tar.bz2;
       sha256 = "0bl1ky8ps9jg842j4mnmf4zbx8nkvk0h77w7bqjlpwij9wq2mvw8";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2540,10 +2540,10 @@ let
   }) // {inherit libX11 libXaw libXmu libXt ;};
 
   xmessage = (mkDerivation "xmessage" {
-    name = "xmessage-1.0.4";
+    name = "xmessage-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xmessage-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2;
       sha256 = "0s5bjlpxnmh8sxx6nfg9m0nr32r1sr3irr71wsnv76s33i34ppxw";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2612,10 +2612,10 @@ let
   }) // {inherit ;};
 
   xpr = (mkDerivation "xpr" {
-    name = "xpr-1.0.4";
+    name = "xpr-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.5.tar.bz2;
       sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2756,10 +2756,10 @@ let
   }) // {inherit libX11 libxcb xproto ;};
 
   xwud = (mkDerivation "xwud" {
-    name = "xwud-1.0.4";
+    name = "xwud-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.5.tar.bz2;
       sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
     };
     nativeBuildInputs = [ pkgconfig ];
