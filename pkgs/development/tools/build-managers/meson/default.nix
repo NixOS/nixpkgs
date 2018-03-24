@@ -43,6 +43,10 @@ in python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+
+    # No one will ever need more than 128 bytes of data structure
+    # https://github.com/mesonbuild/meson/issues/3113
+    ./overly-strict-size-check.patch
   ];
 
   setupHook = ./setup-hook.sh;
