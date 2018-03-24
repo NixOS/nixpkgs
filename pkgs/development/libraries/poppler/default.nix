@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
 
+  # Not sure when and how to pass it.  It seems an upstream bug anyway.
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   cmakeFlags = [
@@ -42,9 +43,6 @@ stdenv.mkDerivation rec {
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
   ];
-
-  # Not sure when and how to pass it.  It seems an upstream bug anyway.
-  CXXFLAGS = if stdenv.cc.isClang then [ "-std=c++11" ] else null;
 
   meta = with lib; {
     homepage = https://poppler.freedesktop.org/;
