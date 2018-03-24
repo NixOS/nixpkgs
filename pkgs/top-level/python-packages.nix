@@ -337,6 +337,8 @@ in {
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
 
+  pygtail = callPackage ../development/python-modules/pygtail { };
+
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
 
   pygtksourceview = callPackage ../development/python-modules/pygtksourceview { };
