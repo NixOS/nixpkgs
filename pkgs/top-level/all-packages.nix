@@ -3580,6 +3580,8 @@ with pkgs;
       };
     };
 
+  memtier-benchmark = callPackage ../tools/networking/memtier-benchmark { };
+
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };

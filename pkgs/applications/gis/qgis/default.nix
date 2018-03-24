@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.16";
+  name = "qgis-2.18.17";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig ]
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "0d880m013kzi4qiyr27yjx6hzpb652slp66gyqgw9ziw03wy12c9";
+    sha256 = "1nxwl5lwibbiz9v3qaw3px7iyxg113zr4j8d99yj07mhk2ap082y";
   };
 
   # CMAKE_FIND_FRAMEWORK=never stops the installer choosing system
