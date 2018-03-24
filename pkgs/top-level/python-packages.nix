@@ -19781,6 +19781,8 @@ EOF
     inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit9;
     cudnn = pkgs.cudnn_cudatoolkit9;
+
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate IOKit Security;
   };
 
   tensorflowWithoutCuda = self.tensorflow.override {
