@@ -3,12 +3,16 @@
 
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7c43b5619deff48cc177c1b0618c4beeb2797f910f160e3c2035d5baf790a5d";
+    sha256 = "1075abnm2nrs69dycsiyi5h84g47yx389xiy9h96zwlvsdr589h3";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "'protobuf>=3.5.0.post1'" "'protobuf'"
+  '';
 
   propagatedBuildInputs = [ six protobuf ]
                         ++ lib.optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
