@@ -81,6 +81,8 @@ let
     # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
     enableParallelBuilding = false;
 
+    dontStrip = true;
+
     meta = with stdenv.lib; {
       homepage = http://www.denx.de/wiki/U-Boot/;
       description = "Boot loader for embedded systems";
