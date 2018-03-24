@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "telepathy-gabble-0.18.2";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/telepathy-gabble/${name}.tar.gz";
+    url = "http://telepathy.freedesktop.org/releases/telepathy-gabble/${name}.tar.gz";
     sha256 = "00ag32ccbj0hmy41rb0fg9gp40m7zbq45r4yijnyslk2mpkvg7c9";
   };
 
