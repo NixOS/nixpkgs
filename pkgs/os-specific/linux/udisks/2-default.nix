@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
         --replace "/bin/sh" "${stdenv.shell}" \
         --replace "/sbin/mdadm" "${mdadm}/bin/mdadm" \
         --replace " sed " " ${gnused}/bin/sed "
-    '';
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace udisks/udisksclient.c \
+        --replace 'defined( __GNUC_PREREQ)' 1 \
+        --replace '__GNUC_PREREQ(4,6)' 1
+  '';
 
   nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection ];
 
