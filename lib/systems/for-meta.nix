@@ -13,6 +13,7 @@ in rec {
   i686    = [ patterns.isi686 ];
   x86_64  = [ patterns.isx86_64 ];
   mips    = [ patterns.isMips ];
+  riscv   = [ patterns.isRiscV ];
 
   cygwin  = [ patterns.isCygwin ];
   darwin  = [ patterns.isDarwin ];
