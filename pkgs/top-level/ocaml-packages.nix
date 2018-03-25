@@ -366,12 +366,10 @@ let
 
     lru = callPackage ../development/ocaml-modules/lru { };
 
-    lwt2 = callPackage ../development/ocaml-modules/lwt { };
+    lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt {
-        version = "3.0.0";
-      }
+      then callPackage ../development/ocaml-modules/lwt { }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
     ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
@@ -650,7 +648,9 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
-    stog = callPackage ../applications/misc/stog { };
+    stog = callPackage ../applications/misc/stog {
+      ocaml_lwt = lwt2;
+    };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
