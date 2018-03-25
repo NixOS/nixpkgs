@@ -448,9 +448,16 @@ rec {
 
         mkdir image
         touch baseFiles
+        echo '[]' > parentEnv
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
+
           tar -C image -xpf "$fromImage"
+
+          # Save environment variables to inherit them later
+          configFile=$(jq -r '.[0].Config' image/manifest.json)
+          jq '.config.Env' image/$configFile > parentEnv
+
           # Do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
@@ -522,6 +529,9 @@ rec {
 
           currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
         done
+
+        # Merge parent image environment variables with image environment variables
+        imageJson=$(echo "$imageJson" | jq ".config.Env = $(cat parentEnv) + .config.Env")
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
         echo "$imageJson" > "image/$imageJsonChecksum.json"
