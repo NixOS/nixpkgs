@@ -14,6 +14,7 @@
 , yubikey-personalization
 , libXi
 , qtx11extras
+, qtmacextras
 
 , withKeePassBrowser ? true
 , withKeePassSSHAgent ? true
@@ -34,8 +35,18 @@ stdenv.mkDerivation rec {
     sha256 = "1zch1qbqgphhp2p2kvjlah8s337162m69yf4y00kcnfb3539ii5f";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-old-style-cast";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
+    "-Wno-old-style-cast"
+    "-Wno-error"
+    "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
+  ];
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/usr/local/bin" "../bin" \
+      --replace "/usr/local/share/man" "../share/man"
+  '';
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
   patches = [ ./darwin.patch ];
 
   cmakeFlags = [
@@ -72,7 +83,7 @@ stdenv.mkDerivation rec {
     qtx11extras
     yubikey-personalization
     zlib
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
 
   postInstall = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
