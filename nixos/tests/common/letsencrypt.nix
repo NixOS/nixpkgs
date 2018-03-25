@@ -386,6 +386,7 @@ in {
 
     services.nginx.enable = true;
     services.nginx.recommendedProxySettings = true;
+    services.nginx.appendHttpConfig = "server_names_hash_bucket_size 64;";
     services.nginx.virtualHosts.${wfeDomain} = {
       onlySSL = true;
       enableACME = false;
