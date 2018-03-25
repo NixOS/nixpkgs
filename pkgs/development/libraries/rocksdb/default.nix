@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
   };
-  
+
   nativeBuildInputs = [ which perl ];
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
   CMAKE_CXX_FLAGS = "-std=gnu++11";
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
-  ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
+  LIBNAME = if enableLite then "librocksdb_lite" else "librocksdb";
   ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
-  
+
   buildAndInstallFlags = [
     "USE_RTTI=1"
     "DEBUG_LEVEL=0"
-    "DISABLE_WARNING_AS_ERROR=1"     
+    "DISABLE_WARNING_AS_ERROR=1"
   ];
 
   buildFlags = buildAndInstallFlags ++ [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     echo "BUILD CONFIGURATION FOR SANITY CHECKING"
     cat make_config.mk
     mkdir -pv $static/lib/
-    mv -vi $out/lib/librocksdb.a $static/lib/
+    mv -vi $out/lib/${LIBNAME}.a $static/lib/
   '';
 
   enableParallelBuilding = true;
