@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.mopidy.com/;
+    homepage = https://www.mopidy.com/;
     description = "Mopidy extension for playing music from Google Play Music";
     license = licenses.asl20;
     maintainers = [ maintainers.jgillich ];

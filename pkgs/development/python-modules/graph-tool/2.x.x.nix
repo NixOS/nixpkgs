@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = http://graph-tool.skewed.de/;
+    homepage    = https://graph-tool.skewed.de/;
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = [ stdenv.lib.maintainers.joelmo ];

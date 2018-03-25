@@ -284,7 +284,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   gpl2Oss = {
     fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-    url = http://www.mysql.com/about/legal/licensing/foss-exception;
+    url = https://www.mysql.com/about/legal/licensing/foss-exception;
   };
 
   gpl2Plus = spdx {
