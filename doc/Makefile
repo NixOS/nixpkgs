@@ -11,7 +11,7 @@ clean:
 validate: manual-full.xml
 	jing "$$RNG" manual-full.xml
 
-out/html/index.html: manual-full.xml style.css
+out/html/index.html: validate manual-full.xml style.css
 	mkdir -p out/html
 	xsltproc $$xsltFlags \
 		--nonet --xinclude \
@@ -24,7 +24,7 @@ out/html/index.html: manual-full.xml style.css
 	mkdir -p out/html/images/callouts
 	cp "$$XSL/docbook/images/callouts/"*.gif out/html/images/callouts/
 
-out/epub/manual.epub: manual-full.xml
+out/epub/manual.epub: validate manual-full.xml
 	mkdir -p out/epub/scratch
 	xsltproc $$xsltFlags --nonet \
 		--output out/epub/scratch/ \
