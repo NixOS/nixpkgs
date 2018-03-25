@@ -1,18 +1,9 @@
 {stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit, ncurses_32bit, file, zlib, ncurses}:
+{version, src}:
 
 stdenv.mkDerivation rec {
-  version = "26.0.1";
+  inherit version src;
   name = "android-build-tools-r${version}";
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
-    then fetchurl {
-      url = "https://dl.google.com/android/repository/build-tools_r${version}-linux.zip";
-      sha256 = "1sp0ir1d88ffw0gz78zlbvnxalz02fsaxwdcvjfynanylwjpyqf8";
-    }
-    else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = "https://dl.google.com/android/repository/build-tools_r${version}-macosx.zip";
-      sha256 = "1ns6c8361l18s3a5x0jc2m3qr06glsb6ak7csrrw6dkzlv8cj5dk";
-    }
-    else throw "System ${stdenv.system} not supported!";
 
   buildCommand = ''
     mkdir -p $out/build-tools
@@ -24,7 +15,10 @@ stdenv.mkDerivation rec {
       ''
         cd ${version}
 
-        ln -s ${ncurses.out}/lib/libncurses.so.5 `pwd`/lib64/libtinfo.so.5
+        if [ -e `pwd`/lib64 ]; then
+          ln -s ${ncurses.out}/lib/libncurses.so.5 `pwd`/lib64/libtinfo.so.5
+        fi
+        ln -s ${ncurses_32bit.out}/lib/libncurses.so.5 `pwd`/lib/libtinfo.so.5
 
         find . -type f -print0 | while IFS= read -r -d "" file
         do

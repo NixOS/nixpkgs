@@ -5,8 +5,9 @@
 , zlib, glxinfo, xkeyboardconfig
 , includeSources
 }:
-{ platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false
-, useGooglePlayServices ? false, useInstantApps ? false, useGoogleRepo ? false }:
+{ platformVersions, abiVersions, useGoogleAPIs, buildToolsVersions ? [ "latest" ]
+, useExtraSupportLibs ? false, useGooglePlayServices ? false, useInstantApps ? false
+, useGoogleRepo ? false }:
 
 let inherit (stdenv.lib) makeLibraryPath; in
 
@@ -126,7 +127,11 @@ stdenv.mkDerivation rec {
 
     cd ..
     ln -s ${platformTools}/platform-tools
-    ln -s ${buildTools}/build-tools
+    mkdir build-tools
+    ${stdenv.lib.concatMapStrings (buildToolsVersion: ''
+      ln -s ${builtins.getAttr ("buildTools_"+buildToolsVersion) buildTools}/build-tools/* build-tools/
+    '') buildToolsVersions
+    }
     ln -s ${support}/support
 
     # Symlink required Google API add-ons
