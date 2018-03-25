@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure =
-    installExtraFiles ippicv + (
+    lib.optionalString enableIpp (installExtraFiles ippicv) + (
     lib.optionalString buildContrib ''
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
 
