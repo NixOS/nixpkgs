@@ -186,7 +186,21 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupCommand = "./Setup";
+  simpleSetup = buildHaskellPackages.setup {};
+  configureSetup = buildHaskellPackages.setup { setupHs = ''
+  import Distribution.Simple
+  main = defaultMainWithHooks autoconfUserHooks
+'';
+};
+
+  setupCommand = if isCross then ''
+  if [ -f configure ]; then
+    HS_SETUP=${configureSetup}
+  else
+    HS_SETUP=${simpleSetup}
+  fi
+  $HS_SETUP/Setup''
+  else "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
@@ -207,7 +221,11 @@ stdenv.mkDerivation ({
   pos = builtins.unsafeGetAttrPos "pname" args;
 
   prePhases = ["setupCompilerEnvironmentPhase"];
-  preConfigurePhases = ["compileBuildDriverPhase"];
+
+  # when cross compiling, we only support Simple or Configure build-types.
+  # Custom build-types are silently ignored!  Hence we use the Setup
+  # derivations and don't need the compileBuildDriverPhase.
+  preConfigurePhases = optionals (!isCross) ["compileBuildDriverPhase"];
   preInstallPhases = ["haddockPhase"];
 
   inherit src;
@@ -278,28 +296,6 @@ stdenv.mkDerivation ({
     for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
     done
-  '') + (optionalString (isCross && setupHaskellDepends != []) ''
-      # Note: We'll iterate only over pkgsHostTarget, as pkgsHostHost contain
-      #       packages that are not build-host specific.  I (@angerman) see
-      #       for example in pkgsHostHost: libiconv-x86_64-pc-mingw32 and libiconv-osx-10.11.6
-      #       at the same time.
-      #
-      # We build the Setup.hs on the *build* machine, and as such should only add
-      # dependencies for the build machine.
-      #
-      for p in "''${pkgsHostTarget[@]}"; do
-        if [ -d "$p/lib/${nativeGhc.name}/package.conf.d" ]; then
-          cp -f "$p/lib/${nativeGhc.name}/package.conf.d/"*.conf $setupPackageConfDir/
-          continue
-        fi
-        if [ -d "$p/include" ]; then
-          setupConfigureFlags+=" --extra-include-dirs=$p/include"
-        fi
-        if [ -d "$p/lib" ]; then
-          setupConfigureFlags+=" --extra-lib-dirs=$p/lib"
-        fi
-      done
-      ${nativeGhcCommand}-pkg --${packageDbFlag}="$setupPackageConfDir" recache
   '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
