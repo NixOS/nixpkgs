@@ -11318,6 +11318,8 @@ in {
     propagatedBuildInputs = with self; [ six requests ];
   };
 
+  mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
+
   mox3 = buildPythonPackage rec {
     name = "mox3-${version}";
     version = "0.23.0";
