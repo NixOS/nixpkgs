@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at-spi2-core
   ] ++ optional enableGeoLocation geoclue2
     ++ optional enableGtk2Plugins gtk2
-    ++ (with xorg; [ libXdmcp libXt libXtst ])
+    ++ (with xorg; [ libXdmcp libXt libXtst libXdamage ])
     ++ optionals stdenv.isDarwin [ libedit readline libGLU_combined ]
     ++ optional stdenv.isLinux wayland;
 
