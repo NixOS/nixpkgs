@@ -7655,6 +7655,10 @@ with pkgs;
 
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
+  cquery = callPackage ../development/tools/misc/cquery {
+    llvmPackages = llvmPackages_6;
+  };
+
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
