@@ -1,17 +1,18 @@
 MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 
 .PHONY: all
-all: out/html/index.html out/epub/manual.epub
+all: validate out/html/index.html out/epub/manual.epub
 
 .PHONY: clean
 clean:
 	rm -f ${MD_TARGETS} .version manual-full.xml
 	rm -rf ./out/
 
+.PHONY: validate
 validate: manual-full.xml
 	jing "$$RNG" manual-full.xml
 
-out/html/index.html: validate manual-full.xml style.css
+out/html/index.html: manual-full.xml style.css
 	mkdir -p out/html
 	xsltproc $$xsltFlags \
 		--nonet --xinclude \
@@ -23,8 +24,9 @@ out/html/index.html: validate manual-full.xml style.css
 
 	mkdir -p out/html/images/callouts
 	cp "$$XSL/docbook/images/callouts/"*.gif out/html/images/callouts/
+	chmod u+w -R out/html/images/
 
-out/epub/manual.epub: validate manual-full.xml
+out/epub/manual.epub: manual-full.xml
 	mkdir -p out/epub/scratch
 	xsltproc $$xsltFlags --nonet \
 		--output out/epub/scratch/ \
