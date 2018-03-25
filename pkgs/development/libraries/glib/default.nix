@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
+{ stdenv, hostPlatform, fetchurl, pkgconfig, perl, python
 , libiconv, libintl, zlib, libffi, pcre, libelf, gnome3
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
     ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl python libintl libiconv ];
+  nativeBuildInputs = [ pkgconfig perl python ];
 
-  propagatedBuildInputs = [ zlib libffi ];
+  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
