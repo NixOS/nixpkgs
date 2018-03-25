@@ -641,13 +641,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  # Fix missing semigroup instance for Journal.
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
-    { url = https://github.com/simonmichael/hledger/pull/718.patch;
-      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
-      stripLen = 1;
-    });
-
   # Fix missing semigroup instance.
   data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
     { url = https://github.com/luqui/data-inttrie/pull/5.patch;
