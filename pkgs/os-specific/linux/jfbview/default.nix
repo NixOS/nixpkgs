@@ -64,7 +64,5 @@ stdenv.mkDerivation rec {
     homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    # incompatible with latest mupdf, see https://github.com/jichu4n/JFBView/issues/17
-    broken = true;
   };
 }
