@@ -6,7 +6,7 @@
 , includeSources
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false
-, useGooglePlayServices ? false, useInstantApps ? false }:
+, useGooglePlayServices ? false, useInstantApps ? false, useGoogleRepo ? false }:
 
 let inherit (stdenv.lib) makeLibraryPath; in
 
@@ -163,6 +163,10 @@ stdenv.mkDerivation rec {
 
     ${if useGooglePlayServices then
        "ln -s ${addons.google_play_services}/google-play-services google_play_services"
+     else ""}
+
+    ${if useGoogleRepo then
+       "ln -s ${addons.google_m2repository}/m2repository"
      else ""}
 
     ${stdenv.lib.optionalString useInstantApps

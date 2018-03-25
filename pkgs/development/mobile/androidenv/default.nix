@@ -135,6 +135,7 @@ rec {
     platformVersions = [ "21" ];
     abiVersions = [ "armeabi-v7a" "x86" ];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
   };
@@ -149,6 +150,7 @@ rec {
     platformVersions = [ "22" ];
     abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
   };
@@ -163,6 +165,7 @@ rec {
     platformVersions = [ "23" ];
     abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
     useInstantApps = true;
@@ -178,6 +181,7 @@ rec {
     platformVersions = [ "24" ];
     abiVersions = [ "x86" "x86_64"];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
     useInstantApps = true;
@@ -193,6 +197,7 @@ rec {
     platformVersions = [ "25" ];
     abiVersions = [ "x86" "x86_64"];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
     useInstantApps = true;
@@ -208,6 +213,7 @@ rec {
     platformVersions = [ "26" ];
     abiVersions = [ "x86" "x86_64"];
     useGoogleAPIs = true;
+    useGoogleRepo = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
     useInstantApps = true;
