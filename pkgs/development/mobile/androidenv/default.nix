@@ -32,7 +32,7 @@ rec {
         ncurses = pkgs.ncurses5;
     }
     else if pkgs.stdenv.system == "x86_64-darwin"
-    then import ./platforms-macosx.nix {
+    then import ./build-tools-macosx.nix {
       inherit (pkgs) stdenv fetchurl unzip zlib file;
       stdenv_32bit = pkgs_i686.stdenv;
       zlib_32bit = pkgs_i686.zlib;
