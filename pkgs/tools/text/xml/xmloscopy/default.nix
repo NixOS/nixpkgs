@@ -6,7 +6,7 @@ docbook5
 }:
 stdenv.mkDerivation rec {
   name = "xmloscopy-${version}";
-  version = "v0.1.1";
+  version = "v0.1.2";
 
   buildInputs = [
     makeWrapper
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "grahamc";
     repo = "xmloscopy";
     rev = version;
-    sha256 = "01i9hr0hh87p4qxfqx4vhml2mpdqggq2326vy7nymm2d4xpa5i1i";
+    sha256 = "07fcnf1vv0x72lksl1v0frmlh73gca199ldqqbgdjpybjdffz456";
   };
 
   installPhase = ''
