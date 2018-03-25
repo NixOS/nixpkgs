@@ -244,6 +244,8 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
+  hnix = doJailbreak super.hnix;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
