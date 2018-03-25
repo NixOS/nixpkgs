@@ -10733,6 +10733,8 @@ in {
     };
   };
 
+  langcodes = callPackage ../development/python-modules/langcodes { };
+
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
     name = "livestreamer-${version}";
