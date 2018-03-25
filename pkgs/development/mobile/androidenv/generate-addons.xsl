@@ -4,6 +4,22 @@
   xmlns:sdk="http://schemas.android.com/sdk/android/addon/7">
 
   <xsl:output omit-xml-declaration="yes" indent="no" />
+  <xsl:template name="revision">
+    <xsl:param name="separator"/>
+    <xsl:value-of select="sdk:revision/sdk:major"/>
+    <xsl:if test="sdk:revision/sdk:minor &gt; 0 or sdk:revision/sdk:micro &gt; 0">
+      <xsl:value-of select="$separator"/>
+      <xsl:value-of select="sdk:revision/sdk:minor"/>
+      <xsl:if test="sdk:revision/sdk:micro &gt; 0">
+        <xsl:value-of select="$separator"/>
+        <xsl:value-of select="sdk:revision/sdk:micro"/>
+      </xsl:if>
+    </xsl:if>
+    <xsl:if test="sdk:revision/sdk:preview">
+      <xsl:text>-rc</xsl:text>
+      <xsl:value-of select="sdk:revision/sdk:preview"/>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="/sdk:sdk-addon">
 # This file is generated from generate-addons.sh. DO NOT EDIT.
 # Execute generate-addons.sh or fetch.sh to update the file.
@@ -73,6 +89,26 @@ in
       description = "Android Instant Apps Development SDK";
       url = "https://developer.android.com/";
     };
+  };
+</xsl:for-each><xsl:for-each select="sdk:extra[sdk:path='m2repository']">
+<xsl:text>  </xsl:text><xsl:value-of select="sdk:vendor-id"/>_m2repository = stdenv.mkDerivation rec {
+    version = "<xsl:call-template name="revision"><xsl:with-param name="separator">.</xsl:with-param></xsl:call-template>";
+    name = "<xsl:value-of select="sdk:vendor-id"/>_m2repository-${version}";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
+      sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
+    };
+    meta = {
+      description = "<xsl:value-of select="sdk:name-display"/> - <xsl:value-of select="sdk:description"/>";
+      url = http://developer.android.com/;
+    };
+    buildCommand = ''
+      mkdir -p $out
+      cd $out
+      unzip $src
+    '';
+
+    buildInputs = [ unzip ];
   };
 </xsl:for-each>
 

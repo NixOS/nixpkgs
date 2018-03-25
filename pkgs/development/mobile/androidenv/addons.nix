@@ -316,5 +316,44 @@ in
       url = "https://developer.android.com/";
     };
   };
+  android_m2repository = stdenv.mkDerivation rec {
+    version = "47";
+    name = "android_m2repository-${version}";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/android_m2repository_r47.zip;
+      sha1 = "a0d22beacc106a6977321f2b07d692ce4979e96a";
+    };
+    meta = {
+      description = "Android Support Repository - Local Maven repository for Support Libraries";
+      url = http://developer.android.com/;
+    };
+    buildCommand = ''
+      mkdir -p $out
+      cd $out
+      unzip $src
+    '';
+
+    buildInputs = [ unzip ];
+  };
+  google_m2repository = stdenv.mkDerivation rec {
+    version = "58";
+    name = "google_m2repository-${version}";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/google_m2repository_gms_v11_3_rc05_wear_2_0_5.zip;
+      sha1 = "05086add9e3a0eb1b67111108d7757a4337c3f10";
+    };
+    meta = {
+      description = "Google Repository - Local Maven repository for Support Libraries";
+      url = http://developer.android.com/;
+    };
+    buildCommand = ''
+      mkdir -p $out
+      cd $out
+      unzip $src
+    '';
+
+    buildInputs = [ unzip ];
+  };
+
 
 }

@@ -1134,7 +1134,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:name-id>google_apis</sdk:name-id>
 		<sdk:name-display>Google APIs</sdk:name-display>
-		<sdk:api-level>23</sdk:api-level>
+		<sdk:api-level>25</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
 		<sdk:libs>
 			<sdk:lib>
