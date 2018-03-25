@@ -41,8 +41,6 @@ rec {
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
-    isSeccomputable = map (family: { kernel = kernels.linux; cpu.family = family; })
-                        [ "x86" "arm" "aarch64" "mips" ];
   };
 
   matchAnyAttrs = patterns:
