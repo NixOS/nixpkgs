@@ -2,21 +2,37 @@
 , dpkg
 , fetchurl
 , unzip
+, useLTS ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "unifi-controller-${version}";
-  version = "5.6.36";
 
-  src = fetchurl {
+let
+  versions = {
+    stable = {
+      version = "5.7.20";
+      sha256 = "1ylj4i5mcv6z9n32275ccdf1rqk74zilqsih3r6xzhm30pxrd8dd";
+    };
+    lts = {
+      version = "5.6.36";
+      sha256 = "075q7vm56fdsjwh72y2cb1pirl2pxdkvqnhvd3bf1c2n64mvp6bi";
+    };
+  };
+  selectedVersion =
+    let attr = if useLTS then "lts" else "stable";
+    in versions."${attr}";
+in
+
+stdenv.mkDerivation {
+  name = "unifi-controller-${selectedVersion.version}";
+  src = with selectedVersion; fetchurl {
     url = "https://dl.ubnt.com/unifi/${version}/unifi_sysvinit_all.deb";
-    sha256 = "075q7vm56fdsjwh72y2cb1pirl2pxdkvqnhvd3bf1c2n64mvp6bi";
+    inherit sha256;
   };
 
   buildInputs = [ dpkg ];
 
   unpackPhase = ''
-    dpkg-deb -x ${src} ./
+    dpkg-deb -x $src ./
   '';
 
   doConfigure = false;
