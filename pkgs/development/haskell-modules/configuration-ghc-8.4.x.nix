@@ -68,11 +68,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## free >=4.9 && <5
-  either = super.either_5;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
   ## Cabal <2.2
   ## Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
