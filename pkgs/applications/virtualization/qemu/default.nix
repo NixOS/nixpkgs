@@ -12,8 +12,8 @@
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
-, openGLSupport ? true, mesa_noglu, epoxy, libdrm
-, virglSupport ? true, virglrenderer
+, openGLSupport ? sdlSupport, mesa_noglu, epoxy, libdrm
+, virglSupport ? openGLSupport, virglrenderer
 , hostCpuOnly ? false
 , nixosTestRunner ? false
 }:
