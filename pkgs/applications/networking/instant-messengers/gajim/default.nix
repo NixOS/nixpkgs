@@ -1,6 +1,6 @@
 { buildPythonApplication, lib, fetchurl, gettext, wrapGAppsHook
 , python, gtk3, gobjectIntrospection
-, nbxmpp, pyasn1, pygobject3, dbus-python, pillow
+, nbxmpp, pyasn1, pygobject3, gnome3, dbus-python, pillow
 , xvfb_run, dbus
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
 , enableE2E ? true, pycrypto, python-gnupg
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   buildInputs = [
-    gobjectIntrospection gtk3
+    gobjectIntrospection gtk3 gnome3.defaultIconTheme
   ] ++ optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
     ++ optional enableSecrets libsecret
     ++ optional enableSpelling gspell
