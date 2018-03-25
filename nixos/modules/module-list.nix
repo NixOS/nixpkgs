@@ -158,7 +158,6 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
