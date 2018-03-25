@@ -17102,6 +17102,8 @@ EOF
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
+  wordfreq = callPackage ../development/python-modules/wordfreq { };
+
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
