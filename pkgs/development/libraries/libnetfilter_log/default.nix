@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "http://netfilter.org/projects/libnetfilter_log/files/${name}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_log/files/${name}.tar.bz2";
     sha256 = "089vjcfxl5qjqpswrbgklf4wflh44irmw6sk2k0kmfixfmszxq3l";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       system that deprecates the old syslog/dmesg based packet logging. This
       library has been previously known as libnfnetlink_log.
     '';
-    homepage = http://netfilter.org/projects/libnetfilter_log/;
+    homepage = https://netfilter.org/projects/libnetfilter_log/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];
