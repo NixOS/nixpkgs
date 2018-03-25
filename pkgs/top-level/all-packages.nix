@@ -3131,9 +3131,7 @@ with pkgs;
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
-  kexectools = if hostPlatform.isKexecable
-                 then callPackage ../os-specific/linux/kexectools { }
-               else null;
+  kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keybase = callPackage ../tools/security/keybase { };
 
