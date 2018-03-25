@@ -112,7 +112,13 @@ self: super: {
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  }));
+  })).overrideScope (self: super: {
+    # shell-conduit doesn't build with conduit 1.3
+    # see https://github.com/psibi/shell-conduit/issues/15
+    conduit = self.conduit_1_2_13_1;
+    conduit-extra = self.conduit-extra_1_2_3_2;
+    resourcet = self.resourcet_1_1_11;
+  });
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
