@@ -40,6 +40,11 @@ let
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
+  setupImpl = pkgs.callPackage ./setup.nix {
+    inherit stdenv;
+    inherit (self) ghc;
+  };
+
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
@@ -66,6 +71,8 @@ let
   };
 
   mkDerivation = makeOverridable mkDerivationImpl;
+  setup        = makeOverridable setupImpl;
+  
 
   # manualArgs are the arguments that were explictly passed to `callPackage`, like:
   #
@@ -151,7 +158,7 @@ let
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
 
-    inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
+    inherit mkDerivation setup callPackage haskellSrc2nix hackage2nix;
 
     inherit (haskellLib) packageSourceOverrides;
 
