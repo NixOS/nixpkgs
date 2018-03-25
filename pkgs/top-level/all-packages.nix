@@ -5577,6 +5577,8 @@ with pkgs;
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
+  xmloscopy = callPackage ../tools/text/xml/xmloscopy { };
+
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto {
