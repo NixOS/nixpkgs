@@ -6379,6 +6379,12 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
+  openjdk10 =
+      callPackage ../development/compilers/openjdk/10.nix {
+        bootjdk = openjdk9;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+
   openjdk = openjdk8;
 
   jdk7 = openjdk7 // { outputs = [ "out" ]; };
