@@ -1,0 +1,12 @@
+diff -ur blender-2.79-orig/build_files/cmake/Modules/FindPythonLibsUnix.cmake blender-2.79/build_files/cmake/Modules/FindPythonLibsUnix.cmake
+--- blender-2.79-orig/build_files/cmake/Modules/FindPythonLibsUnix.cmake	2017-09-10 23:34:59.000000000 -0500
++++ blender-2.79/build_files/cmake/Modules/FindPythonLibsUnix.cmake	2017-11-23 00:53:35.000000000 -0600
+@@ -44,7 +44,7 @@
+ 
+ # See: http://docs.python.org/extending/embedding.html#linking-requirements
+ #      for why this is needed
+-SET(PYTHON_LINKFLAGS "-Xlinker -export-dynamic" CACHE STRING "Linker flags for python")
++SET(PYTHON_LINKFLAGS "" CACHE STRING "Linker flags for python")
+ MARK_AS_ADVANCED(PYTHON_LINKFLAGS)
+ 
+ 

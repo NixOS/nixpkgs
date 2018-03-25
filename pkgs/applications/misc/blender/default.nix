@@ -6,6 +6,7 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
 , colladaSupport ? true, opencollada
+, xcbuild, llvm, darwin, libiconv
 }:
 
 with lib;
@@ -27,13 +28,24 @@ stdenv.mkDerivation rec {
     ]
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
-    ++ optional colladaSupport opencollada;
+    ++ optional colladaSupport opencollada
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      xcbuild llvm Cocoa Foundation IOKit AppKit Carbon AudioUnit
+      AudioToolbox CoreAudio OpenAL libiconv ForceFeedback ]);
 
-  postPatch =
-    ''
-      substituteInPlace doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
-      substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '';
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    ./clang-const.patch
+    ./no-python-install.patch
+    ./darwin-find-packages.patch
+    ./isfinite.patch
+    ./no-export-dynamic.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
+    substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
+  '';
 
   cmakeFlags =
     [ "-DWITH_MOD_OCEANSIM=ON"
@@ -60,9 +72,21 @@ stdenv.mkDerivation rec {
         # Disable architectures before sm_30 to support new CUDA toolkits.
         "-DCYCLES_CUDA_BINARIES_ARCH=sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
       ]
-    ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
+    ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON"
+
+    ++ optionals stdenv.isDarwin [
+      "-DWITH_CXX11=ON"
+      "-DWITH_PYTHON_FRAMEWORK=OFF"
+    ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
+
+  # blender assumes install location is .dmg on darwin
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/*.app $out/Applications
+    rm $out/*.html $out/*.txt
+  '';
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
@@ -70,13 +94,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  dontUseXcbuild = true;
+
   meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = https://www.blender.org;
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.goibhniu ];
   };
 }

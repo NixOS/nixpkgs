@@ -1,0 +1,411 @@
+diff -ur blender-2.79-orig/build_files/cmake/platform/platform_apple.cmake blender-2.79/build_files/cmake/platform/platform_apple.cmake
+--- blender-2.79-orig/build_files/cmake/platform/platform_apple.cmake	2017-09-11 22:44:17.000000000 -0500
++++ blender-2.79/build_files/cmake/platform/platform_apple.cmake	2017-11-25 13:36:22.000000000 -0600
+@@ -24,77 +24,58 @@
+ # Libraries configuration for Apple.
+ 
+ macro(find_package_wrapper)
+-# do nothing, just satisfy the macro
++	find_package(${ARGV})
+ endmacro()
+ 
+-if(NOT DEFINED LIBDIR)
+-	if(WITH_CXX11)
+-		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/darwin)
+-	else()
+-		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/darwin-9.x.universal)
+-	endif()
+-else()
+-	message(STATUS "Using pre-compiled LIBDIR: ${LIBDIR}")
+-endif()
+-if(NOT EXISTS "${LIBDIR}/")
+-	message(FATAL_ERROR "Mac OSX requires pre-compiled libs at: '${LIBDIR}'")
+-endif()
++find_package_wrapper(JPEG REQUIRED)
++find_package_wrapper(PNG REQUIRED)
++find_package_wrapper(ZLIB REQUIRED)
++find_package_wrapper(Freetype REQUIRED)
+ 
+ if(WITH_OPENAL)
+ 	find_package(OpenAL)
+ 	if(OPENAL_FOUND)
+ 		set(WITH_OPENAL ON)
+-		set(OPENAL_INCLUDE_DIR "${LIBDIR}/openal/include")
+ 	else()
+ 		set(WITH_OPENAL OFF)
+ 	endif()
+ endif()
+ 
+ if(WITH_ALEMBIC)
+-	set(ALEMBIC ${LIBDIR}/alembic)
+-	set(ALEMBIC_INCLUDE_DIR ${ALEMBIC}/include)
+-	set(ALEMBIC_INCLUDE_DIRS ${ALEMBIC_INCLUDE_DIR})
+-	set(ALEMBIC_LIBPATH ${ALEMBIC}/lib)
+-	set(ALEMBIC_LIBRARIES Alembic)
+-	set(ALEMBIC_FOUND ON)
++	find_package_wrapper(Alembic)
+ endif()
+ 
+ if(WITH_OPENSUBDIV OR WITH_CYCLES_OPENSUBDIV)
+-	set(OPENSUBDIV ${LIBDIR}/opensubdiv)
+-	set(OPENSUBDIV_LIBPATH ${OPENSUBDIV}/lib)
+-	find_library(OSD_LIB_CPU NAMES osdCPU PATHS ${OPENSUBDIV_LIBPATH})
+-	find_library(OSD_LIB_GPU NAMES osdGPU PATHS ${OPENSUBDIV_LIBPATH})
+-	set(OPENSUBDIV_INCLUDE_DIR ${OPENSUBDIV}/include)
+-	set(OPENSUBDIV_INCLUDE_DIRS ${OPENSUBDIV_INCLUDE_DIR})
+-	list(APPEND OPENSUBDIV_LIBRARIES ${OSD_LIB_CPU} ${OSD_LIB_GPU})
++	find_package_wrapper(OpenSubdiv)
++
++	set(OPENSUBDIV_LIBRARIES ${OPENSUBDIV_LIBRARIES})
++	set(OPENSUBDIV_LIBPATH)  # TODO, remove and reference the absolute path everywhere
++
++	if(NOT OPENSUBDIV_FOUND)
++		set(WITH_OPENSUBDIV OFF)
++		set(WITH_CYCLES_OPENSUBDIV OFF)
++		message(STATUS "OpenSubdiv not found")
++	endif()
+ endif()
+ 
+ if(WITH_JACK)
+-	find_library(JACK_FRAMEWORK
+-		NAMES jackmp
+-	)
+-	set(JACK_INCLUDE_DIRS ${JACK_FRAMEWORK}/headers)
+-	if(NOT JACK_FRAMEWORK)
++	find_package_wrapper(Jack)
++	if(NOT JACK_FOUND)
+ 		set(WITH_JACK OFF)
+ 	endif()
+ endif()
+ 
+ if(WITH_CODEC_SNDFILE)
+-	set(SNDFILE ${LIBDIR}/sndfile)
+-	set(SNDFILE_INCLUDE_DIRS ${SNDFILE}/include)
+-	set(SNDFILE_LIBRARIES sndfile FLAC ogg vorbis vorbisenc)
+-	set(SNDFILE_LIBPATH ${SNDFILE}/lib ${LIBDIR}/ffmpeg/lib)  # TODO, deprecate
++	find_package_wrapper(SndFile)
++	if(NOT SNDFILE_FOUND)
++		set(WITH_CODEC_SNDFILE OFF)
++	endif()
+ endif()
+ 
+ if(WITH_PYTHON)
+-	# we use precompiled libraries for py 3.5 and up by default
+-	set(PYTHON_VERSION 3.5)
+ 	if(NOT WITH_PYTHON_MODULE AND NOT WITH_PYTHON_FRAMEWORK)
+-		# normally cached but not since we include them with blender
+-		set(PYTHON_INCLUDE_DIR "${LIBDIR}/python/include/python${PYTHON_VERSION}m")
+-		set(PYTHON_EXECUTABLE "${LIBDIR}/python/bin/python${PYTHON_VERSION}m")
+-		set(PYTHON_LIBRARY python${PYTHON_VERSION}m)
+-		set(PYTHON_LIBPATH "${LIBDIR}/python/lib/python${PYTHON_VERSION}")
++		find_package(PythonLibsUnix REQUIRED)
++
+ 		# set(PYTHON_LINKFLAGS "-u _PyMac_Error")  # won't  build with this enabled
+ 	else()
+ 		# module must be compiled against Python framework
+@@ -119,51 +100,32 @@
+ endif()
+ 
+ if(WITH_FFTW3)
+-	set(FFTW3 ${LIBDIR}/fftw3)
+-	set(FFTW3_INCLUDE_DIRS ${FFTW3}/include)
+-	set(FFTW3_LIBRARIES fftw3)
+-	set(FFTW3_LIBPATH ${FFTW3}/lib)
+-endif()
+-
+-set(PNG_LIBRARIES png)
+-set(JPEG_LIBRARIES jpeg)
+-
+-set(ZLIB /usr)
+-set(ZLIB_INCLUDE_DIRS "${ZLIB}/include")
+-set(ZLIB_LIBRARIES z bz2)
+-
+-set(FREETYPE ${LIBDIR}/freetype)
+-set(FREETYPE_INCLUDE_DIRS ${FREETYPE}/include ${FREETYPE}/include/freetype2)
+-set(FREETYPE_LIBPATH ${FREETYPE}/lib)
+-set(FREETYPE_LIBRARY freetype)
++	find_package_wrapper(Fftw3)
++	if(NOT FFTW3_FOUND)
++		set(WITH_FFTW3 OFF)
++	endif()
++endif()
+ 
+ if(WITH_IMAGE_OPENEXR)
+-	set(OPENEXR ${LIBDIR}/openexr)
+-	set(OPENEXR_INCLUDE_DIR ${OPENEXR}/include)
+-	set(OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR} ${OPENEXR}/include/OpenEXR)
++	find_package_wrapper(OpenEXR)  # our own module
++	if(NOT OPENEXR_FOUND)
++		set(WITH_IMAGE_OPENEXR OFF)
++	endif()
+ 	if(WITH_CXX11)
+ 		set(OPENEXR_POSTFIX -2_2)
+ 	else()
+ 		set(OPENEXR_POSTFIX)
+ 	endif()
+-	set(OPENEXR_LIBRARIES
+-		Iex${OPENEXR_POSTFIX}
+-		Half
+-		IlmImf${OPENEXR_POSTFIX}
+-		Imath${OPENEXR_POSTFIX}
+-		IlmThread${OPENEXR_POSTFIX})
+-	set(OPENEXR_LIBPATH ${OPENEXR}/lib)
+ endif()
+ 
+ if(WITH_CODEC_FFMPEG)
+-	set(FFMPEG ${LIBDIR}/ffmpeg)
+ 	set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include)
+ 	set(FFMPEG_LIBRARIES
+ 		avcodec avdevice avformat avutil
+-		mp3lame swscale x264 xvidcore theora theoradec theoraenc vorbis vorbisenc vorbisfile ogg
++		swscale
+ 	)
+ 	if(WITH_CXX11)
+-		set(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} schroedinger orc vpx webp swresample)
++		set(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} swresample)
+ 	endif()
+ 	set(FFMPEG_LIBPATH ${FFMPEG}/lib)
+ endif()
+@@ -171,10 +133,11 @@
+ if(WITH_OPENJPEG OR WITH_CODEC_FFMPEG)
+ 	# use openjpeg from libdir that is linked into ffmpeg
+ 	if(WITH_CXX11)
+-		set(OPENJPEG ${LIBDIR}/openjpeg)
++		find_package_wrapper(OpenJPEG)
++		if(NOT OPENJPEG_FOUND)
++			set(WITH_IMAGE_OPENJPEG OFF)
++		endif()
+ 		set(WITH_SYSTEM_OPENJPEG ON)
+-		set(OPENJPEG_INCLUDE_DIRS ${OPENJPEG}/include)
+-		set(OPENJPEG_LIBRARIES ${OPENJPEG}/lib/libopenjpeg.a)
+ 	endif()
+ endif()
+ 
+@@ -216,26 +179,15 @@
+ endif()
+ 
+ if(WITH_OPENCOLLADA)
+-	set(OPENCOLLADA ${LIBDIR}/opencollada)
++	find_package_wrapper(OpenCOLLADA)
+ 
+-	set(OPENCOLLADA_INCLUDE_DIRS
+-		${LIBDIR}/opencollada/include/COLLADAStreamWriter
+-		${LIBDIR}/opencollada/include/COLLADABaseUtils
+-		${LIBDIR}/opencollada/include/COLLADAFramework
+-		${LIBDIR}/opencollada/include/COLLADASaxFrameworkLoader
+-		${LIBDIR}/opencollada/include/GeneratedSaxParser
+-	)
++	if(OPENCOLLADA_FOUND)
++		find_package_wrapper(XML2)
++		find_package_wrapper(PCRE)
++	else()
++		set(WITH_OPENCOLLADA OFF)
++	endif()
+ 
+-	set(OPENCOLLADA_LIBPATH ${OPENCOLLADA}/lib)
+-	set(OPENCOLLADA_LIBRARIES
+-		OpenCOLLADASaxFrameworkLoader
+-		-lOpenCOLLADAFramework
+-		-lOpenCOLLADABaseUtils
+-		-lOpenCOLLADAStreamWriter
+-		-lMathMLSolver
+-		-lGeneratedSaxParser
+-		-lxml2 -lbuffer -lftoa
+-	)
+ 	# Use UTF functions from collada if LLVM is not enabled
+ 	if(NOT WITH_LLVM)
+ 		list(APPEND OPENCOLLADA_LIBRARIES -lUTF)
+@@ -251,10 +203,23 @@
+ endif()
+ 
+ if(WITH_SDL)
+-	set(SDL ${LIBDIR}/sdl)
+-	set(SDL_INCLUDE_DIR ${SDL}/include)
+-	set(SDL_LIBRARY SDL2)
+-	set(SDL_LIBPATH ${SDL}/lib)
++	find_package_wrapper(SDL2)
++	if(SDL2_FOUND)
++		# Use same names for both versions of SDL until we move to 2.x.
++		set(SDL_INCLUDE_DIR "${SDL2_INCLUDE_DIR}")
++		set(SDL_LIBRARY "${SDL2_LIBRARY}")
++		set(SDL_FOUND "${SDL2_FOUND}")
++	else()
++		find_package_wrapper(SDL)
++	endif()
++	mark_as_advanced(
++		SDL_INCLUDE_DIR
++		SDL_LIBRARY
++	)
++	# unset(SDLMAIN_LIBRARY CACHE)
++	if(NOT SDL_FOUND)
++		set(WITH_SDL OFF)
++	endif()
+ 	if(WITH_CXX11)
+ 		set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} -framework ForceFeedback")
+ 	else()
+@@ -262,24 +227,14 @@
+ 	endif()
+ endif()
+ 
+-set(PNG "${LIBDIR}/png")
+-set(PNG_INCLUDE_DIRS "${PNG}/include")
+-set(PNG_LIBPATH ${PNG}/lib)
+-
+-set(JPEG "${LIBDIR}/jpeg")
+-set(JPEG_INCLUDE_DIR "${JPEG}/include")
+-set(JPEG_LIBPATH ${JPEG}/lib)
+-
+ if(WITH_IMAGE_TIFF)
+-	set(TIFF ${LIBDIR}/tiff)
+-	set(TIFF_INCLUDE_DIR ${TIFF}/include)
+-	set(TIFF_LIBRARY tiff)
+-	set(TIFF_LIBPATH ${TIFF}/lib)
++	find_package(TIFF)
++	if(NOT TIFF_FOUND)
++		set(WITH_IMAGE_TIFF OFF)
++	endif()
+ endif()
+ 
+ if(WITH_BOOST)
+-	set(BOOST ${LIBDIR}/boost)
+-	set(BOOST_INCLUDE_DIR ${BOOST}/include)
+ 	if(WITH_CXX11)
+ 		set(BOOST_POSTFIX)
+ 	else()
+@@ -302,7 +257,6 @@
+ 	if(WITH_OPENVDB)
+ 		list(APPEND BOOST_LIBRARIES boost_iostreams${BOOST_POSTFIX})
+ 	endif()
+-	set(BOOST_LIBPATH ${BOOST}/lib)
+ 	set(BOOST_DEFINITIONS)
+ endif()
+ 
+@@ -311,83 +265,66 @@
+ endif()
+ 
+ if(WITH_OPENIMAGEIO)
+-	set(OPENIMAGEIO ${LIBDIR}/openimageio)
+-	set(OPENIMAGEIO_INCLUDE_DIRS ${OPENIMAGEIO}/include)
++	find_package_wrapper(OpenImageIO)
++	if(NOT OPENIMAGEIO_PUGIXML_FOUND AND WITH_CYCLES_STANDALONE)
++		find_package_wrapper(PugiXML)
++	else()
++		set(PUGIXML_INCLUDE_DIR "${OPENIMAGEIO_INCLUDE_DIR/OpenImageIO}")
++		set(PUGIXML_LIBRARIES "")
++	endif()
++
+ 	set(OPENIMAGEIO_LIBRARIES
+-		${OPENIMAGEIO}/lib/libOpenImageIO.a
++		${OPENIMAGEIO_LIBRARIES}
+ 		${PNG_LIBRARIES}
+ 		${JPEG_LIBRARIES}
+-		${TIFF_LIBRARY}
+-		${OPENEXR_LIBRARIES}
+ 		${ZLIB_LIBRARIES}
++		${BOOST_LIBRARIES}
+ 	)
+-	if(WITH_CXX11)
+-		set(OPENIMAGEIO_LIBRARIES ${OPENIMAGEIO_LIBRARIES} ${LIBDIR}/ffmpeg/lib/libwebp.a)
++	set(OPENIMAGEIO_LIBPATH)  # TODO, remove and reference the absolute path everywhere
++	set(OPENIMAGEIO_DEFINITIONS "")
++
++	if(WITH_IMAGE_TIFF)
++		list(APPEND OPENIMAGEIO_LIBRARIES "${TIFF_LIBRARY}")
++	endif()
++	if(WITH_IMAGE_OPENEXR)
++		list(APPEND OPENIMAGEIO_LIBRARIES "${OPENEXR_LIBRARIES}")
++	endif()
++
++	if(NOT OPENIMAGEIO_FOUND)
++		set(WITH_OPENIMAGEIO OFF)
++		message(STATUS "OpenImageIO not found, disabling WITH_CYCLES")
+ 	endif()
+-	set(OPENIMAGEIO_LIBPATH
+-		${OPENIMAGEIO}/lib
+-		${JPEG_LIBPATH}
+-		${PNG_LIBPATH}
+-		${TIFF_LIBPATH}
+-		${OPENEXR_LIBPATH}
+-		${ZLIB_LIBPATH}
+-	)
+-	set(OPENIMAGEIO_DEFINITIONS "-DOIIO_STATIC_BUILD")
+-	set(OPENIMAGEIO_IDIFF "${LIBDIR}/openimageio/bin/idiff")
+ endif()
+ 
+ if(WITH_OPENCOLORIO)
+-	set(OPENCOLORIO ${LIBDIR}/opencolorio)
+-	set(OPENCOLORIO_INCLUDE_DIRS ${OPENCOLORIO}/include)
+-	set(OPENCOLORIO_LIBRARIES OpenColorIO tinyxml yaml-cpp)
+-	set(OPENCOLORIO_LIBPATH ${OPENCOLORIO}/lib)
++	find_package_wrapper(OpenColorIO)
++
++	set(OPENCOLORIO_LIBRARIES ${OPENCOLORIO_LIBRARIES})
++	set(OPENCOLORIO_LIBPATH)  # TODO, remove and reference the absolute path everywhere
++	set(OPENCOLORIO_DEFINITIONS)
++
++	if(NOT OPENCOLORIO_FOUND)
++		set(WITH_OPENCOLORIO OFF)
++		message(STATUS "OpenColorIO not found")
++	endif()
+ endif()
+ 
+ if(WITH_OPENVDB)
+-	set(OPENVDB ${LIBDIR}/openvdb)
+-	set(OPENVDB_INCLUDE_DIRS ${OPENVDB}/include)
+-	set(TBB_INCLUDE_DIRS ${LIBDIR}/tbb/include)
+-	set(TBB_LIBRARIES ${LIBDIR}/tbb/lib/libtbb.a)
+-	set(OPENVDB_LIBRARIES openvdb blosc ${TBB_LIBRARIES})
+-	set(OPENVDB_LIBPATH ${LIBDIR}/openvdb/lib)
+-	set(OPENVDB_DEFINITIONS)
++	find_package_wrapper(OpenVDB)
++	find_package_wrapper(TBB)
++	if(NOT OPENVDB_FOUND OR NOT TBB_FOUND)
++		set(WITH_OPENVDB OFF)
++		set(WITH_OPENVDB_BLOSC OFF)
++		message(STATUS "OpenVDB not found, disabling it")
++	endif()
+ endif()
+ 
+ if(WITH_LLVM)
+-	set(LLVM_ROOT_DIR ${LIBDIR}/llvm CACHE PATH	"Path to the LLVM installation")
+-	set(LLVM_VERSION "3.4" CACHE STRING	"Version of LLVM to use")
+-	if(EXISTS "${LLVM_ROOT_DIR}/bin/llvm-config")
+-		set(LLVM_CONFIG "${LLVM_ROOT_DIR}/bin/llvm-config")
+-	else()
+-		set(LLVM_CONFIG llvm-config)
+-	endif()
+-	execute_process(COMMAND ${LLVM_CONFIG} --version
+-			OUTPUT_VARIABLE LLVM_VERSION
+-			OUTPUT_STRIP_TRAILING_WHITESPACE)
+-	execute_process(COMMAND ${LLVM_CONFIG} --prefix
+-			OUTPUT_VARIABLE LLVM_ROOT_DIR
+-			OUTPUT_STRIP_TRAILING_WHITESPACE)
+-	execute_process(COMMAND ${LLVM_CONFIG} --libdir
+-			OUTPUT_VARIABLE LLVM_LIBPATH
+-			OUTPUT_STRIP_TRAILING_WHITESPACE)
+-	find_library(LLVM_LIBRARY
+-		      NAMES LLVMAnalysis # first of a whole bunch of libs to get
+-		      PATHS ${LLVM_LIBPATH})
+-
+-	if(LLVM_LIBRARY AND LLVM_ROOT_DIR AND LLVM_LIBPATH)
+-		if(LLVM_STATIC)
+-			# if static LLVM libraries were requested, use llvm-config to generate
+-			# the list of what libraries we need, and substitute that in the right
+-			# way for LLVM_LIBRARY.
+-			execute_process(COMMAND ${LLVM_CONFIG} --libfiles
+-					OUTPUT_VARIABLE LLVM_LIBRARY
+-					OUTPUT_STRIP_TRAILING_WHITESPACE)
+-			string(REPLACE " " ";" LLVM_LIBRARY ${LLVM_LIBRARY})
+-		else()
+-			set(PLATFORM_LINKFLAGS "${PLATFORM_LINKFLAGS} -lLLVM-3.4")
+-		endif()
+-	else()
+-		message(FATAL_ERROR "LLVM not found.")
++	find_package_wrapper(LLVM)
++
++	if(NOT LLVM_FOUND)
++		set(WITH_LLVM OFF)
++		message(STATUS "LLVM not found")
+ 	endif()
+ endif()
+ 
