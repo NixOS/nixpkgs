@@ -19,9 +19,7 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
 
-  supportRepository = import ./support-repository.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-  };
+  supportRepository = addons.android_m2repository;
 
   platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
     then import ./platforms-linux.nix {
@@ -50,7 +48,7 @@ rec {
     inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk libGLU_combined file alsaLib jdk coreutils libpulseaudio dbus;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
 
-    inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
+    inherit platformTools buildTools support platforms sysimages addons sources includeSources;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };
