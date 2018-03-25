@@ -9177,6 +9177,8 @@ in {
     marisa = pkgs.marisa;
   };
 
+  marisa-trie = callPackage ../development/python-modules/marisa-trie { };
+
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
     version = "1.0";
