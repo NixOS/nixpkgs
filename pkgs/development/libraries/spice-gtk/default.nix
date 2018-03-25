@@ -2,7 +2,7 @@
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , polkit, acl, usbutils, vala
-, gtk3, epoxy }:
+, gtk3, epoxy, libdrm }:
 
 with stdenv.lib;
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     spice-protocol celt_0_5_1 openssl libpulseaudio pixman
-    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
+    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm
     polkit acl usbutils
   ];
 
