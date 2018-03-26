@@ -1003,4 +1003,7 @@ self: super: {
   # https://github.com/GaloisInc/pure-zlib/issues/6
   pure-zlib = doJailbreak super.pure-zlib;
 
+  # https://github.com/strake/lenz-template.hs/issues/1
+  lenz-template = doJailbreak super.lenz-template;
+
 }
