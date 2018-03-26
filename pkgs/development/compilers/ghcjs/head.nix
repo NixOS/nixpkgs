@@ -1,15 +1,15 @@
 { fetchgit, fetchFromGitHub, bootPkgs, cabal-install }:
 
 bootPkgs.callPackage ./base.nix {
-  version = "0.2.020170323";
+  version = "0.2.120171220";
 
   inherit bootPkgs cabal-install;
 
   ghcjsSrc = fetchFromGitHub {
     owner = "ghcjs";
     repo = "ghcjs";
-    rev = "2b3759942fb5b2fc1a58d314d9b098d4622fa6b6";
-    sha256 = "15asapg0va8dvcdycsx8dgk4xcpdnhml4h31wka6vvxf5anzz8aw";
+    rev = "665624644d5d476f9e4e4c89a2717b9d84151e39";
+    sha256 = "1ar8x86h7qy7hk1gckv8vbmc2abqyj7ma1mk1ndbyja83bvqaxs4";
   };
   ghcjsBootSrc = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
