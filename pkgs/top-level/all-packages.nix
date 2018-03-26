@@ -12380,12 +12380,7 @@ with pkgs;
   jetty = callPackage ../servers/http/jetty { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
-  knot-resolver = callPackage ../servers/dns/knot-resolver {
-    # TODO: vimNox after it gets fixed on Darwin or something lighter
-    hexdump = if stdenv.isLinux then utillinux.bin
-              else if stdenv.isDarwin then darwin.shell_cmds
-              else vim/*xxd*/;
-  };
+  knot-resolver = callPackage ../servers/dns/knot-resolver { };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -13694,7 +13689,8 @@ with pkgs;
     if hostPlatform.isMusl then musl-getconf
     else lib.getBin stdenv.cc.libc;
 
-  nettools = callPackage ../os-specific/linux/net-tools { };
+  nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
+             else unixtools.nettools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
@@ -13817,7 +13813,8 @@ with pkgs;
 
   procps = procps-ng;
 
-  procps-ng = callPackage ../os-specific/linux/procps-ng { };
+  procps-ng = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
+              else unixtools.procps;
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
@@ -14010,7 +14007,9 @@ with pkgs;
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = callPackage ../os-specific/linux/util-linux { };
+  utillinux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
+              else unixtools.utillinux;
+
   utillinuxCurses = utillinux;
 
   utillinuxMinimal = appendToName "minimal" (utillinux.override {
@@ -21140,4 +21139,8 @@ with pkgs;
   xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
 
   mmark = callPackage ../tools/typesetting/mmark { };
+
+  # Unix tools
+  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
+  inherit (unixtools) hexdump ps;
 }

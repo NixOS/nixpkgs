@@ -1,5 +1,5 @@
 { pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
-, ruby, tzdata, git, procps, dpkg, nettools
+, ruby, tzdata, git, ps, dpkg, nettools
 }:
 
 /* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    rubyEnv ruby bundler tzdata git procps dpkg nettools
+    rubyEnv ruby bundler tzdata git ps dpkg nettools
   ];
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     rm config/initializers/gitlab_shell_secret_token.rb
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
-        --replace "ps -U" "${procps}/bin/ps -U"
+        --replace "ps -U" "${ps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 

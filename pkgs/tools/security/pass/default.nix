@@ -74,8 +74,8 @@ in stdenv.mkDerivation rec {
     tree
     which
     qrencode
+    procps
   ] ++ optional tombPluginSupport tomb
-    ++ optional stdenv.isLinux procps
     ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''
