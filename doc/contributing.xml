@@ -16,9 +16,8 @@ subdirectory of the Nixpkgs repository.</para>
   [nix-shell]$ make
 </screen>
 
-<para>If you experience problems, run <command>xmloscopy --docbook5
-./manual.xml ./manual-full.xml</command> inside the nix-shell to help
-understand the docbook errors.</para>
+<para>If you experience problems, run <command>make debug</command>
+to help understand the docbook errors.</para>
 
 <para>After making modifications to the manual, it's important to
 build it before committing. You can do that as follows:
