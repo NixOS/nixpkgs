@@ -58,6 +58,7 @@
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
+  ./misc/documentation.nix
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
@@ -85,12 +86,10 @@
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
-  ./programs/info.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/light.nix
-  ./programs/man.nix
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix

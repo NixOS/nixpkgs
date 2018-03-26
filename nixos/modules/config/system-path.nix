@@ -109,7 +109,6 @@ in
         "/sbin"
         "/share/applications"
         "/share/desktop-directories"
-        "/share/doc"
         "/share/emacs"
         "/share/icons"
         "/share/menus"
