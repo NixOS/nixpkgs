@@ -4,7 +4,6 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
-#, enableInfinality ? true # font rendering patch
 , enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
@@ -20,18 +19,16 @@ let
 
   update = "10";
   build = "46";
-  baseurl = "http://hg.openjdk.java.net/jdk/jdk10";
   repover = "jdk-${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
-  jdk10 = fetchurl {
-             url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "1n5jccf2rw15hzwppnvy87bysb84g3fcnkxbjhj8gi0iv79dxlc7";
-          };
+
   openjdk10 = stdenv.mkDerivation {
     name = "openjdk-${update}-b${build}";
 
-    srcs = [ jdk10 ];
-    sourceRoot = ".";
+    src = fetchurl {
+      url = "http://hg.openjdk.java.net/jdk-updates/jdk10u/archive/${repover}.tar.gz";
+      sha256 = "1a2cjad816qilsigkq035rqzfhzmq5vaz1klilrrws456flbsjlg";
+    };
 
     outputs = [ "out" "jre" ];
 
@@ -43,10 +40,6 @@ let
     ] ++ lib.optionals (!minimal && enableGnome2) [
       gtk2 gnome_vfs GConf glib
     ];
-
-    prePatch = ''
-      cd jdk10*
-    '';
 
     patches = [
       ./fix-java-home-jdk10.patch
@@ -125,12 +118,6 @@ let
       ''}
 
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
-
-      # Make sure cmm/*.pf are not symlinks:
-      # https://youtrack.jetbrains.com/issue/IDEA-147272
-      # in 9, it seems no *.pf files end up in $out ... ?
-      # rm -rf $out/lib/openjdk/jre/lib/cmm
-      # ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Set PaX markings
       exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
