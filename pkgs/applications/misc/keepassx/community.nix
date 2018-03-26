@@ -14,6 +14,7 @@
 , yubikey-personalization
 , libXi
 , qtx11extras
+, qtmacextras
 
 , withKeePassBrowser ? true
 , withKeePassSSHAgent ? true
@@ -25,13 +26,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassxc-${version}";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "1zch1qbqgphhp2p2kvjlah8s337162m69yf4y00kcnfb3539ii5f";
+    sha256 = "1xlg8zb22c2f1pi2has4f4qwggd0m2z254f0d6jrgz368x4g3p87";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-old-style-cast";
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     qtx11extras
     yubikey-personalization
     zlib
-  ];
+  ] ++ optionals (stdenv.isDarwin) [ qtmacextras ];
 
   postInstall = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
