@@ -1,37 +1,53 @@
-diff -Naur a/io/copy_file_range.c b/io/copy_file_range.c
---- a/io/copy_file_range.c	1969-12-31 19:00:01.000000000 -0500
-+++ b/io/copy_file_range.c	2018-02-26 07:39:21.533535821 -0500
-@@ -42,24 +42,6 @@
+From 8041435de7ed028a27ecca64302945ad455c69a6 Mon Sep 17 00:00:00 2001
+From: "Darrick J. Wong" <darrick.wong@oracle.com>
+Date: Mon, 5 Feb 2018 14:38:02 -0600
+Subject: xfs_io: fix copy_file_range symbol name collision
+
+glibc 2.27 has a copy_file_range wrapper, so we need to change our
+internal function out of the way to avoid compiler warnings.
+
+Reported-by: fredrik@crux.nu
+Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Reviewed-by: Eric Sandeen <sandeen@redhat.com>
+Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
+---
+ io/copy_file_range.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/io/copy_file_range.c b/io/copy_file_range.c
+index d1dfc5a..99fba20 100644
+--- a/io/copy_file_range.c
++++ b/io/copy_file_range.c
+@@ -42,13 +42,18 @@ copy_range_help(void)
  "));
  }
  
--static loff_t
++/*
++ * Issue a raw copy_file_range syscall; for our test program we don't want the
++ * glibc buffered copy fallback.
++ */
+ static loff_t
 -copy_file_range(int fd, loff_t *src, loff_t *dst, size_t len)
--{
--	loff_t ret;
--
--	do {
--		ret = syscall(__NR_copy_file_range, fd, src, file->fd, dst, len, 0);
--		if (ret == -1) {
--			perror("copy_range");
--			return errno;
--		} else if (ret == 0)
--			break;
--		len -= ret;
--	} while (len > 0);
--
--	return 0;
--}
--
- static off64_t
- copy_src_filesize(int fd)
++copy_file_range_cmd(int fd, loff_t *src, loff_t *dst, size_t len)
  {
-@@ -130,7 +112,7 @@
+ 	loff_t ret;
+ 
+ 	do {
+-		ret = syscall(__NR_copy_file_range, fd, src, file->fd, dst, len, 0);
++		ret = syscall(__NR_copy_file_range, fd, src, file->fd, dst,
++				len, 0);
+ 		if (ret == -1) {
+ 			perror("copy_range");
+ 			return errno;
+@@ -130,7 +135,7 @@ copy_range_f(int argc, char **argv)
  		copy_dst_truncate();
  	}
  
 -	ret = copy_file_range(fd, &src, &dst, len);
-+	ret = copy_file_range(fd, &src, file->fd, &dst, len, 0);
++	ret = copy_file_range_cmd(fd, &src, &dst, len);
  	close(fd);
  	return ret;
  }
+-- 
+cgit v1.1
+
