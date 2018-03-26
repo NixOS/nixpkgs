@@ -47,6 +47,9 @@ in stdenv.mkDerivation rec {
     ];
 
   #dontAddPrefix = true;
+  patches = [
+    ./8447.patch # https://github.com/systemd/systemd/pull/8447
+  ];
 
   mesonFlags = [
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
