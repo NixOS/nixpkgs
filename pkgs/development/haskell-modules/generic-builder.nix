@@ -352,6 +352,7 @@ stdenv.mkDerivation ({
       for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
+        echo >> "$exe"
         cat "$exeDir/all.js" >> "$exe"
         chmod +x "$exe"
       done
