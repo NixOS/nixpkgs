@@ -269,8 +269,10 @@ stdenv.mkDerivation ({
 
     # host.*Pkgs defined in stdenv/setup.hs
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
+      ${optionalString doVerbose ''
+        echo $p
+    ''}if [ -d "$p/lib/${ghc.targetPrefix}${ghc.name}/package.conf.d" ]; then
+        cp -f "$p/lib/${ghc.targetPrefix}${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
       fi
       if [ -d "$p/include" ]; then
