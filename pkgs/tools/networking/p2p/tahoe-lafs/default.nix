@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
 
   outputs = [ "out" "doc" "info" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "src/allmydata/util/iputil.py" \
         -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
 
@@ -30,6 +30,22 @@ pythonPackages.buildPythonApplication rec {
 
     sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
     sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
+  '';
+
+  # Remove broken and expensive tests.
+  preConfigure = ''
+    (
+      cd src/allmydata/test
+
+      # Buggy?
+      rm cli/test_create.py test_backupdb.py
+
+      # These require Tor and I2P.
+      rm test_connections.py test_iputil.py test_hung_server.py test_i2p_provider.py test_tor_provider.py
+
+      # Expensive
+      rm test_system.py
+    )
   '';
 
   nativeBuildInputs = with pythonPackages; [ sphinx texinfo ];
@@ -59,8 +75,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    # Still broken. ~ C.
-    #   trial allmydata
+    trial --rterrors allmydata
   '';
 
   meta = {
