@@ -1,0 +1,26 @@
+From b20272f5a966333b49fdf2bda797e2a9f0227404 Mon Sep 17 00:00:00 2001
+From: Guillem Jover <guillem@hadrons.org>
+Date: Tue, 6 Mar 2018 01:42:52 +0100
+Subject: Remove <features.h> inclusion from <bsd/libutil.h>
+
+This is a non-portable header, and we should not assume it is present.
+Let the first system header pull it in if needed.
+---
+ include/bsd/libutil.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
+index ccca29a..e5f148a 100644
+--- a/include/bsd/libutil.h
++++ b/include/bsd/libutil.h
+@@ -39,7 +39,6 @@
+ #ifndef LIBBSD_LIBUTIL_H
+ #define LIBBSD_LIBUTIL_H
+ 
+-#include <features.h>
+ #ifdef LIBBSD_OVERLAY
+ #include <sys/cdefs.h>
+ #else
+-- 
+cgit v1.1
+
