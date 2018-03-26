@@ -238,6 +238,20 @@ in
                   Whether to produce verbose logging output.
                 '';
               };
+              explicitSymlinks = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to follow symlinks specified as archives.
+                '';
+              };
+              followSymlinks = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to follow all symlinks in archive trees.
+                '';
+              };
             };
           }
         ));
@@ -304,6 +318,8 @@ in
           let run = ''tarsnap --configfile "/etc/tarsnap/${name}.conf" \
                         -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
                         ${optionalString cfg.verbose "-v"} \
+                        ${optionalString cfg.explicitSymlinks "-H"} \
+                        ${optionalString cfg.followSymlinks "-L"} \
                         ${concatStringsSep " " cfg.directories}'';
           in if (cfg.cachedir != null) then ''
             mkdir -p ${cfg.cachedir}
