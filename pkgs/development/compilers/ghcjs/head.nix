@@ -47,6 +47,4 @@ bootPkgs.callPackage ./base.nix {
   stage2 = import ./head_stage2.nix;
 
   patches = [ ./ghcjs-head.patch ];
-
-  broken = true;  # https://hydra.nixos.org/build/71923242
 }
