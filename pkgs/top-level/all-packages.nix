@@ -14012,12 +14012,12 @@ with pkgs;
 
   utillinuxCurses = utillinux;
 
-  utillinuxMinimal = appendToName "minimal" (utillinux.override {
+  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
     minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;
-  });
+  }) else throw "utillinux is unsupported on non-Linux";
 
   v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
