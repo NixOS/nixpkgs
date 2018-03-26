@@ -5,28 +5,32 @@
 
 stdenv.mkDerivation rec {
   name = "mu-${version}";
-  version = "0.9.18";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
-    rev    = version;
-    sha256 = "0zy0p196bfrfzsq8f58xv04rpnr948sdvljflgzvi6js0vz4009y";
+    rev    = "v${version}";
+    sha256 = "0y6azhcmqdx46a9gi7mn8v8p0mhfx2anjm5rj7i69kbr6j8imlbc";
   };
 
-  # as of 0.9.18 2 tests are failing but previously we had no tests
+  # 0.9.18 and 1.0 have 2 failing tests but previously we had no tests
   patches = [
     ./failing_tests.patch
   ];
 
-  # pmccabe should be a checkInput instead, but configure looks for it
+  # test-utils coredumps so don't run those
+  postPatch = ''
+    sed -i -e '/test-utils/d' lib/parser/Makefile.am
+  '';
+
   buildInputs = [
     sqlite xapian glib gmime texinfo emacs guile libsoup icu
   ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  checkInputs = [ pmccabe ];
 
-  doCheck = true;
+  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
@@ -44,6 +48,8 @@ stdenv.mkDerivation rec {
       install -m755 toys/$f/$f $out/bin/$f
     done
   '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
