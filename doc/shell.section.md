@@ -4,6 +4,8 @@ author: zimbatm
 date: 2017-10-30
 ---
 
+# mkShell
+
 pkgs.mkShell is a special kind of derivation that is only useful when using
 it combined with nix-shell. It will in fact fail to instantiate when invoked
 with nix-build.
