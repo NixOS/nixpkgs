@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wsnmk4wjpdhbn1zaxg6bmyxspcki2zgy0am9lk037rnl4krwzj0";
   };
 
-  # Works around bunch of "format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t {aka long long unsigned int}'" warnings
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional (!stdenv.is64bit) "-Wno-error=format"
-    ++ [ "-Wno-error=format-truncation" ]; # newly detected with gcc-7
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb ];
