@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     ]);
 
   mesonFlags = [
-    "-Dgio_module_dir=${placeholder "out"}/lib/gio/modules"
-    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
+    "-Dgio_module_dir=lib/gio/modules"
+    "-Dsystemduserunitdir=lib/systemd/user"
+    "-Ddbus_service_dir=share/dbus-1/services"
     "-Dtmpfilesdir=no"
   ] ++ stdenv.lib.optionals (!gnomeSupport) [
     "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
