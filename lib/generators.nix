@@ -98,6 +98,7 @@ rec {
     */
   toYAML = {}@args: toJSON args;
 
+
   /* Pretty print a value, akin to `builtins.trace`.
     * Should probably be a builtin as well.
     */
@@ -108,8 +109,9 @@ rec {
     allowPrettyValues ? false
   }@args: v: with builtins;
     if      isInt      v then toString v
-    else if isBool     v then (if v == true then "true" else "false")
-    else if isString   v then "\"" + v + "\""
+    else if isString   v then ''"${libStr.escape [''"''] v}"''
+    else if true  ==   v then "true"
+    else if false ==   v then "false"
     else if null ==    v then "null"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -132,6 +134,6 @@ rec {
               (name: value:
                 "${toPretty args name} = ${toPretty args value};") v)
         + " }"
-    else abort "toPretty: should never happen (v = ${v})";
+    else abort "generators.toPretty: should never happen (v = ${v})";
 
 }
