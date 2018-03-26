@@ -5,9 +5,9 @@
 
 let
   packages = [
-    stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext
+    stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext libGL
   ];
-  libPath = "${stdenv.lib.makeLibraryPath packages}:${libGL.driverLink}/lib";
+  libPath = "${stdenv.lib.makeLibraryPath packages}";
 in
 stdenv.mkDerivation rec {
   name = "genymotion-${version}";

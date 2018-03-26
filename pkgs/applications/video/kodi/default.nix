@@ -13,7 +13,7 @@
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, wayland
+, sqlite, mysql, nasm, gnutls, libva, libdrm, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -121,7 +121,7 @@ in stdenv.mkDerivation rec {
       gnutls libidn libtasn1 nasm p11-kit
       libxml2 yasm python2
       boost libmicrohttpd
-      gettext pcre-cpp yajl fribidi libva
+      gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto libXtst libXfixes fixesproto
