@@ -628,7 +628,6 @@ self: super: {
 
   # Older versions don't compile.
   brick = self.brick_0_35_1;
-  getopt-generics = self.getopt-generics_0_13_0_2;
   HaTeX = self.HaTeX_3_19_0_0;
   json = self.json_0_9_2;
   matrix = self.matrix_0_3_6_1;
