@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4
+{ stdenv, fetchurl, writeText, bash, ocaml, findlib, ocamlbuild, camlp4
 , lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 
@@ -69,6 +69,16 @@ stdenv.mkDerivation rec {
       --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
    done
    '';
+
+  setupHook = writeText "setupHook.sh" ''
+    addOCamlLDPath () {
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"; then
+            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"
+        fi
+    }
+
+    addEnvHooks "$targetOffset" addOCamlLDPath
+  '';
 
   meta = {
     description = "Universal toplevel for OCaml";
