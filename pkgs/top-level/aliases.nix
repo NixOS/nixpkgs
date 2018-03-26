@@ -236,6 +236,10 @@ mapAliases (rec {
   wineStable = winePackages.stable;
   wineUnstable = winePackages.unstable;
 
+  # added 2018-03-26
+  libva-full = libva;
+  libva1-full = libva1;
+
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
