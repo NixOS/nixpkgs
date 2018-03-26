@@ -5,12 +5,7 @@ with (import ./param-lib.nix lib);
 
 let
   cfg = config.services.strongswan-swanctl;
-
-  # TODO: auto-generate these files using:
-  # https://github.com/strongswan/strongswan/tree/master/conf
-  # IDEA: extend the format-options.py script to output these Nix files.
-  #strongswanParams = import ./strongswan-params.nix lib;
-  swanctlParams    = import ./swanctl-params.nix    lib;
+  swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
     enable = mkEnableOption "strongswan-swanctl service";
@@ -32,11 +27,7 @@ in  {
       '';
     };
 
-    # The structured strongswan configuration is commented out for
-    # now in favour of the literal config above. We should first
-    # discus if we want to add the 600+ options by default.
-    #strongswan = paramsToOptions strongswanParams;
-    swanctl    = paramsToOptions swanctlParams;
+    swanctl = paramsToOptions swanctlParams;
   };
 
   config = mkIf cfg.enable {
@@ -76,7 +67,6 @@ in  {
       path = with pkgs; [ kmod iproute iptables utillinux ];
       environment.STRONGSWAN_CONF = pkgs.writeTextFile {
         name = "strongswan.conf";
-        #text = paramsToConf cfg.strongswan strongswanParams;
         text = cfg.strongswan.extraConfig;
       };
       restartTriggers = [ config.environment.etc."swanctl/swanctl.conf".source ];
