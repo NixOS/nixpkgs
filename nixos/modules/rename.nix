@@ -4,6 +4,7 @@ with lib;
 
 {
   imports = [
+    (mkRenamedOptionModule [ "dysnomia" ] [ "services" "dysnomia" ])
     (mkRenamedOptionModule [ "environment" "x11Packages" ] [ "environment" "systemPackages" ])
     (mkRenamedOptionModule [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ])
     (mkRenamedOptionModule [ "environment" "nix" ] [ "nix" "package" ])
