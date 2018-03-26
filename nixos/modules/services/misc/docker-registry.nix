@@ -5,40 +5,26 @@ with lib;
 let
   cfg = config.services.dockerRegistry;
 
-  blogCache = if cfg.enableRedisCache
-      then "redis"
-      else "inmemory";
+  blobCache = if cfg.enableRedisCache
+    then "redis"
+    else "inmemory";
 
   registryConfig = {
     version =  "0.1";
-    log = {
-      fields = {
-        service = "registry";
-      };
-    };
+    log.fields.service = "registry";
     storage = {
-      cache = {
-        blobdescriptor = "${blogCache}";
-      };
-      filesystem = {
-        rootdirectory = "/var/lib/registry";
-      };
-      delete = {
-        enabled = cfg.enableDelete;
-      };
+      cache.blobdescriptor = blobCache;
+      filesystem.rootdirectory = cfg.storagePath;
+      delete.enabled = cfg.enableDelete;
     };
     http = {
-      addr = ":5000";
-      headers = {
-        X-Content-Type-Options = "[nosniff]";
-      };
+      addr = ":${builtins.toString cfg.port}";
+      headers.X-Content-Type-Options = ["nosniff"];
     };
-    health = {
-      storagedriver = {
-        enabled = true;
-        interval = "10s";
-        threshold = 3;
-      };
+    health.storagedriver = {
+      enabled = true;
+      interval = "10s";
+      threshold = 3;
     };
   };
 
@@ -98,7 +84,7 @@ in {
 
     redisPassword = mkOption {
       type = types.str;
-      default = "asecret";
+      default = "";
       description = "Set redis password.";
     };
 
@@ -112,21 +98,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.etc."docker/registry/config.yml".text = builtins.toJSON registryConfig;
-
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-
-      environment = {
-        REGISTRY_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.port}";
-        REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY = cfg.storagePath;
-      } // cfg.extraConfig;
-
-      script = ''
-        ${pkgs.docker-distribution}/bin/registry serve \
-          /etc/docker/registry/config.yml
+      script = let
+        configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (registryConfig // cfg.extraConfig));
+      in ''
+        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
       '';
 
       serviceConfig = {

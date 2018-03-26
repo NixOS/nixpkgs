@@ -77,6 +77,13 @@ following incompatible changes:</para>
       accepted by the nc command.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <varname>services.docker-registry.extraConfig</varname> object doesn't contain
+      environment variables anymore. Instead it needs to provide an object structure
+      that can be mapped onto the YAML configuration defined in <link xlink:href="https://github.com/docker/distribution/blob/v2.6.2/docs/configuration.md">the <varname>docker/distribution</varname> docs</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
