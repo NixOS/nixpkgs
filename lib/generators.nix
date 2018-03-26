@@ -28,6 +28,30 @@ rec {
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
 
+  /* Convert a value to a sensible default string representation.
+   * The builtin `toString` function has some strange defaults,
+   * suitable for bash scripts but not much else.
+   */
+  mkValueStringDefault = {}: v: with builtins;
+    let err = t: v: abort
+          ("generators.mkValueStringDefault: " +
+           "${t} not supported: ${toPretty {} v}");
+    in   if isInt      v then toString v
+    # we default to not quoting strings
+    else if isString   v then v
+    # isString returns "1", which is not a good default
+    else if true  ==   v then "true"
+    # here it returns to "", which is even less of a good default
+    else if false ==   v then "false"
+    else if null  ==   v then "null"
+    # if you have lists you probably want to replace this
+    else if isList     v then err "lists" v
+    # same as for lists, might want to replace
+    else if isAttrs    v then err "attrsets" v
+    else if isFunction v then err "functions" v
+    else err "this value is" (toString v);
+
+
   /* Generate a line of key k and value v, separated by
    * character sep. If sep appears in k, it is escaped.
    * Helper for synaxes with different separators.
@@ -38,7 +62,7 @@ rec {
    * > "f\:oo:bar"
    */
   mkKeyValueDefault = {
-    mkValueString ? toString
+    mkValueString ? mkValueStringDefault {}
   }: sep: k: v:
     "${libStr.escape [sep] k}${sep}${mkValueString v}";
 
