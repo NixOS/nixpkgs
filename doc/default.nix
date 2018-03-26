@@ -16,11 +16,11 @@ pkgs.stdenv.mkDerivation {
   xsltFlags = lib.concatStringsSep " " [
     "--param section.autolabel 1"
     "--param section.label.includes.component.label 1"
-    "--param html.stylesheet 'style.css'"
+    "--stringparam html.stylesheet 'style.css overrides.css'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 3"
-    "--param admon.style ''"
-    "--param callout.graphics.extension '.gif'"
+    "--stringparam admon.style ''"
+    "--stringparam callout.graphics.extension .svg"
   ];
 
   postPatch = ''

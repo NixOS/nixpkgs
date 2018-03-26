@@ -29,8 +29,8 @@ h2 /* chapters, appendices, subtitle */
 }
 
 /* Extra space between chapters, appendices. */
-div.chapter > div.titlepage h2, div.appendix > div.titlepage h2 
-{ 
+div.chapter > div.titlepage h2, div.appendix > div.titlepage h2
+{
     margin-top: 1.5em;
 }
 
@@ -118,7 +118,6 @@ div.example pre.programlisting
     margin: 0 0 0 0;
 }
 
-
 /***************************************************************************
                                Notes, warnings etc:
  ***************************************************************************/
@@ -172,7 +171,7 @@ div.navfooter *
 
 
 /***************************************************************************
-                        Links colors and highlighting: 
+                        Links colors and highlighting:
  ***************************************************************************/
 
 a { text-decoration: none; }
@@ -209,7 +208,7 @@ tt, code
 .term
 {
     font-weight: bold;
-    
+
 }
 
 div.variablelist dd p, div.glosslist dd p
