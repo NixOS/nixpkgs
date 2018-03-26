@@ -10,6 +10,7 @@
 , getent
 , hostPlatform
 , buildPackages
+, withSelinux ? false, libselinux
 }:
 
 assert stdenv.isLinux;
@@ -44,7 +45,7 @@ in stdenv.mkDerivation rec {
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ];
+    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
 
   #dontAddPrefix = true;
 
