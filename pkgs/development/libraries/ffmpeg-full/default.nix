@@ -78,6 +78,7 @@
 #, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
 #, libmfx ? null # Hardware acceleration vis libmfx
 , libmodplug ? null # ModPlug support
+, libmysofa ? null # HRTF support via SOFAlizer
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
@@ -342,6 +343,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
     #(enableFeature (libmfx != null) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
+    (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
     (enableFeature (libssh != null) "libssh")
@@ -402,7 +404,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
-    libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
+    libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib

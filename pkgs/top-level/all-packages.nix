@@ -9702,6 +9702,8 @@ with pkgs;
 
   libmypaint = callPackage ../development/libraries/libmypaint { };
 
+  libmysofa = callPackage ../development/libraries/audio/libmysofa { };
+
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
   };
