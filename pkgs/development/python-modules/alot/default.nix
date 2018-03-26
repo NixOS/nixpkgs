@@ -1,6 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, notmuch, urwid, urwidtrees, twisted, python_magic, configobj, pygpgme, mock, file, gpgme
-, service-identity, gpg
+, notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
+, service-identity
 , gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
 , withManpage ? false }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     configobj
     service-identity
     file
-    gpg
+    gpgme
   ];
 
   # some twisted tests need the network (test_env_set... )
