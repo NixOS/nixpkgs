@@ -11,12 +11,18 @@ pkgs.stdenv.mkDerivation {
 
   src = ./.;
 
+  # Hacking on these variables? Make sure to close and open
+  # nix-shell between each test, maybe even:
+  # $ nix-shell --run "make clean all"
+  # otherwise they won't reapply :)
+  HIGHLIGHTJS = pkgs.documentation-highlighter;
   XSL = "${pkgs.docbook5_xsl}/xml/xsl";
   RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
   xsltFlags = lib.concatStringsSep " " [
     "--param section.autolabel 1"
     "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet 'style.css overrides.css'"
+    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
+    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 3"
     "--stringparam admon.style ''"
