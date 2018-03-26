@@ -271,8 +271,9 @@ stdenv.mkDerivation ({
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${optionalString doVerbose ''
         echo $p
-    ''}if [ -d "$p/lib/${ghc.targetPrefix}${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.targetPrefix}${ghc.name}/package.conf.d/"*.conf $packageConfDir/
+        echo $p/lib/${ghc.name}/package.conf.d
+    ''}if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
+        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
       fi
       if [ -d "$p/include" ]; then
