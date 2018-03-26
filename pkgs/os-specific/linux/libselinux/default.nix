@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, libsepol, pcre
 , enablePython ? true, swig ? null, python ? null
+, musl-fts
 }:
 
 assert enablePython -> swig != null && python != null;
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libsepol pcre ]
-             ++ optionals enablePython [ swig python ];
+             ++ optionals enablePython [ swig python ]
+             ++ optional stdenv.hostPlatform.isMusl musl-fts;
 
   # Avoid this false warning:
   # avc_internal.c: In function 'avc_netlink_receive':
