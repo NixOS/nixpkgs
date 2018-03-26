@@ -8039,6 +8039,8 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
+  panopticon = callPackage ../development/tools/analysis/panopticon {};
+
   pants = callPackage ../development/tools/build-managers/pants {};
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
