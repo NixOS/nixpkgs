@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "06vyjqaraamcc5vka66mlvxj27ihccqc74aymv2wn8nphr2rhh03";
   };
 
-  nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv libintl ];
+  nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
+  buildInputs = [ libintl ];
 
   preAutoreconf = ''
     # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
