@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       name = "pr40.patch";
-      sha256 = "1qndhk5csf7kddk3giailx7r0cdipq46lj73nkcws43n4n93synk";
-      url = https://github.com/svn-all-fast-export/svn2git/pull/40.diff;
+      sha256 = "0mwncklzncsifql9zlxlbj3clsif5p2v1xs8nmxrw44mqvaysjw3";
+      url = https://github.com/svn-all-fast-export/svn2git/compare/f00d5a5...flokli:nixos-20180326.patch;
     })
   ];
 
@@ -30,8 +30,6 @@ stdenv.mkDerivation {
     "APR_INCLUDE=${apr.dev}/include/apr-1"
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
-
-  installPhase = "make install INSTALL_ROOT=$out";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/svn-all-fast-export/svn2git;
