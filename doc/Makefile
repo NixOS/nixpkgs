@@ -3,6 +3,9 @@ MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 .PHONY: all
 all: validate out/html/index.html out/epub/manual.epub
 
+.PHONY: debug
+debug:
+	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
 .PHONY: clean
 clean:
 	rm -f ${MD_TARGETS} .version manual-full.xml
