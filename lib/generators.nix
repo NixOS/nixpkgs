@@ -4,6 +4,12 @@
  * They all follow a similar interface:
  * generator { config-attrs } data
  *
+ * `config-attrs` are “holes” in the generators
+ * with sensible default implementations that
+ * can be overwritten. The default implementations
+ * are mostly generators themselves, called with
+ * their respective default values; they can be reused.
+ *
  * Tests can be found in ./tests.nix
  * Documentation in the manual, #sec-generators
  */
@@ -20,6 +26,8 @@ in
 
 rec {
 
+  ## -- HELPER FUNCTIONS & DEFAULTS --
+
   /* Generate a line of key k and value v, separated by
    * character sep. If sep appears in k, it is escaped.
    * Helper for synaxes with different separators.
@@ -33,6 +41,9 @@ rec {
     mkValueString ? toString
   }: sep: k: v:
     "${libStr.escape [sep] k}${sep}${mkValueString v}";
+
+
+  ## -- FILE FORMAT GENERATORS --
 
 
   /* Generate a key-value-style config file from an attrset.
