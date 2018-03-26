@@ -7,8 +7,8 @@ let
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas = {
-    "x86_64-linux"  = "1gkswrcvqkblazmhybz0pslafacy0fs2lzyrydrfiirkwdr5qnr2";
-    "x86_64-darwin" = "16lyg7xmiprd7ibj37ajpsw7vfn34z4rfxck5x43zd0jvvn8cchd";
+    "x86_64-linux"  = "15iykvbqgqj9lk764rkl52f47b6v59kvfiqfvdp3n3anszyqcc5d";
+    "x86_64-darwin" = "04fgazl5rzb4vw8xn5s46w44f2rdpki81q2rch2jiq9hf8bqm55m";
   };
 in stdenv.mkDerivation rec {
   name = "kibana-${version}";
