@@ -572,6 +572,11 @@
     github = "bergey";
     name = "Daniel Bergey";
   };
+  bgamari = {
+    email = "ben@smart-cactus.org";
+    github = "bgamari";
+    name = "Ben Gamari";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";

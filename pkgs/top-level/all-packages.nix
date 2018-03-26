@@ -3434,6 +3434,8 @@ with pkgs;
 
   libnabo = callPackage ../development/libraries/libnabo { };
 
+  libngspice = callPackage ../development/libraries/libngspice { };
+
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
