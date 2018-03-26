@@ -1,4 +1,13 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline
+# compiles compatibility layer with lua5.1
+, compat ? false
+, hostPlatform
+, makeWrapper
+, lua-setup-hook, callPackage
+, self
+, getLuaPath, getLuaCPath
+, luaPackages, packageOverrides ? (self: super: {})
+}:
 
 let
   dsoPatch = fetchurl {
@@ -12,6 +21,12 @@ stdenv.mkDerivation rec {
   luaversion = "5.2";
   version = "${luaversion}.4";
 
+  # helper functions for dealing with LUA_PATH and LUA_CPATH
+  LuaPathSearchPaths    = getLuaPath majorVersion;
+  LuaCPathSearchPaths   = getLuaCPath majorVersion;
+
+  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "0jwznq0l8qg9wh5grwg07b5cy3lzngvl5m2nl1ikp6vqssmf9qmr";
@@ -21,14 +36,29 @@ stdenv.mkDerivation rec {
 
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch ];
 
+
+  passthru = let
+    luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
+  in rec {
+    # executable = "${libPrefix}m";
+    buildEnv = callPackage ./wrapper.nix { lua = self;
+    inherit (luaPackages) requiredLuaModules;
+    };
+    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
+  };
+
+  enableParallelBuilding = true;
+
   configurePhase =
     if stdenv.isDarwin
     then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${majorVersion} CC="$CC")
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB")
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${majorVersion} liblua.so.${version}" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''

@@ -10,12 +10,43 @@
 , glib, gobject-introspection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
+, pkgs
+, fetchgit
+, overrides ? (self: super: {})
+, lib
+, libiconv
 }:
 
 let
-  isLua52 = lua.luaversion == "5.2";
+  packages = ( self:
+
+let
+  luaAtLeast = lib.versionAtLeast lua.luaversion;
+  luaOlder = lib.versionOlder lua.luaversion;
+  isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
+  isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+
+  # Check whether a derivation provides a lua module.
+  hasLuaModule = drv: drv? luaModule ;
+
+  callPackage = pkgs.newScope self;
+
+  requiredLuaModules = drvs: with stdenv.lib; let
+    modules =  filter hasLuaModule drvs;
+  in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
+
+  # Convert derivation to a lua module.
+  toLuaModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        luaModule = lua;
+        requiredLuaModules = requiredLuaModules drv.propagatedBuildInputs;
+      };
+    });
+
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -24,19 +55,53 @@ let
     else if stdenv.isSunOS then "solaris"
     else throw "unsupported platform";
 
-  self = _self;
-  _self = with self; {
-  inherit lua;
-  inherit (stdenv.lib) maintainers;
-
-  # helper functions for dealing with LUA_PATH and LUA_CPATH
-  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
-  getLuaPath    = lib : getPath lib "lua";
-  getLuaCPath   = lib : getPath lib "so";
 
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic {
     inherit lua writeText;
+  };
+
+  buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
+
+  buildLuarocksPackage = with pkgs.lib; makeOverridable( callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+    inherit toLuaModule;
+    inherit lua writeText;
+  });
+  # TODO move that as python/haskell does
+  # generatedPackages = lib.optionalAttrs (builtins.pathExists path) (import path {
+  #     inherit self stdenv fetchurl requiredLuaModules luaOlder luaAtLeast
+  #     isLua51 isLua52 isLuaJIT buildLuaPackage lua;
+  # });
+
+  # TODO add list of derivations
+  getLuaPaths = majorVersion: [
+     "lib/lua/${majorVersion}/?.lua" "share/lua/${majorVersion}/?.lua"
+    "share/lua/${majorVersion}/?/init.lua" "lib/lua/${majorVersion}/?/init.lua"
+  ];
+  getLuaCPaths = majorVersion: [
+     "lib/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?.so" "share/lua/${majorVersion}/?/init.so"
+  ];
+
+
+
+  # # makeSearchPath = subDir: packages:
+  # #   concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
+  # makeLuaPath =
+  # makeLuaCPath
+  # makeLuaPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredLuaModules drvs);
+  # makeLuaCPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredLuaModules drvs);
+
+  # inspired by makePythonPath
+  # makeLuaPath = :
+in
+with self; {
+
+    inherit toLuaModule;
+    inherit requiredLuaModules luaOlder luaAtLeast
+      isLua51 isLua52 isLuaJIT buildLuaPackage lua callPackage;
+
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
+    inherit lua; inherit (pkgs) makeSetupHook makeWrapper;
   };
 
   luarocks = callPackage ../development/tools/misc/luarocks {

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlagsArray=(
       PREFIX=$out
-      LUA_LIBDIR="$out/lib/lua/${lua5.luaversion}"
+      LUA_LIBDIR="$out/lib/lua/${lua5.majorVersion}"
       LUA_INC="-I${lua5}/include");
   '';
 

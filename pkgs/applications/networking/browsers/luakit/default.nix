@@ -4,7 +4,7 @@
 
 let
   lualibs = [luafilesystem];
-  getPath       = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
+  getPath       = lib : type : "${lib}/lib/lua/${lua5.majorVersion}/?.${type};${lib}/share/lua/${lua5.majorVersion}/?.${type}";
   getLuaPath    = lib : getPath lib "lua";
   getLuaCPath   = lib : getPath lib "so";
   luaPath       = stdenv.lib.concatStringsSep ";" (map getLuaPath lualibs);

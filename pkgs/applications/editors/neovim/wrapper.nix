@@ -102,7 +102,6 @@ let
     passthru = { unwrapped = neovim; };
 
     meta = neovim.meta // {
-      description = neovim.meta.description;
       hydraPlatforms = [];
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;

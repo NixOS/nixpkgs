@@ -92,6 +92,8 @@ let
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
     sha256 = "0j7sbn3w6bgslvwwh5v9527w3gi2sd08kskrgxamx693y0b0i3ia";
   };
+  luaEnv = lua.withPackages(ps: with ps; [ luasocket libuchardet luasocket]);
+
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
   version = "0.29.1";
@@ -139,7 +141,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
-    lua luasocket libuchardet mujs
+    luaEnv
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray

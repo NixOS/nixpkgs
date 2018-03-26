@@ -1,6 +1,10 @@
 { fetchurl, unzip, stdenv, makeWrapper, qtbase, yajl, libzip, hunspell
-, boost, lua5_1, luafilesystem, luazip, lrexlib, luasqlite3, qmake }:
+, boost, lua
+, qmake }:
 
+let
+  luaEnv = lua.withPackages(ps: with ps; [ luazip lrexlib luasqlite3 ]);
+in
 stdenv.mkDerivation rec {
   name = "mudlet-${version}";
   version = "3.0.0-delta";
@@ -12,24 +16,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper qmake ];
   buildInputs = [
-    unzip qtbase lua5_1 hunspell libzip yajl boost
-    luafilesystem luazip lrexlib luasqlite3
+    unzip qtbase hunspell libzip yajl boost
+    luaEnv
   ];
 
   preConfigure = "cd src";
 
-  installPhase = let
-    luaZipPath = "${luazip}/lib/lua/5.1/?.so";
-    luaFileSystemPath = "${luafilesystem}/lib/lua/5.1/?.so";
-    lrexlibPath = "${lrexlib}/lib/lua/5.1/?.so";
-    luasqlitePath = "${luasqlite3}/lib/lua/5.1/?.so";
-  in ''
+  installPhase = ''
     mkdir -pv $out/bin
     cp mudlet $out
     cp -r mudlet-lua $out
 
+    #
     makeWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "${luaFileSystemPath};${luaZipPath};${lrexlibPath};${luasqlitePath}" \
       --run "cd $out";
   '';
 

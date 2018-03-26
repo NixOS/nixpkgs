@@ -1,4 +1,13 @@
-{stdenv, fetchurl, lua, curl, makeWrapper, which, unzip}:
+{stdenv, fetchurl
+, curl, makeWrapper, which, unzip
+,lua
+# for 'luarocks pack'
+, zip
+# some packages need to be compiled with cmake
+, cmake
+# to be able to bring
+, toLuaModule
+}:
 let
   s = # Generated upstream information
   rec {
@@ -13,7 +22,7 @@ let
     lua curl makeWrapper which unzip
   ];
 in
-stdenv.mkDerivation {
+toLuaModule (stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
   src = fetchurl {
@@ -31,22 +40,34 @@ stdenv.mkDerivation {
         configureFlags="$configureFlags --with-lua-include=$lua_inc"
     fi
   '';
+
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     for i in "$out"/bin/*; do
         test -L "$i" || {
 	    wrapProgram "$i" \
-	      --prefix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
-	      --prefix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+	      --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
+	      --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+	      --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
+	      --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
 
 	}
     done
   '';
-  meta = {
+
+  propagatedBuildInputs = [ zip unzip cmake ];
+
+  # unpack hook for src.rock files
+  setupHook = ./setup-hook.sh;
+
+  # cmake is just to compile packages wit cmake types, not luarocks itself
+  dontUseCmakeConfigure = true;
+
+  meta = with stdenv.lib; {
     inherit (s) version;
     description = ''A package manager for Lua'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.mit ;
+    maintainers = [maintainers.raskin];
+    platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

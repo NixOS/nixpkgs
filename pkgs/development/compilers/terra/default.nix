@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
     EOF
 
     mkdir -p build
+    # we need to copy this specific version else the Makefile attempts to fetch it
     cp ${luajitSrc} build/${luajitArchive}
+    # prepend jit folder
+    export LUA_PATH='build/share/luajit-2.0.4/?.lua'
+    export LUA_CPATH='build/share/luajit-2.0.4/?.so'
   '';
 
   installPhase = ''

@@ -21,6 +21,10 @@ stdenv.mkDerivation rec{
   buildPhase = ''
     cd ..
     export PREFIX=$out
+    for i in pkg/*
+    do
+      export LUA_PATH="$PWD/$i/?.lua''${LUA_PATH:+;$LUA_PATH}"
+    done
 
     mkdir "$out"
     sh install.sh -s

@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
       sha256 = "19ichkbc4rxv00ggz8gyf29jibvc2wq9pqjik0ll326rrxswgnag";
   };
 
-  luaver = lua5.luaversion;
+  luaver = lua5.majorVersion;
   patchPhase = ''
-      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua5.luaversion}," \
-          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua5.luaversion}," \
+      sed -e "s,^INSTALL_TOP_SHARE.*,INSTALL_TOP_SHARE=$out/share/lua/${lua5.majorVersion}," \
+          -e "s,^INSTALL_TOP_LIB.*,INSTALL_TOP_LIB=$out/lib/lua/${lua5.majorVersion}," \
           -i config
   '';
 

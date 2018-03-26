@@ -1,13 +1,18 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchFromGitHub, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 , libxkbcommon, xcbutilxrm, hicolor-icon-theme
+, luaModules ? []
+, lua
 }:
 
-with luaPackages; stdenv.mkDerivation rec {
+let
+  luaEnv = lua.withPackages(ps: with ps; [ lgi  ] ++ luaModules);
+in
+stdenv.mkDerivation rec {
   name = "awesome-${version}";
   version = "4.2";
 
@@ -27,12 +32,13 @@ with luaPackages; stdenv.mkDerivation rec {
     pkgconfig
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
+    # luaEnv # not mandatory but lgi is advised
   ];
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
   buildInputs = [ cairo librsvg dbus gdk_pixbuf gobject-introspection
-                  git lgi libpthreadstubs libstartup_notification
-                  libxdg_basedir lua nettools pango xcb-util-cursor
+                  git libpthreadstubs libstartup_notification
+                  libxdg_basedir luaEnv nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
@@ -42,14 +48,13 @@ with luaPackages; stdenv.mkDerivation rec {
   cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
-  LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
-  LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
+  # TODO revisit
   postInstall = ''
     wrapProgram $out/bin/awesome \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --add-flags '--search ${lgi}/lib/lua/${lua.luaversion}' \
-      --add-flags '--search ${lgi}/share/lua/${lua.luaversion}' \
+      --add-flags '--search ''${LUA_PATH}' \
+      --add-flags '--search ''${LUA_CPATH}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix PATH : "${stdenv.lib.makeBinPath [ compton unclutter procps iproute coreutils curl alsaUtils findutils xterm ]}"
 

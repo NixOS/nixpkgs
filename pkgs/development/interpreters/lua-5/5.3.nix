@@ -1,9 +1,22 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline, compat ? false
+, hostPlatform
+, makeWrapper
+, lua-setup-hook, callPackage
+, self
+, getLuaPath, getLuaCPath
+, luaPackages, packageOverrides ? (self: super: {})
+}:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";
-  luaversion = "5.3";
-  version = "${luaversion}.5";
+  majorVersion = "5.3";
+  version = "${majorVersion}.4";
+
+  # helper functions for dealing with LUA_PATH and LUA_CPATH
+  LuaPathSearchPaths    = getLuaPath majorVersion;
+  LuaCPathSearchPaths   = getLuaCPath majorVersion;
+  setupHook = lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
@@ -17,11 +30,11 @@ stdenv.mkDerivation rec {
   configurePhase =
     if stdenv.isDarwin
     then ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version}  CC="$CC" )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${version} CC="$CC")
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.${version}.dylib" INSTALL_DATA='cp -d' )
   '' else ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${luaversion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}" INSTALL_DATA='cp -d' )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" LDFLAGS="-fPIC" V=${majorVersion} R=${version} CC="$CC" AR="$AR q" RANLIB="$RANLIB")
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${majorVersion} liblua.so.${version}" INSTALL_DATA='cp -d' )
     cat ${./lua-5.3-dso.make} >> src/Makefile
     sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
   '';
@@ -33,7 +46,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
-    rmdir $out/{share,lib}/lua/${luaversion} $out/{share,lib}/lua
+    rmdir $out/{share,lib}/lua/${majorVersion} $out/{share,lib}/lua
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/lua.pc" <<EOF
     prefix=$out
@@ -53,6 +66,18 @@ stdenv.mkDerivation rec {
     EOF
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
   '';
+
+  passthru = let
+    luaPackages = callPackage ../../../top-level/lua-packages.nix {lua=self; overrides=packageOverrides;};
+  in rec {
+    # executable = "${libPrefix}m";
+    buildEnv = callPackage ./wrapper.nix { lua = self;
+    inherit (luaPackages) requiredLuaModules;
+    };
+    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
+  };
 
   meta = {
     homepage = http://www.lua.org;
