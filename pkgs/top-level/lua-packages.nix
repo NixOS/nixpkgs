@@ -109,14 +109,14 @@ let
 
   luacheck = buildLuaPackage rec {
     pname = "luacheck";
-    version = "0.20.0";
+    version = "0.21.2";
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
       owner = "mpeterv";
       repo = "luacheck";
       rev = "${version}";
-      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+      sha256 = "1nwnblb55hyn80w3kxiy9pdh3d5di84zw4zmz8jlffrs8srg493n";
     };
 
     propagatedBuildInputs = [ lua ];
