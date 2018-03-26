@@ -123,6 +123,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 })
