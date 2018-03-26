@@ -23,6 +23,7 @@ out/html/index.html: manual-full.xml style.css
 		"$$XSL/docbook/xhtml/docbook.xsl" \
 		./manual-full.xml
 
+	cp ./overrides.css out/html/
 	cp ./style.css out/html/style.css
 
 	mkdir -p out/html/images/callouts
@@ -36,6 +37,7 @@ out/epub/manual.epub: manual-full.xml
 		"$$XSL/docbook/epub/docbook.xsl" \
 		./manual-full.xml
 
+	cp ./overrides.css out/epub/scratch/OEBPS
 	cp ./style.css out/epub/scratch/OEBPS
 	mkdir -p out/epub/scratch/OEBPS/images/callouts/
 	cp "$$XSL/docbook/images/callouts/"*.svg out/epub/scratch/OEBPS/images/callouts/
