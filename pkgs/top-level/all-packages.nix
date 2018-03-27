@@ -13080,26 +13080,7 @@ with pkgs;
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
-  libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
-
-  libuuid =
-    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
-    then (utillinuxMinimal // {
-      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
-        # `libblkid' fails to build on GNU/Hurd.
-        configureFlags = args.configureFlags
-          + " --disable-libblkid --disable-mount --disable-libmount"
-          + " --disable-fsck --enable-static --disable-partx";
-        doCheck = false;
-        CPPFLAGS =                    # ugly hack for ugly software!
-          lib.concatStringsSep " "
-            (map (v: "-D${v}=4096")
-                 [ "PATH_MAX" "MAXPATHLEN" "MAXHOSTNAMELEN" ]);
-      });
-    })
-    else if stdenv.isLinux
-    then utillinuxMinimal
-    else null;
+  libuuid = callPackage ../development/libraries/libossp-uuid { };
 
   light = callPackage ../os-specific/linux/light { };
 
