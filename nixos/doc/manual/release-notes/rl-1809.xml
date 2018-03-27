@@ -107,6 +107,15 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      a stable URL for Nixpkgs to use to package this proprietary software.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The GRUB specific option <option>boot.loader.grub.extraInitrd</option>
+      has been replaced with the generic option
+      <option>boot.initrd.secrets</option>. This option creates a secondary
+      initrd from the specified files, rather than using a manually created
+      initrd file.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
