@@ -7,6 +7,7 @@ let
   gitwebConfigFile = pkgs.writeText "gitweb.conf" ''
     # path to git projects (<project>.git)
     $projectroot = "${cfg.projectroot}";
+    $highlight_bin = "${pkgs.highlight}/bin/highlight";
     ${cfg.extraConfig}
   '';
 
@@ -37,6 +38,10 @@ in
       type = types.lines;
       description = ''
         Verbatim configuration text appended to the generated gitweb.conf file.
+      '';
+      example = ''
+        $feature{'highlight'}{'default'} = [1];
+        $feature{'ctags'}{'default'} = [1];
       '';
     };
 
