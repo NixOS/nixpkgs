@@ -7260,7 +7260,7 @@ with pkgs;
 
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
-    inherit (darwin) CF configd;
+    inherit (buildPackages.darwin) CF configd;
   };
   python34 = callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
