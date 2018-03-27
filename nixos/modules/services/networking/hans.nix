@@ -31,7 +31,7 @@ in
         {
           foo = {
             server = "192.0.2.1";
-            extraConfig = "-p mysecurepassword";
+            extraConfig = "-v";
           }
         }
         '';
@@ -49,8 +49,15 @@ in
               type = types.str;
               default = "";
               description = "Additional command line parameters";
-              example = "-p mysecurepassword";
+              example = "-v";
             };
+
+            passwordFile = mkOption {
+              type = types.str;
+              default = "";
+              description = "File that containts password";
+            };
+
           };
         }));
       };
@@ -79,7 +86,13 @@ in
           type = types.str;
           default = "";
           description = "Additional command line parameters";
-          example = "-p mysecurepassword";
+          example = "-v";
+        };
+
+        passwordFile = mkOption {
+          type = types.str;
+          default = "";
+          description = "File that containts password";
         };
       };
 
@@ -102,10 +115,18 @@ in
         description = "hans client - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        preStart = ''
+          cat > /run/hans/${name}-script << EOF
+            #!/bin/sh
+            ${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"} 
+          EOF
+          chmod 700 /run/hans/${name}-script
+        '';
+        script = "/run/hans/${name}-script";
         serviceConfig = {
           RestartSec = "30s";
           Restart = "always";
-          ExecStart = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server}";
+          RuntimeDirectory = [ "hans" ];
         };
       };
     in
@@ -118,7 +139,15 @@ in
         description = "hans, ip over icmp server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.systemPings "-r"}";
+        preStart = ''
+          cat > /run/hans/script << EOF
+            #!/bin/sh
+            ${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.systemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}
+          EOF
+          chmod 700 /run/hans/script
+        '';
+        script = "/run/hans/script";
+        serviceConfig.RuntimeDirectory = [ "hans" ];
       };
     };
 
