@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  # Fix use of fd_set without proper include
+  prePatch = ''
+    sed -e '1i#include <sys/select.h>' -i vtest/util.c
+  '';
+
   meta = with stdenv.lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
     homepage = https://virgil3d.github.io/;
