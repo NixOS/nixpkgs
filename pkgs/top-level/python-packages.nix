@@ -9896,30 +9896,7 @@ in {
 
   };
 
-
-  mrbob = buildPythonPackage rec {
-    name = "mrbob-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mr.bob/mr.bob-${version}.tar.gz";
-      sha256 = "6737eaf98aaeae85e07ebef844ee5156df2f06a8b28d7c3dcb056f811c588121";
-    };
-
-    buildInputs = [ pkgs.glibcLocales self.mock ];
-
-    disabled = isPy3k;
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ argparse jinja2 six ] ++
-                            (optionals isPy26 [ importlib ordereddict ]);
-
-    meta = {
-      homepage = https://github.com/domenkozar/mr.bob.git;
-      description = "A tool to generate code skeletons from templates";
-    };
-  };
+  mrbob = callPackage ../development/python-modules/mrbob {};
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
