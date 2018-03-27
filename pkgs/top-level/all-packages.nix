@@ -13086,7 +13086,7 @@ with pkgs;
     })
     else if stdenv.isLinux
     then utillinuxMinimal
-    else libossp_uuid;
+    else null;
 
   light = callPackage ../os-specific/linux/light { };
 
@@ -21135,5 +21135,6 @@ with pkgs;
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
-  inherit (unixtools) hexdump ps logger eject modprobe umount mount wall hostname more;
+  inherit (unixtools) hexdump ps logger eject modprobe umount
+                      mount wall hostname more sysctl;
 }
