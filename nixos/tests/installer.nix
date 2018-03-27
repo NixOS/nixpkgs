@@ -80,8 +80,9 @@ let
         + optionalString isEfi (if pkgs.stdenv.isAarch64
             then ''bios => "${pkgs.OVMF.fd}/FV/QEMU_EFI.fd", ''
             else ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '');
-    in
-    ''
+    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+      throw "Non-EFI boot methods are only supported on i686 / x86_64"
+    else ''
       $machine->start;
 
       # Make sure that we get a login prompt etc.

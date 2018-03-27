@@ -11,5 +11,6 @@
 , "pnpm"
 , "semver"
 , "sloc"
+, "swagger"
 , "npm"
 ]

@@ -6,8 +6,6 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0c26x8gi3ivmhlbqcmiag4jwrkvcy28ld24j55nqr3jikb904a5v";
@@ -15,11 +13,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [ ./fix_introspection_paths.patch ];
+
   nativeBuildInputs = [ pkgconfig autoconf vala gobjectIntrospection ];
   buildInputs = [ glib ];
-
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
-  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
 
   passthru = {
     updateScript = gnome3.updateScript {

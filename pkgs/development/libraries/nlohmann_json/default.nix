@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "nlohmann_json-${version}";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "0s5xiyvnvxc2k0zkyb12mm5cwn61lavyxlfpknlx5f243g1xi6f6";
+    sha256 = "1mpr781fb2dfbyscrr7nil75lkxsazg4wkm749168lcf2ksrrbfi";
   };
 
   nativeBuildInputs = [ cmake ];

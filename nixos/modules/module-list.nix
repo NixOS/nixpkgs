@@ -158,7 +158,6 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/crashplan.nix
@@ -363,6 +362,7 @@
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
+  ./services/misc/serviio.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
@@ -398,16 +398,7 @@
   ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
-  ./services/monitoring/prometheus/blackbox-exporter.nix
-  ./services/monitoring/prometheus/collectd-exporter.nix
-  ./services/monitoring/prometheus/fritzbox-exporter.nix
-  ./services/monitoring/prometheus/json-exporter.nix
-  ./services/monitoring/prometheus/minio-exporter.nix
-  ./services/monitoring/prometheus/nginx-exporter.nix
-  ./services/monitoring/prometheus/node-exporter.nix
-  ./services/monitoring/prometheus/snmp-exporter.nix
-  ./services/monitoring/prometheus/unifi-exporter.nix
-  ./services/monitoring/prometheus/varnish-exporter.nix
+  ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -640,7 +631,6 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
-  ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix

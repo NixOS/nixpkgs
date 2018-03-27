@@ -112,7 +112,13 @@ self: super: {
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  }));
+  })).overrideScope (self: super: {
+    # shell-conduit doesn't build with conduit 1.3
+    # see https://github.com/psibi/shell-conduit/issues/15
+    conduit = self.conduit_1_2_13_1;
+    conduit-extra = self.conduit-extra_1_2_3_2;
+    resourcet = self.resourcet_1_1_11;
+  });
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
@@ -238,6 +244,8 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
+  hnix = doJailbreak super.hnix;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -344,7 +352,6 @@ self: super: {
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
-  pure-zlib = dontCheck super.pure-zlib; # https://github.com/NixOS/nixpkgs/issues/37499
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
@@ -915,17 +922,6 @@ self: super: {
   # https://github.com/bos/text-icu/issues/32
   text-icu = dontCheck super.text-icu;
 
-  # https://github.com/strake/lenz.hs/issues/2
-  lenz =
-    let patch = pkgs.fetchpatch
-          { url = https://github.com/strake/lenz.hs/commit/4b9b79104759b9c6b24484455e1eb0d962eb3cff.patch;
-            sha256 = "02i0w9i55a4r251wgjzl5vbk6m2qhilwl7bfp5jwmf22z66sglyn";
-          };
-    in overrideCabal super.lenz (drv:
-      { patches = (drv.patches or []) ++ [ patch ];
-        editedCabalFile = null;
-      });
-
   # https://github.com/haskell/cabal/issues/4969
   haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
   haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
@@ -1005,5 +1001,11 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
+
+  # https://github.com/GaloisInc/pure-zlib/issues/6
+  pure-zlib = doJailbreak super.pure-zlib;
+
+  # https://github.com/strake/lenz-template.hs/issues/1
+  lenz-template = doJailbreak super.lenz-template;
 
 }

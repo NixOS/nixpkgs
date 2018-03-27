@@ -30,6 +30,6 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pecan";
-    homepage = "http://github.com/pecan/pecan";
+    homepage = "https://github.com/pecan/pecan";
   };
 }

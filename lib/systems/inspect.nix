@@ -39,12 +39,8 @@ rec {
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
 
-    isKexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })
-                       [ "x86" "arm" "aarch64" "mips" ];
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
-    isSeccomputable = map (family: { kernel = kernels.linux; cpu.family = family; })
-                        [ "x86" "arm" "aarch64" "mips" ];
   };
 
   matchAnyAttrs = patterns:

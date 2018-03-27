@@ -13,7 +13,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "14sm67vkpxzpnh4c2mzvr0rpk8a3i8kzxx6fi3lpczrcc1g7di09";
+    sha256 = "0dh3bm90mxrbyvdp7x7hcf5li48j7ppkb44lls65lpn6c59r5waz";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

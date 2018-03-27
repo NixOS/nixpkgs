@@ -167,15 +167,14 @@ let
   };
 
   luaevent = buildLuaPackage rec {
-    version = "0.4.3";
+    version = "0.4.4";
     name = "luaevent-${version}";
-    disabled = isLua52;
 
     src = fetchFromGitHub {
       owner = "harningt";
       repo = "luaevent";
       rev = "v${version}";
-      sha256 = "1c1n2zqx5rwfwkqaq1jj8gvx1vswvbihj2sy445w28icz1xfhpik";
+      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
     };
 
     preBuild = ''

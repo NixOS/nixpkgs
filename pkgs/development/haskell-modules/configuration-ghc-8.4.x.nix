@@ -68,11 +68,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## free >=4.9 && <5
-  either = super.either_5;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
   ## Cabal <2.2
   ## Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
@@ -244,17 +239,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  singletons = overrideCabal super.singletons (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## th-desugar ==1.7.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "singletons";
-      rev    = "23aa4bdaf05ce025a2493b35ec3c26cc94e3fdce";
-      sha256 = "0hw12v4z8jxmykc3j8z6g27swmfpxv40bgnx7nl0ialpwbz9mz27";
-    };
-  });
+  singletons = super.singletons_2_4_1;
 
   ## Upstreamed, awaiting a Hackage release
   tar = overrideCabal super.tar (drv: {
@@ -269,18 +254,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  th-desugar = overrideCabal super.th-desugar (drv: {
-    ##     • Could not deduce (MonadIO (DsM q))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       from the context: Quasi q
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "th-desugar";
-      rev    = "4ca98c6492015e6ad063d3ad1a2ad6c4f0a56837";
-      sha256 = "1n3myd3gia9qsgdvrwqa023d3g7wkrhyv0wc8czwzz0lj9xzh7lw";
-    };
-  });
+  th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
   websockets = overrideCabal super.websockets (drv: {
@@ -646,49 +620,26 @@ self: super: {
     jailbreak       = true;
   });
 
-  # Fix missing semigroup instance for Journal.
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
-    { url = https://github.com/simonmichael/hledger/pull/718.patch;
-      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
-      stripLen = 1;
-    });
-
   # Fix missing semigroup instance.
   data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
     { url = https://github.com/luqui/data-inttrie/pull/5.patch;
       sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
     });
 
-  # https://github.com/jgm/pandoc-types/issues/37
-  pandoc-types = self.pandoc-types_1_17_4_2;
-
-  ## Need latest git version to support current haddock-library versions.
-  pandoc = overrideSrc super.pandoc {
-    version = "2.1.2-git";
-    src = pkgs.fetchFromGitHub {
-      owner  = "jgm";
-      repo   = "pandoc";
-      rev    = "fad8d0d67ff4736e1af554d2bfcf1688aa28c8ec";
-      sha256 = "1sgfnyi2ma8vf91dw9ax9xbbjfcja1q5q9vcwa1rhh05jv8j036a";
-    };
-  };
-
-  # Fix missing semigroup instance.
-  json = appendPatch super.json (pkgs.fetchpatch
-    { url = https://github.com/GaloisInc/json/commit/9292150bbe02c2d126ad6a876242578b1a9d1bf2.patch;
-      sha256 = "1xw2gab0wzhszgcbjhg98kkzgnbfn9n3bx1qlk6g7ir6hhwppm9z";
-    });
-
   # Older versions don't compile.
-  brick = self.brick_0_35;
-  timezone-olson = self.timezone-olson_0_1_9;
+  brick = self.brick_0_35_1;
+  HaTeX = self.HaTeX_3_19_0_0;
   matrix = self.matrix_0_3_6_1;
-  getopt-generics = self.getopt-generics_0_13_0_2;
+  pandoc = self.pandoc_2_1_3;
+  pandoc-types = self.pandoc-types_1_17_4_2;
 
   # https://github.com/xmonad/xmonad/issues/155
   xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch
     { url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
       sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
     })) self.semigroups;
+
+  # https://github.com/xmonad/xmonad-contrib/issues/235
+  xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
 
 }

@@ -1,6 +1,7 @@
 { buildPythonApplication, lib, fetchurl, gettext, wrapGAppsHook
 , python, gtk3, gobjectIntrospection
-, nbxmpp, pyasn1, pygobject3, dbus-python, pillow
+, nbxmpp, pyasn1, pygobject3, gnome3, dbus-python, pillow
+, xvfb_run, dbus
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
 , enableE2E ? true, pycrypto, python-gnupg
 , enableSecrets ? true, libsecret
@@ -23,8 +24,13 @@ buildPythonApplication rec {
     sha256 = "10da4imfldj04917h54vrmg70a1d832jd8p6386paa5jqzf5qk20";
   };
 
+  postPatch = ''
+    # This test requires network access
+    echo "" > test/integration/test_resolver.py
+  '';
+
   buildInputs = [
-    gobjectIntrospection gtk3
+    gobjectIntrospection gtk3 gnome3.defaultIconTheme
   ] ++ optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
     ++ optional enableSecrets libsecret
     ++ optional enableSpelling gspell
@@ -41,12 +47,13 @@ buildPythonApplication rec {
     ++ optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages pythonPackages;
 
-  checkPhase = ''
-    ${python.interpreter} test/runtests.py
-  '';
+  checkInputs = [ xvfb_run dbus.daemon ];
 
-  # Tests try to use GTK+ which fails.
-  doCheck = false;
+  checkPhase = ''
+    xvfb-run dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      ${python.interpreter} test/runtests.py
+  '';
 
   meta = {
     homepage = http://gajim.org/;

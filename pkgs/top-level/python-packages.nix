@@ -267,6 +267,8 @@ in {
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
+  logster = callPackage ../development/python-modules/logster { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -338,6 +340,8 @@ in {
   pygobject2 = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
+
+  pygtail = callPackage ../development/python-modules/pygtail { };
 
   pygtk = callPackage ../development/python-modules/pygtk { libglade = null; };
 
@@ -419,6 +423,8 @@ in {
   };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
+
+  toml = callPackage ../development/python-modules/toml { };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
@@ -775,7 +781,7 @@ in {
 
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -790,7 +796,7 @@ in {
     };
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -810,7 +816,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -830,7 +836,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -855,7 +861,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -880,7 +886,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -896,7 +902,7 @@ in {
     propagatedBuildInputs = with self; [ azure-nspkg ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -921,7 +927,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -946,7 +952,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -965,7 +971,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -984,7 +990,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -1750,7 +1756,7 @@ in {
 
     meta = {
       description = "Python bindings for Oracle Berkeley DB";
-      homepage = http://www.jcea.es/programacion/pybsddb.htm;
+      homepage = https://www.jcea.es/programacion/pybsddb.htm;
       license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
     };
   };
@@ -1861,7 +1867,7 @@ in {
     doCheck = false;
 
     meta = {
-      homepage =  http://github.com/ralphbean/bugwarrior;
+      homepage =  https://github.com/ralphbean/bugwarrior;
       description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
       license = licenses.gpl3Plus;
       platforms = platforms.all;
@@ -4184,6 +4190,10 @@ in {
     };
   };
 
+  face_recognition = callPackage ../development/python-modules/face_recognition { };
+
+  face_recognition_models = callPackage ../development/python-modules/face_recognition_models { };
+
   faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = buildPythonPackage rec {
@@ -4686,7 +4696,7 @@ in {
 
     meta = {
       description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-      homepage = http://mg.pov.lt/gtimelog/;
+      homepage = https://mg.pov.lt/gtimelog/;
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ocharles ];
       platforms = platforms.unix;
@@ -5419,15 +5429,6 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
-  logster = buildPythonPackage {
-    name = "logster-7475c53822";
-    src = pkgs.fetchgit {
-      url = git://github.com/etsy/logster;
-      rev = "7475c53822";
-      sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
-    };
-  };
-
   ncclient = callPackage ../development/python-modules/ncclient {};
 
   logfury = callPackage ../development/python-modules/logfury { };
@@ -5512,7 +5513,7 @@ in {
 
     meta = {
       description = "PAM interface using ctypes";
-      homepage = "http://github.com/minrk/pamela";
+      homepage = "https://github.com/minrk/pamela";
       license = licenses.mit;
     };
   };
@@ -5561,7 +5562,7 @@ in {
 
     meta = {
       description = "A Python-based build/distribution/deployment scripting tool";
-      homepage    = http://github.com/paver/paver;
+      homepage    = https://github.com/paver/paver;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -7640,7 +7641,7 @@ in {
 
     meta = {
       description = "Filesystem abstraction";
-      homepage    = http://pypi.python.org/pypi/fs;
+      homepage    = https://pypi.python.org/pypi/fs;
       license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
@@ -8398,7 +8399,7 @@ in {
     '';
 
     meta = {
-      homepage = "http://falcao.it/HTTPretty/";
+      homepage = "https://falcao.it/HTTPretty/";
       description = "HTTP client request mocking tool";
       license = licenses.mit;
     };
@@ -8838,7 +8839,7 @@ in {
 
     meta = {
       description = "Messaging library for Python";
-      homepage    = "http://github.com/celery/kombu";
+      homepage    = "https://github.com/celery/kombu";
       license     = licenses.bsd3;
     };
   };
@@ -9076,7 +9077,7 @@ in {
     '';
 
     meta = {
-      homepage = http://launchpad.net/pylockfile;
+      homepage = https://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
       license = licenses.asl20;
     };
@@ -10383,7 +10384,7 @@ in {
     };
 
     meta = {
-      homepage = http://alastairs-place.net/projects/netifaces/;
+      homepage = https://alastairs-place.net/projects/netifaces/;
       description = "Portable access to network interfaces from Python";
     };
   };
@@ -10937,7 +10938,7 @@ in {
 
     meta = {
       description = "Draws Python object reference graphs with graphviz";
-      homepage = http://mg.pov.lt/objgraph/;
+      homepage = https://mg.pov.lt/objgraph/;
       license = licenses.mit;
     };
   };
@@ -12150,6 +12151,12 @@ in {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_1;
+  };
+
+  protobuf3_5 = callPackage ../development/python-modules/protobuf {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_5;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -18924,7 +18931,7 @@ EOF
     doCheck = false;
 
     meta = {
-      homepage = "http://matplotlib.org/basemap/";
+      homepage = "https://matplotlib.org/basemap/";
       description = "Plot data on map projections with matplotlib";
       longDescription = ''
         An add-on toolkit for matplotlib that lets you plot data on map projections with
@@ -19084,7 +19091,7 @@ EOF
 
     meta = {
       description = "Copy your docs directly to the gh-pages branch";
-      homepage = "http://github.com/davisp/ghp-import";
+      homepage = "https://github.com/davisp/ghp-import";
       license = "Tumbolia Public License";
       maintainers = with maintainers; [ garbas ];
     };
@@ -19200,7 +19207,7 @@ EOF
 
     meta = {
       description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-      homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
+      homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
       license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];
     };

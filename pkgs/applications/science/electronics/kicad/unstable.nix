@@ -3,9 +3,11 @@
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
 , oceSupport ? true, opencascade_oce
-, ngspiceSupport ? true, ngspice
+, ngspiceSupport ? true, libngspice
 , scriptingSupport ? true, swig, python, wxPython
 }:
+
+assert ngspiceSupport -> libngspice != null;
 
 with lib;
 stdenv.mkDerivation rec {
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade_oce
-    ++ optional (ngspiceSupport) ngspice
+    ++ optional (ngspiceSupport) libngspice
     ++ optionals (scriptingSupport) [ swig python wxPython ];
 
   meta = {
