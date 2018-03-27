@@ -304,7 +304,7 @@ in
         requires    = [ "network-online.target" ];
         after       = [ "network-online.target" ];
 
-        path = [ pkgs.iputils pkgs.tarsnap pkgs.utillinux ];
+        path = with pkgs; [ iputils tarsnap utillinux ];
 
         # In order for the persistent tarsnap timer to work reliably, we have to
         # make sure that the tarsnap server is reachable after systemd starts up
@@ -314,9 +314,9 @@ in
           while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
         '';
 
-        script =
-          let run = ''tarsnap --configfile "/etc/tarsnap/${name}.conf" \
-                        -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
+        script = let
+          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+          run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
                         ${optionalString cfg.verbose "-v"} \
                         ${optionalString cfg.explicitSymlinks "-H"} \
                         ${optionalString cfg.followSymlinks "-L"} \
@@ -329,7 +329,7 @@ in
               if [ ! -e ${cfg.cachedir}/firstrun ]; then
                 ( flock 10
                   flock -u 9
-                  tarsnap --configfile "/etc/tarsnap/${name}.conf" --fsck
+                  ${tarsnap} --fsck
                   flock 9
                 ) 10>${cfg.cachedir}/firstrun
               fi
@@ -351,35 +351,29 @@ in
         description = "Tarsnap restore '${name}'";
         requires    = [ "network-online.target" ];
 
-        path = [ pkgs.iputils pkgs.tarsnap pkgs.utillinux ];
+        path = with pkgs; [ iputils tarsnap utillinux ];
 
-        ##
-        preStart = ''
-          while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
-        '';
-
-        script =
-        let
+        script = let
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
           lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
 
-          in if (cfg.cachedir != null) then ''
-            mkdir -p ${cfg.cachedir}
-            chmod 0700 ${cfg.cachedir}
+        in if (cfg.cachedir != null) then ''
+          mkdir -p ${cfg.cachedir}
+          chmod 0700 ${cfg.cachedir}
 
-            ( flock 9
-              if [ ! -e ${cfg.cachedir}/firstrun ]; then
-                ( flock 10
-                  flock -u 9
-                  ${tarsnap} --fsck
-                  flock 9
-                ) 10>${cfg.cachedir}/firstrun
-              fi
-            ) 9>${cfg.cachedir}/lockf
+          ( flock 9
+            if [ ! -e ${cfg.cachedir}/firstrun ]; then
+              ( flock 10
+                flock -u 9
+                ${tarsnap} --fsck
+                flock 9
+              ) 10>${cfg.cachedir}/firstrun
+            fi
+          ) 9>${cfg.cachedir}/lockf
 
-             exec flock ${cfg.cachedir}/firstrun ${run}
-          '' else "exec ${run}";
+           exec flock ${cfg.cachedir}/firstrun ${run}
+        '' else "exec ${run}";
 
         serviceConfig = {
           Type = "oneshot";
