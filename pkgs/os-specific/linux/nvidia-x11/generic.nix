@@ -6,6 +6,7 @@
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
+, settings32Bit ? false
 
 , prePatch ? ""
 , patches ? []
@@ -68,7 +69,7 @@ let
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
-      settings = callPackage (import ./settings.nix self settingsSha256) {
+      settings = (if settings32Bit then callPackage_i686 else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
