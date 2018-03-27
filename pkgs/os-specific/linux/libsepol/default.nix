@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("MAN3DIR=$out/share/man/man3")
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   passthru = { inherit se_release se_url; };
 
