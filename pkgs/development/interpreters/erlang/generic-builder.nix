@@ -66,6 +66,8 @@ in stdenv.mkDerivation ({
 
   postPatch = ''
     patchShebangs make
+    substituteInPlace erts/etc/unix/Install.src  \
+      --replace "#!/bin/sh" "#!${stdenv.shell}"
 
     ${postPatch}
   '';
