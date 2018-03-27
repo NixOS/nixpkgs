@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
   '';
