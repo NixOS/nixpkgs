@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2
-, useNcurses ? false, ncurses, useQt4 ? false, qt4
+, useNcurses ? false, ncurses, useQt4 ? false, qt4, ps
 , buildPlatform, hostPlatform
 }:
 

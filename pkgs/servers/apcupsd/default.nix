@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # There is no real reason for a bin/sbin split, so just use bin.
   preConfigure = ''
     export ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown
-    export ac_cv_path_WALL=${utillinux}/bin/wall
+    export ac_cv_path_WALL=${wall}/bin/wall
     sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
     export configureFlags="\
         --bindir=$out/bin \

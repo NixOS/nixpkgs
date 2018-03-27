@@ -45,7 +45,7 @@ in rec {
   };
   getopt = singleBinary "getopt" {
     linux = pkgs.utillinux;
-    darwin = pkgs.darwin.shell_cmds;
+    darwin = pkgs.getopt;
   };
   hexdump = singleBinary "hexdump" {
     linux = pkgs.procps;
@@ -67,7 +67,7 @@ in rec {
   };
   more = singleBinary "more" {
     linux = pkgs.utillinux;
-    darwin = pkgs.more_compat;
+    darwin = more_compat;
   };
   mount = singleBinary "mount" {
     linux = pkgs.utillinux;
