@@ -10065,6 +10065,8 @@ in {
     };
   };
 
+  OWSLib = callPackage ../development/python-modules/OWSLib { };
+
   pint = buildPythonPackage rec {
     name = "pint-${version}";
     version = "0.7.2";
