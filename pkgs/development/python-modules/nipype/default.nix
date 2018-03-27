@@ -43,11 +43,9 @@ buildPythonPackage rec {
   # see https://github.com/nipy/nipype/issues/2240
   patches = [ ./prov-version.patch ];
 
-  postPatch = ''
-    substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace "/usr/bin/env bash" "${bash}/bin/bash"
-  '';
-
+  doCheck = false;  # fails with TypeError: None is not callable
+  checkInputs = [ which ];
+  buildInputs = [ pytest mock ];  # required in installPhase
   propagatedBuildInputs = [
     click
     dateutil
