@@ -21142,5 +21142,5 @@ with pkgs;
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
-  inherit (unixtools) hexdump ps;
+  inherit (unixtools) hexdump ps sysctl;
 }
