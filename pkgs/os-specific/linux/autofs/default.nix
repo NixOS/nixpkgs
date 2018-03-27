@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, utillinux, nfs-utils, e2fsprogs
+{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, modprobe, nfs-utils, e2fsprogs
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
@@ -17,10 +17,10 @@ in stdenv.mkDerivation {
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 
-    export MOUNT=${utillinux}/bin/mount
+    export MOUNT=${mount}/bin/mount
     export MOUNT_NFS=${nfs-utils}/bin/mount.nfs
-    export UMOUNT=${utillinux}/bin/umount
-    export MODPROBE=${utillinux}/bin/modprobe
+    export UMOUNT=${umount}/bin/umount
+    export MODPROBE=${modprobe}/bin/modprobe
     export E2FSCK=${e2fsprogs}/bin/fsck.ext2
     export E3FSCK=${e2fsprogs}/bin/fsck.ext3
     export E4FSCK=${e2fsprogs}/bin/fsck.ext4

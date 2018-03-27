@@ -4608,11 +4608,7 @@ with pkgs;
     v8 = v8_static;
   };
 
-  rsnapshot = callPackage ../tools/backup/rsnapshot {
-    # For the `logger' command, we can use either `utillinux' or
-    # GNU Inetutils.  The latter is more portable.
-    logger = if stdenv.isLinux then utillinux else inetutils;
-  };
+  rsnapshot = callPackage ../tools/backup/rsnapshot { };
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
@@ -7659,7 +7655,6 @@ with pkgs;
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
     inherit (llvmPackages_4) llvm clang-unwrapped;
-    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -13091,15 +13086,13 @@ with pkgs;
     })
     else if stdenv.isLinux
     then utillinuxMinimal
-    else null;
+    else libossp_uuid;
 
   light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
-
-  eject = utillinux;
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
@@ -14017,7 +14010,7 @@ with pkgs;
     ncurses = null;
     perl = null;
     systemd = null;
-  }) else throw "utillinux is unsupported on non-Linux";
+  }) else utillinux;
 
   v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
@@ -21142,5 +21135,5 @@ with pkgs;
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
-  inherit (unixtools) hexdump ps sysctl;
+  inherit (unixtools) hexdump ps logger eject modprobe umount mount wall hostname more;
 }

@@ -7328,7 +7328,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-${version}.tgz";
       sha256 = "0ksldcw0hydfy9k70i6q6fm1wgbc54kx0lbwlkrszsbd7q72dlfg";
     };
-    propagatedBuildInputs = [pkgs.utillinux.bin]; # `more` used in tests
+    propagatedBuildInputs = [pkgs.more]; # `more` used in tests
   };
 
   IOPrompt = buildPerlPackage {
