@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux, getopt }:
+{ stdenv, fetchurl, elk5Version, makeWrapper, jre_headless, utillinux }:
 
 with stdenv.lib;
 
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./es-home-5.x.patch ./es-classpath-5.x.patch ];
 
-  buildInputs = [ makeWrapper jre_headless ] ++
-    (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
+  buildInputs = [ makeWrapper jre_headless utillinux ];
 
   installPhase = ''
     mkdir -p $out
@@ -24,9 +23,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/elasticsearch \
       --prefix ES_CLASSPATH : "$out/lib/*" \
-      ${if (!stdenv.isDarwin)
-        then ''--prefix PATH : "${utillinux}/bin/"''
-        else ''--prefix PATH : "${getopt}/bin"''} \
+      --prefix PATH : "${utillinux}/bin" \
       --set JAVA_HOME "${jre_headless}" \
       --set ES_JVM_OPTIONS "$out/config/jvm.options"
 

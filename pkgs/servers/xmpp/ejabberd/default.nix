@@ -1,5 +1,6 @@
 { stdenv, writeScriptBin, lib, fetchurl, git, cacert
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, flock
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
@@ -101,7 +102,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     sed -i \
       -e '2iexport PATH=${ctlpath}:$PATH' \
-      -e 's,\(^ *FLOCK=\).*,\1${utillinux}/bin/flock,' \
+      -e 's,\(^ *FLOCK=\).*,\1${flock}/bin/flock,' \
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl

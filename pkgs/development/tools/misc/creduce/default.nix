@@ -6,8 +6,6 @@
 , utillinux
 }:
 
-assert stdenv.isLinux -> (utillinux != null);
-
 stdenv.mkDerivation rec {
   name = "creduce-${version}";
   version = "2.7.0";

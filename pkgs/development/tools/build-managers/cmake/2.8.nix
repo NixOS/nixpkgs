@@ -1,11 +1,10 @@
 { stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2
-, useNcurses ? false, ncurses, useQt4 ? false, qt4, wantPS ? false, ps ? null
+, useNcurses ? false, ncurses, useQt4 ? false, qt4, ps
 , buildPlatform, hostPlatform
 }:
 
 with stdenv.lib;
 
-assert wantPS -> (ps != null);
 assert stdenv ? cc;
 assert stdenv.cc ? libc;
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
-  propagatedBuildInputs = optional wantPS ps;
+  propagatedBuildInputs = [ ps ];
 
   CMAKE_PREFIX_PATH = concatStringsSep ":"
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);

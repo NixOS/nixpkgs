@@ -2474,7 +2474,6 @@ package-maintainers:
     - bson-lens
     - cased
     - elm-export-persistent
-    - pipes-csv
     - pipes-mongodb
     - skeletons
     - streaming-wai
@@ -2492,9 +2491,6 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
-  alunduil:
-    - network-arbitrary
-    - network-uri-json
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
@@ -3509,6 +3505,7 @@ dont-distribute-packages:
   clash-vhdl:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   clash:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   ClassLaws:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  classy-miso:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   classy-parallel:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   ClassyPrelude:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   clckwrks-dot-com:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6505,6 +6502,7 @@ dont-distribute-packages:
   lmdb-simple:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   lmonad-yesod:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   lmonad:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  load-font:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   local-search:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   located-monad-logger:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   loch:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -6990,6 +6988,7 @@ dont-distribute-packages:
   network-address:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-anonymous-i2p:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-api-support:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
+  network-arbitrary:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-bitcoin:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-builder:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-bytestring:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7008,6 +7007,7 @@ dont-distribute-packages:
   network-stream:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-topic-models:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-transport-amqp:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  network-uri-json:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-uri-static:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-voicetext:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   network-wai-router:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7107,6 +7107,7 @@ dont-distribute-packages:
   octohat:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   octopus:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   oculus:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  odbc:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   OddWord:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   oden-go-packages:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   odpic-raw:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -7372,6 +7373,7 @@ dont-distribute-packages:
   pipes-conduit:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-core:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-courier:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  pipes-csv:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-errors:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-extra:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   pipes-fastx:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -8523,6 +8525,7 @@ dont-distribute-packages:
   stream-monad:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   stream:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   streamed:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  streaming-benchmarks:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   streaming-concurrency:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   streaming-eversion:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   streaming-osm:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -9175,6 +9178,7 @@ dont-distribute-packages:
   wai-middleware-preprocessor:                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-middleware-route:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-middleware-static-caching:                [ i686-linux, x86_64-linux, x86_64-darwin ]
+  wai-middleware-verbs:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-responsible:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-router:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   wai-routes:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]

@@ -1,4 +1,4 @@
-{ stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   name = "wrapper-${version}";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
       -e "s#%gettext%#${gettext}/bin/gettext#" \
-      -e "s#/usr/ucb/ps#${procps}/bin/ps#" \
+      -e "s#/usr/ucb/ps#${ps}/bin/ps#" \
       -e "s#/usr/bin/tr#${coreutils}/bin/tr#" \
       -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \

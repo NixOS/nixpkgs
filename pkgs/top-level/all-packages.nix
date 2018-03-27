@@ -3236,6 +3236,8 @@ with pkgs;
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lvmsync = callPackage ../tools/backup/lvmsync { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
@@ -4610,11 +4612,7 @@ with pkgs;
     v8 = v8_static;
   };
 
-  rsnapshot = callPackage ../tools/backup/rsnapshot {
-    # For the `logger' command, we can use either `utillinux' or
-    # GNU Inetutils.  The latter is more portable.
-    logger = if stdenv.isLinux then utillinux else inetutils;
-  };
+  rsnapshot = callPackage ../tools/backup/rsnapshot { };
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
@@ -5636,6 +5634,8 @@ with pkgs;
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
+  xmloscopy = callPackage ../tools/text/xml/xmloscopy { };
+
   xmlstarlet = callPackage ../tools/text/xml/xmlstarlet { };
 
   xmlto = callPackage ../tools/typesetting/xmlto {
@@ -6360,6 +6360,7 @@ with pkgs;
       callPackage ../development/compilers/openjdk-darwin { }
     else
       callPackage ../development/compilers/openjdk/7.nix {
+        ant = apacheAnt_1_9;
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
       };
 
@@ -6378,6 +6379,12 @@ with pkgs;
     # else
       callPackage ../development/compilers/openjdk/9.nix {
         bootjdk = openjdk8;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+
+  openjdk10 =
+      callPackage ../development/compilers/openjdk/10.nix {
+        bootjdk = openjdk9;
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6890,8 +6897,7 @@ with pkgs;
   z88dk = callPackage ../development/compilers/z88dk { };
 
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
-  zulu9 = callPackage ../development/compilers/zulu { };
-  zulu = zulu9;
+  zulu = callPackage ../development/compilers/zulu { };
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -7418,6 +7424,8 @@ with pkgs;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
+  apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
+
   apacheKafka = apacheKafka_1_0;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
@@ -7605,14 +7613,9 @@ with pkgs;
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
-    wantPS = stdenv.isDarwin;
-    inherit (darwin) ps;
-  };
+  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
-    inherit (darwin) ps;
-  };
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
@@ -7640,16 +7643,12 @@ with pkgs;
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
     inherit (llvmPackages_4) llvm clang-unwrapped;
-    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csmith = callPackage ../development/tools/misc/csmith {
     inherit (perlPackages) perl SysCPU;
-    # Workaround optional dependency on libbsd that's
-    # currently broken on Darwin.
-    libbsd = if stdenv.isDarwin then null else libbsd;
   };
 
   csslint = callPackage ../development/web/csslint { };
@@ -8199,7 +8198,9 @@ with pkgs;
 
   swfmill = callPackage ../tools/video/swfmill { };
 
-  swftools = callPackage ../tools/video/swftools { };
+  swftools = callPackage ../tools/video/swftools {
+    stdenv = gccStdenv;
+  };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
@@ -8512,6 +8513,8 @@ with pkgs;
   };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
+
+  clipper = callPackage ../development/libraries/clipper { };
 
   cln = callPackage ../development/libraries/cln { };
 
@@ -9580,7 +9583,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
-  libcdio-paranoia = callPackage ../development/libraries/libcdio-paranoia { };
+  libcdio-paranoia = callPackage ../development/libraries/libcdio-paranoia {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration IOKit;
+  };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
@@ -10754,6 +10759,7 @@ with pkgs;
 
   opal = callPackage ../development/libraries/opal {
     ffmpeg = ffmpeg_2;
+    stdenv = overrideCC stdenv gcc6;
   };
 
   openh264 = callPackage ../development/libraries/openh264 { };
@@ -12315,12 +12321,7 @@ with pkgs;
   jetty = callPackage ../servers/http/jetty { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
-  knot-resolver = callPackage ../servers/dns/knot-resolver {
-    # TODO: vimNox after it gets fixed on Darwin or something lighter
-    hexdump = if stdenv.isLinux then utillinux.bin
-              else if stdenv.isDarwin then darwin.shell_cmds
-              else vim/*xxd*/;
-  };
+  knot-resolver = callPackage ../servers/dns/knot-resolver { };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -13038,8 +13039,6 @@ with pkgs;
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
-  eject = utillinux;
-
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
@@ -13156,7 +13155,9 @@ with pkgs;
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx { };
+  kmsxx = callPackage ../development/libraries/kmsxx {
+    stdenv = overrideCC stdenv gcc6;
+  };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
@@ -13628,7 +13629,8 @@ with pkgs;
     if hostPlatform.isMusl then musl-getconf
     else lib.getBin stdenv.cc.libc;
 
-  nettools = callPackage ../os-specific/linux/net-tools { };
+  nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
+             else unixtools.nettools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
@@ -13751,7 +13753,8 @@ with pkgs;
 
   procps = procps-ng;
 
-  procps-ng = callPackage ../os-specific/linux/procps-ng { };
+  procps-ng = if stdenv.isLinux then callPackage ../os-specific/linux/procps-ng { }
+              else unixtools.procps;
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
@@ -13944,15 +13947,17 @@ with pkgs;
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = callPackage ../os-specific/linux/util-linux { };
+  utillinux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
+              else unixtools.utillinux;
+
   utillinuxCurses = utillinux;
 
-  utillinuxMinimal = appendToName "minimal" (utillinux.override {
+  utillinuxMinimal = if stdenv.isLinux then appendToName "minimal" (utillinux.override {
     minimal = true;
     ncurses = null;
     perl = null;
     systemd = null;
-  });
+  }) else utillinux;
 
   v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
@@ -14582,7 +14587,9 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
-  ahoviewer = callPackage ../applications/graphics/ahoviewer { };
+  ahoviewer = callPackage ../applications/graphics/ahoviewer {
+    useUnrar = config.ahoviewer.useUnrar or false;
+  };
 
   airwave = callPackage ../applications/audio/airwave/default.nix { };
 
@@ -15086,11 +15093,10 @@ with pkgs;
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
-    docker_17_12
-    docker_18_02;
+    docker_18_03;
 
-  docker = docker_17_12;
-  docker-edge = docker_18_02;
+  docker = docker_18_03;
+  docker-edge = docker_18_03;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -16987,6 +16993,8 @@ with pkgs;
 
   openjump = callPackage ../applications/misc/openjump { };
 
+  openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
+
   openscad = callPackage ../applications/graphics/openscad {};
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
@@ -17266,6 +17274,7 @@ with pkgs;
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
     qt = qt4;
   };
 
@@ -21068,4 +21077,9 @@ with pkgs;
   xml2rfc = callPackage ../tools/typesetting/xml2rfc { };
 
   mmark = callPackage ../tools/typesetting/mmark { };
+
+  # Unix tools
+  unixtools = recurseIntoAttrs (callPackages ./unix-tools.nix { });
+  inherit (unixtools) hexdump ps logger eject modprobe umount
+                      mount wall hostname more sysctl;
 }

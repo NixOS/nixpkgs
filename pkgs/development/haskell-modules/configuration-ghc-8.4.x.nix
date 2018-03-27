@@ -68,11 +68,6 @@ self: super: {
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
-  ## free >=4.9 && <5
-  either = super.either_5;
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
   ## Cabal <2.2
   ## Older versions don't compile.
   hackage-db = super.hackage-db_2_0_1;
@@ -646,13 +641,6 @@ self: super: {
     jailbreak       = true;
   });
 
-  # Fix missing semigroup instance for Journal.
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
-    { url = https://github.com/simonmichael/hledger/pull/718.patch;
-      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
-      stripLen = 1;
-    });
-
   # Fix missing semigroup instance.
   data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
     { url = https://github.com/luqui/data-inttrie/pull/5.patch;
@@ -660,7 +648,7 @@ self: super: {
     });
 
   # Older versions don't compile.
-  brick = self.brick_0_35;
+  brick = self.brick_0_35_1;
   getopt-generics = self.getopt-generics_0_13_0_2;
   HaTeX = self.HaTeX_3_19_0_0;
   json = self.json_0_9_2;
