@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils, wall, hostname, man
-, utillinux
 , enableCgiScripts ? true, gd
 }:
 
