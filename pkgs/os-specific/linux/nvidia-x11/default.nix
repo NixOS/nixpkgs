@@ -46,6 +46,7 @@ rec {
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
+    settings32Bit = true;
 
     prePatch = let
       debPatches = fetchurl {
