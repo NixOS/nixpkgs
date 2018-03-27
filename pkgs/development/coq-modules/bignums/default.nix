@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, coq }:
 
-let param =
+let params =
   {
     "8.6" = {
       rev = "v8.6.0";
@@ -14,7 +14,8 @@ let param =
       rev = "V8.8+beta1";
       sha256 = "1ymxyrvjygscxkfj3qkq66skl3vdjhb670rzvsvgmwrjkrakjnfg";
     };
-  }."${coq.coq-version}"
+  };
+  param = params."${coq.coq-version}"
 ; in
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" ];
+    compatibleCoqVersions = v: builtins.hasAttr v params;
   };
 }
