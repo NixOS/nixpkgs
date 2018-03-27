@@ -36,6 +36,9 @@ buildPythonPackage rec {
     sha256 = "47f62fda3d6b9a37aa407a6b78c80e91240aa71e61191ed00da68b02839fe258";
   };
 
+  # see https://github.com/nipy/nipype/issues/2240
+  patches = [ ./prov-version.patch ];
+
   doCheck = false;  # fails with TypeError: None is not callable
   checkInputs = [ which ];
   buildInputs = [ pytest mock ];  # required in installPhase
