@@ -63,6 +63,4 @@ rec {
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
   };
-
-  legacy_173 = callPackage ./legacy173.nix { };
 }
