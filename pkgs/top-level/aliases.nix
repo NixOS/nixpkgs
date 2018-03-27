@@ -122,6 +122,7 @@ mapAliases (rec {
   libgumbo = gumbo; # added 2018-01-21
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
+  libossp_uuid = libuuid; # added 2018-03-27
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31

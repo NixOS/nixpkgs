@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, libmsgpack, qt48, libsodium, snappy, libuuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
 }@args:
 
@@ -332,7 +332,7 @@ in
   };
 
   uuid4r = attrs: {
-    buildInputs = [ which libossp_uuid ];
+    buildInputs = [ which libuuid ];
   };
 
   xapian-ruby = attrs: {

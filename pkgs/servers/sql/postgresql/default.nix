@@ -1,4 +1,4 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libuuid, openssl, libxml2, makeWrapper }:
 
 let
 
@@ -15,8 +15,7 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl libxml2 makeWrapper ]
-      ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
+      [ zlib readline openssl libxml2 makeWrapper libuuid ];
 
     enableParallelBuilding = true;
 
@@ -27,9 +26,8 @@ let
       "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
-    ]
-      ++ lib.optional (stdenv.isDarwin)  "--with-uuid=e2fs"
-      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
+      "--with-ossp-uuid"
+    ];
 
     patches =
       [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
