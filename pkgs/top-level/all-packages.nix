@@ -17079,6 +17079,8 @@ with pkgs;
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
+  mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
+
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   micro = callPackage ../applications/editors/micro { };
