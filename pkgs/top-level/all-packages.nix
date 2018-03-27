@@ -15873,12 +15873,6 @@ with pkgs;
     gtk = gtk3;
   };
 
-  girara-light = callPackage ../applications/misc/girara {
-    gtk = gtk3;
-    withBuildColors = false;
-    ncurses = null;
-  };
-
   gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
 
   inherit (gitAndTools) git gitFull gitSVN git-cola svn2git git-radar git-secret transcrypt git-crypt;
