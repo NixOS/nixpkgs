@@ -82,7 +82,7 @@ in rec {
   };
   ps = singleBinary "ps" {
     linux = pkgs.procps;
-    darwin = pkgs.darwin.adv_cmds;
+    darwin = pkgs.darwin.ps;
   };
   route = singleBinary "route" {
     linux = pkgs.nettools;

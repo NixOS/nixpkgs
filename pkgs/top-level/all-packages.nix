@@ -7620,14 +7620,9 @@ with pkgs;
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
-    wantPS = stdenv.isDarwin;
-    inherit (darwin) ps;
-  };
+  cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
-    inherit (darwin) ps;
-  };
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
