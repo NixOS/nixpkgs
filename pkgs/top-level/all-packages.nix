@@ -3160,6 +3160,8 @@ with pkgs;
 
   kore = callPackage ../development/web/kore { };
 
+  krakenx = callPackage ../tools/system/krakenx { };
+
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
