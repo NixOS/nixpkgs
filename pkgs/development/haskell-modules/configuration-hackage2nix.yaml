@@ -38,22 +38,22 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 11.1
+  # LTS Haskell 11.2
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
   - accelerate ==1.1.1.0
-  - accelerate-arithmetic ==1.0
+  - accelerate-arithmetic ==1.0.0.1
   - accelerate-bignum ==0.1.0.0
   - accelerate-blas ==0.1.0.1
   - accelerate-fft ==1.1.0.0
-  - accelerate-fftw ==1.0
-  - accelerate-fourier ==1.0.0.4
+  - accelerate-fftw ==1.0.0.1
+  - accelerate-fourier ==1.0.0.5
   - accelerate-io ==1.0.0.1
   - accelerate-llvm ==1.1.0.0
   - accelerate-llvm-native ==1.1.0.1
   - accelerate-llvm-ptx ==1.1.0.1
-  - accelerate-utility ==1.0
+  - accelerate-utility ==1.0.0.1
   - accuerr ==0.2.0.2
   - ace ==0.6
   - action-permutations ==0.0.0.1
@@ -235,7 +235,7 @@ default-package-overrides:
   - bson-lens ==0.1.1
   - btrfs ==0.1.2.3
   - buchhaltung ==0.0.7
-  - buffer-builder ==0.2.4.4
+  - buffer-builder ==0.2.4.5
   - buffer-pipe ==0.0
   - butcher ==1.3.0.0
   - bv ==0.5
@@ -252,7 +252,7 @@ default-package-overrides:
   - bytestring-tree-builder ==0.2.7.1
   - bytestring-trie ==0.2.4.1
   - bzlib ==0.5.0.5
-  - bzlib-conduit ==0.3.0
+  - bzlib-conduit ==0.3.0.1
   - c2hs ==0.28.3
   - Cabal ==2.0.1.1
   - cabal-doctest ==1.0.6
@@ -275,7 +275,7 @@ default-package-overrides:
   - cassava-records ==0.1.0.4
   - cassette ==0.1.0
   - cast ==0.1.0.2
-  - cayley-client ==0.4.4
+  - cayley-client ==0.4.5
   - cereal ==0.5.5.0
   - cereal-conduit ==0.8.0
   - cereal-text ==0.1.0.2
@@ -303,6 +303,7 @@ default-package-overrides:
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
+  - cisco-spark-api ==0.1.0.2
   - clang-compilation-database ==0.1.0.1
   - classyplate ==0.3.0.2
   - classy-prelude ==1.4.0
@@ -351,7 +352,7 @@ default-package-overrides:
   - concurrent-split ==0.0.1
   - concurrent-supply ==0.1.8
   - cond ==0.4.1.1
-  - conduit ==1.3.0.1
+  - conduit ==1.3.0.2
   - conduit-algorithms ==0.0.8.0
   - conduit-combinators ==1.3.0
   - conduit-connection ==0.1.0.4
@@ -429,12 +430,12 @@ default-package-overrides:
   - czipwith ==1.0.0.0
   - data-accessor ==0.2.2.7
   - data-accessor-mtl ==0.2.0.4
-  - data-accessor-template ==0.2.1.14
+  - data-accessor-template ==0.2.1.15
   - data-accessor-transformers ==0.2.1.7
   - data-binary-ieee754 ==0.4.4
   - data-bword ==0.1.0.1
   - data-checked ==0.3
-  - data-clist ==0.1.2.0
+  - data-clist ==0.1.2.1
   - data-default ==0.7.1.1
   - data-default-class ==0.1.2.0
   - data-default-instances-containers ==0.0.1
@@ -442,7 +443,7 @@ default-package-overrides:
   - data-default-instances-old-locale ==0.0.1
   - data-diverse ==2.0.1.0
   - data-diverse-lens ==2.1.0.0
-  - datadog ==0.2.0.0
+  - datadog ==0.2.2.0
   - data-dword ==0.3.1.2
   - data-endian ==0.1.1
   - data-fix ==0.2.0
@@ -467,8 +468,9 @@ default-package-overrides:
   - dbcleaner ==0.1.3
   - dbus ==0.10.15
   - debian-build ==0.10.1.0
-  - debug ==0.1
+  - debug ==0.1.1
   - Decimal ==0.5.1
+  - declarative ==0.5.2
   - deepseq-generics ==0.2.0.0
   - dejafu ==1.3.2.0
   - dependent-map ==0.2.4.0
@@ -478,6 +480,7 @@ default-package-overrides:
   - deriving-compat ==0.4.1
   - descriptive ==0.9.4
   - dhall ==1.11.1
+  - dhall-json ==1.0.13
   - dice ==0.1
   - dictionaries ==0.2.0.4
   - Diff ==0.3.4
@@ -487,7 +490,7 @@ default-package-overrides:
   - dimensional ==1.1
   - directory-tree ==0.12.1
   - direct-rocksdb ==0.0.3
-  - direct-sqlite ==2.3.22
+  - direct-sqlite ==2.3.23
   - discount ==0.1.1
   - discrimination ==0.3
   - disk-free-space ==0.1.0.1
@@ -516,7 +519,7 @@ default-package-overrides:
   - doctemplates ==0.2.2.1
   - doctest ==0.13.0
   - doctest-discover ==0.1.0.7
-  - doctest-driver-gen ==0.2.0.0
+  - doctest-driver-gen ==0.2.0.1
   - do-list ==1.0.1
   - dom-parser ==3.0.0
   - dotenv ==0.5.2.4
@@ -544,7 +547,7 @@ default-package-overrides:
   - editor-open ==0.6.0.0
   - either ==5
   - either-unwrap ==1.1
-  - ekg ==0.4.0.14
+  - ekg ==0.4.0.15
   - ekg-core ==0.1.1.4
   - ekg-json ==0.1.0.6
   - ekg-statsd ==0.2.2.0
@@ -558,7 +561,7 @@ default-package-overrides:
   - email-validate ==2.3.2.5
   - enclosed-exceptions ==1.0.2
   - entropy ==0.3.8
-  - enummapset ==0.5.2.1
+  - enummapset ==0.5.2.2
   - enumset ==0.0.4.1
   - envelope ==0.2.2.0
   - envparse ==0.4
@@ -603,7 +606,7 @@ default-package-overrides:
   - extensible ==0.4.8
   - extensible-effects ==2.4.0.0
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.6.4
+  - extra ==1.6.5
   - extractable-singleton ==0.0.1
   - extrapolate ==0.3.1
   - fail ==4.9.0.0
@@ -643,7 +646,7 @@ default-package-overrides:
   - flexible-defaults ==0.0.1.2
   - FloatingHex ==0.4
   - floatshow ==0.2.4
-  - flow ==1.0.11
+  - flow ==1.0.12
   - fmlist ==0.9.2
   - fmt ==0.5.0.0
   - fn ==0.3.0.2
@@ -659,7 +662,7 @@ default-package-overrides:
   - ForestStructures ==0.0.0.2
   - forma ==0.2.0
   - format-numbers ==0.1.0.0
-  - formatting ==6.3.1
+  - formatting ==6.3.2
   - foundation ==0.0.20
   - FPretty ==1.1
   - Frames ==0.3.0.2
@@ -714,7 +717,7 @@ default-package-overrides:
   - genvalidity-unordered-containers ==0.1.0.0
   - genvalidity-uuid ==0.0.0.0
   - genvalidity-vector ==0.1.0.0
-  - getopt-generics ==0.13.0.1
+  - getopt-generics ==0.13.0.2
   - ghc-compact ==0.1.0.0
   - ghc-core ==0.5.6
   - ghc-events ==0.7.2
@@ -725,7 +728,7 @@ default-package-overrides:
   - ghcjs-perch ==0.3.3.2
   - ghc-parser ==0.2.0.2
   - ghc-paths ==0.1.0.9
-  - ghc-prof ==1.4.1
+  - ghc-prof ==1.4.1.1
   - ghc-syb-utils ==0.2.3.3
   - ghc-tcplugins-extra ==0.2.4
   - ghc-typelits-extra ==0.2.4
@@ -740,14 +743,14 @@ default-package-overrides:
   - ginger ==0.7.3.0
   - git ==0.2.1
   - github ==0.19
-  - github-release ==1.1.5
+  - github-release ==1.1.6
   - github-types ==0.2.1
   - github-webhook-handler ==0.0.8
   - github-webhook-handler-snap ==0.0.7
   - github-webhooks ==0.9.1
   - gitrev ==1.3.1
   - gl ==0.8.0
-  - glabrous ==0.3.4
+  - glabrous ==0.3.5
   - glaze ==0.3.0.1
   - glazier ==0.11.0.1
   - glazier-pipes ==0.1.5.1
@@ -761,8 +764,8 @@ default-package-overrides:
   - gloss-raster ==1.11.1.1
   - gloss-raster-accelerate ==2.0.0.0
   - gloss-rendering ==1.11.1.1
-  - GLURaw ==2.0.0.3
-  - GLUT ==2.7.0.12
+  - GLURaw ==2.0.0.4
+  - GLUT ==2.7.0.13
   - gluturtle ==0.0.58.1
   - gnuplot ==0.5.5.1
   - goggles ==0.3.2
@@ -793,6 +796,7 @@ default-package-overrides:
   - haddock-library ==1.4.5
   - hailgun ==0.4.1.6
   - hailgun-simple ==0.1.0.0
+  - hakyll ==4.12.0.1
   - half ==0.2.2.3
   - hamilton ==0.1.0.2
   - HandsomeSoup ==0.4.2
@@ -807,7 +811,7 @@ default-package-overrides:
   - hashable-time ==0.2.0.1
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
-  - hashtables ==1.2.2.1
+  - hashtables ==1.2.3.0
   - haskeline ==0.7.4.2
   - haskell-gi ==0.21.0
   - haskell-gi-base ==0.21.0
@@ -837,6 +841,7 @@ default-package-overrides:
   - hasql-pool ==0.4.3
   - hasql-transaction ==0.6
   - hastache ==0.6.1
+  - hasty-hamiltonian ==1.3.2
   - HaTeX ==3.18.0.0
   - haxl ==0.5.1.0
   - HaXml ==1.25.4
@@ -910,7 +915,7 @@ default-package-overrides:
   - HPDF ==1.4.10
   - hpio ==0.9.0.5
   - hpp ==0.5.1
-  - hpqtypes ==1.5.1.1
+  - hpqtypes ==1.5.2.0
   - hquantlib ==0.0.4.0
   - hreader ==1.1.0
   - hreader-lens ==0.1.3.0
@@ -958,7 +963,7 @@ default-package-overrides:
   - hsshellscript ==3.4.5
   - hstatistics ==0.3
   - hstatsd ==0.1
-  - HStringTemplate ==0.8.6
+  - HStringTemplate ==0.8.7
   - HSvm ==0.1.0.3.22
   - hsx-jmacro ==7.3.8
   - hsyslog ==5.0.1
@@ -987,7 +992,7 @@ default-package-overrides:
   - human-readable-duration ==0.2.0.3
   - HUnit ==1.6.0.0
   - HUnit-approx ==1.1.1.1
-  - hunit-dejafu ==1.1.0.2
+  - hunit-dejafu ==1.1.0.3
   - hvect ==0.4.0.0
   - hw-balancedparens ==0.2.0.1
   - hw-bits ==0.7.0.2
@@ -995,8 +1000,8 @@ default-package-overrides:
   - hw-diagnostics ==0.0.0.5
   - hweblib ==0.6.3
   - hw-excess ==0.2.0.0
-  - hw-fingertree ==0.1.0.0
-  - hw-fingertree-strict ==0.1.0.1
+  - hw-fingertree ==0.1.0.1
+  - hw-fingertree-strict ==0.1.0.2
   - hw-hedgehog ==0.1.0.1
   - hw-hspec-hedgehog ==0.1.0.2
   - hw-int ==0.0.0.3
@@ -1074,8 +1079,8 @@ default-package-overrides:
   - ip ==1.1.2
   - ip6addr ==0.5.3
   - iproute ==1.7.3
-  - IPv6Addr ==1.0.1
-  - IPv6DB ==0.2.5
+  - IPv6Addr ==1.0.2
+  - IPv6DB ==0.2.6
   - ipython-kernel ==0.9.0.2
   - irc ==0.6.1.0
   - irc-client ==1.1.0.2
@@ -1101,7 +1106,7 @@ default-package-overrides:
   - jose-jwt ==0.7.8
   - js-flot ==0.8.3
   - js-jquery ==3.3.1
-  - json ==0.9.1
+  - json ==0.9.2
   - json-autotype ==1.0.18
   - json-builder ==0.3
   - json-rpc-generic ==0.2.1.3
@@ -1128,7 +1133,7 @@ default-package-overrides:
   - kraken ==0.1.0
   - l10n ==0.1.0.1
   - labels ==0.3.3
-  - lackey ==1.0.1
+  - lackey ==1.0.2
   - lambdabot-core ==5.1.0.1
   - lambdabot-irc-plugins ==5.1.0.1
   - lame ==0.1.1
@@ -1143,7 +1148,7 @@ default-package-overrides:
   - language-javascript ==0.6.0.11
   - lapack-carray ==0.0.1
   - lapack-ffi ==0.0.1
-  - lapack-ffi-tools ==0.1
+  - lapack-ffi-tools ==0.1.0.1
   - large-hashable ==0.1.0.4
   - largeword ==1.2.5
   - latex ==0.1.0.3
@@ -1152,7 +1157,7 @@ default-package-overrides:
   - lca ==0.3.1
   - leancheck ==0.7.0
   - leapseconds-announced ==2017.1.0.1
-  - lens ==4.16
+  - lens ==4.16.1
   - lens-accelerate ==0.1.0.0
   - lens-action ==0.2.3
   - lens-aeson ==1.0.2
@@ -1189,7 +1194,7 @@ default-package-overrides:
   - List ==0.6.2
   - ListLike ==4.6
   - listsafe ==0.1.0.1
-  - list-t ==1.0.0.1
+  - list-t ==1.0.1
   - llvm-hs ==5.1.3
   - llvm-hs-pure ==5.1.2
   - lmdb ==0.2.5
@@ -1202,10 +1207,10 @@ default-package-overrides:
   - log-elasticsearch ==0.9.1.0
   - logfloat ==0.13.3.3
   - logger-thread ==0.1.0.2
-  - logging-effect ==1.2.4
+  - logging-effect ==1.2.5
   - logging-effect-extra ==1.2.2
   - logging-effect-extra-file ==1.1.2
-  - logging-effect-extra-handler ==1.1.3
+  - logging-effect-extra-handler ==1.1.4
   - logging-facade ==0.3.0
   - logging-facade-syslog ==1
   - logict ==0.6.0.2
@@ -1234,7 +1239,7 @@ default-package-overrides:
   - markov-chain ==0.0.3.4
   - markup ==4.0.4
   - marvin-interpolate ==1.1.2
-  - massiv ==0.1.2.0
+  - massiv ==0.1.4.0
   - massiv-io ==0.1.1.0
   - mathexpr ==0.3.0.0
   - math-functions ==0.2.1.0
@@ -1287,7 +1292,7 @@ default-package-overrides:
   - mmark ==0.0.5.6
   - mmark-cli ==0.0.3.0
   - mmark-ext ==0.2.0.0
-  - mmorph ==1.1.1
+  - mmorph ==1.1.2
   - mnist-idx ==0.1.2.8
   - mockery ==0.3.5
   - model ==0.4.4
@@ -1319,7 +1324,7 @@ default-package-overrides:
   - monad-products ==4.0.1
   - MonadPrompt ==1.0.0.5
   - MonadRandom ==0.5.1
-  - monad-recorder ==0.1.0
+  - monad-recorder ==0.1.1
   - monad-skeleton ==0.1.5
   - monad-st ==0.2.4.1
   - monads-tf ==0.1.0.3
@@ -1333,7 +1338,7 @@ default-package-overrides:
   - monoid-transformer ==0.0.4
   - mono-traversable ==1.0.8.1
   - mono-traversable-instances ==0.1.0.0
-  - morte ==1.6.16
+  - morte ==1.6.18
   - mountpoints ==1.0.2
   - mstate ==0.2.7
   - mtl ==2.2.2
@@ -1350,11 +1355,11 @@ default-package-overrides:
   - mwc-probability ==2.0.2
   - mwc-random ==0.13.6.0
   - mwc-random-accelerate ==0.1.0.0
-  - mysql ==0.1.4
+  - mysql ==0.1.5
   - mysql-haskell ==0.8.3.0
   - mysql-haskell-nem ==0.1.0.0
   - mysql-haskell-openssl ==0.8.3.0
-  - mysql-simple ==0.4.4
+  - mysql-simple ==0.4.5
   - nagios-check ==0.3.2
   - names-th ==0.2.0.3
   - nano-erl ==0.1.0.1
@@ -1391,7 +1396,7 @@ default-package-overrides:
   - network-transport-tests ==0.2.4.2
   - network-uri ==2.6.1.0
   - newtype ==0.2
-  - newtype-generics ==0.5.2.2
+  - newtype-generics ==0.5.3
   - next-ref ==0.1.0.2
   - nfc ==0.1.0
   - nicify-lib ==1.0.1
@@ -1431,11 +1436,11 @@ default-package-overrides:
   - online ==0.2.1.0
   - Only ==0.1
   - oo-prototypes ==0.1.0.0
-  - opaleye ==0.6.0.0
+  - opaleye ==0.6.1.0
   - OpenAL ==1.7.0.4
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.1
-  - OpenGL ==3.0.2.0
+  - OpenGL ==3.0.2.1
   - OpenGLRaw ==3.2.7.0
   - openpgp-asciiarmor ==0.1
   - opensource ==0.1.0.0
@@ -1458,7 +1463,7 @@ default-package-overrides:
   - pagination ==0.2.1
   - palette ==0.1.0.5
   - pandoc ==2.1.2
-  - pandoc-citeproc ==0.14.1.5
+  - pandoc-citeproc ==0.14.3
   - pandoc-types ==1.17.3.1
   - pango ==0.13.4.0
   - papillon ==0.1.0.5
@@ -1521,7 +1526,7 @@ default-package-overrides:
   - pipes-attoparsec ==0.5.1.5
   - pipes-bytestring ==2.1.6
   - pipes-category ==0.3.0.0
-  - pipes-concurrency ==2.0.9
+  - pipes-concurrency ==2.0.10
   - pipes-csv ==1.4.3
   - pipes-extras ==1.0.13
   - pipes-fastx ==0.3.0.0
@@ -1557,7 +1562,7 @@ default-package-overrides:
   - postgresql-simple ==0.5.3.0
   - postgresql-simple-migration ==0.1.11.0
   - postgresql-simple-queue ==1.0.1
-  - postgresql-simple-url ==0.2.0.0
+  - postgresql-simple-url ==0.2.1.0
   - postgresql-transactional ==1.1.1
   - postgresql-typed ==0.5.2
   - post-mess-age ==0.2.1.0
@@ -1582,7 +1587,7 @@ default-package-overrides:
   - pretty-show ==1.6.16
   - pretty-simple ==2.1.0.0
   - pretty-types ==0.2.3.1
-  - prim-array ==0.2.1
+  - prim-array ==0.2.2
   - primes ==0.2.1.0
   - primitive ==0.6.3.0
   - prim-uniq ==0.1.0.1
@@ -1607,7 +1612,7 @@ default-package-overrides:
   - proto-lens ==0.2.2.0
   - proto-lens-arbitrary ==0.1.1.1
   - proto-lens-descriptors ==0.2.2.0
-  - proto-lens-optparse ==0.1.0.4
+  - proto-lens-optparse ==0.1.1.0
   - protolude ==0.2.1
   - proxied ==0.3
   - psql-helpers ==0.1.0.0
@@ -1655,8 +1660,8 @@ default-package-overrides:
   - rank-product ==0.2.0.1
   - Rasterific ==0.7.2.3
   - rasterific-svg ==0.3.3.1
-  - ratel ==1.0.2
-  - ratel-wai ==1.0.1
+  - ratel ==1.0.3
+  - ratel-wai ==1.0.2
   - ratio-int ==0.1.2
   - rawfilepath ==0.2.4
   - rawstring-qm ==0.2.3.0
@@ -1715,7 +1720,7 @@ default-package-overrides:
   - rest-types ==1.14.1.1
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.7.6.1
+  - retry ==0.7.6.2
   - rev-state ==0.1.2
   - rfc5051 ==0.1.0.3
   - riak ==1.1.2.4
@@ -1741,10 +1746,10 @@ default-package-overrides:
   - sampling ==0.3.2
   - sandman ==0.2.0.1
   - say ==0.1.0.0
-  - sbp ==2.3.9
+  - sbp ==2.3.13
   - sbv ==7.5
-  - SCalendar ==1.1.0
   - scalendar ==1.2.0
+  - SCalendar ==1.1.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1782,7 +1787,7 @@ default-package-overrides:
   - servant-docs ==0.11.2
   - servant-elm ==0.4.0.1
   - servant-exceptions ==0.1.1
-  - servant-foreign ==0.11
+  - servant-foreign ==0.11.1
   - servant-generic ==0.1.0.1
   - servant-github-webhook ==0.4.0.0
   - servant-js ==0.9.3.2
@@ -1816,7 +1821,7 @@ default-package-overrides:
   - shake-language-c ==0.11.0
   - shakespeare ==2.0.15
   - shelltestrunner ==1.9
-  - shelly ==1.7.1
+  - shelly ==1.7.2
   - shikensu ==0.3.8
   - shortcut-links ==0.4.2.0
   - should-not-typecheck ==2.1.0
@@ -1830,7 +1835,7 @@ default-package-overrides:
   - simple-sendfile ==0.2.27
   - simple-session ==0.10.1.1
   - simple-templates ==0.8.0.1
-  - singleton-bool ==0.1.3
+  - singleton-bool ==0.1.4
   - singleton-nats ==0.4.0.4
   - singletons ==2.3.1
   - siphash ==1.0.3
@@ -1845,7 +1850,7 @@ default-package-overrides:
   - smtp-mail ==0.1.4.6
   - snap ==1.1.0.0
   - snap-blaze ==0.2.1.5
-  - snap-core ==1.0.3.1
+  - snap-core ==1.0.3.2
   - snap-server ==1.0.3.3
   - snowflake ==0.1.1.1
   - soap ==0.2.3.6
@@ -1917,7 +1922,7 @@ default-package-overrides:
   - streaming ==0.2.1.0
   - streaming-bytestring ==0.1.5
   - streaming-commons ==0.1.19
-  - streamly ==0.1.0
+  - streamly ==0.1.1
   - streamproc ==1.6.2
   - streams ==3.3
   - strict ==0.3.2
@@ -1934,7 +1939,7 @@ default-package-overrides:
   - stringsearch ==0.3.6.6
   - string-transform ==1.0.0
   - stripe-core ==2.3.0
-  - strive ==5.0.3
+  - strive ==5.0.4
   - structs ==0.1.1
   - sum-type-boilerplate ==0.1.1
   - sundown ==0.6
@@ -1942,8 +1947,8 @@ default-package-overrides:
   - svg-builder ==0.1.0.2
   - svg-tree ==0.6.2.2
   - swagger ==0.3.0
-  - swagger2 ==2.2
-  - swish ==0.9.2.0
+  - swagger2 ==2.2.1
+  - swish ==0.9.2.1
   - syb ==0.7
   - syb-with-class ==0.6.1.8
   - symbol ==0.2.4
@@ -1966,12 +1971,12 @@ default-package-overrides:
   - tasty ==1.0.1.1
   - tasty-ant-xml ==1.1.3
   - tasty-auto ==0.2.0.0
-  - tasty-dejafu ==1.1.0.1
+  - tasty-dejafu ==1.1.0.2
   - tasty-discover ==4.2.0
   - tasty-expected-failure ==0.11.1.1
   - tasty-golden ==2.3.1.3
   - tasty-hedgehog ==0.1.0.2
-  - tasty-hspec ==1.1.3.3
+  - tasty-hspec ==1.1.4
   - tasty-html ==0.4.1.1
   - tasty-hunit ==0.10.0.1
   - tasty-kat ==0.0.3
@@ -2037,7 +2042,7 @@ default-package-overrides:
   - threads ==0.5.1.6
   - threads-extras ==0.1.0.2
   - threepenny-editors ==0.5.6
-  - threepenny-gui ==0.8.2.2
+  - threepenny-gui ==0.8.2.3
   - threepenny-gui-flexbox ==0.4.2
   - th-reify-compat ==0.0.1.3
   - th-reify-many ==0.1.8
@@ -2095,13 +2100,13 @@ default-package-overrides:
   - tuple ==0.3.0.2
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.5.6
+  - turtle ==1.5.7
   - turtle-options ==0.1.0.4
   - type-assertions ==0.1.0.0
   - type-combinators ==0.2.4.3
   - type-combinators-singletons ==0.2.1.0
   - TypeCompose ==0.9.12
-  - typed-process ==0.2.1.0
+  - typed-process ==0.2.2.0
   - type-fun ==0.1.1
   - type-hint ==0.1
   - type-level-integers ==0.0.1
@@ -2112,7 +2117,7 @@ default-package-overrides:
   - type-operators ==0.1.0.4
   - type-spec ==0.3.0.1
   - typography-geometry ==1.0.0.1
-  - tz ==0.1.3.0
+  - tz ==0.1.3.1
   - tzdata ==0.1.20180122.0
   - ua-parser ==0.7.4.1
   - uglymemo ==0.1.0.1
@@ -2131,8 +2136,8 @@ default-package-overrides:
   - union-find ==0.2
   - uniplate ==1.6.12
   - uniq-deep ==1.1.0.0
-  - unique ==0
   - Unique ==0.4.7.2
+  - unique ==0
   - unit-constraint ==0.0.0
   - units-parser ==0.1.1.2
   - universe ==1.0
@@ -2145,7 +2150,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.0.1
   - unix-time ==0.3.8
-  - unliftio ==0.2.5.0
+  - unliftio ==0.2.6.0
   - unliftio-core ==0.1.1.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.9.0
@@ -2156,7 +2161,7 @@ default-package-overrides:
   - uri-encode ==1.5.0.5
   - uri-templater ==0.3.1.0
   - urlpath ==8.0.1
-  - userid ==0.1.3.1
+  - userid ==0.1.3.2
   - users ==0.5.0.0
   - users-postgresql-simple ==0.5.0.2
   - users-test ==0.5.0.1
@@ -2196,7 +2201,7 @@ default-package-overrides:
   - vector-th-unbox ==0.2.1.6
   - vectortiles ==1.3.0
   - verbosity ==0.2.3.0
-  - versions ==3.3.1
+  - versions ==3.3.2
   - vhd ==0.2.2
   - ViennaRNAParser ==1.3.3
   - vinyl ==0.7.0
@@ -2205,10 +2210,10 @@ default-package-overrides:
   - vivid-supercollider ==0.3.0.0
   - void ==0.7.2
   - vty ==5.20
-  - wai ==3.2.1.1
-  - wai-app-static ==3.1.6.1
+  - wai ==3.2.1.2
+  - wai-app-static ==3.1.6.2
   - wai-cli ==0.1.1
-  - wai-conduit ==3.0.0.3
+  - wai-conduit ==3.0.0.4
   - wai-cors ==0.2.6
   - wai-eventsource ==3.0.0
   - wai-extra ==3.0.22.0
@@ -2231,8 +2236,8 @@ default-package-overrides:
   - wai-session-postgresql ==0.2.1.2
   - wai-slack-middleware ==0.2.0
   - wai-transformers ==0.0.7
-  - wai-websockets ==3.0.1.1
-  - warp ==3.2.18.1
+  - wai-websockets ==3.0.1.2
+  - warp ==3.2.18.2
   - warp-tls ==3.2.4.2
   - wave ==0.1.5
   - wavefront ==0.7.1.2
@@ -2240,7 +2245,7 @@ default-package-overrides:
   - webdriver-angular ==0.1.11
   - webpage ==0.0.5
   - web-plugins ==0.2.9
-  - web-routes ==0.27.14
+  - web-routes ==0.27.14.2
   - web-routes-boomerang ==0.28.4.2
   - web-routes-happstack ==0.23.11
   - web-routes-hsp ==0.24.6.1
@@ -2285,7 +2290,7 @@ default-package-overrides:
   - writer-cps-morph ==0.1.0.2
   - writer-cps-mtl ==0.1.1.4
   - writer-cps-transformers ==0.1.1.3
-  - wuss ==1.1.6
+  - wuss ==1.1.8
   - X11 ==1.8
   - X11-xft ==0.3.1
   - x11-xim ==0.0.9.0
@@ -2305,7 +2310,7 @@ default-package-overrides:
   - xml-basic ==0.1.3
   - xml-conduit ==1.8.0
   - xml-conduit-writer ==0.1.1.2
-  - xmlgen ==0.6.2.1
+  - xmlgen ==0.6.2.2
   - xml-hamlet ==0.5.0
   - xmlhtml ==0.2.5.2
   - xml-html-qq ==0.1.0.1
@@ -2340,6 +2345,7 @@ default-package-overrides:
   - yesod-form ==1.6.1
   - yesod-form-bootstrap4 ==0.1.0.2
   - yesod-gitrepo ==0.3.0
+  - yesod-gitrev ==0.2.0.0
   - yesod-newsfeed ==1.6.1.0
   - yesod-paginator ==0.11.0
   - yesod-persistent ==1.6.0
@@ -2377,7 +2383,7 @@ default-package-overrides:
   - zlib-lens ==0.1.2.1
   - zot ==0.0.3
   - zstd ==0.1.0.0
-  - ztail ==1.2
+  - ztail ==1.2.0.1
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
@@ -2403,6 +2409,7 @@ extra-packages:
   - haddock-api == 2.16.*               # required on GHC 7.10.x
   - haddock-api == 2.17.*               # required on GHC 8.0.x
   - haddock-library == 1.2.*            # required for haddock-api-2.16.x
+  - haddock-library == 1.4.3            # required for haddock-api-2.17.x
   - haddock-library == 1.4.4            # required for haddock-api-2.18.x
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support

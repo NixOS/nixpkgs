@@ -63,8 +63,9 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     '';
 
+
   preConfigure = ''
-    export MAKEFLAGS=-j$NIX_BUILD_CORES
+    export NINJAFLAGS=-j$NIX_BUILD_CORES
 
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"

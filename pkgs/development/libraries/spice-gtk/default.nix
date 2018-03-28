@@ -1,8 +1,29 @@
 { stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
-, polkit, acl, usbutils, vala
-, gtk3, epoxy, libdrm }:
+, withPolkit ? true, polkit, acl, usbutils
+, vala, gtk3, epoxy, libdrm }:
+
+# If this package is built with polkit support (withPolkit=true),
+# usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
+# The helper confirms via polkit that the user has an active session,
+# then adds a device acl entry for that user.
+# Example NixOS config to create a setuid wrapper for the helper:
+# security.wrappers.spice-client-glib-usb-acl-helper.source =
+#   "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+# On non-NixOS installations, make a setuid copy of the helper
+# outside the store and adjust PATH to find the setuid version.
+
+# If this package is built without polkit support (withPolkit=false),
+# usb redirection requires read-write access to usb devices.
+# This can be granted by adding users to a custom group like "usb"
+# and using a udev rule to put all usb devices in that group.
+# Example NixOS config:
+#  users.groups.usb = {};
+#  users.users.dummy.extraGroups = [ "usb" ];
+#  services.udev.extraRules = ''
+#    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
+#  '';
 
 with stdenv.lib;
 
@@ -18,31 +39,26 @@ in stdenv.mkDerivation rec {
     sha256 = "1vknp72pl6v6nf3dphhwp29hk6gv787db2pmyg4m312z2q0hwwp9";
   };
 
+  postPatch = ''
+    # get rid of absolute path to helper in store so we can use a setuid wrapper
+    substituteInPlace src/usb-acl-helper.c \
+      --replace 'ACL_HELPER_PATH"/' '"'
+  '';
+
   buildInputs = [
     spice-protocol celt_0_5_1 openssl libpulseaudio pixman
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm
-    polkit acl usbutils
-  ];
+  ] ++ optionals withPolkit [ polkit acl usbutils ] ;
 
   nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "share/polkit-1/actions";
 
   configureFlags = [
     "--with-gtk3"
     "--enable-introspection"
     "--enable-vala"
   ];
-
-  # usb redirection needs spice-client-glib-usb-acl-helper to run setuid root
-  # the helper then uses polkit to check access
-  # in nixos, enable this with
-  # security.wrappers.spice-client-glib-usb-acl-helper.source =
-  #   "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper.real";
-  postFixup = ''
-    mv $out/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper.real
-    ln -sf /run/wrappers/bin/spice-client-glib-usb-acl-helper $out/bin/spice-client-glib-usb-acl-helper
-  '';
 
   dontDisableStatic = true; # Needed by the coroutine test
 

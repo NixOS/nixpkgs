@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  mesonFlags = [ "-Dwith-nautilusdir=${placeholder "out"}/lib/nautilus/extensions-3.0" ];
+  mesonFlags = [ "-Dwith-nautilusdir=lib/nautilus/extensions-3.0" ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

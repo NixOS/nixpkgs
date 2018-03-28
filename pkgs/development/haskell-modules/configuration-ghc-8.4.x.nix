@@ -239,17 +239,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  singletons = overrideCabal super.singletons (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## th-desugar ==1.7.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "singletons";
-      rev    = "23aa4bdaf05ce025a2493b35ec3c26cc94e3fdce";
-      sha256 = "0hw12v4z8jxmykc3j8z6g27swmfpxv40bgnx7nl0ialpwbz9mz27";
-    };
-  });
+  singletons = super.singletons_2_4_1;
 
   ## Upstreamed, awaiting a Hackage release
   tar = overrideCabal super.tar (drv: {
@@ -264,18 +254,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  th-desugar = overrideCabal super.th-desugar (drv: {
-    ##     • Could not deduce (MonadIO (DsM q))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       from the context: Quasi q
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "th-desugar";
-      rev    = "4ca98c6492015e6ad063d3ad1a2ad6c4f0a56837";
-      sha256 = "1n3myd3gia9qsgdvrwqa023d3g7wkrhyv0wc8czwzz0lj9xzh7lw";
-    };
-  });
+  th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
   websockets = overrideCabal super.websockets (drv: {
@@ -649,9 +628,7 @@ self: super: {
 
   # Older versions don't compile.
   brick = self.brick_0_35_1;
-  getopt-generics = self.getopt-generics_0_13_0_2;
   HaTeX = self.HaTeX_3_19_0_0;
-  json = self.json_0_9_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_1_3;
   pandoc-types = self.pandoc-types_1_17_4_2;

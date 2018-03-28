@@ -3,11 +3,11 @@
 , libwebp, gnome3, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.28";
+  name = "gegl-0.3.30";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
-    sha256 = "1zr3gmmzjhp2d3d3h51x80r5q7gs9rv67ywx69sif6as99h8fbqm";
+    sha256 = "0lg5j5kn24qvyb6fn7khxf3jadkacbpnb9nrqzy7w665s8xakd7q";
   };
 
   hardeningDisable = [ "format" ];

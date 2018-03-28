@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  config = lib.mkIf (pkgs.kexectools != null) {
+  config = lib.mkIf (pkgs.kexectools.meta.available) {
     environment.systemPackages = [ pkgs.kexectools ];
 
     systemd.services."prepare-kexec" =
