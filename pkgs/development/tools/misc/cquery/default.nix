@@ -27,14 +27,20 @@ stdenv.mkDerivation rec {
     "-DCLANG_CXX=ON"
   ];
 
+  shell = stdenv.shell;
   postFixup = ''
     # We need to tell cquery where to find the standard library headers.
 
-    args="\"-isystem\", \"${if (stdenv.hostPlatform.libc == "glibc") then stdenv.cc.libc.dev else stdenv.cc.libc}/include\""
-    args+=", \"-isystem\", \"${llvmPackages.libcxx}/include/c++/v1\""
+    standard_library_includes="\\\"-isystem\\\", \\\"${if (stdenv.hostPlatform.libc == "glibc") then stdenv.cc.libc.dev else stdenv.cc.libc}/include\\\""
+    standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
+    export standard_library_includes
 
-    wrapProgram $out/bin/cquery \
-      --add-flags "'"'--init={"extraClangArguments": ['"''${args}"']}'"'"
+    wrapped=".cquery-wrapped"
+    export wrapped
+
+    mv $out/bin/cquery $out/bin/$wrapped
+    substituteAll ${./wrapper} $out/bin/cquery
+    chmod --reference=$out/bin/$wrapped $out/bin/cquery
   '';
 
   doInstallCheck = true;
@@ -50,5 +56,6 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.tobim ];
+    priority    = 3;
   };
 }
