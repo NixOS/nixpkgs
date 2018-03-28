@@ -44,6 +44,9 @@ let
         let
           actualPlugins = plugins terraform.plugins;
 
+          # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
+          wrapperInputs = lib.unique (lib.flatten (lib.catAttrs "propagatedBuildInputs" (builtins.filter (x: x != null) actualPlugins)));
+
           passthru = {
             withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
 
@@ -64,7 +67,8 @@ let
               buildCommand = ''
                 mkdir -p $out/bin/
                 makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
-                  --set NIX_TERRAFORM_PLUGIN_DIR "${buildEnv { name = "tf-plugin-env"; paths = actualPlugins; }}/bin"
+                  --set NIX_TERRAFORM_PLUGIN_DIR "${buildEnv { name = "tf-plugin-env"; paths = actualPlugins; }}/bin" \
+                  --prefix PATH : "${lib.makeBinPath wrapperInputs}"
               '';
 
               inherit passthru;
