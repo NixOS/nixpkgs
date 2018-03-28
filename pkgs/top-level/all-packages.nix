@@ -19512,6 +19512,7 @@ with pkgs;
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
+    impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
     nohotcorner = callPackage ../desktops/gnome-3/extensions/nohotcorner { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
