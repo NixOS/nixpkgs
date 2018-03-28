@@ -115,18 +115,10 @@ in
         description = "hans client - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          cat > /run/hans/${name}-script << EOF
-            #!/bin/sh
-            ${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"} 
-          EOF
-          chmod 700 /run/hans/${name}-script
-        '';
-        script = "/run/hans/${name}-script";
+        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
         serviceConfig = {
           RestartSec = "30s";
           Restart = "always";
-          RuntimeDirectory = [ "hans" ];
         };
       };
     in
@@ -139,15 +131,7 @@ in
         description = "hans, ip over icmp server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          cat > /run/hans/script << EOF
-            #!/bin/sh
-            ${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.systemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}
-          EOF
-          chmod 700 /run/hans/script
-        '';
-        script = "/run/hans/script";
-        serviceConfig.RuntimeDirectory = [ "hans" ];
+        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.systemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
       };
     };
 

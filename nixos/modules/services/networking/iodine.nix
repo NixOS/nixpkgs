@@ -120,18 +120,10 @@ in
         description = "iodine client - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          cat > /run/iodine/${name}-script << EOF
-            #!/bin/sh
-            ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.relay} ${cfg.server}
-          EOF
-          chmod 700 /run/iodine/${name}-script
-        '';
-        script = "/run/iodine/${name}-script";
+        script = "${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.relay} ${cfg.server}";
         serviceConfig = {
           RestartSec = "30s";
           Restart = "always";
-          RuntimeDirectory = [ "iodine" ];
         };
       };
     in
@@ -144,15 +136,7 @@ in
         description = "iodine, ip over dns server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          cat > /run/iodined/script << EOF
-            #!/bin/sh
-            ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}
-          EOF
-          chmod 700 /run/iodined/script
-        '';
-        script = "/run/iodined/script";
-        serviceConfig.RuntimeDirectory = [ "iodined" ];
+        script = "${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}";
       };
     };
 
