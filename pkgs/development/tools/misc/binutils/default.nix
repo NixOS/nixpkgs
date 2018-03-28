@@ -5,6 +5,9 @@
 }:
 
 let
+  # Remove gold-symbol-visibility patch when updating, the proper fix
+  # is now upstream.
+  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
   version = "2.30";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
