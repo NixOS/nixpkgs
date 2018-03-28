@@ -4,16 +4,6 @@ with lib;
 
 let
   cfg = config.services.gitweb;
-  gitwebPerlLibs = with pkgs.perlPackages; [ CGIFast FCGI FCGIProcManager HTMLTagCloud ];
-  git = pkgs.git.overrideAttrs (oldAttrs: rec {
-    postInstall = ''
-      ${oldAttrs.postInstall}
-      for p in ${lib.concatStringsSep " " gitwebPerlLibs}; do
-          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
-              "$out/share/gitweb/gitweb.cgi"
-      done
-    '';
-  });
 
 in
 {
