@@ -1,6 +1,6 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake
-, boost, miniupnpc, openssl, pkgconfig, unbound
-, IOKit
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, pkgconfig, git
+, boost, miniupnpc, openssl, unbound, cppzmq, zeromq, pcsclite
+, readline, IOKit
 }:
 
 assert stdenv.isDarwin -> IOKit != null;
@@ -20,12 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig git ];
 
-  buildInputs = [ boost miniupnpc openssl unbound ]
+  buildInputs = [ boost miniupnpc openssl unbound cppzmq zeromq pcsclite readline ]
     ++ stdenv.lib.optional stdenv.isDarwin IOKit;
-
-  patches = [
-    ./build-wallet-rpc.patch # fixed in next release
-  ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -34,6 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "fortify" ];
+
+  installPhase = ''
+    make install
+    install -Dt "$out/bin/" \
+      bin/monero-blockchain-export \
+      bin/monero-blockchain-import \
+      bin/monero-wallet-rpc
+  '';
 
   meta = {
     description = "Private, secure, untraceable currency";
