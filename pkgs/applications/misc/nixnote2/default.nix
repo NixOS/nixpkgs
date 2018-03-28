@@ -24,7 +24,13 @@ mkDerivation rec {
         --replace '#include <poppler-qt5.h>' '#include <poppler/qt5/poppler-qt5.h>'
     done
 
+    substituteInPlace help/about.html --replace '__VERSION__' '${version}'
+
     substituteInPlace nixnote.cpp --replace 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
+  '';
+  
+  postInstal = ''
+    cp images/windowIcon.png $out/share/pixmaps/nixnote2.png
   '';
 
   meta = with stdenv.lib; {

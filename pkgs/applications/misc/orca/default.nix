@@ -9,16 +9,16 @@
 
 with lib;
 let
-  version = "3.26.0";
-  majorVersion = builtins.concatStringsSep "." (take 2 (splitString "." version));
+  pname = "orca";
+  version = "3.27.91";
 in buildPythonApplication rec {
-  name = "orca-${version}";
+  name = "${pname}-${version}";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/orca/${majorVersion}/${name}.tar.xz";
-    sha256 = "0xk5k9cbswymma60nrfj00dl97wypx59c107fb1hwi75gm0i07a7";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0phlkn6ffqncvsg7ph3l4xw388baddav9s4pbkvqqa8myca9g4wg";
   };
 
   patches = [
@@ -46,6 +46,12 @@ in buildPythonApplication rec {
   preConfigure = ''
     intltoolize
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     homepage = https://wiki.gnome.org/Projects/Orca;

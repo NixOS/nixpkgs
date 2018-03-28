@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, gnome2, atk, cairo, gdk_pixbuf, glib, freetype,
-fontconfig, dbus, libX11, xlibs, libXi, libXcursor, libXdamage, libXrandr,
+fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr,
 libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss,
 nspr, alsaLib, cups, expat, udev
 }:
@@ -33,20 +33,20 @@ let
     nss
     stdenv.cc.cc
     udev
-    xlibs.libxcb
+    xorg.libxcb
   ];
 
 in
   stdenv.mkDerivation rec {
     name = "signal-desktop-${version}";
 
-    version = "1.3.0";
+    version = "1.6.1";
 
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
           url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-          sha256 = "047l3yyqvzyi5969r0n9cwdarsxfbssj415ysh57w7vkdp01axsr";
+          sha256 = "0q2qzl84ifnhcn1qbq38fdpj8ry748h6dlzp2mdpkslsh8mc46as";
         }
       else
         throw "Signal for Desktop is not currently supported on ${stdenv.system}";

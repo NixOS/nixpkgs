@@ -106,7 +106,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -233,7 +233,7 @@
       calibre-server = 213;
       heapster = 214;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;
@@ -393,7 +393,7 @@
       freenet = 79;
       ircd = 80;
       bacula = 81;
-      almir = 82;
+      #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
       deluge = 83;
       mysql = 84;
       rabbitmq = 85;
@@ -514,7 +514,7 @@
       xtreemfs = 212;
       calibre-server = 213;
       bepasty = 215;
-      pumpio = 216;
+      # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
       mathics = 218;
       ejabberd = 219;

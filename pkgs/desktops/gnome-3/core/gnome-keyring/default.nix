@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python2, glib, libxslt
-, intltool, pango, gcr, gdk_pixbuf, atk, p11-kit, wrapGAppsHook
+, intltool, pango, gcr, gdk_pixbuf, atk, p11-kit, openssh, wrapGAppsHook
 , docbook_xsl, docbook_xml_dtd_42, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-keyring-${version}";
-  version = "3.20.1";
+  version = "3.28.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "134ci3mn6jjap59z3lrvyiip7zf2nlw5xvanr44yajs57xr4x5lp";
+    sha256 = "0qxxc3wx4abb07vmbhqy4gipdzilx3v8yba9hsfzpn8p15prjz6i";
   };
 
   passthru = {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = with gnome3; [
-    dbus libgcrypt pam gtk3 libgnome-keyring
+    dbus libgcrypt pam gtk3 libgnome-keyring openssh
     pango gcr gdk_pixbuf atk p11-kit
   ];
 
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  # Tests are not deterministic https://bugzilla.gnome.org/show_bug.cgi?id=791932
-  doCheck = false;
+  doCheck = true;
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \

@@ -24,18 +24,19 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
-, enableLibraryProfiling ? false
+, enableLibraryProfiling ? true
 , enableExecutableProfiling ? false
+, profilingDetail ? "all-functions"
 # TODO enable shared libs for cross-compiling
-, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+, enableSharedExecutables ? false
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
-, enableSplitObjs ? null # OBSOLETE, use enableDeadCodeElimination
-, enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip  for darwin
+, enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? true
+, enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
-, platforms ? ghc.meta.platforms
-, hydraPlatforms ? platforms
+, platforms ? with stdenv.lib.platforms; unix ++ windows # GHC can cross-compile
+, hydraPlatforms ? null
 , hyperlinkSource ? true
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
@@ -66,8 +67,6 @@ in
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
-# OBSOLETE, use enableDeadCodeElimination
-assert enableSplitObjs == null;
 
 let
 
@@ -116,9 +115,13 @@ let
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
-    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs" # not cross one
+    # use the one that comes with the cross compiler.
+    "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
-  ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
+  ] ++ optionals (!isHaLVM) [
+    "--hsc2hs-option=--cross-compile"
+    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
+  ];
 
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
@@ -135,12 +138,15 @@ let
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature (enableDeadCodeElimination && !hostPlatform.isArm && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
+    (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
     (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
-    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
+    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    "--enable-library-vanilla"  # TODO: Should this be configurable?
+    "--enable-library-for-ghci" # TODO: Should this be configurable?
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
      "--ghc-option=-split-sections"
   ] ++ optionals isGhcjs [
@@ -243,7 +249,11 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
-  '' + (optionalString stdenv.isDarwin ''
+  ''
+  # only use the links hack if we're actually building dylibs. otherwise, the
+  # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
+  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+  + (optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -330,10 +340,10 @@ stdenv.mkDerivation ({
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
       if [ -d "$packageConfFile" ]; then
-        mv "$packageConfFile"/* "$packageConfDir"
+        mv "$packageConfFile/"* "$packageConfDir"
         rmdir "$packageConfFile"
       fi
-      for packageConfFile in "$packageConfDir"/*; do
+      for packageConfFile in "$packageConfDir/"*; do
         local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
         mv $packageConfFile $packageConfDir/$pkgId.conf
       done
@@ -342,6 +352,7 @@ stdenv.mkDerivation ({
       for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
+        echo >> "$exe"
         cat "$exeDir/all.js" >> "$exe"
         chmod +x "$exe"
       done
@@ -354,7 +365,7 @@ stdenv.mkDerivation ({
     ''}
 
     ${optionalString enableSeparateDocOutput ''
-    for x in ${docdir "$doc"}/html/src/*.html; do
+    for x in ${docdir "$doc"}"/html/src/"*.html; do
       remove-references-to -t $out $x
     done
     mkdir -p $doc
@@ -385,7 +396,7 @@ stdenv.mkDerivation ({
       buildInputs = systemBuildInputs;
       nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs;
       LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = optionalString (stdenv.hostPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
@@ -403,7 +414,7 @@ stdenv.mkDerivation ({
          // optionalAttrs broken               { inherit broken; }
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
-         // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
+         // optionalAttrs (hydraPlatforms != null) { inherit hydraPlatforms; }
          ;
 
 }
@@ -429,5 +440,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
-// optionalAttrs (buildPlatform.isLinux){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )

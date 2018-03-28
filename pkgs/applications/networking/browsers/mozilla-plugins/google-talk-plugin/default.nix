@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpm, cpio, mesa_noglu, xorg, cairo
+{ stdenv, fetchurl, rpm, cpio, libGL, xorg, cairo
 , libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
 , dbus-glib, alsaLib, libpulseaudio, systemd, pango
 }:
@@ -10,7 +10,7 @@ let
   baseURL = "http://dl.google.com/linux/talkplugin/deb/pool/main/g/google-talkplugin";
 
   rpathPlugin = makeLibraryPath
-    [ mesa_noglu
+    [ libGL
       xorg.libXt
       xorg.libX11
       xorg.libXrender

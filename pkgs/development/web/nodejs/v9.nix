@@ -5,7 +5,7 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "9.6.1";
-    sha256 = "04hi7lwdizwqqbyi77f4z12gnsh673h92brmbssrmw5kjx6h4k5q";
+    version = "9.8.0";
+    sha256 = "1b0ynhvnq25w29rmshim0dn4m1dknkn1p52idi6acpzswi4vn1h7";
     patches = lib.optionals stdenv.isDarwin [ ./no-xcode-v7.patch ];
   }

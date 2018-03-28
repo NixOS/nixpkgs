@@ -5,7 +5,7 @@
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper
+, yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, icu, libpng, jemalloc
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
@@ -75,7 +75,7 @@ stdenv.mkDerivation (rec {
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    nspr libnotify xorg.pixman yasm mesa
+    nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
     xorg.libXext xorg.xextproto sqlite unzip makeWrapper
     hunspell libevent libstartup_notification libvpx /* cairo */
@@ -221,7 +221,7 @@ stdenv.mkDerivation (rec {
 
   postInstall = ''
     # For grsecurity kernels
-    paxmark m $out/lib/firefox-[0-9]*/{firefox,firefox-bin,plugin-container}
+    paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
 
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -233,8 +233,8 @@ stdenv.mkDerivation (rec {
   postFixup = ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
-        "$out"/lib/firefox-*/libxul.so
+      }/lib:$(patchelf --print-rpath "$out"/lib/firefox*/libxul.so)" \
+        "$out"/lib/firefox*/libxul.so
   '';
 
   doInstallCheck = true;

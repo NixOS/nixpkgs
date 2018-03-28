@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
+, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
@@ -11,17 +11,17 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.79a";
+  name = "blender-2.79b";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1mw45mvfk9f0fhn12vp3g2vwqzinrp3by0m3w01wj87h9ri5zkwc";
+    sha256 = "1g4kcdqmf67srzhi3hkdnr4z1ph4h9sza1pahz38mrj998q4r52c";
   };
 
   buildInputs =
     [ boost cmake ffmpeg gettext glew ilmbase
       libXi libX11 libXext libXrender
-      freetype libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+      freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU_combined openal
       opencolorio openexr openimageio openjpeg_1 python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
     ]

@@ -2,7 +2,7 @@
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
+, x11Support ? true, libX11 ? null, libXext ? null, libGLU_combined ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -32,7 +32,7 @@
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
 assert fribidiSupport -> (fribidi != null);
-assert x11Support -> (libX11 != null && libXext != null && mesa != null);
+assert x11Support -> (libX11 != null && libXext != null && libGLU_combined != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
 assert alsaSupport -> alsaLib != null;
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
-    ++ optionals x11Support [ libX11 libXext mesa ]
+    ++ optionals x11Support [ libX11 libXext libGLU_combined ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora

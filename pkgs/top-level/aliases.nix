@@ -36,12 +36,12 @@ mapAliases (rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
-  bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bundler_HEAD = bundler; # added 2015-11-15
+  cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
   cifs_utils = cifs-utils; # added 2016-08
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
@@ -76,6 +76,7 @@ mapAliases (rec {
   go-pup = pup; # added 2017-12-19
   googleAuthenticator = google-authenticator; # added 2016-10-16
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
+  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -103,7 +104,6 @@ mapAliases (rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
-  jquery_ui = jquery-ui;  # added 2014-09-07
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
@@ -148,7 +148,6 @@ mapAliases (rec {
   networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_pptp = networkmanager-pptp; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06

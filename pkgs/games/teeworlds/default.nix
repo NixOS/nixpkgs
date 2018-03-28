@@ -1,5 +1,5 @@
 { fetchurl, stdenv, makeWrapper, python, alsaLib
-, libX11, mesa_glu, SDL, lua5, zlib, bam, freetype
+, libX11, libGLU, SDL, lua5, zlib, bam, freetype
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = "rm -r other/{freetype,sdl}/{include,lib32,lib64}";
 
   buildInputs = [
-    python makeWrapper alsaLib libX11 mesa_glu SDL lua5 zlib bam freetype
+    python makeWrapper alsaLib libX11 libGLU SDL lua5 zlib bam freetype
   ];
 
   buildPhase = ''

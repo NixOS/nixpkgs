@@ -1,18 +1,16 @@
 { stdenv, gettext, libxml2, fetchurl, pkgconfig, libcanberra-gtk3
-, bash, gtk3, glib, meson, ninja, wrapGAppsHook, appstream-glib
-, gnome3, librsvg, gdk_pixbuf }:
+, gtk3, glib, meson, ninja, wrapGAppsHook, appstream-glib, desktop-file-utils
+, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-screenshot-${version}";
+let
+  pname = "gnome-screenshot";
   version = "3.26.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-screenshot/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1bbc11595d3822f4b92319cdf9ba49dd00f5471b6046c590847dc424a874c8bb";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-screenshot"; attrPath = "gnome3.gnome-screenshot"; };
   };
 
   doCheck = true;
@@ -22,16 +20,18 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/postinstall.py
   '';
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 wrapGAppsHook ];
-  buildInputs = [ bash gtk3 glib libcanberra-gtk3
-                  gnome3.gsettings-desktop-schemas ];
-
-  patches = [
-    ./prevent-cache-updates.patch
+  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils wrapGAppsHook ];
+  buildInputs = [
+    gtk3 glib libcanberra-gtk3 gnome3.defaultIconTheme
+    gnome3.gsettings-desktop-schemas
   ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "${pname}";
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://en.wikipedia.org/wiki/GNOME_Screenshot;

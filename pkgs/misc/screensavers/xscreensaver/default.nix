@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
-, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk2
+, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU_combined, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
 , forceInstallAllHacks ? false
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg mesa gtk2 libxml2 libglade pam
+    [ pkgconfig bc perl libjpeg libGLU_combined gtk2 libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
       libXxf86misc intltool xorg.appres makeWrapper gle
     ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.jwz.org/xscreensaver/;
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = with stdenv.lib.platforms; allBut cygwin;
+    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
     inherit version;
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     updateWalker = true;

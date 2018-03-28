@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake
-, mesa_noglu, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
+, libGL, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
-    ncurses gtk2 libsndfile zlib mesa_noglu
+    ncurses gtk2 libsndfile zlib libGL
   ];
 
   installPhase = ''

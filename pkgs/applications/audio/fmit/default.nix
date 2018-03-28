@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmake
+{ stdenv, fetchFromGitHub, fftw, freeglut, libGLU, qtbase, qtmultimedia, qmake
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:

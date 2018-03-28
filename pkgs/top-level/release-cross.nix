@@ -88,7 +88,7 @@ in
         f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
-    testEqual = path: systems: forTheseSystems systems (testEqualOne path);
+    testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
 
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 

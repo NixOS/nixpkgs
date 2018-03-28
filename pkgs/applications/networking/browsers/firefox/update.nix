@@ -22,13 +22,15 @@ writeScript "update-${attrPath}" ''
   #  - removes trailing slash
   #  - sorts everything with semver in mind
   #  - picks up latest release
-  version=`xidel -q $url --extract "//a" | \
+  version=`xidel -s $url --extract "//a" | \
            grep "^[0-9.]*${versionSuffix}/$" | \
            sed s/[/]$// | \
            sort --version-sort | \
            tail -n 1`
 
+  source_url=`curl --silent $url$version/SOURCE | grep -o 'https://.*\.tar\.bz2'`
+
   shasum=`curl --silent $url$version/SHA512SUMS | grep 'source\.tar\.xz' | cut -d ' ' -f 1`
 
-  update-source-version ${attrPath} "$version" "$shasum"
+  update-source-version ${attrPath} "$version" "$shasum" "$source_url"
 ''

@@ -134,6 +134,7 @@ rec {
 
   kernelFamilies = setTypes types.openKernelFamily {
     bsd = {};
+    darwin = {};
   };
 
   ################################################################################
@@ -149,7 +150,10 @@ rec {
   types.kernel = enum (attrValues kernels);
 
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
-    darwin  = { execFormat = macho;   families = { }; };
+    # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
+    # the nnormalized name for macOS.
+    macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
+    ios     = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
     hurd    = { execFormat = elf;     families = { }; };
     linux   = { execFormat = elf;     families = { }; };
@@ -159,9 +163,13 @@ rec {
     solaris = { execFormat = elf;     families = { }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
+    # 'darwin' is the kernel for all of them. We choose macOS by default.
+    darwin = kernels.macos;
     # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
-    darwin10 = kernels.darwin;
-    darwin14 = kernels.darwin;
+    darwin10 = kernels.macos;
+    darwin14 = kernels.macos;
+    watchos = kernels.ios;
+    tvos = kernels.ios;
     win32 = kernels.windows;
   };
 
@@ -263,8 +271,8 @@ rec {
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
   doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
-    if abi == abis.cygnus
-    then "${cpu.name}-cygwin"
+    /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
+    else if kernel.families ? darwin then "${cpu.name}-darwin"
     else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let

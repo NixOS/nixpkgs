@@ -50,12 +50,7 @@ in
         description = ''
           If enabled, start the Resilio Sync daemon. Once enabled, you can
           interact with the service through the Web UI, or configure it in your
-          NixOS configuration. Enabling the <literal>resilio</literal> service
-          also installs a systemd user unit which can be used to start
-          user-specific copies of the daemon. Once installed, you can use
-          <literal>systemctl --user start resilio</literal> as your user to start
-          the daemon using the configuration file located at
-          <literal>$HOME/.config/resilio-sync/config.json</literal>.
+          NixOS configuration.
         '';
       };
 

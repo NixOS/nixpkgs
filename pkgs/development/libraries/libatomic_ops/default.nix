@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   # https://github.com/ivmai/libatomic_ops/pull/32
   patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 
@@ -26,6 +28,6 @@ stdenv.mkDerivation rec {
     description = ''A library for semi-portable access to hardware-provided atomic memory update operations'';
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = with stdenv.lib.platforms; unix ++ windows;
   };
 }

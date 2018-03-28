@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "blas-${version}";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${name}.tgz";
-    sha256 = "1hvmwp488hd6sdxdbmhjhmyrrd4s1ds1cjzh5d86l10b3wsm99n5";
+    sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
   };
 
   buildInputs = [ gfortran ];

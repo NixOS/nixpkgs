@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, mesa, openalSoft
+{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGLU_combined, openalSoft
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which pkgconfig ];
   buildInputs = [
-    SDL2 mesa openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
+    SDL2 libGLU_combined openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
     freetype mumble
   ];
 

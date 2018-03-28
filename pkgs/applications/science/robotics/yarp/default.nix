@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "yarp-${version}";
-  version = "2.3.68";
+  version = "2.3.70.2";
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "yarp";
     rev = "v${version}";
-    sha256 = "1ksz2kv4v14fqgz3fsvvmdk2sikhnxr11jhhf7c2547x6jbzhda6";
+    sha256 = "0mphh899niy30xbjjwi9xpsliq8mladfldbbbjfngdrqfhiray1a";
   };
 
   buildInputs = [ cmake ace ];

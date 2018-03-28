@@ -10,11 +10,11 @@
 stdenv.mkDerivation rec {
 
   name = "kid3-${version}";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${name}.tar.gz";
-    sha256 = "09iryxnhg8d9q36a4brb25bqkjprkx5kl0x7vyy82gxivqk0ihl8";
+    sha256 = "1kv795prc4d3f2cbzskvdi73l6nx4cfcd32x255wq1s74zp1k73p";
   };
 
   buildInputs = with stdenv.lib;

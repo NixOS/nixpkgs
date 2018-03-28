@@ -1,13 +1,14 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk-doc
-, libgcrypt, gobjectIntrospection, vala_0_38 }:
+, libgcrypt, gobjectIntrospection, vala_0_38, gnome3 }:
 let
+  pname = "libsecret";
   version = "0.18.5";
 in
 stdenv.mkDerivation rec {
-  name = "libsecret-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsecret/0.18/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1cychxc3ff8fp857iikw0n2s13s2mhw2dn1mr632f7w3sn6vvrww";
   };
 
@@ -19,6 +20,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
   buildInputs = [ libgcrypt gobjectIntrospection vala_0_38 ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "A library for storing and retrieving passwords and other secrets";

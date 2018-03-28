@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.0.1";
+  version = "3.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7aee5c0750584946fde40da70f0b28fe769f85182f1171acef18a35fd8ecd221";
+    sha256 = "281a9fa56b5ce587a2147ec285d18a224942f7e020581afa6cc44d7caecf937b";
   };
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.5";
 
   checkInputs = [ pytest gunicorn pytest-mock ];
 

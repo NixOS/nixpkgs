@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, bash
+{ stdenv, fetchurl, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
   src = chromium.upstream-info.binary;
 
   buildInputs = [
-    patchelf
+    patchelf makeWrapper
 
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk
@@ -120,14 +120,11 @@ in stdenv.mkDerivation rec {
       mv "$icon_file" "$logo_output_path/google-$appname.png"
     done
 
-    cat > $exe << EOF
-    #!${bash}/bin/sh
-    export LD_LIBRARY_PATH=$rpath\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
-    export PATH=$binpath\''${PATH:+:\$PATH}
-    export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
-    $out/share/google/$appname/google-$appname ${commandLineArgs} "\$@"
-    EOF
-    chmod +x $exe
+    makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
+      --prefix LD_LIBRARY_PATH : "$rpath" \
+      --prefix PATH            : "$binpath" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
       patchelf --set-rpath $rpath $elf

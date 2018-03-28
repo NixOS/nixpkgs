@@ -155,12 +155,6 @@ rec {
       outPath = assert condition; drv.outPath;
     };
 
-  /* Add attributes to each output of a derivation without changing
-     the derivation itself. */
-  addPassthru =
-    lib.warn "`addPassthru drv passthru` is deprecated, replace with `extendDerivation true passthru drv`"
-      (drv: passthru: extendDerivation true passthru drv);
-
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
      result to ensure that there are no thunks kept alive to prevent

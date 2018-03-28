@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "10.3.4";
+  version = "10.5.6";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "0b6508hcahvhfpxyrqs05kz9a7c1wv658asm6a7ccish6hnwcica";
+    sha256 = "1kml7iz4q9g5gcfqqarivlnkmkmq9250wgm95yi4rgzynb5jndd0";
   };
 
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0cvp4wwkc04qffsq738867j31igwzj7zlmahdl24yddbmpa5x8r1";
+    sha256 = "059h63jn552fcir2dgsjv85zv1ihbyiwzws4h2j15mwj2cdpjkh0";
   };
 
   buildInputs = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./nulladapter.patch
     ./fix-36783.patch
   ];
 
@@ -58,6 +57,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace app/controllers/admin/background_jobs_controller.rb \
         --replace "ps -U" "${procps}/bin/ps -U"
+
+    sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
 
     # required for some gems:
     cat > config/database.yml <<EOF

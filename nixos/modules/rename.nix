@@ -240,5 +240,11 @@ with lib;
 
     # Xen
     (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [ "virtualisation" "xen" "package-qemu" ])
-  ];
+  ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                   "snmpExporter" "unifiExporter" "varnishExporter" ]
+       (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
+         The prometheus exporters are now configured using `services.prometheus.exporters'.
+         See the 18.03 release notes for more information.
+       '' ));
 }

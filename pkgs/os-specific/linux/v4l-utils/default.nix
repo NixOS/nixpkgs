@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, pkgconfig, perl
 , libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, mesa_glu
+, withGUI ? true, alsaLib, libX11, qtbase, libGLU
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl ];
 
-  buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase mesa_glu ];
+  buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 

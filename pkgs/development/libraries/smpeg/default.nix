@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, mesa, makeWrapper }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU_combined, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ SDL gtk2 mesa ];
+  buildInputs = [ SDL gtk2 libGLU_combined ];
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
 

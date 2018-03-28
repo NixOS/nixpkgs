@@ -116,6 +116,7 @@ in rec {
       mv jdk1.8.0_*/linux-amd64/product $out
       find $out -type f -exec sed -i "s#${oraclejdk8}#$out#g" {} \;
     '';
+    dontFixup = true; # do not nuke path of ffmpeg etc
     dontStrip = true; # why? see in oraclejdk derivation
     inherit (oraclejdk8) meta;
   };
@@ -174,6 +175,7 @@ in rec {
         --replace file:/dev/random    file:/dev/./urandom \
         --replace NativePRNGBlocking  SHA1PRNG
     '';
+    dontFixup = true; # do not nuke path of ffmpeg etc
     dontStrip = true; # why? see in oraclejdk derivation
     doInstallCheck = true;
     installCheckPhase = ''

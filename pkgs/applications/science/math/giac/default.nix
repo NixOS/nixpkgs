@@ -1,10 +1,10 @@
 { stdenv, fetchurl, texlive, bison, flex
 , gmp, mpfr, pari, ntl, gsl, blas, mpfi, liblapackWithAtlas
 , readline, gettext, libpng, libao, gfortran, perl
-, enableGUI ? false, mesa ? null, xorg ? null, fltk ? null
+, enableGUI ? false, libGLU_combined ? null, xorg ? null, fltk ? null
 }:
 
-assert enableGUI -> mesa != null && xorg != null && fltk != null;
+assert enableGUI -> libGLU_combined != null && xorg != null && fltk != null;
 
 stdenv.mkDerivation rec {
   name = "${attr}-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # we want libgfortran.so.3 instead
     (stdenv.lib.getLib gfortran.cc)
   ] ++ stdenv.lib.optionals enableGUI [
-    mesa fltk xorg.libX11
+    libGLU_combined fltk xorg.libX11
   ];
 
   outputs = [ "out" ];

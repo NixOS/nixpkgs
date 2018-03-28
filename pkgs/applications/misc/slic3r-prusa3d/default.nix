@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, mesa_glu,
+  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
   glew, eigen }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
@@ -27,13 +27,13 @@ let
       url = "mirror://cpan/authors/id/M/MB/MBARBON/${name}.tar.gz";
       sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
     };
-    propagatedBuildInputs = [ Wx perlPackages.OpenGL mesa_glu ];
+    propagatedBuildInputs = [ Wx perlPackages.OpenGL libGLU ];
     doCheck = false;
   };
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.38.7";
+  version = "1.39.1";
 
   enableParallelBuilding = true;
 
@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
     XMLSAX
   ]);
 
+  prePatch = ''
+    sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+  '';
+
   postInstall = ''
     echo 'postInstall'
     wrapProgram "$out/bin/slic3r-prusa3d" \
@@ -84,7 +88,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "1nrryd2bxmk4y59bq5fp7n2alyvc5a9xvnbx5j4fg4mqr91ccs5c";
+    sha256 = "0frkjgzmiy788ijkcqz3baxcrncqmk9s2vcd99hb8p2q13cg51ff";
     rev = "version_${version}";
   };
 

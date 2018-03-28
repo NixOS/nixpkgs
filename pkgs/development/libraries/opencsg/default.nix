@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mesa, freeglut, glew, libXmu, libXext, libX11
+{stdenv, fetchurl, libGLU_combined, freeglut, glew, libXmu, libXext, libX11
   }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ysazynm759gnw1rdhn9xw9nixnzrlzrc462340a6iif79fyqlnr";
   };
 
-  buildInputs = [mesa freeglut glew libXmu libXext libX11];
+  buildInputs = [libGLU_combined freeglut glew libXmu libXext libX11];
 
   doCheck = false;
 

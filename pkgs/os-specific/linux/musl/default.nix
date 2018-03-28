@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
   # so musl can selectively disable as needed
   hardeningDisable = [ "stackprotector" ];
 
+  # Leave these, be friendlier to debuggers/perf tools
+  # Don't force them on, but don't force off either
+  postPatch = ''
+    substituteInPlace configure \
+      --replace -fno-unwind-tables "" \
+      --replace -fno-asynchronous-unwind-tables ""
+  '';
+
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
@@ -40,6 +48,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--enable-static"
+    "--enable-debug"
     "CFLAGS=-fstack-protector-strong"
     # Fix cycle between outputs
     "--disable-wrapper"
@@ -48,15 +57,17 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   dontDisableStatic = true;
-  dontStrip = true;
+  separateDebugInfo = true;
 
   postInstall =
   ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
-  '' +
-  ''
+  '' + ''
+    # Strip debug out of the static library
+    $STRIP -S $out/lib/libc.a
+  '' + ''
     mkdir -p $out/bin
     # Create 'ldd' symlink, builtin
     ln -s $out/lib/libc.so $out/bin/ldd

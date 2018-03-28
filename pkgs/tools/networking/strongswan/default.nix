@@ -76,6 +76,11 @@ stdenv.mkDerivation rec {
          "--enable-sqlite" ]
     ++ optional enableNetworkManager "--enable-nm";
 
+  postInstall = ''
+    # this is needed for l2tp
+    echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
+  '';
+
   NIX_LDFLAGS = "-lgcc_s" ;
 
   meta = {

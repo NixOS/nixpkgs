@@ -2,9 +2,12 @@
 , gawk, utillinux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
+, libelf
 }:
 
 assert (!libsOnly) -> kernel != null;
+# Disable for kernels 4.15 and above due to compatibility issues
+assert kernel != null -> stdenv.lib.versionOlder kernel.version "4.15";
 
 let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
+  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ] ++ kernel.moduleBuildDependencies;
 
   inherit libsOnly;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, xorg, libGL }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-1.1.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ xorg.libX11 ];
 
   configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${mesa_noglu.driverLink}/lib/vdpau";
+    "--with-module-dir=${libGL.driverLink}/lib/vdpau";
 
   installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 

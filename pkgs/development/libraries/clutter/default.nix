@@ -1,30 +1,36 @@
-{ stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib, 
-gobjectIntrospection, gtk3
+{ stdenv, fetchurl, glib, pkgconfig, libGLU_combined, libX11, libXext, libXfixes
+, libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib,
+gobjectIntrospection, gtk3, gnome3
 }:
 
 let
-  ver_maj = "1.26";
-  ver_min = "2";
+  pname = "clutter";
+  version = "1.26.2";
 in
 stdenv.mkDerivation rec {
-  name = "clutter-${ver_maj}.${ver_min}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/clutter/${ver_maj}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "0mif1qnrpkgxi43h7pimim6w6zwywa16ixcliw0yjm9hk0a368z7";
   };
 
   buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
+    [ libX11 libGLU_combined libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json-glib gobjectIntrospection libxcb
     ];
 
   configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK
 
   #doCheck = true; # no tests possible without a display
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = {
     description = "Library for creating fast, dynamic graphical user interfaces";

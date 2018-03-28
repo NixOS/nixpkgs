@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0apr1pxifw6f1rbbsdrrwzs1dnhybg4hda3qqhqcw7p14r5xnbx5";
   };
 
+  patches = [ ./header-order.patch ];
+
   meta = with stdenv.lib; {
     description = "SMTP filter that allows to check for viruses using the ClamAV
                    anti-virus software";

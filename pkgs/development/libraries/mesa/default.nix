@@ -14,7 +14,7 @@
 }:
 
 /** Packaging design:
-  - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
+  - The basic mesa ($out) contains headers and libraries (GLU is in libGLU now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI drivers are compiled into $drivers output, which is much bigger and
@@ -66,7 +66,7 @@ let
 in
 
 let
-  version = "17.3.3";
+  version = "17.3.6";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "16rpm4rwmzd4kdgipa1gw262jqg3346gih0y3bsc3bgn1vgcbfj1";
+    sha256 = "e5915680d44ac9d05defdec529db7459ac9edd441c9845266eff2e2d3e57fbf8";
   };
 
   prePatch = "patchShebangs .";

@@ -124,7 +124,7 @@ in {
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
@@ -182,8 +182,7 @@ in {
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
-                              networkmanager-pptp networkmanager-iodine
-                              networkmanager-l2tp; };
+                              networkmanager-iodine networkmanager-l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

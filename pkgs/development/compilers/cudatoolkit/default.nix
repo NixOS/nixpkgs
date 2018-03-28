@@ -28,7 +28,7 @@ let
               This nix expression requires that ${args.name} is already part of the store.
               Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the CUDA toolkit
               at https://developer.nvidia.com/cuda-toolkit, and run the following command in the download directory:
-              nix-prefetch-url file://${args.name}
+              nix-prefetch-url file://\$PWD/${args.name}
             '';
             inherit (args) name sha256;
           }

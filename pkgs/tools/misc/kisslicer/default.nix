@@ -1,6 +1,6 @@
 { fetchzip
 , libX11
-, mesa
+, libGLU_combined
 , makeWrapper
 , stdenv
 }:
@@ -8,7 +8,7 @@
 let
 
   libPath = stdenv.lib.makeLibraryPath [
-    mesa
+    libGLU_combined
     stdenv.cc.cc
     libX11
   ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    mesa
+    libGLU_combined
     libX11
   ];
 

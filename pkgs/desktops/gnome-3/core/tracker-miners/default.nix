@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib
+, substituteAll, pkgconfig, gtk3, glib, gexiv2
 , bash, wrapGAppsHook, itstool, vala, sqlite, libxslt
 , gnome3, librsvg, gdk_pixbuf, libnotify
 , evolution-data-server, gst_all_1, poppler
@@ -9,17 +9,15 @@
 , libsoup, json-glib, libseccomp
 , libiptcdata }:
 
-stdenv.mkDerivation rec {
-  name = "tracker-miners-${version}";
-  version = "2.0.3";
+let
+  pname = "tracker-miners";
+  version = "2.0.4";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker-miners/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "12413a9f8dfa705a48a2697dcbb3eef12ee91bb98f392a23ba4bda7813e41d1b";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "tracker-miners"; attrPath = "gnome3.tracker-miners"; };
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "0mp9m2waii583sjgr61m1ni6py6dry11r0rzidgvw1g4cxhn89j6";
   };
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
@@ -27,23 +25,31 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ vala pkgconfig intltool itstool libxslt wrapGAppsHook ];
-  # TODO: add libgrss, libenca
+  # TODO: add libgrss, libenca, libosinfo
   buildInputs = [
     bzip2 evolution-data-server exempi flac giflib glib gnome3.totem-pl-parser
     gnome3.tracker gst_all_1.gst-plugins-base gst_all_1.gstreamer icu
     json-glib libcue libexif libgsf libiptcdata libjpeg libpng libseccomp libsoup
-    libtiff libuuid libvorbis libxml2 poppler taglib upower
+    libtiff libuuid libvorbis libxml2 poppler taglib upower gexiv2
   ];
 
   LANG = "en_US.UTF-8"; # for running tests
 
   doCheck = true;
 
-  postPatch = ''
-    substituteInPlace src/libtracker-common/tracker-domain-ontology.c --replace \
-      'SHAREDIR, "tracker", "domain-ontologies"' \
-      '"${gnome3.tracker}/share", "tracker", "domain-ontologies"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (gnome3) tracker;
+    })
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;

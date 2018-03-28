@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # added to fix build with gcc7
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
   preConfigure = ''
    substituteInPlace ./configure \
      --replace '/usr/bin/file' '${file}/bin/file'

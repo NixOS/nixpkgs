@@ -1,5 +1,5 @@
 { stdenv, callPackage, fetchurl, makeWrapper
-, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, mesa_noglu
+, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , factorio-utils
 , releaseType
 , mods ? []
@@ -140,7 +140,7 @@ let
         libXinerama
         libXrandr
         libXi
-        mesa_noglu
+        libGL
       ];
 
       installPhase = base.installPhase + ''

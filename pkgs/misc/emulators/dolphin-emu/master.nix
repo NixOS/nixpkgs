@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
 , pcre, gettext, libpthreadstubs, libXrandr, libXext, libSM, readline
 , openal, libXdmcp, portaudio, libusb, libevdev
 , libpulseaudio ? null
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ curl ffmpeg libao mesa gtk2 glib pcre
+  buildInputs = [ curl ffmpeg libao libGLU_combined gtk2 glib pcre
                   gettext libpthreadstubs libXrandr libXext libSM readline openal
                   libXdmcp portaudio libusb libpulseaudio libpng hidapi
                 ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]

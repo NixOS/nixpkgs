@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight X11 desktop panel for LXDE";
-    homepage = http://lxde.org/;
+    homepage = https://lxde.org/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ryneeverett ];
     platforms = stdenv.lib.platforms.linux;

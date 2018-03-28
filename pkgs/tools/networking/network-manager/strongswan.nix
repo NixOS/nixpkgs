@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name    = "${pname}-${version}";
   pname   = "NetworkManager-strongswan";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchurl {
     url    = "https://download.strongswan.org/NetworkManager/${name}.tar.bz2";
-    sha256 = "0r5j8cr4x01d2cdy970990292n7p9v617cw103kdczw646xwcxs8";
+    sha256 = "0jzl52wmh2q2djb1s546kxliy7s6akhi5bx6rp2ppjfk3wbi2a2l";
   };
 
   postPatch = ''

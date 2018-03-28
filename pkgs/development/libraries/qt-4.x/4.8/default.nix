@@ -2,7 +2,7 @@
 , hostPlatform
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLSupported, libGL, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
-        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
+        openglDriver = if libGLSupported then libGL.driverLink else "/no-such-path";
       })
       (fetchpatch {
         name = "fix-medium-font.patch";
@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
-    ++ optional mesaSupported mesa_glu
+    ++ optional libGLSupported libGLU
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
 

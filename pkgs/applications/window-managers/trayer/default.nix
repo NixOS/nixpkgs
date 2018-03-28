@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "trayer-1.1.7";
+  name = "trayer-1.1.8";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gdk_pixbuf gtk2 ];
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "sargon";
     repo = "trayer-srg";
     rev = name;
-    sha256 = "06lpgralggh5546qgvpilzxh4anshli2za41x68x2zbaizyqb09a";
+    sha256 = "1mvhwaqa9bng9wh3jg3b7y8gl7nprbydmhg963xg0r076jyzv0cg";
   };
 
   preConfigure = ''

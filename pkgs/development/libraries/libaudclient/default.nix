@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Legacy D-Bus client library for Audacious";
-    homepage = http://audacious-media-player.org/;
+    homepage = https://audacious-media-player.org/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

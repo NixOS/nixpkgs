@@ -30,12 +30,12 @@ let
       # /bin/sh in the sandbox as a bind-mount to bash. This means we
       # also need to include the entire closure of bash. Nix >= 2.0
       # provides a /bin/sh by default.
-      sh = pkgs.stdenv.shell;
+      sh = pkgs.runtimeShell;
       binshDeps = pkgs.writeReferencesToFile sh;
     in
-      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; inherit binshDeps; } ''
+      pkgs.runCommand "nix.conf" { extraOptions = cfg.extraOptions; } ''
         ${optionalString (!isNix20) ''
-          extraPaths=$(for i in $(cat binshDeps); do if test -d $i; then echo $i; fi; done)
+          extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         ''}
         cat > $out <<END
         # WARNING: this file is generated from the nix.* options in
@@ -445,12 +445,10 @@ in
         mkdir -m 0755 -p \
           /nix/var/nix/gcroots \
           /nix/var/nix/temproots \
-          /nix/var/nix/manifests \
           /nix/var/nix/userpool \
           /nix/var/nix/profiles \
           /nix/var/nix/db \
-          /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache
+          /nix/var/log/nix/drvs
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \

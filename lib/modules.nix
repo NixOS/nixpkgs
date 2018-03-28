@@ -660,7 +660,7 @@ rec {
   doRename = { from, to, visible, warn, use }:
     let
       toOf = attrByPath to
-        (abort "Renaming error: option `${showOption to}' does not exists.");
+        (abort "Renaming error: option `${showOption to}' does not exist.");
     in
       { config, options, ... }:
       { options = setAttrByPath from (mkOption {

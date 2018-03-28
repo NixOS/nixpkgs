@@ -18,7 +18,7 @@ top-level attribute to `top-level/all-packages.nix`.
 {
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
 
   # options
@@ -37,7 +37,9 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ] ++
+      optionals stdenv.isDarwin [ ./qtbase-darwin.patch
+                                  ./restore-pc-files.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
@@ -66,7 +68,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
@@ -88,6 +90,7 @@ let
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
+      qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};

@@ -1,8 +1,11 @@
-{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz, fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel, libstartup_notification, libX11, libXrandr, libXinerama, libXcursor, libxkbcommon, libXi, libXext }:
+{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz,
+  fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel,
+  libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
+  libxkbcommon, libXi, libXext }:
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.7.1";
+  version = "0.8.2";
   name = "kitty-${version}";
   format = "other";
 
@@ -10,10 +13,13 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0c02xy5psb7v7xfncz4bflrbinifpcm1yn8hvh0zaf7p4vr837p7";
+    sha256 = "08s8l59bib363ykg4djcxrc1968n5j1cjlp6fwwv7xmf18wd1a6c";
   };
 
-  buildInputs = [ fontconfig glfw ncurses libunistring harfbuzz libX11 libXrandr libXinerama libXcursor libxkbcommon libXi libXext ];
+  buildInputs = [
+    fontconfig glfw ncurses libunistring harfbuzz libX11
+    libXrandr libXinerama libXcursor libxkbcommon libXi libXext
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 

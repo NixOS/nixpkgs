@@ -2,17 +2,14 @@
 , libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
 
 stdenv.mkDerivation rec {
-  # KDE hasn't made a release of falkon yet so we just track git for now which is
-  # based on the most recent release of qupzilla
-  # This wip version is 2.1.99 so we add the .1
-  name = "falkon-${version}.1";
-  version = "2.1.99";
+  name = "falkon-${version}";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
-    rev    = "dd3c570c41b4b3d0ad17202b78bf14cf1ac56495";
-    sha256 = "07d40cpckaprj74mr06k3mfriwb471bdmq60smls34y62ss55q9d";
+    rev    = "v${version}";
+    sha256 = "148idxvx32iwg18m3b7s22awcijnbrywz9r8gnfrq6gpwr0m2jna";
   };
 
   preConfigure = ''

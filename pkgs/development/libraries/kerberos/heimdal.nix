@@ -12,14 +12,16 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}heimdal-${version}";
-  version = "7.4.0";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
     rev = "heimdal-${version}";
-    sha256 = "01ch6kqjrxi9fki54yjj2fhxhdkxijz161w2inh5k8mcixlf67vp";
+    sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
+
+  patches = [ ./heimdal-make-missing-headers.patch ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
     ++ (with perlPackages; [ JSON ])
@@ -43,6 +45,10 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!stdenv.isFreeBSD) [
     "--with-capng"
   ];
+
+  postUnpack = ''
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+  '';
 
   buildPhase = optionalString libOnly ''
     (cd include; make -j $NIX_BUILD_CORES)

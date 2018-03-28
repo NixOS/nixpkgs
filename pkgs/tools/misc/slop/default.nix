@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, glew, glm, mesa, libX11, libXext, libXrender, cppcheck, icu}:
+, glew, glm, libGLU_combined, libX11, libXext, libXrender, cppcheck, icu}:
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ glew glm mesa libX11 libXext libXrender icu ]
+  buildInputs = [ glew glm libGLU_combined libX11 libXext libXrender icu ]
                 ++ stdenv.lib.optional doCheck cppcheck;
 
   doCheck = false;

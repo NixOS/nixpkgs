@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
-, mesa_glu, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
+, libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
   version = "20170428";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
+  buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
 
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
   # every now and then on Hydra. No idea why.

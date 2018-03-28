@@ -47,8 +47,8 @@ in
       default = true;
       description =
         ''
-          Whether users of the <code>wheel</code> group can execute
-          commands as super user without entering a password.
+          Whether users of the <code>wheel</code> group must
+          provide a password to run commands as super user via <command>sudo</command>.
         '';
       };
 
@@ -215,7 +215,7 @@ in
           { src = pkgs.writeText "sudoers-in" cfg.configFile; }
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
-          "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
         target = "sudoers";
         mode = "0440";
       };

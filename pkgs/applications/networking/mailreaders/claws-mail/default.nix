@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.claws-mail.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ khumba fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

@@ -18,7 +18,7 @@ top-level attribute to `top-level/all-packages.nix`.
 {
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, mesa, perl,
+  bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
 
   # options
@@ -66,7 +66,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit bison cups harfbuzz mesa;
+        inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };

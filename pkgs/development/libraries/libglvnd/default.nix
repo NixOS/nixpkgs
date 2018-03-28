@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, autoreconfHook, python2, pkgconfig, mesa_noglu, libX11, libXext, glproto }:
+{stdenv, fetchFromGitHub, autoreconfHook, python2, pkgconfig, libGL_driver, libX11, libXext, glproto }:
 
 # Git version is needed for EGL and GLES handling.
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
-    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${mesa_noglu.driverLink}/share/glvnd/egl_vendor.d\""
+    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${libGL_driver.driverLink}/share/glvnd/egl_vendor.d\""
   ];
 
   outputs = [ "out" "dev" ];

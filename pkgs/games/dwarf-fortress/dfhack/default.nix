@@ -1,13 +1,13 @@
 { stdenv, lib, fetchgit, cmake, writeScriptBin, callPackage
 , perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, mesa
+, enableStoneSense ? false,  allegro5, libGLU_combined
 }:
 
 let
   dfVersion = "0.44.05";
   version = "${dfVersion}-r2";
   rev = "refs/tags/${version}";
-  sha256 = "1hr3qsx7rd36syw7dfp4lh8kpmz1pvva757za2yn34hj1jm4nh52";
+  sha256 = "1cwifdhi48a976xc472nf6q2k0ibwqffil5a4llcymcxdbgxdcc9";
 
   # revision of library/xml submodule
   xmlRev = "2794f8a6d7405d4858bac486a0bb17b94740c142";
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
   buildInputs = [ zlib ]
-             ++ lib.optionals enableStoneSense [ allegro5 mesa ];
+             ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
 
   preConfigure = ''
     # Trick build system into believing we have .git

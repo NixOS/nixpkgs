@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
 , xorg, epoxy, json-glib, libxkbcommon, gmp
 , waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
@@ -12,22 +12,20 @@ assert cupsSupport -> cups != null;
 with stdenv.lib;
 
 let
-  ver_maj = "3.22";
-  ver_min = "26";
-  version = "${ver_maj}.${ver_min}";
+  version = "3.22.29";
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "61eef0d320e541976e2dfe445729f12b5ade53050ee9de6184235cb60cd4b967";
+    url = "mirror://gnome/sources/gtk+/${gnome3.versionBranch version}/gtk+-${version}.tar.xz";
+    sha256 = "1y5vzdbgww9l7xcrg13azff2rs94kggkywmpcsh39h7w76wn8zd0";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl makeWrapper ];
 
   patches = [
     ./3.0-immodules.cache.patch
@@ -74,7 +72,19 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
+
+    # TODO: patch glib directly
+    for f in $dev/bin/gtk-encode-symbolic-svg; do
+      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    done
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gtk+";
+      attrPath = "gtk3";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";

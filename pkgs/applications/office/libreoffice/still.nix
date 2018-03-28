@@ -4,7 +4,7 @@
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
-, librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
+, librsvg, gnome_vfs, libGLU_combined, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0max423hdlr4j6y6ymng15awilh2aq8gly1hsf16lnk1pxihgr54";
+      sha256 = "16g85bn6qkql81a0k9iv3nwrpg2kpvz5nk4r7lab5jzlcl20qplc";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "14ziy02qq092x8h29f9dlwvvk2scd5v385zhln4848lf3q5cnifl";
+      sha256 = "02382d09svcgmp5q2xglhbx1na9ycd77f5cbcj9jgs8lpkgwbxxc";
     };
 
   };
@@ -247,7 +247,7 @@ in stdenv.mkDerivation rec {
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
+      libXdmcp libpthreadstubs libGLU_combined mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base glib
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends unzip vigra which zip zlib
@@ -261,7 +261,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   passthru = {
-    inherit srcs;
+    inherit srcs jdk;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

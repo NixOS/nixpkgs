@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "symbiyosys-${version}";
-  version = "2018.02.04";
+  version = "2018.03.21";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "symbiyosys";
-    rev    = "236f6412c1c1afe95d752eaf907f66f19c343134";
-    sha256 = "06bsvvkn9yhz9jvgf7a6pf407ab9m5qrr42niww666z967xdw4p0";
+    rev    = "76a624a363bc44df102359595d34f29370c6668b";
+    sha256 = "1ikax1yiqgj5442wcgp1iigw8wiyw7k848z4ykn7k068kbc320bm";
   };
 
   buildInputs = [ python3 yosys ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
   '';
   meta = {
-    description = "Yosys verification tools for Hardware Definition Languages";
+    description = "Tooling for Yosys-based verification flows";
     homepage    = https://symbiyosys.readthedocs.io/;
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];

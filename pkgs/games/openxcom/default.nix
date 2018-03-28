@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchpatch, cmake, mesa, zlib, openssl, libyamlcpp, boost
+{stdenv, fetchFromGitHub, fetchpatch, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
 let version = "1.0.0.2018.01.28"; in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost libyamlcpp mesa openssl zlib ];
+  buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost libyamlcpp libGLU_combined openssl zlib ];
 
   meta = {
     description = "Open source clone of UFO: Enemy Unknown";

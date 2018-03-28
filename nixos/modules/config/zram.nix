@@ -93,7 +93,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
-              ExecStop = "${pkgs.stdenv.shell} -c 'echo 1 > /sys/class/block/${dev}/reset'";
+              ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/class/block/${dev}/reset'";
             };
             script = ''
               set -u

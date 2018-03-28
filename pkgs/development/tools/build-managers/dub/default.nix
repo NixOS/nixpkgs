@@ -4,7 +4,7 @@ let
 
   dubBuild = stdenv.mkDerivation rec {
     name = "dubBuild-${version}";
-    version = "1.7.2";
+    version = "1.8.0";
 
     enableParallelBuilding = true;
 
@@ -12,20 +12,12 @@ let
       owner = "dlang";
       repo = "dub";
       rev = "v${version}";
-      sha256 = "073ibvgm1gphcqs1yjrav9ryp677nh3b194nxmvicwgvdc0sb6w9";
+      sha256 = "0788d375sc6xdak9x6xclkkz243lb7di68yxfvl4v0n178mi22bk";
     };
 
     postUnpack = ''
         patchShebangs .
     '';
-
-    patches = [
-      # TODO Remove with next release which contains https://github.com/dlang/dub/pull/1354
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/dlang/dub/pull/1354.patch";
-        sha256 = "01alky8a91qwjmlnfjbrn8kiivwr69f3j4c84cjlxrzfp1ph20ah";
-      })
-    ];
 
     # Can be removed with https://github.com/dlang/dub/pull/1368
     dubvar = "\\$DUB";
@@ -71,8 +63,6 @@ let
 
     src = dubBuild.src;
     
-    patches = dubBuild.patches;
-
     postUnpack = dubBuild.postUnpack;
     postPatch = dubBuild.postPatch;
 

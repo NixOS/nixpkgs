@@ -288,6 +288,17 @@ let
                 ${i}
               '')}" > /run/${n}.interfaces
 
+              ${optionalString config.virtualisation.libvirtd.enable ''
+                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  for uri in qemu:///system lxc:///; do
+                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                      ${pkgs.bash}/bin/bash
+                    done
+                  done
+                ''}
+
               # Enable stp on the interface
               ${optionalString v.rstp ''
                 echo 2 >/sys/class/net/${n}/bridge/stp_state

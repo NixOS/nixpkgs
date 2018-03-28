@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, mesa ? null # OpenGL (required for vwebp)
+, openglSupport ? false, freeglut ? null, libGLU_combined ? null # OpenGL (required for vwebp)
 , pngSupport ? true, libpng ? null # PNG image format
 , jpegSupport ? true, libjpeg ? null # JPEG image format
 , tiffSupport ? true, libtiff ? null # TIFF image format
@@ -14,7 +14,7 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-assert openglSupport -> ((freeglut != null) && (mesa != null));
+assert openglSupport -> ((freeglut != null) && (libGLU_combined != null));
 assert pngSupport -> (libpng != null);
 assert jpegSupport -> (libjpeg != null);
 assert tiffSupport -> (libtiff != null);
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ]
-    ++ optionals openglSupport [ freeglut mesa ]
+    ++ optionals openglSupport [ freeglut libGLU_combined ]
     ++ optional pngSupport libpng
     ++ optional jpegSupport libjpeg
     ++ optional tiffSupport libtiff

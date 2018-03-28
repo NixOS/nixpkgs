@@ -36,7 +36,6 @@ lib.makeOverridable (
     rubyName = builtins.parseDrvName ruby.name;
   in "${rubyName.name}${rubyName.version}-")
 , buildInputs ? []
-, doCheck ? false
 , meta ? {}
 , patches ? []
 , gemPath ? []
@@ -79,7 +78,6 @@ in
 
 stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
-  inherit doCheck;
   inherit dontBuild;
   inherit dontStrip;
   inherit type;
@@ -95,8 +93,6 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
-
-  phases = attrs.phases or [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
   unpackPhase = attrs.unpackPhase or ''
     runHook preUnpack

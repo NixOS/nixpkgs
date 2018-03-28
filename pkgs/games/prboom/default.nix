@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_mixer, SDL_net, mesa}:
+{stdenv, fetchurl, SDL, SDL_mixer, SDL_net, libGLU_combined}:
 
 stdenv.mkDerivation {
   name = "prboom-2.5.0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1bjb04q8dk232956k30qlpq6q0hxb904yh1nflr87jcc1x3iqv12";
   };
 
-  buildInputs = [ SDL SDL_mixer SDL_net mesa ];
+  buildInputs = [ SDL SDL_mixer SDL_net libGLU_combined ];
   crossAttrs = {
     propagatedBuildInputs = [ SDL.crossDrv SDL_mixer.crossDrv SDL_net.crossDrv ];
     configureFlags = "--disable-gl --disable-cpu-opt --without-x --disable-sdltest

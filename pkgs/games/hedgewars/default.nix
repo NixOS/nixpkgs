@@ -1,6 +1,6 @@
 { SDL2_image, SDL2_ttf, SDL2_net, fpc, qt4, ghcWithPackages, ffmpeg, freeglut
 , stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
-, zlib, libpng, mesa, physfs
+, zlib, libpng, libGLU_combined, physfs
 }:
 
 let
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
                                      -rpath ${SDL2.out}/lib
                                      -rpath ${libpng.out}/lib
                                      -rpath ${lua5_1}/lib
-                                     -rpath ${mesa}/lib
+                                     -rpath ${libGLU_combined}/lib
                                      -rpath ${zlib.out}/lib
                                      "
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${stdenv.lib.makeLibraryPath [ mesa freeglut physfs ]}
+    wrapProgram $out/bin/hwengine --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH:${stdenv.lib.makeLibraryPath [ libGLU_combined freeglut physfs ]}
   '';
 
   meta = with stdenv.lib; {

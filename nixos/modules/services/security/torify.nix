@@ -7,7 +7,7 @@ let
   torify = pkgs.writeTextFile {
     name = "tsocks";
     text = ''
-        #!${pkgs.stdenv.shell}
+        #!${pkgs.runtimeShell}
         TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.tsocks.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;

@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
-, hostPlatform
+{ stdenv, buildPackages
+, buildPlatform, hostPlatform
+, fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
+, libffi, libtool, readline, gmp, boehmgc, libunistring
+, coverageAnalysis ? null, gnu ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -19,18 +21,18 @@
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+                           buildPackages.buildPackages.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
 
+  propagatedBuildInputs = [ gmp boehmgc ]
     # XXX: These ones aren't normally needed here, but since
     # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
     ++ [ libtool libunistring ];
-
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 
@@ -40,6 +42,7 @@
       url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })
+    ./riscv.patch
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 

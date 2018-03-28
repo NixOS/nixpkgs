@@ -5,9 +5,9 @@
 let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
-  rev = "276ed27a3cc64531542ab73bb36bb04784e79bbc";
-  sha256 = "11967dx3cjs96v3ncfljw0h7blsgg9wm8g9z2270q9a90988g2c2";
-  version = "2017-02-04";
+  rev = "4051c70c9318c837981384cbb23f3e9eb1bd0892";
+  sha256 = "0sd8n3j3rishks3gyqj2jyqhps7hmlfjyz8i0w8v98cczhhh04rq";
+  version = "2017.10.18";
 
   inherit (kernel) stdenv;
   inherit (stdenv) lib;
@@ -16,7 +16,7 @@ let
   stapBuild = stdenv.mkDerivation {
     name = "systemtap-${version}";
     src = fetchgit { inherit url rev sha256; };
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
     # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
     postPatch = ''

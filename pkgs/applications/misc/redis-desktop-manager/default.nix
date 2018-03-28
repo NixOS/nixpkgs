@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "redis-desktop-manager-${version}";
-  version = "0.9.0-alpha5";
+  version = "0.9.1";
 
   src = fetchgit {
     url = "https://github.com/uglide/RedisDesktopManager.git";
     fetchSubmodules = true;
     rev = "refs/tags/${version}";
-    sha256 = "1grw4zng0ff0lvplzzld133hlz6zjn5f5hl3z6z7kc1nq5642yr9";
+    sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -30,16 +30,12 @@ stdenv.mkDerivation rec {
     qtquick1 qtquickcontrols qtsvg qttools qtcharts
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/google/breakpad/commit/bddcc58860f522a0d4cbaa7e9d04058caee0db9d.patch";
-      sha256 = "1bcamjkmif62rb0lbp111r0ppf4raqw664m5by7vr3pdkcjbbilq";
-    })
-  ];
-
-  patchFlags = "-d 3rdparty/gbreakpad -p1";
-
   dontUseQmakeConfigure = true;
+
+  # Disable annoying update reminder
+  postPatch = ''
+    sed -i s/'^\s*initUpdater();'/'\/\/initUpdater():'/ src/app/app.cpp
+  '';
 
   buildPhase = ''
     srcdir=$PWD

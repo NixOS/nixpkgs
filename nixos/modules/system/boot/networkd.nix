@@ -650,11 +650,7 @@ let
   unitFiles = map (name: {
     target = "systemd/network/${name}";
     source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units) ++
-  (map (entry: {
-    target = "systemd/network/${entry}";
-    source = "${config.systemd.package}/lib/systemd/network/${entry}";
-  }) (attrNames (builtins.readDir "${config.systemd.package}/lib/systemd/network")));
+  }) (attrNames cfg.units);
 in
 
 {
