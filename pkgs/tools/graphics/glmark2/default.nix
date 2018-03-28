@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGLU_combined, libdrm,
-  python27, wayland, libudev }:
+{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
+  python27, wayland, libudev, mesa_noglu }:
 
 stdenv.mkDerivation rec {
   name = "glmark2-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libjpeg libpng xorg.libxcb libX11 libGLU_combined libdrm python27 wayland libudev
+    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland libudev mesa_noglu
   ];
 
   buildPhase = ''
