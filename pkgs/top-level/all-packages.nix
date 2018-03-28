@@ -16690,6 +16690,7 @@ with pkgs;
 
   monero = callPackage ../applications/altcoins/monero {
     inherit (darwin.apple_sdk.frameworks) IOKit;
+    boost = boost15x;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui { };
