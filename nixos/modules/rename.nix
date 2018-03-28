@@ -196,9 +196,9 @@ with lib;
     (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
 
     # misc/version.nix
-    (mkRenamedOptionModule [ "config" "system" "nixosVersion" ] [ "config" "system" "nixos" "version" ])
+    #(mkRenamedOptionModule [ "config" "system" "nixosVersion" ] [ "config" "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "config" "system" "nixosRelease" ] [ "config" "system" "nixos" "release" ])
-    (mkRenamedOptionModule [ "config" "system" "nixosVersionSuffix" ] [ "config" "system" "nixos" "versionSuffix" ])
+    #(mkRenamedOptionModule [ "config" "system" "nixosVersionSuffix" ] [ "config" "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "config" "system" "nixosRevision" ] [ "config" "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "config" "system" "nixosCodeName" ] [ "config" "system" "nixos" "codeName" ])
     (mkRenamedOptionModule [ "config" "system" "nixosLabel" ] [ "config" "system" "nixos" "label" ])
