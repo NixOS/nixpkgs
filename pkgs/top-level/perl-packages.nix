@@ -16533,9 +16533,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TI/TINITA/${name}.tar.gz";
       sha256 = "06msvj3vmjszl5zj1k7g47ll0kkds9gdb5sky0q27lh4zw1vlj33";
     };
-    preBuild = ''
-      sed -i 's/FULLPERL *= "/FULLPERL = /' LibYAML/Makefile
-    '';
   };
 
   WebServiceLinode = buildPerlModule rec {
