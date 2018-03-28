@@ -16599,6 +16599,8 @@ with pkgs;
     hwloc = hwloc-nox;
   };
 
+  xmrig = callPackage ../applications/misc/xmrig { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
