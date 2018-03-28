@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio zstd ];
-  patches = [ ./Makefile.patch ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Tool for managing bcachefs filesystems";
