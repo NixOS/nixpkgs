@@ -76,10 +76,10 @@ in
           example = "198.51.100.0";
         };
 
-        systemPings = mkOption {
+        respondToSystemPings = mkOption {
           type = types.bool;
           default = false;
-          description = "Respond to ordinary pings";
+          description = "Force hans respond to ordinary pings";
         };
 
         extraConfig = mkOption {
@@ -102,7 +102,7 @@ in
   ### implementation
 
   config = mkIf (cfg.server.enable || cfg.clients != {}) {
-    boot.kernel.sysctl = optionalAttrs cfg.server.systemPings {
+    boot.kernel.sysctl = optionalAttrs cfg.server.respondToSystemPings {
       "net.ipv4.icmp_echo_ignore_all" = 1;
     };
 
@@ -131,7 +131,7 @@ in
         description = "hans, ip over icmp server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.systemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
+        script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${optionalString cfg.server.respondToSystemPings "-r"} ${optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
       };
     };
 
