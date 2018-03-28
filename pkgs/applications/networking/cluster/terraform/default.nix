@@ -45,7 +45,7 @@ let
           actualPlugins = plugins terraform.plugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
-          wrapperInputs = lib.unique (lib.flatten (lib.catAttrs "propagatedBuildInputs" actualPlugins));
+          wrapperInputs = lib.unique (lib.flatten (builtins.filter (x: x != null) (lib.catAttrs "propagatedBuildInputs" actualPlugins)));
 
           passthru = {
             withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
