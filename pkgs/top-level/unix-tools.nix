@@ -12,19 +12,20 @@
 
 let
 
-  singleBinary = cmd: providers:
-    if builtins.hasAttr hostPlatform.parsed.kernel.name providers then
-      runCommand cmd {} ''
-        mkdir -p $out/bin
+  singleBinary = cmd: providers: let
+      provider = "${providers.${hostPlatform.parsed.kernel.name} or "missing-package"}/bin/${cmd}";
+    in runCommand cmd {
+      meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
+    } ''
+      mkdir -p $out/bin
 
-        if ! [ -x "${providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}" ]; then
-          echo "Cannot find command ${cmd}"
-          exit 1
-        fi
+      if ! [ -x "${provider}" ]; then
+        echo "Cannot find command ${cmd}"
+        exit 1
+      fi
 
-        ln -s ${providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd} $out/bin/${cmd}
-      ''
-    else throw "${hostPlatform.parsed.kernel.name} does not have ${cmd}";
+      ln -s "${provider}" "$out/bin/${cmd}"
+    '';
 
 in rec {
 
