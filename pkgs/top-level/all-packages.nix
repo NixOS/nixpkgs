@@ -13734,16 +13734,8 @@ with pkgs;
 
   musl = callPackage ../os-specific/linux/musl { };
   musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
-  musl-getconf = callPackage ../os-specific/linux/musl/getconf.nix { };
-  musl-getent = callPackage ../os-specific/linux/musl/getent.nix { };
-  getent =
-    if hostPlatform.isMusl then musl-getent
-    # This may not be right on other platforms, but preserves existing behavior
-    else /* if hostPlatform.libc == "glibc" then */ glibc.bin;
 
-  getconf =
-    if hostPlatform.isMusl then musl-getconf
-    else lib.getBin stdenv.cc.libc;
+  musl-utils = callPackage ../os-specific/linux/musl/utils.nix { };
 
   nettools = if stdenv.isLinux then callPackage ../os-specific/linux/net-tools { }
              else unixtools.nettools;
