@@ -49,5 +49,21 @@ in
         Restart = "always";
       };
     };
+
+    systemd.services.monit-reload = {
+      description = "Reload monit";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.systemd}/bin/systemctl reload monit";
+      };
+    };
+
+    systemd.paths.monit-reload = {
+      pathConfig = {
+        PathChanged = "/etc/monitrc";
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
+
   };
 }
