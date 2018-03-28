@@ -5,7 +5,7 @@
 , setJavaClassPath
 , minimal ? false
 #, enableInfinality ? true # font rendering patch
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
@@ -72,7 +72,7 @@ let
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+      gtk3 gnome_vfs GConf glib
     ];
 
     #move the seven other source dirs under the main jdk8u directory,
@@ -127,7 +127,7 @@ let
     NIX_LDFLAGS= lib.optionals (!minimal) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ];
 
     buildFlags = [ "all" ];
