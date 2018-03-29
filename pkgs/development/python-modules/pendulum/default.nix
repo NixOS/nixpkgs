@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f16fb759e6126dd89d49886f8100caa72e5ab36563bc148b4f7eddfa0099c0f";
+    sha256 = "39a255776528afe11ea0d57814f9bf3729c1e0b99063af2e5c6cfd750c3e1f7f";
   };
 
   propagatedBuildInputs = [ dateutil pytzdata tzlocal ];

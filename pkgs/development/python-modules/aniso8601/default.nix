@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "2.0.0";
+  version = "2.0.1";
   name = "${pname}-${version}";
 
   meta = with stdenv.lib; {
@@ -16,6 +16,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "085786415d3550e89785ffbedaa9bb37d41de0707a1268bdbba11249064b71d1";
+    sha256 = "b7215a41e5194a829dc87d1ea5039315be85a6158ba15c8157a284c29fa6808b";
   };
 }

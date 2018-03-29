@@ -9,6 +9,7 @@ let
   version = "5.10";
 
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+
 in buildPythonPackage {
   pname = pname;
   version = version;
@@ -27,13 +28,15 @@ in buildPythonPackage {
     sha256 = "0l2zy6b7bfjxmg4bb8yikg6i8iy2xdwmvk7knfmrzfpqbmkycbrl";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
+  nativeBuildInputs = [ pkgconfig qmake lndir ];
+
+  buildInputs = [ dbus_libs ];
+
+  propagatedBuildInputs = [
+    sip qtbase qtsvg qtwebkit qtwebengine
   ] ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
-
-  propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
     runHook preConfigure

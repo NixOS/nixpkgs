@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libvirt, glib, libxml2, intltool, libtool, yajl
 , nettle, libgcrypt, pythonPackages, gobjectIntrospection, libcap_ng, numactl
-, xen, libapparmor
+, xen, libapparmor, vala
 }:
 
 let
@@ -8,12 +8,14 @@ let
 in stdenv.mkDerivation rec {
   name = "libvirt-glib-1.0.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "http://libvirt.org/sources/glib/${name}.tar.gz";
     sha256 = "0iwa5sdbii52pjpdm5j37f67sdmf0kpcky4liwhy1nf43k85i4fa";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig vala ];
   buildInputs = [
     libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
     python pygobject2 gobjectIntrospection libcap_ng numactl libapparmor

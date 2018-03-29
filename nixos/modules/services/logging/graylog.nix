@@ -141,7 +141,7 @@ in
         JAVA_HOME = jre;
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
+      path = [ pkgs.jre_headless pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
 

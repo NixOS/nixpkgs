@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssh}:
 
 stdenv.mkDerivation rec {
-  name = "autossh-1.4e";
+  name = "autossh-1.4f";
   
   src = fetchurl {
     url = "http://www.harding.motd.ca/autossh/${name}.tgz";
-    sha256 = "0mlicw28vq2jxa0jf0dys5ja75v0fxpjavlq9dpif6bnknji13ly";
+    sha256 = "1wpqwa2872nqgqbhnb6nnkrlzpdawd5k69gh1qp68354pvhyawh1";
   };
   
   buildInputs = [ openssh ];

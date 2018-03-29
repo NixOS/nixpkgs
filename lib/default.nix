@@ -21,7 +21,7 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
-    maintainers = import ./maintainers-list.nix;
+    maintainers = import ../maintainers/maintainer-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;
@@ -47,7 +47,7 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.doubles;
+    platforms = systems.forMeta;
 
     inherit (builtins) add addErrorContext attrNames
       concatLists deepSeq elem elemAt filter genericClosure genList

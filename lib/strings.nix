@@ -437,6 +437,13 @@ rec {
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
+  /* Check whether a value can be coerced to a string */
+  isCoercibleToString = x:
+    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
+    (builtins.isList x && lib.all isCoercibleToString x) ||
+    x ? outPath ||
+    x ? __toString;
+
   /* Check whether a value is a store path.
 
      Example:
@@ -450,7 +457,7 @@ rec {
        => false
   */
   isStorePath = x:
-       builtins.isString x
+       isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
     && dirOf (builtins.toPath x) == builtins.storeDir;
 

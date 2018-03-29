@@ -11,11 +11,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.79a";
+  name = "blender-2.79b";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1mw45mvfk9f0fhn12vp3g2vwqzinrp3by0m3w01wj87h9ri5zkwc";
+    sha256 = "1g4kcdqmf67srzhi3hkdnr4z1ph4h9sza1pahz38mrj998q4r52c";
   };
 
   buildInputs =

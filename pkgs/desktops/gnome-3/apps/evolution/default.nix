@@ -5,13 +5,13 @@
 , libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
 
 let
-  version = "3.26.5";
+  version = "3.28.0";
 in stdenv.mkDerivation rec {
   name = "evolution-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1j748f3407zavrh3bqw0mpf8f1i6b788kfjvwkk5bg7mm3c65n2g";
+    sha256 = "0b6yw664jdfc8ppd78akmrl36iximh7ipknf5mlzgga6lr6pl2nf";
   };
 
   propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     gst_all_1.gstreamer gst_all_1.gst-plugins-base p11-kit
     nss nspr libnotify procps highlight gnome3.libgweather
     gnome3.gsettings-desktop-schemas
-    gnome3.libgnome-keyring gnome3.glib-networking openldap
+    gnome3.glib-networking openldap
   ];
 
   nativeBuildInputs = [ cmake ninja intltool itstool libxml2 pkgconfig wrapGAppsHook ];

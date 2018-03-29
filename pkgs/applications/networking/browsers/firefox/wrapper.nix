@@ -130,9 +130,11 @@ let
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
         else
-            mkdir -p "$out/share/icons/hicolor/128x128/apps"
-            ln -s "${browser}/lib/${browserName}-"*"/browser/icons/mozicon128.png" \
-                "$out/share/icons/hicolor/128x128/apps/${browserName}.png"
+            for res in 16 32 48 64 128; do
+            mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
+            ln -s "${browser}/lib/${browserName}/browser/chrome/icons/default/default''${res}.png" \
+                "$out/share/icons/hicolor/''${res}x''${res}/apps/${browserName}.png"
+            done
         fi
 
         install -D -t $out/share/applications $desktopItem/share/applications/*

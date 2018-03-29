@@ -1,14 +1,14 @@
 { stdenv, fetchurl, iodine, intltool, pkgconfig, networkmanager, libsecret
 , withGnome ? true, gnome3 }:
 
-stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+let
   pname   = "NetworkManager-iodine";
-  major   = "1.2";
-  version = "${major}.0";
+  version = "1.2.0";
+in stdenv.mkDerivation rec {
+  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
+    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0njdigakidji6mfmbsp8lfi8wl88z1dk8cljbva2w0xazyddbwyh";
   };
 
@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
      substituteInPlace "src/nm-iodine-service.c" \
        --replace "/usr/bin/iodine" "${iodine}/bin/iodine"
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager-iodine";
+    };
+  };
 
   meta = {
     description = "NetworkManager's iodine plugin";

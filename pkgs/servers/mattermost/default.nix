@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, buildGoPackage }:
 
 let
-  version = "4.7.2";
+  version = "4.8.0";
   goPackagePath = "github.com/mattermost/mattermost-server";
   buildFlags = "-ldflags \"-X '${goPackagePath}/model.BuildNumber=nixpkgs-${version}'\"";
 in
@@ -13,12 +13,12 @@ buildGoPackage rec {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "129rvmwf9c19jbdpiclysb870svs2fbhdybcal0jbmzgx2zr8qma";
+    sha256 = "16yf4p0n3klgh0zw2ikbahj9cy1wcxbwg86pld0yz63cfvfz5ns4";
   };
 
   webApp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "14gr7zzx77q862qccjcdwrzd6n8g2z8yngw8aa4g3q6hypsqi4v3";
+    sha256 = "0ykp9apsv2514bircgay0xi0jigiai65cnb8q77v1qxjzdyx8s75";
   };
 
   inherit goPackagePath;

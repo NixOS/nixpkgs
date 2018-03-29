@@ -6,6 +6,7 @@
 , gtk3
 , granite
 , gnome3
+, gobjectIntrospection
 , json-glib
 , cmake
 , ninja
@@ -26,11 +27,6 @@ stdenv.mkDerivation rec {
   };
   USER = "nix-build-user";
 
-  XDG_DATA_DIRS = stdenv.lib.concatStringsSep ":" [
-    "${granite}/share"
-    "${gnome3.libgee}/share"
-  ];
-
   nativeBuildInputs = [
     pkgconfig
     wrapGAppsHook
@@ -39,6 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     libxml2
+    gobjectIntrospection # For setup hook
   ];
   buildInputs = [
     gtk3
@@ -47,7 +44,6 @@ stdenv.mkDerivation rec {
     json-glib
     libgudev
     libevdev
-    gnome3.gnome-themes-standard
   ];
 
   meta = with stdenv.lib; {

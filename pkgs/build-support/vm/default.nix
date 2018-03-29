@@ -941,8 +941,8 @@ rec {
     };
 
     ubuntu1710i386 = {
-      name = "ubuntu-17.10-xenial-i386";
-      fullName = "Ubuntu 17.10 Xenial (i386)";
+      name = "ubuntu-17.10-artful-i386";
+      fullName = "Ubuntu 17.10 Artful (i386)";
       packagesLists =
         [ (fetchurl {
             url = mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz;

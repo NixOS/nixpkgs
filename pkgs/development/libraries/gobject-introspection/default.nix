@@ -1,6 +1,7 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
 , libintlOrEmpty, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
+, x11Support ? true
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
@@ -8,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.54.1";
+  version = "1.56.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0zl7pfkzkm07733391b4f3cwjbnvb1nwvpmajf5bajh6bxgfv3dq";
+    sha256 = "1y50pbn5qqbcv2h9rkz96wvv5jls2gma9bkqjq6wapmaszx5jw0d";
   };
 
   outputs = [ "out" "dev" ];
@@ -43,12 +44,11 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
-    # https://github.com/NixOS/nixpkgs/issues/34080
+  ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
       cairoLib = "${getLib cairo}/lib";
-    })
-  ];
+    });
 
   passthru = {
     updateScript = gnome3.updateScript {

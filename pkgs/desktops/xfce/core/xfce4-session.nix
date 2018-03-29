@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk, polkit
-, libxfce4util, libxfce4ui, xfce4panel, libwnck, dbus-glib, xfconf, libglade, xorg
+, libxfce4util, libxfce4ui, xfce4-panel, libwnck, dbus-glib, xfconf, libglade, xorg
 , hicolor-icon-theme
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util libxfce4ui libwnck dbus-glib
-      xfconf xfce4panel libglade xorg.iceauth xorg.libSM
+      xfconf xfce4-panel libglade xorg.iceauth xorg.libSM
       polkit hicolor-icon-theme
     ]; #TODO: upower-glib, gconf (assistive?), gnome keyring
 

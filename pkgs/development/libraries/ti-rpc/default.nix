@@ -1,11 +1,11 @@
 { fetchurl, fetchpatch, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-1.0.2";
+  name = "libtirpc-1.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "1xchbxy0xql7yl7z4n1icj8r7dmly46i22fvm00vdjq64zlmqg3j";
+    sha256 = "0ppxl3k3nsz0qdakq844i2kj4fvh9h937lhx26bgmpmxq67sghw6";
   };
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl

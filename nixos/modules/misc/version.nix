@@ -16,6 +16,21 @@ in
 
   options.system = {
 
+    # XXX: Reintroduce old options to make nixops before 1.6 able to evaluate configurations
+    # XXX: Remove after nixops has been bumped to a compatible version
+    nixosVersion = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.str;
+      default = config.system.nixos.version;
+    };
+    nixosVersionSuffix = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.str;
+      default = config.system.nixos.versionSuffix;
+    };
+
     nixos.version = mkOption {
       internal = true;
       type = types.str;
@@ -85,8 +100,8 @@ in
       revision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
       versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
-      # Note: code names must only increase in alphabetical order.
-      codeName = "Impala";
+      # Note: the first letter is bumped on every release.  It's an animal.
+      codeName = "Jellyfish";
     };
 
     # Generate /etc/os-release.  See

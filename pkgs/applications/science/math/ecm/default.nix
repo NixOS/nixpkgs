@@ -2,7 +2,7 @@
 
 let
   pname = "ecm";
-  version = "6.4.4";
+  version = "7.0.4";
   name = "${pname}-${version}";
 in
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = http://gforge.inria.fr/frs/download.php/file/32159/ecm-6.4.4.tar.gz;
-    sha256 = "0v5h2nicz9yx78c2d72plbhi30iq4nxbvphja1s9501db4aah4y8";
+    url = "http://gforge.inria.fr/frs/download.php/file/36224/ecm-${version}.tar.gz";
+    sha256 = "0hxs24c2m3mh0nq1zz63z3sb7dhy1rilg2s1igwwcb26x3pb7xqc";
   };
 
   # See https://trac.sagemath.org/ticket/19233

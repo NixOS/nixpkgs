@@ -2,12 +2,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "fflas-ffpack";
-  version = "2.2.2";
+  version = "2.3.2";
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "0k1f4pb7azrm6ajncvg7vni7ixfmn6fssd5ld4xddbi6jqbsf9rd";
+    sha256 = "1cqhassj2dny3gx0iywvmnpq8ca0d6m82xl5rz4mb8gaxr2kwddl";
   };
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ givaro (liblapack.override {shared = true;}) openblas];

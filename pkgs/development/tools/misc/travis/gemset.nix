@@ -16,6 +16,7 @@
     version = "3.6.8";
   };
   ethon = {
+    dependencies = ["ffi"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1i873cvma4j52xmij7kasjylh66vf60cy5prkp4cz4hcn9jlkznl";
@@ -24,6 +25,7 @@
     version = "0.10.1";
   };
   faraday = {
+    dependencies = ["multipart-post"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "18p1csdivgwmshfw3mb698a3bn0yrykg30khk5qxjf6n168g91jr";
@@ -32,6 +34,7 @@
     version = "0.11.0";
   };
   faraday_middleware = {
+    dependencies = ["faraday"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0bcarc90brm1y68bl957w483bddsy9idj2gghqnysk6bbxpsvm00";
@@ -48,6 +51,7 @@
     version = "1.9.18";
   };
   gh = {
+    dependencies = ["addressable" "backports" "faraday" "multi_json" "net-http-persistent" "net-http-pipeline"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0g4df0jsscq16g6f27flfmvk7p4sbq81d5mdylbz4ikqq60kywzg";
@@ -72,6 +76,7 @@
     version = "2.0.3";
   };
   launchy = {
+    dependencies = ["addressable"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "190lfbiy1vwxhbgn4nl4dcbzxvm049jwc158r2x7kq3g5khjrxa2";
@@ -112,6 +117,7 @@
     version = "1.0.1";
   };
   pusher-client = {
+    dependencies = ["json" "websocket"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "18ymxz34gmg7jff3h0nyzp5vdg5i06dbdxlrdl2nq4hf14qwj1f4";
@@ -120,6 +126,7 @@
     version = "0.6.2";
   };
   travis = {
+    dependencies = ["backports" "faraday" "faraday_middleware" "gh" "highline" "launchy" "pusher-client" "typhoeus"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "02bjz73f6r9b7nskwzcvcbr4hlvgwrf9rnr6d218d2i1rk4ww936";
@@ -128,6 +135,7 @@
     version = "1.8.8";
   };
   typhoeus = {
+    dependencies = ["ethon"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "03x3fxjsnhgayl4s96h0a9975awlvx2v9nmx2ba0cnliglyczdr8";

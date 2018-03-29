@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ blas gfortran.cc.lib liblapack python ];
 
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace config/install.py \
+      --replace /usr/bin/install_name_tool install_name_tool
+  '';
+
   preConfigure = ''
     patchShebangs .
     configureFlagsArray=(

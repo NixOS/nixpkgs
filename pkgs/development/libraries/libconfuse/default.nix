@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # On darwin the tests depend on the installed libraries because of install_name.
+  doInstallCheck = true;
+  installCheckTarget = "check";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

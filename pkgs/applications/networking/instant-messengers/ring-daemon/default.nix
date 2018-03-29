@@ -24,7 +24,7 @@
 , gnutls
 , zlib
 , jsoncpp
-, xlibs
+, xorg
 , libargon2
 , cryptopp
 , openssl
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     zlib
     jsoncpp
     restbed
-    xlibs.libX11
+    xorg.libX11
     libargon2
     cryptopp
     openssl

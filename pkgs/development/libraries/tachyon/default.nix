@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
   name = "tachyon-${version}";
-  version = "0.98.9";
+  version = "0.99b2";
   src = fetchurl {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${name}.tar.gz";
-    sha256 = "1ms0xr4ibrzz291ibm265lyjrdjrmhfrx0a70hwykhsdxn6jk8y6";
+    sha256 = "04m0bniszyg7ryknj8laj3rl5sspacw5nr45x59j2swcsxmdvn1v";
   };
   buildInputs = [];
   preBuild = "cd unix";

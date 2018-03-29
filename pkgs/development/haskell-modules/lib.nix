@@ -230,8 +230,6 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  } // lib.optionalAttrs (pkgs.hostPlatform.isDarwin) {
-    configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
   });
 
   /* Build a source distribution tarball instead of using the source files
@@ -260,7 +258,7 @@ rec {
      the cabal file are actually used.
 
      The first attrset argument can be used to configure the strictness
-     of this check and a list of ignored package names that would otherwise 
+     of this check and a list of ignored package names that would otherwise
      cause false alarms.
    */
   checkUnusedPackages =

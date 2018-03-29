@@ -15,14 +15,14 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "20180223";
+  version = "20180323";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "1q0zwm8p2mk85icrbq42z4235mpqfra38pigd064kharx54k36sb";
+    sha256 = "0wxk1fqxk9pf2s43mw7diixv3hpwdry1cyr2xh119gqjc27lrc5w";
   };
 
   buildInputs = [
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
       --replace /etc/mime.types ${mime-types}/etc/mime.types
 
     # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) so we disable them for now.
+    # that has tests (20180223) as well as 20180323 so we disable them for now.
     # I don't know if that is related to the tests or our build environment.
     # Try again with a later release.
     sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c

@@ -9,12 +9,14 @@
 , patchelf
 , getent
 , hostPlatform
+, buildPackages
+, withSelinux ? false, libselinux
 }:
 
 assert stdenv.isLinux;
 
 let
-  pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
+  pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
   version = "237";
@@ -33,15 +35,20 @@ in stdenv.mkDerivation rec {
     [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
       ninja meson
       coreutils # meson calls date, stat etc.
-      pythonLxmlEnv glibcLocales
-      patchelf getent
+      glibcLocales
+      patchelf getent m4
     ];
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror libidn2
-      libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
+      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
+      libmicrohttpd ] ++
+      stdenv.lib.meta.enableIfAvailable kexectools ++
+      stdenv.lib.meta.enableIfAvailable libseccomp ++
+    [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
-    ];
+      # This is actually native, but we already pull it from buildPackages
+      pythonLxmlEnv
+    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
 
   #dontAddPrefix = true;
 
@@ -77,6 +84,12 @@ in stdenv.mkDerivation rec {
 
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
+
+    "-Dkill-path=${coreutils}/bin/kill"
+    "-Dkmod-path=${kmod}/bin/kmod"
+    "-Dsulogin-path=${utillinux}/bin/sulogin"
+    "-Dmount-path=${utillinux}/bin/mount"
+    "-Dumount-path=${utillinux}/bin/umount"
   ];
 
   preConfigure = ''
@@ -124,7 +137,7 @@ in stdenv.mkDerivation rec {
 
     for i in src/basic/generate-gperfs.py src/resolve/generate-dns_type-gperf.py src/test/generate-sym-test.py ; do
       substituteInPlace $i \
-        --replace "#!/usr/bin/env python" "#!${python3Packages.python}/bin/python"
+        --replace "#!/usr/bin/env python" "#!${buildPackages.python3Packages.python}/bin/python"
     done
 
     substituteInPlace src/journal/catalog.c \
@@ -191,18 +204,6 @@ in stdenv.mkDerivation rec {
   ''; # */
 
   enableParallelBuilding = true;
-
-  # The rpath to the shared systemd library is not added by meson. The
-  # functionality was removed by a nixpkgs patch because it would overwrite
-  # the existing rpath.
-  postFixup = ''
-    sharedLib=libsystemd-shared-${version}.so
-    for prog in `find $out -type f -executable`; do
-      (patchelf --print-needed $prog | grep $sharedLib > /dev/null) && (
-        patchelf --set-rpath `patchelf --print-rpath $prog`:"$out/lib/systemd" $prog
-      ) || true
-    done
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

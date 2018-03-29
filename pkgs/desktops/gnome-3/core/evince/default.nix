@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
-, poppler, ghostscriptX, djvulibre, libspectre, libsecret, wrapGAppsHook
+, poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
 , librsvg, gobjectIntrospection, yelp-tools
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "evince-${version}";
-  version = "3.26.0";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "79567bdb743cf0c3ed7b638da32afc9b850298f9b4edd532455df4a7e2a4c9d8";
+    sha256 = "1a3kcls18dcz1lj8hrx8skcli9xxfyi71c17xjwayh71cm5jc8zs";
   };
 
   passthru = {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.libgnome-keyring gnome3.gsettings-desktop-schemas
-    poppler ghostscriptX djvulibre libspectre
+    gnome3.gsettings-desktop-schemas
+    poppler ghostscriptX djvulibre libspectre libarchive
     libsecret librsvg gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
 

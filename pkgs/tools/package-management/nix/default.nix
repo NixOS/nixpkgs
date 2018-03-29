@@ -29,8 +29,8 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli ] # Since 1.12
-      ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
+      ++ lib.optionals is20 [ brotli ] # Since 1.12
+      ++ lib.meta.enableIfAvailable libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -38,6 +38,9 @@ let
           });
 
     propagatedBuildInputs = [ boehmgc ];
+
+    # Seems to be required when using std::atomic with 64-bit types
+    NIX_LDFLAGS = lib.optionalString (stdenv.system == "armv6l-linux") "-latomic";
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -57,7 +60,7 @@ let
           hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
       ) ''--with-system=${hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional (!hostPlatform.isSeccomputable) "--disable-seccomp-sandboxing";
+      ++ lib.optional (!libseccomp.meta.available) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -132,6 +135,8 @@ in rec {
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
+  nixUnstable = nix;
+/*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
     suffix = "pre5968_a6c0b773";
@@ -143,5 +148,6 @@ in rec {
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+*/
 
 }

@@ -96,7 +96,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       $machine->succeed("systemctl start systemd-udev-settle.service");
       subtest "udev-auto-load", sub {
           $machine->waitForUnit('systemd-udev-settle.service');
-          $machine->succeed('lsmod | grep psmouse');
+          $machine->succeed('lsmod | grep mousedev');
       };
 
       # Test whether systemd-tmpfiles-clean works.
