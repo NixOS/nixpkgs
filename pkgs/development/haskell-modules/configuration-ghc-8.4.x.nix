@@ -643,4 +643,10 @@ self: super: {
     sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
   });
 
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  flexible-defaults = appendPatch super.flexible-defaults (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/flexible-defaults-0.0.1.2.patch;
+    sha256 = "1bpsqq80h6nxm04wddgcgyzn0fjfsmhccmqb211jqswv5209znx8";
+  });
+
 }
