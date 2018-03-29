@@ -119,41 +119,6 @@ self: super: {
   ## On Hackage:
 
   ## Upstreamed, awaiting a Hackage release
-  cabal-install = overrideCabal super.cabal-install (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=2.0.1.0 && <2.1, base >=4.5 && <4.11
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "cabal";
-      rev    = "728ad1a1e066da453ae13ee479629c00d8c2f32d";
-      sha256 = "0943xpva0fjlx8fanqvb6bg7myim2pki7q8hz3q0ijnf73bgzf7p";
-    };
-    prePatch        = "cd cabal-install; ";
-    ## Setup: Encountered missing dependencies:
-    ## network >=2.4 && <2.6, resolv >=0.1.1 && <0.2
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ network resolv ]);
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  hackage-security = overrideCabal super.hackage-security (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.14 && <1.26,
-    ## directory >=1.1.0.2 && <1.3,
-    ## time >=1.2 && <1.7
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "hackage-security";
-      rev    = "21519f4f572b9547485285ebe44c152e1230fd76";
-      sha256 = "1ijwmps4pzyhsxfhc8mrnc3ldjvpisnmr457vvhgymwhdrr95k0z";
-    };
-    prePatch        = "cd hackage-security; ";
-    ## https://github.com/haskell/hackage-security/issues/211
-    jailbreak       = true;
-    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:217:22:
-    editedCabalFile = null;
-  });
-
-  ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
     ## Setup: Encountered missing dependencies:
     ## haskell-gi-base ==0.20.*

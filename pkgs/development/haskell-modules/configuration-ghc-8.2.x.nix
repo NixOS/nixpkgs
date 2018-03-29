@@ -41,9 +41,6 @@ self: super: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
   });
 
-  # cabal-install can use the native Cabal library.
-  cabal-install = super.cabal-install.override { Cabal = null; };
-
   # jailbreak-cabal doesn't seem to work right with the native Cabal version.
   jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
