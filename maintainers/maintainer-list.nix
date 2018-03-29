@@ -3586,6 +3586,11 @@
     github = "tnias";
     name = "Philipp Bartsch";
   };
+  tobim = {
+    email = "nix@tobim.fastmail.fm";
+    github = "tobimpub";
+    name = "Tobias Mayer";
+  };
   tohl = {
     email = "tom@logand.com";
     github = "tohl";
