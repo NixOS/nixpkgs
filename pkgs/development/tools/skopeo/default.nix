@@ -1,5 +1,6 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux }:
+, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree, libselinux
+, go-md2man }:
 
 with stdenv.lib;
 
@@ -15,15 +16,18 @@ let
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
 
+  goPackagePath = "github.com/projectatomic/skopeo";
+
 in
 buildGoPackage rec {
   name = "skopeo-${version}";
-  inherit src;
+  inherit src goPackagePath;
 
-  goPackagePath = "github.com/projectatomic/skopeo";
+  outputs = [ "bin" "man" "out" ];
+
   excludedPackages = "integration";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig (lib.getBin go-md2man) ];
   buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree libselinux ];
 
   buildFlagsArray = "-ldflags= -X github.com/projectatomic/skopeo/vendor/github.com/containers/image/signature.systemDefaultPolicyPath=${defaultPolicyFile}";
@@ -31,6 +35,13 @@ buildGoPackage rec {
   preBuild = ''
     export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
     export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
+  '';
+
+  postBuild = ''
+    # depends on buildGoPackage not changing …
+    pushd ./go/src/${goPackagePath}
+    make install-docs MANINSTALLDIR="$man"
+    popd
   '';
 
   meta = {
