@@ -6743,6 +6743,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTMLTagCloud = buildPerlPackage rec {
+    name = "HTML-TagCloud-0.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBERTSD/${name}.tar.gz";
+      sha256 = "05bhnrwwlwd6cj3cn91zw5r99xddvy142bznid26p1pg5m3rk029";
+    };
+    meta = {
+      description = "Generate An HTML Tag Cloud";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLQuoted = buildPerlPackage {
     name = "HTML-Quoted-0.04";
     src = fetchurl {
