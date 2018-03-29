@@ -13173,6 +13173,8 @@ with pkgs;
 
   gpm-ncurses = gpm.override { inherit ncurses; };
 
+  gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
+
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
   };

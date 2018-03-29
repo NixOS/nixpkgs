@@ -2465,6 +2465,11 @@
     github = "mschristiansen";
     name = "Mikkel Christiansen";
   };
+  msiedlarek = {
+    email = "mikolaj@siedlarek.pl";
+    github = "msiedlarek";
+    name = "Mikołaj Siedlarek";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
