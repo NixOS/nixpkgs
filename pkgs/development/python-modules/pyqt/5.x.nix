@@ -6,7 +6,7 @@
 
 let
   pname = "PyQt";
-  version = "5.10";
+  version = "5.10.1";
 
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 
@@ -25,7 +25,7 @@ in buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "0l2zy6b7bfjxmg4bb8yikg6i8iy2xdwmvk7knfmrzfpqbmkycbrl";
+    sha256 = "1vz9c4v0k8azk2b08swwybrshzw32x8djjpq13mf9v15x1qyjclr";
   };
 
   outputs = [ "out" "dev" ];
@@ -51,7 +51,7 @@ in buildPythonPackage {
       --replace 'install_dir=pydbusmoddir' "install_dir='$out/${python.sitePackages}/dbus/mainloop'" \
       --replace "ModuleMetadata(qmake_QT=['webkitwidgets'])" "ModuleMetadata(qmake_QT=['webkitwidgets', 'printsupport'])"
 
-    ${python.executable} configure.py  -w \
+    ${python.executable} configure.py -w \
       --confirm-license \
       --dbus=${dbus_libs.dev}/include/dbus-1.0 \
       --no-qml-plugin \
