@@ -4,13 +4,13 @@
 with stdenv.lib;
 
 let
-  version = "0.1.28";
+  version = "0.1.29";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "068nwrr3nr27alravcq1sxyhdd5jjr24213vdgn1dqva3885gbi0";
+    sha256 = "1lhzbyj2mm25x12s7g2jx4v8w19izjwlgx4lml13r5yy1spn65k2";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
@@ -36,7 +36,7 @@ buildGoPackage rec {
   meta = {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = https://github.com/projectatomic/skopeo;
-    maintainers = with stdenv.lib.maintainers; [ vdemeester ];
+    maintainers = with stdenv.lib.maintainers; [ vdemeester lewo ];
     license = stdenv.lib.licenses.asl20;
   };
 }
