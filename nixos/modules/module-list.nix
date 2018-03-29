@@ -323,7 +323,7 @@
   ./services/misc/geoip-updater.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
-  ./services/misc/gitlab.nix
+  #./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
