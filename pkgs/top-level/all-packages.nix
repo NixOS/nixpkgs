@@ -4841,6 +4841,7 @@ with pkgs;
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
+  solvespace2x = callPackage ../applications/graphics/solvespace/2.x.nix { };
 
   sonarr = callPackage ../servers/sonarr { };
 
