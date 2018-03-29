@@ -24,6 +24,7 @@ buildPythonPackage rec {
   buildInputs = [ dateutil pep8 pillow pyproj pytz requests tox ];
   checkInputs = [ pytest pytestcov ];
 
+  # test runner finds no tests and fails build with no displayed error.
   doCheck = false;
 
   meta = with lib; {
