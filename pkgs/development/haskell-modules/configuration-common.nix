@@ -1008,4 +1008,7 @@ self: super: {
   # https://github.com/strake/lenz-template.hs/issues/1
   lenz-template = doJailbreak super.lenz-template;
 
+  # https://github.com/haskell-hvr/resolv/issues/1
+  resolv = dontCheck super.resolv;
+
 }
