@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "1mvsa3v8d1pl2fj1dcdf8sikzm1yb2jcl0q34fyfsjw2cisxpv5f";
+    sha256 = "007rwal8wx2k9gs0r6kym6ix0siz0x9l55q9myq41siirpf2jcpv";
   };
 
   patches = [
