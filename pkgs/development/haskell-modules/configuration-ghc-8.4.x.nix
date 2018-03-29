@@ -637,4 +637,10 @@ self: super: {
   # https://github.com/xmonad/xmonad-contrib/issues/235
   xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
 
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  arrows = appendPatch super.arrows (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/arrows-0.4.4.1.patch;
+    sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
+  });
+
 }
