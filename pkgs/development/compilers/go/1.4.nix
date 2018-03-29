@@ -9,12 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4-bootstrap-20161024";
-  revision = "79d85a4965ea7c46db483314c3981751909d7883";
+  version = "1.4-bootstrap-20170531";
+  revision = "d6bb5454a7855fb87e84117b1bc95b0a71d35cab";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/${revision}.tar.gz";
-    sha256 = "1ljbllwjysya323xxm9s792z8y9jdw19n8sj3mlc8picjclrx5xf";
+    sha256 = "0v8x14zah6a8db3gnxv2wiqx8h7k89zgn6m8r0jqg0q3i4blsxy5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
