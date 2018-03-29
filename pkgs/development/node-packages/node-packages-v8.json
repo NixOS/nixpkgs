@@ -1,6 +1,7 @@
 [
   "bower"
 , "coffee-script"
+, "create-cycle-app"
 , "dat"
 , "grunt-cli"
 , "mocha"
