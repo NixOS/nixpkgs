@@ -1,5 +1,5 @@
 { stdenv
-, runCommand, fetchurl, file
+, runCommand, fetchurl, file, zlib
 
 , version
 }:
@@ -45,7 +45,7 @@ let
     find "$out" -type f -print0 | while IFS= read -r -d "" elf; do
       isELF "$elf" || continue
       patchelf --set-interpreter $(cat "${stdenv.cc}/nix-support/dynamic-linker") "$elf" || true
-      patchelf --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib:$LIBDIRS" "$elf" || true
+      patchelf --set-rpath "${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib:${zlib}/lib:$LIBDIRS" "$elf" || true
     done
 
     # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
