@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
 
-  nativeBuildInputs = [ ronn ]
-    ++ optional stdenv.isDarwin help2man;
+  nativeBuildInputs = optional stdenv.isDarwin help2man;
   buildInputs = [ libunistring ] ++ optional stdenv.isDarwin libiconv;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
