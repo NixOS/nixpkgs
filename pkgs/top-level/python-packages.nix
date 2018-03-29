@@ -8815,7 +8815,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -14045,38 +14045,17 @@ in {
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
 
-  qscintilla = disabledIf (isPy3k || isPyPy)
-    (buildPythonPackage rec {
-      # TODO: Qt5 support
-      name = "qscintilla-${version}";
-      version = pkgs.qscintilla.version;
-      format = "other";
-
-      src = pkgs.qscintilla.src;
-
-      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
-
-      preConfigure = ''
-        mkdir -p $out
-        lndir ${self.pyqt4} $out
-        rm -rf "$out/nix-support"
-        cd Python
-        ${python.executable} ./configure-old.py \
-            --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
-            --apidir $out/api/${python.libPrefix} \
-            -n ${pkgs.qscintilla}/include \
-            -o ${pkgs.qscintilla}/lib \
-            --sipdir $out/share/sip
-      '';
-
-      meta = with stdenv.lib; {
-        description = "A Python binding to QScintilla, Qt based text editing control";
-        license = licenses.lgpl21Plus;
-        maintainers = with maintainers; [ danbst ];
-        platforms = platforms.linux;
-      };
-    });
-
+  qscintilla =
+    if isPy3k then
+      callPackage ../development/python-modules/qscintilla/py3k.nix {
+        lndir = pkgs.xorg.lndir;
+      }
+    else disabledIf isPyPy (
+      callPackage ../development/python-modules/qscintilla {
+        qscintillaCpp = pkgs.qscintilla;
+        lndir = pkgs.xorg.lndir;
+      }
+    );
 
   qserve = buildPythonPackage rec {
     name = "qserve-0.2.8";
