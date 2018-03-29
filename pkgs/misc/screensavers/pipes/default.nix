@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pipes-${version}";
-  version = "1.2.0";
+  version = "1.16.1";
 
   src = fetchurl {
-    url = "https://github.com/pipeseroni/pipes.sh/archive/v${version}.tar.gz";
-    sha256 = "1v0xhgq30zkfjk9l5g8swpivh7rxfjbzhbjpr2c5c836wgn026fb";
+    url = "http://bisqwit.iki.fi/src/arch/${name}.tar.bz2";
+    sha256 = "0b56mls2ygg66p1b66ldws5x0a0k3vk4rmyhlis13s8fw7vh5fyp";
   };
 
   buildInputs = with pkgs; [ bash ];
