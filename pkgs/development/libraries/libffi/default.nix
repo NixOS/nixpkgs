@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchpatch,  dejagnu, doCheck ? false
+{ stdenv, fetchurl, fetchpatch
 , buildPlatform, hostPlatform, autoreconfHook
+, doCheck ? true, dejagnu
 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +41,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "info" ];
 
-  buildInputs = stdenv.lib.optional doCheck dejagnu;
-
   nativeBuildInputs = stdenv.lib.optional hostPlatform.isRiscV autoreconfHook;
 
   configureFlags = [
@@ -53,6 +52,8 @@ stdenv.mkDerivation rec {
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
+
+  checkInputs = [ dejagnu ];
 
   inherit doCheck;
 
