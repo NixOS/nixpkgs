@@ -596,6 +596,11 @@
     github = "bjornfor";
     name = "Bjørn Forsman";
   };
+  bkchr = {
+    email = "nixos@kchr.de";
+    github = "bkchr";
+    name = "Bastian Köcher";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
