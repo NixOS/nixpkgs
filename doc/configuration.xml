@@ -480,7 +480,7 @@ cp ${myProfile} $out/etc/profile.d/my-profile.sh
         jq
         nox
         silver-searcher
-        texinfoInteractive
+        texinfo.interactive
       ];
       pathsToLink = [ "/share/man" "/share/doc" "/share/info" "/bin" "/etc" ];
       extraOutputsToInstall = [ "man" "doc" "info" ];
@@ -501,7 +501,7 @@ cp ${myProfile} $out/etc/profile.d/my-profile.sh
     <literal>postBuild</literal> tells Nixpkgs to run a command after building
     the environment. In this case, <literal>install-info</literal> adds the
     installed info pages to <literal>dir</literal> which is GNU info's default
-    root node. Note that <literal>texinfoInteractive</literal> is added to the
+    root node. Note that <literal>texinfo.interactive</literal> is added to the
     environment to give the <literal>install-info</literal> command.
    </para>
   </section>

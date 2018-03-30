@@ -79,7 +79,7 @@ let cfg = config.documentation; in
     })
 
     (mkIf cfg.info.enable {
-      environment.systemPackages = [ pkgs.texinfoInteractive ];
+      environment.systemPackages = [ pkgs.texinfo.interactive ];
       environment.pathsToLink = [ "/share/info" ];
       environment.extraOutputsToInstall = [ "info" ] ++ optional cfg.dev.enable "devinfo";
     })
