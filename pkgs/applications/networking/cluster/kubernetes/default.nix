@@ -7,7 +7,7 @@
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
-    "plugin/cmd/kube-scheduler"
+    "cmd/kube-scheduler"
     "test/e2e/e2e.test"
   ]
 }:
@@ -16,16 +16,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.9.7";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1dykh48c6bvypg51mlxjdyrggpjq597mjj83xgj1pfadsy6pp9bh";
+    sha256 = "0k6m55p0q8qscg8l7y1ymmp5vc3i07znqk61g4hs1gx0dj3id6mc";
   };
 
-  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60597
   buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
