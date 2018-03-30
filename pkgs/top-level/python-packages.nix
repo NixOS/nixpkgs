@@ -1151,11 +1151,11 @@ in {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.8.0";
+    name = "betamax-0.8.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/betamax/${name}.tar.gz";
-      sha256 = "18f8v5gng3j773jlbbzx4rg1i4y2zw3m2l1zpmbvp8bh5a2q1i42";
+      sha256 = "1hki1c2vs7adq7zr56wi6i5bhrkia4s2ywpv2c98ibnczz709w2v";
     };
 
     propagatedBuildInputs = [ self.requests ];
