@@ -14904,7 +14904,7 @@ with pkgs;
 
   blender = callPackage  ../applications/misc/blender {
     cudaSupport = config.cudaSupport or false;
-    python = python35;
+    pythonPackages = python35Packages;
     stdenv = overrideCC stdenv gcc6;
   };
 
