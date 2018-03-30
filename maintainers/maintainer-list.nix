@@ -3421,6 +3421,11 @@
     github = "suvash";
     name = "Suvash Thapaliya";
   };
+  sveitser = {
+    email = "sveitser@gmail.com";
+    github = "sveitser";
+    name = "Mathis Antony";
+  };
   svsdep = {
     email = "svsdep@gmail.com";
     github = "svsdep";
