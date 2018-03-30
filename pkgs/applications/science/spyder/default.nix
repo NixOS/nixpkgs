@@ -10,11 +10,11 @@
 
 buildPythonApplication rec {
   pname = "spyder";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5bb8fe0a556930dc09b68fa2741a0de3da6488843ec960e0c62f1f3b2e08e2f";
+    sha256 = "0iwcby2bxvayz0kp282yh864br55w6gpd8rqcdj1cp3jbn3q6vg5";
   };
 
   # Somehow setuptools can't find pyqt5. Maybe because the dist-info folder is missing?
