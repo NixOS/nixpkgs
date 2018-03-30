@@ -1,10 +1,21 @@
-{ stdenv
+{ stdenv, writeScript
 , fetchurl, groff
 , buildPlatform, hostPlatform
 }:
 
 assert stdenv.isLinux;
 
+let
+  sendmail-script = writeScript "sendmail-script" ''
+    #!/bin/sh
+
+    if [ -x /run/wrappers/bin/sendmail ]; then
+      /run/wrappers/bin/sendmail "$@"
+    else
+      /run/current-system/sw/bin/sendmail "$@"
+    fi
+  '';
+in
 stdenv.mkDerivation rec {
   name = "mdadm-4.0";
 
@@ -15,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # This is to avoid self-references, which causes the initrd to explode
   # in size and in turn prevents mdraid systems from booting.
-  allowedReferences = [ stdenv.cc.libc.out ];
+  allowedReferences = [ stdenv.cc.libc.out sendmail-script ];
 
   patches = [ ./no-self-references.patch ];
 
@@ -32,7 +43,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@/run/wrappers/bin/sendmail@' -i Makefile
+        -e 's@/usr/sbin/sendmail@${sendmail-script}@' -i Makefile
   '';
 
   meta = {
