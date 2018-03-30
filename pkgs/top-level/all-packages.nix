@@ -9569,6 +9569,8 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
+  libaom = callPackage ../development/libraries/libaom { };
+  
   libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
   libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
 
