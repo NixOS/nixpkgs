@@ -16666,11 +16666,11 @@ in {
 
   uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
-    version = "0.3.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/u/uritemplate.py/${name}.tar.gz";
-      sha256 = "0xvvdiwnag2pdi96hjf7v8asdia98flk2rxcjqnwcs3rk99alygx";
+      sha256 = "1k5zvc5fyyrgv33mi3p86a9jn5n0pqffs9cviz92fw6q1kf7zvmr";
     };
 
     meta = with stdenv.lib; {
