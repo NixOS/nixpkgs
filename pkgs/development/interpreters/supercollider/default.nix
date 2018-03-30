@@ -1,6 +1,7 @@
 { stdenv, fetchurl, cmake, pkgconfig
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebkit, readline
+, alsaLib , avahi
 , useSCEL ? false, emacs
 }:
 
@@ -24,10 +25,10 @@ stdenv.mkDerivation rec {
     -DSC_EL=${if useSCEL then "ON" else "OFF"}
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkgconfig qttools alsaLib ];
 
   buildInputs = [
-    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline avahi ]
       ++ optional useSCEL emacs;
 
   meta = {
