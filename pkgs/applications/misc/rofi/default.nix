@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     patchShebangs "script"
     # root not present in build /etc/passwd
     sed -i 's/~root/~nobody/g' test/helper-expand.c
+
+    export HOME="$(mktemp -d)"
   '';
 
   postFixup = ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Window switcher, run dialog and dmenu replacement";
-    homepage = https://davedavenport.github.io/rofi;
+    homepage = https://github.com/DaveDavenport/rofi/;
     license = licenses.mit;
     maintainers = with maintainers; [ mbakke garbas ];
     platforms = with platforms; unix;
