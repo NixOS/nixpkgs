@@ -15452,17 +15452,29 @@ in {
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "3.0.0";
+    version = "3.1.1";
     disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
+    src = pkgs.fetchdarcs {
+      url = http://devel.ag-projects.com/repositories/python-sipsimple;
+      rev = "release-${version}";
+      sha256 = "0jdilm11f5aahxrzrkxrfx9sgjgkbla1r0wayc5dzd2wmjrdjyrg";
     };
+
+    preConfigure = ''
+      chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
+    '';
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
     propagatedBuildInputs = with self; [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
+
+    meta = {
+      description = "SIP SIMPLE implementation for Python";
+      homepage = http://sipsimpleclient.org/;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ pSub ];
+    };
   };
 
 
