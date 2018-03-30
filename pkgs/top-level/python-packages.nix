@@ -1850,17 +1850,17 @@ in {
 
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
-    version = "1.4.0";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bugwarrior/${name}.tar.gz";
-      sha256 = "1jkz5vzbwspi1jcb3qsgcl619yip77khb696pc3ryk0pdhjhgs5w";
+      sha256 = "0kxknjbw5kchd88i577vlzibg8j60r7zzdhbnragj9wg5s3w60xb";
     };
 
     buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
     propagatedBuildInputs = with self; [
       twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
-      jinja2 pycurl dogpile_cache lockfile click pyxdg
+      jinja2 pycurl dogpile_cache lockfile click pyxdg future15
     ];
 
     # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
@@ -7681,6 +7681,15 @@ in {
   };
 
   future = callPackage ../development/python-modules/future { };
+  future15 = self.future.overridePythonAttrs (old: rec {
+    name = "future-${version}";
+    version = "0.15.2";
+    src = fetchPypi {
+      pname = "future";
+      version = "0.15.2";
+      sha256 = "15wvcfzssc68xqnqi1dq4fhd0848hwi9jn42hxyvlqna40zijfrx";
+    };
+  });
 
   futures = buildPythonPackage rec {
     name = "futures-${version}";
