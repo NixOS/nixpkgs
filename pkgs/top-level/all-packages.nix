@@ -6389,7 +6389,7 @@ with pkgs;
 
   openjdk10 =
       callPackage ../development/compilers/openjdk/10.nix {
-        bootjdk = openjdk9;
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
         inherit (gnome2) GConf gnome_vfs;
       };
 
