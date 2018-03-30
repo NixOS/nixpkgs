@@ -400,6 +400,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  ReParser = callPackage ../development/python-modules/ReParser { };
+
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
