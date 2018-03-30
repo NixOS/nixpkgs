@@ -278,6 +278,7 @@ mapAliases ({
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
+  texinfoInteractive = lib.hiPrio texinfo.interactive; # added 2018-03-25
   tftp_hpa = tftp-hpa; # added 2015-04-03
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06

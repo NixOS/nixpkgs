@@ -1,9 +1,12 @@
 { version, sha256 }:
 
+let self =
 { stdenv, buildPackages, fetchurl, perl, xz
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
+
+, callPackage
 }:
 
 with stdenv.lib;
@@ -39,6 +42,12 @@ stdenv.mkDerivation rec {
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
+  passthru = {
+    interactive = callPackage self {
+      interactive = true;
+    };
+  };
+
   meta = {
     homepage = http://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
@@ -63,4 +72,4 @@ stdenv.mkDerivation rec {
     '';
     branch = version;
   };
-}
+}; in self
