@@ -398,6 +398,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
+  readlike = callPackage ../development/python-modules/readlike { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   ReParser = callPackage ../development/python-modules/ReParser { };
