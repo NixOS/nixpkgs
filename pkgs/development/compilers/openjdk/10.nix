@@ -26,8 +26,9 @@ let
     name = "openjdk-${update}-b${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk10u/archive/${repover}.tar.gz";
-      sha256 = "1a2cjad816qilsigkq035rqzfhzmq5vaz1klilrrws456flbsjlg";
+      # NOTE: this is Shenandoah at jdk-10+46 with backported patches
+      url = "http://hg.openjdk.java.net/shenandoah/jdk10/archive/f45781c7e1da.tar.gz";
+      sha256 = "0mrpsz80b6czyi2sayakazlbicd4f7qf28vzlji65jj31pzlc0qa";
     };
 
     outputs = [ "out" "jre" ];
