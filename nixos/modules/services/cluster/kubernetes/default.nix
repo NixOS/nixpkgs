@@ -5,6 +5,37 @@ with lib;
 let
   cfg = config.services.kubernetes;
 
+  # YAML config; see:
+  #   https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/
+  #   https://github.com/kubernetes/kubernetes/blob/release-1.10/pkg/kubelet/apis/kubeletconfig/v1beta1/types.go
+  #
+  # TODO: migrate the following flags to this config file
+  #
+  #   --pod-manifest-path
+  #   --address
+  #   --port
+  #   --tls-cert-file
+  #   --tls-private-key-file
+  #   --client-ca-file
+  #   --authentication-token-webhook
+  #   --authentication-token-webhook-cache-ttl
+  #   --authorization-mode
+  #   --healthz-bind-address
+  #   --healthz-port
+  #   --allow-privileged
+  #   --cluster-dns
+  #   --cluster-domain
+  #   --hairpin-mode
+  #   --feature-gates
+  kubeletConfig = pkgs.runCommand "kubelet-config.yaml" { } ''
+    echo > $out ${pkgs.lib.escapeShellArg (builtins.toJSON {
+      kind = "KubeletConfiguration";
+      apiVersion = "kubelet.config.k8s.io/v1beta1";
+      ${if cfg.kubelet.applyManifests then "staticPodPath" else null} =
+        manifests;
+    })}
+  '';
+
   skipAttrs = attrs: map (filterAttrs (k: v: k != "enable"))
     (filter (v: !(hasAttr "enable" v) || v.enable) attrs);
 
@@ -339,9 +370,9 @@ in {
         type = types.str;
       };
 
-      admissionControl = mkOption {
+      enableAdmissionPlugins = mkOption {
         description = ''
-          Kubernetes admission control plugins to use. See
+          Kubernetes admission control plugins to enable. See
           <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
         '';
         default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds" "NodeRestriction"];
@@ -350,6 +381,15 @@ in {
           "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
           "PodSecurityPolicy" "NodeRestriction" "DefaultStorageClass"
         ];
+        type = types.listOf types.str;
+      };
+
+      disableAdmissionPlugins = mkOption {
+        description = ''
+          Kubernetes admission control plugins to disable. See
+          <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
+        '';
+        default = [];
         type = types.listOf types.str;
       };
 
@@ -573,6 +613,7 @@ in {
         type = types.bool;
       };
 
+      # TODO: remove this deprecated flag
       cadvisorPort = mkOption {
         description = "Kubernetes kubelet local cadvisor port.";
         default = 4194;
@@ -783,12 +824,10 @@ in {
         serviceConfig = {
           Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kubelet \
-            ${optionalString cfg.kubelet.applyManifests
-              "--pod-manifest-path=${manifests}"} \
             ${optionalString (taints != "")
               "--register-with-taints=${taints}"} \
             --kubeconfig=${mkKubeConfig "kubelet" cfg.kubelet.kubeconfig} \
-            --require-kubeconfig \
+            --config=${kubeletConfig} \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
             --register-node=${boolToString cfg.kubelet.registerNode} \
@@ -899,7 +938,8 @@ in {
             --service-cluster-ip-range=${cfg.apiserver.serviceClusterIpRange} \
             ${optionalString (cfg.apiserver.runtimeConfig != "")
               "--runtime-config=${cfg.apiserver.runtimeConfig}"} \
-            --admission_control=${concatStringsSep "," cfg.apiserver.admissionControl} \
+            --enable-admission-plugins=${concatStringsSep "," cfg.apiserver.enableAdmissionPlugins} \
+            --disable-admission-plugins=${concatStringsSep "," cfg.apiserver.disableAdmissionPlugins} \
             ${optionalString (cfg.apiserver.serviceAccountKeyFile!=null)
               "--service-account-key-file=${cfg.apiserver.serviceAccountKeyFile}"} \
             ${optionalString cfg.verbose "--v=6"} \

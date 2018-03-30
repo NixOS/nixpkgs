@@ -7,7 +7,7 @@
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
-    "plugin/cmd/kube-scheduler"
+    "cmd/kube-scheduler"
     "test/e2e/e2e.test"
   ]
 }:
@@ -16,34 +16,19 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1dmq2g138h7fsswmq4l47b44gsl9anmm3ywqyi7y48f1rkvc11mk";
+    sha256 = "0k6m55p0q8qscg8l7y1ymmp5vc3i07znqk61g4hs1gx0dj3id6mc";
   };
 
-  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60373
+  # go > 1.10 should be fixed by https://github.com/kubernetes/kubernetes/pull/60597
   buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
-
-  patches = [
-    # patch is from https://github.com/kubernetes/kubernetes/pull/58207
-    (fetchpatch {
-      url = "https://github.com/kubernetes/kubernetes/commit/a990b04dc8a7d8408a71eee40db93621cf2b6d1b.patch";
-      sha256 = "0piqilc5c9frikl74hamkffawwg1mvdwfxqvjnmk6wdma43dbb7w";
-    })
-    (fetchpatch {
-      # https://github.com/kubernetes/kubernetes/pull/60978
-      # Fixes critical kube-proxy failure on iptables-restore >= 1.6.2 and
-      # non-critical failures on prior versions.
-      url = "https://github.com/kubernetes/kubernetes/commit/34ce573e9992ecdbc06dff1b4e3d0e9baa8353dd.patch";
-      sha256 = "1sd9qgc28zr6fkk0441f89bw8kq2kadys0qs7bgivy9cmcpw5x5p";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
