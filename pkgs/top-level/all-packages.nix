@@ -8530,12 +8530,6 @@ with pkgs;
 
   classads = callPackage ../development/libraries/classads { };
 
-  classpath = callPackage ../development/libraries/java/classpath {
-    javac = gcj;
-    jvm = gcj;
-    gconf = gnome2.GConf;
-  };
-
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
   clipper = callPackage ../development/libraries/clipper { };
