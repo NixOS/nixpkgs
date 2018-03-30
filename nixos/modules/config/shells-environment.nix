@@ -135,7 +135,7 @@ in
 
     environment.shells = mkOption {
       default = [];
-      example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
+      example = literalExample "[ pkgs.bash.interactive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
         No need to mention <literal>/bin/sh</literal>
@@ -148,7 +148,7 @@ in
 
   config = {
 
-    system.build.binsh = pkgs.bashInteractive;
+    system.build.binsh = pkgs.bash.interactive;
 
     # Set session variables in the shell as well. This is usually
     # unnecessary, but it allows changes to session variables to take

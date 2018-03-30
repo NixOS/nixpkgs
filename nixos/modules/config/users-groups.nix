@@ -122,10 +122,10 @@ let
         type = types.either types.shellPackage types.path;
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
-        example = literalExample "pkgs.bashInteractive";
+        example = literalExample "pkgs.bash.interactive";
         description = ''
           The path to the user's shell. Can use shell derivations,
-          like <literal>pkgs.bashInteractive</literal>. Don’t
+          like <literal>pkgs.bash.interactive</literal>. Don’t
           forget to enable your shell in
           <literal>programs</literal> if necessary,
           like <code>programs.zsh.enable = true;</code>.

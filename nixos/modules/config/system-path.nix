@@ -11,7 +11,7 @@ let
     [ config.nix.package
       pkgs.acl
       pkgs.attr
-      pkgs.bashInteractive # bash with ncurses support
+      pkgs.bash.interactive # bash with ncurses support
       pkgs.bzip2
       pkgs.coreutils
       pkgs.cpio

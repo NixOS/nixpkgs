@@ -14,7 +14,7 @@ rec {
   bash = buildImage {
     name = "bash";
     tag = "latest";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash.interactive;
   };
 
   # 2. service example, layered on another image

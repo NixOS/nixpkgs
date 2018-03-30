@@ -25,7 +25,7 @@
 , enableAlternatives   ? false
 , enableCopyArtifacts  ? false
 
-, bashInteractive, bash-completion
+, bash, bash-completion
 }:
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
@@ -80,7 +80,7 @@ let
   allPlugins = pluginsWithoutDeps ++ attrNames optionalPlugins;
   allEnabledPlugins = pluginsWithoutDeps ++ enabledOptionalPlugins;
 
-  testShell = "${bashInteractive}/bin/bash --norc";
+  testShell = "${bash.interactive}/bin/bash --norc";
   completion = "${bash-completion}/share/bash-completion/bash_completion";
 
   # This is a stripped down beets for testing of the external plugins.

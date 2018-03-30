@@ -187,7 +187,7 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
+      exec ${busybox}/bin/setsid ${bash.interactive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
     fi
   '';
 

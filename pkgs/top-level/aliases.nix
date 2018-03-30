@@ -34,7 +34,7 @@ in
 
 mapAliases ({
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = lib.hiPrio bash.interactive;
+  bashInteractive = bash.interactive;
 
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22

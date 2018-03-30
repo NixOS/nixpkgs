@@ -2,7 +2,7 @@
 , pkgconfig, cmake, libxml2, vala_0_26, intltool, libmx, gnome3, gtk3, gtk-doc
 , keybinder3, clutter-gtk, libnotify
 , libxkbcommon, xorg, udev
-, bashInteractive
+, bash
 }:
 
 with stdenv.lib;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace data/org.gnome.finalterm.gschema.xml \
-      --replace "/bin/bash" "${bashInteractive}/bin/bash"
+      --replace "/bin/bash" "${bash.interactive}/bin/bash"
 
     cmakeFlagsArray=(
       -DMINIMAL_FLAGS=ON
