@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch?h=packages/cups";
+      name = "cups"; # weird name to avoid change (for now)
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch"
+          + "?h=packages/cups&id=41fefa22ac518";
       sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
     })
     ./cups-clean-dirty.patch
