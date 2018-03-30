@@ -23,7 +23,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.12.3";
+  name = "gst-plugins-bad-1.14.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "1v5z3i5ha20gmbb3r9dwsaaspv5fm1jfzlzwlzqx1gjj31v5kl1n";
+    sha256 = "17sgzgx1c54k5rzz7ljyz3is0n7yj56k74vv05h8z1gjnsnjnppd";
   };
 
   outputs = [ "out" "dev" ];
