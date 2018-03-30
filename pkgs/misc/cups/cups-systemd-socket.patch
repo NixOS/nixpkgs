@@ -1,0 +1,45 @@
+--- cups-2.0.2/scheduler/main.c.ustTJg	2015-02-10 13:40:24.121547526 +0100
++++ cups-2.0.2/scheduler/main.c	2015-02-10 13:40:24.295545063 +0100
+@@ -690,8 +690,15 @@
+ 
+ #if defined(HAVE_ONDEMAND)
+   if (OnDemand)
++  {
+     cupsdAddEvent(CUPSD_EVENT_SERVER_STARTED, NULL, NULL, "Scheduler started on demand.");
+-  else
++# ifdef HAVE_SYSTEMD
++    sd_notifyf(0, "READY=1\n"
++               "STATUS=Scheduler is running...\n"
++               "MAINPID=%lu",
++               (unsigned long) getpid());
++# endif /* HAVE_SYSTEMD */
++  } else
+ #endif /* HAVE_ONDEMAND */
+   if (fg)
+     cupsdAddEvent(CUPSD_EVENT_SERVER_STARTED, NULL, NULL, "Scheduler started in foreground.");
+--- cups-2.0.2/scheduler/org.cups.cupsd.path.in.ustTJg	2014-03-21 15:50:24.000000000 +0100
++++ cups-2.0.2/scheduler/org.cups.cupsd.path.in	2015-02-10 13:40:24.295545063 +0100
+@@ -2,7 +2,7 @@
+ Description=CUPS Scheduler
+ 
+ [Path]
+-PathExists=@CUPS_CACHEDIR@/org.cups.cupsd
++PathExistsGlob=@CUPS_REQUESTS@/d*
+ 
+ [Install]
+ WantedBy=multi-user.target
+--- cups-2.0.2/scheduler/org.cups.cupsd.service.in.ustTJg	2014-10-21 13:55:01.000000000 +0200
++++ cups-2.0.2/scheduler/org.cups.cupsd.service.in	2015-02-10 13:40:24.296545049 +0100
+@@ -1,10 +1,11 @@
+ [Unit]
+ Description=CUPS Scheduler
+ Documentation=man:cupsd(8)
++After=network.target
+ 
+ [Service]
+ ExecStart=@sbindir@/cupsd -l
+-Type=simple
++Type=notify
+ 
+ [Install]
+ Also=org.cups.cupsd.socket org.cups.cupsd.path
