@@ -1,17 +1,17 @@
 { stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   isPy3k,
   pythonOlder,
   lib,
   requests,
   future,
-  enum34 }:
+  enum34,
+  mock }:
 
 buildPythonPackage rec {
   pname = "linode-api";
   version = "4.1.8b1"; # NOTE: this is a beta, and the API may change in future versions.
-  name = "${pname}-${version}";
 
   disabled = (pythonOlder "2.7");
 
@@ -22,11 +22,15 @@ buildPythonPackage rec {
     sed -i -e '/"enum34",/d' setup.py
   '');
 
-  doCheck = false; # This library does not have any tests at this point.
+  doCheck = true;
+  checkInputs = [ mock ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0afwqccbdmdnjc3glvn65qz0pmrbs3fa89z3wig2w4v15608p20s";
+  # Sources from Pypi exclude test fixtures
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "linode";
+    repo = "python-linode-api";
+    sha256 = "0qfqn92fr876dncwbkf2vhm90hnf7lwpg80hzwyzyzwz1hcngvjg";
   };
 
   meta = {
