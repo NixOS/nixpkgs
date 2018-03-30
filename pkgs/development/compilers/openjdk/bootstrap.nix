@@ -9,7 +9,12 @@ assert stdenv.hostPlatform.libc == "glibc";
 let
   # !!! These should be on nixos.org
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
-    (if version == "8" then
+    (if version == "10" then
+      fetchurl {
+        url    = "https://inner-haven.net/~aseipp/nix/openjdk10-bootstrap-x86_64-linux.tar.xz";
+        sha256 = "08085fsxc1qhqiv3yi38w8lrg3vm7s0m2yvnwr1c92v019806yq2";
+      }
+    else if version == "8" then
       fetchurl {
         url = "https://www.dropbox.com/s/a0lsq2ig4uguky5/openjdk8-bootstrap-x86_64-linux.tar.xz?dl=1";
         sha256 = "18zqx6jhm3lizn9hh6ryyqc9dz3i96pwaz8f6nxfllk70qi5gvks";
@@ -21,7 +26,12 @@ let
       }
     else throw "No bootstrap for version")
   else if stdenv.hostPlatform.system == "i686-linux" then
-    (if version == "8" then
+    (if version == "10" then
+      fetchurl {
+        url    = "https://inner-haven.net/~aseipp/nix/openjdk10-bootstrap-i686-linux.tar.xz";
+        sha256 = "1blb9gyzp8gfyggxvggqgpcgfcyi00ndnnskipwgdm031qva94p7";
+      }
+    else if version == "8" then
       fetchurl {
         url = "https://www.dropbox.com/s/rneqjhlerijsw74/openjdk8-bootstrap-i686-linux.tar.xz?dl=1";
         sha256 = "1yx04xh8bqz7amg12d13rw5vwa008rav59mxjw1b9s6ynkvfgqq9";
