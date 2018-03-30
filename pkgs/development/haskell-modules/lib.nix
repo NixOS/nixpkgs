@@ -162,6 +162,9 @@ rec {
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
 
+  enableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = true; });
+  disableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = false; });
+
   enableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = true; });
   disableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = false; });
 

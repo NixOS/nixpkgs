@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "convmv-2.04";
+  name = "convmv-2.05";
 
   src = fetchurl {
     url = "http://www.j3e.de/linux/convmv/${name}.tar.gz";
-    sha256 = "075xn1ill26hbhg4nl54sp75b55db3ikl7lvhqb9ijvkpi67j6yy";
+    sha256 = "19hwv197p7c23f43vvav5bs19z9b72jzca2npkjsxgprwj5ardjk";
   };
 
   preBuild=''

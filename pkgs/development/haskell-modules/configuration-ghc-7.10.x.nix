@@ -173,10 +173,6 @@ self: super: {
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 
-  # https://github.com/well-typed/hackage-security/issues/157
-  # https://github.com/well-typed/hackage-security/issues/158
-  hackage-security = dontHaddock (dontCheck super.hackage-security);
-
   # Breaks a dependency cycle between QuickCheck and semigroups
   hashable = dontCheck super.hashable;
   unordered-containers = dontCheck super.unordered-containers;

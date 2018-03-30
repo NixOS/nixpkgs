@@ -7,13 +7,13 @@
 
 let
   pname = "shotwell";
-  version = "0.28.0";
+  version = "0.28.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1d797nmlz9gs6ri0h65b76s40ss6ma6h6405xqx03lhg5xni3kmg";
+    sha256 = "1ywikm5kdsr7q8hklh146x28rzvqkqfjs8kdpw7zcc15ri0dkzya";
   };
 
   nativeBuildInputs = [

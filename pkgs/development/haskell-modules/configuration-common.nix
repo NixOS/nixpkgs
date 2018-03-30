@@ -32,9 +32,13 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # hackage-security's test suite does not compile with Cabal 2.x.
-  # See https://github.com/haskell/hackage-security/issues/188.
-  hackage-security = dontCheck super.hackage-security;
+  # Use the latest version of the Cabal library.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+
+  # Use the latest version, which supports Cabal 2.2.x. Unfortunately, the test
+  # suite depends on old versions of tasty and QuickCheck.
+  hackage-security = self.hackage-security_0_5_3_0;
+  hackage-security_0_5_3_0 = dontCheck super.hackage-security_0_5_3_0;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
@@ -1007,5 +1011,8 @@ self: super: {
 
   # https://github.com/strake/lenz-template.hs/issues/1
   lenz-template = doJailbreak super.lenz-template;
+
+  # https://github.com/haskell-hvr/resolv/issues/1
+  resolv = dontCheck super.resolv;
 
 }

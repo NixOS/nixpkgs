@@ -26,16 +26,10 @@ in
 
     environment.systemPackages = [ pkgs.monit ];
 
-    environment.etc = [
-      {
-        source = pkgs.writeTextFile {
-          name = "monitrc";
-          text = config.services.monit.config;
-        };
-        target = "monitrc";
-        mode = "0400";
-      }
-    ];
+    environment.etc."monitrc" = {
+      text = config.services.monit.config;
+      mode = "0400";
+    };
 
     systemd.services.monit = {
       description = "Pro-active monitoring utility for unix systems";
@@ -48,6 +42,8 @@ in
         KillMode = "process";
         Restart = "always";
       };
+      restartTriggers = [ config.environment.etc."monitrc".source ];
     };
+
   };
 }

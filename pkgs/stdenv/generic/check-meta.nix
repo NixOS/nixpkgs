@@ -174,9 +174,10 @@ let
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
-  checkPlatform = attrs:
-    (!(attrs ? meta.platforms) || lib.any (lib.meta.platformMatch hostPlatform) attrs.meta.platforms) &&
-    (!(attrs ? meta.badPlatforms && lib.any (lib.meta.platformMatch hostPlatform) attrs.meta.badPlatforms));
+  checkPlatform = attrs: let
+      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
+    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
+      ! anyMatch (attrs.meta.badPlatforms or []);
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
