@@ -20,9 +20,9 @@ buildPythonPackage rec {
     sha256 = "063sn5m1966gvm3wrlxczdq4vw0r94h3nd9xpr94qxahpg2r4bpb";
   };
 
-  checkInputs = [ pytest pytest_xdist flaky mock ];
   propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
 
+  checkInputs = [ pytest pytest_xdist flaky mock ];
   inherit doCheck;
 
   # https://github.com/DRMacIver/hypothesis/issues/300
