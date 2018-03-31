@@ -494,20 +494,7 @@ in {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
-  application = buildPythonPackage rec {
-    pname = "python-application";
-    name = "${pname}-${version}";
-    version = "2.0.2";
-    disabled = isPy3k;
-
-    src = pkgs.fetchdarcs {
-      url = "http://devel.ag-projects.com/repositories/${pname}";
-      rev = "release-${version}";
-      sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
-    };
-    buildInputs = with self; [ zope_interface ];
-
-  };
+  application = callPackage ../development/python-modules/application { };
 
   appnope = buildPythonPackage rec {
     version = "0.1.0";
