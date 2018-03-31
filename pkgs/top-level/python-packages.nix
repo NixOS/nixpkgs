@@ -1639,26 +1639,7 @@ in {
 
   construct = callPackage ../development/python-modules/construct {};
 
-  consul = buildPythonPackage (rec {
-    name = "python-consul-0.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-consul/${name}.tar.gz";
-      sha256 = "18gs5myk9wkkq5zvj0n0s68ngj3mrbdcifshxfj1j0bgb1km0wpm";
-    };
-
-    buildInputs = with self; [ requests six pytest ];
-
-    # No tests distributed. https://github.com/cablehead/python-consul/issues/133
-    doCheck = false;
-
-    meta = {
-      description = "Python client for Consul (https://www.consul.io/)";
-      homepage = https://github.com/cablehead/python-consul;
-      license = licenses.mit;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  consul = callPackage ../development/python-modules/consul { };
 
   contexter = buildPythonPackage rec {
     name = "contexter-${version}";
