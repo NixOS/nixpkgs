@@ -1236,25 +1236,7 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
-  billiard = buildPythonPackage rec {
-    name = "billiard-${version}";
-    version = "3.5.0.2";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/billiard/${name}.tar.gz";
-      sha256 = "1anw68rkja1dbgvndxz5mq6f89hmxwaha0fjcdnsl5j1wj7imc1y";
-    };
-
-    buildInputs = with self; [ pytest case ];
-
-    meta = {
-      homepage = https://github.com/celery/billiard;
-      description = "Python multiprocessing fork with improvements and bugfixes";
-      license = licenses.bsd3;
-    };
-  };
+  billiard = callPackage ../development/python-modules/billiard { };
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
