@@ -1842,26 +1842,7 @@ in {
 
   pycontracts = callPackage ../development/python-modules/pycontracts { };
 
-  pycparser = buildPythonPackage rec {
-    name = "pycparser-${version}";
-    version = "2.14";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycparser/${name}.tar.gz";
-      sha256 = "7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s tests
-    '';
-
-    meta = {
-      description = "C parser in Python";
-      homepage = https://github.com/eliben/pycparser;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  pycparser = callPackage ../development/python-modules/pycparser { };
 
   pydub = callPackage ../development/python-modules/pydub {};
 
