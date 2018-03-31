@@ -5047,6 +5047,8 @@ with pkgs;
 
   tcpreplay = callPackage ../tools/networking/tcpreplay { };
 
+  ted = callPackage ../tools/typesetting/ted { };
+
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
   };
