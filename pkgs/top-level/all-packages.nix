@@ -7857,8 +7857,8 @@ with pkgs;
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = if hostPlatform.isRiscV # Technically this check should be for glibc version.
     then gnumake42HEAD
-  else gnumake42;
-  gnumake42HEAD = callPackage ../development/tools/build-managers/gnumake/4.2/head.nix { };
+    else gnumake42;
+  gnumake42HEAD = lowPrio (callPackage ../development/tools/build-managers/gnumake/4.2/head.nix { });
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
@@ -9570,7 +9570,7 @@ with pkgs;
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
   libaom = callPackage ../development/libraries/libaom { };
-  
+
   libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
   libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
 
