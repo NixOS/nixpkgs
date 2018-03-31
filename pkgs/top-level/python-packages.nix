@@ -1536,32 +1536,7 @@ in {
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
 
-  clf = buildPythonPackage rec {
-    name = "clf-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/clf/${name}.tar.gz";
-      sha256 = "04lqd2i4fjs606b0q075yi9xksk567m0sfph6v6j80za0hvzqyy5";
-    };
-
-    patchPhase = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
-
-    propagatedBuildInputs = with self; [ docopt requests pygments ];
-
-    # Error when running tests:
-    # No local packages or download links found for requests
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/ncrocfer/clf;
-      description = "Command line tool to search snippets on Commandlinefu.com";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  clf = callPackage ../development/python-modules/clf {};
 
   click = buildPythonPackage rec {
     name = "click-6.7";
