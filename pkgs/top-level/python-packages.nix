@@ -4872,29 +4872,7 @@ in {
 
   };
 
-  imbalanced-learn = buildPythonPackage rec {
-    name = "imbalanced-learn-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/imbalanced-learn/${name}.tar.gz";
-      sha256 = "0j76m0rrsvyqj9bimky9m7b609y5v6crf9apigww3xvcnchhj901";
-    };
-
-    preConfigure = ''
-      export HOME=$PWD
-    '';
-
-    propagatedBuildInputs = with self; [ scikitlearn ];
-    buildInputs = with self; [ nose pytest pandas ];
-
-    meta = {
-      description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
-      homepage = https://github.com/scikit-learn-contrib/imbalanced-learn;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
