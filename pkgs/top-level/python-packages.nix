@@ -2918,6 +2918,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-ly = callPackage ../development/python-modules/python-ly {};
+
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
     version = "0.5.0";
@@ -5696,6 +5698,11 @@ in {
       maintainers = with maintainers; [ sepi ];
       platforms = platforms.all;
     };
+  };
+
+  poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
+    inherit (pkgs.qt5) qtbase;
+    inherit (pkgs.libsForQt5) poppler;
   };
 
   poyo = buildPythonPackage rec {
