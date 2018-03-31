@@ -91,6 +91,8 @@ let
         # https://github.com/elm-lang/elm-compiler/issues/1566
         indents = hlib.overrideCabal super.indents (drv: {
           version = "0.3.3";
+          #test dep tasty has a version mismatch
+          doCheck = false;
           sha256 = "16lz21bp9j14xilnq8yym22p3saxvc9fsgfcf5awn2a6i6n527xn";
           libraryHaskellDepends = drv.libraryHaskellDepends ++ [super.concatenative];
         });
