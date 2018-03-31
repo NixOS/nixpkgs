@@ -1,6 +1,6 @@
---- a/util/install_helper.sh	1970-01-01 01:00:01.000000000 +0100
-+++ b/util/install_helper.sh	2017-09-21 23:43:50.703942577 +0200
-@@ -11,19 +11,11 @@
+--- a/util/install_helper.sh	2018-04-01 01:05:19.613723599 +0200
++++ b/util/install_helper.sh	2018-04-01 01:06:02.952845382 +0200
+@@ -11,22 +11,14 @@
  udevrulesdir="$3"
  prefix="${MESON_INSTALL_DESTDIR_PREFIX}"
  
@@ -14,11 +14,15 @@
 -
  install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
 -        "${DESTDIR}/${udevrulesdir}/99-fuse3.rules"
-+        "${prefix}/${udevrulesdir}/99-fuse.rules"
++        "${prefix}/${udevrulesdir}/99-fuse3.rules"
  
  install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
 -        "${DESTDIR}/etc/init.d/fuse3"
 +        "${prefix}/etc/init.d/fuse3"
  
+ install -D -m 644 "${MESON_SOURCE_ROOT}/util/fuse.conf" \
+-	"${DESTDIR}/etc/fuse.conf"
++	"${prefix}/etc/fuse.conf"
+
  if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
      /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
