@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, python, gobjectIntrospection
-, gnonlin, libxml2, flex, perl
+{ stdenv, fetchurl, fetchpatch, meson, ninja
+, pkgconfig, python, gst-plugins-base, libxml2
+, flex, perl, gettext, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python gobjectIntrospection flex perl ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection python flex perl ];
 
-  propagatedBuildInputs = [ gnonlin libxml2 ];
+  propagatedBuildInputs = [ gst-plugins-base libxml2 ];
+
+  patches = [
+    (fetchpatch {
+        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370413";
+        sha256 = "1xcgbs18g6n5p7z7kqj7ffakwmkxq7ijajyvhyl7p3zvqll9dc7x";
+    })
+    ./fix_pkgconfig_includedir.patch
+  ];
 }
