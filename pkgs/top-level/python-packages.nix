@@ -625,22 +625,7 @@ in {
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
 
-  noise = buildPythonPackage rec {
-    name = "noise-${version}";
-    version = "1.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/noise/${name}.tar.gz";
-      sha256 = "0rcv40dcshqpchwkdlhsv3n68h9swm9fh4d1cgzr2hsp6rs7k8jp";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/caseman/noise";
-      description = "Native-code and shader implementations of Perlin noise";
-      license = licenses.mit;
-      platforms = platforms.all;
-    };
-  };
+  noise = callPackage ../development/python-modules/noise {};
 
   azure = buildPythonPackage rec {
     version = "0.11.0";
