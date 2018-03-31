@@ -1840,25 +1840,7 @@ in {
 
   pycollada = callPackage ../development/python-modules/pycollada { };
 
-  pycontracts = buildPythonPackage rec {
-    version = "1.7.9";
-    name = "PyContracts-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyContracts/${name}.tar.gz";
-      sha256 = "0rdc9pz08885vqkazjc3lyrrghmf3jzxnlsgpn8akl808x1qrfqf";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [ pyparsing decorator six ];
-
-    meta = {
-      description = "Allows to declare constraints on function parameters and return values";
-      homepage = https://pypi.python.org/pypi/PyContracts;
-      license = licenses.lgpl2;
-    };
-  };
+  pycontracts = callPackage ../development/python-modules/pycontracts { };
 
   pycparser = buildPythonPackage rec {
     name = "pycparser-${version}";
