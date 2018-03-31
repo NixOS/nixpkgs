@@ -1242,27 +1242,7 @@ in {
 
   bitbucket_api = callPackage ../development/python-modules/bitbucket-api { };
 
-  # Should be moved out of python-packages.nix
-  bitbucket-cli = buildPythonPackage rec {
-    name = "bitbucket-cli-0.5.1";
-    src = pkgs.fetchurl {
-       url = "mirror://pypi/b/bitbucket-cli/${name}.tar.gz";
-       sha256 = "d881e21ec7ebfa006cfca6d10a5b7229aa59990568f8c6b8e3364769fa38b6f6";
-    };
-
-    propagatedBuildInputs = [ self.requests ];
-
-    # No tests
-    doCheck = false;
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "Bitbucket command line interface";
-      homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
-      maintainers = with maintainers; [ refnil ];
-    };
-  };
+  bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
 
   bitstring = callPackage ../development/python-modules/bitstring { };
 
