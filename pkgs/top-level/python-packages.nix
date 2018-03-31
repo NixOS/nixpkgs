@@ -5700,6 +5700,11 @@ in {
     };
   };
 
+  poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
+    inherit (pkgs.qt5) qtbase;
+    inherit (pkgs.libsForQt5) poppler;
+  };
+
   poyo = buildPythonPackage rec {
     version = "0.4.0";
     name = "poyo-${version}";
