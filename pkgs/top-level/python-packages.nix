@@ -1828,23 +1828,7 @@ in {
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
-  pretend = buildPythonPackage rec {
-    name = "pretend-1.0.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pretend/pretend-1.0.8.tar.gz";
-      sha256 = "0r5r7ygz9m6d2bklflbl84cqhjkc2q12xgis8268ygjh30g2q3wk";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/alex/pretend;
-      license = licenses.bsd3;
-    };
-  };
-
+  pretend = callPackage ../development/python-modules/pretend { };
 
   detox = self.buildPythonPackage rec {
     name = "detox-0.10.0";
