@@ -1645,29 +1645,7 @@ in {
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
-  cookiecutter = buildPythonPackage rec {
-    version = "1.4.0";
-    name = "cookiecutter-${version}";
-
-    # not sure why this is broken
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/audreyr/cookiecutter/archive/${version}.tar.gz";
-      sha256 = "1clxnabmc5s4b519r1sxyj1163x833ir8xcypmdfpf6r9kbb35vn";
-    };
-
-    buildInputs = with self; [ itsdangerous pytest freezegun docutils ];
-    propagatedBuildInputs = with self; [
-          jinja2 future binaryornot click whichcraft poyo jinja2_time ];
-
-    meta = {
-      homepage = https://github.com/audreyr/cookiecutter;
-      description = "A command-line utility that creates projects from project templates";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ kragniz ];
-    };
-  };
+  cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
   cookies = buildPythonPackage rec {
     name = "cookies-2.2.1";
