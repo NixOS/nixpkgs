@@ -1224,19 +1224,7 @@ in {
 
   dugong = callPackage ../development/python-modules/dugong {};
 
-  iowait = buildPythonPackage rec {
-    name = "iowait-0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/iowait/${name}.tar.gz";
-      sha256 = "ab1bc2eb84c22ccf61f17a0024f9fb6df781b39f1852764a66a7769d5adfb299";
-    };
-
-    meta = {
-      description = "Platform-independent module for I/O completion events";
-      homepage = https://launchpad.net/python-iowait;
-    };
-  };
+  iowait = callPackage ../development/python-modules/iowait {};
 
   responses = self.buildPythonPackage rec {
     name = "responses-0.4.0";
