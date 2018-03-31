@@ -55,6 +55,17 @@ let
     }).config.system.build.isoImage);
 
 
+  makeSdImage =
+    { module, maintainers ? ["dezgeg"], system }:
+
+    with import nixpkgs { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ module versionModule ];
+    }).config.system.build.sdImage);
+
+
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
@@ -155,6 +166,10 @@ in rec {
     inherit system;
   });
 
+  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+    inherit system;
+  });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
