@@ -1540,25 +1540,7 @@ in {
 
   click = callPackage ../development/python-modules/click {};
 
-  click_5 = buildPythonPackage rec {
-    name = "click-5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/click/${name}.tar.gz";
-      sha256 = "0njsm0wn31l21bi118g5825ma5sa3rwn7v2x4wjd7yiiahkri337";
-    };
-
-    meta = {
-      homepage = http://click.pocoo.org/;
-      description = "Create beautiful command line interfaces in Python";
-      longDescription = ''
-        A Python package for creating beautiful command line interfaces in a
-        composable way, with as little code as necessary.
-      '';
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ mog ];
-    };
-  };
+  click_5 = callPackage ../development/python-modules/click/5_1.nix {};
 
   click-log = buildPythonPackage rec {
     version = "0.2.1";
