@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ansifilter-${version}";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    sha256 = "0fmwb8w1bpfxjwddal6cnhgmip26xqgcanpz2vp8jasklkcc1i7r";
+    sha256 = "0gzfxfpic47cs2kqrbvaw166ji62c5nq5cjhh3ngpm2fkm1wzli3";
 
   };
 
