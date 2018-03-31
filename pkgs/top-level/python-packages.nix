@@ -1234,19 +1234,7 @@ in {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
-  pyechonest = self.buildPythonPackage rec {
-    name = "pyechonest-8.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyechonest/pyechonest-8.0.2.tar.gz";
-      sha256 = "496265f4b7d33483ec153b9e1b8333fe959b115f7e781510089c8313b7d86560";
-    };
-
-    meta = {
-      description = "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
-      homepage = https://github.com/echonest/pyechonest;
-    };
-  };
+  pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
