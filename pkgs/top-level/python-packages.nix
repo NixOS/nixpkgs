@@ -1426,16 +1426,7 @@ in {
 
   zc_buildout221 = callPackage ../development/python-modules/buildout { };
 
-  bunch = buildPythonPackage (rec {
-    name = "bunch-1.0.1";
-    meta.maintainers = with maintainers; [ ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bunch/${name}.tar.gz";
-      sha256 = "1akalx2pd1fjlvrq69plvcx783ppslvikqdm93z2sdybq07pmish";
-    };
-    doCheck = false;
-  });
+  bunch = callPackage ../development/python-modules/bunch { };
 
   can = callPackage ../development/python-modules/can {};
 
