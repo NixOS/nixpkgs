@@ -20364,6 +20364,8 @@ with pkgs;
   dpkg = callPackage ../tools/package-management/dpkg { };
 
   ekiga = newScope pkgs.gnome2 ../applications/networking/instant-messengers/ekiga { };
+  
+  hangups = callPackage ../applications/networking/instant-messengers/hangups { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation {
     stdenv = overrideCC stdenv gcc5;
