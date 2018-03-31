@@ -921,26 +921,7 @@ in {
     };
   };
 
-  batinfo = buildPythonPackage rec {
-    version = "0.3";
-    name = "batinfo-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/batinfo/${name}.tar.gz";
-      sha256 = "0gyzkxzvj5l6qrw706bnm3cckqzzzbrjr7jkxc087d7775a73499";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/nicolargo/batinfo;
-      description = "A simple Python lib to retrieve battery information";
-      license = licenses.lgpl3;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = buildPythonPackage rec {
     name = "bcdoc-0.14.0";
