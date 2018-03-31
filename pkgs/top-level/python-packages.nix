@@ -1117,18 +1117,7 @@ in {
 
   cheroot = callPackage ../development/python-modules/cheroot {};
 
-  circus = buildPythonPackage rec {
-    name = "circus-0.11.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/circus/${name}.tar.gz";
-      sha256 = "3757344aa5073ea29e6e2607b3de8ba1652502c61964316116931884293fe846";
-    };
-
-    doCheck = false; # weird error
-
-    propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
-  };
+  circus = callPackage ../development/python-modules/circus {};
 
   colorclass = buildPythonPackage rec {
     pname = "colorclass";
