@@ -1394,32 +1394,7 @@ in {
 
   branca = callPackage ../development/python-modules/branca { };
 
-  bugwarrior = buildPythonPackage rec {
-    name = "bugwarrior-${version}";
-    version = "1.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bugwarrior/${name}.tar.gz";
-      sha256 = "0kxknjbw5kchd88i577vlzibg8j60r7zzdhbnragj9wg5s3w60xb";
-    };
-
-    buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
-    propagatedBuildInputs = with self; [
-      twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
-      jinja2 pycurl dogpile_cache lockfile click pyxdg future15
-    ];
-
-    # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
-    doCheck = false;
-
-    meta = {
-      homepage =  https://github.com/ralphbean/bugwarrior;
-      description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pierron ];
-    };
-  };
+  bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
