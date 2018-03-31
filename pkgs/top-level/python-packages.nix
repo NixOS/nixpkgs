@@ -1663,24 +1663,7 @@ in {
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
-  cryptacular = buildPythonPackage rec {
-    name = "cryptacular-1.4.1";
-
-    buildInputs = with self; [ coverage nose ];
-    propagatedBuildInputs = with self; [ pbkdf2 ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cryptacular/${name}.tar.gz";
-      sha256 = "273f03d03f9b316671ae4f1c1c6b8d3c883da19a5706873e8f3d6543e13dd4a1";
-    };
-
-    # TODO: tests fail: TypeError: object of type 'NoneType' has no len()
-    doCheck = false;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = callPackage ../development/python-modules/cryptography { };
 
