@@ -1542,24 +1542,7 @@ in {
 
   click_5 = callPackage ../development/python-modules/click/5_1.nix {};
 
-  click-log = buildPythonPackage rec {
-    version = "0.2.1";
-    name = "click-log-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/click-log/${name}.tar.gz";
-      sha256 = "1r1x85023cslb2pwldd089jjk573mk3w78cnashs77wrx7yz8fj9";
-    };
-
-    propagatedBuildInputs = with self; [ click ];
-
-    meta = {
-      homepage = https://github.com/click-contrib/click-log/;
-      description = "Logging integration for Click";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
 
