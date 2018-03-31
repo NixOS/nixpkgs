@@ -1193,24 +1193,7 @@ in {
     checkInputs = with self; [ pytest ];
   };
 
-  datadog = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "datadog";
-    version = "0.10.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
-      sha256 = "0y2if4jj43n5jis20imragvhhyhr840w4m1g7j7fxh9bn7h273zp";
-    };
-
-    buildInputs = with self; [ pillow tox mock six nose ];
-    propagatedBuildInputs = with self; [ requests decorator simplejson ];
-
-    meta = {
-      description = "The Datadog Python library ";
-      license = licenses.bsd3;
-      homepage = https://github.com/DataDog/datadogpy;
-    };
-  };
+  datadog = callPackage ../development/python-modules/datadog {};
 
   debian = buildPythonPackage rec {
     name = "${pname}-${version}";
