@@ -1576,25 +1576,7 @@ in {
 
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
-  cmdline = buildPythonPackage rec {
-    pname = "cmdline";
-    version = "0.1.6";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/${pname}/${name}.tar.gz";
-      sha256 = "be2cb4711e9111bb7386a408e3c66a730c36dd6ac05851a9f03d0f4eae63536a";
-    };
-
-    # No tests, https://github.com/rca/cmdline/issues/1
-    doCheck = false;
-    propagatedBuildInputs = with self; [ pyyaml ];
-    meta = {
-      description = "Utilities for consistent command line tools";
-      homepage = https://github.com/rca/cmdline;
-      license = licenses.asl20;
-    };
-  };
+  cmdline = callPackage ../development/python-modules/cmdline { };
 
   codecov = callPackage ../development/python-modules/codecov {};
 
