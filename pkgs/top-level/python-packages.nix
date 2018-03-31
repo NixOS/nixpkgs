@@ -564,22 +564,7 @@ in {
 
   astroid = callPackage ../development/python-modules/astroid { };
 
-  attrdict = buildPythonPackage (rec {
-    name = "attrdict-2.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/attrdict/${name}.tar.gz";
-      sha256 = "86aeb6d3809e0344409f8148d7cac9eabce5f0b577c160b5e90d10df3f8d2ad3";
-    };
-
-    propagatedBuildInputs = with self; [ coverage nose six ];
-
-    meta = {
-      description = "A dict with attribute-style access";
-      homepage = https://github.com/bcj/AttrDict;
-      license = licenses.mit;
-    };
-  });
+  attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
 
