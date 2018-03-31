@@ -1655,18 +1655,7 @@ in {
 
   covCore = callPackage ../development/python-modules/cov-core { };
 
-  crcmod = buildPythonPackage rec {
-    name = "crcmod-1.7";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/c/crcmod/crcmod-1.7.tar.gz;
-      sha256 = "07k0hgr42vw2j92cln3klxka81f33knd7459cn3d8aszvfh52w6w";
-    };
-    meta = {
-      description = "Python module for generating objects that compute the Cyclic Redundancy Check (CRC)";
-      homepage = http://crcmod.sourceforge.net/;
-      license = licenses.mit;
-    };
-  };
+  crcmod = callPackage ../development/python-modules/crcmod { };
 
   credstash = callPackage ../development/python-modules/credstash { };
 
