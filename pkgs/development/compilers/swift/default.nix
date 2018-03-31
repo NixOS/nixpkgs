@@ -286,7 +286,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
     # Swift doesn't support 32bit Linux, unknown on other platforms.
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
+    badPlatforms = platforms.i686;
   };
 }
 
