@@ -104,9 +104,9 @@ let
     }) (attrs: {
       postFixup = (attrs.postFixup or "") + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/goland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+        patchelf --set-interpreter $interp $out/goland*/plugins/go/lib/dlv/linux/dlv
 
-        chmod +x $out/goland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+        chmod +x $out/goland*/plugins/go/lib/dlv/linux/dlv
       '';
     });
 
@@ -260,12 +260,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2017.3.3"; /* updated by script */
+    version = "2018.1"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "073wwhg58hkd8w4jazvwngl78gbhnmilm63jhpirr98jk7i7a4mq"; /* updated by script */
+      sha256 = "0r008q3dn30zbn9zzyjj6pz3myxrb9i1s96kinj9vy0cj7gb0aai"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "goland_release";
