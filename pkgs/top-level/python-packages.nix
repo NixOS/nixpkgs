@@ -2918,6 +2918,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-ly = callPackage ../development/python-modules/python-ly {};
+
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
     version = "0.5.0";
