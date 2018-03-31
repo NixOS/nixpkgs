@@ -1832,21 +1832,7 @@ in {
 
   detox = callPackage ../development/python-modules/detox { };
 
-  pbkdf2 = buildPythonPackage rec {
-    name = "pbkdf2-1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pbkdf2/${name}.tar.gz";
-      sha256 = "ac6397369f128212c43064a2b4878038dab78dab41875364554aaf2a684e6979";
-    };
-
-    # ImportError: No module named test
-    doCheck = false;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
   bcrypt = callPackage ../development/python-modules/bcrypt { };
 
