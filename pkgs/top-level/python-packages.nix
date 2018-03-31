@@ -1574,31 +1574,7 @@ in {
     };
   };
 
-  cloudpickle = buildPythonPackage rec {
-    name = "cloudpickle-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cloudpickle/${name}.tar.gz";
-      sha256 = "0x4fbycipkhfax7lydaxcnc14g42g274qba17j51shr5gbq6m8lx";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-
-    # See README for tests invocation
-    checkPhase = ''
-      PYTHONPATH=$PYTHONPATH:'.:tests' py.test
-    '';
-
-    # TypeError: cannot serialize '_io.FileIO' object
-    doCheck = false;
-
-    meta = {
-      description = "Extended pickling support for Python objects";
-      homepage = https://github.com/cloudpipe/cloudpickle;
-      license = with licenses; [ bsd3 ];
-    };
-  };
+  cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cmdline = buildPythonPackage rec {
     pname = "cmdline";
