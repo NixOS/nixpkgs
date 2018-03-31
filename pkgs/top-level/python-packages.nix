@@ -557,22 +557,7 @@ in {
 
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
-  atomicwrites = buildPythonPackage rec {
-    version = "0.1.9";
-    name = "atomicwrites-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/atomicwrites/atomicwrites-${version}.tar.gz";
-      sha256 = "08s05h211r07vs66r4din3swrbzb344vli041fihpg34q3lcxpvw";
-    };
-
-    meta = {
-      description = "Atomic file writes on POSIX";
-      homepage = https://pypi.python.org/pypi/atomicwrites/0.1.0;
-      maintainers = with maintainers; [ matthiasbeyer ];
-    };
-
-  };
+  atomicwrites = callPackage ../development/python-modules/atomicwrites { };
 
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
