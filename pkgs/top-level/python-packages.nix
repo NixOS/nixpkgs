@@ -1195,16 +1195,7 @@ in {
 
   datadog = callPackage ../development/python-modules/datadog {};
 
-  debian = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "python-debian";
-    version = "0.1.23";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "193faznwnjc3n5991wyzim6h9gyq1zxifmfrnpm3avgkh7ahyynh";
-    };
-    propagatedBuildInputs = with self; [ chardet six ];
-  };
+  debian = callPackage ../development/python-modules/debian {};
 
   defusedxml = buildPythonPackage rec {
     name = "${pname}-${version}";
