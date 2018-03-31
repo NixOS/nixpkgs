@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "qalculate-gtk-${version}";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/qalculate-gtk/archive/v${version}.tar.gz";
-    sha256 = "0sf4ywz8hsszaf0yr0ncdlp7mwjk6b276bwl0j9vf1j925c89pbn";
+    sha256 = "0j5wp6bmnwkyxlvqci6ddg478a0ms93gicvycw0c6bkvs2gd77az";
   };
 
   patchPhase = ''
