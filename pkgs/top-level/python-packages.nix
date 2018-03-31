@@ -617,21 +617,7 @@ in {
     };
   };
 
-  avro = buildPythonPackage (rec {
-    name = "avro-1.7.6";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/avro/${name}.tar.gz";
-      sha256 = "edf14143cabb2891f05a73d60a57a9fc5a9ebd305c2188abb3f5db777c707ad5";
-    };
-
-    meta = {
-      description = "A serialization and RPC framework";
-      homepage = "https://pypi.python.org/pypi/avro/";
-    };
-  });
+  avro = callPackage ../development/python-modules/avro {};
 
   avro3k = pkgs.lowPrio (buildPythonPackage (rec {
     name = "avro3k-1.7.7-SNAPSHOT";
