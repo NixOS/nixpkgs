@@ -1197,15 +1197,7 @@ in {
 
   debian = callPackage ../development/python-modules/debian {};
 
-  defusedxml = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "defusedxml";
-    version = "0.5.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
-      sha256 = "1x54n0h8hl92vvwyymx883fbqpqjwn2mc8fb383bcg3z9zwz5mr4";
-    };
-  };
+  defusedxml = callPackage ../development/python-modules/defusedxml {};
 
   dosage = buildPythonPackage rec {
     name = "${pname}-${version}";
