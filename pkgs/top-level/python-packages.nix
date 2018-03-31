@@ -1424,21 +1424,7 @@ in {
 
   zc_buildout = self.zc_buildout221;
 
-  zc_buildout221 = buildPythonPackage rec {
-    name = "zc.buildout-2.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.buildout/${name}.tar.gz";
-      sha256 = "a6122ea5c06c6c044a9efce4a3df452c8573e1aebfda7b24262655daac894ef5";
-    };
-
-   meta = {
-      homepage = "http://www.buildout.org";
-      description = "A software build and configuration system";
-      license = licenses.zpl21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  zc_buildout221 = callPackage ../development/python-modules/buildout { };
 
   bunch = buildPythonPackage (rec {
     name = "bunch-1.0.1";
