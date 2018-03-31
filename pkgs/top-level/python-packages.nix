@@ -1538,33 +1538,7 @@ in {
 
   clf = callPackage ../development/python-modules/clf {};
 
-  click = buildPythonPackage rec {
-    name = "click-6.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/click/${name}.tar.gz";
-      sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test tests
-    '';
-
-    # https://github.com/pallets/click/issues/823
-    doCheck = false;
-
-    meta = {
-      homepage = http://click.pocoo.org/;
-      description = "Create beautiful command line interfaces in Python";
-      longDescription = ''
-        A Python package for creating beautiful command line interfaces in a
-        composable way, with as little code as necessary.
-      '';
-      license = licenses.bsd3;
-    };
-  };
+  click = callPackage ../development/python-modules/click {};
 
   click_5 = buildPythonPackage rec {
     name = "click-5.1";
