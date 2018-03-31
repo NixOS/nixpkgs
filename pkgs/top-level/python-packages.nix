@@ -1596,30 +1596,7 @@ in {
     };
   });
 
-
-  coilmq = buildPythonPackage (rec {
-    name = "CoilMQ-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CoilMQ/${name}.tar.gz";
-      sha256 = "0wwa6fsqw1mxsryvgp0yrdjil8axyj0kslzi7lr45cnhgp5ab375";
-    };
-
-    propagatedBuildInputs = with self; [ stompclient pythondaemon redis pid];
-
-    buildInputs = with self; [ pytest six click coverage sqlalchemy ];
-
-    # The teste data is not included in the distribution
-    doCheck = false;
-
-    meta = {
-      description = "Simple, lightweight, and easily extensible STOMP message broker";
-      homepage = http://code.google.com/p/coilmq/;
-      license = licenses.asl20;
-    };
-  });
-
+  coilmq = callPackage ../development/python-modules/coilmq { };
 
   colander = callPackage ../development/python-modules/colander { };
 
