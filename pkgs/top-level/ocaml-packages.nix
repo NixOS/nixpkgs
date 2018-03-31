@@ -330,6 +330,8 @@ let
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
