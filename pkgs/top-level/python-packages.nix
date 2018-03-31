@@ -1240,26 +1240,7 @@ in {
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
-  bitbucket_api = buildPythonPackage rec {
-    name = "bitbucket-api-0.4.4";
-    # python3 does not support relative imports
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bitbucket-api/${name}.tar.gz";
-      sha256 = "e890bc3893d59a6f203c1eb2bae60e78ac4d3869da7ea4fb104dca588aea85b2";
-    };
-
-    propagatedBuildInputs = with self; [ requests_oauthlib nose sh ];
-
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/Sheeprider/BitBucket-api;
-      description = "Python library to interact with BitBucket REST API";
-      license = licenses.mit;
-    };
-  };
+  bitbucket_api = callPackage ../development/python-modules/bitbucket-api { };
 
   # Should be moved out of python-packages.nix
   bitbucket-cli = buildPythonPackage rec {
