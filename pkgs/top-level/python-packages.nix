@@ -1830,30 +1830,7 @@ in {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
-  detox = self.buildPythonPackage rec {
-    name = "detox-0.10.0";
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ tox py eventlet ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/detox/${name}.tar.gz";
-      sha256 = "33b704c2a5657366850072fb2aa839df14dd2e692c0c1c2642c3ac30d5c0baec";
-    };
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # eventlet timeout, and broken invokation 3.5
-    doCheck = false;
-
-    meta = {
-      description = "What is detox?";
-      homepage = https://bitbucket.org/hpk42/detox;
-    };
-  };
-
+  detox = callPackage ../development/python-modules/detox { };
 
   pbkdf2 = buildPythonPackage rec {
     name = "pbkdf2-1.3";
