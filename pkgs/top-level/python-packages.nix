@@ -959,25 +959,7 @@ in {
     };
   };
 
-  betamax = buildPythonPackage rec {
-    name = "betamax-0.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/betamax/${name}.tar.gz";
-      sha256 = "1hki1c2vs7adq7zr56wi6i5bhrkia4s2ywpv2c98ibnczz709w2v";
-    };
-
-    propagatedBuildInputs = [ self.requests ];
-
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      homepage = https://betamax.readthedocs.org/en/latest/;
-      description = "A VCR imitation for requests";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
+  betamax = callPackage ../development/python-modules/betamax {};
 
   betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
 
