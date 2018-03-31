@@ -1364,25 +1364,7 @@ in {
 
   botocore = callPackage ../development/python-modules/botocore { };
 
-  bottle = buildPythonPackage rec {
-    version = "0.12.11";
-    name = "bottle-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bottle/${name}.tar.gz";
-      sha256 = "0cd787lzggs933qfav6xicx5c78dz6npwgg3xc4rhah44nbqz5d1";
-    };
-
-    propagatedBuildInputs = with self; [ setuptools ];
-
-    meta = {
-      homepage = http://bottlepy.org;
-      description = "A fast and simple micro-framework for small web-applications";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  bottle = callPackage ../development/python-modules/bottle { };
 
   box2d = buildPythonPackage rec {
     name = "box2d-${version}";
