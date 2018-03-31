@@ -20290,6 +20290,8 @@ with pkgs;
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
+  click = callPackage ../applications/networking/cluster/click { };
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
