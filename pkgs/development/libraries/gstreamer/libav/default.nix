@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, python, yasm
-, gst-plugins-base, orc, bzip2
-, withSystemLibav ? true, libav ? null
+{ stdenv, fetchurl, meson, ninja, pkgconfig
+, python, yasm, gst-plugins-base, orc, bzip2
+, gettext, withSystemLibav ? true, libav ? null
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
@@ -24,11 +24,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = stdenv.lib.optionalString withSystemLibav
-    "--with-system-libav";
-
   nativeBuildInputs = with stdenv.lib;
-    [ pkgconfig python ]
+    [ meson ninja gettext pkgconfig python ]
     ++ optional (!withSystemLibav) yasm
     ;
 
