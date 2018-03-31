@@ -1601,34 +1601,7 @@ in {
   colander = callPackage ../development/python-modules/colander { };
 
   # Backported version of the ConfigParser library of Python 3.3
-  configparser = if isPy3k then null else buildPythonPackage rec {
-    name = "configparser-${version}";
-    version = "3.5.0";
-
-    # running install_egg_info
-    # error: [Errno 9] Bad file descriptor: '<stdout>'
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/configparser/${name}.tar.gz";
-      sha256 = "5308b47021bc2340965c371f0f058cc6971a04502638d4244225c49d80db273a";
-    };
-
-    # No tests available
-    doCheck = false;
-
-    # Fix issue when used together with other namespace packages
-    # https://github.com/NixOS/nixpkgs/issues/23855
-    patches = [
-      ./../development/python-modules/configparser/0001-namespace-fix.patch
-    ];
-
-    meta = {
-      maintainers = [ ];
-      platforms = platforms.all;
-    };
-  };
-
+  configparser = callPackage ../development/python-modules/configparser { };
 
   ColanderAlchemy = buildPythonPackage rec {
     name = "ColanderAlchemy-${version}";
