@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, pcre, curl, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, pcre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "ephoto-${version}";
@@ -11,11 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) makeWrapper ];
 
-  buildInputs = [ efl pcre curl ];
-
-  postInstall = ''
-    wrapProgram $out/bin/ephoto --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-  '';
+  buildInputs = [ efl pcre ];
 
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
