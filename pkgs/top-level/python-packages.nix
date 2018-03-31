@@ -517,22 +517,7 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
-  asyncio = if (pythonAtLeast "3.3") then buildPythonPackage rec {
-    name = "asyncio-${version}";
-    version = "3.4.3";
-
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asyncio/${name}.tar.gz";
-      sha256 = "0hfbqwk9y0bbfgxzg93s2wyk6gcjsdxlr5jwy97hx64ppkw0ydl3";
-    };
-
-    meta = {
-      description = "Reference implementation of PEP 3156";
-      homepage = http://www.python.org/dev/peps/pep-3156;
-      license = licenses.free;
-    };
-  } else null;
+  asyncio = callPackage ../development/python-modules/asyncio {};
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
