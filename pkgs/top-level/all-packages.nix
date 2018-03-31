@@ -6378,18 +6378,14 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk9 =
-    # if stdenv.isDarwin then
-    #   callPackage ../development/compilers/openjdk-darwin/9.nix { }
-    # else
-      callPackage ../development/compilers/openjdk/9.nix {
-        bootjdk = openjdk8;
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
   openjdk10 =
       callPackage ../development/compilers/openjdk/10.nix {
-        bootjdk = openjdk9;
+        #10 needs a modular jdk to bootstrap itself
+        #but aside from that, 9 is EOL'd, so don't expose it
+        bootjdk = callPackage ../development/compilers/openjdk/9.nix {
+          bootjdk = openjdk8;
+          inherit (gnome2) GConf gnome_vfs;
+        };
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6413,20 +6409,6 @@ with pkgs;
       lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}-headless"
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
-
-  jdk9 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk9 else openjdk9 // { outputs = [ "out" ]; };
-  jre9 = if stdenv.isArm || stdenv.isAarch64 then oraclejre9 else lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk9.jre // { outputs = [ "jre" ]; }));
-  jre9_headless =
-    if stdenv.isArm || stdenv.isAarch64 then
-      oraclejre9
-    else if stdenv.isDarwin then
-      jre9
-    else
-      lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}-headless"
-        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-          ((openjdk9.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk10 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
   jre10 = if stdenv.isArm || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
