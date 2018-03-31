@@ -1,10 +1,10 @@
 { stdenv, fetchurl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "json-c-0.13";
+  name = "json-c-0.13.1";
   src = fetchurl {
     url    = "https://s3.amazonaws.com/json-c_releases/releases/${name}-nodoc.tar.gz";
-    sha256 = "01jsr647faqrcbsrmzb52s9ppa9ll4pscz4nizk3xlp98q37cwl5";
+    sha256 = "0ch1v18wk703bpbyzj7h1mkwvsw4rw4qdwvgykscypvqq10678ll";
   };
 
   outputs = [ "out" "dev" ];
