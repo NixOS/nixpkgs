@@ -923,25 +923,7 @@ in {
 
   batinfo = callPackage ../development/python-modules/batinfo {};
 
-  bcdoc = buildPythonPackage rec {
-    name = "bcdoc-0.14.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bcdoc/${name}.tar.gz";
-      sha256 = "1s2kdqs1n2mj7wq3w0pq30zs7vxq0l3abik2clqnc4hm2j7crbk8";
-    };
-
-    buildInputs = with self; [ docutils six ];
-
-    # Tests fail due to nix file timestamp normalization.
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/botocore/bcdoc;
-      license = licenses.asl20;
-      description = "ReST document generation tools for botocore";
-    };
-  };
+  bcdoc = callPackage ../development/python-modules/bcdoc {};
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
