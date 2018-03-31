@@ -619,23 +619,7 @@ in {
 
   avro = callPackage ../development/python-modules/avro {};
 
-  avro3k = pkgs.lowPrio (buildPythonPackage (rec {
-    name = "avro3k-1.7.7-SNAPSHOT";
-
-    disabled = (!isPy3k);
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/avro3k/${name}.tar.gz";
-      sha256 = "15ahl0irwwj558s964abdxg4vp6iwlabri7klsm2am6q5r0ngsky";
-    };
-
-    doCheck = false;        # No such file or directory: './run_tests.py
-
-    meta = {
-      description = "A serialization and RPC framework";
-      homepage = "https://pypi.python.org/pypi/avro3k/";
-    };
-  }));
+  avro3k = callPackage ../development/python-modules/avro3k {};
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
