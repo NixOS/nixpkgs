@@ -1289,22 +1289,7 @@ in {
     };
   };
 
-  blinker = buildPythonPackage rec {
-    name = "blinker-${version}";
-    version = "1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/blinker/${name}.tar.gz";
-      sha256 = "1dpq0vb01p36jjwbhhd08ylvrnyvcc82yxx3mwjx6awrycjyw6j7";
-    };
-
-    meta = {
-      homepage = http://pythonhosted.org/blinker/;
-      description = "Fast, simple object-to-object and broadcast signaling";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  blinker = callPackage ../development/python-modules/blinker { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
