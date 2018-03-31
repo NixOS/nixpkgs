@@ -1222,17 +1222,7 @@ in {
     };
   };
 
-  dugong = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "dugong";
-    version = "3.5";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/${pname}/${name}.tar.bz2";
-      sha256 = "0y0rdxbiwm03zv6vpvapqilrird3h8ijz7xmb0j7ds5j4p6q3g24";
-    };
-
-    disabled = pythonOlder "3.3"; # Library does not support versions older than 3.3
-  };
+  dugong = callPackage ../development/python-modules/dugong {};
 
   iowait = buildPythonPackage rec {
     name = "iowait-0.2";
