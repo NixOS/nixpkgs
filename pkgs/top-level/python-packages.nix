@@ -1522,21 +1522,7 @@ in {
 
   celery = callPackage ../development/python-modules/celery { pytest = self.pytest_32; };
 
-  cerberus = buildPythonPackage rec {
-    name = "Cerberus-${version}";
-    version = "0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cerberus/${name}.tar.gz";
-      sha256 = "1km7hvns1snrmcwz58bssi4wv3gwd34zm1z1hwjylmpqrfrcf8mi";
-    };
-
-    meta = {
-      homepage = http://python-cerberus.org/;
-      description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
-      license = licenses.mit;
-    };
-  };
+  cerberus = callPackage ../development/python-modules/cerberus { };
 
   certifi = callPackage ../development/python-modules/certifi { };
 
