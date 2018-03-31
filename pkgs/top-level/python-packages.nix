@@ -897,21 +897,7 @@ in {
 
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
 
-  babelfish = buildPythonPackage rec {
-    version = "0.5.5";
-    name = "babelfish-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/babelfish/${name}.tar.gz";
-      sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
-    };
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/babelfish;
-      description = "A module to work with countries and languages";
-      license = licenses.bsd3;
-    };
-  };
+  babelfish = callPackage ../development/python-modules/babelfish {};
 
   basiciw = buildPythonPackage rec {
     name = "${pname}-${version}";
