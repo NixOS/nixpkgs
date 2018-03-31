@@ -1416,24 +1416,7 @@ in {
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
-  check-manifest = buildPythonPackage rec {
-    name = "check-manifest";
-    version = "0.30";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/check-manifest/check-manifest-${version}.tar.gz";
-      sha256 = "b19fd0d8b9286532ba3dc0282484fd76d11200cf24b340dc3d08f293c7dd0500";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/mgedmin/check-manifest;
-      description = "Check MANIFEST.in in a Python source package for completeness";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lewo ];
-    };
-  };
+  check-manifest = callPackage ../development/python-modules/check-manifest { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
   # A patched version of buildout, useful for buildout based development on Nix
