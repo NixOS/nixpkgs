@@ -1414,33 +1414,7 @@ in {
   #   };
   # });
 
-  bugzilla = buildPythonPackage rec {
-    name = "bugzilla-${version}";
-    version = "1.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-bugzilla/python-${name}.tar.gz";
-      sha256 = "11361635a4f1613803a0b9b93ba9126f7fd36180653f953e2590b1536d107d46";
-    };
-
-    patches = [ ../development/python-modules/bugzilla/checkPhase-fix-cookie-compare.patch ];
-
-    buildInputs = with self; [ pep8 coverage logilab_common ];
-    propagatedBuildInputs = [ self.requests ];
-
-    preCheck = ''
-      mkdir -p check-phase
-      export HOME=$(pwd)/check-phase
-    '';
-
-    meta = {
-      homepage = https://fedorahosted.org/python-bugzilla/;
-      description = "Bugzilla XMLRPC access module";
-      license = licenses.gpl2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pierron ];
-    };
-  };
+  bugzilla = callPackage ../development/python-modules/bugzilla { };
 
   check-manifest = buildPythonPackage rec {
     name = "check-manifest";
