@@ -299,7 +299,12 @@ let
   # productOpt { req = { a = int; }; opt = {}; open = true; }
   #   { a = 23; }
   #   { a = 42; b = "foo"; c = false; }
-  productOpt = { req, opt, open ? false }: mkBaseType {
+  productOpt = { req, opt, open ? false }:
+    let reqfs = builtins.attrNames req;
+        optfs = builtins.attrNames opt; in
+    # opt and rec fields must not contain the same fields
+    assert (lib.intersectLists reqfs optfs == []);
+    mkBaseType {
     name = "product";
     description = "{ " +
       lib.concatStringsSep ", "
@@ -310,10 +315,8 @@ let
         ++ lib.optional open "…")
       + " }";
     check = v:
-      let reqfs = builtins.attrNames req;
-          optfs = builtins.attrNames opt;
-          vfs   = builtins.attrNames v;
-      in lib.foldl lib.and (builtins.isAttrs v) [
+        let vfs = builtins.attrNames v; in
+        lib.foldl lib.and (builtins.isAttrs v) [
       # if there’s only required fields, this is an optimization
         (opt == {} && !open -> reqfs == vfs)
         # all required fields have to exist in the value
