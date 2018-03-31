@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
+{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext
+, pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
 , gtkSupport ? false, gtk3 ? null
 , faad2, libass, libkate, libmms
@@ -38,13 +39,17 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux ++ platforms.darwin;
   };
 
-  # TODO: Fix Cocoa build. The problem was ARC, which might be related to too
-  #       old version of Apple SDK's.
-  configureFlags = optional stdenv.isDarwin "--disable-cocoa";
-
-  patchPhase = ''
-    sed -i 's/openjpeg-2.2/openjpeg-${openJpegVersion}/' ext/openjpeg/*
+  preConfigure = ''
+    patchShebangs .
   '';
+
+  patches = [
+    (fetchpatch {
+        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370409";
+        sha256 = "0hy0rcn35alq65yqwri4fqjz2hf3nyyg5c7rnndk51msmqjxpprk";
+    })
+    ./fix_pkgconfig_includedir.patch
+  ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ meson ninja pkgconfig python gettext ];
 
   buildInputs = [
     gst-plugins-base orc
@@ -76,6 +81,4 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) mjpegtools;
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
-
-  enableParallelBuilding = true;
 }
