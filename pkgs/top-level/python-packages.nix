@@ -1653,17 +1653,7 @@ in {
 
   coverage = callPackage ../development/python-modules/coverage { };
 
-  covCore = buildPythonPackage rec {
-    name = "cov-core-1.15.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cov-core/${name}.tar.gz";
-      sha256 = "4a14c67d520fda9d42b0da6134638578caae1d374b9bb462d8de00587dba764c";
-    };
-    meta = {
-      description = "Plugin core for use by pytest-cov, nose-cov and nose2-cov";
-    };
-    propagatedBuildInputs = with self; [ self.coverage ];
-  };
+  covCore = callPackage ../development/python-modules/cov-core { };
 
   crcmod = buildPythonPackage rec {
     name = "crcmod-1.7";
