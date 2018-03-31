@@ -293,27 +293,38 @@ let
   #   { }
   #   { a = {}; }
   #   { a = {}; b = 23; }
-  productOpt = { req, opt }: mkBaseType {
+  # if a product is `open`, any fields that are not
+  # given a type in either `req` or `opt` will default
+  # to type `any` (that is they typecheck by default).
+  # productOpt { req = { a = int; }; opt = {}; open = true; }
+  #   { a = 23; }
+  #   { a = 42; b = "foo"; c = false; }
+  productOpt = { req, opt, open ? false }: mkBaseType {
     name = "product";
     description = "{ " +
       lib.concatStringsSep ", "
         (  lib.mapAttrsToList (n: t: "${n}: ${describe t}") req
-        ++ lib.mapAttrsToList (n: t: "[${n}: ${describe t}]") opt)
+        ++ lib.mapAttrsToList (n: t: "[${n}: ${describe t}]") opt
+        # TODO: maybe but this at the beginning: [ …,
+        # so that it’s easier to see that an attrset is open
+        ++ lib.optional open "…")
       + " }";
     check = v:
       let reqfs = builtins.attrNames req;
           optfs = builtins.attrNames opt;
           vfs   = builtins.attrNames v;
-      in builtins.isAttrs v &&
-      (if opt == {}
+      in lib.foldl lib.and (builtins.isAttrs v) [
       # if there’s only required fields, this is an optimization
-      then reqfs == vfs
-        # all fields have to exist in the value
+        (opt == {} && !open -> reqfs == vfs)
+        # all required fields have to exist in the value
         # reqfs - vfs
-      else lib.subtractLists vfs reqfs == []
-        # whithout req, only opt fields must be in the value
+        (lib.subtractLists vfs reqfs == [])
+        # whithout req, and if the product is not open
+        # only opt fields must be in the value
         # (vfs - reqfs) - otfs
-        && lib.subtractLists optfs (lib.subtractLists reqfs vfs) == []);
+        (!open -> [] == lib.subtractLists optfs
+                          (lib.subtractLists reqfs vfs))
+      ];
     variant = variants.product;
     extraFields = {
       inherit opt req;

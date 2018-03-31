@@ -138,6 +138,14 @@ in lib.runTests ({
     { p = { x = 23; }; } # missing the required p.y
     { p = (err (product { x = int; y = bool; }) { x = 23; }); };
 
+  testProductOptOpenOk = test
+    (productOpt { req = { a = unit; }; opt = {}; open = true; })
+    { a = {}; rest1 = 12; rest2 = "foo"; } ok;
+  testProductOptOpenIgnoreRest = test
+    (productOpt { req = { a = unit; }; opt = { b = int; }; open = true; })
+    { a = 23; b = false; rest = "foo"; x = {}; y = 23; }
+    { a = err unit 23; b = err int false; };
+
 
   # -- Sums --
 
