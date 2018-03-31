@@ -1631,27 +1631,7 @@ in {
 
   conda = callPackage ../development/python-modules/conda { };
 
-  configobj = buildPythonPackage (rec {
-    name = "configobj-5.0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/configobj/${name}.tar.gz";
-      sha256 = "a2f5650770e1c87fb335af19a9b7eb73fc05ccf22144eb68db7d00cd2bcb0902";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "Config file reading, writing and validation";
-      homepage = https://pypi.python.org/pypi/configobj;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
-
+  configobj = callPackage ../development/python-modules/configobj { };
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
