@@ -1226,19 +1226,7 @@ in {
 
   iowait = callPackage ../development/python-modules/iowait {};
 
-  responses = self.buildPythonPackage rec {
-    name = "responses-0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/responses/${name}.tar.gz";
-      sha256 = "0fs7a4cf4f12mjhcjd5vfh0f3ixcy2nawzxpgsfr3ahf0rg7ppx5";
-    };
-
-    propagatedBuildInputs = with self; [ cookies mock requests six ];
-
-    doCheck = false;
-
-  };
+  responses = callPackage ../development/python-modules/responses {};
 
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
