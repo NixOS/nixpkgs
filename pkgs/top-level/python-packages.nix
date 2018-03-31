@@ -1438,28 +1438,7 @@ in {
 
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
-  carrot = buildPythonPackage rec {
-    name = "carrot-0.10.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/carrot/${name}.tar.gz";
-      sha256 = "cb46374f3c883c580d142a79d2609883713a867cc86e0514163adce784ce2468";
-    };
-
-    buildInputs = with self; [ self.nose ];
-
-    propagatedBuildInputs =
-      [ self.amqplib
-        self.anyjson
-      ];
-
-    doCheck = false; # depends on the network
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/carrot;
-      description = "AMQP Messaging Framework for Python";
-    };
-  };
+  carrot = callPackage ../development/python-modules/carrot {};
 
   case = buildPythonPackage rec {
     name = "case-${version}";
