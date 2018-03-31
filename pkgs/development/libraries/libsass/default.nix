@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libsass-${version}";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "https://github.com/sass/libsass/archive/${version}.tar.gz";
-    sha256 = "0qy5hsglrdwzlb1x83v40pnm52hrjbdrc5zardp89i3vwcdzkrq8";
+    sha256 = "1qjpicbjsj9gf8s00ma0d6kw6qfnc29fhrqdkvq8427wfffj654r";
   };
 
   patchPhase = ''
