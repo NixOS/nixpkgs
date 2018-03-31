@@ -353,7 +353,7 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
-  pykde4 = callPackage ../development/python-modules/pykde4/default.nix {
+  pykde4 = callPackage ../development/python-modules/pykde4 {
     inherit (self) pyqt4;
     callPackage = pkgs.callPackage;
   };
@@ -1473,7 +1473,7 @@ in {
     };
   };
 
-  cccolutils = callPackage ../development/python-modules/cccolutils/default.nix {};
+  cccolutils = callPackage ../development/python-modules/cccolutils {};
 
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
@@ -1726,8 +1726,7 @@ in {
     pythonPackages = self;
   });
 
-  openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
-
+  openidc-client = callPackage ../development/python-modules/openidc-client {};
 
   idna = callPackage ../development/python-modules/idna { };
 
@@ -2007,7 +2006,7 @@ in {
 
   pytest = self.pytest_34;
 
-  pytest_34 = callPackage ../development/python-modules/pytest/default.nix{
+  pytest_34 = callPackage ../development/python-modules/pytest {
     hypothesis = self.hypothesis.override {
       # hypothesis requires pytest that causes dependency cycle
       doCheck = false;
@@ -3901,9 +3900,9 @@ in {
     };
   };
 
-  idna-ssl = callPackage ../development/python-modules/idna-ssl/default.nix { };
+  idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
-  ijson = callPackage ../development/python-modules/ijson/default.nix {};
+  ijson = callPackage ../development/python-modules/ijson {};
 
   imagesize = buildPythonPackage rec {
     name = "imagesize-${version}";
@@ -7881,7 +7880,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -7914,13 +7913,13 @@ in {
 
   konfig = callPackage ../development/python-modules/konfig { };
 
-  kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
+  kitchen = callPackage ../development/python-modules/kitchen { };
 
-  kubernetes = callPackage ../development/python-modules/kubernetes/default.nix { };
+  kubernetes = callPackage ../development/python-modules/kubernetes { };
 
-  pylast = callPackage ../development/python-modules/pylast/default.nix { };
+  pylast = callPackage ../development/python-modules/pylast { };
 
-  pylru = callPackage ../development/python-modules/pylru/default.nix { };
+  pylru = callPackage ../development/python-modules/pylru { };
 
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
@@ -8178,7 +8177,7 @@ in {
     };
   });
 
-  py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
+  py_scrypt = callPackage ../development/python-modules/py_scrypt { };
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
@@ -8391,13 +8390,13 @@ in {
   };
 
 
-  matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
+  matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { };
+  matrix-client = callPackage ../development/python-modules/matrix-client { };
 
   maya = callPackage ../development/python-modules/maya { };
 
@@ -8425,7 +8424,7 @@ in {
     };
   });
 
-  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup/default.nix { };
+  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
 
   meld3 = buildPythonPackage rec {
     name = "meld3-1.0.0";
@@ -12366,7 +12365,7 @@ in {
     };
   };
 
-  python_fedora = callPackage ../development/python-modules/python_fedora/default.nix {};
+  python_fedora = callPackage ../development/python-modules/python_fedora {};
 
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = self.python-simple-hipchat;
@@ -13469,9 +13468,9 @@ in {
     };
   };
 
-  rpkg = callPackage ../development/python-modules/rpkg/default.nix {};
+  rpkg = callPackage ../development/python-modules/rpkg {};
 
-  rply = callPackage ../development/python-modules/rply/default.nix {};
+  rply = callPackage ../development/python-modules/rply {};
 
   rpm = toPythonModule (pkgs.rpm.override{inherit python;});
 
