@@ -19,10 +19,10 @@
   json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nsby6ry8l9xg3yw4adlhk2pnc7i0h0rznvcss4vk3v74qg0k8lc";
+      sha256 = "0qmj7fypgb9vag723w1a49qihxrcf5shzars106ynw2zk352gbv5";
       type = "gem";
     };
-    version = "1.8.3";
+    version = "1.8.6";
   };
   parallel = {
     source = {

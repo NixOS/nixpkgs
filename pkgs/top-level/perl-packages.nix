@@ -6350,19 +6350,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   GSSAPI = buildPerlPackage rec {
-    name = "GSSAPPI-0.28";
+    name = "GSSAPI-0.28";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
+      url = "mirror://cpan/authors/id/A/AG/AGROLMS/${name}.tar.gz";
       sha256 = "1mkhwxjjlhr58pd770i9gnf7zy7jj092iv6jfbnb8bvnc5xjr3vx";
     };
     buildInputs = [ TestPod ];
-    propagatedBuildInputs = [ pkgs.heimdalFull ];
+    propagatedBuildInputs = [ pkgs.krb5Full.dev ];
     meta = {
       maintainers = [ maintainers.limeytexan ];
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    makeMakerFlags = "--gssapiimpl ${pkgs.heimdalFull.out}";
+    makeMakerFlags = "--gssapiimpl ${pkgs.krb5Full.dev}";
   };
 
   Gtk2 = buildPerlPackage rec {
@@ -6739,6 +6739,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLTagset ];
     meta = {
       description = "HTML parser class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HTMLTagCloud = buildPerlPackage rec {
+    name = "HTML-TagCloud-0.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBERTSD/${name}.tar.gz";
+      sha256 = "05bhnrwwlwd6cj3cn91zw5r99xddvy142bznid26p1pg5m3rk029";
+    };
+    meta = {
+      description = "Generate An HTML Tag Cloud";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8738,6 +8750,14 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
       sha256 = "194dvggf1cmzc701j4wma38jgrcv2pwwzk69rnysjjdcjdv6y255";
+    };
+  };
+
+  MathVecStat = buildPerlPackage rec {
+    name = "Math-VecStat-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
     };
   };
 
@@ -11868,11 +11888,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodPerldoc = buildPerlPackage {
-    name = "Pod-Perldoc-3.25";
+  PodPerldoc = buildPerlPackage rec {
+    name = "Pod-Perldoc-3.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MALLEN/Pod-Perldoc-3.25.tar.gz;
-      sha256 = "f1a4b3ac7aa244485456b0e8733c773bbb39ae35b01a59515f6cba6bbe293a84";
+      url = "mirror://cpan/authors/id/M/MA/MALLEN/${name}.tar.gz";
+      sha256 = "0kf6xwdha8jl0nxv60r2v7xsfnvv6i3gy135xsl40g71p02ychfc";
     };
     meta = {
       description = "Look up Perl documentation in Pod format";
@@ -13231,10 +13251,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysVirt = buildPerlPackage rec {
-    name = "Sys-Virt-1.2.19";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
-      sha256 = "18v8x0514in0zpvq1rv78hmvhpij1xjh5xn0wa6wmg2swky54sp4";
+    version = "4.1.0";
+    name = "Sys-Virt-${version}";
+    src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
+      url = git://libvirt.org/libvirt-perl.git;
+      rev = "v${version}";
+      sha256 = "0m0snv6gqh97nh1c31qvbm4sdzp49vixn7w3r69h6a5r71sn78x4";
     };
     propagatedBuildInputs = [XMLXPath];
     nativeBuildInputs = [ pkgs.pkgconfig ];
@@ -16527,11 +16549,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.59";
+    name = "YAML-LibYAML-0.69";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "0m4zr6gm5rzwvxwd2x7rklr659jl8gsa5bxc5h25904nbvpj9x4x";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/${name}.tar.gz";
+      sha256 = "06msvj3vmjszl5zj1k7g47ll0kkds9gdb5sky0q27lh4zw1vlj33";
     };
+    preBuild = ''
+      sed -i 's/FULLPERL *= "/FULLPERL = /' LibYAML/Makefile
+    '';
   };
 
   WebServiceLinode = buildPerlModule rec {

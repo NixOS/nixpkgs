@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub,
+{ stdenv, fetchFromGitHub, fetchpatch,
   bzip2, nix, perl, perlPackages,
 }:
 
 with stdenv.lib;
 
 let
-  rev = "7e09caa2a7a435aeb2cd5446aa590d6f9ae1699d";
-  sha256 = "0mjzsiknln3isdri9004wwjjjpak5fj8ncizyncf5jv7g4m4q1pj";
+  rev = "e4675e38ab54942e351c7686e40fabec822120b9";
+  sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
 in
 
 stdenv.mkDerivation rec {

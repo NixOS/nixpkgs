@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, buildPackages }:
 
 let
-  buildArmTrustedFirmware = { targetPlatforms
-            , filesToInstall
+  buildArmTrustedFirmware = { filesToInstall
             , installDir ? "$out"
             , platform
             , extraMakeFlags ? []
@@ -11,13 +10,13 @@ let
            stdenv.mkDerivation (rec {
 
     name = "arm-trusted-firmware-${platform}-${version}";
-    version = "1.4";
+    version = "1.5";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
-      rev = "b762fc7481c66b64eb98b6ff694d569e66253973";
-      sha256 = "15m10dfgqkgw6rmzgfg1xzp1si9d5jwzyrcb7cp3y9ckj6mvp3i3";
+      rev = "refs/tags/v${version}";
+      sha256 = "1gm0bn2llzfzz9bfsz11fhwxj5lxvyrq7bc13fjj033nljzxn7k8";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -39,15 +38,14 @@ let
     hardeningDisable = [ "all" ];
     dontStrip = true;
 
-    enableParallelBuilding = true;
+    # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
+    enableParallelBuilding = false;
 
     meta = with stdenv.lib; {
       homepage = https://github.com/ARM-software/arm-trusted-firmware;
       description = "A reference implementation of secure world software for ARMv8-A";
       license = licenses.bsd3;
       maintainers = [ maintainers.lopsided98 ];
-      # TODO: Fix when #34444 is merged
-      # platforms = targetPlatforms;
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 
@@ -64,13 +62,13 @@ in rec {
       sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
     };
     platform = "sun50iw1p1";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
 
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [
       "build/${platform}/release/bl1.bin"
       "build/${platform}/release/bl2.bin"
@@ -81,7 +79,7 @@ in rec {
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3328";
-    targetPlatforms = ["aarch64-linux"];
+    extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
   };
 }

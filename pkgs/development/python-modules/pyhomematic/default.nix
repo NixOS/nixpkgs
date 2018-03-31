@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.39";
+  version = "0.1.40";
 
   disabled = !isPy3k;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "1g181x2mrhxcaswr6vi2m7if97wv4rf2g2pny60334sciga8njfz";
+    sha256 = "0rflfak505cgc69594yc9chz5mblqvc2d7bbbfcddzhlhs5qcsq2";
   };
 
   # Unreliable timing: https://github.com/danielperna84/pyhomematic/issues/126

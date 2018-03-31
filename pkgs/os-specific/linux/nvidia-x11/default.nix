@@ -46,12 +46,13 @@ rec {
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
+    settings32Bit = true;
 
     prePatch = let
       debPatches = fetchurl {
         url = "mirror://debian/pool/non-free/n/nvidia-graphics-drivers-legacy-304xx/"
-            + "nvidia-graphics-drivers-legacy-304xx_304.135-2.debian.tar.xz";
-        sha256 = "0mhji0ssn7075q5a650idigs48kzf11pzj2ca2n07rwxg3vj6pdr";
+            + "nvidia-graphics-drivers-legacy-304xx_304.137-5.debian.tar.xz";
+        sha256 = "0n8512mfcnvklfbg8gv4lzbkm3z6nncwj6ix2b8ngdkmc04f3b6l";
       };
       prefix = "debian/module/debian/patches";
       applyPatches = pnames: if pnames == [] then null else
@@ -63,6 +64,4 @@ rec {
     in applyPatches [ "fix-typos" ];
     patches = maybePatch_drm_legacy;
   };
-
-  legacy_173 = callPackage ./legacy173.nix { };
 }

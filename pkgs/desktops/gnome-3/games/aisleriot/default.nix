@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "aisleriot-${version}";
-  version = "3.22.4";
+  version = "3.22.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/aisleriot/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "fe8dee3ad771ab778d37740a26410778aa5c61e8eb75dd42b9a5e5719c6e34fb";
+    sha256 = "0rl39psr5xi584310pyrgw36ini4wn7yr2m1q5118w3a3v1dkhzh";
   };
 
   passthru = {

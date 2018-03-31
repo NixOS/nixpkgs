@@ -167,15 +167,14 @@ let
   };
 
   luaevent = buildLuaPackage rec {
-    version = "0.4.3";
+    version = "0.4.4";
     name = "luaevent-${version}";
-    disabled = isLua52;
 
     src = fetchFromGitHub {
       owner = "harningt";
       repo = "luaevent";
       rev = "v${version}";
-      sha256 = "1c1n2zqx5rwfwkqaq1jj8gvx1vswvbihj2sy445w28icz1xfhpik";
+      sha256 = "1krzxr0jkv3gmhpckp02byhdd9s5dd0hpyqc8irc8i79dd8x0p53";
     };
 
     preBuild = ''
@@ -696,13 +695,13 @@ let
 
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
-    version = "0.9.1";
+    version = "0.9.2";
 
     src = fetchFromGitHub {
       owner = "pavouk";
       repo = "lgi";
       rev = version;
-      sha256 = "09pbapjhyc3sn0jgx747shqr9286wqfzw02h43p4pk8fv2b766b9";
+      sha256 = "03rbydnj411xpjvwsyvhwy4plm96481d7jax544mvk7apd8sd5jj";
     };
 
     nativeBuildInputs = [ pkgconfig ];

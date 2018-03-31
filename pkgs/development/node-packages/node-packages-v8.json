@@ -12,6 +12,6 @@
 , "semver"
 , "sloc"
 , "vue-cli"
-, "@vue/cli"
+, "swagger"
 , "npm"
 ]

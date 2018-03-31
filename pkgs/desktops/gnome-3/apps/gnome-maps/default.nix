@@ -1,31 +1,31 @@
 { stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
 , gobjectIntrospection, gdk_pixbuf, librsvg, libgweather, autoreconfHook
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup
-, webkitgtk }:
+, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-maps-${version}";
-  version = "3.26.2";
+let
+  pname = "gnome-maps";
+  version = "3.28.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-maps/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "031d5c4a1aa79f1fbaf87f01fb790f7aab1d8dcd5d061cb5daf0fa96eaa18050";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-maps"; attrPath = "gnome3.gnome-maps"; };
+    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    sha256 = "1imcgw67cw1qkfz8m2my0f4qmss11fbqqqi4w7afcfq9p0rplgy0";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gobjectIntrospection wrapGAppsHook
-                  gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
-                  gnome3.geocode-glib libchamplain file libsoup
-                  gdk_pixbuf librsvg libgweather autoreconfHook
-                  gnome3.gsettings-desktop-schemas gnome3.evolution-data-server
-                  gnome3.gnome-online-accounts gnome3.defaultIconTheme
-                  webkitgtk ];
+  nativeBuildInputs = [ intltool wrapGAppsHook file autoreconfHook pkgconfig ];
+  buildInputs = [
+    gobjectIntrospection
+    gtk3 geoclue2 gjs libgee folks gfbgraph
+    geocode-glib libchamplain libsoup
+    gdk_pixbuf librsvg libgweather
+    gnome3.gsettings-desktop-schemas evolution-data-server
+    gnome-online-accounts gnome3.defaultIconTheme
+    webkitgtk
+  ];
 
   # The .service file isn't wrapped with the correct environment
   # so misses GIR files when started. By re-pointing from the gjs
@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
         --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
                   "Exec=$out/bin/gnome-maps"
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Maps;

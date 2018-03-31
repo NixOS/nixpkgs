@@ -5,6 +5,7 @@
 let
   rev = emscriptenVersion;
   appdir = "share/emscripten";
+  binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
 
 stdenv.mkDerivation {
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
     echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
-    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
+    echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
   ''
   +
   ''

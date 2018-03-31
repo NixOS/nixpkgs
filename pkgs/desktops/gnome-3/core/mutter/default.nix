@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
-  version = "3.26.2";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "83309feb05a4635c47713665c0592af8ab6d7f17a36e4bd626d67609b6422fab";
+    sha256 = "1c46sf10mgvwgym4c6hbjm7wa82dvfv8j8dx4zdbc7zj4n0grzsq";
   };
 
   passthru = {
@@ -27,15 +27,6 @@ stdenv.mkDerivation rec {
     "--enable-verbose-mode"
     "--with-libcanberra"
     "--with-xwayland-path=${xwayland}/bin/Xwayland"
-  ];
-
-  patches = [
-    # Pipewire 0.1.8 compatibility
-    (fetchurl {
-      name = "mutter-pipewire-0.1.8-compat.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=367356;
-      sha256 = "10bx5zf11wwhhy686w11ggikk56pbxydpbk9fbd947ir385x92cz";
-    })
   ];
 
   propagatedBuildInputs = [

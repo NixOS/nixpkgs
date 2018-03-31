@@ -1,17 +1,22 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k
-, notmuch, urwid, urwidtrees, twisted, python_magic, configobj, pygpgme, mock, file, gpgme}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, isPy3k
+, notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
+, service-identity
+, gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
+, withManpage ? false }:
+
 
 buildPythonPackage rec {
-  version = "0.5.1";
   pname = "alot";
+  version = "0.7";
+  outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = isPy3k;
 
   src = fetchFromGitHub {
     owner = "pazz";
-    repo = pname;
-    rev = "version";
-    sha256 = "0ipkhc5wllfq78lg47aiq4qih0yjq8ad9xkrbgc88xk8pk9166i8";
+    repo = "alot";
+    rev = "${version}";
+    sha256 = "1y932smng7qx7ybmqw4qh75b0lv9imfs5ak9fd0qhysij8kpmdhi";
   };
 
   postPatch = ''
@@ -20,6 +25,8 @@ buildPythonPackage rec {
                 "themes_dir = string(default='$out/share/themes')"
   '';
 
+  nativeBuildInputs = lib.optional withManpage sphinx;
+
   propagatedBuildInputs = [
     notmuch
     urwid
@@ -27,21 +34,32 @@ buildPythonPackage rec {
     twisted
     python_magic
     configobj
-    pygpgme
-    mock
+    service-identity
     file
+    gpgme
   ];
 
-  postInstall = ''
-    mkdir -p $out/share
+  # some twisted tests need the network (test_env_set... )
+  doCheck = false;
+  postBuild = lib.optionalString withManpage "make -C docs man";
+
+  checkInputs =  [ awk future mock gnupg procps ];
+
+  postInstall = lib.optionalString withManpage ''
+    mkdir -p $out/man
+    cp -r docs/build/man $out/man
+  ''
+  + ''
+    mkdir -p $out/share/applications
     cp -r extra/themes $out/share
-    wrapProgram $out/bin/alot \
-      --prefix LD_LIBRARY_PATH : '${stdenv.lib.makeLibraryPath [ notmuch file gpgme ]}'
+
+    sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pazz/alot;
     description = "Terminal MUA using notmuch mail";
+    license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ garbas ];
   };

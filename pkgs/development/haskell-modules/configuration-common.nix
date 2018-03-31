@@ -32,9 +32,13 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # hackage-security's test suite does not compile with Cabal 2.x.
-  # See https://github.com/haskell/hackage-security/issues/188.
-  hackage-security = dontCheck super.hackage-security;
+  # Use the latest version of the Cabal library.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+
+  # Use the latest version, which supports Cabal 2.2.x. Unfortunately, the test
+  # suite depends on old versions of tasty and QuickCheck.
+  hackage-security = self.hackage-security_0_5_3_0;
+  hackage-security_0_5_3_0 = dontCheck super.hackage-security_0_5_3_0;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
@@ -112,7 +116,13 @@ self: super: {
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  }));
+  })).overrideScope (self: super: {
+    # shell-conduit doesn't build with conduit 1.3
+    # see https://github.com/psibi/shell-conduit/issues/15
+    conduit = self.conduit_1_2_13_1;
+    conduit-extra = self.conduit-extra_1_2_3_2;
+    resourcet = self.resourcet_1_1_11;
+  });
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
@@ -238,6 +248,8 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
+  hnix = doJailbreak super.hnix;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -462,6 +474,11 @@ self: super: {
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
+
+  # Test suite won't compile against tasty-hunit 0.10.x.
+  binary-parser = dontCheck super.binary-parser;
+  bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
+  bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
@@ -909,17 +926,6 @@ self: super: {
   # https://github.com/bos/text-icu/issues/32
   text-icu = dontCheck super.text-icu;
 
-  # https://github.com/strake/lenz.hs/issues/2
-  lenz =
-    let patch = pkgs.fetchpatch
-          { url = https://github.com/strake/lenz.hs/commit/4b9b79104759b9c6b24484455e1eb0d962eb3cff.patch;
-            sha256 = "02i0w9i55a4r251wgjzl5vbk6m2qhilwl7bfp5jwmf22z66sglyn";
-          };
-    in overrideCabal super.lenz (drv:
-      { patches = (drv.patches or []) ++ [ patch ];
-        editedCabalFile = null;
-      });
-
   # https://github.com/haskell/cabal/issues/4969
   haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
   haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
@@ -1000,13 +1006,13 @@ self: super: {
   # https://github.com/fpco/inline-c/issues/72
   inline-c = dontCheck super.inline-c;
 
-  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
-  SHA = appendPatch super.SHA (pkgs.fetchpatch {
-    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
-    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
-  });
+  # https://github.com/GaloisInc/pure-zlib/issues/6
+  pure-zlib = doJailbreak super.pure-zlib;
 
-  # https://github.com/Daniel-Diaz/matrix/issues/55
-  matrix_0_3_6_0 = dontCheck super.matrix_0_3_6_0;
+  # https://github.com/strake/lenz-template.hs/issues/1
+  lenz-template = doJailbreak super.lenz-template;
+
+  # https://github.com/haskell-hvr/resolv/issues/1
+  resolv = dontCheck super.resolv;
 
 }

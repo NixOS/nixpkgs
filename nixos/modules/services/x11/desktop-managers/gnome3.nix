@@ -182,8 +182,7 @@ in {
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (pkgs.gnome3) networkmanager-openvpn networkmanager-vpnc
                               networkmanager-openconnect networkmanager-fortisslvpn
-                              networkmanager-pptp networkmanager-iodine
-                              networkmanager-l2tp; };
+                              networkmanager-iodine networkmanager-l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

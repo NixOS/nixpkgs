@@ -165,6 +165,7 @@ let
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;
+    badPlatforms = platforms;
   };
 
   checkMetaAttr = k: v:
@@ -174,9 +175,9 @@ let
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
   checkPlatform = attrs: let
-      raw = attrs.meta.platforms;
-      uniform = map (x: if builtins.isString x then { system = x; } else { parsed = x; }) raw;
-    in lib.any (pat: lib.matchAttrs pat hostPlatform) uniform;
+      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
+    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
+      ! anyMatch (attrs.meta.badPlatforms or []);
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -191,7 +192,7 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !allowBroken && attrs.meta.platforms or null != null && !(checkPlatform attrs) then
+    else if !allowUnsupportedSystem && !allowBroken && !(checkPlatform attrs) then
       { valid = false; reason = "broken"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
