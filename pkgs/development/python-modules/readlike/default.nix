@@ -10,7 +10,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1ck65ycw51f4xnbh4sg9axgbl81q3azpzvd5f2nvrv2fla9m8r08";
   };
-  name = "${pname}-${version}";
  
   meta = {
     homepage = http://jangler.info/code/readlike;

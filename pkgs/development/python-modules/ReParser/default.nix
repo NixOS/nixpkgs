@@ -14,8 +14,6 @@ buildPythonPackage rec {
     sha256 = "0nniqb69xr0fv7ydlmrr877wyyjb61nlayka7xr08vlxl9caz776";
   };
 
-  name = "${pname}-${version}";
-
   meta = {
     homepage = https://github.com/xmikos/reparser;
     description = "Simple regex-based lexer/parser for inline markup";
