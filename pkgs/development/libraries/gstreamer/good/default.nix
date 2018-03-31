@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, python
-, gst-plugins-base, orc, bzip2
+{ stdenv, fetchurl, meson, ninja, pkgconfig, python
+, gst-plugins-base, orc, bzip2, gettext
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib, libshout
 , cairo, gdk_pixbuf, aalib, libcaca
@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  patches = [ ./fix_pkgconfig_includedir.patch ];
+
+  nativeBuildInputs = [ pkgconfig python meson ninja gettext ];
 
   buildInputs = [
     gst-plugins-base orc bzip2
@@ -43,11 +45,6 @@ stdenv.mkDerivation rec {
   ++ libintlOrEmpty
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
-
-  preFixup = ''
-    mkdir -p "$dev/lib/gstreamer-1.0"
-    mv "$out/lib/gstreamer-1.0/"*.la "$dev/lib/gstreamer-1.0"
-  '';
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }
