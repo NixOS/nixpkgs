@@ -1580,26 +1580,7 @@ in {
 
   codecov = callPackage ../development/python-modules/codecov {};
 
-  cogapp = buildPythonPackage rec {
-    version = "2.3";
-    name    = "cogapp-${version}";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/c/cogapp/${name}.tar.gz";
-      sha256 = "0gzmzbsk54r1qa6wd0yg4zzdxvn2f19ciprr2acldxaknzrpllnn";
-    };
-
-    # there are no tests
-    doCheck = false;
-
-    meta = {
-      description = "A code generator for executing Python snippets in source files";
-      homepage    = http://nedbatchelder.com/code/cog;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  cogapp = callPackage ../development/python-modules/cogapp {};
 
   colorama = callPackage ../development/python-modules/colorama { };
 
