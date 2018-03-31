@@ -1532,23 +1532,7 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
-  cjson = buildPythonPackage rec {
-    name = "python-cjson-${version}";
-    version = "1.1.0";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-cjson/${name}.tar.gz";
-      sha256 = "a01fabb7593728c3d851e1cd9a3efbd18f72650a31a5aa8a74018640da3de8b3";
-    };
-
-    meta = {
-      description = "A very fast JSON encoder/decoder for Python";
-      homepage    = "http://ag-projects.com/";
-      license     = licenses.lgpl2;
-      platforms   = platforms.all;
-    };
-  };
+  cjson = callPackage ../development/python-modules/cjson { };
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
 
