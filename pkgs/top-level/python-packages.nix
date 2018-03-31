@@ -1641,16 +1641,7 @@ in {
 
   consul = callPackage ../development/python-modules/consul { };
 
-  contexter = buildPythonPackage rec {
-    name = "contexter-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/contexter/${name}.tar.gz";
-      sha256 = "0xrnkjya29ya0hkj8y4k9ni2mnr58i6r0xfqlj7wk07v4jfrkc8n";
-    };
-  };
-
+  contexter = callPackage ../development/python-modules/contexter { };
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
