@@ -21,8 +21,12 @@
 , simplejson
 , traits
 , xvfbwrapper
+, pytestcov
+, codecov
 # other dependencies
 , which
+, bash
+, glibcLocales
 }:
 
 assert !isPy3k -> configparser != null;
@@ -39,9 +43,11 @@ buildPythonPackage rec {
   # see https://github.com/nipy/nipype/issues/2240
   patches = [ ./prov-version.patch ];
 
-  doCheck = false;  # fails with TypeError: None is not callable
-  checkInputs = [ which ];
-  buildInputs = [ pytest mock ];  # required in installPhase
+  postPatch = ''
+    substituteInPlace nipype/interfaces/base/tests/test_core.py \
+      --replace "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
+
   propagatedBuildInputs = [
     click
     dateutil
@@ -61,6 +67,12 @@ buildPythonPackage rec {
   ] ++ stdenv.lib.optional (!isPy3k) [
     configparser
   ];
+
+  checkInputs = [ pytest mock pytestcov codecov which glibcLocales ];
+
+  checkPhase = ''
+    LC_ALL="en_US.UTF-8" py.test -v --doctest-modules nipype
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://nipy.org/nipype/;
