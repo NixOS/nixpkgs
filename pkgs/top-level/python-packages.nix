@@ -1123,24 +1123,7 @@ in {
 
   colorlog = callPackage ../development/python-modules/colorlog { };
 
-  colour = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "colour";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/${pname}/${name}.tar.gz";
-      sha256 = "0w1j43l76zw10dvs2kk7jz7kqj2ss7gfgfdxyls27pckwin89gxb";
-    };
-
-    buildInputs = with self; [ d2to1 ];
-
-    meta = {
-      description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
-      homepage = https://github.com/vaab/colour;
-      license = licenses.bsd2;
-    };
-  };
+  colour = callPackage ../development/python-modules/colour {};
 
   constantly = callPackage ../development/python-modules/constantly { };
 
