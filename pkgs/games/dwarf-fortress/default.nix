@@ -22,6 +22,16 @@ let
       };
     };
 
+    hacked = callPackage ./wrapper {
+      enableDFHack = true;
+      enableSoundSense = true;
+      enableStoneSense = true;
+      themes = {
+        "phoebus" = phoebus-theme;
+        "cla" = cla-theme;
+      };
+    };
+
     dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
       texlive = pkgs.texlive.combine {
         inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
