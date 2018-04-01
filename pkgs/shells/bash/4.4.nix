@@ -1,37 +1,33 @@
 { stdenv, buildPackages
-, fetchurl, readline70 ? null, texinfo ? null, binutils ? null, bison, autoconf
+, fetchurl, binutils ? null, bison, autoconf
 , buildPlatform, hostPlatform
-, interactive ? false
+
+# patch for cygwin requires readline support
+, interactive ? stdenv.isCygwin, readline70 ? null
+, withDocs ? false, texinfo ? null
+, self
 }:
 
+with stdenv.lib;
+
 assert interactive -> readline70 != null;
+assert withDocs -> texinfo != null;
 assert hostPlatform.isDarwin -> binutils != null;
 
 let
-  version = "4.4";
-  realName = "bash-${version}";
-  shortName = "bash44";
-  sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
-
-  upstreamPatches =
-    let
-      patch = nr: sha256:
-        fetchurl {
-          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
-          inherit sha256;
-        };
-    in
-      import ./bash-4.4-patches.nix patch;
-
-  inherit (stdenv.lib) optional optionals optionalString;
+  upstreamPatches = import ./bash-4.4-patches.nix (nr: sha256: fetchurl {
+    url = "mirror://gnu/bash/bash-4.4-patches/bash44-${nr}";
+    inherit sha256;
+  });
 in
 
 stdenv.mkDerivation rec {
-  name = "${realName}-p${toString (builtins.length upstreamPatches)}";
+  name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
+  version = "4.4";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/${realName}.tar.gz";
-    inherit sha256;
+    url = "mirror://gnu/bash/bash-${version}.tar.gz";
+    sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
   };
 
   hardeningDisable = [ "format" ];
@@ -50,18 +46,19 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches = upstreamPatches
+    ++ optional hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
     # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
-    ++ optional (hostPlatform.libc == "musl") (fetchurl {
+    ++ optional hostPlatform.isMusl (fetchurl {
       url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
       sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
-  });
-
-  postPatch = optionalString hostPlatform.isCygwin "patch -p2 < ${./cygwin-bash-4.4.11-2.src.patch}";
+    });
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
   ] ++ optionals (hostPlatform != buildPlatform) [
-    "bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing bash_cv_getcwd_malloc=yes"
+    "bash_cv_job_control_missing=nomissing"
+    "bash_cv_sys_named_pipes=nomissing"
+    "bash_cv_getcwd_malloc=yes"
   ] ++ optionals hostPlatform.isCygwin [
     "--without-libintl-prefix --without-libiconv-prefix"
     "--with-installed-readline"
@@ -75,8 +72,8 @@ stdenv.mkDerivation rec {
 
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [bison]
-    ++ optional (texinfo != null) texinfo
+  nativeBuildInputs = [ bison ]
+    ++ optional withDocs texinfo
     ++ optional hostPlatform.isDarwin binutils
     ++ optional (hostPlatform.libc == "musl") autoconf;
 

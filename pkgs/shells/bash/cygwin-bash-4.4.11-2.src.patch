@@ -1,5 +1,5 @@
---- origsrc/bash-4.4/bashline.c	2017-01-23 13:28:06.955247200 -0600
-+++ src/bash-4.4/bashline.c	2017-01-23 13:55:07.992877600 -0600
+--- bashline.c	2017-01-23 13:28:06.955247200 -0600
++++ bashline.c	2017-01-23 13:55:07.992877600 -0600
 @@ -76,6 +76,16 @@
  #  include "pcomplete.h"
  #endif
@@ -104,8 +104,8 @@
    r = file_isdir (fn);
    free (fn);
  
---- origsrc/bash-4.4/builtins/read.def	2017-01-23 13:28:07.017686500 -0600
-+++ src/bash-4.4/builtins/read.def	2017-01-23 13:55:07.992877600 -0600
+--- builtins/read.def	2017-01-23 13:28:07.017686500 -0600
++++ builtins/read.def	2017-01-23 13:55:07.992877600 -0600
 @@ -85,7 +85,6 @@ $END
  
  #ifdef __CYGWIN__
@@ -140,8 +140,8 @@
        if ((skip_ctlesc == 0 && c == CTLESC) || (skip_ctlnul == 0 && c == CTLNUL))
  	{
  	  saw_escape++;
---- origsrc/bash-4.4/builtins/set.def	2016-06-02 19:10:10.000000000 -0500
-+++ src/bash-4.4/builtins/set.def	2017-01-23 13:55:07.992877600 -0600
+--- builtins/set.def	2016-06-02 19:10:10.000000000 -0500
++++ builtins/set.def	2017-01-23 13:55:07.992877600 -0600
 @@ -56,6 +56,13 @@ extern int dont_save_function_defs;
  #if defined (READLINE)
  extern int no_line_editing;
@@ -258,8 +258,8 @@
        free (vname);
      }
  }
---- origsrc/bash-4.4/builtins/shopt.def	2016-05-06 14:00:02.000000000 -0500
-+++ src/bash-4.4/builtins/shopt.def	2017-01-23 13:55:07.992877600 -0600
+--- builtins/shopt.def	2016-05-06 14:00:02.000000000 -0500
++++ builtins/shopt.def	2017-01-23 13:55:07.992877600 -0600
 @@ -92,6 +92,10 @@ extern int glob_asciirange;
  extern int lastpipe_opt;
  extern int inherit_errexit;
@@ -281,8 +281,8 @@
  #if defined (READLINE)
    { "complete_fullquote", &complete_fullquote, (shopt_set_func_t *)NULL},
    { "direxpand", &dircomplete_expand, shopt_set_complete_direxpand },
---- origsrc/bash-4.4/config-top.h	2016-05-19 13:34:02.000000000 -0500
-+++ src/bash-4.4/config-top.h	2017-01-23 13:55:07.992877600 -0600
+--- config-top.h	2016-05-19 13:34:02.000000000 -0500
++++ config-top.h	2017-01-23 13:55:07.992877600 -0600
 @@ -87,10 +87,10 @@
  #define DEFAULT_BASHRC "~/.bashrc"
  
@@ -305,8 +305,8 @@
  
  /* Define if you want the case-capitalizing operators (~[~]) and the
     `capcase' variable attribute (declare -c). */
---- origsrc/bash-4.4/doc/Makefile.in	2015-12-06 18:55:56.000000000 -0600
-+++ src/bash-4.4/doc/Makefile.in	2017-01-23 13:55:07.992877600 -0600
+--- doc/Makefile.in	2015-12-06 18:55:56.000000000 -0600
++++ doc/Makefile.in	2017-01-23 13:55:07.992877600 -0600
 @@ -189,7 +189,7 @@ bashref.html: $(BASHREF_FILES) $(HSUSER)
  	$(MAKEINFO) --html --no-split -I$(TEXINPUTDIR) $(srcdir)/bashref.texi
  
@@ -329,8 +329,8 @@
  	-if test -f bash.info; then d=.; else d=$(srcdir); fi; \
  	  $(INSTALL_DATA) $$d/bash.info $(DESTDIR)$(infodir)/bash.info
  # run install-info if it is present to update the info directory
---- origsrc/bash-4.4/doc/bash.1	2016-08-26 08:45:17.000000000 -0500
-+++ src/bash-4.4/doc/bash.1	2017-01-23 13:55:08.008447700 -0600
+--- doc/bash.1	2016-08-26 08:45:17.000000000 -0500
++++ doc/bash.1	2017-01-23 13:55:08.008447700 -0600
 @@ -9607,6 +9607,10 @@ filenames.
  This variable is set by default, which is the default bash behavior in
  versions through 4.2.
@@ -342,8 +342,8 @@
  .B direxpand
  If set,
  .B bash
---- origsrc/bash-4.4/doc/bashref.texi	2016-09-07 16:13:36.000000000 -0500
-+++ src/bash-4.4/doc/bashref.texi	2017-01-23 13:55:08.008447700 -0600
+--- doc/bashref.texi	2016-09-07 16:13:36.000000000 -0500
++++ doc/bashref.texi	2017-01-23 13:55:08.008447700 -0600
 @@ -5123,6 +5123,10 @@ filenames.
  This variable is set by default, which is the default Bash behavior in
  versions through 4.2.
@@ -355,8 +355,8 @@
  @item direxpand
  If set, Bash
  replaces directory names with the results of word expansion when performing
---- origsrc/bash-4.4/doc/builtins.1	2012-02-21 13:32:05.000000000 -0600
-+++ src/bash-4.4/doc/builtins.1	2017-01-23 13:55:08.008447700 -0600
+--- doc/builtins.1	2012-02-21 13:32:05.000000000 -0600
++++ doc/builtins.1	2017-01-23 13:55:08.008447700 -0600
 @@ -19,6 +19,6 @@ shift, shopt, source, suspend, test, tim
  ulimit, umask, unalias, unset, wait \- bash built-in commands, see \fBbash\fR(1)
  .SH BASH BUILTIN COMMANDS
@@ -365,8 +365,8 @@
 +.so man1/bash.1
  .SH SEE ALSO
  bash(1), sh(1)
---- origsrc/bash-4.4/general.c	2016-08-11 10:16:56.000000000 -0500
-+++ src/bash-4.4/general.c	2017-01-23 13:55:08.008447700 -0600
+--- general.c	2016-08-11 10:16:56.000000000 -0500
++++ general.c	2017-01-23 13:55:08.008447700 -0600
 @@ -48,6 +48,10 @@
  
  #include <tilde/tilde.h>
@@ -388,8 +388,8 @@
        result = savestring (pathbuf);
      }
  #else
---- origsrc/bash-4.4/input.c	2015-09-24 18:49:23.000000000 -0500
-+++ src/bash-4.4/input.c	2017-01-23 13:55:08.008447700 -0600
+--- input.c	2015-09-24 18:49:23.000000000 -0500
++++ input.c	2017-01-23 13:55:08.008447700 -0600
 @@ -44,6 +44,10 @@
  #include "quit.h"
  #include "trap.h"
@@ -421,8 +421,8 @@
  #if !defined (DJGPP)
    return (bufstream_getc (buffers[bash_input.location.buffered_fd]));
  #else
---- origsrc/bash-4.4/lib/sh/pathphys.c	2013-05-28 14:33:58.000000000 -0500
-+++ src/bash-4.4/lib/sh/pathphys.c	2017-01-23 13:55:08.008447700 -0600
+--- lib/sh/pathphys.c	2013-05-28 14:33:58.000000000 -0500
++++ lib/sh/pathphys.c	2017-01-23 13:55:08.008447700 -0600
 @@ -35,6 +35,7 @@
  #include <stdio.h>
  #include <chartypes.h>
@@ -453,8 +453,8 @@
  	      double_slash_path = DOUBLE_SLASH (workpath);
  	      qbase += double_slash_path;
      
---- origsrc/bash-4.4/lib/sh/tmpfile.c	2016-08-11 10:05:58.000000000 -0500
-+++ src/bash-4.4/lib/sh/tmpfile.c	2017-01-23 13:55:08.008447700 -0600
+--- lib/sh/tmpfile.c	2016-08-11 10:05:58.000000000 -0500
++++ lib/sh/tmpfile.c	2017-01-23 13:55:08.008447700 -0600
 @@ -101,7 +101,7 @@ get_tmpdir (flags)
    if (tdir && (file_iswdir (tdir) == 0 || strlen (tdir) > PATH_MAX))
      tdir = 0;
@@ -464,8 +464,8 @@
      tdir = get_sys_tmpdir ();
  
  #if defined (HAVE_PATHCONF) && defined (_PC_NAME_MAX)
---- origsrc/bash-4.4/mksyntax.c	2012-07-29 18:48:38.000000000 -0500
-+++ src/bash-4.4/mksyntax.c	2017-01-23 13:55:08.008447700 -0600
+--- mksyntax.c	2012-07-29 18:48:38.000000000 -0500
++++ mksyntax.c	2017-01-23 13:55:08.008447700 -0600
 @@ -29,13 +29,13 @@
  
  #ifdef HAVE_UNISTD_H
@@ -483,8 +483,8 @@
  #ifndef errno
  extern int errno;
  #endif
---- origsrc/bash-4.4/parse.y	2016-09-11 10:31:46.000000000 -0500
-+++ src/bash-4.4/parse.y	2017-01-23 13:55:08.008447700 -0600
+--- parse.y	2016-09-11 10:31:46.000000000 -0500
++++ parse.y	2017-01-23 13:55:08.008447700 -0600
 @@ -1539,14 +1539,20 @@ yy_string_get ()
    string = bash_input.location.string;
  
@@ -509,8 +509,8 @@
  }
  
  static int
---- origsrc/bash-4.4/subst.c	2017-01-23 13:28:06.955247200 -0600
-+++ src/bash-4.4/subst.c	2017-01-23 13:55:08.008447700 -0600
+--- subst.c	2017-01-23 13:28:06.955247200 -0600
++++ subst.c	2017-01-23 13:55:08.008447700 -0600
 @@ -43,6 +43,7 @@
  #include "posixstat.h"
  #include "bashintl.h"
@@ -562,8 +562,8 @@
    old_pid = last_made_pid;
  #if defined (JOB_CONTROL)
    old_pipeline_pgrp = pipeline_pgrp;
---- origsrc/bash-4.4/support/bashversion.c	2008-09-09 08:31:53.000000000 -0500
-+++ src/bash-4.4/support/bashversion.c	2017-01-23 13:55:08.024037200 -0600
+--- support/bashversion.c	2008-09-09 08:31:53.000000000 -0500
++++ support/bashversion.c	2017-01-23 13:55:08.024037200 -0600
 @@ -26,6 +26,9 @@
  
  #if defined (HAVE_UNISTD_H)
@@ -584,8 +584,8 @@
  extern char *dist_version;
  extern int patch_level;
  
---- origsrc/bash-4.4/support/mkversion.sh	2008-08-13 07:25:57.000000000 -0500
-+++ src/bash-4.4/support/mkversion.sh	2017-01-23 13:55:08.024037200 -0600
+--- support/mkversion.sh	2008-08-13 07:25:57.000000000 -0500
++++ support/mkversion.sh	2017-01-23 13:55:08.024037200 -0600
 @@ -29,7 +29,7 @@ source_dir="."
  while [ $# -gt 0 ]; do
  	case "$1" in
@@ -595,8 +595,8 @@
  	-s)	shift; rel_status=$1; shift ;;
  	-p)	shift; patch_level=$1; shift ;;
  	-d)	shift; dist_version=$1; shift ;;
---- origsrc/bash-4.4/variables.c	2016-06-15 15:05:52.000000000 -0500
-+++ src/bash-4.4/variables.c	2017-01-23 13:55:08.024037200 -0600
+--- variables.c	2016-06-15 15:05:52.000000000 -0500
++++ variables.c	2017-01-23 13:55:08.024037200 -0600
 @@ -5239,6 +5239,7 @@ sv_winsize (name)
  /* Update the value of HOME in the export environment so tilde expansion will
     work on cygwin. */
