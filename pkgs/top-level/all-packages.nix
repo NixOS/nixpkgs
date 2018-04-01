@@ -2758,6 +2758,8 @@ with pkgs;
 
   partimage = callPackage ../tools/backup/partimage { };
 
+  packettracer = callPackage ../applications/misc/packettracer { };
+
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
