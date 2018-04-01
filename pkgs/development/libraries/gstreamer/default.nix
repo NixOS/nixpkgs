@@ -17,8 +17,6 @@ rec {
 
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
 
-  gnonlin = callPackage ./gnonlin { inherit gst-plugins-base; };
-
   gst-editing-services = callPackage ./ges { inherit gst-plugins-base; };
 
   gst-vaapi = callPackage ./vaapi {
