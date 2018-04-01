@@ -82,10 +82,6 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      ess-R-object-popup = super.ess-R-object-popup.override {
-        inherit (self.melpaPackages) ess popup;
-      };
-
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
 
