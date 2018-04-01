@@ -312,7 +312,7 @@ import ./types-simple.nix
       functionArgs = "<λ:{(arg),foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
-      drv = "<δ>";
+      drv = "<δ:test>";
     };
   };
 

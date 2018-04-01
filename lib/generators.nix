@@ -126,7 +126,8 @@ rec {
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
          then v.__pretty v.val
       # TODO: there is probably a better representation?
-      else if v ? type && v.type == "derivation" then "<δ>"
+      else if v ? type && v.type == "derivation" then
+        "<δ:${v.name}>"
       else "{ "
           + libStr.concatStringsSep " " (libAttr.mapAttrsToList
               (name: value:
