@@ -4130,4 +4130,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  srghma = {
+    email = "srghma@gmail.com";
+    github = "srghma";
+    name = "Sergei Khoma";
+  };
 }
