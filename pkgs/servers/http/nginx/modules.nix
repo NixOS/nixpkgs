@@ -5,8 +5,8 @@
     src = let gitsrc = pkgs.fetchFromGitHub {
       owner = "eustas";
       repo = "ngx_brotli";
-      rev = "8cd9dd5fc232d3a01644584921e52dae99034779";
-      sha256 = "0ap1kf51hzb8yvvxjkcj9hnmsmmd5drcay64hd4n7vybf9dqw6g6";
+      rev = "6a1174446f5a866d3d13615dd2824177570f0a69";
+      sha256 = "148xfh6w1wgql2jj922ryiddrs93dyacs903j2hnil67cpia45p6";
     }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/config \

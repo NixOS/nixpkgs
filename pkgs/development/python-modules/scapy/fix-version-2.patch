@@ -1,11 +1,15 @@
---- a/scapy/__init__.py	2017-12-29 18:57:35.315472160 +0100
-+++ b/scapy/__init__.py	2018-02-15 22:36:43.102132489 +0100
-@@ -73,7 +73,7 @@
-                 tag = f.read()
-             return tag
-         except:
--            return 'unknown.version'
-+            return '2.3.3'
+--- a/scapy/__init__.py	2018-03-27 17:38:52.706481269 +0200
++++ b/scapy/__init__.py	2018-03-27 17:39:56.576688890 +0200
+@@ -82,9 +82,10 @@
+             if match:
+                 return "git-archive.dev" + match.group(1)
+             elif sha1:
+-                return "git-archive.dev" + sha1
++                return '2.4.0'
+             else:
+-                return 'unknown.version'
++                return '2.4.0'
++
  
  VERSION = _version()
  

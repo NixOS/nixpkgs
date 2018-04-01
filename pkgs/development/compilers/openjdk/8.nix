@@ -93,7 +93,7 @@ let
       ./004_add-fontconfig.patch
       ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      ./swing-use-gtk.patch
+      ./swing-use-gtk-jdk8.patch
     ];
 
     preConfigure = ''

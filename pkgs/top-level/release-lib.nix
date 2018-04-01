@@ -48,33 +48,56 @@ rec {
   pkgs_x86_64_cygwin = allPackages { system = "x86_64-cygwin"; };
 
 
+  # Given a list of 'meta.platforms'-style patterns, return the sublist of
+  # `supportedSystems` containing systems that matches at least one of the given
+  # patterns.
+  #
+  # This is written in a funny way so that we only elaborate the systems once.
+  supportedMatches = let
+      supportedPlatforms = map
+        (system: lib.systems.elaborate { inherit system; })
+        supportedSystems;
+    in metaPatterns: let
+      anyMatch = platform:
+        lib.any (lib.meta.platformMatch platform) metaPatterns;
+      matchingPlatforms = lib.filter anyMatch supportedPlatforms;
+    in map ({ system, ...}: system) matchingPlatforms;
+
+
   assertTrue = bool:
     if bool
     then pkgs.runCommand "evaluated-to-true" {} "touch $out"
     else pkgs.runCommand "evaluated-to-false" {} "false";
+
 
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
   crossMaintainers = [ maintainers.viric ];
 
+
+  # Generate attributes for all supported systems.
   forAllSystems = genAttrs supportedSystems;
-  forTheseSystems = systems: f:
-    genAttrs (filter (x: elem x supportedSystems) systems) f;
+
+
+  # Generate attributes for all sytems matching at least one of the given
+  # patterns
+  forMatchingSystems = metaPatterns: genAttrs (supportedMatches metaPatterns);
+
 
   /* Build a package on the given set of platforms.  The function `f'
      is called for each supported platform with Nixpkgs for that
      platform as an argument .  We return an attribute set containing
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
-  testOn = systems: f: forTheseSystems systems
+  testOn = metaPatterns: f: forMatchingSystems metaPatterns
     (system: hydraJob' (f (pkgsFor system)));
 
 
   /* Similar to the testOn function, but with an additional
      'crossSystem' parameter for allPackages, defining the target
      platform for cross builds. */
-  testOnCross = crossSystem: systems: f: forTheseSystems systems
+  testOnCross = crossSystem: metaPatterns: f: forMatchingSystems metaPatterns
     (system: hydraJob' (f (allPackages { inherit system crossSystem; })));
 
 
@@ -82,14 +105,14 @@ rec {
      map each leaf node to `testOn [platforms...] (pkgs:
      pkgs.<attrPath>)'. */
   mapTestOn = mapAttrsRecursive
-    (path: systems: testOn systems (pkgs: getAttrFromPath path pkgs));
+    (path: metaPatterns: testOn metaPatterns (pkgs: getAttrFromPath path pkgs));
 
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
    * parameter for allPackages, defining the target platform for cross builds,
    * and triggering the build of the host derivation (cross built - crossDrv). */
   mapTestOnCross = crossSystem: mapAttrsRecursive
-    (path: systems: testOnCross crossSystem systems
+    (path: metaPatterns: testOnCross crossSystem metaPatterns
       (pkgs: addMetaAttrs { maintainers = crossMaintainers; } (getAttrFromPath path pkgs)));
 
 
@@ -98,18 +121,8 @@ rec {
   packagePlatforms = mapAttrs (name: value:
     let res = builtins.tryEval (
       if isDerivation value then
-        # TODO(@Ericson2314) deduplicate with `checkPlatform` in
-        # `pkgs/stdenv/generic/check-meta.nix`.
-        value.meta.hydraPlatforms or (let
-            raw = value.meta.platforms or [ "x86_64-linux" ];
-            toPattern = x: if builtins.isString x
-                           then { system = x; }
-                           else { parsed = x; };
-            uniform = map toPattern raw;
-            pred = hostPlatform:
-              lib.any (pat: lib.matchAttrs pat hostPlatform) uniform;
-            pred' = system: pred (lib.systems.elaborate { inherit system; });
-         in lib.filter pred' supportedSystems)
+        value.meta.hydraPlatforms
+          or (supportedMatches (value.meta.platforms or [ "x86_64-linux" ]))
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else

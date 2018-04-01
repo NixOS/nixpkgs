@@ -162,6 +162,9 @@ rec {
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
 
+  enableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = true; });
+  disableExecutableProfiling = drv: overrideCabal drv (drv: { enableExecutableProfiling = false; });
+
   enableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = true; });
   disableSharedExecutables = drv: overrideCabal drv (drv: { enableSharedExecutables = false; });
 
@@ -230,8 +233,6 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  } // lib.optionalAttrs (pkgs.hostPlatform.isDarwin) {
-    configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
   });
 
   /* Build a source distribution tarball instead of using the source files
@@ -260,7 +261,7 @@ rec {
      the cabal file are actually used.
 
      The first attrset argument can be used to configure the strictness
-     of this check and a list of ignored package names that would otherwise 
+     of this check and a list of ignored package names that would otherwise
      cause false alarms.
    */
   checkUnusedPackages =

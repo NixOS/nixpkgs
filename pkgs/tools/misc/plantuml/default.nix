@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     # "java -jar plantuml.jar -license" says GPLv3 or later
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

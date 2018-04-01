@@ -1,23 +1,38 @@
 { spellChecking ? true
-, stdenv, fetchurl, pkgconfig, gtk2, gtkspell2 ? null
-, perl, pcre, gmime, gettext, intltool, dbus-glib, libnotify
+, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
+, perl, pcre, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
+, makeWrapper, gnupg
+, gnomeSupport ? true, libgnome-keyring3
 }:
 
-assert spellChecking -> gtkspell2 != null;
+assert spellChecking -> gtkspell3 != null;
 
-let version = "0.139"; in
+let version = "0.144"; in
 
 stdenv.mkDerivation {
   name = "pan-${version}";
 
   src = fetchurl {
     url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "1fab2i6ngqp66lhls0g7j8d1c1rk75afiqr3r1x2sn3zk47k4pxz";
+    sha256 = "0l07y75z8jxhbmfv28slw81gjncs7i89x7fq44zif7xhq5vy7yli";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 perl gmime gettext intltool dbus-glib libnotify ]
-    ++ stdenv.lib.optional spellChecking gtkspell2;
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ gtk3 perl gmime2 gettext intltool itstool libxml2 dbus-glib libnotify gnutls ]
+    ++ stdenv.lib.optional spellChecking gtkspell3
+    ++ stdenv.lib.optional gnomeSupport libgnome-keyring3;
+
+  configureFlags = [
+    "--with-dbus"
+    "--with-gtk3"
+    "--with-gnutls"
+    "--enable-libnotify"
+  ] ++ stdenv.lib.optional spellChecking "--with-gtkspell"
+    ++ stdenv.lib.optional gnomeSupport "--enable-gkr";
+
+  postInstall = ''
+    wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin
+  '';
 
   enableParallelBuilding = true;
 

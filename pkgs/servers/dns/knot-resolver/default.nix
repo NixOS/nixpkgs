@@ -12,16 +12,16 @@ inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
 
 unwrapped = stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "0b9caee03d7cd30e1dc8fa0ce5fafade31fc1785314986bbf77cad446522a1b3";
+    sha256 = "1yhlwvpl81klyfb8hhvrhii99q7wvydi3vandmq9j7dvig6z1dvv";
   };
 
   outputs = [ "out" "dev" ];
 
-  configurePhase = ":";
+  configurePhase = "patchShebangs scripts/";
 
   nativeBuildInputs = [ pkgconfig which hexdump ];
 

@@ -81,10 +81,6 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
-      ess-R-object-popup = super.ess-R-object-popup.override {
-        inherit (self.melpaPackages) ess popup;
-      };
-
       # upstream issue: doesn't build
       eterm-256color = markBroken super.eterm-256color;
 

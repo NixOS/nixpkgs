@@ -1,34 +1,36 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32, makeWrapper
-, gnome3, glib, libsoup, libgdata, sqlite, itstool, xdg_utils }:
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32, libgee, wrapGAppsHook, itstool, gobjectIntrospection
+, gnome-online-accounts, evolution-data-server, gnome3, glib, libsoup, libgdata, sqlite, xdg_utils }:
 
 let
-  majorVersion = "0.4";
-in
-stdenv.mkDerivation rec {
-  name = "california-${majorVersion}.0";
+  pname = "california";
+  version = "0.4.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/california/${majorVersion}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1dky2kllv469k8966ilnf4xrr7z35pq8mdvs7kwziy59cdikapxj";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper intltool vala_0_32 glib gtk3 gnome3.libgee
-    libsoup libgdata gnome3.gnome-online-accounts gnome3.evolution-data-server
-    sqlite itstool xdg_utils gnome3.gsettings-desktop-schemas ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/california" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.defaultIconTheme}/share:${gnome3.gnome-themes-standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH:${gnome3.gsettings-desktop-schemas}/share"
-  '';
+  nativeBuildInputs = [ intltool itstool vala_0_32 pkgconfig wrapGAppsHook gobjectIntrospection ];
+  buildInputs = [ glib gtk3 libgee libsoup libgdata gnome-online-accounts evolution-data-server sqlite xdg_utils gnome3.gsettings-desktop-schemas ];
 
   enableParallelBuilding = true;
 
-  # Apply fedoras patch to build with evolution-data-server >3.13
-  patches = [ ./0002-Build-with-evolution-data-server-3.13.90.patch ];
+  patches = [
+    # Apply Fedora patch to build with evolution-data-server > 3.13
+    (fetchurl {
+      url = https://src.fedoraproject.org/rpms/california/raw/c00bf9924d8fa8cb0a9ec06564d1a1b00c9055af/f/0002-Build-with-evolution-data-server-3.13.90.patch;
+      sha256 = "0g9923n329p32gzr1q52ad30f8vyz8vrri4rih0w8klmf02ga4pm";
+    })
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/California;

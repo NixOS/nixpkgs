@@ -10,6 +10,7 @@
 , getent
 , hostPlatform
 , buildPackages
+, withSelinux ? false, libselinux
 }:
 
 assert stdenv.isLinux;
@@ -40,11 +41,14 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
+      libmicrohttpd ] ++
+      stdenv.lib.meta.enableIfAvailable kexectools ++
+      stdenv.lib.meta.enableIfAvailable libseccomp ++
+    [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ];
+    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
 
   #dontAddPrefix = true;
 
@@ -200,18 +204,6 @@ in stdenv.mkDerivation rec {
   ''; # */
 
   enableParallelBuilding = true;
-
-  # The rpath to the shared systemd library is not added by meson. The
-  # functionality was removed by a nixpkgs patch because it would overwrite
-  # the existing rpath.
-  postFixup = ''
-    sharedLib=libsystemd-shared-${version}.so
-    for prog in `find $out -type f -executable`; do
-      (patchelf --print-needed $prog | grep $sharedLib > /dev/null) && (
-        patchelf --set-rpath `patchelf --print-rpath $prog`:"$out/lib/systemd" $prog
-      ) || true
-    done
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

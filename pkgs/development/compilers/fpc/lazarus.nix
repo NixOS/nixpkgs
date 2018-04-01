@@ -8,10 +8,10 @@ stdenv, fetchurl
 let
   s =
   rec {
-    version = "1.8.0";
+    version = "1.8.2";
     versionSuffix = "";
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}${versionSuffix}.tar.gz";
-    sha256 = "0i58ngrr1vjyazirfmz0cgikglc02z1m0gcrsfw9awpi3ax8h21j";
+    sha256 = "06ajdnyba3v3d37mjq1yim96hsmbx1w5n695m5zlhjbydgw62a15";
     name = "lazarus-${version}";
   };
   buildInputs = [

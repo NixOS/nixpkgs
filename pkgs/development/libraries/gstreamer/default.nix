@@ -13,6 +13,8 @@ rec {
 
   gst-plugins-ugly = callPackage ./ugly { inherit gst-plugins-base; };
 
+  gst-rtsp-server = callPackage ./rtsp-server { inherit gst-plugins-base; };
+
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
 
   gnonlin = callPackage ./gnonlin { inherit gst-plugins-base; };

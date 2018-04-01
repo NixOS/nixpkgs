@@ -11,7 +11,7 @@ let
 
     "x86_64-darwin" = {
       system = "mac64";
-      sha256 = "11xa31bxhrq0p7kd3j76dihp73abdbmbwdng5454m1wir6yj25f1";
+      sha256 = "11hs4mmlvxjaanq41h0dljj4sff0lfwk31svvdmzfg91idlikpsz";
     };
   };
 

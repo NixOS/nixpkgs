@@ -4,6 +4,12 @@
  * They all follow a similar interface:
  * generator { config-attrs } data
  *
+ * `config-attrs` are “holes” in the generators
+ * with sensible default implementations that
+ * can be overwritten. The default implementations
+ * are mostly generators themselves, called with
+ * their respective default values; they can be reused.
+ *
  * Tests can be found in ./tests.nix
  * Documentation in the manual, #sec-generators
  */
@@ -20,6 +26,32 @@ in
 
 rec {
 
+  ## -- HELPER FUNCTIONS & DEFAULTS --
+
+  /* Convert a value to a sensible default string representation.
+   * The builtin `toString` function has some strange defaults,
+   * suitable for bash scripts but not much else.
+   */
+  mkValueStringDefault = {}: v: with builtins;
+    let err = t: v: abort
+          ("generators.mkValueStringDefault: " +
+           "${t} not supported: ${toPretty {} v}");
+    in   if isInt      v then toString v
+    # we default to not quoting strings
+    else if isString   v then v
+    # isString returns "1", which is not a good default
+    else if true  ==   v then "true"
+    # here it returns to "", which is even less of a good default
+    else if false ==   v then "false"
+    else if null  ==   v then "null"
+    # if you have lists you probably want to replace this
+    else if isList     v then err "lists" v
+    # same as for lists, might want to replace
+    else if isAttrs    v then err "attrsets" v
+    else if isFunction v then err "functions" v
+    else err "this value is" (toString v);
+
+
   /* Generate a line of key k and value v, separated by
    * character sep. If sep appears in k, it is escaped.
    * Helper for synaxes with different separators.
@@ -30,9 +62,12 @@ rec {
    * > "f\:oo:bar"
    */
   mkKeyValueDefault = {
-    mkValueString ? toString
+    mkValueString ? mkValueStringDefault {}
   }: sep: k: v:
     "${libStr.escape [sep] k}${sep}${mkValueString v}";
+
+
+  ## -- FILE FORMAT GENERATORS --
 
 
   /* Generate a key-value-style config file from an attrset.
@@ -98,6 +133,7 @@ rec {
     */
   toYAML = {}@args: toJSON args;
 
+
   /* Pretty print a value, akin to `builtins.trace`.
     * Should probably be a builtin as well.
     */
@@ -108,8 +144,9 @@ rec {
     allowPrettyValues ? false
   }@args: v: with builtins;
     if      isInt      v then toString v
-    else if isBool     v then (if v == true then "true" else "false")
-    else if isString   v then "\"" + v + "\""
+    else if isString   v then ''"${libStr.escape [''"''] v}"''
+    else if true  ==   v then "true"
+    else if false ==   v then "false"
     else if null ==    v then "null"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -132,6 +169,6 @@ rec {
               (name: value:
                 "${toPretty args name} = ${toPretty args value};") v)
         + " }"
-    else abort "toPretty: should never happen (v = ${v})";
+    else abort "generators.toPretty: should never happen (v = ${v})";
 
 }

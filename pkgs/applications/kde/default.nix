@@ -130,6 +130,7 @@ let
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
+      ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};

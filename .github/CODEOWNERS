@@ -13,6 +13,7 @@
 # Libraries
 /lib                        @edolstra @nbp
 /lib/systems                @nbp @ericson2314
+/lib/generators.nix         @edolstra @nbp @Profpatsch
 
 # Nixpkgs Internals
 /default.nix                          @nbp

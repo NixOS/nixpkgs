@@ -28,7 +28,9 @@ in stdenv.mkDerivation rec {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
-    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
+    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch
+    # TODO: Only relevant for 3.2.2 (opened an upstream issue)
+    ++ stdenv.lib.optional isFuse3 ./fuse3-fix-version.patch;
 
 
   nativeBuildInputs = if isFuse3
@@ -63,11 +65,11 @@ in stdenv.mkDerivation rec {
   postFixup = "cd $out\n" + (if isFuse3 then ''
     mv bin/mount.fuse3 bin/mount.fuse
 
-    install -D -m555 bin/mount.fuse $common/bin/mount.fuse
-    install -D -m444 etc/udev/rules.d/99-fuse.rules $common/etc/udev/rules.d/99-fuse.rules
+    install -D -m444 etc/fuse.conf $common/etc/fuse.conf
+    install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
     install -D -m444 share/man/man8/mount.fuse.8.gz $common/share/man/man8/mount.fuse.8.gz
   '' else ''
-    cp ${fusePackages.fuse_3.common}/bin/mount.fuse bin/mount.fuse
+    cp ${fusePackages.fuse_3.common}/etc/fuse.conf etc/fuse.conf
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
     cp ${fusePackages.fuse_3.common}/share/man/man8/mount.fuse.8.gz share/man/man8/mount.fuse.8.gz
   '');
