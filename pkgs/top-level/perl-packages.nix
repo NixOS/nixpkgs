@@ -13549,6 +13549,7 @@ let self = _self // overrides; _self = with self; {
     };
     setOutputFlags = false;
     buildInputs = [ pkgs.which ];
+    patches = [ ../development/perl-modules/Socket6-sv_undef.patch ];
     meta = {
       description = "IPv6 related part of the C socket.h defines and structure manipulators";
       license = stdenv.lib.licenses.bsd3;
