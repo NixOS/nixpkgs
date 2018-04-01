@@ -1916,26 +1916,7 @@ in {
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
-  pytest-catchlog = buildPythonPackage rec {
-    name = "pytest-catchlog-1.2.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-catchlog/${name}.zip";
-      sha256 = "1w7wxh27sbqwm4jgwrjr9c2gy384aca5jzw9c0wzhl0pmk2mvqab";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = "make test";
-
-    # Requires pytest < 3.1
-    doCheck = false;
-
-    meta = {
-      license = licenses.mit;
-      homepage = https://pypi.python.org/pypi/pytest-catchlog/;
-      description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
-    };
-  };
+  pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
