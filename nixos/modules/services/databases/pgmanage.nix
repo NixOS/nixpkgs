@@ -22,7 +22,7 @@ let
 
       web_root = ${cfg.package}/etc/pgmanage/web_root
 
-      data_root = ${cfg.dataRoot}
+      sql_root = ${cfg.sqlRoot}
 
       ${optionalString (!isNull cfg.tls) ''
       tls_cert = ${cfg.tls.cert}
@@ -130,7 +130,7 @@ let
       '';
     };
 
-    dataRoot = mkOption {
+    sqlRoot = mkOption {
       type = types.str;
       default = "/var/lib/pgmanage";
       description = ''
@@ -210,7 +210,7 @@ in {
         users."${pgmanage}" = {
           name  = pgmanage;
           group = pgmanage;
-          home  = cfg.dataRoot;
+          home  = cfg.sqlRoot;
           createHome = true;
         };
         groups."${pgmanage}" = {
