@@ -1939,7 +1939,7 @@ with pkgs;
   diction = callPackage ../tools/text/diction { };
 
   diffoscope = callPackage ../tools/misc/diffoscope {
-    jdk = jdk7;
+    jdk = jdk8;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -6325,10 +6325,6 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  icedtea7_web = callPackage ../development/compilers/icedtea-web {
-    jdk = jdk7;
-  };
-
   icedtea8_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk8;
   };
@@ -6366,15 +6362,6 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  openjdk7 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin { }
-    else
-      callPackage ../development/compilers/openjdk/7.nix {
-        ant = apacheAnt_1_9;
-        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
-      };
-
   openjdk8 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin/8.nix { }
@@ -6384,27 +6371,13 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk9 =
-    # if stdenv.isDarwin then
-    #   callPackage ../development/compilers/openjdk-darwin/9.nix { }
-    # else
-      callPackage ../development/compilers/openjdk/9.nix {
-        bootjdk = openjdk8;
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
   openjdk10 =
       callPackage ../development/compilers/openjdk/10.nix {
-        bootjdk = openjdk9;
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
         inherit (gnome2) GConf gnome_vfs;
       };
 
   openjdk = openjdk8;
-
-  jdk7 = openjdk7 // { outputs = [ "out" ]; };
-  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk7.jre // { outputs = [ "jre" ]; }));
 
   jdk8 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk8 else openjdk8 // { outputs = [ "out" ]; };
   jre8 = if stdenv.isArm || stdenv.isAarch64 then oraclejre8 else lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
@@ -6419,20 +6392,6 @@ with pkgs;
       lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}-headless"
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
-
-  jdk9 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk9 else openjdk9 // { outputs = [ "out" ]; };
-  jre9 = if stdenv.isArm || stdenv.isAarch64 then oraclejre9 else lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk9.jre // { outputs = [ "jre" ]; }));
-  jre9_headless =
-    if stdenv.isArm || stdenv.isAarch64 then
-      oraclejre9
-    else if stdenv.isDarwin then
-      jre9
-    else
-      lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}-headless"
-        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-          ((openjdk9.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk10 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
   jre10 = if stdenv.isArm || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
@@ -6462,8 +6421,6 @@ with pkgs;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
-  oraclejdk9 = pkgs.oraclejdk9distro "JDK" false;
-
   oraclejdk10 = pkgs.oraclejdk10distro "JDK" false;
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
@@ -6472,11 +6429,7 @@ with pkgs;
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
-  oraclejre9 = lowPrio (pkgs.oraclejdk9distro "JRE" false);
-
   oraclejre10 = lowPrio (pkgs.oraclejdk10distro "JRE" false);
-
-  oracleserverjre9 = lowPrio (pkgs.oraclejdk9distro "ServerJRE" false);
 
   oracleserverjre10 = lowPrio (pkgs.oraclejdk10distro "ServerJRE" false);
 
@@ -6493,10 +6446,6 @@ with pkgs;
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
-
-  oraclejdk9distro = packageType: pluginSupport:
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk9-linux.nix { inherit packageType pluginSupport; });
 
   oraclejdk10distro = packageType: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
@@ -7364,8 +7313,6 @@ with pkgs;
   betaflight = callPackage ../development/stm32/betaflight { };
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
-
-  ecj = callPackage ../development/eclipse/ecj { };
 
   jruby = callPackage ../development/interpreters/jruby { };
 
@@ -8562,12 +8509,6 @@ with pkgs;
   cl = callPackage ../development/libraries/cl { };
 
   classads = callPackage ../development/libraries/classads { };
-
-  classpath = callPackage ../development/libraries/java/classpath {
-    javac = gcj;
-    jvm = gcj;
-    gconf = gnome2.GConf;
-  };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
@@ -17305,10 +17246,6 @@ with pkgs;
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
-
-  processing = callPackage ../applications/graphics/processing {
-    jdk = jdk7;
-  };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
