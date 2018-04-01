@@ -16621,6 +16621,8 @@ with pkgs;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
+  magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
+
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
   magnetophonDSP = {
