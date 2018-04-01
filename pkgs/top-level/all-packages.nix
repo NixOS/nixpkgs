@@ -9821,7 +9821,7 @@ with pkgs;
 
   libgroove = callPackage ../development/libraries/libgroove { };
 
-  libseccomp = callPackage ../development/libraries/libseccomp { };
+  libseccomp = if stdenv.isLinux then callPackage ../development/libraries/libseccomp { } else null;
 
   libsecret = callPackage ../development/libraries/libsecret { };
 

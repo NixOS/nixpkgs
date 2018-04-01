@@ -60,7 +60,7 @@ let
           hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
       ) ''--with-system=${hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional (!libseccomp.meta.available) "--disable-seccomp-sandboxing";
+      ++ lib.optional (!(builtins.isAttrs libseccomp && libseccomp.meta.available)) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 

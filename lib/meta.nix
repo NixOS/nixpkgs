@@ -87,5 +87,5 @@ rec {
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
 
-  enableIfAvailable = p: if p.meta.available or true then [ p ] else [];
+  enableIfAvailable = p: if builtins.isAttrs p && p.meta.available or true then [ p ] else [];
 }
