@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lmdb-${version}";
-  version = "0.9.21";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "LMDB";
     repo = "lmdb";
     rev = "LMDB_${version}";
-    sha256 = "026a6himvg3y4ssnccdbgr3c2pq3w2d47nayn05v512875z4f2w3";
+    sha256 = "0lng4ra2qrbqcf8klvqp68qarha0z4bkqhhv8lhh45agsxyrhfkj";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
