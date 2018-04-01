@@ -11237,6 +11237,7 @@ with pkgs;
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+    qmlbox2d = libsForQt59.callPackage ../development/libraries/qmlbox2d { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
@@ -19000,6 +19001,8 @@ with pkgs;
   gav = callPackage ../games/gav { };
 
   gcs = callPackage ../games/gcs { };
+
+  gcompris = libsForQt59.callPackage ../games/gcompris { };
 
   gemrb = callPackage ../games/gemrb { };
 
