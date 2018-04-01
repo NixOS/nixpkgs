@@ -1932,28 +1932,7 @@ in {
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
-  pytestflakes = buildPythonPackage rec {
-    name = "pytest-flakes-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-flakes/${name}.tar.gz";
-      sha256 = "9c2271654294020e134624020a2144cb93b7334809d70fb3f470cd31ec788a3a";
-    };
-
-    buildInputs = with self; [ pytestpep8 pytest ];
-    propagatedBuildInputs = with self; [ pyflakes pytestcache ];
-
-    checkPhase = ''
-      py.test test_flakes.py
-    '';
-
-    meta = {
-      license = licenses.mit;
-      homepage = "https://pypi.python.org/pypi/pytest-flakes";
-      description = "pytest plugin to check source code with pyflakes";
-    };
-  };
+  pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
