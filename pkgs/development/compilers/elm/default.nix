@@ -74,6 +74,16 @@ let
             elm-format = self.callPackage ./packages/elm-format.nix { };
             elm-interface-to-json = self.callPackage ./packages/elm-interface-to-json.nix {
               aeson-pretty = self.aeson-pretty_0_7_2;
+              either = hlib.overrideCabal self.either (drv :{
+                jailbreak = true;
+                version = "4.4.1.1";
+                sha256 = "1lrlwqqnm6ibfcydlv5qvvssw7bm0c6yypy0rayjzv1znq7wp1xh";
+                libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
+                  self.exceptions self.free self.mmorph self.monad-control
+                  self.MonadRandom self.profunctors self.transformers
+                  self.transformers-base
+                ];
+              });
             };
           };
       in elmPkgs // {
