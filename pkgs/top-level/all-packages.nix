@@ -4976,6 +4976,8 @@ with pkgs;
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
 
+  swfdec = callPackage ../tools/graphics/swfdec {};
+
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
