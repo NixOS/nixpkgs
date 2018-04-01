@@ -167,11 +167,11 @@ everything = stdenv.mkDerivation (common // {
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.4";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1g1sq5knarxkfhpkcczr6qxmq12pid65cdkqnhnfs94av89hbswb";
+    sha256 = "1spfhj4kcdl0d15clrqyfz7iwf4q19d9x3p9p0yms8sb87ihw3r1";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 
