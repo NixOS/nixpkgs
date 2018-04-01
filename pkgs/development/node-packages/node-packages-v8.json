@@ -11,6 +11,7 @@
 , "pnpm"
 , "semver"
 , "sloc"
+, "vue-cli"
 , "swagger"
 , "npm"
 ]
