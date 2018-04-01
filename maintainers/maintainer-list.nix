@@ -2974,6 +2974,11 @@
     github = "redbaron";
     name = "Maxim Ivanov";
   };
+  redfish64 = {
+    email = "engler@gmail.com";
+    github = "redfish64";
+    name = "Tim Engler";
+  };
   redvers = {
     email = "red@infect.me";
     github = "redvers";
