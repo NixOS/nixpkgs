@@ -4,7 +4,10 @@
 
 with python.pkgs;
 
-buildPythonApplication rec {
+#We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
+#This is needed for services.bepasty
+#https://github.com/NixOS/nixpkgs/pull/38300
+buildPythonPackage rec {
   pname = "bepasty";
   version = "0.4.0";
   name = "${pname}-${version}";
