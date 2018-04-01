@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   postFixup = "cd $out\n" + (if isFuse3 then ''
     mv bin/mount.fuse3 bin/mount.fuse
 
-    install -D -m555 etc/fuse.conf $common/etc/fuse.conf
+    install -D -m444 etc/fuse.conf $common/etc/fuse.conf
     install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
     install -D -m444 share/man/man8/mount.fuse.8.gz $common/share/man/man8/mount.fuse.8.gz
   '' else ''
