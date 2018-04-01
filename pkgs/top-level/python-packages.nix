@@ -1940,29 +1940,7 @@ in {
 
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
-  pytestpep8 = buildPythonPackage rec {
-    name = "pytest-pep8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-pep8/pytest-pep8-1.0.6.tar.gz";
-      sha256 = "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ pytestcache pep8 ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Fails
-    doCheck = false;
-
-    meta = {
-      license = licenses.mit;
-      homepage = "https://pypi.python.org/pypi/pytest-pep8";
-      description = "pytest plugin to check PEP8 requirements";
-    };
-  };
+  pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
