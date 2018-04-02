@@ -1,5 +1,5 @@
 diff --git a/pkgconfig/meson.build b/pkgconfig/meson.build
-index edb0586c2..0325cdf4a 100644
+index edb0586c2..7ed46dfce 100644
 --- a/pkgconfig/meson.build
 +++ b/pkgconfig/meson.build
 @@ -2,8 +2,8 @@ pkgconf = configuration_data()
@@ -8,8 +8,8 @@ index edb0586c2..0325cdf4a 100644
  pkgconf.set('exec_prefix', '${prefix}')
 -pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
 -pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
-+pkgconf.set('libdir', get_option('libdir'))
-+pkgconf.set('includedir', get_option('includedir'))
++pkgconf.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))
++pkgconf.set('includedir', join_paths(get_option('prefix'), get_option('includedir')))
  pkgconf.set('GST_API_VERSION', apiversion)
  pkgconf.set('VERSION', gst_version)
  pkgconf.set('LIBM', mathlib.found() ? '-lm' : '')
