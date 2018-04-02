@@ -23,6 +23,28 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dextension_set=all" ];
 
+  preFixup = ''
+    # The meson build doesn't compile the schemas.
+    # Fixup adapted from export-zips.sh in the source.
+
+    extensiondir=$out/share/gnome-shell/extensions
+    schemadir=$out/share/gsettings-schemas/gnome-shell-extensions-3.28.0/glib-2.0/schemas/
+
+    glib-compile-schemas $schemadir
+
+    for f in $extensiondir/*; do
+      name=`basename ''${f%%@*}`
+      uuid=$name@gnome-shell-extensions.gcampax.github.com
+      schema=$schemadir/org.gnome.shell.extensions.$name.gschema.xml
+
+      if [ -f $schema ]; then
+        mkdir $f/schemas
+        ln -s $schema $f/schemas;
+        glib-compile-schemas $f/schemas
+      fi
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeShell/Extensions;
     description = "Modify and extend GNOME Shell functionality and behavior";
