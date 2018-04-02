@@ -17,11 +17,11 @@ with lib;
 buildPythonApplication rec {
   name = "gajim-${version}";
   majorVersion = "1.0";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.1";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${majorVersion}/gajim-${version}.tar.bz2";
-    sha256 = "10da4imfldj04917h54vrmg70a1d832jd8p6386paa5jqzf5qk20";
+    sha256 = "16ynws10vhx6rhjjjmzw6iyb3hc19823xhx4gsb14hrc7l8vzd1c";
   };
 
   postPatch = ''
