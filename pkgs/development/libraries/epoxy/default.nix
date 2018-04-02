@@ -25,10 +25,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
   '';
 
-  # add libGL to rpath because libepoxy dlopen()s libEGL
-  postFixup = optionalString stdenv.isLinux ''
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libGL ]}:$(patchelf --print-rpath $out/lib/libepoxy.so.0.0.0)" $out/lib/libepoxy.so.0.0.0
-  '';
+  patches = [ ./libgl-path.patch ];
+
+  NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
 
   meta = {
     description = "A library for handling OpenGL function pointer management";
