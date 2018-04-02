@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jgmzs0ycl930hmzcvx0ykryik56704yw62w394q1q3xw5kkjn9v";
   };
 
-  configureFlags = [ "--with-uuid=${libuuid}" ];
+  configureFlags = [ "--with-uuid=${libuuid.dev}" ];
   buildInputs = [ icu tzdata.dev ];
   enableParallelBuilding = true;
 
