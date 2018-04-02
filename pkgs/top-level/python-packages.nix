@@ -9567,22 +9567,7 @@ in {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
-  requests-mock = buildPythonPackage rec {
-    name = "requests-mock-${version}";
-    version = "1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/requests-mock/${name}.tar.gz";
-      sha256 = "0jr997dvk6zbmhvbpcv3rajrgag69mcsm1ai3w3rgk2jdh6rg1mx";
-    };
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    buildInputs = with self; [ pbr testtools testrepository mock ];
-    propagatedBuildInputs = with self; [ six requests ];
-  };
+  requests-mock = callPackage ../development/python-modules/requests-mock { };
 
   mox3 = buildPythonPackage rec {
     name = "mox3-${version}";
