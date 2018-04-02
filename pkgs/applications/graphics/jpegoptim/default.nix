@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.4";
+  version = "1.4.5";
   name = "jpegoptim-${version}";
 
   src = fetchurl {
     url = "http://www.kokkonen.net/tjko/src/${name}.tar.gz";
-    sha256 = "1cn1i0g1xjdwa12w0ifbnzgb1vqbpr8ji6h05vxksj79vyi3x849";
+    sha256 = "1mngi8c4mhzwa7i4wqrqq6i80cqj4adbacblfvk6dy573wywyxmi";
   };
 
   # There are no checks, it seems.
