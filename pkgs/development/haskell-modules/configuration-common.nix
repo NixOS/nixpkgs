@@ -35,10 +35,8 @@ self: super: {
   # Use the latest version of the Cabal library.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
 
-  # Use the latest version, which supports Cabal 2.2.x. Unfortunately, the test
-  # suite depends on old versions of tasty and QuickCheck.
-  hackage-security = self.hackage-security_0_5_3_0;
-  hackage-security_0_5_3_0 = dontCheck super.hackage-security_0_5_3_0;
+  # The test suite depends on old versions of tasty and QuickCheck.
+  hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
