@@ -338,7 +338,9 @@ in
       nixPath = mkOption {
         type = types.listOf types.str;
         default =
-          [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+          [
+            "$HOME/.nix-defexpr/channels"
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];
