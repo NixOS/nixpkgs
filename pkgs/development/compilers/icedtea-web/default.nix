@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
 
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "http://icedtea.wildebeest.org/download/source/${name}.tar.gz";
-    sha256 = "004kwrngyxxlrlzby4vzxjr0xcyngcdc9dfgnvi61ffnjr006ryf";
+    sha256 = "1b9z0i9b1dsc2qpfdzbn2fi4vi3idrhm7ig45g1ny40ymvxcwwn9";
   };
 
   nativeBuildInputs = [ pkgconfig bc perl ];
