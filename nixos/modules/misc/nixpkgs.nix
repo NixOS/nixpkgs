@@ -33,7 +33,11 @@ let
   configType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
-    check = traceValIfNot isConfig;
+    check = x:
+      let traceXIfNot = c:
+            if c x then true
+            else lib.traceSeqN 1 x false;
+      in traceXIfNot isConfig;
     merge = args: fold (def: mergeConfig def.value) {};
   };
 
