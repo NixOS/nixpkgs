@@ -17,7 +17,8 @@ rec {
 
   traceIf = p: msg: x: if p then trace msg x else x;
 
-  traceVal = x: trace x x;
+  traceValFn = f: x: trace (f x) x;
+  traceVal = traceValFn id;
   traceXMLVal = x: trace (builtins.toXML x) x;
   traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
@@ -44,9 +45,11 @@ rec {
                (modify depth snip x)) y;
 
   /* `traceSeq`, but the same value is traced and returned */
-  traceValSeq = v: traceVal (builtins.deepSeq v v);
+  traceValSeqFn = f: v: traceVal f (builtins.deepSeq v v);
+  traceValSeq = traceValSeqFn id;
   /* `traceValSeq` but with fixed depth */
-  traceValSeqN = depth: v: traceSeqN depth v v;
+  traceValSeqNFn = f: depth: v: traceSeqN depth (f v) v;
+  traceValSeqN = traceValSeqNFn id;
 
 
   # this can help debug your code as well - designed to not produce thousands of lines
