@@ -74,6 +74,7 @@ self: super: {
   indents = dontCheck super.indents;
 
   # Newer versions require GHC 8.2.
+  haddock-library = self.haddock-library_1_4_3;
   haddock-api = self.haddock-api_2_17_4;
   haddock = self.haddock_2_17_5;
 }
