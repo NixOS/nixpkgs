@@ -93,9 +93,10 @@ rec {
   traceCall2 = n: f: a: b: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
   traceCall3 = n: f: a: b: c: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
-  # FIXME: rename this?
   traceValIfNot = c: x:
-    if c x then true else trace (showVal x) false;
+    trace ( "Warning: `traceValIfNot` is deprecated "
+          + "and will be removed in the next release." )
+    (if c x then true else traceSeq (showVal x) false);
 
   /* Evaluate a set of tests.  A test is an attribute set {expr,
      expected}, denoting an expression and its expected result.  The
