@@ -19,9 +19,6 @@ rec {
 
   traceValFn = f: x: trace (f x) x;
   traceVal = traceValFn id;
-  traceXMLVal = x: trace (builtins.toXML x) x;
-  traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
-
   # strict trace functions (traced structure is fully evaluated and printed)
 
   /* `builtins.trace`, but the value is `builtins.deepSeq`ed first. */
@@ -55,7 +52,12 @@ rec {
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x: trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
-  attrNamesToStr = a: lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a));
+
+  attrNamesToStr = a:
+    trace ( "Warning: `attrNamesToStr` is deprecated "
+          + "and will be removed in the next release." )
+    (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
+
   showVal = with lib;
     trace ( "Warning: `showVal` is deprecated "
           + "and will be removed in the next release, "
@@ -75,6 +77,15 @@ rec {
         { allowPrettyValues = true; }
         (modify x);
     in go);
+
+  traceXMLVal = x:
+    trace ( "Warning: `traceXMLVal` is deprecated "
+          + "and will be removed in the next release." )
+    (trace (builtins.toXML x) x);
+  traceXMLValMarked = str: x:
+    trace ( "Warning: `traceXMLValMarked` is deprecated "
+          + "and will be removed in the next release." )
+    (trace (str + builtins.toXML x) x);
 
   # trace the arguments passed to function and its result
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
