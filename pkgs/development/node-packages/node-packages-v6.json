@@ -73,7 +73,7 @@
 , "npm-check-updates"
 , "nsp"
 , "ocaml-language-server"
-, "parsoid"
+, { "parsoid": "git://github.com/abbradar/parsoid#stable" }
 , "peerflix"
 , "peerflix-server"
 , "phantomjs"
