@@ -963,37 +963,37 @@ self: super: {
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in embeddedfiles/*.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
   hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in *.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v *.info* $out/share/info/
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in *.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v *.info* $out/share/info/
     '';
   });
 
@@ -1014,5 +1014,9 @@ self: super: {
 
   # https://github.com/haskell-hvr/resolv/issues/1
   resolv = dontCheck super.resolv;
+
+  # spdx 0.2.2.0 needs older tasty
+  # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
+  spdx = dontCheck super.spdx;
 
 }

@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "3.6";
+  version = "3.7";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1639sf200n9rxgkvvhlhnrjsb7vn42p1fl1rx562axh3vpr6j4c4";
+    sha256 = "0qc6xkrhf2phaj9fhym19blr4rr2vllvnyljjz909xr4vsynvb41";
   };
 
   nativeBuildInputs = [

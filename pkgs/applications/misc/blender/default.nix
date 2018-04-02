@@ -1,14 +1,17 @@
 { stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, python
+, libtiff, libGLU_combined, openal, opencolorio, openexr, openimageio, openjpeg_1, pythonPackages
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
 , colladaSupport ? true, opencollada
+, enableNumpy ? false, makeWrapper
 }:
 
 with lib;
+
+let python = pythonPackages.python; in
 
 stdenv.mkDerivation rec {
   name = "blender-2.79b";
@@ -24,6 +27,7 @@ stdenv.mkDerivation rec {
       freetype libjpeg libpng libsamplerate libsndfile libtiff libGLU_combined openal
       opencolorio openexr openimageio openjpeg_1 python zlib fftw jemalloc
       (opensubdiv.override { inherit cudaSupport; })
+      makeWrapper
     ]
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
@@ -69,6 +73,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   enableParallelBuilding = true;
+
+  postInstall = optionalString enableNumpy
+    ''
+      wrapProgram $out/bin/blender \
+        --prefix PYTHONPATH : ${pythonPackages.numpy}/lib/python${python.majorVersion}/site-packages
+    '';
 
   meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";

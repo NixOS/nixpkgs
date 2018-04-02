@@ -100,7 +100,10 @@ sub uploadFile {
     sub redirect {
         my ($name, $dest) = @_;
         #print STDERR "linking $name to $dest...\n";
-        $bucket->add_key($name, "", { 'x-amz-website-redirect-location' => "/" . $dest })
+        $bucket->add_key($name, "", {
+	    'x-amz-website-redirect-location' => "/" . $dest,
+	    'x-amz-acl' => "public-read"
+        })
             or die "failed to create redirect from $name to $dest\n";
         $cache{$name} = 1;
     }
@@ -112,7 +115,10 @@ sub uploadFile {
 
     # Upload the file as sha512/<hash-in-base-16>.
     print STDERR "uploading $fn to $mainKey...\n";
-    $bucket->add_key_filename($mainKey, $fn, { 'x-amz-meta-original-name' => $name })
+    $bucket->add_key_filename($mainKey, $fn, {
+	'x-amz-meta-original-name' => $name,
+	'x-amz-acl' => "public-read"
+    })
         or die "failed to upload $fn to $mainKey\n";
     $cache{$mainKey} = 1;
 }

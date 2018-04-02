@@ -21,9 +21,6 @@ in
       "it cannot be cross compiled";
   };
 
-  # Needed by RPi firmware
-  nixpkgs.config.allowUnfree = true;
-
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
 

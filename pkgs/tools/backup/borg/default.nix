@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, python3Packages, acl, lz4, openssl, openssh }:
+{ stdenv, python3Packages, acl, lz4, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
-  name = "borgbackup-${version}";
-  version = "1.1.4";
-  namePrefix = "";
+  pname = "borgbackup";
+  version = "1.1.5";
 
-  src = fetchurl {
-    url = "https://github.com/borgbackup/borg/releases/download/"
-      + "${version}/${name}.tar.gz";
-    sha256 = "1cicqwh85wfp65y00qaq6q4i4jcyy9b66qz5gpl80qc880wab912";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "4356e6c712871f389e3cb1d6382e341ea635f9e5c65de1cd8fcd103d0fb66d3d";
   };
+
+  postPatch = ''
+    # loosen constraint on msgpack version, only 0.5.0 had problems
+    sed -i "s/'msgpack-python.*'/'msgpack-python'/g" setup.py
+  '';
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:

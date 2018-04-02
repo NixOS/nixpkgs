@@ -611,6 +611,8 @@ with pkgs;
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
+  cconv = callPackage ../tools/text/cconv { };
+  
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -1937,7 +1939,7 @@ with pkgs;
   diction = callPackage ../tools/text/diction { };
 
   diffoscope = callPackage ../tools/misc/diffoscope {
-    jdk = jdk7;
+    jdk = jdk8;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -2760,7 +2762,15 @@ with pkgs;
 
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
+  cstore_fdw = callPackage ../servers/sql/postgresql/cstore_fdw {};
+
+  pg_hll = callPackage ../servers/sql/postgresql/pg_hll {};
+
+  pg_cron = callPackage ../servers/sql/postgresql/pg_cron {};
+
   pgtap = callPackage ../servers/sql/postgresql/pgtap {};
+
+  pg_topn = callPackage ../servers/sql/postgresql/topn {};
 
   pigz = callPackage ../tools/compression/pigz { };
 
@@ -4809,6 +4819,10 @@ with pkgs;
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
+  slstatus = callPackage ../applications/misc/slstatus {
+    conf = config.slstatus.conf or null;
+  };
+
   smartmontools = callPackage ../tools/system/smartmontools {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
@@ -4969,6 +4983,8 @@ with pkgs;
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
+
+  swfdec = callPackage ../tools/graphics/swfdec {};
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
@@ -6319,10 +6335,6 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  icedtea7_web = callPackage ../development/compilers/icedtea-web {
-    jdk = jdk7;
-  };
-
   icedtea8_web = callPackage ../development/compilers/icedtea-web {
     jdk = jdk8;
   };
@@ -6360,15 +6372,6 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  openjdk7 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin { }
-    else
-      callPackage ../development/compilers/openjdk/7.nix {
-        ant = apacheAnt_1_9;
-        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
-      };
-
   openjdk8 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin/8.nix { }
@@ -6378,27 +6381,13 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk9 =
-    # if stdenv.isDarwin then
-    #   callPackage ../development/compilers/openjdk-darwin/9.nix { }
-    # else
-      callPackage ../development/compilers/openjdk/9.nix {
-        bootjdk = openjdk8;
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
   openjdk10 =
       callPackage ../development/compilers/openjdk/10.nix {
-        bootjdk = openjdk9;
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
         inherit (gnome2) GConf gnome_vfs;
       };
 
   openjdk = openjdk8;
-
-  jdk7 = openjdk7 // { outputs = [ "out" ]; };
-  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk7.jre // { outputs = [ "jre" ]; }));
 
   jdk8 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk8 else openjdk8 // { outputs = [ "out" ]; };
   jre8 = if stdenv.isArm || stdenv.isAarch64 then oraclejre8 else lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
@@ -6413,20 +6402,6 @@ with pkgs;
       lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}-headless"
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
-
-  jdk9 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk9 else openjdk9 // { outputs = [ "out" ]; };
-  jre9 = if stdenv.isArm || stdenv.isAarch64 then oraclejre9 else lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk9.jre // { outputs = [ "jre" ]; }));
-  jre9_headless =
-    if stdenv.isArm || stdenv.isAarch64 then
-      oraclejre9
-    else if stdenv.isDarwin then
-      jre9
-    else
-      lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}-headless"
-        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-          ((openjdk9.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk10 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
   jre10 = if stdenv.isArm || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
@@ -6456,8 +6431,6 @@ with pkgs;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
-  oraclejdk9 = pkgs.oraclejdk9distro "JDK" false;
-
   oraclejdk10 = pkgs.oraclejdk10distro "JDK" false;
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
@@ -6466,11 +6439,7 @@ with pkgs;
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
-  oraclejre9 = lowPrio (pkgs.oraclejdk9distro "JRE" false);
-
   oraclejre10 = lowPrio (pkgs.oraclejdk10distro "JRE" false);
-
-  oracleserverjre9 = lowPrio (pkgs.oraclejdk9distro "ServerJRE" false);
 
   oracleserverjre10 = lowPrio (pkgs.oraclejdk10distro "ServerJRE" false);
 
@@ -6487,10 +6456,6 @@ with pkgs;
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
-
-  oraclejdk9distro = packageType: pluginSupport:
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk9-linux.nix { inherit packageType pluginSupport; });
 
   oraclejdk10distro = packageType: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
@@ -7359,8 +7324,6 @@ with pkgs;
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
-  ecj = callPackage ../development/eclipse/ecj { };
-
   jruby = callPackage ../development/interpreters/jruby { };
 
   jython = callPackage ../development/interpreters/jython {};
@@ -7834,7 +7797,9 @@ with pkgs;
 
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake3 = gnumake382;
-  gnumake = callPackage ../development/tools/build-managers/gnumake/4.2 { };
+  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
+  gnumake42HEAD = lowPrio (callPackage ../development/tools/build-managers/gnumake/4.2/head.nix { });
+  gnumake = gnumake42;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
@@ -8039,6 +8004,8 @@ with pkgs;
   oprofile = callPackage ../development/tools/profiling/oprofile { };
 
   pahole = callPackage ../development/tools/misc/pahole {};
+
+  panopticon = callPackage ../development/tools/analysis/panopticon {};
 
   pants = callPackage ../development/tools/build-managers/pants {};
 
@@ -8530,12 +8497,6 @@ with pkgs;
   cl = callPackage ../development/libraries/cl { };
 
   classads = callPackage ../development/libraries/classads { };
-
-  classpath = callPackage ../development/libraries/java/classpath {
-    javac = gcj;
-    jvm = gcj;
-    gconf = gnome2.GConf;
-  };
 
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
@@ -9534,6 +9495,8 @@ with pkgs;
   libamqpcpp = callPackage ../development/libraries/libamqpcpp { };
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
+
+  libaom = callPackage ../development/libraries/libaom { };
 
   libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
   libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
@@ -11172,6 +11135,7 @@ with pkgs;
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+    qmlbox2d = libsForQt59.callPackage ../development/libraries/qmlbox2d { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
@@ -12031,8 +11995,11 @@ with pkgs;
   buildGo19Package = callPackage ../development/go-modules/generic {
     go = go_1_9;
   };
+  buildGo110Package = callPackage ../development/go-modules/generic {
+    go = go_1_10;
+  };
 
-  buildGoPackage = buildGo19Package;
+  buildGoPackage = buildGo110Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -13126,6 +13093,8 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  nmon = callPackage ../os-specific/linux/nmon { };
+
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
     inherit platform;
@@ -13308,6 +13277,21 @@ with pkgs;
   };
 
   linux_4_15 = callPackage ../os-specific/linux/kernel/linux-4.15.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        # kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+  linux_4_16 = callPackage ../os-specific/linux/kernel/linux-4.16.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
@@ -13515,7 +13499,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_15;
+  linuxPackages_latest = linuxPackages_4_16;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -13526,6 +13510,7 @@ with pkgs;
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_15);
+  linuxPackages_4_16 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_16);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -13806,6 +13791,7 @@ with pkgs;
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
@@ -14839,7 +14825,7 @@ with pkgs;
 
   blender = callPackage  ../applications/misc/blender {
     cudaSupport = config.cudaSupport or false;
-    python = python35;
+    pythonPackages = python35Packages;
     stdenv = overrideCC stdenv gcc6;
   };
 
@@ -15172,9 +15158,6 @@ with pkgs;
   dvdstyler = callPackage ../applications/video/dvdstyler {
     inherit (gnome2) libgnomeui;
   };
-
-  dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
-  dwb = wrapFirefox dwb-unwrapped { desktopName = "dwb"; };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
@@ -15585,6 +15568,8 @@ with pkgs;
   gpicview = callPackage ../applications/graphics/gpicview {
     gtk2 = gtk2-x11;
   };
+
+  gpx = callPackage ../applications/misc/gpx { };
 
   gqrx = qt5.callPackage ../applications/misc/gqrx { };
 
@@ -16545,6 +16530,8 @@ with pkgs;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
+  magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
+
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
   magnetophonDSP = {
@@ -16657,7 +16644,9 @@ with pkgs;
     boost = boost15x;
   };
 
-  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui { };
+  monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
+    boost = boost15x;
+  };
 
   xmr-stak = callPackage ../applications/misc/xmr-stak {
     hwloc = hwloc-nox;
@@ -17224,10 +17213,6 @@ with pkgs;
 
   qiv = callPackage ../applications/graphics/qiv { };
 
-  processing = callPackage ../applications/graphics/processing {
-    jdk = jdk7;
-  };
-
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
@@ -17672,6 +17657,8 @@ with pkgs;
 
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
+  curaByDagoma = callPackage ../applications/misc/curabydagoma { };
+
   peru = callPackage ../applications/version-management/peru {};
 
   pmidi = callPackage ../applications/audio/pmidi { };
@@ -17954,6 +17941,8 @@ with pkgs;
   toot = callPackage ../applications/misc/toot { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
+
+  toxiproxy = callPackage ../development/tools/toxiproxy { };
 
   tqsl = callPackage ../applications/misc/tqsl { };
 
@@ -18921,6 +18910,8 @@ with pkgs;
   gav = callPackage ../games/gav { };
 
   gcs = callPackage ../games/gcs { };
+
+  gcompris = libsForQt59.callPackage ../games/gcompris { };
 
   gemrb = callPackage ../games/gemrb { };
 
@@ -19940,6 +19931,8 @@ with pkgs;
   veriT = callPackage ../applications/science/logic/verit {};
 
   why3 = callPackage ../applications/science/logic/why3 {};
+
+  workcraft = callPackage ../applications/science/logic/workcraft {};
 
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };

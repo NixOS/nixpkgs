@@ -596,6 +596,11 @@
     github = "bjornfor";
     name = "Bjørn Forsman";
   };
+  bkchr = {
+    email = "nixos@kchr.de";
+    github = "bkchr";
+    name = "Bastian Köcher";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
@@ -1996,6 +2001,11 @@
     github = "leenaars";
     name = "Michiel Leenaars";
   };
+  leo60228 = {
+    email = "iakornfeld@gmail.com";
+    github = "leo60228";
+    name = "leo60228";
+  };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";
@@ -2964,6 +2974,11 @@
     github = "redbaron";
     name = "Maxim Ivanov";
   };
+  redfish64 = {
+    email = "engler@gmail.com";
+    github = "redfish64";
+    name = "Tim Engler";
+  };
   redvers = {
     email = "red@infect.me";
     github = "redvers";
@@ -3405,6 +3420,11 @@
     email = "suvash+nixpkgs@gmail.com";
     github = "suvash";
     name = "Suvash Thapaliya";
+  };
+  sveitser = {
+    email = "sveitser@gmail.com";
+    github = "sveitser";
+    name = "Mathis Antony";
   };
   svsdep = {
     email = "svsdep@gmail.com";
