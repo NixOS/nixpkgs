@@ -2968,6 +2968,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-ly = callPackage ../development/python-modules/python-ly {};
+
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
     version = "0.5.0";
@@ -4913,29 +4915,7 @@ in {
 
   };
 
-  imbalanced-learn = buildPythonPackage rec {
-    name = "imbalanced-learn-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/imbalanced-learn/${name}.tar.gz";
-      sha256 = "0j76m0rrsvyqj9bimky9m7b609y5v6crf9apigww3xvcnchhj901";
-    };
-
-    preConfigure = ''
-      export HOME=$PWD
-    '';
-
-    propagatedBuildInputs = with self; [ scikitlearn ];
-    buildInputs = with self; [ nose pytest pandas ];
-
-    meta = {
-      description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
-      homepage = https://github.com/scikit-learn-contrib/imbalanced-learn;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
@@ -5734,6 +5714,11 @@ in {
       maintainers = with maintainers; [ sepi ];
       platforms = platforms.all;
     };
+  };
+
+  poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
+    inherit (pkgs.qt5) qtbase;
+    inherit (pkgs.libsForQt5) poppler;
   };
 
   poyo = buildPythonPackage rec {
@@ -9896,30 +9881,7 @@ in {
 
   };
 
-
-  mrbob = buildPythonPackage rec {
-    name = "mrbob-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mr.bob/mr.bob-${version}.tar.gz";
-      sha256 = "6737eaf98aaeae85e07ebef844ee5156df2f06a8b28d7c3dcb056f811c588121";
-    };
-
-    buildInputs = [ pkgs.glibcLocales self.mock ];
-
-    disabled = isPy3k;
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ argparse jinja2 six ] ++
-                            (optionals isPy26 [ importlib ordereddict ]);
-
-    meta = {
-      homepage = https://github.com/domenkozar/mr.bob.git;
-      description = "A tool to generate code skeletons from templates";
-    };
-  };
+  mrbob = callPackage ../development/python-modules/mrbob {};
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 

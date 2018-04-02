@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.4";
+  version = "0.6.5";
   name = "nix-bash-completions-${version}";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
     rev = "v${version}";
-    sha256 = "1kdysrfc8dx24q438wj3aisn64g2w5yb6mx91qa385p5hz7b1yz2";
+    sha256 = "10f70jw81vky52s3fidf7vzl725fihiypsw39825wnkpynayhmrg";
   };
 
   # To enable lazy loading via. bash-completion we need a symlink to the script
