@@ -47,10 +47,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib $out/bin
     cp -d loader/libvulkan.so* $out/lib
     cp demos/vulkaninfo $out/bin
-    mkdir -p $out/lib $out/share/vulkan/explicit_layer.d
+    mkdir -p $out/etc/vulkan/explicit_layer.d
+    ln -s $out/etc $out/share
     cp -L layers/*.so $out/lib/
-    cp -L layers/*.json $out/share/vulkan/explicit_layer.d/
-    sed -i "s:\\./lib:$out/lib/lib:g" "$out/share/vulkan/"*/*.json
+    cp -L layers/*.json $out/etc/vulkan/explicit_layer.d/
+    sed -i "s:\\./lib:$out/lib/lib:g" "$out/etc/vulkan/"*/*.json
     mkdir -p $dev/include
     cp -rv ../include $dev/
     mkdir -p $demos/share/vulkan-demos
