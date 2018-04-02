@@ -102,10 +102,6 @@ rec {
   # usage: { testX = allTrue [ true ]; }
   testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
 
-  strict = v:
-    trace "Warning: strict is deprecated and will be removed in the next release"
-      (builtins.seq v v);
-
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3
   # this forces deep evaluation of all arguments and the result!
@@ -119,10 +115,10 @@ rec {
       in (str: expr:
           if isFunction expr then
             (arg:
-              traceCallXml (builtins.add 1 nr) "${str}\n arg ${builtins.toString nr} is \n ${builtins.toXML (strict arg)}" (expr arg)
+              traceCallXml (builtins.add 1 nr) "${str}\n arg ${builtins.toString nr} is \n ${builtins.toXML (builtins.seq arg arg)}" (expr arg)
             )
           else
-            let r = strict expr;
+            let r = builtins.seq expr expr;
             in trace "${str}\n result:\n${builtins.toXML r}" r
       );
 }
