@@ -2762,6 +2762,8 @@ with pkgs;
 
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
+  pg_cron = callPackage ../servers/sql/postgresql/pg_cron {};
+
   pgtap = callPackage ../servers/sql/postgresql/pgtap {};
 
   pigz = callPackage ../tools/compression/pigz { };
