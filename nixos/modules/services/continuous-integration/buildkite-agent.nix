@@ -17,7 +17,7 @@ let
 
   hooksDir = let
     mkHookEntry = name: value: ''
-      cat > $out/${name} <<EOF
+      cat > $out/${name} <<'EOF'
       #! ${pkgs.stdenv.shell}
       set -e
       ${value}
