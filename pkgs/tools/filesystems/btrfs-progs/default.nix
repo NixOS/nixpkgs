@@ -2,14 +2,14 @@
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd
 }:
 
-let version = "4.14.1"; in
+let version = "4.15.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1palnddw3d50kyflwk1j4xapbc6jniid6j5i9dsr8l8a7nkv7ich";
+    sha256 = "15izak6jg6pqr6ha9447cdrdj9k6kfiarvwlrj53cpvrsv02l437";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
-  patchPhase = "sed -i s/-O1/-O2/ configure";
+  prePatch = "sed -i s/-O1/-O2/ configure";
+
+  patches = [ ./e2fsprogs.patch ];
 
   postInstall = ''
     install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs

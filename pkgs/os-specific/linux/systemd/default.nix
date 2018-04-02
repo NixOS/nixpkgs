@@ -17,16 +17,14 @@ let
   pythonLxmlEnv = python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "238";
+  version = "237";
   name = "systemd-${version}";
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "3a439bcdb5706dbb44215ef4e70f07b09aaac040";
-    sha256 = "0qkk5891068pkxmxqvm07bwl597i8lfp89c23yxp11m21cjq0f4b";
+    rev = "98067cc806ae0d2759cdd2334f230cd8548e5317";
+    sha256 = "077svfs2xy3g30s62q69wcv5pb9vfhzh8i7lhfri73vvhwbpzd5q";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -169,6 +167,13 @@ in stdenv.mkDerivation rec {
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
+
+    # Install SysV compatibility commands.
+    mkdir -p $out/sbin
+    ln -s $out/lib/systemd/systemd $out/sbin/telinit
+    for i in init halt poweroff runlevel reboot shutdown; do
+      ln -s $out/bin/systemctl $out/sbin/$i
+    done
 
     # Fix reference to /bin/false in the D-Bus services.
     for i in $out/share/dbus-1/system-services/*.service; do
