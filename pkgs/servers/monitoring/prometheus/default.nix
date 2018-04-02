@@ -17,7 +17,7 @@ let
           inherit sha256;
         };
 
-        docheck = true;
+        doCheck = true;
 
         buildFlagsArray = let t = "${goPackagePath}/version"; in ''
           -ldflags=
