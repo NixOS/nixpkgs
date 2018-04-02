@@ -2667,6 +2667,8 @@ with pkgs;
 
   groonga = callPackage ../servers/search/groonga { };
 
+  gron = callPackage ../development/tools/gron { };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
