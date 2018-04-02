@@ -1,36 +1,40 @@
 { stdenv, fetchurl, makeWrapper, emacs, texinfo, tcl, tk, tclx
-, espeakTTS ? true, espeak ? null
+, espeakTTS ? true, espeak-classic ? null
 , outLoudTTS ? false, glibc_multi ? null, alsaLib ? null
 , decTalkTTS ? false}:
 
-assert espeakTTS -> espeak != null;
+assert espeakTTS -> espeak-classic != null;
 
 assert outLoudTTS -> glibc_multi != null;
 assert outLoudTTS -> alsaLib != null;
 assert outLoudTTS -> false; # Could not get it to work
-
 assert decTalkTTS -> false; # Could not get it to work
 
 stdenv.mkDerivation rec {
   name = "emacspeak-${version}";
-  version = "44.0";
+  version = "47.0";
 
   src = fetchurl {
-    url = "https://github.com/tvraman/emacspeak/releases/download/44.0/${name}.tar.bz2";
-    sha256 = "1mbgfcd2hk8xya85cx7zwd4k5zn2lqqqqmqpc35860ljsm58zspq";
+    url = "https://github.com/tvraman/emacspeak/releases/download/${version}/${name}.tar.bz2";
+    sha256 = "0xbcc266x752y68s3g096m161irzvsqym3axzqn8rb276a8x55n7";
   };
 
   tclLibraries = [ tclx tk ];
   tclLibPaths = stdenv.lib.concatStringsSep " "
     (map (p: "${p}/lib/${p.libPrefix}") tclLibraries);
 
-  buildInputs = [ makeWrapper emacs texinfo
-                  espeak glibc_multi alsaLib
-                  tcl ] ++ tclLibraries;
+  buildInputs = [ 
+    makeWrapper
+    emacs
+    texinfo
+    espeak-classic
+    glibc_multi
+    alsaLib
+    tcl
+  ] ++ tclLibraries;
 
   configurePhase = ''
     make config
-
     ${if espeakTTS then "" else
       "sed '/INSTALL.*ESPEAK/d' -i Makefile"}
     ${if outLoudTTS then "" else
@@ -41,7 +45,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make
-
     ${if espeakTTS then
       "(cd servers/linux-espeak;
         make)"
@@ -57,7 +60,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    make prefix=$out SRC=$out/share/emacs/site-lisp/emacspeak install
+    mkdir $out
+    cp -R * $out
 
     ${if espeakTTS then
       "(cd servers/linux-espeak;
@@ -73,7 +77,7 @@ stdenv.mkDerivation rec {
     else ""}
 
     for prog in `grep -rl '^#!/usr/bin/tclsh' $out`; do
-      wrapProgram "$prog" --set TCLLIBPATH '"${tclLibPaths}"'
+      wrapProgram "$prog" --set TCLLIBPATH "${tclLibPaths}"
     done
   '';
 

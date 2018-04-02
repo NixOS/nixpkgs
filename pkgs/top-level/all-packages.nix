@@ -15250,6 +15250,8 @@ with pkgs;
   emacsPackagesNg = emacs25PackagesNg;
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
 
+  emacspeak = callPackage ../applications/editors/emacs-modes/emacspeak { };
+
   emacs25 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
     libXaw = xorg.libXaw;
