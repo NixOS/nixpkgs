@@ -208,10 +208,10 @@ in {
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "3" "";
+    version = rubyVersion "2" "4" "4" "";
     sha256 = {
-      src = "161smb52q19r9lrzy22b3bhnkd0z8wjffm0qsfkml14j5ic7a0zx";
-      git = "0x2lqbqm2rq9j5zh1p72dma56nqvdkfbgzb9wybm4y4hwhiw8c1m";
+      src = "0nmfr2lijik6cykk0zbj11zcapcrvmdvq83k3r6q3k74g4d1qkr5";
+      git = "103cs7hz1v0h84lbrippl87s4lawi20m406rs5dgxl2gr2wyjpy5";
     };
   };
 
