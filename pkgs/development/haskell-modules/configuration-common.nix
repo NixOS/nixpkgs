@@ -1017,4 +1017,10 @@ self: super: {
   # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
   spdx = dontCheck super.spdx;
 
+  # The test suite does not know how to find the 'alex' binary.
+  alex = overrideCabal super.alex (drv: {
+    testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
+    preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
+  });
+
 }
