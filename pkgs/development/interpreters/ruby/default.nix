@@ -94,7 +94,7 @@ let
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (op (isRuby25 && stdenv.isDarwin) Foundation)
+          ++ (op stdenv.isDarwin Foundation)
           ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
 
         enableParallelBuilding = true;
@@ -200,10 +200,10 @@ let
 
 in {
   ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "6" "";
+    version = rubyVersion "2" "3" "7" "";
     sha256 = {
-      src = "07jpa7fw1gyf069m7alf2b0zm53qm08w2ns45mhzmvgrg4r528l3";
-      git = "1bk59i0ygdc5z3zz3k6indfrxd2ix55np6rwvkcdpdw8svm749ds";
+      src = "0zvx5kdp1frjs9n95n7ba7dy0alax33wi3nj8034m3ppvnf39k9m";
+      git = "11wbzw2ywwfnvlkg3qjg0as2pzk5zyk63y2iis42d91lg1l2flrk";
     };
   };
 
