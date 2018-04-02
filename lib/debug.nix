@@ -56,19 +56,25 @@ rec {
   traceShowVal = x: trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
   attrNamesToStr = a: lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a));
-  showVal = x:
-      if isAttrs x then
-          if x ? outPath then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
-          else "x is attr set { ${attrNamesToStr x} }"
-      else if isFunction x then "x is a function"
-      else if x == [] then "x is an empty list"
-      else if isList x then "x is a list, first element is: ${showVal (head x)}"
-      else if x == true then "x is boolean true"
-      else if x == false then "x is boolean false"
-      else if x == null then "x is null"
-      else if isInt x then "x is an integer `${toString x}'"
-      else if isString x then "x is a string `${substring 0 50 x}...'"
-      else "x is probably a path `${substring 0 50 (toString x)}...'";
+  showVal = with lib;
+    trace ( "Warning: `showVal` is deprecated "
+          + "and will be removed in the next release, "
+          + "please use `traceSeqN`" )
+    (let
+      modify = v:
+        let pr = f: { __pretty = f; val = v; };
+        in   if isDerivation v then pr
+          (drv: "<δ:${drv.name}:${concatStringsSep ","
+                                 (attrNames drv)}>")
+        else if [] ==   v then pr (const "[]")
+        else if isList  v then pr (l: "[ ${go (head l)}, … ]")
+        else if isAttrs v then pr
+          (a: "{ ${ concatStringsSep ", " (attrNames a)} }")
+        else v;
+      go = x: generators.toPretty
+        { allowPrettyValues = true; }
+        (modify x);
+    in go);
 
   # trace the arguments passed to function and its result
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
