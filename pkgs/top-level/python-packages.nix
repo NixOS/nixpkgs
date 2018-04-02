@@ -9688,6 +9688,8 @@ in {
     };
   });
 
+  mock-open = callPackage ../development/python-modules/mock-open { };
+
   modestmaps = buildPythonPackage rec {
     name = "ModestMaps-1.4.6";
 
