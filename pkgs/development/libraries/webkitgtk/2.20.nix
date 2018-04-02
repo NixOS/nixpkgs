@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  postConfigure = ''
+    # A stopgap for a non-deterministic build failure when using only one core
+    # Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=183788#c4
+    ninja JavaScriptCoreForwardingHeaders WTFForwardingHeaders
+  '';
+
   cmakeFlags = [
   "-DPORT=GTK"
   "-DUSE_LIBHYPHEN=0"
