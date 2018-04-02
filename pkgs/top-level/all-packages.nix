@@ -2764,6 +2764,8 @@ with pkgs;
 
   cstore_fdw = callPackage ../servers/sql/postgresql/cstore_fdw {};
 
+  pg_hll = callPackage ../servers/sql/postgresql/pg_hll {};
+
   pg_cron = callPackage ../servers/sql/postgresql/pg_cron {};
 
   pgtap = callPackage ../servers/sql/postgresql/pgtap {};
