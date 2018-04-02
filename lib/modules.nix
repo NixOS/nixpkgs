@@ -159,7 +159,7 @@ rec {
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = builtins.listToAttrs (map (name: {
         inherit name;
-        value = addErrorContext (context name)
+        value = builtins.addErrorContext (context name)
           (args.${name} or config._module.args.${name});
       }) requiredArgs);
 
@@ -309,7 +309,7 @@ rec {
           res.mergedValue;
 
     in opt //
-      { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+      { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         inherit (res) isDefined;

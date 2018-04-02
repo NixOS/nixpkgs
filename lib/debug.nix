@@ -11,10 +11,6 @@ in
 
 rec {
 
-  inherit (builtins) addErrorContext;
-
-  addErrorContextToAttrs = lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v);
-
   traceIf = p: msg: x: if p then trace msg x else x;
 
   traceValFn = f: x: trace (f x) x;
@@ -97,6 +93,12 @@ rec {
     trace ( "Warning: `traceValIfNot` is deprecated "
           + "and will be removed in the next release." )
     (if c x then true else traceSeq (showVal x) false);
+
+
+  addErrorContextToAttrs = attrs:
+    trace ( "Warning: `addErrorContextToAttrs` is deprecated "
+          + "and will be removed in the next release." )
+    (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
 
   /* Evaluate a set of tests.  A test is an attribute set {expr,
      expected}, denoting an expression and its expected result.  The
