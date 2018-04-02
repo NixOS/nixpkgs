@@ -15209,9 +15209,6 @@ with pkgs;
     inherit (gnome2) libgnomeui;
   };
 
-  dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
-  dwb = wrapFirefox dwb-unwrapped { desktopName = "dwb"; };
-
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
   };
