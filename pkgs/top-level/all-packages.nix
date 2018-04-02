@@ -2768,6 +2768,8 @@ with pkgs;
 
   pgtap = callPackage ../servers/sql/postgresql/pgtap {};
 
+  pg_topn = callPackage ../servers/sql/postgresql/topn {};
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
