@@ -61,6 +61,8 @@ in
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
 
+    services.upower.enable = config.powerManagement.enable;
   };
+
 
 }
