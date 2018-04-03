@@ -1,28 +1,67 @@
+/* Collection of functions useful for debugging
+   broken nix expressions.
+
+   * `trace`-like functions take two values, print
+     the first to stderr and return the second.
+   * `traceVal`-like functions take one argument
+     which both printed and returned.
+   * `traceSeq`-like functions fully evaluate their
+     traced value before printing (not just to “weak
+     head normal form” like trace does by default).
+   * Functions that end in `-Fn` take an additional
+     function as their first argument, which is applied
+     to the traced value before it is printed.
+*/
 { lib }:
-
 let
-
-inherit (builtins) trace attrNamesToStr isAttrs isList isInt
-        isString isBool head substring attrNames;
-
-inherit (lib) all id mapAttrsFlatten elem isFunction;
-
+  inherit (builtins) trace isAttrs isList isInt
+          head substring attrNames;
+  inherit (lib) id elem isFunction;
 in
 
 rec {
 
-  traceIf = p: msg: x: if p then trace msg x else x;
+  # -- TRACING --
 
+  /* Trace msg, but only if pred is true.
+
+     Example:
+       traceIf true "hello" 3
+       trace: hello
+       => 3
+  */
+  traceIf = pred: msg: x: if pred then trace msg x else x;
+
+  /* Trace the value and also return it.
+
+     Example:
+       traceValFn (v: "mystring ${v}") "foo"
+       trace: mystring foo
+       => "foo"
+  */
   traceValFn = f: x: trace (f x) x;
   traceVal = traceValFn id;
-  # strict trace functions (traced structure is fully evaluated and printed)
 
-  /* `builtins.trace`, but the value is `builtins.deepSeq`ed first. */
+  /* `builtins.trace`, but the value is `builtins.deepSeq`ed first.
+
+     Example:
+       trace { a.b.c = 3; } null
+       trace: { a = <CODE>; }
+       => null
+       traceSeq { a.b.c = 3; } null
+       trace: { a = { b = { c = 3; }; }; }
+       => null
+  */
   traceSeq = x: y: trace (builtins.deepSeq x x) y;
 
-  /* Like `traceSeq`, but only down to depth n.
-   * This is very useful because lots of `traceSeq` usages
-   * lead to an infinite recursion.
+  /* Like `traceSeq`, but only evaluate down to depth n.
+     This is very useful because lots of `traceSeq` usages
+     lead to an infinite recursion.
+
+     Example:
+       traceSeqN 2 { a.b.c = 3; } null
+       trace: { a = { b = {…}; }; }
+       => null
    */
   traceSeqN = depth: x: y: with lib;
     let snip = v: if      isList  v then noQuotes "[…]" v
@@ -37,15 +76,42 @@ rec {
     in trace (generators.toPretty { allowPrettyValues = true; }
                (modify depth snip x)) y;
 
-  /* `traceSeq`, but the same value is traced and returned */
+  /* A combination of `traceVal` and `traceSeq` */
   traceValSeqFn = f: v: traceVal f (builtins.deepSeq v v);
   traceValSeq = traceValSeqFn id;
-  /* `traceValSeq` but with fixed depth */
+
+  /* A combination of `traceVal` and `traceSeqN`. */
   traceValSeqNFn = f: depth: v: traceSeqN depth (f v) v;
   traceValSeqN = traceValSeqNFn id;
 
 
-  # this can help debug your code as well - designed to not produce thousands of lines
+  # -- TESTING --
+
+  /* Evaluate a set of tests.  A test is an attribute set {expr,
+     expected}, denoting an expression and its expected result.  The
+     result is a list of failed tests, each represented as {name,
+     expected, actual}, denoting the attribute name of the failing
+     test and its expected and actual results.  Used for regression
+     testing of the functions in lib; see tests.nix for an example.
+     Only tests having names starting with "test" are run.
+     Add attr { tests = ["testName"]; } to run these test only
+  */
+  runTests = tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
+    let testsToRun = if tests ? tests then tests.tests else [];
+    in if (substring 0 4 name == "test" ||  elem name testsToRun)
+       && ((testsToRun == []) || elem name tests.tests)
+       && (test.expr != test.expected)
+
+      then [ { inherit name; expected = test.expected; result = test.expr; } ]
+      else [] ) tests));
+
+  # create a test assuming that list elements are true
+  # usage: { testX = allTrue [ true ]; }
+  testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
+
+
+  # -- DEPRECATED --
+
   traceShowVal = x: trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
 
@@ -99,28 +165,6 @@ rec {
     trace ( "Warning: `addErrorContextToAttrs` is deprecated "
           + "and will be removed in the next release." )
     (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
-
-  /* Evaluate a set of tests.  A test is an attribute set {expr,
-     expected}, denoting an expression and its expected result.  The
-     result is a list of failed tests, each represented as {name,
-     expected, actual}, denoting the attribute name of the failing
-     test and its expected and actual results.  Used for regression
-     testing of the functions in lib; see tests.nix for an example.
-     Only tests having names starting with "test" are run.
-     Add attr { tests = ["testName"]; } to run these test only
-  */
-  runTests = tests: lib.concatLists (lib.attrValues (lib.mapAttrs (name: test:
-    let testsToRun = if tests ? tests then tests.tests else [];
-    in if (substring 0 4 name == "test" ||  elem name testsToRun)
-       && ((testsToRun == []) || elem name tests.tests)
-       && (test.expr != test.expected)
-
-      then [ { inherit name; expected = test.expected; result = test.expr; } ]
-      else [] ) tests));
-
-  # create a test assuming that list elements are true
-  # usage: { testX = allTrue [ true ]; }
-  testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
 
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3
