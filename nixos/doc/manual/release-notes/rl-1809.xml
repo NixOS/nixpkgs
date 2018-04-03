@@ -58,6 +58,11 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>lib.strict</literal> is removed. Use <literal>builtins.seq</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The <literal>clementine</literal> package points now to the free derivation.
       <literal>clementineFree</literal> is removed now and <literal>clementineUnfree</literal>
       points to the package which is bundled with the unfree <literal>libspotify</literal> package.
@@ -77,6 +82,46 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>lib.attrNamesToStr</literal> has been deprecated. Use
+      more specific concatenation (<literal>lib.concat(Map)StringsSep</literal>)
+      instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.addErrorContextToAttrs</literal> has been deprecated. Use
+      <literal>builtins.addErrorContext</literal> directly.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.showVal</literal> has been deprecated. Use
+      <literal>lib.traceSeqN</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceXMLVal</literal> has been deprecated. Use
+      <literal>lib.traceValFn builtins.toXml</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceXMLValMarked</literal> has been deprecated. Use
+      <literal>lib.traceValFn (x: str + builtins.toXML x)</literal> instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceValIfNot</literal> has been deprecated. Use
+      <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal>
+      instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>lib.traceCallXml</literal> has been deprecated. Please complain
+      if you use the function regularly.
     </para>
   </listitem>
 </itemizedlist>
