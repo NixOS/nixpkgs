@@ -125,7 +125,8 @@ let self = stdenv.mkDerivation {
     "--enable-gles1"
     "--enable-gles2"
     "--enable-glx"
-    "--enable-glx-tls"
+    # https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    (enableFeature (!stdenv.hostPlatform.isMusl) "glx-tls")
     "--enable-gallium-osmesa" # used by wine
     "--enable-llvm"
     "--enable-egl"
