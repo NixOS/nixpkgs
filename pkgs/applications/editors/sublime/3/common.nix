@@ -1,33 +1,37 @@
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip, bash }:
+  gksuSupport ? false, gksu, unzip, zip, bash, build, x32sha256, x64sha256 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
 
 let
-  build = "3143";
+
   libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo pango];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let
+  archSha256 =
+    if stdenv.system == "i686-linux" then
+      x32sha256
+    else
+      x64sha256;
+
+  arch =
+    if stdenv.system == "i686-linux" then
+      "x32"
+    else
+      "x64";
+
   # package with just the binaries
   sublime = stdenv.mkDerivation {
     name = "sublimetext3-${build}-bin";
-
     src =
-      if stdenv.system == "i686-linux" then
-        fetchurl {
-          name = "sublimetext-${build}.tar.bz2";
-          url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x32.tar.bz2";
-          sha256 = "0dgpx4wij2m77f478p746qadavab172166bghxmj7fb61nvw9v5i";
-        }
-      else
-        fetchurl {
-          name = "sublimetext-${build}.tar.bz2";
-          url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x64.tar.bz2";
-          sha256 = "06b554d2cvpxc976rvh89ix3kqc7klnngvk070xrs8wbyb221qcw";
-        };
+      fetchurl {
+        name = "sublimetext-${build}.tar.bz2";
+        url = "https://download.sublimetext.com/sublime_text_3_build_${build}_${arch}.tar.bz2";
+        sha256 = archSha256;
+      };
 
     dontStrip = true;
     dontPatchELF = true;
