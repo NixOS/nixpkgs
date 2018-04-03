@@ -117,7 +117,9 @@ rec {
 
   attrNamesToStr = a:
     trace ( "Warning: `attrNamesToStr` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please use more specific concatenation "
+          + "for your uses (`lib.concat(Map)StringsSep`)." )
     (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
 
   showVal = with lib;
@@ -142,11 +144,13 @@ rec {
 
   traceXMLVal = x:
     trace ( "Warning: `traceXMLVal` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please use `traceValFn builtins.toXML`." )
     (trace (builtins.toXML x) x);
   traceXMLValMarked = str: x:
     trace ( "Warning: `traceXMLValMarked` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please use `traceValFn (x: str + builtins.toXML x)`." )
     (trace (str + builtins.toXML x) x);
 
   # trace the arguments passed to function and its result
@@ -157,13 +161,15 @@ rec {
 
   traceValIfNot = c: x:
     trace ( "Warning: `traceValIfNot` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please use `if/then/else` and `traceValSeq 1`.")
     (if c x then true else traceSeq (showVal x) false);
 
 
   addErrorContextToAttrs = attrs:
     trace ( "Warning: `addErrorContextToAttrs` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please use `builtins.addErrorContext` directly." )
     (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
 
   # example: (traceCallXml "myfun" id 3) will output something like
@@ -173,7 +179,8 @@ rec {
   #       args should be printed in any case
   traceCallXml = a:
     trace ( "Warning: `traceCallXml` is deprecated "
-          + "and will be removed in the next release." )
+          + "and will be removed in the next release. "
+          + "Please complain if you use the function regularly." )
     (if !isInt a then
       traceCallXml 1 "calling ${a}\n"
     else
