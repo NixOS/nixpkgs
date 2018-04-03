@@ -1995,17 +1995,7 @@ in {
     };
   };
 
-
-  cssselect = buildPythonPackage rec {
-    name = "cssselect-${version}";
-    version = "0.9.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cssselect/${name}.tar.gz";
-      sha256 = "10h623qnp6dp1191jri7lvgmnd4yfkl36k9smqklp1qlf3iafd85";
-    };
-    # AttributeError: 'module' object has no attribute 'tests'
-    doCheck = false;
-  };
+  cssselect = callPackage ../development/python-modules/cssselect { };
 
   cssutils = buildPythonPackage (rec {
     name = "cssutils-1.0.1";
