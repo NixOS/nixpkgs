@@ -2049,28 +2049,7 @@ in {
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
-  locket = buildPythonPackage rec {
-    name = "locket-${version}";
-    version = "0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/locket/${name}.tar.gz";
-      sha256 = "1d4z2zngrpqkrfhnd4yhysh66kjn4mblys2l06sh5dix2p0n7vhz";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [  ];
-
-    # weird test requirements (spur.local>=0.3.7,<0.4)
-    doCheck = false;
-
-    meta = {
-      description = "Locket implements a lock that can be used by multiple processes provided they use the same path.";
-      homepage = "https://github.com/mwilliamson/locket.py";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
+  locket = callPackage ../development/python-modules/locket { };
 
   tblib = buildPythonPackage rec {
     name = "tblib-${version}";
