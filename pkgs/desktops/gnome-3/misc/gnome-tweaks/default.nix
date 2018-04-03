@@ -24,6 +24,8 @@ in stdenv.mkDerivation rec {
     libsoup gnome3.gnome-settings-daemon gnome3.nautilus
     gnome3.mutter gnome3.gnome-desktop gobjectIntrospection
     gnome3.nautilus
+    # Makes it possible to select user themes through the `user-theme` extension
+    gnome3.gnome-shell-extensions
   ];
 
   postPatch = ''
