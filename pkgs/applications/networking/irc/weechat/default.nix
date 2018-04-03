@@ -12,13 +12,13 @@
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, weechatEnchantHunspellDicts ? [] # A list of derivations from pkgs.hunspellDicts
-, useEnchant ? (weechatEnchantHunspellDicts != [])
+, enchantHunspellDicts ? [] # A list of derivations from pkgs.hunspellDicts
+, useEnchant ? (enchantHunspellDicts != [])
 , extraBuildInputs ? []
 , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
 
-assert (weechatEnchantHunspellDicts != []) -> useEnchant;
+assert (enchantHunspellDicts != []) -> useEnchant;
 
 let
   inherit (pythonPackages) python pycrypto pync;
@@ -34,7 +34,7 @@ let
 
   enchantHunspellDictEnv = buildEnv{
     name = "weechat-enchant-hunspell-dicts";
-    paths = weechatEnchantHunspellDicts;
+    paths = enchantHunspellDicts;
   };
 
   weechat =
@@ -61,7 +61,7 @@ let
         "-DENABLE_ENCHANT=${if useEnchant then "ON" else "OFF"}"
         "-DASPELL_DICT_DIR=\"${aspell}/lib/aspell\""
       ]
-        ++ optional (weechatEnchantHunspellDicts != []) "-DENCHANT_MYSPELL_DICT_DIR=\"${enchantHunspellDictEnv}/share/hunspell\""
+        ++ optional (enchantHunspellDicts != []) "-DENCHANT_MYSPELL_DICT_DIR=\"${enchantHunspellDictEnv}/share/hunspell\""
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
