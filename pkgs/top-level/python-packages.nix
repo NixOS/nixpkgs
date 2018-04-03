@@ -2077,24 +2077,7 @@ in {
   dateutil = self.python-dateutil;
 
   # Buildbot 0.8.7p1 needs dateutil==1.5
-  dateutil_1_5 = buildPythonPackage (rec {
-    name = "dateutil-1.5";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = https://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
+  dateutil_1_5 = callPackage ../development/python-modules/dateutil/1_5.nix { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
