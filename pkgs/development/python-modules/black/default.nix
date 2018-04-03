@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "black";
   version = "18.4a0";
-  name = "${pname}-${version}";
 
   disabled = pythonOlder "3.6";
 
