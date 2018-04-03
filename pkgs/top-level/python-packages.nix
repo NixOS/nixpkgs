@@ -1950,30 +1950,7 @@ in {
 
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
-  pytest-server-fixtures = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-server-fixtures";
-    version = "1.1.0";
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ setuptools-git pytest-shutil pytest-fixture-config psutil requests ];
-
-    meta = {
-      description = "Extensible server fixures for py.test";
-      homepage    = "https://github.com/manahl/pytest-plugins";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    doCheck = false;
-    # RuntimeError: Unable to find a free server number to start Xvfb
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1gs9qimcn8q6xi9d6i5624l0dziwvn6nj2rda07fg15g1cq66s8l";
-    };
-  };
+  pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-shutil = buildPythonPackage rec {
     name = "pytest-shutil-${version}";
