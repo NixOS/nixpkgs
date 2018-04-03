@@ -2085,22 +2085,7 @@ in {
 
   demjson = callPackage ../development/python-modules/demjson { };
 
-  derpconf = self.buildPythonPackage rec {
-    name = "derpconf-0.4.9";
-
-    propagatedBuildInputs = with self; [ six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/derpconf/${name}.tar.gz";
-      sha256 = "9129419e3a6477fe6366c339d2df8c614bdde82a639f33f2f40d4de9a1ed236a";
-    };
-
-    meta = {
-      description = "derpconf abstracts loading configuration files for your app";
-      homepage = https://github.com/globocom/derpconf;
-      license = licenses.mit;
-    };
-  };
+  derpconf = callPackage ../development/python-modules/derpconf { };
 
   deskcon = self.buildPythonPackage rec {
     name = "deskcon-0.3";
