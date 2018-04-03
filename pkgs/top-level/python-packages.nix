@@ -1964,26 +1964,7 @@ in {
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
-  pytest-subtesthack = buildPythonPackage rec {
-    name = "pytest-subtesthack-${version}";
-    version = "0.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-subtesthack/${name}.tar.gz";
-      sha256 = "15kzcr5pchf3id4ikdvlv752rc0j4d912n589l4rifp8qsj19l1x";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    # no upstream test
-    doCheck = false;
-
-    meta = {
-      description = "Terrible plugin to set up and tear down fixtures within the test function itself";
-      homepage = https://github.com/untitaker/pytest-subtesthack;
-      license = licenses.publicDomain;
-    };
-  };
+  pytest-subtesthack = callPackage ../development/python-modules/pytest-subtesthack { };
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
