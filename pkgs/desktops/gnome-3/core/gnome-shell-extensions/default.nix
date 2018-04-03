@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_52, glib, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_52, glib
+, gnome3, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extensions-${version}";
@@ -15,6 +16,13 @@ stdenv.mkDerivation rec {
       attrPath = "gnome3.gnome-shell-extensions";
     };
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix_gmenu.patch;
+      gmenu_path = "${gnome3.gnome-menus}/lib/girepository-1.0";
+    })
+  ];
 
   doCheck = true;
 
