@@ -2213,24 +2213,7 @@ in {
 
   easydict = callPackage ../development/python-modules/easydict { };
 
-  EasyProcess = buildPythonPackage rec {
-    name = "EasyProcess-0.2.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/EasyProcess/${name}.tar.gz";
-      sha256 = "94e241cadc9a46f55b5c06000df85618849602e7e1865b8de87576b90a22e61f";
-    };
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Easy to use python subprocess interface";
-      homepage = "https://github.com/ponty/EasyProcess";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
