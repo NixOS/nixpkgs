@@ -1997,27 +1997,7 @@ in {
 
   cssselect = callPackage ../development/python-modules/cssselect { };
 
-  cssutils = buildPythonPackage (rec {
-    name = "cssutils-1.0.1";
-
-    src = pkgs.fetchurl {
-      url = mirror://pypi/c/cssutils/cssutils-1.0.1.tar.gz;
-      sha256 = "0qwha9x1wml2qmipbcz03gndnlwhzrjdvw9i09si247a90l8p8fq";
-    };
-
-    buildInputs = with self; [ self.mock ];
-
-    # couple of failing tests
-    doCheck = false;
-
-    meta = {
-      description = "A Python package to parse and build CSS";
-
-      homepage = http://code.google.com/p/cssutils/;
-
-      license = licenses.lgpl3Plus;
-    };
-  });
+  cssutils = callPackage ../development/python-modules/cssutils { };
 
   darcsver = buildPythonPackage (rec {
     name = "darcsver-1.7.4";
