@@ -1794,6 +1794,8 @@ with pkgs;
 
   crackxls = callPackage ../tools/security/crackxls { };
 
+  create-cycle-app = nodePackages_8_x.create-cycle-app;
+
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
   cromfs = callPackage ../tools/archivers/cromfs { };
