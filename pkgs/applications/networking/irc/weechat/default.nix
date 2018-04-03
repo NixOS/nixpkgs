@@ -1,6 +1,7 @@
 { stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls
 , zlib, curl, pkgconfig, libgcrypt
+, enchant
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , writeScriptBin, symlinkJoin # for withPlugins
 , asciidoctor # manpages
@@ -10,6 +11,7 @@
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
+, useEnchant ? false
 , extraBuildInputs ? []
 , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
@@ -43,16 +45,18 @@ let
       cmakeFlags = with stdenv.lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_ENCHANT=${if useEnchant then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls zlib curl pkgconfig
+          ncurses openssl gnutls zlib curl pkgconfig
           libgcrypt makeWrapper cmake asciidoctor
           ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]
+        ++ [(if useEnchant then enchant else aspell)]
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
