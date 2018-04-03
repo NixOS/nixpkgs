@@ -53,26 +53,28 @@ in {
     };
 
     config = mkOption {
-      type = types.str;
-      default = ''
-        [keyboard]
-        meta-key = Logo
+      type = types.attrs;
+      default = {
+        keyboard = {
+          meta-key = "Logo";
+        };
 
-        # Sway/i3 like Keybindings
-        # Maps key combinations with commands to execute
-        # Commands include:
-        # - "exit" to stop the compositor
-        # - "exec" to execute a shell command
-        # - "close" to close the current view
-        # - "next_window" to cycle through windows
-        [bindings]
-        Logo+Shift+e = exit
-        Logo+q = close
-        Logo+m = maximize
-        Alt+Tab = next_window
-        Logo+Return = exec weston-terminal
-        Logo+d = exec rofi -show run
-      '';
+        bindings = {
+          # Sway/i3 like Keybindings
+          # Maps key combinations with commands to execute
+          # Commands include:
+          # - "exit" to stop the compositor
+          # - "exec" to execute a shell command
+          # - "close" to close the current view
+          # - "next_window" to cycle through windows
+          "Logo+Shift+e" = "exit";
+          "Logo+q" = "close";
+          "Logo+m" = "maximize";
+          "Alt+Tab" = "next_window";
+          "Logo+Return" = "exec weston-terminal";
+          "Logo+d" = "exec rofi -show run";
+        };
+      };
       description = ''
         Default configuration for rootston (used when called without any
         parameters).
@@ -91,7 +93,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.etc."rootston.ini".text = cfg.config;
+    environment.etc."rootston.ini".text = lib.generators.toINI {}
+      cfg.config;
     environment.systemPackages = [ rootstonWrapped ] ++ cfg.extraPackages;
 
     hardware.opengl.enable = mkDefault true;
