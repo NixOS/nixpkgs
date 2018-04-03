@@ -1,22 +1,45 @@
 diff --git a/.cargo/config b/.cargo/config
-new file mode 100644
-index 000000000..8dddda426
---- /dev/null
+index 72652ad2f..b21c6aa7b 100644
+--- a/.cargo/config
 +++ b/.cargo/config
-@@ -0,0 +1,94 @@
+@@ -1,3 +1,113 @@
+ [target.x86_64-pc-windows-msvc]
+ # Link the C runtime statically ; https://github.com/paritytech/parity/issues/6643
+ rustflags = ["-Ctarget-feature=+crt-static"]
++
 +[source."https://github.com/alexcrichton/mio-named-pipes"]
 +git = "https://github.com/alexcrichton/mio-named-pipes"
-+branch = "master" 
++branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/js-dist-paritytech/parity-master-1-10-shell.git"]
++git = "https://github.com/js-dist-paritytech/parity-master-1-10-shell.git"
++rev = "bd25b41cd642c6b822d820dded3aa601a29aa079"
++replace-with = "vendored-sources"
++
++[source."https://github.com/js-dist-paritytech/parity-master-1-10-wallet.git"]
++git = "https://github.com/js-dist-paritytech/parity-master-1-10-wallet.git"
++rev = "4b6f112412716cd05123d32eeb7fda448288a6c6"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/nikvolf/parity-tokio-ipc"]
 +git = "https://github.com/nikvolf/parity-tokio-ipc"
-+branch = "master" 
++branch = "master"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/nikvolf/tokio-named-pipes"]
 +git = "https://github.com/nikvolf/tokio-named-pipes"
 +branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/parity-js/dapp-wallet.git"]
++git = "https://github.com/parity-js/dapp-wallet.git"
++rev = "65deb02e7c007a0fd8aab0c089c93e3fd1de6f87"
++replace-with = "vendored-sources"
++
++[source."https://github.com/parity-js/shell.git"]
++git = "https://github.com/parity-js/shell.git"
++rev = "eecaadcb9e421bce31e91680d14a20bbd38f92a2"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/paritytech/bn"]
@@ -34,14 +57,9 @@ index 000000000..8dddda426
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/paritytech/js-precompiled.git"]
-+git = "https://github.com/paritytech/js-precompiled.git"
-+branch = "stable"
-+replace-with = "vendored-sources"
-+
 +[source."https://github.com/paritytech/jsonrpc.git"]
 +git = "https://github.com/paritytech/jsonrpc.git"
-+branch = "parity-1.8"
++branch = "parity-1.10"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/paritytech/libusb-rs"]
@@ -52,11 +70,6 @@ index 000000000..8dddda426
 +[source."https://github.com/paritytech/libusb-sys"]
 +git = "https://github.com/paritytech/libusb-sys"
 +branch = "master"
-+replace-with = "vendored-sources"
-+
-+[source."https://github.com/paritytech/nanomsg.rs.git"]
-+git = "https://github.com/paritytech/nanomsg.rs.git"
-+branch = "parity-1.7"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/paritytech/rust-ctrlc.git"]
@@ -86,6 +99,11 @@ index 000000000..8dddda426
 +
 +[source."https://github.com/paritytech/wasm-utils"]
 +git = "https://github.com/paritytech/wasm-utils"
++branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/paritytech/wasmi"]
++git = "https://github.com/paritytech/wasmi"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
