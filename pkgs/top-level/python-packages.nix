@@ -2175,22 +2175,7 @@ in {
 
   dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
 
-  dogpile_core = buildPythonPackage rec {
-    name = "dogpile.core-0.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dogpile.core/dogpile.core-0.4.1.tar.gz";
-      sha256 = "be652fb11a8eaf66f7e5c94d418d2eaa60a2fe81dae500f3743a863cc9dbed76";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
-      homepage = https://bitbucket.org/zzzeek/dogpile.core;
-      license = licenses.bsd3;
-    };
-  };
+  dogpile_core = callPackage ../development/python-modules/dogpile.core { };
 
   dopy = buildPythonPackage rec {
     version = "2016-01-04";
