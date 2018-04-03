@@ -128,7 +128,9 @@ rec {
   # note: if result doesn't evaluate you'll get no trace at all (FIXME)
   #       args should be printed in any case
   traceCallXml = a:
-    if !isInt a then
+    trace ( "Warning: `traceCallXml` is deprecated "
+          + "and will be removed in the next release." )
+    (if !isInt a then
       traceCallXml 1 "calling ${a}\n"
     else
       let nr = a;
@@ -140,5 +142,5 @@ rec {
           else
             let r = builtins.seq expr expr;
             in trace "${str}\n result:\n${builtins.toXML r}" r
-      );
+      ));
 }
