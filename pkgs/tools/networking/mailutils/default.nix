@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
   hardeningDisable = [ "format" ];
 
   configureFlags = [
