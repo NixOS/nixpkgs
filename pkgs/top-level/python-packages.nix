@@ -2169,20 +2169,7 @@ in {
     };
   };
 
-  docopt = buildPythonPackage rec {
-    name = "docopt-0.6.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docopt/${name}.tar.gz";
-      sha256 = "49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491";
-    };
-
-    meta = {
-      description = "Pythonic argument parser, that will make you smile";
-      homepage = http://docopt.org/;
-      license = licenses.mit;
-    };
-  };
+  docopt = callPackage ../development/python-modules/docopt { };
 
   doctest-ignore-unicode = buildPythonPackage rec {
     name = "doctest-ignore-unicode-${version}";
