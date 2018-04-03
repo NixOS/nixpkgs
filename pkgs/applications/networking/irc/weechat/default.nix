@@ -12,14 +12,12 @@
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, weechatAspellDicts ? [] # A list of derivations from pkgs.aspellDicts
 , weechatEnchantHunspellDicts ? [] # A list of derivations from pkgs.hunspellDicts
 , useEnchant ? (weechatEnchantHunspellDicts != [])
 , extraBuildInputs ? []
 , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
 
-assert (weechatAspellDicts != []) -> !useEnchant;
 assert (weechatEnchantHunspellDicts != []) -> useEnchant;
 
 let
@@ -33,11 +31,6 @@ let
     { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON"; buildInputs = [ python ]; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
-
-  aspellDictEnv = buildEnv{
-    name = "weechat-aspell-dicts";
-    paths = weechatAspellDicts;
-  };
 
   enchantHunspellDictEnv = buildEnv{
     name = "weechat-enchant-hunspell-dicts";
@@ -66,8 +59,8 @@ let
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
         "-DENABLE_ENCHANT=${if useEnchant then "ON" else "OFF"}"
+        "-DASPELL_DICT_DIR=\"${aspell}/lib/aspell\""
       ]
-        ++ optional (weechatAspellDicts != []) "-DASPELL_DICT_DIR=\"${aspellDictEnv}/lib/aspell\""
         ++ optional (weechatEnchantHunspellDicts != []) "-DENCHANT_MYSPELL_DICT_DIR=\"${enchantHunspellDictEnv}/share/hunspell\""
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
