@@ -2136,30 +2136,7 @@ in {
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
-  docker_registry_core = buildPythonPackage rec {
-    name = "docker-registry-core-2.0.3";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-registry-core/${name}.tar.gz";
-      sha256 = "347e804f1f35b28dbe27bf8d7a0b630fca29d684032139bf26e3940572360360";
-    };
-
-    DEPS = "loose";
-
-    doCheck = false;
-    propagatedBuildInputs = with self; [
-      boto redis setuptools simplejson
-    ];
-
-    patchPhase = "> requirements/main.txt";
-
-    meta = {
-      description = "Docker registry core package";
-      homepage = https://github.com/docker/docker-registry;
-      license = licenses.asl20;
-    };
-  };
+  docker_registry_core = callPackage ../development/python-modules/docker-registry-core {};
 
   docker_registry = buildPythonPackage rec {
     name = "docker-registry-0.9.1";
