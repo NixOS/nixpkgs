@@ -2203,25 +2203,7 @@ in {
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
 
-  dropbox = buildPythonPackage rec {
-    name = "dropbox-${version}";
-    version = "8.0.0";
-    doCheck = false; # Set DROPBOX_TOKEN environment variable to a valid token.
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dropbox/${name}.tar.gz";
-      sha256 = "0bixx80zjq0286dwm4zhg8bdhc8pqlrqy4n2jg7i6m6a4gv4gak5";
-    };
-
-    buildInputs = with self; [ pytestrunner ];
-    propagatedBuildInputs = with self; [ requests urllib3 mock setuptools ];
-
-    meta = {
-      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-      homepage = https://www.dropbox.com/developers/core/docs;
-      license = licenses.mit;
-    };
-  };
+  dropbox = callPackage ../development/python-modules/dropbox {};
 
   ds4drv = callPackage ../development/python-modules/ds4drv {
     inherit (pkgs) fetchFromGitHub bluez;
