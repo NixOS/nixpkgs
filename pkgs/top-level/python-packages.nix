@@ -1952,27 +1952,7 @@ in {
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
-  pytest-shutil = buildPythonPackage rec {
-    name = "pytest-shutil-${version}";
-    version = "1.2.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
-      sha256 = "924accaec3f3781416139e580386ab4f849cb8662bc1072405a81d3a5e56bf3d";
-    };
-    buildInputs = with self; [ cmdline pytest ];
-    propagatedBuildInputs = with self; [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
-    meta = {
-      description = "A goodie-bag of unix shell and environment tools for py.test";
-      homepage = https://github.com/manahl/pytest-plugins;
-      maintainers = with maintainers; [ ryansydnor ];
-      platforms   = platforms.all;
-      license = licenses.mit;
-    };
-
-    checkPhase = ''
-      py.test
-    '';
-  };
+  pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
   pytestcov = buildPythonPackage rec {
     name = "pytest-cov-2.4.0";
