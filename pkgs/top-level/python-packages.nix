@@ -2132,22 +2132,7 @@ in {
 
   docker = callPackage ../development/python-modules/docker {};
 
-  dockerpty = buildPythonPackage rec {
-    name = "dockerpty-0.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dockerpty/${name}.tar.gz";
-      sha256 = "1kjn64wx23jmr8dcc6g7bwlmrhfmxr77gh6iphqsl39sayfxdab9";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
-      homepage = https://github.com/d11wtq/dockerpty;
-      license = licenses.asl20;
-    };
-  };
+  dockerpty = callPackage ../development/python-modules/dockerpty {};
 
   docker_pycreds = buildPythonPackage rec {
     name = "docker-pycreds-${version}";
