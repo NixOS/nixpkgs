@@ -2007,26 +2007,7 @@ in {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
-  zict = buildPythonPackage rec {
-
-    name = "zict-${version}";
-    version = "0.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zict/${name}.tar.gz";
-      sha256 = "12h95vbkbar1hc6cr1kpr6zr486grj3mpx4lznvmnai0iy6pbqp4";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ heapdict ];
-
-    meta = {
-      description = "Mutable mapping tools.";
-      homepage = https://github.com/dask/zict;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
+  zict = callPackage ../development/python-modules/zict { };
 
   distributed = buildPythonPackage rec {
 
