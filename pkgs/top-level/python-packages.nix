@@ -2057,25 +2057,7 @@ in {
 
   datashape = callPackage ../development/python-modules/datashape { };
 
-  requests-cache = buildPythonPackage (rec {
-    name = "requests-cache-${version}";
-    version = "0.4.13";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/requests-cache/${name}.tar.gz";
-      sha256 = "18jpyivnq5pjbkymk3i473rihpj2bgikafpha7xvr6w736hiqmpy";
-    };
-
-    buildInputs = with self; [ mock ];
-
-    propagatedBuildInputs = with self; [ requests six urllib3 ];
-
-    meta = {
-      description = "Persistent cache for requests library";
-      homepage = https://pypi.python.org/pypi/requests-cache;
-      license = licenses.bsd3;
-    };
-  });
+  requests-cache = callPackage ../development/python-modules/requests-cache { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
