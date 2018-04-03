@@ -4,7 +4,7 @@
          version="5.0"
          xml:id="sec-release-18.03">
 
-<title>Release 18.03 (“Impala”, 2018/03/??)</title>
+<title>Release 18.03 (“Impala”, 2018/04/04)</title>
 
 <section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -18,6 +18,20 @@
 has the following highlights: </para>
 
 <itemizedlist>
+
+  <listitem>
+    <para>
+      End of support is planned for end of October 2018, handing over to 18.09.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Platform support: x86_64-linux and x86_64-darwin since release time (the latter isn't NixOS, really).
+      Binaries for aarch64-linux are available, but no channel exists yet, as it's waiting for some test fixes, etc.
+    </para>
+  </listitem>
+
   <listitem>
     <para>
       Nix now defaults to 2.0; see its
@@ -27,13 +41,13 @@ has the following highlights: </para>
 
   <listitem>
     <para>
-      Linux kernel defaults to the 4.14 branch (it was 4.9).
+      Core version changes: linux: 4.9 -> 4.14, glibc: 2.25 -> 2.26, gcc: 6 -> 7, systemd: 234 -> 237.
     </para>
   </listitem>
 
   <listitem>
     <para>
-      GCC defaults to 7.x (it was 6.x).
+      Desktop version changes: gnome: 3.24 -> 3.26, (KDE) plasma-desktop: 5.10 -> 5.12.
     </para>
   </listitem>
 
@@ -59,13 +73,7 @@ has the following highlights: </para>
   </listitem>
 
   <listitem>
-    <para>
-      The GNOME version is now 3.26.
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>PHP now defaults to PHP 7.2</para>
+    <para>PHP now defaults to PHP 7.2, updated from 7.1.</para>
   </listitem>
 </itemizedlist>
 
@@ -81,9 +89,66 @@ has the following highlights: </para>
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
-  <listitem>
-    <para></para>
-  </listitem>
+  <listitem><para><literal>./config/krb5/default.nix</literal></para></listitem>
+  <listitem><para><literal>./hardware/digitalbitbox.nix</literal></para></listitem>
+  <listitem><para><literal>./misc/label.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/ccache.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/criu.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/digitalbitbox/default.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/less.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/npm.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/plotinus.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/rootston.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/systemtap.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/sway.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/udevil.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/way-cooler.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/yabar.nix</literal></para></listitem>
+  <listitem><para><literal>./programs/zsh/zsh-autoenv.nix</literal></para></listitem>
+  <listitem><para><literal>./services/backup/borgbackup.nix</literal></para></listitem>
+  <listitem><para><literal>./services/backup/crashplan-small-business.nix</literal></para></listitem>
+  <listitem><para><literal>./services/desktops/dleyna-renderer.nix</literal></para></listitem>
+  <listitem><para><literal>./services/desktops/dleyna-server.nix</literal></para></listitem>
+  <listitem><para><literal>./services/desktops/pipewire.nix</literal></para></listitem>
+  <listitem><para><literal>./services/desktops/gnome3/chrome-gnome-shell.nix</literal></para></listitem>
+  <listitem><para><literal>./services/desktops/gnome3/tracker-miners.nix</literal></para></listitem>
+  <listitem><para><literal>./services/hardware/fwupd.nix</literal></para></listitem>
+  <listitem><para><literal>./services/hardware/interception-tools.nix</literal></para></listitem>
+  <listitem><para><literal>./services/hardware/u2f.nix</literal></para></listitem>
+  <listitem><para><literal>./services/hardware/usbmuxd.nix</literal></para></listitem>
+  <listitem><para><literal>./services/mail/clamsmtp.nix</literal></para></listitem>
+  <listitem><para><literal>./services/mail/dkimproxy-out.nix</literal></para></listitem>
+  <listitem><para><literal>./services/mail/pfix-srsd.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/gitea.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/home-assistant.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/ihaskell.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/logkeys.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/novacomd.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/osrm.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/plexpy.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/pykms.nix</literal></para></listitem>
+  <listitem><para><literal>./services/misc/tzupdate.nix</literal></para></listitem>
+  <listitem><para><literal>./services/monitoring/fusion-inventory.nix</literal></para></listitem>
+  <listitem><para><literal>./services/monitoring/prometheus/exporters.nix</literal></para></listitem>
+  <listitem><para><literal>./services/network-filesystems/beegfs.nix</literal></para></listitem>
+  <listitem><para><literal>./services/network-filesystems/davfs2.nix</literal></para></listitem>
+  <listitem><para><literal>./services/network-filesystems/openafs/client.nix</literal></para></listitem>
+  <listitem><para><literal>./services/network-filesystems/openafs/server.nix</literal></para></listitem>
+  <listitem><para><literal>./services/network-filesystems/ceph.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/aria2.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/monero.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/nghttpx/default.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/nixops-dns.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/rxe.nix</literal></para></listitem>
+  <listitem><para><literal>./services/networking/stunnel.nix</literal></para></listitem>
+  <listitem><para><literal>./services/web-apps/matomo.nix</literal></para></listitem>
+  <listitem><para><literal>./services/web-apps/restya-board.nix</literal></para></listitem>
+  <listitem><para><literal>./services/web-servers/mighttpd2.nix</literal></para></listitem>
+  <listitem><para><literal>./services/x11/fractalart.nix</literal></para></listitem>
+  <listitem><para><literal>./system/boot/binfmt.nix</literal></para></listitem>
+  <listitem><para><literal>./system/boot/grow-partition.nix</literal></para></listitem>
+  <listitem><para><literal>./tasks/filesystems/ecryptfs.nix</literal></para></listitem>
+  <listitem><para><literal>./virtualisation/hyperv-guest.nix</literal></para></listitem>
 </itemizedlist>
 
 </section>
