@@ -2053,30 +2053,7 @@ in {
 
   tblib = callPackage ../development/python-modules/tblib { };
 
-  s3fs = buildPythonPackage rec {
-    name = "s3fs-${version}";
-    version = "0.0.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/s3fs/${name}.tar.gz";
-      sha256 = "0zbdzqrim0zig94fk1hswg4vfdjplw6jpx3pdi42qc830h0nscn8";
-    };
-
-    buildInputs = with self; [ docutils ];
-    propagatedBuildInputs = with self; [ boto3 ];
-
-    # Depends on `moto` which has a long dependency chain with exact
-    # version requirements that can't be made to work with current
-    # pythonPackages.
-    doCheck = false;
-
-    meta = {
-      description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
-      homepage = "http://github.com/dask/s3fs/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
+  s3fs = callPackage ../development/python-modules/s3fs { };
 
   datashape = callPackage ../development/python-modules/datashape { };
 
