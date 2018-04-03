@@ -26,10 +26,6 @@ in {
       type = types.lines;
       default = "";
       example = ''
-        # Define a keymap (US QWERTY is the default)
-        export XKB_DEFAULT_LAYOUT=de,us
-        export XKB_DEFAULT_VARIANT=nodeadkeys
-        export XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle,caps:escape
       '';
       description = ''
         Shell commands executed just before rootston is started.
@@ -81,6 +77,22 @@ in {
       '';
     };
 
+    extraConfig = mkOption {
+      type = types.attrs;
+      default = { };
+      example = {
+        keyboard = {
+          layout = "de,us";
+          variant = "nodeadkeys";
+          options = "grp:alt_shift_toggle,caps:escape";
+        };
+      };
+      description = ''
+        Extra configuration options for rootston. These options will be merged
+        with the base configuration from config (overriding existing options).
+      '';
+    };
+
     configFile = mkOption {
       type = types.path;
       default = "/etc/rootston.ini";
@@ -94,7 +106,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.etc."rootston.ini".text = lib.generators.toINI {}
-      cfg.config;
+      (lib.recursiveUpdate cfg.config cfg.extraConfig);
     environment.systemPackages = [ rootstonWrapped ] ++ cfg.extraPackages;
 
     hardware.opengl.enable = mkDefault true;
