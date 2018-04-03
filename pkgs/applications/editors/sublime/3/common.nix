@@ -1,6 +1,8 @@
+{buildVersion, x32sha256, x64sha256}:
+
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip, bash, build, x32sha256, x64sha256 }:
+  gksuSupport ? false, gksu, unzip, zip, bash}:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
@@ -25,11 +27,11 @@ in let
 
   # package with just the binaries
   sublime = stdenv.mkDerivation {
-    name = "sublimetext3-${build}-bin";
+    name = "sublimetext3-${buildVersion}-bin";
     src =
       fetchurl {
-        name = "sublimetext-${build}.tar.bz2";
-        url = "https://download.sublimetext.com/sublime_text_3_build_${build}_${arch}.tar.bz2";
+        name = "sublimetext-${buildVersion}.tar.bz2";
+        url = "https://download.sublimetext.com/sublime_text_3_build_${buildVersion}_${arch}.tar.bz2";
         sha256 = archSha256;
       };
 
@@ -84,8 +86,8 @@ in let
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
-in stdenv.mkDerivation {
-  name = "sublimetext3-${build}";
+in stdenv.mkDerivation (rec {
+  name = "sublimetext3-${buildVersion}";
 
   phases = [ "installPhase" ];
 
@@ -114,4 +116,4 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     platforms = platforms.linux;
   };
-}
+})
