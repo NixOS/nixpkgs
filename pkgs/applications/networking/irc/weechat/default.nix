@@ -5,16 +5,22 @@
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , writeScriptBin, symlinkJoin # for withPlugins
 , asciidoctor # manpages
+, buildEnv
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, useEnchant ? false
+, weechatAspellDicts ? [] # A list of derivations from pkgs.aspellDicts
+, weechatEnchantHunspellDicts ? [] # A list of derivations from pkgs.hunspellDicts
+, useEnchant ? (weechatEnchantHunspellDicts != [])
 , extraBuildInputs ? []
 , configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
+
+assert (weechatAspellDicts != []) -> !useEnchant;
+assert (weechatEnchantHunspellDicts != []) -> useEnchant;
 
 let
   inherit (pythonPackages) python pycrypto pync;
@@ -28,6 +34,16 @@ let
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
+  aspellDictEnv = buildEnv{
+    name = "weechat-aspell-dicts";
+    paths = weechatAspellDicts;
+  };
+
+  enchantHunspellDictEnv = buildEnv{
+    name = "weechat-enchant-hunspell-dicts";
+    paths = weechatEnchantHunspellDicts;
+  };
+
   weechat =
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
@@ -39,6 +55,10 @@ let
         sha256 = "0jd1l67k2k44xmfv0a71im3j4v0gss3a6bd5s84nj3f7lqnfmqdn";
       };
 
+      patches = [
+        ./dict-dir.patch
+      ];
+
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       enableParallelBuilding = true;
@@ -47,6 +67,8 @@ let
         "-DENABLE_DOC=ON"
         "-DENABLE_ENCHANT=${if useEnchant then "ON" else "OFF"}"
       ]
+        ++ optional (weechatAspellDicts != []) "-DASPELL_DICT_DIR=\"${aspellDictEnv}/lib/aspell\""
+        ++ optional (weechatEnchantHunspellDicts != []) "-DENCHANT_MYSPELL_DICT_DIR=\"${enchantHunspellDictEnv}/share/hunspell\""
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;

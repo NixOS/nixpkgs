@@ -1,0 +1,85 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7fb7d0620..e59a36c47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -114,6 +114,14 @@ option(ENABLE_MAN        "Enable build of man page"                  OFF)
+ option(ENABLE_DOC        "Enable build of documentation"             OFF)
+ option(ENABLE_TESTS      "Enable tests"                              OFF)
+ 
++if(DEFINED ASPELL_DICT_DIR)
++  add_definitions(-DASPELL_DICT_DIR=${ASPELL_DICT_DIR})
++endif()
++
++if(DEFINED ENCHANT_MYSPELL_DICT_DIR)
++  add_definitions(-DENCHANT_MYSPELL_DICT_DIR=${ENCHANT_MYSPELL_DICT_DIR})
++endif()
++
+ # option WEECHAT_HOME
+ if(NOT DEFINED WEECHAT_HOME OR "${WEECHAT_HOME}" STREQUAL "")
+   set(WEECHAT_HOME "~/.weechat")
+diff --git a/src/plugins/aspell/weechat-aspell-command.c b/src/plugins/aspell/weechat-aspell-command.c
+index 5d4c0cc6c..fcae73ac9 100644
+--- a/src/plugins/aspell/weechat-aspell-command.c
++++ b/src/plugins/aspell/weechat-aspell-command.c
+@@ -159,6 +159,9 @@ weechat_aspell_command_speller_list_dicts ()
+                                NULL);
+ #else
+     config = new_aspell_config();
++#ifdef ASPELL_DICT_DIR
++    aspell_config_replace (config, "dict-dir", ASPELL_DICT_DIR);
++#endif
+     list = get_aspell_dict_info_list (config);
+     elements = aspell_dict_info_list_elements (list);
+ 
+diff --git a/src/plugins/aspell/weechat-aspell-completion.c b/src/plugins/aspell/weechat-aspell-completion.c
+index 12a8f1470..a6c43d907 100644
+--- a/src/plugins/aspell/weechat-aspell-completion.c
++++ b/src/plugins/aspell/weechat-aspell-completion.c
+@@ -107,6 +107,9 @@ weechat_aspell_completion_dicts_cb (const void *pointer, void *data,
+                                completion);
+ #else
+     config = new_aspell_config ();
++#ifdef ASPELL_DICT_DIR
++    aspell_config_replace (config, "dict-dir", ASPELL_DICT_DIR);
++#endif
+     list = get_aspell_dict_info_list (config);
+     elements = aspell_dict_info_list_elements (list);
+ 
+diff --git a/src/plugins/aspell/weechat-aspell-speller.c b/src/plugins/aspell/weechat-aspell-speller.c
+index 52bde0163..7d1917de6 100644
+--- a/src/plugins/aspell/weechat-aspell-speller.c
++++ b/src/plugins/aspell/weechat-aspell-speller.c
+@@ -65,6 +65,9 @@ weechat_aspell_speller_dict_supported (const char *lang)
+     rc = 0;
+ 
+     config = new_aspell_config ();
++#ifdef ASPELL_DICT_DIR
++    aspell_config_replace (config, "dict-dir", ASPELL_DICT_DIR);
++#endif
+     list = get_aspell_dict_info_list (config);
+     elements = aspell_dict_info_list_elements (list);
+ 
+@@ -163,6 +166,9 @@ weechat_aspell_speller_new (const char *lang)
+     /* create a speller instance for the newly created cell */
+     config = new_aspell_config();
+     aspell_config_replace (config, "lang", lang);
++#ifdef ASPELL_DICT_DIR
++    aspell_config_replace (config, "dict-dir", ASPELL_DICT_DIR);
++#endif
+ #endif /* USE_ENCHANT */
+ 
+     /* apply all options */
+diff --git a/src/plugins/aspell/weechat-aspell.c b/src/plugins/aspell/weechat-aspell.c
+index 376762b3a..4aee18b6a 100644
+--- a/src/plugins/aspell/weechat-aspell.c
++++ b/src/plugins/aspell/weechat-aspell.c
+@@ -1049,6 +1049,9 @@ weechat_plugin_init (struct t_weechat_plugin *plugin, int argc, char *argv[])
+     broker = enchant_broker_init ();
+     if (!broker)
+         return WEECHAT_RC_ERROR;
++#ifdef ENCHANT_MYSPELL_DICT_DIR
++    enchant_broker_set_param(broker, "enchant.myspell.dictionary.path", ENCHANT_MYSPELL_DICT_DIR);
++#endif
+ #endif /* USE_ENCHANT */
+ 
+     if (!weechat_aspell_speller_init ())
