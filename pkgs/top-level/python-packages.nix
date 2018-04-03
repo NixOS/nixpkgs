@@ -2037,26 +2037,7 @@ in {
     };
   };
 
-  digital-ocean = buildPythonPackage rec {
-    name = "python-digitalocean-1.10.1";
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    # Package doesn't distribute tests.
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-digitalocean/${name}.tar.gz";
-      sha256 = "12qybflfnl08acspz7rpaprmlabgrzimacbd7gm9qs5537hl3qnp";
-    };
-
-    meta = {
-      description = "digitalocean.com API to manage Droplets and Images";
-      homepage = https://pypi.python.org/pypi/python-digitalocean;
-      license = licenses.lgpl3;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
+  digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   leather = callPackage ../development/python-modules/leather { };
 
