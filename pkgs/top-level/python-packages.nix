@@ -2003,23 +2003,7 @@ in {
 
   dask = callPackage ../development/python-modules/dask { };
 
-  datrie = buildPythonPackage rec {
-    name = "datrie";
-    version = "0.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
-      sha256 = "08r0if7dry2q7p34gf7ffyrlnf4bdvnprxgydlfxgfnvq8f3f4bs";
-    };
-
-    buildInputs = with self; [ pytest pytestrunner hypothesis ];
-    meta = {
-      description = "Super-fast, efficiently stored Trie for Python";
-      homepage = "https://github.com/kmike/datrie";
-      license = licenses.lgpl2;
-      maintainers = with maintainers; [ lewo ];
-    };
-  };
+  datrie = callPackage ../development/python-modules/datrie { };
 
   heapdict = buildPythonPackage rec {
     name = "HeapDict-${version}";
