@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
   };
-  
+
   nativeBuildInputs = [ which perl ];
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
   CMAKE_CXX_FLAGS = "-std=gnu++11";
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
-  ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
+  LIBNAME = "librocksdb${stdenv.lib.optionalString enableLite "_lite"}";
   ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
-  
+
   buildAndInstallFlags = [
     "USE_RTTI=1"
     "DEBUG_LEVEL=0"
-    "DISABLE_WARNING_AS_ERROR=1"     
+    "DISABLE_WARNING_AS_ERROR=1"
   ];
 
   buildFlags = buildAndInstallFlags ++ [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     echo "BUILD CONFIGURATION FOR SANITY CHECKING"
     cat make_config.mk
     mkdir -pv $static/lib/
-    mv -vi $out/lib/librocksdb.a $static/lib/
+    mv -vi $out/lib/${LIBNAME}.a $static/lib/
   '';
 
   enableParallelBuilding = true;
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = http://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
-    platforms = platforms.x86_64 ++ platforms.aarch64;
+    platforms = platforms.x86_64;
     maintainers = with maintainers; [ adev wkennington ];
   };
 }
