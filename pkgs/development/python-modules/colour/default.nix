@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "colour";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w1j43l76zw10dvs2kk7jz7kqj2ss7gfgfdxyls27pckwin89gxb";
+    sha256 = "af20120fefd2afede8b001fbef2ea9da70ad7d49fafdb6489025dae8745c3aee";
   };
 
   buildInputs = [ d2to1 ];
