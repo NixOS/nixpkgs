@@ -6,7 +6,6 @@
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
 , pcsclite, zeromq, cppzmq, pkgconfig
-, CoreData
 }:
 
 with stdenv.lib;
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     qtxmlpatterns monero unbound readline
     boost libunwind pcsclite zeromq cppzmq
     makeWrapper
-  ] ++ stdenv.lib.optional stdenv.isDarwin CoreData;
+  ];
 
   patches = [
     ./move-log-file.patch
