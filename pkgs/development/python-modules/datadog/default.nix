@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.10.0";
+  version = "0.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y2if4jj43n5jis20imragvhhyhr840w4m1g7j7fxh9bn7h273zp";
+    sha256 = "7bb4af836d7422a6138f983b81c16acd56c2d608913982602856cc273ae74768";
   };
 
   buildInputs = [ pillow tox mock six nose ];
