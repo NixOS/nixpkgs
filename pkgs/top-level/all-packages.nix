@@ -16706,6 +16706,7 @@ with pkgs;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/altcoins/monero-gui {
+    inherit (darwin.apple_sdk.frameworks) CoreData;
     boost = boost15x;
   };
 
