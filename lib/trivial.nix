@@ -19,6 +19,18 @@ rec {
   */
   const = x: y: x;
 
+  /* Right-to-left composition of a pair of unary functions.
+
+     Type: compose :: (b -> c) -> (a -> b) -> a -> c
+  */
+  compose = f: g: x: f (g x);
+
+  /* Perform a left-to-right composition across a list of functions.
+
+     Type: pipe :: [(a -> b), (b -> c), ..., (y -> z)] -> a -> z
+  */
+  pipe = builtins.foldl' (flip compose) id;
+
 
   ## Named versions corresponding to some builtin operators.
 

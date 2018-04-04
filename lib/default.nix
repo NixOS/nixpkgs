@@ -54,8 +54,8 @@ let
       getAttr hasAttr head isAttrs isBool isInt isList
       isString length lessThan listToAttrs pathExists readFile
       replaceStrings seq stringLength sub substring tail;
-    inherit (trivial) id const concat or and boolToString mergeAttrs
-      flip mapNullable inNixShell min max importJSON warn info
+    inherit (trivial) id const compose pipe concat or and boolToString
+      mergeAttrs flip mapNullable inNixShell min max importJSON warn info
       nixpkgsVersion mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction;
 
