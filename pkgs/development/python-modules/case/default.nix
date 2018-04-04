@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "case";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zbhbw87izcxj9rvqg432a7r69ps2ks20mqq3g3hgd42sckcy3ca";
+    sha256 = "48432b01d91913451c3512c5b90e31b0f348f1074b166a3431085eb70d784fb1";
   };
 
   propagatedBuildInputs = [ six nose unittest2 mock ];
