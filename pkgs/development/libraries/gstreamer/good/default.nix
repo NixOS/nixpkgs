@@ -4,7 +4,7 @@
 , libvpx, speex, flac, taglib, libshout
 , cairo, gdk_pixbuf, aalib, libcaca
 , libsoup, libpulseaudio, libintlOrEmpty
-, darwin, lame, mpg123
+, darwin, lame, mpg123, twolame
 }:
 
 let
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base orc bzip2
     libdv libvpx speex flac taglib
     cairo gdk_pixbuf aalib libcaca
-    libsoup libshout lame mpg123
+    libsoup libshout lame mpg123 twolame
   ]
   ++ libintlOrEmpty
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
