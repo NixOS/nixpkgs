@@ -2,7 +2,7 @@
 , pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
 , faad2, libass, libkate, libmms
-, libmodplug, mpeg2dec, mpg123
+, libmodplug, mpeg2dec
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc
     faad2 libass libkate libmms
-    libmodplug mpeg2dec mpg123
+    libmodplug mpeg2dec
     openjpeg libopus librsvg
     fluidsynth libvdpau
     libwebp xvidcore gnutls libGLU_combined
