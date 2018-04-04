@@ -3090,6 +3090,8 @@ with pkgs;
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
+  jl = haskellPackages.callPackage ../development/tools/jl { };
+
   jmespath = callPackage ../development/tools/jmespath { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
