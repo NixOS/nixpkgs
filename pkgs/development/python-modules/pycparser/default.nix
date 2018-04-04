@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pycparser";
-  version = "2.14";
+  version = "2.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wvzyb6rxsfj3xcnpa4ynbh9qc7rrbk2277d5wqpphmx9akv8nbr";
+    sha256 = "99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226";
   };
 
   checkPhase = ''
