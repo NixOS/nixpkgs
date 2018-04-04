@@ -3,7 +3,7 @@
 let
   inherit (args) stdenv makeWrapper;
   inherit (stdenv) lib isDarwin;
-  inherit (lib) overrideDerivation;
+  inherit (lib) overrideDerivation compose;
 
   setMalloc0ReturnsNullCrossCompiling = ''
     if test -n "$crossConfig"; then
@@ -20,8 +20,6 @@ let
     buildInputs = attrs.buildInputs ++ [ xorg.utilmacros  ];
     preConfigure = (attrs.preConfigure or "") + "\n./autogen.sh";
   };
-
-  compose = f: g: x: f (g x);
 in
 {
   bdftopcf = attrs: attrs // {
