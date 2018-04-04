@@ -73,10 +73,10 @@ let
 
     mkdir /fs
 
-    mount /dev/${hd} /fs 2>/dev/null || {
+    if ! mount /dev/${hd} /fs 2>/dev/null; then
       ${pkgsLinux.e2fsprogs}/bin/mkfs.ext4 -q /dev/${hd}
       mount /dev/${hd} /fs
-    } || true
+    fi
 
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
@@ -111,8 +111,54 @@ let
     PasswordAuthentication no
     ChallengeResponseAuthentication no
   '';
-  stage2Init = writeScript "vm-run-stage2" ''
-    #! ${pkgsLinux.bash}/bin/bash
+stage2Init = let
+    script_modprobe = writeScript "modeprobe" ''
+      #! /bin/sh
+      export MODULE_DIR=${pkgsLinux.linux}/lib/modules/
+      exec ${pkgsLinux.kmod}/bin/modprobe "$@"
+    '';
+
+    file_passwd = writeText "passwd" ''
+      root:x:0:0:System administrator:/root:${pkgsLinux.bash}/bin/bash
+      sshd:x:1:65534:SSH privilege separation user:/var/empty:${pkgsLinux.shadow}/bin/nologin
+      nixbld1:x:30001:30000:Nix build user 1:/var/empty:${pkgsLinux.shadow}/bin/nologin
+    '';
+
+    file_group = writeText "group" ''
+      nixbld:x:30000:nixbld1
+    '';
+
+    file_bashrc = writeText "bashrc" ''
+      export PATH="${vmToolsLinux.initrdUtils}/bin:${pkgsLinux.nix}/bin"
+      export NIX_SSL_CERT_FILE='${pkgsLinux.cacert}/etc/ssl/certs/ca-bundle.crt'
+    '';
+
+    script_poweroff = writeText "poweroff" ''
+      #!/bin/sh
+      poweroff
+    '';
+
+    script_poweroff_f = writeText "poweroff" ''
+      #!/bin/sh
+      poweroff -f
+    '';
+
+    file_instructions = writeText "instructions" ''
+      ======================================================================
+      Remote builder has started.
+
+      If this is a fresh VM you need to run the following on the host:
+          sudo ~/.nixpkgs/linuxkit-builder/root-init.sh
+
+      Then you can use the following to build x86_64-linux derivations:
+          sudo $(cat ~/.nixpkgs/linuxkit-builder/env) nix-build
+
+      Exit this VM by running:
+          kill $(cat ~/.nixpkgs/linuxkit-builder/nix-state/hyperkit.pid)
+      ======================================================================
+    '';
+  in writeScript "vm-run-stage2" ''
+    #! ${pkgsLinux.bash}/bin/bash -eux
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -123,22 +169,26 @@ let
     ${pkgsLinux.coreutils}/bin/ln -fs ${pkgsLinux.bash}/bin/sh /bin/sh
 
     # # Set up automatic kernel module loading.
-    export MODULE_DIR=${pkgsLinux.linux}/lib/modules/
-    ${pkgsLinux.coreutils}/bin/cat <<EOF > /run/modprobe
-    #! /bin/sh
-    export MODULE_DIR=$MODULE_DIR
-    exec ${pkgsLinux.kmod}/bin/modprobe "\$@"
-    EOF
+    ${pkgsLinux.coreutils}/bin/cat ${script_modprobe} > /run/modprobe
     ${pkgsLinux.coreutils}/bin/chmod 755 /run/modprobe
     echo /run/modprobe > /proc/sys/kernel/modprobe
-    ${pkgsLinux.kmod}/bin/modprobe virtio_net
+    /run/modprobe virtio_net
 
-    echo "root:x:0:0:System administrator:/root:${pkgsLinux.bash}/bin/bash" >> /etc/passwd
-    echo "sshd:x:1:65534:SSH privilege separation user:/var/empty:${pkgsLinux.shadow}/bin/nologin" >> /etc/passwd
-    echo "nixbld1:x:30001:30000:Nix build user 1:/var/empty:${pkgsLinux.shadow}/bin/nologin" >> /etc/passwd
-    echo "nixbld:x:30000:nixbld1" >> /etc/group
+    echo "Existing passwd:"
+    cat /etc/passwd
+    echo "---overwriting---"
 
-    export PATH="${vmToolsLinux.initrdUtils}/bin:${pkgsLinux.nix}/bin"
+    cat ${file_passwd} > /etc/passwd
+
+    echo "Existing group:"
+    cat /etc/group
+    echo "---overwriting---"
+
+    cat ${file_group} > /etc/group
+
+    mkdir -p /etc/ssh /root/.ssh /var/db /var/empty
+    cat ${file_bashrc} > /root/.bashrc
+    . /root/.bashrc
 
     if [ -f /nix-path-registration ]; then
       cat /nix-path-registration | nix-store --load-db
@@ -146,8 +196,6 @@ let
     fi
 
     ln -s /dev/pts/ptmx /dev/ptmx
-    mkdir -p /etc/ssh /root/.ssh /var/db /var/empty
-
     ln -s /proc/self/fd/0 /dev/stdin
 
     ifconfig eth0 ${containerIp}
@@ -155,9 +203,7 @@ let
     echo 'nameserver 192.168.65.1' > /etc/resolv.conf
 
     ${pkgsLinux.openssh}/bin/ssh-keygen -A
-    echo -n > /root/.bashrc
-    echo "export PATH=$PATH" >> /root/.bashrc
-    echo "export NIX_SSL_CERT_FILE='${pkgsLinux.cacert}/etc/ssl/certs/ca-bundle.crt'" >> /root/.bashrc
+
     cp ${authorizedKeys} /root/.ssh/authorized_keys
     chmod 0644 /root/.ssh/authorized_keys
 
@@ -165,11 +211,9 @@ let
     mount -v -t 9p -o trans=virtio,dfltuid=1001,dfltgid=50,version=9p2000 port /port
 
     mkdir -p /etc/acpi/PWRF /etc/acpi/events
-    cat >/etc/acpi/PWRF/00000080 <<EOF
-    #!/bin/sh
-    poweroff
-    EOF
+    cat ${script_poweroff} > /etc/acpi/PWRF/00000080
     chmod +x "$pkgdir"/etc/acpi/PWRF/00000080
+
     # ${pkgsLinux.acpid}/bin/acpid -d
 
     ${pkgsLinux.openssh}/bin/sshd -e -f ${sshdConfig}
@@ -183,25 +227,12 @@ let
 
     mkdir -p /dev/input /etc/acpi/PWRF /var/log
     mknod /dev/input/event0 c 13 64
-    cat <<EOF > /etc/acpi/PWRF/00000080
-    #!/bin/sh
-    poweroff -f
-    EOF
+    cat ${script_poweroff_f} > /etc/acpi/PWRF/00000080
     chmod +x /etc/acpi/PWRF/00000080
 
     echo
-    echo -e '\033[91;47m======================================================================'
-    echo 'Remote builder has started.'
-    echo
-    echo 'If this is a fresh VM you need to run the following on the host:'
-    echo '    sudo ~/.nixpkgs/linuxkit-builder/root-init.sh'
-    echo
-    echo 'Then you can use the following to build x86_64-linux derivations:'
-    echo '    sudo $(cat ~/.nixpkgs/linuxkit-builder/env) nix-build'
-    echo
-    echo 'Exit this VM by running:'
-    echo '    kill $(cat ~/.nixpkgs/linuxkit-builder/nix-state/hyperkit.pid)'
-    echo '======================================================================'
+    echo -e '\033[91;47m'
+    cat ${file_instructions}
     echo -en '\033[0m'
 
     exec ${pkgsLinux.busybox}/bin/acpid -f
