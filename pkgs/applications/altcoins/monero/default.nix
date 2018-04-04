@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, git
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline
-, IOKit
-, CoreData
+, CoreData, IOKit, PCSC
 }:
 
 assert stdenv.isDarwin -> IOKit != null;
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost miniupnpc openssl unbound
     cppzmq zeromq pcsclite readline
-  ] ++ optionals stdenv.isDarwin [ IOKit CoreData ];
+  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
