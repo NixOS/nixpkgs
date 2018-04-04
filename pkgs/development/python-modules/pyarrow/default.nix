@@ -43,6 +43,8 @@ buildPythonPackage rec {
     # when it is not intended to be imported at all
     rm pyarrow/tests/deserialize_buffer.py
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
+
+    env | grep PYTHON
   '';
 
   ARROW_HOME = arrow-cpp;
