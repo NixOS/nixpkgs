@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "progressbar";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfee5201237ca0e942baa4d451fee8bf8a54065a337fabe7378b8585aeda56a3";
+    sha256 = "b2d38a729785149e65323381d2e6fca0a5e9615a6d8bcf10bfa8adedfc481254";
   };
 
   # invalid command 'test'
