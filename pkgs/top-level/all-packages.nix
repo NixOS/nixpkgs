@@ -14539,15 +14539,9 @@ with pkgs;
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
-  tex-gyre = callPackage ../data/fonts/tex-gyre { };
+  tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
-  tex-gyre-bonum-math = callPackage ../data/fonts/tex-gyre-math { variant = "bonum"; };
-
-  tex-gyre-pagella-math = callPackage ../data/fonts/tex-gyre-math { variant = "pagella"; };
-
-  tex-gyre-schola-math = callPackage ../data/fonts/tex-gyre-math { variant = "schola"; };
-
-  tex-gyre-termes-math = callPackage ../data/fonts/tex-gyre-math { variant = "termes"; };
+  tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
 
   tipa = callPackage ../data/fonts/tipa { };
 
