@@ -197,16 +197,18 @@ stage2Init = let
       paths = [
         (writeRunitForegroundService "acpid" ''
           #!/bin/sh
-          echo "OK Let's go acpid"
           exec ${pkgsLinux.busybox}/bin/acpid -f
         '')
 
         (writeRunitForegroundService "sshd" ''
           #!/bin/sh
-          echo "OK Let's go sshd"
           exec ${pkgsLinux.openssh}/bin/sshd -D -e -f ${sshdConfig}
         '')
 
+        (writeRunitForegroundService "vpnkit-forwarder" ''
+          #!/bin/sh
+          exec ${pkgsLinux.go-vpnkit}/bin/vpnkit-forwarder
+        '')
       ];
     };
   in writeScript "vm-run-stage2" ''
@@ -260,14 +262,6 @@ stage2Init = let
     cat ${script_poweroff} > /etc/acpi/PWRF/00000080
     chmod +x /etc/acpi/PWRF/00000080
 
-
-    ${pkgsLinux.go-vpnkit}/bin/vpnkit-forwarder &
-    ${pkgsLinux.go-vpnkit}/bin/vpnkit-expose-port \
-      -i \
-      -host-ip 127.0.0.1 -host-port ${hostPort} \
-      -container-ip 192.168.65.2 -container-port 22 \
-      -no-local-ip &
-
     mkdir -p /dev/input /etc/acpi/PWRF /var/log
     mknod /dev/input/event0 c 13 64
     cat ${script_poweroff_f} > /etc/acpi/PWRF/00000080
@@ -279,8 +273,7 @@ stage2Init = let
     echo -en '\033[0m'
 
     rm -rf /etc/runit
-    cp -r ${runit_targets} /etc/runit
-    cat /etc/runit/*
+    cp -r ${runit_targets} /etc/runit/
 
     exec ${pkgsLinux.runit}/bin/runit
   '';
