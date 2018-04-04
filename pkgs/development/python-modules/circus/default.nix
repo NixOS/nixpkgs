@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "circus";
-  version = "0.11.1";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ip87wlq864k2rhk2r0rqq12ard1iggb61r6dsga4gh7lm538mrp";
+    sha256 = "b8ca91d8bd87b350fda199488ac9ddff91a546b0c6214a28a2f13393713cf062";
   };
 
   doCheck = false; # weird error
