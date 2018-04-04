@@ -217,8 +217,6 @@ stage2Init = let
     cat ${script_poweroff} > /etc/acpi/PWRF/00000080
     chmod +x /etc/acpi/PWRF/00000080
 
-    # ${pkgsLinux.acpid}/bin/acpid -d
-
     ${pkgsLinux.openssh}/bin/sshd -e -f ${sshdConfig}
 
     ${pkgsLinux.go-vpnkit}/bin/vpnkit-forwarder &
