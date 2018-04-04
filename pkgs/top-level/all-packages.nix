@@ -19859,6 +19859,8 @@ with pkgs;
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
+  beluga = callPackage ../applications/science/logic/beluga { };
+
   boogie = dotnetPackages.Boogie;
 
   inherit (callPackage ./coq-packages.nix {})
