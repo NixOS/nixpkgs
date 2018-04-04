@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "1i79sh9ip32agbrn4n51pjn9266i45s8spk5jsi8ax0hqy1vhhmi";
+    sha256 = "16l91fixb5dgx3v6xc73ipn1w1hjgbmijyvs81j7ywzpna2cdcdy";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
