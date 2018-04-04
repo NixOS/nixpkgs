@@ -136,11 +136,11 @@ checkConfigOutput "true" "$@" ./define-module-check.nix
 # Check coerced value.
 checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'The option value .* in .* is not.*string or signed integer.*' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'The option value .* in .* is not.*string or signed integer convertible to it' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput "12" config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'The option value .* in .* is not.*8 bit signed integer.* or string.*' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'The option value .* in .* is not.*8 bit signed integer.* or string convertible to it' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'unrecognised JSON value' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 cat <<EOF
