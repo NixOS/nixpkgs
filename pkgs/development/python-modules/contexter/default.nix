@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "contexter";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xrnkjya29ya0hkj8y4k9ni2mnr58i6r0xfqlj7wk07v4jfrkc8n";
+    sha256 = "c730890b1a915051414a6350d8ea1cddca7d01d8f756badedb30b9bf305ea0a8";
   };
 
   meta = with stdenv.lib; {
