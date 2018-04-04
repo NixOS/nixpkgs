@@ -20562,6 +20562,8 @@ with pkgs;
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
+  nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
