@@ -1,5 +1,5 @@
 import ./make-test.nix {
-  name = "dovecot";
+  name = "openldap";
 
   machine = { pkgs, ... }: {
     services.openldap = {
