@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "atomicwrites";
-  version = "0.1.9";
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08s05h211r07vs66r4din3swrbzb344vli041fihpg34q3lcxpvw";
+    sha256 = "240831ea22da9ab882b551b31d4225591e5e447a68c5e188db5b89ca1d487585";
   };
 
   meta = with stdenv.lib; {
