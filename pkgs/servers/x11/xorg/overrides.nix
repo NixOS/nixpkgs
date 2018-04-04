@@ -3,7 +3,7 @@
 let
   inherit (args) stdenv makeWrapper;
   inherit (stdenv) lib isDarwin;
-  inherit (lib) overrideDerivation compose;
+  inherit (lib) overrideDerivation;
 
   setMalloc0ReturnsNullCrossCompiling = ''
     if test -n "$crossConfig"; then
