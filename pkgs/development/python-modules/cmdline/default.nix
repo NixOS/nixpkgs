@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cmdline";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sjkcfp4w3rxy2lm2n60dbfkc33kdb3f6254hrrvn4ci3rqv8b5y";
+    sha256 = "324cc8fc6580f221824821c47232c297ed1f7cc737186a57305a8c08fc902dd7";
   };
 
   # No tests, https://github.com/rca/cmdline/issues/1
