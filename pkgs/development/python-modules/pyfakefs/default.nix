@@ -1,13 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, unittest2 }:
 
 buildPythonPackage rec {
-  version = "3.3";
+  version = "3.4.1";
   pname = "pyfakefs";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19hj5wyi8wy8n8hdj5dwlryl3frrn783y4dsfdxn5mg0lpg9iqg3";
+    sha256 = "96f1d008ae6cc4d9866dd674ee852748a11c67784f1f369221a5fd2750cc0883";
   };
 
   propagatedBuildInputs = [ pytest unittest2 ];
