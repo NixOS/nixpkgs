@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h8py468bvxnydkjs352d7a9s8hk0ihc7msjkcnzj2d7nzp5nsc1";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-conversion";
   nativeBuildInputs = [ cmake catch ];
 
   meta = with stdenv.lib; {

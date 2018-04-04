@@ -7,7 +7,7 @@ let
   dfVersion = "0.44.05";
   version = "${dfVersion}-r2";
   rev = "refs/tags/${version}";
-  sha256 = "1hr3qsx7rd36syw7dfp4lh8kpmz1pvva757za2yn34hj1jm4nh52";
+  sha256 = "1cwifdhi48a976xc472nf6q2k0ibwqffil5a4llcymcxdbgxdcc9";
 
   # revision of library/xml submodule
   xmlRev = "2794f8a6d7405d4858bac486a0bb17b94740c142";

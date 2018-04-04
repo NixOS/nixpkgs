@@ -20,7 +20,7 @@ let
         inherit rev sha256;
       };
 
-      patches = [ ./const.patch ./install_prefix.patch ];
+      patches = [ ./install_prefix.patch ];
 
       nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
@@ -61,8 +61,8 @@ in
   assert kernel != null;
 {
     splStable = common {
-      version = "0.7.6";
-      sha256 = "1l641d89k48ngmarx9mxh8gw2zzrf7fw7n8zmslhz4h1152plddb";
+      version = "0.7.7";
+      sha256 = "0mq7827x4173wdbpj361gvxvk8j9r96363gka75smzsc31i2wa5x";
     };
 
     splUnstable = common {

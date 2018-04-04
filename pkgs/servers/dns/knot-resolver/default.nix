@@ -21,7 +21,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  configurePhase = ":";
+  configurePhase = "patchShebangs scripts/";
 
   nativeBuildInputs = [ pkgconfig which hexdump ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, xfce4panel, libxfce4util, gtk, libsoup
+{ stdenv, fetchurl, pkgconfig, intltool, xfce4-panel, libxfce4util, gtk, libsoup
 , makeWrapper, glib-networking, exo, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xfce4panel libxfce4util gtk libsoup exo hicolor-icon-theme glib-networking
+    xfce4-panel libxfce4util gtk libsoup exo hicolor-icon-theme glib-networking
   ];
 
   meta = {

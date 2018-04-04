@@ -57,7 +57,10 @@ stdenv.mkDerivation rec {
     '')}"
   '';
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
+  NIX_CFLAGS_COMPILE = [
+    "-fstack-protector-all"
+    "-Wno-error=implicit-fallthrough" "-Wno-error=alloc-size-larger-than=" # gcc7
+  ];
 
   meta = with stdenv.lib; {
     description = "SELinux policy core utilities";

@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0pjdpxla5kh1w1b0shxrx97a116vyy31njxi0jhyvqhk8d6cfdgf";
+    sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
   };
 
   outputs = [ "out" "dev" ];

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec
     description = "A small, easy to use Open Source Database Connection Pool Library";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.calrama ];
+    maintainers = [ ];
   };
 }

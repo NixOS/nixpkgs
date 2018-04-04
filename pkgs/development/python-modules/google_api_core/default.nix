@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, google_auth, protobuf, googleapis_common_protos, requests, grpcio, setuptools, mock, pytest }:
+, google_auth, protobuf3_5, googleapis_common_protos, requests, grpcio, setuptools, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0144d467083ed54d2e8ccb4212d42c3724fe0b844b7d3a0ff85aea54b7ae8347";
   };
 
-  propagatedBuildInputs = [ google_auth protobuf googleapis_common_protos requests grpcio ];
+  propagatedBuildInputs = [ google_auth protobuf3_5 googleapis_common_protos requests grpcio ];
   checkInputs = [ setuptools mock pytest ];
 
   checkPhase = ''

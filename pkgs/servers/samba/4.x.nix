@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
-, kerberos, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
+, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
 , gnutls, libgcrypt, libgpgerror
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
@@ -19,11 +19,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "samba-${version}";
-  version = "4.7.4";
+  version = "4.7.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "0iw290n0q4l5s92d0f9yz27yp3rdfr6bvsmvg1xvd19g8p2d04pv";
+    sha256 = "0vkxqp3wh7bpn1fd45lznmrpn2ma1fq75yq28vi08rggr07y7v8y";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
       docbook_xml_dtd_45 */ readline talloc popt iniparser
-      libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
+      libbsd libarchive zlib acl fam libiconv gettext libunwind krb5Full
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
     ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
       "--with-system-mitkrb5"
+      "--with-system-mitkdc" "${krb5Full}"
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"

@@ -3,12 +3,11 @@
 , buildPythonPackage
 , python
 , fetchPypi
-, fetchFromGitHub
+, html5lib
 , pytest
 , cython
-, cymem
 , preshed
-, pathlib2
+, ftfy
 , numpy
 , murmurhash
 , plac
@@ -16,7 +15,6 @@
 , ujson
 , dill
 , requests
-, ftfy
 , thinc
 , pip
 , regex
@@ -24,32 +22,49 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "1.8.2";
+  version = "2.0.9";
 
-  src = fetchFromGitHub {
-    owner = "explosion";
-    repo = "spaCy";
-    rev = "v${version}";
-    sha256 = "0v3bmmar31a6968y4wl0lmgnc3829l2mnwd8s959m4pqw1y1w648";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
   };
+
+  prePatch = ''
+    substituteInPlace setup.py --replace \
+      "'html5lib==1.0b8'," \
+      "'html5lib',"
+
+    substituteInPlace setup.py --replace \
+      "'regex==2017.4.5'," \
+      "'regex',"
+
+    substituteInPlace setup.py --replace \
+      "'ftfy==2017.4.5'," \
+      "'ftfy',"
+
+    substituteInPlace setup.py --replace \
+      "'pathlib'," \
+      "\"pathlib; python_version<'3.4'\","
+  '';
 
   propagatedBuildInputs = [
    cython
-   cymem
-   pathlib2
-   preshed
-   numpy
-   murmurhash
-   plac
-   six
-   ujson
    dill
-   requests
+   html5lib
+   murmurhash
+   numpy
+   plac
+   preshed
    regex
-   ftfy
+   requests
+   six
    thinc
-   pytest
-   pip
+   ujson
+   ftfy
+  ];
+
+  checkInputs = [
+    pytest
   ];
 
   doCheck = false;

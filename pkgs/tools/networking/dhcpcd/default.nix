@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ udev ];
 
+  preConfigure = "patchShebangs ./configure";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"

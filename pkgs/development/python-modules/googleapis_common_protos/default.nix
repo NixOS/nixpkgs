@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, protobuf, pytest }:
+, protobuf3_5, pytest }:
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1whfjl44gy15ha6palpwa2m0xi36dsvpaz8vw0cvb2k2lbdfsxf0";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  propagatedBuildInputs = [ protobuf3_5 ];
   checkInputs = [ pytest ];
 
   doCheck = false;  # there are no tests

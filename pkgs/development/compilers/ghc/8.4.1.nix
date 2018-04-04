@@ -4,6 +4,7 @@
 # build-tools
 , bootPkgs, alex, happy
 , autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3
+, runCommand
 
 , libffi, libiconv ? null, ncurses
 
@@ -15,7 +16,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? false, gmp ? null, m4
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
@@ -24,7 +25,7 @@
   # platform). Static libs are always built.
   enableShared ? true
 
-, version ? "8.4.0.20180224"
+, version ? "8.4.1"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -77,15 +78,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
-    rev = "a1e15c8f59092ef2d11be7966bd20688d8dc01e6";
-    sha256 = "1pimf5ryl76r3vwnc2n0qzk4yh7zckp2r2g5rlz8nbddsws2v893";
+    rev = "0a3e2f324dbd525d626ebd3d97e8ffa1cf2f0ffb";
+    sha256 = "1m51khnmf8gw203d8kh6y4ivh0acb2wiqqnb950yfbg2a2k7bcfi";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
 
-  patches = stdenv.lib.optional deterministicProfiling
+  patches = [
+    (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
+  ] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch { # https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/8b2dbd869d1a64de3e99fa8b1c9bb1140eee7099.patch";
       sha256 = "0hxpiwhbg64rsyjdr4psh6dwyp58b96mad3adccvfr0x8hc6ba2m";
@@ -149,7 +152,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
+  nativeBuildInputs = [ ghc perl autoconf automake m4 happy alex python3 ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;

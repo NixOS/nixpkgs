@@ -1,17 +1,17 @@
 { stdenv, fetchgit, git,  espeak, SDL2, udev, doxygen, cmake
 , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
-, qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake
+, qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake, qtspeech
 , makeWrapper, lndir
 , gst_all_1, qt-gstreamer1, pkgconfig, glibc
 }:
 
 stdenv.mkDerivation rec {
   name = "qgroundcontrol-${version}";
-  version = "3.2.7";
+  version = "3.3.0";
 
   qtInputs = [
     qtbase qtlocation qtserialport qtdeclarative qtconnectivity qtxmlpatterns qtsvg
-    qtquick1 qtquickcontrols qtgraphicaleffects
+    qtquick1 qtquickcontrols qtgraphicaleffects qtspeech
   ];
 
   gstInputs = with gst_all_1; [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/mavlink/qgroundcontrol.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1sla3sgj2p3h87d7kcaj53f8z5xzyadvsqlqzgh4d2n1f7sikdc5";
+    sha256 = "0abjm0wywp24qlgg9w8g35ijprjg5csq4fgba9caaiwvmpfbhmpw";
     fetchSubmodules = true;
   };
 

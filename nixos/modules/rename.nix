@@ -196,9 +196,9 @@ with lib;
     (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
 
     # misc/version.nix
-    (mkRenamedOptionModule [ "config" "system" "nixosVersion" ] [ "config" "system" "nixos" "version" ])
+    #(mkRenamedOptionModule [ "config" "system" "nixosVersion" ] [ "config" "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "config" "system" "nixosRelease" ] [ "config" "system" "nixos" "release" ])
-    (mkRenamedOptionModule [ "config" "system" "nixosVersionSuffix" ] [ "config" "system" "nixos" "versionSuffix" ])
+    #(mkRenamedOptionModule [ "config" "system" "nixosVersionSuffix" ] [ "config" "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "config" "system" "nixosRevision" ] [ "config" "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "config" "system" "nixosCodeName" ] [ "config" "system" "nixos" "codeName" ])
     (mkRenamedOptionModule [ "config" "system" "nixosLabel" ] [ "config" "system" "nixos" "label" ])
@@ -240,5 +240,11 @@ with lib;
 
     # Xen
     (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [ "virtualisation" "xen" "package-qemu" ])
-  ];
+  ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                   "snmpExporter" "unifiExporter" "varnishExporter" ]
+       (opt: mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
+         The prometheus exporters are now configured using `services.prometheus.exporters'.
+         See the 18.03 release notes for more information.
+       '' ));
 }

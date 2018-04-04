@@ -7,18 +7,21 @@
 
 with stdenv.lib;
 
+let
+  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.3.4";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "1djrbpm1f258cicf65ddvndpxi1izmnc12253k1zwl77z4jjbwls";
+    sha256 = "0jj3a02bz30xa7p4migyhvxd9s0cllymsp1rdh2pbh40p79g1fp1";
   };
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
-    curl
+    curlWithGnuTls
     udev
     libX11
     libXext

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -48,7 +49,11 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     mkdir tmp
-    HOME=tmp nosetests -v
+    HOME=tmp nosetests -v ${if (stdenv.isDarwin) then ''
+      --exclude test_delete \
+      --exclude test_checkpoints_follow_file
+    ''
+    else ""}
   '';
 
   meta = {

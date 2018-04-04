@@ -23,15 +23,30 @@ stdenv.mkDerivation rec {
         url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/rc_mksid-no-buffer-overflow?h=debian/2.4.7-1%2b4";
         sha256 = "1dk00j7bg9nfgskw39fagnwv1xgsmyv0xnkd6n1v5gy0psw0lvqh";
       })
+      (fetchurl {
+        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
+        sha256 = "1xnmqn02kc6g5y84xynjwnpv9cvrfn3nyv7h7r8j8xi7qf2aj4q8";
+      })
       ./musl-fix-headers.patch
     ];
 
   buildInputs = [ libpcap ];
 
+  postPatch = ''
+    # strip is not found when cross compiling with seemingly no way to point
+    # make to the right place, fixup phase will correctly strip
+    # everything anyway so we remove it from the Makefiles
+    for file in $(find -name Makefile.linux); do
+      substituteInPlace "$file" --replace '$(INSTALL) -s' '$(INSTALL)'
+    done
+  '';
+
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     make install
     install -D -m 755 scripts/{pon,poff,plog} $out/bin
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -85,7 +85,7 @@ EOF
     description = "Gerbil Scheme";
     homepage    = "https://github.com/vyzo/gerbil";
     license     = stdenv.lib.licenses.lgpl2;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fare ];
   };
 }

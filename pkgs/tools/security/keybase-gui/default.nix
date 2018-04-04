@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildFHSUserEnv, writeTextFile, alsaLib, atk, cairo, cups
-, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk2, nspr
-, nss, pango, systemd, xorg, utillinuxMinimal }:
+, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk2
+, libnotify, nspr, nss, pango, systemd, xorg, utillinuxMinimal }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
@@ -17,6 +17,7 @@ let
     glib
     gnome2.GConf
     gtk2
+    libnotify
     nspr
     nss
     pango

@@ -16,6 +16,21 @@ in
 
   options.system = {
 
+    # XXX: Reintroduce old options to make nixops before 1.6 able to evaluate configurations
+    # XXX: Remove after nixops has been bumped to a compatible version
+    nixosVersion = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.str;
+      default = config.system.nixos.version;
+    };
+    nixosVersionSuffix = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.str;
+      default = config.system.nixos.versionSuffix;
+    };
+
     nixos.version = mkOption {
       internal = true;
       type = types.str;
@@ -70,7 +85,7 @@ in
     defaultChannel = mkOption {
       internal = true;
       type = types.str;
-      default = https://nixos.org/channels/nixos-unstable;
+      default = https://nixos.org/channels/nixos-18.03;
       description = "Default NixOS channel to which the root user is subscribed.";
     };
 

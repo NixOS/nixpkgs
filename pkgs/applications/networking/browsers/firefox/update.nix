@@ -22,7 +22,7 @@ writeScript "update-${attrPath}" ''
   #  - removes trailing slash
   #  - sorts everything with semver in mind
   #  - picks up latest release
-  version=`xidel -q $url --extract "//a" | \
+  version=`xidel $url --extract "//a" | \
            grep "^[0-9.]*${versionSuffix}/$" | \
            sed s/[/]$// | \
            sort --version-sort | \

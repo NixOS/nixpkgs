@@ -1,5 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
-, google_auth, ply, protobuf, grpcio, requests, googleapis_common_protos,  dill,  future,  pytest,  mock,  unittest2 }:
+, google_auth, ply, protobuf3_5, grpcio, requests
+, googleapis_common_protos, dill, future, pytest, mock, unittest2 }:
 
 buildPythonPackage rec {
   pname = "google-gax";
@@ -10,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0p1ribd2xy7a04wnjv12agkcdi6f9cpj838884hayx07p5g8v3ji";
   };
 
-  propagatedBuildInputs = [ google_auth ply protobuf grpcio requests googleapis_common_protos dill future ];
+  propagatedBuildInputs = [ google_auth ply protobuf3_5 grpcio requests googleapis_common_protos dill future ];
   checkInputs = [ pytest mock unittest2 ];
 
   # Importing test__grpc_google_auth fails with "ModuleNotFoundError: No module named 'google_auth_httplib2'", where
