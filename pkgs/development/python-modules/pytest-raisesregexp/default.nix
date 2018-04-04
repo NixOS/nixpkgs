@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-raisesregexp";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q8yby4g3il86rp7rhk89792wm17cykzsqcwbxpbbyal3an8mphg";
+    sha256 = "b54372494fc1f11388b1b9348aeb36b69609699eb8f46e0e010afc733d78236a";
   };
 
   buildInputs = [ py pytest ];
