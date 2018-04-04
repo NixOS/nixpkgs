@@ -66,9 +66,9 @@ in
     };
 
     splUnstable = common {
-      version = "2018-01-24";
-      rev = "23602fdb39e1254c669707ec9d2d0e6bcdbf1771";
-      sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
+      version = "2018-03-09";
+      rev = "43983eb2024ec6b3280e6e06a6fb621ee3bb2a41";
+      sha256 = "00h7z30hzxd09cfa44w7yv7zympvdwzdximfgjvpa1layzppjpsh";
     };
 
     splLegacyCrypto = common {
