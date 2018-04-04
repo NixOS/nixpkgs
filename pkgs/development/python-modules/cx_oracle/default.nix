@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
-  version = "6.1";
+  version = "6.2.1";
 
   buildInputs = [
     oracle-instantclient
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80545fc7acbdda917dd2b1604c938141256bdfed3ad464a44586c9c2f09c3004";
+    sha256 = "01970bc843b3c699a7fd98af19e0401fe69abfbd2acdf464e0bf2ae06ea372b9";
   };
 
   # Check need an Oracle database to run  
