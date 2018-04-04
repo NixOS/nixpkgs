@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, python, gstreamer, gobjectIntrospection
-, orc, alsaLib, libXv, pango, libtheora
-, cdparanoia, libvisual, libintl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, meson
+, ninja, gettext, gobjectIntrospection, python
+, gstreamer, orc, alsaLib, libXv, pango, libtheora
+, wayland, cdparanoia, libvisual, libintl
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.12.3";
+  name = "gst-plugins-base-1.14.0";
 
   meta = {
     description = "Base plugins and helper libraries";
@@ -15,29 +16,34 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "19ffwdch7m777ragmwpy6prqmfb742ym1n3ki40s0zyki627plyk";
+    sha256 = "0h39bcp7fcd9kgb189lxr8l0hm0almvzpzgpdh1jpq2nzxh4d43y";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig python gobjectIntrospection
+    pkgconfig python meson ninja gettext gobjectIntrospection
   ];
 
   buildInputs = [
-    orc libXv pango libtheora cdparanoia libintl
+    orc libXv pango libtheora cdparanoia libintl wayland
   ]
   ++ stdenv.lib.optional stdenv.isLinux alsaLib
   ++ stdenv.lib.optional (!stdenv.isDarwin) libvisual;
 
   propagatedBuildInputs = [ gstreamer ];
 
-  configureFlags = if stdenv.isDarwin then [
-    # Does not currently build on Darwin
-    "--disable-libvisual"
-    # Undefined symbols _cdda_identify and _cdda_identify_scsi in cdparanoia
-    "--disable-cdparanoia"
-  ] else null;
+  preConfigure = ''
+    patchShebangs .
+  '';
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch {
+        url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370414";
+        sha256 = "07x43xis0sr0hfchf36ap0cibx0lkfpqyszb3r3w9dzz301fk04z";
+    })
+    ./fix_pkgconfig_includedir.patch
+  ];
 }

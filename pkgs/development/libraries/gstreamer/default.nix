@@ -17,11 +17,7 @@ rec {
 
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
 
-  gnonlin = callPackage ./gnonlin { inherit gst-plugins-base; };
-
-  # TODO: gnonlin is deprecated in gst-editing-services, better switch to nle
-  # (Non Linear Engine).
-  gst-editing-services = callPackage ./ges { inherit gnonlin; };
+  gst-editing-services = callPackage ./ges { inherit gst-plugins-base; };
 
   gst-vaapi = callPackage ./vaapi {
     inherit gst-plugins-base gstreamer gst-plugins-bad;

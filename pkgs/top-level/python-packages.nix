@@ -14467,6 +14467,8 @@ in {
     };
   };
 
+  Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
+
   squaremap = buildPythonPackage rec {
     name = "squaremap-1.0.4";
     disabled = isPy3k;
@@ -18602,6 +18604,8 @@ EOF
 
     };
   };
+
+  vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";

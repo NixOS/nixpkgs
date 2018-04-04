@@ -612,7 +612,7 @@ with pkgs;
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   cconv = callPackage ../tools/text/cconv { };
-  
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -1794,6 +1794,8 @@ with pkgs;
 
   crackxls = callPackage ../tools/security/crackxls { };
 
+  create-cycle-app = nodePackages_8_x.create-cycle-app;
+
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
   cromfs = callPackage ../tools/archivers/cromfs { };
@@ -2665,6 +2667,8 @@ with pkgs;
     inherit (xorg) libXdmcp;
   };
 
+  gron = callPackage ../development/tools/gron { };
+
   groonga = callPackage ../servers/search/groonga { };
 
   grub = callPackage_i686 ../tools/misc/grub {
@@ -3088,6 +3092,8 @@ with pkgs;
   jing = self.jing-trang;
   jing-trang = callPackage ../tools/text/xml/jing-trang { };
 
+  jl = haskellPackages.callPackage ../development/tools/jl { };
+
   jmespath = callPackage ../development/tools/jmespath { };
 
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
@@ -3175,6 +3181,8 @@ with pkgs;
   kpcli = callPackage ../tools/security/kpcli { };
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
+
+  krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
@@ -5962,7 +5970,9 @@ with pkgs;
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { };
+  gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
   gerbil = callPackage ../development/compilers/gerbil { };
+  gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { };
 
   gccFun = callPackage ../development/compilers/gcc/7;
   gcc = gcc7;
@@ -14471,15 +14481,9 @@ with pkgs;
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
-  tex-gyre = callPackage ../data/fonts/tex-gyre { };
+  tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
-  tex-gyre-bonum-math = callPackage ../data/fonts/tex-gyre-math { variant = "bonum"; };
-
-  tex-gyre-pagella-math = callPackage ../data/fonts/tex-gyre-math { variant = "pagella"; };
-
-  tex-gyre-schola-math = callPackage ../data/fonts/tex-gyre-math { variant = "schola"; };
-
-  tex-gyre-termes-math = callPackage ../data/fonts/tex-gyre-math { variant = "termes"; };
+  tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
 
   tipa = callPackage ../data/fonts/tipa { };
 
@@ -17430,7 +17434,8 @@ with pkgs;
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
-  rofi = callPackage ../applications/misc/rofi { };
+  rofi-unwrapped = callPackage ../applications/misc/rofi { };
+  rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
@@ -18854,6 +18859,8 @@ with pkgs;
   factorio-experimental = callPackage ../games/factorio { releaseType = "alpha"; experimental = true; };
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
+
+  factorio-headless-experimental = callPackage ../games/factorio { releaseType = "headless"; experimental = true; };
 
   factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
 

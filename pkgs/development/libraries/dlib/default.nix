@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "19.10";
+  version = "19.9";
   name = "dlib-${version}";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "0sgxblf4n33b8wgblyblmrkwydvy1yh7fzll1b6c4zgkz675w0m5";
+    sha256 = "0lc54r928j9dg7f2wn25m887z24d31wrc14v2hn6aknp1z084lrc";
   };
 
   postPatch = ''

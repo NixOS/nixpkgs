@@ -10521,14 +10521,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetLDAP = buildPerlPackage {
-    name = "Net-LDAP-0.4001";
-    propagatedBuildInputs = [ ConvertASN1 ];
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.4001.tar.gz;
-      sha256 = "0spwid70yxkh5zbad3ldw8yb2m5shkm59a7f0kllw8bb7ccczqps";
-    };
-  };
+  NetLDAP = perlldap;
 
   NetOAuth = buildPerlPackage {
     name = "Net-OAuth-0.28";
@@ -11260,6 +11253,22 @@ let self = _self // overrides; _self = with self; {
       description = "A PerlIO layer that adds read & write timeout to a handle";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  perlldap = buildPerlPackage rec {
+    name = "perl-ldap-0.65";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/${name}.tar.gz";
+      sha256 = "5f57dd261dc16ebf942a272ddafe69526598df71151a51916edc37a4f2f23834";
+    };
+    buildInputs = [ TextSoundex ];
+    propagatedBuildInputs = [ ConvertASN1 ];
+    meta = {
+      homepage = http://ldap.perl.org/;
+      description = "LDAP client library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
     };
   };
 

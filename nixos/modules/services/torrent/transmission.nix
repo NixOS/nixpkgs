@@ -59,8 +59,8 @@ in
           time the service starts). String values must be quoted, integer and
           boolean values must not.
 
-          See https://trac.transmissionbt.com/wiki/EditConfigFiles for
-          documentation.
+          See https://github.com/transmission/transmission/wiki/Editing-Configuration-Files
+          for documentation.
         '';
       };
 

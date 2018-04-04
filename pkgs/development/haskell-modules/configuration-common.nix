@@ -35,10 +35,8 @@ self: super: {
   # Use the latest version of the Cabal library.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
 
-  # Use the latest version, which supports Cabal 2.2.x. Unfortunately, the test
-  # suite depends on old versions of tasty and QuickCheck.
-  hackage-security = self.hackage-security_0_5_3_0;
-  hackage-security_0_5_3_0 = dontCheck super.hackage-security_0_5_3_0;
+  # The test suite depends on old versions of tasty and QuickCheck.
+  hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
@@ -1018,5 +1016,11 @@ self: super: {
   # spdx 0.2.2.0 needs older tasty
   # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
   spdx = dontCheck super.spdx;
+
+  # The test suite does not know how to find the 'alex' binary.
+  alex = overrideCabal super.alex (drv: {
+    testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
+    preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
+  });
 
 }

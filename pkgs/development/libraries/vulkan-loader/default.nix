@@ -3,12 +3,12 @@
   libXext, wayland, libGL_driver, makeWrapper }:
 
 let
-  version = "1.0.61.1";
+  version = "1.1.70.0";
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-LoaderAndValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "043kw6wnrpdplnb40x6n9rgf3gygsn9jiv91y458sydbhalfr945";
+    sha256 = "1a7xwl65bi03l4zbjq54qkxjb8kb4m78qvw8bas5alhf9v6i6yqp";
   };
 in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ cmake git python3 python3Packages.lxml
-                  glslang spirv-tools x11 libxcb libXrandr libXext wayland
+                  glslang x11 libxcb libXrandr libXext wayland
                 ];
   enableParallelBuilding = true;
 
@@ -28,13 +28,18 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" "demos" ];
+  patches = [ ./rev-file.patch ];
+
+  postUnpack = ''
+    # Hack so a version header can be generated. Relies on ./rev-file.patch to work.
+    mkdir -p "$sourceRoot/external/glslang/External"
+    echo "${spirv-tools.src.rev}" > "$sourceRoot/external/glslang/External/spirv-tools"
+  '';
 
   preConfigure = ''
     checkRev() {
       [ "$2" = $(cat "external_revisions/$1_revision") ] || (echo "ERROR: dependency $1 is revision $2 but should be revision" $(cat "external_revisions/$1_revision") && exit 1)
     }
-    checkRev spirv-tools "${spirv-tools.src.rev}"
-    checkRev spirv-headers "${spirv-tools.headers.rev}"
     checkRev glslang "${glslang.src.rev}"
   '';
 
