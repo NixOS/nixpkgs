@@ -172,7 +172,10 @@ stage2Init = let
     ${pkgsLinux.coreutils}/bin/cat ${script_modprobe} > /run/modprobe
     ${pkgsLinux.coreutils}/bin/chmod 755 /run/modprobe
     echo /run/modprobe > /proc/sys/kernel/modprobe
-    /run/modprobe virtio_net
+    # This never passed, before:
+    # + /nix/store/q1yvjh3ab1sb5sn510zla8nlr2r1iimp-kmod-24/bin/modprobe virtio_net
+    # modprobe: FATAL: Module virtio_net not found in directory /nix/store/yimxiswgxpps9j19kykddfibj02b4k05-linux-4.9.50/lib/modules//4.9.50-linuxkit
+    # /run/modprobe virtio_net
 
     echo "Existing passwd:"
     cat /etc/passwd
