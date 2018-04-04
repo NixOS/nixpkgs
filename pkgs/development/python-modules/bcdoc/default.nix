@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bcdoc";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s2kdqs1n2mj7wq3w0pq30zs7vxq0l3abik2clqnc4hm2j7crbk8";
+    sha256 = "f568c182e06883becf7196f227052435cffd45604700c82362ca77d3427b6202";
   };
 
   buildInputs = [ docutils six ];
