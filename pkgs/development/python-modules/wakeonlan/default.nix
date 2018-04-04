@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "1.0.0";
+  version = "1.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1snkyc6ph0bnypqs5yjw35mx3f9ij4808r5i06gl2vhn1rfzgyh1";
+    sha256 = "5e6013a17004809e676c150689abd94bcc0f12a37ad3fbce1f6270968f95ffa9";
   };
 
   meta = with stdenv.lib; {
