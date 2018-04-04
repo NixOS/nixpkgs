@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "5.1";
+  version = "6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0njsm0wn31l21bi118g5825ma5sa3rwn7v2x4wjd7yiiahkri337";
+    sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
   };
 
   meta = with stdenv.lib; {
