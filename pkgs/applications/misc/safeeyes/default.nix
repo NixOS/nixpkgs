@@ -30,11 +30,11 @@ in buildPythonApplication rec {
   # patch smartpause plugin
   postPatch = ''
     sed -i \
-      -e 's!xprintidle!${xprintidle-ng}/bin/xprintidle-ng!g' \
+      -e 's!xprintidle!xprintidle-ng!g' \
       safeeyes/plugins/smartpause/plugin.py
 
     sed -i \
-      -e 's!xprintidle!${xprintidle-ng}/bin/xprintidle-ng!g' \
+      -e 's!xprintidle!xprintidle-ng!g' \
       safeeyes/plugins/smartpause/config.json
   '';
 
