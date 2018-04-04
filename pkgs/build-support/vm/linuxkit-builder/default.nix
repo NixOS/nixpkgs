@@ -16,9 +16,11 @@
 , hyperkit
 , vpnkit
 , linuxkit
+, buildEnv
 , writeScript
 , writeScriptBin
 , writeText
+, writeTextFile
 , forceSystem
 , vmTools
 , makeInitrd
@@ -32,6 +34,9 @@
 }:
 
 let
+  writeScriptDir = name: text: writeTextFile {inherit name text; executable = true; destination = "/${name}"; };
+  writeRunitForegroundService = name: run: writeTextFile {inherit name; text = run; executable = true; destination = "/${name}/run"; };
+
   pkgsLinux = forceSystem "x86_64-linux" "x86_64";
   vmToolsLinux = vmTools.override { kernel = linuxkitKernel; pkgs = pkgsLinux; };
   containerIp = "192.168.65.2";
@@ -135,12 +140,12 @@ stage2Init = let
 
     script_poweroff = writeText "poweroff" ''
       #!/bin/sh
-      poweroff
+      exec ${pkgsLinux.busybox}/bin/poweroff
     '';
 
     script_poweroff_f = writeText "poweroff" ''
       #!/bin/sh
-      poweroff -f
+      exec ${pkgsLinux.busybox}/bin/poweroff -f
     '';
 
     file_instructions = writeText "instructions" ''
@@ -157,6 +162,53 @@ stage2Init = let
           kill $(cat ~/.nixpkgs/linuxkit-builder/nix-state/hyperkit.pid)
       ======================================================================
     '';
+
+    runit_targets = buildEnv {
+      name = "runit-targets";
+      paths = [
+        # Startup
+        (writeScriptDir "1" ''
+          #!/bin/sh
+          echo 'Hello world!'
+          touch /etc/runit/stopit
+          chmod 0 /etc/runit/stopit
+        '')
+
+        # Run-time
+        (writeScriptDir "2" ''
+          #!/bin/sh
+          echo "I have no idea what I'm doing..."
+
+          cat /proc/uptime
+          echo "Running some services in ${service_targets} :)"
+          exec ${pkgsLinux.runit}/bin/runsvdir -P ${service_targets}
+        '')
+
+        # Shutdown
+        (writeScriptDir "3" ''
+          #!/bin/sh
+          echo 'Ok, bye...'
+        '')
+      ];
+    };
+
+    service_targets = buildEnv {
+      name = "service-targets";
+      paths = [
+        (writeRunitForegroundService "acpid" ''
+          #!/bin/sh
+          echo "OK Let's go acpid"
+          exec ${pkgsLinux.busybox}/bin/acpid -f
+        '')
+
+        (writeRunitForegroundService "sshd" ''
+          #!/bin/sh
+          echo "OK Let's go sshd"
+          exec ${pkgsLinux.openssh}/bin/sshd -D -e -f ${sshdConfig}
+        '')
+
+      ];
+    };
   in writeScript "vm-run-stage2" ''
     #! ${pkgsLinux.bash}/bin/bash -eux
 
@@ -177,16 +229,7 @@ stage2Init = let
     # modprobe: FATAL: Module virtio_net not found in directory /nix/store/yimxiswgxpps9j19kykddfibj02b4k05-linux-4.9.50/lib/modules//4.9.50-linuxkit
     # /run/modprobe virtio_net
 
-    echo "Existing passwd:"
-    cat /etc/passwd
-    echo "---overwriting---"
-
     cat ${file_passwd} > /etc/passwd
-
-    echo "Existing group:"
-    cat /etc/group
-    echo "---overwriting---"
-
     cat ${file_group} > /etc/group
 
     mkdir -p /etc/ssh /root/.ssh /var/db /var/empty
@@ -217,7 +260,6 @@ stage2Init = let
     cat ${script_poweroff} > /etc/acpi/PWRF/00000080
     chmod +x /etc/acpi/PWRF/00000080
 
-    ${pkgsLinux.openssh}/bin/sshd -e -f ${sshdConfig}
 
     ${pkgsLinux.go-vpnkit}/bin/vpnkit-forwarder &
     ${pkgsLinux.go-vpnkit}/bin/vpnkit-expose-port \
@@ -236,7 +278,11 @@ stage2Init = let
     cat ${file_instructions}
     echo -en '\033[0m'
 
-    exec ${pkgsLinux.busybox}/bin/acpid -f
+    rm -rf /etc/runit
+    cp -r ${runit_targets} /etc/runit
+    cat /etc/runit/*
+
+    exec ${pkgsLinux.runit}/bin/runit
   '';
 
   img = "bzImage";
