@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "2.5.2";
+  version = "3.0.0";
   name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8c134dfedaef0e6ff4a4b94277708dcadb758b448905a83b8946df077356ed2";
+    sha256 = "86746b912a2cd37a54b06c694f021b0c8556d4caeab75ef50435ada152e2fbe1";
   };
 
   checkInputs = [ pytest pyasn1 ];
