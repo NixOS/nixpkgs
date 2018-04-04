@@ -612,7 +612,7 @@ with pkgs;
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   cconv = callPackage ../tools/text/cconv { };
-  
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -20551,6 +20551,8 @@ with pkgs;
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
+
+  nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
 
   norwester-font = callPackage ../data/fonts/norwester  {};
 
