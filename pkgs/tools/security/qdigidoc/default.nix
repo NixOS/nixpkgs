@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a7nsi28q57ic99hrb6x83qlvpqvzvk6acbfl6ncny2j4yaxa4jl";
   };
 
-  patches = [ ./glibc-2_26.patch ];
+  patches = [ ./certs.patch ./glibc-2_26.patch ];
 
   unpackPhase = ''
     mkdir src
