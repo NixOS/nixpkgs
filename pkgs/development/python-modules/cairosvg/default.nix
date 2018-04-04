@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cairosvg";
-  version = "1.0.18";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+    sha256 = "0b334f4ec436d78ecbc934c652f961a73a27d770f1133082cac265afab3dd64a";
   };
 
   propagatedBuildInputs = [ cairocffi ];
