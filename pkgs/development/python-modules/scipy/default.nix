@@ -1,12 +1,11 @@
-{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
+{lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
 
 buildPythonPackage rec {
   pname = "scipy";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "87ea1f11a0e9ec08c264dc64551d501fa307289460705f6fccd84cbfc7926d10";
   };
 
