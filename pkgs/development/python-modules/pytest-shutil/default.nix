@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
-  version = "1.2.8";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gdzarg3l7d80lj0gh9bcsw9r12gmf306n4y2cb18y7kqfpcqjlj";
+    sha256 = "2cfe4d3f5f25ad2b19e64847d62563f5494b2e0450ca1cfc5940974029b2cbd1";
   };
 
   buildInputs = [ cmdline pytest ];
