@@ -1,23 +1,23 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, scipy, stdenv, flake8, tox, pytest, glibcLocales
+, face_recognition_models, stdenv, flake8, tox, pytest, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "face_recognition";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "ageitgey";
-    rev = "fe421d4acd76e8a19098e942b7bd9c3bbef6ebc4"; # no tags available in Git, pure revs are pushed to pypi
-    sha256 = "0wv5qxkg7xv1cr43zhhbixaqgj08xw2l7yvwl8g3fb2kdxyndw1c";
+    rev = "v${version}";
+    sha256 = "17jnyr80j1p74gyvh1jabvwd3zsxvip2y7cjhh2g6gsjv2dpvrjv";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "flake8==2.6.0" "flake8"
   '';
 
-  propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models scipy ];
+  propagatedBuildInputs = [ pillow click dlib numpy face_recognition_models ];
 
   checkInputs = [ flake8 tox pytest glibcLocales ];
   checkPhase = ''
