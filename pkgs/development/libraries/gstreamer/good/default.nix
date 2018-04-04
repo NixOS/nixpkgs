@@ -5,7 +5,10 @@
 , cairo, gdk_pixbuf, aalib, libcaca
 , libsoup, libpulseaudio, libintlOrEmpty
 , darwin, lame, mpg123, twolame
+, gtkSupport ? false, gtk3 ? null
 }:
+
+assert gtkSupport -> gtk3 != null;
 
 let
   inherit (stdenv.lib) optionals optionalString;
@@ -44,7 +47,9 @@ stdenv.mkDerivation rec {
   ]
   ++ libintlOrEmpty
   ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
-  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ]
+  # for gtksink
+  ++ optionals gtkSupport [ gtk3 ];
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }
