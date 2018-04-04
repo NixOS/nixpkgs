@@ -20445,6 +20445,8 @@ with pkgs;
 
   helm = callPackage ../applications/audio/helm { };
 
+  heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
+
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
