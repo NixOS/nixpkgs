@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "CoilMQ";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wwa6fsqw1mxsryvgp0yrdjil8axyj0kslzi7lr45cnhgp5ab375";
+    sha256 = "4cbfeb5ed2459df14902c1380157be6267702b1271682924cd316ccad8a29d1d";
   };
 
   propagatedBuildInputs = [ stompclient pythondaemon redis pid ];
