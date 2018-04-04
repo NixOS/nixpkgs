@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-flakes";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0flag3n33kbhyjrhzmq990rvg4yb8hhhl0i48q9hw0ll89jp28lw";
+    sha256 = "3e880927fd2a77d31715eaab3876196e76d779726c9c24fe32ee5bab23281f82";
   };
 
   buildInputs = [ pytestpep8 pytest ];
