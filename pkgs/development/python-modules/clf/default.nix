@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "clf";
-  version = "0.5.2";
+  version = "0.5.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04lqd2i4fjs606b0q075yi9xksk567m0sfph6v6j80za0hvzqyy5";
+    sha256 = "abc919a1e99667f32fdde15dfb4bc527dbe22cf86a17acb78a449d7f2dfe937e";
   };
 
   patchPhase = ''
