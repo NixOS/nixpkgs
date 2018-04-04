@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "bitbucket-api";
-  version = "0.4.4";
+  version = "0.5.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cl5xa55ijjd23xs8znsd4w4vb3q1vkbmchy7hh6z6nmjcwbr478";
+    sha256 = "b541d9d7f234074a74214505aff1846eb21e5dd6d3915139e817d4675d34f4e3";
   };
 
   propagatedBuildInputs = [ requests_oauthlib nose sh ];
