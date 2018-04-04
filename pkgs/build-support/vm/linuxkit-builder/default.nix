@@ -215,7 +215,7 @@ stage2Init = let
 
     mkdir -p /etc/acpi/PWRF /etc/acpi/events
     cat ${script_poweroff} > /etc/acpi/PWRF/00000080
-    chmod +x "$pkgdir"/etc/acpi/PWRF/00000080
+    chmod +x /etc/acpi/PWRF/00000080
 
     # ${pkgsLinux.acpid}/bin/acpid -d
 
