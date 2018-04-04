@@ -7,15 +7,17 @@
 , certifi
 , singledispatch
 , pythonOlder
+, futures
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "4.5.3";
-  name = "${pname}-${version}";
+  version = "5.0.1";
+
 
   propagatedBuildInputs = [ backports_abc  certifi singledispatch ]
-    ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname;
+    ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname
+    ++ lib.optional (pythonOlder "3.2") futures;
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634
@@ -25,6 +27,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d14e47eab0e15799cf3cdcc86b0b98279da68522caace2bd7ce644287685f0a";
+    sha256 = "3e9a2333362d3dad7876d902595b64aea1a2f91d0df13191ea1f8bca5a447771";
+  };
+
+  meta = {
+    description = "A web framework and asynchronous networking library";
+    homepage = http://www.tornadoweb.org/;
+    license = lib.licenses.asl20;
   };
 }
