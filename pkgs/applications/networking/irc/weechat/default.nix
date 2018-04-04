@@ -122,4 +122,7 @@ in if configure == null then weechat else
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
-  '') // { unwrapped = weechat; }
+  '') // {
+    unwrapped = weechat;
+    meta = weechat.meta;
+  }
