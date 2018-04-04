@@ -4988,6 +4988,8 @@ in {
 
   jdcal = callPackage ../development/python-modules/jdcal { };
 
+  jieba = callPackage ../development/python-modules/jieba { };
+
   internetarchive = callPackage ../development/python-modules/internetarchive {};
 
   JPype1 = callPackage ../development/python-modules/JPype1 {};
