@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Cerberus";
-  version = "0.9.2";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1km7hvns1snrmcwz58bssi4wv3gwd34zm1z1hwjylmpqrfrcf8mi";
+    sha256 = "a5b39090fde3ec3294c9d7030b8eda935b42222160a66a922e0c8aea34cabfdf";
   };
 
   meta = with stdenv.lib; {
