@@ -6,7 +6,6 @@ in
 buildPythonApplication rec {
   pname = "fava";
   version = "1.7";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
