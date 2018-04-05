@@ -248,6 +248,23 @@ table
     box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
 }
 
+table.simplelist
+{
+    text-align: left;
+    color: #005aa0;
+    border: 0;
+    padding: 5px;
+    background: #fffff5;
+    font-weight: normal;
+    font-style: italic;
+    box-shadow: none;
+    margin-bottom: 1em;
+}
+
+div.navheader table, div.navfooter table {
+    box-shadow: none;
+}
+
 div.affiliation
 {
     font-style: italic;

@@ -25,13 +25,6 @@ out/html/index.html: manual-full.xml style.css highlightjs
 		./manual-full.xml
 
 	mkdir -p out/html/highlightjs/
-	echo "document.onreadystatechange = function () { \
-	  var listings = document.querySelectorAll('.programlisting, .screen'); \
-	  for (i = 0; i < listings.length; ++i) { \
-	     hljs.highlightBlock(listings[i]); \
-	  } \
-	} " > out/html/highlightjs/loader.js
-
 	cp -r highlightjs out/html/
 
 	cp ./overrides.css out/html/
@@ -63,6 +56,7 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/highlight.pack.js" highlightjs/
 	cp -r "$$HIGHLIGHTJS/LICENSE" highlightjs/
 	cp -r "$$HIGHLIGHTJS/mono-blue.css" highlightjs/
+	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
 manual-full.xml: ${MD_TARGETS} .version *.xml
