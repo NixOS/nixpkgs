@@ -193,6 +193,14 @@ with lib;
       '';
     };
 
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
+      '';
+    };
+
     locations = mkOption {
       type = types.attrsOf (types.submodule (import ./location-options.nix {
         inherit lib;
