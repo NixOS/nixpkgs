@@ -28,8 +28,6 @@
 , linuxkitKernel ? import ./kernel.nix { pkgs = forceSystem "x86_64-linux" "x86_64"; }
 , storeDir ? builtins.storeDir
 
-, authorizedKeys ? ./default-key.pub
-, privateKey ? ./default-key
 , hostPort ? "24083"
 }:
 
@@ -131,6 +129,7 @@ stage2Init = let
 
     file_group = writeText "group" ''
       nixbld:x:30000:nixbld1
+      root:x:0:root
     '';
 
     file_bashrc = writeText "bashrc" ''
@@ -234,7 +233,10 @@ stage2Init = let
     cat ${file_passwd} > /etc/passwd
     cat ${file_group} > /etc/group
 
-    mkdir -p /etc/ssh /root/.ssh /var/db /var/empty
+    mkdir -p /etc/ssh /root /var/db /var/empty
+    chown root:root /root
+    chmod 0700 /root
+
     cat ${file_bashrc} > /root/.bashrc
     . /root/.bashrc
 
@@ -250,10 +252,33 @@ stage2Init = let
     route add default gw 192.168.65.1 eth0
     echo 'nameserver 192.168.65.1' > /etc/resolv.conf
 
-    ${pkgsLinux.openssh}/bin/ssh-keygen -A
+    mkdir -p /mnt
+    mknod /dev/sr0 b 11 0
+    ${pkgsLinux.busybox}/bin/mount /dev/sr0 /mnt
 
-    cp ${authorizedKeys} /root/.ssh/authorized_keys
-    chmod 0644 /root/.ssh/authorized_keys
+    if [ ! -f /mnt/config ]; then
+      echo "FAIL FAIL FAIL"
+      echo "You must pass an SSH key data file via via a CDROM (ie: -data on linuxkit)"
+      exit 1
+    fi
+
+    mkdir /extract-ssh-keys
+    (
+      rm -rf /root/.ssh
+      mkdir -p /root/.ssh
+      chmod 0700 /root/.ssh
+
+      cd /extract-ssh-keys
+      tar -xf /mnt/config
+      chmod 0600 ./*
+      chmod 0644 ./*.pub
+
+      mv client.pub /root/.ssh/authorized_keys
+      chmod 0600 /root/.ssh/authorized_keys
+      chown root:root /root/.ssh/authorized_keys
+      mv ssh_host_* /etc/ssh/
+    )
+    rm -rf /extract-ssh-keys
 
     mkdir -p /port
     mount -v -t 9p -o trans=virtio,dfltuid=1001,dfltgid=50,version=9p2000 port /port
@@ -319,11 +344,20 @@ stage2Init = let
     ln -fs ${initrd}/initrd $DIR/nix-initrd.img
     echo -n "console=ttyS0 panic=1 command=${stage2Init} loglevel=7 debug" > $DIR/nix-cmdline
 
-    [ ! -f $DIR/key ] && {
-      cp '${privateKey}' $DIR/key
-      chmod 0400 $DIR/key
-    }
-    echo "root@localhost x86_64-linux $DIR/key $CPUS 1 $FEATURES" > $DIR/remote-systems
+    if [ ! -d $DIR/keys ]; then
+      mkdir -p $DIR/keys
+      (
+        cd $DIR/keys
+        ssh-keygen -C "Nix LinuxKit Builder, Client" -N "" -f client
+        ssh-keygen -C "Nix LinuxKit Builder, Server" -f ssh_host_ecdsa_key -N "" -t ecdsa
+
+        tar -cf server-config.tar client.pub ssh_host_ecdsa_key.pub ssh_host_ecdsa_key
+
+        echo -n '[localhost]:${hostPort} ' > known_host
+        cat ssh_host_ecdsa_key.pub >> known_host
+      )
+    fi
+    echo "nix-linuxkit x86_64-linux $DIR/keys/client $CPUS 1 $FEATURES" > $DIR/remote-systems
 
     cat <<EOF > $DIR/root-init.sh
     #!/usr/bin/env bash
@@ -352,6 +386,7 @@ stage2Init = let
       -networking vpnkit \
       -ip ${containerIp} \
       -disk $DIR/nix-disk,size=$SIZE \
+      -data $DIR/keys/server-config.tar \
       -cpus $CPUS \
       -mem $MEM \
       $DIR/nix
