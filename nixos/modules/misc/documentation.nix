@@ -16,7 +16,10 @@ let cfg = config.documentation; in
         description = ''
           Whether to install documentation of packages from
           <option>environment.systemPackages</option> into the generated system path.
+
+          See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
+        # which is at ../../../doc/multiple-output.xml
       };
 
       man.enable = mkOption {
@@ -25,6 +28,15 @@ let cfg = config.documentation; in
         description = ''
           Whether to install manual pages and the <command>man</command> command.
           This also includes "man" outputs.
+        '';
+      };
+
+      info.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to install info pages and the <command>info</command> command.
+          This also includes "info" outputs.
         '';
       };
 
@@ -38,14 +50,6 @@ let cfg = config.documentation; in
         '';
       };
 
-      info.enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to install info pages and the <command>info</command> command.
-          This also includes "info" outputs.
-        '';
-      };
 
     };
 
@@ -59,17 +63,17 @@ let cfg = config.documentation; in
       environment.extraOutputsToInstall = [ "man" ];
     })
 
+    (mkIf cfg.info.enable {
+      environment.systemPackages = [ pkgs.texinfoInteractive ];
+      environment.pathsToLink = [ "/share/info" ];
+      environment.extraOutputsToInstall = [ "info" ];
+    })
+
     (mkIf cfg.doc.enable {
       # TODO(@oxij): put it here and remove from profiles?
       # environment.systemPackages = [ pkgs.w3m ]; # w3m-nox?
       environment.pathsToLink = [ "/share/doc" ];
       environment.extraOutputsToInstall = [ "doc" ];
-    })
-
-    (mkIf cfg.info.enable {
-      environment.systemPackages = [ pkgs.texinfoInteractive ];
-      environment.pathsToLink = [ "/share/info" ];
-      environment.extraOutputsToInstall = [ "info" ];
     })
 
   ]);
