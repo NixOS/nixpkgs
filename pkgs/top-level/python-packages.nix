@@ -931,6 +931,8 @@ in {
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
 
+  beancount = callPackage ../development/python-modules/beancount { };
+
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
   beaker = buildPythonPackage rec {

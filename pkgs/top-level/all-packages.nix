@@ -18775,9 +18775,7 @@ with pkgs;
 
   bastet = callPackage ../games/bastet {};
 
-  beancount = callPackage ../applications/office/beancount {
-      pythonPackages = python3Packages;
-  };
+  beancount = with python3.pkgs; toPythonApplication beancount;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
