@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "oauth2client";
-  version = "1.4.12";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
+    sha256 = "bd3062c06f8b10c6ef7a890b22c2740e5f87d61b6e1f4b1c90d069cdfc9dadb5";
   };
 
   propagatedBuildInputs = [ six httplib2 pyasn1-modules rsa ];
