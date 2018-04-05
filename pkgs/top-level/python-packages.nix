@@ -18320,24 +18320,7 @@ EOF
 
   moreItertools = self.more-itertools;
 
-  more-itertools = buildPythonPackage rec {
-    name = "more-itertools-${version}";
-    version = "4.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
-      sha256 = "0cadwsr97c80k18if7qy5d8j8l1zj3yhnkm6kbngk0lpl7pxq8ax";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      homepage = https://more-itertools.readthedocs.org;
-      description = "Expansion of the itertools module";
-      license = licenses.mit;
-    };
-  };
+  more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = buildPythonPackage rec {
     name = "jaraco.functools-${version}";
