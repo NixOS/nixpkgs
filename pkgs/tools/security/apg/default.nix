@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.adel.nursat.kz/apg/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
