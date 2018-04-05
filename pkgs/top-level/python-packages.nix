@@ -20178,6 +20178,8 @@ EOF
 
   yapf = callPackage ../development/python-modules/yapf { };
 
+  black = callPackage ../development/python-modules/black { };
+
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   jsonref = callPackage ../development/python-modules/jsonref { };
