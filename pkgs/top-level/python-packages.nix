@@ -16703,11 +16703,11 @@ in {
   update_checker = callPackage ../development/python-modules/update_checker {};
 
   uritemplate = buildPythonPackage rec {
-    name = "uritemplate-${version}";
+    pname = "uritemplate";
     version = "0.6";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
+    src = pkgs.fetchPypi {
+      inherit pname version;
       sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
     };
 
