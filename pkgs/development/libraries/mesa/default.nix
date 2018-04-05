@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.3.7";
+  version = "17.3.8";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "07mcfyksspr4xp7fhhdgjhxm0182jhyav11shpzahrdsix591585";
+    sha256 = "1cd6a4ll5arla3kncxnw9196ak1v4rvnb098aa7lm3n4h7r9p7cg";
   };
 
   prePatch = "patchShebangs .";
@@ -92,7 +92,8 @@ let self = stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
+    ./missing-include.patch # dev_t needs sys/stat.h, fixes build w/musl
+  ];
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
