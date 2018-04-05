@@ -860,6 +860,8 @@ in {
     };
   };
 
+  backcall = callPackage ../development/python-modules/backcall { };
+
   backports_abc = callPackage ../development/python-modules/backports_abc { };
 
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
