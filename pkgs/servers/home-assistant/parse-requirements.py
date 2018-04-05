@@ -43,6 +43,9 @@ def fetch_reqs(version='master'):
                 if component not in requirements:
                     requirements[component] = []
             elif line[0] != '#':
+                # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
+                # Therefore, if there's a "#" in the line, only take the part after it
+                line = line[line.find('#') + 1:]
                 for component in components:
                     requirements[component].append(line)
     return requirements
