@@ -1,7 +1,9 @@
 { stdenv, fetchurl, openssl, libcap, curl, which
 , eventlog, pkgconfig, glib, python, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
-, json_c, libuuid, libivykis, mongoc, rabbitmq-c }:
+, json_c, libuuid, libivykis, mongoc, rabbitmq-c
+, libesmtp
+}:
 
 let
   pname = "syslog-ng";
@@ -36,12 +38,14 @@ stdenv.mkDerivation rec {
     libivykis
     mongoc
     rabbitmq-c
+    libesmtp
   ];
 
   configureFlags = [
     "--enable-manpages"
     "--enable-dynamic-linking"
     "--enable-systemd"
+    "--enable-smtp"
     "--with-ivykis=system"
     "--with-librabbitmq-client=system"
     "--with-mongoc=system"
