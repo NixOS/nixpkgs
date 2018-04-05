@@ -4648,6 +4648,8 @@ with pkgs;
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
+  
+  rpiboot-unstable = callPackage ../development/misc/rpiboot/unstable.nix { };
 
   rpm = callPackage ../tools/package-management/rpm { };
 
