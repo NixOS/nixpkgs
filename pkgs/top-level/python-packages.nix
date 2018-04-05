@@ -8811,7 +8811,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -12381,7 +12381,8 @@ in {
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-2.5.3";
+    pname = "Babel";
+    version = "2.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/B/Babel/${name}.tar.gz";
