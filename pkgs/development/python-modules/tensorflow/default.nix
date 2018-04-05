@@ -11,6 +11,8 @@
 , sse42Support ? false
 , avx2Support ? false
 , fmaSupport ? false
+
+, Accelerate, IOKit, Security
 }:
 
 assert cudaSupport -> nvidia_x11 != null
@@ -58,7 +60,8 @@ let
     nativeBuildInputs = [ swig which ];
 
     buildInputs = [ python jemalloc openmpi glibcLocales numpy ]
-      ++ lib.optionals cudaSupport [ cudatoolkit cudnn nvidia_x11 ];
+      ++ lib.optionals cudaSupport [ cudatoolkit cudnn nvidia_x11 ]
+      ++ lib.optionals stdenv.isDarwin [ Accelerate IOKit Security ];
 
     preConfigure = ''
       patchShebangs configure
@@ -88,7 +91,10 @@ let
 
     hardeningDisable = [ "all" ];
 
+    # monolithic config generates a single tensorflow .so, which resolves linking issues on Darwin
+    # See https://github.com/tensorflow/tensorflow/blob/37aa430d84ced579342a4044c89c236664be7f68/configure.py#L1228
     bazelFlags = [ "--config=opt" ]
+                 ++ lib.optional stdenv.isDarwin "--config=monolithic"
                  ++ lib.optional sse42Support "--copt=-msse4.2"
                  ++ lib.optional avx2Support "--copt=-mavx2"
                  ++ lib.optional fmaSupport "--copt=-mfma"
@@ -105,11 +111,30 @@ let
     };
 
     buildAttrs = {
+      # Here we use `declare` to solidify the environment (NIX_CFLAGS_COMPILE, etc) for when cc/cxx/ld is called
+      # It's gross but it works!
+      # We also set CC to `CC || CXX` since Bazel invokes CC for C++ files occasionally
       preBuild = ''
         patchShebangs .
         find -type f -name CROSSTOOL\* -exec sed -i \
           -e 's,/usr/bin/ar,${binutils.bintools}/bin/ar,g' \
           {} \;
+      '' + lib.optionalString stdenv.isDarwin ''
+        export CC="$(pwd)/cc.sh"
+        export CXX="$(pwd)/cxx.sh"
+        export LD="$(pwd)/ld.sh"
+
+        echo "#!/usr/bin/env bash" >> test.sh
+        chmod +x test.sh
+        declare -px >> test.sh
+        cp test.sh cc.sh
+        cp test.sh cxx.sh
+        cp test.sh ld.sh
+
+        echo "(clang \"\$@\" ) || (clang++ \"\$@\" )" >> cc.sh
+        echo "export isCpp=1; export cppInclude=1" >> cxx.sh
+        echo "(clang++ \"\$@\") " >> cxx.sh
+        echo "(ld \"\$@\") " >> ld.sh
       '';
 
       installPhase = ''
@@ -150,6 +175,6 @@ in buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
     platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
-    broken = !(xlaSupport -> cudaSupport);
+    broken = !(xlaSupport -> cudaSupport) || (stdenv.isDarwin && cudaSupport);
   };
 }
