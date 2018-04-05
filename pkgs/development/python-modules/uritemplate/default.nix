@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "uritemplate";
-  version = "0.6";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    sha256 = "c02643cebe23fc8adb5e6becffe201185bf06c40bda5c0b4028a93f1527d011d";
   };
 
   # No tests in archive
