@@ -68,8 +68,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.vswitches) ||
-             (hasAttr dev cfg.wlanInterfaces)
+             (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 

@@ -239,7 +239,7 @@ following incompatible changes:</para>
       the <literal>openssh_with_kerberos</literal> package
       is now a deprecated alias.
       If you do not want Kerberos support,
-      you can do <literal>openssh.override { withKerboros = false; }</literal>.
+      you can do <literal>openssh.override { withKerberos = false; }</literal>.
       Note, this also applies to the <literal>openssh_hpn</literal> package.
     </para>
   </listitem>

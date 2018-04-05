@@ -111,6 +111,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  castxml = callPackage ../development/tools/castxml { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
@@ -4234,6 +4236,8 @@ with pkgs;
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pdd = python3Packages.callPackage ../tools/misc/pdd { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
@@ -4647,6 +4651,8 @@ with pkgs;
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
+  rpiboot-unstable = callPackage ../development/misc/rpiboot/unstable.nix { };
+
   rpm = callPackage ../tools/package-management/rpm { };
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
@@ -4656,6 +4662,8 @@ with pkgs;
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
+
+  rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
     pythonPackages = python3Packages;
@@ -5046,6 +5054,8 @@ with pkgs;
   tcpkali = callPackage ../applications/networking/tcpkali { };
 
   tcpreplay = callPackage ../tools/networking/tcpreplay { };
+
+  ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
@@ -14975,6 +14985,7 @@ with pkgs;
   };
 
   cni = callPackage ../applications/networking/cluster/cni {};
+  cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
@@ -15172,7 +15183,9 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { webkitgtk24x-gtk2 = null; });
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
+    jdk = jdk10;
+  });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -16639,7 +16652,7 @@ with pkgs;
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monero = callPackage ../applications/altcoins/monero {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost15x;
   };
 
@@ -19443,7 +19456,7 @@ with pkgs;
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
-  gnomeExtensions = {
+  gnomeExtensions = recurseIntoAttrs {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
@@ -20484,6 +20497,8 @@ with pkgs;
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
+
+  nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 

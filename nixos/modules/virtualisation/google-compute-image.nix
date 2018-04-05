@@ -2,7 +2,7 @@
 
 with lib;
 let
-  diskSize = 1024; # MB
+  diskSize = 1536; # MB
   gce = pkgs.google-compute-engine;
 in
 {

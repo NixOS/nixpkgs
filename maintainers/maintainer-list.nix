@@ -695,6 +695,11 @@
     github = "carlsverre";
     name = "Carl Sverre";
   };
+  cartr = {
+    email = "carter.sande@duodecima.technology";
+    github = "cartr";
+    name = "Carter Sande";
+  };
   casey = {
     email = "casey@rodarmor.net";
     github = "casey";
