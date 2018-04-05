@@ -12380,25 +12380,7 @@ in {
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
-  Babel = buildPythonPackage (rec {
-    name = "Babel-2.3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/Babel/${name}.tar.gz";
-      sha256 = "0x98qqqw35xllpcama013a9788ly84z8dm1w2wwfpxh2710c8df5";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ pytz ];
-
-    meta = {
-      homepage = http://babel.edgewall.org;
-      description = "A collection of tools for internationalizing Python applications";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
-
+  Babel = callPackage ../development/python-modules/Babel { };
   pybfd = callPackage ../development/python-modules/pybfd { };
 
   pyblock = stdenv.mkDerivation rec {
@@ -16721,12 +16703,12 @@ in {
   update_checker = callPackage ../development/python-modules/update_checker {};
 
   uritemplate = buildPythonPackage rec {
-    name = "uritemplate-${version}";
-    version = "0.6";
+    pname = "uritemplate";
+    version = "3.0.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
-      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0781gm9g34wa0asc19dx81ng0nqq07igzv3bbvdqmz13pv7469n0";
     };
 
     # No tests in archive
