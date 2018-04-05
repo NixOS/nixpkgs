@@ -17929,6 +17929,8 @@ with pkgs;
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
+  terminus = callPackage ../applications/misc/terminus { inherit (gnome2) GConf; };
+
   lxterminal = callPackage ../applications/misc/lxterminal {
     vte = gnome3.vte;
   };
