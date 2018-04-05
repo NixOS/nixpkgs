@@ -623,12 +623,12 @@ in {
   };
 
   atomicwrites = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "1.1.5";
     name = "atomicwrites-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/atomicwrites/atomicwrites-${version}.tar.gz";
-      sha256 = "08s05h211r07vs66r4din3swrbzb344vli041fihpg34q3lcxpvw";
+      sha256 = "11bm90fwm2avvf4f3ib8g925w7jr4m11vcsinn1bi6ns4bm32214";
     };
 
     meta = {
