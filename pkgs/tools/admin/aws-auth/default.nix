@@ -1,25 +1,23 @@
-{ stdenv, fetchFromGitHub, makeWrapper, jq, awscli }:
+{ stdenv, fetchFromGitHub, makeWrapper, jq, awscli, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2017-07-24";
+  version = "unstable-2018-04-04";
   name = "aws-auth-${version}";
 
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = "aws-auth";
-    rev = "5a4c9673f9f00ebaa4bb538827e1c2f277c475e1";
-    sha256 = "095j9zqxra8hi2iyz0y4azs9yigy5f6alqkfmv180pm75nbc031g";
+    rev = "03e3eb2a0e89c6d55f0721462a6bc077aa4668bf";
+    sha256 = "0r89kvkcjsz6v9r2pk45v82v623y334b0hfvdvzfnls3j7d23m2p";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-
-  dontBuild = true;
 
   # copy script and set $PATH
   installPhase = ''
     install -D $src/aws-auth.sh $out/bin/aws-auth
     wrapProgram $out/bin/aws-auth \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ awscli jq ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ awscli jq openssl ]}
   '';
 
   meta = {
