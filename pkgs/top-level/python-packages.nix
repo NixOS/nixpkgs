@@ -4988,6 +4988,8 @@ in {
 
   jdcal = callPackage ../development/python-modules/jdcal { };
 
+  jieba = callPackage ../development/python-modules/jieba { };
+
   internetarchive = callPackage ../development/python-modules/internetarchive {};
 
   JPype1 = callPackage ../development/python-modules/JPype1 {};
@@ -9177,6 +9179,8 @@ in {
     marisa = pkgs.marisa;
   };
 
+  marisa-trie = callPackage ../development/python-modules/marisa-trie { };
+
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
     version = "1.0";
@@ -10733,6 +10737,8 @@ in {
     };
   };
 
+  langcodes = callPackage ../development/python-modules/langcodes { };
+
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
     name = "livestreamer-${version}";
@@ -11319,6 +11325,8 @@ in {
     buildInputs = with self; [ pbr testtools testrepository mock ];
     propagatedBuildInputs = with self; [ six requests ];
   };
+
+  mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
   mox3 = buildPythonPackage rec {
     name = "mox3-${version}";
@@ -17097,6 +17105,8 @@ EOF
   wheel = callPackage ../development/python-modules/wheel { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
+
+  wordfreq = callPackage ../development/python-modules/wordfreq { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
