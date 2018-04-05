@@ -12384,8 +12384,8 @@ in {
     pname = "Babel";
     version = "2.5.3";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/Babel/${name}.tar.gz";
+    src = pkgs.fetchpypi {
+      inherit pname version;
       sha256 = "050zyi300wsyqq1cj0ajrskb5kkv0wxblz124g9yv4s3vmpwpr4c";
     };
 
