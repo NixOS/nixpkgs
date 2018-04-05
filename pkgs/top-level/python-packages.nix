@@ -12381,14 +12381,14 @@ in {
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-2.3.4";
+    name = "Babel-2.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/B/Babel/${name}.tar.gz";
-      sha256 = "0x98qqqw35xllpcama013a9788ly84z8dm1w2wwfpxh2710c8df5";
+      sha256 = "050zyi300wsyqq1cj0ajrskb5kkv0wxblz124g9yv4s3vmpwpr4c";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest freezegun ];
     propagatedBuildInputs = with self; [ pytz ];
 
     meta = {
