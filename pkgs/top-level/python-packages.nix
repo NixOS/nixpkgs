@@ -16706,7 +16706,7 @@ in {
     pname = "uritemplate";
     version = "3.0.0";
 
-    src = pkgs.fetchPypi {
+    src = fetchPypi {
       inherit pname version;
       sha256 = "0781gm9g34wa0asc19dx81ng0nqq07igzv3bbvdqmz13pv7469n0";
     };
