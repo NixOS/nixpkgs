@@ -6302,27 +6302,7 @@ in {
 
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
-  google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-${version}";
-    version = "1.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/google-api-python-client/${name}.tar.gz";
-      sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ httplib2 six oauth2client uritemplate ];
-
-    meta = {
-      description = "The core Python library for accessing Google APIs";
-      homepage = "https://code.google.com/p/google-api-python-client/";
-      license = licenses.asl20;
-      platforms = platforms.unix;
-    };
-  };
+  google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
 
   google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.1";
