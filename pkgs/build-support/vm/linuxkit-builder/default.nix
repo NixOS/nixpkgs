@@ -372,7 +372,7 @@ stage2Init = let
     cat <<-EOF > $DIR/finish-setup.sh
       #!/bin/sh
       cat <<EOI
-      1. Add the following to /etc/nix/nix.conf:
+      1. Add the following to /etc/nix/machines:
 
         nix-linuxkit x86_64-linux $DIR/keys/client $CPUS 1 $FEATURES
 
