@@ -39,9 +39,9 @@ IP address. This can be accomplished using the following configuration
 on the host:
 
 <programlisting>
-networking.nat.enable = true;
-networking.nat.internalInterfaces = ["ve-+"];
-networking.nat.externalInterface = "eth0";
+<xref linkend="opt-networking.nat.enable"/> = true;
+<xref linkend="opt-networking.nat.internalInterfaces"/> = ["ve-+"];
+<xref linkend="opt-networking.nat.externalInterface"/> = "eth0";
 </programlisting>
 where <literal>eth0</literal> should be replaced with the desired
 external interface. Note that <literal>ve-+</literal> is a wildcard

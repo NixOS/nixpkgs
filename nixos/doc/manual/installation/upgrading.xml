@@ -119,7 +119,7 @@ able to go back to your original channel.</para></warning>
 the following to <filename>configuration.nix</filename>:
 
 <programlisting>
-system.autoUpgrade.enable = true;
+<xref linkend="opt-system.autoUpgrade.enable"/> = true;
 </programlisting>
 
 This enables a periodically executed systemd service named
@@ -130,7 +130,7 @@ runs, see <command>systemctl list-timers</command>.)  You can also
 specify a channel explicitly, e.g.
 
 <programlisting>
-system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.03;
+<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-17.03;
 </programlisting>
 
 </para>

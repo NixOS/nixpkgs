@@ -42,7 +42,7 @@
 </para>
 
 <programlisting>
-boot.loader.grub.device = "/dev/sda";
+<xref linkend="opt-boot.loader.grub.device"/> = "/dev/sda";
 </programlisting>
 
 <para>
@@ -51,7 +51,7 @@ boot.loader.grub.device = "/dev/sda";
 </para>
 
 <programlisting>
-boot.initrd.checkJournalingFS = false;
+<xref linkend="opt-boot.initrd.checkJournalingFS"/> = false;
 </programlisting>
 
 <para>

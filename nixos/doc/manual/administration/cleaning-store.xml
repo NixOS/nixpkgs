@@ -29,8 +29,8 @@ this unit automatically at certain points in time, for instance, every
 night at 03:15:
 
 <programlisting>
-nix.gc.automatic = true;
-nix.gc.dates = "03:15";
+<xref linkend="opt-nix.gc.automatic"/> = true;
+<xref linkend="opt-nix.gc.dates"/> = "03:15";
 </programlisting>
 
 </para>

@@ -75,7 +75,7 @@ have set <literal>mutableUsers = false</literal>.  Another way is to
 temporarily add the following to your configuration:
 
 <screen>
-users.extraUsers.your-user.initialPassword = "test"  
+<link linkend="opt-users.users._name__.initialHashedPassword">users.extraUsers.your-user.initialHashedPassword</link> = "test";
 </screen>
 
 <emphasis>Important:</emphasis> delete the $hostname.qcow2 file if you
