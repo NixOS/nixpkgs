@@ -335,10 +335,10 @@ in
   };
 
   xf86inputlibinput = attrs: attrs // rec {
-    name = "xf86-input-libinput-0.26.0";
+    name = "xf86-input-libinput-0.27.0";
     src = args.fetchurl {
       url = "mirror://xorg/individual/driver/${name}.tar.bz2";
-      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
+      sha256 = "18v8qry7493k37bcfbfwdr4xrygyjivpzvgsj7s1dxmzn1n53c3p";
     };
     outputs = [ "out" "dev" ];
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
