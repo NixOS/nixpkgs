@@ -15995,21 +15995,7 @@ EOF
     };
   };
 
-  pyzmq = buildPythonPackage rec {
-    name = "pyzmq-16.0.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyzmq/${name}.tar.gz";
-      sha256 = "0322543fff5ab6f87d11a8a099c4c07dd8a1719040084b6ce9162bcdf5c45c9d";
-    };
-    buildInputs = with self; [ pkgs.zeromq3 pytest tornado ];
-    propagatedBuildInputs = [ self.py ];
-
-    # Disable broken test
-    # https://github.com/zeromq/pyzmq/issues/799
-    checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send and not test_recv_json_cancelled"
-    '';
-  };
+  pyzmq = callPackage ../development/python-modules/pyzmq { };
 
   testfixtures = callPackage ../development/python-modules/testfixtures {};
 
