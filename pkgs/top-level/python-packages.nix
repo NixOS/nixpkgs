@@ -9088,23 +9088,7 @@ in {
     };
   });
 
-  oauth2client = buildPythonPackage rec {
-    name = "oauth2client-1.4.12";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oauth2client/${name}.tar.gz";
-      sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
-    };
-
-    propagatedBuildInputs = with self; [ six httplib2 pyasn1-modules rsa ];
-    doCheck = false;
-
-    meta = {
-      description = "A client library for OAuth 2.0";
-      homepage = https://github.com/google/oauth2client/;
-      license = licenses.bsd2;
-    };
-  };
+  oauth2client = callPackage ../development/python-modules/oauth2client { };
 
   oauthlib = buildPythonPackage rec {
     version = "2.0.0";
