@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "configparser";
   version = "3.5.0";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
