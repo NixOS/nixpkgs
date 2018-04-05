@@ -30,7 +30,7 @@ let
     }:
 
     let
-      cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
