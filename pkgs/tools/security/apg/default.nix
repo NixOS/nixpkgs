@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   '';
   makeFlags = stdenv.lib.optionals stdenv.isDarwin ["CC=cc"];
 
-  patches = [ ./apg.patch ];
+  patches = [
+    ./apg.patch
+    ./phony-install-target.patch
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|APG_CLIBS += -lcrypt|APG_CLIBS += -L${openssl.out}/lib -lcrypto|' Makefile
