@@ -203,6 +203,11 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)
+    if [[ "$spec" =~ ( ) ]]; then
+      echo "failure: detected multiple gemspecs for $gempkg.  This can happen when not all dependencies are declared."
+      echo "gemspecs found: $spec"
+      exit 1
+    fi
     ruby ${./gem-post-build.rb} "$spec"
     ''}
 
