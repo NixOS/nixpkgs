@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, pythonPackages }:
 
 buildPythonPackage rec {
   pname = "Babel";
@@ -9,14 +9,14 @@ buildPythonPackage rec {
     sha256 = "050zyi300wsyqq1cj0ajrskb5kkv0wxblz124g9yv4s3vmpwpr4c";
   };
 
-  buildInputs = with self; [ pytest freezegun ];
-  propagatedBuildInputs = with self; [ pytz ];
+  buildInputs = with pythonPackages; [ pytest freezegun ];
+  propagatedBuildInputs = with pythonPackages; [ pytz ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://babel.edgewall.org;
     description = "A collection of tools for internationalizing Python applications";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = [ garbas ];
   };
 }
 
