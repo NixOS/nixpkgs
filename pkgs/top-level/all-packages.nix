@@ -19512,7 +19512,7 @@ with pkgs;
 
   gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
-  gnomeExtensions = {
+  gnomeExtensions = recurseIntoAttrs {
     appindicator = callPackage ../desktops/gnome-3/extensions/appindicator { };
     battery-status = callPackage ../desktops/gnome-3/extensions/battery-status { };
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
