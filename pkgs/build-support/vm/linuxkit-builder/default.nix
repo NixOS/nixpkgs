@@ -152,10 +152,8 @@ stage2Init = let
       Remote builder has started.
 
       If this is a fresh VM you need to run the following on the host:
-          sudo ~/.nixpkgs/linuxkit-builder/root-init.sh
+          ~/.nixpkgs/linuxkit-builder/finish-setup.sh
 
-      Then you can use the following to build x86_64-linux derivations:
-          sudo $(cat ~/.nixpkgs/linuxkit-builder/env) nix-build
 
       Exit this VM by running:
           kill $(cat ~/.nixpkgs/linuxkit-builder/nix-state/hyperkit.pid)
@@ -176,10 +174,10 @@ stage2Init = let
         # Run-time
         (writeScriptDir "2" ''
           #!/bin/sh
-          echo "I have no idea what I'm doing..."
+          echo "Entering run-time"
 
           cat /proc/uptime
-          echo "Running some services in ${service_targets} :)"
+          echo "Running services in ${service_targets}..."
           exec ${pkgsLinux.runit}/bin/runsvdir -P ${service_targets}
         '')
 
@@ -207,6 +205,21 @@ stage2Init = let
         (writeRunitForegroundService "vpnkit-forwarder" ''
           #!/bin/sh
           exec ${pkgsLinux.go-vpnkit}/bin/vpnkit-forwarder
+        '')
+
+        (writeRunitForegroundService "postboot-instructions" ''
+          #!/bin/sh
+
+          sleep 1
+          inst() {
+            echo
+            echo -e '\033[91;47m'
+            cat ${file_instructions}
+            echo -e '\033[0m'
+          }
+
+          inst
+          while read x; do inst; done
         '')
       ];
     };
@@ -292,11 +305,6 @@ stage2Init = let
     cat ${script_poweroff_f} > /etc/acpi/PWRF/00000080
     chmod +x /etc/acpi/PWRF/00000080
 
-    echo
-    echo -e '\033[91;47m'
-    cat ${file_instructions}
-    echo -en '\033[0m'
-
     rm -rf /etc/runit
     cp -r ${runit_targets} /etc/runit/
 
@@ -357,27 +365,36 @@ stage2Init = let
         cat ssh_host_ecdsa_key.pub >> known_host
       )
     fi
-    echo "nix-linuxkit x86_64-linux $DIR/keys/client $CPUS 1 $FEATURES" > $DIR/remote-systems
 
-    cat <<EOF > $DIR/root-init.sh
-    #!/usr/bin/env bash
-    if [[ \$EUID -ne 0 ]]; then
-      echo "This script should be executed as root." 1>&2
-      exit 1
-    fi
-    chown root $HOME/.nixpkgs/linuxkit-builder/key
-    ssh-keygen -R '[localhost]:${hostPort}'
-    ssh-keyscan -t ecdsa-sha2-nistp256 -p ${hostPort} localhost >> /var/root/.ssh/known_hosts
+    cp ${./example.nix} $DIR/example.nix
+
+
+    cat <<-EOF > $DIR/finish-setup.sh
+      #!/bin/sh
+      cat <<EOI
+      1. Add the following to /etc/nix/nix.conf:
+
+        nix-linuxkit x86_64-linux $DIR/keys/client $CPUS 1 $FEATURES
+
+      2. Add the following to /var/root/.ssh/config:
+
+        Host nix-linuxkit
+           HostName localhost
+           User root
+           Port 24083
+           IdentityFile $DIR/keys/client
+           StrictHostKeyChecking yes
+           UserKnownHostsFile $DIR/keys/known_host
+           IdentitiesOnly yes
+
+      3. Try it out!
+
+        nix-build $DIR/example.nix
+
+
     EOF
-    chmod +x $DIR/root-init.sh
 
-    ENV=$DIR/env
-    echo -n > $ENV
-    echo "NIX_REMOTE=" >> $ENV
-    echo "NIX_SSHOPTS=-p${hostPort}" >> $ENV
-    echo "NIX_BUILD_HOOK=build-remote.pl" >> $ENV
-    echo "NIX_REMOTE_SYSTEMS=$DIR/remote-systems" >> $ENV
-    echo "NIX_CURRENT_LOAD=$DIR/current-load" >> $ENV
+    chmod +x $DIR/finish-setup.sh
 
     PATH="${vpnkit}/bin:$PATH"
     exec ${linuxkit}/bin/linuxkit run \
