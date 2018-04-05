@@ -13373,6 +13373,7 @@ with pkgs;
         # when adding a new linux version
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.bcm2835_mmal_v4l2_camera_driver
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
