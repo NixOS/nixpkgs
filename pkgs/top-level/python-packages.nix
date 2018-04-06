@@ -5952,16 +5952,6 @@ in {
 
   futures = callPackage ../development/python-modules/futures { };
 
-  futures_2_2 = self.futures.override rec {
-    version = "2.2.0";
-    name = "futures-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/futures/${name}.tar.gz";
-      sha256 = "1lqfzl3z3pkxakgbcrfy6x7x0fp3q18mj5lpz103ljj7fdqha70m";
-    };
-  };
-
   gcovr = buildPythonPackage rec {
     name = "gcovr-2.4";
 
