@@ -233,6 +233,8 @@ in {
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
+  ewmh = callPackage ../development/python-modules/ewmh { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
