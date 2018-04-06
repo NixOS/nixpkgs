@@ -9,12 +9,12 @@ buildPythonPackage rec {
   disabled = isPy3k || isPyPy;
 
   pname = "platformio";
-  version="3.5.1";
+  version="3.5.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cc15mzh7p1iykip0jpxldz81yz946vrgvhwmfl8w3z5kgjjgx3n";
+    sha256 = "1v74qb7jlfw7kbbb8wi4zcr3cyl8lhk1c1y28ny9ab7ip3jiqcdv";
   };
 
   propagatedBuildInputs =  [
