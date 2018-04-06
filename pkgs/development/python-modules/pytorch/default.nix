@@ -20,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "0zbndardq3fpvxfa9qamkms0x7kxla4657lccrpyymydn97n888a";
   };
 
-  preConfigure = lib.optionalString (cudaSupport && cudnn != null) ''
+  preConfigure = lib.optionalString cudaSupport ''
+    export CC=${cudatoolkit.cc}/bin/gcc
+  '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
 
