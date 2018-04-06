@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
         generate a variety of reports from them, and provides a web interface.
     '';
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
 
