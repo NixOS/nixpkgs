@@ -20,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "0zbndardq3fpvxfa9qamkms0x7kxla4657lccrpyymydn97n888a";
   };
 
-  preConfigure = lib.optionalString (cudnn != null) "export CUDNN_INCLUDE_DIR=${cudnn}/include";
+  preConfigure = lib.optionalString (cudaSupport && cudnn != null) ''
+    export CUDNN_INCLUDE_DIR=${cudnn}/include
+  '';
 
   buildInputs = [
      cmake
