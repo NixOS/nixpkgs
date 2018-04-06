@@ -94,6 +94,8 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,pyserial>=[^"]*,pyserial,g' \
       -e 's,semantic_version>=[^"]*,semantic_version,g' \
       -e 's,wrapt>=[^"]*,wrapt,g' \
+      -e 's,python-dateutil>=[^"]*,python-dateutil,g' \
+      -e 's,emoji>=[^"]*,emoji,g' \
       setup.py
   '';
 
