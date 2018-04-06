@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    sed -i "/import sys/a import sys; sys.path.insert(0, '$PYTHONPATH'.split(':'))" \
+    sed -i "/import sys/a import sys; sys.path[0:0] = '$PYTHONPATH'.split(':')" \
       $out/share/pwndbg/gdbinit.py
   '';
 
