@@ -4384,6 +4384,8 @@ with pkgs;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
+  pywal = callPackage ../tools/graphics/pywal {};
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
