@@ -16,6 +16,8 @@
 # - https://wiki.debian.org/DebianScience/Sage
 # - https://github.com/cschwan/sage-on-gentoo
 # - https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/sagemath
+# Look here to see how to use host libraries instead of sage ones
+# - https://github.com/cschwan/sage-on-gentoo/blob/master/sci-mathematics/sage/sage-8.1-r2.ebuild
 
 { stdenv
 , bash
@@ -31,6 +33,7 @@
 , hevea
 , buildDocs ? false
 , optimize ? false # optimize sage to the current system (obviously impure)
+, hostSingular ? true, singular ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -83,6 +86,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteAllInPlace src/bin/sage-env
     bash=${bash} substituteAllInPlace build/bin/sage-spkg
+  '' +
+  # sed -i "s:lib/libSingular:$(get_libdir)/libSingular:" \
+   stdenv.lib.optionalString hostSingular ''
+    # fix library path of libSingular
+    substituteInPlace src/sage/env.py --replace lib/libSingular ${singular}/lib
   '';
 
   installPhase = ''
@@ -110,7 +118,8 @@ stdenv.mkDerivation rec {
       babel-greek # optional for giac, otherwise throws a bunch of latex command not founds
       ;
     })
-  ];
+  ] ++ stdenv.lib.optional hostSingular singular
+  ;
 
   nativeBuildInputs = [ gfortran6 perl which ];
 
