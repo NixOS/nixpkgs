@@ -69,7 +69,7 @@ in
 
       promptInit = mkOption {
         default = ''
-          autoload -U promptinit && promptinit && prompt walters
+          autoload -U promptinit && promptinit
         '';
         description = ''
           Shell script code used to initialise the zsh prompt.
