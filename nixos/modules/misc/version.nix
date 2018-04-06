@@ -12,29 +12,29 @@ in
 
 {
 
-  options.system = {
+  options.system.nixos = {
 
-    nixos.version = mkOption {
+    version = mkOption {
       internal = true;
       type = types.str;
       description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
     };
 
-    nixos.release = mkOption {
+    release = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.release;
       description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
-    nixos.versionSuffix = mkOption {
+    versionSuffix = mkOption {
       internal = true;
       type = types.str;
       default = trivial.versionSuffix;
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
-    nixos.revision = mkOption {
+    revision = mkOption {
       internal = true;
       type = types.str;
       default = if pathIsDirectory gitRepo then commitIdFromGitRepo gitRepo
@@ -43,7 +43,7 @@ in
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
-    nixos.codeName = mkOption {
+    codeName = mkOption {
       readOnly = true;
       type = types.str;
       description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
