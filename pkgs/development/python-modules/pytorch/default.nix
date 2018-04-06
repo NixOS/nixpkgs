@@ -1,6 +1,6 @@
 { buildPythonPackage,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, lib, numpy, pyyaml, cffi, cmake,
+  fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, cmake,
   git, stdenv, symlinkJoin,
   utillinux, which }:
 
@@ -25,6 +25,18 @@ in buildPythonPackage rec {
     fetchSubmodules = true;
     sha256 = "1k8fr97v5pf7rni5cr2pi21ixc3pdj3h3lkz28njbjbgkndh7mr3";
   };
+
+  patches = [
+    (fetchpatch {
+      # make sure stdatomic.h is included when checking for ATOMIC_INT_LOCK_FREE
+      # Fixes this test failure:
+      # RuntimeError: refcounted file mapping not supported on your system at /tmp/nix-build-python3.6-pytorch-0.3.0.drv-0/source/torch/lib/TH/THAllocator.c:525
+      url = "https://github.com/pytorch/pytorch/commit/502aaf39cf4a878f9e4f849e5f409573aa598aa9.patch";
+      stripLen = 3;
+      extraPrefix = "torch/lib/";
+      sha256 = "1miz4lhy3razjwcmhxqa4xmlcmhm65lqyin1czqczj8g16d3f62f";
+    })
+  ];
 
   preConfigure = lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/gcc
