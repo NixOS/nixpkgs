@@ -14,16 +14,16 @@ let
   };
 
 in buildPythonPackage rec {
-  version = "0.3.0";
+  version = "0.3.1";
   pname = "pytorch";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "pytorch";
     repo   = "pytorch";
-    rev    = "af3964a8725236c78ce969b827fdeee1c5c54110";
+    rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0zbndardq3fpvxfa9qamkms0x7kxla4657lccrpyymydn97n888a";
+    sha256 = "1k8fr97v5pf7rni5cr2pi21ixc3pdj3h3lkz28njbjbgkndh7mr3";
   };
 
   preConfigure = lib.optionalString cudaSupport ''
