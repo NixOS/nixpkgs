@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "whichcraft";
-  version = "0.1.1";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5df20674e0a90028b5633417510f0001b63bc0f345ab3cbb184dd4b221d125ec";
+    sha256 = "9e0d51c9387cb7e9f28b7edb549e6a03da758f7784f991eb4397d7f7808c57fd";
   };
 
   checkInputs = [ pytest ];
