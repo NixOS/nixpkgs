@@ -2,8 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.15.4";
-  name = "${pname}-${version}";
+  version = "1.16.3";
 
   disabled = isPyPy;
 
@@ -11,13 +10,21 @@ buildPythonPackage rec {
     owner = "pygobject";
     repo = "pycairo";
     rev = "v${version}";
-    sha256 = "02vzmfxx8nl6dbwzc911wcj7hqspgqz6v9xmq6579vwfla0vaglv";
+    sha256 = "0clk6wrfls3fa1xrn844762qfaw6gs4ivwkrfysidbzmlbxhpngl";
   };
 
-  postPatch = ''
-    # we are unable to pass --prefix to bdist_wheel
-    # see https://github.com/NixOS/nixpkgs/pull/32034#discussion_r153285955
-    substituteInPlace setup.py --replace '"prefix": self.install_base' "'prefix': '$out'"
+  # We need to create the pkgconfig file but it cannot be installed as a wheel since wheels
+  # are supposed to be relocatable and do not support --prefix option
+  buildPhase = ''
+    ${python.interpreter} setup.py build
+  '';
+
+  installPhase = ''
+    ${python.interpreter} setup.py install --skip-build --prefix="$out" --optimize=1
+  '';
+
+  checkPhase = ''
+    ${python.interpreter} setup.py test
   '';
 
   nativeBuildInputs = [ pkgconfig ];
