@@ -20480,11 +20480,12 @@ with pkgs;
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
-  jack2Full = callPackage ../misc/jackaudio {
+  jack2 = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
     inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
   };
-  libjack2 = jack2Full.override { prefix = "lib"; };
+  libjack2 = jack2;
+  jack2Full = jack2;
 
   keynav = callPackage ../tools/X11/keynav { };
 
