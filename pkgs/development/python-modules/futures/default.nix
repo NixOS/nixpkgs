@@ -13,11 +13,8 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover
+    ${python.interpreter} test_futures.py
   '';
-
-  # Tests fail
-  doCheck = false;
 
   meta = with lib; {
     description = "Backport of the concurrent.futures package from Python 3.2";
