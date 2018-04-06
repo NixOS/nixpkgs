@@ -1,30 +1,42 @@
 { stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
-, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx, glibmm
+, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx
+, alsaLib, dbus, dbus_cplusplus
 
 # Optional dependencies
-, libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
 , pyqt4 ? null, dbus-python ? null, xdg_utils ? null
 
 # Other Flags
-, prefix ? ""
+, libOnly ? false
 }:
 
 let
 
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
-  libOnly = prefix == "lib";
-
-  optLibjack2 = shouldUsePkg libjack2;
-  optDbus = shouldUsePkg dbus;
-  optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
-  optAlsaLib = shouldUsePkg alsaLib;
+# Mixer/tools dependencies
+# FIXME: can we build mixer separately? Then we can farewell `libOnly` mode
+# (otherwise we have perfect loop via qt -> pulseaudio -> jack -> ffado -> qt)
+# FIXME: it should work with pyqt5 as well (so we can farewell `qt4` sometimes)
   optPyqt4 = shouldUsePkg pyqt4;
   optPythonDBus = shouldUsePkg dbus-python;
   optXdg_utils = shouldUsePkg xdg_utils;
+
+  PYDIR="$out/lib/${python.libPrefix}/site-packages";
+  SCONS_OPTIONS = ''
+      PREFIX=$out \
+      PYPKGDIR=${PYDIR} \
+      DEBUG=False \
+      ENABLE_ALL=True \
+      SERIALIZE_USE_EXPAT=True \
+      BUILD_TESTS=False \
+      UDEVDIR=$out/lib/udev/rules.d \
+      BINDIR=$bin/bin \
+      INCLUDEDIR=$dev/include \
+      BUILD_MIXER=${if libOnly then "False" else "True"} \
+  '';
 in
 stdenv.mkDerivation rec {
-  name = "${prefix}ffado-${version}";
+  name = "ffado-${version}";
   version = "2.4.0";
 
   src = fetchurl {
@@ -32,13 +44,14 @@ stdenv.mkDerivation rec {
     sha256 = "14rprlcd0gpvg9kljh0zzjzd2rc9hbqqpjidshxxjvvfh4r00f4f";
   };
 
+  outputs = [ "out" "bin" "dev" ];
+
   nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
 
   buildInputs = [
-    expat libraw1394 libconfig libavc1394 libiec61883
+    expat libraw1394 libconfig libavc1394 libiec61883 dbus dbus_cplusplus libxmlxx
   ] ++ stdenv.lib.optionals (!libOnly) [
-    optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
-    optXdg_utils libxmlxx glibmm
+    optXdg_utils
   ];
 
   postPatch = ''
@@ -62,25 +75,18 @@ stdenv.mkDerivation rec {
 
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
   buildPhase = ''
-    export PYDIR=$out/lib/${python.libPrefix}/site-packages
-
-    scons PYPKGDIR=$PYDIR DEBUG=False \
-      ENABLE_ALL=True \
-      SERIALIZE_USE_EXPAT=True \
+    scons ${SCONS_OPTIONS}
   '';
 
-  installPhase = if libOnly then ''
-    scons PREFIX=$TMPDIR UDEVDIR=$TMPDIR \
-      LIBDIR=$out/lib INCLUDEDIR=$out/include install
-  '' else ''
-    scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
-  '' + stdenv.lib.optionalString (optPyqt4 != null && optPythonDBus != null) ''
+  installPhase = ''
+    scons ${SCONS_OPTIONS} install
+  '' + stdenv.lib.optionalString (!libOnly && optPyqt4 != null && optPythonDBus != null) ''
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+      $PYTHONPATH:${PYDIR}:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
 
     wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
-      $PYTHONPATH:$PYDIR:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
-  '';
+      $PYTHONPATH:${PYDIR}:$out/share/libffado/python:${optPyqt4}/$LIBSUFFIX:${optPythonDBus}/$LIBSUFFIX:
+   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.ffado.org;
