@@ -1,21 +1,23 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
+, urllib3, certifi
 , gevent, geventhttpclient, mock, fastimport
 , git, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "0.19.0";
+  version = "0.19.1";
   pname = "dulwich";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-    sha256 = "91aad98f37a5494c6eabf08c78ed2b6e1b1ce6e7a5556406245d8763a352b99e";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "c7334bd6ac8d14189ab42b20e0b0593ebd97ae922875562a8c111ee298fb194f";
   };
 
   LC_ALL = "en_US.UTF-8";
 
+  propagatedBuildInputs = [ urllib3 certifi ];
+
   # Only test dependencies
-  buildInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];
+  checkInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];
 
   doCheck = !stdenv.isDarwin;
 
