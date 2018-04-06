@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "OpenOrienteering-Mapper-${version}";
-  version = "0.8.1";
+  version = "0.8.1.2";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtsensors clipper zlib proj doxygen cups];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "10viw8bddl76mc2gh84jsl7h237yzvh4nim61pbd63vg1hlqisi6";
+    sha256 = "0f7zxzl2n46qy86k6n3f6a7l1nhba58i28l8ngp3drf74qffaa33";
   };
 
   cmakeFlags =
