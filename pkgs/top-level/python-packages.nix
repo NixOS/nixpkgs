@@ -634,7 +634,7 @@ in {
     meta = {
       description = "Atomic file writes on POSIX";
       homepage = https://pypi.python.org/pypi/atomicwrites/0.1.0;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
 
   };
@@ -4759,7 +4759,7 @@ in {
       description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.linux; # can only test on linux
     };
 
@@ -4847,7 +4847,7 @@ in {
       description = "WSGI HTTP Digest Authentication middleware";
       homepage = https://github.com/jonashaag/httpauth;
       license = licenses.bsd2;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -16738,7 +16738,7 @@ in {
       homepage = https://github.com/uri-templates/uritemplate-py;
       description = "Python implementation of URI Template";
       license = licenses.asl20;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 
