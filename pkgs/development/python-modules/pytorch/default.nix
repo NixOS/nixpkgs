@@ -38,6 +38,12 @@ in buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace test/run_test.sh --replace \
+      "INIT_METHOD='file://'\$TEMP_DIR'/shared_init_file' \$PYCMD ./test_distributed.py" \
+      "echo Skipped for Nix package"
+  '';
+
   preConfigure = lib.optionalString cudaSupport ''
     export CC=${cudatoolkit.cc}/bin/gcc
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
