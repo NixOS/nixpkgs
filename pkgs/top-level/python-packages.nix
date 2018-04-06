@@ -11873,23 +11873,7 @@ in {
     };
   };
 
-  pyperclip = buildPythonPackage rec {
-    version = "1.5.27";
-    name = "pyperclip-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyperclip/${name}.zip";
-      sha256 = "1i9zxm7qc49n9yxfb41c0jbmmp2hpzx98kaizjl7qmgiv3snvjx3";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/asweigart/pyperclip";
-      license = licenses.bsdOriginal;
-      description = "Cross-platform clipboard module";
-    };
-  };
+  pyperclip = callPackage ../development/python-modules/pyperclip { };
 
   pysqlite = buildPythonPackage rec {
     name = "pysqlite-2.8.3";
