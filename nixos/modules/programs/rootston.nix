@@ -26,10 +26,6 @@ in {
       type = types.lines;
       default = "";
       example = ''
-        # Define a keymap (US QWERTY is the default)
-        export XKB_DEFAULT_LAYOUT=de,us
-        export XKB_DEFAULT_VARIANT=nodeadkeys
-        export XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle,caps:escape
       '';
       description = ''
         Shell commands executed just before rootston is started.
@@ -53,29 +49,47 @@ in {
     };
 
     config = mkOption {
-      type = types.str;
-      default = ''
-        [keyboard]
-        meta-key = Logo
+      type = types.attrs;
+      default = {
+        keyboard = {
+          meta-key = "Logo";
+        };
 
-        # Sway/i3 like Keybindings
-        # Maps key combinations with commands to execute
-        # Commands include:
-        # - "exit" to stop the compositor
-        # - "exec" to execute a shell command
-        # - "close" to close the current view
-        # - "next_window" to cycle through windows
-        [bindings]
-        Logo+Shift+e = exit
-        Logo+q = close
-        Logo+m = maximize
-        Alt+Tab = next_window
-        Logo+Return = exec weston-terminal
-        Logo+d = exec rofi -show run
-      '';
+        bindings = {
+          # Sway/i3 like Keybindings
+          # Maps key combinations with commands to execute
+          # Commands include:
+          # - "exit" to stop the compositor
+          # - "exec" to execute a shell command
+          # - "close" to close the current view
+          # - "next_window" to cycle through windows
+          "Logo+Shift+e" = "exit";
+          "Logo+q" = "close";
+          "Logo+m" = "maximize";
+          "Alt+Tab" = "next_window";
+          "Logo+Return" = "exec weston-terminal";
+          "Logo+d" = "exec rofi -show run";
+        };
+      };
       description = ''
         Default configuration for rootston (used when called without any
         parameters).
+      '';
+    };
+
+    extraConfig = mkOption {
+      type = types.attrs;
+      default = { };
+      example = {
+        keyboard = {
+          layout = "de,us";
+          variant = "nodeadkeys";
+          options = "grp:alt_shift_toggle,caps:escape";
+        };
+      };
+      description = ''
+        Extra configuration options for rootston. These options will be merged
+        with the base configuration from config (overriding existing options).
       '';
     };
 
@@ -91,7 +105,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.etc."rootston.ini".text = cfg.config;
+    environment.etc."rootston.ini".text = lib.generators.toINI {}
+      (lib.recursiveUpdate cfg.config cfg.extraConfig);
     environment.systemPackages = [ rootstonWrapped ] ++ cfg.extraPackages;
 
     hardware.opengl.enable = mkDefault true;
