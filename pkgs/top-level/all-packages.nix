@@ -17824,9 +17824,11 @@ with pkgs;
     inherit sbcl lispPackages;
   };
 
-  sublime = callPackage ../applications/editors/sublime { };
+  sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
 
-  sublime3 = lowPrio (callPackage ../applications/editors/sublime3 { });
+  sublime3 = sublime3Packages.sublime3;
+
+  sublime3-dev = sublime3Packages.sublime3-dev;
 
   inherit (callPackages ../applications/version-management/subversion/default.nix {
       bdbSupport = true;
