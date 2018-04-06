@@ -1,13 +1,19 @@
 { buildPythonPackage,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
   fetchFromGitHub, lib, numpy, pyyaml, cffi, cmake,
-  git, stdenv,
+  git, stdenv, symlinkJoin,
   utillinux, which }:
 
 assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || cudatoolkit != null;
 
-buildPythonPackage rec {
+let
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-unsplit";
+    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
+
+in buildPythonPackage rec {
   version = "0.3.0";
   pname = "pytorch";
   name = "${pname}-${version}";
@@ -32,7 +38,7 @@ buildPythonPackage rec {
      numpy.blas
      utillinux
      which
-  ] ++ lib.optionals cudaSupport [cudatoolkit cudnn];
+  ] ++ lib.optionals cudaSupport [cudatoolkit_joined cudnn];
 
   propagatedBuildInputs = [
     cffi
