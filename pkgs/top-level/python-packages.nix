@@ -16049,25 +16049,7 @@ EOF
     };
   };
 
-
-  whichcraft = buildPythonPackage rec {
-    name = "whichcraft-${version}";
-    version = "0.1.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/pydanny/whichcraft/archive/${version}.tar.gz";
-      sha256 = "1xqp66knzlb01k30qic40vzwl51jmlsb8r96iv60m2ca6623abbv";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = https://github.com/pydanny/whichcraft;
-      description = "Cross-platform cross-python shutil.which functionality";
-      license = licenses.bsd3;
-    };
-  };
-
+  whichcraft = callPackage ../development/python-modules/whichcraft { };
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
