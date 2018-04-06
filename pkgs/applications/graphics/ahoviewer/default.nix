@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
     description = "A GTK2 image viewer, manga reader, and booru browser";
     maintainers = with maintainers; [ skrzyp xzfc ];
     license = licenses.mit;
-    platforms = platforms.allBut [ "darwin" "cygwin" ];
+    # Unintentionally not working on Darwin:
+    # https://github.com/ahodesuka/ahoviewer/issues/62
+    platforms = platforms.linux;
   };
 }
 
