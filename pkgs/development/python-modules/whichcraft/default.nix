@@ -11,6 +11,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  checkPhase = ''
+    py.test
+  '';
+
   meta = with lib; {
     homepage = https://github.com/pydanny/whichcraft;
     description = "Cross-platform cross-python shutil.which functionality";
