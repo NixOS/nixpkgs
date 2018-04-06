@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, msgpack-python
+, msgpack
 , numpy
 , python
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-   msgpack-python
+   msgpack
    numpy
   ];
 
