@@ -1603,7 +1603,7 @@ with pkgs;
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
 
-  clementineFree = clementine.free;
+  clementineUnfree = clementine.unfree;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
