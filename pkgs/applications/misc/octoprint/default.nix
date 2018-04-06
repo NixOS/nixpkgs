@@ -96,6 +96,7 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,wrapt>=[^"]*,wrapt,g' \
       -e 's,python-dateutil>=[^"]*,python-dateutil,g' \
       -e 's,emoji>=[^"]*,emoji,g' \
+      -e 's,futures>=[^"]*,futures,g' \
       setup.py
   '';
 
