@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
-    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 
   doCheck = true;
