@@ -6527,12 +6527,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   HookLexWrap = buildPerlPackage rec {
-    name = "Hook-LexWrap-0.25";
+    name = "Hook-LexWrap-0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "08ab9af6bd9b4560702d9d994ad9d905af0c2fd24090d1480ff640f137c1430d";
+      sha256 = "b60bdc5f98f94f9294b06adef82b1d996da192d5f183f9f434b610fd1137ec2d";
     };
-    buildInputs = [ ModuleBuildTiny pkgs.unzip ];
+    buildInputs = [ pkgs.unzip ];
     meta = {
       homepage = https://github.com/chorny/Hook-LexWrap;
       description = "Lexically scoped subroutine wrappers";
