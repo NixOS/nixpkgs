@@ -2,9 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, CommonMark
+, mock
+, cmarkgfm
 , bleach
 , docutils
+, future
 , pygments
 , six
 }:
@@ -18,10 +20,10 @@ buildPythonPackage rec {
     sha256 = "e18cab7f1b07412990df1b59e1be04e1538f514a5bba53ec8777bfc5aac27563";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest mock ];
 
   propagatedBuildInputs = [
-    CommonMark bleach docutils pygments six
+    bleach cmarkgfm docutils future pygments six
   ];
 
   checkPhase = ''
