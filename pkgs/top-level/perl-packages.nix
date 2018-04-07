@@ -5958,11 +5958,11 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/B/BH/BHALLISSY/${name}.tar.gz";
       sha256 = "4b697d444259759ea02d2c442c9bffe5ffe14c9214084a01f743693a944cc293";
     };
-    propagatedBuildInputs = [ IOString ];
     meta = {
       description = "TTF font support for Perl";
       license = stdenv.lib.licenses.artistic2;
     };
+    buildInputs = [ IOString ];
   };
 
   ForksSuper = buildPerlPackage {
