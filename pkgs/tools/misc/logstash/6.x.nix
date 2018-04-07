@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r {Gemfile*,modules,vendor,lib,bin,config,data,logstash-core,logstash-core-plugin-api} $out
 
+    patchShebangs $out/bin/logstash
+    patchShebangs $out/bin/logstash-plugin
+
     wrapProgram $out/bin/logstash \
        --set JAVA_HOME "${jre}"
 
