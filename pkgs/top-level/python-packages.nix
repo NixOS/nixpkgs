@@ -2005,6 +2005,8 @@ in {
     };
   };
 
+  tinycss2 = callPackage ../development/python-modules/tinycss2 { };
+
   cssselect = callPackage ../development/python-modules/cssselect { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
