@@ -2891,13 +2891,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CSSDOM = buildPerlPackage rec {
-    name = "CSS-DOM-0.16";
+    name = "CSS-DOM-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPROUT/${name}.tar.gz";
-      sha256 = "0s1gg6jvcxlj87sbbbcn9riw7rrh2n85hkbaim9civki8vj8vg9z";
+      sha256 = "09phb6c9czpcp9imq06khm54kspsx6hnvfrjxramx663ygmpifb5";
     };
-
-    buildInputs = [ Clone ];
+    propagatedBuildInputs = [ Clone ];
   };
 
   CSSMinifierXP = buildPerlModule rec {
