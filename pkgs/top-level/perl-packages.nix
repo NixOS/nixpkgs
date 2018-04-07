@@ -5133,12 +5133,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   Expect = buildPerlPackage {
-    name = "Expect-1.32";
+    name = "Expect-1.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SZ/SZABGAB/Expect-1.32.tar.gz;
-      sha256 = "d1f96842a5c7dd8516b202b530d87a70b65e7054d3bf975c34f6a42084e54e25";
+      url = mirror://cpan/authors/id/J/JA/JACOBY/Expect-1.35.tar.gz;
+      sha256 = "09d92761421decd495853103379165a99efbf452c720f30277602cf23679fd06";
     };
-    buildInputs = [ TestException ];
     propagatedBuildInputs = [ IOTty ];
     meta = {
       description = "Automate interactions with command line programs that expose a text terminal interface";
