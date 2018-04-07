@@ -16678,8 +16678,6 @@ EOF
     };
   };
 
-  redNotebook = pkgs.rednotebook; # Backwards compatibility alias.
-
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   funcy = buildPythonPackage rec {
