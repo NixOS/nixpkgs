@@ -184,12 +184,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   AnyMoose = buildPerlPackage rec {
-    name = "Any-Moose-0.26";
+    name = "Any-Moose-0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "1wcd1lpx38hvxk6k0zpx48hb7yidxnlr34lyk51zxin9ra9f2104";
+      sha256 = "0dc55mpayrixwx8dwql0vj0jalg4rlb3k64rprc84bl0z8vkx9m8";
     };
-    propagatedBuildInputs = [ Mouse ];
+    propagatedBuildInputs = [ Moose Mouse ];
   };
 
   ApacheLogFormatCompiler = buildPerlModule rec {
