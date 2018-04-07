@@ -2951,15 +2951,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   CwdGuard = buildPerlModule rec {
-    name = "Cwd-Guard-0.04";
+    name = "Cwd-Guard-0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/${name}.tar.gz";
-      sha256 = "071k50n1yr48122jjjg50i1s2kwp06dmrisv35f3wjry8m6cqchm";
+      sha256 = "0xwf4rmii55k3lp19mpbh00mbgby7rxdk2lk84148bjhp6i7rz3s";
     };
     meta = {
       description = "Temporary changing working directory (chdir)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestRequires ];
   };
 
   DataClone = buildPerlPackage {
