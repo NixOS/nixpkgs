@@ -4817,13 +4817,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestMinimumVersion = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-MinimumVersion-2.000005";
+    name = "Dist-Zilla-Plugin-Test-MinimumVersion-2.000008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-MinimumVersion-2.000005.tar.gz;
-      sha256 = "988c71a3158e94e7a0b23f346f19af4a0ed67e101a2653c3185c5ae49981132b";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-MinimumVersion-2.000008.tar.gz;
+      sha256 = "d924ce79aaaa1885510ca6ecfcb4d8bc250fb6995bc96627f1536cb589e3b660";
     };
-    buildInputs = [ DistZilla MooseAutobox TestOutput ];
-    propagatedBuildInputs = [ DistZilla Moose TestMinimumVersion ];
+    buildInputs = [ TestDeep TestMinimumVersion TestOutput ];
+    propagatedBuildInputs = [ DistZilla ];
     meta = {
       homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-MinimumVersion/;
       description = "Release tests for minimum required versions";
