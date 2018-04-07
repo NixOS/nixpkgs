@@ -2127,7 +2127,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassISA ];
   };
 
-  ClassStd = buildPerlPackage {
+  ClassStd = buildPerlModule {
     name = "Class-Std-0.013";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Class-Std-0.013.tar.gz;
