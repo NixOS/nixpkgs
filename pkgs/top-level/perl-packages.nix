@@ -5184,10 +5184,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsConfig = buildPerlPackage {
-    name = "ExtUtils-Config-0.007";
+    name = "ExtUtils-Config-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.007.tar.gz;
-      sha256 = "2c1465078b876fd16a90507092805265528c2532d4937b03547a6dbdb8ac0eef";
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz;
+      sha256 = "ae5104f634650dce8a79b7ed13fb59d67a39c213a6776cfdaa3ee749e62f1a8c";
     };
     meta = {
       description = "A wrapper for perl's configuration";
