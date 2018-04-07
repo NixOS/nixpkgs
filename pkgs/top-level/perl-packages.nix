@@ -4196,6 +4196,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DevelGlobalPhase = buildPerlPackage rec {
+     name = "Devel-GlobalPhase-0.003003";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/H/HA/HAARG/Devel-GlobalPhase-0.003003.tar.gz;
+       sha256 = "1x9jzy3l7gwikj57swzl94qsq03j9na9h1m69azzs7d7ghph58wd";
+     };
+     meta = {
+       description = "Detect perl's global phase on older perls.";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   DevelHide = buildPerlPackage rec {
     name = "Devel-Hide-0.0009";
     src = fetchurl {
@@ -14787,16 +14799,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSpec = buildPerlPackage rec {
-    name = "Test-Spec-0.51";
+    name = "Test-Spec-0.54";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AN/ANDYJONES/${name}.tar.gz";
-      sha256 = "0n2pzc32q4fr1b9w292ld9gh3yn3saxib3hxrjx6jvcmy3k9jkbi";
+      url = mirror://cpan/authors/id/A/AK/AKZHAN/Test-Spec-0.54.tar.gz;
+      sha256 = "1lk5l69bm6yl1zxzz5v6mizzqfinpdhasmi4qjxr1vnwcl9cyc8a";
     };
-    propagatedBuildInputs = [ PackageStash TestDeep TestTrap TieIxHash ];
+    propagatedBuildInputs = [ DevelGlobalPhase PackageStash TieIxHash ];
     meta = {
       description = "Write tests in a declarative specification style";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestDeep TestTrap ];
   };
 
   TestSubCalls = buildPerlPackage rec {
