@@ -14905,14 +14905,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestRunPluginBreakOnFailure = buildPerlPackage rec {
-    name = "Test-Run-Plugin-BreakOnFailure-v0.0.5";
+  TestRunPluginBreakOnFailure = buildPerlModule rec {
+    name = "Test-Run-Plugin-BreakOnFailure-0.0.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-BreakOnFailure-v0.0.5.tar.gz;
       sha256 = "e422eb64a2fa6ae59837312e37ab88d68b4945148eb436a3774faed5074f0430";
     };
-    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
-    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ Moose ];
     meta = {
       homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
       description = "Stop processing the entire test suite";
