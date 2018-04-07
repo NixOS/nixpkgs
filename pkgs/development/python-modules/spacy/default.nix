@@ -1,11 +1,11 @@
-{ stdenv
+{ lib
 , pkgs
 , buildPythonPackage
 , python
 , fetchPypi
+, pythonOlder
 , html5lib
 , pytest
-, cython
 , preshed
 , ftfy
 , numpy
@@ -16,8 +16,11 @@
 , dill
 , requests
 , thinc
-, pip
 , regex
+, cymem
+, pathlib
+, msgpack-python
+, msgpack-numpy
 }:
 
 buildPythonPackage rec {
@@ -40,20 +43,22 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-   cython
-   dill
-   html5lib
-   murmurhash
    numpy
-   plac
+   murmurhash
+   cymem
    preshed
-   regex
-   requests
-   six
    thinc
+   plac
+   six
+   html5lib
    ujson
+   dill
+   requests
+   regex
    ftfy
-  ];
+   msgpack-python
+   msgpack-numpy
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
     pytest
@@ -64,7 +69,7 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;
