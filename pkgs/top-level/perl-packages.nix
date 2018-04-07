@@ -15395,7 +15395,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TieIxHash = buildPerlPackage {
+  TieIxHash = buildPerlModule {
     name = "Tie-IxHash-1.23";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CH/CHORNY/Tie-IxHash-1.23.tar.gz;
