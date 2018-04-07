@@ -15,7 +15,7 @@ buildPythonPackage rec {
     notebook
   ];
 
-  # No tests in archive
+  # Depends on npm
   doCheck = false;
 
   meta = with lib; {
