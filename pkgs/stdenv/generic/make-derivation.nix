@@ -241,6 +241,7 @@ rec {
                    && (if config.checkMetaRecursively or false
                        then lib.all (d: d.meta.available or true) references
                        else true);
+          supported = validity.supported or false;
         };
 
     in

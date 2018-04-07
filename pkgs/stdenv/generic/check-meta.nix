@@ -158,6 +158,7 @@ let
     outputsToInstall = listOf str;
     position = str;
     available = bool;
+    supported = bool;
     repositories = attrsOf str;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
@@ -182,7 +183,7 @@ let
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
   #
-  # Return { valid: Bool } and additionally
+  # Return { valid: Bool, supported: Bool } and additionally
   # { reason: String; errormsg: String } if it is not valid, where
   # reason is one of "unfree", "blacklisted" or "broken".
   checkValidity = attrs:
@@ -198,7 +199,7 @@ let
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; };
+    else { valid = true; supported = checkPlatform attrs; };
 
   assertValidity = attrs: let
       validity = checkValidity attrs;
