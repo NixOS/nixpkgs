@@ -220,7 +220,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl bc nettools openssl libelf ] ++ optional (stdenv.platform.uboot != null)
+  nativeBuildInputs = [ perl bc nettools openssl ] ++ moduleBuildDependencies ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
