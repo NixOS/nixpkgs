@@ -3449,6 +3449,8 @@ in {
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
+  jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
+
   jupyterlab = buildPythonPackage rec {
     name = "jupyterlab-${version}";
     version = "0.4.1";
