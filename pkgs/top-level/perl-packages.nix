@@ -4891,14 +4891,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EncodeDetect = buildPerlPackage rec {
+  EncodeDetect = buildPerlModule rec {
     name = "Encode-Detect-1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGMYERS/${name}.tar.gz";
       sha256 = "834d893aa7db6ce3f158afbd0e432d6ed15a276e0940db0a74be13fd9c4bbbf1";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
-    propagatedBuildInputs = [ ModuleBuild ];
     meta = {
       description = "An Encode::Encoding subclass that detects the encoding of data";
       license = stdenv.lib.licenses.free;
