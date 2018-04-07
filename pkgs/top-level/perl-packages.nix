@@ -2588,12 +2588,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   CPANMeta = buildPerlPackage rec {
-    name = "CPAN-Meta-2.150005";
+    name = "CPAN-Meta-2.150010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "04g7cfbx7vi8kqc9pwv7n3z95vimkbv0h7v6p1ky37gzz3nsw66j";
+      sha256 = "1mm3dfw3ffyzb2ikpqn9l6zyqrxijb4vyywmbx2l21ryqwp0zy74";
     };
-    propagatedBuildInputs = [ ParseCPANMeta CPANMetaYAML CPANMetaRequirements JSONPP ];
     meta = {
       homepage = https://github.com/Perl-Toolchain-Gang/CPAN-Meta;
       description = "The distribution metadata for a CPAN dist";
