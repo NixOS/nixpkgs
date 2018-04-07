@@ -5342,10 +5342,9 @@ let self = _self // overrides; _self = with self; {
   ExtUtilsTypemapsDefault = buildPerlModule rec {
     name = "ExtUtils-Typemaps-Default-1.05";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.05.tar.gz;
       sha256 = "1phmha0ks95kvzl00r1kgnd5hvg7qb1q9jmzjmw01p5zgs1zbyix";
     };
-    propagatedBuildInputs = [ ExtUtilsTypemap ExtUtilsParseXS ];
   };
 
   ExtUtilsXSBuilder = buildPerlPackage {
