@@ -14466,17 +14466,16 @@ let self = _self // overrides; _self = with self; {
   TestSimple = null;
 
   TestSimple13 = buildPerlPackage rec {
-    name = "Test-Simple-1.302125";
+    name = "Test-Simple-1.302135";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302125.tar.gz;
-      sha256 = "8a3785a4fa60c4c5ae0c5cac2f3312242f2b36ca20e368d8a9ec22b4061aa317";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302135.tar.gz;
+      sha256 = "889b59d5fb5955b5d15dbef1020aa2e9a3ccafacc8717c16a939d7cfd619ab70";
     };
     meta = {
       description = "Basic utilities for writing tests";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
     };
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   TestSpec = buildPerlPackage rec {
