@@ -797,11 +797,10 @@ let self = _self // overrides; _self = with self; {
   BusinessHours = buildPerlPackage rec {
     name = "Business-Hours-0.12";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/R/RU/RUZ/Business-Hours-0.12.tar.gz";
+      url = mirror://cpan/authors/id/R/RU/RUZ/Business-Hours-0.12.tar.gz;
       sha256 = "15c5g278m1x121blspf4bymxp89vysizr3z6s1g3sbpfdkrn4gyv";
     };
-    buildInputs = [ TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ SetIntSpan TimeLocal ];
+    propagatedBuildInputs = [ SetIntSpan ];
     meta = {
       description = "Calculate business hours in a time period";
     };
