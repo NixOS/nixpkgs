@@ -1,27 +1,34 @@
-{ buildPythonPackage, fetchFromGitHub, lib, numpy, pyyaml, cffi, cmake,
-  git, stdenv }:
+{ buildPythonPackage,
+  cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, cmake,
+  git, stdenv,
+  utillinux, which }:
+
+assert cudnn == null || cudatoolkit != null;
+assert !cudaSupport || cudatoolkit != null;
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.3.0";
   pname = "pytorch";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "pytorch";
     repo   = "pytorch";
-    rev    = "v${version}";
-    sha256 = "1s3f46ga1f4lfrcj3lpvvhgkdr1pi8i2hjd9xj9qiz3a9vh2sj4n";
+    rev    = "af3964a8725236c78ce969b827fdeee1c5c54110";
+    fetchSubmodules = true;
+    sha256 = "0zbndardq3fpvxfa9qamkms0x7kxla4657lccrpyymydn97n888a";
   };
 
-  checkPhase = ''
-    ${stdenv.shell} test/run_test.sh
-  '';
+  preConfigure = lib.optionalString (cudnn != null) "export CUDNN_INCLUDE_DIR=${cudnn}/include";
 
   buildInputs = [
      cmake
      git
      numpy.blas
-  ];
+     utillinux
+     which
+  ] ++ lib.optionals cudaSupport [cudatoolkit cudnn];
 
   propagatedBuildInputs = [
     cffi
@@ -29,9 +36,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preConfigure = ''
-    export NO_CUDA=1
+  checkPhase = ''
+    ${stdenv.shell} test/run_test.sh
   '';
+
+  doCheck = !cudaSupport; # for some unknown reason doesn't detect cuda if run from builder user
 
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
