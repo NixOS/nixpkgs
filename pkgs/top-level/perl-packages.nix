@@ -4742,10 +4742,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailMIMEContentType = buildPerlPackage rec {
-    name = "Email-MIME-ContentType-1.018";
+    name = "Email-MIME-ContentType-1.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "7508cd1227b8f150a403ca49658cb4a0892836dd8f01ff95f049957b2abf10f9";
+      sha256 = "9abb7280b0da62a855ae5528b14deb94341a84e721af0a7e5a2adc3534ec5310";
     };
     meta = {
       homepage = https://github.com/rjbs/Email-MIME-ContentType;
@@ -4753,6 +4753,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ rycee ];
     };
+    propagatedBuildInputs = [ Encode ];
   };
 
   EmailMIMEEncodings = buildPerlPackage rec {
