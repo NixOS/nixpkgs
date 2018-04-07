@@ -5027,7 +5027,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExceptionBase = buildPerlPackage rec {
+  ExceptionBase = buildPerlModule rec {
     name = "Exception-Base-0.2501";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/${name}.tar.gz";
