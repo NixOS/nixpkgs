@@ -1,17 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-
-# Extra Args
-, type ? ""
 }:
 
-let
-  libOnly = type == "lib";
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${type}heimdal-${version}";
+  name = "heimdal-${version}";
   version = "7.5.0";
 
   src = fetchFromGitHub {
@@ -21,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "1j38wjj4k0q8vx168k3d3k0fwa8j1q5q8f2688nnx1b9qgjd6w1d";
   };
 
+  outputs = [ "out" "bin" "dev" "man" ];
+
   patches = [ ./heimdal-make-missing-headers.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]
-    ++ (with perlPackages; [ JSON ])
-    ++ optional (!libOnly) texinfo;
+  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+    ++ (with perlPackages; [ JSON ]);
   buildInputs = optionals (!stdenv.isFreeBSD) [ libcap_ng db ]
-    ++ [ sqlite openssl libedit ]
-    ++ optionals (!libOnly) [ openldap pam ];
+    ++ [ sqlite openssl libedit openldap pam ];
 
   ## ugly, X should be made an option
   configureFlags = [
@@ -36,11 +30,13 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--enable-hdb-openldap-module"
     "--with-sqlite3=${sqlite.dev}"
-    "--with-libedit=${libedit}"
+
+  # ugly, --with-libedit is not enought, it fall back to bundled libedit
+    "--with-libedit-include=${libedit.dev}/include"
+    "--with-libedit-lib=${libedit}/lib"
     "--with-openssl=${openssl.dev}"
     "--without-x"
     "--with-berkeley-db=${db}"
-  ] ++ optionals (!libOnly) [
     "--with-openldap=${openldap.dev}"
   ] ++ optionals (!stdenv.isFreeBSD) [
     "--with-capng"
@@ -48,24 +44,17 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac 
   '';
 
-  buildPhase = optionalString libOnly ''
-    (cd include; make -j $NIX_BUILD_CORES)
-    (cd lib; make -j $NIX_BUILD_CORES)
-    (cd tools; make -j $NIX_BUILD_CORES)
-    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
-    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
-  '';
-
-  installPhase = optionalString libOnly ''
-    (cd include; make -j $NIX_BUILD_CORES install)
-    (cd lib; make -j $NIX_BUILD_CORES install)
-    (cd tools; make -j $NIX_BUILD_CORES install)
-    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
-    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
-    rm -rf $out/{libexec,sbin,share}
-    find $out/bin -type f | grep -v 'krb5-config' | xargs rm
+  preConfigure = ''
+    configureFlagsArray+=(
+      "--bindir=$out/bin" # Put binaries to $out, then move them to $bin,
+                          # otherwise we go a cyclic dependecny
+      "--sbindir=$out/sbin"
+      "--mandir=$man/share/man"
+      "--infodir=$man/share/info"
+      "--includedir=$dev/include")
   '';
 
   # We need to build hcrypt for applications like samba
@@ -74,14 +63,27 @@ stdenv.mkDerivation rec {
     (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
   '';
 
+  # FIXME: share/info hits $bin, IDK why, but I decide is to minor to block
   postInstall = ''
     # Install hcrypto
     (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
     (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
 
+    # Do we need it?
+    rm $out/bin/su
+
     # Doesn't succeed with --libexec=$out/sbin, so
-    mv "$out/libexec/"* $out/sbin/
+    mkdir -p $dev/bin
+    mkdir -p $bin/{,s}bin
+    mv "$out/libexec/heimdal/"* $dev/bin/
+    rmdir $out/libexec/heimdal
+    mv "$out/libexec/"* $bin/sbin/
     rmdir $out/libexec
+
+    mkdir -p $dev/bin && mv $out/bin/krb5-config $dev/bin/
+
+    # Move remaining binaries to $bin
+    mv $out/bin/* $bin/bin/
   '';
 
   # Issues with hydra
