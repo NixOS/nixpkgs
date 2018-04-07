@@ -3451,26 +3451,7 @@ in {
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
 
-  jupyterlab = buildPythonPackage rec {
-    name = "jupyterlab-${version}";
-    version = "0.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyterlab/${name}.tar.gz";
-      sha256 = "91dc4d7dfb1e6ab97e28d6e3a2fc38f5f65d368201c00fd0ed077519258e67bb";
-    };
-
-    propagatedBuildInputs = with self; [ notebook ];
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter lab environment notebook server extension.";
-      license = with licenses; [ bsd3 ];
-      homepage = "http://jupyter.org/";
-    };
-  };
+  jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
   PyLTI = callPackage ../development/python-modules/pylti { };
 
