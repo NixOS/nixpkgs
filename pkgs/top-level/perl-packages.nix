@@ -1461,7 +1461,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginLogHandler = buildPerlPackage rec {
+  CatalystPluginLogHandler = buildPerlModule rec {
     name = "Catalyst-Plugin-Log-Handler-0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEPE/${name}.tar.gz";
