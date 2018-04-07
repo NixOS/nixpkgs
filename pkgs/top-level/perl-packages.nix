@@ -5765,10 +5765,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileRemove = buildPerlPackage rec {
-    name = "File-Remove-1.52";
+    name = "File-Remove-1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-      sha256 = "1p8bal9qhwkjbghivxn1d5m3qdj2qwm1agrjbmakm6la9dbxqm21";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/File-Remove-1.57.tar.gz;
+      sha256 = "1b814lw181kkqh6c1n4p2zlzzsq6ic5pfpr831nphf2w2rhcvgmk";
     };
   };
 
