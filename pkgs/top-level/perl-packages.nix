@@ -5581,7 +5581,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MJ/MJP/File-FnMatch-0.02.tar.gz";
       sha256 = "05p9m7kpmjv8bmmbs5chb5fqyshcgmskbbzq5c9qpskbx2w5894n";
     };
-    buildInputs = [ ];
     meta = {
       maintainers = [ maintainers.limeytexan ];
       description = "simple filename and pathname matching";
