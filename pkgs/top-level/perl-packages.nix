@@ -2487,8 +2487,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RJ/RJBS/constant-1.33.tar.gz;
       sha256 = "015my616h5l2fswh52x4dp3n007gk5lax83ww9q6cmzb610mv5kr";
     };
-    propagatedBuildInputs = [ TestSimple13 ];
-    buildInputs = [ ExtUtilsMakeMaker ];
   };
 
   constantboolean = buildPerlPackage {
