@@ -14834,6 +14834,8 @@ with pkgs;
 
   backintime = backintime-qt4;
 
+  balsa = callPackage ../applications/networking/mailreaders/balsa { };
+
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
