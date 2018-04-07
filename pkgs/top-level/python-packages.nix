@@ -1125,6 +1125,8 @@ in {
 
   cheroot = callPackage ../development/python-modules/cheroot {};
 
+  cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
+
   circus = callPackage ../development/python-modules/circus {};
 
   colorclass = callPackage ../development/python-modules/colorclass {};
