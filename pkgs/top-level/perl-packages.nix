@@ -5713,10 +5713,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileNFSLock = buildPerlPackage {
-    name = "File-NFSLock-1.21";
+    name = "File-NFSLock-1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.21.tar.gz;
-      sha256 = "1kclhmyha2xijq49darlz82f3bn7gq3saycxpfiz3dndqhr5i9iz";
+      url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.27.tar.gz;
+      sha256 = "0hhh3cmbby98b1xh64dvj31wqcr9hsk1zqrq3ci8fjd4xb7xch8g";
     };
     meta = {
       maintainers = with maintainers; [ ];
