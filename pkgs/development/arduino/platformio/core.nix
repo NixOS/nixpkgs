@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "platformio";
-  version="3.5.1";
+  version = "3.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cc15mzh7p1iykip0jpxldz81yz946vrgvhwmfl8w3z5kgjjgx3n";
+    sha256 = "bb311ce5b8f12c95bc45c2071626a4887a3632fb2472b4d69a873b2acfc2e4ec";
   };
 
   propagatedBuildInputs =  [
