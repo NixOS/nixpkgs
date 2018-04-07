@@ -1822,13 +1822,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassAccessorChained = buildPerlPackage {
+  ClassAccessorChained = buildPerlModule {
     name = "Class-Accessor-Chained-0.01";
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-0.01.tar.gz;
       sha256 = "1lilrjy1s0q5hyr0888kf0ifxjyl2iyk4vxil4jsv0sgh39lkgx5";
     };
-    propagatedBuildInputs = [ClassAccessor];
+    propagatedBuildInputs = [ ClassAccessor ];
   };
 
   ClassAccessorFast = ClassAccessor;
