@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, google_auth, protobuf3_5, googleapis_common_protos, requests, grpcio, futures, mock, pytest }:
+, google_auth, protobuf, googleapis_common_protos, requests, grpcio, futures, mock, pytest }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    googleapis_common_protos protobuf3_5
+    googleapis_common_protos protobuf
     google_auth requests grpcio
   ] ++ lib.optional (pythonOlder "3.2") futures;
   checkInputs = [ mock pytest ];
