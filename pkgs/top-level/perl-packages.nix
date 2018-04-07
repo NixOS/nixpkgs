@@ -4931,10 +4931,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EncodeJIS2K = buildPerlPackage {
-    name = "Encode-JIS2K-0.02";
+    name = "Encode-JIS2K-0.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.02.tar.gz;
-      sha256 = "5d718add5857f37fc270f24360bc9d100b72e0e13a11ca3149fe4e4d7c7cc4bf";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.03.tar.gz;
+      sha256 = "1ec84d72db39deb4dad6fca95acfcc21033f45a24d347c20f9a1a696896c35cc";
     };
     outputs = [ "out" ];
     meta = {
