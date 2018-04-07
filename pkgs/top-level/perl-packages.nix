@@ -2853,10 +2853,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptOpenSSLBignum = buildPerlPackage rec {
-    name = "Crypt-OpenSSL-Bignum-0.04";
+    name = "Crypt-OpenSSL-Bignum-0.09";
     src = fetchurl {
-      url    = "mirror://cpan/authors/id/I/IR/IROBERTS/${name}.tar.gz";
-      sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
+      url = mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz;
+      sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
