@@ -4089,8 +4089,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
       sha256 = "0ns95dsgmr8s0f1dfwd1cyv32vmd22w0vs51ppnnzp5zyi499581";
     };
-    buildInputs = [ CaptureTiny ];
-    propagatedBuildInputs = [ ExtUtilsConfig ];
     meta = {
       description = "Find the path to your perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
