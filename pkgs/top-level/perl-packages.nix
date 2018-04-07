@@ -2797,13 +2797,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CryptMySQL = buildPerlPackage rec {
+  CryptMySQL = buildPerlModule rec {
     name = "Crypt-MySQL-0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IK/IKEBE/${name}.tar.gz";
       sha256 = "93ebdfaaefcfe9ab683f0121c85f24475d8197f0bcec46018219e4111434dde3";
     };
-    propagatedBuildInputs = [DigestSHA1];
+    propagatedBuildInputs = [ DigestSHA1 ];
   };
 
   CryptRijndael = buildPerlPackage rec {
