@@ -22,36 +22,31 @@ in
 
   config = mkIf config.services.nginx.gitweb.enable {
 
-    systemd.sockets.gitweb = {
-      description = "GitWeb Listen Socket";
-      listenStreams = [ "/run/gitweb.sock" ];
-      socketConfig = {
-        Accept = "false";
-        SocketUser = "nginx";
-        SocketGroup = "nginx";
-        SocketMode = "0600";
-      };
-      wantedBy = [ "sockets.target" ];
-    };
     systemd.services.gitweb = {
       description = "GitWeb service";
-      script = "${git}/share/gitweb/gitweb.cgi --fcgi";
+      script = "${pkgs.git}/share/gitweb/gitweb.cgi --fastcgi --nproc=1";
+      environment  = {
+        FCGI_SOCKET_PATH = "/run/gitweb/gitweb.sock";
+      };
       serviceConfig = {
-        Type = "simple";
-        StandardInput = "socket";
         User = "nginx";
         Group = "nginx";
+        RuntimeDirectory = [ "gitweb" ];
       };
+      wantedBy = [ "multi-user.target" ];
     };
 
     services.nginx = {
       virtualHosts.default = {
-        locations."/gitweb" = {
-          root = "${pkgs.git}/share/gitweb";
+        locations."/gitweb/" = {
+          root = "${pkgs.git}/share";
+          tryFiles = "$uri @gitweb";
+        };
+        locations."@gitweb" = {
           extraConfig = ''
             include ${pkgs.nginx}/conf/fastcgi_params;
             fastcgi_param GITWEB_CONFIG ${cfg.gitwebConfigFile};
-            fastcgi_pass unix:/run/gitweb.sock;
+            fastcgi_pass unix:/run/gitweb/gitweb.sock;
           '';
         };
       };
