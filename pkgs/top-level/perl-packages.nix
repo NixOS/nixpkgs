@@ -272,6 +272,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestPod ];
   };
 
+  AppFatPacker = buildPerlPackage rec {
+     name = "App-FatPacker-0.010007";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MS/MSTROUT/App-FatPacker-0.010007.tar.gz;
+       sha256 = "1g9nff9fdg7dvja0ix2yv32w5xcj963ybcf7x22j61g6r81845fi";
+     };
+     meta = {
+       description = "pack your dependencies onto your script file";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   Appcpanminus = buildPerlPackage rec {
     name = "App-cpanminus-1.7043";
     src = fetchurl {
@@ -9138,6 +9150,7 @@ let self = _self // overrides; _self = with self; {
       description = "Automatically give your module the ability to have plugins";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ AppFatPacker ];
   };
 
   ModulePluggableFast = buildPerlPackage {
