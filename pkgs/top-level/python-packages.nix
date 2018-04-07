@@ -8935,6 +8935,8 @@ in {
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
+  python_openzwave = callPackage ../development/python-modules/python_openzwave { };
+
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
     version = "0.12.0";
