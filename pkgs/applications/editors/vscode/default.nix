@@ -2,7 +2,7 @@
   makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.21.1";
+  version = "1.22.1";
   channel = "stable";
 
   plat = {
@@ -12,9 +12,9 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "0c5wh6i4yl601hg0r1c8y25lz7j2p4vhisdnvnx9nzd6v4ib27cj";
-    "x86_64-linux" = "19i0wkl0qccq2cm10khy0xxb53a6g2m061g71y54s4cxb4wimc9l";
-    "x86_64-darwin" = "0d1ws4c3n80gypiarqbylyipg273ssc0m29jnrg7hx1mcy5ljb1i";
+    "i686-linux" = "1w1ywf21vcwmfq5ngag1y076nxbdqg3qav90ilxgd3dkv5j6fkjr";
+    "x86_64-linux" = "14phpsrkkv09dgr7phqhgjzfhm3zzbh3w2yhyng0cj3vwzysikcs";
+    "x86_64-darwin" = "0fqsr4ramanl7v1damf01zkmg75s9nlfkj6298h9sjvhc93pfcll";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
