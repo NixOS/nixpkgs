@@ -14101,13 +14101,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestCleanNamespaces = buildPerlPackage {
-    name = "Test-CleanNamespaces-0.16";
+    name = "Test-CleanNamespaces-0.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.16.tar.gz;
-      sha256 = "9779378394b9be32cf04129fafe2d40d74f6f200f593f1494998bd128a6ed9fa";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.22.tar.gz;
+      sha256 = "862a221994dd413b2f350450f22c96f57cac78784b1aca1a8fc763fc5449aaca";
     };
-    buildInputs = [ ModuleRuntime TestDeep TestRequires TestTester TestWarnings if_ ];
-    propagatedBuildInputs = [ FileFindRule FileFindRulePerl ModuleRuntime PackageStash SubExporter SubIdentify namespaceclean ];
+    buildInputs = [ Filepushd Moo Mouse RoleTiny SubExporter TestDeep TestNeeds TestWarnings namespaceclean ];
+    propagatedBuildInputs = [ PackageStash SubIdentify ];
     meta = {
       homepage = https://github.com/karenetheridge/Test-CleanNamespaces;
       description = "Check for uncleaned imports";
