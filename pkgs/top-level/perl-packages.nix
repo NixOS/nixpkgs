@@ -13940,10 +13940,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestHarness = buildPerlPackage {
-    name = "Test-Harness-3.33";
+    name = "Test-Harness-3.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Test-Harness-3.33.tar.gz;
-      sha256 = "c22e36287d5cee3c28fd2006e3c8b6e7cc76c6fc39d79c7ab74f1936d35e8fe2";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Test-Harness-3.42.tar.gz;
+      sha256 = "0fd90d4efea82d6e262e6933759e85d27cbcfa4091b14bf4042ae20bab528e53";
     };
     doCheck = false; # makes assumptions about path to Perl
     meta = {
