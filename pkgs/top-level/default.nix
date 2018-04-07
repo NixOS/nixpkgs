@@ -53,15 +53,15 @@ in let
     then configExpr { inherit pkgs; }
     else configExpr;
 
+  # Allow setting the platform in the config file. This take precedence over
+  # the inferred platform, but not over an explicitly passed-in one.
+  configPlatform = builtins.intersectAttrs { platform = null; } config;
+
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
-    # Allow setting the platform in the config file. This take precedence over
-    # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config
-    // args.localSystem);
+  localSystem = lib.systems.elaborate ((if crossSystem0 == null then configPlatform else {}) // args.localSystem);
 
-  crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
+  crossSystem = lib.mapNullable lib.systems.elaborate (if crossSystem0 != null then crossSystem0 // configPlatform else null);
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
