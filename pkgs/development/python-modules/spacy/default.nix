@@ -30,21 +30,13 @@ buildPythonPackage rec {
   };
 
   prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'html5lib==1.0b8'," \
-      "'html5lib',"
-
-    substituteInPlace setup.py --replace \
-      "'regex==2017.4.5'," \
-      "'regex',"
-
-    substituteInPlace setup.py --replace \
-      "'ftfy==2017.4.5'," \
-      "'ftfy',"
-
-    substituteInPlace setup.py --replace \
-      "'pathlib'," \
-      "\"pathlib; python_version<'3.4'\","
+    substituteInPlace setup.py \
+      --replace "html5lib==" "html5lib>=" \
+      --replace "regex==" "regex>=" \
+      --replace "ftfy==" "ftfy>=" \
+      --replace "msgpack-python==" "msgpack-python>=" \
+      --replace "msgpack-numpy==" "msgpack-numpy>=" \
+      --replace "pathlib" "pathlib; python_version<\"3.4\""
   '';
 
   propagatedBuildInputs = [
