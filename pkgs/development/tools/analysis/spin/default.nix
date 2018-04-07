@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = requireFile {
     name = "spin${url-version}.tar.gz";
-    sha256 = "1rpazi5fj772121cn7r85fxypmaiv0x6x2l82b5y1xqzyf0fi4ph";
+    sha256 = "1rvamdsf0igzpndlr4ck7004jw9x1bg4xyf78zh5k9sp848vnd80";
     message = ''
       reCAPTCHA is preventing us to download the file for you.
       Please download it at http://spinroot.com/spin/Src/index.html
@@ -24,12 +24,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ yacc ];
 
   sourceRoot = "Spin/Src${version}";
-
-  unpackPhase = ''
-    # The archive is compressed twice
-    gunzip -c $src > spin.tar.gz
-    tar -xzf spin.tar.gz
-  '';
 
   installPhase = ''
     install -Dm755 spin $out/bin/spin
