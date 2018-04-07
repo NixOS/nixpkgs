@@ -5291,10 +5291,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
-    name = "ExtUtils-Manifest-1.63";
+    name = "ExtUtils-Manifest-1.70";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0p4hj03nb5n6mk7pskpw066n1i3hr80nq7k7rc3fgl329v6syfmg";
+      url = mirror://cpan/authors/id/E/ET/ETHER/ExtUtils-Manifest-1.70.tar.gz;
+      sha256 = "159bypwl8xpq1yi39prr49hl7x2xww5aj97nv169c8xja0h0dzzf";
     };
   };
 
