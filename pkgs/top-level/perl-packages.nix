@@ -2044,14 +2044,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassMix = buildPerlPackage rec {
-    name = "Class-Mix-0.005";
+  ClassMix = buildPerlModule rec {
+    name = "Class-Mix-0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "054d0db62df90f22601f2a18fc84e9ca026d81601f5940b2fcc543e39d69b36b";
+      sha256 = "8747f643893914f8c44979f1716d0c1ec8a41394796555447944e860f1ff7c0b";
     };
-    buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ ParamsClassify self."if" ];
+    propagatedBuildInputs = [ ParamsClassify ];
     meta = {
       description = "Dynamic class mixing";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
