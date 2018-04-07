@@ -2009,6 +2009,8 @@ in {
 
   cssselect = callPackage ../development/python-modules/cssselect { };
 
+  cssselect2 = callPackage ../development/python-modules/cssselect2 { };
+
   cssutils = callPackage ../development/python-modules/cssutils { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
