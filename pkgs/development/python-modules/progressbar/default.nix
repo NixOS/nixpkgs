@@ -1,8 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "progressbar";
   version = "2.3";
+
+  # https://github.com/niltonvolpato/python-progressbar/issues/54
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
