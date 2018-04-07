@@ -5876,13 +5876,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileUtil = buildPerlPackage rec {
+  FileUtil = buildPerlModule rec {
     name = "File-Util-4.161950";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
       sha256 = "88507b19da580d595b5c25fe6ba75bbd6096b4359e389ead067a216f766c20ee";
     };
-    buildInputs = [ ModuleBuild TestNoWarnings ];
+    buildInputs = [ TestNoWarnings ];
     meta = {
       homepage = https://github.com/tommybutler/file-util/wiki;
       description = "Easy, versatile, portable file handling";
