@@ -1550,8 +1550,6 @@ in {
 
   click = callPackage ../development/python-modules/click {};
 
-  click_5 = callPackage ../development/python-modules/click/5_1.nix {};
-
   click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
