@@ -1,7 +1,7 @@
 { buildPythonPackage,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
   fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, cmake,
-  git, stdenv, symlinkJoin,
+  git, stdenv, linkFarm, symlinkJoin,
   utillinux, which }:
 
 assert cudnn == null || cudatoolkit != null;
@@ -12,6 +12,17 @@ let
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
+
+  # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
+  # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
+  # libcuda.so from cudatoolkit for running tests, so that we don’t have
+  # to recompile pytorch on every update to nvidia-x11 or the kernel.
+  cudaStub = linkFarm "cuda-stub" [{
+    name = "libcuda.so.1";
+    path = "${cudatoolkit}/lib/stubs/libcuda.so";
+  }];
+  cudaStubEnv = lib.optionalString cudaSupport
+    "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ";
 
 in buildPythonPackage rec {
   version = "0.3.1";
@@ -65,10 +76,8 @@ in buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${stdenv.shell} test/run_test.sh
+    ${cudaStubEnv}${stdenv.shell} test/run_test.sh
   '';
-
-  doCheck = !cudaSupport; # for some unknown reason doesn't detect cuda if run from builder user
 
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
