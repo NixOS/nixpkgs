@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84465f6534f49687f1a8069d48044799d2dd3f4e7ff06b66b7eea1502f3c402d";
+    sha256 = "977d7061779c7ebc5cbe7af71adb795ced96058552fe5f6b646d95b5055959be";
   };
 
   propagatedBuildInputs = [ cffi ];
@@ -16,10 +16,6 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
-
-  # no tests in PyPI tarball
-  # see https://github.com/jonparrott/cmarkgfm/pull/6
-  doCheck = false;
 
   meta = with lib; {
     description = "Minimal bindings to GitHub's fork of cmark";
