@@ -3108,13 +3108,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DataInteger = buildPerlPackage rec {
-    name = "Data-Integer-0.005";
+  DataInteger = buildPerlModule rec {
+    name = "Data-Integer-0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
-      sha256 = "1dk04jf78sv63lww1qzagxlywcc04cfd3cfvzz168d24db9cr5bz";
+      sha256 = "0m53zxhx9sn49yqh7azlpyy9m65g54v8cd2ha98y77337gg7xdv3";
     };
-    buildInputs = [ ModuleBuild ];
   };
 
   DataOptList = buildPerlPackage {
