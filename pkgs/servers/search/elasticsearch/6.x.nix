@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
       ${if (!stdenv.isDarwin)
         then ''--prefix PATH : "${utillinux}/bin/"''
         else ''--prefix PATH : "${getopt}/bin"''} \
-      --set JAVA_HOME "${jre_headless}" \
-      --set ES_JVM_OPTIONS "$out/config/jvm.options"
+      --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
