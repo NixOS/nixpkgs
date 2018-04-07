@@ -4091,10 +4091,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelGlobalDestruction = buildPerlPackage rec {
-    name = "Devel-GlobalDestruction-0.13";
+    name = "Devel-GlobalDestruction-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "0qn4iszgylnxjdkb6430f6a3ci7bcx9ih1az6bd5cbij1pf2965j";
+      sha256 = "1aslj6myylsvzr0vpqry1cmmvzbmpbdcl4v9zrl18ccik7rabf1l";
     };
     propagatedBuildInputs = [ SubExporterProgressive ];
     meta = {
