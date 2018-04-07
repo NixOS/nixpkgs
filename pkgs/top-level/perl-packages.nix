@@ -3735,13 +3735,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeTimeZone = buildPerlPackage rec {
-    name = "DateTime-TimeZone-1.97";
+    name = "DateTime-TimeZone-2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "68a5f4b0a77074f9cc96b2c1d2282e2110db74f55e43fbad72926cee0fd434c8";
+      sha256 = "b7f74295650bde3f378017113dcc504cefecc054cf6ef31133dc76940e15453a";
     };
     buildInputs = [ TestFatal TestRequires ];
-    propagatedBuildInputs = [ ClassSingleton ListAllUtils ModuleRuntime ParamsValidate TryTiny ];
+    propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
     meta = {
       homepage = https://metacpan.org/release/DateTime-TimeZone;
       description = "Time zone object base class and factory";
@@ -11233,6 +11233,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ParamsValidationCompiler = buildPerlPackage rec {
+     name = "Params-ValidationCompiler-0.27";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Params-ValidationCompiler-0.27.tar.gz;
+       sha256 = "1cpr188c2xm0kkmdir6slcsgv7v6ibqff4lax8s0whwx6ml9kaah";
+     };
+     propagatedBuildInputs = [ EvalClosure ExceptionClass ];
+     buildInputs = [ Specio Test2PluginNoWarnings Test2Suite TestSimple13 TestWithoutModule ];
+     meta = {
+       description = "Build an optimized subroutine parameter validator once, use it forever";
+       license = with stdenv.lib.licenses; [ artistic2 ];
+       homepage = "http://metacpan.org/release/Params-ValidationCompiler";
+     };
+  };
+
   PARDist = buildPerlPackage {
     name = "PAR-Dist-0.49";
     src = fetchurl {
@@ -12772,6 +12787,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Specio = buildPerlPackage rec {
+     name = "Specio-0.42";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.42.tar.gz;
+       sha256 = "1xjfa9g4vc6x3f0bzzbac8dwgpc4in4za1l1sp0y6ykdla9qna93";
+     };
+     propagatedBuildInputs = [ DevelStackTrace EvalClosure MROCompat ModuleRuntime RoleTiny SubQuote TryTiny ];
+     buildInputs = [ TestFatal TestNeeds ];
+     meta = {
+       description = "Type constraints and coercions for Perl";
+       license = with stdenv.lib.licenses; [ artistic2 ];
+       homepage = "http://metacpan.org/release/Specio";
+     };
+  };
+
   Spiffy = buildPerlPackage rec {
     name = "Spiffy-0.46";
     src = fetchurl {
@@ -13951,6 +13981,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Provides a simple framework for writing test scripts";
     };
+  };
+
+  Test2PluginNoWarnings = buildPerlPackage rec {
+     name = "Test2-Plugin-NoWarnings-0.06";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.06.tar.gz;
+       sha256 = "002qk6qsm0l6r2kaxywvc38w0yf0mlavgywq8li076pn6kcw3242";
+     };
+     propagatedBuildInputs = [ TestSimple13 ];
+     buildInputs = [ IPCRun3 Test2Suite ];
+     meta = {
+       description = "Fail if tests warn";
+       license = with stdenv.lib.licenses; [ artistic2 ];
+       homepage = "http://metacpan.org/release/Test2-Plugin-NoWarnings";
+     };
   };
 
   Test2Suite = buildPerlPackage rec {
