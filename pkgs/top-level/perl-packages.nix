@@ -136,7 +136,6 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/P/PO/POTYL/${name}.tar.gz";
       sha256 = "41c1faf183b61806b55889ceea1237750c1f61b9ce2735fdf33dc05536712dae";
     };
-    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ AnyEvent ];
     doCheck = false; # does an DNS lookup
     meta = {
