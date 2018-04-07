@@ -2929,11 +2929,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Curses = let version = "1.33"; in buildPerlPackage {
+  Curses = let version = "1.36"; in buildPerlPackage {
     name = "Curses-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-${version}.tar.gz";
-      sha256 = "126fhcyb822vqhszdrr7nmhrnshf06076shxdr7la0fwqzsfn7zb";
+      sha256 = "0r6xd9wr0c25rr28zixhqipak575zqsfb7r7f2693i9il1dpj554";
     };
     propagatedBuildInputs = [ pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lncurses";
