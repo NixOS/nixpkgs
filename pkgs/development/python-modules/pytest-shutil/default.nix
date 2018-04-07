@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
 , pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
-, contextlib2 }:
+, contextlib2, termcolor }:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ cmdline pytest ];
-  propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
+  propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
 
   checkPhase = ''
     py.test
