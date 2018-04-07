@@ -6515,7 +6515,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   HeapFibonacci = buildPerlPackage {
-    name = "Heap-Fibonacci-0.80";
+    name = "Heap-0.80";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JM/JMM/Heap-0.80.tar.gz;
       sha256 = "1plv2djbyhvkdcw2ic54rdqb745cwksxckgzvw7ssxiir7rjknnc";
