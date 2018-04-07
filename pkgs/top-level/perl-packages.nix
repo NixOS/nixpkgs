@@ -6720,7 +6720,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLTagCloud = buildPerlPackage rec {
+  HTMLTagCloud = buildPerlModule rec {
     name = "HTML-TagCloud-0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBERTSD/${name}.tar.gz";
