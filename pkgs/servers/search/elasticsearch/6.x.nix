@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/elasticsearch \
       --prefix PATH : "${utillinux}/bin/" \
-      --set JAVA_HOME "${jre_headless}" \
-      --set ES_JVM_OPTIONS "$out/config/jvm.options"
+      --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
