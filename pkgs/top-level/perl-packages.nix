@@ -104,8 +104,9 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0raapwp4155lqag1kzhsd20z4if10hav9wx4d7mc1xpvf7dcnr5r";
     };
 
-    buildInputs = [ FileShareDir ArchiveExtract ];
+    buildInputs = [ ArchiveExtract ];
     TIDYP_DIR = "${pkgs.tidyp}";
+    propagatedBuildInputs = [ FileShareDir ];
   };
 
   AlienWxWidgets = buildPerlPackage rec {
