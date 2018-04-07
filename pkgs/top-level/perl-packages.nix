@@ -8436,6 +8436,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MCE = buildPerlPackage rec {
+     name = "MCE-1.835";
+     src = fetchurl {
+       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.835.tar.gz;
+       sha256 = "1dxs7gvj97vr1ns74k3inix1i80d8b2j942crnapdx9j90j6cqvi";
+     };
+     meta = {
+       description = "Many-Core Engine for Perl providing parallel processing capabilities";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       homepage = "https://github.com/marioroy/mce-perl";
+     };
+  };
+
   LogLog4perl = buildPerlPackage rec {
     name = "Log-Log4perl-1.49";
     src = fetchurl {
@@ -14552,13 +14565,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CaptureTiny ];
   };
 
-  TestPerlCritic = buildPerlPackage rec {
-    name = "Test-Perl-Critic-1.02";
+  TestPerlCritic = buildPerlModule rec {
+    name = "Test-Perl-Critic-1.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TH/THALJEF/${name}.tar.gz";
-      sha256 = "89b242ff539034336ed87c11ef3e5ecac47c333a6ab8b46aab4cc449e3739a89";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/Test-Perl-Critic-1.04.tar.gz;
+      sha256 = "28f806b5412c7908b56cf1673084b8b44ce1cb54c9417d784d91428e1a04096e";
     };
-    propagatedBuildInputs = [ PerlCritic ];
+    propagatedBuildInputs = [ MCE PerlCritic ];
   };
 
   TestPerlTidy = buildPerlPackage rec {
