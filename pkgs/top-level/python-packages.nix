@@ -1942,6 +1942,8 @@ in {
 
   pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
 
+  pytest-isort = callPackage ../development/python-modules/pytest-isort { };
+
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
