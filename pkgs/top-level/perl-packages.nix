@@ -6491,10 +6491,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HashMultiValue = buildPerlPackage {
-    name = "Hash-MultiValue-0.15";
+    name = "Hash-MultiValue-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Hash-MultiValue-0.15.tar.gz;
-      sha256 = "1jc37kwpa1fl88va8bd1p95h0vjv1gsvmn7pc2pxj62ga6x0wpc0";
+      url = mirror://cpan/authors/id/A/AR/ARISTOTLE/Hash-MultiValue-0.16.tar.gz;
+      sha256 = "1x3k7h542xnigz0b8vsfiq580p5r325wi5b8mxppiqk8mbvis636";
     };
     meta = {
       description = "Store multiple values per key";
