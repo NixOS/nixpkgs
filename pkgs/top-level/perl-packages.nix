@@ -5214,10 +5214,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsDepends = buildPerlPackage {
-    name = "ExtUtils-Depends-0.306";
+    name = "ExtUtils-Depends-0.405";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-Depends-0.306.tar.gz;
-      sha256 = "0s935hmxjl6md47i80abcfaghqwhnv0ikzzqln80w4ydhg5qn9a5";
+      url = mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-Depends-0.405.tar.gz;
+      sha256 = "0b4ab9qmcihsfs2ajhn5qzg7nhazr68v3r0zvb7076smswd41mla";
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
