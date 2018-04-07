@@ -5239,10 +5239,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsInstall = buildPerlPackage {
-    name = "ExtUtils-Install-2.04";
+    name = "ExtUtils-Install-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.04.tar.gz;
-      sha256 = "1b2e5370bc63d93cf99a75feb2b9b67227b693d16ebfb730ca90a483145de3b6";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.14.tar.gz;
+      sha256 = "35412305cbae979aac3b6e2c70cb301ae461979a1d848a8a043f74518eb96aea";
     };
     meta = {
       homepage = https://metacpan.org/release/ExtUtils-Install;
