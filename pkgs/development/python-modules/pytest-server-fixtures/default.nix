@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
 , pytest, setuptools-git, pytest-shutil, pytest-fixture-config, psutil
-, requests}:
+, requests, future }:
 
 buildPythonPackage rec {
   pname = "pytest-server-fixtures";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ setuptools-git pytest-shutil pytest-fixture-config psutil requests ];
+  propagatedBuildInputs = [ setuptools-git pytest-shutil pytest-fixture-config psutil requests future ];
 
   # RuntimeError: Unable to find a free server number to start Xvfb
   doCheck = false;
