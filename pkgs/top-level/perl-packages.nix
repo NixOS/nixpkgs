@@ -5334,10 +5334,9 @@ let self = _self // overrides; _self = with self; {
   ExtUtilsTypemap = buildPerlPackage rec {
     name = "ExtUtils-Typemap-1.00";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemap-1.00.tar.gz;
       sha256 = "1iqz0xlscg655gnwb2h1wrjj70llblps1zznl29qn1mv5mvibc5i";
     };
-    buildInputs = [ ExtUtilsParseXS ];
   };
 
   ExtUtilsTypemapsDefault = buildPerlModule rec {
