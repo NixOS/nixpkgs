@@ -12695,10 +12695,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringCamelCase = buildPerlPackage rec {
-    name = "String-CamelCase-0.02";
+    name = "String-CamelCase-0.04";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
-      sha256 = "17kh8nap2z5g5rqcvw0m7mvbai7wr7h0al39w8l827zhqad8ss42";
+      url = mirror://cpan/authors/id/H/HI/HIO/String-CamelCase-0.04.tar.gz;
+      sha256 = "1a8i4yzv586svd0pbxls7642vvmyiwzh4x2xyij8gbnfxsydxhw9";
     };
   };
 
