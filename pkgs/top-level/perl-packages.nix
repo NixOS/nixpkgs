@@ -10567,7 +10567,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [NetSSLeay DigestHMAC IOSocketSSL];
   };
 
-  NetSNMP = buildPerlPackage rec {
+  NetSNMP = buildPerlModule rec {
     name = "Net-SNMP-6.0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz";
