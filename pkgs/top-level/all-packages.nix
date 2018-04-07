@@ -18690,6 +18690,11 @@ with pkgs;
 
   xmacro = callPackage ../tools/X11/xmacro { };
 
+  xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor {
+    libxml = libxml2;
+    wxwidgets = wxGTK;
+  };
+
   xmove = callPackage ../applications/misc/xmove { };
 
   xmp = callPackage ../applications/audio/xmp { };
