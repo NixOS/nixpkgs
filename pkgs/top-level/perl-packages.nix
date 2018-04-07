@@ -1872,11 +1872,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassBase = buildPerlPackage rec {
-    name = "Class-Base-0.06";
+    name = "Class-Base-0.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SZ/SZABGAB/${name}.tar.gz";
-      sha256 = "15mvg1ba0iphjjb90a2fq73hyzcgp8pv0c44pjfcn7vdlzp098z3";
+      url = mirror://cpan/authors/id/Y/YA/YANICK/Class-Base-0.09.tar.gz;
+      sha256 = "117dmsrb30a09zlrv919fb5h5rg8r4asa24i99k04n2habgbv9g1";
     };
+    propagatedBuildInputs = [ Clone ];
   };
 
   ClassC3 = buildPerlPackage rec {
