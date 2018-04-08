@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    sha256 = "1gh5a2km33jj151j3q7mgkjzzhaaxlqxbb53n4ff46q658gv0wma";
+    rev = "8c1e439c967a50f0698d61aafdba3841aff10db0";
+    sha256 = "110vxgahyx5dvylqrxsm5cmx4a32cl2zchvm6cgc270jz75fg7wd";
   };
 
   preInstall = ''

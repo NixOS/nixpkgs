@@ -11736,7 +11736,7 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk218x;
+  webkitgtk = webkitgtk220x;
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu-58;
@@ -11744,7 +11744,7 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  webkitgtk218x = callPackage ../development/libraries/webkitgtk/2.18.nix {
+  webkitgtk220x = callPackage ../development/libraries/webkitgtk/2.20.nix {
     harfbuzz = harfbuzz-icu;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     stdenv = overrideCC stdenv gcc6;
@@ -13514,11 +13514,24 @@ with pkgs;
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
 
-  linuxPackages_custom = { version, src, configfile }:
+  linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile stdenv;
-      allowImportFromDerivation = true;
+      inherit version src configfile stdenv allowImportFromDerivation;
+      inherit (stdenv) hostPlatform;
     }));
+
+  # This serves as a test for linuxPackages_custom
+  linuxPackages_custom_tinyconfig_kernel = let
+    base = pkgs.linuxPackages.kernel;
+    tinyLinuxPackages = pkgs.linuxPackages_custom {
+      inherit (base) version src;
+      allowImportFromDerivation = false;
+      configfile = pkgs.linuxConfig {
+        makeTarget = "tinyconfig";
+        src = base.src;
+      };
+    };
+    in tinyLinuxPackages.kernel;
 
   # Build a kernel with bcachefs module
   linuxPackages_testing_bcachefs = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing_bcachefs);
@@ -13558,6 +13571,19 @@ with pkgs;
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
   buildLinux = makeOverridable (callPackage ../os-specific/linux/kernel/generic.nix {});
+
+  # Derive one of the default .config files
+  linuxConfig = { src, makeTarget ? "defconfig", name ? "kernel.config" }:
+    stdenv.mkDerivation {
+      inherit name src;
+      buildPhase = ''
+        set -x
+        make ${makeTarget}
+      '';
+      installPhase = ''
+        cp .config $out
+      '';
+    };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
@@ -13783,6 +13809,7 @@ with pkgs;
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
@@ -16602,7 +16629,7 @@ with pkgs;
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monero = callPackage ../applications/altcoins/monero {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost15x;
   };
 
@@ -18822,6 +18849,8 @@ with pkgs;
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
+  factorio-headless-experimental = callPackage ../games/factorio { releaseType = "headless"; experimental = true; };
+
   factorio-demo = callPackage ../games/factorio { releaseType = "demo"; };
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
@@ -20722,9 +20751,7 @@ with pkgs;
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
-  vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
-    webkit = webkitgtk218x;
-  };
+  vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
   vips = callPackage ../tools/graphics/vips { };

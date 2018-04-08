@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.icewm.org/;
     license = licenses.lgpl2;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

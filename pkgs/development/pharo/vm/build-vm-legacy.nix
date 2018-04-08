@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)
-    platforms = with stdenv.lib;
-                  intersectLists
-                    platforms.mesaPlatforms
-                    (subtractLists platforms.darwin platforms.unix);
+    platforms = stdenv.lib.filter
+      (system: with stdenv.lib.systems.elaborate { inherit system; };
+         isUnix && !isDarwin)
+      stdenv.lib.platforms.mesaPlatforms;
   };
 }

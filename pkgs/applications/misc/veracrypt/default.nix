@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "veracrypt-${version}";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchurl {
     url = "https://launchpad.net/veracrypt/trunk/${version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "0n036znmwnv70wy8r2j3b55bx2z3cch5fr83vnwjvzyyp0j7swa4";
+    sha256 = "0w5qyxnx03vn93ach1kb995w2mdg43s82gf1isbk206sxp00qk4y";
   };
 
   unpackPhase =

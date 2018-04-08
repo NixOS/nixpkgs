@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.opensmtpd.org/;
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
   };
 }

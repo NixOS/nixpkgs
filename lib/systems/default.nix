@@ -3,6 +3,7 @@
 
 rec {
   doubles = import ./doubles.nix { inherit lib; };
+  forMeta = import ./for-meta.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };

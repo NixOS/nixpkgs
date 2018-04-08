@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;
     maintainers = [ maintainers.rickynils ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
