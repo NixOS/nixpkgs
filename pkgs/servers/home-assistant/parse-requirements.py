@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ setuptools ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ ])"
 #
 # This script downloads https://github.com/home-assistant/home-assistant/blob/master/requirements_all.txt.
 # This file contains lines of the form
@@ -20,7 +20,6 @@ import os
 import sys
 import json
 import re
-from pkg_resources import Requirement, RequirementParseError
 
 GENERAL_PREFIX = '# homeassistant.'
 COMPONENT_PREFIX = GENERAL_PREFIX + 'components.'
@@ -64,9 +63,11 @@ def name_to_attr_path(req):
     names = [req]
     # E.g. python-mpd2 is actually called python3.6-mpd2
     # instead of python-3.6-python-mpd2 inside Nixpkgs
-    if req.startswith('python-'):
+    if req.startswith('python-') or req.startswith('python_'):
         names.append(req[len('python-'):])
     for name in names:
+        # treat "-" and "_" equally
+        name = re.sub('[-_]', '[-_]', name)
         pattern = re.compile('^python\\d\\.\\d-{}-\\d'.format(name), re.I)
         for attr_path, package in packages.items():
             if pattern.match(package['name']):
@@ -86,7 +87,7 @@ for component, reqs in OrderedDict(sorted(requirements.items())).items():
     attr_paths = []
     for req in reqs:
         try:
-            name = Requirement.parse(req).project_name
+            name = req.split('==')[0]
             attr_path = name_to_attr_path(name)
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
