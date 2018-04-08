@@ -1053,6 +1053,8 @@ with pkgs;
 
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
 
+  crip = callPackage ../applications/audio/crip { };
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
