@@ -1,4 +1,4 @@
-{lib, python2Packages, git, mercurial, coreutils}:
+{lib, python2Packages, fetchFromGitHub, fetchurl, git, mercurial, coreutils}:
 
 with python2Packages;
 buildPythonApplication rec {
@@ -12,10 +12,29 @@ buildPythonApplication rec {
   buildInputs = [ pytest pytest-flake8 pytest-cram git pytestrunner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b997c99b8bbb865988202d2f005cdaabb2598b07dad891c302a147a5871a4a95";
+  # PyPI source is currently missing tests. Thus, use GitHub instead.
+  # See: https://github.com/kynan/nbstripout/issues/73
+  # Use PyPI again after it has been fixed in a release.
+  src = fetchFromGitHub {
+    owner = "kynan";
+    repo = pname;
+    rev = version;
+    sha256 = "1jifqmszjzyaqzaw2ir83k5fdb04iyxdad4lclawpb42hbink9ws";
   };
+
+  patches = [
+    (
+      # Fix git diff tests by using --no-index.
+      # See: https://github.com/kynan/nbstripout/issues/74
+      #
+      # Remove this patch once the pull request has been merged and a new
+      # release made.
+      fetchurl {
+        url = "https://github.com/jluttine/nbstripout/commit/03e28424fb788dd09a95e99814977b0d0846c0b4.patch";
+        sha256 = "09myfb77a2wh8lqqs9fcpam97vmaw8b7zbq8n5gwn6d80zbl7dn0";
+      }
+    )
+  ];
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
   # force using the echo binary
