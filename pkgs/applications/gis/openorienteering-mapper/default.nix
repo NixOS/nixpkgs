@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     ln -s $out/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = ''
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.
     '';
     homepage = https://www.openorienteering.org/apps/mapper/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; darwin;
-    maintainers = with stdenv.lib.maintainers; [mpickering];
+    license = licenses.gpl3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [mpickering];
   };
 }
