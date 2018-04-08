@@ -165,7 +165,7 @@ in rec {
     inherit system;
   });
 
-  sd_image = forTheseSystems [ "aarch64-linux" ] (system: makeSdImage {
+  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
     inherit system;
   });
