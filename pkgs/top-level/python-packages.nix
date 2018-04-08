@@ -10029,31 +10029,7 @@ in {
 
   piexif = callPackage ../development/python-modules/piexif { };
 
-  pip = buildPythonPackage rec {
-    pname = "pip";
-    version = "9.0.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d";
-    };
-
-    # pip detects that we already have bootstrapped_pip "installed", so we need
-    # to force it a little.
-    installFlags = [ "--ignore-installed" ];
-
-    checkInputs = with self; [ mock scripttest virtualenv pretend pytest ];
-    # Pip wants pytest, but tests are not distributed
-    doCheck = false;
-
-    meta = {
-      description = "The PyPA recommended tool for installing Python packages";
-      license = licenses.mit;
-      homepage = https://pip.pypa.io/;
-      priority = 10;
-    };
-  };
+  pip = callPackage ../development/python-modules/pip { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools {
     git = pkgs.gitMinimal;
