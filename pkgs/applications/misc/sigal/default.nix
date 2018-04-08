@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, pythonPackages }:
+{ lib, buildPythonApplication, fetchPypi, pythonPackages, ffmpeg }:
 
 buildPythonApplication rec {
   version = "1.4.0";
@@ -19,6 +19,8 @@ buildPythonApplication rec {
     click
     blinker
   ];
+
+  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg}/bin" ];
 
   # No tests included
   doCheck = false;
