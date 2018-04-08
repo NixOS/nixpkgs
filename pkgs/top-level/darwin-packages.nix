@@ -67,4 +67,6 @@ in
 
   swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
 
+  darling = callPackage ../os-specific/darwin/darling/default.nix { };
+
 })
