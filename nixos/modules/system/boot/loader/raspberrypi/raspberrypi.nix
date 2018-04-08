@@ -45,7 +45,7 @@ let
       arm_control=0x200
     '' + optional cfg.uboot.enable ''
       kernel=u-boot-rpi.bin
-    '');
+    '' + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
 
@@ -88,6 +88,15 @@ in
           '';
         };
 
+      };
+
+      firmwareConfig = mkOption {
+        default = null;
+        type = types.nullOr types.string;
+        description = ''
+          Extra options that will be appended to <literal>/boot/config.txt</literal> file.
+          For possible values, see: https://www.raspberrypi.org/documentation/configuration/config-txt/
+        '';
       };
     };
   };
