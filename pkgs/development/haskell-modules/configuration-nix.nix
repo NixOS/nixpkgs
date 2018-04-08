@@ -203,7 +203,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
 
-   # Needs access to locale data, but looks for it in the wrong place.
+  # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
   # Expect to find sendmail(1) in $PATH.
