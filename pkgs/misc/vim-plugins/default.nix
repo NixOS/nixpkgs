@@ -1,5 +1,5 @@
 # TODO check that no license information gets lost
-{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
+{ fetchurl, stdenv, python, go, cmake, vim, vimUtils, perl, ruby
 , which, fetchgit, llvmPackages, rustPlatform
 , xkb_switch, rustracerd, fzf, skim
 , python3, boost, icu, ncurses
@@ -3053,13 +3053,7 @@ rec {
       sha256 = "1s9c4lnsmbfm97bp22jrmcp5lga5ihx23lzqqncvv7rcizkvr3dm";
     };
     dependencies = [];
-    unpackPhase = ''
-      (
-       sourceRoot=d
-       mkdir $sourceRoot; cd $sourceRoot;
-       unzip $src
-      )
-    '';
+
   };
 
   mayansmoke-git = buildVimPluginFrom2Nix { # created by nix#NixDerivation
