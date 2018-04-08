@@ -63,6 +63,8 @@ in
 
   xcode = callPackage ../os-specific/darwin/xcode { };
 
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+
   swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
 
 })
