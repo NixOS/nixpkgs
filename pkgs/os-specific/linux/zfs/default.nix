@@ -182,9 +182,11 @@ in {
     spl = splUnstable;
   };
 
+  # TODO: Remove this module before 18.09
+  # also remove boot.zfs.enableLegacyCrypto
   zfsLegacyCrypto = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    incompatibleKernelVersion = "4.16";
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-02-01";
