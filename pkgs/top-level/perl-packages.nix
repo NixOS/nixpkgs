@@ -1658,6 +1658,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CDDB_get = buildPerlPackage rec {
+    name = "CDDB_get-2.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FO/FONKIE/${name}.tar.gz";
+      sha256 = "1jfrwvfasylcafbvb0jjm94ad4v6k99a7rf5i4qwzhg4m0gvmk5x";
+    };
+    meta = {
+      homepage = https://metacpan.org/module/CDDB_get;
+      description = "Get the CDDB info for an audio cd";
+      license = stdenv.lib.licenses.artistic1;
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ maintainers.endgame ];
+    };
+  };
+
   CGI = buildPerlPackage rec {
     name = "CGI-4.38";
     src = fetchurl {
