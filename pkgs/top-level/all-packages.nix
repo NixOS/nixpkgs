@@ -20060,7 +20060,6 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  z3_4_5_0 = callPackage ../applications/science/logic/z3/4.5.0.nix {};
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
