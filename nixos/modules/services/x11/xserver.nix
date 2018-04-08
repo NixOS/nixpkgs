@@ -161,15 +161,6 @@ in
         '';
       };
 
-      plainX = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether the X11 session can be plain (without DM/WM) and
-          the Xsession script will be used as fallback or not.
-        '';
-      };
-
       autorun = mkOption {
         type = types.bool;
         default = true;
@@ -561,11 +552,6 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
-      { assertion = cfg.desktopManager.default == "none" && cfg.windowManager.default == "none" -> cfg.plainX;
-        message = "Either the desktop manager or the window manager shouldn't be `none`! "
-                + "To explicitly allow this, you can also set `services.xserver.plainX` to `true`. "
-                + "The `default` value looks for enabled WMs/DMs and select the first one.";
-      }
     ];
 
     environment.etc =

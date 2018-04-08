@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
-}: 
+}:
+
 buildPythonPackage rec {
   pname = "celery";
   version = "4.1.0";
@@ -11,11 +12,11 @@ buildPythonPackage rec {
   };
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = ''
+  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
       LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
-  postCheck = ''
+  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 

@@ -61,7 +61,7 @@ pythonPackages.buildPythonApplication rec {
       options.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
 }

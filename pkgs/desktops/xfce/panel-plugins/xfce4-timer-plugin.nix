@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Battery plugin for Xfce panel";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = [ ];
   };
 }

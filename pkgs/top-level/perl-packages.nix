@@ -5756,6 +5756,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FilePid = buildPerlPackage rec {
+    name = "File-Pid-1.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CW/CWEST/${name}.tar.gz";
+      sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
+    };
+    propagatedBuildInputs = [ ClassAccessor ];
+    meta = {
+      license = stdenv.lib.licenses.free; # Same as Perl
+      description = "Pid File Manipulation";
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   Filepushd = buildPerlPackage {
     name = "File-pushd-1.005";
     src = fetchurl {
@@ -5847,21 +5861,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileTemp = null;
-
-  FileType = buildPerlPackage {
-    name = "File-Type-0.22";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
-      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
-    };
-    meta = {
-      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
-    };
-  };
-
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
     # WARNING: check on next update if deprecation warning is gone
@@ -5899,6 +5898,48 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "A simple, sane and efficient file slurper [DISCOURAGED]";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  FileTail = buildPerlPackage rec {
+    name = "File-Tail-1.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGRABNAR/${name}.tar.gz";
+      sha256 = "1ixg6kn4h330xfw3xgvqcbzfc3v2wlzjim9803jflhvfhf0rzl16";
+    };
+    meta = {
+      description = "Perl extension for reading from continously updated files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
+  FileTemp = null;
+
+  FileTouch = buildPerlPackage rec {
+    name = "File-Touch-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "e379a5ff89420cf39906e5ceff309b8ce958f99f9c3e57ad52b5002a3982d93c";
+    };
+    meta = {
+      homepage = https://github.com/neilb/File-Touch;
+      description = "Update file access and modification times, optionally creating files if needed";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
+  FileType = buildPerlPackage {
+    name = "File-Type-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
+      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
+    };
+    meta = {
+      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -6739,6 +6780,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTMLTagset ];
     meta = {
       description = "HTML parser class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HTMLTagCloud = buildPerlPackage rec {
+    name = "HTML-TagCloud-0.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROBERTSD/${name}.tar.gz";
+      sha256 = "05bhnrwwlwd6cj3cn91zw5r99xddvy142bznid26p1pg5m3rk029";
+    };
+    meta = {
+      description = "Generate An HTML Tag Cloud";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8741,6 +8794,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MathVecStat = buildPerlPackage rec {
+    name = "Math-VecStat-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
+    };
+  };
+
   Memoize = buildPerlPackage {
     name = "Memoize-1.03.tgz";
     src = fetchurl {
@@ -10502,14 +10563,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NetLDAP = buildPerlPackage {
-    name = "Net-LDAP-0.4001";
-    propagatedBuildInputs = [ ConvertASN1 ];
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.4001.tar.gz;
-      sha256 = "0spwid70yxkh5zbad3ldw8yb2m5shkm59a7f0kllw8bb7ccczqps";
-    };
-  };
+  NetLDAP = perlldap;
 
   NetOAuth = buildPerlPackage {
     name = "Net-OAuth-0.28";
@@ -11244,6 +11298,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  perlldap = buildPerlPackage rec {
+    name = "perl-ldap-0.65";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/${name}.tar.gz";
+      sha256 = "5f57dd261dc16ebf942a272ddafe69526598df71151a51916edc37a4f2f23834";
+    };
+    buildInputs = [ TextSoundex ];
+    propagatedBuildInputs = [ ConvertASN1 ];
+    meta = {
+      homepage = http://ldap.perl.org/;
+      description = "LDAP client library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   PerlMagick = buildPerlPackage rec {
     name = "PerlMagick-6.89-1";
     src = fetchurl {
@@ -11868,11 +11938,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodPerldoc = buildPerlPackage {
-    name = "Pod-Perldoc-3.25";
+  PodPerldoc = buildPerlPackage rec {
+    name = "Pod-Perldoc-3.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MALLEN/Pod-Perldoc-3.25.tar.gz;
-      sha256 = "f1a4b3ac7aa244485456b0e8733c773bbb39ae35b01a59515f6cba6bbe293a84";
+      url = "mirror://cpan/authors/id/M/MA/MALLEN/${name}.tar.gz";
+      sha256 = "0kf6xwdha8jl0nxv60r2v7xsfnvv6i3gy135xsl40g71p02ychfc";
     };
     meta = {
       description = "Look up Perl documentation in Pod format";

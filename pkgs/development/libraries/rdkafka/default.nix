@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rdkafka-${version}";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "17ghq0kzk2fdpxhr40xgg3s0p0n0gkvd0d85c6jsww3mj8v5xd14";
+    sha256 = "11ps8sy4v8yvj4sha7d1q3rmhfw7l1rd52rnl01xam9862yasahs";
   };
 
   nativeBuildInputs = [ pkgconfig ];

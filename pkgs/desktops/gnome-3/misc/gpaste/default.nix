@@ -2,12 +2,12 @@
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "3.28.0";
+  version = "3.28.1";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "15zigqmhd2x58ml0rl6srgvpx8ms7a3dapphcr75563pacv46mir";
+    sha256 = "19rdi2syshrk32hqnjh63fm0wargw546j5wlsnsg1axml0x1xww9";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];

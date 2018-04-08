@@ -32,8 +32,10 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # hackage-security's test suite does not compile with Cabal 2.x.
-  # See https://github.com/haskell/hackage-security/issues/188.
+  # Use the latest version of the Cabal library.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+
+  # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
@@ -959,37 +961,37 @@ self: super: {
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in embeddedfiles/*.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v embeddedfiles/*.info* $out/share/info/
     '';
   });
   hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in *.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v *.info* $out/share/info/
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in *.$i; do
           mkdir -p $out/share/man/man$i
-          cp $j $out/share/man/man$i/
+          cp -v $j $out/share/man/man$i/
         done
       done
       mkdir -p $out/share/info
-      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
+      cp -v *.info* $out/share/info/
     '';
   });
 
@@ -1008,4 +1010,34 @@ self: super: {
   # https://github.com/strake/lenz-template.hs/issues/1
   lenz-template = doJailbreak super.lenz-template;
 
+  # https://github.com/haskell-hvr/resolv/issues/1
+  resolv = dontCheck super.resolv;
+
+  # spdx 0.2.2.0 needs older tasty
+  # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
+  spdx = dontCheck super.spdx;
+
+  # The test suite does not know how to find the 'alex' binary.
+  alex = overrideCabal super.alex (drv: {
+    testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
+    preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
+  });
+
 }
+
+//
+
+(let
+  amazonkaOverrides = self: super: {
+    conduit = self.conduit_1_2_13_1;
+    conduit-extra = self.conduit-extra_1_2_3_2;
+    resourcet = self.resourcet_1_1_11;
+    xml-conduit = self.xml-conduit_1_7_1_2;
+    http-conduit = self.http-conduit_2_2_4;
+  };
+  amazonka-core = super.amazonka-core.overrideScope amazonkaOverrides;
+  amazonka = super.amazonka.overrideScope amazonkaOverrides;
+  amazonka-test = super.amazonka-test.overrideScope amazonkaOverrides;
+in {
+  inherit amazonka amazonka-core amazonka-test;
+})

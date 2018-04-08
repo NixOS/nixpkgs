@@ -60,7 +60,7 @@ self = stdenv.mkDerivation rec {
     install -vD $out/lib/*.a -t $static/lib
     rm -r $out/mysql-test
     rm $out/share/man/man1/mysql-test-run.pl.1 $out/lib/*.a
-    ln -s libmysqlclient.so $out/lib/libmysqlclient_r.so
+    ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   passthru = {

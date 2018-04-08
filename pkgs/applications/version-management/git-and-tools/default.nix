@@ -15,7 +15,7 @@ let
       perlPackages.MIMEBase64 perlPackages.AuthenSASL
       perlPackages.DigestHMAC
     ];
-    gitwebPerlLibs = with perlPackages; [ CGI HTMLParser ];
+    gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
   };
 
 in
@@ -117,11 +117,14 @@ rec {
     git = gitSVN;
   };
 
-  svn_all_fast_export = libsForQt5.callPackage ./svn-all-fast-export { };
+  svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
 
   tig = callPackage ./tig { };
 
   topGit = callPackage ./topgit { };
 
   transcrypt = callPackage ./transcrypt { };
+
+  # aliases
+  svn_all_fast_export = svn-all-fast-export;
 }

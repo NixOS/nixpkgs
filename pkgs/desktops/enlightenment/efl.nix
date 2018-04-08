@@ -70,6 +70,12 @@ stdenv.mkDerivation rec {
       'Cflags: -I''${includedir}/eina-1/eina'"$modules"
   '';
 
+  # EFL applications depend on libcurl, although it is linked at
+  # runtime by hand in code (it is dlopened).
+  postFixup = ''
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
+  '';
+
   enableParallelBuilding = true;
 
   meta = {

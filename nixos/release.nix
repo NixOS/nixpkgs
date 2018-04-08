@@ -55,6 +55,17 @@ let
     }).config.system.build.isoImage);
 
 
+  makeSdImage =
+    { module, maintainers ? ["dezgeg"], system }:
+
+    with import nixpkgs { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ module versionModule ];
+    }).config.system.build.sdImage);
+
+
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
@@ -155,6 +166,10 @@ in rec {
     inherit system;
   });
 
+  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+    inherit system;
+  });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
@@ -296,7 +311,10 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
+  tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
+  ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
+  #tests.kubernetes.e2e = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};
+  tests.kubernetes.rbac = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/rbac.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
@@ -365,6 +383,7 @@ in rec {
   tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
+  tests.transmission = callTest tests/transmission.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
   tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};

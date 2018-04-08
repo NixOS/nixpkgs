@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-m 4755" "-m 755"
     substituteInPlace sandboxX.sh \
       --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
+      --replace "/usr/share/sandbox/start" "$out/share/sandbox/start" \
       --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
       --replace "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
       --replace "secon" "${policycoreutils}/bin/secon"

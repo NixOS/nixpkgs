@@ -2,7 +2,7 @@
 
 with lib;
 let
-  diskSize = 1024; # MB
+  diskSize = 1536; # MB
   gce = pkgs.google-compute-engine;
 in
 {
@@ -56,6 +56,12 @@ in
 
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
+
+  # Make sure GCE image does not replace host key that NixOps sets
+  environment.etc."default/instance_configs.cfg".text = lib.mkDefault ''
+    [InstanceSetup]
+    set_host_keys = false
+  '';
 
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;

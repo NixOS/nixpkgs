@@ -23,7 +23,7 @@ buildPythonApplication rec {
     homepage = https://beancount.github.io/fava;
     description = "Web interface for beancount";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
 

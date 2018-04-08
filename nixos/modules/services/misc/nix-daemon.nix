@@ -439,17 +439,18 @@ in
 
     services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 
+    # FIXME: use systemd-tmpfiles to create Nix directories.
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
         # Nix initialisation.
-        mkdir -m 0755 -p \
+        install -m 0755 -d \
           /nix/var/nix/gcroots \
           /nix/var/nix/temproots \
           /nix/var/nix/userpool \
           /nix/var/nix/profiles \
           /nix/var/nix/db \
           /nix/var/log/nix/drvs
-        mkdir -m 1777 -p \
+        install -m 1777 -d \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
           /nix/var/nix/gcroots/tmp

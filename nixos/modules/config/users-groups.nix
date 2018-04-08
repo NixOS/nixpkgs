@@ -35,6 +35,7 @@ let
 
       name = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -91,6 +92,7 @@ let
 
       group = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 17 || abort "Group name '${x}' is longer than 16 characters which is not allowed!"); x;
         default = "nogroup";
         description = "The user's primary group.";
       };
@@ -502,9 +504,6 @@ in {
       };
     };
 
-    # Install all the user shells
-    environment.systemPackages = systemShells;
-
     users.groups = {
       root.gid = ids.gids.root;
       wheel.gid = ids.gids.wheel;
@@ -541,14 +540,29 @@ in {
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
-    environment.etc."subuid" = {
-      text = subuidFile;
-      mode = "0644";
-    };
-    environment.etc."subgid" = {
-      text = subgidFile;
-      mode = "0644";
-    };
+    # Install all the user shells
+    environment.systemPackages = systemShells;
+
+    environment.etc = {
+      "subuid" = {
+        text = subuidFile;
+        mode = "0644";
+      };
+      "subgid" = {
+        text = subgidFile;
+        mode = "0644";
+      };
+    } // (mapAttrs' (name: { packages, ... }: {
+      name = "profiles/per-user/${name}";
+      value.source = pkgs.buildEnv {
+        name = "user-environment";
+        paths = packages;
+        inherit (config.environment) pathsToLink extraOutputsToInstall;
+        inherit (config.system.path) ignoreCollisions postBuild;
+      };
+    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+
+    environment.profiles = [ "/etc/profiles/per-user/$USER" ];
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
@@ -579,22 +593,4 @@ in {
 
   };
 
-  imports =
-    [ (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
-      (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
-      {
-        environment = {
-          etc = mapAttrs' (name: { packages, ... }: {
-            name = "profiles/per-user/${name}";
-            value.source = pkgs.buildEnv {
-              name = "user-environment";
-              paths = packages;
-              inherit (config.environment) pathsToLink extraOutputsToInstall;
-              inherit (config.system.path) ignoreCollisions postBuild;
-            };
-          }) (filterAttrs (_: { packages, ... }: packages != []) cfg.users);
-          profiles = ["/etc/profiles/per-user/$USER"];
-        };
-      }
-    ];
 }

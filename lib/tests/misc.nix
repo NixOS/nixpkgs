@@ -207,6 +207,29 @@ runTests {
     expected = ''f\:oo:bar'';
   };
 
+  testMkValueString = {
+    expr = let
+      vals = {
+        int = 42;
+        string = ''fo"o'';
+        bool = true;
+        bool2 = false;
+        null = null;
+        # float = 42.23; # floats are strange
+      };
+      in mapAttrs
+        (const (generators.mkValueStringDefault {}))
+        vals;
+    expected = {
+      int = "42";
+      string = ''fo"o'';
+      bool = "true";
+      bool2 = "false";
+      null = "null";
+      # float = "42.23" true false [ "bar" ] ]'';
+    };
+  };
+
   testToKeyValue = {
     expr = generators.toKeyValue {} {
       key = "value";
@@ -249,6 +272,8 @@ runTests {
       "section 1" = {
         attribute1 = 5;
         x = "Me-se JarJar Binx";
+        # booleans are converted verbatim by default
+        boolean = false;
       };
       "foo[]" = {
         "he\\h=he" = "this is okay";
@@ -260,6 +285,7 @@ runTests {
 
       [section 1]
       attribute1=5
+      boolean=false
       x=Me-se JarJar Binx
     '';
   };
