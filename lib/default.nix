@@ -74,7 +74,7 @@ let
     inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
-      reverseList listDfs toposort sort compareLists take drop sublist
+      reverseList listDfs toposort sort naturalSort compareLists take drop sublist
       last init crossLists unique intersectLists subtractLists
       mutuallyExclusive;
     inherit (strings) concatStrings concatMapStrings concatImapStrings
