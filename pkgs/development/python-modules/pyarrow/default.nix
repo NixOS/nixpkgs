@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, pytestrunner, parquet-cpp, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, numpy, pandas, pytest, pytestrunner, parquet-cpp, pkgconfig, setuptools_scm, six }:
+
+let
+  _arrow-cpp = arrow-cpp.override { inherit python;};
+  _parquet-cpp = parquet-cpp.override { arrow-cpp = _arrow-cpp; };
+in
 
 buildPythonPackage rec {
   pname = "pyarrow";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
-  propagatedBuildInputs = [ futures numpy six ];
+  propagatedBuildInputs = [ numpy six ] ++ lib.optionals (!isPy3k) [ futures ];
   checkInputs = [ pandas pytest pytestrunner ];
 
   PYARROW_BUILD_TYPE = "release";
@@ -23,7 +28,7 @@ buildPythonPackage rec {
     substituteInPlace CMakeLists.txt --replace "\''${ARROW_SO_VERSION}" '"0"'
 
     # fix the hardcoded value
-    substituteInPlace cmake_modules/FindParquet.cmake --replace 'set(PARQUET_ABI_VERSION "1.0.0")' 'set(PARQUET_ABI_VERSION "${parquet-cpp.version}")'
+    substituteInPlace cmake_modules/FindParquet.cmake --replace 'set(PARQUET_ABI_VERSION "1.0.0")' 'set(PARQUET_ABI_VERSION "${_parquet-cpp.version}")'
   '';
 
   preCheck = ''
@@ -45,8 +50,8 @@ buildPythonPackage rec {
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
   '';
 
-  ARROW_HOME = arrow-cpp;
-  PARQUET_HOME = parquet-cpp;
+  ARROW_HOME = _arrow-cpp;
+  PARQUET_HOME = _parquet-cpp;
 
   setupPyBuildFlags = ["--with-parquet" ];
 

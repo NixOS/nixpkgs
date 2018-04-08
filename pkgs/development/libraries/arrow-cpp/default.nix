@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, pythonPackages, rapidjson, snappy, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, flatbuffers, gtest, gflags, lz4, python, rapidjson, snappy, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "apache-arrow-${version}/cpp";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost pythonPackages.python pythonPackages.numpy ];
+  buildInputs = [ boost python.pkgs.python python.pkgs.numpy ];
 
   preConfigure = ''
     substituteInPlace cmake_modules/FindBrotli.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
