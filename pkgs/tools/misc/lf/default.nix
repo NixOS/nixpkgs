@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-${version}";
-  version = "1";
+  version = "2";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "0mq83m7mvavd0dzhk8g6ffldy57i22n0846yzqnlz733chiy3anz";
+    sha256 = "0g9fy6x3wc5hda886ci79wj7rnjwvaidbwhsrckqgiqymbzvrdb8";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
@@ -24,7 +24,7 @@ buildGoPackage rec {
     runHook preBuild
     runHook renameImports
     cd go/src/${goPackagePath}
-    go install -ldflags="-s -w -X main.gVersion=${version}"
+    go install -ldflags="-s -w -X main.gVersion=r${version}"
     runHook postBuild
   '';
 

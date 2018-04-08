@@ -383,6 +383,7 @@ in rec {
   tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
+  tests.transmission = callTest tests/transmission.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.vault = callTest tests/vault.nix {};
   tests.virtualbox = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/virtualbox.nix {};

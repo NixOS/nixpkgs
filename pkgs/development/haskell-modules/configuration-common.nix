@@ -1024,3 +1024,20 @@ self: super: {
   });
 
 }
+
+//
+
+(let
+  amazonkaOverrides = self: super: {
+    conduit = self.conduit_1_2_13_1;
+    conduit-extra = self.conduit-extra_1_2_3_2;
+    resourcet = self.resourcet_1_1_11;
+    xml-conduit = self.xml-conduit_1_7_1_2;
+    http-conduit = self.http-conduit_2_2_4;
+  };
+  amazonka-core = super.amazonka-core.overrideScope amazonkaOverrides;
+  amazonka = super.amazonka.overrideScope amazonkaOverrides;
+  amazonka-test = super.amazonka-test.overrideScope amazonkaOverrides;
+in {
+  inherit amazonka amazonka-core amazonka-test;
+})

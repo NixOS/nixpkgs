@@ -42,5 +42,8 @@ in stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    # Marked as broken until the first official/stable release (upstream
+    # request). See #38344 for the public discussion.
+    broken = true;
   };
 }

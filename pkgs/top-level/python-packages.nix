@@ -233,6 +233,8 @@ in {
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
+  ewmh = callPackage ../development/python-modules/ewmh { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -3025,7 +3027,7 @@ in {
       description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.linux; # can only test on linux
     };
 
@@ -3113,7 +3115,7 @@ in {
       description = "WSGI HTTP Digest Authentication middleware";
       homepage = https://github.com/jonashaag/httpauth;
       license = licenses.bsd2;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -14989,7 +14991,7 @@ in {
       homepage = https://github.com/uri-templates/uritemplate-py;
       description = "Python implementation of URI Template";
       license = licenses.asl20;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 

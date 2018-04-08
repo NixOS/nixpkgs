@@ -32,7 +32,7 @@ stdenv.mkDerivation rec
     LOG4CPLUS_LIB=
     BLOSC_INCLUDE_DIR=${c-blosc}/include/
     BLOSC_LIB_DIR=${c-blosc}/lib/
-    '';
+  '';
 
   installFlags = ''DESTDIR=$(out)'';
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec
     description = "An open framework for voxel";
     homepage = "http://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     license = licenses.mpl20;
   };
 }

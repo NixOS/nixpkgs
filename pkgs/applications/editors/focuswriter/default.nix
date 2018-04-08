@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Simple, distraction-free writing environment";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ madjar ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     homepage = https://gottcode.org/focuswriter/;
   };
 }

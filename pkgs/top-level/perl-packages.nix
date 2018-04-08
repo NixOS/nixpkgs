@@ -6092,6 +6092,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FilePid = buildPerlPackage rec {
+    name = "File-Pid-1.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CW/CWEST/${name}.tar.gz";
+      sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
+    };
+    propagatedBuildInputs = [ ClassAccessor ];
+    meta = {
+      license = stdenv.lib.licenses.free; # Same as Perl
+      description = "Pid File Manipulation";
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   Filepushd = buildPerlPackage {
     name = "File-pushd-1.014";
     src = fetchurl {
@@ -6185,21 +6199,6 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestSharedFork ];
   };
 
-  FileTemp = null;
-
-  FileType = buildPerlModule {
-    name = "File-Type-0.22";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
-      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
-    };
-    meta = {
-      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
-    };
-  };
-
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
     # WARNING: check on next update if deprecation warning is gone
@@ -6240,7 +6239,49 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileUtil = buildPerlModule rec {
+  FileTail = buildPerlPackage rec {
+    name = "File-Tail-1.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGRABNAR/${name}.tar.gz";
+      sha256 = "1ixg6kn4h330xfw3xgvqcbzfc3v2wlzjim9803jflhvfhf0rzl16";
+    };
+    meta = {
+      description = "Perl extension for reading from continously updated files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
+  FileTemp = null;
+
+  FileTouch = buildPerlPackage rec {
+    name = "File-Touch-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "e379a5ff89420cf39906e5ceff309b8ce958f99f9c3e57ad52b5002a3982d93c";
+    };
+    meta = {
+      homepage = https://github.com/neilb/File-Touch;
+      description = "Update file access and modification times, optionally creating files if needed";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
+  FileType = buildPerlModule {
+    name = "File-Type-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
+      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
+    };
+    meta = {
+      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
+    };
+  };
+
+  FileUtil = buildPerlPackage rec {
     name = "File-Util-4.161950";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";

@@ -172,10 +172,14 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
-        wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:$out/lib/julia" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
+    # Symlink shared libraries from LD_LIBRARY_PATH into lib/julia,
+    # as using a wrapper with LD_LIBRARY_PATH causes segmentation
+    # faults when program returns an error:
+    #   $ julia -e 'throw(Error())'
+    find $(echo $LD_LIBRARY_PATH | sed 's|:| |g') -maxdepth 1 -name '*.${if stdenv.isDarwin then "dylib" else "so"}*' | while read lib; do
+      if [[ ! -e $out/lib/julia/$(basename $lib) ]]; then
+        ln -sv $lib $out/lib/julia/$(basename $lib)
+      fi
     done
   '';
 

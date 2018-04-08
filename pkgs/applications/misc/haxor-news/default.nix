@@ -32,7 +32,7 @@ buildPythonApplication rec {
     homepage = https://github.com/donnemartin/haxor-news;
     description = "Browse Hacker News like a haxor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 
 }
