@@ -2037,6 +2037,7 @@ rec {
       cmake
       boost
       icu
+      ncurses
     ];
     buildPhase = ''
       patchShebangs .
