@@ -12527,11 +12527,7 @@ with pkgs;
 
   # Name is changed to prevent use in packages;
   # please use libpulseaudio instead.
-  pulseaudioLight = callPackage ../servers/pulseaudio {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
-
-  pulseaudioFull = callPackage ../servers/pulseaudio {
+  pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome3.gconf;
     x11Support = true;
     jackaudioSupport = true;
@@ -12545,10 +12541,7 @@ with pkgs;
 
   # libpulse implementations
 
-  libpulseaudio-vanilla = callPackage ../servers/pulseaudio {
-    libOnly = true;
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
+  libpulseaudio-vanilla = pulseaudio;
 
   apulse = callPackage ../misc/apulse { };
 

@@ -14,7 +14,8 @@ let
 
   overriddenPackage = cfg.package.override
     (optionalAttrs hasZeroconf { zeroconfSupport = true; });
-  binary = "${getBin overriddenPackage}/bin/pulseaudio";
+  getDaemon = getOutput "daemon";  
+  binary = "${getDaemon overriddenPackage}/bin/pulseaudio";
   binaryNoDaemon = "${binary} --daemonize=no";
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
@@ -144,9 +145,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight;
-        defaultText = "pkgs.pulseaudioLight";
-        example = literalExample "pkgs.pulseaudioFull";
+        default = pulseaudio;
+        defaultText = "pkgs.pulseaudio";
+        example = literalExample "pkgs.pulseaudio.override {};";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
@@ -212,7 +213,9 @@ in {
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ overriddenPackage ];
+      environment.systemPackages = [ overriddenPackage ] 
+        # We won't pollute $PATH with server binaries, as long as we run it as system server
+        ++ optionals nonSystemWide [(getDaemon overridenPackage)];
 
       environment.etc = [
         { target = "asound.conf";

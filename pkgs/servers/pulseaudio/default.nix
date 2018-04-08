@@ -2,7 +2,7 @@
 , libsndfile, libtool
 , xorg, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
-, sbc, bluez5, udev, openssl, fftwFloat
+, orc, sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing, gconf ? null
 
 # Database selection
@@ -35,7 +35,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
+  name = "pulseaudio-${version}";
   version = "11.1";
 
   src = fetchurl {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sha256 = "0gf4w25zi123ghk0njapysvrlljkc3hyanacgiswfnnm1i8sab1q";
     });
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" "daemon" ];
 
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 
@@ -58,36 +58,37 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile speexdsp fftwFloat orc ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
-    ++ lib.optionals (!libOnly) (
-      [ libasyncns webrtc-audio-processing ]
-      ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
-      ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
-      ++ lib.optional airtunesSupport openssl
-      ++ lib.optional gconfSupport gconf
-      ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
-      ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport  avahi
-    );
+    ++ [ libasyncns webrtc-audio-processing ]
+    ++ lib.optional jackaudioSupport libjack2
+    ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
+    ++ lib.optional useSystemd systemd
+    ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
+    ++ lib.optional airtunesSupport openssl
+    ++ lib.optional gconfSupport gconf
+    ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
+    ++ lib.optional remoteControlSupport lirc
+    ++ lib.optional zeroconfSupport  avahi
+    ;
 
   preConfigure = ''
-    # Performs and autoreconf
-    export NOCONFIGURE="yes"
-    patchShebangs bootstrap.sh
-    ./bootstrap.sh
-
     # Move the udev rules under $(prefix).
-    sed -i "src/Makefile.in" \
-        -e "s|udevrulesdir[[:blank:]]*=.*$|udevrulesdir = $out/lib/udev/rules.d|g"
 
     # don't install proximity-helper as root and setuid
     sed -i "src/Makefile.in" \
         -e "s|chown root|true |" \
         -e "s|chmod r+s |true |"
+   
+    # cut-off path from default autostartable. In nixos it usually set via
+    # user/system config, and I not sure if autostart still usable if pulseaudio
+    # daemon used from nixpkgs on non-nixos.
+    substituteInPlace src/pulse/client-conf.c --replace "PA_BINARY" "\"pulseaudio\""
+
+    # Fixes: error: po/Makefile.in.in was not created by intltoolize.
+    intltoolize --automake --copy --force
+
   '';
 
   configureFlags =
@@ -97,12 +98,16 @@ stdenv.mkDerivation rec {
     ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
+      "--with-module-dir=\${daemon}/lib/pulseaudio"
       "--with-access-group=audio"
-      "--with-bash-completion-dir=\${out}/share/bash-completions/completions"
+      "--with-bash-completion-dir=\${bin}/share/bash-completions/completions"
+      "--with-zsh-completion-dir=\${bin}/share/zsh/site-functions"
+      "--with-udev-rules-dir=\${daemon}/lib/udev/rules.d"
+      "--with-pulsedsp-location=\${bin}/lib/pulseaudio"
     ]
-    ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
+    ++ lib.optional (jackaudioSupport) "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${out}/lib/systemd/user";
+    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${daemon}/lib/systemd/user";
 
   enableParallelBuilding = true;
 
@@ -114,15 +119,21 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
 
   installFlags =
-    [ "sysconfdir=$(out)/etc"
-      "pulseconfdir=$(out)/etc/pulse"
+    [ "sysconfdir=$(bin)/etc"
+      "pulseconfdir=$(daemon)/etc/pulse"
     ];
 
-  postInstall = lib.optionalString libOnly ''
-    rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
-  ''
-    + ''moveToOutput lib/cmake "$dev" '';
+  # FIXME: #out/share/pulse/alsa-mixer move to bin, or even to daemon (may require patch)
+  # FIXME: split qpaeq to own derivation, it python script depending qt indirectly 
+  #        (and w/o it fail with a message)
+  postInstall = ''
+    moveToOutput lib/cmake "$dev" 
+    moveToOutput share/vala "$dev"
+    rm $daemon/lib/systemd/user/pulseaudio.service
+    for each in system.pa default.pa client.conf; do
+      substituteInPlace $daemon/etc/pulse/$each --replace $bin $daemon
+    done
+  '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
