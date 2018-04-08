@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "faac36266c72745102a1a8b93abc5b25feed1be5bca7b29968a156966c312567";
+    sha256 = "b13f1bfab295150b25958014d93fcd9f744d92011d186d7381575465587b8587";
   };
 
   propagatedBuildInputs = [ twisted ];

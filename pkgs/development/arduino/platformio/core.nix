@@ -1,24 +1,21 @@
 { stdenv, buildPythonPackage, fetchPypi
-, bottle, click_5, colorama
+, bottle, click, colorama
 , lockfile, pyserial, requests
 , semantic-version
-, isPy3k, isPyPy
 , git
 }:
-buildPythonPackage rec {
-  disabled = isPy3k || isPyPy;
 
+buildPythonPackage rec {
   pname = "platformio";
-  version="3.5.1";
-  name = "${pname}-${version}";
+  version = "3.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cc15mzh7p1iykip0jpxldz81yz946vrgvhwmfl8w3z5kgjjgx3n";
+    sha256 = "bb311ce5b8f12c95bc45c2071626a4887a3632fb2472b4d69a873b2acfc2e4ec";
   };
 
   propagatedBuildInputs =  [
-    bottle click_5 colorama git lockfile
+    bottle click colorama git lockfile
     pyserial requests semantic-version
   ];
 

@@ -35,6 +35,13 @@ let
           sha256 = "527628fbfe90c1596c3950ff84ebd07ecc10c8fb1044c903a0519b5057700cb6";
         };
       });
+      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "c17d8ac2d735d59aa62737d76f2787a6c938f5a944ecf768a8c0ab70b0dea566";
+        };
+      });
       hass-frontend = super.callPackage ./frontend.nix { };
     };
   };

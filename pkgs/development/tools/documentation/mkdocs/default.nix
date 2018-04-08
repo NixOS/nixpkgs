@@ -5,7 +5,6 @@ with python.pkgs;
 buildPythonApplication rec {
   pname = "mkdocs";
   version = "0.17.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
@@ -13,6 +12,11 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "15lv60gdc837zja5kn2rfp78kwyb1ckc43jg01zfzqra4qz7b6rw";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "tornado>=4.1,<5.0" "tornado>=4.1"
+  '';
 
   checkInputs = [
     nose nose-exclude mock

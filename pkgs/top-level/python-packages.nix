@@ -860,6 +860,8 @@ in {
     };
   };
 
+  backcall = callPackage ../development/python-modules/backcall { };
+
   backports_abc = callPackage ../development/python-modules/backports_abc { };
 
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
@@ -928,6 +930,8 @@ in {
   batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
+
+  beancount = callPackage ../development/python-modules/beancount { };
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
@@ -1120,6 +1124,8 @@ in {
   channels = callPackage ../development/python-modules/channels {};
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+
+  cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   circus = callPackage ../development/python-modules/circus {};
 
@@ -1544,8 +1550,6 @@ in {
 
   click = callPackage ../development/python-modules/click {};
 
-  click_5 = callPackage ../development/python-modules/click/5_1.nix {};
-
   click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
@@ -1893,9 +1897,9 @@ in {
     };
   };
 
-  pytest = self.pytest_34;
+  pytest = self.pytest_35;
 
-  pytest_34 = callPackage ../development/python-modules/pytest {
+  pytest_35 = callPackage ../development/python-modules/pytest {
     hypothesis = self.hypothesis.override {
       # hypothesis requires pytest that causes dependency cycle
       doCheck = false;
@@ -1904,7 +1908,7 @@ in {
   };
 
   # Needed for celery
-  pytest_32 = self.pytest_34.overrideAttrs( oldAttrs: rec {
+  pytest_32 = self.pytest_35.overrideAttrs( oldAttrs: rec {
     version = "3.2.5";
     src = oldAttrs.src.override {
       inherit version;
@@ -1937,6 +1941,8 @@ in {
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
   pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
+
+  pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
@@ -1999,7 +2005,11 @@ in {
     };
   };
 
+  tinycss2 = callPackage ../development/python-modules/tinycss2 { };
+
   cssselect = callPackage ../development/python-modules/cssselect { };
+
+  cssselect2 = callPackage ../development/python-modules/cssselect2 { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
 
@@ -5946,42 +5956,7 @@ in {
     };
   });
 
-  futures = buildPythonPackage rec {
-    name = "futures-${version}";
-    version = "3.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/futures/${name}.tar.gz";
-      sha256 = "1z9j05fdj2yszjmz4pmjhl2jdnwhdw80cjwfqq3ci0yx19gv9v2i";
-    };
-
-    # This module is for backporting functionality to Python 2.x, it's builtin in py3k
-    disabled = isPy3k;
-
-    checkPhase = ''
-        ${python.interpreter} -m unittest discover
-    '';
-
-    # Tests fail
-    doCheck = false;
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Backport of the concurrent.futures package from Python 3.2";
-      homepage = "https://github.com/agronholm/pythonfutures";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  futures_2_2 = self.futures.override rec {
-    version = "2.2.0";
-    name = "futures-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/futures/${name}.tar.gz";
-      sha256 = "1lqfzl3z3pkxakgbcrfy6x7x0fp3q18mj5lpz103ljj7fdqha70m";
-    };
-  };
+  futures = callPackage ../development/python-modules/futures { };
 
   gcovr = buildPythonPackage rec {
     name = "gcovr-2.4";
@@ -6298,27 +6273,7 @@ in {
 
   google_api_core = callPackage ../development/python-modules/google_api_core { };
 
-  google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-${version}";
-    version = "1.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/google-api-python-client/${name}.tar.gz";
-      sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ httplib2 six oauth2client uritemplate ];
-
-    meta = {
-      description = "The core Python library for accessing Google APIs";
-      homepage = "https://code.google.com/p/google-api-python-client/";
-      license = licenses.asl20;
-      platforms = platforms.unix;
-    };
-  };
+  google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
 
   google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.1";
@@ -7077,6 +7032,8 @@ in {
   keyring = callPackage ../development/python-modules/keyring { };
 
   keyutils = callPackage ../development/python-modules/keyutils { };
+
+  kiwisolver = callPackage ../development/python-modules/kiwisolver { };
 
   klein = callPackage ../development/python-modules/klein { };
 
@@ -9102,23 +9059,7 @@ in {
     };
   });
 
-  oauth2client = buildPythonPackage rec {
-    name = "oauth2client-1.4.12";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oauth2client/${name}.tar.gz";
-      sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
-    };
-
-    propagatedBuildInputs = with self; [ six httplib2 pyasn1-modules rsa ];
-    doCheck = false;
-
-    meta = {
-      description = "A client library for OAuth 2.0";
-      homepage = https://github.com/google/oauth2client/;
-      license = licenses.bsd2;
-    };
-  };
+  oauth2client = callPackage ../development/python-modules/oauth2client { };
 
   oauthlib = buildPythonPackage rec {
     version = "2.0.0";
@@ -10088,31 +10029,7 @@ in {
 
   piexif = callPackage ../development/python-modules/piexif { };
 
-  pip = buildPythonPackage rec {
-    pname = "pip";
-    version = "9.0.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d";
-    };
-
-    # pip detects that we already have bootstrapped_pip "installed", so we need
-    # to force it a little.
-    installFlags = [ "--ignore-installed" ];
-
-    checkInputs = with self; [ mock scripttest virtualenv pretend pytest ];
-    # Pip wants pytest, but tests are not distributed
-    doCheck = false;
-
-    meta = {
-      description = "The PyPA recommended tool for installing Python packages";
-      license = licenses.mit;
-      homepage = https://pip.pypa.io/;
-      priority = 10;
-    };
-  };
+  pip = callPackage ../development/python-modules/pip { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools {
     git = pkgs.gitMinimal;
@@ -10141,7 +10058,6 @@ in {
   };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
-  platformio = callPackage ../development/python-modules/platformio { };
 
   kmsxx = callPackage ../development/libraries/kmsxx { };
 
@@ -10380,19 +10296,13 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf;
+    protobuf = pkgs.protobuf3_5;
   };
 
   protobuf3_1 = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_1;
-  };
-
-  protobuf3_5 = callPackage ../development/python-modules/protobuf {
-    disabled = isPyPy;
-    doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_5;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -10583,32 +10493,7 @@ in {
     };
   };
 
-
-
-  vobject = buildPythonPackage rec {
-    version = "0.9.5";
-    name = "vobject-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "eventable";
-      repo = "vobject";
-      sha256 = "1f5lw9kpssr66bdirkjba3izbnm68p8pd47546m5yl4c7x76s1ld";
-      rev = version;
-    };
-
-    disabled = isPyPy;
-
-    propagatedBuildInputs = with self; [ dateutil ];
-
-    checkPhase = "${python.interpreter} tests.py";
-
-    meta = {
-      description = "Module for reading vCard and vCalendar files";
-      homepage = http://eventable.github.io/vobject/;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  vobject = callPackage ../development/python-modules/vobject { };
 
   pycarddav = buildPythonPackage rec {
     version = "0.7.0";
@@ -10633,24 +10518,7 @@ in {
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
-  Babel = buildPythonPackage (rec {
-    name = "Babel-2.3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/Babel/${name}.tar.gz";
-      sha256 = "0x98qqqw35xllpcama013a9788ly84z8dm1w2wwfpxh2710c8df5";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ pytz ];
-
-    meta = {
-      homepage = http://babel.edgewall.org;
-      description = "A collection of tools for internationalizing Python applications";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  Babel = callPackage ../development/python-modules/Babel { };
 
   pybfd = callPackage ../development/python-modules/pybfd { };
 
@@ -11632,7 +11500,7 @@ in {
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
 
   ldap = callPackage ../development/python-modules/ldap {
-    inherit (pkgs) openldap cyrus_sasl openssl;
+    inherit (pkgs) openldap cyrus_sasl;
   };
 
   ldap3 = callPackage ../development/python-modules/ldap3 {};
@@ -11920,23 +11788,7 @@ in {
     };
   };
 
-  pyperclip = buildPythonPackage rec {
-    version = "1.5.27";
-    name = "pyperclip-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyperclip/${name}.zip";
-      sha256 = "1i9zxm7qc49n9yxfb41c0jbmmp2hpzx98kaizjl7qmgiv3snvjx3";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/asweigart/pyperclip";
-      license = licenses.bsdOriginal;
-      description = "Cross-platform clipboard module";
-    };
-  };
+  pyperclip = callPackage ../development/python-modules/pyperclip { };
 
   pysqlite = buildPythonPackage rec {
     name = "pysqlite-2.8.3";
@@ -14973,27 +14825,7 @@ in {
 
   update_checker = callPackage ../development/python-modules/update_checker {};
 
-  uritemplate = buildPythonPackage rec {
-    name = "uritemplate-${version}";
-    version = "0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
-      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ simplejson ];
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/uri-templates/uritemplate-py;
-      description = "Python implementation of URI Template";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uptime = buildPythonPackage rec {
     name = "uptime-${version}";
@@ -15991,21 +15823,7 @@ EOF
     };
   };
 
-  pyzmq = buildPythonPackage rec {
-    name = "pyzmq-16.0.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyzmq/${name}.tar.gz";
-      sha256 = "0322543fff5ab6f87d11a8a099c4c07dd8a1719040084b6ce9162bcdf5c45c9d";
-    };
-    buildInputs = with self; [ pkgs.zeromq3 pytest tornado ];
-    propagatedBuildInputs = [ self.py ];
-
-    # Disable broken test
-    # https://github.com/zeromq/pyzmq/issues/799
-    checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send and not test_recv_json_cancelled"
-    '';
-  };
+  pyzmq = callPackage ../development/python-modules/pyzmq { };
 
   testfixtures = callPackage ../development/python-modules/testfixtures {};
 
@@ -16130,25 +15948,7 @@ EOF
     };
   };
 
-
-  whichcraft = buildPythonPackage rec {
-    name = "whichcraft-${version}";
-    version = "0.1.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/pydanny/whichcraft/archive/${version}.tar.gz";
-      sha256 = "1xqp66knzlb01k30qic40vzwl51jmlsb8r96iv60m2ca6623abbv";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = https://github.com/pydanny/whichcraft;
-      description = "Cross-platform cross-python shutil.which functionality";
-      license = licenses.bsd3;
-    };
-  };
-
+  whichcraft = callPackage ../development/python-modules/whichcraft { };
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
@@ -16844,8 +16644,6 @@ EOF
       maintainers = with maintainers; [ tstrobel ];
     };
   };
-
-  redNotebook = pkgs.rednotebook; # Backwards compatibility alias.
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
@@ -18320,24 +18118,7 @@ EOF
 
   moreItertools = self.more-itertools;
 
-  more-itertools = buildPythonPackage rec {
-    name = "more-itertools-${version}";
-    version = "4.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
-      sha256 = "0cadwsr97c80k18if7qy5d8j8l1zj3yhnkm6kbngk0lpl7pxq8ax";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      homepage = https://more-itertools.readthedocs.org;
-      description = "Expansion of the itertools module";
-      license = licenses.mit;
-    };
-  };
+  more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = buildPythonPackage rec {
     name = "jaraco.functools-${version}";

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "python-cjson";
-  version = "1.1.0";
+  version = "1.2.1";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cz87pd411h1fj5am99i19jp53yizcz9mkg1a7cc6a1pb6vsn7x0";
+    sha256 = "52db2745264624768bfd9b604acb38f631bde5c2ec9b23861677d747e4558626";
   };
 
   meta = with stdenv.lib; {

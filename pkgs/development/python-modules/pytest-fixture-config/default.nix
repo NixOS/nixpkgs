@@ -1,20 +1,23 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, coverage, virtualenv, pytestcov, six }:
+, setuptools-git, pytest, six }:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dpdf36hpkfhgmca4rwmf0vnzz7xqbiw479v11zp12pq4p5w2z3x";
+    sha256 = "1717cd7d2233943cae9af419c6e31dca5e40d5de01ef0bcfd5cd06f37548db08";
   };
 
+  nativeBuildInputs = [ setuptools-git ];
+
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ coverage virtualenv pytestcov six ];
+
+  checkInputs = [ six ];
 
   checkPhase = ''
-    py.test -k "not test_yield_requires_config_doesnt_skip and not test_yield_requires_config_skips"
+    py.test
   '';
 
   meta = with stdenv.lib; {

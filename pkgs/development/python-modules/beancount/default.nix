@@ -1,16 +1,20 @@
-{ stdenv, fetchhg, pkgs, pythonPackages }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+, beautifulsoup4, bottle, chardet, dateutil
+, google_api_python_client, lxml, ply, python_magic
+, nose }:
 
-pythonPackages.buildPythonApplication rec {
+buildPythonPackage rec {
   version = "2.0.0";
-  name = "beancount-${version}";
-  namePrefix = "";
+  pname = "beancount";
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/b/beancount/${name}.tar.gz";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0wxwf02d3raglwqsxdsgf89fniakv1m19q825w76k5z004g18y42";
   };
 
-  buildInputs = with pythonPackages; [ nose ];
+  checkInputs = [ nose ];
 
   # Automatic tests cannot be run because it needs to import some local modules for tests.
   doCheck = false;
@@ -18,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
     nosetests
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     beautifulsoup4
     bottle
     chardet

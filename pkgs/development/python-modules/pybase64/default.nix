@@ -1,19 +1,19 @@
-{ buildPythonPackage, stdenv, fetchPypi, parameterized, six, nose }:
+{ buildPythonPackage, stdenv, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hggg69s5r8jyqdwyzri5sn3f19p7ayl0fjhjma0qzgfp7bk6zjc";
+    sha256 = "c974bff394e16817596fab686a0c7deb4995a468b035b02a788b6dbfd1e6bdeb";
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ parameterized nose ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
-    nosetests
+    py.test
   '';
 
   meta = with stdenv.lib; {

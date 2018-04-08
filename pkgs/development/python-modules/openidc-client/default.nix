@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "openidc-client";
-  version = "0.2.0";
+  version = "0.5.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fca4bpnswyji5nivsrbak5vsfphl4njyfrb8rm2034nq6mzb8ah";
+    sha256 = "59d59d6fbfd26c5b57c53e582bdf2379274602f96133a163e7ff1ef39c363353";
   };
   propagatedBuildInputs = [ requests ];
 

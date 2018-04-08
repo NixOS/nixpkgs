@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "derpconf";
-  version = "0.4.9";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0si3xnhyjk8dykr377v35bldsjv1ikgx4ff3crizwxv47ag42aci";
+    sha256 = "ce4f0cd55d367a3357538a18422c916dced0617a00056b4ebabe775059eace4f";
   };
 
   propagatedBuildInputs = [ six ];

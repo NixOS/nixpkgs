@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.30";
+  version = "0.36";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0005vp3r7wh87pf41cr4rw015lbnzn228a607nx34r98p7cd17xi";
+    sha256 = "2bb906a736a0f026cc5fd6c0dab5a481793b3d7a7d70106cca6e238da5f52d84";
   };
 
   doCheck = false;

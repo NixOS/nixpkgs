@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
-  version = "1.10.1";
+  version = "1.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12qybflfnl08acspz7rpaprmlabgrzimacbd7gm9qs5537hl3qnp";
+    sha256 = "06391cf0b253c8b4a5a10b3a4b7b7808b890a1d1e3b43d5ce3b5293a9c77af6b";
   };
 
   propagatedBuildInputs = [ requests ];

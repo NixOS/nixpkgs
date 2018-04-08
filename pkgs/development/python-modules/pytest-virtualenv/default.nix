@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-virtualenv";
-  version = "1.2.7";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mb76zhlak4qjjq2h7kaxbihk1b9plmimbzcb8qv4906cxl69ysi";
+    sha256 = "8d8a0b9b57f5efb7db6457c1f57347e35fe332979ecefe592d5324430ae3ed7f";
   };
 
   buildInputs = [ pytest pytestcov mock cmdline ];

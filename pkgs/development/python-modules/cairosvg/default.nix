@@ -1,15 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, cairocffi }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+, cairocffi, cssselect2, defusedxml, pillow, tinycss2
+, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 
 buildPythonPackage rec {
-  pname = "cairosvg";
-  version = "1.0.18";
+  pname = "CairoSVG";
+  version = "2.1.3";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+    sha256 = "e512f555f576b6462b04b585c4ba4c09a43f3a8fec907b60ead21d7d00c550e9";
   };
 
-  propagatedBuildInputs = [ cairocffi ];
+  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
+
+  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort ];
 
   meta = with stdenv.lib; {
     homepage = https://cairosvg.org;

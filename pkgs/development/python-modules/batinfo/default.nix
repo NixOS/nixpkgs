@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "batinfo";
-  version = "0.3";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gyzkxzvj5l6qrw706bnm3cckqzzzbrjr7jkxc087d7775a73499";
+    sha256 = "497e29efc9353ec52e71d43bd040bdfb6d685137ddc2b9143cded4583af572f5";
   };
 
   # No tests included

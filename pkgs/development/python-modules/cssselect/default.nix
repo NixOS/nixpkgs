@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cssselect";
-  version = "0.9.1";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10h623qnp6dp1191jri7lvgmnd4yfkl36k9smqklp1qlf3iafd85";
+    sha256 = "066d8bc5229af09617e24b3ca4d52f1f9092d9e061931f4184cd572885c23204";
   };
 
   # AttributeError: 'module' object has no attribute 'tests'
