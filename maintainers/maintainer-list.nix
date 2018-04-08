@@ -28,6 +28,11 @@
     github = "AndersonTorres";
     name = "Anderson Torres";
   };
+  andreivolt = {
+    email = "andrei@avolt.net";
+    github = "andreivolt";
+    name = "Andrei Vladescu-Olt";
+  };
   Baughn = {
     email = "sveina@gmail.com";
     github = "Baughn";
