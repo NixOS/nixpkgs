@@ -169,6 +169,9 @@ stdenv.mkDerivation {
       # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
       ln -s "$out/usr/lib" "$out/lib"
 
+      # as well as a firefox directory in lib without suffix.
+      ln -s "$out/usr/lib/firefox-bin-${version}" "$out/lib/firefox"
+
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
