@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, bash }:
+{ stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vgw2mwngq20c530zim52zvgmw1lci8rzl33pvh44xqk3xlzvjsa";
   };
 
-  nativeBuildInputs = [ perl ];
-
-  buildInputs = [ htslib zlib bzip2 lzma curl ];
+  buildInputs = [ htslib zlib bzip2 lzma curl perl python ];
 
   makeFlags = [
     "HSTDIR=${htslib}"
