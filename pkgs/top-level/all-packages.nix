@@ -6934,6 +6934,8 @@ with pkgs;
 
   dhall = callPackage ../development/interpreters/dhall { };
 
+  lumo = callPackage ../development/interpreters/clojure/lumo.nix { };
+
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
   dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
