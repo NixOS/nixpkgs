@@ -20030,6 +20030,7 @@ with pkgs;
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {};
+  tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {gtk = gtk2;};
 
 
   aiger = callPackage ../applications/science/logic/aiger {};
