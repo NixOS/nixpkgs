@@ -18968,6 +18968,8 @@ with pkgs;
 
   endless-sky = callPackage ../games/endless-sky { };
 
+  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
+
   eternity = callPackage ../games/eternity-engine { };
 
   extremetuxracer = callPackage ../games/extremetuxracer {
