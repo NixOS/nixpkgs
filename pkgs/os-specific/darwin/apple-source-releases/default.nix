@@ -53,6 +53,7 @@ let
       ICU           = "531.48";
       libdispatch   = "442.1.4";
       Security      = "57031.40.6";
+      security_systemkeychain = "55202";
 
       IOAudioFamily                        = "203.3";
       IOFireWireFamily                     = "458";
@@ -243,6 +244,8 @@ let
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
     system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
+
+    security_systemkeychain = applePackage "security_systemkeychain" "osx-10.10.5" "0xviskdgxsail15npi0billyiysvljlmg38mmhnr7qi4ymnnjr90" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};
