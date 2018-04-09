@@ -7905,6 +7905,10 @@ with pkgs;
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
+  iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
+  iaca = iaca_3_0;
+
   icestorm = callPackage ../development/tools/icestorm { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
