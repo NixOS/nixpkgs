@@ -2649,6 +2649,11 @@
     github = "nthorne";
     name = "Niklas Thörne";
   };
+  nyanloutre = {
+    email = "paul@nyanlout.re";
+    github = "nyanloutre";
+    name = "Paul Trehiou";
+  };
   nyarly = {
     email = "nyarly@gmail.com";
     github = "nyarly";

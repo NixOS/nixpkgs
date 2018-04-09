@@ -2037,6 +2037,8 @@ with pkgs;
 
   duo-unix = callPackage ../tools/security/duo-unix { };
 
+  duplicati = callPackage ../tools/backup/duplicati { };
+
   duplicity = callPackage ../tools/backup/duplicity {
     gnupg = gnupg1;
   };
