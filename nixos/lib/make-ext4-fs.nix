@@ -7,23 +7,22 @@
 , volumeLabel
 }:
 
+let
+  sdClosureInfo = pkgs.closureInfo { rootPaths = storePaths; };
+in
+
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img";
 
   nativeBuildInputs = with pkgs; [e2fsprogs libfaketime perl];
 
-  # For obtaining the closure of `storePaths'.
-  exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x) x]) storePaths;
-
   buildCommand =
     ''
       # Add the closures of the top-level store objects.
-      storePaths=$(perl ${pkgs.pathsFromGraph} closure-*)
+      storePaths=$(cat ${sdClosureInfo}/store-paths)
 
-      # Also include a manifest of the closures in a format suitable
-      # for nix-store --load-db.
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > nix-path-registration
+      # Also include a manifest of the closures in a format suitable for nix-store --load-db.
+      cp ${sdClosureInfo}/registration nix-path-registration
 
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
