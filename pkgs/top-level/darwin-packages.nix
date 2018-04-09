@@ -1,7 +1,20 @@
-{ pkgs, darwin, stdenv, callPackage, callPackages, newScope }:
+{ pkgs, darwin, stdenv, callPackage, callPackages, newScope, runCommand, config }:
 
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
+
+
+  codesign = drv: runCommand "codesign" {
+    nativeBuildInputs = [apple-source-releases.security_systemkeychain];
+  } ''
+    mkdir -p $out/bin
+    for bin in ${drv}/bin/*; do
+      cp $bin $out/bin
+    done
+    for bin in $out/bin/*; do
+      codesign -s ${config.codesign_identity or "nixpkgs"} $bin
+    done
+  '';
 in
 
 (apple-source-releases // {
@@ -69,4 +82,8 @@ in
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
+  # sign some things that need signatures to work
+  gdb = codesign pkgs.gdb;
+  lldb = codesign pkgs.lldb;
+  dtrace = codesign pkgs.dtrace-xcode;
 })
