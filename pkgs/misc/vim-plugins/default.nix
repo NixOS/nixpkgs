@@ -122,7 +122,7 @@ rec {
   snipmate            = vim-snipmate;
   sourcemap           = sourcemap-vim;
   "sourcemap.vim"     = sourcemap-vim;
-  sourround           = vim-surround;
+  surround            = vim-surround;
   sleuth              = vim-sleuth;
   solidity            = vim-solidity;
   stylish-haskell     = vim-stylish-haskell;
