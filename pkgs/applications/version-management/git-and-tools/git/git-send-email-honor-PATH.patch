@@ -1,22 +1,20 @@
 diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
-index 8060ea35c..c81067a19 100644
 --- a/Documentation/git-send-email.txt
 +++ b/Documentation/git-send-email.txt
-@@ -203,8 +203,7 @@ a password is obtained using 'git-credential'.
+@@ -208,8 +208,7 @@ a password is obtained using 'git-credential'.
  	specify a full pathname of a sendmail-like program instead;
  	the program must support the `-i` option.  Default value can
  	be specified by the `sendemail.smtpServer` configuration
 -	option; the built-in default is to search for `sendmail` in
 -	`/usr/sbin`, `/usr/lib` and $PATH if such program is
-+        option; the built-in default is to search in $PATH if such program is
++	option; the built-in default is to search in $PATH if such program is
  	available, falling back to `localhost` otherwise.
 
  --smtp-server-port=<port>::
 diff --git a/git-send-email.perl b/git-send-email.perl
-index edcc6d346..8e357aeab 100755
 --- a/git-send-email.perl
 +++ b/git-send-email.perl
-@@ -885,8 +885,7 @@ if (defined $initial_reply_to) {
+@@ -944,8 +944,7 @@ if (defined $reply_to) {
  }
 
  if (!defined $smtp_server) {
