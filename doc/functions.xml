@@ -624,10 +624,9 @@ merge:"diff3"
 
    <para>
     This function is analogous to the <command>docker pull</command> command,
-    in that can be used to fetch a Docker image from a Docker registry.
-    Currently only registry <literal>v1</literal> is supported. By default
-    <link xlink:href="https://hub.docker.com/">Docker Hub</link> is used to
-    pull images.
+    in that can be used to pull a Docker image from a Docker registry.
+    By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
+    is used to pull images.
    </para>
 
    <para>
@@ -638,13 +637,10 @@ merge:"diff3"
     <title>Docker pull</title>
 <programlisting>
   pullImage {
-    imageName = "debian"; <co xml:id='ex-dockerTools-pullImage-1' />
-    imageTag = "jessie"; <co xml:id='ex-dockerTools-pullImage-2' />
-    imageId = null; <co xml:id='ex-dockerTools-pullImage-3' />
-    sha256 = "1bhw5hkz6chrnrih0ymjbmn69hyfriza2lr550xyvpdrnbzr4gk2"; <co xml:id='ex-dockerTools-pullImage-4' />
-
-    indexUrl = "https://index.docker.io"; <co xml:id='ex-dockerTools-pullImage-5' />
-    registryVersion = "v1";
+    imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
+    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
+    finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
+    sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
   }
   </programlisting>
    </example>
@@ -652,43 +648,34 @@ merge:"diff3"
    <calloutlist>
     <callout arearefs='ex-dockerTools-pullImage-1'>
      <para>
-      <varname>imageName</varname> specifies the name of the image to be
-      downloaded, which can also include the registry namespace (e.g.
-      <literal>library/debian</literal>). This argument is required.
+      <varname>imageName</varname> specifies the name of the image to be downloaded,
+      which can also include the registry namespace (e.g. <literal>nixos</literal>).
+      This argument is required.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-2'>
      <para>
-      <varname>imageTag</varname> specifies the tag of the image to be
-      downloaded. By default it's <literal>latest</literal>.
+      <varname>imageDigest</varname> specifies the digest of the image
+      to be downloaded. Skopeo can be used to get the digest of an image
+<programlisting>
+  $ skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
+  sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
+  </programlisting>
+      This argument is required.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-3'>
      <para>
-      <varname>imageId</varname>, if specified this exact image will be
-      fetched, instead of <varname>imageName/imageTag</varname>. However, the
-      resulting repository will still be named
-      <varname>imageName/imageTag</varname>. By default it's
-      <literal>null</literal>.
+      <varname>finalImageTag</varname>, if specified, this is the tag of
+      the image to be created. Note it is never used to fetch the image
+      since we prefer to rely on the immutable digest ID. By default
+      it's <literal>latest</literal>.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-4'>
      <para>
       <varname>sha256</varname> is the checksum of the whole fetched image.
       This argument is required.
-     </para>
-     <note>
-      <para>
-       The checksum is computed on the unpacked directory, not on the final
-       tarball.
-      </para>
-     </note>
-    </callout>
-    <callout arearefs='ex-dockerTools-pullImage-5'>
-     <para>
-      In the above example the default values are shown for the variables
-      <varname>indexUrl</varname> and <varname>registryVersion</varname>. Hence
-      by default the Docker.io registry is used to pull the images.
      </para>
     </callout>
    </calloutlist>
