@@ -201,6 +201,7 @@ mapAliases (rec {
   sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
+  tahoelafs = tahoe-lafs; # added 2018-03-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
