@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc-full, makeWrapper }:
+, utillinux, asciidoc, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "04ahfm52vcf1w0c2km0wdgj2jpffp45bpawczmygcg8fdcm021lp";
   };
 
-  buildInputs = with perlPackages; [ asciidoc-full makeWrapper perl DateCalc ];
+  nativeBuildInputs = [ asciidoc makeWrapper ];
+
+  buildInputs = with perlPackages; [ perl DateCalc ];
 
   preInstall = ''
     for f in $(find . -name Makefile); do
