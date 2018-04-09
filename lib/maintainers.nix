@@ -658,6 +658,7 @@
   ylwghst = "Burim Augustin Berisa <ylwghst@onionmail.info>";
   yochai = "Yochai <yochai@titat.info>";
   yorickvp = "Yorick van Pelt <yorickvanpelt@gmail.com>";
+  ysndr = "Yannik Sander <me@ysndr.de>";
   yuriaisaka = "Yuri Aisaka <yuri.aisaka+nix@gmail.com>";
   yurrriq = "Eric Bailey <eric@ericb.me>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";

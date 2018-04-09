@@ -2849,6 +2849,8 @@ with pkgs;
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
+  krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
+
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
