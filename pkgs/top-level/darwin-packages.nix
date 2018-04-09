@@ -85,5 +85,5 @@ in
   # sign some things that need signatures to work
   gdb = codesign pkgs.gdb;
   lldb = codesign pkgs.lldb;
-  dtrace = codesign pkgs.dtrace-xcode;
+  dtrace = codesign apple-source-releases.dtrace-xcode;
 })
