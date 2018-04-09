@@ -42,8 +42,8 @@ in stdenv.mkDerivation rec {
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd ] ++
-      stdenv.lib.meta.enableIfAvailable kexectools ++
-      stdenv.lib.meta.enableIfAvailable libseccomp ++
+      stdenv.lib.meta.enableIfSupported kexectools ++
+      stdenv.lib.meta.enableIfSupported libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
