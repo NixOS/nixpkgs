@@ -142,7 +142,7 @@ rec {
   tmuxNavigator       = tmux-navigator; # backwards compat, added 2014-10-18
   tslime              = tslime-vim;
   unite               = unite-vim;
-  Ultisnips           = ultisnips;
+  UltiSnips           = ultisnips;
   vim-grepper         = vim-grepper-git;
   vim-test            = vim-test-git;
   vimproc             = vimproc-vim;
