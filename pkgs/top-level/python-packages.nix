@@ -1278,6 +1278,8 @@ in {
     enablePython = true;
   });
 
+  bumps = callPackage ../development/python-modules/bumps {};
+
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
 
@@ -11725,6 +11727,8 @@ in {
     };
   };
 
+    periodictable = callPackage ../development/python-modules/periodictable { };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
@@ -14607,6 +14611,8 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
+  sasmodels = callPackage ../development/python-modules/sasmodels { };
+
   scapy = callPackage ../development/python-modules/scapy { };
 
   scipy = callPackage ../development/python-modules/scipy { };
@@ -16617,7 +16623,9 @@ in {
     };
   };
 
-  uritemplate_py = buildPythonPackage rec {
+    unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+    uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
     version = "3.0.0";
 
