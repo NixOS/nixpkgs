@@ -3,7 +3,7 @@
 
 let
   pname = "libgweather";
-  version = "3.28.0";
+  version = "3.28.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "13z12ra5fhn7xhsrskd7q8dnc2qnd1kylhndg6zlhk0brj6yfjsr";
+    sha256 = "1qqbfgmlfs0g0v92rdl96v2b44yr3sqj9x7zpqv1nx9aaf486yhm";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala gtk-doc docbook_xsl gobjectIntrospection ];

@@ -8,9 +8,6 @@ self: super: {
   inherit (pkgs) llvmPackages;
 
   # Disable GHC 8.4.x core libraries.
-  #
-  # Verify against:
-  # ls /nix/store/wnh3kxra586h9wvxrn62g4lmsri2akds-ghc-8.4.20180115/lib/ghc-8.4.20180115/ -1 | sort | grep -e '-' | grep -Ev '(txt|h|targets)$'
   array = null;
   base = null;
   binary = null;
@@ -20,12 +17,11 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
-  bin-package-db = null;
   ghc-boot = null;
   ghc-boot-th = null;
   ghc-compact = null;
-  ghci = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hpc = null;
   integer-gmp = null;
@@ -33,6 +29,7 @@ self: super: {
   parsec = null;
   pretty = null;
   process = null;
+  rts = null;
   stm = null;
   template-haskell = null;
   terminfo = null;
@@ -65,11 +62,6 @@ self: super: {
     ## QuickCheck >=2.11.3
     doCheck         = false;
   });
-
-  ## Needs bump to a versioned attribute
-  ## Setup: Encountered missing dependencies:
-  ## free >=4.9 && <5
-  either = super.either_5;
 
   ## Needs bump to a versioned attribute
   ## Setup: Encountered missing dependencies:
@@ -125,41 +117,6 @@ self: super: {
   hspec-discover = super.hspec-discover_2_5_0;
 
   ## On Hackage:
-
-  ## Upstreamed, awaiting a Hackage release
-  cabal-install = overrideCabal super.cabal-install (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=2.0.1.0 && <2.1, base >=4.5 && <4.11
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "cabal";
-      rev    = "728ad1a1e066da453ae13ee479629c00d8c2f32d";
-      sha256 = "0943xpva0fjlx8fanqvb6bg7myim2pki7q8hz3q0ijnf73bgzf7p";
-    };
-    prePatch        = "cd cabal-install; ";
-    ## Setup: Encountered missing dependencies:
-    ## network >=2.4 && <2.6, resolv >=0.1.1 && <0.2
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ (with self; [ network resolv ]);
-  });
-
-  ## Upstreamed, awaiting a Hackage release
-  hackage-security = overrideCabal super.hackage-security (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## Cabal >=1.14 && <1.26,
-    ## directory >=1.1.0.2 && <1.3,
-    ## time >=1.2 && <1.7
-    src = pkgs.fetchFromGitHub {
-      owner  = "haskell";
-      repo   = "hackage-security";
-      rev    = "21519f4f572b9547485285ebe44c152e1230fd76";
-      sha256 = "1ijwmps4pzyhsxfhc8mrnc3ldjvpisnmr457vvhgymwhdrr95k0z";
-    };
-    prePatch        = "cd hackage-security; ";
-    ## https://github.com/haskell/hackage-security/issues/211
-    jailbreak       = true;
-    ## error: while evaluating ‘overrideCabal’ at nixpkgs://pkgs/development/haskell-modules/lib.nix:37:24, called from /home/deepfire/nixpkgs/pkgs/development/haskell-modules/configuration-ghc-8.4.x.nix:217:22:
-    editedCabalFile = null;
-  });
 
   ## Upstreamed, awaiting a Hackage release
   haskell-gi = overrideCabal super.haskell-gi (drv: {
@@ -244,17 +201,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  singletons = overrideCabal super.singletons (drv: {
-    ## Setup: Encountered missing dependencies:
-    ## th-desugar ==1.7.*
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "singletons";
-      rev    = "23aa4bdaf05ce025a2493b35ec3c26cc94e3fdce";
-      sha256 = "0hw12v4z8jxmykc3j8z6g27swmfpxv40bgnx7nl0ialpwbz9mz27";
-    };
-  });
+  singletons = super.singletons_2_4_1;
 
   ## Upstreamed, awaiting a Hackage release
   tar = overrideCabal super.tar (drv: {
@@ -269,18 +216,7 @@ self: super: {
     };
   });
 
-  ## Upstreamed, awaiting a Hackage release
-  th-desugar = overrideCabal super.th-desugar (drv: {
-    ##     • Could not deduce (MonadIO (DsM q))
-    ##         arising from the 'deriving' clause of a data type declaration
-    ##       from the context: Quasi q
-    src = pkgs.fetchFromGitHub {
-      owner  = "goldfirere";
-      repo   = "th-desugar";
-      rev    = "4ca98c6492015e6ad063d3ad1a2ad6c4f0a56837";
-      sha256 = "1n3myd3gia9qsgdvrwqa023d3g7wkrhyv0wc8czwzz0lj9xzh7lw";
-    };
-  });
+  th-desugar = super.th-desugar_1_8;
 
   ## Upstreamed, awaiting a Hackage release
   websockets = overrideCabal super.websockets (drv: {
@@ -646,24 +582,9 @@ self: super: {
     jailbreak       = true;
   });
 
-  # Fix missing semigroup instance for Journal.
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch
-    { url = https://github.com/simonmichael/hledger/pull/718.patch;
-      sha256 = "1gcs9j934wvk9hbn27zm42dnvf4x1gxr54li4kdw3zi3160y2l5c";
-      stripLen = 1;
-    });
-
-  # Fix missing semigroup instance.
-  data-inttrie = appendPatch super.data-inttrie (pkgs.fetchpatch
-    { url = https://github.com/luqui/data-inttrie/pull/5.patch;
-      sha256 = "1wwdzrbsjqb7ih4nl28sq5bbj125mxf93a74yh4viv5gmxwj606a";
-    });
-
   # Older versions don't compile.
-  brick = self.brick_0_35;
-  getopt-generics = self.getopt-generics_0_13_0_2;
+  brick = self.brick_0_36;
   HaTeX = self.HaTeX_3_19_0_0;
-  json = self.json_0_9_2;
   matrix = self.matrix_0_3_6_1;
   pandoc = self.pandoc_2_1_3;
   pandoc-types = self.pandoc-types_1_17_4_2;
@@ -676,5 +597,17 @@ self: super: {
 
   # https://github.com/xmonad/xmonad-contrib/issues/235
   xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
+
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  arrows = appendPatch super.arrows (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/arrows-0.4.4.1.patch;
+    sha256 = "0j859vclcfnz8n2mw466mv00kjsa9gdbrppjc1m3b68jbypdmfvr";
+  });
+
+  # Contributed by Bertram Felgenhauer <int-e@gmx.de>.
+  flexible-defaults = appendPatch super.flexible-defaults (pkgs.fetchpatch {
+    url = https://raw.githubusercontent.com/lambdabot/lambdabot/ghc-8.4.1/patches/flexible-defaults-0.0.1.2.patch;
+    sha256 = "1bpsqq80h6nxm04wddgcgyzn0fjfsmhccmqb211jqswv5209znx8";
+  });
 
 }

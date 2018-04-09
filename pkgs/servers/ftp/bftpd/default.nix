@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "bftpd";
-  version = "4.8";
+  version = "4.9";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "1zlsajj6wjd9wcijzngmafhy2gr3sm5rphsr5n44rlmx1jdkk00c";
+    sha256 = "13pjil9cjggpi773m0516lszyqvwzlgcrmmj8yn9nc24rbxwvn6d";
   };
   buildInputs = [];
   preConfigure = ''

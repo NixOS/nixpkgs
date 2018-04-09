@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "http://rtorrent.net/downloads/";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
 
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ebzzry codyopel ];
   };
 }

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/share/bash-completion/completions" "$man/share/man" "$pause/bin"
+    mkdir -p "$out/bin" "$out/share/bash-completion/completions" "$out/share/zsh/site-functions" "$man/share/man" "$pause/bin"
 
     cp _output/local/go/bin/* "$out/bin/"
     cp build/pause/pause "$pause/bin/pause"
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
+    $out/bin/kubectl completion zsh > $out/share/zsh/site-functions/_kubectl
   '';
 
   preFixup = ''

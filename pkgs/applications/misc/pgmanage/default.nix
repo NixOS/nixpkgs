@@ -2,14 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "pgmanage-${version}";
-  version = "10.1.0";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
     owner  = "pgManage";
     repo   = "pgManage";
     rev    = "v${version}";
-    sha256 = "0kzdq3xl6wyclngq307544yk57vpm10wyklkbgzx649z3pls3kyw";
+    sha256 = "1gv96an1ff9amh16lf71wknshmxl3l4hsl3ga7wb106c10i14zzc";
   };
+
+  patchPhase = ''
+    patchShebangs src/configure
+  '';
+
+  configurePhase = ''
+    ./configure --prefix $out
+  '';
 
   buildInputs = [ postgresql openssl ];
 

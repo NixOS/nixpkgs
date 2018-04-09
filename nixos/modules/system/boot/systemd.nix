@@ -524,6 +524,14 @@ in
       '';
     };
 
+    systemd.enableCgroupAccounting = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to enable cgroup accounting.
+      '';
+    };
+
     systemd.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -725,6 +733,13 @@ in
 
       "systemd/system.conf".text = ''
         [Manager]
+        ${optionalString config.systemd.enableCgroupAccounting ''
+          DefaultCPUAccounting=yes
+          DefaultIOAccounting=yes
+          DefaultBlockIOAccounting=yes
+          DefaultMemoryAccounting=yes
+          DefaultTasksAccounting=yes
+        ''}
         ${config.systemd.extraConfig}
       '';
 

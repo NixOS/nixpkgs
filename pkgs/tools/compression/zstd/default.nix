@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
-    sha256 = "15h9i9ygry0znlmvll5r21lzwgyqzynaw9q2wbj4bcn7zjy4c1pn";
+    sha256 = "090ba7dnv5z2v4vlb8b275b0n7cqsdzjqvr3b6a0w65z13mgy2nw";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       speed is preserved and remain roughly the same at all settings, a
       property shared by most LZ compression algorithms, such as zlib.
     '';
-    homepage = http://www.zstd.net/;
+    homepage = https://facebook.github.io/zstd/;
     # The licence of the CLI programme is GPLv2+, that of the library BSD-2.
     license = with licenses; [ gpl2Plus bsd2 ];
 

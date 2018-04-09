@@ -70,6 +70,9 @@ mkDerivation (common "tamarin-prover" src // {
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz sapic ]}
+    # so that the package can be used as a vim plugin to install syntax coloration
+    install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/{spthy,sapic}.vim 
+    install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";

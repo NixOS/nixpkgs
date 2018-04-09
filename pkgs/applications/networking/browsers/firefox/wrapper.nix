@@ -30,7 +30,7 @@ let
     }:
 
     let
-      cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
@@ -132,7 +132,7 @@ let
         else
             for res in 16 32 48 64 128; do
             mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
-            ln -s "${browser}/lib/${browserName}/browser/chrome/icons/default/default''${res}.png" \
+            ln -s "${browser}/lib/"*"/browser/chrome/icons/default/default''${res}.png" \
                 "$out/share/icons/hicolor/''${res}x''${res}/apps/${browserName}.png"
             done
         fi

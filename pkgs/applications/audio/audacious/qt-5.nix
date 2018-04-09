@@ -81,7 +81,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Audio player";
-    homepage = http://audacious-media-player.org/;
+    homepage = https://audacious-media-player.org/;
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [

@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, stdenv }:
+{ buildGoPackage, fetchFromGitHub, stdenv, openssh, makeWrapper }:
 
 buildGoPackage rec {
 
@@ -15,6 +15,12 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/dop251/diskrsync";
   goDeps = ./deps.nix;
+
+  buildInputs = [ makeWrapper ];
+
+  preFixup = ''
+    wrapProgram "$bin/bin/diskrsync" --prefix PATH : ${openssh}/bin
+  '';
 
   meta = with stdenv.lib; {
     description = "Rsync for block devices and disk images";

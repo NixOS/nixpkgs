@@ -1,11 +1,11 @@
 { stdenv, cmake, fetchFromGitHub, emscriptenRev ? null }:
 
 let
-  defaultVersion = "44";
+  defaultVersion = "45";
 
   # Map from git revs to SHA256 hashes
   sha256s = {
-    "version_44" = "0zsqppc05fm62807w6vyccxkk2y2gar7kxbxxixq8zz3xsp6w84p";
+    "version_45" = "1wgzfzjjzkiaz0rf2lnwrcvlcsjvjhyvbyh58jxhqq43vi34zyjc";
     "1.37.36" = "1wgzfzjjzkiaz0rf2lnwrcvlcsjvjhyvbyh58jxhqq43vi34zyjc";
   };
 in

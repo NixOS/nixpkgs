@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, pythonPackages }:
+{ lib, buildPythonApplication, fetchPypi, pythonPackages, ffmpeg }:
 
 buildPythonApplication rec {
   version = "1.4.0";
@@ -20,6 +20,8 @@ buildPythonApplication rec {
     blinker
   ];
 
+  makeWrapperArgs = [ "--prefix PATH : ${ffmpeg}/bin" ];
+
   # No tests included
   doCheck = false;
 
@@ -27,7 +29,7 @@ buildPythonApplication rec {
     description = "Yet another simple static gallery generator";
     homepage    = http://sigal.saimon.org/en/latest/index.html;
     license     = licenses.mit;
-    maintainers = with maintainers; [ domenkozar matthiasbeyer ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }
 

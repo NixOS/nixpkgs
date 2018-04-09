@@ -59,7 +59,6 @@ mapAliases (rec {
   digikam5 = digikam; # added 2017-02-18
   double_conversion = double-conversion; # 2017-11-22
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   exfat-utils = exfat;                  # 2015-09-11
@@ -202,6 +201,7 @@ mapAliases (rec {
   sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
+  tahoelafs = tahoe-lafs; # added 2018-03-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
@@ -213,6 +213,10 @@ mapAliases (rec {
   telepathy_qt = telepathy-qt; # added 2018-02-25
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
+  tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
+  tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
+  tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
+  tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06

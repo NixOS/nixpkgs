@@ -70,6 +70,7 @@ pythonPackages.buildPythonApplication {
     pygobject2
     reportlab
     usbutils
+    sip
   ] ++ stdenv.lib.optionals withQt5 [
     pyqt5
   ];

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-cstruct-${version}";
-  version = "3.0.2";
+  version = "3.1.1";
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
-    sha256 = "03caxcyzfjmbnnwa15zy9s1ckkl4sc834d1qkgi4jcs3zqchvd8z";
+    sha256 = "1x4jxsvd1lrfibnjdjrkfl7hqsc48rljnwbap6faanj9qhwwa6v2";
   };
 
   unpackCmd = "tar -xjf $curSrc";

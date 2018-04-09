@@ -48,6 +48,6 @@ buildPythonApplication rec {
     homepage = https://github.com/michael-lazar/rtv;
     description = "Browse Reddit from your Terminal";
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer jgeerds wedens ];
+    maintainers = with maintainers; [ jgeerds wedens ];
   };
 }

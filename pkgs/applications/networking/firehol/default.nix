@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       FireHOL, an iptables stateful packet filtering firewall for humans!
       FireQOS, a TC based bandwidth shaper for humans!
     '';
-    homepage = http://firehol.org/;
+    homepage = https://firehol.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ geistesk ];
     platforms = platforms.linux;

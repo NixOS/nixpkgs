@@ -22,7 +22,8 @@ import json
 import re
 from pkg_resources import Requirement, RequirementParseError
 
-PREFIX = '# homeassistant.components.'
+GENERAL_PREFIX = '# homeassistant.'
+COMPONENT_PREFIX = GENERAL_PREFIX + 'components.'
 PKG_SET = 'python3Packages'
 
 def get_version():
@@ -37,12 +38,19 @@ def fetch_reqs(version='master'):
         for line in response.read().decode().splitlines():
             if line == '':
                 components = []
-            elif line[:len(PREFIX)] == PREFIX:
-                component = line[len(PREFIX):]
+            elif line[:len(COMPONENT_PREFIX)] == COMPONENT_PREFIX:
+                component = line[len(COMPONENT_PREFIX):]
                 components.append(component)
                 if component not in requirements:
                     requirements[component] = []
-            elif line[0] != '#':
+            elif line[:len(GENERAL_PREFIX)] != GENERAL_PREFIX: # skip lines like "# homeassistant.scripts.xyz"
+                # Some dependencies are commented out because they don't build on all platforms
+                # Since they are still required for running the component, don't skip them
+                if line[:2] == '# ':
+                    line = line[2:]
+                # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
+                # Therefore, if there's a "#" in the line, only take the part after it
+                line = line[line.find('#') + 1:]
                 for component in components:
                     requirements[component].append(line)
     return requirements

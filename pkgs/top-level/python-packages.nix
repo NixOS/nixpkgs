@@ -233,6 +233,8 @@ in {
 
   email_validator = callPackage ../development/python-modules/email-validator { };
 
+  ewmh = callPackage ../development/python-modules/ewmh { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -423,6 +425,8 @@ in {
   };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
+
+  toml = callPackage ../development/python-modules/toml { };
 
   unifi = callPackage ../development/python-modules/unifi { };
 
@@ -632,7 +636,7 @@ in {
     meta = {
       description = "Atomic file writes on POSIX";
       homepage = https://pypi.python.org/pypi/atomicwrites/0.1.0;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
 
   };
@@ -779,7 +783,7 @@ in {
 
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -794,7 +798,7 @@ in {
     };
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -814,7 +818,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -834,7 +838,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -859,7 +863,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -884,7 +888,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -900,7 +904,7 @@ in {
     propagatedBuildInputs = with self; [ azure-nspkg ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -925,7 +929,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -950,7 +954,7 @@ in {
     propagatedBuildInputs = with self; [ azure-mgmt-common ];
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -969,7 +973,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -988,7 +992,7 @@ in {
     '';
     meta = {
       description = "Microsoft Azure SDK for Python";
-      homepage = "http://azure.microsoft.com/en-us/develop/python/";
+      homepage = "https://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
     };
@@ -1149,11 +1153,11 @@ in {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.8.0";
+    name = "betamax-0.8.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/betamax/${name}.tar.gz";
-      sha256 = "18f8v5gng3j773jlbbzx4rg1i4y2zw3m2l1zpmbvp8bh5a2q1i42";
+      sha256 = "1hki1c2vs7adq7zr56wi6i5bhrkia4s2ywpv2c98ibnczz709w2v";
     };
 
     propagatedBuildInputs = [ self.requests ];
@@ -1754,7 +1758,7 @@ in {
 
     meta = {
       description = "Python bindings for Oracle Berkeley DB";
-      homepage = http://www.jcea.es/programacion/pybsddb.htm;
+      homepage = https://www.jcea.es/programacion/pybsddb.htm;
       license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
     };
   };
@@ -1848,24 +1852,24 @@ in {
 
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
-    version = "1.4.0";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bugwarrior/${name}.tar.gz";
-      sha256 = "1jkz5vzbwspi1jcb3qsgcl619yip77khb696pc3ryk0pdhjhgs5w";
+      sha256 = "0kxknjbw5kchd88i577vlzibg8j60r7zzdhbnragj9wg5s3w60xb";
     };
 
     buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
     propagatedBuildInputs = with self; [
       twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
-      jinja2 pycurl dogpile_cache lockfile click pyxdg
+      jinja2 pycurl dogpile_cache lockfile click pyxdg future15
     ];
 
     # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
     doCheck = false;
 
     meta = {
-      homepage =  http://github.com/ralphbean/bugwarrior;
+      homepage =  https://github.com/ralphbean/bugwarrior;
       description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
       license = licenses.gpl3Plus;
       platforms = platforms.all;
@@ -2915,6 +2919,8 @@ in {
   PyLD = callPackage ../development/python-modules/PyLD { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
+
+  python-ly = callPackage ../development/python-modules/python-ly {};
 
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
@@ -4694,7 +4700,7 @@ in {
 
     meta = {
       description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-      homepage = http://mg.pov.lt/gtimelog/;
+      homepage = https://mg.pov.lt/gtimelog/;
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ocharles ];
       platforms = platforms.unix;
@@ -4755,7 +4761,7 @@ in {
       description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.linux; # can only test on linux
     };
 
@@ -4843,7 +4849,7 @@ in {
       description = "WSGI HTTP Digest Authentication middleware";
       homepage = https://github.com/jonashaag/httpauth;
       license = licenses.bsd2;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -4868,29 +4874,7 @@ in {
 
   };
 
-  imbalanced-learn = buildPythonPackage rec {
-    name = "imbalanced-learn-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/imbalanced-learn/${name}.tar.gz";
-      sha256 = "0j76m0rrsvyqj9bimky9m7b609y5v6crf9apigww3xvcnchhj901";
-    };
-
-    preConfigure = ''
-      export HOME=$PWD
-    '';
-
-    propagatedBuildInputs = with self; [ scikitlearn ];
-    buildInputs = with self; [ nose pytest pandas ];
-
-    meta = {
-      description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
-      homepage = https://github.com/scikit-learn-contrib/imbalanced-learn;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
 
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
@@ -5005,6 +4989,8 @@ in {
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi {};
 
   jdcal = callPackage ../development/python-modules/jdcal { };
+
+  jieba = callPackage ../development/python-modules/jieba { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive {};
 
@@ -5511,7 +5497,7 @@ in {
 
     meta = {
       description = "PAM interface using ctypes";
-      homepage = "http://github.com/minrk/pamela";
+      homepage = "https://github.com/minrk/pamela";
       license = licenses.mit;
     };
   };
@@ -5560,7 +5546,7 @@ in {
 
     meta = {
       description = "A Python-based build/distribution/deployment scripting tool";
-      homepage    = http://github.com/paver/paver;
+      homepage    = https://github.com/paver/paver;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -5694,6 +5680,11 @@ in {
       maintainers = with maintainers; [ sepi ];
       platforms = platforms.all;
     };
+  };
+
+  poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
+    inherit (pkgs.qt5) qtbase;
+    inherit (pkgs.libsForQt5) poppler;
   };
 
   poyo = buildPythonPackage rec {
@@ -7639,7 +7630,7 @@ in {
 
     meta = {
       description = "Filesystem abstraction";
-      homepage    = http://pypi.python.org/pypi/fs;
+      homepage    = https://pypi.python.org/pypi/fs;
       license     = licenses.bsd3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
@@ -7679,6 +7670,15 @@ in {
   };
 
   future = callPackage ../development/python-modules/future { };
+  future15 = self.future.overridePythonAttrs (old: rec {
+    name = "future-${version}";
+    version = "0.15.2";
+    src = fetchPypi {
+      pname = "future";
+      version = "0.15.2";
+      sha256 = "15wvcfzssc68xqnqi1dq4fhd0848hwi9jn42hxyvlqna40zijfrx";
+    };
+  });
 
   futures = buildPythonPackage rec {
     name = "futures-${version}";
@@ -7952,14 +7952,14 @@ in {
 
   github3_py = buildPythonPackage rec {
     name = "github3.py-${version}";
-    version = "1.0.0a4";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/github3.py/${name}.tar.gz";
-      sha256 = "0rhnrhb7qc60h82hkd4wnj1jh544yzrf4pjmn4rqacdi59p7f3jp";
+      sha256 = "1g91a8q9w0dalf4y4v0g72zi7vfrxwpx639an28vvys20y5zlvwp";
     };
 
-    buildInputs = with self; [ unittest2 pytest mock betamax betamax-matchers ];
+    buildInputs = with self; [ unittest2 pytest mock betamax betamax-matchers dateutil ];
 
     propagatedBuildInputs = with self; [ requests pyopenssl uritemplate_py
       ndg-httpsclient requests_toolbelt pyasn1 ];
@@ -8087,6 +8087,8 @@ in {
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
   google_gax = callPackage ../development/python-modules/google_gax { };
+
+  gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -8397,7 +8399,7 @@ in {
     '';
 
     meta = {
-      homepage = "http://falcao.it/HTTPretty/";
+      homepage = "https://falcao.it/HTTPretty/";
       description = "HTTP client request mocking tool";
       license = licenses.mit;
     };
@@ -8811,7 +8813,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -8837,7 +8839,7 @@ in {
 
     meta = {
       description = "Messaging library for Python";
-      homepage    = "http://github.com/celery/kombu";
+      homepage    = "https://github.com/celery/kombu";
       license     = licenses.bsd3;
     };
   };
@@ -9075,7 +9077,7 @@ in {
     '';
 
     meta = {
-      homepage = http://launchpad.net/pylockfile;
+      homepage = https://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
       license = licenses.asl20;
     };
@@ -9178,6 +9180,8 @@ in {
   marisa = callPackage ../development/python-modules/marisa {
     marisa = pkgs.marisa;
   };
+
+  marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
@@ -9690,6 +9694,8 @@ in {
     };
   });
 
+  mock-open = callPackage ../development/python-modules/mock-open { };
+
   modestmaps = buildPythonPackage rec {
     name = "ModestMaps-1.4.6";
 
@@ -9835,30 +9841,7 @@ in {
 
   };
 
-
-  mrbob = buildPythonPackage rec {
-    name = "mrbob-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mr.bob/mr.bob-${version}.tar.gz";
-      sha256 = "6737eaf98aaeae85e07ebef844ee5156df2f06a8b28d7c3dcb056f811c588121";
-    };
-
-    buildInputs = [ pkgs.glibcLocales self.mock ];
-
-    disabled = isPy3k;
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ argparse jinja2 six ] ++
-                            (optionals isPy26 [ importlib ordereddict ]);
-
-    meta = {
-      homepage = https://github.com/domenkozar/mr.bob.git;
-      description = "A tool to generate code skeletons from templates";
-    };
-  };
+  mrbob = callPackage ../development/python-modules/mrbob {};
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
@@ -10382,7 +10365,7 @@ in {
     };
 
     meta = {
-      homepage = http://alastairs-place.net/projects/netifaces/;
+      homepage = https://alastairs-place.net/projects/netifaces/;
       description = "Portable access to network interfaces from Python";
     };
   };
@@ -10756,6 +10739,8 @@ in {
     };
   };
 
+  langcodes = callPackage ../development/python-modules/langcodes { };
+
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
     name = "livestreamer-${version}";
@@ -10936,7 +10921,7 @@ in {
 
     meta = {
       description = "Draws Python object reference graphs with graphviz";
-      homepage = http://mg.pov.lt/objgraph/;
+      homepage = https://mg.pov.lt/objgraph/;
       license = licenses.mit;
     };
   };
@@ -11342,6 +11327,8 @@ in {
     buildInputs = with self; [ pbr testtools testrepository mock ];
     propagatedBuildInputs = with self; [ six requests ];
   };
+
+  mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
   mox3 = buildPythonPackage rec {
     name = "mox3-${version}";
@@ -11905,7 +11892,11 @@ in {
   pika-pool = callPackage ../development/python-modules/pika-pool { };
   platformio = callPackage ../development/python-modules/platformio { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx { };
+  kmsxx = (callPackage ../development/libraries/kmsxx {
+    inherit (pkgs.kmsxx) stdenv;
+  }).overrideAttrs (oldAttrs: {
+    name = "${python.libPrefix}-${pkgs.kmsxx.name}";
+  });
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
@@ -12149,6 +12140,12 @@ in {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_1;
+  };
+
+  protobuf3_5 = callPackage ../development/python-modules/protobuf {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_5;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -14484,6 +14481,8 @@ in {
     };
   };
 
+  Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
+
   squaremap = buildPythonPackage rec {
     name = "squaremap-1.0.4";
     disabled = isPy3k;
@@ -15433,17 +15432,29 @@ in {
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "3.0.0";
+    version = "3.1.1";
     disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
+    src = pkgs.fetchdarcs {
+      url = http://devel.ag-projects.com/repositories/python-sipsimple;
+      rev = "release-${version}";
+      sha256 = "0jdilm11f5aahxrzrkxrfx9sgjgkbla1r0wayc5dzd2wmjrdjyrg";
     };
+
+    preConfigure = ''
+      chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
+    '';
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
     propagatedBuildInputs = with self; [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
+
+    meta = {
+      description = "SIP SIMPLE implementation for Python";
+      homepage = http://sipsimpleclient.org/;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ pSub ];
+    };
   };
 
 
@@ -16635,11 +16646,11 @@ in {
 
   uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
-    version = "0.3.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/u/uritemplate.py/${name}.tar.gz";
-      sha256 = "0xvvdiwnag2pdi96hjf7v8asdia98flk2rxcjqnwcs3rk99alygx";
+      sha256 = "1k5zvc5fyyrgv33mi3p86a9jn5n0pqffs9cviz92fw6q1kf7zvmr";
     };
 
     meta = with stdenv.lib; {
@@ -16733,7 +16744,7 @@ in {
       homepage = https://github.com/uri-templates/uritemplate-py;
       description = "Python implementation of URI Template";
       license = licenses.asl20;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -17100,6 +17111,8 @@ EOF
   wheel = callPackage ../development/python-modules/wheel { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
+
+  wordfreq = callPackage ../development/python-modules/wordfreq { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
@@ -18608,6 +18621,8 @@ EOF
     };
   };
 
+  vxi11 = callPackage ../development/python-modules/vxi11 { };
+
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";
     disabled = ! isPy27;
@@ -18709,6 +18724,10 @@ EOF
 
     propagatedBuildInputs = with self; [];
   };
+
+  pybindgen = callPackage ../development/python-modules/pybindgen {};
+
+  pygccxml = callPackage ../development/python-modules/pygccxml {};
 
   pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
 
@@ -18923,7 +18942,7 @@ EOF
     doCheck = false;
 
     meta = {
-      homepage = "http://matplotlib.org/basemap/";
+      homepage = "https://matplotlib.org/basemap/";
       description = "Plot data on map projections with matplotlib";
       longDescription = ''
         An add-on toolkit for matplotlib that lets you plot data on map projections with
@@ -19083,7 +19102,7 @@ EOF
 
     meta = {
       description = "Copy your docs directly to the gh-pages branch";
-      homepage = "http://github.com/davisp/ghp-import";
+      homepage = "https://github.com/davisp/ghp-import";
       license = "Tumbolia Public License";
       maintainers = with maintainers; [ garbas ];
     };
@@ -19199,7 +19218,7 @@ EOF
 
     meta = {
       description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-      homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
+      homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
       license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];
     };
@@ -19770,12 +19789,15 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = callPackage ../development/python-modules/tensorflow rec {
-    cudaSupport = pkgs.config.cudaSupport or false;
-    inherit (pkgs.linuxPackages) nvidia_x11;
-    cudatoolkit = pkgs.cudatoolkit9;
-    cudnn = pkgs.cudnn_cudatoolkit9;
-  };
+  tensorflow =
+    if stdenv.isDarwin
+    then callPackage ../development/python-modules/tensorflow/bin.nix { }
+    else callPackage ../development/python-modules/tensorflow rec {
+      cudaSupport = pkgs.config.cudaSupport or false;
+      inherit (pkgs.linuxPackages) nvidia_x11;
+      cudatoolkit = pkgs.cudatoolkit9;
+      cudnn = pkgs.cudnn_cudatoolkit9;
+    };
 
   tensorflowWithoutCuda = self.tensorflow.override {
     cudaSupport = false;
@@ -20178,6 +20200,8 @@ EOF
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   yapf = callPackage ../development/python-modules/yapf { };
+
+  black = callPackage ../development/python-modules/black { };
 
   autobahn = callPackage ../development/python-modules/autobahn { };
 

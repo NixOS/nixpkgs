@@ -13,4 +13,4 @@ nixos/doc/** linguist-documentation
 nixos/doc/default.nix linguist-documentation=false
 
 nixos/modules/module-list.nix merge=union
-pkgs/top-level/all-packages.nix merge=union
+# pkgs/top-level/all-packages.nix merge=union

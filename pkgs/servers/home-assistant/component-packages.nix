@@ -71,7 +71,7 @@
     "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
     "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
     "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
-    "device_tracker.fritz" = ps: with ps; [  ];
+    "device_tracker.fritz" = ps: with ps; [ fritzconnection ];
     "device_tracker.icloud" = ps: with ps; [  ];
     "device_tracker.linksys_ap" = ps: with ps; [ beautifulsoup4 ];
     "device_tracker.mikrotik" = ps: with ps; [  ];
@@ -100,7 +100,7 @@
     "fan.xiaomi_miio" = ps: with ps; [  ];
     "feedreader" = ps: with ps; [ feedparser ];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
-    "frontend" = ps: with ps; [ user-agents ];
+    "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
     "google" = ps: with ps; [ google_api_python_client oauth2client ];
@@ -123,7 +123,7 @@
     "joaoapps_join" = ps: with ps; [  ];
     "juicenet" = ps: with ps; [  ];
     "keyboard" = ps: with ps; [  ];
-    "keyboard_remote" = ps: with ps; [  ];
+    "keyboard_remote" = ps: with ps; [ evdev ];
     "kira" = ps: with ps; [  ];
     "knx" = ps: with ps; [  ];
     "lametric" = ps: with ps; [  ];
@@ -196,7 +196,7 @@
     "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [  ];
     "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
-    "media_player.spotify" = ps: with ps; [  ];
+    "media_player.spotify" = ps: with ps; [ spotipy ];
     "media_player.vizio" = ps: with ps; [  ];
     "media_player.vlc" = ps: with ps; [  ];
     "media_player.webostv" = ps: with ps; [ websockets ];
@@ -278,7 +278,7 @@
     "sensor.coinmarketcap" = ps: with ps; [  ];
     "sensor.cpuspeed" = ps: with ps; [  ];
     "sensor.crimereports" = ps: with ps; [  ];
-    "sensor.cups" = ps: with ps; [  ];
+    "sensor.cups" = ps: with ps; [ pycups ];
     "sensor.darksky" = ps: with ps; [  ];
     "sensor.deluge" = ps: with ps; [ deluge-client ];
     "sensor.deutsche_bahn" = ps: with ps; [  ];
@@ -298,8 +298,8 @@
     "sensor.fido" = ps: with ps; [  ];
     "sensor.fitbit" = ps: with ps; [  ];
     "sensor.fixer" = ps: with ps; [  ];
-    "sensor.fritzbox_callmonitor" = ps: with ps; [  ];
-    "sensor.fritzbox_netmonitor" = ps: with ps; [  ];
+    "sensor.fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
+    "sensor.fritzbox_netmonitor" = ps: with ps; [ fritzconnection ];
     "sensor.gearbest" = ps: with ps; [  ];
     "sensor.geizhals" = ps: with ps; [ beautifulsoup4 ];
     "sensor.geo_rss_events" = ps: with ps; [ feedparser ];

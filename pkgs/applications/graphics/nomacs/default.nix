@@ -18,12 +18,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.1";
+  version = "3.8.1";
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "0yli05hhmd57v3mynq78nmr15rbpm0vadv273pavmcnayv86yl44";
+    sha256 = "1irms980d7acdqrfn8isw55vgc4d9n26ff86887vk7xfvxs0ayla";
   };
 
   name = "nomacs-${version}";
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
   setSourceRoot = ''
     sourceRoot=$(echo */ImageLounge)
   '';
-
-  patches = [./fix-appdata-install.patch];
 
   nativeBuildInputs = [cmake
                        pkgconfig

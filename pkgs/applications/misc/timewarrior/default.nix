@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A command-line time tracker";
     homepage = https://tasktools.org/projects/timewarrior.html;
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
+    maintainers = with maintainers; [ mrVanDalo ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

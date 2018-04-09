@@ -41,9 +41,6 @@ self: super: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
   });
 
-  # cabal-install can use the native Cabal library.
-  cabal-install = super.cabal-install.override { Cabal = null; };
-
   # jailbreak-cabal doesn't seem to work right with the native Cabal version.
   jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
@@ -87,12 +84,12 @@ self: super: {
   purescript = doJailbreak (super.purescript);
 
   # These packages need Cabal 2.2.x, which is not the default.
-  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
-  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
-  cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_0; });
+  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   stylish-cabal = dontCheck (super.stylish-cabal.overrideScope (self: super: {
-    Cabal = self.Cabal_2_2_0_0;
+    Cabal = self.Cabal_2_2_0_1;
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 

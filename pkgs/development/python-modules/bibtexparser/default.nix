@@ -1,10 +1,7 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, future
-, nose
-, glibcLocales
+, buildPythonPackage, fetchFromGitHub
+, future, pyparsing
+, glibcLocales, nose
 }:
 
 buildPythonPackage rec {
@@ -19,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0lmlarkfbq2hp1wa04a62245jr2mqizqsdlgilj5aq6vy92gr6ai";
   };
 
-  propagatedBuildInputs = [ pyparsing future ];
+  propagatedBuildInputs = [ future pyparsing ];
 
   checkInputs = [ nose glibcLocales ];
 

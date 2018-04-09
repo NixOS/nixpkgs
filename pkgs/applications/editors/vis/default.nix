@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "vis-${version}";
-  version  = "0.4";
+  version  = "0.5";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1crsg3ssqv4xix9z16hwl0zyx7hxk686s52zmrp7yfak3m5igf9k";
+    sha256 = "1vhq6hprkgj90iwl5vl3pxs3xwc01mx8yhi6c1phzry5agqqp8jb";
     repo = "vis";
     owner = "martanne";
   };

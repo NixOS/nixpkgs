@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableGUI) ''
     wrapProgram $out/bin/xpdf \
       --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}
   '';

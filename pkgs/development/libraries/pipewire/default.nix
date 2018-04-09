@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     "-Denable_gstreamer=true"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "lib/systemd/user";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    homepage = http://pipewire.org/;
+    homepage = https://pipewire.org/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];

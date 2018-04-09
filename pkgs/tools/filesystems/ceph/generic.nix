@@ -5,7 +5,7 @@
 , openldap, lttngUst
 , babeltrace, gperf
 , cunit, snappy
-, rocksdb
+, rocksdb, makeWrapper
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -96,6 +96,7 @@ let
     ps.pecan
     ps.prettytable
     ps.webob
+    ps.cherrypy
 	]);
 
 in
@@ -113,7 +114,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig which git python2Packages.wrapPython
+    pkgconfig which git python2Packages.wrapPython makeWrapper
     (ensureNewerSourcesHook { year = "1980"; })
   ];
   
@@ -158,6 +159,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapPythonPrograms
+    wrapProgram $out/bin/ceph-mgr --set PYTHONPATH $out/${python2Packages.python.sitePackages}
   '';
 
   enableParallelBuilding = true;
@@ -165,7 +167,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "lib" "out" "doc" ];
 
   meta = {
-    homepage = http://ceph.com/;
+    homepage = https://ceph.com/;
     description = "Distributed storage system";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ adev ak wkennington ];

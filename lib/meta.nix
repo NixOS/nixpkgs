@@ -86,4 +86,6 @@ rec {
         then { system = elem; }
         else { parsed = elem; };
     in lib.matchAttrs pattern platform;
+
+  enableIfAvailable = p: if p.meta.available or true then [ p ] else [];
 }

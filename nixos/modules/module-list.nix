@@ -58,6 +58,7 @@
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
+  ./misc/documentation.nix
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
@@ -85,12 +86,11 @@
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
-  ./programs/info.nix
+  ./programs/iftop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
   ./programs/light.nix
-  ./programs/man.nix
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -158,9 +158,9 @@
   ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
-  ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
+  ./services/backup/duplicati.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
@@ -324,8 +324,9 @@
   ./services/misc/geoip-updater.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
-  ./services/misc/gitlab.nix
+  #./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gitweb.nix
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
@@ -651,6 +652,7 @@
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/nginx/gitweb.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix

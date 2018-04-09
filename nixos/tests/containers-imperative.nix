@@ -20,7 +20,7 @@ import ./make-test.nix ({ pkgs, ...} : {
             containers.foo.config = {};
           };
         };
-      in [ pkgs.stdenv emptyContainer.config.containers.foo.path ];
+      in [ pkgs.stdenv emptyContainer.config.containers.foo.path pkgs.libxslt ];
     };
 
   testScript =

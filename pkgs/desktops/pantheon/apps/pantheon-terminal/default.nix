@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper, gobjectIntrospection }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, wrapGAppsHook, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   majorVersion = "0.4";
@@ -9,19 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bfrqxig26i9qhm15kk7h9lgmzgnqada5snbbwqkp0n0pnyyh4ss";
   };
 
-  preConfigure = ''
-    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:${granite}/lib64/pkgconfig"
-  '';
-
-  preFixup = ''
-    for f in $out/bin/*; do
-      wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$XDG_ICON_DIRS:$out/share"
-    done
-  '';
-
   nativeBuildInputs = [
-    perl cmake vala_0_38 pkgconfig makeWrapper
+    perl cmake vala_0_38 pkgconfig wrapGAppsHook
     # For setup hook
     gobjectIntrospection
   ];

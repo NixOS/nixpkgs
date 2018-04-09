@@ -138,7 +138,7 @@ let
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature (enableDeadCodeElimination && !hostPlatform.isArm && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
+    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
     (enableFeature enableSharedLibraries "shared")
     (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
@@ -352,6 +352,7 @@ stdenv.mkDerivation ({
       for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
+        echo >> "$exe"
         cat "$exeDir/all.js" >> "$exe"
         chmod +x "$exe"
       done

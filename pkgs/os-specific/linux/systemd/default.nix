@@ -10,6 +10,7 @@
 , getent
 , hostPlatform
 , buildPackages
+, withSelinux ? false, libselinux
 }:
 
 assert stdenv.isLinux;
@@ -40,11 +41,14 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd kexectools libseccomp libffi audit lz4 bzip2 libapparmor
+      libmicrohttpd ] ++
+      stdenv.lib.meta.enableIfAvailable kexectools ++
+      stdenv.lib.meta.enableIfAvailable libseccomp ++
+    [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ];
+    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
 
   #dontAddPrefix = true;
 

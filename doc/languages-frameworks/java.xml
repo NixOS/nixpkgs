@@ -62,16 +62,7 @@ depending on the JDK at runtime.</para>
 
 <para>It is possible to use a different Java compiler than
 <command>javac</command> from the OpenJDK.  For instance, to use the
-Eclipse Java Compiler:
-
-<programlisting>
-buildInputs = [ jre ant ecj ];
-</programlisting>
-
-(Note that here you don’t need the full JDK as an input, but just the
-JRE.)  The ECJ has a stdenv setup hook that sets some environment
-variables to cause Ant to use ECJ, but this doesn’t work with all Ant
-files.  Similarly, you can use the GNU Java Compiler:
+GNU Java Compiler:
 
 <programlisting>
 buildInputs = [ gcj ant ];

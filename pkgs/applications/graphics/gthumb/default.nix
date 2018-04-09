@@ -1,31 +1,42 @@
 { stdenv,  fetchurl, gnome3, itstool, libxml2, pkgconfig, intltool,
-  exiv2, libjpeg, libtiff, gstreamer, libraw, libsoup, libsecret,
-  libchamplain, librsvg, libwebp, json-glib, webkit, lcms2, bison,
-  flex, hicolor-icon-theme, wrapGAppsHook, shared-mime-info }:
+  exiv2, libjpeg, libtiff, gst_all_1, libraw, libsoup, libsecret,
+  libchamplain, librsvg, libwebp, json-glib, webkitgtk, lcms2, bison,
+  flex, wrapGAppsHook, shared-mime-info }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+let
   pname = "gthumb";
-  version = "${major}.0";
-  major = "3.6";
+  version = "3.6.1";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "1zc7myvnzgq7dawjg03rqvwfad7p938m20f25sfhv65jsfq8n928";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1vj26gw9b5y4bmb2m49wplqg0md568g3gxin500v3slggzhzkaww";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ itstool libxml2 intltool pkgconfig bison flex wrapGAppsHook ];
 
-  buildInputs = with gnome3;
-    [ itstool libxml2 intltool glib gtk gsettings-desktop-schemas dconf
-      exiv2 libjpeg libtiff gstreamer libraw libsoup libsecret libchamplain
-      librsvg libwebp json-glib webkit lcms2 bison flex hicolor-icon-theme defaultIconTheme ];
+  buildInputs = with gnome3; [
+    glib gtk gsettings-desktop-schemas gst_all_1.gstreamer gst_all_1.gst-plugins-base
+    exiv2 libjpeg libtiff libraw libsoup libsecret libchamplain
+    librsvg libwebp json-glib webkitgtk lcms2 defaultIconTheme
+  ];
 
   enableParallelBuilding = true;
+
+  configureFlags = [
+    "--enable-libchamplain"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/gthumb;

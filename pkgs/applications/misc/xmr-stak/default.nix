@@ -2,18 +2,18 @@
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
 , devDonationLevel ? "0.0"
 , cudaSupport ? false
-, openclSupport ? false
+, openclSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
-    rev = "v${version}";
-    sha256 = "0n21y37d8khgfk9965mrhnh6y5ag7w0s6as1fmf76yx6vajvajsn";
+    rev = "${version}";
+    sha256 = "1iisy73pi4xx3vmqvy6whdzb566jqyjx4pdyx0g35qjj8giflpc8";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";

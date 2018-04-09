@@ -26,6 +26,8 @@ pythonPackages.buildPythonApplication {
   doCheck = false;
 
   preInstall = ''
+    substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
+  
     # see https://github.com/NixOS/nixpkgs/issues/4968
     ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
   '';

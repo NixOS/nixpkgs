@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, intltool, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
-, poppler, ghostscriptX, djvulibre, libspectre, libsecret, wrapGAppsHook
+, poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
 , librsvg, gobjectIntrospection, yelp-tools
 , recentListSize ? null # 5 is not enough, allow passing a different number
 , supportXPS ? false    # Open XML Paper Specification via libgxps
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 pango atk gdk_pixbuf libxml2
     gnome3.gsettings-desktop-schemas
-    poppler ghostscriptX djvulibre libspectre
+    poppler ghostscriptX djvulibre libspectre libarchive
     libsecret librsvg gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
 

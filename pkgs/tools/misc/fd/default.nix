@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "6.3.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1q666k7rssjd2cbkm8bm2gsn5shlkh756qpam53kibi5ahrwa7dc";
+    sha256 = "0qykzkwrj4w3i5h1a328kadd7fgd91w0z2n4xr6i3csyaiwwgd1x";
   };
 
-  cargoSha256 = "1dikix9d46f0ydi81ray2vdvsy6y326w8ql6c89zx0p9cjm8m83r";
+  cargoSha256 = "1qicgfaqzjm7sjzgxkci6bg495n227pyicj4ycds5z6mfy15hi4q";
 
   preFixup = ''
     mkdir -p "$out/man/man1"

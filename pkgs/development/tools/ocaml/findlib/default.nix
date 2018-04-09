@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4, ncurses, ocaml, writeText}:
+{ stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
   name = "ocaml-findlib-${version}";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [m4 ncurses ocaml];
 
-  patches = [ ./ldconf.patch ./install_topfind.patch ];
+  patches = [ ./ldconf.patch ./install_topfind.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/1f29c5ef8eccd373e5ff2169a30bfd95a9ae6050/packages/ocamlfind/ocamlfind.1.7.3-1/files/threads.patch";
+      sha256 = "0cqgpjqpmfbr0ph3jr25gw8hgckj4qlfwmir6vkgi5hvn2qnjpx3";
+    })
+  ];
 
   dontAddPrefix=true;
 
@@ -33,6 +38,9 @@ stdenv.mkDerivation rec {
     addOCamlPath () {
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib"; then
             export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
+        fi
+        if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"; then
+            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stubslibs"
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
         if test -n "$createFindlibDestdir"; then

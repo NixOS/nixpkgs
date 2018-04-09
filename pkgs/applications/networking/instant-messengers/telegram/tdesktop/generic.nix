@@ -1,7 +1,7 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
 { mkDerivation, lib, fetchgit, fetchsvn
-, pkgconfig, pythonPackages, cmake, makeWrapper
+, pkgconfig, pythonPackages, cmake, wrapGAppsHook
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 }:
@@ -37,7 +37,10 @@ mkDerivation rec {
       --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
   '';
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake makeWrapper ];
+  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook ];
+
+  # We want to run wrapProgram manually (with additional parameters)
+  dontWrapGApps = true;
 
   buildInputs = [
     qtbase qtimageformats gtk3 libappindicator-gtk3
@@ -113,11 +116,14 @@ mkDerivation rec {
     for icon_size in 16 32 48 64 128 256 512; do
       install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
     done
+  '';
 
+  postFixup = ''
     # This is necessary to run Telegram in a pure environment.
+    # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/telegram-desktop \
+      "''${gappsWrapperArgs[@]}" \
       --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}" \
-      --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","

@@ -3,7 +3,7 @@
 , glib, gtk, pango, atk, gnome-doc-utils, intltool, GConf, libglade, libgnome, libgnomeui, libgnomekbd
 , librsvg, gnome_menus, gnome-desktop, gnome_panel, metacity, gnome-settings-daemon
 , libbonobo, libbonoboui, libgnomecanvas, libart_lgpl, gnome_vfs, ORBit2
-, libSM }:
+, libSM, docbook_xml_dtd_412 }:
 
 stdenv.mkDerivation {
   name = "gnome-control-center-2.32.1";
@@ -15,9 +15,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus-glib libxml2Python libxslt libxklavier popt which python shared-mime-info desktop-file-utils
-                  gtk gnome-doc-utils intltool GConf libglade libgnomekbd libunique libtool bzip2 
+                  gtk gnome-doc-utils intltool GConf libglade libgnomekbd libunique libtool bzip2
                   libgnomeui librsvg gnome_menus gnome-desktop gnome_panel metacity gnome-settings-daemon
-                  libSM
+                  libSM docbook_xml_dtd_412
   ];
   configureFlags = "--disable-scrollkeeper";
 }
