@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, asciidoc-full, makeWrapper }:
+, utillinux, asciidoc-full, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
       --replace "/bin/date" "${coreutils}/bin/date" \
       --replace "/bin/echo" "${coreutils}/bin/echo" \
       --replace '$btrbk' 'btrbk'
+
+    # Fix SSH filter script
+    sed -i '/^export PATH/d' ssh_filter_btrbk.sh
+    substituteInPlace ssh_filter_btrbk.sh --replace logger ${utillinux}/bin/logger
   '';
 
   preFixup = ''
