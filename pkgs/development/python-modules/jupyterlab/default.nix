@@ -15,6 +15,10 @@ buildPythonPackage rec {
     notebook
   ];
 
+  makeWrapperArgs = [
+    "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
+  ];
+
   # Depends on npm
   doCheck = false;
 
