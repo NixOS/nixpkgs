@@ -41,6 +41,7 @@
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
+  ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
