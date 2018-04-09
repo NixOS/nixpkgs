@@ -28,9 +28,6 @@
 
 , zeroconfSupport ? false
 
-, # Whether to build only the library.
-  libOnly ? false
-
 , CoreServices, AudioUnit, Cocoa
 }:
 
@@ -63,7 +60,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ [ libasyncns webrtc-audio-processing ]
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
+    ++ lib.optionals x11Support [ xorg.libxcb xorg.libX11 xorg.libSM xorg.libICE xorg.libXtst xorg.libXi ]
     ++ lib.optional useSystemd systemd
     ++ lib.optionals stdenv.isLinux [ alsaLib udev ]
     ++ lib.optional airtunesSupport openssl
@@ -73,8 +70,32 @@ stdenv.mkDerivation rec {
     ++ lib.optional zeroconfSupport  avahi
     ;
 
+  configureFlags =
+    [ "--disable-solaris"
+      "--disable-jack"
+      "--disable-oss-output"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-access-group=audio"
+    ]
+    ++ lib.optional (!ossWrapper) "--disable-oss-wrapper"
+    ++ lib.optional (jackaudioSupport) "--enable-jack"
+    ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
+    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${daemon}/lib/systemd/user";
+
+
   preConfigure = ''
-    # Move the udev rules under $(prefix).
+    # We need "expanded" $daemon here, otherwise variable reference falls to .pc files 
+    # FIXME: return all back to configureFlags, when placeholders would be landed.
+    configureFlagsArray+=(
+      "--with-bash-completion-dir=$bin/share/bash-completions/completions"
+      "--with-zsh-completion-dir=$bin/share/zsh/site-functions"
+      "--with-pulsedsp-location=$bin/lib/pulseaudio"
+      "--with-udev-rules-dir=$daemon/lib/udev/rules.d"
+      "--with-module-dir=$daemon/lib/pulseaudio"
+      "--libexecdir=$daemon/libexec"
+      "--datadir=$daemon/share"
+    )
 
     # don't install proximity-helper as root and setuid
     sed -i "src/Makefile.in" \
@@ -90,24 +111,6 @@ stdenv.mkDerivation rec {
     intltoolize --automake --copy --force
 
   '';
-
-  configureFlags =
-    [ "--disable-solaris"
-      "--disable-jack"
-      "--disable-oss-output"
-    ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
-    [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-module-dir=\${daemon}/lib/pulseaudio"
-      "--with-access-group=audio"
-      "--with-bash-completion-dir=\${bin}/share/bash-completions/completions"
-      "--with-zsh-completion-dir=\${bin}/share/zsh/site-functions"
-      "--with-udev-rules-dir=\${daemon}/lib/udev/rules.d"
-      "--with-pulsedsp-location=\${bin}/lib/pulseaudio"
-    ]
-    ++ lib.optional (jackaudioSupport) "--enable-jack"
-    ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${daemon}/lib/systemd/user";
 
   enableParallelBuilding = true;
 
