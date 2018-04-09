@@ -114,6 +114,13 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     <literal>dockerTools.pullImage</literal> relies on image digest
+     instead of image tag to download the image. The
+     <literal>sha256</literal> of a pulled image has to be updated.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <literal>lib.attrNamesToStr</literal> has been deprecated. Use more
      specific concatenation (<literal>lib.concat(Map)StringsSep</literal>)
      instead.
