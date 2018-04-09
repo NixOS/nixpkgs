@@ -7,6 +7,7 @@ let
   # now it's staying here.
   versions = {
     "osx-10.11.6" = {
+      SmartCardServices = "55111";
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
@@ -192,6 +193,8 @@ let
   adv_cmds = applePackage "adv_cmds" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
   packages = {
+    SmartCardServices = applePackage "SmartCardServices" "osx-10.11.6" "1qqjlbi6j37mw9p3qpfnwf14xh9ff8h5786bmvzwc4kblfglabkm" {};
+
     inherit (adv_cmds) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
