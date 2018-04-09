@@ -20617,6 +20617,8 @@ with pkgs;
 
   nix-index = callPackage ../tools/package-management/nix-index { };
 
+  nix-pin = callPackage ../tools/package-management/nix-pin { };
+
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs
