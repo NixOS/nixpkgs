@@ -2615,6 +2615,11 @@
     github = "ninjatrappeur";
     name = "Félix Baylac-Jacqué";
   };
+  nioncode = {
+    email = "nioncode+github@gmail.com";
+    github = "nioncode";
+    name = "Nicolas Schneider";
+  };
   nipav = {
     email = "niko.pavlinek@gmail.com";
     github = "nipav";

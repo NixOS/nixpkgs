@@ -16967,6 +16967,8 @@ with pkgs;
 
   ostinato = callPackage ../applications/networking/ostinato { };
 
+  p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api { };
   panamax_ui = callPackage ../applications/networking/cluster/panamax/ui { };
 
