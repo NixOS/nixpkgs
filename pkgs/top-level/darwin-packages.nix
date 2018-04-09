@@ -2,19 +2,6 @@
 
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-
-
-  codesign = drv: runCommand "codesign" {
-    nativeBuildInputs = [apple-source-releases.security_systemkeychain];
-  } ''
-    mkdir -p $out/bin
-    for bin in ${drv}/bin/*; do
-      cp $bin $out/bin
-    done
-    for bin in $out/bin/*; do
-      codesign -s ${config.codesign_identity or "nixpkgs"} $bin
-    done
-  '';
 in
 
 (apple-source-releases // {
@@ -82,8 +69,34 @@ in
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
-  # sign some things that need signatures to work
-  gdb = codesign pkgs.gdb;
-  lldb = codesign pkgs.lldb;
-  dtrace = codesign apple-source-releases.dtrace-xcode;
+  codesign = drv: if builtins.hasAttr "keychain" config then
+    (runCommand "codesign" {
+      nativeBuildInputs = [
+        apple-source-releases.security_systemkeychain
+        darwin.cctools
+        darwin.security_tool
+      ];
+    } ''
+    IDENTITY=${config.keychain.identity}
+    PASS=${config.keychain.password}
+    export HOME=$PWD
+    mkdir -p $PWD/Library/Keychains
+    cp ${config.keychain.file} $PWD/Library/Keychains
+    KEYCHAIN=$(basename $PWD/Library/Keychains/*)
+    security unlock-keychain -p $PASS $KEYCHAIN
+    security set-keychain-settings -u $PWD/Library/Keychains/$KEYCHAIN
+    security find-identity -s codesigning $KEYCHAIN
+
+    mkdir -p $out/bin
+    for bin in ${drv}/bin/*; do
+      cp $bin $out/bin
+    done
+    for bin in $out/bin/*; do
+      codesign --sign $IDENTITY \
+               --keychain $KEYCHAIN \
+               $bin
+    done
+
+    security lock-keychain $KEYCHAIN
+  '') else drv;
 })
