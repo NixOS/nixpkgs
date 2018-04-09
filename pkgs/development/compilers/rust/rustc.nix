@@ -102,8 +102,10 @@ stdenv.mkDerivation {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  ''
-  + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isAarch64 ''
+    # https://github.com/rust-lang/rust/issues/49807
+    rm -vr src/test/debuginfo/by-value-self-argument-in-trait-impl.rs
+  '' + optionalString stdenv.isDarwin ''
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
