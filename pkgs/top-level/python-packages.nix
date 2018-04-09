@@ -1646,6 +1646,8 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
+  envs = callPackage ../development/python-modules/envs { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
