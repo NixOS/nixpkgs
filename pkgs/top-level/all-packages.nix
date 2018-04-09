@@ -16050,8 +16050,7 @@ with pkgs;
   };
 
   guake = callPackage ../applications/misc/guake {
-    gconf = gnome2.GConf;
-    vte = gnome2.vte.override { pythonSupport = true; };
+    inherit (gnome3) vte;
   };
 
   guitone = callPackage ../applications/version-management/guitone {
