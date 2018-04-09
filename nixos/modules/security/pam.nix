@@ -386,7 +386,7 @@ let
           ${optionalString (cfg.enableGnomeKeyring)
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
-               "session optional ${pkgs.lxcfs}/lib/security/pam_cgfs.so -c freezer,memory,name=systemd,unified,cpuset"}
+               "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
         '');
     };
 
