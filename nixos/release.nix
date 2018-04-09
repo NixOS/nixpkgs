@@ -17,11 +17,11 @@ let
   } // args);
 
   # Note: only supportedSystems are considered.
-  callTestOnMatchingSystems = systems: fn: args:
-    forMatchingSystems
+  callTestOnTheseSystems = systems: fn: args:
+    forTheseSystems
       (intersectLists supportedSystems systems)
       (system: hydraJob (importTest fn args system));
-  callTest = callTestOnMatchingSystems supportedSystems;
+  callTest = callTestOnTheseSystems supportedSystems;
 
   callSubTests = callSubTestsOnMatchingSystems supportedSystems;
   callSubTestsOnMatchingSystems = systems: fn: args: let
@@ -166,7 +166,7 @@ in rec {
     inherit system;
   });
 
-  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+  sd_image = forTheseSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
     inherit system;
   });
@@ -248,9 +248,9 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
   tests.buildbot = callTest tests/buildbot.nix {};
-  tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
-  tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
-  tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
+  tests.cadvisor = callTestOnTheseSystems ["x86_64-linux"] tests/cadvisor.nix {};
+  tests.ceph = callTestOnTheseSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.chromium = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
@@ -270,10 +270,10 @@ in rec {
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
-  tests.etcd = callTestOnMatchingSystems ["x86_64-linux"] tests/etcd.nix {};
-  tests.ec2-nixops = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
-  tests.ec2-config = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
-  tests.elk = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/elk.nix {};
+  tests.etcd = callTestOnTheseSystems ["x86_64-linux"] tests/etcd.nix {};
+  tests.ec2-nixops = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
+  tests.ec2-config = (callSubTestsOnTheseSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
+  tests.elk = callSubTestsOnTheseSystems ["x86_64-linux"] tests/elk.nix {};
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
@@ -312,10 +312,7 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
-  ## kubernetes.e2e should eventually replace kubernetes.rbac when it works
-  #tests.kubernetes.e2e = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/e2e.nix {};
-  tests.kubernetes.rbac = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/rbac.nix {};
+  tests.kubernetes = callSubTestsOnTheseSystems ["x86_64-linux"] tests/kubernetes/default.nix {};
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};

@@ -28,6 +28,28 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("MAN5DIR=$out/share/man/man5")
   '';
 
+  # Creation of the system-config-selinux directory is broken
+  preInstall = ''
+    mkdir -p $out/share/system-config-selinux
+  '';
+
+  # Fix the python scripts to include paths to libraries
+  # NOTE: We are not using wrapPythonPrograms or makeWrapper as these scripts
+  # purge the environment as a security measure
+  postInstall = ''
+    grep -r '#!.*python' $out/bin | awk -F: '{print $1}' | xargs sed -i "1a \
+    import sys; \
+    sys.path.append('$(toPythonPath "$out")'); \
+    ${stdenv.lib.flip stdenv.lib.concatMapStrings pythonPath (lib: ''
+      sys.path.append('$(toPythonPath "${lib}")'); \
+    '')}"
+  '';
+
+  NIX_CFLAGS_COMPILE = [
+    "-fstack-protector-all"
+    "-Wno-error=implicit-fallthrough" "-Wno-error=alloc-size-larger-than=" # gcc7
+  ];
+
   meta = with stdenv.lib; {
     description = "SELinux policy core utilities";
     license = licenses.gpl2;

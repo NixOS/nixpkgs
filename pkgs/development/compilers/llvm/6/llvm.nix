@@ -16,7 +16,6 @@
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
-, enableWasm ? true
 , darwin
 }:
 
@@ -114,9 +113,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableWasm
-   "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
-  ;
+  ];
 
   postBuild = ''
     rm -fR $out

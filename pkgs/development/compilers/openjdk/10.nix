@@ -4,7 +4,7 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
 let

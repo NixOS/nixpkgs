@@ -50,6 +50,8 @@ in stdenv.mkDerivation rec {
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy
   ] ++ optionals withPolkit [ polkit acl usbutils ] ;
 
+  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala ];
+
   nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "share/polkit-1/actions";

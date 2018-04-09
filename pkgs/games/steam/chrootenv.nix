@@ -51,12 +51,12 @@ in buildFHSUserEnv rec {
 
   multiPkgs = pkgs: with pkgs; [
     # These are required by steam with proper errors
-    xorg.libXcomposite
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXext
-    xorg.libX11
-    xorg.libXfixes
+    xlibs.libXcomposite
+    xlibs.libXtst
+    xlibs.libXrandr
+    xlibs.libXext
+    xlibs.libX11
+    xlibs.libXfixes
 
     # Not formally in runtime but needed by some games
     gst_all_1.gstreamer

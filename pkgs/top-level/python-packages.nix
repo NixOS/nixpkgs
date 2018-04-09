@@ -4761,8 +4761,7 @@ in {
       description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.linux; # can only test on linux
+      maintainers = with maintainers; [ matthiasbeyer ];
     };
 
   };
@@ -8786,7 +8785,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
-
+ 
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -12537,7 +12536,40 @@ in {
 
   pycups = callPackage ../development/python-modules/pycups { };
 
-  pycurl = callPackage ../development/python-modules/pycurl { };
+  pycurl = buildPythonPackage (rec {
+    pname = "pycurl";
+    version = "7.43.0.1";
+    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1ali1gjs9iliwjra7w0y5hwg79a2fd0f4ydvv6k27sgxpbr1n8s3";
+    };
+
+    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
+
+    checkInputs = with self; [ bottle pytest nose flaky ];
+
+    checkPhase = ''
+      py.test -k "not ssh_key_cb_test \
+                  and not test_libcurl_ssl_gnutls \
+                  and not test_libcurl_ssl_nss \
+                  and not test_libcurl_ssl_openssl \
+                  and not test_libcurl_ssl_unrecognized \
+                  and not test_request_with_verifypeer \
+                  and not test_ssl_in_static_libs" tests
+    '';
+
+    preConfigure = ''
+      substituteInPlace setup.py --replace '--static-libs' '--libs'
+      export PYCURL_SSL_LIBRARY=openssl
+    '';
+
+    meta = {
+      homepage = http://pycurl.sourceforge.net/;
+      description = "Python wrapper for libcurl";
+    };
+  });
 
   pycurl2 = buildPythonPackage (rec {
     name = "pycurl2-7.20.0";

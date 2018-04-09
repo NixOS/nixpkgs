@@ -630,10 +630,13 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  }));
+  })).override {
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
+  };
 
-  # Need newer versions of their dependencies than the ones we have in LTS-11.x.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
+  # Need newer versions of their dependencies than the ones we have in LTS-10.x.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_27_0; hackage-db = self.hackage-db_2_0_1; });
+  hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_2; });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -866,6 +869,19 @@ self: super: {
   # https://github.com/fpco/stackage/issues/3126
   stack = doJailbreak super.stack;
 
+  # Hoogle needs newer versions than lts-10 provides. lambdabot-haskell-plugins
+  # depends on Hoogle and therefore needs to use the same version.
+  hoogle = super.hoogle.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
+    http-conduit = self.http-conduit_2_3_0;
+  };
+  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.override {
+    haskell-src-exts-simple = self.haskell-src-exts-simple_1_20_0_0;
+  };
+  haskell-src-exts-simple_1_20_0_0 = super.haskell-src-exts-simple_1_20_0_0.override {
+    haskell-src-exts = self.haskell-src-exts_1_20_2;
+  };
+
   # These packages depend on each other, forming an infinite loop.
   scalendar = markBroken (super.scalendar.override { SCalendar = null; });
   SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
@@ -944,6 +960,9 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
+  # Use latest version to support newer QuickCheck and base libraries.
+  ChasingBottoms = self.ChasingBottoms_1_3_1_4;
+
   # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
   multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
 
@@ -1001,27 +1020,17 @@ self: super: {
   # Needs older hlint
   hpio = dontCheck super.hpio;
 
-  # https://github.com/fpco/inline-c/issues/72
-  inline-c = dontCheck super.inline-c;
+  # Needs turtle >=1.5.0, which we use by default in lts-10.x.
+  changelogged = super.changelogged.override { turtle = self.turtle_1_5_4; };
 
-  # https://github.com/GaloisInc/pure-zlib/issues/6
-  pure-zlib = doJailbreak super.pure-zlib;
+  # Avoid GHC compiler crash a la https://ghc.haskell.org/trac/ghc/ticket/5361.
+  SHA = appendPatch super.SHA (pkgs.fetchpatch {
+    url = https://github.com/GaloisInc/SHA/commit/c258350e953c3de2f98c5625ac3857f1a6863afc.patch;
+    sha256 = "1485bbjca1wqbh3c9yqj85kmq8j7zxq79y5isxypy3r6wjpr3g6b";
+  });
 
   # https://github.com/strake/lenz-template.hs/issues/1
   lenz-template = doJailbreak super.lenz-template;
-
-  # https://github.com/haskell-hvr/resolv/issues/1
-  resolv = dontCheck super.resolv;
-
-  # spdx 0.2.2.0 needs older tasty
-  # was fixed in spdx master (4288df6e4b7840eb94d825dcd446b42fef25ef56)
-  spdx = dontCheck super.spdx;
-
-  # The test suite does not know how to find the 'alex' binary.
-  alex = overrideCabal super.alex (drv: {
-    testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
-    preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
-  });
 
 }
 

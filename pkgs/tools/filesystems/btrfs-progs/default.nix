@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
-  patchPhase = "sed -i s/-O1/-O2/ configure";
+  prePatch = "sed -i s/-O1/-O2/ configure";
+
+  patches = [ ./e2fsprogs.patch ];
 
   postInstall = ''
     install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs

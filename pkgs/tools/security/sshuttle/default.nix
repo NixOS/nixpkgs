@@ -30,6 +30,14 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ mock pytest pytestrunner ];
 
+  # Tests only run with Python 3. Server-side Python 2 still works if client
+  # uses Python 3, so it should be fine.
+  doCheck = true;
+
+  checkPhase = ''
+    py.test -k "${stdenv.lib.optionalString stdenv.isDarwin "not test_parse_subnetport_ip6"}"
+  '';
+
   postInstall = let
     mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
   in ''
