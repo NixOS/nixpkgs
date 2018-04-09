@@ -3164,6 +3164,8 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/kbfs { };
 
+  keybase-bin = callPackage ../tools/security/keybase-bin { };
+
   keybase-gui = callPackage ../tools/security/keybase-gui { };
 
   keychain = callPackage ../tools/misc/keychain { };
