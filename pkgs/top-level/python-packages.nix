@@ -6219,16 +6219,16 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.7";
+    version = "3.8";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "1khrvxjjcm1bsswgrdgvyrdrimxx92yhql4gmji6a0kpp59dp541";
+      sha256 = "0454g6zmhgpaag5cj16jarp9bm6h0cf9r3pbkjq2j9wa7rynp3l4";
     };
     doCheck = false;
-    propagatedBuildInputs = with self; [ requests ];
+    propagatedBuildInputs = with self; [ pytz requests tzlocal ];
     buildInputs = with pkgs; [ file ];
     prePatch = ''
       sed -i -e "s|'file|'${pkgs.file}/bin/file|" py3status/parse_config.py
