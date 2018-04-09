@@ -1,12 +1,17 @@
 { stdenv, python3Packages, pew }:
-with python3Packages; buildPythonApplication rec {
-    name = "${pname}-${version}";
+
+with python3Packages;
+let
+  version = "11.9.0";
+
+  unwrapped = buildPythonApplication rec {
+    name = "${pname}-unwrapped-${version}";
     pname = "pipenv";
-    version = "10.1.2";
+    inherit version;
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "ce6dbb305fb1f262dba0dcb50c06591e4d146f7bfe079cc9f0ce3f89c7516ae9";
+      sha256 = "0s291ayiszqg4ia0fiya2g3ra6m6bf7mrds1c4dscz71azxm4g3v";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -21,4 +26,19 @@ with python3Packages; buildPythonApplication rec {
       platforms = platforms.all;
       maintainers = with maintainers; [ berdario ];
     };
-  }
+  };
+in stdenv.mkDerivation {
+  name = "pipenv-${version}";
+  unpackPhase = ":";
+  # avoid propagating python packages to avoid polluting nix-shell environments.
+  # Python version might be different. Python packages might be unwanted.
+  installPhase = ''
+    runHook preInstall
+    mkdir $out
+    ln -s ${unwrapped}/bin $out/bin
+    runHook postInstall
+  '';
+  passthru = {
+    inherit unwrapped;
+  };
+}
