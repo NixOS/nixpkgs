@@ -17,8 +17,8 @@ buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "daa84";
     repo = "neovim-gtk";
-    rev = "30b7fc87e1e92ac2bb102fd6af6a960fc75017ac";
-    sha256 = "14yy611b6pgy3qay0g1nnwss66xckz0ljw7ixpsqbwi0imjvda27";
+    rev = "74d7417564012ff9a98df179470cedd5677b1018";
+    sha256 = "0x031vjm2a9kr1cn2gsfd33bp7y43n4yznprdqb4ligm22ddlwjz";
   };
 
   propagatedBuildInputs= [
