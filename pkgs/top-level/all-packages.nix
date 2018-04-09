@@ -111,6 +111,9 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  codesign = drv: if stdenv.isDarwin then darwin.codesign drv
+                  else drv;
+
   castxml = callPackage ../development/tools/castxml { };
 
   cmark = callPackage ../development/libraries/cmark { };
@@ -6551,10 +6554,10 @@ with pkgs;
   lld_5 = llvmPackages_5.lld;
   lld_6 = llvmPackages_6.lld;
 
-  lldb = llvmPackages.lldb;
-  lldb_4 = llvmPackages_4.lldb;
-  lldb_5 = llvmPackages_5.lldb;
-  lldb_6 = llvmPackages_6.lldb;
+  lldb = codesign llvmPackages.lldb;
+  lldb_4 = codesign llvmPackages_4.lldb;
+  lldb_5 = codesign llvmPackages_5.lldb;
+  lldb_6 = codesign llvmPackages_6.lldb;
 
   llvm = llvmPackages.llvm;
 
@@ -8291,11 +8294,11 @@ with pkgs;
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
-  gdb = callPackage ../development/tools/misc/gdb {
+  gdb = codesign (callPackage ../development/tools/misc/gdb {
     guile = null;
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
-  };
+  });
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
