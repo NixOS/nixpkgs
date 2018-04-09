@@ -35,6 +35,10 @@ in
       then "ERL_COMPILER_OPTIONS=debug_info"
       else "";
 
+    preConfigure = ''
+      patchShebangs bin/elixir
+    '';
+
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
       rm -v rebar
