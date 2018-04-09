@@ -5347,6 +5347,8 @@ with pkgs;
 
   vobsub2srt = callPackage ../tools/cd-dvd/vobsub2srt { };
 
+  volume_key = callPackage ../development/libraries/volume-key { };
+
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
@@ -9606,6 +9608,8 @@ with pkgs;
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
+  libblockdev = callPackage ../development/libraries/libblockdev { };
+
   libblocksruntime = callPackage ../development/libraries/libblocksruntime { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
@@ -9615,6 +9619,8 @@ with pkgs;
   libbson = callPackage ../development/libraries/libbson { };
 
   libburn = callPackage ../development/libraries/libburn { };
+
+  libbytesize= callPackage ../development/libraries/libbytesize{ };
 
   libcaca = callPackage ../development/libraries/libcaca {
     inherit (xorg) libX11 libXext;
