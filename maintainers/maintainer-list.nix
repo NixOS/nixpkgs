@@ -1196,6 +1196,11 @@
     github = "ElvishJerricco";
     name = "Will Fancher";
   };
+  endgame = {
+    email = "jack@jackkelly.name";
+    github = "endgame";
+    name = "Jack Kelly";
+  };
   enzime = {
     email = "enzime@users.noreply.github.com";
     github = "enzime";
@@ -2495,6 +2500,11 @@
     github = "mschristiansen";
     name = "Mikkel Christiansen";
   };
+  msiedlarek = {
+    email = "mikolaj@siedlarek.pl";
+    github = "msiedlarek";
+    name = "Mikołaj Siedlarek";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
@@ -2643,6 +2653,11 @@
     email = "notrupertthorne@gmail.com";
     github = "nthorne";
     name = "Niklas Thörne";
+  };
+  nyanloutre = {
+    email = "paul@nyanlout.re";
+    github = "nyanloutre";
+    name = "Paul Trehiou";
   };
   nyarly = {
     email = "nyarly@gmail.com";
@@ -3257,6 +3272,11 @@
     email = "tlo@sengaya.de";
     github = "sengaya";
     name = "Thilo Uttendorfer";
+  };
+  sephalon = {
+    email = "me@sephalon.net";
+    github = "sephalon";
+    name = "Stefan Wiehler";
   };
   sepi = {
     email = "raffael@mancini.lu";

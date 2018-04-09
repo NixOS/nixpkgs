@@ -76,6 +76,8 @@ let
 
     enableParallelBuilding = true;
 
+    passthru.unfree = unfree;
+
     meta = with stdenv.lib; {
       homepage = http://www.clementine-player.org;
       description = "A multiplatform music player";
@@ -85,8 +87,8 @@ let
     };
   };
 
-  # Spotify blob for Clementine
-  blob = stdenv.mkDerivation {
+  # Unfree Spotify blob for Clementine
+  unfree = stdenv.mkDerivation {
     name = "clementine-blob-${version}";
     # Use the same patches and sources as Clementine
     inherit src nativeBuildInputs postPatch;
@@ -95,7 +97,7 @@ let
       ./clementine-spotify-blob.patch
     ];
 
-    buildInputs = buildInputs ++ [ libspotify ];
+    buildInputs = buildInputs ++ [ libspotify makeWrapper gst_plugins ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob
@@ -104,6 +106,15 @@ let
       mkdir -p $out/libexec/clementine
       mv $out/bin/clementine-spotifyblob $out/libexec/clementine
       rmdir $out/bin
+
+      makeWrapper ${free}/bin/clementine $out/bin/clementine \
+        --set CLEMENTINE_SPOTIFYBLOB $out/libexec/clementine \
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+
+      mkdir -p $out/share
+      for dir in applications icons kde4; do
+        ln -s "$free/share/$dir" "$out/share/$dir"
+      done
     '';
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
@@ -116,34 +127,4 @@ let
     };
   };
 
-in
-
-with stdenv.lib;
-
-runCommand "clementine-${version}"
-{
-  inherit blob free;
-  buildInputs = [ makeWrapper ] ++ gst_plugins; # for the setup-hooks
-  dontPatchELF = true;
-  dontStrip = true;
-  meta = {
-    description = "A multiplatform music player"
-      + " (" + (optionalString withSpotify "with Spotify, ")
-      + "with gstreamer plugins: "
-      + concatStrings (intersperse ", " (map (x: x.name) gst_plugins))
-      + ")";
-    license = licenses.gpl3Plus;
-    inherit (free.meta) homepage platforms maintainers;
-  };
-}
-''
-  mkdir -p $out/bin
-  makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
-      ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-
-  mkdir -p $out/share
-  for dir in applications icons kde4; do
-      ln -s "$free/share/$dir" "$out/share/$dir"
-  done
-''
+in free

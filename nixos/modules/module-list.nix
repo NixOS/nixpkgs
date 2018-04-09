@@ -86,6 +86,7 @@
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
+  ./programs/iftop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -159,6 +160,7 @@
   ./services/audio/ympd.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
+  ./services/backup/duplicati.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix

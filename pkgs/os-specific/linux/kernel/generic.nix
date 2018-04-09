@@ -77,6 +77,7 @@ let
     generateConfig = ./generate-config.pl;
 
     kernelConfig = kernelConfigFun config;
+    passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl ]
@@ -104,7 +105,7 @@ let
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > "$buildRoot/kernel-config"
+      ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
       DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';

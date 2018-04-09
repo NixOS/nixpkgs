@@ -26,20 +26,16 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.26.1";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "1rm15qj743k376skjxyyfmzwajx3rb8z2inzc4309kl98jfw3cw0";
+    sha256 = "00hcjs5hbayamckcsfd92s7f3da9jv5nm5ygvwinyc7ml7gn66i3";
   };
 
   patches = [
-    (fetchpatch { # Update pynacl dependency
-      url = "https://github.com/matrix-org/synapse/pull/2888.patch";
-      sha256 = "0gr9vwv02ps17d6pzassp9xmj1qbdgxwn1z4kckx4x964zzhyn4f";
-    })
     ./matrix-synapse.patch
   ];
 

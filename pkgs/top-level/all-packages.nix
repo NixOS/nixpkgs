@@ -1053,6 +1053,8 @@ with pkgs;
 
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
 
+  crip = callPackage ../applications/audio/crip { };
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
@@ -1603,7 +1605,7 @@ with pkgs;
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
 
-  clementineFree = clementine.free;
+  clementineUnfree = clementine.unfree;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -2034,6 +2036,8 @@ with pkgs;
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
+
+  duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
     gnupg = gnupg1;
@@ -4235,6 +4239,8 @@ with pkgs;
   };
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
+
+  pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
 
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
@@ -13100,6 +13106,8 @@ with pkgs;
 
   gpm-ncurses = gpm.override { inherit ncurses; };
 
+  gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
+
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
   };
@@ -14446,6 +14454,8 @@ with pkgs;
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
+  scheherazade = callPackage ../data/fonts/scheherazade { };
+
   signwriting = callPackage ../data/fonts/signwriting { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
@@ -14796,6 +14806,8 @@ with pkgs;
   backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
 
   backintime = backintime-qt4;
+
+  balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
@@ -16565,6 +16577,11 @@ with pkgs;
     flavour = "git";
   };
 
+  luakit = callPackage ../applications/networking/browsers/luakit {
+    inherit (lua51Packages) luafilesystem;
+    lua5 = lua5_1;
+  };
+
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail {
@@ -17857,7 +17874,7 @@ with pkgs;
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
-  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
+  tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
   tailor = callPackage ../applications/version-management/tailor {};
 
@@ -17966,6 +17983,8 @@ with pkgs;
   };
 
   tnef = callPackage ../applications/misc/tnef { };
+
+  todiff = callPackage ../applications/misc/todiff { };
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
@@ -18897,6 +18916,8 @@ with pkgs;
   egoboo = callPackage ../games/egoboo { };
 
   endless-sky = callPackage ../games/endless-sky { };
+
+  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
 
   eternity = callPackage ../games/eternity-engine { };
 
@@ -20273,6 +20294,8 @@ with pkgs;
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
+  click = callPackage ../applications/networking/cluster/click { };
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
@@ -20525,6 +20548,8 @@ with pkgs;
   nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
 
   nix-index = callPackage ../tools/package-management/nix-index { };
+
+  nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr

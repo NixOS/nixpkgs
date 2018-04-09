@@ -191,7 +191,7 @@ let
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed"
+                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
@@ -212,7 +212,7 @@ let
                      if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "failed"
+                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''

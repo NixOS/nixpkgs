@@ -1,7 +1,9 @@
 # General list operations.
 { lib }:
 with lib.trivial;
-
+let
+  inherit (lib.strings) toInt;
+in
 rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
@@ -408,6 +410,25 @@ rec {
               if rel == 0
               then compareLists cmp (tail a) (tail b)
               else rel;
+
+  /* Sort list using "Natural sorting".
+     Numeric portions of strings are sorted in numeric order.
+
+     Example:
+       naturalSort ["disk11" "disk8" "disk100" "disk9"]
+       => ["disk8" "disk9" "disk11" "disk100"]
+       naturalSort ["10.46.133.149" "10.5.16.62" "10.54.16.25"]
+       => ["10.5.16.62" "10.46.133.149" "10.54.16.25"]
+       naturalSort ["v0.2" "v0.15" "v0.0.9"]
+       => [ "v0.0.9" "v0.2" "v0.15" ]
+  */
+  naturalSort = lst:
+    let
+      vectorise = s: map (x: if isList x then toInt (head x) else x) (builtins.split "(0|[1-9][0-9]*)" s);
+      prepared = map (x: [ (vectorise x) x ]) lst; # remember vectorised version for O(n) regex splits
+      less = a: b: (compareLists compare (head a) (head b)) < 0;
+    in
+      map (x: elemAt x 1) (sort less prepared);
 
   /* Return the first (at most) N elements of a list.
 
