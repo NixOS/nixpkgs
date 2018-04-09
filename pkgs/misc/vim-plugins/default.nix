@@ -59,6 +59,7 @@ rec {
   coffeeScript        = coffee-script; # backwards compat, added 2014-10-18
   Solarized           = vim-colors-solarized;
   solarized           = vim-colors-solarized;
+  colors-solarized    = vim-colors-solarized;
   caw                 = caw-vim;
   colorsamplerpack    = Colour_Sampler_Pack;
   Colour_Sampler_Pack = Colour-Sampler-Pack;
