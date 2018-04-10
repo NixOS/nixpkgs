@@ -11480,6 +11480,8 @@ in {
 
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
 
+  progressbar231 = callPackage ../development/python-modules/progressbar231 { };
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl;
   };
