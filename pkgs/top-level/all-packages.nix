@@ -15708,6 +15708,8 @@ with pkgs;
 
   grass = callPackage ../applications/gis/grass { };
 
+  grepcidr = callPackage ../applications/search/grepcidr { };
+
   grepm = callPackage ../applications/search/grepm { };
 
   grip = callPackage ../applications/misc/grip {
