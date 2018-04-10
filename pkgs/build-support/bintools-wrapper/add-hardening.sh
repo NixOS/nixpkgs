@@ -1,4 +1,3 @@
-allHardeningFlags=(pie relro bindnow)
 hardeningFlags=()
 
 declare -A hardeningEnableMap=()
@@ -11,19 +10,14 @@ for flag in ${NIX_@infixSalt@_HARDENING_ENABLE-}; do
 done
 
 # Remove unsupported flags.
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -A hardeningDisableMap=()
-fi
 for flag in @hardening_unsupported_flags@; do
-  [[ -n ${hardeningEnableMap[$flag]} ]] || continue
-  if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    hardeningDisableMap[$flag]=1
-  fi
   unset hardeningEnableMap[$flag]
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
   # Determine which flags were effectively disabled so we can report below.
+  allHardeningFlags=(pie relro bindnow)
+  declare -A hardeningDisableMap=()
   for flag in ${allHardeningFlags[@]}; do
     if [[ -z "${hardeningEnableMap[$flag]-}" ]]; then
       hardeningDisableMap[$flag]=1
