@@ -39,8 +39,10 @@ in
         ExecStart = ''
           ${pkgs.safeeyes}/bin/safeeyes
         '';
+        Restart = "on-failure";
         RestartSec = 3;
-        Restart = "always";
+        StartLimitInterval = 350;
+        StartLimitBurst = 10;
       };
     };
 
