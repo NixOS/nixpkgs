@@ -1897,6 +1897,11 @@
     email = "info+nix@chmist.com";
     name = "karolchmist";
   };
+  kazcw = {
+    email = "kaz@lambdaverse.org";
+    github = "kazcw";
+    name = "Kaz Wesley";
+  };
   kentjames = {
     email = "jameschristopherkent@gmail.com";
     github = "kentjames";

@@ -7877,6 +7877,10 @@ with pkgs;
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
+  iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
+  iaca = iaca_3_0;
+
   icestorm = callPackage ../development/tools/icestorm { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
@@ -12701,6 +12705,8 @@ with pkgs;
   redstore = callPackage ../servers/http/redstore { };
 
   restic = callPackage ../tools/backup/restic { };
+
+  restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
 
   restya-board = callPackage ../servers/web-apps/restya-board { };
 
@@ -19956,6 +19962,7 @@ with pkgs;
   lean = callPackage ../applications/science/logic/lean {};
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
+  elan = callPackage ../applications/science/logic/elan {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {
      ocaml = ocamlPackages_4_01_0.ocaml;};
