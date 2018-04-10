@@ -24,7 +24,7 @@ let
         exit 1
       fi
 
-      ln -s "${provider}" "$out/bin/${cmd}"
+      cp "${provider}" "$out/bin/${cmd}"
     '';
 
 in rec {
