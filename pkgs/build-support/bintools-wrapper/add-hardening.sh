@@ -35,24 +35,24 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
-      case $flag in
-        pie)
-          if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
-            if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-            hardeningLDFlags+=('-pie')
-          fi
-          ;;
-        relro)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling relro >&2; fi
-          hardeningLDFlags+=('-z' 'relro')
-          ;;
-        bindnow)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling bindnow >&2; fi
-          hardeningLDFlags+=('-z' 'now')
-          ;;
-        *)
-          # Ignore unsupported. Checked in Nix that at least *some*
-          # tool supports each flag.
-          ;;
-      esac
+  case $flag in
+    pie)
+      if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
+        hardeningLDFlags+=('-pie')
+      fi
+      ;;
+    relro)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling relro >&2; fi
+      hardeningLDFlags+=('-z' 'relro')
+      ;;
+    bindnow)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling bindnow >&2; fi
+      hardeningLDFlags+=('-z' 'now')
+      ;;
+    *)
+      # Ignore unsupported. Checked in Nix that at least *some*
+      # tool supports each flag.
+      ;;
+  esac
 done

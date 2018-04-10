@@ -35,38 +35,38 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
-      case $flag in
-        fortify)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-          hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
-          ;;
-        stackprotector)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
-          hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
-          ;;
-        pie)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
-          hardeningCFlags+=('-fPIE')
-          if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
-            if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-            hardeningCFlags+=('-pie')
-          fi
-          ;;
-        pic)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
-          hardeningCFlags+=('-fPIC')
-          ;;
-        strictoverflow)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
-          hardeningCFlags+=('-fno-strict-overflow')
-          ;;
-        format)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
-          hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
-          ;;
-        *)
-          # Ignore unsupported. Checked in Nix that at least *some*
-          # tool supports each flag.
-          ;;
-      esac
+  case $flag in
+    fortify)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
+      hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+      ;;
+    stackprotector)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
+      hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+      ;;
+    pie)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
+      hardeningCFlags+=('-fPIE')
+      if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
+        hardeningCFlags+=('-pie')
+      fi
+      ;;
+    pic)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
+      hardeningCFlags+=('-fPIC')
+      ;;
+    strictoverflow)
+       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
+      hardeningCFlags+=('-fno-strict-overflow')
+      ;;
+    format)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
+      hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+      ;;
+    *)
+      # Ignore unsupported. Checked in Nix that at least *some*
+      # tool supports each flag.
+      ;;
+  esac
 done
