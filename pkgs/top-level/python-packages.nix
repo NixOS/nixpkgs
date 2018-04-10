@@ -1003,6 +1003,8 @@ in {
   binwalk = self.binwalk_fun { };
   binwalk-full = self.binwalk_fun { visualizationSupport = true; pyqtgraph = self.pyqtgraph; };
 
+  bitmath = callPackage ../development/python-modules/bitmath { };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
