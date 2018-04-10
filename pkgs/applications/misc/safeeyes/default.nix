@@ -1,4 +1,4 @@
-{ lib, python3Packages, gobjectIntrospection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng
+{ lib, python3Packages, gobjectIntrospection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng, wrapGAppsHook, gdk_pixbuf, shared-mime-info, librsvg
 }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi;
@@ -14,7 +14,16 @@ in buildPythonApplication rec {
     sha256 = "1fx6zd4hnbc7gdpac6r7smxwdl1bifaxx3mnx0wrqfvhpnwr1ybv";
   };
 
-  buildInputs = [ gtk3 gobjectIntrospection gnome3.defaultIconTheme ];
+  buildInputs = [
+    gtk3
+    gobjectIntrospection
+    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     Babel
@@ -39,14 +48,18 @@ in buildPythonApplication rec {
       safeeyes/plugins/smartpause/config.json
   '';
 
-  doCheck = false;
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
 
-  makeWrapperArgs = [
-    ''--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"''
-    ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
-    ''--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"''
-    ''--prefix XDG_DATA_DIRS : "$out/lib/${python.libPrefix}/site-packages/usr/share"''
-  ];
+      # safeeyes images
+      --prefix XDG_DATA_DIRS : "$out/lib/${python.libPrefix}/site-packages/usr/share"
+    )
+  '';
+
+  doCheck = false; # no tests
 
   meta = {
     homepage = http://slgobinath.github.io/SafeEyes;
