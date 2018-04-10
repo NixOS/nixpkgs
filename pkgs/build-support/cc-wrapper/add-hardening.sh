@@ -34,7 +34,7 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
   fi
 fi
 
-  for flag in "${!hardeningEnableMap[@]}"; do
+for flag in "${!hardeningEnableMap[@]}"; do
       case $flag in
         fortify)
           if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
@@ -69,4 +69,4 @@ fi
           # tool supports each flag.
           ;;
       esac
-  done
+done

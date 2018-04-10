@@ -34,7 +34,7 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
   fi
 fi
 
-  for flag in "${!hardeningEnableMap[@]}"; do
+for flag in "${!hardeningEnableMap[@]}"; do
       case $flag in
         pie)
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
@@ -55,4 +55,4 @@ fi
           # tool supports each flag.
           ;;
       esac
-  done
+done
