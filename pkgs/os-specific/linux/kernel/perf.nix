@@ -47,7 +47,6 @@ stdenv.mkDerivation {
       "-Wno-error=bool-compare"
       "-Wno-error=deprecated-declarations"
       "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
-      "-DTIPDIR=\"$(out)/share/doc/perf-tip\""
     ]
     # gcc before 6 doesn't know these options
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
