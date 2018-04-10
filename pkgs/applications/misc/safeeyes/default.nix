@@ -1,4 +1,4 @@
-{ lib, python3Packages, gobjectIntrospection, libappindicator-gtk3, gtk3, gnome3, xprintidle-ng
+{ lib, python3Packages, gobjectIntrospection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng
 }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi;
@@ -24,6 +24,7 @@ in buildPythonApplication rec {
     dbus-python
 
     libappindicator-gtk3
+    libnotify
     xprintidle-ng
   ];
 
