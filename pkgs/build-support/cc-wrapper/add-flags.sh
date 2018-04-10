@@ -10,7 +10,6 @@ var_templates_list=(
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
     NIX+GNATFLAGS_COMPILE
-    NIX+HARDENING_ENABLE
 )
 var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
