@@ -83,6 +83,10 @@ do
     fi
 done
 
+# If unset, assume the default hardening flags.
+: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
+export NIX_HARDENING_ENABLE
+
 # No local scope in sourced file
 unset -v role_pre role_post cmd upper_case
 set +u
