@@ -6,7 +6,7 @@ declare -A hardeningEnableMap=()
 # array expansion also prevents undefined variables from causing trouble with
 # `set -u`.
 for flag in ${NIX_@infixSalt@_HARDENING_ENABLE-}; do
-  hardeningEnableMap[$flag]=1
+  hardeningEnableMap["$flag"]=1
 done
 
 # Remove unsupported flags.
@@ -15,12 +15,13 @@ for flag in @hardening_unsupported_flags@; do
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  # Determine which flags were effectively disabled so we can report below.
   declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
   declare -A hardeningDisableMap=()
+
+  # Determine which flags were effectively disabled so we can report below.
   for flag in "${allHardeningFlags[@]}"; do
     if [[ -z "${hardeningEnableMap[$flag]-}" ]]; then
-      hardeningDisableMap[$flag]=1
+      hardeningDisableMap["$flag"]=1
     fi
   done
 
