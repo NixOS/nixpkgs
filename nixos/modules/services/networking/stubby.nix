@@ -161,20 +161,6 @@ in
         '';
       };
 
-      enableNetBindService = mkOption {
-        default = true;
-        type = types.bool;
-        description = ''
-          This option enables or disables the "CAP_NET_BIND_SERVICE"
-          capability for the daemon process. This capability is necessary in the
-          default configuration (localhost listening on port 853), but is not 
-          necessary if the user chooses to bind to ports higher than 1024 
-          and can safely be disabled in this case for increased security. 
-          See <citerefentry><refentrytitle> capabilities</refentrytitle>
-          <manvolnum>7</manvolnum> </citerefentry> for more information.
-        '';
-      };
-
       extraConfig = mkOption {
         default = "";
         type = types.lines;
@@ -195,8 +181,8 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        AmbientCapabilities = "${optionalString cfg.enableNetBindService "CAP_NET_BIND_SERVICE"}";
-        CapabilitiesBoundingSet = "${optionalString cfg.enableNetBindService "CAP_NET_BIND_SERVICE"}";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilitiesBoundingSet = "CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile}";
         DynamicUser = true;
       };
