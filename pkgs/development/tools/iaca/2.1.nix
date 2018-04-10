@@ -2,6 +2,7 @@
 assert stdenv.system == "x86_64-linux";
 with stdenv.lib;
 
+# v2.1: last version with NHM/WSM arch support
 stdenv.mkDerivation {
   name = "iaca-2.1";
   src = requireFile {
