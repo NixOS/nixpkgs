@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
-, perl, fetchpatch
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils, fetchpatch
 , configFile ? "all"
 
 # Userspace dependencies
@@ -40,12 +39,8 @@ let
 
       patches = extraPatches;
 
-      postPatch = optionalString buildKernel ''
-        patchShebangs scripts
-      '';
-
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
-         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
+         ++ optional buildKernel kernel.moduleBuildDependencies;
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
@@ -147,9 +142,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.7";
+    version = "0.7.6";
 
-    sha256 = "0lrzy27sh1cinkf04ki2vfjrgpgbiza2s59i2by45qdd8kmkcc5r";
+    sha256 = "1k3a69zfdk4ia4z2l69lbz0mj26bwdanxd2wynkdpm2kl3zjj18h";
 
     extraPatches = [
       (fetchpatch {
