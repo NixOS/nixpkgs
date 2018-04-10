@@ -45,7 +45,7 @@ let
 
   getPackages = component: builtins.getAttr component componentPackages.components;
 
-  componentBuildInputs = map (component: getPackages component py.pkgs) extraComponents;
+  componentBuildInputs = lib.concatMap (component: getPackages component py.pkgs) extraComponents;
 
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages py.pkgs;
