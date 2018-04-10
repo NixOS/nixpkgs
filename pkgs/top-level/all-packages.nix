@@ -16798,6 +16798,8 @@ with pkgs;
 
   xmrig = callPackage ../applications/misc/xmrig { };
 
+  xmrig-proxy = callPackage ../applications/misc/xmrig-proxy { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
