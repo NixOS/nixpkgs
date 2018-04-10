@@ -1,7 +1,7 @@
 { stdenv, lib, bundlerApp, ruby, curl
   # Dependencies of the 'mathematical' package
 , cmake, bison, flex, glib, pkgconfig, cairo
-, pango, gdk_pixbuf, libxml2, python3
+, pango, gdk_pixbuf, libxml2, python3, patchelf
 }:
 
 bundlerApp {
@@ -39,8 +39,8 @@ bundlerApp {
       # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
       postFixup = ''
         soPath="$out/lib/ruby/gems/2.4.0/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
-        patchelf \
-          --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(patchelf --print-rpath "$soPath")" \
+        ${patchelf}/bin/patchelf \
+          --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
           "$soPath"
       '';
     };
