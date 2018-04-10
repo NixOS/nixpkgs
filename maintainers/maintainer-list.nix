@@ -3411,6 +3411,11 @@
     github = "grwlf";
     name = "Sergey Mironov";
   };
+  sna = {
+    email = "abouzahra.9@wright.edu";
+    github = "s-na";
+    name = "S. Nordin Abouzahra";
+  };
   snyh = {
     email = "snyh@snyh.org";
     github = "snyh";
