@@ -12769,6 +12769,8 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
+  restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
+
   restya-board = callPackage ../servers/web-apps/restya-board { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
