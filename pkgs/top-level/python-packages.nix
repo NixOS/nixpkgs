@@ -1003,6 +1003,8 @@ in {
   binwalk = self.binwalk_fun { };
   binwalk-full = self.binwalk_fun { visualizationSupport = true; pyqtgraph = self.pyqtgraph; };
 
+  bitmath = callPackage ../development/python-modules/bitmath { };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
@@ -11479,6 +11481,10 @@ in {
   progressbar = callPackage ../development/python-modules/progressbar {};
 
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
+
+  progressbar231 = callPackage ../development/python-modules/progressbar231 { };
+
+  progressbar33 = callPackage ../development/python-modules/progressbar33 { };
 
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl;
