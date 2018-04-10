@@ -1,4 +1,4 @@
-hardeningCFlags=()
+declare -a hardeningCFlags=()
 
 declare -A hardeningEnableMap=()
 
@@ -11,14 +11,14 @@ done
 
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
-  unset hardeningEnableMap[$flag]
+  unset -v hardeningEnableMap["$flag"]
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
   # Determine which flags were effectively disabled so we can report below.
-  allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
+  declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
   declare -A hardeningDisableMap=()
-  for flag in ${allHardeningFlags[@]}; do
+  for flag in "${allHardeningFlags[@]}"; do
     if [[ -z "${hardeningEnableMap[$flag]-}" ]]; then
       hardeningDisableMap[$flag]=1
     fi
@@ -27,12 +27,12 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
   printf 'HARDENING: disabled flags:' >&2
   (( "${#hardeningDisableMap[@]}" )) && printf ' %q' "${!hardeningDisableMap[@]}" >&2
   echo >&2
-fi
 
-if (( "${#hardeningEnableMap[@]}" )); then
-  if (( "${NIX_DEBUG:-0}" >= 1 )); then
+  if (( "${#hardeningEnableMap[@]}" )); then
     echo 'HARDENING: Is active (not completely disabled with "all" flag)' >&2;
   fi
+fi
+
   for flag in "${!hardeningEnableMap[@]}"; do
       case $flag in
         fortify)
@@ -69,4 +69,3 @@ if (( "${#hardeningEnableMap[@]}" )); then
           ;;
       esac
   done
-fi
