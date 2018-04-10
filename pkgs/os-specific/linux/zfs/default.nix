@@ -147,9 +147,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.7";
+    version = "0.7.8";
 
-    sha256 = "0lrzy27sh1cinkf04ki2vfjrgpgbiza2s59i2by45qdd8kmkcc5r";
+    sha256 = "0m7j5cpz81lqcfbh4w3wvqjjka07wickl27klgy1zplv6vr0baix";
 
     extraPatches = [
       (fetchpatch {
@@ -166,10 +166,10 @@ in {
     incompatibleKernelVersion = "4.16";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-04-04";
+    version = "2018-04-10";
 
-    rev = "1724eb62debfaa48f5861660615d49a994945d94";
-    sha256 = "1adnmpn7b8zi5rq9r71flwx237vbysss1wywbck8407mcnrfaxzf";
+    rev = "74df0c5e251a920a1966a011c16f960cd7ba562e";
+    sha256 = "1x3mipj3ryznnd7kx84r3n607hv6jqs66mb61g3zcdmvk6al4yq4";
     isUnstable = true;
 
     extraPatches = [
