@@ -16,6 +16,6 @@ buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     license = with licenses; [ artistic1 gpl1Plus ];
-    maintainer = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }
