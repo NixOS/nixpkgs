@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bugworm ];
+    broken = true; # 2018-04-10
   };
 }
