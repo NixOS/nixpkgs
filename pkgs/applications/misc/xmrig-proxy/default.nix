@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libuv libmicrohttpd libuuid ];
 
+  # Set default donation level to 0%. Can be increased at runtime via --donate-level option.
   postPatch = ''
     substituteInPlace src/donate.h --replace "kDonateLevel = 2;" "kDonateLevel = ${toString donateLevel};"
   '';
