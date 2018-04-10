@@ -12,7 +12,7 @@ assert versionAtLeast kernel.version "3.12";
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
-  inherit (kernel) src makeFlags;
+  inherit (kernel) src;
 
   preConfigure = ''
     cd tools/perf
@@ -24,17 +24,21 @@ stdenv.mkDerivation {
       substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
     done
 
-    [ -f bash_completion ] && sed -i 's,^have perf,_have perf,' bash_completion
-    export makeFlags="DESTDIR=$out WERROR=0 $makeFlags"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DTIPDIR=\"$out/share/doc/perf-tip\""
+    if [ -f bash_completion ]; then
+      sed -i 's,^have perf,_have perf,' bash_completion
+    fi
   '';
 
+  makeFlags = ["prefix=$(out)" "WERROR=0"] ++ kernel.makeFlags;
+
   # perf refers both to newt and slang
-  nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-      flex bison libiberty libaudit makeWrapper pkgconfig python perl ];
-  buildInputs =
-    [ elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
-    ] ++ stdenv.lib.optional withGtk gtk2;
+  nativeBuildInputs = [
+    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
+    flex bison libiberty libaudit makeWrapper pkgconfig python perl
+  ];
+  buildInputs = [
+    elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
+  ] ++ stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
@@ -43,6 +47,7 @@ stdenv.mkDerivation {
       "-Wno-error=bool-compare"
       "-Wno-error=deprecated-declarations"
       "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
+      "-DTIPDIR=\"$(out)/share/doc/perf-tip\""
     ]
     # gcc before 6 doesn't know these options
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
@@ -50,7 +55,7 @@ stdenv.mkDerivation {
     ];
 
   separateDebugInfo = true;
-  installFlags = "install install-man ASCIIDOC8=1";
+  installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";
 
   preFixup = ''
     wrapProgram $out/bin/perf \
