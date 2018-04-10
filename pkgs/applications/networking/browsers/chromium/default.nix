@@ -19,6 +19,8 @@ let
   callPackage = newScope chromium;
 
   chromium = {
+    inherit stdenv;
+
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {

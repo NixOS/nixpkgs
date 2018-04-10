@@ -13886,6 +13886,7 @@ with pkgs;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
     gnome = gnome2;
+    stdenv = overrideCC stdenv gcc7;
   };
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
