@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Library for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    licenses  = licenses.free;
+    license   = licenses.free;
   };
 }
