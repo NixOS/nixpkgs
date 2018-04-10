@@ -3182,6 +3182,8 @@ with pkgs;
 
   kore = callPackage ../development/web/kore { };
 
+  krakenx = callPackage ../tools/system/krakenx { };
+
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
@@ -4726,6 +4728,8 @@ with pkgs;
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   samplicator = callPackage ../tools/networking/samplicator { };
+
+  sasview = callPackage ../applications/science/misc/sasview {};
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
@@ -11511,7 +11515,9 @@ with pkgs;
 
   t1lib = callPackage ../development/libraries/t1lib { };
 
-  tachyon = callPackage ../development/libraries/tachyon {};
+  tachyon = callPackage ../development/libraries/tachyon {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   taglib = callPackage ../development/libraries/taglib { };
   taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
@@ -16163,6 +16169,8 @@ with pkgs;
 
   i3status-rust = callPackage ../applications/window-managers/i3/status-rust.nix { };
 
+  i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
@@ -16898,6 +16906,8 @@ with pkgs;
 
   ostinato = callPackage ../applications/networking/ostinato { };
 
+  p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api { };
   panamax_ui = callPackage ../applications/networking/cluster/panamax/ui { };
 
@@ -17174,6 +17184,8 @@ with pkgs;
   pflask = callPackage ../os-specific/linux/pflask {};
 
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
+
+  photoflow = callPackage ../applications/graphics/photoflow { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
@@ -18443,6 +18455,7 @@ with pkgs;
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
+      ++ optional (config.kodi.enablePVRIPTVSimple or false) pvr-iptvsimple
       );
   };
 
@@ -20333,6 +20346,8 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  cups-brother-hl1110 = callPackage_i686 ../misc/cups/drivers/hl1110 { };
+
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
 
@@ -20514,6 +20529,8 @@ with pkgs;
   };
 
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
+
+  openzwave = callPackage ../development/libraries/openzwave { };
 
   mongoc = callPackage ../development/libraries/mongoc { };
 
@@ -20700,6 +20717,8 @@ with pkgs;
   shc = callPackage ../tools/security/shc { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
+
+  hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
   mfcj470dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj470dwlpr { };

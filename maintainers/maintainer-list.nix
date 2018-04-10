@@ -2520,6 +2520,11 @@
     github = "mt-caret";
     name = "Masayuki Takeda";
   };
+  MtP = {
+    email = "marko.nixos@poikonen.de";
+    github = "MtP76";
+    name = "Marko Poikonen";
+  };
   mtreskin = {
     email = "zerthurd@gmail.com";
     github = "Zert";
@@ -2614,6 +2619,11 @@
     email = "felix@alternativebit.fr";
     github = "ninjatrappeur";
     name = "Félix Baylac-Jacqué";
+  };
+  nioncode = {
+    email = "nioncode+github@gmail.com";
+    github = "nioncode";
+    name = "Nicolas Schneider";
   };
   nipav = {
     email = "niko.pavlinek@gmail.com";
@@ -3069,6 +3079,11 @@
     github = "risicle";
     name = "Robert Scott";
   };
+  rittelle = {
+    email = "rittelle@posteo.de";
+    github = "rittelle";
+    name = "Lennart Rittel";
+  };
   rlupton20 = {
     email = "richard.lupton@gmail.com";
     github = "rlupton20";
@@ -3128,6 +3143,11 @@
     email = "rongcuid@outlook.com";
     github = "rongcuid";
     name = "Rongcui Dong";
+  };
+  rprospero = {
+    email = "rprospero+nix@gmail.com";
+    github = "rprospero";
+    name = "Adam Washington";
   };
   rszibele = {
     email = "richard@szibele.com";
@@ -3490,6 +3510,11 @@
     email = "symphorien_nixpkgs@xlumurb.eu";
     github = "symphorien";
     name = "Guillaume Girol";
+  };
+  synthetica = {
+    email = "nix@hilhorst.be";
+    github = "Synthetica9";
+    name = "Patrick Hilhorst";
   };
   szczyp = {
     email = "qb@szczyp.com";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "abcMIDI-${version}";
-  version = "2018.03.21";
+  version = "2018.04.01";
 
   src = fetchzip {
     url = "http://ifdo.ca/~seymour/runabc/${name}.zip";
-    sha256 = "0h34bjs5p3vkabg6c1dpwrwfxypki0xyd0m6jf4ys7xbs9qnal6l";
+    sha256 = "1ffr358q663qgcjzg2l50isp8hybxp60r99xma2qhhy7lvyv57x4";
   };
 
   # There is also a file called "makefile" which seems to be preferred by the standard build phase

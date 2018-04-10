@@ -1075,6 +1075,8 @@ in {
     enablePython = true;
   });
 
+  bumps = callPackage ../development/python-modules/bumps {};
+
   buttersink = callPackage ../development/python-modules/buttersink {};
 
   cached-property = callPackage ../development/python-modules/cached-property { };
@@ -5663,9 +5665,7 @@ in {
     };
   };
 
-  # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
-  graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
-    else callPackage ../development/python-modules/graph-tool/2.x.x.nix { boost = pkgs.boost159; };
+  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
@@ -7130,6 +7130,8 @@ in {
   };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
+
+  python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
@@ -9916,6 +9918,8 @@ in {
       license = licenses.mit;
     };
   };
+
+    periodictable = callPackage ../development/python-modules/periodictable { };
 
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
@@ -12710,6 +12714,8 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
+  sasmodels = callPackage ../development/python-modules/sasmodels { };
+
   scapy = callPackage ../development/python-modules/scapy { };
 
   scipy = callPackage ../development/python-modules/scipy { };
@@ -14720,7 +14726,9 @@ in {
     };
   };
 
-  uritemplate_py = buildPythonPackage rec {
+    unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+    uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
     version = "3.0.0";
 

@@ -4,7 +4,7 @@
  # following variables make use of $ENV, e.g. OPENSSL=<myprivate_path_to_openssl> ./testssl.sh <host>
  # 0 means (normally) true here. Some of the variables are also accessible with a command line switch, see --help
  declare -x OPENSSL OPENSSL_TIMEOUT
-+OPENSSL=${OPENSSL:-""}
++OPENSSL=${OPENSSL:-"@@openssl-path@@"}
  FAST_SOCKET=${FAST_SOCKET:-false}       # EXPERIMENTAL feature to accelerate sockets -- DO NOT USE it for production
  COLOR=${COLOR:-2}                       # 2: Full color, 1: b/w+positioning, 0: no ESC at all
  COLORBLIND=${COLORBLIND:-false}         # if true, swap blue and green in the output
