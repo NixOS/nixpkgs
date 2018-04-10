@@ -44,6 +44,13 @@ in rec {
   eject = singleBinary "eject" {
     linux = pkgs.utillinux;
   };
+  getconf = singleBinary "getconf" {
+    linux = pkgs.musl-getconf;
+    darwin = pkgs.system_cmds;
+  };
+  getent = singleBinary "getconf" {
+    linux = pkgs.musl-getent;
+  };
   getopt = singleBinary "getopt" {
     linux = pkgs.utillinux;
     darwin = pkgs.getopt;
