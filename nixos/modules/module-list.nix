@@ -192,6 +192,7 @@
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/clickhouse.nix
+  ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
   ./services/databases/hbase.nix
