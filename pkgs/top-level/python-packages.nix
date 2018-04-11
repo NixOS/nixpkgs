@@ -8888,7 +8888,7 @@ in {
   dynd = buildPythonPackage rec {
     version = "0.7.2";
     name = "dynd-${version}";
-    disabled = isPyPy;
+    disabled = isPyPy || !isPy3k; # tests fail on python2, 2018-04-11
 
     src = pkgs.fetchFromGitHub {
       owner = "libdynd";
