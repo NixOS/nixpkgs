@@ -3971,6 +3971,11 @@
     github = "womfoo";
     name = "Kranium Gikos Mendoza";
   };
+  worldofpeace = {
+    email = "worldofpeace@users.noreply.github.com";
+    github = "worldofpeace";
+    name = "Worldofpeace";
+  };
   wscott = {
     email = "wsc9tt@gmail.com";
     github = "wscott";
