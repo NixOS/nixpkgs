@@ -1207,6 +1207,8 @@ in {
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
+  cypari2 = callPackage ../development/python-modules/cypari2 { };
+
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
 
