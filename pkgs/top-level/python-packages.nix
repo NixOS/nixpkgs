@@ -5606,6 +5606,8 @@ in {
 
   flask_script = callPackage ../development/python-modules/flask-script { };
 
+  flask-silk = callPackage ../development/python-modules/flask-silk { };
+
   flask_sqlalchemy = buildPythonPackage rec {
     name = "Flask-SQLAlchemy-${version}";
     version = "2.1";
