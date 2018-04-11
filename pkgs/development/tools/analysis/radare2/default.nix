@@ -13,7 +13,7 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.5.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     capstone = fetchgit {
       url = "https://github.com/aquynh/capstone.git";
       rev = cs_tip;
-      sha256 = "1b126npshdbwh5y7rafmb9w4dzlvxsf4ca6bx4zs2y7kbk48jyn8";
+      sha256 = "19vfgdfykmi3cfs4x1acxy0gnwggjjc8qq46pybqvcksbi11nw1k";
       leaveDotGit = true;
     };
   in ''
