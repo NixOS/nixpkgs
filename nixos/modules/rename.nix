@@ -113,9 +113,10 @@ with lib;
 
     # murmur
     (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
 
     # parsoid
-    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] [ "services" "parsoid" "wikis" ])
+    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] "Use services.parsoid.wikis instead")
 
     # plexpy / tautulli
     (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
