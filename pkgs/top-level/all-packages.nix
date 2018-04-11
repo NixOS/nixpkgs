@@ -19783,6 +19783,8 @@ with pkgs;
 
   m4ri = callPackage ../development/libraries/science/math/m4ri { };
 
+  m4rie = callPackage ../development/libraries/science/math/m4rie { };
+
   nasc = callPackage ../applications/science/math/nasc { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
