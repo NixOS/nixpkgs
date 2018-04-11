@@ -74,11 +74,6 @@ rec {
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
-      enabledHardeningOptions =
-        if builtins.elem "all" hardeningDisable
-        then []
-        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
@@ -184,8 +179,6 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
-        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
-          NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
