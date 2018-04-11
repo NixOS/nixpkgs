@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
+  makeFlags = [ "CC=cc" ];
+
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
   installPhase =
