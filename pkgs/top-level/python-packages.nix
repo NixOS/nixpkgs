@@ -5189,20 +5189,39 @@ in {
 
   jupyterlab = buildPythonPackage rec {
     name = "jupyterlab-${version}";
-    version = "0.4.1";
+    version = "0.31.12";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyterlab/${name}.tar.gz";
-      sha256 = "91dc4d7dfb1e6ab97e28d6e3a2fc38f5f65d368201c00fd0ed077519258e67bb";
+      sha256 = "1hp6p9bsr863glildgs2iy1a4l99m7rxj2sy9fmkxp5zhyhqvsrz";
     };
 
-    propagatedBuildInputs = with self; [ notebook ];
+    propagatedBuildInputs = with self; [ notebook jupyterlab_launcher ];
 
-    # No tests in archive
     doCheck = false;
 
     meta = {
       description = "Jupyter lab environment notebook server extension.";
+      license = with licenses; [ bsd3 ];
+      homepage = "http://jupyter.org/";
+    };
+  };
+
+  jupyterlab_launcher = buildPythonPackage rec {
+    name = "jupyterlab_launcher-${version}";
+    version = "0.10.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jupyterlab_launcher/${name}.tar.gz";
+      sha256 = "1v1ir182zm2dl14lqvqjhx2x40wnp0i32n6rldxnm1allfpld1n7";
+    };
+
+    propagatedBuildInputs = with self; [ notebook jsonschema ];
+
+    doCheck = false;
+
+    meta = {
+      description = "This package is used to launch an application built using JupyterLab.";
       license = with licenses; [ bsd3 ];
       homepage = "http://jupyter.org/";
     };
