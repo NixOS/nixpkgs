@@ -46,8 +46,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # "screenshot" needs this.
-  NIX_LDFLAGS = "-rpath ${xorg.libX11.out}/lib"
-    + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
+  NIX_LDFLAGS = "-rpath ${xorg.libX11.out}/lib";
 
   meta = {
     description = "The GNU Image Manipulation Program";

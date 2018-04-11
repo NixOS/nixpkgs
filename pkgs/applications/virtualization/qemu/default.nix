@@ -7,11 +7,13 @@
 , numaSupport ? stdenv.isLinux && !stdenv.isArm, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL
+, sdlSupport ? !stdenv.isDarwin, SDL2
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
+, openGLSupport ? sdlSupport, mesa_noglu, epoxy, libdrm
+, virglSupport ? openGLSupport, virglrenderer
 , hostCpuOnly ? false
 , nixosTestRunner ? false
 }:
@@ -52,18 +54,42 @@ stdenv.mkDerivation rec {
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
-    ++ optionals sdlSupport [ SDL ]
+    ++ optionals sdlSupport [ SDL2 ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
-    ++ optionals xenSupport [ xen ];
+    ++ optionals xenSupport [ xen ]
+    ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ]
+    ++ optionals virglSupport [ virglrenderer ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./no-etc-install.patch ./statfs-flags.patch ]
+  patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
+    name = "glibc-2.27-memfd.patch";
+    url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
+    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
+  }) ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optional pulseSupport ./fix-hda-recording.patch;
+    ++ optional pulseSupport ./fix-hda-recording.patch
+    ++ optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch;
+      sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch;
+      sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/61a7a1b77a868e3b940c0b25e6c2b2a6c32caf20/main/qemu/0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch;
+      sha256 = "1ar6r1vpmhnbs72v6mhgyahcjcf7b9b4xi7asx17sy68m171d2g6";
+    })
+    (fetchpatch {
+      url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch;
+      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
+    })
+  ];
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -84,7 +110,9 @@ stdenv.mkDerivation rec {
     ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
-    ++ optional xenSupport "--enable-xen";
+    ++ optional xenSupport "--enable-xen"
+    ++ optional openGLSupport "--enable-opengl"
+    ++ optional virglSupport "--enable-virglrenderer";
 
   postFixup =
     ''

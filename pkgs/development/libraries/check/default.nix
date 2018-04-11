@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "check-${version}";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://github.com/libcheck/check/releases/download/${version}/check-${version}.tar.gz";
-    sha256 = "05jn1pgb7hqb937xky2147nnq3r4qy5wwr79rddpax3bms5a9xr4";
+    sha256 = "0d22h8xshmbpl9hba9ch3xj8vb9ybm5akpsbbh7yj07fic4h2hj6";
   };
 
   # Test can randomly fail: http://hydra.nixos.org/build/7243912

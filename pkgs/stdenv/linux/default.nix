@@ -374,7 +374,7 @@ in
         ${localSystem.libc} = getLibc prevStage;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
-        inherit (prevStage) binutils binutils-raw;
+        inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;
       };
     };

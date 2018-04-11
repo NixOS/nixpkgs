@@ -4,13 +4,13 @@ let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
 
 stdenv.mkDerivation rec {
   name = "lsof-${version}";
-  version = "4.89";
+  version = "4.90";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
 
   src = fetchurl {
-    urls =
+    urls = ["https://fossies.org/linux/misc/lsof_4.90.tar.bz2"] ++ # Mirrors seem to be down...
       ["ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_${version}.tar.bz2"]
       ++ map (
         # the tarball is moved after new version is released
@@ -23,22 +23,19 @@ stdenv.mkDerivation rec {
         + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
       ) [ false true ]
       ;
-    sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
+    sha256 = "1xhn3amvl5mmwji5g90nkw7lfmh2494v18qbv1f729hrg468853g";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
-
-  patches = [ ./dfile.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
   '';
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.cc.libc}/include";
+  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
-    sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;' -e 's/-lcurses/-lncurses/'
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
     done
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.dezgeg ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

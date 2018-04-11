@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
   patches = [
     ./fix-libusb-include-path.patch
   ];

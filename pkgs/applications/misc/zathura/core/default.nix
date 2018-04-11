@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , gtk, girara, ncurses, gettext, docutils
-, file, sqlite, glib, texlive, libintlOrEmpty
+, file, sqlite, glib, texlive, libintl
 , gtk-mac-integration, synctexSupport ? true
 }:
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   icon = ./icon.xpm;
 
   nativeBuildInputs = [
-    pkgconfig
-  ] ++ optional stdenv.isDarwin [ libintlOrEmpty ];
+    pkgconfig libintl
+  ];
 
   buildInputs = [
     file gtk girara
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   ] ++ optional synctexSupport texlive.bin.core
     ++ optional stdenv.isDarwin [ gtk-mac-integration ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [

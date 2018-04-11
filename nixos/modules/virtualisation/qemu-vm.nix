@@ -98,7 +98,7 @@ let
           ${qemuGraphics} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
-          $@
+          "$@"
     '';
 
 

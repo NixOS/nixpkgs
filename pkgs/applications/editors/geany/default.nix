@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file }:
+{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file, libintl }:
 
 with stdenv.lib;
 
@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "66baaff43f12caebcf0efec9a5533044dc52837f799c73a1fd7312caa86099c2";
   };
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool libintl ];
   buildInputs = [ gtk2 which file ];
 
   doCheck = true;

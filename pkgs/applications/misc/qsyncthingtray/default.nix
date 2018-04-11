@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, procps ? null
+{ mkDerivation, stdenv, lib, fetchFromGitHub, fetchpatch, procps
 , qtbase, qtwebengine, qtwebkit
 , cmake
 , syncthing

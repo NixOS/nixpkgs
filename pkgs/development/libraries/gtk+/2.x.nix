@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk_pixbuf, libintlOrEmpty, xlibsWrapper, gobjectIntrospection
+, gdk_pixbuf, xlibsWrapper, gobjectIntrospection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 , gdktarget ? "x11"
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = optionalString (libintlOrEmpty != []) "-lintl";
-
   setupHook = ./setup-hook.sh;
 
   nativeBuildInputs = [ setupHook perl pkgconfig gettext gobjectIntrospection ];
@@ -38,7 +36,6 @@ stdenv.mkDerivation rec {
          libXrandr libXrender libXcomposite libXi libXcursor
        ]
     ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
-    ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];

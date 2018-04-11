@@ -1,5 +1,6 @@
-{ stdenv, lib, sudo, utillinux, coreutils, systemd, cryptsetup,
-  buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, sudo, coreutils, systemd, cryptsetup
+, mount, umount
+, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "interlock-${version}";
@@ -23,8 +24,8 @@ buildGoPackage rec {
   buildFlags = [ "-tags textsecure" ];
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
-      -e 's|/bin/mount|${utillinux}/bin/mount|' \
-      -e 's|/bin/umount|${utillinux}/bin/umount|' \
+      -e 's|/bin/mount|${mount}/bin/mount|' \
+      -e 's|/bin/umount|${umount}/bin/umount|' \
       -e 's|/bin/cp|${coreutils}/bin/cp|' \
       -e 's|/bin/mv|${coreutils}/bin/mv|' \
       -e 's|/bin/chown|${coreutils}/bin/chown|' \

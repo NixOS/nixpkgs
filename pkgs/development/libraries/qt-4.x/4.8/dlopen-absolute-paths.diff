@@ -59,32 +59,6 @@ index 6b42d1e..f88b628 100644
      lib.setLoadHints(QLibrary::ImprovedSearchHeuristics);
      if (!lib.load())
          return;
-diff --git a/src/plugins/platforms/xcb/qglxintegration.cpp b/src/plugins/platforms/xcb/qglxintegration.cpp
-index 229d6f9..c122bf3 100644
---- a/src/plugins/platforms/xcb/qglxintegration.cpp
-+++ b/src/plugins/platforms/xcb/qglxintegration.cpp
-@@ -136,7 +136,7 @@ void* QGLXContext::getProcAddress(const QString& procName)
-             {
-                 extern const QString qt_gl_library_name();
- //                QLibrary lib(qt_gl_library_name());
--                QLibrary lib(QLatin1String("GL"));
-+                QLibrary lib(QLatin1String("@openglDriver@/lib/libGL"));
-                 glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
-             }
-         }
-diff --git a/src/plugins/platforms/xlib/qglxintegration.cpp b/src/plugins/platforms/xlib/qglxintegration.cpp
-index 2467247..a2441d4 100644
---- a/src/plugins/platforms/xlib/qglxintegration.cpp
-+++ b/src/plugins/platforms/xlib/qglxintegration.cpp
-@@ -137,7 +137,7 @@ void* QGLXContext::getProcAddress(const QString& procName)
-             {
-                 extern const QString qt_gl_library_name();
- //                QLibrary lib(qt_gl_library_name());
--                QLibrary lib(QLatin1String("GL"));
-+                QLibrary lib(QLatin1String("@openglDriver@/lib/libGL"));
-                 glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
-             }
-         }
 diff --git a/src/plugins/platforms/xlib/qxlibstatic.cpp b/src/plugins/platforms/xlib/qxlibstatic.cpp
 index f8f3d69..d63c5bc 100644
 --- a/src/plugins/platforms/xlib/qxlibstatic.cpp

@@ -10,8 +10,8 @@
 #include <errno.h>
 #include <linux/capability.h>
 #include <sys/capability.h>
-#include <linux/prctl.h>
 #include <sys/prctl.h>
+#include <limits.h>
 #include <cap-ng.h>
 
 // Make sure assertions are not compiled out, we use them to codify

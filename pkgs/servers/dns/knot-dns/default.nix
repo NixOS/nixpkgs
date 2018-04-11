@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit, zlib, libiconv, libintlOrEmpty
+, systemd, nettle, libedit, zlib, libiconv, libintl
 }:
 
 let inherit (stdenv.lib) optional optionals; in
@@ -20,11 +20,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnutls liburcu libidn
     nettle libedit
-    libiconv lmdb
+    libiconv lmdb libintl
     # without sphinx &al. for developer documentation
   ]
     ++ optionals stdenv.isLinux [ libcap_ng systemd ]
-    ++ libintlOrEmpty
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
@@ -43,4 +42,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
-

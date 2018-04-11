@@ -119,6 +119,7 @@ mapAliases (rec {
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
@@ -238,6 +239,10 @@ mapAliases (rec {
   wineFull = winePackages.full;
   wineStable = winePackages.stable;
   wineUnstable = winePackages.unstable;
+
+  # added 2018-03-26
+  libva-full = libva;
+  libva1-full = libva1;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, findutils, binutils, glibc, procps, coreutils }:
+{ stdenv, fetchurl, file, findutils, binutils, glibc, procps, coreutils, sysctl }:
 
 stdenv.mkDerivation rec {
   name = "checksec-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/checksec --replace " readelf -" " ${binutils.out}/bin/readelf -"
     substituteInPlace $out/bin/checksec --replace "(readelf -" "(${binutils.out}/bin/readelf -"
     substituteInPlace $out/bin/checksec --replace "command_exists readelf" "command_exists ${binutils.out}/bin/readelf"
-    substituteInPlace $out/bin/checksec --replace "/sbin/sysctl -" "${procps}/sbin/sysctl -"
+    substituteInPlace $out/bin/checksec --replace "/sbin/sysctl -" "${sysctl}/bin/sysctl -"
     substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
   '';
 
