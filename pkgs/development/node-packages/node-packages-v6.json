@@ -11,6 +11,8 @@
 , "coinmon"
 , "configurable-http-proxy"
 , "cordova"
+, "create-react-app"
+, "create-react-native-app"
 , "csslint"
 , "dat"
 , "dhcp"

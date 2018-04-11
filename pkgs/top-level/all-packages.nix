@@ -629,9 +629,9 @@ with pkgs;
 
   encryptr = callPackage ../tools/security/encryptr {
     gconf = gnome2.GConf;
- };
+  };
 
- enchive = callPackage ../tools/security/enchive { };
+  enchive = callPackage ../tools/security/enchive { };
 
   enpass = callPackage ../tools/security/enpass { };
 
@@ -4722,6 +4722,8 @@ with pkgs;
   safecopy = callPackage ../tools/system/safecopy { };
 
   safe-rm = callPackage ../tools/system/safe-rm { };
+
+  safeeyes = callPackage ../applications/misc/safeeyes { };
 
   salt = callPackage ../tools/admin/salt {};
 
@@ -15177,10 +15179,11 @@ with pkgs;
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
-    docker_18_03;
+    docker_18_03
+    docker_18_04;
 
   docker = docker_18_03;
-  docker-edge = docker_18_03;
+  docker-edge = docker_18_04;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -16731,6 +16734,8 @@ with pkgs;
   };
 
   xmrig = callPackage ../applications/misc/xmrig { };
+
+  xmrig-proxy = callPackage ../applications/misc/xmrig-proxy { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
