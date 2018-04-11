@@ -5208,6 +5208,26 @@ in {
     };
   };
 
+  jupyterlab_launcher = buildPythonPackage rec {
+    name = "jupyterlab_launcher-${version}";
+    version = "0.10.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jupyterlab_launcher/${name}.tar.gz";
+      sha256 = "1v1ir182zm2dl14lqvqjhx2x40wnp0i32n6rldxnm1allfpld1n7";
+    };
+
+    propagatedBuildInputs = with self; [ notebook jsonschema ];
+
+    doCheck = false;
+
+    meta = {
+      description = "This package is used to launch an application built using JupyterLab.";
+      license = with licenses; [ bsd3 ];
+      homepage = "http://jupyter.org/";
+    };
+  };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   lmdb = buildPythonPackage rec {
