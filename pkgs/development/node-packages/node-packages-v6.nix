@@ -94,22 +94,22 @@ let
         sha512 = "2fv2qaz90rp6ib2s45ix0p3a4bd6yl6k94k1kkhw7w4s2aa5mqc6chppkf6pfvsz1l6phh7y0xswyfyzjgny7qzascch8c7ws20a0r4";
       };
     };
-    "@types/node-8.10.4" = {
+    "@types/node-8.10.7" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "8.10.4";
+      version = "8.10.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-8.10.4.tgz";
-        sha512 = "345l7fbkr415rdf3p0akk11k8shxibfl77crpj3wd3a8d4lbsdpylfzm8ihkg6wnj88gjpcwy4nw6vb2x58kwx15fbl09bz96dlrahn";
+        url = "https://registry.npmjs.org/@types/node/-/node-8.10.7.tgz";
+        sha512 = "3wyk8m5ym2hngv1a00zkignr73kbq85l46fb5bk2iwpr4mlj37k4lxgscq67c5cp6c4qs8kkin4mq29vbkl7q5nmvrsbvf705hb8075";
       };
     };
-    "@types/node-9.6.2" = {
+    "@types/node-9.6.4" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "9.6.2";
+      version = "9.6.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-9.6.2.tgz";
-        sha512 = "30kq6rikl2ya5krnyglrbi52xrm0f3q0nyzj99haady8c2s03l3rcp42cxkkd4v3mrvsw3jan0kz7vb4j148qg8wklh2igvsmii2sai";
+        url = "https://registry.npmjs.org/@types/node/-/node-9.6.4.tgz";
+        sha512 = "2dycvznsyvvh20z231b8xg7c6rx6dvazq0c7hzk4pa9mkv90qwaiv611lzhgqmy1f4g4mvmvlz5b0p7pbmiiplb596rp28qql2kh203";
       };
     };
     "@types/request-2.47.0" = {
@@ -1615,13 +1615,13 @@ let
         sha1 = "00f35b2d27ac91b1f0d3ef2084c98cf1d1f0adc3";
       };
     };
-    "aws-sdk-2.223.1" = {
+    "aws-sdk-2.224.1" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.223.1";
+      version = "2.224.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.223.1.tgz";
-        sha1 = "b264bf6407d7c74152f08b4a8fda8aad3a84baa4";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.224.1.tgz";
+        sha1 = "82fe93e10b3e818f315c35ce8667cdc8db94a0b3";
       };
     };
     "aws-sign-0.2.0" = {
@@ -2524,13 +2524,13 @@ let
         sha1 = "159a49b9a9714c1fb102f2e0ed1906fab6a450f4";
       };
     };
-    "big-integer-1.6.27" = {
+    "big-integer-1.6.28" = {
       name = "big-integer";
       packageName = "big-integer";
-      version = "1.6.27";
+      version = "1.6.28";
       src = fetchurl {
-        url = "https://registry.npmjs.org/big-integer/-/big-integer-1.6.27.tgz";
-        sha512 = "2v5f59yjsa3hzwhk333s84nfl1x24w52h9hqpwbav0p5v5d5prkna0flw25ywccrrjziq3lylbl874qqikzljkyz2g6jjdqhlqhld9p";
+        url = "https://registry.npmjs.org/big-integer/-/big-integer-1.6.28.tgz";
+        sha512 = "3b56jaa0yvrl9p90c0phnhyh02sv9hxssl8y0nghv91ra8akrcdpxm55c1gf5w1is9991wm2g0wqcr4hm5ri9lmzwd8gc9d72pzg51q";
       };
     };
     "big.js-3.2.0" = {
@@ -3217,22 +3217,22 @@ let
         sha1 = "96247e853f068fd6e0d45cc73f0bb2cd9778ef02";
       };
     };
-    "browserify-cipher-1.0.0" = {
+    "browserify-cipher-1.0.1" = {
       name = "browserify-cipher";
       packageName = "browserify-cipher";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/browserify-cipher/-/browserify-cipher-1.0.0.tgz";
-        sha1 = "9988244874bf5ed4e28da95666dcd66ac8fc363a";
+        url = "https://registry.npmjs.org/browserify-cipher/-/browserify-cipher-1.0.1.tgz";
+        sha512 = "3bz6v63l37ndb18236yjdkbxjcvy4x16a8j7vsqxqprvnkcnkq1hg1ffd1c9zk9a3j555ppnpisfyh0x4adlb8lmpwbfa8i837n9y5h";
       };
     };
-    "browserify-des-1.0.0" = {
+    "browserify-des-1.0.1" = {
       name = "browserify-des";
       packageName = "browserify-des";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/browserify-des/-/browserify-des-1.0.0.tgz";
-        sha1 = "daa277717470922ed2fe18594118a175439721dd";
+        url = "https://registry.npmjs.org/browserify-des/-/browserify-des-1.0.1.tgz";
+        sha512 = "35rl28vzg80fa81b0a7rdaj71zf0ymxxhlmdpisps4dlgvkazbxz47q9fnl1n9wnbq7ilk6vnbxa399zcwdjdz3i0lii1mpnyhh4bfg";
       };
     };
     "browserify-incremental-3.1.1" = {
@@ -5224,6 +5224,15 @@ let
         sha1 = "137918d6d78283f7df7a6b7c5a63e140e69425e6";
       };
     };
+    "component-indexof-0.0.3" = {
+      name = "component-indexof";
+      packageName = "component-indexof";
+      version = "0.0.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/component-indexof/-/component-indexof-0.0.3.tgz";
+        sha1 = "11d091312239eb8f32c8f25ae9cb002ffe8d3c24";
+      };
+    };
     "component-inherit-0.0.3" = {
       name = "component-inherit";
       packageName = "component-inherit";
@@ -6143,13 +6152,13 @@ let
         sha1 = "e3cdd3b4df3168dd74e3de3fbbcb7b297fe908f4";
       };
     };
-    "create-ecdh-4.0.0" = {
+    "create-ecdh-4.0.1" = {
       name = "create-ecdh";
       packageName = "create-ecdh";
-      version = "4.0.0";
+      version = "4.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/create-ecdh/-/create-ecdh-4.0.0.tgz";
-        sha1 = "888c723596cdf7612f6498233eebd7a35301737d";
+        url = "https://registry.npmjs.org/create-ecdh/-/create-ecdh-4.0.1.tgz";
+        sha512 = "2whpg1253714sq60ayvsap6n3qdwa9l0zhdlxv2gz8frppds69w1q079pmf55qlygnc7ad499511xsbswy0a39asqcp9a0p1w5c56w9";
       };
     };
     "create-error-class-3.0.2" = {
@@ -6161,22 +6170,22 @@ let
         sha1 = "06be7abef947a3f14a30fd610671d401bca8b7b6";
       };
     };
-    "create-hash-1.1.3" = {
+    "create-hash-1.2.0" = {
       name = "create-hash";
       packageName = "create-hash";
-      version = "1.1.3";
+      version = "1.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/create-hash/-/create-hash-1.1.3.tgz";
-        sha1 = "606042ac8b9262750f483caddab0f5819172d8fd";
+        url = "https://registry.npmjs.org/create-hash/-/create-hash-1.2.0.tgz";
+        sha512 = "055xaldi3hy1bjxhvznh3470j1kq2xk827mxal79bgqik3lblax6s4inxqby27ymgcghl2hn7wnx9fnacmyq3q93hk6y327cc41nkfg";
       };
     };
-    "create-hmac-1.1.6" = {
+    "create-hmac-1.1.7" = {
       name = "create-hmac";
       packageName = "create-hmac";
-      version = "1.1.6";
+      version = "1.1.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/create-hmac/-/create-hmac-1.1.6.tgz";
-        sha1 = "acb9e221a4e17bdb076e90657c42b93e3726cf06";
+        url = "https://registry.npmjs.org/create-hmac/-/create-hmac-1.1.7.tgz";
+        sha512 = "0p2jhk94k3as67lhrr1jyljkr0y65snxjzqnix0nifnfcanhilccrzkc47gwlg5wy0m8l1gv12lj78ivgmw5m1ww4f8iylr52bbv49h";
       };
     };
     "create-torrent-3.30.0" = {
@@ -7457,13 +7466,13 @@ let
         sha1 = "31bb815881c975634c7f3907a5e789341e1560bc";
       };
     };
-    "diffie-hellman-5.0.2" = {
+    "diffie-hellman-5.0.3" = {
       name = "diffie-hellman";
       packageName = "diffie-hellman";
-      version = "5.0.2";
+      version = "5.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/diffie-hellman/-/diffie-hellman-5.0.2.tgz";
-        sha1 = "b5835739270cfe26acf632099fded2a07f209e5e";
+        url = "https://registry.npmjs.org/diffie-hellman/-/diffie-hellman-5.0.3.tgz";
+        sha512 = "37186rz3862gn294acnwnm59jwm62x1rz9ca0y5anvmj0a7abs4rhw974qp1j684qpd4rxb8c2kagv21hapxfddr2q72zvyv7ya19lj";
       };
     };
     "difflib-0.2.4" = {
@@ -16118,13 +16127,13 @@ let
         sha1 = "e9bdbde94a20a5ac18b04340fc5764d5b09d901d";
       };
     };
-    "mdn-data-1.1.0" = {
+    "mdn-data-1.1.1" = {
       name = "mdn-data";
       packageName = "mdn-data";
-      version = "1.1.0";
+      version = "1.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mdn-data/-/mdn-data-1.1.0.tgz";
-        sha512 = "3av1cblh8aix05jyfib9mhm57qx8fnkxgxs2g493mdm4815pisrn8rzgf9yxjiww6psa619aa8l62xigrbwfcag741bgls227f82blc";
+        url = "https://registry.npmjs.org/mdn-data/-/mdn-data-1.1.1.tgz";
+        sha512 = "1xj42zxwaz4vyhbs7vwqzfij40glkfx7qvq9h61iv0as0z20j31rfgx5rrq5cmkw0i2n7b0zzcalj3aacly4j1h0gwj1qqvsw84k7nq";
       };
     };
     "mdns-js-0.5.0" = {
@@ -16505,13 +16514,13 @@ let
         sha512 = "1x901mk5cdib4xp27v4ivwwr7mhy64r4rk953bzivi5p9lf2bhw88ra2rhkd254xkdx2d3q30zkq239vc4yx4pfsj4hpys8rbr6fif7";
       };
     };
-    "mime-2.2.2" = {
+    "mime-2.3.1" = {
       name = "mime";
       packageName = "mime";
-      version = "2.2.2";
+      version = "2.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime/-/mime-2.2.2.tgz";
-        sha512 = "2ahs0dpq95sf8rrpc024h6jqrvknjnj5v046k755kz6br3pr371y9j9df0srgfszdqviaw4fc6vgngbyik866272hmckw1qif1w7cq3";
+        url = "https://registry.npmjs.org/mime/-/mime-2.3.1.tgz";
+        sha512 = "1xa7b4k7mp4apq8mvj7912m38gzbcbbddaa92lmbb9cbs08z0b2a4x3kds1sr86br6x6r19kygscf20ky6g6wyx313x1jb8qnajai9q";
       };
     };
     "mime-db-1.12.0" = {
@@ -16595,13 +16604,13 @@ let
         sha1 = "d2d0f1887ca363d1acf0ea86d5c4df293b3fb675";
       };
     };
-    "minimalistic-assert-1.0.0" = {
+    "minimalistic-assert-1.0.1" = {
       name = "minimalistic-assert";
       packageName = "minimalistic-assert";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.0.tgz";
-        sha1 = "702be2dda6b37f4836bcb3f5db56641b64a1d3d3";
+        url = "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz";
+        sha512 = "3y39pa1xxg7j49vya7xca4p1mg89d0df56hj4yjhpyhmza3g5qvpgp11xs11wkd48zzy7ym970jfbn0ppimmczpijns249j7q05rljj";
       };
     };
     "minimalistic-crypto-utils-1.0.1" = {
@@ -17743,13 +17752,13 @@ let
         sha256 = "243e90fbf6616ef39f3c71bbcd027799e35cbf2ef3f25203676f65b20f7f7394";
       };
     };
-    "neo-async-2.5.0" = {
+    "neo-async-2.5.1" = {
       name = "neo-async";
       packageName = "neo-async";
-      version = "2.5.0";
+      version = "2.5.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/neo-async/-/neo-async-2.5.0.tgz";
-        sha512 = "3mgwi8gsgy9lazh0qbpaz8f2l8gvvpn3jp0ghc6xnn0xq0ajdmzp7lfklby1n4s67fy1w5g5gzizyqzds8l3fqsj76cy0mq06rr56cw";
+        url = "https://registry.npmjs.org/neo-async/-/neo-async-2.5.1.tgz";
+        sha512 = "3256b78wjq1hf7ycvh6ll1wr0kxpqb01lgj1fdirkrx5lpzz12c4ygifw09c2bag30njm8sfjkwkg3gxpy32kl1w3n9x4cizdzgg8nw";
       };
     };
     "nested-error-stacks-1.0.2" = {
@@ -18391,13 +18400,13 @@ let
         sha1 = "99b85aec29fcb388d2dd351f0013bf5268787e67";
       };
     };
-    "npm-package-arg-6.0.0" = {
+    "npm-package-arg-6.1.0" = {
       name = "npm-package-arg";
       packageName = "npm-package-arg";
-      version = "6.0.0";
+      version = "6.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/npm-package-arg/-/npm-package-arg-6.0.0.tgz";
-        sha512 = "15a1x3fjip5waxap8dbjkm88j0c2bcnay8pw14p74h1499wznynw2if91shrqlrbzwia09x4xiphp6wkxga5z8vf9k08bjarn1vn047";
+        url = "https://registry.npmjs.org/npm-package-arg/-/npm-package-arg-6.1.0.tgz";
+        sha512 = "14dqycy588sf0k73livvvpmp1dqmbhacc97pq3ksxk1wrm9j82r7hhlrxigj0nb58gz4cbvbh3isj1x3sjiqxs60dhv439xd4zy31nd";
       };
     };
     "npm-packlist-1.1.10" = {
@@ -19400,13 +19409,13 @@ let
         sha1 = "fedd4d2bf193a77745fe71e371d73c3307d9c751";
       };
     };
-    "parse-asn1-5.1.0" = {
+    "parse-asn1-5.1.1" = {
       name = "parse-asn1";
       packageName = "parse-asn1";
-      version = "5.1.0";
+      version = "5.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/parse-asn1/-/parse-asn1-5.1.0.tgz";
-        sha1 = "37c4f9b7ed3ab65c74817b5f2480937fbf97c712";
+        url = "https://registry.npmjs.org/parse-asn1/-/parse-asn1-5.1.1.tgz";
+        sha512 = "1vq07bq1c0b5v82mknyg2y4lrdy1qmqkzw432f406rx9v2hni3040z270kpsvi2vf4ikq6x0k9g8p16n7aafrwsrpwvx0wpa9z7pz18";
       };
     };
     "parse-entities-1.1.1" = {
@@ -20787,13 +20796,13 @@ let
         sha512 = "3jqj1qpjdy5lizvm5mir14vqzzqgaim2yl0iwa164ps6mlp20liyaid1mhr62k23dg0zbkk11zcnzk56d0xvzy9ddbdfmjcnjy3k4mb";
       };
     };
-    "public-encrypt-4.0.0" = {
+    "public-encrypt-4.0.2" = {
       name = "public-encrypt";
       packageName = "public-encrypt";
-      version = "4.0.0";
+      version = "4.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/public-encrypt/-/public-encrypt-4.0.0.tgz";
-        sha1 = "39f699f3a46560dd5ebacbca693caf7c65c18cc6";
+        url = "https://registry.npmjs.org/public-encrypt/-/public-encrypt-4.0.2.tgz";
+        sha512 = "38qgcvnxnp4lva9c0x6xhq05hb811n8q5s8dxchm5mg04rv64693a1w2hrhy8lcgbvs36kv003ar1xsh312c866hzvwb0qwr897jhp2";
       };
     };
     "pug-2.0.3" = {
@@ -22578,13 +22587,13 @@ let
         sha1 = "753b87a89a11c95467c4ac1626c4efc4e05c67be";
       };
     };
-    "rxjs-5.5.8" = {
+    "rxjs-5.5.9" = {
       name = "rxjs";
       packageName = "rxjs";
-      version = "5.5.8";
+      version = "5.5.9";
       src = fetchurl {
-        url = "https://registry.npmjs.org/rxjs/-/rxjs-5.5.8.tgz";
-        sha512 = "32whnkvnay58zbcwimj3lpagg52k7swjdcys6i14a0im2hj1svh602bpvpb3zrqv36k96a1gsjjzbjxvfy6aj89i838l06mxsiflgh7";
+        url = "https://registry.npmjs.org/rxjs/-/rxjs-5.5.9.tgz";
+        sha512 = "2yh8qsipjqwibmbw148ld15149j6p8qzvcgnh631x5ri1vshvggyfjgwxi5m4vav0x81g6c3nd4649pg9x73h88ba2hd6l2g40bsw8c";
       };
     };
     "safe-buffer-5.0.1" = {
@@ -27718,6 +27727,15 @@ let
         sha1 = "5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73";
       };
     };
+    "vm-browserify-1.0.0" = {
+      name = "vm-browserify";
+      packageName = "vm-browserify";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.0.0.tgz";
+        sha512 = "2c2lrpsh6civ983n3p8m9j91ymcl63m9gll0dypwih173i01m01kbjm0d4r45ahbss83bk0lsfl6bnyihhjhhhrnw0xd3nx8gcwn6va";
+      };
+    };
     "voc-1.1.0" = {
       name = "voc";
       packageName = "voc";
@@ -29363,7 +29381,7 @@ in
     dependencies = [
       sources."@types/caseless-0.12.1"
       sources."@types/form-data-2.2.1"
-      sources."@types/node-8.10.4"
+      sources."@types/node-8.10.7"
       sources."@types/request-2.47.0"
       sources."@types/tough-cookie-2.3.2"
       sources."@types/uuid-3.4.3"
@@ -29653,10 +29671,10 @@ in
       })
       (sources."ms-rest-azure-2.5.5" // {
         dependencies = [
-          sources."@types/node-9.6.2"
+          sources."@types/node-9.6.4"
           (sources."adal-node-0.1.28" // {
             dependencies = [
-              sources."@types/node-8.10.4"
+              sources."@types/node-8.10.7"
             ];
           })
           sources."async-2.6.0"
@@ -29933,10 +29951,10 @@ in
   browserify = nodeEnv.buildNodePackage {
     name = "browserify";
     packageName = "browserify";
-    version = "16.1.1";
+    version = "16.2.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/browserify/-/browserify-16.1.1.tgz";
-      sha512 = "01ay1w7sndfvwjdc5n7sa9a4yzzrwdr8agj1655dz50f0g034scaqli9v1dngxasi8gk8gqvqcsqnmphvwkj1y6awlq1y5l6bbgc8c9";
+      url = "https://registry.npmjs.org/browserify/-/browserify-16.2.0.tgz";
+      sha512 = "02kwwi6cvxwcyhv9n13j05y67xdkb4b09p5z7n2sl97sif012i5cibmbz6wqqy89ybqh7s3sbdxqf7g6y2hbl61g81vhrbz9815v2ya";
     };
     dependencies = [
       sources."JSONStream-1.3.2"
@@ -29960,8 +29978,8 @@ in
         ];
       })
       sources."browserify-aes-1.2.0"
-      sources."browserify-cipher-1.0.0"
-      sources."browserify-des-1.0.0"
+      sources."browserify-cipher-1.0.1"
+      sources."browserify-des-1.0.1"
       sources."browserify-rsa-4.0.1"
       sources."browserify-sign-4.0.4"
       sources."browserify-zlib-0.2.0"
@@ -29972,15 +29990,16 @@ in
       sources."cached-path-relative-1.0.1"
       sources."cipher-base-1.0.4"
       sources."combine-source-map-0.8.0"
+      sources."component-indexof-0.0.3"
       sources."concat-map-0.0.1"
       sources."concat-stream-1.6.2"
       sources."console-browserify-1.1.0"
       sources."constants-browserify-1.0.0"
       sources."convert-source-map-1.1.3"
       sources."core-util-is-1.0.2"
-      sources."create-ecdh-4.0.0"
-      sources."create-hash-1.1.3"
-      sources."create-hmac-1.1.6"
+      sources."create-ecdh-4.0.1"
+      sources."create-hash-1.2.0"
+      sources."create-hmac-1.1.7"
       (sources."crypto-browserify-3.12.0" // {
         dependencies = [
           sources."hash-base-2.0.2"
@@ -29991,7 +30010,7 @@ in
       sources."deps-sort-2.0.0"
       sources."des.js-1.0.0"
       sources."detective-5.1.0"
-      sources."diffie-hellman-5.0.2"
+      sources."diffie-hellman-5.0.3"
       sources."domain-browser-1.2.0"
       sources."duplexer2-0.1.4"
       sources."elliptic-6.4.0"
@@ -30007,7 +30026,6 @@ in
       sources."htmlescape-1.1.1"
       sources."https-browserify-1.0.0"
       sources."ieee754-1.1.11"
-      sources."indexof-0.0.1"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
       sources."inline-source-map-0.6.2"
@@ -30022,7 +30040,7 @@ in
       sources."lodash.memoize-3.0.4"
       sources."md5.js-1.3.4"
       sources."miller-rabin-4.0.1"
-      sources."minimalistic-assert-1.0.0"
+      sources."minimalistic-assert-1.0.1"
       sources."minimalistic-crypto-utils-1.0.1"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
@@ -30037,7 +30055,7 @@ in
       sources."os-browserify-0.3.0"
       sources."pako-1.0.6"
       sources."parents-1.0.1"
-      sources."parse-asn1-5.1.0"
+      sources."parse-asn1-5.1.1"
       sources."path-browserify-0.0.0"
       sources."path-is-absolute-1.0.1"
       sources."path-parse-1.0.5"
@@ -30045,7 +30063,7 @@ in
       sources."pbkdf2-3.0.14"
       sources."process-0.11.10"
       sources."process-nextick-args-2.0.0"
-      sources."public-encrypt-4.0.0"
+      sources."public-encrypt-4.0.2"
       sources."punycode-1.4.1"
       sources."querystring-0.2.0"
       sources."querystring-es3-0.2.1"
@@ -30055,7 +30073,6 @@ in
       (sources."readable-stream-2.3.6" // {
         dependencies = [
           sources."isarray-1.0.0"
-          sources."string_decoder-1.1.1"
         ];
       })
       sources."resolve-1.7.0"
@@ -30069,7 +30086,7 @@ in
       sources."stream-combiner2-1.1.1"
       sources."stream-http-2.8.1"
       sources."stream-splicer-2.0.0"
-      sources."string_decoder-1.0.3"
+      sources."string_decoder-1.1.1"
       (sources."subarg-1.0.0" // {
         dependencies = [
           sources."minimist-1.2.0"
@@ -30094,7 +30111,7 @@ in
         ];
       })
       sources."util-deprecate-1.0.2"
-      sources."vm-browserify-0.0.4"
+      sources."vm-browserify-1.0.0"
       sources."wrappy-1.0.2"
       sources."xtend-4.0.1"
     ];
@@ -30601,7 +30618,7 @@ in
       sources."balanced-match-1.0.0"
       sources."base64-js-0.0.8"
       sources."bcrypt-pbkdf-1.0.1"
-      sources."big-integer-1.6.27"
+      sources."big-integer-1.6.28"
       sources."block-stream-0.0.9"
       sources."bn.js-4.11.8"
       (sources."body-parser-1.18.2" // {
@@ -30626,8 +30643,8 @@ in
         ];
       })
       sources."browserify-aes-1.2.0"
-      sources."browserify-cipher-1.0.0"
-      sources."browserify-des-1.0.0"
+      sources."browserify-cipher-1.0.1"
+      sources."browserify-des-1.0.1"
       sources."browserify-rsa-4.0.1"
       sources."browserify-sign-4.0.4"
       sources."browserify-transform-tools-1.7.0"
@@ -30710,9 +30727,9 @@ in
         ];
       })
       sources."core-util-is-1.0.2"
-      sources."create-ecdh-4.0.0"
-      sources."create-hash-1.1.3"
-      sources."create-hmac-1.1.6"
+      sources."create-ecdh-4.0.1"
+      sources."create-hash-1.2.0"
+      sources."create-hmac-1.1.7"
       sources."cryptiles-2.0.5"
       sources."crypto-browserify-3.12.0"
       sources."dashdash-1.14.1"
@@ -30737,7 +30754,7 @@ in
       sources."destroy-1.0.4"
       sources."detect-indent-5.0.0"
       sources."detective-4.7.1"
-      sources."diffie-hellman-5.0.2"
+      sources."diffie-hellman-5.0.3"
       sources."domain-browser-1.1.7"
       sources."dot-prop-3.0.0"
       sources."duplexer2-0.1.4"
@@ -30862,7 +30879,7 @@ in
       sources."mime-1.4.1"
       sources."mime-db-1.33.0"
       sources."mime-types-2.1.18"
-      sources."minimalistic-assert-1.0.0"
+      sources."minimalistic-assert-1.0.1"
       sources."minimalistic-crypto-utils-1.0.1"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
@@ -30874,7 +30891,7 @@ in
       sources."nested-error-stacks-1.0.2"
       sources."nopt-3.0.1"
       sources."normalize-package-data-2.4.0"
-      sources."npm-package-arg-6.0.0"
+      sources."npm-package-arg-6.1.0"
       sources."number-is-nan-1.0.1"
       sources."oauth-sign-0.8.2"
       sources."object-assign-4.1.1"
@@ -30894,7 +30911,7 @@ in
       sources."package-json-1.2.0"
       sources."pako-0.2.9"
       sources."parents-1.0.1"
-      sources."parse-asn1-5.1.0"
+      sources."parse-asn1-5.1.1"
       sources."parseurl-1.3.2"
       sources."path-browserify-0.0.0"
       sources."path-is-absolute-1.0.1"
@@ -30912,7 +30929,7 @@ in
       sources."promzard-0.3.0"
       sources."properties-parser-0.3.1"
       sources."proxy-addr-2.0.3"
-      sources."public-encrypt-4.0.0"
+      sources."public-encrypt-4.0.2"
       sources."punycode-1.4.1"
       sources."q-1.5.1"
       sources."qs-6.5.1"
@@ -31922,10 +31939,10 @@ in
   elasticdump = nodeEnv.buildNodePackage {
     name = "elasticdump";
     packageName = "elasticdump";
-    version = "3.3.8";
+    version = "3.3.9";
     src = fetchurl {
-      url = "https://registry.npmjs.org/elasticdump/-/elasticdump-3.3.8.tgz";
-      sha512 = "3bahinp16ajfxy06ihrl022906h6zdxhsgmwh28k1p04blzqzgddbryx4l1a8ncg5fdjlj7ka9k3f6lam68fanjw4093hgyns7iclf4";
+      url = "https://registry.npmjs.org/elasticdump/-/elasticdump-3.3.9.tgz";
+      sha512 = "1nd9x3f48r328ccrzlcz12sahj906qp66g0vfkn7dhv6yfippcx172axb8y5r48byydjgg28xs6l3xjgxsq9w428yncjnhnabz304sj";
     };
     dependencies = [
       sources."JSONStream-1.3.2"
@@ -31934,7 +31951,7 @@ in
       sources."assert-plus-1.0.0"
       sources."async-2.6.0"
       sources."asynckit-0.4.0"
-      sources."aws-sdk-2.223.1"
+      sources."aws-sdk-2.224.1"
       sources."aws-sign2-0.7.0"
       sources."aws4-1.7.0"
       sources."base64-js-1.2.3"
@@ -32014,6 +32031,23 @@ in
       description = "import and export tools for elasticsearch";
       homepage = "https://github.com/taskrabbit/elasticsearch-dump#readme";
       license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = false;
+  };
+  elm-oracle = nodeEnv.buildNodePackage {
+    name = "elm-oracle";
+    packageName = "elm-oracle";
+    version = "1.1.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/elm-oracle/-/elm-oracle-1.1.1.tgz";
+      sha1 = "61f6d783221b4ad08e7d101d678b9d5a67d3961c";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Query for information about values in elm source files.";
+      homepage = "https://github.com/ElmCast/elm-oracle#readme";
+      license = "BSD-3-Clause";
     };
     production = true;
     bypassCache = false;
@@ -34313,7 +34347,7 @@ in
       sources."opentracing-0.14.3"
       sources."path-is-absolute-1.0.1"
       sources."pathval-1.1.0"
-      sources."rxjs-5.5.8"
+      sources."rxjs-5.5.9"
       sources."semaphore-async-await-1.5.1"
       sources."string-similarity-1.2.0"
       sources."string-template-0.2.1"
@@ -35015,8 +35049,8 @@ in
         ];
       })
       sources."browserify-aes-1.2.0"
-      sources."browserify-cipher-1.0.0"
-      sources."browserify-des-1.0.0"
+      sources."browserify-cipher-1.0.1"
+      sources."browserify-des-1.0.1"
       sources."browserify-rsa-4.0.1"
       sources."browserify-sign-4.0.4"
       sources."browserify-zlib-0.2.0"
@@ -35062,9 +35096,9 @@ in
       sources."cookie-0.3.1"
       sources."core-js-2.5.5"
       sources."core-util-is-1.0.2"
-      sources."create-ecdh-4.0.0"
-      sources."create-hash-1.1.3"
-      sources."create-hmac-1.1.6"
+      sources."create-ecdh-4.0.1"
+      sources."create-hash-1.2.0"
+      sources."create-hmac-1.1.7"
       (sources."cryptiles-3.1.2" // {
         dependencies = [
           sources."boom-5.2.0"
@@ -35086,7 +35120,7 @@ in
       sources."des.js-1.0.0"
       sources."detective-4.7.1"
       sources."di-0.0.1"
-      sources."diffie-hellman-5.0.2"
+      sources."diffie-hellman-5.0.3"
       sources."dom-serialize-2.2.1"
       sources."domain-browser-1.1.7"
       sources."double-ended-queue-2.1.0-0"
@@ -35273,7 +35307,7 @@ in
       sources."mime-1.6.0"
       sources."mime-db-1.33.0"
       sources."mime-types-2.1.18"
-      sources."minimalistic-assert-1.0.0"
+      sources."minimalistic-assert-1.0.1"
       sources."minimalistic-crypto-utils-1.0.1"
       sources."minimatch-3.0.4"
       sources."minimist-1.2.0"
@@ -35310,7 +35344,7 @@ in
       sources."pac-resolver-2.0.0"
       sources."pako-1.0.6"
       sources."parents-1.0.1"
-      sources."parse-asn1-5.1.0"
+      sources."parse-asn1-5.1.1"
       sources."parse-glob-3.0.4"
       sources."parseqs-0.0.5"
       sources."parseuri-0.0.5"
@@ -35334,7 +35368,7 @@ in
       sources."process-nextick-args-1.0.7"
       sources."proxy-agent-2.0.0"
       sources."pseudomap-1.0.2"
-      sources."public-encrypt-4.0.0"
+      sources."public-encrypt-4.0.2"
       sources."punycode-1.4.1"
       sources."q-1.4.1"
       sources."qjobs-1.2.0"
@@ -36928,7 +36962,7 @@ in
       sources."nijs-0.0.25"
       sources."nopt-3.0.6"
       sources."normalize-package-data-2.4.0"
-      sources."npm-package-arg-6.0.0"
+      sources."npm-package-arg-6.1.0"
       sources."npm-registry-client-8.5.1"
       (sources."npmconf-2.1.2" // {
         dependencies = [
@@ -37168,7 +37202,7 @@ in
           sources."yargs-1.3.3"
         ];
       })
-      sources."big-integer-1.6.27"
+      sources."big-integer-1.6.28"
       sources."block-stream-0.0.9"
       (sources."body-parser-1.18.2" // {
         dependencies = [
@@ -39418,7 +39452,7 @@ in
       sources."balanced-match-1.0.0"
       sources."base64-js-0.0.8"
       sources."bencode-2.0.0"
-      sources."big-integer-1.6.27"
+      sources."big-integer-1.6.28"
       sources."bitfield-0.1.0"
       sources."bittorrent-dht-6.4.2"
       sources."bittorrent-tracker-7.7.0"
@@ -40231,8 +40265,8 @@ in
       })
       sources."browserify-aes-1.2.0"
       sources."browserify-cache-api-3.0.1"
-      sources."browserify-cipher-1.0.0"
-      sources."browserify-des-1.0.0"
+      sources."browserify-cipher-1.0.1"
+      sources."browserify-des-1.0.1"
       (sources."browserify-incremental-3.1.1" // {
         dependencies = [
           sources."JSONStream-0.10.0"
@@ -40273,9 +40307,9 @@ in
       sources."convert-source-map-1.1.3"
       sources."copy-descriptor-0.1.1"
       sources."core-util-is-1.0.2"
-      sources."create-ecdh-4.0.0"
-      sources."create-hash-1.1.3"
-      sources."create-hmac-1.1.6"
+      sources."create-ecdh-4.0.1"
+      sources."create-hash-1.2.0"
+      sources."create-hmac-1.1.7"
       sources."crypto-browserify-3.12.0"
       sources."date-now-0.1.4"
       sources."debug-2.6.9"
@@ -40285,7 +40319,7 @@ in
       sources."deps-sort-2.0.0"
       sources."des.js-1.0.0"
       sources."detective-4.7.1"
-      sources."diffie-hellman-5.0.2"
+      sources."diffie-hellman-5.0.3"
       sources."domain-browser-1.1.7"
       sources."duplexer2-0.1.4"
       sources."elliptic-6.4.0"
@@ -40364,7 +40398,7 @@ in
       sources."micromatch-3.1.10"
       sources."miller-rabin-4.0.1"
       sources."mime-1.6.0"
-      sources."minimalistic-assert-1.0.0"
+      sources."minimalistic-assert-1.0.1"
       sources."minimalistic-crypto-utils-1.0.1"
       sources."minimatch-3.0.4"
       sources."minimist-1.2.0"
@@ -40374,7 +40408,7 @@ in
       sources."mute-stream-0.0.7"
       sources."nan-2.10.0"
       sources."nanomatch-1.2.9"
-      sources."neo-async-2.5.0"
+      sources."neo-async-2.5.1"
       (sources."node-static-0.7.10" // {
         dependencies = [
           sources."minimist-0.0.10"
@@ -40391,7 +40425,7 @@ in
       sources."os-tmpdir-1.0.2"
       sources."pako-0.2.9"
       sources."parents-1.0.1"
-      sources."parse-asn1-5.1.0"
+      sources."parse-asn1-5.1.1"
       sources."pascalcase-0.1.1"
       sources."path-browserify-0.0.0"
       sources."path-dirname-1.0.2"
@@ -40402,7 +40436,7 @@ in
       sources."posix-character-classes-0.1.1"
       sources."process-0.11.10"
       sources."process-nextick-args-1.0.7"
-      sources."public-encrypt-4.0.0"
+      sources."public-encrypt-4.0.2"
       sources."punycode-1.4.1"
       sources."querystring-0.2.0"
       sources."querystring-es3-0.2.1"
@@ -42151,7 +42185,7 @@ in
       sources."is-regex-1.0.4"
       sources."is-symbol-1.0.1"
       sources."js-yaml-3.10.0"
-      sources."mdn-data-1.1.0"
+      sources."mdn-data-1.1.1"
       sources."minimist-0.0.8"
       sources."mkdirp-0.5.1"
       sources."nth-check-1.0.1"
@@ -42846,7 +42880,7 @@ in
       sources."nopt-1.0.10"
       sources."normalize-package-data-2.4.0"
       sources."npm-6.0.0-next.0"
-      sources."npm-package-arg-6.0.0"
+      sources."npm-package-arg-6.1.0"
       (sources."npm-registry-client-8.5.1" // {
         dependencies = [
           sources."combined-stream-1.0.6"
@@ -43538,8 +43572,8 @@ in
       })
       sources."brorand-1.1.0"
       sources."browserify-aes-1.2.0"
-      sources."browserify-cipher-1.0.0"
-      sources."browserify-des-1.0.0"
+      sources."browserify-cipher-1.0.1"
+      sources."browserify-des-1.0.1"
       sources."browserify-rsa-4.0.1"
       sources."browserify-sign-4.0.4"
       sources."browserify-zlib-0.2.0"
@@ -43569,9 +43603,9 @@ in
       sources."copy-concurrently-1.0.5"
       sources."copy-descriptor-0.1.1"
       sources."core-util-is-1.0.2"
-      sources."create-ecdh-4.0.0"
-      sources."create-hash-1.1.3"
-      sources."create-hmac-1.1.6"
+      sources."create-ecdh-4.0.1"
+      sources."create-hash-1.2.0"
+      sources."create-hmac-1.1.7"
       sources."crypto-browserify-3.12.0"
       sources."cyclist-0.2.2"
       sources."date-now-0.1.4"
@@ -43579,7 +43613,7 @@ in
       sources."decode-uri-component-0.2.0"
       sources."define-property-2.0.2"
       sources."des.js-1.0.0"
-      sources."diffie-hellman-5.0.2"
+      sources."diffie-hellman-5.0.3"
       sources."domain-browser-1.2.0"
       sources."duplexify-3.5.4"
       sources."elliptic-6.4.0"
@@ -43683,7 +43717,7 @@ in
         ];
       })
       sources."miller-rabin-4.0.1"
-      sources."minimalistic-assert-1.0.0"
+      sources."minimalistic-assert-1.0.1"
       sources."minimalistic-crypto-utils-1.0.1"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
@@ -43694,7 +43728,7 @@ in
       sources."ms-2.0.0"
       sources."nan-2.10.0"
       sources."nanomatch-1.2.9"
-      sources."neo-async-2.5.0"
+      sources."neo-async-2.5.1"
       (sources."node-libs-browser-2.1.0" // {
         dependencies = [
           sources."hash-base-2.0.2"
@@ -43713,7 +43747,7 @@ in
       sources."p-try-1.0.0"
       sources."pako-1.0.6"
       sources."parallel-transform-1.1.0"
-      sources."parse-asn1-5.1.0"
+      sources."parse-asn1-5.1.1"
       sources."pascalcase-0.1.1"
       sources."path-browserify-0.0.0"
       sources."path-dirname-1.0.2"
@@ -43728,7 +43762,7 @@ in
       sources."promise-inflight-1.0.1"
       sources."prr-1.0.1"
       sources."pseudomap-1.0.2"
-      sources."public-encrypt-4.0.0"
+      sources."public-encrypt-4.0.2"
       sources."pump-2.0.1"
       sources."pumpify-1.4.0"
       sources."punycode-2.1.0"
@@ -44110,7 +44144,7 @@ in
       (sources."webtorrent-0.98.24" // {
         dependencies = [
           sources."debug-3.1.0"
-          sources."mime-2.2.2"
+          sources."mime-2.3.1"
           sources."minimist-0.0.8"
           sources."thunky-1.0.2"
         ];
@@ -44146,7 +44180,7 @@ in
     dependencies = [
       sources."@cliqz-oss/firefox-client-0.3.1"
       sources."@cliqz-oss/node-firefox-connect-1.2.1"
-      sources."@types/node-9.6.2"
+      sources."@types/node-9.6.4"
       sources."JSONSelect-0.2.1"
       sources."abbrev-1.1.1"
       sources."acorn-5.5.3"
@@ -44737,7 +44771,7 @@ in
           sources."debug-2.6.9"
         ];
       })
-      sources."neo-async-2.5.0"
+      sources."neo-async-2.5.1"
       sources."nested-error-stacks-1.0.2"
       sources."next-tick-1.0.0"
       sources."node-forge-0.7.5"

@@ -49,13 +49,13 @@ let
         sha1 = "cbc4b9a68981bf0b501ccd06a9058acd65309bf7";
       };
     };
-    "@types/node-9.6.2" = {
+    "@types/node-9.6.4" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "9.6.2";
+      version = "9.6.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-9.6.2.tgz";
-        sha512 = "30kq6rikl2ya5krnyglrbi52xrm0f3q0nyzj99haady8c2s03l3rcp42cxkkd4v3mrvsw3jan0kz7vb4j148qg8wklh2igvsmii2sai";
+        url = "https://registry.npmjs.org/@types/node/-/node-9.6.4.tgz";
+        sha512 = "2dycvznsyvvh20z231b8xg7c6rx6dvazq0c7hzk4pa9mkv90qwaiv611lzhgqmy1f4g4mvmvlz5b0p7pbmiiplb596rp28qql2kh203";
       };
     };
     "@types/superagent-3.5.6" = {
@@ -7583,7 +7583,7 @@ in
           sources."chalk-1.1.3"
         ];
       })
-      sources."@types/node-9.6.2"
+      sources."@types/node-9.6.4"
       sources."@types/superagent-3.5.6"
       sources."ansi-escapes-3.1.0"
       sources."ansi-regex-2.1.1"
