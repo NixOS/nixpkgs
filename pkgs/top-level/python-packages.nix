@@ -66,6 +66,9 @@ let
     toPythonModule = x: x; # Application does not provide modules.
   }));
 
+  # See build-setupcfg/default.nix for documentation.
+  buildSetupcfg = import ../build-support/build-setupcfg self;
+
   graphiteVersion = "1.0.2";
 
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
@@ -133,6 +136,7 @@ in {
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit buildSetupcfg;
 
   # helpers
 
