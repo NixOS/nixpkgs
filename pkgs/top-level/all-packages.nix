@@ -20195,6 +20195,8 @@ with pkgs;
 
   gap = callPackage ../applications/science/math/gap { };
 
+  gap-minimal = lowPrio (gap.override { keepAllPackages = false; });
+
   geogebra = callPackage ../applications/science/math/geogebra { };
 
   maxima = callPackage ../applications/science/math/maxima {
