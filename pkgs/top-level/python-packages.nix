@@ -10572,6 +10572,7 @@ in {
       license = licenses.bsd2;
       platforms = platforms.all;
       homepage = "http://jparyani.github.io/pycapnp/index.html";
+      broken = true; # 2018-04-11
     };
   };
 
