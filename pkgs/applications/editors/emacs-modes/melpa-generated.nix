@@ -26791,27 +26791,6 @@
           license = lib.licenses.free;
         };
       }) {};
-    fold-dwim-org = callPackage ({ fetchFromGitHub, fetchurl, fold-dwim, lib, melpaBuild }:
-    melpaBuild {
-        pname = "fold-dwim-org";
-        version = "20131203.551";
-        src = fetchFromGitHub {
-          owner = "mattfidler";
-          repo = "fold-dwim-org";
-          rev = "c09bb2b46d65afbd1d0febc6fded7495be7a3037";
-          sha256 = "14jvbkahwvv4wb0s9vp8gqmlpv1d4269j5rsjxn79q5pawjzslxw";
-        };
-        recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/97d22d9feaf521ce576b80d2933ecbc166c1dbe7/recipes/fold-dwim-org";
-          sha256 = "0812p351rzvqcfn00k92nfhlg3y772y4z4b9f0xqnpa935y6harn";
-          name = "fold-dwim-org";
-        };
-        packageRequires = [ fold-dwim ];
-        meta = {
-          homepage = "https://melpa.org/#/fold-dwim-org";
-          license = lib.licenses.free;
-        };
-      }) {};
     fold-this = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fold-this";
@@ -66323,27 +66302,6 @@
         packageRequires = [ doom s ];
         meta = {
           homepage = "https://melpa.org/#/show-css";
-          license = lib.licenses.free;
-        };
-      }) {};
-    show-marks = callPackage ({ fetchFromGitHub, fetchurl, fm, lib, melpaBuild }:
-    melpaBuild {
-        pname = "show-marks";
-        version = "20130805.749";
-        src = fetchFromGitHub {
-          owner = "vapniks";
-          repo = "show-marks";
-          rev = "97609566582e65eed0d0a854efa5c312f209115d";
-          sha256 = "15vkk7lnnfwgzkiwpqz1l1qpnz2d10l82m10m0prbw03k1zx22c7";
-        };
-        recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/f2007ab49d123e324c8d7c09bca9de33468d98ab/recipes/show-marks";
-          sha256 = "1jgxdclj88ca106vcvf1k8zbf7iwamy80c2ad8b3myz0f4zscjzb";
-          name = "show-marks";
-        };
-        packageRequires = [ fm ];
-        meta = {
-          homepage = "https://melpa.org/#/show-marks";
           license = lib.licenses.free;
         };
       }) {};
