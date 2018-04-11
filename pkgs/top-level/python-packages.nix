@@ -3395,6 +3395,7 @@ in {
     pname = "lightblue";
     version = "0.4";
     name = "${pname}-${version}";
+    disabled = isPy3k; # build fails, 2018-04-11
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/${pname}/${name}.tar.gz";
