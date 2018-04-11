@@ -20280,6 +20280,8 @@ with pkgs;
     inherit (gnome3) gtksourceview;
   };
 
+  pynac = callPackage ../applications/science/math/pynac { };
+
   singular = callPackage ../applications/science/math/singular { };
 
   scilab = callPackage ../applications/science/math/scilab {
