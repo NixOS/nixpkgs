@@ -20268,6 +20268,8 @@ with pkgs;
   gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
   pari-unstable = callPackage ../applications/science/math/pari/unstable.nix {};
 
+  palp = callPackage ../applications/science/math/palp { };
+
   ratpoints = callPackage ../applications/science/math/ratpoints {};
 
   calc = callPackage ../applications/science/math/calc { };
