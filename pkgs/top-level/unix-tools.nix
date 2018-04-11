@@ -24,7 +24,7 @@ let
         exit 1
       fi
 
-      ln -s "${provider}" "$out/bin/${cmd}"
+      cp "${provider}" "$out/bin/${cmd}"
     '';
 
 in rec {
@@ -43,6 +43,13 @@ in rec {
   };
   eject = singleBinary "eject" {
     linux = pkgs.utillinux;
+  };
+  getconf = singleBinary "getconf" {
+    linux = pkgs.musl-getconf;
+    darwin = pkgs.darwin.system_cmds;
+  };
+  getent = singleBinary "getconf" {
+    linux = pkgs.musl-getent;
   };
   getopt = singleBinary "getopt" {
     linux = pkgs.utillinux;
