@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg; do
+    for link in lean leanpkg leanchecker; do
       ln -s elan $link
     done
     popd
