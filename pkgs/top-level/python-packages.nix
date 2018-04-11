@@ -5557,6 +5557,8 @@ in {
 
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
+  flask-babel = callPackage ../development/python-modules/flask-babel { };
+
   flask_cache = buildPythonPackage rec {
     name = "Flask-Cache-0.13.1";
 
