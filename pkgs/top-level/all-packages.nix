@@ -5824,6 +5824,8 @@ with pkgs;
 
   dash = callPackage ../shells/dash { };
 
+  dashing = callPackages ../tools/misc/dashing { };
+
   es = callPackage ../shells/es { };
 
   fish = callPackage ../shells/fish { };
