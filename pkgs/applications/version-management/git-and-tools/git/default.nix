@@ -54,11 +54,19 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
+  preBuild = ''
+    makeFlagsArray+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
+  '';
+
+  makeFlags = stdenv.lib.concatStringsSep " " [
+    "prefix=\${out}"
+    "PERL_PATH=${perl}/bin/perl"
+    "SHELL_PATH=${stdenv.shell}"
+    (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
+    (if stdenv.isSunOS then "INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
+    (if stdenv.isDarwin then "NO_APPLE_COMMON_CRYPTO=1" else "sysconfdir=/etc/ ")
+    (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "")
+  ];
 
   # build git-credential-osxkeychain if darwin
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
