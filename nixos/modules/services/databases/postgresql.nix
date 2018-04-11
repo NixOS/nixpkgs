@@ -36,9 +36,6 @@ let
       ${cfg.extraConfig}
     '';
 
-  pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
-
-
 in
 
 {
@@ -182,7 +179,7 @@ in
     services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
-        local all all              ident ${optionalString pre84 "sameuser"}
+        local all all              ident
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';

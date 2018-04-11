@@ -66,6 +66,9 @@ let
     toPythonModule = x: x; # Application does not provide modules.
   }));
 
+  # See build-setupcfg/default.nix for documentation.
+  buildSetupcfg = import ../build-support/build-setupcfg self;
+
   graphiteVersion = "1.0.2";
 
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
@@ -133,6 +136,7 @@ in {
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit buildSetupcfg;
 
   # helpers
 
@@ -8132,26 +8136,7 @@ in {
     };
   };
 
-  mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.36";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mutagen/${name}.tar.gz";
-      sha256 = "1kabb9b81hgvpd3wcznww549vss12b1xlvpnxg1r6n4c7gikgvnp";
-    };
-
-    # Needed for tests only
-    buildInputs = with self; [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-      pkgs.glibcLocales pytest
-    ];
-    LC_ALL = "en_US.UTF-8";
-
-    meta = {
-      description = "Python multimedia tagging library";
-      homepage = http://code.google.com/p/mutagen;
-      license = licenses.lgpl2;
-    };
-  });
+  mutagen = callPackage ../development/python-modules/mutagen { };
 
 
   muttils = buildPythonPackage (rec {

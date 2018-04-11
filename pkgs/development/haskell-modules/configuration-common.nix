@@ -508,7 +508,7 @@ self: super: {
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
-  # https://github.com/haskell-hvr/lzma/issues/8
+  # https://github.com/haskell-hvr/lzma/pull/11
   lzma = appendPatch super.lzma ./patches/lzma-tests.patch;
 
   # https://github.com/BNFC/bnfc/issues/140

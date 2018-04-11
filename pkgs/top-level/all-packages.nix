@@ -7230,6 +7230,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
+
   # These pyside tools do not provide any Python modules and are meant to be here.
   # See ../development/python-modules/pyside/default.nix for details.
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
@@ -10684,7 +10686,9 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins { };
+  nix-plugins = callPackage ../development/libraries/nix-plugins {
+    nix = nixUnstable;
+  };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -13765,13 +13769,19 @@ with pkgs;
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
+  linux-pam = callPackage ../os-specific/linux/pam { };
+
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
 
+  openpam = callPackage ../development/libraries/openpam { };
+
+  openbsm = callPackage ../development/libraries/openbsm { };
+
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
-  pam = callPackage ../os-specific/linux/pam { };
+  pam = if stdenv.isLinux then linux-pam else openpam;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
@@ -15149,6 +15159,8 @@ with pkgs;
 
   distrho = callPackage ../applications/audio/distrho {};
 
+  dit = callPackage ../applications/editors/dit { };
+
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
@@ -15851,12 +15863,6 @@ with pkgs;
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
-  };
-
-  girara-light = callPackage ../applications/misc/girara {
-    gtk = gtk3;
-    withBuildColors = false;
-    ncurses = null;
   };
 
   gitAndTools = recurseIntoAttrs (callPackage ../applications/version-management/git-and-tools {});
@@ -17439,8 +17445,8 @@ with pkgs;
 
   quodlibet-xine = quodlibet.override { xineBackend = true; tag = "-xine"; };
 
-  quodlibet-full = callPackage ../applications/audio/quodlibet {
-    inherit (gnome2) gtksourceview;
+  quodlibet-full = quodlibet.override {
+    inherit (gnome3) gtksourceview webkitgtk;
     withDbusPython = true;
     withPyInotify = true;
     withMusicBrainzNgs = true;
@@ -17448,7 +17454,6 @@ with pkgs;
     keybinder3 = keybinder3;
     libmodplug = libmodplug;
     kakasi = kakasi;
-    webkitgtk = webkitgtk24x-gtk3;
     libappindicator-gtk3 = libappindicator-gtk3;
     tag = "-full";
   };
@@ -20118,6 +20123,8 @@ with pkgs;
   fricas = callPackage ../applications/science/math/fricas { };
 
   gap = callPackage ../applications/science/math/gap { };
+
+  gap-minimal = lowPrio (gap.override { keepAllPackages = false; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
