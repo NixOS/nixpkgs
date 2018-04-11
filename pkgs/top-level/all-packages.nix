@@ -3110,6 +3110,8 @@ with pkgs;
 
   jmespath = callPackage ../development/tools/jmespath { };
 
+  jmol = callPackage ../applications/science/chemistry/jmol { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
