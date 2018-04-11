@@ -19816,6 +19816,8 @@ with pkgs;
 
   nauty = callPackage ../applications/science/math/nauty {};
 
+  rubiks = callPackage ../development/libraries/science/math/rubiks { };
+
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
   sage = callPackage ../applications/science/math/sage { };
