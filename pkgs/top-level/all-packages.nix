@@ -13848,6 +13848,8 @@ with pkgs;
 
   openpam = callPackage ../development/libraries/openpam { };
 
+  openbsm = callPackage ../development/libraries/openbsm { };
+
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
   pam = if stdenv.isLinux then linux-pam else openpam;
