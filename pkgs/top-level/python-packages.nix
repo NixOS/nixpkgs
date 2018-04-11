@@ -2975,7 +2975,6 @@ in {
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
           --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
-
     '';
 
     meta = {
@@ -12490,28 +12489,7 @@ in {
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
-  rpy2 = buildPythonPackage rec {
-    name = "rpy2-2.8.2";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rpy2/${name}.tar.gz";
-      sha256 = "2c1a313df4e64236dcfe1078ce847b8e3c180656c894928d3a4b391aacb9b24c";
-    };
-    buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
-    propagatedBuildInputs = with self; [ singledispatch six ];
-
-    # According to manual this is how the testsuite should be invoked
-    checkPhase = ''
-      ${python.interpreter}  -m rpy2.tests
-    '';
-    meta = {
-      homepage = http://rpy.sourceforge.net/rpy2;
-      description = "Python interface to R";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ joelmo ];
-      broken = true;
-    };
-  };
+  rpy2 = callPackage ../development/python-modules/rpy2 {};
 
   rpyc = buildPythonPackage rec {
     name = "rpyc-${version}";
