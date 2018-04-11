@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     # keeping all packages increases the package size considerably, wchich
     # is why a local build is preferable in that situation. The timeframe
     # is reasonable and that way the binary cache doesn't get overloaded.
-    hydraPlatforms = stdenv.lib.optionals (!keepAllPackages) platforms;
+    hydraPlatforms = stdenv.lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
     homepage = http://gap-system.org/;
   };
