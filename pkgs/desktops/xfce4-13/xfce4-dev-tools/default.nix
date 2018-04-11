@@ -9,7 +9,7 @@ mkXfceDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  propagatedNativeBuildInputs = [
+  propagatedBuildInputs = [
     autoconf
     automake
     glib
