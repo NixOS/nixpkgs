@@ -19904,6 +19904,8 @@ with pkgs;
 
   planarity = callPackage ../development/libraries/science/math/planarity { };
 
+  rankwidth = callPackage ../development/libraries/science/math/rankwidth { };
+
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (python3Packages) numpy ply pytest python six sympy;
     pythonPackages = python3Packages;
