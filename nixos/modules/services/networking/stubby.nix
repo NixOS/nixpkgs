@@ -161,6 +161,12 @@ in
         '';
       };
 
+      debugLogging = mkOption {
+        default = false;
+        type = types.bool;
+        description = "enable debug level logging.";
+      };
+
       extraConfig = mkOption {
         default = "";
         type = types.lines;
@@ -183,7 +189,7 @@ in
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilitiesBoundingSet = "CAP_NET_BIND_SERVICE";
-        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile}";
+        ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
         DynamicUser = true;
       };
     };
