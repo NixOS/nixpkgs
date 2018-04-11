@@ -225,11 +225,15 @@ in
                     simp_le ${escapeShellArgs cmdline}
                     EXITCODE=$?
                     set -e
-                    echo "$EXITCODE" > /tmp/lastExitCode
-                    exit "$EXITCODE"
+                    echo "$EXITCODE" > /tmp/lastSimpleExitCode
+                    if [ "$EXITCODE" = "1" ]; then
+                      exit 0
+                    else
+                      exit "$EXITCODE"
+                    fi
                   '';
                   postStop = ''
-                    if [ -e /tmp/lastExitCode ] && [ "$(cat /tmp/lastExitCode)" = "0" ]; then
+                    if [ -e /tmp/lastSimpleExitCode ] && [ "$(cat /tmp/lastSimpleExitCode)" = "0" ]; then
                       echo "Executing postRun hook..."
                       ${data.postRun}
                     fi
