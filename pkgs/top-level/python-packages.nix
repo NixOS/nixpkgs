@@ -5189,16 +5189,15 @@ in {
 
   jupyterlab = buildPythonPackage rec {
     name = "jupyterlab-${version}";
-    version = "0.4.1";
+    version = "0.31.12";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyterlab/${name}.tar.gz";
-      sha256 = "91dc4d7dfb1e6ab97e28d6e3a2fc38f5f65d368201c00fd0ed077519258e67bb";
+      sha256 = "1hp6p9bsr863glildgs2iy1a4l99m7rxj2sy9fmkxp5zhyhqvsrz";
     };
 
-    propagatedBuildInputs = with self; [ notebook ];
+    propagatedBuildInputs = with self; [ notebook jupyterlab_launcher ];
 
-    # No tests in archive
     doCheck = false;
 
     meta = {
