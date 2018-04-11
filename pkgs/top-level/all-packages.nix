@@ -10680,6 +10680,10 @@ with pkgs;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
+  nix-plugins_4 = callPackage ../development/libraries/nix-plugins/4.nix {
+    nix = nixUnstable;
+  };
+
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
