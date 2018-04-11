@@ -20144,6 +20144,7 @@ with pkgs;
   };
   maxima-ecl = callPackage ../applications/science/math/maxima {
     ecl = ecl_16_1_2;
+    ecl-fasl = true;
     sbcl = null;
   };
 
