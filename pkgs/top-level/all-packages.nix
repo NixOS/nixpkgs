@@ -19864,6 +19864,8 @@ with pkgs;
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
+  flintqs = callPackage ../development/libraries/science/math/flintqs { };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
