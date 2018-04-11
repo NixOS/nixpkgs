@@ -5,7 +5,7 @@ let
     baseName="sinit";
     version="1.0";
     name="${baseName}-${version}";
-    url="http://git.suckless.org/sinit/";
+    url="https://git.suckless.org/sinit/";
     sha256="0cf8yylgrrj1wxm5v6jdlbnxpx97m38yxrc9nmv1l8hldjqsj9pc";
     rev = "refs/tags/v${version}";
   };
@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://tools.suckless.org/sinit;
-    downloadPage = "http://git.suckless.org/sinit";
+    downloadPage = "https://git.suckless.org/sinit";
   };
 }
