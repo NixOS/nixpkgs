@@ -49,7 +49,7 @@ in rec {
     darwin = pkgs.getopt;
   };
   hexdump = singleBinary "hexdump" {
-    linux = pkgs.procps;
+    linux = pkgs.utillinux;
     darwin = pkgs.darwin.shell_cmds;
   };
   hostname = singleBinary "hostname" {
