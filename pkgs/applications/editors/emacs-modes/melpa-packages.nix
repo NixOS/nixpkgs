@@ -94,9 +94,6 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
-      # upstream issue: missing file header
-      fold-dwim = markBroken super.fold-dwim;
-
       # build timeout
       graphene = markBroken super.graphene;
 
@@ -163,9 +160,6 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
-
-      # upstream issue: missing package version
-      quack = markBroken super.quack;
 
       # upstream issue: missing file header
       railgun = markBroken super.railgun;
