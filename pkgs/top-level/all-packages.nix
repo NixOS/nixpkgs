@@ -13840,13 +13840,17 @@ with pkgs;
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
+  linux-pam = callPackage ../os-specific/linux/pam { };
+
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
 
+  openpam = callPackage ../development/libraries/openpam { };
+
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
-  pam = callPackage ../os-specific/linux/pam { };
+  pam = if stdenv.isLinux then linux-pam else openpam;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
