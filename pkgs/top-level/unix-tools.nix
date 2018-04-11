@@ -46,7 +46,7 @@ in rec {
   };
   getconf = singleBinary "getconf" {
     linux = pkgs.musl-getconf;
-    darwin = pkgs.system_cmds;
+    darwin = pkgs.darwin.system_cmds;
   };
   getent = singleBinary "getconf" {
     linux = pkgs.musl-getent;
