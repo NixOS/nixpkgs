@@ -19804,6 +19804,8 @@ with pkgs;
     docs = true;
   };
 
+  lcalc = callPackage ../development/libraries/science/math/lcalc { };
+
   lie = callPackage ../applications/science/math/LiE { };
 
   magma = callPackage ../development/libraries/science/math/magma { };
