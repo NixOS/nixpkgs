@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "flatbuffers-${version}";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1qq8qbv8wkiiizj8s984f17bsbjsrhbs9q1nw1yjgrw0grcxlsi9";
+    sha256 = "1ygckvhya0xwc9i2kb9ijh5ffd687srx4543ad9a5bkabgp3p1dm";
   };
 
   buildInputs = [ cmake ];
