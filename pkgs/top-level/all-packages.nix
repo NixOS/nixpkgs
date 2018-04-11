@@ -4865,7 +4865,7 @@ in
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
-  plex = callPackage ../servers/plex { enablePlexPass = config.plex.enablePlexPass or false; };
+  plex = callPackage ../servers/plex { };
 
   plexpy = callPackage ../servers/plexpy { python = python2; };
 
