@@ -19769,6 +19769,8 @@ with pkgs;
 
   clblas = callPackage ../development/libraries/science/math/clblas { };
 
+  flintqs = callPackage ../development/libraries/science/math/flintqs { };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
