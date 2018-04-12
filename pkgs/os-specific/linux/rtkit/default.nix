@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
       url = "http://git.0pointer.net/rtkit.git/patch/?id=88d4082ef6caf6b071d749dca1c50e7edde914cc";
       sha256 = "0hp1blbi359qz8fmr6nj4w9yc0jf3dd176f8pn25wdj38n13qkix";
     })
+    (fetchpatch {
+      url = "https://salsa.debian.org/multimedia-team/rtkit/raw/5594f371aff655ce6d2f016b38e5cb2da7dec677/debian/patches/0006-fix-format-strings.patch";
+      sha256 = "09mr89lh16jvz6cqw00zmh0xk919bjfhjkvna1czwmafwy9p7kgp";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig ];
