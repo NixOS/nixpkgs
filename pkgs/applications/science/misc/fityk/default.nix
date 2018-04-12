@@ -1,12 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, boost, lua, zlib, bzip2
+{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK_2, boost, lua, zlib, bzip2
 , xylib, readline, gnuplot, swig3 }:
 
-let
-  name    = "fityk";
+stdenv.mkDerivation rec {
+  name = "fityk-${version}";
   version = "1.3.1";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
 
   src = fetchFromGitHub {
     owner = "wojdyr";
@@ -16,13 +13,13 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline
+  buildInputs = [ wxGTK_2 boost lua zlib bzip2 xylib readline
     gnuplot swig3 ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Curve fitting and peak fitting software";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = http://fityk.nieto.pl/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
