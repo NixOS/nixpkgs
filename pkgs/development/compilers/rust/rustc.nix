@@ -53,6 +53,7 @@ stdenv.mkDerivation {
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
+  # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" ]
@@ -61,6 +62,13 @@ stdenv.mkDerivation {
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+
+  # The boostrap.py will generated a Makefile that then executes the build.
+  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
+  # to the bootstrap builder.
+  postConfigure = ''
+    substituteInPlace Makefile --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
+  '';
 
   patches = patches ++ targetPatches;
 
