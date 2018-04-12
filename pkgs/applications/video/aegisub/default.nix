@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, libX11, wxGTK
+, libX11, wxGTK_3
 , libiconv, fontconfig, freetype
 , libGLU_combined
 , libass, fftw, ffms
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <unicode/unistr.h>' -i src/utils.cpp";
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig intltool libX11 wxGTK fontconfig freetype libGLU_combined
+  [ pkgconfig intltool libX11 wxGTK_3 fontconfig freetype libGLU_combined
     libass fftw ffms ffmpeg zlib icu boost boost.out libiconv
   ]
     ++ optional spellcheckSupport hunspell

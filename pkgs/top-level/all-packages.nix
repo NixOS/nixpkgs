@@ -433,7 +433,6 @@ with pkgs;
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../applications/video/aegisub {
-    wxGTK = wxGTK30;
     spellcheckSupport = config.aegisub.spellcheckSupport or true;
     automationSupport = config.aegisub.automationSupport or true;
     openalSupport     = config.aegisub.openalSupport or false;
