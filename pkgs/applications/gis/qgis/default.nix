@@ -58,11 +58,13 @@ stdenv.mkDerivation rec {
           '') +
     (stdenv.lib.optionalString stdenv.isDarwin ''
       # Necessary for QGIS to find the correct default GRASS path
+      # Plugins look for gdal tools like deminfo on the PATH
       ${stdenv.lib.optionalString withGrass "ln -sf ${grass} $out/QGIS.app/Contents/MacOS/grass"}
       for file in $(find $out -type f -name "QGIS"); do
         wrapProgram "$file" \
           --prefix DYLD_LIBRARY_PATH : "${qwt}/lib" \
           --prefix DYLD_LIBRARY_PATH : "${qscintilla}/lib" \
+          --prefix PATH : "${gdal}/bin" \
           ${stdenv.lib.optionalString withGrass "--prefix PATH : ${grass}/bin"} \
           --set PYTHONPATH $PYTHONPATH
       done
