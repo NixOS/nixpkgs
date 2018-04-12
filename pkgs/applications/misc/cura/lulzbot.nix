@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, bash, python27Packages }:
+{ stdenv, fetchurl, dpkg, bash, python27Packages, wrapGAppsHook }:
 
 let
   py = python27Packages;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
   pythonPath = python_deps;
   propagatedBuildInputs = python_deps;
-  buildInputs = [ dpkg bash py.wrapPython ];
+  buildInputs = [ dpkg bash py.wrapPython wrapGAppsHook ];
 
   phases = [ "unpackPhase" "installPhase" ];
   unpackPhase = "dpkg-deb -x ${src} ./";
