@@ -19,6 +19,8 @@
 , pkgsi686Linux
 , which
 , curl
+, libX11
+, libGL
 }:
 
 let
@@ -64,6 +66,8 @@ in stdenv.mkDerivation {
     [ python2Packages.python
       python2Packages.wxPython
       python2Packages.setuptools
+      libX11
+      libGL
     ];
 
   patchPhase = ''
