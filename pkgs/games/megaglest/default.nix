@@ -1,5 +1,5 @@
 { stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, vlc
-, libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
+, libjpeg, wxGTK_3, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
 , fetchFromGitHub
 }:
@@ -9,7 +9,7 @@ let
     name = "megaglest-lib-env";
     paths = [ SDL2 xorg.libSM xorg.libICE xorg.libX11 xorg.libXext
       xercesc openal libvorbis lua libjpeg libpng curl fontconfig ftgl freetype
-      stdenv.cc.cc glew libGLU wxGTK ];
+      stdenv.cc.cc glew libGLU wxGTK_3 ];
   };
   path-env = buildEnv {
     name = "megaglest-path-env";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg vlc wxGTK
+  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg vlc wxGTK_3
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
 
   configurePhase = ''
