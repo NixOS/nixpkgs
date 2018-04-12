@@ -64,7 +64,7 @@ in rec {
     linux = pkgs.utillinux;
   };
   modprobe = singleBinary "modprobe" {
-    linux = pkgs.utillinux;
+    linux = pkgs.kmod;
   };
   more = singleBinary "more" {
     linux = pkgs.utillinux;
