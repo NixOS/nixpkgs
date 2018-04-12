@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    mkdir -p $out/share/java
-    cp $src/share/java/*_postgresql-${version}.jar $_/postgresql-jdbc.jar
+    install -D $src/share/java/*_postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar
   '';
 
   meta = with stdenv.lib; {
