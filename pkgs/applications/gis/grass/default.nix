@@ -76,6 +76,7 @@ stdenv.mkDerivation {
     --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass-*/lib $out/lib
+    ln -s $out/grass-*/include $out/include
   '';
 
   enableParallelBuilding = true;
