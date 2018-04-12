@@ -1,5 +1,5 @@
-{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
-  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
+{ fetchurl, fetchFromGitHub, stdenv, wxGTK_3, freeimage, cmake, zziplib, libGLU_combined, boost,
+  pkgconfig, libuuid, openal, ogre, ois, curl, pixman, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU_combined boost
-    libuuid openal ogre ois curl gtk2 mygui unzip angelscript
+  buildInputs = [ wxGTK_3 freeimage cmake zziplib libGLU_combined boost
+    libuuid openal ogre ois curl mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 
   meta = {
