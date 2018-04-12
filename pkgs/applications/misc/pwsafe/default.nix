@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, libuuid, xercesc, zip , libXt, libXtst
+{ stdenv, fetchFromGitHub, wxGTK_3, libuuid, xercesc, zip , libXt, libXtst
 , libXi, xextproto, gettext, perl, pkgconfig, libyubikey, yubikey-personalization
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = "YBPERS_LIBPATH=${yubikey-personalization}/lib";
 
   buildFlags = "unicoderelease";
-  buildInputs = [ wxGTK libuuid gettext perl zip
+  buildInputs = [ wxGTK_3 libuuid gettext perl zip
                   xercesc libXt libXtst libXi xextproto
                   pkgconfig libyubikey yubikey-personalization ];
 
