@@ -2032,9 +2032,7 @@ with pkgs;
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
-  slade = callPackage ../applications/misc/slade {
-    wxGTK = wxGTK30;
-  };
+  slade = callPackage ../applications/misc/slade { };
 
   sladeUnstable = callPackage ../applications/misc/slade/git.nix {
     wxGTK = wxGTK30;
