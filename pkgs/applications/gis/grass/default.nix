@@ -1,20 +1,23 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
+, cairo, readline, ffmpeg, makeWrapper, wxGTK_3, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS
+, wrapGAppsHook
 }:
 
-stdenv.mkDerivation {
-  name = "grass-7.2.2";
+stdenv.mkDerivation rec {
+  name = "grass-${version}";
+  version = "7.2.2";
+
   src = fetchurl {
-    url = http://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz;
+    url = "http://grass.osgeo.org/grass72/source/${name}.tar.gz";
     sha256 = "0yzljbrxlqp4wbw08n1dvmm4vmwkg8glf1ff4xyh589r5ryb7gxv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.connector-c blas
+  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo wrapGAppsHook
+  readline ffmpeg makeWrapper wxGTK_3 netcdf geos postgresql mysql.connector-c blas
   libLAS ]
-    ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+    ++ (with python2Packages; [ python dateutil wxPython30_gtk3 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
