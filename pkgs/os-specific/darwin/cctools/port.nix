@@ -12,8 +12,6 @@ let
     "${targetPlatform.config}-";
 in
 
-assert targetPlatform.isDarwin;
-
 # Non-Darwin alternatives
 assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
@@ -117,6 +115,7 @@ let
     };
 
     meta = {
+      broken = !targetPlatform.isDarwin; # Only supports darwin targets
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
