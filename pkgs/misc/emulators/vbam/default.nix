@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , ffmpeg
 , gettext
-, gtk2-x11
 , libpng
 , libpthreadstubs
 , libXdmcp
@@ -14,7 +13,7 @@
 , pkgconfig
 , SDL2
 , sfml
-, wxGTK
+, wxGTK_3
 , zip
 , zlib
 }:
@@ -34,13 +33,13 @@ stdenv.mkDerivation rec {
     cmake
     ffmpeg
     gettext
-    gtk2-x11
     libGLU_combined
     openal
     pkgconfig
     SDL2
     sfml
-    wxGTK
+    wxGTK_3
+    wxGTK_3.gtk
     zip
     zlib
   ];
