@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, gtk2, wxGTK30, libpulseaudio, curl,
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, wxGTK_2, libpulseaudio, curl,
   gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake gtk2 wxGTK30 libpulseaudio curl gettext
-                  glib portaudio ];
+  buildInputs = [ cmake wxGTK_2 wxGTK_2.gtk libpulseaudio curl gettext glib portaudio ];
 
   cmakeFlags = [
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${wxGTK_2.gtk.out}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
 
