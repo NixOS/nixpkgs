@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ stdenv, fetchFromGitHub, wxGTK_3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name    = "treesheets-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0np91c4skq3yxq76c4zi33w73qb1w2nrcin490kkvrxk53jspklb";
   };
 
-  buildInputs = [ wxGTK makeWrapper ];
+  buildInputs = [ wxGTK_3 makeWrapper ];
 
   preConfigure = "cd src";
 
