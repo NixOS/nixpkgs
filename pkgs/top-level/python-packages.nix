@@ -15094,7 +15094,7 @@ EOF
 
   wxPython = self.wxPython_gtk3;
   wxPython_gtk2 = self.wxPython30_gtk2;
-  wxPython_gtk3 = self.wxPython30_gtk3;
+  wxPython_gtk3 = self.wxPython40_gtk3;
   wxPython30 = self.wxPython30_gtk3;
 
   wxPython30_gtk3 = callPackage ../development/python-modules/wxPython/3.0.nix {
@@ -15102,6 +15102,14 @@ EOF
   };
 
   wxPython30_gtk2 = self.wxPython30_gtk3.override {
+    wxGTK = pkgs.wxGTK30_2;
+  };
+
+  wxPython40_gtk3 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    wxGTK = pkgs.wxGTK30_3;
+  };
+
+  wxPython40_gtk2 = self.wxPython40_gtk3.override {
     wxGTK = pkgs.wxGTK30_2;
   };
 
