@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
-, pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle }:
+{ stdenv, fetchurl, dbus, gnutls, wxGTK_3, libidn, tinyxml, gettext
+, pkgconfig, xdg_utils, sqlite, pugixml, libfilezilla, nettle }:
 
-let version = "3.31.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "filezilla-${version}";
+  version = "3.31.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    dbus gnutls wxGTK30 libidn tinyxml gettext xdg_utils gtk2 sqlite
+    dbus gnutls wxGTK_3 wxGTK_3.gtk libidn tinyxml gettext xdg_utils sqlite
     pugixml libfilezilla nettle ];
 
   meta = with stdenv.lib; {
