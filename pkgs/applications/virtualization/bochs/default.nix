@@ -1,17 +1,17 @@
 { stdenv, fetchurl
 , pkgconfig, libtool
-, gtk2, libGLU_combined, readline, libX11, libXpm
+, libGL, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
 , sdlSupport ? true, SDL2 ? null
 , termSupport ? true, ncurses ? null
-, wxSupport ? true, wxGTK ? null
+, wxSupport ? true, wxGTK_2 ? null
 , wgetSupport ? false, wget ? null
 , curlSupport ? false, curl ? null
 }:
 
 assert sdlSupport -> (SDL2 != null);
 assert termSupport -> (ncurses != null);
-assert wxSupport -> (gtk2 != null && wxGTK != null);
+assert wxSupport -> (wxGTK_2 != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
   patches = [ ./bochs-2.6.9-glibc-2.26.patch ];
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig libtool gtk2 libGLU_combined readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
+  [ pkgconfig libtool libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
-  ++ optionals wxSupport [ wxGTK ]
+  ++ optionals wxSupport [ wxGTK_2 ]
   ++ optionals wgetSupport [ wget ]
   ++ optionals curlSupport [ curl ];
 
@@ -104,8 +104,8 @@ stdenv.mkDerivation rec {
          "--enable-es1370"
          "--enable-busmouse" ];
 
-  NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool.lib}/lib";
+  NIX_CFLAGS_COMPILE = [ "-I${wxGTK_2.gtk.dev}/include/gtk-2.0/" "-I${libtool}/include/" ];
+  NIX_LDFLAGS = [ "-L${libtool.lib}/lib" ];
 
   hardeningDisable = [ "format" ];
 
