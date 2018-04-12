@@ -17780,7 +17780,7 @@ with pkgs;
   };
 
   seg3d = callPackage ../applications/graphics/seg3d {
-    wxGTK = wxGTK28.override { unicode = false; };
+    wxGTK_2 = wxGTK28.override { unicode = false; };
   };
 
   sent = callPackage ../applications/misc/sent { };
