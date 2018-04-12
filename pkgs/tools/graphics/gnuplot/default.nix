@@ -8,7 +8,7 @@
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false, wxGTK_3 ? null
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -20,7 +20,8 @@ let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-5.2.3";
+  name = "gnuplot-${version}";
+  version = "5.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
-    ++ lib.optional withWxGTK wxGTK;
+    ++ lib.optional withWxGTK wxGTK_3;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
