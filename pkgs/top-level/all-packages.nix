@@ -414,6 +414,8 @@ with pkgs;
 
   acct = callPackage ../tools/system/acct { };
 
+  acme-sh = callPackage ../tools/admin/acme.sh { };
+
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_1;
   };
