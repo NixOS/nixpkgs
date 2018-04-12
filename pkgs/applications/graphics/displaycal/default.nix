@@ -1,14 +1,16 @@
-{buildPythonPackage, stdenv, fetchurl, pkgconfig
- , libXext, libXxf86vm, libX11, libXrandr, libXinerama, libXScrnSaver
- , argyllcms, wxPython, numpy
- }:
-buildPythonPackage {
-  name = "displaycal-3.5.0.0";
+{ buildPythonPackage, stdenv, fetchurl, pkgconfig
+, libXext, libXxf86vm, libX11, libXrandr, libXinerama, libXScrnSaver
+, argyllcms, wxPython, numpy
+}:
+
+buildPythonPackage rec {
+  name = "DisplayCAL-${version}";
+  version = "3.5.0.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = mirror://sourceforge/project/dispcalgui/release/3.5.0.0/DisplayCAL-3.5.0.0.tar.gz;
+    url = "mirror://sourceforge/project/dispcalgui/release/${version}/${name}.tar.gz";
     sha256 = "1j496sv8pbhby5hkkbp07k6bs3f7mb1l3dijmn2iga3kmix0fn5q";
   };
 
