@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , wrapGAppsHook, cmake, gettext
-, maxima, wxGTK, gnome3 }:
+, maxima, wxGTK_3, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "wxmaxima-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s7bdykc77slqix28cyaa6x8wvxrn8461mkdgxflvi2apwsl56aa";
   };
 
-  buildInputs = [ wxGTK maxima gnome3.defaultIconTheme ];
+  buildInputs = [ wxGTK_3 maxima gnome3.defaultIconTheme ];
 
   nativeBuildInputs = [ wrapGAppsHook cmake gettext ];
 
