@@ -19605,7 +19605,7 @@ with pkgs;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
-  numix-solarized-gtk-theme = callPackage ../misc/themes/gtk3/numix-solarized-gtk-theme {  };
+  numix-solarized-gtk-theme = callPackage ../misc/themes/numix-solarized { };
 
   numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
 
