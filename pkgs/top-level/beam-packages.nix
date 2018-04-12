@@ -1,4 +1,4 @@
-{ pkgs, stdenv, callPackage, wxGTK30, darwin }:
+{ pkgs, stdenv, callPackage, darwin }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -14,27 +14,21 @@ rec {
     erlang_nox = erlangR19_nox;
 
     # These are standard Erlang versions, using the generic builder.
-    erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
-      wxGTK = wxGTK30;
-    };
+    erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix { };
     erlangR18_odbc = erlangR18.override { odbcSupport = true; };
     erlangR18_javac = erlangR18.override { javacSupport = true; };
     erlangR18_odbc_javac = erlangR18.override {
       javacSupport = true; odbcSupport = true;
     };
     erlangR18_nox = erlangR18.override { wxSupport = false; };
-    erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
-      wxGTK = wxGTK30;
-    };
+    erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix { };
     erlangR19_odbc = erlangR19.override { odbcSupport = true; };
     erlangR19_javac = erlangR19.override { javacSupport = true; };
     erlangR19_odbc_javac = erlangR19.override {
       javacSupport = true; odbcSupport = true;
     };
     erlangR19_nox = erlangR19.override { wxSupport = false; };
-    erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix {
-      wxGTK = wxGTK30;
-    };
+    erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix { };
     erlangR20_odbc = erlangR20.override { odbcSupport = true; };
     erlangR20_javac = erlangR20.override { javacSupport = true; };
     erlangR20_odbc_javac = erlangR20.override {

@@ -2,7 +2,7 @@
 , libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK_3 ? null, wxmac ? null, xorg ? null # wxSupport
 }:
 
 { baseName ? "erlang"
@@ -17,7 +17,7 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK_3 xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
@@ -31,7 +31,7 @@
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else libGLU_combined != null && wxGTK != null && xorg != null);
+  else libGL != null && libGLU != null && wxGTK_3 != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;
