@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig
 , autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
 , glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
-, libXmu, libGLU_combined, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
+, libXmu, libGLU_combined, openexr, panotools, perlPackages, sqlite, vigra, wxGTK_3, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
     libpng libtiff libX11 libXi libXmu libGLU_combined openexr panotools sqlite vigra
-    wxGTK zlib
+    wxGTK_3 zlib
   ];
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];

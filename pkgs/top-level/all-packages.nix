@@ -16264,9 +16264,7 @@ with pkgs;
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
-  hugin = callPackage ../applications/graphics/hugin {
-    wxGTK = wxGTK30;
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hugo = callPackage ../applications/misc/hugo { };
 
