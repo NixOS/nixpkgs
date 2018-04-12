@@ -20458,7 +20458,6 @@ with pkgs;
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly { };
-  golly-beta = callPackage ../applications/science/misc/golly/beta.nix { wxGTK = wxGTK30; };
 
   megam = callPackage ../applications/science/misc/megam { };
 
