@@ -2034,9 +2034,7 @@ with pkgs;
 
   slade = callPackage ../applications/misc/slade { };
 
-  sladeUnstable = callPackage ../applications/misc/slade/git.nix {
-    wxGTK = wxGTK30;
-  };
+  sladeUnstable = callPackage ../applications/misc/slade/git.nix { };
 
   drive = callPackage ../applications/networking/drive { };
 
