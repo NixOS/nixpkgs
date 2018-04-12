@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
+  boost, tbb, wxGTK_3, pkgconfig, fetchurl, bash, libGLU,
   glew, eigen }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
@@ -10,7 +10,7 @@ let
     };
     propagatedBuildInputs = [
       pkgconfig perlPackages.ModulePluggable perlPackages.ModuleBuild
-      gtk2 gtk3 wxGTK30
+      wxGTK_3
     ];
   };
 
