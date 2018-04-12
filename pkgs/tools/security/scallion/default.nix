@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/scallion.exe
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/scallion -l  # list OpenCL devices (at least CPU to be found)
-  '';
-
   meta = with stdenv.lib; {
     description = "GPU-based tor hidden service name generator";
     homepage = src.meta.homepage;
