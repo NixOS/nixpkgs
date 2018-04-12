@@ -16,12 +16,9 @@
 , pango
 }:
 
-assert wxGTK.unicode;
-
 buildPythonPackage rec {
   pname = "wxPython";
   version = "3.0.2.0";
-  name = pname + "-" + version;
 
   disabled = isPy3k || isPyPy;
   doCheck = false;
@@ -35,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pkgconfig ]
     ++ (lib.optional openglSupport pyopengl)
-    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK (wxGTK.gtk) libX11 ])
+    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK wxGTK.gtk libX11 ])
     ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ])
     ;
   preConfigure = ''
@@ -60,14 +57,30 @@ buildPythonPackage rec {
       ]}'
   '';
 
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lX11 -lgdk-x11-2.0";
+  NIX_LDFLAGS = lib.optionals (!stdenv.isDarwin) ([ "-lX11" ] ++ (if wxGTK.withGtk2 then [ "-lgdk-x11-2.0" ] else [ "-lgtk-3" "-lgdk-3" ]));
 
-  buildPhase = "";
+  buildFlags = [
+    "WXPORT=${if stdenv.isDarwin then "osx_cocoa" else if wxGTK.withGtk2 then "gtk2" else "gtk3"}"
+    "NO_HEADERS=0"
+    "BUILD_GLCANVAS=${if openglSupport then "1" else "0"}"
+    "UNICODE=1"
+  ];
+
+  buildPhase = ''
+    ${python.interpreter} setup.py build $buildFlags
+  '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install WXPORT=${if stdenv.isDarwin then "osx_cocoa" else "gtk2"} NO_HEADERS=0 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
-    wrapPythonPrograms
+    ${python.interpreter} setup.py install $buildFlags --prefix=$out
   '';
 
   passthru = { inherit wxGTK openglSupport; };
+
+  meta = with stdenv.lib; {
+    description = "A wxWidgets GUI toolkit for Python";
+    homepage = https://www.wxpython.org/;
+    license = wxGTK.meta.license;
+    platforms = platforms.unix;
+    broken = !wxGTK.unicode;
+  };
 }
