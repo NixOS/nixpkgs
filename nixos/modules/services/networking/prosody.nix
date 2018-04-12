@@ -301,6 +301,18 @@ in
         default = "/var/lib/prosody";
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "User account under which prosody runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "Group account under which prosody runs.";
+      };
+
       allowRegistration = mkOption {
         type = types.bool;
         default = false;
@@ -475,15 +487,15 @@ in
         '') cfg.virtualHosts) }
     '';
 
-    users.extraUsers.prosody = {
+    users.extraUsers.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
       createHome = true;
-      group = "prosody";
+      inherit (cfg) group;
       home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.prosody = {
+    users.extraGroups.prosody = mkIf (cfg.group == "prosody") {
       gid = config.ids.gids.prosody;
     };
 
@@ -494,7 +506,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
       serviceConfig = {
-        User = "prosody";
+        User = cfg.user;
+        Group = cfg.group;
         Type = "forking";
         PIDFile = "${cfg.dataDir}/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
