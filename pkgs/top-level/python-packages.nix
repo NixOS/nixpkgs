@@ -1203,6 +1203,8 @@ in {
 
   cycler = callPackage ../development/python-modules/cycler { };
 
+  cysignals = callPackage ../development/python-modules/cysignals { };
+
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
 
