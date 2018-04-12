@@ -2,7 +2,7 @@
 , cmake, boost
 , portmidi, sqlite
 , freetype, libpng, pngpp, zlib
-, wxGTK30, wxsqlite3
+, wxGTK_3, wxsqlite3
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cmake boost
     portmidi sqlite
     freetype libpng pngpp zlib
-    wxGTK30 wxsqlite3
+    wxGTK_3 wxsqlite3
   ];
 
   meta = with stdenv.lib; {
