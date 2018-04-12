@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wxGTK30, openssl, curl }:
+{ stdenv, fetchurl, wxGTK_3, openssl, curl }:
 
 stdenv.mkDerivation rec {
   name = "hakuneko-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
        --replace /bin/bash $shell
     '';
 
-  buildInputs = [ wxGTK30 openssl curl ];
+  buildInputs = [ wxGTK_3 openssl curl ];
 
   meta = {
     description = "Manga downloader";
