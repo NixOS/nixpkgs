@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, yasm, fuse, wxGTK30, devicemapper, makeself,
+{ fetchurl, stdenv, pkgconfig, yasm, fuse, wxGTK_3, devicemapper, makeself,
   wxGUI ? true
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeself yasm pkgconfig ];
   buildInputs = [ fuse devicemapper ]
-    ++ optional wxGUI wxGTK30;
+    ++ optional wxGUI wxGTK_3;
   makeFlags = optionalString (!wxGUI) "NOGUI=1";
 
   installPhase =
