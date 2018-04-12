@@ -15092,10 +15092,17 @@ EOF
     };
   };
 
-  wxPython = self.wxPython30;
+  wxPython = self.wxPython_gtk3;
+  wxPython_gtk2 = self.wxPython30_gtk2;
+  wxPython_gtk3 = self.wxPython30_gtk3;
+  wxPython30 = self.wxPython30_gtk3;
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
-    wxGTK = pkgs.wxGTK30;
+  wxPython30_gtk3 = callPackage ../development/python-modules/wxPython/3.0.nix {
+    wxGTK = pkgs.wxGTK30_3;
+  };
+
+  wxPython30_gtk2 = self.wxPython30_gtk3.override {
+    wxGTK = pkgs.wxGTK30_2;
   };
 
   xcaplib = buildPythonPackage rec {
