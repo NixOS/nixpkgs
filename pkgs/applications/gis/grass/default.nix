@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     "--with-blas"
   ];
 
+  # Otherwise a very confusing "Can't load GDAL library" error
+  makeFlags = stdenv.lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
   postConfigure = ''
