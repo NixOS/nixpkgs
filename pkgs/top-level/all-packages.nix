@@ -18639,8 +18639,6 @@ with pkgs;
 
   wxcam = callPackage ../applications/video/wxcam {
     inherit (gnome2) libglade;
-    wxGTK = wxGTK28;
-    gtk = gtk2;
   };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
