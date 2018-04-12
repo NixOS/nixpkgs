@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "2.16.2";
+  version = "2.17.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "05y7480f2p7fkncbhf08zz56jbykcp0ia5gl6y3djs0lsa5mfq2m";
+    sha256 = "1ismz7nsz8dgjmk782xr9s0mr2qh06f72pdcgbxfmnw1bvlya5p9";
   };
 
   hardeningDisable = [ "format" ];
@@ -54,11 +54,19 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
+  preBuild = ''
+    makeFlagsArray+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
+  '';
+
+  makeFlags = stdenv.lib.concatStringsSep " " [
+    "prefix=\${out}"
+    "PERL_PATH=${perl}/bin/perl"
+    "SHELL_PATH=${stdenv.shell}"
+    (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
+    (if stdenv.isSunOS then "INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
+    (if stdenv.isDarwin then "NO_APPLE_COMMON_CRYPTO=1" else "sysconfdir=/etc/ ")
+    (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "")
+  ];
 
   # build git-credential-osxkeychain if darwin
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
