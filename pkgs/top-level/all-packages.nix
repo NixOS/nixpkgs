@@ -17173,7 +17173,7 @@ with pkgs;
 
   diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
-  diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
+  diff-pdf = callPackage ../applications/misc/diff-pdf { };
 
   mlocate = callPackage ../tools/misc/mlocate { };
 
