@@ -1,15 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, libGLU_combined, gtk2, glib
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, libGL, glib
 , pcre, gettext, libpthreadstubs, libXrandr, libXext, libXxf86vm, libXinerama, libSM, readline
-, openal, libXdmcp, portaudio, libusb, libevdev
-, libpulseaudio ? null
-, curl
-
+, openal, libXdmcp, portaudio, libusb, libevdev, miniupnpc, sfml, mbedtls
+, curl, wxGTKDev_2, libpng, hidapi
+, alsaLib, libpulseaudio
 , qt5
+
 # - Inputs used for Darwin
 , CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL
-, wxGTK
-, libpng
-, hidapi
 
 # options
 , dolphin-wxgui ? true
@@ -20,7 +17,7 @@ assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20180430";
+  name = "dolphin-emu-2018-04-30";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
@@ -28,24 +25,27 @@ stdenv.mkDerivation rec {
     sha256 = "17fv3vz0nc5jax1bbl4wny1kzsshbbhms82dxd8rzcwwvd2ad1g7";
   };
 
-  cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
-    "-DENABLE_LTO=True"
-  ] ++ stdenv.lib.optionals (!dolphin-qtgui)  [ "-DENABLE_QT2=False" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DOSX_USE_DEFAULT_SEARCH_PATH=True" ];
+  cmakeFlags =
+    [ "-DENABLE_LTO=True" ]
+    ++ lib.optional (!dolphin-qtgui) "-DENABLE_QT2=False"
+    ++ lib.optional stdenv.isDarwin "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+    ++ lib.optionals dolphin-wxgui [
+      "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+      "-DGTK2_GDKCONFIG_INCLUDE_DIR=${wxGTKDev_2.gtk.out}/lib/gtk-2.0/include"
+      "-DGTK2_INCLUDE_DIRS=${wxGTKDev_2.gtk.dev}/include/gtk-2.0"
+    ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ curl ffmpeg libao libGLU_combined gtk2 glib pcre
+  buildInputs = [ curl ffmpeg libao libGL glib pcre miniupnpc sfml
                   gettext libpthreadstubs libXrandr libXext libXxf86vm libXinerama libSM readline openal
-                  libXdmcp portaudio libusb libpulseaudio libpng hidapi
-                ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
-                  ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ]
-                  ++ stdenv.lib.optionals dolphin-qtgui [ qt5.qtbase ];
+                  libXdmcp portaudio libusb libpng hidapi
+                ] ++ lib.optionals stdenv.isDarwin [ CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
+                  ++ lib.optionals stdenv.isLinux [ alsaLib libpulseaudio bluez libevdev ]
+                  ++ lib.optionals dolphin-wxgui [ wxGTKDev_2 wxGTKDev_2.gtk ]
+                  ++ lib.optional dolphin-qtgui qt5.qtbase;
 
   # - Change install path to Applications relative to $out
   # - Allow Dolphin to use nix-provided libraries instead of building them
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
   '';
 
-  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
   '';
 
