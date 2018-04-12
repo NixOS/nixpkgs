@@ -69,6 +69,7 @@ in rec {
   };
   mount = singleBinary "mount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   netstat = singleBinary "netstat" {
     linux = pkgs.nettools;
@@ -96,6 +97,7 @@ in rec {
   };
   umount = singleBinary "umount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   whereis = singleBinary "whereis" {
     linux = pkgs.utillinux;
