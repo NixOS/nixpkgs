@@ -63,9 +63,6 @@ in rec {
   logger = singleBinary "logger" {
     linux = pkgs.utillinux;
   };
-  modprobe = singleBinary "modprobe" {
-    linux = pkgs.kmod;
-  };
   more = singleBinary "more" {
     linux = pkgs.utillinux;
     darwin = more_compat;
