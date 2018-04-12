@@ -19152,7 +19152,7 @@ with pkgs;
   frotz = callPackage ../games/frotz { };
 
   fsg = callPackage ../games/fsg {
-    wxGTK = wxGTK28.override { unicode = false; };
+    wxGTK_2 = wxGTK28.override { unicode = false; };
   };
 
   galaxis = callPackage ../games/galaxis { };

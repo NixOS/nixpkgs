@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU_combined, wxGTK, libX11, xproto }:
+{ stdenv, fetchurl, glib, pkgconfig, libGL, libGLU, wxGTK_2, libX11, xproto }:
 
-stdenv.mkDerivation {
-  name = "fsg-4.4";
+stdenv.mkDerivation rec {
+  name = "fsg-${version}";
+  version = "4.4";
 
   src = fetchurl {
     url = http://www.sourcefiles.org/Games/Simulation/Other/fsg-src-4.4.tar.gz;
@@ -11,7 +12,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 glib libGLU_combined wxGTK libX11 xproto ];
+  buildInputs = [ glib libGL libGLU wxGTK_2 libX11 xproto ];
 
   preBuild = ''
     sed -e '
