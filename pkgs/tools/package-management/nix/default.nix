@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , libseccomp, busybox-sandbox-shell
 , hostPlatform, buildPlatform
@@ -35,7 +35,8 @@ let
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
-          });
+          })
+      ++ lib.optional fromGit boost;
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -135,19 +136,16 @@ in rec {
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
-  nixUnstable = nix;
-/*
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
-    suffix = "pre5968_a6c0b773";
+    suffix = "pre6137_e3cdcf89";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a6c0b773b72d4e30690e01f1f1dcffc28f2d9ea1";
-      sha256 = "0i8wcblcjw3291ba6ki4llw3fgm8ylp9q52kajkyr58dih537346";
+      rev = "e3cdcf89b0ef42f81c9df5899776ea225f1ecae0";
+      sha256 = "1s9w7ixc2qra3x9545f9a634654rvdqsf38jp9b7wr6xx6qqx60s";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
-*/
 
 }

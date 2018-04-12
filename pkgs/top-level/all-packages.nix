@@ -2671,9 +2671,7 @@ with pkgs;
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
-  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
-    inherit (gnome2) libglademm;
-  };
+  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome2) libsoup;
@@ -7197,6 +7195,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix {};
+
   # These pyside tools do not provide any Python modules and are meant to be here.
   # See ../development/python-modules/pyside/default.nix for details.
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
@@ -10679,6 +10679,10 @@ with pkgs;
   libnghttp2 = nghttp2.lib;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
+
+  nix-plugins_4 = callPackage ../development/libraries/nix-plugins/4.nix {
+    nix = nixUnstable;
+  };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -15118,10 +15122,11 @@ with pkgs;
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
-    docker_18_03;
+    docker_18_03
+    docker_18_04;
 
   docker = docker_18_03;
-  docker-edge = docker_18_03;
+  docker-edge = docker_18_04;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -16401,50 +16406,51 @@ with pkgs;
 
   libreoffice = hiPrio libreoffice-still;
 
-  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice {
-    inherit (perlPackages) ArchiveZip CompressZlib;
-    inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) defaultIconTheme;
-    zip = zip.override { enableNLS = false; };
-    bluez5 = bluez5_28;
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        carlito dejavu_fonts
-        freefont_ttf xorg.fontmiscmisc
-        liberation_ttf_v1_binary
-        liberation_ttf_v2_binary
-      ];
-    };
-    clucene_core = clucene_core_2;
-    lcms = lcms2;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-    # checking whether g++ supports C++14 or C++11... configure: error: no
-    stdenv = overrideCC stdenv gcc5;
-  });
+  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix
+    { libreoffice = callPackage ../applications/office/libreoffice {
+      inherit (perlPackages) ArchiveZip CompressZlib;
+      inherit (gnome2) GConf ORBit2 gnome_vfs;
+      inherit (gnome3) defaultIconTheme;
+      zip = zip.override { enableNLS = false; };
+      bluez5 = bluez5_28;
+      fontsConf = makeFontsConf {
+        fontDirectories = [
+          carlito dejavu_fonts
+          freefont_ttf xorg.fontmiscmisc
+          liberation_ttf_v1_binary
+          liberation_ttf_v2_binary
+        ];
+      };
+      clucene_core = clucene_core_2;
+      lcms = lcms2;
+      harfbuzz = harfbuzz.override {
+        withIcu = true; withGraphite2 = true;
+      };
+      # checking whether g++ supports C++14 or C++11... configure: error: no
+      stdenv = overrideCC stdenv gcc5;
+  };});
 
-  libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
-    inherit (perlPackages) ArchiveZip CompressZlib;
-    inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) defaultIconTheme;
-    zip = zip.override { enableNLS = false; };
-    bluez5 = bluez5_28;
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        freefont_ttf xorg.fontmiscmisc
-      ];
-    };
-    clucene_core = clucene_core_2;
-    lcms = lcms2;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-    icu = icu58;
-    # checking whether g++ supports C++14 or C++11... configure: error: no
-    stdenv = overrideCC stdenv gcc5;
-  });
-
+  libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix
+    { libreoffice = callPackage ../applications/office/libreoffice/still.nix {
+      inherit (perlPackages) ArchiveZip CompressZlib;
+      inherit (gnome2) GConf ORBit2 gnome_vfs;
+      inherit (gnome3) defaultIconTheme;
+      zip = zip.override { enableNLS = false; };
+      bluez5 = bluez5_28;
+      fontsConf = makeFontsConf {
+        fontDirectories = [
+          freefont_ttf xorg.fontmiscmisc
+        ];
+      };
+      clucene_core = clucene_core_2;
+      lcms = lcms2;
+      harfbuzz = harfbuzz.override {
+        withIcu = true; withGraphite2 = true;
+      };
+      icu = icu58;
+      # checking whether g++ supports C++14 or C++11... configure: error: no
+      stdenv = overrideCC stdenv gcc5;
+  };});
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
     inherit (gnome3) libpeas gsettings-desktop-schemas dconf;

@@ -11,6 +11,7 @@ let
     , sha256
     , rev ? "spl-${version}"
     , broken ? false
+    , patches ? []
     } @ args : stdenv.mkDerivation rec {
       name = "spl-${version}-${kernel.version}";
 
@@ -20,7 +21,7 @@ let
         inherit rev sha256;
       };
 
-      patches = [ ./install_prefix.patch ];
+      inherit patches;
 
       nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
@@ -61,14 +62,16 @@ in
   assert kernel != null;
 {
     splStable = common {
-      version = "0.7.7";
-      sha256 = "0mq7827x4173wdbpj361gvxvk8j9r96363gka75smzsc31i2wa5x";
+      version = "0.7.8";
+      sha256 = "0ypyy7ij280n7rly6ifrvna9k55gxwdx9a7lalf4r1ka714379fi";
+      patches = [ ./install_prefix-0.7.8.patch ];
     };
 
     splUnstable = common {
-      version = "2018-03-09";
-      rev = "43983eb2024ec6b3280e6e06a6fb621ee3bb2a41";
-      sha256 = "00h7z30hzxd09cfa44w7yv7zympvdwzdximfgjvpa1layzppjpsh";
+      version = "2018-04-10";
+      rev = "9125f8f5bdb36bfbd2d816d30b6b29b9f89ae3d8";
+      sha256 = "00zrbca906rzjd62m4khiw3sdv8x18dapcmvkyaawripwvzc4iri";
+      patches = [ ./install_prefix.patch ];
     };
 
     splLegacyCrypto = common {

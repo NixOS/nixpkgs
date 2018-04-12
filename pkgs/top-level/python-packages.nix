@@ -66,6 +66,9 @@ let
     toPythonModule = x: x; # Application does not provide modules.
   }));
 
+  # See build-setupcfg/default.nix for documentation.
+  buildSetupcfg = import ../build-support/build-setupcfg self;
+
   graphiteVersion = "1.0.2";
 
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
@@ -133,6 +136,7 @@ in {
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit buildSetupcfg;
 
   # helpers
 
@@ -1636,19 +1640,7 @@ in {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
-  pyechonest = self.buildPythonPackage rec {
-    name = "pyechonest-8.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyechonest/pyechonest-8.0.2.tar.gz";
-      sha256 = "496265f4b7d33483ec153b9e1b8333fe959b115f7e781510089c8313b7d86560";
-    };
-
-    meta = {
-      description = "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
-      homepage = https://github.com/echonest/pyechonest;
-    };
-  };
+  pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
@@ -7458,9 +7450,7 @@ in {
     };
   };
 
-  # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
-  graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
-    else callPackage ../development/python-modules/graph-tool/2.x.x.nix { boost = pkgs.boost159; };
+  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
@@ -11930,7 +11920,11 @@ in {
   pika-pool = callPackage ../development/python-modules/pika-pool { };
   platformio = callPackage ../development/python-modules/platformio { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx { };
+  kmsxx = (callPackage ../development/libraries/kmsxx {
+    inherit (pkgs.kmsxx) stdenv;
+  }).overrideAttrs (oldAttrs: {
+    name = "${python.libPrefix}-${pkgs.kmsxx.name}";
+  });
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
