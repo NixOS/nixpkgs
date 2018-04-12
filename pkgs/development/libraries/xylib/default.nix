@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, bzip2, wxGTK30 }:
+{ stdenv, fetchurl, boost, zlib, bzip2, wxGTK_3 }:
 
 stdenv.mkDerivation rec {
   name = "xylib-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r2kx80zhdvz39k6h2fsncm2742xxvxl3z8a3fnr13jl9sl7mnnd";
   };
 
-  buildInputs = [ boost zlib bzip2 wxGTK30 ];
+  buildInputs = [ boost zlib bzip2 wxGTK_3 ];
 
   meta = with stdenv.lib; {
     description = "Portable library for reading files that contain x-y data from powder diffraction, spectroscopy and other experimental methods";
