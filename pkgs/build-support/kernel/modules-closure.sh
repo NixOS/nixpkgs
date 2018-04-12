@@ -3,7 +3,7 @@ source $stdenv/setup
 # When no modules are built, the $out/lib/modules directory will not
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
-if ! test -d "$out/lib/modules"; then
+if ! test -d "$kernel/lib/modules"; then
     if test -z "$rootModules" || test -n "$allowMissing"; then
         mkdir -p "$out"
         exit 0
