@@ -3,10 +3,10 @@
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL, SDL2
 , gloox, nvidia-texture-tools
-, withEditor ? true, wxGTK ? null
+, withEditor ? true, wxGTK_3 ? null
 }:
 
-assert withEditor -> wxGTK != null;
+assert withEditor -> wxGTK_3 != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     zlib curl libogg libvorbis enet miniupnpc openal
     libGLU_combined xproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools
-  ] ++ lib.optional withEditor wxGTK;
+  ] ++ lib.optional withEditor wxGTK_3;
 
   NIX_CFLAGS_COMPILE = [
     "-I${xproto}/include/X11"
