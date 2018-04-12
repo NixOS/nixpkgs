@@ -2,7 +2,7 @@
 , daemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
-, fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
+, fetchurl, stdenv, zlib, wxGTK_3, perl, cryptopp, libupnp, gettext, libpng ? null
 , pkgconfig, makeWrapper, libX11 ? null }:
 
 assert httpServer -> libpng != null;
@@ -13,7 +13,8 @@ let
   edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
 in
 mkDerivation rec {
-  name = "aMule-2.3.2";
+  name = "aMule-${version}";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/amule/${name}.tar.xz";
@@ -21,7 +22,7 @@ mkDerivation rec {
   };
 
   buildInputs =
-    [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
+    [ zlib wxGTK_3 perl cryptopp libupnp gettext pkgconfig makeWrapper ]
     ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
