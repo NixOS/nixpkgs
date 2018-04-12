@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK_3, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 with stdenv.lib;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre ]
+  buildInputs = [ wxGTK_3 glib pcre ]
     ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   patches = [ ./add-nix-syntax-highlighting.patch ];
