@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out $out/bin $out/lib
+    mkdir -p $out $out/bin $out/libexec
     cp -R $src/* $_
-    makeWrapper $out/lib/acme.sh $out/bin/acme.sh \
+    makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
       --prefix PATH : "${lib.makeBinPath [ socat openssl curl iproute ]}"
   '';
 
