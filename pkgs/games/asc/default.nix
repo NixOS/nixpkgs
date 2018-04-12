@@ -1,9 +1,10 @@
 { fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2
+, boost, expat, freetype, libjpeg, wxGTK_3, lua, perl, pkgconfig, zlib, zip, bzip2
 , libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
-  name = "asc-2.6.0.0";
+  name = "asc-${version}";
+  version = "2.6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/asc-hq/${name}.tar.bz2";
@@ -12,12 +13,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # I'm too lazy to catch all gcc47-related problems
   hardeningDisable = [ "format" ];
 
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl pkgconfig zlib zip bzip2 libpng
+    freetype libjpeg wxGTK_3 lua perl pkgconfig zlib zip bzip2 libpng
     libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 
