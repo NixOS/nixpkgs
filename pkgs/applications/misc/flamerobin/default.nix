@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK30, boost, firebird }:
+{ stdenv, fetchFromGitHub, wxGTK_3, boost, firebird, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   version = "0.9.3.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ wxGTK30 boost firebird ];
+  buildInputs = [ wxGTK_3 boost firebird wrapGAppsHook ];
 
   preBuild = ''
     sed -i 's/CXXFLAGS = -g -O2/CXXFLAGS = -g -O2 -nostartfiles/' Makefile
