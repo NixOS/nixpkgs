@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
+{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK_2
 , contribPlugins ? false, hunspell, gamin, boost
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool file zip ];
-  buildInputs = [ wxGTK gtk2 ]
+  buildInputs = [ wxGTK_2 wxGTK_2.gtk ]
     ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
