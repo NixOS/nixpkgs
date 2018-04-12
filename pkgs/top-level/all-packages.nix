@@ -21267,9 +21267,7 @@ with pkgs;
 
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 { };
 
-  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
-    wxGTK = wxGTK30;
-  };
+  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus { };
 
   x11idle = callPackage ../tools/misc/x11idle {};
 

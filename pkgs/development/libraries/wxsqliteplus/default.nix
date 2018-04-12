@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
+{ stdenv, fetchFromGitHub, wxGTK_3, wxsqlite3, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "wxsqliteplus-${version}";
@@ -11,16 +11,19 @@ stdenv.mkDerivation rec {
     sha1 = "yr9ysviv4hbrxn900z1wz8j32frimvx1";
   };
 
-  buildInputs = [ wxGTK wxsqlite3 sqlite ];
+  buildInputs = [ wxGTK_3 wxsqlite3 sqlite ];
 
   makeFlags = [
     "LDFLAGS=-L${wxsqlite3}/lib"
   ];
 
   preBuild = ''
+    libname="$(basename ${wxsqlite3}/lib/libwxcode_gtk?u_wxsqlite3-*.so)"
+    libname="''${libname#lib}"
+    libname="''${libname%.so}"
     sed -ie 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile
     sed -ie 's|wxsqliteplus$(EXEEXT): $(WXSQLITEPLUS_OBJECTS) $(LIBPREFIX)wxsqlite$(LIBEXT)|wxsqliteplus$(EXEEXT):  $(WXSQLITEPLUS_OBJECTS) |g' Makefile
-    sed -ie 's|-lwxsqlite |-lwxcode_gtk2u_wxsqlite3-3.0 |g' Makefile
+    sed -ie "s|-lwxsqlite |-l$libname |g" Makefile
   '';
 
   installPhase = ''
