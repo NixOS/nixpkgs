@@ -77,6 +77,7 @@ let
         done
 
         ./autogen.sh
+        configureFlagsArray+=("--libexecdir=$out/libexec")
       '';
 
       configureFlags = [
@@ -86,6 +87,7 @@ let
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
         "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
         "--with-mounthelperdir=$(out)/bin"
         "--sysconfdir=/etc"
         "--localstatedir=/var"
