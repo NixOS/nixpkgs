@@ -1,4 +1,4 @@
-{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
+{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl, wrapGAppsHook }:
 let
   py = python27Packages;
   version = "15.04";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = python_deps;
 
-  buildInputs = [ curaengine py.wrapPython ];
+  buildInputs = [ curaengine py.wrapPython wrapGAppsHook ];
 
   configurePhase = "";
   buildPhase = "";
