@@ -11925,28 +11925,38 @@ with pkgs;
     wt3
     wt4;
 
-  wxGTK = wxGTK28;
+  wxGTK_3 = wxGTK30_3;
+  wxGTK_2 = wxGTK30_2;
+
+  wxGTKDev_3 = wxGTK31_3;
+  wxGTKDev_2 = wxGTK31_2;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
     inherit (gnome2) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9/default.nix {
-    inherit (gnome2) GConf;
-    inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
-  };
-
-  wxGTK30 = callPackage ../development/libraries/wxwidgets/3.0/default.nix {
+  wxGTK30_3 = callPackage ../development/libraries/wxwidgets/3.0/default.nix {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
+  wxGTK30_2 = wxGTK30_3.override {
+    withGtk2 = true;
+    withWebKit = false;
+  };
 
-  wxGTK31 = callPackage ../development/libraries/wxwidgets/3.1 {};
+  wxGTK31_3 = callPackage ../development/libraries/wxwidgets/3.1 {
+    inherit (gnome2) GConf;
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+  };
+  wxGTK31_2 = wxGTK31_3.override {
+    withGtk2 = true;
+    withWebKit = false;
+  };
 
   wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix {
     inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel;
