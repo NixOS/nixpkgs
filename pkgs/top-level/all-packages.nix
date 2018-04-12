@@ -21265,9 +21265,7 @@ with pkgs;
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
-  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
-    wxGTK = wxGTK30;
-  };
+  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 { };
 
   wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
     wxGTK = wxGTK30;

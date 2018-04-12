@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, sqlite
+{ stdenv, fetchFromGitHub, wxGTK_3, sqlite
 , darwin }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp build28/Info.plist.in build28/wxmac.icns build/
   '';
 
-  buildInputs = [ wxGTK sqlite ]
+  buildInputs = [ wxGTK_3 sqlite ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.stubs.setfile darwin.stubs.rez darwin.stubs.derez ];
 
   meta = with stdenv.lib; {
