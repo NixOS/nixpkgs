@@ -8451,7 +8451,7 @@ in {
     name = "sleekxmpp-${version}";
     version = "1.3.3";
 
-    propagatedBuildInputs = with self; [ dnspython pyasn1 gevent ];
+    propagatedBuildInputs = with self; [ dnspython pyasn1 pyasn1-modules gevent ];
     checkInputs = [ pkgs.gnupg ];
     checkPhase = "${python.interpreter} testall.py";
     doCheck = false; # Tests failed all this time and upstream doesn't seem to care.
