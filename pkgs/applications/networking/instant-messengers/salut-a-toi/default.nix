@@ -20,7 +20,7 @@ in
 
     buildInputs = with python27Packages;
     [
-      python twisted urwid wxPython pygobject2
+      python twisted urwid wxPython30_gtk2 pygobject2
       dbus-python wrapPython setuptools file
       pycrypto pyxdg
     ] ++  (with requirements; [
