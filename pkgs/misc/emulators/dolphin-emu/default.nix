@@ -1,8 +1,8 @@
-{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib, libGLU_combined
+{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, glib, libGL
 , gettext, libpthreadstubs, libXrandr, libXext, readline, openal
 , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
-, wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
-, libpulseaudio ? null }:
+, wxGTK_2, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
+, alsaLib, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   name = "dolphin-emu-${version}";
@@ -20,21 +20,20 @@ stdenv.mkDerivation rec {
       --replace " CHAR_WIDTH " " CHARWIDTH "
   '';
 
-  cmakeFlags = ''
-    -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
-    -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include
-    -DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0
-    -DENABLE_LTO=True
-  '';
+  cmakeFlags = [
+    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${wxGTK_2.gtk.out}/lib/gtk-2.0/include"
+    "-DGTK2_INCLUDE_DIRS=${wxGTK_2.gtk.dev}/include/gtk-2.0"
+    "-DENABLE_LTO=True"
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake bluez ffmpeg libao libGLU_combined gtk2 glib
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ bluez ffmpeg libao libGL glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  libevdev libXdmcp portaudio libusb libpulseaudio
-                  libevdev libXdmcp portaudio libusb libpulseaudio
-                  wxGTK30 soundtouch miniupnpc mbedtls curl lzo sfml ];
+                  alsaLib libevdev libXdmcp portaudio libusb libpulseaudio
+                  wxGTK_2 wxGTK_2.gtk soundtouch miniupnpc mbedtls curl lzo sfml ];
 
   meta = {
     homepage = http://dolphin-emu.org/;
