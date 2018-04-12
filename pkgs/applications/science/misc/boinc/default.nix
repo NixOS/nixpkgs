@@ -1,6 +1,6 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
-libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
-sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
+libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK28, xcbutil,
+sqlite, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
   majorVersion = "7.8";
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool automake autoconf m4 pkgconfig ];
 
   buildInputs = [
-    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK sqlite gtk2 libXScrnSaver
-    libnotify patchelf libX11 libxcb xcbutil
+    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK28 sqlite libXScrnSaver
+    libnotify patchelf libX11 libxcb xcbutil wxGTK28.gtk
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  NIX_LDFLAGS = [ "-lX11" ];
 
   preConfigure = ''
     ./_autosetup
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = "--disable-server";
+  configureFlags = [ "--disable-server" ];
 
   meta = {
     description = "Free software for distributed and grid computing";
