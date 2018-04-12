@@ -11963,9 +11963,7 @@ with pkgs;
     inherit (darwin.stubs) setfile rez derez;
   };
 
-  wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK30;
-  };
+  wxSVG = callPackage ../development/libraries/wxSVG { };
 
   wtk = callPackage ../development/libraries/wtk { };
 
