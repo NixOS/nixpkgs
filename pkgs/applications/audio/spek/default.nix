@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoconf, automake, intltool, pkgconfig, ffmpeg, wxGTK }:
+{ stdenv, fetchzip, autoconf, automake, intltool, pkgconfig, ffmpeg, wxGTK_3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "spek-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake intltool ffmpeg wxGTK ];
+  buildInputs = [ autoconf automake intltool ffmpeg wxGTK_3 wrapGAppsHook ];
 
   preConfigure = ''
     ./autogen.sh
