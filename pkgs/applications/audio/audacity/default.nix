@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, wxGTK30, pkgconfig, file, gettext, gtk2, glib, zlib, perl, intltool,
+{ stdenv, fetchurl, wxGTK_3, pkgconfig, file, gettext, glib, zlib, perl, intltool,
   libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
-  autoconf, automake, libtool
+  autoreconfHook, libtool, wrapGAppsHook
   }:
 
 with stdenv.lib;
@@ -14,14 +14,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
     sha256 = "18q7i77ynihx7xp45lz2lv0k0wrh6736pcrivlpwrxjgbvyqx7km";
   };
-
-  preConfigure = /* we prefer system-wide libs */ ''
-    autoreconf -vi # use system libraries
-
-    # we will get a (possibly harmless) warning during configure without this
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
 
   configureFlags = [
     "--with-libsamplerate"
@@ -43,12 +35,11 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook wrapGAppsHook ];
   buildInputs = [
-    file gettext wxGTK30 expat alsaLib
-    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil gtk2
+    gettext wxGTK_3 wxGTK_3.gtk expat alsaLib
+    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil
     ffmpeg libmad lame libvorbis flac soundtouch
-    autoconf automake libtool # for the preConfigure phase
   ]; #ToDo: detach sbsms
 
   enableParallelBuilding = true;
