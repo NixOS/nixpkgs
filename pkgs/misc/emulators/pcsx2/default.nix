@@ -1,6 +1,6 @@
-{ alsaLib, cmake, fetchFromGitHub, glib, gtk2, gettext, libaio, libpng
+{ alsaLib, cmake, fetchFromGitHub, glib, gettext, libaio, libpng
 , makeWrapper, perl, pkgconfig, portaudio, SDL2, soundtouch, stdenv
-, wxGTK30, zlib }:
+, wxGTK_2, zlib }:
 
 stdenv.mkDerivation rec {
   name = "pcsx2-${version}";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       -DGAMEINDEX_DIR="$out/share/pcsx2" \
       -DGLSL_SHADER_DIR="$out/share/pcsx2" \
       -DGTK2_GLIBCONFIG_INCLUDE_DIR='${glib.out}/lib/glib-2.0/include' \
-      -DGTK2_GDKCONFIG_INCLUDE_DIR='${gtk2.out}/lib/gtk-2.0/include' \
-      -DGTK2_INCLUDE_DIRS='${gtk2.dev}/include/gtk-2.0' \
+      -DGTK2_GDKCONFIG_INCLUDE_DIR='${wxGTK_2.gtk.out}/lib/gtk-2.0/include' \
+      -DGTK2_INCLUDE_DIRS='${wxGTK_2.gtk.dev}/include/gtk-2.0' \
       -DPACKAGE_MODE=TRUE \
       -DPLUGIN_DIR="$out/lib/pcsx2" \
       -DREBUILD_SHADER=TRUE \
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
   buildInputs = [
-    alsaLib glib gettext gtk2 libaio libpng makeWrapper portaudio SDL2
-    soundtouch wxGTK30 zlib
+    alsaLib glib gettext libaio libpng makeWrapper portaudio SDL2
+    soundtouch wxGTK_2 wxGTK_2.gtk zlib
   ];
 
   enableParallelBuilding = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = http://pcsx2.net;
     maintainers = with maintainers; [ hrdinka ];
 
-    # PCSX2's source code is released under LGPLv3+. It However ships
+    # PCSX2's source code is released under LGPLv3+. It however ships
     # additional data files and code that are licensed differently.
     # This might be solved in future, for now we should stick with
     # license.free
