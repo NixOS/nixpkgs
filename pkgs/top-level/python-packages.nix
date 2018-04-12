@@ -8451,6 +8451,14 @@ in {
     name = "sleekxmpp-${version}";
     version = "1.3.3";
 
+    patches = [
+      # Fix https://github.com/etingof/pyasn1/issues/112
+      (pkgs.fetchpatch {
+        url = "https://github.com/kdschlosser/SleekXMPP/commit/597014ba5ca258763e96ee37729ac933c5af1602.patch";
+        sha256 = "176v3f3pr0bx48wv1kf9jn2pwxdn7qpqyc2chwv1m8gbppsfaikf";
+      })
+    ];
+
     propagatedBuildInputs = with self; [ dnspython pyasn1 pyasn1-modules gevent ];
     checkInputs = [ pkgs.gnupg ];
     checkPhase = "${python.interpreter} testall.py";
