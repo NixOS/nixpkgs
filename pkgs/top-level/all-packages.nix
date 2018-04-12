@@ -20320,10 +20320,7 @@ with pkgs;
     boost = boost160;
   };
 
-  kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
-    wxGTK = wxGTK30;
-    boost = boost160;
-  };
+  kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix { };
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 

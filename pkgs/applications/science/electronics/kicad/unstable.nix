@@ -1,10 +1,10 @@
-{ wxGTK, lib, stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib
+{ wxGTK_2, lib, stdenv, fetchFromGitHub, cmake, libGL, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
 
 , oceSupport ? true, opencascade_oce
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, wxPython
+, scriptingSupport ? true, swig, python, wxPython_gtk2
 }:
 
 assert ngspiceSupport -> libngspice != null;
@@ -35,16 +35,16 @@ stdenv.mkDerivation rec {
       "-DKICAD_SCRIPTING_WXPYTHON=ON"
       # nix installs wxPython headers in wxPython package, not in wxwidget
       # as assumed. We explicitely set the header location.
-      "-DCMAKE_CXX_FLAGS=-I${wxPython}/include/wx-3.0"
+      "-DCMAKE_CXX_FLAGS=-I${wxPython_gtk2}/include/wx-3.0"
     ];
 
-  nativeBuildInputs = [ cmake doxygen  pkgconfig ];
+  nativeBuildInputs = [ cmake doxygen pkgconfig ];
   buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
+    libGL zlib libX11 wxGTK_2 pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade_oce
     ++ optional (ngspiceSupport) libngspice
-    ++ optionals (scriptingSupport) [ swig python wxPython ];
+    ++ optionals (scriptingSupport) [ swig python wxPython_gtk2 ];
 
   meta = {
     description = "Free Software EDA Suite, Nightly Development Build";
