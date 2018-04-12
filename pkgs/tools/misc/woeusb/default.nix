@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
 , coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, utillinux, wget
-, wxGTK30 }:
+, wxGTK_3 }:
 
 stdenv.mkDerivation rec {
   version = "3.1.5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jbyrd49ikwkfpnka884y3p600bm3nfil2zinrgbac7vyhxxqjmw";
   };
 
-  buildInputs = [ wxGTK30 autoreconfHook makeWrapper ];
+  buildInputs = [ wxGTK_3 autoreconfHook makeWrapper ];
 
   postPatch = ''
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
