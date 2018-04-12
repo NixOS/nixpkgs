@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
+{ stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK_3 }:
 
 let
   lib_suffix =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     zlib
     db
     curl
-    wxGTK
+    wxGTK_3
   ];
 
   patches = [ ./cmake_lib_path.patch ];
