@@ -1,11 +1,12 @@
 { stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
 , perl, perlXMLParser, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
 , libsigcxx, gtk, dbus-glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
-, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor-icon-theme
-, libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
+, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib
+, libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "ekiga-4.0.1";
+  name = "ekiga-${version}";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/ekiga/4.0/${name}.tar.xz";
@@ -15,10 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
                   perl perlXMLParser evolution-data-server gnome-doc-utils avahi
                   libsigcxx gtk dbus-glib libnotify libXext xextproto sqlite
-                  gnome3.libsoup glib gnome3.defaultIconTheme boost
+                  gnome3.libsoup glib boost
                   autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
                   nss zlib libsecret libXrandr randrproto which libxslt libtasn1
-                  gmp nettle makeWrapper ];
+                  gmp nettle wrapGAppsHook ];
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
@@ -45,11 +46,6 @@ stdenv.mkDerivation rec {
       sha256 = "18wc68im8422ibpa0gkrkgjq41m7hikaha3xqmjs2km45i1cwcaz";
     })
   ];
-
-  postInstall = ''
-    wrapProgram "$out"/bin/ekiga \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   meta = with stdenv.lib; {
     description = "VOIP/Videoconferencing app with full SIP and H.323 support";
