@@ -17647,9 +17647,7 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
-  radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK30;
-  };
+  radiotray-ng = callPackage ../applications/audio/radiotray-ng { };
 
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
 

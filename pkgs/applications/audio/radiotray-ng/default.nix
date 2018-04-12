@@ -15,7 +15,7 @@
 , libappindicator-gtk3
 , libnotify
 , libxdg_basedir
-, wxGTK
+, wxGTK_3
 # GStreamer
 , gst_all_1
 # User-agent info
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     glibmm hicolor-icon-theme gnome3.gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
-    wxGTK
+    wxGTK_3
   ] ++ stdenv.lib.optional doCheck gmock
     ++ gstInputs
     ++ pythonInputs;
