@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, postgresql, wxGTK, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
+{ stdenv, fetchurl, fetchpatch, postgresql, wxGTK28, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "pgadmin3-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ postgresql wxGTK openssl zlib ];
+  buildInputs = [ postgresql wxGTK28 openssl zlib ];
 
   patches = [
     (fetchpatch {
