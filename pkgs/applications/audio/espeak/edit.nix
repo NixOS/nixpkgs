@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, unzip, portaudio, wxGTK, sox }:
+{ stdenv, fetchurl, pkgconfig, unzip, portaudio, wxGTK28, sox }:
 
 stdenv.mkDerivation rec {
-  name = "espeakedit-1.48.03";
+  name = "espeakedit-${version}";
+  version = "1.48.03";
 
   src = fetchurl {
     url = "mirror://sourceforge/espeak/${name}.zip";
@@ -9,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ unzip portaudio wxGTK ];
+  buildInputs = [ unzip portaudio wxGTK28 ];
 
   # TODO:
   # Uhm, seems like espeakedit still wants espeak-data/ in $HOME, even thought
