@@ -7626,9 +7626,7 @@ with pkgs;
 
   bloaty = callPackage ../development/tools/bloaty { };
 
-  bossa = callPackage ../development/tools/misc/bossa {
-    wxGTK = wxGTK30;
-  };
+  bossa = callPackage ../development/tools/misc/bossa { };
 
   buck = callPackage ../development/tools/build-managers/buck { };
 

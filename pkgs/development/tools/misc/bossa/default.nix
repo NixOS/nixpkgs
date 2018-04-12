@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wxGTK, libX11, readline }:
+{ stdenv, fetchgit, wxGTK_3, libX11, readline }:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [ ./bossa-no-applet-build.patch ];
 
   nativeBuildInputs = [ bin2c ];
-  buildInputs = [ wxGTK libX11 readline ];
+  buildInputs = [ wxGTK_3 libX11 readline ];
 
   # Explicitly specify targets so they don't get stripped.
   makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
