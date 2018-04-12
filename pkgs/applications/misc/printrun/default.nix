@@ -11,7 +11,7 @@ python27Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python27Packages; [
-    wxPython30 pyserial dbus-python psutil numpy pyopengl pyglet cython
+    wxPython pyserial dbus-python psutil numpy pyopengl pyglet cython
   ];
 
   doCheck = false;
