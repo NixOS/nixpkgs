@@ -16871,7 +16871,7 @@ with pkgs;
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    wxGTK30 = wxGTK30.override { withWebKit  = true ; };
+    wxGTK_3 = wxGTK_3.override { withWebKit = true; };
   };
 
   moc = callPackage ../applications/audio/moc {
