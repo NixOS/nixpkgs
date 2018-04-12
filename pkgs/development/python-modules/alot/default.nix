@@ -19,12 +19,6 @@ buildPythonPackage rec {
     sha256 = "1y932smng7qx7ybmqw4qh75b0lv9imfs5ak9fd0qhysij8kpmdhi";
   };
 
-  postPatch = ''
-    substituteInPlace alot/defaults/alot.rc.spec \
-      --replace "themes_dir = string(default=None)" \
-                "themes_dir = string(default='$out/share/themes')"
-  '';
-
   nativeBuildInputs = lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [
@@ -50,8 +44,8 @@ buildPythonPackage rec {
     cp -r docs/build/man $out/man
   ''
   + ''
-    mkdir -p $out/share/applications
-    cp -r extra/themes $out/share
+    mkdir -p $out/share/{applications,alot}
+    cp -r extra/themes $out/share/alot
 
     sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
   '';
