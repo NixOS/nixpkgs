@@ -1,8 +1,9 @@
-{stdenv, fetchurl, automake, gettext, freetype, libxml2, pango, pkgconfig
-, wxGTK, gtk2, perl, zip}:
+{ stdenv, fetchurl, automake, gettext, freetype, libxml2, pango, pkgconfig
+, wxGTK_3, perl, zip }:
 
-stdenv.mkDerivation {
-  name = "xaralx-0.7r1785";
+stdenv.mkDerivation rec {
+  name = "xaralx-${version}";
+  version = "0.7r1785";
 
   src = fetchurl {
     url = http://downloads2.xara.com/opensource/XaraLX-0.7r1785.tar.bz2;
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ automake pkgconfig gettext perl zip ];
-  buildInputs = [ wxGTK gtk2 libxml2 freetype pango ];
+  buildInputs = [ wxGTK_3 libxml2 freetype pango ];
 
   configureFlags = "--disable-svnversion";
 
