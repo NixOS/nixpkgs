@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, hostPlatform }:
+{ pkgs, buildEnv, runCommand, hostPlatform, lib }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -13,7 +13,7 @@
 let
 
   singleBinary = cmd: providers: let
-      provider = "${providers.${hostPlatform.parsed.kernel.name} or "missing-package"}/bin/${cmd}";
+      provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
     in runCommand cmd {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
