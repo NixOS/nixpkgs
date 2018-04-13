@@ -1,9 +1,10 @@
-{stdenv, fetchFromGitHub, fetchgit, fetchurl, fetchpatch, pkgconfig, libusb, readline, libewf, perl, zlib, openssl, git,
-gtk2 ? null, vte ? null, gtkdialog ? null,
-python ? null,
-ruby ? null,
-lua ? null,
-useX11, rubyBindings, pythonBindings, luaBindings}:
+{stdenv, fetchFromGitHub, pkgconfig, libusb, readline, libewf, perl, zlib, openssl
+, gtk2 ? null, vte ? null, gtkdialog ? null
+, python ? null
+, ruby ? null
+, lua ? null
+, useX11, rubyBindings, pythonBindings, luaBindings
+}:
 
 assert useX11 -> (gtk2 != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
@@ -23,13 +24,16 @@ stdenv.mkDerivation rec {
     sha256 = "07x94chkhpn3wgw4pypn35psxq370j6xwmhf1mh5z27cqkq7c2yd";
   };
 
+  # do not try to update capstone
+  WITHOUT_PULL=1;
+
   postPatch = let
     cs_tip = "4a1b580d069c82d60070d0869a87000db7cdabe2"; # version from $sourceRoot/shlr/Makefile
-    capstone = fetchgit {
-      url = "https://github.com/aquynh/capstone.git";
+    capstone = fetchFromGitHub {
+      owner = "aquynh";
+      repo = "capstone";
       rev = cs_tip;
-      sha256 = "1b126npshdbwh5y7rafmb9w4dzlvxsf4ca6bx4zs2y7kbk48jyn8";
-      leaveDotGit = true;
+      sha256 = "0v6rxfpxjq0hf40qn1n5m5wsv1dv6p1j8vm94a708lhvcbk9nkv8";
     };
   in ''
     if ! grep -F "CS_TIP=${cs_tip}" shlr/Makefile; then echo "CS_TIP mismatch"; exit 1; fi
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig git ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libusb libewf perl zlib openssl]
     ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
