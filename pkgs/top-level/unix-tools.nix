@@ -92,7 +92,7 @@ in rec {
     darwin = pkgs.darwin.ps;
   };
   quota = singleBinary "quota" {
-    linux = pkgs.utillinux;
+    linux = pkgs.linuxquota;
     darwin = pkgs.darwin.diskdev_cmds;
   };
   route = singleBinary "route" {

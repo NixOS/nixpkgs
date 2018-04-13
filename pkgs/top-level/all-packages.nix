@@ -3491,6 +3491,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  linuxquota = callPackage ../tools/misc/linuxquota { };
+
   localtime = callPackage ../tools/system/localtime { };
 
   logcheck = callPackage ../tools/system/logcheck {
@@ -4512,7 +4514,7 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  linuxquota = callPackage ../tools/misc/linuxquota { };
+  quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   wiggle = callPackage ../development/tools/wiggle { };
 
