@@ -4512,7 +4512,7 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  quota = callPackage ../tools/misc/quota { };
+  linuxquota = callPackage ../tools/misc/linuxquota { };
 
   wiggle = callPackage ../development/tools/wiggle { };
 
