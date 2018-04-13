@@ -138,7 +138,7 @@ in rec {
   utillinux = buildEnv {
     name = "utillinux-compat";
     paths = [ fsck fdisk getopt hexdump mount
-              quota script umount whereis write ];
+              script umount whereis write ];
   };
 
   nettools = buildEnv {
