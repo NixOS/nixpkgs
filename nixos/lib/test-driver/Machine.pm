@@ -651,9 +651,9 @@ sub waitForWindow {
 
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
-    my $s = `cat $from` or die;
+    my $s = `base64 $from` or die;
     $s =~ s/'/'\\''/g;
-    $self->mustSucceed("echo '$s' > $to");
+    $self->mustSucceed("echo '$s' | base64 -d > $to");
 }
 
 
