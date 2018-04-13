@@ -1221,29 +1221,6 @@ in {
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
-  dosage = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "dosage";
-    version = "2016.03.17";
-    PBR_VERSION = version;
-    src = pkgs.fetchFromGitHub {
-      owner = "webcomics";
-      repo = "dosage";
-      rev = "1af022895e5f86bc43da95754c4c4ed305790f5b";
-      sha256 = "1bkqhlzigy656pam0znp2ddp1y5sqzyhw3c4fyy58spcafldq4j6";
-    };
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ requests lxml pbr ];
-    # prompt_toolkit doesn't work on 3.5 on OSX.
-    doCheck = !isPy35;
-
-    meta = {
-      description = "A comic strip downloader and archiver";
-      homepage = http://dosage.rocks/;
-      broken = true; # ctypes error
-    };
-  };
-
   dugong = callPackage ../development/python-modules/dugong {};
 
   iowait = callPackage ../development/python-modules/iowait {};
