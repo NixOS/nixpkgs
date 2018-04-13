@@ -14,7 +14,7 @@ let
 
     ${concatStrings (mapAttrsToList (host: ips: ''
       ${concatMapStrings (ip: ''
-        echo ${lib.escapeShellArg ip} > "$out/servers/"${lib.escapeShellArg host}
+        echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
       '') ips}
     '') cfg.domainServers)}
 
