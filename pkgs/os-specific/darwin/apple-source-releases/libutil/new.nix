@@ -4,16 +4,12 @@
 appleDerivation {
   buildInputs = [ xcbuild ];
 
-  dontUseXcbuild = true;
-
   prePatch = ''
     substituteInPlace tzlink.c \
       --replace '#include <xpc/xpc.h>' ""
   '';
 
-  buildPhase = ''
-    xcodebuild -target util
-  '';
+  xcbuildFlags = "-target util";
 
   installPhase = ''
     mkdir -p $out/lib $out/include

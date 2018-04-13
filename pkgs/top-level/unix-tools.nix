@@ -48,6 +48,14 @@ in rec {
     linux = pkgs.utillinux;
     darwin = pkgs.getopt;
   };
+  fdisk = singleBinary "fdisk" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
+  fsck = singleBinary "fsck" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
   hexdump = singleBinary "hexdump" {
     linux = pkgs.utillinux;
     darwin = pkgs.darwin.shell_cmds;
@@ -63,15 +71,13 @@ in rec {
   logger = singleBinary "logger" {
     linux = pkgs.utillinux;
   };
-  modprobe = singleBinary "modprobe" {
-    linux = pkgs.kmod;
-  };
   more = singleBinary "more" {
     linux = pkgs.utillinux;
     darwin = more_compat;
   };
   mount = singleBinary "mount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   netstat = singleBinary "netstat" {
     linux = pkgs.nettools;
@@ -85,6 +91,10 @@ in rec {
     linux = pkgs.procps;
     darwin = pkgs.darwin.ps;
   };
+  quota = singleBinary "quota" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
   route = singleBinary "route" {
     linux = pkgs.nettools;
     darwin = pkgs.darwin.network_cmds;
@@ -97,8 +107,13 @@ in rec {
     linux = pkgs.procps;
     darwin = pkgs.darwin.system_cmds;
   };
+  top = singleBinary "top" {
+    linux = pkgs.procps;
+    darwin = pkgs.darwin.top;
+  };
   umount = singleBinary "umount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   whereis = singleBinary "whereis" {
     linux = pkgs.utillinux;
@@ -117,16 +132,17 @@ in rec {
 
   procps = buildEnv {
     name = "procps-compat";
-    paths = [ sysctl ps ];
+    paths = [ ps sysctl top ];
   };
 
   utillinux = buildEnv {
     name = "utillinux-compat";
-    paths = [ getopt hexdump script whereis write ];
+    paths = [ fsck fdisk getopt hexdump mount
+              quota script umount whereis write ];
   };
 
   nettools = buildEnv {
     name = "nettools-compat";
-    paths = [ arp hostname netstat route ];
+    paths = [ arp hostname ifconfig netstat route ];
   };
 }
