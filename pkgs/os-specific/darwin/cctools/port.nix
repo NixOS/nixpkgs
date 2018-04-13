@@ -2,6 +2,7 @@
 , llvm, libcxx, libcxxabi, clang, libuuid
 , libobjc ? null, maloader ? null, xctoolchain ? null
 , hostPlatform, targetPlatform
+, enableDumpNormalizedLibArgs ? false
 }:
 
 let
@@ -12,8 +13,6 @@ let
     "${targetPlatform.config}-";
 in
 
-assert targetPlatform.isDarwin;
-
 # Non-Darwin alternatives
 assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
@@ -22,12 +21,18 @@ let
     name = "${targetPrefix}cctools-port-${version}";
     version = "895";
 
-    src = fetchFromGitHub {
+    src = fetchFromGitHub (if enableDumpNormalizedLibArgs then {
+      owner  = "tpoechtrager";
+      repo   = "cctools-port";
+      # master with https://github.com/tpoechtrager/cctools-port/pull/34
+      rev    = "8395d4b2c3350356e2fb02f5e04f4f463c7388df";
+      sha256 = "10vbf1cfzx02q8chc77s84fp2kydjpx2y682mr6mrbb7sq5rwh8f";
+    } else {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
       rev    = "2e569d765440b8cd6414a695637617521aa2375b"; # From branch 895-ld64-274.2
       sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
-    };
+    });
 
     outputs = [ "out" "dev" ];
 
@@ -117,6 +122,7 @@ let
     };
 
     meta = {
+      broken = !targetPlatform.isDarwin; # Only supports darwin targets
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
