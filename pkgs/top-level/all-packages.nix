@@ -1120,7 +1120,9 @@ with pkgs;
 
   doitlive = callPackage ../tools/misc/doitlive { };
 
-  dosage = pythonPackages.dosage;
+  dosage = callPackage ../applications/graphics/dosage {
+    pythonPackages = python3Packages;
+  };
 
   dpic = callPackage ../tools/graphics/dpic { };
 
