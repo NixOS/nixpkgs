@@ -3631,6 +3631,11 @@
     github = "ctheune";
     name = "Christian Theune";
   };
+  thorerik = {
+    name = "Thor Erik Lie";
+    email = "thor@thorerik.com";
+    github = "thorerik";
+  };
   thoughtpolice = {
     email = "aseipp@pobox.com";
     github = "thoughtpolice";

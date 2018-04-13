@@ -16771,6 +16771,8 @@ with pkgs;
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
+  mopidy-mpris = callPackage ../applications/audio/mopidy-mpris { };
+
   mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
 
   mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
