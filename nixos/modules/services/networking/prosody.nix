@@ -439,7 +439,7 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text = ''
 
-      pidfile = "${cfg.dataDir}/prosody.pid"
+      pidfile = "/run/prosody/prosody.pid"
 
       log = "*syslog"
 
@@ -509,7 +509,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         Type = "forking";
-        PIDFile = "${cfg.dataDir}/prosody.pid";
+        RuntimeDirectory = [ "prosody" ];
+        PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
       };
     };
