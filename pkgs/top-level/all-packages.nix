@@ -16503,7 +16503,6 @@ with pkgs;
       inherit (gnome2) GConf ORBit2 gnome_vfs;
       inherit (gnome3) defaultIconTheme;
       zip = zip.override { enableNLS = false; };
-      bluez5 = bluez5_28;
       fontsConf = makeFontsConf {
         fontDirectories = [
           carlito dejavu_fonts
@@ -16518,6 +16517,7 @@ with pkgs;
         withIcu = true; withGraphite2 = true;
       };
       # checking whether g++ supports C++14 or C++11... configure: error: no
+      # Still relevant: 2018-04-13
       stdenv = overrideCC stdenv gcc5;
   };});
 
@@ -16527,11 +16527,13 @@ with pkgs;
       inherit (gnome2) GConf ORBit2 gnome_vfs;
       inherit (gnome3) defaultIconTheme;
       zip = zip.override { enableNLS = false; };
-      bluez5 = bluez5_28;
       poppler = poppler_0_61;
       fontsConf = makeFontsConf {
         fontDirectories = [
+          carlito dejavu_fonts
           freefont_ttf xorg.fontmiscmisc
+          liberation_ttf_v1_binary
+          liberation_ttf_v2_binary
         ];
       };
       clucene_core = clucene_core_2;
@@ -16539,8 +16541,8 @@ with pkgs;
       harfbuzz = harfbuzz.override {
         withIcu = true; withGraphite2 = true;
       };
-      icu = icu58;
       # checking whether g++ supports C++14 or C++11... configure: error: no
+      # Still relevant: 2018-04-13; gcc6 is not enough!
       stdenv = overrideCC stdenv gcc5;
   };});
 
