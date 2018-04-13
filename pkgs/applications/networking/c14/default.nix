@@ -3,14 +3,13 @@
 buildGoPackage rec {
   name = "c14-cli-${version}";
   version = "0.3";
-  rev = "a9c2cd8";
 
   goPackagePath = "github.com/online-net/c14-cli";
 
   src = fetchFromGitHub {
     owner = "online-net";
     repo = "c14-cli";
-    inherit rev;
+    rev = "${version}";
     sha256 = "0b1piviy6vvdbak8y8bc24rk3c1fi67vv3352pmnzvrhsar2r5yf";
   };
 
