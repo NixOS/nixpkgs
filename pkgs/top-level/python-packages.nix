@@ -410,6 +410,8 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
+  rlp = callPackage ../development/python-modules/rlp { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
