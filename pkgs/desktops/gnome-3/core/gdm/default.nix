@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0i5rzr6fdvlm88gl85gvql1wf1yflkmg90x81dqjf39as3ixs81s";
+    sha256 = "1yxjjyrp0ywrc25cp81bsdhp79zn0c0jag48hlp00b5wfnkqy1kp";
   };
 
   passthru = {
