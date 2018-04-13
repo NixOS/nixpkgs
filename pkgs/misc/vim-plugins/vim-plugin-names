@@ -87,6 +87,7 @@
 "github:jnurmine/zenburn"
 "github:jonbri/vim-colorstepper"
 "github:joonty/vim-xdebug"
+"github:JuliaEditorSupport/julia-vim"
 "github:junegunn/fzf.vim"
 "github:junegunn/goyo.vim"
 "github:junegunn/limelight.vim"
