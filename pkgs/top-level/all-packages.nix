@@ -5311,7 +5311,8 @@ with pkgs;
   vcftools = callPackage ../applications/science/biology/vcftools { };
 
   vcsh = callPackage ../applications/version-management/vcsh {
-    inherit (perlPackages) ShellCommand TestMost;
+    inherit (perlPackages) ShellCommand TestMost TestDifferences TestDeep
+      TestException TestWarn;
   };
 
   vcstool = callPackage ../development/tools/vcstool { };
