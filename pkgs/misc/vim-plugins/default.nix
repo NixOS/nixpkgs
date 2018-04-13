@@ -1500,6 +1500,17 @@ rec {
     postInstall = false;
   };
 
+  julia-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "julia-vim-2018-03-27";
+    src = fetchgit {
+      url = "https://github.com/JuliaEditorSupport/julia-vim";
+      rev = "4593c8b1ffe20022677e524487c8554d96cf8f84";
+      sha256 = "0yrdzkxyg6cg2i4bd6bqbq0w63hssh3nd0f0qnfl7v5pkq9yba4w";
+    };
+    dependencies = [];
+
+  };
+
   fzf-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "fzf-vim-2018-03-09";
     src = fetchgit {
