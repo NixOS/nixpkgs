@@ -17259,7 +17259,7 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu-riscv = callPackage ../applications/virtualization/qemu/riscv.nix {};
+  qemu-riscv = lowPrio (callPackage ../applications/virtualization/qemu/riscv.nix {});
 
   qgis = callPackage ../applications/gis/qgis {};
 
