@@ -7105,6 +7105,8 @@ in {
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
+  python-openid = callPackage ../development/python-modules/python-openid { };
+
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
     version = "0.12.0";
