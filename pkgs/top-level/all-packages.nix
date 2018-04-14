@@ -4733,6 +4733,8 @@ with pkgs;
 
   sasview = callPackage ../applications/science/misc/sasview {};
 
+  scallion = callPackage ../tools/security/scallion { };
+
   scanbd = callPackage ../tools/graphics/scanbd { };
 
   screen = callPackage ../tools/misc/screen {
