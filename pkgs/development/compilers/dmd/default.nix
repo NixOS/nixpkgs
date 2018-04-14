@@ -3,10 +3,10 @@
 , curl, tzdata, gdb, darwin
 , callPackage
 , bootstrapVersion ? false
-, version ? "2.079.0"
-, dmdSha256 ? "1k6cky71pqnss6h6391p1ich2mjs598f5fda018aygnxg87qgh4y"
-, druntimeSha256 ? "183pqygj5w4105czs5kswyjn9mrcybx3wmkynz3in0m3ylzzjmvl"
-, phobosSha256 ? "0y9i86ggmf41ww2xk2bsrlsv9b1blj5dbyan6q6r6xp8dmgrd79w"
+, version ? "2.079.1"
+, dmdSha256 ? "0mlk095aw94d940qkymfp85daggiz3f0xv598nlc7acgp6408kyj"
+, druntimeSha256 ? "18r8gwvb54ar80j5155wx0qbqq4w56hqmbf6wap20xwijg2rw90g"
+, phobosSha256 ? "1x5v1ln51nr8x2vyki864160bakdyq0acmvbfv7jcipaj2w3m9bb"
 }:
 
 let
@@ -143,6 +143,9 @@ let
     + stdenv.lib.optionalString (stdenv.hostPlatform.isLinux && bootstrapVersion) ''
       substituteInPlace ${dmdPath}/root/port.c \
         --replace "#include <bits/mathdef.h>" "#include <complex.h>"
+
+      substituteInPlace ${dmdPath}/root/port.c \
+        --replace "#include <bits/nan.h>" "#include <math.h>"
     ''
 
     + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
