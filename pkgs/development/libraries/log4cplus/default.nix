@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 let
-  name = "log4cplus-1.2.0";
+  name = "log4cplus-2.0.0";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/log4cplus/${name}.tar.bz2";
-    sha256 = "1fb3g9l12sps3mv4xjiql2kcvj439mww3skz735y7113cnlcf338";
+    sha256 = "1pn6kgj04x3030iz2hvvn1sj3rncam1a5l4frz4lgai6m37afg2y";
   };
 
   meta = {
