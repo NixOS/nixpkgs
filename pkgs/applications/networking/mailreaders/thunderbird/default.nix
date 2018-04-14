@@ -52,40 +52,33 @@ in stdenv.mkDerivation rec {
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool ];
 
-  configureFlags =
-    [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
-      "--enable-application=mail"
-      "--disable-alsa"
-      "--disable-pulseaudio"
-
-      "--with-system-jpeg"
-      "--with-system-zlib"
-      "--with-system-bz2"
-      "--with-system-nspr"
-      "--with-system-nss"
-      "--with-system-libevent"
-      "--with-system-png" # needs APNG support
-      "--with-system-icu"
-      "--enable-system-ffi"
-      "--enable-system-hunspell"
-      "--enable-system-pixman"
-      "--enable-system-sqlite"
-      #"--enable-system-cairo"
-      "--enable-startup-notification"
-      "--disable-crashreporter"
-      "--disable-tests"
-      "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-updater"
-      "--enable-jemalloc"
-      "--disable-gconf"
-      "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
-    ]
-      ++ lib.optional enableCalendar "--enable-calendar"
-      ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
-                        else [ "--disable-debug" "--enable-release"
-                               "--disable-debug-symbols"
-                               "--enable-optimize" "--enable-strip" ])
-      ++ lib.optional enableOfficialBranding "--enable-official-branding";
+  configureFlags = [
+    "--enable-application=mail"
+    "--with-system-jpeg"
+    "--with-system-zlib"
+    "--with-system-bz2"
+    "--with-system-nspr"
+    "--with-system-nss"
+    "--with-system-libevent"
+    "--with-system-png" # needs APNG support
+    "--with-system-icu"
+    "--enable-system-ffi"
+    "--enable-system-hunspell"
+    "--enable-system-pixman"
+    "--enable-system-sqlite"
+    # "--enable-system-cairo"
+    "--enable-startup-notification"
+    "--disable-crashreporter"
+    "--disable-updater"
+    "--enable-jemalloc"
+    "--disable-gconf"
+    "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
+  ] ++ lib.optional enableCalendar "--enable-calendar"
+    ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
+                      else [ "--disable-debug" "--enable-release"
+                             "--disable-debug-symbols"
+                             "--enable-optimize" "--enable-strip" ])
+    ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
   enableParallelBuilding = true;
 
