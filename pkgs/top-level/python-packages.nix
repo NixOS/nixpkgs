@@ -2568,6 +2568,8 @@ in {
 
   fpdf = callPackage ../development/python-modules/fpdf { };
 
+  fpylll = callPackage ../development/python-modules/fpylll { };
+
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = buildPythonPackage rec {
