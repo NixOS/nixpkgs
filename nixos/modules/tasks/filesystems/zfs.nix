@@ -305,6 +305,8 @@ in
         }
       ];
 
+      virtualisation.lxd.zfsSupport = true;
+
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
         extraModulePackages = with packages; [ spl zfs ];
