@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     "--with-blas"
   ];
 
+  # Otherwise a very confusing "Can't load GDAL library" error
+  makeFlags = stdenv.lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
   postConfigure = ''
@@ -73,6 +76,7 @@ stdenv.mkDerivation {
     --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass-*/lib $out/lib
+    ln -s $out/grass-*/include $out/include
   '';
 
   enableParallelBuilding = true;
@@ -82,5 +86,6 @@ stdenv.mkDerivation {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [mpickering];
   };
 }
