@@ -1179,29 +1179,7 @@ in {
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle {};
 
-  cvxopt = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "cvxopt";
-    version = "1.1.7";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/${pname}/${name}.tar.gz";
-      sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
-    };
-    doCheck = false;
-    buildInputs = with pkgs; [ openblasCompat ];
-    preConfigure = ''
-      export CVXOPT_BLAS_LIB_DIR=${pkgs.openblasCompat}/lib
-      export CVXOPT_BLAS_LIB=openblas
-      export CVXOPT_LAPACK_LIB=openblas
-    '';
-    meta = {
-      homepage = "http://cvxopt.org/";
-      description = "Python Software for Convex Optimization";
-      maintainers = with maintainers; [ edwtjo ];
-      license = licenses.gpl3Plus;
-    };
-  };
+  cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cycler = callPackage ../development/python-modules/cycler { };
 
