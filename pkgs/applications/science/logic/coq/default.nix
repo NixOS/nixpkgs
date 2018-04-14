@@ -34,11 +34,9 @@ let
 self = stdenv.mkDerivation {
   name = "coq-${version}";
 
-  inherit coq-version;
-  inherit camlp5;
-  inherit (ocamlPackages) ocaml;
   passthru = {
-    inherit (ocamlPackages) findlib num;
+    inherit coq-version camlp5;
+    inherit (ocamlPackages) ocaml findlib num;
     emacsBufferSetup = pkgs: ''
       ; Propagate coq paths to children
       (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
