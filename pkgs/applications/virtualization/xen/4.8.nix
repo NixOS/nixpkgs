@@ -41,6 +41,12 @@ let
     sha256 = "1ki295pymbcfc64sjb9wqfwpv19p8vwgmnxankada3vm4fxg2rhq";
   });
 
+  qemuMemfdBuildFix = fetchpatch {
+    name = "xen-4.8-memfd-build-fix.patch";
+    url = https://github.com/qemu/qemu/commit/75e5b70e6b5dcc4f2219992d7cffa462aa406af0.patch;
+    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
+  };
+
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
     alsaLib
@@ -63,6 +69,9 @@ callPackage (import ./generic.nix (rec {
         rev = "refs/tags/qemu-xen-${version}";
         sha256 = "0lb7zd5nvr6znx47z93nbq4gj8xfb3622s8r2cvmpqmwnmlc3nd4";
       };
+      patches = [
+        qemuMemfdBuildFix
+      ];
       buildInputs = qemuDeps;
       meta.description = "Xen's fork of upstream Qemu";
     };
