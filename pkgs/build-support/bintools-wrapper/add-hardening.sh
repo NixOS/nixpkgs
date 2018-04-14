@@ -11,7 +11,7 @@ done
 
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
-  unset -v hardeningEnableMap["$flag"]
+  unset -v "hardeningEnableMap[$flag]"
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
