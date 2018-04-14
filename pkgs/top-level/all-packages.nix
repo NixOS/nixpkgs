@@ -17804,6 +17804,7 @@ with pkgs;
     inherit (gnome2) GConf;
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
+    curl = curl.override { gnutlsSupport = true; sslSupport = false;};
   };
 
   libspotify = callPackage ../development/libraries/libspotify {
