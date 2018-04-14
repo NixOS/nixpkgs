@@ -20,7 +20,8 @@ python3Packages.buildPythonApplication rec {
 
   libpulseaudioPath = stdenv.lib.makeLibraryPath [ libpulseaudio ];
   ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${libpulseaudioPath}\"";
-  makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
+  # LC_TIME != C results in locale.Error: unsupported locale setting
+  makeWrapperArgs = [ "--set LC_TIME C" ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
 
   postInstall = ''
     makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \
