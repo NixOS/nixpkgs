@@ -42,13 +42,14 @@ in
 
       preStart = ''
         # Create the proper run directory
-        mkdir -p /run/rdnssd
-        touch /run/rdnssd/resolv.conf
-        chown -R rdnssd /run/rdnssd
+        mkdir -p /run/rdnssd/resolv
+        touch /run/rdnssd/resolv/resolv.conf
+        chown root /run/rdnssd
+        chown -R rdnssd /run/rdnssd/resolv
 
         # Link the resolvconf interfaces to rdnssd
         rm -f /run/resolvconf/interfaces/rdnssd
-        ln -s /run/rdnssd/resolv.conf /run/resolvconf/interfaces/rdnssd
+        ln -s /run/rdnssd/resolv/resolv.conf /run/resolvconf/interfaces/rdnssd
         ${mergeHook}
       '';
 
@@ -58,7 +59,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "@${pkgs.ndisc6}/bin/rdnssd rdnssd -p /run/rdnssd/rdnssd.pid -r /run/rdnssd/resolv.conf -u rdnssd -H ${mergeHook}";
+        ExecStart = "@${pkgs.ndisc6}/bin/rdnssd rdnssd -p /run/rdnssd/rdnssd.pid -r /run/rdnssd/resolv/resolv.conf -u rdnssd -H ${mergeHook}";
         Type = "forking";
         PIDFile = "/run/rdnssd/rdnssd.pid";
       };
