@@ -123,8 +123,11 @@ self = stdenv.mkDerivation {
 
   buildFlags = "revision coq coqide bin/votour";
 
+  createFindlibDestdir = true;
+
   postInstall = ''
     cp bin/votour $out/bin/
+    ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
   '';
 
   meta = with stdenv.lib; {
