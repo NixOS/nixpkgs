@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.66.1";
+  version = "0.67.0";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -59,6 +59,7 @@
     "coinbase" = ps: with ps; [  ];
     "comfoconnect" = ps: with ps; [  ];
     "config.config_entries" = ps: with ps; [  ];
+    "cover.gogogate2" = ps: with ps; [  ];
     "cover.myq" = ps: with ps; [  ];
     "daikin" = ps: with ps; [  ];
     "datadog" = ps: with ps; [ datadog ];
@@ -71,6 +72,7 @@
     "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
     "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
     "device_tracker.fritz" = ps: with ps; [ fritzconnection ];
+    "device_tracker.google_maps" = ps: with ps; [  ];
     "device_tracker.icloud" = ps: with ps; [  ];
     "device_tracker.linksys_ap" = ps: with ps; [ beautifulsoup4 ];
     "device_tracker.mikrotik" = ps: with ps; [  ];
@@ -84,6 +86,7 @@
     "device_tracker.unifi" = ps: with ps; [ pyunifi ];
     "device_tracker.unifi_direct" = ps: with ps; [ pexpect ];
     "device_tracker.upc_connect" = ps: with ps; [ defusedxml ];
+    "device_tracker.xiaomi_miio" = ps: with ps; [  ];
     "digital_ocean" = ps: with ps; [ digital-ocean ];
     "discovery" = ps: with ps; [ netdisco ];
     "dominos" = ps: with ps; [  ];
@@ -99,6 +102,7 @@
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
     "feedreader" = ps: with ps; [ feedparser ];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
+    "folder_watcher" = ps: with ps; [ watchdog ];
     "frontend" = ps: with ps; [  ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
@@ -139,6 +143,7 @@
     "light.lifx_legacy" = ps: with ps; [  ];
     "light.limitlessled" = ps: with ps; [  ];
     "light.mystrom" = ps: with ps; [  ];
+    "light.nanoleaf_aurora" = ps: with ps; [  ];
     "light.osramlightify" = ps: with ps; [  ];
     "light.piglow" = ps: with ps; [  ];
     "light.rpi_gpio_pwm" = ps: with ps; [  ];
@@ -205,7 +210,6 @@
     "media_player.yamaha_musiccast" = ps: with ps; [  ];
     "media_player.ziggo_mediabox_xl" = ps: with ps; [  ];
     "melissa" = ps: with ps; [  ];
-    "mercedesme" = ps: with ps; [  ];
     "mochad" = ps: with ps; [  ];
     "modbus" = ps: with ps; [  ];
     "mqtt" = ps: with ps; [ paho-mqtt ];
@@ -230,6 +234,7 @@
     "notify.kodi" = ps: with ps; [ jsonrpc-async ];
     "notify.lametric" = ps: with ps; [  ];
     "notify.mailgun" = ps: with ps; [  ];
+    "notify.mastodon" = ps: with ps; [  ];
     "notify.matrix" = ps: with ps; [ matrix-client ];
     "notify.message_bird" = ps: with ps; [  ];
     "notify.pushbullet" = ps: with ps; [ pushbullet ];
@@ -375,6 +380,7 @@
     "sensor.ups" = ps: with ps; [  ];
     "sensor.vasttrafik" = ps: with ps; [  ];
     "sensor.waqi" = ps: with ps; [  ];
+    "sensor.waze_travel_time" = ps: with ps; [  ];
     "sensor.whois" = ps: with ps; [  ];
     "sensor.xbox_live" = ps: with ps; [  ];
     "sensor.xiaomi_miio" = ps: with ps; [ construct ];
