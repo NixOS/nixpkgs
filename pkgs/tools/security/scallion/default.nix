@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "GPU-based tor hidden service name generator";
     homepage = src.meta.homepage;
-    license = licenses.free;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ volth ];
   };
