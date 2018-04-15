@@ -340,7 +340,7 @@ stdenv.mkDerivation rec {
       \
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DISPLAY="\$DISPLAY" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
