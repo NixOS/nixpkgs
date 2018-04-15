@@ -247,6 +247,7 @@
 "github:vim-scripts/align"
 "github:vim-scripts/argtextobj.vim"
 "github:vim-scripts/a.vim"
+"github:vim-scripts/bats.vim"
 "github:vim-scripts/changeColorScheme.vim"
 "github:vim-scripts/Colour-Sampler-Pack"
 "github:vim-scripts/Improved-AnsiEsc"
