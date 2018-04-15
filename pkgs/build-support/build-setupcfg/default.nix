@@ -6,7 +6,7 @@
 # * application: Whether this package is a python library or an
 #   application which happens to be written in python.
 # * doCheck: Whether to run the test suites.
-pythonPackages:
+{ pkgs, pythonPackages }:
 { src, info, meta ? {}, application ? false, doCheck ? true }: let
   build = if application
     then pythonPackages.buildPythonApplication
@@ -16,7 +16,9 @@ in build {
 
   inherit src meta doCheck;
 
-  nativeBuildInputs = map (p: pythonPackages.${p}) (
+  nativeBuildInputs = [
+    pkgs.unzip
+  ] ++ map (p: pythonPackages.${p}) (
     (info.setup_requires or []) ++
     (if doCheck then (info.tests_require or []) else []));
 
