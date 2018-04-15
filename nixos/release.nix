@@ -166,8 +166,12 @@ in rec {
     inherit system;
   });
 
-  sd_image = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+  sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
+        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
+        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+      }.${system};
     inherit system;
   });
 
