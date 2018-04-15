@@ -18298,6 +18298,8 @@ EOF
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   h11 = callPackage ../development/python-modules/h11 { };
+
+  python-docx = callPackage ../development/python-modules/python-docx { };
 });
 
 in fix' (extends overrides packages)
