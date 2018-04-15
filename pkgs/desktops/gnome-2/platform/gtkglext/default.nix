@@ -12,8 +12,14 @@ stdenv.mkDerivation rec {
     [ pkgconfig glib gtk libGLU_combined pango libX11 libXmu ];
   propagatedBuildInputs = [ pangox_compat ];
 
-  # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and
-  # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.
+  patches = [
+    # Fix build with glibc ≥ 2.27
+    (fetchurl {
+      url = https://salsa.debian.org/gewo/gtkglext/raw/3b002677c907890c7de002c9f5b4b3ec71d11b31/debian/patches/04_glibc2.27-ftbfs.diff;
+      sha256 = "1l1swkjkai6pnah23xfsfpbq2fgbhp5pzj3l0ybsx6b858cxqzj5";
+    })
+  ];
+
   CPPFLAGS = "-UGTK_DISABLE_DEPRECATED";
 
   meta = with stdenv.lib; {
