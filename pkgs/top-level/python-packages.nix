@@ -67,8 +67,7 @@ let
   }));
 
   # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../build-support/build-setupcfg
-    { inherit pkgs; pythonPackages = self; };
+  buildSetupcfg = import ../build-support/build-setupcfg self;
 
   graphiteVersion = "1.0.2";
 
