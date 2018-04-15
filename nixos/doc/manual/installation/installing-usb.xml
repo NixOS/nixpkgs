@@ -51,7 +51,7 @@ ISO, copy its contents verbatim to your drive, then either:
   <listitem>
     <para>If you want to load the contents of the ISO to ram after bootin
     (So you can remove the stick after bootup) you can append the parameter
-    <literal>copytoram</literal>to the <literal>options</literal> field.</para>
+    <literal>copytoram</literal> to the <literal>options</literal> field.</para>
   </listitem>
 </itemizedlist>
 </para>
