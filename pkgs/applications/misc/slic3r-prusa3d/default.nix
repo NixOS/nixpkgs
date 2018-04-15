@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     ClassXSAccessor
     EncodeLocale
     ExtUtilsMakeMaker
+    ExtUtilsTypemapsDefault
     ExtUtilsXSpp
     GrowlGNTP
     ImportInto
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     MathConvexHullMonotoneChain
     MathGeometryVoronoi
     MathPlanePath
-    ModuleBuild
+    ModuleBuildWithXSpp
     Moo
     NetDBus
     OpenGL
