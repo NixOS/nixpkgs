@@ -563,6 +563,8 @@ with pkgs;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
+  iamy = callPackage ../tools/admin/iamy { };
+
   azure-cli = nodePackages.azure-cli;
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
