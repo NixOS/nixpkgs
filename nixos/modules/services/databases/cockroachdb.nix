@@ -8,6 +8,13 @@ let
 
   cockroachdb = cfg.package;
 
+  escape = builtins.replaceStrings ["%"] ["%%"];
+
+  secureArg = insecure: certsDir:
+    if insecure then "--insecure " else
+    if (!isNull certsDir) then "--certs-dir=${certsDir} " else
+    throw  "error: cockroachdb must specify either insecure or certsDir";
+
 in
 
 {
@@ -66,7 +73,7 @@ in
 
       insecure = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = "Run in insecure mode.";
       };
 
@@ -146,13 +153,14 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${cockroachdb}/bin/cockroach start --logtostderr --cache=${cfg.cache} "
+          { ExecStart = "${cockroachdb}/bin/cockroach start --logtostderr --cache='${escape cfg.cache}' "
                       + "--http-host=${cfg.httpHost} --http-port=${toString cfg.httpPort} "
-                      + "--max-sql-memory=${cfg.maxSqlMemory} --port=${toString cfg.port} "
+                      + "--max-sql-memory='${escape cfg.maxSqlMemory}' --port=${toString cfg.port} "
                       + (optionalString (!isNull cfg.host) "--host=${cfg.host} ")
                       + (optionalString (!isNull cfg.join) "--join=${cfg.join} ")
-                      + (if cfg.insecure then "--insecure " else "--certs-dir=${cfg.certsDir} ")
+                      + (secureArg cfg.insecure cfg.certsDir)
                       + "--store=${cfg.dataDir} ";
+            Type = "notify";
             User = cfg.user;
             PermissionsStartOnly = true;
           };

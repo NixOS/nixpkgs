@@ -11,6 +11,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       {
         services.cockroachdb.enable = true;
         services.cockroachdb.package = pkgs.cockroachdb;
+        services.cockroachdb.insecure = true;
       };
   };
 
@@ -18,7 +19,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $master->waitForUnit("cockroachdb");
-    $master->sleep(10); # Hopefully this is long enough!!
     $master->succeed("cockroach sql --insecure -e 'SHOW ALL CLUSTER SETTINGS'");
   '';
 })
