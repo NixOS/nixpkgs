@@ -188,6 +188,7 @@
 "github:vim-scripts/a.vim"
 "github:vim-scripts/align"
 "github:vim-scripts/argtextobj.vim"
+"github:vim-scripts/bats.vim"
 "github:vim-scripts/changeColorScheme.vim"
 "github:vim-scripts/mayansmoke.git"
 "github:vim-scripts/random.vim"
