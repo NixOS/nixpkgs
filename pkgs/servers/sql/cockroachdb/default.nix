@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchurl, cmake, xz, which, autoconf, ncurses6 }:
+{ stdenv, buildGoPackage, fetchurl, cmake, xz, which, autoconf, ncurses6, libedit }:
 
 buildGoPackage rec {
   name = "cockroach-${version}";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     sha256 = "0x8hf5qwvgb2w6dcnvy20v77nf19f0l1pb40jf31rm72xhk3bwvy";
   };
 
-  buildInputs = [ ncurses6 ];
+  buildInputs = [ (if stdenv.isDarwin then libedit else ncurses6) ];
   nativeBuildInputs = [ cmake xz which autoconf ];
 
   buildPhase = ''
