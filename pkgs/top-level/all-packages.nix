@@ -19657,7 +19657,9 @@ with pkgs;
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
-  clblas = callPackage ../development/libraries/science/math/clblas { };
+  clblas = callPackage ../development/libraries/science/math/clblas {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo OpenCL;
+  };
 
   jags = callPackage ../applications/science/math/jags { };
 
