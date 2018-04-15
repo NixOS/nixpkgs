@@ -18271,6 +18271,8 @@ EOF
 
   pyspark = callPackage ../development/python-modules/pyspark { };
 
+  pysensors = callPackage ../development/python-modules/pysensors { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   textacy = callPackage ../development/python-modules/textacy { };
