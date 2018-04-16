@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     owner = "darlinghq";
     rev = "d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b";
-    sha256 = "1sdl0ysa3yfdvkq0x7vkdl64g7mcfy3qx70saf1d8rnhycbxjgjg";
+    sha256 = "1mkcnzy1cfpwghgvb9pszhy9jy6534y8krw8inwl9fqfd0w019wz";
   };
 
   # only packaging sandbox for now
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.gpl3;
     description = "Darwin/macOS emulation layer for Linux";
-    platforms = platforms.unix;
+    platforms = platforms.darwin;
   };
 }
