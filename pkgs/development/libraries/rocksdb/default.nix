@@ -1,4 +1,4 @@
-{ stdenv, lib
+{ stdenv
 , fetchFromGitHub
 , fixDarwinDylibNames
 , which, perl
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     mv -vi $out/lib/${LIBNAME}.a $static/lib/
 
     install -d ''${!outputBin}/bin
-    install -D ${lib.concatStringsSep " " tools} ''${!outputBin}/bin
+    install -D ${stdenv.lib.concatStringsSep " " tools} ''${!outputBin}/bin
   '';
 
   enableParallelBuilding = true;
