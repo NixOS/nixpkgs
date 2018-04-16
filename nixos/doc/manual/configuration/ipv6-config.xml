@@ -26,7 +26,10 @@ example, we use interface <varname>eth0</varname>):
 DHCPv6. You can configure an interface manually:
 
 <programlisting>
-<link linkend="opt-networking.interfaces._name__.ipv6.addresses">networking.interfaces.eth0.ipv6.addresses</link> = [ { address = "fe00:aa:bb:cc::2"; prefixLength = 64; } ];
+<link linkend="opt-networking.interfaces._name__.ipv6.addresses">networking.interfaces.eth0.ipv6.addresses</link> = [ {
+  address = "fe00:aa:bb:cc::2";
+  prefixLength = 64;
+} ];
 </programlisting>
 </para>
 
