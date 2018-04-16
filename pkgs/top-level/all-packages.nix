@@ -6916,15 +6916,14 @@ with pkgs;
     libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
   };
 
-  wrapBintoolsWith = { bintools, libc }: bintoolsWrapperFun {
+  wrapBintoolsWith = { bintools, libc, extraBuildCommands ? "" }: bintoolsWrapperFun {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
 
     noLibc = (libc == null);
 
-    inherit bintools libc;
-    extraBuildCommands = "";
+    inherit bintools libc extraBuildCommands;
   };
 
   # prolog
