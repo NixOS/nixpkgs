@@ -12,13 +12,13 @@ management.  In the declarative style, users are specified in
 states that a user account named <literal>alice</literal> shall exist:
 
 <programlisting>
-<xref linkend="opt-users.users"/>.alice =
-  { <link linkend="opt-users.users._name__.isNormalUser">isNormalUser</link> = true;
-    <link linkend="opt-users.users._name__.home">home</link> = "/home/alice";
-    <link linkend="opt-users.users._name__.description">description</link> = "Alice Foobar";
-    <link linkend="opt-users.users._name__.extraGroups">extraGroups</link> = [ "wheel" "networkmanager" ];
-    <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">openssh.authorizedKeys.keys</link> = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
-  };
+<xref linkend="opt-users.users"/>.alice = {
+  <link linkend="opt-users.users._name__.isNormalUser">isNormalUser</link> = true;
+  <link linkend="opt-users.users._name__.home">home</link> = "/home/alice";
+  <link linkend="opt-users.users._name__.description">description</link> = "Alice Foobar";
+  <link linkend="opt-users.users._name__.extraGroups">extraGroups</link> = [ "wheel" "networkmanager" ];
+  <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">openssh.authorizedKeys.keys</link> = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
+};
 </programlisting>
 
 Note that <literal>alice</literal> is a member of the

@@ -29,8 +29,8 @@ form <literal><replaceable>name</replaceable> =
 { config, pkgs, ... }:
 
 { <xref linkend="opt-services.httpd.enable"/> = true;
-<xref linkend="opt-services.httpd.adminAddr"/> = "alice@example.org";
-<xref linkend="opt-services.httpd.documentRoot"/> = "/webroot";
+  <xref linkend="opt-services.httpd.adminAddr"/> = "alice@example.org";
+  <xref linkend="opt-services.httpd.documentRoot"/> = "/webroot";
 }
 </programlisting>
 

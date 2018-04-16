@@ -273,9 +273,9 @@ for a UEFI installation is by and large the same as a BIOS installation. The dif
     you to set the password for the <literal>root</literal> user, e.g.
 
     <screen>
-      setting root password...
-      Enter new UNIX password: ***
-      Retype new UNIX password: ***
+setting root password...
+Enter new UNIX password: ***
+Retype new UNIX password: ***
     </screen>
 
     <note>
@@ -380,25 +380,24 @@ drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
 
 <example xml:id='ex-config'><title>NixOS Configuration</title>
   <screen>
-    { config, pkgs, ... }:
-
-    {
-    imports =
-    [ # Include the results of the hardware scan.
+{ config, pkgs, ... }: {
+  imports = [
+    # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ];
+  ];
 
-    <xref linkend="opt-boot.loader.grub.device"/> = "/dev/sda";   # <lineannotation>(for BIOS systems only)</lineannotation>
-    <xref linkend="opt-boot.loader.systemd-boot.enable"/> = true; # <lineannotation>(for UEFI systems only)</lineannotation>
+  <xref linkend="opt-boot.loader.grub.device"/> = "/dev/sda";   # <lineannotation>(for BIOS systems only)</lineannotation>
+  <xref linkend="opt-boot.loader.systemd-boot.enable"/> = true; # <lineannotation>(for UEFI systems only)</lineannotation>
 
-    # Note: setting fileSystems is generally not
-    # necessary, since nixos-generate-config figures them out
-    # automatically in hardware-configuration.nix.
-    #<link linkend="opt-fileSystems._name__.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
+  # Note: setting fileSystems is generally not
+  # necessary, since nixos-generate-config figures them out
+  # automatically in hardware-configuration.nix.
+  #<link linkend="opt-fileSystems._name__.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
 
-    # Enable the OpenSSH server.
-    services.sshd.enable = true;
-    }</screen>
+  # Enable the OpenSSH server.
+  services.sshd.enable = true;
+}
+  </screen>
 </example>
 
 <xi:include href="installing-usb.xml" />
