@@ -107,9 +107,6 @@ self:
       helm-rtags = markBroken super.helm-rtags;
 
       # upstream issue: missing file header
-      helm-words = markBroken super.helm-words;
-
-      # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
       # upstream issue: missing file header
@@ -155,9 +152,6 @@ self:
       # upstream issue: missing dependency
       org-readme = markBroken super.org-readme;
 
-      # upstream issue: missing file header
-      perl-completion = markBroken super.perl-completion;
-
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 
@@ -166,12 +160,6 @@ self:
 
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
-
-      # upstream issue: missing package version
-      quack = markBroken super.quack;
-
-      # upstream issue: missing file header
-      railgun = markBroken super.railgun;
 
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
@@ -206,9 +194,6 @@ self:
 
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
-
-      # upstream issue: missing file header
-      zeitgeist = markBroken super.zeitgeist;
 
       w3m = super.w3m.override (args: {
         melpaBuild = drv: args.melpaBuild (drv // {
