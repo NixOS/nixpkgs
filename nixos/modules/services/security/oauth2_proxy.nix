@@ -20,7 +20,7 @@ let
       inherit (cfg.github) org team;
     }; };
 
-    google = cfg: { google = with cfg.google; {
+    google = cfg: { google = with cfg.google; optionalAttrs (groups != []) {
       admin-email = adminEmail;
       service-account = serviceAccountJSON;
       group = groups;
@@ -57,6 +57,7 @@ let
       inherit (cookie) domain secure expire name secret refresh;
       httponly = cookie.httpOnly;
     };
+    set-xauthrequest = setXauthrequest;
   } // lib.optionalAttrs (!isNull cfg.email.addresses) {
     authenticated-emails-file = authenticatedEmailsFile;
   } // lib.optionalAttrs (cfg.passBasicAuth) {
@@ -120,7 +121,7 @@ in
     };
 
     clientID = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = ''
         The OAuth Client ID.
       '';
@@ -128,7 +129,7 @@ in
     };
 
     clientSecret = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = ''
         The OAuth Client Secret.
       '';
@@ -282,7 +283,8 @@ in
     ####################################################
     # UPSTREAM Configuration
     upstream = mkOption {
-      type = types.commas;
+      type = with types; coercedTo string (x: [x]) (listOf string);
+      default = [];
       description = ''
         The http url(s) of the upstream endpoint or <literal>file://</literal>
         paths for static files. Routing is based on the path.
@@ -504,6 +506,14 @@ in
       '';
     };
 
+    setXauthrequest = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = ''
+        Set X-Auth-Request-User and X-Auth-Request-Email response headers (useful in Nginx auth_request mode).
+      '';
+    };
+
     extraConfig = mkOption {
       default = {};
       description = ''
@@ -511,9 +521,27 @@ in
       '';
     };
 
+    keyFile = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      description = ''
+        oauth2_proxy allows passing sensitive configuration via environment variables.
+        Make a file that contains lines like
+        OAUTH2_PROXY_CLIENT_SECRET=asdfasdfasdf.apps.googleuserscontent.com
+        and specify the path here.
+      '';
+      example = "/run/keys/oauth2_proxy";
+    };
+
   };
 
   config = mkIf cfg.enable {
+
+    services.oauth2_proxy = mkIf (!isNull cfg.keyFile) {
+      clientID = mkDefault null;
+      clientSecret = mkDefault null;
+      cookie.secret = mkDefault null;
+    };
 
     users.extraUsers.oauth2_proxy = {
       description = "OAuth2 Proxy";
@@ -529,6 +557,7 @@ in
         User = "oauth2_proxy";
         Restart = "always";
         ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${configString}";
+        EnvironmentFile = mkIf (cfg.keyFile != null) cfg.keyFile;
       };
     };
 
