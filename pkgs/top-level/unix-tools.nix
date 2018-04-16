@@ -41,6 +41,10 @@ in rec {
     linux = pkgs.nettools;
     darwin = pkgs.darwin.network_cmds;
   };
+  col = singleBinary "col" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.text_cmds;
+  };
   eject = singleBinary "eject" {
     linux = pkgs.utillinux;
   };
@@ -138,7 +142,7 @@ in rec {
   utillinux = buildEnv {
     name = "utillinux-compat";
     paths = [ fsck fdisk getopt hexdump mount
-              script umount whereis write ];
+              script umount whereis write col ];
   };
 
   nettools = buildEnv {
