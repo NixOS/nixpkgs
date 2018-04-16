@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, version, sha256 }:
+{ stdenv, fetchurl, version, sha256, ... }@args:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "jemalloc-${version}";
   inherit version;
 
@@ -19,11 +19,6 @@ stdenv.mkDerivation rec {
                    ++ stdenv.lib.optional stdenv.isArm "--disable-thp";
   doCheck = true;
 
-  patches = stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/jemalloc/jemalloc/pull/1035.patch";
-    sha256 = "02y0q3dp253bipxv4r954nqipbjbj92p6ww9bx5bk3d8pa81wkqq";
-  });
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
@@ -37,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];
   };
-}
+} // (builtins.removeAttrs args [ "stdenv" "fetchurl" "version" "sha256" ]))
