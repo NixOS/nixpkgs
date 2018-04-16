@@ -1646,6 +1646,8 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
+  envs = callPackage ../development/python-modules/envs { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
@@ -18272,6 +18274,8 @@ EOF
   pyspark = callPackage ../development/python-modules/pyspark { };
 
   sseclient = callPackage ../development/python-modules/sseclient { };
+
+  warrant = callPackage ../development/python-modules/warrant { };
 
   textacy = callPackage ../development/python-modules/textacy { };
 

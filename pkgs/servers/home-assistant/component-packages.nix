@@ -55,7 +55,7 @@
     "climate.sensibo" = ps: with ps; [  ];
     "climate.touchline" = ps: with ps; [  ];
     "climate.venstar" = ps: with ps; [  ];
-    "cloud" = ps: with ps; [  ];
+    "cloud" = ps: with ps; [ warrant ];
     "coinbase" = ps: with ps; [  ];
     "comfoconnect" = ps: with ps; [  ];
     "config.config_entries" = ps: with ps; [  ];
