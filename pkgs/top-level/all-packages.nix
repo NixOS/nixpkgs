@@ -18183,11 +18183,8 @@ with pkgs;
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = libsForQt5.vlc;
-  vlc_qt5 = vlc;
 
-  vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
-    gtk = gtk2;
-  };
+  vlc_qt5 = vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
