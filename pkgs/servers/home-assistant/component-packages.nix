@@ -151,7 +151,7 @@
     "light.tikteck" = ps: with ps; [  ];
     "light.tplink" = ps: with ps; [  ];
     "light.xiaomi_miio" = ps: with ps; [ construct ];
-    "light.yeelight" = ps: with ps; [  ];
+    "light.yeelight" = ps: with ps; [ yeelight ];
     "light.yeelightsunflower" = ps: with ps; [  ];
     "light.zengge" = ps: with ps; [  ];
     "linode" = ps: with ps; [ linode-api ];

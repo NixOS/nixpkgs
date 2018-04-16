@@ -18304,6 +18304,21 @@ EOF
   h11 = callPackage ../development/python-modules/h11 { };
 
   python-docx = callPackage ../development/python-modules/python-docx { };
+
+  yeelight = buildPythonPackage rec {
+    name = "yeelight-${version}";
+    version = "0.4.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/yeelight/${name}.tar.gz";
+      sha256 = "0v5glz4q52w3p51c2yc3pfjlscbnbjq7lkb6j8cz7kkd5pprpp6f";
+    };
+    propagatedBuildInputs = with self; [ future enum-compat ];
+    meta = {
+      homepage = https://gitlab.com/stavros/python-yeelight;
+      description = "A Python library for controlling YeeLight WiFi RGB bulbs";
+      license = licenses.bsd2;
+    };
+  };
 });
 
 in fix' (extends overrides packages)
