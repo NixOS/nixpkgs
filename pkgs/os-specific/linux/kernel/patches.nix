@@ -73,4 +73,14 @@ rec {
     };
   };
 
+  # https://patchwork.kernel.org/patch/9626797/
+  bcm2835_mmal_v4l2_camera_driver = rec {
+    name = "bcm2835_mmal_v4l2_camera_driver";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = https://patchwork.kernel.org/patch/9626797/raw/;
+      sha256 = "0iwb0yxsf95zv4qxkvlvhqfmzx0rk13g9clvxsharvwkb4w5lwa0";
+    };
+  };
+
 }
