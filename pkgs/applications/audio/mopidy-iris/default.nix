@@ -17,7 +17,10 @@ pythonPackages.buildPythonApplication rec {
     pylast
     spotipy
     raven
+    tornado
   ]);
+
+  postPatch = "sed -i /tornado/d setup.py";
 
   # no tests implemented
   doCheck = false;
