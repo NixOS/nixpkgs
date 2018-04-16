@@ -18272,10 +18272,6 @@ with pkgs;
   vlc = libsForQt5.vlc;
   vlc_qt5 = vlc;
 
-  vlc_npapi = callPackage ../applications/video/vlc/plugin.nix {
-    gtk = gtk2;
-  };
-
   vmpk = callPackage ../applications/audio/vmpk { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
