@@ -9445,6 +9445,8 @@ with pkgs;
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
+  jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
+
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json2hcl = callPackage ../development/tools/json2hcl { };
