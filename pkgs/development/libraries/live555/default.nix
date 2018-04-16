@@ -1,39 +1,41 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
-# Based on https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD
 let
-  version = "2018.02.28";
-in
-stdenv.mkDerivation {
-  name = "live555-${version}";
+  target = "linux-with-shared-libraries";
 
-  src = fetchurl { # the upstream doesn't provide a stable URL
-    url = "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz";
+in stdenv.mkDerivation rec {
+  name = "live555-${version}";
+  version = "2018-02-28";
+
+  # old versions are aggressively purged from upstream
+  src = fetchurl {
+    url = "http://live555.com/liveMedia/public/live.${lib.replaceStrings [ "-" ] [ "." ] version}.tar.gz";
     sha256 = "0zi47asv1qmb09g321m02q684i3c90vci0mgkdh1mlmx2rbg1d1d";
   };
 
-  postPatch = "sed 's,/bin/rm,rm,g' -i genMakefiles"
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  # Arch Linux does this but I don't know *why*
+  postPatch = ''
+    substituteInPlace genMakefiles \
+      --replace /bin/rm rm
 
-    substituteInPlace liveMedia/include/Locale.hh \
-      --replace '<xlocale.h>' '<locale.h>'
+    substituteInPlace config.${target} --replace \
+      '-DSOCKLEN_T' \
+      '-fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T'
   '';
 
   configurePhase = ''
-    sed \
-      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-      -i config.linux
+    runHook preConfigure
 
-    ./genMakefiles linux
+    ./genMakefiles ${target}
+
+    runHook postConfigure
   '';
 
-  installPhase = ''
-    for dir in BasicUsageEnvironment groupsock liveMedia UsageEnvironment; do
-      install -dm755 $out/{bin,lib,include/$dir}
-      install -m644 $dir/*.a "$out/lib"
-      install -m644 $dir/include/*.h* "$out/include/$dir"
-    done
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
