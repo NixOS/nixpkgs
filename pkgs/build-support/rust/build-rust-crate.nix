@@ -187,7 +187,7 @@ let makeDeps = dependencies:
           rustcOpts =
             lib.lists.foldl' (opts: opt: opts + " " + opt)
               (if release then "-C opt-level=3" else "-C debuginfo=2")
-              extraRustcOpts;
+              (["-C codegen-units=1"] ++ extraRustcOpts);
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
           version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
