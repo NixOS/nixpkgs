@@ -27,7 +27,7 @@ appleDerivation {
                 | grep -v -e Desktop -e Embedded -e mklocale -e colldef)
 
     for i in $targets; do
-      xcodebuild -target $i
+      xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates -target $i
     done
   '';
 
