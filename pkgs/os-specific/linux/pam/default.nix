@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchurl, fetchpatch, flex, cracklib }:
+{ stdenv, buildPackages, hostPlatform, fetchurl, fetchpatch, flex, cracklib, db4 }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ cracklib ];
+  buildInputs = [ cracklib db4 ];
 
   enableParallelBuilding = true;
 
@@ -72,9 +72,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = {
-    homepage = http://ftp.kernel.org/pub/linux/libs/pam/;
+  meta = with stdenv.lib; {
+    homepage = http://www.linux-pam.org/;
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }
