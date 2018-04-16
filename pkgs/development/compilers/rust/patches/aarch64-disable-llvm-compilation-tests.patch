@@ -1,0 +1,20 @@
+--- rustc-1.25.0-src.org/src/libcore/num/mod.rs	2018-03-25 15:26:14.000000000 +0100
++++ rustc-1.25.0-src/src/libcore/num/mod.rs	2018-04-16 12:13:51.391605020 +0100
+@@ -2210,7 +2210,7 @@
+         ///
+         /// Basic usage:
+         ///
+-        /// ```
++        /// ``` ignore
+         /// assert_eq!(2u8.next_power_of_two(), 2);
+         /// assert_eq!(3u8.next_power_of_two(), 4);
+         /// ```
+@@ -2620,7 +2620,7 @@
+     ///
+     /// # Examples
+     ///
+-    /// ```
++    /// ``` ignore
+     /// #![feature(ascii_ctype)]
+     ///
+     /// let uppercase_a = b'A';
