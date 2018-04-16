@@ -50,10 +50,10 @@ let
 
     outputs = [ "out" "lib" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
-    # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
+      # Clang expects to find LLVMgold in its own prefix
       ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      # Clang expects to find sanitizer libraries in its own prefix
       ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
       ln -sv $out/bin/clang $out/bin/cpp
 
