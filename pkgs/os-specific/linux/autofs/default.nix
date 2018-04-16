@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, modprobe, nfs-utils, e2fsprogs
+{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     export MOUNT=${mount}/bin/mount
     export MOUNT_NFS=${nfs-utils}/bin/mount.nfs
     export UMOUNT=${umount}/bin/umount
-    export MODPROBE=${modprobe}/bin/modprobe
+    export MODPROBE=${kmod}/bin/modprobe
     export E2FSCK=${e2fsprogs}/bin/fsck.ext2
     export E3FSCK=${e2fsprogs}/bin/fsck.ext3
     export E4FSCK=${e2fsprogs}/bin/fsck.ext4

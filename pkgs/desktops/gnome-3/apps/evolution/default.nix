@@ -5,13 +5,13 @@
 , libcanberra-gtk3, bogofilter, gst_all_1, procps, p11-kit, openldap }:
 
 let
-  version = "3.28.0";
+  version = "3.28.1";
 in stdenv.mkDerivation rec {
   name = "evolution-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0b6yw664jdfc8ppd78akmrl36iximh7ipknf5mlzgga6lr6pl2nf";
+    sha256 = "0sdv5lg2vlz5f4raymz9d8a5jq4j18vbqyigaip6508p3bjnfj8l";
   };
 
   propagatedUserEnvPkgs = [ gnome3.evolution-data-server ];

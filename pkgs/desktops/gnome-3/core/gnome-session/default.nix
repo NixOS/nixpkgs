@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1ldcalj9i7qharvw8k8gf7pkcvwb1qwiag2ckffx9x8ic2d3v00b";
+    sha256 = "14nmbirgrp2nm16khbz109saqdlinlbrlhjnbjydpnrlimfgg4xq";
   };
 
   mesonFlags = [ "-Dsystemd=true" ];

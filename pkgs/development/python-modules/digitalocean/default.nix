@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests }:
+{ stdenv, buildPythonPackage, fetchPypi, requests, jsonpickle }:
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
@@ -6,10 +6,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06391cf0b253c8b4a5a10b3a4b7b7808b890a1d1e3b43d5ce3b5293a9c77af6b";
+    sha256 = "0h4drpdsmk0b3rlvg6q6cz11k23w0swj1iddk7xdcw4m7r7c52kw";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests jsonpickle ];
 
   # Package doesn't distribute tests.
   doCheck = false;

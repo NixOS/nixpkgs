@@ -13,6 +13,7 @@
   libXxf86vm,
   libXi,
   libXrandr,
+  libGL,
   xclip }:
 
 with rustPlatform;
@@ -26,6 +27,7 @@ let
     libXcursor
     libXxf86vm
     libXrandr
+    libGL
     libXi
   ];
 in buildRustPackage rec {

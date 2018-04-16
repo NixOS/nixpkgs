@@ -882,9 +882,6 @@ self: super: {
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
-  # Needs time<1.7
-  taffybar = doJailbreak super.taffybar;
-
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;

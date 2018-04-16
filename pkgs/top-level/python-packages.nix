@@ -410,6 +410,8 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
+  rlp = callPackage ../development/python-modules/rlp { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
@@ -1177,31 +1179,11 @@ in {
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle {};
 
-  cvxopt = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "cvxopt";
-    version = "1.1.7";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/${pname}/${name}.tar.gz";
-      sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
-    };
-    doCheck = false;
-    buildInputs = with pkgs; [ openblasCompat ];
-    preConfigure = ''
-      export CVXOPT_BLAS_LIB_DIR=${pkgs.openblasCompat}/lib
-      export CVXOPT_BLAS_LIB=openblas
-      export CVXOPT_LAPACK_LIB=openblas
-    '';
-    meta = {
-      homepage = "http://cvxopt.org/";
-      description = "Python Software for Convex Optimization";
-      maintainers = with maintainers; [ edwtjo ];
-      license = licenses.gpl3Plus;
-    };
-  };
+  cvxopt = callPackage ../development/python-modules/cvxopt { };
 
   cycler = callPackage ../development/python-modules/cycler { };
+
+  cysignals = callPackage ../development/python-modules/cysignals { };
 
   dlib = buildPythonPackage rec {
     inherit (pkgs.dlib) name src nativeBuildInputs meta;
@@ -1216,29 +1198,6 @@ in {
   debian = callPackage ../development/python-modules/debian {};
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
-
-  dosage = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "dosage";
-    version = "2016.03.17";
-    PBR_VERSION = version;
-    src = pkgs.fetchFromGitHub {
-      owner = "webcomics";
-      repo = "dosage";
-      rev = "1af022895e5f86bc43da95754c4c4ed305790f5b";
-      sha256 = "1bkqhlzigy656pam0znp2ddp1y5sqzyhw3c4fyy58spcafldq4j6";
-    };
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ requests lxml pbr ];
-    # prompt_toolkit doesn't work on 3.5 on OSX.
-    doCheck = !isPy35;
-
-    meta = {
-      description = "A comic strip downloader and archiver";
-      homepage = http://dosage.rocks/;
-      broken = true; # ctypes error
-    };
-  };
 
   dugong = callPackage ../development/python-modules/dugong {};
 
@@ -1686,6 +1645,8 @@ in {
   cryptography_vectors = callPackage ../development/python-modules/cryptography_vectors { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
+
+  envs = callPackage ../development/python-modules/envs { };
 
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
@@ -2589,6 +2550,8 @@ in {
 
   fpdf = callPackage ../development/python-modules/fpdf { };
 
+  fpylll = callPackage ../development/python-modules/fpylll { };
+
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
   frozendict = buildPythonPackage rec {
@@ -2981,7 +2944,6 @@ in {
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
           --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
-
     '';
 
     meta = {
@@ -8453,7 +8415,15 @@ in {
     name = "sleekxmpp-${version}";
     version = "1.3.3";
 
-    propagatedBuildInputs = with self; [ dnspython pyasn1 gevent ];
+    patches = [
+      # Fix https://github.com/etingof/pyasn1/issues/112
+      (pkgs.fetchpatch {
+        url = "https://github.com/kdschlosser/SleekXMPP/commit/597014ba5ca258763e96ee37729ac933c5af1602.patch";
+        sha256 = "176v3f3pr0bx48wv1kf9jn2pwxdn7qpqyc2chwv1m8gbppsfaikf";
+      })
+    ];
+
+    propagatedBuildInputs = with self; [ dnspython pyasn1 pyasn1-modules gevent ];
     checkInputs = [ pkgs.gnupg ];
     checkPhase = "${python.interpreter} testall.py";
     doCheck = false; # Tests failed all this time and upstream doesn't seem to care.
@@ -11851,12 +11821,12 @@ in {
 
   python-wifi = buildPythonPackage rec {
     name = "python-wifi-${version}";
-    version = "0.6.0";
+    version = "0.6.1";
     disabled = ! (isPy26 || isPy27 );
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-wifi/${name}.tar.bz2";
-      sha256 = "504639e5953eaec0e41758900fbe143d33d82ea86762b19b659a118c77d8403d";
+      sha256 = "149c3dznb63d82143cz5hqdim0mqjysz6p3yk0zv271vq3xnmzvv";
     };
 
     meta = {
@@ -12477,28 +12447,7 @@ in {
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
-  rpy2 = buildPythonPackage rec {
-    name = "rpy2-2.8.2";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rpy2/${name}.tar.gz";
-      sha256 = "2c1a313df4e64236dcfe1078ce847b8e3c180656c894928d3a4b391aacb9b24c";
-    };
-    buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
-    propagatedBuildInputs = with self; [ singledispatch six ];
-
-    # According to manual this is how the testsuite should be invoked
-    checkPhase = ''
-      ${python.interpreter}  -m rpy2.tests
-    '';
-    meta = {
-      homepage = http://rpy.sourceforge.net/rpy2;
-      description = "Python interface to R";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ joelmo ];
-      broken = true;
-    };
-  };
+  rpy2 = callPackage ../development/python-modules/rpy2 {};
 
   rpyc = buildPythonPackage rec {
     name = "rpyc-${version}";
@@ -18328,6 +18277,8 @@ EOF
 
   sseclient = callPackage ../development/python-modules/sseclient { };
 
+  warrant = callPackage ../development/python-modules/warrant { };
+
   textacy = callPackage ../development/python-modules/textacy { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
@@ -18353,6 +18304,8 @@ EOF
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   h11 = callPackage ../development/python-modules/h11 { };
+
+  python-docx = callPackage ../development/python-modules/python-docx { };
 });
 
 in fix' (extends overrides packages)

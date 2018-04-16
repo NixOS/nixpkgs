@@ -305,6 +305,11 @@
     github = "akru";
     name = "Alexander Krupenkin ";
   };
+  alexchapman = {
+    name = "Alex Chapman";
+    email = "alex@farfromthere.net";
+    github = "AJChapman";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
@@ -3405,6 +3410,11 @@
     email = "grrwlf@gmail.com";
     github = "grwlf";
     name = "Sergey Mironov";
+  };
+  sna = {
+    email = "abouzahra.9@wright.edu";
+    github = "s-na";
+    name = "S. Nordin Abouzahra";
   };
   snyh = {
     email = "snyh@snyh.org";

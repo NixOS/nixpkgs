@@ -147,6 +147,7 @@ in
           ${getLib pkgs.libcap}/lib/libcap*.so*            mr,
           ${getLib pkgs.attr}/lib/libattr*.so*             mr,
           ${getLib pkgs.lz4}/lib/liblz4*.so*               mr,
+          ${getLib pkgs.libkrb5}/lib/lib*.so*              mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

@@ -13,7 +13,7 @@
 let
 
   singleBinary = cmd: providers: let
-      provider = "${providers.${hostPlatform.parsed.kernel.name} or "missing-package"}/bin/${cmd}";
+      provider = "${lib.getBin providers.${hostPlatform.parsed.kernel.name}}/bin/${cmd}";
     in runCommand cmd {
       meta.platforms = map (n: { kernel.name = n; }) (pkgs.lib.attrNames providers);
     } ''
@@ -41,6 +41,10 @@ in rec {
     linux = pkgs.nettools;
     darwin = pkgs.darwin.network_cmds;
   };
+  col = singleBinary "col" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.text_cmds;
+  };
   eject = singleBinary "eject" {
     linux = pkgs.utillinux;
   };
@@ -58,6 +62,14 @@ in rec {
     linux = pkgs.utillinux;
     darwin = pkgs.getopt;
   };
+  fdisk = singleBinary "fdisk" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
+  fsck = singleBinary "fsck" {
+    linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
   hexdump = singleBinary "hexdump" {
     linux = pkgs.utillinux;
     darwin = pkgs.darwin.shell_cmds;
@@ -73,15 +85,13 @@ in rec {
   logger = singleBinary "logger" {
     linux = pkgs.utillinux;
   };
-  modprobe = singleBinary "modprobe" {
-    linux = pkgs.utillinux;
-  };
   more = singleBinary "more" {
     linux = pkgs.utillinux;
     darwin = more_compat;
   };
   mount = singleBinary "mount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   netstat = singleBinary "netstat" {
     linux = pkgs.nettools;
@@ -95,6 +105,10 @@ in rec {
     linux = pkgs.procps;
     darwin = pkgs.darwin.ps;
   };
+  quota = singleBinary "quota" {
+    linux = pkgs.linuxquota;
+    darwin = pkgs.darwin.diskdev_cmds;
+  };
   route = singleBinary "route" {
     linux = pkgs.nettools;
     darwin = pkgs.darwin.network_cmds;
@@ -107,8 +121,13 @@ in rec {
     linux = pkgs.procps;
     darwin = pkgs.darwin.system_cmds;
   };
+  top = singleBinary "top" {
+    linux = pkgs.procps;
+    darwin = pkgs.darwin.top;
+  };
   umount = singleBinary "umount" {
     linux = pkgs.utillinux;
+    darwin = pkgs.darwin.diskdev_cmds;
   };
   whereis = singleBinary "whereis" {
     linux = pkgs.utillinux;
@@ -127,16 +146,17 @@ in rec {
 
   procps = buildEnv {
     name = "procps-compat";
-    paths = [ sysctl ps ];
+    paths = [ ps sysctl top ];
   };
 
   utillinux = buildEnv {
     name = "utillinux-compat";
-    paths = [ getopt hexdump script whereis write ];
+    paths = [ fsck fdisk getopt hexdump mount
+              script umount whereis write col ];
   };
 
   nettools = buildEnv {
     name = "nettools-compat";
-    paths = [ arp hostname netstat route ];
+    paths = [ arp hostname ifconfig netstat route ];
   };
 }
