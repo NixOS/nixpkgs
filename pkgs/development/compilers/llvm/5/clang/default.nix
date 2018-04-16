@@ -52,7 +52,9 @@ let
 
     postInstall = ''
       # Clang expects to find LLVMgold in its own prefix
-      ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      if [ -e ${llvm}/lib/LLVMgold.so ]; then
+        ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+      fi
       # Clang expects to find sanitizer libraries in its own prefix
       ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
       ln -sv $out/bin/clang $out/bin/cpp
