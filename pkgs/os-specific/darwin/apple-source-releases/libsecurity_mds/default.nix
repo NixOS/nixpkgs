@@ -8,4 +8,7 @@ appleDerivation {
     libsecurity_cdsa_client
     libsecurityd
   ];
+  postInstall = ''
+    ln -s $out/include/security_mds $out/include/Security
+  '';
 }

@@ -44,7 +44,7 @@ in
   };
 
   libobjc = apple-source-releases.objc4;
-  
+
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
@@ -69,6 +69,8 @@ in
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
+  corecrypto = callPackage ../os-specific/darwin/darling/corecrypto.nix { };
+
   codesign = drv: if builtins.hasAttr "keychain" config then
     (runCommand "codesign" {
       nativeBuildInputs = [
@@ -80,12 +82,29 @@ in
     IDENTITY=${config.keychain.identity}
     PASS=${config.keychain.password}
     export HOME=$PWD
-    mkdir -p $PWD/Library/Keychains
-    cp ${config.keychain.file} $PWD/Library/Keychains
-    KEYCHAIN=$(basename $PWD/Library/Keychains/*)
+    mkdir -p $PWD/Library/Keychains $PWD/Library/Preferences
+    KEYCHAIN=nixpkgs.keychain
+    cp ${config.keychain.file} $PWD/Library/Keychains/$KEYCHAIN
+    cat > $PWD/Library/Preferences/com.apple.security.plist <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DLDBSearchList</key>
+	<array>
+		<dict>
+			<key>DbName</key>
+			<string>~/Library/Keychains/nixpkgs.keychain</string>
+			<key>SubserviceType</key>
+			<integer>6</integer>
+		</dict>
+	</array>
+</dict>
+</plist>
+EOF
     security unlock-keychain -p $PASS $KEYCHAIN
     security set-keychain-settings -u $PWD/Library/Keychains/$KEYCHAIN
-    security find-identity -s codesigning $KEYCHAIN
+    # security find-identity -s codesigning $KEYCHAIN
 
     mkdir -p $out/bin
     for bin in ${drv}/bin/*; do

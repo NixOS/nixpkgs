@@ -101,6 +101,7 @@ let
       libsecurity_cdsa_plugin    = "55001";
       libsecurity_cdsa_utilities = "55006";
       libsecurity_cdsa_utils     = "55000";
+      libsecurity_cms            = "55002.2";
       libsecurity_codesigning    = "55037.15";
       libsecurity_cssm           = "55005.5";
       libsecurity_filedb         = "55016.1";
@@ -109,7 +110,9 @@ let
       libsecurity_ocspd          = "55010";
       libsecurity_pkcs12         = "55000";
       libsecurity_sd_cspdl       = "55003";
+      libsecurity_smime          = "55004.3";
       libsecurity_utilities      = "55030.3";
+      libsecurity_ssl            = "55003";
       libsecurityd               = "55004";
     };
     "osx-10.7.4" = {
@@ -200,6 +203,7 @@ let
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
+    CarbonHeaders-full   = applePackage "CarbonHeaders/full.nix" "osx-10.6.2" "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
     CF              = applePackage "CF"                "osx-10.10.5"     "07f5psjxi7wyd13ci4x83ya5hy6p69sjfqcpp2mmxdlhd8yzkf74" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.11.6"     "0vllfpb8f4f97wj2vpdd7w5k9ibnsbr6ff1zslpp6q323h01n25y" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
@@ -237,7 +241,6 @@ let
     objc4           = applePackage "objc4"             "osx-10.11.6"     "00b7vbgxni8frrqyi69b4njjihlwydzjd9zj9x4z5dbx8jabkvrj" {};
     ppp             = applePackage "ppp"               "osx-10.11.6"     "1dql6r1v0vbcs04958nn2i6p31yfsxyy51jca63bm5mf0gxalk3f" {};
     removefile      = applePackage "removefile"        "osx-10.11.6"     "1b6r74ry3k01kypvlaclf33fha15pcm0kzx9zrymlg66wg0s0i3r" {};
-    Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
     xnu             = applePackage "xnu"               "osx-10.11.6"     "0yhziq4dqqcbjpf6vyqn8xhwva2zb525gndkx8cp8alzwp76jnr9" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds/xcode.nix" "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
@@ -248,7 +251,14 @@ let
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
     system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
 
+    Security        = applePackage "Security"          "osx-10.9.5"      "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    libsecurity_authorization = applePackage "Security/libsecurity_authorization.nix" "osx-10.9.5" "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    libsecurity_comcryption = applePackage "Security/libsecurity_comcryption.nix" "osx-10.9.5" "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    libsecurity_cryptkit = applePackage "Security/libsecurity_cryptkit.nix" "osx-10.9.5" "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+    libsecurity_transform = applePackage "Security/libsecurity_transform.nix" "osx-10.9.5" "1nv0dczf67dhk17hscx52izgdcyacgyy12ag0jh6nl5hmfzsn8yy" {};
+
     security_systemkeychain = applePackage "security_systemkeychain" "osx-10.10.5" "0xviskdgxsail15npi0billyiysvljlmg38mmhnr7qi4ymnnjr90" {};
+    libsecurity_smime          = applePackage "libsecurity_smime"          "osx-10.7.5" "05kf2yy995nsw0iwhm5p03jw6d0lvlpfpv2dfb1qpp1hd4kx6vay" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};
@@ -260,8 +270,9 @@ let
     libsecurity_cdsa_plugin    = libsecPackage "libsecurity_cdsa_plugin"    "osx-10.7.5" "0ifmx85rs51i7zjm015s8kc2dqyrlvbr39lw9xzxgd2ds33i4lfj" {};
     libsecurity_cdsa_utilities = libsecPackage "libsecurity_cdsa_utilities" "osx-10.7.5" "1kzsl0prvfa8a0m3j3pcxq06aix1csgayd3lzx27iqg84c8mhzan" {};
     libsecurity_cdsa_utils     = libsecPackage "libsecurity_cdsa_utils"     "osx-10.7.5" "0q55jizav6n0lkj7lcmcr2mjdhnbnnn525fa9ipwgvzbspihw0g6" {};
+    libsecurity_cms           = applePackage "libsecurity_cms"    "osx-10.7.5" "0gjy3hh8i7rwi3hraa35k7sd7ik7qrdg433cd3gddjmvhmbqpqfx" {};
     libsecurity_codesigning    = libsecPackage "libsecurity_codesigning"    "osx-10.7.5" "0vf5nj2g383b4hknlp51qll5pm8z4qbf56dnc16n3wm8gj82iasy" {};
-    libsecurity_cssm           = libsecPackage "libsecurity_cssm"           "osx-10.7.5" "0l6ia533bhr8kqp2wa712bnzzzisif3kbn7h3bzzf4nps4wmwzn4" {};
+    libsecurity_cssm           = applePackage  "libsecurity_cssm"           "osx-10.7.5" "0l6ia533bhr8kqp2wa712bnzzzisif3kbn7h3bzzf4nps4wmwzn4" {};
     libsecurity_filedb         = libsecPackage "libsecurity_filedb"         "osx-10.7.5" "1r0ik95xapdl6l2lhd079vpq41jjgshz2hqb8490gpy5wyc49cxb" {};
     libsecurity_keychain       = libsecPackage "libsecurity_keychain"       "osx-10.7.5" "15wf2slcgyns61kk7jndgm9h22vidyphh9x15x8viyprra9bkhja" {};
     libsecurity_mds            = libsecPackage "libsecurity_mds"            "osx-10.7.5" "0vin5hnzvkx2rdzaaj2gxmx38amxlyh6j24a8gc22y09d74p5lzs" {};
@@ -269,6 +280,7 @@ let
     libsecurity_pkcs12         = libsecPackage "libsecurity_pkcs12"         "osx-10.7.5" "1yq8p2sp39q40fxshb256b7jn9lvmpymgpm8yz9kqrf980xddgsg" {};
     libsecurity_sd_cspdl       = libsecPackage "libsecurity_sd_cspdl"       "osx-10.7.5" "10v76xycfnvz1n0zqfbwn3yh4w880lbssqhkn23iim3ihxgm5pbd" {};
     libsecurity_utilities      = libsecPackage "libsecurity_utilities"      "osx-10.7.5" "0ayycfy9jm0n0c7ih9f3m69ynh8hs80v8yicq47aa1h9wclbxg8r" {};
+    libsecurity_ssl            = applePackage  "libsecurity_ssl"            "osx-10.7.5" "1fd6l4aj9bmkn463dcsxyf4s90rxd0qs013gj2hhxs5si0b104pk" {};
     libsecurityd               = libsecPackage "libsecurityd"               "osx-10.7.5" "1ywm2qj8l7rhaxy5biwxsyavd0d09d4bzchm03nlvwl313p2747x" {};
     security_dotmac_tp         = libsecPackage "security_dotmac_tp"         "osx-10.9.5" "1l4fi9qhrghj0pkvywi8da22bh06c5bv3l40a621b5g258na50pl" {};
   };

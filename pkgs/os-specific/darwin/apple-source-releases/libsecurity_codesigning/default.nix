@@ -7,7 +7,7 @@ appleDerivation {
   NIX_CFLAGS_COMPILE = "-Iinclude -I${xnu}/Library/Frameworks/System.framework/Headers";
   patchPhase = ''
     substituteInPlace lib/policydb.cpp \
-      --replace "new MutableDictionary::MutableDictionary()" NULL
+      --replace "new MutableDictionary::MutableDictionary()" "new MutableDictionary()"
     substituteInPlace lib/xpcengine.h \
       --replace "#include <xpc/private.h>" ""
     substituteInPlace lib/policyengine.cpp \
@@ -29,5 +29,9 @@ appleDerivation {
 
     sed -i '1i #define bool int' lib/security_codesigning.d
     dtrace -h -C -s lib/security_codesigning.d -o codesigning_dtrace.h
+  '';
+
+  postInstall = ''
+    ln -s $out/include/security_codesigning $out/include/Security
   '';
 }
