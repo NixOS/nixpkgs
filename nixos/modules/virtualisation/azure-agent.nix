@@ -185,7 +185,7 @@ in
       after = [ "network-online.target" "sshd.service" ];
       wants = [ "network-online.target" ];
 
-      path = [ pkgs.e2fsprogs ];
+      path = [ pkgs.e2fsprogs pkgs.bash ];
       description = "Windows Azure Agent Service";
       unitConfig.ConditionPathExists = "/etc/waagent.conf";
       serviceConfig = {
