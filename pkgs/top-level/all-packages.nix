@@ -1358,6 +1358,8 @@ with pkgs;
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
+  sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
