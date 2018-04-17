@@ -14963,6 +14963,8 @@ with pkgs;
 
   bviplus = callPackage ../applications/editors/bviplus { };
 
+  bwsyncandshare = callPackage ../applications/networking/bwsyncandshare { };
+
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
       stdenv = overrideCC stdenv gcc5;
