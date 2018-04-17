@@ -123,7 +123,7 @@ let
       # Perform a reverse-path test to refuse spoofers
       # For now, we just drop, as the raw table doesn't have a log-refuse yet
       ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
-      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCP4 client without first having to use APIPA
       iptables -t raw -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
