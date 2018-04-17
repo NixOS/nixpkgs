@@ -2888,8 +2888,6 @@ with pkgs;
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
-  hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
-
   highlight = callPackage ../tools/text/highlight ({
     lua = lua5;
   } // lib.optionalAttrs stdenv.isDarwin {
