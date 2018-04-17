@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -13,7 +13,7 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    buildInputs = [ cmake libedit libxml2 llvm ];
+    buildInputs = [ cmake libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"

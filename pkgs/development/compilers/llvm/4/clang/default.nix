@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, release_version, clang-tools-extra_src, python
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -19,7 +19,7 @@ let
     nativeBuildInputs = [ cmake python ]
       ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-    buildInputs = [ libedit libxml2 llvm ]
+    buildInputs = [ libxml2 llvm ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
