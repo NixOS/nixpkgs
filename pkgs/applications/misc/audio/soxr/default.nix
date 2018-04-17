@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "soxr-0.1.2";
+  name = "soxr-0.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/soxr/${name}-Source.tar.xz";
-    sha256 = "0xf2w3piwz9gfr1xqyrj4k685q5dy53kq3igv663i4f4y4sg9rjl";
+    sha256 = "12aql6svkplxq5fjycar18863hcq84c5kx8g6f4rj0lcvigw24di";
   };
 
   outputs = [ "out" "doc" ]; # headers are just two and very small
