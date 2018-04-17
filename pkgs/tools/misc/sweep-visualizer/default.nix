@@ -53,7 +53,7 @@
     meta = with stdenv.lib; {
       homepage = https://support.scanse.io/hc/en-us/articles/115006008948-Visualizer-Overview;
       description = "A minimal desktop application for interfacing with the Sweep device";
-      license = licenses.proprietary;
+      license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ mt-caret ];
     };
