@@ -37,21 +37,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake python2 pkgconfig yasm autoconf automake libtool m4
-  ] ++ (lib.optionals useGtk [
+  ] ++ lib.optionals useGtk [
     intltool wrapGAppsHook
-  ]);
+  ];
 
   buildInputs = [
     fribidi fontconfig freetype jansson zlib
     libass libiconv libsamplerate libxml2 bzip2
     libogg libopus libtheora libvorbis libdvdcss a52dec libmkv
-    lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx]
-    ++ lib.optionals useGtk [
+    lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
+  ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
-    libgudev]
-    ++ (if useFfmpeg then [ffmpeg] else [libav_12])
-    ++ lib.optional useFdk fdk_aac;
+    libgudev
+  ] ++ (if useFfmpeg then [ ffmpeg ] else [ libav_12 ])
+  ++ lib.optional useFdk fdk_aac;
 
   dontUseCmakeConfigure = true;
 
