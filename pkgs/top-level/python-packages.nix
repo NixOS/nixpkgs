@@ -3541,6 +3541,8 @@ in {
     };
   };
 
+  misaka = callPackage ../development/python-modules/misaka {};
+
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
   mwlib = let
