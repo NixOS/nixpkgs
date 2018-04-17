@@ -19878,6 +19878,10 @@ with pkgs;
 
   saga = callPackage ../applications/gis/saga { };
 
+  saga = callPackage ../applications/gis/saga {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
   samplv1 = callPackage ../applications/audio/samplv1 { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
