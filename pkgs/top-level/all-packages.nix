@@ -19543,7 +19543,10 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
-  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+  deepin = recurseIntoAttrs (import ../desktops/deepin {
+    inherit pkgs libsForQt5;
+    inherit (lib) makeScope;
+  });
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
