@@ -54,7 +54,7 @@
       homepage = https://support.scanse.io/hc/en-us/articles/115006008948-Visualizer-Overview;
       description = "A minimal desktop application for interfacing with the Sweep device";
       license = licenses.proprietary;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
       maintainers = [ mt-caret ];
     };
   }
