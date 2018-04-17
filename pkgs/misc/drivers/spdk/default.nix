@@ -1,68 +1,49 @@
-# To build this:
-# nix-build -K -E 'with import <nixpkgs> { }; callPackage ./default.nix {}' --show-trace
-#
-# Or to build using the same version of nixpkgs (reproducible build):
-# nix-build -K shell.nix --show-trace
-#
-# Or to drop into a shell:
-# nix-shell ~/src/github.com/avalent/nixpkgs/default.nix -A spdk
-
 { lib
 , stdenv
 , numactl
 , libaio
 , cunit
-, python
-, pythonPackages
-, fetchurl
-, groff
-, less
+, libuuid
+, fetchFromGitHub
 , gcc
-, libffi
 , openssl
+, python
 }:
 
 stdenv.mkDerivation rec {
   name = "spdk-${version}";
-  version = "1.0.0";
+  version = "v18.04-pre";
 
-  #src = fetchurl {
-    #url = "https://download3.ebz.epson.net/dsc/f/03/00/06/41/54/29588ed107f800e5bc3f91706661567efb369c1c/epson-inkjet-printer-escpr-1.6.16-1lsb3.2.tar.gz";
-    #sha256 = "0v9mcih3dg3ws18hdcgm014k97hv6imga39hy2a84gnc6badp6n6";
-  #};
+  src = fetchFromGitHub {
+    repo = "spdk";
+    owner = "spdk";
+    rev = "a3f8876777762f9b99544b78ee0b24ff66266c5c";
+    sha256 = "1hb22h8c8b3q91ypfj084ic8gw1fibhfckivfgl334hbbxvay0j0";
+    fetchSubmodules = true;
+  };
 
-  #patches = [ ./cups-filter-ppd-dirs.patch ];
+  CFLAGS = "-msha -msse4.1 -mssse3";
 
   buildInputs = [
-    gcc
     cunit
+    gcc
     libaio
+    libuuid
     numactl
+    python
+    openssl
   ];
 
-  #meta = with stdenv.lib; {
-    #homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
-    #description = "ESC/P-R Driver (generic driver)";
-    #longDescription = ''
-      #Epson Inkjet Printer Driver (ESC/P-R) for Linux and the
-      #corresponding PPD files. The list of supported printers
-      #can be found at http://www.openprinting.org/driver/epson-escpr/ .
-
-      #To use the driver adjust your configuration.nix file:
-        #services.printing = {
-          #enable = true;
-          #drivers = [ pkgs.epson-escpr ];
-        #};
-
-      #To setup a wireless printer, enable Avahi which provides
-      #printer's hostname to CUPS and nss-mdns to make this
-      #hostname resolvable:
-        #services.avahi = {
-          #enable = true;
-          #nssmdns = true;
-        #};'';
-    #license = licenses.gpl3Plus;
-    #maintainers = with maintainers; [ artuuge ];
-    #platforms = platforms.linux;
-  #};
+  meta = with stdenv.lib; {
+    homepage = "http://www.spdk.io";
+    description = "The Storage Performance Development Kit (SPDK)";
+    longDescription = ''
+      The Storage Performance Development Kit (SPDK) provides a set of tools and
+      libraries for writing high performance, scalable, user-mode storage
+      applications.
+    '';
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ avalent ];
+    platforms = platforms.linux;
+  };
 }
