@@ -95,16 +95,19 @@ let
     passthru = { inherit fromGit; };
   };
 
-  perl-bindings = { nix }: stdenv.mkDerivation {
+  perl-bindings = { nix, needsBoost ? false }: stdenv.mkDerivation {
     name = "nix-perl-" + nix.version;
 
     inherit (nix) src;
 
     postUnpack = "sourceRoot=$sourceRoot/perl";
 
+    # This is not cross-compile safe, don't have time to fix right now
+    # but noting for future travellers.
     nativeBuildInputs =
       [ perl pkgconfig curl nix libsodium ]
-      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
+      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ]
+      ++ lib.optional needsBoost boost;
 
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -137,15 +140,18 @@ in rec {
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.0${suffix}";
-    suffix = "pre6137_e3cdcf89";
+    name = "nix-2.1${suffix}";
+    suffix = "pre6148_a4aac7f";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "e3cdcf89b0ef42f81c9df5899776ea225f1ecae0";
-      sha256 = "1s9w7ixc2qra3x9545f9a634654rvdqsf38jp9b7wr6xx6qqx60s";
+      rev = "a4aac7f88c59c97299027c9668461c637bbc6a72";
+      sha256 = "1250fg1rgzcd0qy960nhl2bw9hsc1a6pyz11rmxasr0h3j1a2z53";
     };
     fromGit = true;
-  })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+  })) // { perl-bindings = perl-bindings {
+    nix = nixUnstable;
+    needsBoost = true;
+  }; };
 
 }
