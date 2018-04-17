@@ -5,13 +5,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "grml-zsh-config-${version}";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "1xvv2mnkfqa657w8y4q2zrchhindngdzij9fbalcg1gggz4zdwcm";
+    sha256 = "1akx6lwxnbcccddzw41rci8rb9n5vb6q2vpn5qr07f0grchyiifk";
   };
 
   buildInputs = [ zsh coreutils txt2tags procps ]
