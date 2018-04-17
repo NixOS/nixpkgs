@@ -17,7 +17,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
-  doCheck = !stdenv.isDarwin;
+  # all tests with flake8 are broken right now
+  # https://github.com/tholo/pytest-flake8/issues/45
+  doCheck = false;
 
   checkPhase = ''
     py.test

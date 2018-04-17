@@ -5,14 +5,19 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "5.2.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
     rev = "v${version}";
-    sha256 = "0nwfadczxa1fyq65zc3sfv8g2r4w3xrx3bdi5fv9xpn97wh2ifgw";
+    sha256 = "13vbh2r952ai2m6sc79psfwaj5fc8cssdg2pqpizg2mwd0l1s6lb";
   };
+
+  postPatch = ''
+    # drop upper bound of prawcore requirement
+    sed -ri "s/'(prawcore >=.+), <.+'/'\1'/" setup.py
+  '';
 
   propagatedBuildInputs = [
     requests
