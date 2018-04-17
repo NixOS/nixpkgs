@@ -17331,6 +17331,11 @@ with pkgs;
 
   qiv = callPackage ../applications/graphics/qiv { };
 
+  processing = processing3;
+  processing3 = callPackage ../applications/graphics/processing3 {
+    jdk = oraclejdk8;
+  };
+
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
