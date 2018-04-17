@@ -19882,6 +19882,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  saga_2_3_2 = callPackage ../applications/gis/saga/lts.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
   samplv1 = callPackage ../applications/audio/samplv1 { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
