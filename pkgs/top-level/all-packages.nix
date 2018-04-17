@@ -8921,7 +8921,7 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gflags = callPackage ../development/libraries/gflags { };
+  gflags = google-gflags;
 
   gf2x = callPackage ../development/libraries/gf2x {};
 
