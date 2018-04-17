@@ -242,6 +242,9 @@ let
 
     # Don't allow traffic to leak out until the script has completed
     ip46tables -A INPUT -j nixos-drop
+
+    ${cfg.extraStopCommands}
+
     if ${startScript}; then
       ip46tables -D INPUT -j nixos-drop 2>/dev/null || true
     else
