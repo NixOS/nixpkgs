@@ -55,11 +55,11 @@ let
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
-    "runtime-link=${runtime-link}"
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
-  ] ++ optional (variant == "release") "debug-symbols=off"
+  ] ++ optional (link != "static") "runtime-link=${runtime-link}"
+    ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
     ++ optionals (hostPlatform.libc == "msvcrt") [
