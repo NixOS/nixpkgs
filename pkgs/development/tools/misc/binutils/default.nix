@@ -64,7 +64,13 @@ stdenv.mkDerivation rec {
 
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
-  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch
+    ++ stdenv.lib.optionals targetPlatform.isAarch64 [
+    # Version 2.30 introduced strict requirements on ELF relocations which cannot
+    # be satisfied on aarch64 platform. Add backported fix from bugzilla.
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
+    ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
+  ];
 
   outputs = [ "out" "info" "man" ];
 
