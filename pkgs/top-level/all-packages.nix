@@ -10373,6 +10373,7 @@ with pkgs;
 
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
   libivykis = callPackage ../development/libraries/libivykis { };
