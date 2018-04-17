@@ -92,7 +92,7 @@ let
 
       group = mkOption {
         type = types.str;
-        apply = x: assert (builtins.stringLength x < 17 || abort "Group name '${x}' is longer than 16 characters which is not allowed!"); x;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "nogroup";
         description = "The user's primary group.";
       };
