@@ -14,12 +14,14 @@
   autoconf, automake, cmake, libtool, m4, jansson,
   libass, libiconv, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec,
-  lame, ffmpeg, libdvdread, libdvdnav, libbluray,
+  lame, libdvdread, libdvdnav, libbluray,
   mp4v2, mpeg2dec, x264, x265, libmkv,
   fontconfig, freetype, hicolor-icon-theme,
   glib, gtk3, intltool, libnotify,
   gst_all_1, dbus-glib, udev, libgudev, libvpx,
-  useGtk ? true, wrapGAppsHook ? null, libappindicator-gtk3 ? null, useFdk ? false, fdk_aac ? null
+  useGtk ? true, wrapGAppsHook ? null, libappindicator-gtk3 ? null,
+  useFfmpeg ? false, libav_12 ? null, ffmpeg ? null,
+  useFdk ? false, fdk_aac ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -35,20 +37,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake python2 pkgconfig yasm autoconf automake libtool m4
-  ] ++ (lib.optionals useGtk [
+  ] ++ lib.optionals useGtk [
     intltool wrapGAppsHook
-  ]);
+  ];
 
   buildInputs = [
     fribidi fontconfig freetype jansson zlib
     libass libiconv libsamplerate libxml2 bzip2
     libogg libopus libtheora libvorbis libdvdcss a52dec libmkv
     lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
-  ] ++ (lib.optionals useGtk [
+  ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
     libgudev
-  ]) ++ (lib.optionals useFdk [fdk_aac]);
+  ] ++ (if useFfmpeg then [ ffmpeg ] else [ libav_12 ])
+  ++ lib.optional useFdk fdk_aac;
 
   dontUseCmakeConfigure = true;
 
