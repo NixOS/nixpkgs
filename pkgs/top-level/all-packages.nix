@@ -1637,15 +1637,15 @@ with pkgs;
 
   connman = callPackage ../tools/networking/connman { };
 
-  connman-gtk = callPackage ../tools/networking/connman-gtk { };
+  connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
 
-  connman-ncurses = callPackage ../tools/networking/connman-ncurses { };
+  connman-ncurses = callPackage ../tools/networking/connman/connman-ncurses { };
 
-  connman-notify = callPackage ../tools/networking/connman-notify { };
+  connman-notify = callPackage ../tools/networking/connman/connman-notify { };
 
-  connmanui = callPackage ../tools/networking/connmanui { };
+  connmanui = callPackage ../tools/networking/connman/connmanui { };
 
-  connman_dmenu = callPackage ../tools/networking/connman_dmenu  { };
+  connman_dmenu = callPackage ../tools/networking/connman/connman_dmenu  { };
 
   convertlit = callPackage ../tools/text/convertlit { };
 
@@ -2107,7 +2107,7 @@ with pkgs;
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcompPackages = callPackage ../development/compilers/emscripten-fastcomp { };
+  emscriptenfastcompPackages = callPackage ../development/compilers/emscripten/fastcomp { };
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
@@ -3164,7 +3164,7 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/kbfs { };
 
-  keybase-gui = callPackage ../tools/security/keybase-gui { };
+  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   keychain = callPackage ../tools/misc/keychain { };
 
@@ -3305,7 +3305,7 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
-  nagstamon = callPackage ../tools/nagstamon {
+  nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
 
@@ -3886,9 +3886,9 @@ with pkgs;
 
   networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
 
-  networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
+  networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager/applet.nix { };
 
-  networkmanager_dmenu = callPackage ../tools/networking/networkmanager_dmenu  { };
+  networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu.nix  { };
 
   newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
 
@@ -4318,7 +4318,7 @@ with pkgs;
     qt = qt5.qtbase;
   };
 
-  pinentry_mac = callPackage ../tools/security/pinentry-mac {
+  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -6428,7 +6428,7 @@ with pkgs;
 
   openjdk8 =
     if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin/8.nix { }
+      callPackage ../development/compilers/openjdk/darwin/8.nix { }
     else
       callPackage ../development/compilers/openjdk/8.nix {
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
@@ -7376,7 +7376,7 @@ with pkgs;
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
-  betaflight = callPackage ../development/stm32/betaflight { };
+  betaflight = callPackage ../development/misc/stm32/betaflight { };
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
@@ -8110,7 +8110,7 @@ with pkgs;
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
-  qtcreator = libsForQt5.callPackage ../development/qtcreator { };
+  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
 
@@ -18667,21 +18667,21 @@ with pkgs;
     packages = self: [];
   };
 
-  xmonad_log_applet_gnome2 = callPackage ../applications/window-managers/xmonad-log-applet {
+  xmonad_log_applet_gnome2 = callPackage ../applications/window-managers/xmonad/log-applet {
     desktopSupport = "gnome2";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
     GConf2 = gnome2.GConf;
   };
 
-  xmonad_log_applet_gnome3 = callPackage ../applications/window-managers/xmonad-log-applet {
+  xmonad_log_applet_gnome3 = callPackage ../applications/window-managers/xmonad/log-applet {
     desktopSupport = "gnome3";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
     GConf2 = gnome2.GConf;
   };
 
-  xmonad_log_applet_xfce = callPackage ../applications/window-managers/xmonad-log-applet {
+  xmonad_log_applet_xfce = callPackage ../applications/window-managers/xmonad/log-applet {
     desktopSupport = "xfce4";
     inherit (xfce) libxfce4util xfce4-panel;
     gnome2_panel = gnome2.gnome_panel;
