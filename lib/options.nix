@@ -127,7 +127,18 @@ rec {
 
 
   /* Helper functions. */
-  showOption = concatStringsSep ".";
+  showOption = let
+    contains = c: str:
+      if ((builtins.stringLength str) == 0) then
+        false
+      else (
+        if (hasPrefix c str) then
+          true
+        else
+          contains c (substring 1 (builtins.stringLength str) str)
+      );
+  in x: concatStringsSep "." (map (el: if (contains "." el) then ''"${el}"'' else el) x);
+
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 
