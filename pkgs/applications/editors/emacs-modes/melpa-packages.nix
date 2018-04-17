@@ -94,6 +94,9 @@ self:
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
 
+      # upstream issue: missing dependency
+      fold-dwim-org = markBroken super.fold-dwim-org;
+
       # build timeout
       graphene = markBroken super.graphene;
 

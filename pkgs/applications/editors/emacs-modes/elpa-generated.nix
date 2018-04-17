@@ -1507,10 +1507,10 @@
     nhexl-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "nhexl-mode";
-        version = "0.2";
+        version = "0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/nhexl-mode-0.2.el";
-          sha256 = "0qrzpkxxdwi2b3136yj5agvaxwr9g2c58kpmjmjpfhpc6yyyx5x0";
+          url = "https://elpa.gnu.org/packages/nhexl-mode-0.5.el";
+          sha256 = "02z2mx39m96s7v5d8sh6hxb5p70qzbagjfa3lavfw10zjim8g9wl";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1612,10 +1612,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "9.1.9";
+        version = "9.1.10";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-9.1.9.tar";
-          sha256 = "16yr0srfzsrzv2b1f2wjk8gb2pyhsgj2hxbscixirkxqz674c5cl";
+          url = "https://elpa.gnu.org/packages/org-9.1.10.tar";
+          sha256 = "01vvq6m7r2ifyflvq5ga241qvl4j62smz0zr6jljk56b6nqi20lm";
         };
         packageRequires = [];
         meta = {
