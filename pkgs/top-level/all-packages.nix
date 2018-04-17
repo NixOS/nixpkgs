@@ -3395,6 +3395,8 @@ with pkgs;
 
   ispell = callPackage ../tools/text/ispell {};
 
+  jumanpp = callPackage ../tools/text/jumanpp {};
+
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
   latex2html = callPackage ../tools/misc/latex2html { };
