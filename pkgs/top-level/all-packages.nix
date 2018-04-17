@@ -14943,6 +14943,8 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
+  bonzomatic = callPackage ../applications/editors/bonzomatic { };
+
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
