@@ -5999,6 +5999,8 @@ with pkgs;
   ecl = callPackage ../development/compilers/ecl { };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
+  eli = callPackage ../development/compilers/eli { };
+
   eql = callPackage ../development/compilers/eql {};
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
